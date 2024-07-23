@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import {createContext, useContext, useState} from "react";
 
 type EntityFieldContextProps = {
   tooltipsVisible: boolean;
@@ -27,3 +27,13 @@ export const EntityFieldProvider = ({
   );
 };
 
+export const useEntityField = () => {
+  const context = useContext(EntityFieldContext);
+  if (!context) {
+    return {
+      tooltipsVisible: false,
+      toggleTooltips: () => {},
+    };
+  }
+  return context;
+};
