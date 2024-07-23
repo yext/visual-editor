@@ -15,7 +15,8 @@
     "lint": "eslint --cache --fix src/ scripts/",
     "autofix": "pnpm run lint && npm prun prettier",
     "ci-publish": "tsx scripts/publishCI.ts",
-    "release": "tsx scripts/release.ts"
+    "release": "tsx scripts/release.ts",
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "@yext/eslint-config": "^1.0.0",
@@ -28,7 +29,7 @@
     "tsx": "^4.16.2"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": "^17 || ^18 || ^20"
   },
   "packageManager": "pnpm@8.6.8",
   "lint-staged": {

@@ -1,1 +1,1 @@
-export { MyComponent } from "./MyComponent.tsx";
+export * from "./components/index.js";

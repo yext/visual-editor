@@ -1,0 +1,28 @@
+name: main
+on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  automated_linting:
+    uses: ./.github/workflows/automated-linting.yml
+    secrets:
+      BOT_REPO_SCOPED_TOKEN: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
+
+  update_notices:
+    uses: ./.github/workflows/third_party_notices_check.yml
+    secrets:
+      BOT_REPO_SCOPED_TOKEN: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
+
+  call_build:
+    uses: ./.github/workflows/build.yml
+    with:
+      package: "visual-editor"
+
+  call_unit_test:
+    needs: call_build
+    uses: ./.github/workflows/unit_test.yml
+    with:
+      package: "visual-editor"

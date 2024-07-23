@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: The name of the package to build
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./packages/${{ inputs.package }}"
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.1.6
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: Install deps
+        run: pnpm i
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Build Storybook
+        run: pnpm run build-storybook
+
+      - name: Create build-output artifact
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: build-output
+          path: "./packages/${{ inputs.package }}/dist"
+          overwrite: true
