@@ -1,1 +1,1 @@
-export { MyComponent } from "./myComponent.tsx";
+export { Editor } from "./editor.tsx";

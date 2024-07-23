@@ -5,7 +5,7 @@
     "jsx": "react-jsx",
 
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Node",
     "types": [
       "vite/client",
       "node"
