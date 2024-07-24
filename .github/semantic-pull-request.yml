@@ -24,4 +24,6 @@ jobs:
             doesn't start with an uppercase character.
           wip: true
           scopes: |
-            visual-editor
+            components
+            deps
+            util
