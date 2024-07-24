@@ -1,0 +1,48 @@
+name: Run unit tests
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: The name of the package to test
+        required: true
+        type: string
+
+jobs:
+  unit_tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/${{ inputs.package }}
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.1.6
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.1
+
+      - name: "test with node ${{ matrix.node-version }}"
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install deps
+        run: pnpm i
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: build-output
+          path: dist/
+
+      - name: Run tests
+        run: pnpm run test

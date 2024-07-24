@@ -1,0 +1,50 @@
+name: Update Third Party Notices
+on:
+  workflow_call:
+    secrets:
+      BOT_REPO_SCOPED_TOKEN:
+        required: true
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
+
+      - uses: actions/setup-node@v4.0.2
+        with:
+          node-version: 20.x
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.1
+
+      - name: Global install generate-license-file
+        run: pnpm add -g generate-license-file
+
+      - name: Global install turbo
+        run: pnpm add -g turbo
+
+      - name: Install packages
+        run: pnpm i --ignore-scripts
+
+      - name: Generate package licenses
+        run: pnpm run generate-notices
+
+      - name: Update THIRD-PARTY-NOTICES
+        id: push-changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "Automated update to THIRD-PARTY-NOTICES from github action's 3rd party notices check"
+          push: true
+          default_author: github_actions
+
+      - name: Fail job if push changes
+        if: steps.push-changes.outputs.pushed == 'true'
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('THIRD-PARTY-NOTICES were updated. A new commit was pushed.')
