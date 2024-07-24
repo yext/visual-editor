@@ -100,8 +100,8 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.3.4(@types/node@20.14.11))
       '@yext/pages':
-        specifier: ^1.1.0-beta.4
-        version: 1.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.4(@types/node@20.14.11))
+        specifier: file:/Users/bbaugher/yext-pages-1.1.1.tgz
+        version: file:../../../yext-pages-1.1.1.tgz(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.4(@types/node@20.14.11))
       eslint-plugin-require-extensions:
         specifier: ^0.1.3
         version: 0.1.3(eslint@8.57.0)
@@ -1827,8 +1827,9 @@ packages:
   '@yext/eslint-plugin-export-star@1.2.0':
     resolution: {integrity: sha512-oD2Vg33/sttaGBSiO3xY2HQlvTooX+Ob9hYp1QBkLMIhYcXqciNVpj27U8p4b7R7Tu5uOFo1BScuPF0cngQBHA==}
 
-  '@yext/pages@1.1.1':
-    resolution: {integrity: sha512-Ga5it+MM76Pm0Di5vFopc6aYwR34k+YWK1iH6pXqFetIvHmU9SI5qiZfH8kGtO1CBuWabvJ7NNkWIhVDkFICcA==}
+  '@yext/pages@file:../../../yext-pages-1.1.1.tgz':
+    resolution: {integrity: sha512-vwJdMB43yUUDd8niXMBkjKnlHj3TdCG2vYxQ/MMxkiKLSarb4sGlORjDdpkra5qXnYMZj9N1UGIguYD7C8XC2Q==, tarball: file:../../../yext-pages-1.1.1.tgz}
+    version: 1.1.1
     engines: {node: ^18 || ^20.2.0}
     hasBin: true
     peerDependencies:
@@ -3872,8 +3873,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  pretty-ms@9.0.0:
-    resolution: {integrity: sha512-E9e9HJ9R9NasGOgPaPE8VMeiPKAyWR5jcFpNnwIejslIhWqdqOrb2wShBsncMPUb+BcCd2OPYfh7p2W6oemTng==}
+  pretty-ms@9.1.0:
+    resolution: {integrity: sha512-o1piW0n3tgKIKCwk2vpM/vOV13zjJzvP37Ioze54YlTHE06m4tjEbzg9WsKkvTuyYln2DHjo5pY4qrZGI0otpw==}
     engines: {node: '>=18'}
 
   process-nextick-args@2.0.1:
@@ -6683,7 +6684,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@yext/pages@1.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.4(@types/node@20.14.11))':
+  '@yext/pages@file:../../../yext-pages-1.1.1.tgz(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.4(@types/node@20.14.11))':
     dependencies:
       ansi-to-html: 0.7.2
       browser-or-node: 2.1.1
@@ -6703,7 +6704,7 @@ snapshots:
       picocolors: 1.0.1
       postcss: 8.4.39
       postcss-nested: 6.2.0(postcss@8.4.39)
-      pretty-ms: 9.0.0
+      pretty-ms: 9.1.0
       prompts: 2.4.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -9090,7 +9091,7 @@ snapshots:
 
   prettier@3.3.3: {}
 
-  pretty-ms@9.0.0:
+  pretty-ms@9.1.0:
     dependencies:
       parse-ms: 4.0.0
 

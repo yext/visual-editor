@@ -20,7 +20,7 @@ import {
 import { useCallback, useEffect } from "react";
 import { useDocument } from "@yext/pages/util";
 import { Button } from "../ui/button.tsx";
-import { useEntityField } from "../../components/EntityField.tsx";
+import { useEntityField } from "../../../components/EntityField.tsx";
 import { Tooltip, TooltipArrow, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip.tsx";
 
 const handleClick = (slug: string) => {

@@ -3,8 +3,8 @@ import "@measured/puck/puck.css";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
 import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
-import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityFieldProvider } from "./EntityField.tsx";
+import { TemplateMetadata } from "../../types";
+import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 
 interface InternalEditorProps {

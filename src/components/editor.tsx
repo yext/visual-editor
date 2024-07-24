@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { getLocalStorageKey } from "../internal/utils/localStorageHelper";
-import { TemplateMetadata } from "../internal/types/templateMetadata";
+import { TemplateMetadata } from "../types";
 import { type History, type Data, type Config } from "@measured/puck";
 import { useReceiveMessage, useSendMessageToParent } from "../hooks";
 import { SaveState } from "../internal/types/saveState";
@@ -15,7 +15,7 @@ export const Role = {
   INDIVIDUAL: "individual",
 };
 
-const TARGET_ORIGINS = [
+export const TARGET_ORIGINS = [
   "http://localhost",
   "https://dev.yext.com",
   "https://qa.yext.com",
@@ -40,6 +40,16 @@ export const Editor = ({document, puckConfig, templateMetadata}: EditorProps) =>
       useState<boolean>(false); // needed because visualConfigurationData can be empty
   const [saveState, setSaveState] = useState<SaveState>();
   const [saveStateFetched, setSaveStateFetched] = useState<boolean>(false); // needed because saveState can be empty
+  console.log('render VE lib editor')
+
+  const {sendToParent: veLibLoaded} = useSendMessageToParent(
+      'veLibLoaded',
+      TARGET_ORIGINS
+  )
+
+  useEffect(() => {
+    veLibLoaded({payload: {message: 'VE Library is loaded'} });
+  }, []);
 
   /**
    * Clears the user's localStorage and resets the current Puck history
@@ -171,7 +181,7 @@ export const Editor = ({document, puckConfig, templateMetadata}: EditorProps) =>
   }, []);
 
   useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
-    setSaveState(payload);
+    setSaveState(payload as SaveState);
     setSaveStateFetched(true);
     send({ status: "success", payload: { message: "saveState received" } });
   });
@@ -214,8 +224,9 @@ export const Editor = ({document, puckConfig, templateMetadata}: EditorProps) =>
       !saveStateFetched ||
       !visualConfigurationDataFetched;
 
+
   const progress: number =
-      (100 *
+      (100 *// @ts-ignore adding bools is fine
           (!!puckConfig +
               !!puckData +
               !!templateMetadata +
@@ -236,7 +247,7 @@ export const Editor = ({document, puckConfig, templateMetadata}: EditorProps) =>
                   histories={histories}
                   clearHistory={templateMetadata?.isDevMode ? clearLocalStorage : clearHistory}
                   templateMetadata={templateMetadata}
-                  saveState={saveState}
+                  saveState={saveState!}
                   saveSaveState={saveSaveState}
                   saveVisualConfigData={saveVisualConfigData}
                   deleteSaveState={deleteSaveState}
