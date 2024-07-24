@@ -10,3 +10,4 @@ pnpm-lock.yaml
 /README.md
 /tsconfig.json
 /vite.config.ts
+.husky/

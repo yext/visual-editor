@@ -16,7 +16,7 @@
     "autofix": "pnpm run lint && npm prun prettier",
     "ci-publish": "tsx scripts/publishCI.ts",
     "release": "tsx scripts/release.ts",
-    "prepare": "pnpm build"
+    "prepare": "husky install && pnpm build"
   },
   "dependencies": {
     "@yext/eslint-config": "^1.0.0",
@@ -53,6 +53,8 @@
     "fs-extra": "^11.2.0",
     "globals": "^15.8.0",
     "jsdom": "^24.1.1",
+    "husky": "^9.1.1",
+    "lint-staged": "^15.2.7",
     "minimist": "^1.2.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
