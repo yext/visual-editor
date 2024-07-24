@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react";
+import { createContext, useContext, useState } from "react";
 import {
   Tooltip,
   TooltipArrow,
@@ -14,10 +14,10 @@ type EntityFieldProps = {
 };
 
 export const EntityField = ({
-                              displayName,
-                              fieldId,
-                              children,
-                            }: EntityFieldProps) => {
+  displayName,
+  fieldId,
+  children,
+}: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
 
   let tooltipContent: string = "";
@@ -30,19 +30,25 @@ export const EntityField = ({
   }
 
   return (
-      <TooltipProvider>
-        <Tooltip open={tooltipsVisible && !!tooltipContent}>
-          <TooltipTrigger asChild>
-            <div className={tooltipsVisible ? "outline-2 outline-dotted outline-[#5A58F2]" : ""}>
-              {children}
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{tooltipContent}</p>
-            <TooltipArrow fill="bg-popover" />
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+    <TooltipProvider>
+      <Tooltip open={tooltipsVisible && !!tooltipContent}>
+        <TooltipTrigger asChild>
+          <div
+            className={
+              tooltipsVisible
+                ? "outline-2 outline-dotted outline-[#5A58F2]"
+                : ""
+            }
+          >
+            {children}
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltipContent}</p>
+          <TooltipArrow fill="bg-popover" />
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
