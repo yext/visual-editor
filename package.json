@@ -35,7 +35,7 @@
     "prepare": "pnpm build"
   },
   "dependencies": {
-    "@measured/puck": "https://github.com/mkilpatrick/puck/raw/main/packages/core/measured-puck-v0.15.0.tgz",
+    "@measured/puck": "0.16.0-canary.39e7f40",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",

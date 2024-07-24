@@ -19,9 +19,15 @@ import {
 } from "../ui/AlertDialog.tsx";
 import { useCallback, useEffect } from "react";
 import { useDocument } from "@yext/pages/util";
-import { Button } from "../ui/button.tsx";
+import { Button } from "../ui/Button.tsx";
 import { useEntityField } from "../../../components/EntityField.tsx";
-import { Tooltip, TooltipArrow, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip.tsx";
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
 
 const handleClick = (slug: string) => {
   window.open(`/${slug}`, "_blank");
@@ -85,16 +91,18 @@ export const customHeader = (
         >
           View Page
         </Button>
-        {isDevMode ? null : <Button
+        {isDevMode ? null : (
+          <Button
             variant="secondary"
             disabled={histories.length === 0}
             onClick={async () => {
               await handleSaveData(data);
               handleClearLocalChanges();
             }}
-        >
-          Publish
-        </Button>}
+          >
+            Publish
+          </Button>
+        )}
       </div>
     </header>
   );
@@ -187,7 +195,14 @@ const ToggleEntityFields = () => {
     <TooltipProvider>
       <Tooltip open={tooltipsVisible}>
         <TooltipTrigger asChild>
-          <Button variant="ghost" size="icon" onClick={toggleTooltips} className={tooltipsVisible ? "border-2 border-[#5A58F2] rounded-full" : ""}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTooltips}
+            className={
+              tooltipsVisible ? "border-2 border-[#5A58F2] rounded-full" : ""
+            }
+          >
             <RectangleEllipsis className="sm-icon" />
           </Button>
         </TooltipTrigger>

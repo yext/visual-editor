@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@measured/puck':
-        specifier: https://github.com/mkilpatrick/puck/raw/main/packages/core/measured-puck-v0.15.0.tgz
-        version: https://github.com/mkilpatrick/puck/raw/main/packages/core/measured-puck-v0.15.0.tgz(@types/react-dom@18.3.0)(@types/react@18.3.3)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.16.0-canary.39e7f40
+        version: 0.16.0-canary.39e7f40(@types/react-dom@18.3.0)(@types/react@18.3.3)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1252,9 +1252,8 @@ packages:
       react: ^16.8.5 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
 
-  '@measured/puck@https://github.com/mkilpatrick/puck/raw/main/packages/core/measured-puck-v0.15.0.tgz':
-    resolution: {tarball: https://github.com/mkilpatrick/puck/raw/main/packages/core/measured-puck-v0.15.0.tgz}
-    version: 0.15.0
+  '@measured/puck@0.16.0-canary.39e7f40':
+    resolution: {integrity: sha512-w+tsVT5lmR9HSxU7bX+N2LNL8In4NY57f1/S4ZQWkEGI80hxLVKnDnV/bngi3Dm4Sg16eWmefVHIfEvQHR5ftw==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0
 
@@ -6073,7 +6072,7 @@ snapshots:
       - '@types/react-dom'
       - react-native
 
-  '@measured/puck@https://github.com/mkilpatrick/puck/raw/main/packages/core/measured-puck-v0.15.0.tgz(@types/react-dom@18.3.0)(@types/react@18.3.3)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@measured/puck@0.16.0-canary.39e7f40(@types/react-dom@18.3.0)(@types/react@18.3.3)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@measured/dnd': 16.6.0-canary.4cba1d1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       deep-diff: 1.0.2

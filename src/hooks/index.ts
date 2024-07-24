@@ -1,1 +1,5 @@
-export * from "./useMessage.ts"
+export {
+  useSendMessageToParent,
+  useReceiveMessage,
+  useSendMessageToIFrame,
+} from "./useMessage.ts";

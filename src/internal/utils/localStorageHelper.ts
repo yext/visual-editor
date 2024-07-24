@@ -1,4 +1,4 @@
-import { Role } from "../../components/editor.tsx";
+import { Role } from "../../components/Editor.tsx";
 
 const ROLE = "ROLE_",
   TEMPLATE = "TEMPLATE_",
