@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../internal/puck/ui/tooltip";
+} from "../internal/puck/ui/Tooltip";
 
 type EntityFieldProps = {
   displayName?: string;
