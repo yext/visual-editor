@@ -1,4 +1,3 @@
-import "./puck.css";
 import { Data, usePuck, type History } from "@measured/puck";
 import {
   PanelLeft,
@@ -27,7 +26,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/Tooltip.tsx";
+} from "../ui/tooltip.tsx";
+import "./puck.css";
+import "../../../components/index.css";
 
 const handleClick = (slug: string) => {
   window.open(`/${slug}`, "_blank");
@@ -200,7 +201,9 @@ const ToggleEntityFields = () => {
             size="icon"
             onClick={toggleTooltips}
             className={
-              tooltipsVisible ? "border-2 border-[#5A58F2] rounded-full" : ""
+              tooltipsVisible
+                ? "ve-border-2 ve-border-[#5A58F2] ve-rounded-full"
+                : ""
             }
           >
             <RectangleEllipsis className="sm-icon" />

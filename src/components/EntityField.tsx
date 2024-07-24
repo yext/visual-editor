@@ -36,7 +36,7 @@ export const EntityField = ({
           <div
             className={
               tooltipsVisible
-                ? "outline-2 outline-dotted outline-[#5A58F2]"
+                ? "ve-outline-2 ve-outline-dotted" + " ve-outline-[#5A58F2]"
                 : ""
             }
           >
