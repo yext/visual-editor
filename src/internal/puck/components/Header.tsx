@@ -19,7 +19,7 @@ import {
 } from "../ui/AlertDialog.tsx";
 import { useCallback, useEffect } from "react";
 import { useDocument } from "@yext/pages/util";
-import { Button } from "../ui/Button.tsx";
+import { Button } from "../ui/button.tsx";
 import { useEntityField } from "../../../components/EntityField.tsx";
 import {
   Tooltip,
