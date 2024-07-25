@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",
-    "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.7.0",
     "@types/fs-extra": "^11.0.4",
     "@types/minimist": "^1.2.5",
