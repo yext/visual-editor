@@ -1,8 +1,15 @@
-import {
-  PagesLayout,
-  VisualConfiguration,
-  VisualLayout,
-} from "../types/types.js";
+type VisualConfiguration = {
+  template: string;
+  data: string;
+};
+
+type PagesLayout = {
+  c_visualConfiguration?: VisualConfiguration;
+};
+
+type VisualLayout = {
+  c_visualConfiguration?: VisualConfiguration;
+};
 
 const defaultData = JSON.stringify({
   root: {},
