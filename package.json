@@ -16,7 +16,7 @@
     "autofix": "pnpm run lint && npm prun prettier",
     "ci-publish": "tsx scripts/publishCI.ts",
     "release": "tsx scripts/release.ts",
-    "prepare": "husky install && pnpm build"
+    "prepare": "husky && pnpm build"
   },
   "dependencies": {
     "@yext/eslint-config": "^1.0.0",
