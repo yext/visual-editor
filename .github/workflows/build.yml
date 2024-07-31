@@ -36,5 +36,5 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: build-output
-          path: "./packages/${{ inputs.package }}/dist"
+          path: "./dist"
           overwrite: true
