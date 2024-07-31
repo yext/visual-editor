@@ -1,0 +1,11 @@
+inputs:
+  - ./package.json
+output: ./THIRD-PARTY-NOTICES
+overwrite: true
+eol: lf
+ci: true
+no-spinner: true
+replace:
+  doctrine@2.1.0: node_modules/.pnpm/doctrine@2.1.0/node_modules/doctrine/LICENSE
+  axe-core@4.9.1: node_modules/.pnpm/axe-core@4.9.1/node_modules/axe-core/LICENSE
+  rc@1.2.8: node_modules/.pnpm/rc@1.2.8/node_modules/rc/LICENSE.MIT
