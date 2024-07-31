@@ -35,9 +35,6 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Build Storybook
-        run: pnpm run build-storybook
-
       - name: Create build-output artifact
         uses: actions/upload-artifact@v4.3.3
         with:
