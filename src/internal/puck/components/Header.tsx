@@ -6,7 +6,7 @@ import {
   PanelRight,
   RotateCcw,
   RotateCw,
-  RectangleEllipsis,
+  MessageSquareText,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -194,8 +194,8 @@ const ToggleEntityFields = () => {
   const { toggleTooltips, tooltipsVisible } = useEntityField();
   return (
     <TooltipProvider>
-      <Tooltip open={tooltipsVisible}>
-        <TooltipTrigger asChild>
+      <Tooltip>
+        <TooltipTrigger>
           <Button
             variant="ghost"
             size="icon"
@@ -204,11 +204,11 @@ const ToggleEntityFields = () => {
               tooltipsVisible ? "border-2 border-[#5A58F2] rounded-full" : ""
             }
           >
-            <RectangleEllipsis className="sm-icon" />
+            <MessageSquareText className="sm-icon" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          Hide Entity Fields
+          {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
           <TooltipArrow fill="bg-popover" />
         </TooltipContent>
       </Tooltip>
