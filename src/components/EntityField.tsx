@@ -20,7 +20,7 @@ export const EntityField = ({
 }: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
 
-  let tooltipContent: string = "";
+  let tooltipContent = "";
   if (displayName && fieldId) {
     tooltipContent = `${displayName} (${fieldId})`;
   } else if (fieldId) {
