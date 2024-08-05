@@ -118,7 +118,9 @@ export const InternalEditor = ({
     <EntityFieldProvider>
       <Puck
         config={puckConfig}
-        data={puckData as Partial<Data>}
+        data={
+          (puckData as Partial<Data>) ?? { root: {}, content: [], zones: {} }
+        }
         initialHistory={
           index === -1 ? undefined : { histories: histories, index: index }
         }
