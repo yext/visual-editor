@@ -92,7 +92,7 @@ export const customHeader = (
         >
           View Page
         </Button>
-        {isDevMode ? null : (
+        {!isDevMode && (
           <Button
             variant="secondary"
             disabled={histories.length === 0}
@@ -195,7 +195,7 @@ const ToggleEntityFields = () => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
