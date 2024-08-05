@@ -13,6 +13,7 @@ import {
   useSendMessageToParent,
 } from "../hooks/useMessage.ts";
 import { SaveState } from "../internal/types/saveState.ts";
+import "@measured/puck/puck.css";
 
 export const Role = {
   GLOBAL: "global",
