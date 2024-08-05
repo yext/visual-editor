@@ -61,7 +61,8 @@ export const Editor = ({
   useEffect(() => {
     if (templateMetadata?.isDevMode) {
       try {
-        setDevPageSets(pageSets); // pageSets is a global variable set by pagesJS
+        // @ts-expect-error pageSets is a global variable set by pagesJS
+        setDevPageSets(pageSets);
         // eslint-disable-next-line
       } catch (ignored) {
         console.warn("pageSets are not defined");
