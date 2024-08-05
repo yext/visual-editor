@@ -29,6 +29,11 @@ export const TARGET_ORIGINS = [
   "https://app.eu.yext.com",
 ];
 
+export type PuckInitialHistory = {
+  histories: History<any>[];
+  index: number;
+};
+
 export interface EditorProps {
   document: any;
   puckConfig: Config;
@@ -41,23 +46,28 @@ export const Editor = ({
   templateMetadata,
 }: EditorProps) => {
   const [puckData, setPuckData] = useState<Data>();
-  const [histories, setHistories] = useState<History<any>[]>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(0);
+  const [puckInitialHistory, setPuckInitialHistory] =
+    useState<PuckInitialHistory>({
+      histories: [],
+      index: -1,
+    });
   const [visualConfigurationData, setVisualConfigurationData] = useState<any>(); // json data
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
   const [saveState, setSaveState] = useState<SaveState>();
   const [saveStateFetched, setSaveStateFetched] = useState<boolean>(false); // needed because saveState can be empty
-  console.log("render VE lib editor");
-
-  const { sendToParent: veLibLoaded } = useSendMessageToParent(
-    "veLibLoaded",
-    TARGET_ORIGINS
-  );
+  const [devPageSets, setDevPageSets] = useState<any>(undefined);
 
   useEffect(() => {
-    veLibLoaded({ payload: { message: "VE Library is loaded" } });
-  }, []);
+    if (templateMetadata?.isDevMode) {
+      try {
+        setDevPageSets(pageSets); // pageSets is a global variable set by pagesJS
+        // eslint-disable-next-line
+      } catch (ignored) {
+        console.warn("pageSets are not defined");
+      }
+    }
+  }, [templateMetadata?.isDevMode]);
 
   /**
    * Clears the user's localStorage and resets the current Puck history
@@ -74,8 +84,6 @@ export const Editor = ({
     layoutId?: number,
     entityId?: number
   ) => {
-    setHistories([]);
-    setHistoryIndex(-1);
     window.localStorage.removeItem(
       getLocalStorageKey(isDevMode, role, templateId, layoutId, entityId)
     );
@@ -118,6 +126,35 @@ export const Editor = ({
       return;
     }
 
+    if (templateMetadata.isDevMode) {
+      // Check localStorage for existing Puck history
+      const localHistoryArray = window.localStorage.getItem(
+        getLocalStorageKey(
+          templateMetadata.isDevMode,
+          templateMetadata.role,
+          templateMetadata.templateId,
+          templateMetadata.layoutId,
+          templateMetadata.entityId
+        )
+      );
+
+      // Use localStorage directly if it exists
+      if (localHistoryArray) {
+        const localHistories = JSON.parse(localHistoryArray);
+        const localHistoryIndex = localHistories.length - 1;
+        setPuckInitialHistory({
+          histories: localHistories,
+          index: localHistoryIndex,
+        });
+        setPuckData(localHistories[localHistoryIndex].data.data);
+        return;
+      }
+
+      // Otherwise start from the data saved to Content
+      setPuckData(visualConfigurationData);
+      return;
+    }
+
     // Nothing in save_state table, start fresh from Content
     if (!saveState) {
       clearLocalStorage(
@@ -147,7 +184,7 @@ export const Editor = ({
       )
     );
 
-    // No localStorage
+    // No localStorage, start from saveState
     if (!localHistoryArray) {
       return;
     }
@@ -158,8 +195,10 @@ export const Editor = ({
 
     // If local storage reset Puck history to it
     if (localHistoryIndex !== -1) {
-      setHistoryIndex(localHistoryIndex);
-      setHistories(JSON.parse(localHistoryArray));
+      setPuckInitialHistory({
+        histories: JSON.parse(localHistoryArray),
+        index: localHistoryIndex,
+      });
       return;
     }
 
@@ -172,8 +211,7 @@ export const Editor = ({
       templateMetadata.entityId
     );
   }, [
-    setHistories,
-    setHistoryIndex,
+    setPuckInitialHistory,
     setPuckData,
     clearLocalStorage,
     getLocalStorageKey,
@@ -184,9 +222,35 @@ export const Editor = ({
     TARGET_ORIGINS
   );
 
+  const { sendToParent: sendDevSaveStateData } = useSendMessageToParent(
+    "sendDevSaveStateData",
+    TARGET_ORIGINS
+  );
+
   useEffect(() => {
     iFrameLoaded({ payload: { message: "iFrame is loaded" } });
   }, []);
+
+  useEffect(() => {
+    if (templateMetadata?.isDevMode) {
+      const localHistory = window.localStorage.getItem(
+        getLocalStorageKey(
+          templateMetadata.isDevMode,
+          templateMetadata.role,
+          templateMetadata.templateId,
+          templateMetadata.layoutId,
+          templateMetadata.entityId
+        )
+      );
+      const localHistoryArray = localHistory ? JSON.parse(localHistory) : [];
+      const historyToSend = JSON.stringify(
+        localHistoryArray.length > 0
+          ? localHistoryArray[localHistoryArray.length - 1].data?.data
+          : {}
+      );
+      sendDevSaveStateData({ payload: { devSaveStateData: historyToSend } });
+    }
+  }, [templateMetadata]);
 
   useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
     setSaveState(payload as SaveState);
@@ -208,6 +272,23 @@ export const Editor = ({
       });
     }
   );
+
+  const { sendToParent: pushPageSets } = useSendMessageToParent(
+    "pushPageSets",
+    TARGET_ORIGINS
+  );
+
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      templateMetadata?.isDevMode &&
+      devPageSets
+    ) {
+      pushPageSets({
+        payload: devPageSets,
+      });
+    }
+  }, [templateMetadata?.isDevMode, devPageSets]);
 
   const { sendToParent: saveSaveState } = useSendMessageToParent(
     "saveSaveState",
@@ -250,8 +331,7 @@ export const Editor = ({
             puckConfig={puckConfig}
             puckData={puckData}
             isLoading={isLoading}
-            index={historyIndex}
-            histories={histories}
+            puckInitialHistory={puckInitialHistory}
             clearHistory={
               templateMetadata?.isDevMode ? clearLocalStorage : clearHistory
             }
@@ -259,7 +339,7 @@ export const Editor = ({
             saveState={saveState!}
             saveSaveState={saveSaveState}
             saveVisualConfigData={saveVisualConfigData}
-            deleteSaveState={deleteSaveState}
+            sendDevSaveStateData={sendDevSaveStateData}
           />
         </DocumentProvider>
       ) : (
