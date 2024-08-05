@@ -106,8 +106,8 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(vite@5.3.5(@types/node@20.14.11))
       '@yext/pages':
-        specifier: file:/Users/bbaugher/yext-pages-1.1.1.tgz
-        version: file:../../../yext-pages-1.1.1.tgz(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.5(@types/node@20.14.11))
+        specifier: 1.2.0-beta.0
+        version: 1.2.0-beta.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.5(@types/node@20.14.11))
       eslint-plugin-import:
         specifier: ^2.29.1
         version: 2.29.1(@typescript-eslint/parser@8.0.1(eslint@9.8.0)(typescript@5.5.4))(eslint@9.8.0)
@@ -1991,9 +1991,8 @@ packages:
   '@yext/eslint-plugin-export-star@1.2.0':
     resolution: {integrity: sha512-oD2Vg33/sttaGBSiO3xY2HQlvTooX+Ob9hYp1QBkLMIhYcXqciNVpj27U8p4b7R7Tu5uOFo1BScuPF0cngQBHA==}
 
-  '@yext/pages@file:../../../yext-pages-1.1.1.tgz':
-    resolution: {integrity: sha512-vwJdMB43yUUDd8niXMBkjKnlHj3TdCG2vYxQ/MMxkiKLSarb4sGlORjDdpkra5qXnYMZj9N1UGIguYD7C8XC2Q==, tarball: file:../../../yext-pages-1.1.1.tgz}
-    version: 1.1.1
+  '@yext/pages@1.2.0-beta.0':
+    resolution: {integrity: sha512-uBMEW6TGle/hlwWIV97vh2qDXjoVpqjT6qqIH/JXQ/qDqDdPYFjRsDZoP57h/RnZTquJ8ZCnfmobS4G8X7Ef4g==}
     engines: {node: ^18 || ^20.2.0}
     hasBin: true
     peerDependencies:
@@ -7496,7 +7495,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@yext/pages@file:../../../yext-pages-1.1.1.tgz(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.5(@types/node@20.14.11))':
+  '@yext/pages@1.2.0-beta.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vite@5.3.5(@types/node@20.14.11))':
     dependencies:
       ansi-to-html: 0.7.2
       browser-or-node: 2.1.1
