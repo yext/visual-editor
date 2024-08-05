@@ -65,7 +65,7 @@ function validateOrDefault(puckData: string, templateName: string): string {
 
   try {
     JSON.parse(puckData); // check if the puckData is valid JSON
-  } catch (e) {
+  } catch {
     console.warn(`Invalid visual editor data for template: ${templateName}`);
     return defaultData;
   }

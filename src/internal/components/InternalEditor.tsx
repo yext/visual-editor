@@ -1,9 +1,10 @@
 import { Puck, Data, Config, usePuck, type History } from "@measured/puck";
+import React from "react";
 import "@measured/puck/puck.css";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
 import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
-import { TemplateMetadata } from "../../types";
+import { TemplateMetadata } from "../../types/index.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 

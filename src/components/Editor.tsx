@@ -1,14 +1,18 @@
 import { InternalEditor } from "../internal/components/InternalEditor.js";
+import React from "react";
 import "./index.css";
 import { DocumentProvider } from "@yext/pages/util";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { getLocalStorageKey } from "../internal/utils/localStorageHelper";
-import { TemplateMetadata } from "../types";
+import { getLocalStorageKey } from "../internal/utils/localStorageHelper.ts";
+import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { type History, type Data, type Config } from "@measured/puck";
-import { useReceiveMessage, useSendMessageToParent } from "../hooks";
-import { SaveState } from "../internal/types/saveState";
+import {
+  useReceiveMessage,
+  useSendMessageToParent,
+} from "../hooks/useMessage.ts";
+import { SaveState } from "../internal/types/saveState.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -229,7 +233,7 @@ export const Editor = ({
     !visualConfigurationDataFetched;
 
   const progress: number =
-    (100 * // @ts-ignore adding bools is fine
+    (100 * // @ts-expect-error adding bools is fine
       (!!puckConfig +
         !!puckData +
         !!templateMetadata +

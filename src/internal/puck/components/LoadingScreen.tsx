@@ -1,4 +1,5 @@
 import { Progress } from "../ui/Progress.tsx";
+import React from "react";
 
 export type LoadingScreenProps = {
   progress: number;

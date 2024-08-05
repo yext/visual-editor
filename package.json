@@ -29,7 +29,7 @@
     "test": "vitest run",
     "prettier": "prettier --write --cache .",
     "lint": "eslint --cache --fix src/ scripts/",
-    "autofix": "pnpm run lint && npm prun prettier",
+    "autofix": "pnpm run lint && pnpm run prettier",
     "ci-publish": "tsx scripts/publishCI.ts",
     "release": "tsx scripts/release.ts",
     "prepare": "husky && pnpm build",

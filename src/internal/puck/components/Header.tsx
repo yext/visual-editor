@@ -1,4 +1,5 @@
 import "./puck.css";
+import React from "react";
 import { Data, usePuck, type History } from "@measured/puck";
 import {
   PanelLeft,
