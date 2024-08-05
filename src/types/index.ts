@@ -1,1 +1,1 @@
-export { type TemplateMetadata } from "./templateMetadata";
+export { type TemplateMetadata } from "./templateMetadata.ts";

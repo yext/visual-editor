@@ -1,10 +1,12 @@
+import "./puck.css";
+import React from "react";
 import { Data, usePuck, type History } from "@measured/puck";
 import {
   PanelLeft,
   PanelRight,
   RotateCcw,
   RotateCw,
-  RectangleEllipsis,
+  MessageSquareText,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -92,7 +94,7 @@ export const customHeader = (
         >
           View Page
         </Button>
-        {isDevMode ? null : (
+        {!isDevMode && (
           <Button
             variant="secondary"
             disabled={histories.length === 0}
@@ -194,7 +196,7 @@ const ToggleEntityFields = () => {
   const { toggleTooltips, tooltipsVisible } = useEntityField();
   return (
     <TooltipProvider>
-      <Tooltip open={tooltipsVisible}>
+      <Tooltip>
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
@@ -206,11 +208,11 @@ const ToggleEntityFields = () => {
                 : ""
             }
           >
-            <RectangleEllipsis className="sm-icon" />
+            <MessageSquareText className="sm-icon" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          Hide Entity Fields
+          {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
           <TooltipArrow fill="bg-popover" />
         </TooltipContent>
       </Tooltip>

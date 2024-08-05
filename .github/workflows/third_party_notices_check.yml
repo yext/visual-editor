@@ -25,9 +25,6 @@ jobs:
       - name: Global install generate-license-file
         run: pnpm add -g generate-license-file
 
-      - name: Global install turbo
-        run: pnpm add -g turbo
-
       - name: Install packages
         run: pnpm i --ignore-scripts
 
