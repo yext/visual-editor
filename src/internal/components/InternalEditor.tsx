@@ -7,13 +7,13 @@ import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../../types/index.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
+import { PuckInitialHistory } from "../../components/Editor.tsx";
 
 interface InternalEditorProps {
   puckConfig: Config;
   puckData: any; // json object
+  puckInitialHistory: PuckInitialHistory;
   isLoading: boolean;
-  histories: Array<{ data: any; id: string }>;
-  index: number;
   clearHistory: (
     isDevMode: boolean,
     role: string,
@@ -25,28 +25,27 @@ interface InternalEditorProps {
   saveState: SaveState;
   saveSaveState: (data: any) => void;
   saveVisualConfigData: (data: any) => void;
-  deleteSaveState: () => void;
+  sendDevSaveStateData: (data: any) => void;
 }
 
 // Render Puck editor
 export const InternalEditor = ({
   puckConfig,
   puckData,
+  puckInitialHistory,
   isLoading,
-  histories,
-  index,
   clearHistory,
   templateMetadata,
   saveState,
   saveSaveState,
   saveVisualConfigData,
-  deleteSaveState,
+  sendDevSaveStateData,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(-1);
 
   /**
-   * When the Puck history changes save it to localStorage and set a message
+   * When the Puck history changes save it to localStorage and send a message
    * to the parent which saves the state to the VES database.
    */
   const handleHistoryChange = useCallback(
@@ -58,31 +57,33 @@ export const InternalEditor = ({
       ) {
         historyIndex.current = index;
 
+        window.localStorage.setItem(
+          getLocalStorageKey(
+            templateMetadata.isDevMode,
+            templateMetadata.role,
+            templateMetadata.templateId,
+            templateMetadata.layoutId,
+            templateMetadata.entityId
+          ),
+          JSON.stringify(histories)
+        );
+
         if (saveState?.hash !== histories[index].id) {
-          saveSaveState({
-            payload: {
-              hash: histories[index].id,
-              history: JSON.stringify(histories[index].data),
-            },
-          });
-
-          window.localStorage.setItem(
-            getLocalStorageKey(
-              templateMetadata.isDevMode,
-              templateMetadata.role,
-              templateMetadata.templateId,
-              templateMetadata.layoutId,
-              templateMetadata.entityId
-            ),
-            JSON.stringify(histories)
-          );
+          if (templateMetadata.isDevMode) {
+            sendDevSaveStateData({
+              payload: {
+                devSaveStateData: JSON.stringify(histories[index].data?.data),
+              },
+            });
+          } else {
+            saveSaveState({
+              payload: {
+                hash: histories[index].id,
+                history: JSON.stringify(histories[index].data),
+              },
+            });
+          }
         }
-      }
-
-      if (index === -1 && historyIndex.current !== index) {
-        historyIndex.current = index;
-
-        deleteSaveState();
       }
     },
     [templateMetadata, getLocalStorageKey]
@@ -121,9 +122,7 @@ export const InternalEditor = ({
         data={
           (puckData as Partial<Data>) ?? { root: {}, content: [], zones: {} }
         }
-        initialHistory={
-          index === -1 ? undefined : { histories: histories, index: index }
-        }
+        initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
           header: () => {
