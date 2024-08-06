@@ -5,17 +5,17 @@ This library provides components to make it easy to set up a Pages repository su
 
 ## Hooks
 
-| Hook                                            |
-|-------------------------------------------------|
-| [useReceiveMessage](./src/hooks/README.md)      |
-| [useSendMessageToIFrame](./src/hooks/README.md) |
-| [useSendMessageToParent](./src/hooks/README.md) |
+| Hook                                                                   |
+|------------------------------------------------------------------------|
+| [useReceiveMessage](./src/hooks/README.md#usereceivemessage)           |
+| [useSendMessageToIFrame](./src/hooks/README.md#usesendmessagetoiframe) |
+| [useSendMessageToParent](./src/hooks/README.md#usesendmessagetoparent) |
 ## Components
 
-| Component                                 |
-|-------------------------------------------|
-| [Editor](./src/components/README.md)      |
-| [EntityField](./src/components/README.md) | 
+| Component                                             |
+|-------------------------------------------------------|
+| [Editor](./src/components/README.md#editor)           |
+| [EntityField](./src/components/README.md#entityfield) | 
 
 ## Utils
 
@@ -25,9 +25,9 @@ This library provides components to make it easy to set up a Pages repository su
 
 ## Types
 
-| Type                                    |
-|-----------------------------------------|
-| TemplateMetadata                        |
-| [TARGET_ORIGINS](./src/hooks/README.md) |
+| Type                                                   |
+|--------------------------------------------------------|
+| TemplateMetadata                                       |
+| [TARGET_ORIGINS](./src/hooks/README.md#target_origins) |
 
 
