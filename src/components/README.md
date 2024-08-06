@@ -12,7 +12,7 @@ information.
 | ---------------- | ------------------------------------------------------------------ |
 | document         | any (json data)                                                    |
 | puckConfig       | Config from [@measuredco/puck](https://github.com/measuredco/puck) |
-| templateMetadata | [TemplateMetadata](//TODO)                                         |
+| templateMetadata | [TemplateMetadata](./../types/README.md#templatemetadata)          |
 
 #### Usage:
 

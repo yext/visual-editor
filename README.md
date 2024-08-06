@@ -25,9 +25,9 @@ This library provides components to make it easy to set up a Pages repository su
 
 ## Types
 
-| Type                                                   |
-|--------------------------------------------------------|
-| TemplateMetadata                                       |
-| [TARGET_ORIGINS](./src/hooks/README.md#target_origins) |
+| Type                                                       |
+|------------------------------------------------------------|
+| [TemplateMetadata](./src/types/README.md#templatemetadata) |
+| [TARGET_ORIGINS](./src/hooks/README.md#target_origins)     |
 
 
