@@ -51,14 +51,11 @@
   }
 }
 
-.loading-screen {
-  .wrapper {
-    width: 100vw;
-    height: 100vh;
-    justify-content: center;
-  }
-
-  .progress {
+.ve-loading-wrapper {
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  .ve-loading-progress {
     width: 30%;
   }
 }
