@@ -29,7 +29,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
-import "./puck.css";
 import "../../../components/index.css";
 
 const handleClick = (slug: string) => {
