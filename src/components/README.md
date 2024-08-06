@@ -28,8 +28,6 @@ import { Editor } from "@yext/visual-editor";
 </DocumentProvider>;
 ```
 
-### TARGET_ORIGINS
-
 ## EntityField
 
 Use this to wrap areas which use an entity field to populate data within components. This will
@@ -53,5 +51,3 @@ import { EntityField } from "@yext/visual-editor";
   </Body>
 </EntityField>;
 ```
-
-### useEntityField
