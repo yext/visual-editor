@@ -19,9 +19,9 @@ This library provides components to make it easy to set up a Pages repository su
 
 ## Utils
 
-| Function                |
-|-------------------------|
-| resolveVisualEditorData |
+| Function                                                                 |
+|--------------------------------------------------------------------------|
+| [resolveVisualEditorData](./src/utils/README.md#resolvevisualeditordata) |
 
 ## Types
 
