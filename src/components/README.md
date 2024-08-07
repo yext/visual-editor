@@ -3,7 +3,7 @@
 ## Editor
 
 Use this component to create an `edit.tsx` page in your Pages repository. This is the first step
-in making your repo compatible with the Visual Editor. See the [starter](//TODO) for more
+in making your repo compatible with the Visual Editor. See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for more
 information.
 
 #### Props:
