@@ -6,12 +6,12 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { getLocalStorageKey } from "../internal/utils/localStorageHelper.ts";
-import { TemplateMetadata } from "../types/templateMetadata.ts";
+import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type History, type Data, type Config } from "@measured/puck";
 import {
   useReceiveMessage,
   useSendMessageToParent,
-} from "../hooks/useMessage.ts";
+} from "../internal/hooks/useMessage.ts";
 import { SaveState } from "../internal/types/saveState.ts";
 import "@measured/puck/puck.css";
 
@@ -37,15 +37,10 @@ export type PuckInitialHistory = {
 
 export interface EditorProps {
   document: any;
-  puckConfig: Config;
-  templateMetadata: TemplateMetadata;
+  puckConfigs: Map<string, Config<any>>;
 }
 
-export const Editor = ({
-  document,
-  puckConfig,
-  templateMetadata,
-}: EditorProps) => {
+export const Editor = ({ document, puckConfigs }: EditorProps) => {
   const [puckData, setPuckData] = useState<Data>();
   const [puckInitialHistory, setPuckInitialHistory] =
     useState<PuckInitialHistory>({
@@ -58,6 +53,15 @@ export const Editor = ({
   const [saveState, setSaveState] = useState<SaveState>();
   const [saveStateFetched, setSaveStateFetched] = useState<boolean>(false); // needed because saveState can be empty
   const [devPageSets, setDevPageSets] = useState<any>(undefined);
+  const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
+  const [puckConfig, setPuckConfig] = useState<Config>();
+
+  useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
+    const puckConfig = puckConfigs.get(payload.templateId);
+    setPuckConfig(puckConfig);
+    setTemplateMetadata(payload as TemplateMetadata);
+    send({ status: "success", payload: { message: "payload received" } });
+  });
 
   useEffect(() => {
     if (templateMetadata?.isDevMode) {

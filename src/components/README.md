@@ -20,11 +20,7 @@ information.
 import { Editor } from "@yext/visual-editor";
 
 <DocumentProvider value={entityDocument}>
-  <Editor
-    document={entityDocument}
-    puckConfig={puckConfig!}
-    templateMetadata={templateMetadata!}
-  />
+  <Editor document={entityDocument} puckConfigs={puckConfigs} />
 </DocumentProvider>;
 ```
 
