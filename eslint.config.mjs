@@ -26,7 +26,7 @@ export default [
   {
     plugins: {
       react,
-      "@typescript-eslint": typescriptEslint,
+      typescriptEslint: fixupPluginRules(typescriptEslint),
       import: fixupPluginRules(_import),
     },
 
@@ -58,12 +58,14 @@ export default [
     },
 
     rules: {
+      "typescriptEslint/no-explicit-any": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-empty-function": "off",
-      "@typescript-eslint/no-extra-semi": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
+      "typescriptEslint/no-empty-function": "off",
+      "typescriptEslint/no-extra-semi": "off",
+      "typescriptEslint/no-non-null-assertion": "off",
       "import/extensions": ["error", "ignorePackages"],
       "react/no-deprecated": "off",
+      "react/prop-types": "off",
     },
   },
 ];
