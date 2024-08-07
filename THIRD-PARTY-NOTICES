@@ -6800,7 +6800,7 @@ Apache-2.0
 
 The following npm package may be included in this product:
 
- - caniuse-lite@1.0.30001649
+ - caniuse-lite@1.0.30001650
 
 This package contains the following license and notice below:
 
@@ -10408,10 +10408,10 @@ SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - @floating-ui/core@1.6.6
- - @floating-ui/dom@1.6.9
+ - @floating-ui/core@1.6.7
+ - @floating-ui/dom@1.6.10
  - @floating-ui/react-dom@2.1.1
- - @floating-ui/utils@0.2.6
+ - @floating-ui/utils@0.2.7
 
 These packages each contain the following license and notice below:
 
@@ -11366,7 +11366,7 @@ ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following npm package may be included in this product:
 
- - foreground-child@3.2.1
+ - foreground-child@3.3.0
 
 This package contains the following license and notice below:
 
