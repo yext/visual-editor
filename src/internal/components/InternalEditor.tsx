@@ -1,6 +1,5 @@
 import { Puck, Data, Config, usePuck, type History } from "@measured/puck";
 import React from "react";
-import "@measured/puck/puck.css";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
 import { getLocalStorageKey } from "../utils/localStorageHelper.ts";

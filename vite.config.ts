@@ -13,7 +13,7 @@ export default defineConfig(() => ({
       formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@measured/puck"],
       output: {
         globals: {
           react: "React",

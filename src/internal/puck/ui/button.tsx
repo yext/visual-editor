@@ -4,25 +4,30 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn.ts";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "ve-inline-flex ve-items-center ve-justify-center ve-whitespace-nowrap ve-rounded-md ve-text-sm" +
+    " ve-font-medium ve-ring-offset-background ve-transition-colors focus-visible:ve-outline-none" +
+    " focus-visible:ve-ring-2 focus-visible:ve-ring-ring focus-visible:ve-ring-offset-2" +
+    " disabled:ve-pointer-events-none disabled:ve-opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "ve-bg-primary ve-text-primary-foreground hover:ve-bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "ve-bg-destructive ve-text-destructive-foreground hover:ve-bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "ve-border ve-border-input ve-bg-background hover:ve-bg-accent" +
+          " hover:ve-text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "ve-bg-secondary ve-text-secondary-foreground hover:ve-bg-secondary/80",
+        ghost: "hover:ve-bg-accent hover:ve-text-accent-foreground",
+        link: "ve-text-primary ve-underline-offset-4 hover:ve-underline",
       },
       size: {
-        default: "h-10 rounded-md px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "ve-h-10 ve-rounded-md ve-px-4 ve-py-2",
+        sm: "ve-h-9 ve-rounded-md ve-px-3",
+        lg: "ve-h-11 ve-rounded-md ve-px-8",
+        icon: "ve-h-10 ve-w-10",
       },
     },
     defaultVariants: {

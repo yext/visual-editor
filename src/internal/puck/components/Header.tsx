@@ -29,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
+import "../../../components/index.css";
 
 const handleClick = (slug: string) => {
   window.open(`/${slug}`, "_blank");
@@ -201,7 +202,9 @@ const ToggleEntityFields = () => {
             size="icon"
             onClick={toggleTooltips}
             className={
-              tooltipsVisible ? "border-2 border-[#5A58F2] rounded-full" : ""
+              tooltipsVisible
+                ? "ve-border-2 ve-border-[#5A58F2] ve-rounded-full"
+                : ""
             }
           >
             <MessageSquareText className="sm-icon" />
