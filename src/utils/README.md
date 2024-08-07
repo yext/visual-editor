@@ -7,12 +7,12 @@ This is a helper function to be used in transformProps within your template tsx 
 
 ### Params
 
-| Name                       | Type                  |
-| -------------------------- | --------------------- |
-| entityConfigurations       | VisualConfiguration[] |
-| entityLayoutConfigurations | PagesLayout[]         |
-| siteLayoutConfigurations   | VisualLayout[]        |
-| templateName               | string or undefined   |
+| Name                       | Type                     |
+| -------------------------- | ------------------------ |
+| entityConfigurations       | VisualConfiguration[]    |
+| entityLayoutConfigurations | PagesLayout[]            |
+| siteLayoutConfigurations   | VisualLayout[]           |
+| templateName               | json string or undefined |
 
 ### Usage
 
@@ -22,11 +22,19 @@ export const transformProps = async (data) => {
   const entityConfigurations = document.c_visualConfigurations ?? [];
   const entityLayoutConfigurations = document.c_pages_layouts ?? [];
   const siteLayoutConfigurations = document._site?.c_visualLayouts;
-  return resolveVisualEditorData(
+  const visualEditorData = resolveVisualEditorData(
     entityConfigurations,
     entityLayoutConfigurations,
     siteLayoutConfigurations,
     "location"
   );
+  const visualTemplate = JSON.parse(visualEditorData);
+  return {
+    ...data,
+    document: {
+      ...document,
+      visualTemplate,
+    },
+  };
 };
 ```
