@@ -8,25 +8,37 @@ information.
 
 #### Props:
 
-| Name             | Type                                                               |
-| ---------------- | ------------------------------------------------------------------ |
-| document         | any (json data)                                                    |
-| puckConfig       | Config from [@measuredco/puck](https://github.com/measuredco/puck) |
-| templateMetadata | [TemplateMetadata](./../types/README.md#templatemetadata)          |
+| Name        | Type                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------ |
+| document    | any (json data from [our hook](../hooks/README.md#usedocumentprovider))              |
+| puckConfigs | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
 
 #### Usage:
 
 ```tsx
-import { Editor } from "@yext/visual-editor";
+// All the available components for locations
+const locationConfig: Config<LocationProps> = {
+  components: {...},
+  root: {...},
+};
 
-<DocumentProvider value={entityDocument}>
-  <Editor
-    document={entityDocument}
-    puckConfig={puckConfig!}
-    templateMetadata={templateMetadata!}
-  />
-</DocumentProvider>;
+const puckConfigs = new Map<string, Config<any>>([
+  ["location", locationConfig],
+]);
+
+
+const Edit: () => JSX.Element = () => {
+  const entityDocument = useDocumentProvider();
+
+  return (
+      <DocumentProvider value={entityDocument}>
+        <Editor document={entityDocument} puckConfigs={puckConfigs} />
+      </DocumentProvider>
+  );
+};
 ```
+
+See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for a more detailed look at the puckConfigs.
 
 ## EntityField
 
