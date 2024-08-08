@@ -6,7 +6,6 @@ import {
   PanelRight,
   RotateCcw,
   RotateCw,
-  MessageSquareText,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -21,6 +20,7 @@ import {
 import { useCallback, useEffect } from "react";
 import { useDocument } from "@yext/pages/util";
 import { Button } from "../ui/button.tsx";
+import { Switch } from "../ui/switch.tsx";
 import { useEntityField } from "../../../components/EntityField.tsx";
 import {
   Tooltip,
@@ -197,18 +197,10 @@ const ToggleEntityFields = () => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTooltips}
-            className={
-              tooltipsVisible
-                ? "ve-border-2 ve-border-[#5A58F2] ve-rounded-full"
-                : ""
-            }
-          >
-            <MessageSquareText className="sm-icon" />
-          </Button>
+          <div className="flex flex-row self-center gap-3 pl-2">
+            <Switch onCheckedChange={toggleTooltips} />
+            <p className="self-center text-sm">Entity Fields</p>
+          </div>
         </TooltipTrigger>
         <TooltipContent>
           {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
