@@ -18,9 +18,7 @@ const defaultData = JSON.stringify({
 });
 
 export function resolveVisualEditorData(
-  entityConfigurations: VisualConfiguration[],
-  entityLayoutConfigurations: PagesLayout[],
-  siteLayoutConfigurations: VisualLayout[],
+  data: any,
   templateName: string | undefined
 ): string {
   if (!templateName) {
@@ -28,33 +26,70 @@ export function resolveVisualEditorData(
       "Unable to parse puck data, template name must be defined in config."
     );
   }
+
+  const { document } = data;
+  const entityConfigurations: VisualConfiguration[] =
+    document.c_visualConfigurations ?? [];
+  const entityLayoutConfigurations: PagesLayout[] =
+    document.c_pages_layouts ?? [];
+  const siteLayoutConfigurations: VisualLayout[] =
+    document._site?.c_visualLayouts;
+
   // check base entity
   for (const entityConfiguration of entityConfigurations) {
     if (entityConfiguration.template === templateName) {
-      return validateOrDefault(entityConfiguration.data, templateName);
+      const visualTemplate = JSON.parse(
+        validateOrDefault(entityConfiguration.data, templateName)
+      );
+      return {
+        ...data,
+        document: {
+          ...document,
+          visualTemplate,
+        },
+      };
     }
   }
   // check layouts referenced by the base entity
   for (const entityLayout of entityLayoutConfigurations) {
     if (entityLayout.c_visualConfiguration?.template === templateName) {
-      return validateOrDefault(
-        entityLayout.c_visualConfiguration.data,
-        templateName
+      const visualTemplate = JSON.parse(
+        validateOrDefault(entityLayout.c_visualConfiguration.data, templateName)
       );
+      return {
+        ...data,
+        document: {
+          ...document,
+          visualTemplate,
+        },
+      };
     }
   }
   // check layouts referenced by the site entity
   for (const siteLayout of siteLayoutConfigurations) {
     if (siteLayout.c_visualConfiguration?.template === templateName) {
-      return validateOrDefault(
-        siteLayout.c_visualConfiguration.data,
-        templateName
+      const visualTemplate = JSON.parse(
+        validateOrDefault(siteLayout.c_visualConfiguration.data, templateName)
       );
+      return {
+        ...data,
+        document: {
+          ...document,
+          visualTemplate,
+        },
+      };
     }
   }
 
   console.warn(`Unable to find puck data for template: ${templateName}`);
-  return defaultData;
+  const visualTemplate = JSON.parse(defaultData);
+  return {
+    ...data,
+    document: {
+      ...document,
+      visualTemplate,
+    },
+  };
 }
 
 function validateOrDefault(puckData: string, templateName: string): string {
