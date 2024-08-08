@@ -1,2 +1,2 @@
-export { Editor, TARGET_ORIGINS } from "./Editor.tsx";
-export { EntityField, useEntityField } from "./EntityField.tsx";
+export { Editor } from "./Editor.tsx";
+export { EntityField } from "./EntityField.tsx";
