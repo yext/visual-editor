@@ -1,12 +1,7 @@
 import "./puck.css";
 import React from "react";
 import { Data, usePuck, type History } from "@measured/puck";
-import {
-  PanelLeft,
-  PanelRight,
-  RotateCcw,
-  RotateCw,
-} from "lucide-react";
+import { PanelLeft, PanelRight, RotateCcw, RotateCw } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogCancel,
