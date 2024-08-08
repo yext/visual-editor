@@ -7,7 +7,7 @@ if (!tag) {
   process.exit(1);
 }
 
-const [, version] = tag.split("@");
+const [, version] = tag.split("v");
 
 const { currentVersion, pkgDir } = await getPackageInfo();
 if (currentVersion !== version) {
