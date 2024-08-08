@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push:
     tags:
-      - "visual-editor*" # Push events to matching visual-editor*, i.e. visual-editor@1.0.0
+      - "*"
 
 jobs:
   publish:
