@@ -62,8 +62,11 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       const ancestors = window.location.ancestorOrigins;
       if (ancestors.length === 0) {
         window.location.assign("/404.html");
-      } else if (!ancestors[0].includes ("pagescdn") && !ancestors[0].includes("yext.com")) {
-          window.location.assign("/404.html");
+      } else if (
+        !ancestors[0].includes("pagescdn") &&
+        !ancestors[0].includes("yext.com")
+      ) {
+        window.location.assign("/404.html");
       } else {
           setParentLoaded(true);
       }
