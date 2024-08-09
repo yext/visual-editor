@@ -1,6 +1,6 @@
 # Development
 
-This library uses pnpm.
+This library uses [pnpm](https://pnpm.io/).
 
 ## Navigating the codebase
 
@@ -17,7 +17,7 @@ InternalEditor once all the requisite data is loaded.
 
 #### hooks
 
-Find useDocumentProvider in this directory. This calls internal useMessageHooks to fetch data
+Find useDocumentProvider in this directory. This calls internal useMessage hooks to fetch data
 from the Yext platform.
 
 #### utils
@@ -35,7 +35,8 @@ named accordingly.
 ### test
 
 This directory houses all the library's unit tests which are automatically run by GitHub when
-a PR is made. We highly recommend running the tests yourself as you develop code using `vitest run`.
+a PR is made. We highly recommend running the tests yourself as you develop code using `pnpm run 
+test`.
 
 ## Testing workflow
 
@@ -51,7 +52,7 @@ package.json's @yext/visual-editor dependency to `file:../path/to/the/pack.tgz`.
   may be easier to access. Either way the command will print the file path upon completion. It
   should look something like `~/yext-visual-editor-[version tag].tgz`
 
-After running this the first time to get your file path, an example script to automate this
+After running this the first time to get and set your file path, an example script to automate this
 would look like:
 
 ```shell
