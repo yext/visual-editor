@@ -8697,11 +8697,13 @@ The following npm packages may be included in this product:
  - @radix-ui/react-primitive@2.0.0
  - @radix-ui/react-progress@1.1.0
  - @radix-ui/react-slot@1.1.0
+ - @radix-ui/react-switch@1.1.0
  - @radix-ui/react-tooltip@1.1.2
  - @radix-ui/react-use-callback-ref@1.1.0
  - @radix-ui/react-use-controllable-state@1.1.0
  - @radix-ui/react-use-escape-keydown@1.1.0
  - @radix-ui/react-use-layout-effect@1.1.0
+ - @radix-ui/react-use-previous@1.1.0
  - @radix-ui/react-use-rect@1.1.0
  - @radix-ui/react-use-size@1.1.0
  - @radix-ui/react-visually-hidden@1.1.0
