@@ -68,7 +68,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       ) {
         window.location.assign("/404.html");
       } else {
-          setParentLoaded(true);
+        setParentLoaded(true);
       }
     }
   }, []);
