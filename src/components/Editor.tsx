@@ -55,6 +55,20 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   const [devPageSets, setDevPageSets] = useState<any>(undefined);
   const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
   const [puckConfig, setPuckConfig] = useState<Config>();
+  const [parentLoaded, setParentLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const ancestors = window.location.ancestorOrigins;
+      if (ancestors.length === 0) {
+        window.location.assign("/404.html");
+      } else if (!ancestors[0].includes ("pagescdn") && !ancestors[0].includes("yext.com")) {
+          window.location.assign("/404.html");
+      } else {
+          setParentLoaded("true");
+      }
+    }
+  }, []);
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = puckConfigs.get(payload.templateId);
@@ -349,7 +363,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
           />
         </DocumentProvider>
       ) : (
-        <LoadingScreen progress={progress} />
+        parentLoaded && <LoadingScreen progress={progress} />
       )}
       <Toaster closeButton richColors />
     </>
