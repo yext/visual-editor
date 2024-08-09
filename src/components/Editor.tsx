@@ -65,7 +65,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       } else if (!ancestors[0].includes ("pagescdn") && !ancestors[0].includes("yext.com")) {
           window.location.assign("/404.html");
       } else {
-          setParentLoaded("true");
+          setParentLoaded(true);
       }
     }
   }, []);
