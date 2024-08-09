@@ -192,14 +192,14 @@ const ToggleEntityFields = () => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="flex flex-row self-center gap-3 pl-2">
+          <div className="ve-flex ve-flex-row ve-self-center ve-gap-3 ve-pl-2">
             <Switch onCheckedChange={toggleTooltips} />
-            <p className="self-center text-sm">Entity Fields</p>
+            <p className="ve-self-center ve-text-sm">Entity Fields</p>
           </div>
         </TooltipTrigger>
         <TooltipContent>
           {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
-          <TooltipArrow fill="bg-popover" />
+          <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
