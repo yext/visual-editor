@@ -119,8 +119,15 @@ const ClearLocalChangesButton = ({
   disabled,
   onClearLocalChanges,
 }: ClearLocalChangesButtonProps) => {
+  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+
+  const handleClearLocalChanges = () => {
+    onClearLocalChanges();
+    setDialogOpen(false);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogTrigger disabled={disabled} asChild>
         <Button variant="outline">Clear Local Changes</Button>
       </AlertDialogTrigger>
@@ -133,7 +140,7 @@ const ClearLocalChangesButton = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button onClick={onClearLocalChanges}>Confirm</Button>
+          <Button onClick={() => handleClearLocalChanges()}>Confirm</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
