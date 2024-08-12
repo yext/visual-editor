@@ -1,7 +1,6 @@
 import { InternalEditor } from "../internal/components/InternalEditor.js";
 import React from "react";
 import "./index.css";
-import { DocumentProvider } from "@yext/pages/util";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
@@ -349,22 +348,20 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   return (
     <>
       {!isLoading ? (
-        <DocumentProvider value={document}>
-          <InternalEditor
-            puckConfig={puckConfig}
-            puckData={puckData}
-            isLoading={isLoading}
-            puckInitialHistory={puckInitialHistory}
-            clearHistory={
-              templateMetadata?.isDevMode ? clearLocalStorage : clearHistory
-            }
-            templateMetadata={templateMetadata}
-            saveState={saveState!}
-            saveSaveState={saveSaveState}
-            saveVisualConfigData={saveVisualConfigData}
-            sendDevSaveStateData={sendDevSaveStateData}
-          />
-        </DocumentProvider>
+        <InternalEditor
+          puckConfig={puckConfig}
+          puckData={puckData}
+          isLoading={isLoading}
+          puckInitialHistory={puckInitialHistory}
+          clearHistory={
+            templateMetadata?.isDevMode ? clearLocalStorage : clearHistory
+          }
+          templateMetadata={templateMetadata}
+          saveState={saveState!}
+          saveSaveState={saveSaveState}
+          saveVisualConfigData={saveVisualConfigData}
+          sendDevSaveStateData={sendDevSaveStateData}
+        />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
       )}
