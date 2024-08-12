@@ -1,13 +1,7 @@
 import "./puck.css";
 import React from "react";
 import { Data, usePuck, type History } from "@measured/puck";
-import {
-  PanelLeft,
-  PanelRight,
-  RotateCcw,
-  RotateCw,
-  MessageSquareText,
-} from "lucide-react";
+import { PanelLeft, PanelRight, RotateCcw, RotateCw } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -20,6 +14,7 @@ import {
 } from "../ui/AlertDialog.tsx";
 import { useCallback, useEffect } from "react";
 import { Button } from "../ui/button.tsx";
+import { Switch } from "../ui/switch.tsx";
 import { useEntityField } from "../../../components/EntityField.tsx";
 import {
   Tooltip,
@@ -185,22 +180,14 @@ const ToggleEntityFields = () => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTooltips}
-            className={
-              tooltipsVisible
-                ? "ve-border-2 ve-border-[#5A58F2] ve-rounded-full"
-                : ""
-            }
-          >
-            <MessageSquareText className="sm-icon" />
-          </Button>
+          <div className="ve-flex ve-flex-row ve-self-center ve-gap-3 ve-pl-2">
+            <Switch onCheckedChange={toggleTooltips} />
+            <p className="ve-self-center ve-text-sm">Entity Fields</p>
+          </div>
         </TooltipTrigger>
         <TooltipContent>
           {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
-          <TooltipArrow fill="bg-popover" />
+          <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
