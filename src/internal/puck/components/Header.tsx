@@ -28,21 +28,14 @@ import "../../../components/index.css";
 export const customHeader = (
   handleClearLocalChanges: () => void,
   handleHistoryChange: (histories: History[], index: number) => void,
-  data: Data,
+  currentPuckData: Data, // the current state of Puck data
+  initialPuckData: Data, // the initial state of Puck data before any local changes
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean
 ) => {
   const {
-    history: {
-      back,
-      forward,
-      histories,
-      index,
-      hasFuture,
-      hasPast,
-      setHistories,
-      setHistoryIndex,
-    },
+    dispatch: puckDispatch,
+    history: { back, forward, histories, index, hasFuture, setHistories },
   } = usePuck();
 
   useEffect(() => {
@@ -57,7 +50,12 @@ export const customHeader = (
       </div>
       <div className="header-center"></div>
       <div className="actions">
-        <Button variant="ghost" size="icon" disabled={!hasPast} onClick={back}>
+        <Button
+          variant="ghost"
+          size="icon"
+          disabled={index === 0} // prevent going to -1 because it would loop data back to the saveState
+          onClick={back}
+        >
           <RotateCcw className="sm-icon" />
         </Button>
         <Button
@@ -73,7 +71,10 @@ export const customHeader = (
           onClearLocalChanges={() => {
             handleClearLocalChanges();
             setHistories([]);
-            setHistoryIndex(-1);
+            puckDispatch({
+              type: "setData",
+              data: initialPuckData,
+            });
           }}
         />
         {!isDevMode && (
@@ -81,7 +82,7 @@ export const customHeader = (
             variant="secondary"
             disabled={histories.length === 0}
             onClick={async () => {
-              await handleSaveData(data);
+              await handleSaveData(currentPuckData);
               handleClearLocalChanges();
             }}
           >
@@ -102,8 +103,15 @@ const ClearLocalChangesButton = ({
   disabled,
   onClearLocalChanges,
 }: ClearLocalChangesButtonProps) => {
+  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+
+  const handleClearLocalChanges = () => {
+    onClearLocalChanges();
+    setDialogOpen(false);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogTrigger disabled={disabled} asChild>
         <Button variant="outline">Clear Local Changes</Button>
       </AlertDialogTrigger>
@@ -116,7 +124,7 @@ const ClearLocalChangesButton = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button onClick={onClearLocalChanges}>Confirm</Button>
+          <Button onClick={handleClearLocalChanges}>Confirm</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

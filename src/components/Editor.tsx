@@ -1,12 +1,11 @@
 import { InternalEditor } from "../internal/components/InternalEditor.js";
-import React from "react";
 import "./index.css";
-import { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { getLocalStorageKey } from "../internal/utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
-import { type History, type Data, type Config } from "@measured/puck";
+import { type History, type Config } from "@measured/puck";
 import {
   useReceiveMessage,
   useSendMessageToParent,
@@ -40,7 +39,6 @@ export interface EditorProps {
 }
 
 export const Editor = ({ document, puckConfigs }: EditorProps) => {
-  const [puckData, setPuckData] = useState<Data>();
   const [puckInitialHistory, setPuckInitialHistory] =
     useState<PuckInitialHistory>({
       histories: [],
@@ -136,10 +134,21 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       isFirstRender.current = false; // toggle flag after first render/mounting
       return;
     }
-    loadPuckDataUsingHistory(); // do something after state has updated
+    loadPuckInitialHistory(); // do something after state has updated
   }, [templateMetadata, saveState, visualConfigurationData]);
 
-  const loadPuckDataUsingHistory = useCallback(() => {
+  /**
+   * Determines the initialHistory to send to Puck. It is based on a combination
+   * of localStorage and saveState (from the DB).
+   *
+   * When in dev mode, only use localStorage if it exists.
+   * When NOT dev mode:
+   * 1. if no saveState, clear localStorage and use nothing
+   * 2. if saveState, find matching hash in localStorage:
+   *  - if match, use localStorage with index set to saveState hash
+   *  - if no match, use saveState directly and clear localStorage
+   */
+  const loadPuckInitialHistory = useCallback(() => {
     if (
       !visualConfigurationDataFetched ||
       !saveStateFetched ||
@@ -168,12 +177,17 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
           histories: localHistories,
           index: localHistoryIndex,
         });
-        setPuckData(localHistories[localHistoryIndex].data.data);
         return;
       }
 
-      // Otherwise start from the data saved to Content
-      setPuckData(visualConfigurationData);
+      // Otherwise start fresh from Content
+      setPuckInitialHistory({
+        histories: visualConfigurationData
+          ? [{ id: "root", data: { data: visualConfigurationData } }]
+          : [],
+        index: visualConfigurationData ? 0 : -1,
+      });
+
       return;
     }
 
@@ -187,13 +201,15 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
         templateMetadata.entityId
       );
 
-      setPuckData(visualConfigurationData);
+      setPuckInitialHistory({
+        histories: visualConfigurationData
+          ? [{ id: "root", data: { data: visualConfigurationData } }]
+          : [],
+        index: visualConfigurationData ? 0 : -1,
+      });
+
       return;
     }
-
-    // The history stored has both "ui" and "data" keys, but PuckData
-    // is only concerned with the "data" portion.
-    setPuckData(jsonFromEscapedJsonString(saveState.history).data);
 
     // Check localStorage for existing Puck history
     const localHistoryArray = window.localStorage.getItem(
@@ -208,6 +224,15 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
 
     // No localStorage, start from saveState
     if (!localHistoryArray) {
+      setPuckInitialHistory({
+        histories: visualConfigurationData
+          ? [
+              { id: "root", data: { data: visualConfigurationData } },
+              jsonFromEscapedJsonString(saveState.history).data,
+            ]
+          : [jsonFromEscapedJsonString(saveState.history).data],
+        index: visualConfigurationData ? 1 : 0,
+      });
       return;
     }
 
@@ -232,12 +257,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       templateMetadata.layoutId,
       templateMetadata.entityId
     );
-  }, [
-    setPuckInitialHistory,
-    setPuckData,
-    clearLocalStorage,
-    getLocalStorageKey,
-  ]);
+  }, [setPuckInitialHistory, clearLocalStorage, getLocalStorageKey]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
     "iFrameLoaded",
@@ -328,7 +348,6 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   );
 
   const isLoading =
-    !puckData ||
     !puckConfig ||
     !templateMetadata ||
     !document ||
@@ -338,7 +357,6 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   const progress: number =
     (100 * // @ts-expect-error adding bools is fine
       (!!puckConfig +
-        !!puckData +
         !!templateMetadata +
         !!document +
         saveStateFetched +
@@ -350,7 +368,6 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       {!isLoading ? (
         <InternalEditor
           puckConfig={puckConfig}
-          puckData={puckData}
           isLoading={isLoading}
           puckInitialHistory={puckInitialHistory}
           clearHistory={
@@ -361,6 +378,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
           saveSaveState={saveSaveState}
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
+          visualConfigurationData={visualConfigurationData}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
