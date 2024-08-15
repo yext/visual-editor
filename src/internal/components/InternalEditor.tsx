@@ -10,7 +10,6 @@ import { PuckInitialHistory } from "../../components/Editor.tsx";
 
 interface InternalEditorProps {
   puckConfig: Config;
-  puckData: any; // json object
   puckInitialHistory: PuckInitialHistory;
   isLoading: boolean;
   clearHistory: (
@@ -25,12 +24,12 @@ interface InternalEditorProps {
   saveSaveState: (data: any) => void;
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
+  visualConfigurationData: any;
 }
 
 // Render Puck editor
 export const InternalEditor = ({
   puckConfig,
-  puckData,
   puckInitialHistory,
   isLoading,
   clearHistory,
@@ -39,6 +38,7 @@ export const InternalEditor = ({
   saveSaveState,
   saveVisualConfigData,
   sendDevSaveStateData,
+  visualConfigurationData,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(-1);
@@ -85,7 +85,7 @@ export const InternalEditor = ({
         }
       }
     },
-    [templateMetadata, getLocalStorageKey]
+    [templateMetadata, getLocalStorageKey, saveState]
   );
 
   const handleClearLocalChanges = () => {
@@ -96,6 +96,7 @@ export const InternalEditor = ({
       templateMetadata.layoutId,
       templateMetadata.entityId
     );
+    historyIndex.current = -1;
   };
 
   const handleSave = async (data: Data) => {
@@ -114,12 +115,26 @@ export const InternalEditor = ({
     }
   };
 
+  /**
+   * Explanation for Puck `data` and `initialHistory`:
+   *  Let's say there are two changes, one is "committed" to Content called C, and one is the saveState WIP called W.
+   *  Puck data = [W]
+   *  initialHistories = [C, W] index at W
+   *  Ideally we can undo such that C is what shows at index -1, but because data starts at W we end up with W -> C -> W.
+   *  If we start data at C, then initial render shows C, but we want to render W.
+   *  To overcome this, we limit the undo history to index 0 in Header.tsx.
+   */
   return (
     <EntityFieldProvider>
       <Puck
         config={puckConfig}
         data={
-          (puckData as Partial<Data>) ?? { root: {}, content: [], zones: {} }
+          (puckInitialHistory.histories[puckInitialHistory.index].data
+            .data as Partial<Data>) ?? {
+            root: {},
+            content: [],
+            zones: {},
+          }
         }
         initialHistory={puckInitialHistory}
         onChange={change}
@@ -130,6 +145,7 @@ export const InternalEditor = ({
               handleClearLocalChanges,
               handleHistoryChange,
               appState.data,
+              visualConfigurationData,
               handleSave,
               templateMetadata.isDevMode
             );
