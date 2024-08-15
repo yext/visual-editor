@@ -13,7 +13,6 @@ import {
   AlertDialogTrigger,
 } from "../ui/AlertDialog.tsx";
 import { useCallback, useEffect } from "react";
-import { useDocument } from "@yext/pages/util";
 import { Button } from "../ui/button.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { useEntityField } from "../../../components/EntityField.tsx";
@@ -26,10 +25,6 @@ import {
 } from "../ui/Tooltip.tsx";
 import "../../../components/index.css";
 
-const handleClick = (slug: string) => {
-  window.open(`/${slug}`, "_blank");
-};
-
 export const customHeader = (
   handleClearLocalChanges: () => void,
   handleHistoryChange: (histories: History[], index: number) => void,
@@ -38,7 +33,6 @@ export const customHeader = (
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean
 ) => {
-  const entityDocument = useDocument<any>();
   const {
     dispatch: puckDispatch,
     history: { back, forward, histories, index, hasFuture, setHistories },
@@ -83,12 +77,6 @@ export const customHeader = (
             });
           }}
         />
-        <Button
-          variant="outline"
-          onClick={() => handleClick(entityDocument.slug)}
-        >
-          View Page
-        </Button>
         {!isDevMode && (
           <Button
             variant="secondary"

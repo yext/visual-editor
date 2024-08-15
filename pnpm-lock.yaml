@@ -115,9 +115,6 @@ devDependencies:
   '@vitejs/plugin-react':
     specifier: ^4.3.1
     version: 4.3.1(vite@5.3.5)
-  '@yext/pages':
-    specifier: 1.2.0-beta.0
-    version: 1.2.0-beta.0(react-dom@18.3.1)(react@18.3.1)(vite@5.3.5)
   autoprefixer:
     specifier: ^10.4.19
     version: 10.4.19(postcss@8.4.39)
