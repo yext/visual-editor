@@ -129,7 +129,7 @@ export const InternalEditor = ({
       <Puck
         config={puckConfig}
         data={
-          (puckInitialHistory.histories[puckInitialHistory.index].data
+          (puckInitialHistory.histories[puckInitialHistory.index]
             .data as Partial<Data>) ?? {
             root: {},
             content: [],
