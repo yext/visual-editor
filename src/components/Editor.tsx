@@ -228,9 +228,17 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
         histories: visualConfigurationData
           ? [
               { id: "root", data: { data: visualConfigurationData } },
-              jsonFromEscapedJsonString(saveState.history).data,
+              {
+                id: saveState.hash,
+                data: jsonFromEscapedJsonString(saveState.history),
+              },
             ]
-          : [jsonFromEscapedJsonString(saveState.history).data],
+          : [
+              {
+                id: saveState.hash,
+                data: jsonFromEscapedJsonString(saveState.history),
+              },
+            ],
         index: visualConfigurationData ? 1 : 0,
       });
       return;
