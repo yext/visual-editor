@@ -1,3 +1,10 @@
+#### 0.0.3 (2024-08-21)
+
+##### Bug Fixes
+
+- content data within history object (#22) (5629486e)
+- remove tooltip warning (#21) (cef55282)
+
 #### 0.0.2 (2024-08-15)
 
 ##### Documentation Changes
