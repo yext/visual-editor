@@ -65,19 +65,21 @@ export function resolveVisualEditorData(
       };
     }
   }
-  // check layouts referenced by the site entity
-  for (const siteLayout of siteLayoutConfigurations) {
-    if (siteLayout.c_visualConfiguration?.template === templateName) {
-      const visualTemplate = JSON.parse(
-        validateOrDefault(siteLayout.c_visualConfiguration.data, templateName)
-      );
-      return {
-        ...data,
-        document: {
-          ...document,
-          visualTemplate,
-        },
-      };
+  if (siteLayoutConfigurations) {
+    // check layouts referenced by the site entity
+    for (const siteLayout of siteLayoutConfigurations) {
+      if (siteLayout.c_visualConfiguration?.template === templateName) {
+        const visualTemplate = JSON.parse(
+          validateOrDefault(siteLayout.c_visualConfiguration.data, templateName)
+        );
+        return {
+          ...data,
+          document: {
+            ...document,
+            visualTemplate,
+          },
+        };
+      }
     }
   }
 
