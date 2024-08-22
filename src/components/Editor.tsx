@@ -35,10 +35,10 @@ export type PuckInitialHistory = {
 
 export interface EditorProps {
   document: any;
-  puckConfigs: Map<string, Config<any>>;
+  componentRegistry: Map<string, Config<any>>;
 }
 
-export const Editor = ({ document, puckConfigs }: EditorProps) => {
+export const Editor = ({ document, componentRegistry }: EditorProps) => {
   const [puckInitialHistory, setPuckInitialHistory] =
     useState<PuckInitialHistory>({
       histories: [],
@@ -71,7 +71,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   }, []);
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    const puckConfig = puckConfigs.get(payload.templateId);
+    const puckConfig = componentRegistry.get(payload.templateId);
     setPuckConfig(puckConfig);
     setTemplateMetadata(payload as TemplateMetadata);
     send({ status: "success", payload: { message: "payload received" } });
@@ -329,11 +329,13 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   );
 
   useEffect(() => {
+    console.log("pushPageSets useEffect", devPageSets);
     if (
       typeof window !== "undefined" &&
       templateMetadata?.isDevMode &&
       devPageSets
     ) {
+      console.log("actually calling pushPageSets");
       pushPageSets({
         payload: devPageSets,
       });
