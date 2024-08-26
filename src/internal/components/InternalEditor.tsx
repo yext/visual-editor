@@ -12,19 +12,14 @@ interface InternalEditorProps {
   puckConfig: Config;
   puckInitialHistory: PuckInitialHistory;
   isLoading: boolean;
-  clearHistory: (
-    isDevMode: boolean,
-    role: string,
-    templateId: string,
-    layoutId?: number,
-    entityId?: number
-  ) => void;
+  clearHistory: () => void;
   templateMetadata: TemplateMetadata;
   saveState: SaveState;
   saveSaveState: (data: any) => void;
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   visualConfigurationData: any;
+  buildLocalStorageKey: () => string;
 }
 
 // Render Puck editor
@@ -39,6 +34,7 @@ export const InternalEditor = ({
   saveVisualConfigData,
   sendDevSaveStateData,
   visualConfigurationData,
+  buildLocalStorageKey,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(-1);
@@ -57,18 +53,12 @@ export const InternalEditor = ({
         historyIndex.current = index;
 
         window.localStorage.setItem(
-          getLocalStorageKey(
-            templateMetadata.isDevMode,
-            templateMetadata.role,
-            templateMetadata.templateId,
-            templateMetadata.layoutId,
-            templateMetadata.entityId
-          ),
+          buildLocalStorageKey(),
           JSON.stringify(histories)
         );
 
         if (saveState?.hash !== histories[index].id) {
-          if (templateMetadata.isDevMode) {
+          if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
             sendDevSaveStateData({
               payload: {
                 devSaveStateData: JSON.stringify(histories[index].data?.data),
@@ -89,13 +79,7 @@ export const InternalEditor = ({
   );
 
   const handleClearLocalChanges = () => {
-    clearHistory(
-      templateMetadata.isDevMode,
-      templateMetadata.role,
-      templateMetadata.templateId,
-      templateMetadata.layoutId,
-      templateMetadata.entityId
-    );
+    clearHistory();
     historyIndex.current = -1;
   };
 
@@ -147,7 +131,7 @@ export const InternalEditor = ({
               appState.data,
               visualConfigurationData,
               handleSave,
-              templateMetadata.isDevMode
+              templateMetadata.isDevMode && !templateMetadata.devOverride
             );
           },
         }}

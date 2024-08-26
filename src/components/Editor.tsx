@@ -35,10 +35,10 @@ export type PuckInitialHistory = {
 
 export interface EditorProps {
   document: any;
-  puckConfigs: Map<string, Config<any>>;
+  componentRegistry: Map<string, Config<any>>;
 }
 
-export const Editor = ({ document, puckConfigs }: EditorProps) => {
+export const Editor = ({ document, componentRegistry }: EditorProps) => {
   const [puckInitialHistory, setPuckInitialHistory] =
     useState<PuckInitialHistory>({
       histories: [],
@@ -54,6 +54,20 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   const [puckConfig, setPuckConfig] = useState<Config>();
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
 
+  const buildLocalStorageKey = useCallback(() => {
+    if (!templateMetadata) {
+      return "";
+    }
+
+    return getLocalStorageKey(
+      templateMetadata.isDevMode && !templateMetadata.devOverride,
+      templateMetadata.role,
+      templateMetadata.templateId,
+      templateMetadata.layoutId,
+      templateMetadata.entityId
+    );
+  }, [templateMetadata]);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const ancestors = window.location.ancestorOrigins;
@@ -61,7 +75,8 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
         window.location.assign("/404.html");
       } else if (
         !ancestors[0].includes("pagescdn") &&
-        !ancestors[0].includes("yext.com")
+        !ancestors[0].includes("yext.com") &&
+        !ancestors[0].includes("localhost")
       ) {
         window.location.assign("/404.html");
       } else {
@@ -71,7 +86,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
   }, []);
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    const puckConfig = puckConfigs.get(payload.templateId);
+    const puckConfig = componentRegistry.get(payload.templateId);
     setPuckConfig(puckConfig);
     setTemplateMetadata(payload as TemplateMetadata);
     send({ status: "success", payload: { message: "payload received" } });
@@ -91,40 +106,16 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
 
   /**
    * Clears the user's localStorage and resets the current Puck history
-   * @param isDevMode
-   * @param role
-   * @param templateId
-   * @param layoutId
-   * @param entityId
    */
-  const clearLocalStorage = (
-    isDevMode: boolean,
-    role: string,
-    templateId: string,
-    layoutId?: number,
-    entityId?: number
-  ) => {
-    window.localStorage.removeItem(
-      getLocalStorageKey(isDevMode, role, templateId, layoutId, entityId)
-    );
+  const clearLocalStorage = () => {
+    window.localStorage.removeItem(buildLocalStorageKey());
   };
 
   /**
    * Clears localStorage and resets the save data in the DB
-   * @param isDevMode
-   * @param role
-   * @param templateId
-   * @param layoutId
-   * @param entityId
    */
-  const clearHistory = (
-    isDevMode: boolean,
-    role: string,
-    templateId: string,
-    layoutId?: number,
-    entityId?: number
-  ) => {
-    clearLocalStorage(isDevMode, role, templateId, layoutId, entityId);
+  const clearHistory = () => {
+    clearLocalStorage();
     deleteSaveState();
   };
 
@@ -157,16 +148,10 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
       return;
     }
 
-    if (templateMetadata.isDevMode) {
+    if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing Puck history
       const localHistoryArray = window.localStorage.getItem(
-        getLocalStorageKey(
-          templateMetadata.isDevMode,
-          templateMetadata.role,
-          templateMetadata.templateId,
-          templateMetadata.layoutId,
-          templateMetadata.entityId
-        )
+        buildLocalStorageKey()
       );
 
       // Use localStorage directly if it exists
@@ -193,13 +178,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
 
     // Nothing in save_state table, start fresh from Content
     if (!saveState) {
-      clearLocalStorage(
-        templateMetadata.isDevMode,
-        templateMetadata.role,
-        templateMetadata.templateId,
-        templateMetadata.layoutId,
-        templateMetadata.entityId
-      );
+      clearLocalStorage();
 
       setPuckInitialHistory({
         histories: visualConfigurationData
@@ -213,13 +192,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
 
     // Check localStorage for existing Puck history
     const localHistoryArray = window.localStorage.getItem(
-      getLocalStorageKey(
-        templateMetadata.isDevMode,
-        templateMetadata.role,
-        templateMetadata.templateId,
-        templateMetadata.layoutId,
-        templateMetadata.entityId
-      )
+      buildLocalStorageKey()
     );
 
     // No localStorage, start from saveState
@@ -258,13 +231,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
     }
 
     // otherwise start fresh - this user doesn't have localStorage that reflects the saved state
-    clearLocalStorage(
-      templateMetadata.isDevMode,
-      templateMetadata.role,
-      templateMetadata.templateId,
-      templateMetadata.layoutId,
-      templateMetadata.entityId
-    );
+    clearLocalStorage();
   }, [setPuckInitialHistory, clearLocalStorage, getLocalStorageKey]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
@@ -283,15 +250,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
 
   useEffect(() => {
     if (templateMetadata?.isDevMode) {
-      const localHistory = window.localStorage.getItem(
-        getLocalStorageKey(
-          templateMetadata.isDevMode,
-          templateMetadata.role,
-          templateMetadata.templateId,
-          templateMetadata.layoutId,
-          templateMetadata.entityId
-        )
-      );
+      const localHistory = window.localStorage.getItem(buildLocalStorageKey());
       const localHistoryArray = localHistory ? JSON.parse(localHistory) : [];
       const historyToSend = JSON.stringify(
         localHistoryArray.length > 0
@@ -397,7 +356,9 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
           isLoading={isLoading}
           puckInitialHistory={puckInitialHistory}
           clearHistory={
-            templateMetadata?.isDevMode ? clearLocalStorage : clearHistory
+            templateMetadata.isDevMode && !templateMetadata.devOverride
+              ? clearLocalStorage
+              : clearHistory
           }
           templateMetadata={templateMetadata}
           saveState={saveState!}
@@ -405,6 +366,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
           visualConfigurationData={visualConfigurationData}
+          buildLocalStorageKey={buildLocalStorageKey}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />

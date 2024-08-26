@@ -8,10 +8,10 @@ information.
 
 #### Props:
 
-| Name        | Type                                                                                 |
-| ----------- | ------------------------------------------------------------------------------------ |
-| document    | any (json data from [our hook](../hooks/README.md#usedocumentprovider))              |
-| puckConfigs | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
+| Name              | Type                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| document          | any (json data from [our hook](../hooks/README.md#usedocumentprovider))              |
+| componentRegistry | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
 
 #### Usage:
 
@@ -22,7 +22,7 @@ const locationConfig: Config<LocationProps> = {
   root: {...},
 };
 
-const puckConfigs = new Map<string, Config<any>>([
+const componentRegistry = new Map<string, Config<any>>([
   ["location", locationConfig],
 ]);
 
@@ -32,13 +32,13 @@ const Edit: () => JSX.Element = () => {
 
   return (
       <DocumentProvider value={entityDocument}>
-        <Editor document={entityDocument} puckConfigs={puckConfigs} />
+        <Editor document={entityDocument} componentRegistry={componentRegistry} />
       </DocumentProvider>
   );
 };
 ```
 
-See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for a more detailed look at the puckConfigs.
+See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for a more detailed look at the componentRegistry.
 
 ## EntityField
 
