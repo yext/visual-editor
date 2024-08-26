@@ -355,6 +355,31 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
     TARGET_ORIGINS
   );
 
+  const { sendToParent: openQuickFind } = useSendMessageToParent(
+    "openQuickFind",
+    TARGET_ORIGINS
+  );
+
+  const keyboardHandler = (event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "k") {
+      openQuickFind({
+        payload: {
+          ctrlKey: event.ctrlKey,
+          metaKey: event.metaKey,
+          key: event.key,
+          code: event.code,
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", keyboardHandler);
+    return () => {
+      window.removeEventListener("keydown", keyboardHandler);
+    };
+  }, []);
+
   const isLoading =
     !puckConfig ||
     !templateMetadata ||
