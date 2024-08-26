@@ -12,7 +12,7 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { SaveState } from "../internal/types/saveState.ts";
 import "@measured/puck/puck.css";
-import { DevLogger, DevLoggerPrefix } from "../utils/devLogger.ts";
+import { DevLogger } from "../utils/devLogger.ts";
 
 export const Role = {
   GLOBAL: "global",
