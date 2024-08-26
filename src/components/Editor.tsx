@@ -75,7 +75,8 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
         window.location.assign("/404.html");
       } else if (
         !ancestors[0].includes("pagescdn") &&
-        !ancestors[0].includes("yext.com")
+        !ancestors[0].includes("yext.com") &&
+        !ancestors[0].includes("localhost")
       ) {
         window.location.assign("/404.html");
       } else {
