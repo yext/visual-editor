@@ -15,7 +15,7 @@ const entityDocument = useDocumentProvider();
 
 return (
   <DocumentProvider value={entityDocument}>
-    <Editor document={entityDocument} puckConfigs={puckConfigs} />
+    <Editor document={entityDocument} componentRegistry={componentRegistry} />
   </DocumentProvider>
 );
 ```
