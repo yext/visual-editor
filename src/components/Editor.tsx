@@ -329,13 +329,11 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
   );
 
   useEffect(() => {
-    console.log("pushPageSets useEffect", devPageSets);
     if (
       typeof window !== "undefined" &&
       templateMetadata?.isDevMode &&
       devPageSets
     ) {
-      console.log("actually calling pushPageSets");
       pushPageSets({
         payload: devPageSets,
       });
