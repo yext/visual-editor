@@ -1,3 +1,19 @@
+#### 0.0.4 (2024-08-26)
+
+##### New Features
+
+- add devOverride functionality (#26) (237db9af)
+
+##### Bug Fixes
+
+- make quick find keyboard shortcut work (#25) (c4e1fca5)
+- redirecting on localhost (#27) (d770a478)
+- prevent error in resolveVisualEditorData (#24) (d8b15281)
+
+##### Refactors
+
+- rename puckConfigs parameter to componentRegistry (#23) (3671728f)
+
 #### 0.0.3 (2024-08-21)
 
 ##### Bug Fixes
