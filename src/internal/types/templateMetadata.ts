@@ -5,4 +5,5 @@ export type TemplateMetadata = {
   layoutId?: number;
   entityId?: number;
   isDevMode: boolean;
+  devOverride: boolean;
 };
