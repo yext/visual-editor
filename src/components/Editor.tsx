@@ -362,14 +362,7 @@ export const Editor = ({ document, puckConfigs }: EditorProps) => {
 
   const keyboardHandler = (event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "k") {
-      openQuickFind({
-        payload: {
-          ctrlKey: event.ctrlKey,
-          metaKey: event.metaKey,
-          key: event.key,
-          code: event.code,
-        },
-      });
+      openQuickFind();
     }
   };
 
