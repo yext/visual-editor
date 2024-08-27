@@ -1,3 +1,13 @@
+#### 0.0.5 (2024-08-27)
+
+##### New Features
+
+- add debug logging with xYextDebug (#28) (209a6b86)
+
+##### Bug Fixes
+
+- add null check to message.data (#29) (36505bb3)
+
 #### 0.0.4 (2024-08-26)
 
 ##### New Features
