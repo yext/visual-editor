@@ -1,1 +1,1 @@
-export { useDocumentProvider } from "./useDocumentProvider.ts";
+export { usePlatformBridgeDocument } from "./usePlatformBridgeDocument.ts";
