@@ -12,6 +12,7 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { SaveState } from "../internal/types/saveState.ts";
 import "@measured/puck/puck.css";
+import { DevLogger } from "../utils/devLogger.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -38,6 +39,8 @@ export interface EditorProps {
   componentRegistry: Map<string, Config<any>>;
 }
 
+const devLogger = new DevLogger();
+
 export const Editor = ({ document, componentRegistry }: EditorProps) => {
   const [puckInitialHistory, setPuckInitialHistory] =
     useState<PuckInitialHistory>({
@@ -53,6 +56,10 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
   const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
   const [puckConfig, setPuckConfig] = useState<Config>();
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
+
+  if (document) {
+    devLogger.logData("DOCUMENT", document);
+  }
 
   const buildLocalStorageKey = useCallback(() => {
     if (!templateMetadata) {
@@ -88,7 +95,11 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry.get(payload.templateId);
     setPuckConfig(puckConfig);
+    const templateMetadata = payload as TemplateMetadata;
     setTemplateMetadata(payload as TemplateMetadata);
+    devLogger.enable(templateMetadata.isxYextDebug);
+    devLogger.logData("TEMPLATE_METADATA", templateMetadata);
+    devLogger.logData("PUCK_CONFIG", puckConfig);
     send({ status: "success", payload: { message: "payload received" } });
   });
 
@@ -108,6 +119,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
    * Clears the user's localStorage and resets the current Puck history
    */
   const clearLocalStorage = () => {
+    devLogger.logFunc("clearLocalStorage");
     window.localStorage.removeItem(buildLocalStorageKey());
   };
 
@@ -115,6 +127,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
    * Clears localStorage and resets the save data in the DB
    */
   const clearHistory = () => {
+    devLogger.logFunc("clearHistory");
     clearLocalStorage();
     deleteSaveState();
   };
@@ -148,6 +161,8 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       return;
     }
 
+    devLogger.logFunc("loadPuckInitialHistory");
+
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing Puck history
       const localHistoryArray = window.localStorage.getItem(
@@ -156,6 +171,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
 
       // Use localStorage directly if it exists
       if (localHistoryArray) {
+        devLogger.log("Dev Mode - Using localStorage");
         const localHistories = JSON.parse(localHistoryArray);
         const localHistoryIndex = localHistories.length - 1;
         setPuckInitialHistory({
@@ -166,6 +182,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       }
 
       // Otherwise start fresh from Content
+      devLogger.log("Dev Mode - No localStorage. Using data from Content");
       setPuckInitialHistory({
         histories: visualConfigurationData
           ? [{ id: "root", data: { data: visualConfigurationData } }]
@@ -180,6 +197,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
     if (!saveState) {
       clearLocalStorage();
 
+      devLogger.log("Prod Mode - No saveState. Using data from Content");
       setPuckInitialHistory({
         histories: visualConfigurationData
           ? [{ id: "root", data: { data: visualConfigurationData } }]
@@ -197,6 +215,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
 
     // No localStorage, start from saveState
     if (!localHistoryArray) {
+      devLogger.log("Prod Mode - No localStorage. Using saveState");
       setPuckInitialHistory({
         histories: visualConfigurationData
           ? [
@@ -223,6 +242,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
 
     // If local storage reset Puck history to it
     if (localHistoryIndex !== -1) {
+      devLogger.log("Prod Mode - Using localStorage");
       setPuckInitialHistory({
         histories: JSON.parse(localHistoryArray),
         index: localHistoryIndex,
@@ -233,6 +253,12 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
     // otherwise start fresh - this user doesn't have localStorage that reflects the saved state
     clearLocalStorage();
   }, [setPuckInitialHistory, clearLocalStorage, getLocalStorageKey]);
+
+  useEffect(() => {
+    if (puckInitialHistory) {
+      devLogger.logData("PUCK_INITIAL_HISTORY", puckInitialHistory);
+    }
+  }, [puckInitialHistory]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
     "iFrameLoaded",
@@ -262,6 +288,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
   }, [templateMetadata]);
 
   useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
+    devLogger.logData("SAVE_STATE", payload);
     setSaveState(payload as SaveState);
     setSaveStateFetched(true);
     send({ status: "success", payload: { message: "saveState received" } });
@@ -271,9 +298,9 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
     "getVisualConfigurationData",
     TARGET_ORIGINS,
     (send, payload) => {
-      setVisualConfigurationData(
-        jsonFromEscapedJsonString(payload.visualConfigurationData)
-      );
+      const vcd = jsonFromEscapedJsonString(payload.visualConfigurationData);
+      devLogger.logData("VISUAL_CONFIGURATION_DATA", vcd);
+      setVisualConfigurationData(vcd);
       setVisualConfigurationDataFetched(true);
       send({
         status: "success",
@@ -367,6 +394,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           sendDevSaveStateData={sendDevSaveStateData}
           visualConfigurationData={visualConfigurationData}
           buildLocalStorageKey={buildLocalStorageKey}
+          devLogger={devLogger}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />

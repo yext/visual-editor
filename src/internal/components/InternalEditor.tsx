@@ -7,6 +7,7 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { PuckInitialHistory } from "../../components/Editor.tsx";
+import { DevLogger } from "../../utils/devLogger.ts";
 
 interface InternalEditorProps {
   puckConfig: Config;
@@ -20,6 +21,7 @@ interface InternalEditorProps {
   sendDevSaveStateData: (data: any) => void;
   visualConfigurationData: any;
   buildLocalStorageKey: () => string;
+  devLogger: DevLogger;
 }
 
 // Render Puck editor
@@ -35,6 +37,7 @@ export const InternalEditor = ({
   sendDevSaveStateData,
   visualConfigurationData,
   buildLocalStorageKey,
+  devLogger,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(-1);
@@ -50,8 +53,12 @@ export const InternalEditor = ({
         historyIndex.current !== index &&
         histories.length > 0
       ) {
+        devLogger.logFunc("handleHistoryChange");
+        devLogger.logData("PUCK_INDEX", index);
+        devLogger.logData("PUCK_HISTORY", histories);
         historyIndex.current = index;
 
+        devLogger.logFunc("saveToLocalStorage");
         window.localStorage.setItem(
           buildLocalStorageKey(),
           JSON.stringify(histories)
@@ -59,12 +66,14 @@ export const InternalEditor = ({
 
         if (saveState?.hash !== histories[index].id) {
           if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
+            devLogger.logFunc("sendDevSaveStateData");
             sendDevSaveStateData({
               payload: {
                 devSaveStateData: JSON.stringify(histories[index].data?.data),
               },
             });
           } else {
+            devLogger.logFunc("saveSaveState");
             saveSaveState({
               payload: {
                 hash: histories[index].id,
@@ -84,6 +93,7 @@ export const InternalEditor = ({
   };
 
   const handleSave = async (data: Data) => {
+    devLogger.logFunc("saveVisualConfigData");
     saveVisualConfigData({
       payload: { visualConfigurationData: JSON.stringify(data) },
     });

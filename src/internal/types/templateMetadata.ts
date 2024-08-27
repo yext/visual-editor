@@ -6,4 +6,5 @@ export type TemplateMetadata = {
   entityId?: number;
   isDevMode: boolean;
   devOverride: boolean;
+  isxYextDebug: boolean;
 };
