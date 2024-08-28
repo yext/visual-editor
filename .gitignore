@@ -78,6 +78,5 @@ out
 .pnp.*
 
 .turbo
-.idea
 
 dist/
