@@ -142,7 +142,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       return;
     }
     loadPuckInitialHistory(); // do something after state has updated
-  }, [templateMetadata, saveState, visualConfigurationData]);
+  }, [templateMetadata, saveStateFetched, visualConfigurationDataFetched]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination
@@ -376,7 +376,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
         !!document +
         saveStateFetched +
         visualConfigurationDataFetched)) /
-    6;
+    5;
 
   return (
     <>
