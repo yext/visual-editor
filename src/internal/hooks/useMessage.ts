@@ -180,7 +180,7 @@ const useListenAndRespondMessage = (
         return;
       }
       if (!targetOrigins.includes(origin)) {
-        throw new Error("Unrecognized origin");
+        return;
       }
 
       const { type }: ReceivePayloadInternal = data;
