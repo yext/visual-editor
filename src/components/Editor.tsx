@@ -53,6 +53,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
   const [saveState, setSaveState] = useState<SaveState>();
   const [saveStateFetched, setSaveStateFetched] = useState<boolean>(false); // needed because saveState can be empty
   const [devPageSets, setDevPageSets] = useState<any>(undefined);
+  const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
   const [puckConfig, setPuckConfig] = useState<Config>();
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
@@ -108,6 +109,8 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       try {
         // @ts-expect-error pageSets is a global variable set by pagesJS
         setDevPageSets(pageSets);
+        // @ts-expect-error siteStream is a global variable set by pagesJS
+        setDevSiteStream(siteStream);
         // eslint-disable-next-line
       } catch (ignored) {
         console.warn("pageSets are not defined");
@@ -139,7 +142,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       return;
     }
     loadPuckInitialHistory(); // do something after state has updated
-  }, [templateMetadata, saveState, visualConfigurationData]);
+  }, [templateMetadata, saveStateFetched, visualConfigurationDataFetched]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination
@@ -321,7 +324,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       devPageSets
     ) {
       pushPageSets({
-        payload: devPageSets,
+        payload: { ...devPageSets, siteStream: devSiteStream },
       });
     }
   }, [templateMetadata?.isDevMode, devPageSets]);
@@ -373,7 +376,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
         !!document +
         saveStateFetched +
         visualConfigurationDataFetched)) /
-    6;
+    5;
 
   return (
     <>
