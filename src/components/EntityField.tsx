@@ -31,25 +31,27 @@ export const EntityField = ({
   }
 
   return (
-    <TooltipProvider>
-      <Tooltip open={tooltipsVisible && !!tooltipContent}>
-        <TooltipTrigger>
-          <div
-            className={
-              tooltipsVisible
-                ? "ve-outline-2 ve-outline-dotted" + " ve-outline-[#5A58F2]"
-                : ""
-            }
-          >
-            {children}
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{tooltipContent}</p>
-          <TooltipArrow fill="bg-popover" />
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <div className="puck-css">
+      <TooltipProvider>
+        <Tooltip open={tooltipsVisible && !!tooltipContent}>
+          <TooltipTrigger>
+            <div
+              className={
+                tooltipsVisible
+                  ? "ve-outline-2 ve-outline-dotted" + " ve-outline-[#5A58F2]"
+                  : ""
+              }
+            >
+              {children}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltipContent}</p>
+            <TooltipArrow fill="bg-popover" />
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
   );
 };
 
