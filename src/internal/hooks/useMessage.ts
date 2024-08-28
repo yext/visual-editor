@@ -179,17 +179,21 @@ const useListenAndRespondMessage = (
       if (data?.source?.startsWith("react-devtools")) {
         return;
       }
-      if (!targetOrigins.includes(origin)) {
-        throw new Error("Unrecognized origin");
-      }
 
       const { type }: ReceivePayloadInternal = data;
-      if (type === messageName) {
-        setSource(source);
-        setOrigin(origin);
-
-        callback(data, origin, source);
+      if (type !== messageName) {
+        return;
       }
+
+      if (!targetOrigins.includes(origin)) {
+        throw new Error(
+          `Unrecognized origin '${origin}' for message '${messageName}'`
+        );
+      }
+
+      setSource(source);
+      setOrigin(origin);
+      callback(data, origin, source);
     },
     [messageName, targetOrigins, setSource, setOrigin, callback]
   );
