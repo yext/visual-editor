@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "author": "sumo@yext.com",
   "types": "dist/index.d.ts",

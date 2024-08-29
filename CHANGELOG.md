@@ -1,3 +1,20 @@
+#### 0.0.6 (2024-08-29)
+
+##### Chores
+
+- move react and react-dom to peer dependencies (#33) (f60ed657)
+
+##### Bug Fixes
+
+- add css to EntityField (#35) (6a78b57c)
+- handle unrecognized origin (#34) (059db804)
+- loadPuckInitialHistory is never called (#32) (2b132b0e)
+- make \_site object available on documents in dev mode (#31) (3b4f904f)
+
+##### Other Changes
+
+- update useDocumentProvider name to usePlatformBridgeDocument (#30) (9e91f4ad)
+
 #### 0.0.5 (2024-08-27)
 
 ##### New Features
