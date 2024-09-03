@@ -1,6 +1,6 @@
 # Hooks
 
-## useDocumentProvider
+## usePlatformBridgeDocument
 
 Use this hook to capture the entityDocument from the Yext platform in your `edit.tsx` file.
 This is a requirement to make your repo VE compatible and should only be used once - in `edit.tsx`.
@@ -9,9 +9,9 @@ Meant to be used in conjunction with the [DocumentProvider](https://github.com/y
 ### Usage
 
 ```tsx
-import { Editor, useDocumentProvider } from "@yext/visual-editor";
+import { Editor, usePlatformBridgeDocument } from "@yext/visual-editor";
 
-const entityDocument = useDocumentProvider();
+const entityDocument = usePlatformBridgeDocument();
 
 return (
   <DocumentProvider value={entityDocument}>
