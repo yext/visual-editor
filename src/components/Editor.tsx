@@ -47,6 +47,8 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       histories: [],
       index: -1,
     });
+  const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
+    useState<boolean>(false);
   const [visualConfigurationData, setVisualConfigurationData] = useState<any>(); // json data
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
@@ -181,6 +183,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           histories: localHistories,
           index: localHistoryIndex,
         });
+        setPuckInitialHistoryFetched(true);
         return;
       }
 
@@ -192,6 +195,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           : [],
         index: visualConfigurationData ? 0 : -1,
       });
+      setPuckInitialHistoryFetched(true);
 
       return;
     }
@@ -207,6 +211,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           : [],
         index: visualConfigurationData ? 0 : -1,
       });
+      setPuckInitialHistoryFetched(true);
 
       return;
     }
@@ -236,6 +241,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
             ],
         index: visualConfigurationData ? 1 : 0,
       });
+      setPuckInitialHistoryFetched(true);
       return;
     }
 
@@ -250,12 +256,18 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
         histories: JSON.parse(localHistoryArray),
         index: localHistoryIndex,
       });
+      setPuckInitialHistoryFetched(true);
       return;
     }
 
     // otherwise start fresh - this user doesn't have localStorage that reflects the saved state
     clearLocalStorage();
-  }, [setPuckInitialHistory, clearLocalStorage, getLocalStorageKey]);
+  }, [
+    setPuckInitialHistory,
+    setPuckInitialHistoryFetched,
+    clearLocalStorage,
+    getLocalStorageKey,
+  ]);
 
   useEffect(() => {
     if (puckInitialHistory) {
@@ -367,7 +379,8 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
     !templateMetadata ||
     !document ||
     !saveStateFetched ||
-    !visualConfigurationDataFetched;
+    !visualConfigurationDataFetched ||
+    !puckInitialHistoryFetched;
 
   const progress: number =
     (100 * // @ts-expect-error adding bools is fine
@@ -375,8 +388,9 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
         !!templateMetadata +
         !!document +
         saveStateFetched +
-        visualConfigurationDataFetched)) /
-    5;
+        visualConfigurationDataFetched +
+        puckInitialHistoryFetched)) /
+    6;
 
   return (
     <>
