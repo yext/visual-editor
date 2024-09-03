@@ -10,7 +10,7 @@ information.
 
 | Name              | Type                                                                                 |
 | ----------------- | ------------------------------------------------------------------------------------ |
-| document          | any (json data from [our hook](../hooks/README.md#usedocumentprovider))              |
+| document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))        |
 | componentRegistry | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
 
 #### Usage:
@@ -28,7 +28,7 @@ const componentRegistry = new Map<string, Config<any>>([
 
 
 const Edit: () => JSX.Element = () => {
-  const entityDocument = useDocumentProvider();
+  const entityDocument = usePlatformBridgeDocument();
 
   return (
       <DocumentProvider value={entityDocument}>
