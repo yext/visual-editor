@@ -1,13 +1,13 @@
 ![Yext](yext.svg)
 
 # visual-editor
-This library provides components to make it easy to set up a Pages repository such that it can easily interact with Visual Editor in the Yext platform.
+This library provides components necessary to set up a Pages repository that can interact with Visual Editor in the Yext platform.
 
 ## Hooks
 
 | Hook                                                             |
 |------------------------------------------------------------------|
-| [useDocumentProvider](./src/hooks/README.md#usedocumentprovider) |
+| [usePlatformBridgeDocument](./src/hooks/README.md#usePlatformBridgeDocument) |
 
 ## Components
 

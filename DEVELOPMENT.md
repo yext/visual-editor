@@ -17,7 +17,7 @@ InternalEditor once all the requisite data is loaded.
 
 #### hooks
 
-Find useDocumentProvider in this directory. This calls internal useMessage hooks to fetch data
+Find usePlatformBridgeDocument in this directory. This calls internal useMessage hooks to fetch data
 from the Yext platform.
 
 #### utils
