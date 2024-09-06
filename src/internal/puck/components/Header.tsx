@@ -189,7 +189,10 @@ const ToggleEntityFields = () => {
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="ve-flex ve-flex-row ve-self-center ve-gap-3 ve-pl-2">
-            <Switch onCheckedChange={toggleTooltips} />
+            <Switch
+              onCheckedChange={toggleTooltips}
+              checked={tooltipsVisible}
+            />
             <p className="ve-self-center ve-text-sm">Entity Fields</p>
           </div>
         </TooltipTrigger>
