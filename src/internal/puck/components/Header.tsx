@@ -43,7 +43,7 @@ export const customHeader = (
   }, [index, histories, handleHistoryChange]);
 
   return (
-    <header className="puck-header puck-css">
+    <header className="puck-header">
       <div className="header-left">
         <ToggleUIButtons />
         <ToggleEntityFields />
@@ -115,7 +115,7 @@ const ClearLocalChangesButton = ({
       <AlertDialogTrigger disabled={disabled} asChild>
         <Button variant="outline">Clear Local Changes</Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="puck-css">
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Clear Local Changes</AlertDialogTitle>
           <AlertDialogDescription>
