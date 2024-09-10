@@ -1,4 +1,11 @@
-import { Puck, Data, Config, usePuck, type History } from "@measured/puck";
+import {
+  Puck,
+  Data,
+  Config,
+  usePuck,
+  type History,
+  InitialHistory,
+} from "@measured/puck";
 import React from "react";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
@@ -6,12 +13,11 @@ import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
-import { PuckInitialHistory } from "../../components/Editor.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 
 interface InternalEditorProps {
   puckConfig: Config;
-  puckInitialHistory: PuckInitialHistory;
+  puckInitialHistory: InitialHistory | undefined;
   isLoading: boolean;
   clearHistory: () => void;
   templateMetadata: TemplateMetadata;
@@ -19,7 +25,6 @@ interface InternalEditorProps {
   saveSaveState: (data: any) => void;
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
-  visualConfigurationData: any;
   buildLocalStorageKey: () => string;
   devLogger: DevLogger;
 }
@@ -35,12 +40,11 @@ export const InternalEditor = ({
   saveSaveState,
   saveVisualConfigData,
   sendDevSaveStateData,
-  visualConfigurationData,
   buildLocalStorageKey,
   devLogger,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
-  const historyIndex = useRef<number>(-1);
+  const historyIndex = useRef<number>(0);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -49,7 +53,7 @@ export const InternalEditor = ({
   const handleHistoryChange = useCallback(
     (histories: History[], index: number) => {
       if (
-        index !== -1 &&
+        index !== 0 &&
         historyIndex.current !== index &&
         histories.length > 0
       ) {
@@ -69,7 +73,7 @@ export const InternalEditor = ({
             devLogger.logFunc("sendDevSaveStateData");
             sendDevSaveStateData({
               payload: {
-                devSaveStateData: JSON.stringify(histories[index].data?.data),
+                devSaveStateData: JSON.stringify(histories[index].state.data),
               },
             });
           } else {
@@ -77,7 +81,7 @@ export const InternalEditor = ({
             saveSaveState({
               payload: {
                 hash: histories[index].id,
-                history: JSON.stringify(histories[index].data),
+                history: JSON.stringify(histories[index].state),
               },
             });
           }
@@ -89,7 +93,7 @@ export const InternalEditor = ({
 
   const handleClearLocalChanges = () => {
     clearHistory();
-    historyIndex.current = -1;
+    historyIndex.current = 0;
   };
 
   const handleSave = async (data: Data) => {
@@ -122,14 +126,7 @@ export const InternalEditor = ({
     <EntityFieldProvider>
       <Puck
         config={puckConfig}
-        data={
-          (puckInitialHistory.histories[puckInitialHistory.index].data
-            .data as Partial<Data>) ?? {
-            root: {},
-            content: [],
-            zones: {},
-          }
-        }
+        data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
@@ -139,7 +136,7 @@ export const InternalEditor = ({
               handleClearLocalChanges,
               handleHistoryChange,
               appState.data,
-              visualConfigurationData,
+              puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride
             );

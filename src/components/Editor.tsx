@@ -5,7 +5,7 @@ import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { getLocalStorageKey } from "../internal/utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
-import { type History, type Config } from "@measured/puck";
+import { type Config, InitialHistory } from "@measured/puck";
 import {
   useReceiveMessage,
   useSendMessageToParent,
@@ -29,11 +29,6 @@ export const TARGET_ORIGINS = [
   "https://app.eu.yext.com",
 ];
 
-export type PuckInitialHistory = {
-  histories: History<any>[];
-  index: number;
-};
-
 export interface EditorProps {
   document: any;
   componentRegistry: Map<string, Config<any>>;
@@ -42,11 +37,9 @@ export interface EditorProps {
 const devLogger = new DevLogger();
 
 export const Editor = ({ document, componentRegistry }: EditorProps) => {
-  const [puckInitialHistory, setPuckInitialHistory] =
-    useState<PuckInitialHistory>({
-      histories: [],
-      index: -1,
-    });
+  const [puckInitialHistory, setPuckInitialHistory] = useState<
+    InitialHistory | undefined
+  >();
   const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
     useState<boolean>(false);
   const [visualConfigurationData, setVisualConfigurationData] = useState<any>(); // json data
@@ -182,6 +175,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
         setPuckInitialHistory({
           histories: localHistories,
           index: localHistoryIndex,
+          appendData: false,
         });
         setPuckInitialHistoryFetched(true);
         return;
@@ -189,12 +183,12 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
 
       // Otherwise start fresh from Content
       devLogger.log("Dev Mode - No localStorage. Using data from Content");
-      setPuckInitialHistory({
-        histories: visualConfigurationData
-          ? [{ id: "root", data: { data: visualConfigurationData } }]
-          : [],
-        index: visualConfigurationData ? 0 : -1,
-      });
+      if (visualConfigurationData) {
+        setPuckInitialHistory({
+          histories: [{ id: "root", state: { data: visualConfigurationData } }],
+          appendData: false,
+        });
+      }
       setPuckInitialHistoryFetched(true);
 
       return;
@@ -205,12 +199,12 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       clearLocalStorage();
 
       devLogger.log("Prod Mode - No saveState. Using data from Content");
-      setPuckInitialHistory({
-        histories: visualConfigurationData
-          ? [{ id: "root", data: { data: visualConfigurationData } }]
-          : [],
-        index: visualConfigurationData ? 0 : -1,
-      });
+      if (visualConfigurationData) {
+        setPuckInitialHistory({
+          histories: [{ id: "root", state: { data: visualConfigurationData } }],
+          appendData: false,
+        });
+      }
       setPuckInitialHistoryFetched(true);
 
       return;
@@ -227,19 +221,20 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       setPuckInitialHistory({
         histories: visualConfigurationData
           ? [
-              { id: "root", data: { data: visualConfigurationData } },
+              { id: "root", state: { data: visualConfigurationData } },
               {
                 id: saveState.hash,
-                data: jsonFromEscapedJsonString(saveState.history),
+                state: jsonFromEscapedJsonString(saveState.history),
               },
             ]
           : [
               {
                 id: saveState.hash,
-                data: jsonFromEscapedJsonString(saveState.history),
+                state: jsonFromEscapedJsonString(saveState.history),
               },
             ],
         index: visualConfigurationData ? 1 : 0,
+        appendData: false,
       });
       setPuckInitialHistoryFetched(true);
       return;
@@ -255,6 +250,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       setPuckInitialHistory({
         histories: JSON.parse(localHistoryArray),
         index: localHistoryIndex,
+        appendData: false,
       });
       setPuckInitialHistoryFetched(true);
       return;
@@ -409,7 +405,6 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           saveSaveState={saveSaveState}
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
-          visualConfigurationData={visualConfigurationData}
           buildLocalStorageKey={buildLocalStorageKey}
           devLogger={devLogger}
         />
