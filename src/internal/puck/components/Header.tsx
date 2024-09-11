@@ -29,13 +29,20 @@ export const customHeader = (
   handleClearLocalChanges: () => void,
   handleHistoryChange: (histories: History[], index: number) => void,
   currentPuckData: Data, // the current state of Puck data
-  initialPuckData: Data, // the initial state of Puck data before any local changes
+  initialPuckData: Data | undefined, // the initial state of Puck data before any local changes
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean
 ) => {
   const {
-    dispatch: puckDispatch,
-    history: { back, forward, histories, index, hasFuture, setHistories },
+    history: {
+      back,
+      forward,
+      histories,
+      index,
+      hasPast,
+      hasFuture,
+      setHistories,
+    },
   } = usePuck();
 
   useEffect(() => {
@@ -50,12 +57,7 @@ export const customHeader = (
       </div>
       <div className="header-center"></div>
       <div className="actions">
-        <Button
-          variant="ghost"
-          size="icon"
-          disabled={index === 0} // prevent going to -1 because it would loop data back to the saveState
-          onClick={back}
-        >
+        <Button variant="ghost" size="icon" disabled={!hasPast} onClick={back}>
           <RotateCcw className="sm-icon" />
         </Button>
         <Button
@@ -67,20 +69,16 @@ export const customHeader = (
           <RotateCw className="sm-icon" />
         </Button>
         <ClearLocalChangesButton
-          disabled={histories.length === 0}
+          disabled={histories.length === 1}
           onClearLocalChanges={() => {
             handleClearLocalChanges();
-            setHistories([]);
-            puckDispatch({
-              type: "setData",
-              data: initialPuckData,
-            });
+            setHistories([{ id: "root", state: { data: initialPuckData } }]);
           }}
         />
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={histories.length === 0}
+            disabled={histories.length === 1}
             onClick={async () => {
               await handleSaveData(currentPuckData);
               handleClearLocalChanges();
