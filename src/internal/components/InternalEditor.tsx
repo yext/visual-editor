@@ -113,15 +113,6 @@ export const InternalEditor = ({
     }
   };
 
-  /**
-   * Explanation for Puck `data` and `initialHistory`:
-   *  Let's say there are two changes, one is "committed" to Content called C, and one is the saveState WIP called W.
-   *  Puck data = [W]
-   *  initialHistories = [C, W] index at W
-   *  Ideally we can undo such that C is what shows at index -1, but because data starts at W we end up with W -> C -> W.
-   *  If we start data at C, then initial render shows C, but we want to render W.
-   *  To overcome this, we limit the undo history to index 0 in Header.tsx.
-   */
   return (
     <EntityFieldProvider>
       <Puck
