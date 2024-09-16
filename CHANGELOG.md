@@ -1,3 +1,27 @@
+#### 0.0.7 (2024-09-16)
+
+##### Chores
+
+- remove old comment (beb59564)
+- update to latest Puck canary (#41) (c7834fbb)
+
+##### Documentation Changes
+
+- update usePlatformBridgeDocument change (#36) (aa23b741)
+
+##### New Features
+
+- add and export schema types for streams (2d036e44)
+- add hooks/provider for entityFields (#37) (9f6763ea)
+
+##### Bug Fixes
+
+- wrap EntityField in div (#42) (8f27df55)
+- accordions inside EntityField tooltip (#43) (f2770c59)
+- css was overriding components not in visual-editor library (#40) (2633e0c0)
+- entity fields toggle incorrectly switching off (#39) (2e2d45ee)
+- puckInitialHistory not set in time (#38) (5b8c73c2)
+
 #### 0.0.6 (2024-08-29)
 
 ##### Chores
