@@ -18,15 +18,15 @@ export const usePlatformBridgeEntityFields = () => {
     });
   });
 
-  return templateStream as EntityFields;
+  return templateStream as YextEntityFields;
 };
 
-const EntityFieldsContext = React.createContext<EntityFields | undefined>(
+const EntityFieldsContext = React.createContext<YextEntityFields | undefined>(
   undefined
 );
 
 type EntityFieldsProviderProps = {
-  entityFields: EntityFields;
+  entityFields: YextEntityFields;
   children: React.ReactNode;
 };
 
@@ -50,19 +50,41 @@ export const useEntityFields = () => {
   return context;
 };
 
-export type EntityFields = {
-  stream: Stream;
+export type YextEntityFields = {
+  stream: YextStream;
 };
 
-export type Stream = {
+export type YextStream = {
   expression: {
-    fields: Field[];
+    fields: YextEntityField[];
+  };
+  schema: YextSchema;
+};
+
+export type YextEntityField = {
+  name: string;
+  children?: {
+    fields: YextEntityField[];
   };
 };
 
-export type Field = {
+export type YextSchema = {
+  fields: YextSchemaField[];
+};
+
+export type YextSchemaField = {
   name: string;
-  children: {
-    fields: Field[];
+  definition: YextFieldDefinition;
+  children?: {
+    fields: YextSchemaField[];
   };
+};
+
+export type YextFieldDefinition = {
+  name: string;
+  isList: boolean;
+  registryId: string;
+  typeName: string;
+  typeRegistryId: string;
+  type: Record<string, string>;
 };
