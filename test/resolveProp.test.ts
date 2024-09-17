@@ -1,37 +1,42 @@
 import { test, assert } from "vitest";
 import { resolveProp } from "../src/utils/resolveProp.ts";
 
-test("resolve prop data found", async () => {
+test("resolveProp returns value when field found in document", async () => {
   assert.equal(
-    resolveProp("location.address.city", {
-      location: {
+    resolveProp(
+      {
         address: {
           city: "potato land",
         },
       },
-    }),
+      "address.city"
+    ),
     "potato land"
   );
 });
 
-test("resolve prop data empty", async () => {
+test("resolveProp returns empty value when field found in document", async () => {
   assert.equal(
-    resolveProp("location.address.city", {
-      location: {
+    resolveProp(
+      {
         address: {
           city: "",
         },
       },
-    }),
+      "address.city"
+    ),
     ""
   );
 });
 
-test("resolve prop data not found", async () => {
+test("resolveProp returns constant value when field not found in document", async () => {
   assert.equal(
-    resolveProp("location.address.city", {
-      location: {},
-    }),
-    "location.address.city"
+    resolveProp(
+      {
+        address: {},
+      },
+      "address.city"
+    ),
+    "address.city"
   );
 });

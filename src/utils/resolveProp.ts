@@ -1,4 +1,4 @@
-export const resolveProp = <T>(entityField: string, document: any): T => {
+export const resolveProp = <T>(document: any, entityField: string): T => {
   // check for the entity field in the document
   const steps: string[] = entityField.split(".");
   let missedStep = false;
