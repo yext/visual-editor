@@ -43,6 +43,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@yext/eslint-config": "^1.0.0",
+    "@yext/pages": "^1.2.0-beta.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "eslint": "^9.8.0",
