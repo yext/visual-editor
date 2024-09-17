@@ -7,16 +7,23 @@ type Only<T, U> = {
 };
 type Either<T, U> = Only<T, U> | Only<U, T>;
 
-type AllowList = {
-  allowList: string[];
+type ConfigFields<T extends Record<string, any>> = T["stream"]["fields"];
+
+type AllowList<T extends Record<string, any>> = {
+  allowList: ConfigFields<T>[number][];
 };
-type DisallowList = {
-  disallowList: string[];
+
+type DisallowList<T extends Record<string, any>> = {
+  disallowList: ConfigFields<T>[number][];
 };
-type EntityFieldTypesFilter = { types: EntityFieldTypes[] };
-export type RenderEntityFieldFilter = Either<
+
+type EntityFieldTypesFilter = {
+  types: EntityFieldTypes[];
+};
+
+export type RenderEntityFieldFilter<T extends Record<string, any>> = Either<
   EntityFieldTypesFilter,
-  Either<AllowList, DisallowList>
+  Either<AllowList<T>, DisallowList<T>>
 >;
 
 type EntityFieldTypes = "type.string" | "type.image" | `c_${string}`;
@@ -104,6 +111,7 @@ const getEntityTypeToFieldNames = (
       if (fieldNameToSchemas.length === 0) {
         return prev;
       }
+
       for (const fieldNameToSchema of fieldNameToSchemas) {
         const typeName = getTypeFromSchemaField(fieldNameToSchema.schemaField);
         if (!typeName) {
@@ -133,13 +141,14 @@ const getEntityTypeToFieldNames = (
   }, new Map<string, string[]>());
 };
 
-export const getFilteredEntityFields = (filter?: RenderEntityFieldFilter) => {
+export const getFilteredEntityFields = <T extends Record<string, any>>(
+  filter?: RenderEntityFieldFilter<T>
+) => {
   const entityFields = useEntityFields();
 
-  let filteredEntityFields = entityFields.stream.expression.fields
-    // filter to top level fields for now, though this is only based on the dot in the stream field, not the true schema
-    .filter((field) => field.children === undefined)
-    .filter((field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name));
+  let filteredEntityFields = entityFields.stream.expression.fields.filter(
+    (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
+  );
 
   if (filter?.allowList) {
     filteredEntityFields = filteredEntityFields.filter((field) =>

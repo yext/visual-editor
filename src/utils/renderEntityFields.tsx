@@ -12,23 +12,26 @@ import {
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
-type RenderEntityFields<T extends RenderProps> = {
+type RenderEntityFields<
+  T extends RenderProps,
+  U extends Record<string, any>,
+> = {
   renderProps: RenderProps;
   fieldName: keyof T["value"];
   objectFields?: ObjectField<any>["objectFields"];
-  filter?: RenderEntityFieldFilter;
+  filter?: RenderEntityFieldFilter<U>;
 };
 
-export const renderEntityFields = <T extends RenderProps>({
-  renderProps,
-  fieldName,
-  objectFields,
-  filter,
-}: RenderEntityFields<T>) => {
-  const filteredEntityFields = getFilteredEntityFields(filter);
+export const renderEntityFields = <
+  T extends RenderProps,
+  U extends Record<string, any>,
+>(
+  props: RenderEntityFields<T, U>
+) => {
+  const filteredEntityFields = getFilteredEntityFields(props.filter);
 
   const selectorField: any = {};
-  selectorField[fieldName] = {
+  selectorField[props.fieldName] = {
     label: "Entity Field",
     type: "select",
     options: filteredEntityFields.map((field) => {
@@ -38,17 +41,17 @@ export const renderEntityFields = <T extends RenderProps>({
 
   return (
     <>
-      <FieldLabel label={renderProps.field.label!}>
+      <FieldLabel label={props.renderProps.field.label!}>
         <AutoField
           field={{
             type: "object",
             objectFields: {
               ...selectorField,
-              ...objectFields,
+              ...props.objectFields,
             },
           }}
-          onChange={(value) => renderProps.onChange(value)}
-          value={renderProps.value}
+          onChange={(value) => props.renderProps.onChange(value)}
+          value={props.renderProps.value}
         />
       </FieldLabel>
     </>
