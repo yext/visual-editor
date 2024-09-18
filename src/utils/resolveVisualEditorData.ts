@@ -1,14 +1,10 @@
 type VisualConfiguration = {
-  template: string;
+  pageSet: string;
   data: string;
 };
 
-type PagesLayout = {
-  c_visualConfiguration?: VisualConfiguration;
-};
-
-type VisualLayout = {
-  c_visualConfiguration?: VisualConfiguration;
+type Layout = {
+  visualConfiguration?: VisualConfiguration;
 };
 
 const defaultData = JSON.stringify({
@@ -19,48 +15,46 @@ const defaultData = JSON.stringify({
 
 export function resolveVisualEditorData(
   data: any,
-  templateName: string | undefined
+  pageSetName: string | undefined
 ): string {
-  if (!templateName) {
+  if (!pageSetName) {
     throw new Error(
-      "Unable to parse puck data, template name must be defined in config."
+      "Unable to parse puck data, page set name must be defined in config."
     );
   }
 
   const { document } = data;
   const entityConfigurations: VisualConfiguration[] =
-    document.c_visualConfigurations ?? [];
-  const entityLayoutConfigurations: PagesLayout[] =
-    document.c_pages_layouts ?? [];
-  const siteLayoutConfigurations: VisualLayout[] =
-    document._site?.c_visualLayouts;
+    document.visualConfigurations ?? [];
+  const entityLayoutConfigurations: Layout[] = document.pagesLayouts ?? [];
+  const siteLayoutConfigurations: Layout[] = document._site?.defaultLayouts;
 
   // check base entity
   for (const entityConfiguration of entityConfigurations) {
-    if (entityConfiguration.template === templateName) {
-      const visualTemplate = JSON.parse(
-        validateOrDefault(entityConfiguration.data, templateName)
+    if (entityConfiguration.pageSet === pageSetName) {
+      const pageSet = JSON.parse(
+        validateOrDefault(entityConfiguration.data, pageSetName)
       );
       return {
         ...data,
         document: {
           ...document,
-          visualTemplate,
+          pageSet,
         },
       };
     }
   }
   // check layouts referenced by the base entity
   for (const entityLayout of entityLayoutConfigurations) {
-    if (entityLayout.c_visualConfiguration?.template === templateName) {
-      const visualTemplate = JSON.parse(
-        validateOrDefault(entityLayout.c_visualConfiguration.data, templateName)
+    if (entityLayout.visualConfiguration?.pageSet === pageSetName) {
+      const pageSet = JSON.parse(
+        validateOrDefault(entityLayout.visualConfiguration.data, pageSetName)
       );
       return {
         ...data,
         document: {
           ...document,
-          visualTemplate,
+          pageSet,
         },
       };
     }
@@ -68,35 +62,35 @@ export function resolveVisualEditorData(
   if (siteLayoutConfigurations) {
     // check layouts referenced by the site entity
     for (const siteLayout of siteLayoutConfigurations) {
-      if (siteLayout.c_visualConfiguration?.template === templateName) {
-        const visualTemplate = JSON.parse(
-          validateOrDefault(siteLayout.c_visualConfiguration.data, templateName)
+      if (siteLayout.visualConfiguration?.pageSet === pageSetName) {
+        const pageSet = JSON.parse(
+          validateOrDefault(siteLayout.visualConfiguration.data, pageSetName)
         );
         return {
           ...data,
           document: {
             ...document,
-            visualTemplate,
+            pageSet,
           },
         };
       }
     }
   }
 
-  console.warn(`Unable to find puck data for template: ${templateName}`);
-  const visualTemplate = JSON.parse(defaultData);
+  console.warn(`Unable to find puck data for page set: ${pageSetName}`);
+  const pageSet = JSON.parse(defaultData);
   return {
     ...data,
     document: {
       ...document,
-      visualTemplate,
+      pageSet,
     },
   };
 }
 
-function validateOrDefault(puckData: string, templateName: string): string {
+function validateOrDefault(puckData: string, pageSetName: string): string {
   if (!puckData || puckData.length < 1) {
-    console.warn(`Missing visual editor data for template: ${templateName}`);
+    console.warn(`Missing visual editor data for page set: ${pageSetName}`);
     return defaultData;
   }
 
@@ -104,7 +98,7 @@ function validateOrDefault(puckData: string, templateName: string): string {
     JSON.parse(puckData); // check if the puckData is valid JSON
     // eslint-disable-next-line
   } catch (e) {
-    console.warn(`Invalid visual editor data for template: ${templateName}`);
+    console.warn(`Invalid visual editor data for page set: ${pageSetName}`);
     return defaultData;
   }
 
