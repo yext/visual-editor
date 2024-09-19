@@ -99,7 +99,10 @@ export const InternalEditor = ({
   const handleSave = async (data: Data) => {
     devLogger.logFunc("saveVisualConfigData");
     saveVisualConfigData({
-      payload: { visualConfigurationData: JSON.stringify(data) },
+      payload: {
+        siteId: templateMetadata.siteId,
+        visualConfigurationData: JSON.stringify(data),
+      },
     });
   };
 
