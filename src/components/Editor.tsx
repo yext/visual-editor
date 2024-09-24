@@ -407,6 +407,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           sendDevSaveStateData={sendDevSaveStateData}
           buildLocalStorageKey={buildLocalStorageKey}
           devLogger={devLogger}
+          document={document}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />

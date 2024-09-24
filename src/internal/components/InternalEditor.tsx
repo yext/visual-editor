@@ -6,7 +6,7 @@ import {
   type History,
   InitialHistory,
 } from "@measured/puck";
-import React from "react";
+import React, { useEffect } from "react";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
 import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
@@ -14,6 +14,7 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { resolveProp } from "../../utils/resolveProp.ts";
 
 interface InternalEditorProps {
   puckConfig: Config;
@@ -27,6 +28,7 @@ interface InternalEditorProps {
   sendDevSaveStateData: (data: any) => void;
   buildLocalStorageKey: () => string;
   devLogger: DevLogger;
+  document: any;
 }
 
 // Render Puck editor
@@ -42,6 +44,7 @@ export const InternalEditor = ({
   sendDevSaveStateData,
   buildLocalStorageKey,
   devLogger,
+  document,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -113,6 +116,40 @@ export const InternalEditor = ({
     }
   };
 
+  const EntityFieldResolver = ({ children }: { children: React.ReactNode }) => {
+    const { appState } = usePuck();
+    useEffect(() => {
+      resolveEntityFieldData(appState.data, document);
+    }, [appState, document]);
+    return children;
+  };
+
+  const resolveEntityFieldData = async (data: Data, document: any) => {
+    data.content.forEach((component) => {
+      Object.entries(component.props).forEach(
+        ([propName, prop]: [string, any]) => {
+          Object.entries(prop).forEach(
+            ([fieldName, fieldValue]: [string, any]) => {
+              if (fieldName !== "entityField") {
+                return;
+              }
+              if (!component.readOnly) {
+                component.readOnly = {};
+              }
+
+              if (fieldValue.name === "") {
+                component.readOnly[propName + ".entityField"] = false;
+              } else {
+                fieldValue.value = resolveProp(document, fieldValue.name);
+                component.readOnly[propName + ".entityField"] = true;
+              }
+            }
+          );
+        }
+      );
+    });
+  };
+
   return (
     <EntityFieldProvider>
       <Puck
@@ -121,6 +158,9 @@ export const InternalEditor = ({
         initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
+          puck: ({ children }) => (
+            <EntityFieldResolver>{children}</EntityFieldResolver>
+          ),
           header: () => {
             const { appState } = usePuck();
             return customHeader(

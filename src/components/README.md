@@ -72,27 +72,18 @@ Use this to allow Visual Editor users to choose an entity field or a constant va
 
 #### Props
 
-| Name                      | Type            | Description                                                                                                          |
-| ------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------- |
-| useDocument               | function        | See [@yext/pages useDocument](https://github.com/yext/pages/blob/main/packages/pages/src/util/README.md#usedocument) |
-| label?                    | string          | The user-facing label for the field.                                                                                 |
-| filter?.types?            | string[]        | Determines which fields will be available based on field type.                                                       |
-| filter?.includeSubfields? | boolean         |                                                                                                                      |
-| filter?.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.                                                        |
-| filter?.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.                                                           |
-
-### resolveDataForEntityField
-
-Determines whether to use a constant value or an entity field. Used as [Puck's resolveData function](https://puckeditor.com/docs/api-reference/configuration/component-config#resolvedatadata-params).
+| Name                      | Type            | Description                                                    |
+| ------------------------- | --------------- | -------------------------------------------------------------- |
+| label?                    | string          | The user-facing label for the field.                           |
+| filter?.types?            | string[]        | Determines which fields will be available based on field type. |
+| filter?.includeSubfields? | boolean         |                                                                |
+| filter?.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.  |
+| filter?.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
 
 ### Usage
 
 ```tsx
-import {
-  EntityFieldType,
-  YextEntityFieldSelector,
-  resolveDataForEntityField,
-} from "@yext/visual-editor";
+import { EntityFieldType, YextEntityFieldSelector } from "@yext/visual-editor";
 import { config } from "../templates/myTemplate";
 import { useDocument } from "@yext/pages/util";
 
@@ -109,7 +100,6 @@ const exampleFields: Fields<ExampleProps> = {
     objectFields: {
       //@ts-expect-error ts(2322)
       entityField: YextEntityFieldSelector<typeof config>({
-        useDocument: useDocument,
         label: "Entity Field",
         filter: {
           types: ["type.string"],
@@ -129,11 +119,13 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
         name: "",
         value: "This is an example", // default constant value
       },
+      // entityField: {
+      //   name: "id", // default entity field
+      //   value: "",
+      // },
     },
   },
   label: "Example Component",
-  resolveData: (props, changed) =>
-    resolveDataForEntityField<ExampleProps>("myField", props, changed),
   render: ({ myField }) => <Example myField={myField} />,
 };
 
