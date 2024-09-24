@@ -50,11 +50,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
 
       return (
         <>
-          <FieldLabel
-            label={field.label || "Label is undefined"}
-            //@ts-expect-error ts(2367)
-            readOnly={readOnly === "name"}
-          >
+          <FieldLabel label={field.label || "Label is undefined"}>
             <AutoField
               field={{
                 type: "select",
@@ -75,8 +71,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                 });
               }}
               value={value?.name}
-              //@ts-expect-error ts(2367)
-              readOnly={readOnly === "name"}
             />
             {value?.name && (
               <button
@@ -85,8 +79,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                 onClick={() => {
                   onChange({ name: "", value: value?.value });
                 }}
-                //@ts-expect-error ts(2367)
-                disabled={readOnly === "name"}
               >
                 <span className="entityField-unlock-icon">
                   <Unlock size={16} />
@@ -96,15 +88,12 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
             )}
           </FieldLabel>
           <FieldLabel
-            //@ts-expect-error ts(2367)
-            label={readOnly === "value" ? "Value" : "Constant Value"}
-            //@ts-expect-error ts(2367)
-            readOnly={readOnly === "value"}
+            label={readOnly ? "Value" : "Constant Value"}
+            readOnly={readOnly}
             className="entityField-value"
           >
             <AutoField
-              //@ts-expect-error ts(2367)
-              readOnly={readOnly === "value"}
+              readOnly={readOnly}
               onChange={(value) =>
                 onChange({
                   name: "",
@@ -147,7 +136,7 @@ export const resolveDataForEntityField = <T extends DefaultComponentProps>(
   return {
     props,
     readOnly: {
-      [fieldName.toString() + ".entityField"]: "value",
+      [fieldName.toString() + ".entityField"]: true,
     },
   };
 };
