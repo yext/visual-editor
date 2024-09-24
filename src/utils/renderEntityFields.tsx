@@ -10,7 +10,7 @@ import {
   RenderEntityFieldFilter,
 } from "./getFilteredEntityFields.ts";
 
-type RenderProps = Parameters<CustomField<any>["render"]>[0];
+export type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 type RenderEntityFields<
   T extends RenderProps,
