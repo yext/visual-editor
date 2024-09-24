@@ -11,31 +11,28 @@ import {
   getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../utils/getFilteredEntityFields.ts";
+import { resolveProp } from "../utils/resolveProp.ts";
 
 export type EntityFieldType = {
   name: string;
   value: string;
 };
+
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     useDocument: (...args: any[]) => any;
     label: string;
     filter: RenderEntityFieldFilter<T>;
   };
+
 type ResolveDataForEntityFieldProps<T extends DefaultComponentProps> = Omit<
   ComponentData<T, string>,
   "type"
 >;
+
 type ResolveDataForEntityFieldChanged<T extends DefaultComponentProps> = {
   changed: Partial<Record<keyof T, boolean>>;
   lastData: Omit<ComponentData<T, string>, "type"> | null;
-};
-
-/**
- * Returns the constant value if it exists, otherwise returns the selected field's value.
- */
-export const resolveProp = <T,>(document: any, entityField: string): T => {
-  return document[entityField] || (entityField as T);
 };
 
 /**
