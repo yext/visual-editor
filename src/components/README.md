@@ -127,7 +127,7 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
     myField: {
       entityField: {
         name: "",
-        value: "Information",
+        value: "This is an example", // default constant value
       },
     },
   },
