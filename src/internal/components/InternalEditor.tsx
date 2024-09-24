@@ -127,7 +127,7 @@ export const InternalEditor = ({
               handleClearLocalChanges,
               handleHistoryChange,
               appState.data,
-              puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
+              puckInitialHistory?.histories[0]?.state?.data, // used for clearing local changes - reset to first puck history
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride
             );
