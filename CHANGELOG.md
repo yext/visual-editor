@@ -1,3 +1,21 @@
+#### 0.0.8 (2024-09-25)
+
+##### Chores
+
+- update to latest (official) puck version (54c6083d)
+- add .idea to .gitignore (#46) (806e7239)
+
+##### New Features
+
+- constant value for mappable fields (#49) (745fcb1c)
+- **util:**
+  - add renderEntityFields function (#44) (ef7cc7bb)
+  - add resolveProp function (#45) (37ceeff7)
+
+##### Refactors
+
+- mappable fields with static values version 2 (#53) (3dfe0382)
+
 #### 0.0.7 (2024-09-16)
 
 ##### Chores
