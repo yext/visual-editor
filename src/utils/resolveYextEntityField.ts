@@ -4,7 +4,7 @@ export const resolveYextEntityField = <T>(
   document: any,
   entityField: EntityFieldType
 ): T => {
-  // return static value if "Use Static Value" selected
+  // return static value if fieldName is not set
   if (entityField.fieldName === "") {
     return entityField.staticValue as T;
   }

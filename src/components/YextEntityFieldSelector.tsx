@@ -36,7 +36,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               field={{
                 type: "select",
                 options: [
-                  { value: "", label: "Use Static Value" },
+                  { value: "", label: "Select a Content field" },
                   ...filteredEntityFields.map((entityFieldNameToSchema) => {
                     return {
                       label: entityFieldNameToSchema.name,
@@ -47,7 +47,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               }}
               onChange={(selectedEntityFieldName) => {
                 onChange({
-                  fieldName: selectedEntityFieldName as unknown as string, // hack because the option value is a string so it comes back as a string even though TS thinks it's an object
+                  fieldName: selectedEntityFieldName,
                   staticValue: value.staticValue,
                 });
               }}

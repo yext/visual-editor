@@ -1,7 +1,7 @@
 import { test, assert } from "vitest";
 import { resolveYextEntityField } from "../src/utils/resolveYextEntityField.ts";
 
-test("resolveProp returns value when field found in document", async () => {
+test("resolveYextEntityField returns value when field found in document", async () => {
   assert.equal(
     resolveYextEntityField(
       {
@@ -15,7 +15,7 @@ test("resolveProp returns value when field found in document", async () => {
   );
 });
 
-test("resolveProp returns empty value when field found in document", async () => {
+test("resolveYextEntityField returns empty value when field found in document", async () => {
   assert.equal(
     resolveYextEntityField(
       {
@@ -29,7 +29,7 @@ test("resolveProp returns empty value when field found in document", async () =>
   );
 });
 
-test("resolveProp returns static value when field not found in document", async () => {
+test("resolveYextEntityField returns static value when field not found in document", async () => {
   assert.equal(
     resolveYextEntityField(
       {
@@ -41,7 +41,7 @@ test("resolveProp returns static value when field not found in document", async 
   );
 });
 
-test("resolveProp returns static value when 'Use Static Value' is selected", async () => {
+test("resolveYextEntityField returns static value when fieldName not set", async () => {
   assert.equal(
     resolveYextEntityField(
       {
