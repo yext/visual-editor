@@ -39,23 +39,7 @@
   margin-left: -1px;
 }
 
-.entityField:focus-visible {
-  outline: 2px solid var(--puck-color-azure-05);
-  outline-offset: 2px;
-  z-index: 1;
-}
-
-.entityField:hover {
-  background: var(--puck-color-azure-12);
-  transition: none;
-
-  .entityField-unlock-icon {
-    color: var(--puck-color-azure-04);
-    transition: none;
-  }
-}
-
-.entityField-value {
+.entityField-staticValue {
   margin-top: 10px;
   display: block;
 }
