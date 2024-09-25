@@ -115,7 +115,6 @@ const exampleFields: Fields<ExampleProps> = {
     type: "object",
     label: "Example Field Populated by Entity Fields",
     objectFields: {
-      //@ts-expect-error ts(2322)
       entityField: YextEntityFieldSelector<typeof config>({
         label: "Entity Field",
         filter: {
