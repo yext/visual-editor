@@ -4,6 +4,10 @@ export const resolveYextEntityField = <T>(
   document: any,
   entityField: EntityFieldType
 ): T => {
+  if (!entityField) {
+    return undefined as T;
+  }
+
   // return static value if fieldName is not set
   if (entityField.fieldName === "") {
     return entityField.staticValue as T;
