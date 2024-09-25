@@ -51,7 +51,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                   staticValue: value.staticValue,
                 });
               }}
-              value={value?.entityFieldName}
+              value={value?.fieldName}
             />
           </FieldLabel>
           <FieldLabel
