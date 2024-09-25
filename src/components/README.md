@@ -68,22 +68,30 @@ import { EntityField } from "@yext/visual-editor";
 
 ### YextEntityFieldSelector
 
-Use this to allow Visual Editor users to choose an entity field or a constant value that will populate data into a component.
+Use this to allow Visual Editor users to choose an entity field or static value that will populate data into a component.
+The user can choose an entity field from a dropdown or select "Use Static Value". Regardless, the user should always
+enter a static value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
 
 #### Props
 
-| Name                      | Type            | Description                                                                                                          |
-| ------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------- |
-| useDocument               | function        | See [@yext/pages useDocument](https://github.com/yext/pages/blob/main/packages/pages/src/util/README.md#usedocument) |
-| label?                    | string          | The user-facing label for the field.                                                                                 |
-| filter?.types?            | string[]        | Determines which fields will be available based on field type.                                                       |
-| filter?.includeSubfields? | boolean         |                                                                                                                      |
-| filter?.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.                                                        |
-| filter?.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.                                                           |
+| Name                      | Type            | Description                                                    |
+| ------------------------- | --------------- | -------------------------------------------------------------- |
+| label?                    | string          | The user-facing label for the field.                           |
+| filter?.types?            | string[]        | Determines which fields will be available based on field type. |
+| filter?.includeSubfields? | boolean         |                                                                |
+| filter?.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.  |
+| filter?.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
 
-### resolveDataForEntityField
+### resolveYextEntityField
 
-Determines whether to use a constant value or an entity field. Used as [Puck's resolveData function](https://puckeditor.com/docs/api-reference/configuration/component-config#resolvedatadata-params).
+Used in a component's render function to pull in the selected entity field's value from the document or use the static value.
+
+#### Props
+
+| Name        | Type                |
+| ----------- | ------------------- |
+| document    | Record<string, any> |
+| entityField | EntityFieldType     |
 
 ### Usage
 
@@ -91,7 +99,7 @@ Determines whether to use a constant value or an entity field. Used as [Puck's r
 import {
   EntityFieldType,
   YextEntityFieldSelector,
-  resolveDataForEntityField,
+  resolveYextEntityField,
 } from "@yext/visual-editor";
 import { config } from "../templates/myTemplate";
 import { useDocument } from "@yext/pages/util";
@@ -109,7 +117,6 @@ const exampleFields: Fields<ExampleProps> = {
     objectFields: {
       //@ts-expect-error ts(2322)
       entityField: YextEntityFieldSelector<typeof config>({
-        useDocument: useDocument,
         label: "Entity Field",
         filter: {
           types: ["type.string"],
@@ -126,18 +133,17 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
   defaultProps: {
     myField: {
       entityField: {
-        name: "",
-        value: "This is an example", // default constant value
+        fieldName: "", // default to Use Static Value
+        staticValue: "Example Text", // default static value
       },
     },
   },
   label: "Example Component",
-  resolveData: (props, changed) =>
-    resolveDataForEntityField<ExampleProps>("myField", props, changed),
   render: ({ myField }) => <Example myField={myField} />,
 };
 
 const Example = ({ myField }: ExampleProps) => {
-  return <p>{myField.entityField.value}</p>;
+  const document = useDocument();
+  return <p>{resolveYextEntityField(document, myField.entityField)}</p>;
 };
 ```

@@ -143,6 +143,15 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   );
 
   if (filter?.allowList) {
+    const streamFieldNames = filteredEntityFields.map((field) => field.name);
+    filter.allowList.forEach((field) => {
+      if (!streamFieldNames.includes(field)) {
+        console.warn(
+          `The entity field filter allowList included ${field}, which does not exist on the stream.`
+        );
+      }
+    });
+
     filteredEntityFields = filteredEntityFields.filter((field) =>
       filter.allowList.includes(field.name)
     );
