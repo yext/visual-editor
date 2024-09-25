@@ -41,7 +41,7 @@ test("resolveProp returns static value when field not found in document", async 
   );
 });
 
-test("resolveProp returns static value Use Static Value is selected", async () => {
+test("resolveProp returns static value when 'Use Static Value' is selected", async () => {
   assert.equal(
     resolveYextEntityField(
       {
