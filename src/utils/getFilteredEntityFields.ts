@@ -33,11 +33,12 @@ type EntityFieldTypesFilter = {
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
 
-type EntityFieldTypes =
+export type EntityFieldTypes =
   | "type.string"
   | "type.image"
   | "type.hours"
   | "type.address"
+  | "type.phone"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
