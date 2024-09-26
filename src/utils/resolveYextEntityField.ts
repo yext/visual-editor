@@ -4,7 +4,12 @@ export const resolveYextEntityField = <T>(
   document: any,
   entityField: EntityFieldType
 ): T => {
-  if (!entityField) {
+  if (
+    !entityField ||
+    typeof entityField !== "object" ||
+    !("fieldName" in entityField) ||
+    !("staticValue" in entityField)
+  ) {
     return undefined as T;
   }
 
