@@ -168,12 +168,13 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     );
   }
 
-  let filterEntitySubFields: YextSchemaField[] = [];
+  // Augment to include subfields
+  let filteredEntitySubFields: YextSchemaField[] = [];
   for (const yextSchemaField of filteredEntityFields) {
     const entityFieldNames = getEntityFieldNames(yextSchemaField);
 
     for (const entityFieldName of entityFieldNames) {
-      filterEntitySubFields.push({
+      filteredEntitySubFields.push({
         ...entityFieldName.schemaField,
         name: entityFieldName.name,
       });
@@ -181,18 +182,18 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   }
 
   if (filter?.types) {
-    const typeToFieldNames = getEntityTypeToFieldNames(filterEntitySubFields);
+    const typeToFieldNames = getEntityTypeToFieldNames(filteredEntitySubFields);
 
-    const updatedFilterEntitySubFields: YextSchemaField[] = [];
+    const updatedFilteredEntitySubFields: YextSchemaField[] = [];
     filter.types.forEach((type) => {
-      updatedFilterEntitySubFields.push(
-        ...filterEntitySubFields.filter((field) => {
+      updatedFilteredEntitySubFields.push(
+        ...filteredEntitySubFields.filter((field) => {
           return typeToFieldNames.get(type)?.includes(field.name);
         })
       );
     });
-    filterEntitySubFields = updatedFilterEntitySubFields;
+    filteredEntitySubFields = updatedFilteredEntitySubFields;
   }
 
-  return filterEntitySubFields;
+  return filteredEntitySubFields;
 };
