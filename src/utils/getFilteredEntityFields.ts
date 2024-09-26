@@ -27,8 +27,7 @@ type DisallowList<T extends Record<string, any>> = {
 };
 
 type EntityFieldTypesFilter = {
-  types?: EntityFieldTypes[];
-  includeSubfields?: boolean;
+  types: EntityFieldTypes[];
 };
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
@@ -71,21 +70,28 @@ const walkSubfields = (
   if (
     TOP_LEVEL_ONLY_FIELD_TYPES.includes(getTypeFromSchemaField(schemaField))
   ) {
+    // skip all children of TOP_LEVEL_ONLY_FIELD_TYPES
     return [{ name: fieldNameInternal, schemaField: schemaField }];
   }
+
+  if (schemaField.definition.isList) {
+    return []; // skip all children of list types
+  }
+
+  const fieldNames: EntityFieldNameAndSchema[] = [
+    { name: fieldNameInternal, schemaField: schemaField },
+  ];
 
   if (
     schemaField.children?.fields &&
     schemaField.children?.fields?.length > 0
   ) {
-    const fieldNames: EntityFieldNameAndSchema[] = [];
     for (const child of schemaField.children.fields) {
       fieldNames.push(...walkSubfields(child, fieldNameInternal));
     }
-    return fieldNames;
   }
 
-  return [{ name: fieldNameInternal, schemaField: schemaField }];
+  return fieldNames;
 };
 
 const getTypeFromSchemaField = (schemaField: YextSchemaField) => {
@@ -108,19 +114,10 @@ function appendToMapList<K, V>(
 }
 
 const getEntityTypeToFieldNames = (
-  schemaFields: YextSchemaField[],
-  filter: {
-    includeSubfields: boolean;
-  }
+  schemaFields: YextSchemaField[]
 ): Map<string, string[]> => {
   return schemaFields.reduce((prev: Map<string, string[]>, field) => {
-    if (field.definition.isList) {
-      return prev;
-    }
-
-    const fieldNameToSchemas = filter.includeSubfields
-      ? getEntityFieldNames(field)
-      : [{ name: field.definition.name, schemaField: field }];
+    const fieldNameToSchemas = getEntityFieldNames(field);
 
     for (const fieldToSchema of fieldNameToSchemas) {
       const typeName = getTypeFromSchemaField(fieldToSchema.schemaField);
@@ -134,16 +131,28 @@ const getEntityTypeToFieldNames = (
 };
 
 export const getFilteredEntityFields = <T extends Record<string, any>>(
-  filter?: RenderEntityFieldFilter<T>
+  filter: RenderEntityFieldFilter<T>
 ) => {
   const entityFields = useEntityFields();
 
-  let filteredEntityFields = entityFields.stream.schema.fields.filter(
+  const filteredEntityFields = entityFields.stream.schema.fields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
   );
 
+  let filterEntitySubFields: YextSchemaField[] = [];
+  for (const yextSchemaField of filteredEntityFields) {
+    const entityFieldNames = getEntityFieldNames(yextSchemaField);
+
+    for (const entityFieldName of entityFieldNames) {
+      filterEntitySubFields.push({
+        ...entityFieldName.schemaField,
+        name: entityFieldName.name,
+      });
+    }
+  }
+
   if (filter?.allowList) {
-    const streamFieldNames = filteredEntityFields.map((field) => field.name);
+    const streamFieldNames = filterEntitySubFields.map((field) => field.name);
     filter.allowList.forEach((field) => {
       if (!streamFieldNames.includes(field)) {
         console.warn(
@@ -152,43 +161,29 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
       }
     });
 
-    filteredEntityFields = filteredEntityFields.filter((field) =>
-      filter.allowList.includes(field.name)
-    );
+    filterEntitySubFields = filterEntitySubFields.filter((field) => {
+      return filter.allowList.some((allowedName) => {
+        return field.name.includes(allowedName);
+      });
+    });
   }
 
   if (filter?.disallowList) {
-    filteredEntityFields = filteredEntityFields.filter(
-      (field) => !filter.disallowList.includes(field.name)
-    );
-  }
-
-  if (filter?.includeSubfields) {
-    const filterEntitySubFields: YextSchemaField[] = [];
-    for (const yextSchemaField of filteredEntityFields) {
-      const entityFieldNames = getEntityFieldNames(yextSchemaField);
-
-      for (const entityFieldName of entityFieldNames) {
-        filterEntitySubFields.push({
-          ...entityFieldName.schemaField,
-          name: entityFieldName.name,
-        });
-      }
-    }
-    filteredEntityFields = filterEntitySubFields;
+    filterEntitySubFields = filterEntitySubFields.filter((field) => {
+      return !filter.disallowList.some((disallowedName) => {
+        return field.name.includes(disallowedName);
+      });
+    });
   }
 
   if (filter?.types) {
-    const typeToFieldNames = getEntityTypeToFieldNames(filteredEntityFields, {
-      includeSubfields: !!filter.includeSubfields,
-    });
-
+    const typeToFieldNames = getEntityTypeToFieldNames(filterEntitySubFields);
     filter.types.forEach((type) => {
-      filteredEntityFields = filteredEntityFields.filter((field) =>
-        typeToFieldNames.get(type)?.includes(field.name)
-      );
+      filterEntitySubFields = filterEntitySubFields.filter((field) => {
+        return typeToFieldNames.get(type)?.includes(field.name);
+      });
     });
   }
 
-  return filteredEntityFields;
+  return filterEntitySubFields;
 };

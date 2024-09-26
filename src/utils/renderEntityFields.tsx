@@ -19,7 +19,7 @@ type RenderEntityFields<
   renderProps: RenderProps;
   fieldName: keyof T["value"];
   objectFields?: ObjectField<any>["objectFields"];
-  filter?: RenderEntityFieldFilter<U>;
+  filter: RenderEntityFieldFilter<U>;
 };
 
 export const renderEntityFields = <
