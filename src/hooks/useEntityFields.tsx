@@ -2,6 +2,7 @@ import * as React from "react";
 import { useReceiveMessage } from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
 import { TARGET_ORIGINS } from "../components/Editor.tsx";
+import { YextEntityFields } from "../internal/types/entityFields.ts";
 
 /**
  * Under the hood we receive a Stream for a template, but we expose
@@ -48,43 +49,4 @@ export const useEntityFields = () => {
   }
 
   return context;
-};
-
-export type YextEntityFields = {
-  stream: YextStream;
-};
-
-export type YextStream = {
-  expression: {
-    fields: YextEntityField[];
-  };
-  schema: YextSchema;
-};
-
-export type YextEntityField = {
-  name: string;
-  children?: {
-    fields: YextEntityField[];
-  };
-};
-
-export type YextSchema = {
-  fields: YextSchemaField[];
-};
-
-export type YextSchemaField = {
-  name: string;
-  definition: YextFieldDefinition;
-  children?: {
-    fields: YextSchemaField[];
-  };
-};
-
-export type YextFieldDefinition = {
-  name: string;
-  isList: boolean;
-  registryId: string;
-  typeName: string;
-  typeRegistryId: string;
-  type: Record<string, string>;
 };

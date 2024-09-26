@@ -1,5 +1,5 @@
 import { test, assert } from "vitest";
-import { resolveYextEntityField } from "../src/utils/resolveYextEntityField.ts";
+import { resolveYextEntityField } from "./resolveYextEntityField.ts";
 
 test("resolveYextEntityField returns value when field found in document", async () => {
   assert.equal(

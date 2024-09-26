@@ -1,4 +1,5 @@
-import { useEntityFields, YextSchemaField } from "../hooks/index.ts";
+import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { YextSchemaField } from "../internal/types/entityFields.ts";
 
 type Only<T, U> = {
   [P in keyof T]: T[P];
@@ -32,7 +33,12 @@ type EntityFieldTypesFilter = {
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
 
-type EntityFieldTypes = "type.string" | "type.image" | `c_${string}`;
+type EntityFieldTypes =
+  | "type.string"
+  | "type.image"
+  | "type.hours"
+  | "type.address"
+  | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
   "uid",
@@ -41,7 +47,9 @@ const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
   "c_visualConfigurations",
   "c_pages_layouts",
 ];
-const TOP_LEVEL_ONLY_FIELD_TYPES = ["type.image", "type.hours", "type.address"];
+
+// Populate this with fields that aren't allowed to have subfields.
+const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = [];
 
 type EntityFieldNameAndSchema = {
   name: string;
@@ -135,24 +143,12 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
 ) => {
   const entityFields = useEntityFields();
 
-  const filteredEntityFields = entityFields.stream.schema.fields.filter(
+  let filteredEntityFields = entityFields.stream.schema.fields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
   );
 
-  let filterEntitySubFields: YextSchemaField[] = [];
-  for (const yextSchemaField of filteredEntityFields) {
-    const entityFieldNames = getEntityFieldNames(yextSchemaField);
-
-    for (const entityFieldName of entityFieldNames) {
-      filterEntitySubFields.push({
-        ...entityFieldName.schemaField,
-        name: entityFieldName.name,
-      });
-    }
-  }
-
   if (filter?.allowList) {
-    const streamFieldNames = filterEntitySubFields.map((field) => field.name);
+    const streamFieldNames = filteredEntityFields.map((field) => field.name);
     filter.allowList.forEach((field) => {
       if (!streamFieldNames.includes(field)) {
         console.warn(
@@ -161,29 +157,43 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
       }
     });
 
-    filterEntitySubFields = filterEntitySubFields.filter((field) => {
-      return filter.allowList.some((allowedName) => {
-        return field.name.includes(allowedName);
-      });
-    });
+    filteredEntityFields = filteredEntityFields.filter((field) =>
+      filter.allowList.includes(field.name)
+    );
   }
 
   if (filter?.disallowList) {
-    filterEntitySubFields = filterEntitySubFields.filter((field) => {
-      return !filter.disallowList.some((disallowedName) => {
-        return field.name.includes(disallowedName);
+    filteredEntityFields = filteredEntityFields.filter(
+      (field) => !filter.disallowList.includes(field.name)
+    );
+  }
+
+  // Augment to include subfields
+  let filteredEntitySubFields: YextSchemaField[] = [];
+  for (const yextSchemaField of filteredEntityFields) {
+    const entityFieldNames = getEntityFieldNames(yextSchemaField);
+
+    for (const entityFieldName of entityFieldNames) {
+      filteredEntitySubFields.push({
+        ...entityFieldName.schemaField,
+        name: entityFieldName.name,
       });
-    });
+    }
   }
 
   if (filter?.types) {
-    const typeToFieldNames = getEntityTypeToFieldNames(filterEntitySubFields);
+    const typeToFieldNames = getEntityTypeToFieldNames(filteredEntitySubFields);
+
+    const updatedFilteredEntitySubFields: YextSchemaField[] = [];
     filter.types.forEach((type) => {
-      filterEntitySubFields = filterEntitySubFields.filter((field) => {
-        return typeToFieldNames.get(type)?.includes(field.name);
-      });
+      updatedFilteredEntitySubFields.push(
+        ...filteredEntitySubFields.filter((field) => {
+          return typeToFieldNames.get(type)?.includes(field.name);
+        })
+      );
     });
+    filteredEntitySubFields = updatedFilteredEntitySubFields;
   }
 
-  return filterEntitySubFields;
+  return filteredEntitySubFields;
 };
