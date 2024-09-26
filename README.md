@@ -8,6 +8,7 @@ This library provides components necessary to set up a Pages repository that can
 | Hook                                                             |
 |------------------------------------------------------------------|
 | [usePlatformBridgeDocument](./src/hooks/README.md#usePlatformBridgeDocument) |
+| [usePlatformBridgeEntityFields](./src/hooks/README.md#usePlatformBridgeEntityFields) |
 
 ## Components
 
@@ -15,9 +16,11 @@ This library provides components necessary to set up a Pages repository that can
 |-------------------------------------------------------|
 | [Editor](./src/components/README.md#editor)           |
 | [EntityField](./src/components/README.md#entityfield) | 
+| [YextEntityFieldSelector](./src/components/README.md#YextEntityFieldSelector) | 
 
 ## Utils
 
 | Function                                                                 |
 |--------------------------------------------------------------------------|
 | [resolveVisualEditorData](./src/utils/README.md#resolvevisualeditordata) |
+| [resolveYextEntityField](./src/utils/README.md#resolveYextEntityField) |

@@ -29,11 +29,17 @@ const componentRegistry = new Map<string, Config<any>>([
 
 const Edit: () => JSX.Element = () => {
   const entityDocument = usePlatformBridgeDocument();
+  const entityFields = usePlatformBridgeEntityFields();
 
   return (
-      <DocumentProvider value={entityDocument}>
-        <Editor document={entityDocument} componentRegistry={componentRegistry} />
-      </DocumentProvider>
+    <DocumentProvider value={entityDocument}>
+      <EntityFieldsProvider entityFields={entityFields}>
+        <Editor
+          document={entityDocument}
+          componentRegistry={componentRegistry}
+        />
+      </EntityFieldsProvider>
+    </DocumentProvider>
   );
 };
 ```
@@ -64,13 +70,14 @@ import { EntityField } from "@yext/visual-editor";
 </EntityField>;
 ```
 
-## Entity Field Selection
-
-### YextEntityFieldSelector
+## YextEntityFieldSelector
 
 Use this to allow Visual Editor users to choose an entity field or static value that will populate data into a component.
 The user can choose an entity field from a dropdown or select "Use Static Value". Regardless, the user should always
 enter a static value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
+
+The static value field currently has no functionality with complex object entity types (ex. image, c_cta). When using complex
+object types, ensure your render function handles undefined fields.
 
 #### Props
 
@@ -81,18 +88,7 @@ enter a static value as it will be used as a fallback value in the case that the
 | filter.allowList?    | types: string[] | Field names to include. Cannot be combined with disallowList.  |
 | filter.disallowList? | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
 
-### resolveYextEntityField
-
-Used in a component's render function to pull in the selected entity field's value from the document or use the static value.
-
-#### Props
-
-| Name        | Type                |
-| ----------- | ------------------- |
-| document    | Record<string, any> |
-| entityField | EntityFieldType     |
-
-### Usage
+#### Usage
 
 ```tsx
 import {
@@ -100,6 +96,7 @@ import {
   YextEntityFieldSelector,
   resolveYextEntityField,
 } from "@yext/visual-editor";
+import { MyFieldType, TemplateStream } from "../types/autogen";
 import { config } from "../templates/myTemplate";
 import { useDocument } from "@yext/pages/util";
 
@@ -112,13 +109,14 @@ export type ExampleProps = {
 const exampleFields: Fields<ExampleProps> = {
   myField: {
     type: "object",
-    label: "Example Field Populated by Entity Fields",
+    label: "Example Field", // top-level sidebar label
     objectFields: {
       entityField: YextEntityFieldSelector<typeof config>({
-        label: "Entity Field",
+        label: "Entity Field", // sidebar label for the entity field dropdown
         filter: {
           types: ["type.string"],
           disallowList: ["exampleFieldName"],
+          //allowList: ["exampleFieldName"],
         },
       }),
     },
@@ -130,7 +128,8 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
   defaultProps: {
     myField: {
       entityField: {
-        fieldName: "", // default to Use Static Value
+        fieldName: "id", // default to the entity's id
+        // fieldName: "", // default to Select a Content field (page will display the static value)
         staticValue: "Example Text", // default static value
       },
     },
@@ -140,7 +139,10 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
 };
 
 const Example = ({ myField }: ExampleProps) => {
-  const document = useDocument();
-  return <p>{resolveYextEntityField(document, myField.entityField)}</p>;
+  const document = useDocument<TemplateStream>();
+  return (
+    // myField?.entityField optional chaining only required when updating existing component
+    <p>{resolveYextEntityField<MyFieldType>(document, myField?.entityField)}</p>
+  );
 };
 ```
