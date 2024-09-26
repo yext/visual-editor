@@ -19,3 +19,18 @@ export const transformProps = async (data) => {
   return resolveVisualEditorData(data, "location");
 };
 ```
+
+### resolveYextEntityField
+
+Used in a component's render function to pull in the selected entity field's value from the document or use the static value.
+
+#### Props
+
+| Name        | Type                |
+| ----------- | ------------------- |
+| document    | Record<string, any> |
+| entityField | EntityFieldType     |
+
+### Usage
+
+See [YextEntityFieldSelector](../components/README.md#YextEntityFieldSelector)
