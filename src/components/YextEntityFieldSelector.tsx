@@ -48,7 +48,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               onChange={(selectedEntityFieldName) => {
                 onChange({
                   fieldName: selectedEntityFieldName,
-                  staticValue: value.staticValue,
+                  staticValue: value?.staticValue ?? "",
                 });
               }}
               value={value?.fieldName}
@@ -61,7 +61,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
             <AutoField
               onChange={(newStaticValue) =>
                 onChange({
-                  fieldName: value.fieldName,
+                  fieldName: value?.fieldName ?? "",
                   staticValue: newStaticValue,
                 })
               }
