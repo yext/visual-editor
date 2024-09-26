@@ -1,3 +1,26 @@
+#### 0.0.9 (2024-09-26)
+
+##### Chores
+
+- pin Puck (a1bfd375)
+
+##### Documentation Changes
+
+- documentation updates for mappable fields (#58) (15e95382)
+
+##### New Features
+
+- hide static value field for complex entity types (#60) (51cc136e)
+
+##### Bug Fixes
+
+- update field filtering logic (#59) (040b919d)
+- additional resolveYextEntityField undefined checks (#57) (7c03b721)
+- mappable fields filter updates (#56) (a2622fe4)
+- fields not returned by type when type was a subfield (1a5c5939)
+- selector return type signature (#55) (42c70ce6)
+- undefined checks for mappable fields (#54) (dcf4baa6)
+
 #### 0.0.8 (2024-09-25)
 
 ##### Chores
