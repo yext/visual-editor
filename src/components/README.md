@@ -74,13 +74,12 @@ enter a static value as it will be used as a fallback value in the case that the
 
 #### Props
 
-| Name                      | Type            | Description                                                    |
-| ------------------------- | --------------- | -------------------------------------------------------------- |
-| label?                    | string          | The user-facing label for the field.                           |
-| filter?.types?            | string[]        | Determines which fields will be available based on field type. |
-| filter?.includeSubfields? | boolean         |                                                                |
-| filter?.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.  |
-| filter?.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
+| Name                 | Type            | Description                                                    |
+| -------------------- | --------------- | -------------------------------------------------------------- |
+| label?               | string          | The user-facing label for the field.                           |
+| filter.types         | string[]        | Determines which fields will be available based on field type. |
+| filter.allowList?    | types: string[] | Field names to include. Cannot be combined with disallowList.  |
+| filter.disallowList? | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
 
 ### resolveYextEntityField
 
@@ -119,7 +118,6 @@ const exampleFields: Fields<ExampleProps> = {
         label: "Entity Field",
         filter: {
           types: ["type.string"],
-          includeSubfields: true,
           disallowList: ["exampleFieldName"],
         },
       }),
