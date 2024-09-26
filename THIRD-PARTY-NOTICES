@@ -6800,7 +6800,7 @@ Apache-2.0
 
 The following npm package may be included in this product:
 
- - caniuse-lite@1.0.30001663
+ - caniuse-lite@1.0.30001664
 
 This package contains the following license and notice below:
 
@@ -8135,7 +8135,7 @@ distributed under the terms of the MIT license above.
 
 The following npm package may be included in this product:
 
- - electron-to-chromium@1.5.28
+ - electron-to-chromium@1.5.29
 
 This package contains the following license and notice below:
 
