@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField, FieldLabel } from "@measured/puck";
+import { AutoField, FieldLabel, Field } from "@measured/puck";
 import { RenderProps } from "../utils/renderEntityFields.tsx";
 import {
   getFilteredEntityFields,
@@ -22,7 +22,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
  */
 export const YextEntityFieldSelector = <T extends Record<string, any>>(
   props: RenderYextEntityFieldSelectorProps<T>
-) => {
+): Field<EntityFieldType> => {
   return {
     type: "custom",
     label: props.label,
