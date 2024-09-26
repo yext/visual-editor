@@ -163,22 +163,11 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     );
   }
 
-  if (filter?.types) {
-    const typeToFieldNames = getEntityTypeToFieldNames(filteredEntityFields, {
-      includeSubfields: true,
-    });
-
-    filter.types.forEach((type) => {
-      filteredEntityFields = filteredEntityFields.filter((field) =>
-        typeToFieldNames.get(type)?.includes(field.name)
-      );
-    });
-  }
-
   if (filter?.includeSubfields) {
     const filterEntitySubFields: YextSchemaField[] = [];
     for (const yextSchemaField of filteredEntityFields) {
       const entityFieldNames = getEntityFieldNames(yextSchemaField);
+
       for (const entityFieldName of entityFieldNames) {
         filterEntitySubFields.push({
           ...entityFieldName.schemaField,
@@ -187,6 +176,18 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
       }
     }
     filteredEntityFields = filterEntitySubFields;
+  }
+
+  if (filter?.types) {
+    const typeToFieldNames = getEntityTypeToFieldNames(filteredEntityFields, {
+      includeSubfields: !!filter.includeSubfields,
+    });
+
+    filter.types.forEach((type) => {
+      filteredEntityFields = filteredEntityFields.filter((field) =>
+        typeToFieldNames.get(type)?.includes(field.name)
+      );
+    });
   }
 
   return filteredEntityFields;
