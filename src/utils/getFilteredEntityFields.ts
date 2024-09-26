@@ -1,4 +1,5 @@
-import { useEntityFields, YextSchemaField } from "../hooks/index.ts";
+import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { YextSchemaField } from "../internal/types/entityFields.ts";
 
 type Only<T, U> = {
   [P in keyof T]: T[P];
@@ -32,7 +33,12 @@ type EntityFieldTypesFilter = {
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
 
-type EntityFieldTypes = "type.string" | "type.image" | `c_${string}`;
+type EntityFieldTypes =
+  | "type.string"
+  | "type.image"
+  | "type.hours"
+  | "type.address"
+  | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
   "uid",
@@ -41,7 +47,9 @@ const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
   "c_visualConfigurations",
   "c_pages_layouts",
 ];
-const TOP_LEVEL_ONLY_FIELD_TYPES = ["type.image", "type.hours", "type.address"];
+
+// Populate this with fields that aren't allowed to have subfields.
+const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = [];
 
 type EntityFieldNameAndSchema = {
   name: string;
@@ -135,9 +143,30 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
 ) => {
   const entityFields = useEntityFields();
 
-  const filteredEntityFields = entityFields.stream.schema.fields.filter(
+  let filteredEntityFields = entityFields.stream.schema.fields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
   );
+
+  if (filter?.allowList) {
+    const streamFieldNames = filteredEntityFields.map((field) => field.name);
+    filter.allowList.forEach((field) => {
+      if (!streamFieldNames.includes(field)) {
+        console.warn(
+          `The entity field filter allowList included ${field}, which does not exist in the stream.`
+        );
+      }
+    });
+
+    filteredEntityFields = filteredEntityFields.filter((field) =>
+      filter.allowList.includes(field.name)
+    );
+  }
+
+  if (filter?.disallowList) {
+    filteredEntityFields = filteredEntityFields.filter(
+      (field) => !filter.disallowList.includes(field.name)
+    );
+  }
 
   let filterEntitySubFields: YextSchemaField[] = [];
   for (const yextSchemaField of filteredEntityFields) {
@@ -151,38 +180,18 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     }
   }
 
-  if (filter?.allowList) {
-    const streamFieldNames = filterEntitySubFields.map((field) => field.name);
-    filter.allowList.forEach((field) => {
-      if (!streamFieldNames.includes(field)) {
-        console.warn(
-          `The entity field filter allowList included ${field}, which does not exist in the stream.`
-        );
-      }
-    });
-
-    filterEntitySubFields = filterEntitySubFields.filter((field) => {
-      return filter.allowList.some((allowedName) => {
-        return field.name.includes(allowedName);
-      });
-    });
-  }
-
-  if (filter?.disallowList) {
-    filterEntitySubFields = filterEntitySubFields.filter((field) => {
-      return !filter.disallowList.some((disallowedName) => {
-        return field.name.includes(disallowedName);
-      });
-    });
-  }
-
   if (filter?.types) {
     const typeToFieldNames = getEntityTypeToFieldNames(filterEntitySubFields);
+
+    const updatedFilterEntitySubFields: YextSchemaField[] = [];
     filter.types.forEach((type) => {
-      filterEntitySubFields = filterEntitySubFields.filter((field) => {
-        return typeToFieldNames.get(type)?.includes(field.name);
-      });
+      updatedFilterEntitySubFields.push(
+        ...filterEntitySubFields.filter((field) => {
+          return typeToFieldNames.get(type)?.includes(field.name);
+        })
+      );
     });
+    filterEntitySubFields = updatedFilterEntitySubFields;
   }
 
   return filterEntitySubFields;
