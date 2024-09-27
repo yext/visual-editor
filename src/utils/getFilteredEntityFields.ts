@@ -144,7 +144,7 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
 ) => {
   const entityFields = useEntityFields();
 
-  let filteredEntityFields = entityFields.stream.schema.fields.filter(
+  let filteredEntityFields = entityFields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
   );
 

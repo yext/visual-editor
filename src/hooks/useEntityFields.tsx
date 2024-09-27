@@ -2,32 +2,60 @@ import * as React from "react";
 import { useReceiveMessage } from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
 import { TARGET_ORIGINS } from "../components/Editor.tsx";
-import { YextEntityFields } from "../internal/types/entityFields.ts";
+import {
+  YextFieldDefinition,
+  YextSchemaField,
+} from "../internal/types/entityFields.ts";
 
 /**
  * Under the hood we receive a Stream for a template, but we expose
  * hooks with a more user-friendly name.
  */
 export const usePlatformBridgeEntityFields = () => {
-  const [templateStream, setTemplateStream] = useState<any>(undefined);
+  const [entityFields, setEntityFields] = useState<any>(undefined);
 
   useReceiveMessage("getTemplateStream", TARGET_ORIGINS, (send, payload) => {
-    setTemplateStream(payload);
+    setEntityFields(payload.stream.schema.fields);
     send({
       status: "success",
       payload: { message: "templateStream received" },
     });
   });
 
-  return templateStream as YextEntityFields;
+  useReceiveMessage("getDevEntityFields", TARGET_ORIGINS, (send, payload) => {
+    setEntityFields(assignDefinitions(payload));
+    send({
+      status: "success",
+      payload: { message: "getDevEntityFields received" },
+    });
+  });
+
+  return entityFields as YextSchemaField[];
 };
 
-const EntityFieldsContext = React.createContext<YextEntityFields | undefined>(
+const assignDefinitions = (entityFields: any): YextSchemaField[] => {
+  return entityFields.map((field: any) => {
+    return {
+      name: field.name,
+      definition: {
+        name: field.name,
+        typeName: field.typeName,
+        type: field.type,
+        registryId: field.registryId,
+        typeRegistryId: field.typeRegistryId,
+        isList: field.isList,
+      } as YextFieldDefinition,
+      children: field.children ?? [],
+    } as YextSchemaField;
+  });
+};
+
+const EntityFieldsContext = React.createContext<YextSchemaField[] | undefined>(
   undefined
 );
 
 type EntityFieldsProviderProps = {
-  entityFields: YextEntityFields;
+  entityFields: YextSchemaField[];
   children: React.ReactNode;
 };
 
