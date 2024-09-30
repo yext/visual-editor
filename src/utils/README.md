@@ -10,7 +10,7 @@ This is a helper function to be used in transformProps within your template tsx 
 | Name         | Type   | Usage                                              |
 | ------------ | ------ | -------------------------------------------------- |
 | data         | any    | pass through document from transformProps args     |
-| templateName | string | name of the template you defined in TemplateConfig |
+| templateName | string | name of the template defined in the TemplateConfig |
 
 ### Usage
 
@@ -20,11 +20,11 @@ export const transformProps = async (data) => {
 };
 ```
 
-### resolveYextEntityField
+## resolveYextEntityField
 
 Used in a component's render function to pull in the selected entity field's value from the document or use the static value.
 
-#### Props
+### Props
 
 | Name        | Type                |
 | ----------- | ------------------- |

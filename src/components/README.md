@@ -6,14 +6,14 @@ Use this component to create an `edit.tsx` page in your Pages repository. This i
 in making your repo compatible with the Visual Editor. See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for more
 information.
 
-#### Props:
+### Props:
 
 | Name              | Type                                                                                 |
 | ----------------- | ------------------------------------------------------------------------------------ |
 | document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))        |
 | componentRegistry | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
 
-#### Usage:
+### Usage:
 
 ```tsx
 // All the available components for locations
@@ -51,14 +51,14 @@ See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) 
 Use this to wrap areas which use an entity field to populate data within components. This will
 display helpful information to those using the Visual Editor.
 
-#### Props
+### Props
 
 | Name        | Type   |
 | ----------- | ------ |
 | displayName | string |
 | fieldId     | string |
 
-#### Usage
+### Usage
 
 ```tsx
 import { EntityField } from "@yext/visual-editor";
@@ -79,7 +79,7 @@ enter a static value as it will be used as a fallback value in the case that the
 The static value field currently has no functionality with complex object entity types (ex. image, c_cta). When using complex
 object types, ensure your render function handles undefined fields.
 
-#### Props
+### Props
 
 | Name                 | Type            | Description                                                    |
 | -------------------- | --------------- | -------------------------------------------------------------- |
@@ -88,7 +88,7 @@ object types, ensure your render function handles undefined fields.
 | filter.allowList?    | types: string[] | Field names to include. Cannot be combined with disallowList.  |
 | filter.disallowList? | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
 
-#### Usage
+### Usage
 
 ```tsx
 import {

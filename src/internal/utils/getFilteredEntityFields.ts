@@ -1,5 +1,5 @@
-import { useEntityFields } from "../hooks/useEntityFields.tsx";
-import { YextSchemaField } from "../internal/types/entityFields.ts";
+import { useEntityFields } from "../../hooks/useEntityFields.tsx";
+import { YextSchemaField } from "../types/entityFields.ts";
 
 type Only<T, U> = {
   [P in keyof T]: T[P];
