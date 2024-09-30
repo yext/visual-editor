@@ -7,20 +7,20 @@ export const resolveYextEntityField = <T>(
   if (
     !entityField ||
     typeof entityField !== "object" ||
-    !("fieldName" in entityField) ||
+    !("fieldId" in entityField) ||
     !("staticValue" in entityField)
   ) {
     return undefined as T;
   }
 
-  // return static value if fieldName is not set
-  if (entityField.fieldName === "") {
+  // return static value if fieldId is not set
+  if (entityField.fieldId === "") {
     return entityField.staticValue as T;
   }
 
   try {
     // check for the entity field in the document
-    const steps: string[] = entityField.fieldName.split(".");
+    const steps: string[] = entityField.fieldId.split(".");
     let missedStep = false;
     let current = document;
     for (let i = 0; i < steps.length; i++) {
@@ -40,7 +40,7 @@ export const resolveYextEntityField = <T>(
 
   // if field not found, return static value as a fallback
   console.warn(
-    `The field ${entityField.fieldName} was not found in the document, defaulting to static value ${entityField.staticValue}.`
+    `The field ${entityField.fieldId} was not found in the document, defaulting to static value ${entityField.staticValue}.`
   );
   return entityField.staticValue as T;
 };

@@ -115,8 +115,8 @@ const exampleFields: Fields<ExampleProps> = {
         label: "Entity Field", // sidebar label for the entity field dropdown
         filter: {
           types: ["type.string"],
-          disallowList: ["exampleFieldName"],
-          //allowList: ["exampleFieldName"],
+          disallowList: ["exampleFieldId"],
+          //allowList: ["exampleFieldId"],
         },
       }),
     },
@@ -128,8 +128,8 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
   defaultProps: {
     myField: {
       entityField: {
-        fieldName: "id", // default to the entity's id
-        // fieldName: "", // default to Select a Content field (page will display the static value)
+        fieldId: "name", // default to the entity's name
+        // fieldId: "", // default to Select a Content field (page will display the static value)
         staticValue: "Example Text", // default static value
       },
     },

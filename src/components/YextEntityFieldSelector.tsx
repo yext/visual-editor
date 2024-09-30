@@ -8,7 +8,7 @@ import {
 } from "../utils/getFilteredEntityFields.ts";
 
 export type EntityFieldType = {
-  fieldName: string;
+  fieldId: string;
   staticValue: string;
 };
 
@@ -55,13 +55,13 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                   }),
                 ],
               }}
-              onChange={(selectedEntityFieldName) => {
+              onChange={(selectedEntityFieldId) => {
                 onChange({
-                  fieldName: selectedEntityFieldName,
+                  fieldId: selectedEntityFieldId,
                   staticValue: value?.staticValue ?? "",
                 });
               }}
-              value={value?.fieldName}
+              value={value?.fieldId}
             />
           </FieldLabel>
           {shouldDisplayStaticValueField(props.filter.types) && (
@@ -72,7 +72,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               <AutoField
                 onChange={(newStaticValue) =>
                   onChange({
-                    fieldName: value?.fieldName ?? "",
+                    fieldId: value?.fieldId ?? "",
                     staticValue: newStaticValue,
                   })
                 }
