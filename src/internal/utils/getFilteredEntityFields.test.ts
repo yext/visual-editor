@@ -4,7 +4,7 @@ import { useEntityFields } from "../../hooks/useEntityFields.tsx";
 import { YextEntityFields } from "../types/entityFields.ts";
 
 // Mock the useEntityFields hook
-vi.mock("../hooks/useEntityFields.tsx", () => ({
+vi.mock("../../hooks/useEntityFields.tsx", () => ({
   useEntityFields: vi.fn(),
 }));
 
