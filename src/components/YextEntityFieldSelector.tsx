@@ -1,11 +1,11 @@
 import React from "react";
 import { AutoField, FieldLabel, Field } from "@measured/puck";
-import { RenderProps } from "../utils/renderEntityFields.tsx";
+import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
   getFilteredEntityFields,
   RenderEntityFieldFilter,
-} from "../utils/getFilteredEntityFields.ts";
+} from "../internal/utils/getFilteredEntityFields.ts";
 
 export type YextEntityField = {
   field: string;
