@@ -14,7 +14,7 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import ThemeSidebar, { ThemeConfig } from "../puck/components/ThemeSidebar.tsx";
+import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 
 interface InternalEditorProps {
   puckConfig: Config;
@@ -107,21 +107,11 @@ export const InternalEditor = ({
     });
   };
 
-  const handleResetTheme = (
-    themeCategory: string,
-    resetTo: "default" | "published"
-  ) => {
-    console.log("resetting ", themeCategory, " to ", resetTo);
-  };
-
-  const handleSaveTheme = (newTheme: ThemeConfig) => {
-    console.log("saving theme: ", newTheme);
-  };
-
   const toggleThemeModeActive = () => {
     setThemeModeActive((prev) => !prev);
   };
 
+  // set permissions on the component level to allow for dynamic updating
   Object.values(puckConfig.components).forEach((component) => {
     component.resolvePermissions = () => {
       return {
@@ -161,15 +151,7 @@ export const InternalEditor = ({
           },
           actionBar: themeModeActive ? () => <></> : undefined,
           components: themeModeActive ? () => <></> : undefined,
-          fields: themeModeActive
-            ? () => (
-                <ThemeSidebar
-                  saveTheme={handleSaveTheme}
-                  resetTheme={handleResetTheme}
-                  puckConfig={puckConfig}
-                />
-              )
-            : undefined,
+          fields: themeModeActive ? () => <ThemeSidebar /> : undefined,
         }}
       />
     </EntityFieldProvider>
