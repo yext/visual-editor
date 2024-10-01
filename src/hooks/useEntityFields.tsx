@@ -2,10 +2,7 @@ import * as React from "react";
 import { useReceiveMessage } from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
 import { TARGET_ORIGINS } from "../components/Editor.tsx";
-import {
-  YextFieldDefinition,
-  YextSchemaField,
-} from "../internal/types/entityFields.ts";
+import { YextSchemaField } from "../internal/types/entityFields.ts";
 
 /**
  * Under the hood we receive a Stream for a template, but we expose
@@ -44,9 +41,9 @@ const assignDefinitions = (entityFields: any): YextSchemaField[] => {
         registryId: field.registryId,
         typeRegistryId: field.typeRegistryId,
         isList: field.isList,
-      } as YextFieldDefinition,
+      },
       children: field.children ?? [],
-    } as YextSchemaField;
+    };
   });
 };
 
