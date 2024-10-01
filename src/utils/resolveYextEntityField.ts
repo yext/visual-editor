@@ -3,14 +3,14 @@ import { EntityFieldType } from "../components/YextEntityFieldSelector.tsx";
 export const resolveYextEntityField = <T>(
   document: any,
   entityField: EntityFieldType
-): T => {
+): T | undefined => {
   if (
     !entityField ||
     typeof entityField !== "object" ||
     !("fieldName" in entityField) ||
     !("staticValue" in entityField)
   ) {
-    return undefined as T;
+    return undefined;
   }
 
   // return static value if fieldName is not set
