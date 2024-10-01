@@ -9,7 +9,7 @@ test("resolveYextEntityField returns value when field found in document", async 
           city: "potato land",
         },
       },
-      { fieldName: "address.city", staticValue: "" }
+      { field: "address.city", constantValue: "" }
     ),
     "potato land"
   );
@@ -23,25 +23,25 @@ test("resolveYextEntityField returns empty value when field found in document", 
           city: "",
         },
       },
-      { fieldName: "address.city", staticValue: "abc" }
+      { field: "address.city", constantValue: "abc" }
     ),
     ""
   );
 });
 
-test("resolveYextEntityField returns static value when field not found in document", async () => {
+test("resolveYextEntityField returns constant value when field not found in document", async () => {
   assert.equal(
     resolveYextEntityField(
       {
         address: {},
       },
-      { fieldName: "address.city", staticValue: "City" }
+      { field: "address.city", constantValue: "City" }
     ),
     "City"
   );
 });
 
-test("resolveYextEntityField returns static value when fieldName not set", async () => {
+test("resolveYextEntityField returns constant value when field not set", async () => {
   assert.equal(
     resolveYextEntityField(
       {
@@ -49,7 +49,7 @@ test("resolveYextEntityField returns static value when fieldName not set", async
           city: "",
         },
       },
-      { fieldName: "", staticValue: "City" }
+      { field: "", constantValue: "City" }
     ),
     "City"
   );

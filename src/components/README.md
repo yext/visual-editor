@@ -72,11 +72,11 @@ import { EntityField } from "@yext/visual-editor";
 
 ## YextEntityFieldSelector
 
-Use this to allow Visual Editor users to choose an entity field or static value that will populate data into a component.
-The user can choose an entity field from a dropdown or select "Use Static Value". Regardless, the user should always
-enter a static value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
+Use this to allow Visual Editor users to choose an entity field or constant value that will populate data into a component.
+The user can choose an entity field from a dropdown or use a constant value. Regardless, the user should always
+enter a constant value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
 
-The static value field currently has no functionality with complex object entity types (ex. image, c_cta). When using complex
+The constant value field currently has no functionality with complex object entity types (ex. image, c_cta). When using complex
 object types, ensure your render function handles undefined fields.
 
 #### Props
@@ -102,7 +102,7 @@ import { useDocument } from "@yext/pages/util";
 
 export type ExampleProps = {
   myField: {
-    entityField: EntityFieldType;
+    entityField: YextEntityField;
   };
 };
 
@@ -115,8 +115,8 @@ const exampleFields: Fields<ExampleProps> = {
         label: "Entity Field", // sidebar label for the entity field dropdown
         filter: {
           types: ["type.string"],
-          disallowList: ["exampleFieldName"],
-          //allowList: ["exampleFieldName"],
+          disallowList: ["exampleField"],
+          //allowList: ["exampleField"],
         },
       }),
     },
@@ -128,9 +128,9 @@ export const ExampleComponent: ComponentConfig<ExampleProps> = {
   defaultProps: {
     myField: {
       entityField: {
-        fieldName: "id", // default to the entity's id
-        // fieldName: "", // default to Select a Content field (page will display the static value)
-        staticValue: "Example Text", // default static value
+        field: "id", // default to the entity's id
+        // field: "", // default to Select a Content field (page will display the constant value)
+        constantValue: "Example Text", // default constant value
       },
     },
   },

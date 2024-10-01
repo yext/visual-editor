@@ -7,9 +7,10 @@ import {
   RenderEntityFieldFilter,
 } from "../utils/getFilteredEntityFields.ts";
 
-export type EntityFieldType = {
-  fieldName: string;
-  staticValue: string;
+export type YextEntityField = {
+  field: string;
+  constantValue: string;
+  constantValueEnabled?: boolean;
 };
 
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
@@ -18,21 +19,24 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
   };
 
-const STATIC_VALUE_TYPES: EntityFieldTypes[] = ["type.string", "type.phone"];
-const shouldDisplayStaticValueField = (typeFilter: EntityFieldTypes[]) => {
-  for (const staticValueType of STATIC_VALUE_TYPES) {
-    if (typeFilter.includes(staticValueType)) {
+const SUPPORTED_CONSTANT_VALUE_TYPES: EntityFieldTypes[] = [
+  "type.string",
+  "type.phone",
+];
+const shouldDisplayConstantValueField = (typeFilter: EntityFieldTypes[]) => {
+  for (const constantValueType of SUPPORTED_CONSTANT_VALUE_TYPES) {
+    if (typeFilter.includes(constantValueType)) {
       return true;
     }
   }
 };
 
 /**
- * Allows the user to select an entity field from the document and set a static value.
+ * Allows the user to select an entity field from the document and set a constant value.
  */
 export const YextEntityFieldSelector = <T extends Record<string, any>>(
   props: RenderYextEntityFieldSelectorProps<T>
-): Field<EntityFieldType> => {
+): Field<YextEntityField> => {
   return {
     type: "custom",
     label: props.label,
@@ -55,28 +59,28 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                   }),
                 ],
               }}
-              onChange={(selectedEntityFieldName) => {
+              onChange={(selectedEntityField) => {
                 onChange({
-                  fieldName: selectedEntityFieldName,
-                  staticValue: value?.staticValue ?? "",
+                  field: selectedEntityField,
+                  constantValue: value?.constantValue ?? "",
                 });
               }}
-              value={value?.fieldName}
+              value={value?.field}
             />
           </FieldLabel>
-          {shouldDisplayStaticValueField(props.filter.types) && (
+          {shouldDisplayConstantValueField(props.filter.types) && (
             <FieldLabel
-              label={"Static Value"}
-              className="entityField-staticValue"
+              label={"Constant Value"}
+              className="entityField-constantValue"
             >
               <AutoField
-                onChange={(newStaticValue) =>
+                onChange={(newConstantValue) =>
                   onChange({
-                    fieldName: value?.fieldName ?? "",
-                    staticValue: newStaticValue,
+                    field: value?.field ?? "",
+                    constantValue: newConstantValue,
                   })
                 }
-                value={value?.staticValue}
+                value={value?.constantValue}
                 field={{
                   type: "text",
                 }}
