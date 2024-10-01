@@ -19,6 +19,7 @@ import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 interface InternalEditorProps {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
+  isLoading: boolean;
   clearHistory: () => void;
   templateMetadata: TemplateMetadata;
   saveState: SaveState;
@@ -33,6 +34,7 @@ interface InternalEditorProps {
 export const InternalEditor = ({
   puckConfig,
   puckInitialHistory,
+  isLoading,
   clearHistory,
   templateMetadata,
   saveState,
@@ -42,6 +44,7 @@ export const InternalEditor = ({
   buildLocalStorageKey,
   devLogger,
 }: InternalEditorProps) => {
+  const [canEdit, setCanEdit] = useState<boolean>(false);
   const [themeModeActive, setThemeModeActive] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
 
@@ -97,14 +100,23 @@ export const InternalEditor = ({
 
   const handleSave = async (data: Data) => {
     if (themeModeActive) {
-      devLogger.logFunc("saveStyles");
-      // save styles
+      // TODO: publish theme here
       return;
     }
     devLogger.logFunc("saveVisualConfigData");
     saveVisualConfigData({
       payload: { visualConfigurationData: JSON.stringify(data) },
     });
+  };
+
+  const change = async () => {
+    if (isLoading) {
+      return;
+    }
+    if (!canEdit) {
+      setCanEdit(true);
+      return;
+    }
   };
 
   const toggleThemeModeActive = () => {
@@ -130,6 +142,7 @@ export const InternalEditor = ({
         config={puckConfig}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
+        onChange={change}
         overrides={{
           header: () => {
             const { appState, refreshPermissions } = usePuck();

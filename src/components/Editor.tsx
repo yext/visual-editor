@@ -393,6 +393,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
       {!isLoading ? (
         <InternalEditor
           puckConfig={puckConfig}
+          isLoading={isLoading}
           puckInitialHistory={puckInitialHistory}
           clearHistory={
             templateMetadata.isDevMode && !templateMetadata.devOverride
