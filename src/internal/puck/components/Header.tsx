@@ -31,7 +31,9 @@ export const customHeader = (
   currentPuckData: Data, // the current state of Puck data
   initialPuckData: Data | undefined, // the initial state of Puck data before any local changes
   handleSaveData: (data: Data) => Promise<void>,
-  isDevMode: boolean
+  isDevMode: boolean,
+  isStyleMode: boolean,
+  toggleStyleMode: () => void
 ) => {
   const {
     history: {
@@ -54,27 +56,42 @@ export const customHeader = (
       <div className="header-left">
         <ToggleUIButtons />
         <ToggleEntityFields />
+        <ToggleStyleMode
+          isStyleMode={isStyleMode}
+          toggleStyleMode={toggleStyleMode}
+        />
       </div>
       <div className="header-center"></div>
       <div className="actions">
-        <Button variant="ghost" size="icon" disabled={!hasPast} onClick={back}>
-          <RotateCcw className="sm-icon" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          disabled={!hasFuture}
-          onClick={forward}
-        >
-          <RotateCw className="sm-icon" />
-        </Button>
-        <ClearLocalChangesButton
-          disabled={histories.length === 1}
-          onClearLocalChanges={() => {
-            handleClearLocalChanges();
-            setHistories([{ id: "root", state: { data: initialPuckData } }]);
-          }}
-        />
+        {!isStyleMode && (
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!hasPast}
+            onClick={back}
+          >
+            <RotateCcw className="sm-icon" />
+          </Button>
+        )}
+        {!isStyleMode && (
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!hasFuture}
+            onClick={forward}
+          >
+            <RotateCw className="sm-icon" />
+          </Button>
+        )}
+        {!isStyleMode && (
+          <ClearLocalChangesButton
+            disabled={histories.length === 1}
+            onClearLocalChanges={() => {
+              handleClearLocalChanges();
+              setHistories([{ id: "root", state: { data: initialPuckData } }]);
+            }}
+          />
+        )}
         {!isDevMode && (
           <Button
             variant="secondary"
@@ -196,6 +213,31 @@ const ToggleEntityFields = () => {
         </TooltipTrigger>
         <TooltipContent>
           {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
+          <TooltipArrow fill="ve-bg-popover" />
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+const ToggleStyleMode = ({
+  isStyleMode,
+  toggleStyleMode,
+}: {
+  isStyleMode: boolean;
+  toggleStyleMode: () => void;
+}) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="ve-flex ve-flex-row ve-self-center ve-gap-3 ve-pl-2">
+            <Switch onCheckedChange={toggleStyleMode} checked={isStyleMode} />
+            <p className="ve-self-center ve-text-sm">Style Mode</p>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          {isStyleMode ? "Disable Style Mode" : "Enable Style Mode"}
           <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>

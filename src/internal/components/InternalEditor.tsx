@@ -6,7 +6,7 @@ import {
   type History,
   InitialHistory,
 } from "@measured/puck";
-import React from "react";
+import React, { useEffect } from "react";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
 import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
@@ -14,11 +14,11 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
+import ThemeSidebar, { ThemeConfig } from "../puck/components/ThemeSidebar.tsx";
 
 interface InternalEditorProps {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
-  isLoading: boolean;
   clearHistory: () => void;
   templateMetadata: TemplateMetadata;
   saveState: SaveState;
@@ -33,7 +33,6 @@ interface InternalEditorProps {
 export const InternalEditor = ({
   puckConfig,
   puckInitialHistory,
-  isLoading,
   clearHistory,
   templateMetadata,
   saveState,
@@ -43,7 +42,7 @@ export const InternalEditor = ({
   buildLocalStorageKey,
   devLogger,
 }: InternalEditorProps) => {
-  const [canEdit, setCanEdit] = useState<boolean>(false);
+  const [isStyleMode, setIsStyleMode] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
 
   /**
@@ -97,21 +96,43 @@ export const InternalEditor = ({
   };
 
   const handleSave = async (data: Data) => {
+    if (isStyleMode) {
+      devLogger.logFunc("saveStyles");
+      // save styles
+      return;
+    }
     devLogger.logFunc("saveVisualConfigData");
     saveVisualConfigData({
       payload: { visualConfigurationData: JSON.stringify(data) },
     });
   };
 
-  const change = async () => {
-    if (isLoading) {
-      return;
-    }
-    if (!canEdit) {
-      setCanEdit(true);
-      return;
-    }
+  const handleResetTheme = (
+    themeCategory: string,
+    resetTo: "default" | "published"
+  ) => {
+    console.log("resetting ", themeCategory, " to ", resetTo);
   };
+
+  const handleSaveTheme = (newTheme: ThemeConfig) => {
+    console.log("saving theme: ", newTheme);
+  };
+
+  const toggleStyleMode = () => {
+    setIsStyleMode((prev) => !prev);
+  };
+
+  Object.values(puckConfig.components).forEach((component) => {
+    component.resolvePermissions = () => {
+      return {
+        drag: !isStyleMode,
+        duplicate: !isStyleMode,
+        delete: !isStyleMode,
+        insert: !isStyleMode,
+        edit: !isStyleMode,
+      };
+    };
+  });
 
   return (
     <EntityFieldProvider>
@@ -119,19 +140,36 @@ export const InternalEditor = ({
         config={puckConfig}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
-        onChange={change}
         overrides={{
           header: () => {
-            const { appState } = usePuck();
+            const { appState, refreshPermissions } = usePuck();
+
+            useEffect(() => {
+              refreshPermissions();
+            }, [isStyleMode]);
+
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
               appState.data,
               puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
               handleSave,
-              templateMetadata.isDevMode && !templateMetadata.devOverride
+              templateMetadata.isDevMode && !templateMetadata.devOverride,
+              isStyleMode,
+              toggleStyleMode
             );
           },
+          actionBar: isStyleMode ? () => <></> : undefined,
+          components: isStyleMode ? () => <></> : undefined,
+          fields: isStyleMode
+            ? () => (
+                <ThemeSidebar
+                  saveTheme={handleSaveTheme}
+                  resetTheme={handleResetTheme}
+                  puckConfig={puckConfig}
+                />
+              )
+            : undefined,
         }}
       />
     </EntityFieldProvider>
