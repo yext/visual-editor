@@ -83,15 +83,13 @@ export const customHeader = (
             <RotateCw className="sm-icon" />
           </Button>
         )}
-        {!themeModeActive && (
-          <ClearLocalChangesButton
-            disabled={histories.length === 1}
-            onClearLocalChanges={() => {
-              handleClearLocalChanges();
-              setHistories([{ id: "root", state: { data: initialPuckData } }]);
-            }}
-          />
-        )}
+        <ClearLocalChangesButton
+          disabled={histories.length === 1}
+          onClearLocalChanges={() => {
+            handleClearLocalChanges();
+            setHistories([{ id: "root", state: { data: initialPuckData } }]);
+          }}
+        />
         {!isDevMode && (
           <Button
             variant="secondary"
