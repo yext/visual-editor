@@ -32,8 +32,8 @@ export const customHeader = (
   initialPuckData: Data | undefined, // the initial state of Puck data before any local changes
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean,
-  isStyleMode: boolean,
-  toggleStyleMode: () => void
+  themeModeActive: boolean,
+  setThemeModeActive: () => void
 ) => {
   const {
     history: {
@@ -56,14 +56,14 @@ export const customHeader = (
       <div className="header-left">
         <ToggleUIButtons />
         <ToggleEntityFields />
-        <ToggleStyleMode
-          isStyleMode={isStyleMode}
-          toggleStyleMode={toggleStyleMode}
+        <ToggleThemeMode
+          themeModeActive={themeModeActive}
+          toggleThemeMode={setThemeModeActive}
         />
       </div>
       <div className="header-center"></div>
       <div className="actions">
-        {!isStyleMode && (
+        {!themeModeActive && (
           <Button
             variant="ghost"
             size="icon"
@@ -73,7 +73,7 @@ export const customHeader = (
             <RotateCcw className="sm-icon" />
           </Button>
         )}
-        {!isStyleMode && (
+        {!themeModeActive && (
           <Button
             variant="ghost"
             size="icon"
@@ -83,7 +83,7 @@ export const customHeader = (
             <RotateCw className="sm-icon" />
           </Button>
         )}
-        {!isStyleMode && (
+        {!themeModeActive && (
           <ClearLocalChangesButton
             disabled={histories.length === 1}
             onClearLocalChanges={() => {
@@ -220,24 +220,27 @@ const ToggleEntityFields = () => {
   );
 };
 
-const ToggleStyleMode = ({
-  isStyleMode,
-  toggleStyleMode,
+const ToggleThemeMode = ({
+  themeModeActive,
+  toggleThemeMode,
 }: {
-  isStyleMode: boolean;
-  toggleStyleMode: () => void;
+  themeModeActive: boolean;
+  toggleThemeMode: () => void;
 }) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="ve-flex ve-flex-row ve-self-center ve-gap-3 ve-pl-2">
-            <Switch onCheckedChange={toggleStyleMode} checked={isStyleMode} />
-            <p className="ve-self-center ve-text-sm">Style Mode</p>
+            <Switch
+              onCheckedChange={toggleThemeMode}
+              checked={themeModeActive}
+            />
+            <p className="ve-self-center ve-text-sm">Theme Mode</p>
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          {isStyleMode ? "Disable Style Mode" : "Enable Style Mode"}
+          {themeModeActive ? "Disable Theme Mode" : "Enable Theme Mode"}
           <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>

@@ -42,7 +42,7 @@ export const InternalEditor = ({
   buildLocalStorageKey,
   devLogger,
 }: InternalEditorProps) => {
-  const [isStyleMode, setIsStyleMode] = useState<boolean>(false);
+  const [themeModeActive, setThemeModeActive] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
 
   /**
@@ -96,7 +96,7 @@ export const InternalEditor = ({
   };
 
   const handleSave = async (data: Data) => {
-    if (isStyleMode) {
+    if (themeModeActive) {
       devLogger.logFunc("saveStyles");
       // save styles
       return;
@@ -118,18 +118,18 @@ export const InternalEditor = ({
     console.log("saving theme: ", newTheme);
   };
 
-  const toggleStyleMode = () => {
-    setIsStyleMode((prev) => !prev);
+  const toggleThemeModeActive = () => {
+    setThemeModeActive((prev) => !prev);
   };
 
   Object.values(puckConfig.components).forEach((component) => {
     component.resolvePermissions = () => {
       return {
-        drag: !isStyleMode,
-        duplicate: !isStyleMode,
-        delete: !isStyleMode,
-        insert: !isStyleMode,
-        edit: !isStyleMode,
+        drag: !themeModeActive,
+        duplicate: !themeModeActive,
+        delete: !themeModeActive,
+        insert: !themeModeActive,
+        edit: !themeModeActive,
       };
     };
   });
@@ -146,7 +146,7 @@ export const InternalEditor = ({
 
             useEffect(() => {
               refreshPermissions();
-            }, [isStyleMode]);
+            }, [themeModeActive]);
 
             return customHeader(
               handleClearLocalChanges,
@@ -155,13 +155,13 @@ export const InternalEditor = ({
               puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
-              isStyleMode,
-              toggleStyleMode
+              themeModeActive,
+              toggleThemeModeActive
             );
           },
-          actionBar: isStyleMode ? () => <></> : undefined,
-          components: isStyleMode ? () => <></> : undefined,
-          fields: isStyleMode
+          actionBar: themeModeActive ? () => <></> : undefined,
+          components: themeModeActive ? () => <></> : undefined,
+          fields: themeModeActive
             ? () => (
                 <ThemeSidebar
                   saveTheme={handleSaveTheme}
