@@ -3,5 +3,5 @@ export { EntityField } from "./EntityField.tsx";
 export { YextEntityFieldSelector } from "./YextEntityFieldSelector.tsx";
 export type {
   RenderYextEntityFieldSelectorProps,
-  EntityFieldType,
+  YextEntityField,
 } from "./YextEntityFieldSelector.tsx";

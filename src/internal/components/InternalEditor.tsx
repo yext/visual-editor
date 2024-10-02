@@ -14,11 +14,12 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import ThemeSidebar, { ThemeConfig } from "../puck/components/ThemeSidebar.tsx";
+import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 
 interface InternalEditorProps {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
+  isLoading: boolean;
   clearHistory: () => void;
   templateMetadata: TemplateMetadata;
   saveState: SaveState;
@@ -33,6 +34,7 @@ interface InternalEditorProps {
 export const InternalEditor = ({
   puckConfig,
   puckInitialHistory,
+  isLoading,
   clearHistory,
   templateMetadata,
   saveState,
@@ -42,6 +44,7 @@ export const InternalEditor = ({
   buildLocalStorageKey,
   devLogger,
 }: InternalEditorProps) => {
+  const [canEdit, setCanEdit] = useState<boolean>(false);
   const [themeModeActive, setThemeModeActive] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
 
@@ -93,12 +96,16 @@ export const InternalEditor = ({
   const handleClearLocalChanges = () => {
     clearHistory();
     historyIndex.current = 0;
+    // TODO: reset theme to published values here
+  };
+
+  const handleSaveTheme = () => {
+    // TODO: save draft theme here
   };
 
   const handleSave = async (data: Data) => {
     if (themeModeActive) {
-      devLogger.logFunc("saveStyles");
-      // save styles
+      // TODO: publish theme here
       return;
     }
     devLogger.logFunc("saveVisualConfigData");
@@ -107,32 +114,19 @@ export const InternalEditor = ({
     });
   };
 
-  // const handleResetTheme = (
-  //   themeCategory: string,
-  //   resetTo: "default" | "published"
-  // ) => {
-  //   console.log("resetting ", themeCategory, " to ", resetTo);
-  // };
-
-  const handleSaveTheme = (newTheme: ThemeConfig) => {
-    console.log("saving theme: ", newTheme);
+  const change = async () => {
+    if (isLoading) {
+      return;
+    }
+    if (!canEdit) {
+      setCanEdit(true);
+      return;
+    }
   };
 
   const toggleThemeModeActive = () => {
     setThemeModeActive((prev) => !prev);
   };
-
-  Object.values(puckConfig.components).forEach((component) => {
-    component.resolvePermissions = () => {
-      return {
-        drag: !themeModeActive,
-        duplicate: !themeModeActive,
-        delete: !themeModeActive,
-        insert: !themeModeActive,
-        edit: !themeModeActive,
-      };
-    };
-  });
 
   return (
     <EntityFieldProvider>
@@ -140,11 +134,24 @@ export const InternalEditor = ({
         config={puckConfig}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
+        onChange={change}
         overrides={{
           header: () => {
-            const { appState, refreshPermissions } = usePuck();
+            const { appState, refreshPermissions, config } = usePuck();
 
             useEffect(() => {
+              // set permissions on the component level to allow for dynamic updating
+              Object.values(config.components).forEach((component) => {
+                component.resolvePermissions = () => {
+                  return {
+                    drag: !themeModeActive,
+                    duplicate: !themeModeActive,
+                    delete: !themeModeActive,
+                    insert: !themeModeActive,
+                    edit: !themeModeActive,
+                  };
+                };
+              });
               refreshPermissions();
             }, [themeModeActive]);
 
