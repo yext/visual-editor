@@ -31,7 +31,9 @@ export const customHeader = (
   currentPuckData: Data, // the current state of Puck data
   initialPuckData: Data | undefined, // the initial state of Puck data before any local changes
   handleSaveData: (data: Data) => Promise<void>,
-  isDevMode: boolean
+  isDevMode: boolean,
+  themeModeActive: boolean,
+  setThemeModeActive: () => void
 ) => {
   const {
     history: {
@@ -54,20 +56,33 @@ export const customHeader = (
       <div className="header-left">
         <ToggleUIButtons />
         <ToggleEntityFields />
+        <ToggleThemeMode
+          themeModeActive={themeModeActive}
+          toggleThemeMode={setThemeModeActive}
+        />
       </div>
       <div className="header-center"></div>
       <div className="actions">
-        <Button variant="ghost" size="icon" disabled={!hasPast} onClick={back}>
-          <RotateCcw className="sm-icon" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          disabled={!hasFuture}
-          onClick={forward}
-        >
-          <RotateCw className="sm-icon" />
-        </Button>
+        {!themeModeActive && (
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!hasPast}
+            onClick={back}
+          >
+            <RotateCcw className="sm-icon" />
+          </Button>
+        )}
+        {!themeModeActive && (
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!hasFuture}
+            onClick={forward}
+          >
+            <RotateCw className="sm-icon" />
+          </Button>
+        )}
         <ClearLocalChangesButton
           disabled={histories.length === 1}
           onClearLocalChanges={() => {
@@ -196,6 +211,34 @@ const ToggleEntityFields = () => {
         </TooltipTrigger>
         <TooltipContent>
           {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
+          <TooltipArrow fill="ve-bg-popover" />
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+const ToggleThemeMode = ({
+  themeModeActive,
+  toggleThemeMode,
+}: {
+  themeModeActive: boolean;
+  toggleThemeMode: () => void;
+}) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="ve-flex ve-flex-row ve-self-center ve-gap-3 ve-pl-2">
+            <Switch
+              onCheckedChange={toggleThemeMode}
+              checked={themeModeActive}
+            />
+            <p className="ve-self-center ve-text-sm">Theme Mode</p>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          {themeModeActive ? "Disable Theme Mode" : "Enable Theme Mode"}
           <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>
