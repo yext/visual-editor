@@ -22,14 +22,14 @@ export const transformProps = async (data) => {
 
 ## resolveYextEntityField
 
-Used in a component's render function to pull in the selected entity field's value from the document or use the static value.
+Used in a component's render function to pull in the selected entity field's value from the document or use the constant value.
 
 ### Props
 
 | Name        | Type                |
 | ----------- | ------------------- |
 | document    | Record<string, any> |
-| entityField | EntityFieldType     |
+| entityField | YextEntityField     |
 
 ### Usage
 

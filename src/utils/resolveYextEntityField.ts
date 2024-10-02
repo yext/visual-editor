@@ -1,26 +1,26 @@
-import { EntityFieldType } from "../components/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../components/YextEntityFieldSelector.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,
-  entityField: EntityFieldType
+  entityField: YextEntityField
 ): T | undefined => {
   if (
     !entityField ||
     typeof entityField !== "object" ||
-    !("fieldName" in entityField) ||
-    !("staticValue" in entityField)
+    !("field" in entityField) ||
+    !("constantValue" in entityField)
   ) {
     return undefined;
   }
 
-  // return static value if fieldName is not set
-  if (entityField.fieldName === "") {
-    return entityField.staticValue as T;
+  // return constant value if field is not set
+  if (entityField.field === "") {
+    return entityField.constantValue as T;
   }
 
   try {
     // check for the entity field in the document
-    const steps: string[] = entityField.fieldName.split(".");
+    const steps: string[] = entityField.field.split(".");
     let missedStep = false;
     let current = document;
     for (let i = 0; i < steps.length; i++) {
@@ -38,9 +38,9 @@ export const resolveYextEntityField = <T>(
     console.error("Error in resolveYextEntityField:", e);
   }
 
-  // if field not found, return static value as a fallback
+  // if field not found, return constant value as a fallback
   console.warn(
-    `The field ${entityField.fieldName} was not found in the document, defaulting to static value ${entityField.staticValue}.`
+    `The field ${entityField.field} was not found in the document, defaulting to constant value ${entityField.constantValue}.`
   );
-  return entityField.staticValue as T;
+  return entityField.constantValue as T;
 };
