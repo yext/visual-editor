@@ -1,11 +1,12 @@
-import React from "react";
-import { AutoField, FieldLabel, Field } from "@measured/puck";
+import React, { useState } from "react";
+import { AutoField, FieldLabel, Field, Button } from "@measured/puck";
 import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
   getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
+import { Lock } from "lucide-react";
 
 export type YextEntityField = {
   field: string;
@@ -42,33 +43,43 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
+      const [entityFieldMode, setEntityFieldMode] = useState<boolean>(true);
+
+      const toggleEntityFieldMode = () => {
+        setEntityFieldMode((prevMode) => !prevMode);
+        onChange({
+          field: "",
+          constantValue: "",
+        });
+      };
 
       return (
         <>
-          <FieldLabel label={field.label || "Label is undefined"}>
-            <AutoField
-              field={{
-                type: "select",
-                options: [
-                  { value: "", label: "Select a Content field" },
-                  ...filteredEntityFields.map((entityFieldNameToSchema) => {
-                    return {
-                      label: entityFieldNameToSchema.name,
-                      value: entityFieldNameToSchema.name,
-                    };
-                  }),
-                ],
-              }}
-              onChange={(selectedEntityField) => {
-                onChange({
-                  field: selectedEntityField,
-                  constantValue: value?.constantValue ?? "",
-                });
-              }}
-              value={value?.field}
-            />
-          </FieldLabel>
-          {shouldDisplayConstantValueField(props.filter.types) && (
+          {entityFieldMode ? (
+            <FieldLabel label={field.label || "Label is undefined"}>
+              <AutoField
+                field={{
+                  type: "select",
+                  options: [
+                    { value: "", label: "Select a Content field" },
+                    ...filteredEntityFields.map((entityFieldNameToSchema) => {
+                      return {
+                        label: entityFieldNameToSchema.name,
+                        value: entityFieldNameToSchema.name,
+                      };
+                    }),
+                  ],
+                }}
+                onChange={(selectedEntityField) => {
+                  onChange({
+                    field: selectedEntityField,
+                    constantValue: "",
+                  });
+                }}
+                value={value?.field}
+              />
+            </FieldLabel>
+          ) : (
             <FieldLabel
               label={"Constant Value"}
               className="entityField-constantValue"
@@ -76,7 +87,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               <AutoField
                 onChange={(newConstantValue) =>
                   onChange({
-                    field: value?.field ?? "",
+                    field: "",
                     constantValue: newConstantValue,
                   })
                 }
@@ -87,8 +98,37 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               />
             </FieldLabel>
           )}
+          {shouldDisplayConstantValueField(props.filter.types) && (
+            <ToggleMode
+              entityFieldMode={entityFieldMode}
+              toggleEntityFieldMode={toggleEntityFieldMode}
+            />
+          )}
         </>
       );
     },
   };
+};
+
+const ToggleMode = ({
+  entityFieldMode,
+  toggleEntityFieldMode,
+}: {
+  entityFieldMode: boolean;
+  toggleEntityFieldMode: () => void;
+}) => {
+  return (
+    <div className="ve-mt-2">
+      <Button onClick={toggleEntityFieldMode} variant="secondary">
+        {entityFieldMode ? (
+          <>
+            <Lock className="sm-icon" />
+            <p>Use Constant Value</p>
+          </>
+        ) : (
+          <p>Use Entity Field</p>
+        )}
+      </Button>
+    </div>
+  );
 };
