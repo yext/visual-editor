@@ -123,19 +123,6 @@ export const InternalEditor = ({
     setThemeModeActive((prev) => !prev);
   };
 
-  // set permissions on the component level to allow for dynamic updating
-  Object.values(puckConfig.components).forEach((component) => {
-    component.resolvePermissions = () => {
-      return {
-        drag: !themeModeActive,
-        duplicate: !themeModeActive,
-        delete: !themeModeActive,
-        insert: !themeModeActive,
-        edit: !themeModeActive,
-      };
-    };
-  });
-
   return (
     <EntityFieldProvider>
       <Puck
@@ -145,9 +132,21 @@ export const InternalEditor = ({
         onChange={change}
         overrides={{
           header: () => {
-            const { appState, refreshPermissions } = usePuck();
+            const { appState, refreshPermissions, config } = usePuck();
 
             useEffect(() => {
+              // set permissions on the component level to allow for dynamic updating
+              Object.values(config.components).forEach((component) => {
+                component.resolvePermissions = () => {
+                  return {
+                    drag: !themeModeActive,
+                    duplicate: !themeModeActive,
+                    delete: !themeModeActive,
+                    insert: !themeModeActive,
+                    edit: !themeModeActive,
+                  };
+                };
+              });
               refreshPermissions();
             }, [themeModeActive]);
 
