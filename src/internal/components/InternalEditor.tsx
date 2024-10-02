@@ -6,7 +6,7 @@ import {
   type History,
   InitialHistory,
 } from "@measured/puck";
-import React from "react";
+import React, { useEffect } from "react";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
 import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
@@ -14,6 +14,7 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
+import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 
 interface InternalEditorProps {
   puckConfig: Config;
@@ -44,6 +45,7 @@ export const InternalEditor = ({
   devLogger,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
+  const [themeModeActive, setThemeModeActive] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
 
   /**
@@ -97,6 +99,10 @@ export const InternalEditor = ({
   };
 
   const handleSave = async (data: Data) => {
+    if (themeModeActive) {
+      // TODO: publish theme here
+      return;
+    }
     devLogger.logFunc("saveVisualConfigData");
     saveVisualConfigData({
       payload: { visualConfigurationData: JSON.stringify(data) },
@@ -113,6 +119,10 @@ export const InternalEditor = ({
     }
   };
 
+  const toggleThemeModeActive = () => {
+    setThemeModeActive((prev) => !prev);
+  };
+
   return (
     <EntityFieldProvider>
       <Puck
@@ -122,16 +132,38 @@ export const InternalEditor = ({
         onChange={change}
         overrides={{
           header: () => {
-            const { appState } = usePuck();
+            const { appState, refreshPermissions, config } = usePuck();
+
+            useEffect(() => {
+              // set permissions on the component level to allow for dynamic updating
+              Object.values(config.components).forEach((component) => {
+                component.resolvePermissions = () => {
+                  return {
+                    drag: !themeModeActive,
+                    duplicate: !themeModeActive,
+                    delete: !themeModeActive,
+                    insert: !themeModeActive,
+                    edit: !themeModeActive,
+                  };
+                };
+              });
+              refreshPermissions();
+            }, [themeModeActive]);
+
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
               appState.data,
               puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
               handleSave,
-              templateMetadata.isDevMode && !templateMetadata.devOverride
+              templateMetadata.isDevMode && !templateMetadata.devOverride,
+              themeModeActive,
+              toggleThemeModeActive
             );
           },
+          actionBar: themeModeActive ? () => <></> : undefined,
+          components: themeModeActive ? () => <></> : undefined,
+          fields: themeModeActive ? () => <ThemeSidebar /> : undefined,
         }}
       />
     </EntityFieldProvider>
