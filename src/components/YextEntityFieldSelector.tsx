@@ -48,8 +48,9 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
       const toggleEntityFieldMode = () => {
         setEntityFieldMode((prevMode) => !prevMode);
         onChange({
-          field: "",
-          constantValue: "",
+          field: value?.field ?? "",
+          constantValue: value?.constantValue ?? "",
+          constantValueEnabled: !value.constantValueEnabled,
         });
       };
 
@@ -73,7 +74,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                 onChange={(selectedEntityField) => {
                   onChange({
                     field: selectedEntityField,
-                    constantValue: "",
+                    constantValue: value?.constantValue ?? "",
+                    constantValueEnabled: false,
                   });
                 }}
                 value={value?.field}
@@ -87,8 +89,9 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               <AutoField
                 onChange={(newConstantValue) =>
                   onChange({
-                    field: "",
+                    field: value?.field ?? "",
                     constantValue: newConstantValue,
+                    constantValueEnabled: true,
                   })
                 }
                 value={value?.constantValue}
@@ -118,7 +121,7 @@ const ToggleMode = ({
   toggleEntityFieldMode: () => void;
 }) => {
   return (
-    <div className="ve-mt-2">
+    <div className="ve-mt-2 ve-w-full">
       <Button onClick={toggleEntityFieldMode} variant="secondary">
         {entityFieldMode ? (
           <>

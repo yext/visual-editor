@@ -14,7 +14,7 @@ export const resolveYextEntityField = <T>(
   }
 
   // return constant value if field is not set
-  if (entityField.field === "") {
+  if (entityField.field === "" || entityField.constantValueEnabled) {
     return entityField.constantValue as T;
   }
 
