@@ -2,21 +2,22 @@ import React from "react";
 import { SketchPicker, RGBColor } from "react-color";
 import { PresetColor } from "react-color/lib/components/sketch/Sketch";
 
-interface ColorPickerProps {
+type ColorPickerProps = {
   disableAlpha: boolean;
   color: RGBColor;
   setColor: (color: RGBColor) => void;
   presetColors?: PresetColor[] | undefined;
-}
+};
 
 const ColorPicker = (props: ColorPickerProps) => {
+  const { disableAlpha, presetColors, color, setColor } = props;
   return (
     <SketchPicker
-      disableAlpha={props.disableAlpha}
-      presetColors={props.presetColors}
-      color={props.color}
+      disableAlpha={disableAlpha}
+      presetColors={presetColors}
+      color={color}
       onChange={(color) => {
-        props.setColor(color.rgb);
+        setColor(color.rgb);
       }}
     ></SketchPicker>
   );
