@@ -1,4 +1,4 @@
-import { AutoField, Config, Field } from "@measured/puck";
+import { AutoFieldPrivate, Config, Field } from "@measured/puck";
 import React from "react";
 
 type ThemeSidebarProps = {
@@ -106,7 +106,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
         });
 
         return (
-          <AutoField
+          <AutoFieldPrivate
             key={themeCategoryKey}
             field={field}
             onChange={(value) => handleChange(themeCategoryKey, value)}
