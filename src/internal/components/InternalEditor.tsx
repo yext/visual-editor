@@ -155,6 +155,20 @@ export const InternalEditor = ({
                   };
                 };
               });
+
+              const componentList = document.querySelector<HTMLElement>(
+                "[class*='PuckLayout-leftSideBar'] > div[class*='SidebarSection--noBorderTop']"
+              );
+              if (componentList) {
+                componentList.style.display = themeModeActive ? "none" : "";
+              }
+              const fieldListTitle = document.querySelector<HTMLElement>(
+                "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
+              );
+              if (fieldListTitle) {
+                fieldListTitle.style.display = themeModeActive ? "none" : "";
+              }
+
               refreshPermissions();
             }, [themeModeActive]);
 

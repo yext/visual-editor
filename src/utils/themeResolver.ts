@@ -3,7 +3,7 @@ export type Style =
       label: string;
       plugin: string;
       type: "number";
-      default: number;
+      default: number | string;
     }
   | {
       label: string;
@@ -38,7 +38,7 @@ export type ThemeConfig = {
 
 export type TailwindConfig = {
   [key: string]: {
-    [key: string]: string | { [key: string]: string };
+    [key: string]: any;
   };
 };
 
@@ -62,7 +62,7 @@ const extractDefaults = (styles: {
   return result;
 };
 
-const convertToTailwindConfig = (input: ThemeConfig): TailwindConfig => {
+export const convertToTailwindConfig = (input: ThemeConfig): TailwindConfig => {
   const output: TailwindConfig = {};
 
   for (const category in input) {
@@ -78,7 +78,7 @@ type PlainObject = Record<string, any>;
 /**
  * Merges two objects deeply, giving priority to properties from the first object.
  */
-const deepMerge = <T extends PlainObject, U extends PlainObject>(
+export const deepMerge = <T extends PlainObject, U extends PlainObject>(
   obj1: T,
   obj2: U
 ): T & U => {
@@ -110,10 +110,10 @@ const isObject = (value: any): value is PlainObject => {
  * Merges the developer-specified theming and the marketer-specified theming,
  * giving priority to the developer-specified theming.
  */
-export const themeResolver = <T extends PlainObject>(
-  deverloperTheming: T,
+export const themeResolver = (
+  deverloperTheming: TailwindConfig,
   marketerTheming: ThemeConfig
-) => {
+): TailwindConfig => {
   const marketerTailwindConfig = convertToTailwindConfig(marketerTheming);
   return deepMerge(deverloperTheming, marketerTailwindConfig);
 };
