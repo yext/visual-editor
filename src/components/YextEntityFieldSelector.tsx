@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { AutoField, FieldLabel, Field, Button } from "@measured/puck";
 import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
 import {
@@ -43,20 +43,17 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
-      const [entityFieldMode, setEntityFieldMode] = useState<boolean>(true);
-
-      const toggleEntityFieldMode = () => {
-        setEntityFieldMode((prevMode) => !prevMode);
+      const toggleConstantValueEnabled = () => {
         onChange({
           field: value?.field ?? "",
           constantValue: value?.constantValue ?? "",
-          constantValueEnabled: !value.constantValueEnabled,
+          constantValueEnabled: !value?.constantValueEnabled,
         });
       };
 
       return (
         <>
-          {entityFieldMode ? (
+          {!value?.constantValueEnabled ? (
             <FieldLabel label={field.label || "Label is undefined"}>
               <AutoField
                 field={{
@@ -103,8 +100,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
           )}
           {shouldDisplayConstantValueField(props.filter.types) && (
             <ToggleMode
-              entityFieldMode={entityFieldMode}
-              toggleEntityFieldMode={toggleEntityFieldMode}
+              constantValueEnabled={value?.constantValueEnabled}
+              toggleConstantValueEnabled={toggleConstantValueEnabled}
             />
           )}
         </>
@@ -114,22 +111,22 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
 };
 
 const ToggleMode = ({
-  entityFieldMode,
-  toggleEntityFieldMode,
+  constantValueEnabled,
+  toggleConstantValueEnabled,
 }: {
-  entityFieldMode: boolean;
-  toggleEntityFieldMode: () => void;
+  constantValueEnabled: boolean;
+  toggleConstantValueEnabled: () => void;
 }) => {
   return (
     <div className="ve-mt-2 ve-w-full">
-      <Button onClick={toggleEntityFieldMode} variant="secondary">
-        {entityFieldMode ? (
+      <Button onClick={toggleConstantValueEnabled} variant="secondary">
+        {constantValueEnabled ? (
+          <p>Use Entity Field</p>
+        ) : (
           <>
             <Lock className="sm-icon" />
             <p>Use Constant Value</p>
           </>
-        ) : (
-          <p>Use Entity Field</p>
         )}
       </Button>
     </div>
