@@ -16,6 +16,9 @@ export const resolveYextEntityField = <T>(
   if (entityField.constantValueEnabled) {
     return entityField.constantValue as T;
   }
+  if (entityField.field === "") {
+    return undefined;
+  }
 
   try {
     // check for the entity field in the document
