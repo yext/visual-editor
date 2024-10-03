@@ -1,11 +1,13 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, Button } from "@measured/puck";
+import { AutoField, FieldLabel, Field } from "@measured/puck";
 import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
   getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
+import { RadioGroup, RadioGroupItem } from "../internal/puck/ui/radio.tsx";
+import { Label } from "../internal/puck/ui/label.tsx";
 
 export type YextEntityField = {
   field: string;
@@ -42,18 +44,27 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
-      const toggleConstantValueEnabled = () => {
+      const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
           constantValue: value?.constantValue ?? "",
-          constantValueEnabled: !value?.constantValueEnabled,
+          constantValueEnabled: constantValueEnabled,
         });
       };
 
       return (
         <>
+          {shouldDisplayConstantValueField(props.filter.types) && (
+            <ToggleMode
+              constantValueEnabled={value?.constantValueEnabled}
+              toggleConstantValueEnabled={toggleConstantValueEnabled}
+            />
+          )}
           {!value?.constantValueEnabled ? (
-            <FieldLabel label={field.label || "Label is undefined"}>
+            <FieldLabel
+              label={field.label || "Label is undefined"}
+              className="ve-mt-2.5"
+            >
               <AutoField
                 field={{
                   type: "select",
@@ -97,12 +108,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               />
             </FieldLabel>
           )}
-          {shouldDisplayConstantValueField(props.filter.types) && (
-            <ToggleMode
-              constantValueEnabled={value?.constantValueEnabled}
-              toggleConstantValueEnabled={toggleConstantValueEnabled}
-            />
-          )}
         </>
       );
     },
@@ -114,17 +119,28 @@ const ToggleMode = ({
   toggleConstantValueEnabled,
 }: {
   constantValueEnabled: boolean;
-  toggleConstantValueEnabled: () => void;
+  toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
 }) => {
   return (
-    <div className="ve-mt-2 ve-w-full">
-      <Button onClick={toggleConstantValueEnabled} variant="secondary">
-        {constantValueEnabled ? (
-          <p>Use Entity Field</p>
-        ) : (
-          <p>Use Constant Value</p>
-        )}
-      </Button>
+    <div className="ve-mb-2 ve-w-full">
+      <RadioGroup defaultValue={constantValueEnabled?.toString() ?? "false"}>
+        <div className="ve-flex ve-items-center ve-space-x-2">
+          <RadioGroupItem
+            value="false"
+            id="r1"
+            onClick={() => toggleConstantValueEnabled(false)}
+          />
+          <Label htmlFor="r1">Use Entity Value</Label>
+        </div>
+        <div className="ve-flex ve-items-center ve-space-x-2">
+          <RadioGroupItem
+            value="true"
+            id="r2"
+            onClick={() => toggleConstantValueEnabled(true)}
+          />
+          <Label htmlFor="r2">Use Constant Value</Label>
+        </div>
+      </RadioGroup>
     </div>
   );
 };
