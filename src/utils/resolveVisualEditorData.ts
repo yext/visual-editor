@@ -1,14 +1,15 @@
 type VisualConfiguration = {
-  template: string;
+  pageSet: string;
   data: string;
+  siteId: number;
 };
 
 type PagesLayout = {
-  c_visualConfiguration?: VisualConfiguration;
+  visualConfiguration?: VisualConfiguration;
 };
 
 type VisualLayout = {
-  c_visualConfiguration?: VisualConfiguration;
+  visualConfiguration?: VisualConfiguration;
 };
 
 const defaultData = JSON.stringify({
@@ -19,9 +20,9 @@ const defaultData = JSON.stringify({
 
 export function resolveVisualEditorData(
   data: any,
-  templateName: string | undefined
+  pageSet: string | undefined
 ): string {
-  if (!templateName) {
+  if (!pageSet) {
     throw new Error(
       "Unable to parse puck data, template name must be defined in config."
     );
@@ -29,17 +30,16 @@ export function resolveVisualEditorData(
 
   const { document } = data;
   const entityConfigurations: VisualConfiguration[] =
-    document.c_visualConfigurations ?? [];
-  const entityLayoutConfigurations: PagesLayout[] =
-    document.c_pages_layouts ?? [];
+    document.visualConfigurations ?? [];
+  const entityLayoutConfigurations: PagesLayout[] = document.pageLayouts ?? [];
   const siteLayoutConfigurations: VisualLayout[] =
-    document._site?.c_visualLayouts;
+    document._site?.defaultLayouts;
 
   // check base entity
   for (const entityConfiguration of entityConfigurations) {
-    if (entityConfiguration.template === templateName) {
+    if (entityConfiguration.pageSet === pageSet) {
       const visualTemplate = JSON.parse(
-        validateOrDefault(entityConfiguration.data, templateName)
+        validateOrDefault(entityConfiguration.data, pageSet)
       );
       return {
         ...data,
@@ -52,9 +52,9 @@ export function resolveVisualEditorData(
   }
   // check layouts referenced by the base entity
   for (const entityLayout of entityLayoutConfigurations) {
-    if (entityLayout.c_visualConfiguration?.template === templateName) {
+    if (entityLayout.visualConfiguration?.pageSet === pageSet) {
       const visualTemplate = JSON.parse(
-        validateOrDefault(entityLayout.c_visualConfiguration.data, templateName)
+        validateOrDefault(entityLayout.visualConfiguration.data, pageSet)
       );
       return {
         ...data,
@@ -68,9 +68,9 @@ export function resolveVisualEditorData(
   if (siteLayoutConfigurations) {
     // check layouts referenced by the site entity
     for (const siteLayout of siteLayoutConfigurations) {
-      if (siteLayout.c_visualConfiguration?.template === templateName) {
+      if (siteLayout.visualConfiguration?.pageSet === pageSet) {
         const visualTemplate = JSON.parse(
-          validateOrDefault(siteLayout.c_visualConfiguration.data, templateName)
+          validateOrDefault(siteLayout.visualConfiguration.data, pageSet)
         );
         return {
           ...data,
@@ -83,7 +83,7 @@ export function resolveVisualEditorData(
     }
   }
 
-  console.warn(`Unable to find puck data for template: ${templateName}`);
+  console.warn(`Unable to find puck data for pageSet: ${pageSet}`);
   const visualTemplate = JSON.parse(defaultData);
   return {
     ...data,
