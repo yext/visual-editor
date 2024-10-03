@@ -7,13 +7,24 @@ type ThemeSidebarProps = {
 };
 
 // Temporary types until we have a defined config
+type StyleSelectOptions = {
+  label: string;
+  value: string;
+};
 type StyleValue = string | number;
 type StyleFieldValues = { [styleKey: string]: StyleValue };
-type Style = {
-  label: string;
-  type: "number" | "string";
-  value: StyleValue;
-};
+type Style =
+  | {
+      label: string;
+      type: "number";
+      value: number;
+    }
+  | {
+      label: string;
+      type: "select";
+      value: string;
+      options: StyleSelectOptions[];
+    };
 export type ThemeCategory = {
   label: string;
   styles: {
@@ -29,9 +40,15 @@ const exampleThemeConfig: ThemeConfig = {
     label: "Text",
     styles: {
       color: {
-        label: "Text Color",
-        type: "string",
-        value: "#0000ff",
+        label: "Font Weight",
+        type: "select",
+        value: "",
+        options: [
+          { label: "Light", value: "300" },
+          { label: "Normal", value: "400" },
+          { label: "Bold", value: "700" },
+          { label: "Extra Bold", value: "800" },
+        ],
       },
       size: {
         label: "Font Size",
@@ -45,8 +62,8 @@ const exampleThemeConfig: ThemeConfig = {
     styles: {
       color: {
         label: "Heading Color",
-        type: "string",
-        value: "#ff0000",
+        type: "number",
+        value: 0,
       },
     },
   },
@@ -91,10 +108,11 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
                 type: "number",
               };
               break;
-            case "string":
+            case "select":
               field.objectFields[styleKey] = {
                 label: style.label,
-                type: "text",
+                type: "select",
+                options: style.options,
               };
               break;
           }
