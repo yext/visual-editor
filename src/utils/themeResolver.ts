@@ -94,10 +94,7 @@ const isObject = (value: any): value is PlainObject => {
 export const themeResolver = (
   deverloperTheming: TailwindConfig,
   marketerTheming: ThemeConfig
-) => {
+): TailwindConfig => {
   const marketerTailwindConfig = convertToTailwindConfig(marketerTheming);
-  console.log("marketerTailwindConfig", marketerTailwindConfig);
-  const mergedConfig = deepMerge(deverloperTheming, marketerTailwindConfig);
-  console.log("mergedConfig", mergedConfig);
-  return mergedConfig;
+  return deepMerge(deverloperTheming, marketerTailwindConfig);
 };
