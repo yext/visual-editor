@@ -399,8 +399,8 @@ export const Editor = ({
       {!isLoading ? (
         <InternalEditor
           puckConfig={puckConfig}
-          puckInitialHistory={puckInitialHistory}
           isLoading={isLoading}
+          puckInitialHistory={puckInitialHistory}
           clearHistory={
             templateMetadata.isDevMode && !templateMetadata.devOverride
               ? clearLocalStorage

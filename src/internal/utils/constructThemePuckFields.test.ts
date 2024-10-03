@@ -219,7 +219,7 @@ describe("convertStyleToPuckField", () => {
 });
 
 describe("constructThemePuckValues", () => {
-  it("constructs theme values using saved theme alues", () => {
+  it("constructs theme puck values using saved theme values", () => {
     const savedThemeValues = {
       font: {
         size: 16,
@@ -256,7 +256,7 @@ describe("constructThemePuckValues", () => {
     });
   });
 
-  it("use sdefault values for missing saved values", () => {
+  it("uses default values for missing saved theme values", () => {
     const savedThemeValues = {};
 
     const result = constructThemePuckValues(
@@ -282,7 +282,7 @@ describe("constructThemePuckValues", () => {
     });
   });
 
-  it("handles a mix of saved and default values", () => {
+  it("handles a mix of saved and default theme values", () => {
     const savedThemeValues = {
       font: {
         size: 14, // provided value
