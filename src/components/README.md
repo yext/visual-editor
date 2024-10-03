@@ -12,10 +12,13 @@ information.
 | ----------------- | ------------------------------------------------------------------------------------ |
 | document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))        |
 | componentRegistry | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
+| themeConfig?      | ThemeConfig                                                                          |
 
 ### Usage:
 
 ```tsx
+import { themeConfig } from "../../theme.config"
+
 // All the available components for locations
 const locationConfig: Config<LocationProps> = {
   components: {...},
@@ -37,6 +40,7 @@ const Edit: () => JSX.Element = () => {
         <Editor
           document={entityDocument}
           componentRegistry={componentRegistry}
+          themeConfig={themeConfig}
         />
       </EntityFieldsProvider>
     </DocumentProvider>

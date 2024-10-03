@@ -1,23 +1,42 @@
-type Style = {
+export type Style =
+  | {
+      label: string;
+      plugin: string;
+      type: "number";
+      default: number;
+    }
+  | {
+      label: string;
+      plugin: string;
+      type: "select";
+      default: string;
+      options: StyleSelectOption[];
+    }
+  | {
+      label: string;
+      plugin: string;
+      type: "color";
+      default: string;
+    };
+
+export type StyleSelectOption = {
   label: string;
-  plugin: string;
-  type: string;
-  default: string;
+  value: string;
 };
 
-type ParentStyle = {
+export type ParentStyle = {
   label: string;
   styles: { [key: string]: Style | ParentStyle };
 };
 
-type ThemeConfig = {
+export type ThemeConfig = {
   [key: string]: {
     label: string;
     styles: { [key: string]: Style | ParentStyle };
   };
 };
 
-type TailwindConfig = {
+export type TailwindConfig = {
   [key: string]: {
     [key: string]: string | { [key: string]: string };
   };
