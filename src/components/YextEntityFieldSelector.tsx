@@ -6,7 +6,6 @@ import {
   getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
-import { Lock } from "lucide-react";
 
 export type YextEntityField = {
   field: string;
@@ -123,10 +122,7 @@ const ToggleMode = ({
         {constantValueEnabled ? (
           <p>Use Entity Field</p>
         ) : (
-          <>
-            <Lock className="sm-icon" />
-            <p>Use Constant Value</p>
-          </>
+          <p>Use Constant Value</p>
         )}
       </Button>
     </div>
