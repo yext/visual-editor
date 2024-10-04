@@ -97,6 +97,7 @@ export const customHeader = (
             onClick={async () => {
               await handleSaveData(currentPuckData);
               handleClearLocalChanges();
+              setHistories([{ id: "root", state: { data: currentPuckData } }]);
             }}
           >
             Publish

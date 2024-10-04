@@ -172,11 +172,13 @@ export const InternalEditor = ({
               refreshPermissions();
             }, [themeModeActive]);
 
+            const { history } = usePuck();
+
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
               appState.data,
-              puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
+              history?.histories[0].state.data, // used for clearing local changes - reset to first puck history
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
               themeModeActive,
