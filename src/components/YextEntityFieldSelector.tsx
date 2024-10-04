@@ -127,18 +127,18 @@ const ToggleMode = ({
         <div className="ve-flex ve-items-center ve-space-x-2">
           <RadioGroupItem
             value="false"
-            id="false"
+            id="ve-use-entity-value"
             onClick={() => toggleConstantValueEnabled(false)}
           />
-          <Label htmlFor="false">Use Entity Value</Label>
+          <Label htmlFor="ve-use-entity-value">Use Entity Value</Label>
         </div>
         <div className="ve-flex ve-items-center ve-space-x-2">
           <RadioGroupItem
             value="true"
-            id="true"
+            id="ve-use-constant-value"
             onClick={() => toggleConstantValueEnabled(true)}
           />
-          <Label htmlFor="true">Use Constant Value</Label>
+          <Label htmlFor="ve-use-constant-value">Use Constant Value</Label>
         </div>
       </RadioGroup>
     </div>
