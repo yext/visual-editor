@@ -140,7 +140,7 @@ export const InternalEditor = ({
         onChange={change}
         overrides={{
           header: () => {
-            const { appState, refreshPermissions, config } = usePuck();
+            const { appState, refreshPermissions, config, history } = usePuck();
 
             useEffect(() => {
               // set permissions on the component level to allow for dynamic updating
