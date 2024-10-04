@@ -15,6 +15,7 @@ import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
+import { ThemeConfig } from "../../utils/themeResolver.ts";
 
 interface InternalEditorProps {
   puckConfig: Config;
@@ -28,6 +29,7 @@ interface InternalEditorProps {
   sendDevSaveStateData: (data: any) => void;
   buildLocalStorageKey: () => string;
   devLogger: DevLogger;
+  themeConfig?: ThemeConfig;
 }
 
 // Render Puck editor
@@ -43,6 +45,7 @@ export const InternalEditor = ({
   sendDevSaveStateData,
   buildLocalStorageKey,
   devLogger,
+  themeConfig,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const [themeModeActive, setThemeModeActive] = useState<boolean>(false);
@@ -96,6 +99,11 @@ export const InternalEditor = ({
   const handleClearLocalChanges = () => {
     clearHistory();
     historyIndex.current = 0;
+    // TODO: reset theme to published values here
+  };
+
+  const handleSaveTheme = () => {
+    // TODO: save draft theme here
   };
 
   const handleSave = async (data: Data) => {
@@ -177,7 +185,15 @@ export const InternalEditor = ({
           },
           actionBar: themeModeActive ? () => <></> : undefined,
           components: themeModeActive ? () => <></> : undefined,
-          fields: themeModeActive ? () => <ThemeSidebar /> : undefined,
+          fields: themeModeActive
+            ? () => (
+                <ThemeSidebar
+                  themeConfig={themeConfig}
+                  saveTheme={handleSaveTheme}
+                  savedThemeValues={undefined} // TODO: load theme values into this prop
+                />
+              )
+            : undefined,
         }}
       />
     </EntityFieldProvider>

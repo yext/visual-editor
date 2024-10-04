@@ -1,3 +1,33 @@
+#### 0.0.10 (2024-10-04)
+
+##### Chores
+
+- add test with react testing library (#62) (e0d545fc)
+
+##### Documentation Changes
+
+- adjust READMEs and move internal code (#64) (ba784362)
+
+##### New Features
+
+- add toggle for "Use Entity Field" vs "Use Constant Value" (#70) (a5bfe5e1)
+- theme editor sidebar (#74) (b6902481)
+- toggle theme editing mode (#65) (65d4e610)
+- **util:**
+  - add buildCssOverridesStyle (#72) (7ea4eebf)
+  - add themeResolver (#69) (370ecac0)
+  - use built-in fields (#73) (6347bef2)
+  - use local stream for entity fields in dev mode (#61) (8a19028e)
+
+##### Bug Fixes
+
+- hide sidebar titles in theme mode via DOM (#71) (95c32294)
+- add undefined to return type of resolveYextEntityField (#66) (1b3ab2b8)
+
+##### Refactors
+
+- rename EntityFieldType to YextEntityField (#67) (564933f7)
+
 #### 0.0.9 (2024-09-26)
 
 ##### Chores

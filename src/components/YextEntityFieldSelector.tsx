@@ -6,6 +6,8 @@ import {
   getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
+import { RadioGroup, RadioGroupItem } from "../internal/puck/ui/radio.tsx";
+import { Label } from "../internal/puck/ui/label.tsx";
 
 export type YextEntityField = {
   field: string;
@@ -42,33 +44,51 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
+      const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
+        onChange({
+          field: value?.field ?? "",
+          constantValue: value?.constantValue ?? "",
+          constantValueEnabled: constantValueEnabled,
+        });
+      };
 
       return (
         <>
-          <FieldLabel label={field.label || "Label is undefined"}>
-            <AutoField
-              field={{
-                type: "select",
-                options: [
-                  { value: "", label: "Select a Content field" },
-                  ...filteredEntityFields.map((entityFieldNameToSchema) => {
-                    return {
-                      label: entityFieldNameToSchema.name,
-                      value: entityFieldNameToSchema.name,
-                    };
-                  }),
-                ],
-              }}
-              onChange={(selectedEntityField) => {
-                onChange({
-                  field: selectedEntityField,
-                  constantValue: value?.constantValue ?? "",
-                });
-              }}
-              value={value?.field}
-            />
-          </FieldLabel>
           {shouldDisplayConstantValueField(props.filter.types) && (
+            <ToggleMode
+              constantValueEnabled={value?.constantValueEnabled}
+              toggleConstantValueEnabled={toggleConstantValueEnabled}
+            />
+          )}
+          {!value?.constantValueEnabled ? (
+            <FieldLabel
+              label={field.label || "Label is undefined"}
+              className="ve-mt-2.5"
+            >
+              <AutoField
+                field={{
+                  type: "select",
+                  options: [
+                    { value: "", label: "Select a Content field" },
+                    ...filteredEntityFields.map((entityFieldNameToSchema) => {
+                      return {
+                        label: entityFieldNameToSchema.name,
+                        value: entityFieldNameToSchema.name,
+                      };
+                    }),
+                  ],
+                }}
+                onChange={(selectedEntityField) => {
+                  onChange({
+                    field: selectedEntityField,
+                    constantValue: value?.constantValue ?? "",
+                    constantValueEnabled: false,
+                  });
+                }}
+                value={value?.field}
+              />
+            </FieldLabel>
+          ) : (
             <FieldLabel
               label={"Constant Value"}
               className="entityField-constantValue"
@@ -78,6 +98,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
                   onChange({
                     field: value?.field ?? "",
                     constantValue: newConstantValue,
+                    constantValueEnabled: true,
                   })
                 }
                 value={value?.constantValue}
@@ -91,4 +112,35 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
       );
     },
   };
+};
+
+const ToggleMode = ({
+  constantValueEnabled,
+  toggleConstantValueEnabled,
+}: {
+  constantValueEnabled: boolean;
+  toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
+}) => {
+  return (
+    <div className="ve-mb-2 ve-w-full">
+      <RadioGroup defaultValue={constantValueEnabled?.toString() ?? "false"}>
+        <div className="ve-flex ve-items-center ve-space-x-2">
+          <RadioGroupItem
+            value="false"
+            id="ve-use-entity-value"
+            onClick={() => toggleConstantValueEnabled(false)}
+          />
+          <Label htmlFor="ve-use-entity-value">Use Entity Value</Label>
+        </div>
+        <div className="ve-flex ve-items-center ve-space-x-2">
+          <RadioGroupItem
+            value="true"
+            id="ve-use-constant-value"
+            onClick={() => toggleConstantValueEnabled(true)}
+          />
+          <Label htmlFor="ve-use-constant-value">Use Constant Value</Label>
+        </div>
+      </RadioGroup>
+    </div>
+  );
 };
