@@ -172,8 +172,6 @@ export const InternalEditor = ({
               refreshPermissions();
             }, [themeModeActive]);
 
-            const { history } = usePuck();
-
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
