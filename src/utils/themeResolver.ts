@@ -1,11 +1,30 @@
-type Style = {
+export type Style =
+  | {
+      label: string;
+      plugin: string;
+      type: "number";
+      default: number | string;
+    }
+  | {
+      label: string;
+      plugin: string;
+      type: "select";
+      default: string;
+      options: StyleSelectOption[];
+    }
+  | {
+      label: string;
+      plugin: string;
+      type: "color";
+      default: string;
+    };
+
+export type StyleSelectOption = {
   label: string;
-  plugin: string;
-  type: string;
-  default: string;
+  value: string;
 };
 
-type ParentStyle = {
+export type ParentStyle = {
   label: string;
   styles: { [key: string]: Style | ParentStyle };
 };

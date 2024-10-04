@@ -13,6 +13,7 @@ import {
 import { SaveState } from "../internal/types/saveState.ts";
 import "@measured/puck/puck.css";
 import { DevLogger } from "../utils/devLogger.ts";
+import { ThemeConfig } from "../utils/themeResolver.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -32,11 +33,16 @@ export const TARGET_ORIGINS = [
 export interface EditorProps {
   document: any;
   componentRegistry: Map<string, Config<any>>;
+  themeConfig?: ThemeConfig;
 }
 
 const devLogger = new DevLogger();
 
-export const Editor = ({ document, componentRegistry }: EditorProps) => {
+export const Editor = ({
+  document,
+  componentRegistry,
+  themeConfig,
+}: EditorProps) => {
   const [puckInitialHistory, setPuckInitialHistory] = useState<
     InitialHistory | undefined
   >();
@@ -407,6 +413,7 @@ export const Editor = ({ document, componentRegistry }: EditorProps) => {
           sendDevSaveStateData={sendDevSaveStateData}
           buildLocalStorageKey={buildLocalStorageKey}
           devLogger={devLogger}
+          themeConfig={themeConfig}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
