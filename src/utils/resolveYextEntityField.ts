@@ -13,9 +13,11 @@ export const resolveYextEntityField = <T>(
     return undefined;
   }
 
-  // return constant value if field is not set
-  if (entityField.field === "") {
+  if (entityField.constantValueEnabled) {
     return entityField.constantValue as T;
+  }
+  if (entityField.field === "") {
+    return undefined;
   }
 
   try {
@@ -38,9 +40,6 @@ export const resolveYextEntityField = <T>(
     console.error("Error in resolveYextEntityField:", e);
   }
 
-  // if field not found, return constant value as a fallback
-  console.warn(
-    `The field ${entityField.field} was not found in the document, defaulting to constant value ${entityField.constantValue}.`
-  );
-  return entityField.constantValue as T;
+  console.warn(`The field ${entityField.field} was not found in the document.`);
+  return undefined;
 };

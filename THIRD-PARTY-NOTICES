@@ -8684,18 +8684,23 @@ The following npm packages may be included in this product:
  - @radix-ui/primitive@1.1.0
  - @radix-ui/react-alert-dialog@1.1.1
  - @radix-ui/react-arrow@1.1.0
+ - @radix-ui/react-collection@1.1.0
  - @radix-ui/react-compose-refs@1.1.0
- - @radix-ui/react-context@1.1.0
+ - @radix-ui/react-context@1.1.1
  - @radix-ui/react-dialog@1.1.1
+ - @radix-ui/react-direction@1.1.0
  - @radix-ui/react-dismissable-layer@1.1.0
  - @radix-ui/react-focus-guards@1.1.0
  - @radix-ui/react-focus-scope@1.1.0
  - @radix-ui/react-id@1.1.0
+ - @radix-ui/react-label@2.1.0
  - @radix-ui/react-popper@1.2.0
  - @radix-ui/react-portal@1.1.1
  - @radix-ui/react-presence@1.1.0
  - @radix-ui/react-primitive@2.0.0
  - @radix-ui/react-progress@1.1.0
+ - @radix-ui/react-radio-group@1.2.1
+ - @radix-ui/react-roving-focus@1.1.0
  - @radix-ui/react-slot@1.1.0
  - @radix-ui/react-switch@1.1.0
  - @radix-ui/react-tooltip@1.1.2

@@ -29,7 +29,7 @@ test("resolveYextEntityField returns empty value when field found in document", 
   );
 });
 
-test("resolveYextEntityField returns constant value when field not found in document", async () => {
+test("resolveYextEntityField returns undefined when field not found in document", async () => {
   assert.equal(
     resolveYextEntityField(
       {
@@ -37,11 +37,11 @@ test("resolveYextEntityField returns constant value when field not found in docu
       },
       { field: "address.city", constantValue: "City" }
     ),
-    "City"
+    undefined
   );
 });
 
-test("resolveYextEntityField returns constant value when field not set", async () => {
+test("resolveYextEntityField returns constant value when constantValueEnabled is true", async () => {
   assert.equal(
     resolveYextEntityField(
       {
@@ -49,7 +49,7 @@ test("resolveYextEntityField returns constant value when field not set", async (
           city: "",
         },
       },
-      { field: "", constantValue: "City" }
+      { field: "", constantValue: "City", constantValueEnabled: true }
     ),
     "City"
   );
