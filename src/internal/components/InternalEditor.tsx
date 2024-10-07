@@ -48,7 +48,9 @@ export const InternalEditor = ({
   themeConfig,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
-  const [themeModeActive, setThemeModeActive] = useState<boolean>(false);
+  const [themeModeActive, setThemeModeActive] = useState<boolean>(
+    !!templateMetadata.isThemeMode
+  );
   const historyIndex = useRef<number>(0);
 
   /**
@@ -180,7 +182,8 @@ export const InternalEditor = ({
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
               themeModeActive,
-              toggleThemeModeActive
+              toggleThemeModeActive,
+              !!templateMetadata.isThemeMode
             );
           },
           actionBar: themeModeActive ? () => <></> : undefined,
