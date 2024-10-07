@@ -1,5 +1,5 @@
 import React from "react";
-import { SketchPicker, RGBColor } from "react-color";
+import { SketchPicker, RGBColor, ColorResult } from "react-color";
 import { PresetColor } from "react-color/lib/components/sketch/Sketch";
 
 type ColorPickerProps = {
@@ -16,7 +16,7 @@ const ColorPicker = (props: ColorPickerProps) => {
       disableAlpha={disableAlpha}
       presetColors={presetColors}
       color={color}
-      onChange={(color) => {
+      onChange={(color: ColorResult) => {
         setColor(color.rgb);
       }}
     ></SketchPicker>
