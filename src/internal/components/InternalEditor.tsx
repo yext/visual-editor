@@ -140,7 +140,7 @@ export const InternalEditor = ({
         onChange={change}
         overrides={{
           header: () => {
-            const { appState, refreshPermissions, config } = usePuck();
+            const { refreshPermissions, config } = usePuck();
 
             useEffect(() => {
               // set permissions on the component level to allow for dynamic updating
@@ -175,8 +175,6 @@ export const InternalEditor = ({
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
-              appState.data,
-              puckInitialHistory?.histories[0].state.data, // used for clearing local changes - reset to first puck history
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
               themeModeActive,
