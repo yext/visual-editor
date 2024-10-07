@@ -99,7 +99,6 @@ describe("constructThemePuckFields", () => {
   it("constructs theme fields from a parent style", () => {
     const result = constructThemePuckFields(exampleThemeConfig.text);
 
-    // TODO: update to use color picker
     expect(result).toMatchObject({
       label: "Text",
       type: "object",
@@ -201,11 +200,10 @@ describe("convertStyleToPuckField", () => {
   });
 
   it("converts color style to color field", () => {
-    // TODO: update to use color picker
     const colorStyle: Style = {
       label: "Main Color",
       type: "color",
-      default: "000000",
+      default: "#000000",
       plugin: "colors",
     };
 

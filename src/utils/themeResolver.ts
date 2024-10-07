@@ -98,13 +98,13 @@ export const deepMerge = <T extends PlainObject, U extends PlainObject>(
         // If both values are objects, merge them recursively
         result[key] = deepMerge(value1, value2);
       } else {
-        // Otherwise, prioritize obj1's value
+        // Otherwise, prioritize obj2's value
         if (value1 && value2) {
           console.warn(
-            `Both theme.config.ts and tailwind.config.ts provided a value for ${key}. Using the value from tailwind.config.ts (${value1})`
+            `Both theme.config.ts and tailwind.config.ts provided a value for ${key}. Using the value from theme.config.ts (${value2})`
           );
         }
-        result[key] = value1;
+        result[key] = value2 ?? value1;
       }
     }
   }

@@ -13,25 +13,25 @@ describe("themeResolver", () => {
     expect(result).toEqual(marketerTailwindConfig);
   });
 
-  test("merge market and developer tailwind configs, prioritizing developer specifications", () => {
+  test("merge marketer and developer tailwind configs, prioritizing theme.config specifications", () => {
     const consoleSpy = vi.spyOn(console, "warn");
     const result = deepMerge(developerTailwindConfig, marketerTailwindConfig);
     expect(result).toEqual(mergedConfig);
     expect(consoleSpy).toHaveBeenLastCalledWith(
-      "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from tailwind.config.ts (0px)"
+      "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from theme.config.ts (var(--borderRadius-sm))"
     );
   });
 
   test(
     "restructures theme config and merges with developer-specified tailwind config, " +
-      "prioritizing developer sepecifications",
+      "prioritizing theme.config",
     () => {
       const consoleSpy = vi.spyOn(console, "warn");
       const result = themeResolver(developerTailwindConfig, testThemeConfig);
       expect(result).toEqual(mergedConfig);
       expect(consoleSpy).toHaveBeenCalledTimes(3);
       expect(consoleSpy).toHaveBeenLastCalledWith(
-        "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from tailwind.config.ts (0px)"
+        "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from theme.config.ts (var(--borderRadius-sm))"
       );
     }
   );
@@ -311,9 +311,9 @@ const mergedConfig: TailwindConfig = {
     },
   },
   borderRadius: {
-    lg: "0px", // developer-defined takes priority
-    md: "0px", // developer-defined takes priority
-    sm: "0px", // developer-defined takes priority
+    lg: "var(--borderRadius-lg)", // theme.config takes priority
+    md: "var(--borderRadius-md)", // theme.config takes priority
+    sm: "var(--borderRadius-sm)", // theme.config takes priority
   },
   keyframes: {
     "accordion-down": {

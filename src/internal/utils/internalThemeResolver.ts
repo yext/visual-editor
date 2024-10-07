@@ -4,7 +4,7 @@ import {
   SavedTheme,
 } from "../../utils/themeResolver.ts";
 
-// internalThemeResolver returns a mapping of css variable names to their valuess
+// internalThemeResolver returns a mapping of css variable names to their values
 // using the themeConfig to create the list of variable names and applying the saved value
 // if it exists for each one. If it does not exist, it falls back on the themeConfig's default field.
 export const internalThemeResolver = (

@@ -6,6 +6,8 @@ export type Document = {
   [key: string]: any;
 };
 
+const THEME_STYLE_TAG_ID = "visual-editor-theme" as const;
+
 export const applyTheme = (
   document: Document,
   themeConfig: ThemeConfig,
@@ -18,7 +20,7 @@ export const applyTheme = (
     return base ?? "";
   }
   return (
-    `${base ?? ""}<style id="visual-editor-theme" type="text/css">.components{` +
+    `${base ?? ""}<style id="${THEME_STYLE_TAG_ID}" type="text/css">.components{` +
     Object.entries(themeValues)
       .map(([key, value]) => `${key}:${value} !important`)
       .join(";") +
@@ -34,9 +36,8 @@ export const updateThemeInEditor = (
     "preview-frame"
   ) as HTMLIFrameElement;
   if (previewFrame && previewFrame.contentDocument) {
-    const styleOverride = previewFrame?.contentDocument?.getElementById(
-      "visual-editor-theme"
-    );
+    const styleOverride =
+      previewFrame?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
     if (styleOverride) {
       styleOverride.outerHTML = applyTheme({ c_theme: newTheme }, themeConfig);
     }
