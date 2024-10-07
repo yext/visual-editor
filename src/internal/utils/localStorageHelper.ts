@@ -6,6 +6,7 @@ const ROLE = "ROLE_",
   ENTITY = "ENTITY_";
 
 export function getLocalStorageKey(
+  isThemeMode: boolean,
   isDevMode: boolean,
   role: string,
   templateId: string,
@@ -18,7 +19,7 @@ export function getLocalStorageKey(
       "Unable to generate local storage key, missing query parameters"
     );
   }
-  if (role === Role.INDIVIDUAL) {
+  if (role === Role.INDIVIDUAL || isThemeMode) {
     if (!entityId) {
       throw new Error(`EntityId required for role ${role}`);
     }

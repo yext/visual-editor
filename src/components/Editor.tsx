@@ -69,6 +69,7 @@ export const Editor = ({
     }
 
     return getLocalStorageKey(
+      !!templateMetadata.isThemeMode,
       templateMetadata.isDevMode && !templateMetadata.devOverride,
       templateMetadata.role,
       templateMetadata.templateId,

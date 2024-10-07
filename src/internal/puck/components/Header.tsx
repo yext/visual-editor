@@ -31,7 +31,8 @@ export const customHeader = (
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean,
   themeModeActive: boolean,
-  setThemeModeActive: () => void
+  setThemeModeActive: () => void,
+  isThemeMode: boolean
 ) => {
   const {
     appState,
@@ -55,10 +56,12 @@ export const customHeader = (
       <div className="header-left">
         <ToggleUIButtons />
         <ToggleEntityFields />
-        <ToggleThemeMode
-          themeModeActive={themeModeActive}
-          toggleThemeMode={setThemeModeActive}
-        />
+        {!isThemeMode && (
+          <ToggleThemeMode
+            themeModeActive={themeModeActive}
+            toggleThemeMode={setThemeModeActive}
+          />
+        )}
       </div>
       <div className="header-center"></div>
       <div className="actions">
