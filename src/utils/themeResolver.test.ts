@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import {
   convertToTailwindConfig,
   deepMerge,
@@ -9,164 +9,173 @@ import {
 
 describe("themeResolver", () => {
   test("convert theme config to tailwind config", () => {
-    const result = convertToTailwindConfig(themeConfig);
+    const result = convertToTailwindConfig(testThemeConfig);
     expect(result).toEqual(marketerTailwindConfig);
   });
 
   test("merge market and developer tailwind configs, prioritizing developer specifications", () => {
+    const consoleSpy = vi.spyOn(console, "warn");
     const result = deepMerge(developerTailwindConfig, marketerTailwindConfig);
     expect(result).toEqual(mergedConfig);
+    expect(consoleSpy).toHaveBeenLastCalledWith(
+      "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from tailwind.config.ts (0px)"
+    );
   });
 
   test(
     "restructures theme config and merges with developer-specified tailwind config, " +
       "prioritizing developer sepecifications",
     () => {
-      const result = themeResolver(developerTailwindConfig, themeConfig);
+      const consoleSpy = vi.spyOn(console, "warn");
+      const result = themeResolver(developerTailwindConfig, testThemeConfig);
       expect(result).toEqual(mergedConfig);
+      expect(consoleSpy).toHaveBeenCalledTimes(3);
+      expect(consoleSpy).toHaveBeenLastCalledWith(
+        "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from tailwind.config.ts (0px)"
+      );
     }
   );
 });
 
-const themeConfig: ThemeConfig = {
+export const testThemeConfig: ThemeConfig = {
   colors: {
     label: "Colors",
     styles: {
       text: {
-        label: "Text Color",
+        label: "Text",
         plugin: "colors",
         type: "color",
         default: "black",
       },
       border: {
-        label: "Border Color",
+        label: "Border",
         plugin: "colors",
         type: "color",
-        default: "hsl(var(--border))",
+        default: "hsl(214 100% 39%)",
       },
       input: {
-        label: "Input Color",
+        label: "Input",
         plugin: "colors",
         type: "color",
-        default: "hsl(var(--input))",
+        default: "hsl(214.3 31.8% 91.4%)",
       },
       ring: {
-        label: "Ring Color",
+        label: "Ring",
         plugin: "colors",
         type: "color",
-        default: "hsl(var(--ring))",
+        default: "hsl(215 20.2% 65.1%)",
       },
       background: {
-        label: "Background Color",
+        label: "Background",
         plugin: "colors",
         type: "color",
-        default: "hsl(var(--background))",
+        default: "hsl(0 0% 100%)",
       },
       foreground: {
-        label: "Foreground Color",
+        label: "Foreground",
         plugin: "colors",
         type: "color",
-        default: "hsl(var(--foreground))",
+        default: "hsl(0 2% 11%)",
       },
       primary: {
-        label: "Primary Color",
+        label: "Primary",
         styles: {
           DEFAULT: {
-            label: "Primary Color (Default)",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--primary))",
+            default: "hsl(0 68% 51%)",
           },
           foreground: {
-            label: "Primary Foreground Color",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--primary-foreground))",
+            default: "hsl(0 0% 100%)",
           },
         },
       },
       secondary: {
-        label: "Secondary Color",
+        label: "Secondary",
         styles: {
           DEFAULT: {
-            label: "Secondary Color (Default)",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--secondary))",
+            default: "hsl(11 100% 26%)",
           },
           foreground: {
-            label: "Secondary Foreground Color",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--secondary-foreground))",
+            default: "hsl(0 0% 100%)",
           },
         },
       },
       destructive: {
-        label: "Destructive Color",
+        label: "Destructive",
         styles: {
           DEFAULT: {
-            label: "Destructive Color (Default)",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--destructive))",
+            default: "hsl(0 100% 50%)",
           },
           foreground: {
-            label: "Destructive Foreground Color",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--destructive-foreground))",
+            default: "hsl(210 40% 98%)",
           },
         },
       },
       muted: {
-        label: "Muted Color",
+        label: "Muted",
         styles: {
           DEFAULT: {
-            label: "Muted Color (Default)",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--muted))",
+            default: "hsl(210 40% 96.1%)",
           },
           foreground: {
-            label: "Muted Foreground Color",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--muted-foreground))",
+            default: "hsl(215.4 16.3% 46.9%)",
           },
         },
       },
       accent: {
-        label: "Accent Color",
+        label: "Accent",
         styles: {
           DEFAULT: {
-            label: "Accent Color (Default)",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--accent))",
+            default: "hsl(166 55% 67%)",
           },
           foreground: {
-            label: "Accent Foreground Color",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--accent-foreground))",
+            default: "hsl(0 0% 0%)",
           },
         },
       },
       popover: {
-        label: "Popover Color",
+        label: "Secondary",
         styles: {
           DEFAULT: {
-            label: "Popover Color (Default)",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--popover))",
+            default: "hsl(225 7% 12%)",
           },
           foreground: {
-            label: "Popover Foreground Color",
+            label: "Default",
             plugin: "colors",
             type: "color",
-            default: "hsl(var(--popover-foreground))",
+            default: "hsl(0 0% 100%)",
           },
         },
       },
@@ -179,19 +188,19 @@ const themeConfig: ThemeConfig = {
         label: "Large Border Radius",
         plugin: "borderRadius",
         type: "number",
-        default: `var(--radius)`,
+        default: `8px`,
       },
       md: {
         label: "Medium Border Radius",
         plugin: "borderRadius",
         type: "number",
-        default: `calc(var(--radius) - 2px)`,
+        default: `6px`,
       },
       sm: {
         label: "Small Border Radius",
         plugin: "borderRadius",
         type: "number",
-        default: "calc(var(--radius) - 4px)",
+        default: "4px",
       },
     },
   },
@@ -199,45 +208,50 @@ const themeConfig: ThemeConfig = {
 
 const marketerTailwindConfig: TailwindConfig = {
   colors: {
-    text: "black",
-    border: "hsl(var(--border))",
-    input: "hsl(var(--input))",
-    ring: "hsl(var(--ring))",
-    background: "hsl(var(--background))",
-    foreground: "hsl(var(--foreground))",
+    text: "var(--colors-text)",
+    border: "var(--colors-border)",
+    input: "var(--colors-input)",
+    ring: "var(--colors-ring)",
+    background: "var(--colors-background)",
+    foreground: "var(--colors-foreground)",
     primary: {
-      DEFAULT: "hsl(var(--primary))",
-      foreground: "hsl(var(--primary-foreground))",
+      DEFAULT: "var(--colors-primary-DEFAULT)",
+      foreground: "var(--colors-primary-foreground)",
     },
     secondary: {
-      DEFAULT: "hsl(var(--secondary))",
-      foreground: "hsl(var(--secondary-foreground))",
+      DEFAULT: "var(--colors-secondary-DEFAULT)",
+      foreground: "var(--colors-secondary-foreground)",
     },
     destructive: {
-      DEFAULT: "hsl(var(--destructive))",
-      foreground: "hsl(var(--destructive-foreground))",
+      DEFAULT: "var(--colors-destructive-DEFAULT)",
+      foreground: "var(--colors-destructive-foreground)",
     },
     muted: {
-      DEFAULT: "hsl(var(--muted))",
-      foreground: "hsl(var(--muted-foreground))",
+      DEFAULT: "var(--colors-muted-DEFAULT)",
+      foreground: "var(--colors-muted-foreground)",
     },
     accent: {
-      DEFAULT: "hsl(var(--accent))",
-      foreground: "hsl(var(--accent-foreground))",
+      DEFAULT: "var(--colors-accent-DEFAULT)",
+      foreground: "var(--colors-accent-foreground)",
     },
     popover: {
-      DEFAULT: "hsl(var(--popover))",
-      foreground: "hsl(var(--popover-foreground))",
+      DEFAULT: "var(--colors-popover-DEFAULT)",
+      foreground: "var(--colors-popover-foreground)",
     },
   },
   borderRadius: {
-    lg: "var(--radius)",
-    md: "calc(var(--radius) - 2px)",
-    sm: "calc(var(--radius) - 4px)",
+    lg: "var(--borderRadius-lg)",
+    md: "var(--borderRadius-md)",
+    sm: "var(--borderRadius-sm)",
   },
 };
 
 const developerTailwindConfig: TailwindConfig = {
+  borderRadius: {
+    lg: "0px",
+    md: "0px",
+    sm: "0px",
+  },
   keyframes: {
     "accordion-down": {
       from: { height: "0" },
@@ -265,41 +279,41 @@ const developerTailwindConfig: TailwindConfig = {
 
 const mergedConfig: TailwindConfig = {
   colors: {
-    text: "black",
-    border: "hsl(var(--border))",
-    input: "hsl(var(--input))",
-    ring: "hsl(var(--ring))",
-    background: "hsl(var(--background))",
-    foreground: "hsl(var(--foreground))",
+    text: "var(--colors-text)",
+    border: "var(--colors-border)",
+    input: "var(--colors-input)",
+    ring: "var(--colors-ring)",
+    background: "var(--colors-background)",
+    foreground: "var(--colors-foreground)",
     primary: {
-      DEFAULT: "hsl(var(--primary))",
-      foreground: "hsl(var(--primary-foreground))",
+      DEFAULT: "var(--colors-primary-DEFAULT)",
+      foreground: "var(--colors-primary-foreground)",
     },
     secondary: {
-      DEFAULT: "hsl(var(--secondary))",
-      foreground: "hsl(var(--secondary-foreground))",
+      DEFAULT: "var(--colors-secondary-DEFAULT)",
+      foreground: "var(--colors-secondary-foreground)",
     },
     destructive: {
-      DEFAULT: "hsl(var(--destructive))",
-      foreground: "hsl(var(--destructive-foreground))",
+      DEFAULT: "var(--colors-destructive-DEFAULT)",
+      foreground: "var(--colors-destructive-foreground)",
     },
     muted: {
-      DEFAULT: "hsl(var(--muted))",
-      foreground: "hsl(var(--muted-foreground))",
+      DEFAULT: "var(--colors-muted-DEFAULT)",
+      foreground: "var(--colors-muted-foreground)",
     },
     accent: {
-      DEFAULT: "hsl(var(--accent))",
-      foreground: "hsl(var(--accent-foreground))",
+      DEFAULT: "var(--colors-accent-DEFAULT)",
+      foreground: "var(--colors-accent-foreground)",
     },
     popover: {
-      DEFAULT: "hsl(var(--popover))",
-      foreground: "hsl(var(--popover-foreground))",
+      DEFAULT: "var(--colors-popover-DEFAULT)",
+      foreground: "var(--colors-popover-foreground)",
     },
   },
   borderRadius: {
-    lg: "var(--radius)",
-    md: "calc(var(--radius) - 2px)",
-    sm: "calc(var(--radius) - 4px)",
+    lg: "0px", // developer-defined takes priority
+    md: "0px", // developer-defined takes priority
+    sm: "0px", // developer-defined takes priority
   },
   keyframes: {
     "accordion-down": {

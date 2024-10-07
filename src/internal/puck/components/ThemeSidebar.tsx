@@ -1,16 +1,18 @@
 import { AutoFieldPrivate } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
+import { ThemeConfig, SavedTheme } from "../../../utils/themeResolver.ts";
 import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
+import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
+import { generateCssVariablesFromPuckFields } from "../../utils/internalThemeResolver.ts";
 
 type ThemeSidebarProps = {
-  savedThemeValues: any;
+  savedThemeValues: SavedTheme | undefined;
   themeConfig?: ThemeConfig;
-  saveTheme: (theme: ThemeConfig) => void;
+  saveTheme: (savedThemeValues: SavedTheme) => void;
 };
 
 const ThemeSidebar = (props: ThemeSidebarProps) => {
@@ -27,15 +29,13 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
     );
   }
 
-  const handleChange = (themeCategoryKey: string, newValue: any) => {
-    const updatedConfig: ThemeConfig = {
-      ...themeConfig,
-      [themeCategoryKey]: {
-        ...themeConfig[themeCategoryKey],
-        styles: newValue,
-      },
+  const handleChange = (topLevelKey: string, newValue: any) => {
+    const newThemeValues = {
+      ...savedThemeValues,
+      ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
     };
-    saveTheme(updatedConfig);
+    updateThemeInEditor(newThemeValues, themeConfig);
+    saveTheme(newThemeValues);
   };
 
   return (
@@ -48,7 +48,11 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       </Alert>
       {Object.entries(themeConfig).map(([parentStyleKey, parentStyle]) => {
         const field = constructThemePuckFields(parentStyle);
-        const values = constructThemePuckValues(savedThemeValues, parentStyle);
+        const values = constructThemePuckValues(
+          savedThemeValues,
+          parentStyle,
+          parentStyleKey
+        );
 
         return (
           <AutoFieldPrivate

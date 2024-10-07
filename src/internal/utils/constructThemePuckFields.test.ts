@@ -221,21 +221,18 @@ describe("convertStyleToPuckField", () => {
 describe("constructThemePuckValues", () => {
   it("constructs theme puck values using saved theme values", () => {
     const savedThemeValues = {
-      font: {
-        size: 16,
-        family: "arial",
-      },
-      color: {
-        lightMode: {
-          mainColor: "blue",
-          secondaryColor: "lightgrey",
-        },
-      },
+      "--text-font-size": 16,
+      "--text-font-family": "arial",
+      "--text-color-lightMode-mainColor": "blue",
+      "--text-color-lightMode-secondaryColor": "lightgrey",
+      "--text-color-darkMode-mainColor": "black",
+      "--text-color-darkMode-secondaryColor": "grey",
     };
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text
+      exampleThemeConfig.text,
+      "text"
     );
 
     expect(result).toEqual({
@@ -261,7 +258,8 @@ describe("constructThemePuckValues", () => {
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text
+      exampleThemeConfig.text,
+      "text"
     );
 
     expect(result).toEqual({
@@ -284,19 +282,14 @@ describe("constructThemePuckValues", () => {
 
   it("handles a mix of saved and default theme values", () => {
     const savedThemeValues = {
-      font: {
-        size: 14, // provided value
-      },
-      color: {
-        lightMode: {
-          mainColor: "red", // provided value
-        },
-      },
+      "--text-font-size": 14,
+      "--text-color-lightMode-mainColor": "red",
     };
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text
+      exampleThemeConfig.text,
+      "text"
     );
 
     expect(result).toEqual({

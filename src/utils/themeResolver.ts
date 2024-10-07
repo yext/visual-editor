@@ -42,20 +42,25 @@ export type TailwindConfig = {
   };
 };
 
-const extractDefaults = (styles: {
-  [key: string]: Style | ParentStyle;
-}): { [key: string]: string | { [key: string]: string } } => {
+export type SavedTheme = Record<string, string | number>;
+
+const extractDefaults = (
+  styles: {
+    [key: string]: Style | ParentStyle;
+  },
+  parentKey = ""
+): { [key: string]: string | { [key: string]: string } } => {
   const result: any = {};
 
   for (const key in styles) {
     const style = styles[key];
 
     if ("default" in style) {
-      // It's a Style, extract the default
-      result[key] = style.default;
+      // It's a Style, give it a CSS variable
+      result[key] = `var(--${parentKey}-${key})`;
     } else if ("styles" in style) {
-      // It's a ParentStyle, recurse to extract defaults
-      result[key] = extractDefaults(style.styles);
+      // It's a ParentStyle, recurse to children
+      result[key] = extractDefaults(style.styles, `${parentKey}-${key}`);
     }
   }
 
@@ -67,7 +72,7 @@ export const convertToTailwindConfig = (input: ThemeConfig): TailwindConfig => {
 
   for (const category in input) {
     const categoryData = input[category];
-    output[category] = extractDefaults(categoryData.styles);
+    output[category] = extractDefaults(categoryData.styles, category);
   }
 
   return output;
@@ -94,6 +99,11 @@ export const deepMerge = <T extends PlainObject, U extends PlainObject>(
         result[key] = deepMerge(value1, value2);
       } else {
         // Otherwise, prioritize obj1's value
+        if (value1 && value2) {
+          console.warn(
+            `Both theme.config.ts and tailwind.config.ts provided a value for ${key}. Using the value from tailwind.config.ts (${value1})`
+          );
+        }
         result[key] = value1;
       }
     }

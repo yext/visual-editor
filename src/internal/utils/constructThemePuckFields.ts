@@ -4,7 +4,7 @@ import {
   SelectField,
   TextField,
 } from "@measured/puck";
-import { ParentStyle, Style } from "../../utils/themeResolver.ts";
+import { ParentStyle, SavedTheme, Style } from "../../utils/themeResolver.ts";
 
 export const constructThemePuckFields = (parentStyle: ParentStyle) => {
   const field: ObjectField = {
@@ -49,18 +49,21 @@ export const convertStyleToPuckField = (style: Style) => {
 };
 
 export const constructThemePuckValues = (
-  savedThemeValues: any,
-  parentStyle: ParentStyle
+  savedThemeValues: SavedTheme | undefined,
+  parentStyle: ParentStyle,
+  parentKey: string = ""
 ) => {
   const value: Record<string, any> = {};
 
   Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
-      value[styleKey] = savedThemeValues?.[styleKey] ?? style.default;
+      value[styleKey] =
+        savedThemeValues?.[`--${parentKey}-${styleKey}`] ?? style.default;
     } else {
       value[styleKey] = constructThemePuckValues(
-        savedThemeValues?.[styleKey],
-        style
+        savedThemeValues,
+        style,
+        `${parentKey}-${styleKey}`
       );
     }
   });
