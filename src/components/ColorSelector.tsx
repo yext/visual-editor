@@ -1,8 +1,7 @@
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
-import ColorPicker from "../internal/puck/components/ColorPicker.tsx";
-import { RGBColor } from "react-color";
+import { ColorResult, RGBColor, SketchPicker } from "react-color";
 
 export type ColorSelectorProps = {
   label: string;
@@ -19,11 +18,13 @@ export const ColorSelector = (props: ColorSelectorProps): Field => {
             label={field.label || "Label is undefined"}
             className="ve-mt-2.5"
           >
-            <ColorPicker
+            <SketchPicker
               disableAlpha={true}
               color={hexToRgb(value)}
-              setColor={(rgb: RGBColor) => onChange(rgbToHex(rgb))}
-            />
+              onChange={(colorResult: ColorResult) => {
+                onChange(rgbToHex(colorResult.rgb));
+              }}
+            ></SketchPicker>
           </FieldLabel>
         </>
       );
