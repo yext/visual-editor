@@ -28,8 +28,6 @@ import "../../../components/index.css";
 export const customHeader = (
   handleClearLocalChanges: () => void,
   handleHistoryChange: (histories: History[], index: number) => void,
-  currentPuckData: Data, // the current state of Puck data
-  initialPuckData: Data | undefined, // the initial state of Puck data before any local changes
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean,
   themeModeActive: boolean,
@@ -37,6 +35,7 @@ export const customHeader = (
   isThemeMode: boolean
 ) => {
   const {
+    appState,
     history: {
       back,
       forward,
@@ -90,7 +89,9 @@ export const customHeader = (
           disabled={histories.length === 1}
           onClearLocalChanges={() => {
             handleClearLocalChanges();
-            setHistories([{ id: "root", state: { data: initialPuckData } }]);
+            setHistories([
+              { id: "root", state: { data: histories[0].state.data } },
+            ]);
           }}
         />
         {!isDevMode && (
@@ -98,8 +99,9 @@ export const customHeader = (
             variant="secondary"
             disabled={histories.length === 1}
             onClick={async () => {
-              await handleSaveData(currentPuckData);
+              await handleSaveData(appState.data);
               handleClearLocalChanges();
+              setHistories([{ id: "root", state: { data: appState.data } }]);
             }}
           >
             Publish
