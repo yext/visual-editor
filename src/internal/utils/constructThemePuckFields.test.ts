@@ -100,7 +100,7 @@ describe("constructThemePuckFields", () => {
     const result = constructThemePuckFields(exampleThemeConfig.text);
 
     // TODO: update to use color picker
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       label: "Text",
       type: "object",
       objectFields: {
@@ -133,11 +133,11 @@ describe("constructThemePuckFields", () => {
               objectFields: {
                 mainColor: {
                   label: "Main Color",
-                  type: "text",
+                  type: "custom",
                 },
                 secondaryColor: {
                   label: "Secondary Color",
-                  type: "text",
+                  type: "custom",
                 },
               },
             },
@@ -147,11 +147,11 @@ describe("constructThemePuckFields", () => {
               objectFields: {
                 mainColor: {
                   label: "Main Color",
-                  type: "text",
+                  type: "custom",
                 },
                 secondaryColor: {
                   label: "Secondary Color",
-                  type: "text",
+                  type: "custom",
                 },
               },
             },
@@ -211,9 +211,9 @@ describe("convertStyleToPuckField", () => {
 
     const result = convertStyleToPuckField(colorStyle);
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       label: "Main Color",
-      type: "text",
+      type: "custom",
     });
   });
 });
