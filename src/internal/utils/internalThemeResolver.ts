@@ -32,8 +32,7 @@ const extractCssVariablesFromThemeConfig = (
 ) => {
   Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
     if ("default" in style) {
-      const unit = style.type === "number" ? "px" : "";
-      result[`--${parentKey}-${styleKey}`] = style.default + unit;
+      result[`--${parentKey}-${styleKey}`] = style.default;
     } else {
       extractCssVariablesFromThemeConfig(
         style,
@@ -58,7 +57,7 @@ export const generateCssVariablesFromThemeConfig = (
 };
 
 type PuckThemeFields = {
-  [key: string]: string | number | PuckThemeFields;
+  [key: string]: string | PuckThemeFields;
 };
 
 // generateCssVariablesFromPuckFields flattens the puck sidebar fields, creating an object
@@ -77,8 +76,7 @@ export const generateCssVariablesFromPuckFields = (
         result
       );
     } else {
-      const unit = typeof fieldValue === "number" ? "px" : "";
-      result[`--${parentKey}-${fieldKey}`] = fieldValue + unit;
+      result[`--${parentKey}-${fieldKey}`] = fieldValue;
     }
   }
   return result;

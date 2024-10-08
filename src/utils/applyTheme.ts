@@ -6,7 +6,7 @@ export type Document = {
   [key: string]: any;
 };
 
-const THEME_STYLE_TAG_ID = "visual-editor-theme" as const;
+const THEME_STYLE_TAG_ID = "visual-editor-theme";
 
 export const applyTheme = (
   document: Document,

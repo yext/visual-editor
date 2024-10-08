@@ -16,7 +16,7 @@ export const exampleThemeConfig: ThemeConfig = {
           size: {
             label: "Font Size",
             type: "number",
-            default: 12,
+            default: "12px",
             plugin: "fontSize",
           },
           family: {
@@ -109,7 +109,7 @@ describe("constructThemePuckFields", () => {
           objectFields: {
             size: {
               label: "Font Size",
-              type: "number",
+              type: "text",
             },
             family: {
               label: "Font Family",
@@ -167,14 +167,14 @@ describe("convertStyleToPuckField", () => {
       label: "Font Size",
       type: "number",
       plugin: "fontSize",
-      default: 0,
+      default: "0",
     };
 
     const result = convertStyleToPuckField(numberStyle);
 
     expect(result).toEqual({
       label: "Font Size",
-      type: "number",
+      type: "text",
     });
   });
 
@@ -219,7 +219,7 @@ describe("convertStyleToPuckField", () => {
 describe("constructThemePuckValues", () => {
   it("constructs theme puck values using saved theme values", () => {
     const savedThemeValues = {
-      "--text-font-size": 16,
+      "--text-font-size": "16px",
       "--text-font-family": "arial",
       "--text-color-lightMode-mainColor": "blue",
       "--text-color-lightMode-secondaryColor": "lightgrey",
@@ -235,7 +235,7 @@ describe("constructThemePuckValues", () => {
 
     expect(result).toEqual({
       font: {
-        size: 16, // from saved values
+        size: "16px", // from saved values
         family: "arial", // from saved values
       },
       color: {
@@ -262,7 +262,7 @@ describe("constructThemePuckValues", () => {
 
     expect(result).toEqual({
       font: {
-        size: 12, // default value
+        size: "12px", // default value
         family: "helvetica", // default value
       },
       color: {
@@ -280,7 +280,7 @@ describe("constructThemePuckValues", () => {
 
   it("handles a mix of saved and default theme values", () => {
     const savedThemeValues = {
-      "--text-font-size": 14,
+      "--text-font-size": "14px",
       "--text-color-lightMode-mainColor": "red",
     };
 
@@ -292,7 +292,7 @@ describe("constructThemePuckValues", () => {
 
     expect(result).toEqual({
       font: {
-        size: 14, // from saved values
+        size: "14px", // from saved values
         family: "helvetica", // default value
       },
       color: {

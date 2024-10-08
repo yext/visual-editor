@@ -38,7 +38,6 @@ export const ColorSelector = (props: ColorSelectorProps): Field => {
                   color={value}
                   onChange={(colorResult: ColorResult) => {
                     onChange(colorResult.hex);
-                    setIsOpen(false);
                   }}
                 />
               </div>

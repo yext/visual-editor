@@ -1,5 +1,6 @@
 import { describe, test, expect } from "vitest";
 import {
+  generateCssVariablesFromPuckFields,
   generateCssVariablesFromThemeConfig,
   internalThemeResolver,
 } from "./internalThemeResolver.ts";
@@ -21,6 +22,56 @@ describe("generateCssVariables", () => {
   test("generates css variables with default values", () => {
     const result = generateCssVariablesFromThemeConfig(testThemeConfig);
     expect(result).toEqual(defaultThemeValues);
+  });
+});
+
+describe("generateCssVariablesFromPuckFields", () => {
+  test("generates css variables from Puck field", () => {
+    const result = generateCssVariablesFromPuckFields(
+      { primary: "green" },
+      "colors"
+    );
+    expect(result).toEqual({ "--colors-primary": "green" });
+  });
+
+  test("merges css variables", () => {
+    const result = generateCssVariablesFromPuckFields(
+      { primary: "green" },
+      "colors",
+      { "--text-font-size": "12px" }
+    );
+    expect(result).toEqual({
+      "--colors-primary": "green",
+      "--text-font-size": "12px",
+    });
+  });
+
+  test("generates css variables from nested Puck fields", () => {
+    const result = generateCssVariablesFromPuckFields(
+      {
+        primary: "green",
+        secondary: "purple",
+        alternatives: {
+          lighter: {
+            primary: "white",
+            secondary: "yellow",
+          },
+          darker: {
+            primary: "black",
+            secondary: "grey",
+          },
+        },
+      },
+      "colors"
+    );
+    expect(result).toEqual({
+      "--colors-primary": "green",
+      "--colors-secondary": "purple",
+      "--colors-alternatives-lighter-primary": "white",
+      "--colors-alternatives-lighter-secondary": "yellow",
+      "--colors-alternatives-darker-primary": "black",
+      "--colors-alternatives-darker-secondary": "grey",
+    });
   });
 });
 
