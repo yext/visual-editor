@@ -1,10 +1,6 @@
-import {
-  NumberField,
-  ObjectField,
-  SelectField,
-  TextField,
-} from "@measured/puck";
-import { ParentStyle, Style } from "../../utils/themeResolver.ts";
+import { ObjectField, SelectField, TextField } from "@measured/puck";
+import { ParentStyle, SavedTheme, Style } from "../../utils/themeResolver.ts";
+import { ColorSelector } from "../../components/ColorSelector.tsx";
 
 export const constructThemePuckFields = (parentStyle: ParentStyle) => {
   const field: ObjectField = {
@@ -31,8 +27,8 @@ export const convertStyleToPuckField = (style: Style) => {
     case "number":
       return {
         label: style.label,
-        type: "number",
-      } as NumberField;
+        type: "text",
+      } as TextField;
     case "select":
       return {
         label: style.label,
@@ -40,27 +36,26 @@ export const convertStyleToPuckField = (style: Style) => {
         options: style.options,
       } as SelectField;
     case "color":
-      // TODO: add color picker
-      return {
-        label: style.label,
-        type: "text",
-      } as TextField;
+      return ColorSelector({ label: style.label });
   }
 };
 
 export const constructThemePuckValues = (
-  savedThemeValues: any,
-  parentStyle: ParentStyle
+  savedThemeValues: SavedTheme | undefined,
+  parentStyle: ParentStyle,
+  parentKey: string = ""
 ) => {
   const value: Record<string, any> = {};
 
   Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
-      value[styleKey] = savedThemeValues?.[styleKey] ?? style.default;
+      value[styleKey] =
+        savedThemeValues?.[`--${parentKey}-${styleKey}`] ?? style.default;
     } else {
       value[styleKey] = constructThemePuckValues(
-        savedThemeValues?.[styleKey],
-        style
+        savedThemeValues,
+        style,
+        `${parentKey}-${styleKey}`
       );
     }
   });

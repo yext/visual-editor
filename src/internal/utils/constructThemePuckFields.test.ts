@@ -16,7 +16,7 @@ export const exampleThemeConfig: ThemeConfig = {
           size: {
             label: "Font Size",
             type: "number",
-            default: 12,
+            default: "12px",
             plugin: "fontSize",
           },
           family: {
@@ -99,8 +99,7 @@ describe("constructThemePuckFields", () => {
   it("constructs theme fields from a parent style", () => {
     const result = constructThemePuckFields(exampleThemeConfig.text);
 
-    // TODO: update to use color picker
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       label: "Text",
       type: "object",
       objectFields: {
@@ -110,7 +109,7 @@ describe("constructThemePuckFields", () => {
           objectFields: {
             size: {
               label: "Font Size",
-              type: "number",
+              type: "text",
             },
             family: {
               label: "Font Family",
@@ -133,11 +132,11 @@ describe("constructThemePuckFields", () => {
               objectFields: {
                 mainColor: {
                   label: "Main Color",
-                  type: "text",
+                  type: "custom",
                 },
                 secondaryColor: {
                   label: "Secondary Color",
-                  type: "text",
+                  type: "custom",
                 },
               },
             },
@@ -147,11 +146,11 @@ describe("constructThemePuckFields", () => {
               objectFields: {
                 mainColor: {
                   label: "Main Color",
-                  type: "text",
+                  type: "custom",
                 },
                 secondaryColor: {
                   label: "Secondary Color",
-                  type: "text",
+                  type: "custom",
                 },
               },
             },
@@ -168,14 +167,14 @@ describe("convertStyleToPuckField", () => {
       label: "Font Size",
       type: "number",
       plugin: "fontSize",
-      default: 0,
+      default: "0",
     };
 
     const result = convertStyleToPuckField(numberStyle);
 
     expect(result).toEqual({
       label: "Font Size",
-      type: "number",
+      type: "text",
     });
   });
 
@@ -201,19 +200,18 @@ describe("convertStyleToPuckField", () => {
   });
 
   it("converts color style to color field", () => {
-    // TODO: update to use color picker
     const colorStyle: Style = {
       label: "Main Color",
       type: "color",
-      default: "000000",
+      default: "#000000",
       plugin: "colors",
     };
 
     const result = convertStyleToPuckField(colorStyle);
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       label: "Main Color",
-      type: "text",
+      type: "custom",
     });
   });
 });
@@ -221,26 +219,23 @@ describe("convertStyleToPuckField", () => {
 describe("constructThemePuckValues", () => {
   it("constructs theme puck values using saved theme values", () => {
     const savedThemeValues = {
-      font: {
-        size: 16,
-        family: "arial",
-      },
-      color: {
-        lightMode: {
-          mainColor: "blue",
-          secondaryColor: "lightgrey",
-        },
-      },
+      "--text-font-size": "16px",
+      "--text-font-family": "arial",
+      "--text-color-lightMode-mainColor": "blue",
+      "--text-color-lightMode-secondaryColor": "lightgrey",
+      "--text-color-darkMode-mainColor": "black",
+      "--text-color-darkMode-secondaryColor": "grey",
     };
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text
+      exampleThemeConfig.text,
+      "text"
     );
 
     expect(result).toEqual({
       font: {
-        size: 16, // from saved values
+        size: "16px", // from saved values
         family: "arial", // from saved values
       },
       color: {
@@ -261,12 +256,13 @@ describe("constructThemePuckValues", () => {
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text
+      exampleThemeConfig.text,
+      "text"
     );
 
     expect(result).toEqual({
       font: {
-        size: 12, // default value
+        size: "12px", // default value
         family: "helvetica", // default value
       },
       color: {
@@ -284,24 +280,19 @@ describe("constructThemePuckValues", () => {
 
   it("handles a mix of saved and default theme values", () => {
     const savedThemeValues = {
-      font: {
-        size: 14, // provided value
-      },
-      color: {
-        lightMode: {
-          mainColor: "red", // provided value
-        },
-      },
+      "--text-font-size": "14px",
+      "--text-color-lightMode-mainColor": "red",
     };
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text
+      exampleThemeConfig.text,
+      "text"
     );
 
     expect(result).toEqual({
       font: {
-        size: 14, // from saved values
+        size: "14px", // from saved values
         family: "helvetica", // default value
       },
       color: {
