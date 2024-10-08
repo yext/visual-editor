@@ -3,7 +3,7 @@ export type Style =
       label: string;
       plugin: string;
       type: "number";
-      default: number | string;
+      default: number;
     }
   | {
       label: string;
