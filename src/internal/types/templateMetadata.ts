@@ -7,5 +7,5 @@ export type TemplateMetadata = {
   isDevMode: boolean;
   devOverride: boolean;
   isxYextDebug: boolean;
-  isThemeMode?: boolean;
+  isThemeMode: boolean;
 };

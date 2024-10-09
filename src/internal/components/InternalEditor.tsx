@@ -48,10 +48,8 @@ export const InternalEditor = ({
   themeConfig,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
-  const [themeModeActive, setThemeModeActive] = useState<boolean>(
-    !!templateMetadata.isThemeMode
-  );
   const historyIndex = useRef<number>(0);
+  const isThemeMode = templateMetadata.isThemeMode;
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -109,7 +107,7 @@ export const InternalEditor = ({
   };
 
   const handleSave = async (data: Data) => {
-    if (themeModeActive) {
+    if (isThemeMode) {
       // TODO: publish theme here
       return;
     }
@@ -129,10 +127,6 @@ export const InternalEditor = ({
     }
   };
 
-  const toggleThemeModeActive = () => {
-    setThemeModeActive((prev) => !prev);
-  };
-
   return (
     <EntityFieldProvider>
       <Puck
@@ -149,11 +143,11 @@ export const InternalEditor = ({
               Object.values(config.components).forEach((component) => {
                 component.resolvePermissions = () => {
                   return {
-                    drag: !themeModeActive,
-                    duplicate: !themeModeActive,
-                    delete: !themeModeActive,
-                    insert: !themeModeActive,
-                    edit: !themeModeActive,
+                    drag: !isThemeMode,
+                    duplicate: !isThemeMode,
+                    delete: !isThemeMode,
+                    insert: !isThemeMode,
+                    edit: !isThemeMode,
                   };
                 };
               });
@@ -162,31 +156,29 @@ export const InternalEditor = ({
                 "[class*='PuckLayout-leftSideBar'] > div[class*='SidebarSection--noBorderTop']"
               );
               if (componentList) {
-                componentList.style.display = themeModeActive ? "none" : "";
+                componentList.style.display = isThemeMode ? "none" : "";
               }
               const fieldListTitle = document.querySelector<HTMLElement>(
                 "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
               );
               if (fieldListTitle) {
-                fieldListTitle.style.display = themeModeActive ? "none" : "";
+                fieldListTitle.style.display = isThemeMode ? "none" : "";
               }
 
               refreshPermissions();
-            }, [themeModeActive]);
+            }, [isThemeMode]);
 
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
-              themeModeActive,
-              toggleThemeModeActive,
               !!templateMetadata.isThemeMode
             );
           },
-          actionBar: themeModeActive ? () => <></> : undefined,
-          components: themeModeActive ? () => <></> : undefined,
-          fields: themeModeActive
+          actionBar: isThemeMode ? () => <></> : undefined,
+          components: isThemeMode ? () => <></> : undefined,
+          fields: isThemeMode
             ? () => (
                 <ThemeSidebar
                   themeConfig={themeConfig}
