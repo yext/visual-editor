@@ -33,6 +33,7 @@ interface InternalEditorProps {
   themeConfig?: ThemeConfig;
   themeData: any;
   saveThemeSaveState: (data: any) => void;
+  themeHistory: any;
 }
 
 // Render Puck editor
@@ -52,6 +53,7 @@ export const InternalEditor = ({
   themeConfig,
   themeData,
   saveThemeSaveState,
+  themeHistory,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -181,7 +183,8 @@ export const InternalEditor = ({
               handleHistoryChange,
               handleSave,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
-              !!templateMetadata.isThemeMode
+              !!templateMetadata.isThemeMode,
+              themeHistory
             );
           },
           actionBar: isThemeMode ? () => <></> : undefined,

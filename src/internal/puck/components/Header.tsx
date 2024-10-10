@@ -30,7 +30,8 @@ export const customHeader = (
   handleHistoryChange: (histories: History[], index: number) => void,
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean,
-  isThemeMode: boolean
+  isThemeMode: boolean,
+  themeHistory: any
 ) => {
   const {
     appState,
@@ -78,7 +79,9 @@ export const customHeader = (
           </Button>
         )}
         <ClearLocalChangesButton
-          disabled={isThemeMode ? false : histories.length === 1}
+          disabled={
+            isThemeMode ? themeHistory.length === 1 : histories.length === 1
+          }
           onClearLocalChanges={() => {
             handleClearLocalChanges();
             setHistories([
@@ -89,7 +92,9 @@ export const customHeader = (
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={isThemeMode ? false : histories.length === 1}
+            disabled={
+              isThemeMode ? themeHistory.length === 1 : histories.length === 1
+            }
             onClick={async () => {
               await handleSaveData(appState.data);
               handleClearLocalChanges();

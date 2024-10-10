@@ -79,7 +79,7 @@ export const Editor = ({
   }
 
   const buildVisualConfigLocalStorageKey = useCallback(() => {
-    if (!templateMetadata) {
+    if (!templateMetadata || templateMetadata.isThemeMode) {
       return "";
     }
 
@@ -210,8 +210,7 @@ export const Editor = ({
     if (
       !visualConfigurationDataFetched ||
       !saveStateFetched ||
-      !templateMetadata ||
-      templateMetadata.isThemeMode
+      !templateMetadata
     ) {
       return;
     }
@@ -464,9 +463,6 @@ export const Editor = ({
   }, [templateMetadata]);
 
   useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
-    if (templateMetadata?.isThemeMode) {
-      return;
-    }
     devLogger.logData("SAVE_STATE", payload);
     setSaveState(payload as SaveState);
     setSaveStateFetched(true);
@@ -487,9 +483,6 @@ export const Editor = ({
     "getVisualConfigurationData",
     TARGET_ORIGINS,
     (send, payload) => {
-      if (templateMetadata?.isThemeMode) {
-        return;
-      }
       const vcd = jsonFromEscapedJsonString(payload.visualConfigurationData);
       devLogger.logData("VISUAL_CONFIGURATION_DATA", vcd);
       setVisualConfigurationData(vcd);
@@ -581,10 +574,9 @@ export const Editor = ({
     !puckConfig ||
     !templateMetadata ||
     !document ||
-    (!templateMetadata.isThemeMode &&
-      (!saveStateFetched ||
-        !visualConfigurationDataFetched ||
-        !puckInitialHistoryFetched)) ||
+    !saveStateFetched ||
+    !visualConfigurationDataFetched ||
+    !puckInitialHistoryFetched ||
     (templateMetadata.isThemeMode &&
       (!themeDataFetched ||
         !themeSaveStateFetched ||
@@ -595,14 +587,15 @@ export const Editor = ({
       (!!puckConfig +
         !!templateMetadata +
         !!document +
+        saveStateFetched +
+        visualConfigurationDataFetched +
+        puckInitialHistoryFetched +
         (templateMetadata?.isThemeMode // @ts-expect-error adding bools is fine
           ? themeDataFetched +
             themeSaveStateFetched +
-            themeInitialHistoryFetched // @ts-expect-error adding bools is fine
-          : saveStateFetched +
-            visualConfigurationDataFetched +
-            puckInitialHistoryFetched))) /
-    6;
+            themeInitialHistoryFetched
+          : 0))) /
+    (templateMetadata?.isThemeMode ? 9 : 6);
 
   return (
     <>
@@ -627,6 +620,7 @@ export const Editor = ({
           themeConfig={themeConfig}
           themeData={themeData}
           saveThemeSaveState={saveThemeSaveState}
+          themeHistory={themeInitialHistory}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
