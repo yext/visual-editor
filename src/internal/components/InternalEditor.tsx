@@ -9,7 +9,7 @@ import {
 import React, { useEffect } from "react";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
-import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
+import { getVisualConfigLocalStorageKey } from "../utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
@@ -28,9 +28,11 @@ interface InternalEditorProps {
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   saveThemeData: (data: any) => void;
-  buildLocalStorageKey: () => string;
+  buildVisualConfigLocalStorageKey: () => string;
   devLogger: DevLogger;
   themeConfig?: ThemeConfig;
+  themeData: any;
+  saveThemeSaveState: (data: any) => void;
 }
 
 // Render Puck editor
@@ -45,9 +47,11 @@ export const InternalEditor = ({
   saveVisualConfigData,
   sendDevSaveStateData,
   saveThemeData,
-  buildLocalStorageKey,
+  buildVisualConfigLocalStorageKey,
   devLogger,
   themeConfig,
+  themeData,
+  saveThemeSaveState,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -71,7 +75,7 @@ export const InternalEditor = ({
 
         devLogger.logFunc("saveToLocalStorage");
         window.localStorage.setItem(
-          buildLocalStorageKey(),
+          buildVisualConfigLocalStorageKey(),
           JSON.stringify(histories)
         );
 
@@ -95,17 +99,16 @@ export const InternalEditor = ({
         }
       }
     },
-    [templateMetadata, getLocalStorageKey, saveState]
+    [templateMetadata, getVisualConfigLocalStorageKey, saveState]
   );
 
   const handleClearLocalChanges = () => {
     clearHistory();
     historyIndex.current = 0;
-    // TODO: reset theme to published values here
   };
 
   const handleSaveTheme = () => {
-    // TODO: save draft theme here
+    saveThemeSaveState(themeConfig);
   };
 
   const handleSave = async (data: Data) => {
@@ -188,7 +191,7 @@ export const InternalEditor = ({
                 <ThemeSidebar
                   themeConfig={themeConfig}
                   saveTheme={handleSaveTheme}
-                  savedThemeValues={undefined} // TODO: load theme values into this prop
+                  savedThemeValues={themeData}
                 />
               )
             : undefined,
