@@ -155,7 +155,7 @@ export const Editor = ({
   };
 
   /**
-   * Clears the user's localStorage and resets the current Puck history
+   * Clears the user's visual configuration in localStorage and resets the current Puck history
    */
   const clearVisualConfigLocalStorage = () => {
     devLogger.logFunc("clearVisualConfigLocalStorage");
@@ -163,7 +163,7 @@ export const Editor = ({
   };
 
   /**
-   * Clears the user's localStorage and resets the current Puck history
+   * Clears the user's theming in localStorage
    */
   const clearThemeLocalStorage = () => {
     devLogger.logFunc("clearThemeLocalStorage");
