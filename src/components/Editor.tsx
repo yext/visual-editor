@@ -79,7 +79,7 @@ export const Editor = ({
   }
 
   const buildVisualConfigLocalStorageKey = useCallback(() => {
-    if (!templateMetadata || templateMetadata.isThemeMode) {
+    if (!templateMetadata) {
       return "";
     }
 
