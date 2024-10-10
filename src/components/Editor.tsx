@@ -367,7 +367,7 @@ export const Editor = ({
   const { sendToParent: saveThemeData } = useSendMessageToParent(
     "saveThemeData",
     TARGET_ORIGINS
-  )
+  );
 
   const keyboardHandler = (event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "k") {
