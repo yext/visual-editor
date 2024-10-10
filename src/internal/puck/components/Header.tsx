@@ -78,7 +78,7 @@ export const customHeader = (
           </Button>
         )}
         <ClearLocalChangesButton
-          disabled={histories.length === 1}
+          disabled={isThemeMode ? false : histories.length === 1}
           onClearLocalChanges={() => {
             handleClearLocalChanges();
             setHistories([
@@ -89,7 +89,7 @@ export const customHeader = (
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={histories.length === 1}
+            disabled={isThemeMode ? false : histories.length === 1}
             onClick={async () => {
               await handleSaveData(appState.data);
               handleClearLocalChanges();
