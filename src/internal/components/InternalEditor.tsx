@@ -112,8 +112,8 @@ export const InternalEditor = ({
     if (isThemeMode) {
       devLogger.logFunc("saveThemeData");
       saveThemeData({
-        payload: { saveThemeData: JSON.stringify(data) }
-      })
+        payload: { saveThemeData: JSON.stringify(data) },
+      });
       return;
     }
     devLogger.logFunc("saveVisualConfigData");
