@@ -30,6 +30,9 @@ interface InternalEditorProps {
   buildLocalStorageKey: () => string;
   devLogger: DevLogger;
   themeConfig?: ThemeConfig;
+  themeData: any;
+  saveThemeSaveState: (data: any) => void;
+  saveThemeConfigData: (data: any) => void;
 }
 
 // Render Puck editor
@@ -46,6 +49,9 @@ export const InternalEditor = ({
   buildLocalStorageKey,
   devLogger,
   themeConfig,
+  themeData,
+  saveThemeSaveState,
+  saveThemeConfigData,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -99,16 +105,17 @@ export const InternalEditor = ({
   const handleClearLocalChanges = () => {
     clearHistory();
     historyIndex.current = 0;
-    // TODO: reset theme to published values here
   };
 
   const handleSaveTheme = () => {
-    // TODO: save draft theme here
+    saveThemeSaveState(themeConfig);
   };
 
   const handleSave = async (data: Data) => {
     if (isThemeMode) {
-      // TODO: publish theme here
+      saveThemeConfigData({
+        payload: { themeConfigurationData: JSON.stringify(data) },
+      });
       return;
     }
     devLogger.logFunc("saveVisualConfigData");
@@ -183,7 +190,7 @@ export const InternalEditor = ({
                 <ThemeSidebar
                   themeConfig={themeConfig}
                   saveTheme={handleSaveTheme}
-                  savedThemeValues={undefined} // TODO: load theme values into this prop
+                  savedThemeValues={themeData}
                 />
               )
             : undefined,
