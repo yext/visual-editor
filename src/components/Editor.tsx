@@ -364,6 +364,11 @@ export const Editor = ({
     TARGET_ORIGINS
   );
 
+  const { sendToParent: saveThemeData } = useSendMessageToParent(
+    "saveThemeData",
+    TARGET_ORIGINS
+  );
+
   const keyboardHandler = (event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "k") {
       openQuickFind();
@@ -412,6 +417,7 @@ export const Editor = ({
           saveSaveState={saveSaveState}
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
+          saveThemeData={saveThemeData}
           buildLocalStorageKey={buildLocalStorageKey}
           devLogger={devLogger}
           themeConfig={themeConfig}
