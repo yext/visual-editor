@@ -4,7 +4,17 @@ import { ThemeConfig } from "./themeResolver.ts";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
-    const document: Document = { c_theme: { "--colors-text": "red" } };
+    const document: Document = {
+      _site: {
+        pagesTheme: [
+          {
+            themeConfiguration: {
+              data: JSON.stringify({ "--colors-text": "red" }),
+            },
+          },
+        ],
+      },
+    };
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
@@ -20,12 +30,21 @@ describe("buildCssOverridesStyle", () => {
 
   it("should generate correct CSS with multiple overrides in c_theme", () => {
     const document: Document = {
-      c_theme: {
-        "--colors-primary-DEFAULT": "hsl(0 68% 51%)",
-        "--colors-primary-foreground": "hsl(0 0% 100%)",
-        "--borderRadius-lg": "20px",
+      _site: {
+        pagesTheme: [
+          {
+            themeConfiguration: {
+              data: JSON.stringify({
+                "--colors-primary-DEFAULT": "hsl(0 68% 51%)",
+                "--colors-primary-foreground": "hsl(0 0% 100%)",
+                "--borderRadius-lg": "20px",
+              }),
+            },
+          },
+        ],
       },
     };
+
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
@@ -61,10 +80,16 @@ describe("buildCssOverridesStyle", () => {
   });
 
   it("should ignore saved values that are no longer in the themeConfig", () => {
-    const result = applyTheme(
-      { c_theme: { "--abddef": "red" } } as Document,
-      themeConfig
-    );
+    const document: Document = {
+      _site: {
+        pagesTheme: [
+          {
+            themeConfiguration: { data: JSON.stringify({ "--absdag": "red" }) },
+          },
+        ],
+      },
+    };
+    const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +

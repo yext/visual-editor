@@ -2,7 +2,6 @@ import { internalThemeResolver } from "../internal/utils/internalThemeResolver.t
 import { SavedTheme, ThemeConfig } from "./themeResolver.ts";
 
 export type Document = {
-  c_theme?: SavedTheme;
   [key: string]: any;
 };
 
@@ -13,7 +12,13 @@ export const applyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
-  const overrides = document.c_theme;
+  const themeTextValue =
+    document?._site?.pagesTheme?.[0]?.themeConfiguration?.data;
+  let overrides;
+  if (themeTextValue) {
+    overrides = JSON.parse(themeTextValue);
+  }
+
   const themeValues = internalThemeResolver(themeConfig, overrides);
 
   if (!themeValues || Object.keys(themeValues).length === 0) {
