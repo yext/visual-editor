@@ -3,7 +3,10 @@ import "./index.css";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { getLocalStorageKey } from "../internal/utils/localStorageHelper.ts";
+import {
+  getVisualConfigLocalStorageKey,
+  getThemeLocalStorageKey,
+} from "../internal/utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type Config, InitialHistory } from "@measured/puck";
 import {
@@ -14,6 +17,7 @@ import { SaveState } from "../internal/types/saveState.ts";
 import "@measured/puck/puck.css";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
+import { ThemeSaveState } from "../internal/types/themeSaveState.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -59,22 +63,44 @@ export const Editor = ({
   const [puckConfig, setPuckConfig] = useState<Config>();
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
 
+  // theming
+  const [themeInitialHistory, setThemeInitialHistory] =
+    useState<any>(undefined);
+  const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
+    useState<boolean>(false);
+  const [themeData, setThemeData] = useState<any>(); // json data
+  const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
+  const [themeSaveState, setThemeSaveState] = useState<ThemeSaveState>();
+  const [themeSaveStateFetched, setThemeSaveStateFetched] =
+    useState<boolean>(false); // needed because themeSaveState can be empty
+
   if (document) {
     devLogger.logData("DOCUMENT", document);
   }
 
-  const buildLocalStorageKey = useCallback(() => {
+  const buildVisualConfigLocalStorageKey = useCallback(() => {
     if (!templateMetadata) {
       return "";
     }
 
-    return getLocalStorageKey(
-      !!templateMetadata.isThemeMode,
+    return getVisualConfigLocalStorageKey(
       templateMetadata.isDevMode && !templateMetadata.devOverride,
       templateMetadata.role,
       templateMetadata.templateId,
       templateMetadata.layoutId,
       templateMetadata.entityId
+    );
+  }, [templateMetadata]);
+
+  const buildThemeLocalStorageKey = useCallback(() => {
+    if (!templateMetadata) {
+      return "";
+    }
+
+    return getThemeLocalStorageKey(
+      templateMetadata.isDevMode,
+      templateMetadata.siteId,
+      templateMetadata.themeEntityId
     );
   }, [templateMetadata]);
 
@@ -120,12 +146,28 @@ export const Editor = ({
     }
   }, [templateMetadata?.isDevMode]);
 
-  /**
-   * Clears the user's localStorage and resets the current Puck history
-   */
   const clearLocalStorage = () => {
-    devLogger.logFunc("clearLocalStorage");
-    window.localStorage.removeItem(buildLocalStorageKey());
+    if (templateMetadata?.isThemeMode) {
+      clearThemeLocalStorage();
+    } else {
+      clearVisualConfigLocalStorage();
+    }
+  };
+
+  /**
+   * Clears the user's visual configuration in localStorage and resets the current Puck history
+   */
+  const clearVisualConfigLocalStorage = () => {
+    devLogger.logFunc("clearVisualConfigLocalStorage");
+    window.localStorage.removeItem(buildVisualConfigLocalStorageKey());
+  };
+
+  /**
+   * Clears the user's theming in localStorage
+   */
+  const clearThemeLocalStorage = () => {
+    devLogger.logFunc("clearThemeLocalStorage");
+    window.localStorage.removeItem(buildThemeLocalStorageKey());
   };
 
   /**
@@ -135,6 +177,7 @@ export const Editor = ({
     devLogger.logFunc("clearHistory");
     clearLocalStorage();
     deleteSaveState();
+    deleteThemeSaveState();
   };
 
   const isFirstRender = useRef(true);
@@ -143,8 +186,14 @@ export const Editor = ({
       isFirstRender.current = false; // toggle flag after first render/mounting
       return;
     }
-    loadPuckInitialHistory(); // do something after state has updated
-  }, [templateMetadata, saveStateFetched, visualConfigurationDataFetched]);
+    loadPuckInitialHistory();
+    loadThemeInitialHistory();
+  }, [
+    templateMetadata,
+    saveStateFetched,
+    visualConfigurationDataFetched,
+    themeSaveStateFetched,
+  ]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination
@@ -171,7 +220,7 @@ export const Editor = ({
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing Puck history
       const localHistoryArray = window.localStorage.getItem(
-        buildLocalStorageKey()
+        buildVisualConfigLocalStorageKey()
       );
 
       // Use localStorage directly if it exists
@@ -219,7 +268,7 @@ export const Editor = ({
 
     // Check localStorage for existing Puck history
     const localHistoryArray = window.localStorage.getItem(
-      buildLocalStorageKey()
+      buildVisualConfigLocalStorageKey()
     );
 
     // No localStorage, start from saveState
@@ -269,7 +318,7 @@ export const Editor = ({
     setPuckInitialHistory,
     setPuckInitialHistoryFetched,
     clearLocalStorage,
-    getLocalStorageKey,
+    getVisualConfigLocalStorageKey,
   ]);
 
   useEffect(() => {
@@ -277,6 +326,112 @@ export const Editor = ({
       devLogger.logData("PUCK_INITIAL_HISTORY", puckInitialHistory);
     }
   }, [puckInitialHistory]);
+
+  const loadThemeInitialHistory = useCallback(() => {
+    if (
+      !themeSaveStateFetched ||
+      !templateMetadata ||
+      !templateMetadata.isThemeMode
+    ) {
+      return;
+    }
+
+    devLogger.logFunc("loadThemeHistory");
+
+    if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
+      // Check localStorage for existing theme history
+      const localHistoryArray = window.localStorage.getItem(
+        buildThemeLocalStorageKey()
+      );
+
+      // Use localStorage directly if it exists
+      if (localHistoryArray) {
+        devLogger.log("Dev Mode - Using theme localStorage");
+        const localHistories = JSON.parse(localHistoryArray);
+        const localHistoryIndex = localHistories.length - 1;
+        setThemeInitialHistory({
+          histories: localHistories,
+          index: localHistoryIndex,
+        });
+        setThemeInitialHistoryFetched(true);
+        return;
+      }
+
+      // Otherwise start fresh from Content
+      devLogger.log(
+        "Dev Mode - No localStorage. Using theme data from Content"
+      );
+      if (themeData) {
+        setThemeInitialHistory({
+          histories: [themeData],
+          index: 0,
+        });
+      }
+      setThemeInitialHistoryFetched(true);
+      return;
+    }
+
+    // Nothing in save_state table, start fresh from Content
+    if (!themeSaveState) {
+      clearLocalStorage();
+
+      devLogger.log("Prod Mode - No saveState. Using theme data from Content");
+      if (themeData) {
+        setThemeInitialHistory({
+          histories: [themeData],
+          index: 0,
+        });
+      }
+      setThemeInitialHistoryFetched(true);
+
+      return;
+    }
+
+    // Check localStorage for existing themes
+    const localHistoryArray = window.localStorage.getItem(
+      buildThemeLocalStorageKey()
+    );
+
+    // No localStorage for themes, start from themeSaveState
+    if (!localHistoryArray) {
+      devLogger.log("Prod Mode - No themeLocalStorage. Using themeSaveState");
+      setThemeInitialHistory({
+        histories: themeData
+          ? [themeData, themeSaveState.history]
+          : [themeSaveState.history],
+        index: themeData ? 1 : 0,
+      });
+      setThemeInitialHistoryFetched(true);
+      return;
+    }
+
+    const localHistoryIndex = JSON.parse(localHistoryArray).findIndex(
+      (item: any) => item.id === saveState?.hash
+    );
+
+    // If local storage reset theme history to it
+    if (localHistoryIndex !== -1) {
+      devLogger.log("Prod Mode - Using themeLocalStorage");
+      setThemeInitialHistory({
+        histories: JSON.parse(localHistoryArray),
+        index: localHistoryIndex,
+        appendData: false,
+      });
+      setPuckInitialHistoryFetched(true);
+      return;
+    }
+  }, [
+    setThemeInitialHistory,
+    setThemeInitialHistoryFetched,
+    clearLocalStorage,
+    getThemeLocalStorageKey,
+  ]);
+
+  useEffect(() => {
+    if (themeInitialHistory) {
+      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
+    }
+  }, [themeInitialHistory]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
     "iFrameLoaded",
@@ -294,7 +449,9 @@ export const Editor = ({
 
   useEffect(() => {
     if (templateMetadata?.isDevMode) {
-      const localHistory = window.localStorage.getItem(buildLocalStorageKey());
+      const localHistory = window.localStorage.getItem(
+        buildVisualConfigLocalStorageKey()
+      );
       const localHistoryArray = localHistory ? JSON.parse(localHistory) : [];
       const historyToSend = JSON.stringify(
         localHistoryArray.length > 0
@@ -312,6 +469,16 @@ export const Editor = ({
     send({ status: "success", payload: { message: "saveState received" } });
   });
 
+  useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
+    devLogger.logData("THEME_SAVE_STATE", payload);
+    setThemeSaveState(payload as ThemeSaveState);
+    setThemeSaveStateFetched(true);
+    send({
+      status: "success",
+      payload: { message: "themeSaveState received" },
+    });
+  });
+
   useReceiveMessage(
     "getVisualConfigurationData",
     TARGET_ORIGINS,
@@ -326,6 +493,17 @@ export const Editor = ({
       });
     }
   );
+
+  useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
+    const themeConfig = jsonFromEscapedJsonString(payload.themeConfig);
+    devLogger.logData("THEME_DATA", themeConfig);
+    setThemeData(themeConfig);
+    setThemeDataFetched(true);
+    send({
+      status: "success",
+      payload: { message: "getThemeData received" },
+    });
+  });
 
   const { sendToParent: pushPageSets } = useSendMessageToParent(
     "pushPageSets",
@@ -359,13 +537,23 @@ export const Editor = ({
     TARGET_ORIGINS
   );
 
-  const { sendToParent: openQuickFind } = useSendMessageToParent(
-    "openQuickFind",
+  const { sendToParent: saveThemeSaveState } = useSendMessageToParent(
+    "saveThemeSaveState",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: deleteThemeSaveState } = useSendMessageToParent(
+    "deleteThemeSaveState",
     TARGET_ORIGINS
   );
 
   const { sendToParent: saveThemeData } = useSendMessageToParent(
     "saveThemeData",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: openQuickFind } = useSendMessageToParent(
+    "openQuickFind",
     TARGET_ORIGINS
   );
 
@@ -388,7 +576,11 @@ export const Editor = ({
     !document ||
     !saveStateFetched ||
     !visualConfigurationDataFetched ||
-    !puckInitialHistoryFetched;
+    !puckInitialHistoryFetched ||
+    (templateMetadata.isThemeMode &&
+      (!themeDataFetched ||
+        !themeSaveStateFetched ||
+        !themeInitialHistoryFetched));
 
   const progress: number =
     (100 * // @ts-expect-error adding bools is fine
@@ -397,8 +589,13 @@ export const Editor = ({
         !!document +
         saveStateFetched +
         visualConfigurationDataFetched +
-        puckInitialHistoryFetched)) /
-    6;
+        puckInitialHistoryFetched +
+        (templateMetadata?.isThemeMode // @ts-expect-error adding bools is fine
+          ? themeDataFetched +
+            themeSaveStateFetched +
+            themeInitialHistoryFetched
+          : 0))) /
+    (templateMetadata?.isThemeMode ? 9 : 6);
 
   return (
     <>
@@ -418,9 +615,12 @@ export const Editor = ({
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
           saveThemeData={saveThemeData}
-          buildLocalStorageKey={buildLocalStorageKey}
+          buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
           devLogger={devLogger}
           themeConfig={themeConfig}
+          themeData={themeData}
+          saveThemeSaveState={saveThemeSaveState}
+          themeHistory={themeInitialHistory}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
