@@ -589,8 +589,13 @@ export const Editor = ({
         !!document +
         saveStateFetched +
         visualConfigurationDataFetched +
-        puckInitialHistoryFetched)) /
-    6;
+        puckInitialHistoryFetched +
+        (templateMetadata?.isThemeMode // @ts-expect-error adding bools is fine
+          ? themeDataFetched +
+            themeSaveStateFetched +
+            themeInitialHistoryFetched
+          : 0))) /
+    (templateMetadata?.isThemeMode ? 9 : 6);
 
   return (
     <>
