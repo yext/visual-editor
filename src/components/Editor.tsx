@@ -364,8 +364,8 @@ export const Editor = ({
     TARGET_ORIGINS
   );
 
-  const { sendToParent: publishThemeData } = useSendMessageToParent(
-    "publishThemeData",
+  const { sendToParent: saveThemeData } = useSendMessageToParent(
+    "saveThemeData",
     TARGET_ORIGINS
   )
 
@@ -417,7 +417,7 @@ export const Editor = ({
           saveSaveState={saveSaveState}
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
-          publishThemeData={publishThemeData}
+          saveThemeData={saveThemeData}
           buildLocalStorageKey={buildLocalStorageKey}
           devLogger={devLogger}
           themeConfig={themeConfig}

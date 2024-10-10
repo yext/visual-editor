@@ -27,7 +27,7 @@ interface InternalEditorProps {
   saveSaveState: (data: any) => void;
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
-  publishThemeData: (data: any) => void;
+  saveThemeData: (data: any) => void;
   buildLocalStorageKey: () => string;
   devLogger: DevLogger;
   themeConfig?: ThemeConfig;
@@ -44,7 +44,7 @@ export const InternalEditor = ({
   saveSaveState,
   saveVisualConfigData,
   sendDevSaveStateData,
-  publishThemeData,
+  saveThemeData,
   buildLocalStorageKey,
   devLogger,
   themeConfig,
@@ -110,9 +110,9 @@ export const InternalEditor = ({
 
   const handleSave = async (data: Data) => {
     if (isThemeMode) {
-      devLogger.logFunc("publishThemeData");
-      publishThemeData({
-        payload: { publishThemeData: JSON.stringify(data) }
+      devLogger.logFunc("saveThemeData");
+      saveThemeData({
+        payload: { saveThemeData: JSON.stringify(data) }
       })
       return;
     }
