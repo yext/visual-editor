@@ -35,13 +35,13 @@ export function getLocalStorageKey(
 }
 
 export function getThemeLocalStorageKey(
-    isDevMode: boolean,
-    siteId: number,
-    themeEntityId?: number
+  isDevMode: boolean,
+  siteId: number,
+  themeEntityId?: number
 ): string {
   if (!siteId || !themeEntityId) {
     throw new Error(
-        "Unable to generate local storage key for themes, missing query parameters"
+      "Unable to generate local storage key for themes, missing query parameters"
     );
   }
   return (isDevMode ? "dev" : "") + SITE + siteId + THEME + themeEntityId;
