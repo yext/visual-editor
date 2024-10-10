@@ -4,6 +4,7 @@ export type TemplateMetadata = {
   templateId: string;
   layoutId?: number;
   entityId?: number;
+  themeEntityId?: number;
   isDevMode: boolean;
   devOverride: boolean;
   isxYextDebug: boolean;
