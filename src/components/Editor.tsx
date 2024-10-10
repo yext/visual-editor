@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import {
-  getLocalStorageKey,
+  getVisualConfigLocalStorageKey,
   getThemeLocalStorageKey,
 } from "../internal/utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
@@ -78,13 +78,12 @@ export const Editor = ({
     devLogger.logData("DOCUMENT", document);
   }
 
-  const buildLocalStorageKey = useCallback(() => {
-    if (!templateMetadata) {
+  const buildVisualConfigLocalStorageKey = useCallback(() => {
+    if (!templateMetadata || templateMetadata.isThemeMode) {
       return "";
     }
 
-    return getLocalStorageKey(
-      templateMetadata.isThemeMode,
+    return getVisualConfigLocalStorageKey(
       templateMetadata.isDevMode && !templateMetadata.devOverride,
       templateMetadata.role,
       templateMetadata.templateId,
@@ -148,19 +147,19 @@ export const Editor = ({
   }, [templateMetadata?.isDevMode]);
 
   const clearLocalStorage = () => {
-    if (!templateMetadata?.isThemeMode) {
-      clearPuckLocalStorage();
-    } else {
+    if (templateMetadata?.isThemeMode) {
       clearThemeLocalStorage();
+    } else {
+      clearVisualConfigLocalStorage();
     }
   };
 
   /**
    * Clears the user's localStorage and resets the current Puck history
    */
-  const clearPuckLocalStorage = () => {
-    devLogger.logFunc("clearPuckLocalStorage");
-    window.localStorage.removeItem(buildLocalStorageKey());
+  const clearVisualConfigLocalStorage = () => {
+    devLogger.logFunc("clearVisualConfigLocalStorage");
+    window.localStorage.removeItem(buildVisualConfigLocalStorageKey());
   };
 
   /**
@@ -187,7 +186,7 @@ export const Editor = ({
       isFirstRender.current = false; // toggle flag after first render/mounting
       return;
     }
-    loadPuckInitialHistory(); // do something after state has updated
+    loadPuckInitialHistory();
     loadThemeInitialHistory();
   }, [
     templateMetadata,
@@ -221,7 +220,7 @@ export const Editor = ({
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing Puck history
       const localHistoryArray = window.localStorage.getItem(
-        buildLocalStorageKey()
+        buildVisualConfigLocalStorageKey()
       );
 
       // Use localStorage directly if it exists
@@ -269,7 +268,7 @@ export const Editor = ({
 
     // Check localStorage for existing Puck history
     const localHistoryArray = window.localStorage.getItem(
-      buildLocalStorageKey()
+      buildVisualConfigLocalStorageKey()
     );
 
     // No localStorage, start from saveState
@@ -319,7 +318,7 @@ export const Editor = ({
     setPuckInitialHistory,
     setPuckInitialHistoryFetched,
     clearLocalStorage,
-    getLocalStorageKey,
+    getVisualConfigLocalStorageKey,
   ]);
 
   useEffect(() => {
@@ -450,7 +449,9 @@ export const Editor = ({
 
   useEffect(() => {
     if (templateMetadata?.isDevMode) {
-      const localHistory = window.localStorage.getItem(buildLocalStorageKey());
+      const localHistory = window.localStorage.getItem(
+        buildVisualConfigLocalStorageKey()
+      );
       const localHistoryArray = localHistory ? JSON.parse(localHistory) : [];
       const historyToSend = JSON.stringify(
         localHistoryArray.length > 0
@@ -609,7 +610,7 @@ export const Editor = ({
           saveVisualConfigData={saveVisualConfigData}
           sendDevSaveStateData={sendDevSaveStateData}
           saveThemeData={saveThemeData}
-          buildLocalStorageKey={buildLocalStorageKey}
+          buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
           devLogger={devLogger}
           themeConfig={themeConfig}
           themeData={themeData}

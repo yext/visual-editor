@@ -9,7 +9,7 @@ import {
 import React, { useEffect } from "react";
 import { customHeader } from "../puck/components/Header.tsx";
 import { useState, useRef, useCallback } from "react";
-import { getLocalStorageKey } from "../utils/localStorageHelper.ts";
+import { getVisualConfigLocalStorageKey } from "../utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { SaveState } from "../types/saveState.ts";
@@ -28,7 +28,7 @@ interface InternalEditorProps {
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   saveThemeData: (data: any) => void;
-  buildLocalStorageKey: () => string;
+  buildVisualConfigLocalStorageKey: () => string;
   devLogger: DevLogger;
   themeConfig?: ThemeConfig;
   themeData: any;
@@ -47,7 +47,7 @@ export const InternalEditor = ({
   saveVisualConfigData,
   sendDevSaveStateData,
   saveThemeData,
-  buildLocalStorageKey,
+  buildVisualConfigLocalStorageKey,
   devLogger,
   themeConfig,
   themeData,
@@ -75,7 +75,7 @@ export const InternalEditor = ({
 
         devLogger.logFunc("saveToLocalStorage");
         window.localStorage.setItem(
-          buildLocalStorageKey(),
+          buildVisualConfigLocalStorageKey(),
           JSON.stringify(histories)
         );
 
@@ -99,7 +99,7 @@ export const InternalEditor = ({
         }
       }
     },
-    [templateMetadata, getLocalStorageKey, saveState]
+    [templateMetadata, getVisualConfigLocalStorageKey, saveState]
   );
 
   const handleClearLocalChanges = () => {

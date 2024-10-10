@@ -7,8 +7,7 @@ const ROLE = "ROLE_",
   ENTITY = "ENTITY_",
   THEME = "THEME_";
 
-export function getLocalStorageKey(
-  isThemeMode: boolean,
+export function getVisualConfigLocalStorageKey(
   isDevMode: boolean,
   role: string,
   templateId: string,
@@ -21,7 +20,7 @@ export function getLocalStorageKey(
       "Unable to generate local storage key, missing query parameters"
     );
   }
-  if (role === Role.INDIVIDUAL || isThemeMode) {
+  if (role === Role.INDIVIDUAL) {
     if (!entityId) {
       throw new Error(`EntityId required for role ${role}`);
     }
