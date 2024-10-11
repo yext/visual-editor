@@ -36,7 +36,6 @@ interface InternalEditorProps {
   saveThemeSaveState: (data: any) => void;
   themeHistory?: ThemeSaveState;
   setThemeHistory: (themeHistory: ThemeSaveState) => void;
-  setPuckRendered: (isRendered: boolean) => void;
 }
 
 // Render Puck editor
@@ -57,7 +56,6 @@ export const InternalEditor = ({
   saveThemeSaveState,
   themeHistory,
   setThemeHistory,
-  setPuckRendered,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -151,7 +149,6 @@ export const InternalEditor = ({
         overrides={{
           header: () => {
             const { refreshPermissions, config } = usePuck();
-            setPuckRendered(true);
 
             useEffect(() => {
               // set permissions on the component level to allow for dynamic updating

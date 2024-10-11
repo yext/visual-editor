@@ -9,7 +9,8 @@ export type DevLoggerPrefix =
   | "DOCUMENT"
   | "PUCK_INDEX"
   | "PUCK_HISTORY"
-  | "PUCK_INITIAL_HISTORY";
+  | "PUCK_INITIAL_HISTORY"
+  | "THEME_VALUES_TO_APPLY";
 
 export class DevLogger {
   constructor(private enabled: boolean = false) {

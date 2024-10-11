@@ -12,7 +12,6 @@ import { ThemeSaveState } from "../../types/themeSaveState.ts";
 import { Payload } from "../../hooks/useMessage.ts";
 
 type ThemeSidebarProps = {
-  //savedThemeValues: SavedTheme | undefined;
   themeConfig?: ThemeConfig;
   saveTheme: (themeSaveState: Payload) => void;
   themeHistory: ThemeSaveState;
@@ -43,7 +42,6 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       history: [...themeHistory.history, newThemeValues],
       index: themeHistory.index + 1,
     };
-    console.log(`handleThemeChange newHistory ${JSON.stringify(newHistory)}`);
     saveTheme({
       payload: {
         history: JSON.stringify(newHistory.history),
