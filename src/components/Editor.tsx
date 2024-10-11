@@ -600,14 +600,24 @@ export const Editor = ({
 
   useEffect(() => {
     console.log("theme useEffect");
-    if (puckRendered && themeInitialHistory && themeConfig) {
+    if (
+      puckRendered &&
+      themeInitialHistory &&
+      themeConfig &&
+      templateMetadata?.isThemeMode
+    ) {
       devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
       updateThemeInEditor(
         themeInitialHistory.history[themeInitialHistory.index],
         themeConfig
       );
     }
-  }, [themeInitialHistory, themeConfig, puckRendered]);
+  }, [
+    themeInitialHistory,
+    themeConfig,
+    puckRendered,
+    templateMetadata?.isThemeMode,
+  ]);
 
   const progress: number =
     (100 * // @ts-expect-error adding bools is fine
