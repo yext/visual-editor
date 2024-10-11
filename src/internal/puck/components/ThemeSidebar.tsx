@@ -1,22 +1,26 @@
 import { AutoFieldPrivate } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
-import { ThemeConfig, SavedTheme } from "../../../utils/themeResolver.ts";
+import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { generateCssVariablesFromPuckFields } from "../../utils/internalThemeResolver.ts";
+import { ThemeSaveState } from "../../types/themeSaveState.ts";
+import { Payload } from "../../hooks/useMessage.ts";
 
 type ThemeSidebarProps = {
-  savedThemeValues: SavedTheme | undefined;
+  //savedThemeValues: SavedTheme | undefined;
   themeConfig?: ThemeConfig;
-  saveTheme: (savedThemeValues: SavedTheme) => void;
+  saveTheme: (themeSaveState: Payload) => void;
+  themeHistory: ThemeSaveState;
+  setThemeHistory: (themeHistory: ThemeSaveState) => void;
 };
 
 const ThemeSidebar = (props: ThemeSidebarProps) => {
-  const { saveTheme, themeConfig, savedThemeValues } = props;
+  const { saveTheme, themeConfig, themeHistory, setThemeHistory } = props;
   if (!themeConfig) {
     return (
       <div>
@@ -31,11 +35,22 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
 
   const handleChange = (topLevelKey: string, newValue: any) => {
     const newThemeValues = {
-      ...savedThemeValues,
+      ...themeHistory.history[themeHistory.index],
       ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
     };
     updateThemeInEditor(newThemeValues, themeConfig);
-    saveTheme(newThemeValues);
+    const newHistory = {
+      history: [...themeHistory.history, newThemeValues],
+      index: themeHistory.index + 1,
+    };
+    console.log(`handleThemeChange newHistory ${JSON.stringify(newHistory)}`);
+    saveTheme({
+      payload: {
+        history: JSON.stringify(newHistory.history),
+        index: newHistory.index,
+      },
+    });
+    setThemeHistory(newHistory);
   };
 
   return (
@@ -49,7 +64,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       {Object.entries(themeConfig).map(([parentStyleKey, parentStyle]) => {
         const field = constructThemePuckFields(parentStyle);
         const values = constructThemePuckValues(
-          savedThemeValues,
+          themeHistory.history[themeHistory.index],
           parentStyle,
           parentStyleKey
         );

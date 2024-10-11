@@ -16,6 +16,7 @@ import { SaveState } from "../types/saveState.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeSaveState } from "../types/themeSaveState.ts";
 
 interface InternalEditorProps {
   puckConfig: Config;
@@ -33,7 +34,9 @@ interface InternalEditorProps {
   themeConfig?: ThemeConfig;
   themeData: any;
   saveThemeSaveState: (data: any) => void;
-  themeHistory: any;
+  themeHistory?: ThemeSaveState;
+  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  setPuckRendered: (isRendered: boolean) => void;
 }
 
 // Render Puck editor
@@ -51,9 +54,10 @@ export const InternalEditor = ({
   buildVisualConfigLocalStorageKey,
   devLogger,
   themeConfig,
-  themeData,
   saveThemeSaveState,
   themeHistory,
+  setThemeHistory,
+  setPuckRendered,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -109,15 +113,15 @@ export const InternalEditor = ({
     historyIndex.current = 0;
   };
 
-  const handleSaveTheme = () => {
-    saveThemeSaveState(themeConfig);
-  };
-
-  const handleSave = async (data: Data) => {
+  const handlePublish = async (data: Data) => {
     if (isThemeMode) {
       devLogger.logFunc("saveThemeData");
       saveThemeData({
-        payload: { saveThemeData: JSON.stringify(data) },
+        payload: {
+          saveThemeData: JSON.stringify(
+            themeHistory?.history[themeHistory?.index]
+          ),
+        },
       });
       return;
     }
@@ -147,6 +151,7 @@ export const InternalEditor = ({
         overrides={{
           header: () => {
             const { refreshPermissions, config } = usePuck();
+            setPuckRendered(true);
 
             useEffect(() => {
               // set permissions on the component level to allow for dynamic updating
@@ -181,9 +186,11 @@ export const InternalEditor = ({
             return customHeader(
               handleClearLocalChanges,
               handleHistoryChange,
-              handleSave,
+              handlePublish,
               templateMetadata.isDevMode && !templateMetadata.devOverride,
-              !!templateMetadata.isThemeMode,
+              templateMetadata.isThemeMode,
+              setThemeHistory,
+              themeConfig,
               themeHistory
             );
           },
@@ -193,8 +200,9 @@ export const InternalEditor = ({
             ? () => (
                 <ThemeSidebar
                   themeConfig={themeConfig}
-                  saveTheme={handleSaveTheme}
-                  savedThemeValues={themeData}
+                  saveTheme={saveThemeSaveState}
+                  themeHistory={themeHistory!}
+                  setThemeHistory={setThemeHistory}
                 />
               )
             : undefined,
