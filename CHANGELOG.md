@@ -1,3 +1,23 @@
+#### 0.0.11 (2024-10-11)
+
+##### New Features
+
+- **dev:** fix themes (#84) (e19ec2e4)
+- load themes from content on published pages (#83) (eb01dbb1)
+- handle theme data from content and local storage (#82) (ac768866)
+- save theme data to YSS (#81) (d2043342)
+- remove theme mode toggle (#79) (418bddf5)
+- receive isThemeMode from storm (#76) (9e98ae0d)
+- **components:** add react-color color picker (#68) (59afa7a8)
+
+##### Bug Fixes
+
+- **components:** fixed history desync after publish (#75) (0d08b035)
+
+##### Refactors
+
+- generate theme variables automatically and merge saved state with themeConfig for UI (#77) (7a8f8055)
+
 #### 0.0.10 (2024-10-04)
 
 ##### Chores
