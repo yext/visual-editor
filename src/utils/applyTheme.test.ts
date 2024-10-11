@@ -5,11 +5,13 @@ import { ThemeConfig } from "./themeResolver.ts";
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
     const document: Document = {
+      siteId: 123,
       _site: {
         pagesTheme: [
           {
             themeConfiguration: {
               data: JSON.stringify({ "--colors-text": "red" }),
+              siteId: 123,
             },
           },
         ],
@@ -30,6 +32,7 @@ describe("buildCssOverridesStyle", () => {
 
   it("should generate correct CSS with multiple overrides in c_theme", () => {
     const document: Document = {
+      siteId: 123,
       _site: {
         pagesTheme: [
           {
@@ -39,6 +42,7 @@ describe("buildCssOverridesStyle", () => {
                 "--colors-primary-foreground": "hsl(0 0% 100%)",
                 "--borderRadius-lg": "20px",
               }),
+              siteId: 123,
             },
           },
         ],
