@@ -2,7 +2,6 @@ import { internalThemeResolver } from "../internal/utils/internalThemeResolver.t
 import { SavedTheme, ThemeConfig } from "./themeResolver.ts";
 
 export type Document = {
-  c_theme?: SavedTheme;
   [key: string]: any;
 };
 
@@ -13,8 +12,31 @@ export const applyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
-  const overrides = document.c_theme;
-  const themeValues = internalThemeResolver(themeConfig, overrides);
+  const savedThemes: Record<string, any>[] = document?._site?.pagesTheme;
+
+  let savedTheme;
+  if (savedThemes?.length > 0) {
+    savedTheme =
+      document.siteId !== 0
+        ? savedThemes.find(
+            (theme) => theme.themeConfiguration.siteId === document.siteId
+          )
+        : savedThemes[0]; // siteId is not set on local data documents, so default to the first one
+  }
+
+  let overrides;
+  if (savedTheme?.themeConfiguration) {
+    overrides = JSON.parse(savedTheme.themeConfiguration?.data);
+  }
+  return internalApplyTheme(overrides, themeConfig, base);
+};
+
+const internalApplyTheme = (
+  savedThemeValues: Record<string, any>,
+  themeConfig: ThemeConfig,
+  base?: string
+): string => {
+  const themeValues = internalThemeResolver(themeConfig, savedThemeValues);
 
   if (!themeValues || Object.keys(themeValues).length === 0) {
     return base ?? "";
@@ -39,7 +61,7 @@ export const updateThemeInEditor = (
     const styleOverride =
       previewFrame?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
     if (styleOverride) {
-      styleOverride.outerHTML = applyTheme({ c_theme: newTheme }, themeConfig);
+      styleOverride.outerHTML = internalApplyTheme(newTheme, themeConfig);
     }
   }
 };
