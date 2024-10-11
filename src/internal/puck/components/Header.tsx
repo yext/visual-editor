@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
 import "../../../components/index.css";
+import { ThemeSaveState } from "../../types/themeSaveState.ts";
 
 export const customHeader = (
   handleClearLocalChanges: () => void,
@@ -31,7 +32,7 @@ export const customHeader = (
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean,
   isThemeMode: boolean,
-  themeHistory: any
+  themeHistory?: ThemeSaveState
 ) => {
   const {
     appState,
@@ -80,7 +81,9 @@ export const customHeader = (
         )}
         <ClearLocalChangesButton
           disabled={
-            isThemeMode ? themeHistory.length === 1 : histories.length === 1
+            isThemeMode
+              ? themeHistory?.history.length === 1
+              : histories.length === 1
           }
           onClearLocalChanges={() => {
             handleClearLocalChanges();
@@ -93,7 +96,9 @@ export const customHeader = (
           <Button
             variant="secondary"
             disabled={
-              isThemeMode ? themeHistory.length === 1 : histories.length === 1
+              isThemeMode
+                ? themeHistory?.history.length === 1
+                : histories.length === 1
             }
             onClick={async () => {
               await handleSaveData(appState.data);
