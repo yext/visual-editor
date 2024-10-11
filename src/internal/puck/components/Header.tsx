@@ -25,6 +25,8 @@ import {
 } from "../ui/Tooltip.tsx";
 import "../../../components/index.css";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
+import {ThemeConfig} from "../../../utils.ts";
+import {updateThemeInEditor} from "../../../utils/applyTheme.ts";
 
 export const customHeader = (
   handleClearLocalChanges: () => void,
@@ -32,7 +34,9 @@ export const customHeader = (
   handleSaveData: (data: Data) => Promise<void>,
   isDevMode: boolean,
   isThemeMode: boolean,
-  themeHistory?: ThemeSaveState
+  setThemeHistory: (themeHistory: ThemeSaveState) => void,
+  themeConfig?: ThemeConfig,
+  themeHistory?: ThemeSaveState,
 ) => {
   const {
     appState,
@@ -87,9 +91,19 @@ export const customHeader = (
           }
           onClearLocalChanges={() => {
             handleClearLocalChanges();
-            setHistories([
-              { id: "root", state: { data: histories[0].state.data } },
-            ]);
+            if (isThemeMode) {
+              if (themeConfig) {
+                updateThemeInEditor(themeHistory?.history[0], themeConfig)
+              }
+              setThemeHistory({
+                history: [themeHistory?.history[0]],
+                index: 0
+              });
+            } else {
+              setHistories([
+                { id: "root", state: { data: histories[0].state.data } },
+              ]);
+            }
           }}
         />
         {!isDevMode && (
@@ -103,7 +117,14 @@ export const customHeader = (
             onClick={async () => {
               await handleSaveData(appState.data);
               handleClearLocalChanges();
-              setHistories([{ id: "root", state: { data: appState.data } }]);
+              if (isThemeMode) {
+                setThemeHistory({
+                  history: [themeHistory?.history[themeHistory?.history.length - 1]],
+                  index: 0
+                });
+              } else {
+                setHistories([{ id: "root", state: { data: appState.data } }]);
+              }
             }}
           >
             Publish

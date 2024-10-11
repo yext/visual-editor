@@ -9,11 +9,12 @@ import {
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { generateCssVariablesFromPuckFields } from "../../utils/internalThemeResolver.ts";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
+import {Payload} from "../../hooks/useMessage.ts";
 
 type ThemeSidebarProps = {
   //savedThemeValues: SavedTheme | undefined;
   themeConfig?: ThemeConfig;
-  saveTheme: (themeSaveState: ThemeSaveState) => void;
+  saveTheme: (themeSaveState: Payload) => void;
   themeHistory: ThemeSaveState;
   setThemeHistory: (themeHistory: ThemeSaveState) => void;
 };
@@ -42,7 +43,13 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       history: [...themeHistory.history, newThemeValues],
       index: themeHistory.index + 1,
     };
-    saveTheme(newHistory); // save to db
+    console.log(`handleThemeChange newHistory ${JSON.stringify(newHistory)}`);
+    saveTheme({
+      payload: {
+        history: JSON.stringify(newHistory.history),
+        index: newHistory.index
+      },
+    });
     setThemeHistory(newHistory);
   };
 

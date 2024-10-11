@@ -18,6 +18,7 @@ import "@measured/puck/puck.css";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { ThemeSaveState } from "../internal/types/themeSaveState.ts";
+import {updateThemeInEditor} from "../utils/applyTheme.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -62,11 +63,12 @@ export const Editor = ({
   const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
   const [puckConfig, setPuckConfig] = useState<Config>();
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
+  const [puckRendered, setPuckRendered] = useState(false)
 
   // theming
   const [themeInitialHistory, setThemeInitialHistory] = useState<
-    ThemeSaveState | undefined
-  >(undefined);
+    ThemeSaveState
+  >({history: [{}], index: 0});
   const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
     useState<boolean>(false);
   const [themeData, setThemeData] = useState<any>(); // json data
@@ -332,6 +334,7 @@ export const Editor = ({
   }, [puckInitialHistory]);
 
   const loadThemeInitialHistory = useCallback(() => {
+    console.log(`themeData is ${JSON.stringify(themeData)}, themeSaveState is ${JSON.stringify(themeSaveState)}`);
     if (
       !themeSaveStateFetched ||
       !templateMetadata ||
@@ -366,6 +369,7 @@ export const Editor = ({
         "Dev Mode - No localStorage. Using theme data from Content"
       );
       if (themeData) {
+        console.log(`starting fresh from content: ${themeData}`);
         setThemeInitialHistory({
           history: [themeData],
           index: 0,
@@ -398,22 +402,27 @@ export const Editor = ({
 
     // No localStorage for themes, start from themeSaveState
     //if (!localHistoryArray) {
-    if (themeData || themeSaveState) {
+    if (themeData) {
       devLogger.log("Prod Mode - No themeLocalStorage. Using themeSaveState");
-      setThemeInitialHistory({
-        history: themeData
+      const history = themeData
           ? [themeData, ...themeSaveState.history]
-          : [...themeSaveState.history],
-        index: themeData ? 1 : 0,
-      });
+          : [...themeSaveState.history];
+      const themeInitialHistory = {
+        history: history,
+        index: history.length - 1,
+      };
+      setThemeInitialHistory(themeInitialHistory);
       setThemeInitialHistoryFetched(true);
+      console.log(`themeInitialHistory is ${JSON.stringify(themeInitialHistory)}`);
       return;
     }
 
+    console.log("Setting blank now");
     setThemeInitialHistory({
       history: [{}],
       index: 0,
     });
+    setThemeInitialHistoryFetched(true);
     // If local storage reset theme history to it
     // devLogger.log("Prod Mode - Using themeLocalStorage");
     // setThemeInitialHistory({
@@ -428,12 +437,6 @@ export const Editor = ({
     clearLocalStorage,
     getThemeLocalStorageKey,
   ]);
-
-  useEffect(() => {
-    if (themeInitialHistory) {
-      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
-    }
-  }, [themeInitialHistory]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
     "iFrameLoaded",
@@ -473,7 +476,12 @@ export const Editor = ({
 
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
     devLogger.logData("THEME_SAVE_STATE", payload);
-    setThemeSaveState(payload as ThemeSaveState);
+    console.log("themeSaveState", JSON.stringify(payload));
+    const themeSaveState = {
+      history: payload?.history ? jsonFromEscapedJsonString(payload?.history) : [],
+      index: payload?.index ?? 0
+    }
+    setThemeSaveState(themeSaveState);
     setThemeSaveStateFetched(true);
     send({
       status: "success",
@@ -497,9 +505,10 @@ export const Editor = ({
   );
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    const themeConfig = jsonFromEscapedJsonString(payload.themeConfig ?? {});
-    devLogger.logData("THEME_DATA", themeConfig);
-    setThemeData(themeConfig);
+    console.log(`payload in getThemeData is ${JSON.stringify(payload)}`);
+    const themeData = jsonFromEscapedJsonString(payload as any);
+    devLogger.logData("THEME_DATA", themeData);
+    setThemeData(themeData);
     setThemeDataFetched(true);
     send({
       status: "success",
@@ -584,6 +593,14 @@ export const Editor = ({
         !themeSaveStateFetched ||
         !themeInitialHistoryFetched));
 
+  useEffect(() => {
+    console.log("theme useEffect");
+    if (puckRendered && themeInitialHistory && themeConfig) {
+      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
+      updateThemeInEditor(themeInitialHistory.history[themeInitialHistory.index], themeConfig)
+    }
+  }, [themeInitialHistory, themeConfig, puckRendered]);
+
   const progress: number =
     (100 * // @ts-expect-error adding bools is fine
       (!!puckConfig +
@@ -624,6 +641,7 @@ export const Editor = ({
           saveThemeSaveState={saveThemeSaveState}
           themeHistory={themeInitialHistory}
           setThemeHistory={setThemeInitialHistory}
+          setPuckRendered={setPuckRendered}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
