@@ -1,3 +1,9 @@
+#### 0.0.12 (2024-10-11)
+
+##### Bug Fixes
+
+- don't load theme data when not in theme mode (ad051c32)
+
 #### 0.0.11 (2024-10-11)
 
 ##### New Features
