@@ -64,13 +64,16 @@ export const Editor = ({
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
 
   // theming
-  const [themeInitialHistory, setThemeInitialHistory] =
-    useState<any>(undefined);
+  const [themeInitialHistory, setThemeInitialHistory] = useState<
+    ThemeSaveState | undefined
+  >(undefined);
   const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
     useState<boolean>(false);
   const [themeData, setThemeData] = useState<any>(); // json data
   const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
-  const [themeSaveState, setThemeSaveState] = useState<ThemeSaveState>();
+  const [themeSaveState, setThemeSaveState] = useState<
+    ThemeSaveState | undefined
+  >(undefined);
   const [themeSaveStateFetched, setThemeSaveStateFetched] =
     useState<boolean>(false); // needed because themeSaveState can be empty
 
@@ -192,6 +195,7 @@ export const Editor = ({
     templateMetadata,
     saveStateFetched,
     visualConfigurationDataFetched,
+    themeDataFetched,
     themeSaveStateFetched,
   ]);
 
@@ -350,7 +354,7 @@ export const Editor = ({
         const localHistories = JSON.parse(localHistoryArray);
         const localHistoryIndex = localHistories.length - 1;
         setThemeInitialHistory({
-          histories: localHistories,
+          history: localHistories,
           index: localHistoryIndex,
         });
         setThemeInitialHistoryFetched(true);
@@ -363,7 +367,7 @@ export const Editor = ({
       );
       if (themeData) {
         setThemeInitialHistory({
-          histories: [themeData],
+          history: [themeData],
           index: 0,
         });
       }
@@ -378,7 +382,7 @@ export const Editor = ({
       devLogger.log("Prod Mode - No saveState. Using theme data from Content");
       if (themeData) {
         setThemeInitialHistory({
-          histories: [themeData],
+          history: [themeData],
           index: 0,
         });
       }
@@ -388,38 +392,36 @@ export const Editor = ({
     }
 
     // Check localStorage for existing themes
-    const localHistoryArray = window.localStorage.getItem(
-      buildThemeLocalStorageKey()
-    );
+    // const localHistoryArray = window.localStorage.getItem(
+    //   buildThemeLocalStorageKey()
+    // );
 
     // No localStorage for themes, start from themeSaveState
-    if (!localHistoryArray) {
+    //if (!localHistoryArray) {
+    if (themeData || themeSaveState) {
       devLogger.log("Prod Mode - No themeLocalStorage. Using themeSaveState");
       setThemeInitialHistory({
-        histories: themeData
-          ? [themeData, themeSaveState.history]
-          : [themeSaveState.history],
+        history: themeData
+          ? [themeData, ...themeSaveState.history]
+          : [...themeSaveState.history],
         index: themeData ? 1 : 0,
       });
       setThemeInitialHistoryFetched(true);
       return;
     }
 
-    const localHistoryIndex = JSON.parse(localHistoryArray).findIndex(
-      (item: any) => item.id === saveState?.hash
-    );
-
+    setThemeInitialHistory({
+      history: [{}],
+      index: 0,
+    });
     // If local storage reset theme history to it
-    if (localHistoryIndex !== -1) {
-      devLogger.log("Prod Mode - Using themeLocalStorage");
-      setThemeInitialHistory({
-        histories: JSON.parse(localHistoryArray),
-        index: localHistoryIndex,
-        appendData: false,
-      });
-      setPuckInitialHistoryFetched(true);
-      return;
-    }
+    // devLogger.log("Prod Mode - Using themeLocalStorage");
+    // setThemeInitialHistory({
+    //   history: JSON.parse(localHistoryArray),
+    //   index: themeSaveState.index,
+    // });
+    // setThemeInitialHistoryFetched(true);
+    // return;
   }, [
     setThemeInitialHistory,
     setThemeInitialHistoryFetched,
@@ -621,6 +623,7 @@ export const Editor = ({
           themeData={themeData}
           saveThemeSaveState={saveThemeSaveState}
           themeHistory={themeInitialHistory}
+          setThemeHistory={setThemeInitialHistory}
         />
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
