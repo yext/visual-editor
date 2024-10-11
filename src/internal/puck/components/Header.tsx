@@ -25,7 +25,7 @@ import {
 } from "../ui/Tooltip.tsx";
 import "../../../components/index.css";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import { ThemeConfig } from "../../../utils.ts";
+import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 
 export const customHeader = (
