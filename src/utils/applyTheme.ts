@@ -12,8 +12,6 @@ export const applyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
-  // Find the theme on the site entity that corresponds to the current site id
-  // If in dev mode, default to the first theme because the siteId is not available
   const savedThemes: Record<string, any>[] = document?._site?.pagesTheme;
 
   let savedTheme;
@@ -23,7 +21,7 @@ export const applyTheme = (
         ? savedThemes.find(
             (theme) => theme.themeConfiguration.siteId === document.siteId
           )
-        : savedThemes[0];
+        : savedThemes[0]; // siteId is not set on local data documents, so default to the first one
   }
 
   let overrides;
