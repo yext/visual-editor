@@ -9,7 +9,7 @@ import {
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { generateCssVariablesFromPuckFields } from "../../utils/internalThemeResolver.ts";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import {Payload} from "../../hooks/useMessage.ts";
+import { Payload } from "../../hooks/useMessage.ts";
 
 type ThemeSidebarProps = {
   //savedThemeValues: SavedTheme | undefined;
@@ -47,7 +47,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
     saveTheme({
       payload: {
         history: JSON.stringify(newHistory.history),
-        index: newHistory.index
+        index: newHistory.index,
       },
     });
     setThemeHistory(newHistory);

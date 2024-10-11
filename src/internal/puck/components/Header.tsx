@@ -25,8 +25,8 @@ import {
 } from "../ui/Tooltip.tsx";
 import "../../../components/index.css";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import {ThemeConfig} from "../../../utils.ts";
-import {updateThemeInEditor} from "../../../utils/applyTheme.ts";
+import { ThemeConfig } from "../../../utils.ts";
+import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 
 export const customHeader = (
   handleClearLocalChanges: () => void,
@@ -36,7 +36,7 @@ export const customHeader = (
   isThemeMode: boolean,
   setThemeHistory: (themeHistory: ThemeSaveState) => void,
   themeConfig?: ThemeConfig,
-  themeHistory?: ThemeSaveState,
+  themeHistory?: ThemeSaveState
 ) => {
   const {
     appState,
@@ -93,11 +93,11 @@ export const customHeader = (
             handleClearLocalChanges();
             if (isThemeMode) {
               if (themeConfig) {
-                updateThemeInEditor(themeHistory?.history[0], themeConfig)
+                updateThemeInEditor(themeHistory?.history[0], themeConfig);
               }
               setThemeHistory({
                 history: [themeHistory?.history[0]],
-                index: 0
+                index: 0,
               });
             } else {
               setHistories([
@@ -119,8 +119,10 @@ export const customHeader = (
               handleClearLocalChanges();
               if (isThemeMode) {
                 setThemeHistory({
-                  history: [themeHistory?.history[themeHistory?.history.length - 1]],
-                  index: 0
+                  history: [
+                    themeHistory?.history[themeHistory?.history.length - 1],
+                  ],
+                  index: 0,
                 });
               } else {
                 setHistories([{ id: "root", state: { data: appState.data } }]);

@@ -18,7 +18,7 @@ import "@measured/puck/puck.css";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { ThemeSaveState } from "../internal/types/themeSaveState.ts";
-import {updateThemeInEditor} from "../utils/applyTheme.ts";
+import { updateThemeInEditor } from "../utils/applyTheme.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -63,12 +63,11 @@ export const Editor = ({
   const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
   const [puckConfig, setPuckConfig] = useState<Config>();
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
-  const [puckRendered, setPuckRendered] = useState(false)
+  const [puckRendered, setPuckRendered] = useState(false);
 
   // theming
-  const [themeInitialHistory, setThemeInitialHistory] = useState<
-    ThemeSaveState
-  >({history: [{}], index: 0});
+  const [themeInitialHistory, setThemeInitialHistory] =
+    useState<ThemeSaveState>({ history: [{}], index: 0 });
   const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
     useState<boolean>(false);
   const [themeData, setThemeData] = useState<any>(); // json data
@@ -334,7 +333,9 @@ export const Editor = ({
   }, [puckInitialHistory]);
 
   const loadThemeInitialHistory = useCallback(() => {
-    console.log(`themeData is ${JSON.stringify(themeData)}, themeSaveState is ${JSON.stringify(themeSaveState)}`);
+    console.log(
+      `themeData is ${JSON.stringify(themeData)}, themeSaveState is ${JSON.stringify(themeSaveState)}`
+    );
     if (
       !themeSaveStateFetched ||
       !templateMetadata ||
@@ -405,15 +406,17 @@ export const Editor = ({
     if (themeData) {
       devLogger.log("Prod Mode - No themeLocalStorage. Using themeSaveState");
       const history = themeData
-          ? [themeData, ...themeSaveState.history]
-          : [...themeSaveState.history];
+        ? [themeData, ...themeSaveState.history]
+        : [...themeSaveState.history];
       const themeInitialHistory = {
         history: history,
         index: history.length - 1,
       };
       setThemeInitialHistory(themeInitialHistory);
       setThemeInitialHistoryFetched(true);
-      console.log(`themeInitialHistory is ${JSON.stringify(themeInitialHistory)}`);
+      console.log(
+        `themeInitialHistory is ${JSON.stringify(themeInitialHistory)}`
+      );
       return;
     }
 
@@ -478,9 +481,11 @@ export const Editor = ({
     devLogger.logData("THEME_SAVE_STATE", payload);
     console.log("themeSaveState", JSON.stringify(payload));
     const themeSaveState = {
-      history: payload?.history ? jsonFromEscapedJsonString(payload?.history) : [],
-      index: payload?.index ?? 0
-    }
+      history: payload?.history
+        ? jsonFromEscapedJsonString(payload?.history)
+        : [],
+      index: payload?.index ?? 0,
+    };
     setThemeSaveState(themeSaveState);
     setThemeSaveStateFetched(true);
     send({
@@ -597,7 +602,10 @@ export const Editor = ({
     console.log("theme useEffect");
     if (puckRendered && themeInitialHistory && themeConfig) {
       devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
-      updateThemeInEditor(themeInitialHistory.history[themeInitialHistory.index], themeConfig)
+      updateThemeInEditor(
+        themeInitialHistory.history[themeInitialHistory.index],
+        themeConfig
+      );
     }
   }, [themeInitialHistory, themeConfig, puckRendered]);
 

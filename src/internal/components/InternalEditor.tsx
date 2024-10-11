@@ -57,7 +57,7 @@ export const InternalEditor = ({
   saveThemeSaveState,
   themeHistory,
   setThemeHistory,
-  setPuckRendered
+  setPuckRendered,
 }: InternalEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -151,7 +151,7 @@ export const InternalEditor = ({
         overrides={{
           header: () => {
             const { refreshPermissions, config } = usePuck();
-            setPuckRendered(true)
+            setPuckRendered(true);
 
             useEffect(() => {
               // set permissions on the component level to allow for dynamic updating
@@ -191,7 +191,7 @@ export const InternalEditor = ({
               templateMetadata.isThemeMode,
               setThemeHistory,
               themeConfig,
-              themeHistory,
+              themeHistory
             );
           },
           actionBar: isThemeMode ? () => <></> : undefined,

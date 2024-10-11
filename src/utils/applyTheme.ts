@@ -19,7 +19,8 @@ export const applyTheme = (
     savedTheme =
       document.siteId !== 0
         ? savedThemes.find(
-            (theme) => Number(theme.themeConfiguration.siteId) === document.siteId
+            (theme) =>
+              Number(theme.themeConfiguration.siteId) === document.siteId
           )
         : savedThemes[0]; // siteId is not set on local data documents, so default to the first one
   }
@@ -36,13 +37,11 @@ const internalApplyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
-
   const themeValues = internalThemeResolver(themeConfig, savedThemeValues);
-  console.log("internalApplyTheme", savedThemeValues, themeConfig, themeValues)
-
+  console.log("internalApplyTheme", savedThemeValues, themeConfig, themeValues);
 
   if (!themeValues || Object.keys(themeValues).length === 0) {
-    console.log("apply theme returning nothing ")
+    console.log("apply theme returning nothing ");
     return base ?? "";
   }
   return (
@@ -55,8 +54,8 @@ const internalApplyTheme = (
 };
 
 const delay = (ms: number) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 export const updateThemeInEditor = async (
   newTheme: SavedTheme,
   themeConfig: ThemeConfig
@@ -64,17 +63,20 @@ export const updateThemeInEditor = async (
   const previewFrame = document.getElementById(
     "preview-frame"
   ) as HTMLIFrameElement;
-  console.log("updateThemeInEditor previewFrame", previewFrame)
+  console.log("updateThemeInEditor previewFrame", previewFrame);
   if (previewFrame && previewFrame.contentDocument) {
-    while(1) {
+    while (1) {
       const styleOverride =
-          previewFrame?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
+        previewFrame?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
       console.log("updateThemeInEditor styleOverride", styleOverride);
-      console.log("default zone", previewFrame?.contentDocument?.getElementById("default-zone"));
+      console.log(
+        "default zone",
+        previewFrame?.contentDocument?.getElementById("default-zone")
+      );
 
       if (styleOverride) {
         styleOverride.outerHTML = internalApplyTheme(newTheme, themeConfig);
-        console.log("updateThemeInEditor internalApplyTheme ran")
+        console.log("updateThemeInEditor internalApplyTheme ran");
         return;
       }
       await delay(10);
