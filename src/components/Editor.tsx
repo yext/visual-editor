@@ -497,7 +497,7 @@ export const Editor = ({
   );
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    const themeConfig = jsonFromEscapedJsonString(payload.themeConfig);
+    const themeConfig = jsonFromEscapedJsonString(payload.themeConfig ?? {});
     devLogger.logData("THEME_DATA", themeConfig);
     setThemeData(themeConfig);
     setThemeDataFetched(true);
