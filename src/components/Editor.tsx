@@ -340,8 +340,8 @@ export const Editor = ({
       return;
     }
     devLogger.logFunc("loadThemeHistory");
-    devLogger.logData("THEME_DATA", JSON.stringify(themeData));
-    devLogger.logData("THEME_SAVE_STATE", JSON.stringify(themeSaveState));
+    devLogger.logData("THEME_DATA", themeData);
+    devLogger.logData("THEME_SAVE_STATE", themeSaveState);
 
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing theme history
