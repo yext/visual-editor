@@ -1,7 +1,9 @@
 import * as React from "react";
-import { useReceiveMessage } from "../internal/hooks/useMessage.ts";
+import {
+  useReceiveMessage,
+  TARGET_ORIGINS,
+} from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
-import { TARGET_ORIGINS } from "../components/Editor.tsx";
 import { YextSchemaField } from "../internal/types/entityFields.ts";
 
 /**

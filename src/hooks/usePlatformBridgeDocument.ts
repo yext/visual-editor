@@ -1,6 +1,8 @@
-import { useReceiveMessage } from "../internal/hooks/useMessage.ts";
+import {
+  useReceiveMessage,
+  TARGET_ORIGINS,
+} from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
-import { TARGET_ORIGINS } from "../components/Editor.tsx";
 
 export const usePlatformBridgeDocument = () => {
   const [entityDocument, setEntityDocument] = useState<any>(); // json data

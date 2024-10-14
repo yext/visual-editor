@@ -1,4 +1,3 @@
-import { InternalEditor } from "../internal/components/InternalEditor.js";
 import "./index.css";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
@@ -10,15 +9,18 @@ import {
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type Config, InitialHistory } from "@measured/puck";
 import {
+  useMessageSenders,
   useReceiveMessage,
-  useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
-import { SaveState } from "../internal/types/saveState.ts";
+import { LayoutSaveState } from "../internal/types/saveState.ts";
 import "@measured/puck/puck.css";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { ThemeSaveState } from "../internal/types/themeSaveState.ts";
 import { updateThemeInEditor } from "../utils/applyTheme.ts";
+import { InternalThemeEditor } from "../internal/components/InternalThemeEditor.tsx";
+import { InternalLayoutEditor } from "../internal/components/InternalLayoutEditor.tsx";
+import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -56,7 +58,7 @@ export const Editor = ({
   const [visualConfigurationData, setVisualConfigurationData] = useState<any>(); // json data
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
-  const [saveState, setSaveState] = useState<SaveState>();
+  const [saveState, setSaveState] = useState<LayoutSaveState>();
   const [saveStateFetched, setSaveStateFetched] = useState<boolean>(false); // needed because saveState can be empty
   const [devPageSets, setDevPageSets] = useState<any>(undefined);
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
@@ -80,6 +82,19 @@ export const Editor = ({
   if (document) {
     devLogger.logData("DOCUMENT", document);
   }
+
+  const {
+    iFrameLoaded,
+    sendDevLayoutSaveStateData,
+    pushPageSets,
+    saveLayoutSaveState,
+    deleteLayoutSaveState,
+    publishVisualConfiguration,
+    saveThemeSaveState,
+    deleteThemeSaveState,
+    publishThemeConfiguration,
+  } = useMessageSenders();
+  useQuickFindShortcut();
 
   const buildVisualConfigLocalStorageKey = useCallback(() => {
     if (!templateMetadata) {
@@ -179,8 +194,11 @@ export const Editor = ({
   const clearHistory = () => {
     devLogger.logFunc("clearHistory");
     clearLocalStorage();
-    deleteSaveState();
-    deleteThemeSaveState();
+    if (templateMetadata?.isThemeMode) {
+      deleteThemeSaveState();
+    } else {
+      deleteLayoutSaveState();
+    }
   };
 
   const isFirstRender = useRef(true);
@@ -441,16 +459,6 @@ export const Editor = ({
     getThemeLocalStorageKey,
   ]);
 
-  const { sendToParent: iFrameLoaded } = useSendMessageToParent(
-    "iFrameLoaded",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: sendDevSaveStateData } = useSendMessageToParent(
-    "sendDevSaveStateData",
-    TARGET_ORIGINS
-  );
-
   useEffect(() => {
     iFrameLoaded({ payload: { message: "iFrame is loaded" } });
   }, []);
@@ -466,13 +474,15 @@ export const Editor = ({
           ? localHistoryArray[localHistoryArray.length - 1].data?.data
           : {}
       );
-      sendDevSaveStateData({ payload: { devSaveStateData: historyToSend } });
+      sendDevLayoutSaveStateData({
+        payload: { devSaveStateData: historyToSend },
+      });
     }
   }, [templateMetadata]);
 
   useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
     devLogger.logData("SAVE_STATE", payload);
-    setSaveState(payload as SaveState);
+    setSaveState(payload as LayoutSaveState);
     setSaveStateFetched(true);
     send({ status: "success", payload: { message: "saveState received" } });
   });
@@ -519,11 +529,6 @@ export const Editor = ({
     });
   });
 
-  const { sendToParent: pushPageSets } = useSendMessageToParent(
-    "pushPageSets",
-    TARGET_ORIGINS
-  );
-
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -535,54 +540,6 @@ export const Editor = ({
       });
     }
   }, [templateMetadata?.isDevMode, devPageSets]);
-
-  const { sendToParent: saveSaveState } = useSendMessageToParent(
-    "saveSaveState",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: deleteSaveState } = useSendMessageToParent(
-    "deleteSaveState",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: saveVisualConfigData } = useSendMessageToParent(
-    "saveVisualConfigData",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: saveThemeSaveState } = useSendMessageToParent(
-    "saveThemeSaveState",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: deleteThemeSaveState } = useSendMessageToParent(
-    "deleteThemeSaveState",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: saveThemeData } = useSendMessageToParent(
-    "saveThemeData",
-    TARGET_ORIGINS
-  );
-
-  const { sendToParent: openQuickFind } = useSendMessageToParent(
-    "openQuickFind",
-    TARGET_ORIGINS
-  );
-
-  const keyboardHandler = (event: KeyboardEvent) => {
-    if ((event.ctrlKey || event.metaKey) && event.key === "k") {
-      openQuickFind();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", keyboardHandler);
-    return () => {
-      window.removeEventListener("keydown", keyboardHandler);
-    };
-  }, []);
 
   const isLoading =
     !puckConfig ||
@@ -625,29 +582,35 @@ export const Editor = ({
   return (
     <>
       {!isLoading ? (
-        <InternalEditor
-          puckConfig={puckConfig}
-          isLoading={isLoading}
-          puckInitialHistory={puckInitialHistory}
-          clearHistory={
-            templateMetadata.isDevMode && !templateMetadata.devOverride
-              ? clearLocalStorage
-              : clearHistory
-          }
-          templateMetadata={templateMetadata}
-          saveState={saveState!}
-          saveSaveState={saveSaveState}
-          saveVisualConfigData={saveVisualConfigData}
-          sendDevSaveStateData={sendDevSaveStateData}
-          saveThemeData={saveThemeData}
-          buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
-          devLogger={devLogger}
-          themeConfig={themeConfig}
-          themeData={themeData}
-          saveThemeSaveState={saveThemeSaveState}
-          themeHistory={themeInitialHistory}
-          setThemeHistory={setThemeInitialHistory}
-        />
+        templateMetadata.isThemeMode ? (
+          <InternalThemeEditor
+            puckConfig={puckConfig}
+            puckInitialHistory={puckInitialHistory}
+            isLoading={isLoading}
+            templateMetadata={templateMetadata}
+            publishThemeConfiguration={publishThemeConfiguration}
+            devLogger={devLogger}
+            themeConfig={themeConfig}
+            saveThemeSaveState={saveThemeSaveState}
+            themeHistory={themeInitialHistory}
+            setThemeHistory={setThemeInitialHistory}
+            clearThemeHistory={clearHistory}
+          />
+        ) : (
+          <InternalLayoutEditor
+            puckConfig={puckConfig}
+            puckInitialHistory={puckInitialHistory}
+            isLoading={isLoading}
+            clearHistory={clearHistory}
+            templateMetadata={templateMetadata}
+            layoutSaveState={saveState}
+            saveLayoutSaveState={saveLayoutSaveState}
+            publishVisualConfiguration={publishVisualConfiguration}
+            sendDevSaveStateData={sendDevLayoutSaveStateData}
+            buildVisualConfigLocalStorageKey={buildThemeLocalStorageKey}
+            devLogger={devLogger}
+          />
+        )
       ) : (
         parentLoaded && <LoadingScreen progress={progress} />
       )}
