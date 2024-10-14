@@ -344,7 +344,7 @@ export const Editor = ({
   // Handles sending the devSaveStateData on initial load so that nothing isn't rendered for preview.
   // Subsequent changes are sent via handleHistoryChange in InternalEditor.tsx.
   useEffect(() => {
-    if (!puckInitialHistoryFetched) {
+    if (!puckInitialHistoryFetched || templateMetadata?.isThemeMode) {
       return;
     }
 
@@ -356,7 +356,7 @@ export const Editor = ({
     sendDevSaveStateData({
       payload: { devSaveStateData: JSON.stringify(historyToSend) },
     });
-  }, [puckInitialHistoryFetched, puckInitialHistory]);
+  }, [puckInitialHistoryFetched, puckInitialHistory, templateMetadata]);
 
   useEffect(() => {
     if (puckInitialHistory) {
@@ -477,7 +477,7 @@ export const Editor = ({
   // Handles sending the sendDevThemeSaveStateData on initial load so that nothing isn't rendered for preview.
   // Subsequent changes are sent via handleChange in ThemeSidebar.tsx.
   useEffect(() => {
-    if (!themeSaveStateFetched) {
+    if (!themeSaveStateFetched || !templateMetadata?.isThemeMode) {
       return;
     }
 
@@ -487,7 +487,7 @@ export const Editor = ({
     sendDevThemeSaveStateData({
       payload: { devThemeSaveStateData: JSON.stringify(themeToSend) },
     });
-  }, [themeSaveStateFetched, themeSaveState]);
+  }, [themeSaveStateFetched, themeSaveState, templateMetadata]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
     "iFrameLoaded",
