@@ -477,17 +477,17 @@ export const Editor = ({
   // Handles sending the sendDevThemeSaveStateData on initial load so that nothing isn't rendered for preview.
   // Subsequent changes are sent via handleChange in ThemeSidebar.tsx.
   useEffect(() => {
-    if (!themeSaveStateFetched || !templateMetadata?.isThemeMode) {
+    if (!themeInitialHistoryFetched || !templateMetadata?.isThemeMode) {
       return;
     }
 
-    const themeToSend = themeSaveState?.history[themeSaveState.index];
+    const themeToSend = themeInitialHistory?.history[themeInitialHistory.index];
 
     devLogger.logFunc("sendDevThemeSaveStateData useEffect");
     sendDevThemeSaveStateData({
       payload: { devThemeSaveStateData: JSON.stringify(themeToSend) },
     });
-  }, [themeSaveStateFetched, themeSaveState, templateMetadata]);
+  }, [themeInitialHistoryFetched, themeInitialHistory, templateMetadata]);
 
   const { sendToParent: iFrameLoaded } = useSendMessageToParent(
     "iFrameLoaded",
