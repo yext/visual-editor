@@ -478,7 +478,6 @@ export const Editor = ({
   });
 
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
-    devLogger.log("getThemeSaveState PAYLOAD" + JSON.stringify(payload));
     const themeSaveState = {
       history: payload?.history
         ? jsonFromEscapedJsonString(payload?.history)
@@ -510,8 +509,7 @@ export const Editor = ({
   );
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    devLogger.log("getThemeData PAYLOAD: " + JSON.stringify(payload));
-    const themeData = jsonFromEscapedJsonString(payload as any);
+    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
     devLogger.logData("THEME_DATA", themeData);
     setThemeData(themeData);
     setThemeDataFetched(true);

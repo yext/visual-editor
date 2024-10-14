@@ -60,35 +60,25 @@ const internalApplyTheme = (
   );
 };
 
-const delay = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
 export const updateThemeInEditor = async (
   newTheme: SavedTheme,
   themeConfig: ThemeConfig
 ) => {
   devLogger.logFunc("updateThemeInEditor");
 
-  const previewFrame = document.getElementById(
-    "preview-frame"
-  ) as HTMLIFrameElement;
-
-  let loopTries = 0;
-  if (previewFrame && previewFrame.contentDocument) {
-    devLogger.log("updateThemeInEditor: preview-frame found.");
-
-    while (loopTries < 500) {
-      const styleOverride =
-        previewFrame?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
-
-      if (styleOverride) {
-        devLogger.log("updateThemeInEditor: preview-frame found.");
-        styleOverride.outerHTML = internalApplyTheme(newTheme, themeConfig);
-        return;
-      }
-      await delay(10);
-      loopTries += 1;
+  const observer = new MutationObserver(() => {
+    const iframe = document.getElementById(
+      "preview-frame"
+    ) as HTMLIFrameElement;
+    const styleTag = iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
+    if (styleTag) {
+      observer.disconnect();
+      styleTag.outerHTML = internalApplyTheme(newTheme, themeConfig);
     }
-    devLogger.log("Could not find style override tag after 5 seconds");
-  }
+  });
+
+  observer.observe(document, {
+    childList: true,
+    subtree: true,
+  });
 };
