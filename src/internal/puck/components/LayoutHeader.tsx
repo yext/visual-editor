@@ -6,7 +6,7 @@ import { Button } from "../ui/button.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import "../ui/Puck.css";
+import "../ui/puck.css";
 import "../../../components/index.css";
 
 type LayoutHeaderProps = {
