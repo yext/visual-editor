@@ -2,10 +2,6 @@ import "./index.css";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import {
-  getVisualConfigLocalStorageKey,
-  getThemeLocalStorageKey,
-} from "../internal/utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type Config, InitialHistory } from "@measured/puck";
 import {
@@ -21,6 +17,7 @@ import { updateThemeInEditor } from "../utils/applyTheme.ts";
 import { InternalThemeEditor } from "../internal/components/InternalThemeEditor.tsx";
 import { InternalLayoutEditor } from "../internal/components/InternalLayoutEditor.tsx";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
+import { useLocalStorage } from "../internal/hooks/useLocalStorage.ts";
 
 export const Role = {
   GLOBAL: "global",
@@ -88,40 +85,19 @@ export const Editor = ({
     sendDevLayoutSaveStateData,
     pushPageSets,
     saveLayoutSaveState,
-    deleteLayoutSaveState,
     publishVisualConfiguration,
     saveThemeSaveState,
-    deleteThemeSaveState,
     publishThemeConfiguration,
     sendDevThemeSaveStateData,
+    deleteLayoutSaveState,
+    deleteThemeSaveState,
   } = useMessageSenders();
+  const {
+    buildVisualConfigLocalStorageKey,
+    buildThemeLocalStorageKey,
+    clearLocalStorage,
+  } = useLocalStorage(templateMetadata);
   useQuickFindShortcut();
-
-  const buildVisualConfigLocalStorageKey = useCallback(() => {
-    if (!templateMetadata || templateMetadata.isThemeMode) {
-      return "";
-    }
-
-    return getVisualConfigLocalStorageKey(
-      templateMetadata.isDevMode && !templateMetadata.devOverride,
-      templateMetadata.role,
-      templateMetadata.templateId,
-      templateMetadata.layoutId,
-      templateMetadata.entityId
-    );
-  }, [templateMetadata]);
-
-  const buildThemeLocalStorageKey = useCallback(() => {
-    if (!templateMetadata || !templateMetadata.isThemeMode) {
-      return "";
-    }
-
-    return getThemeLocalStorageKey(
-      templateMetadata.isDevMode,
-      templateMetadata.siteId,
-      templateMetadata.themeEntityId
-    );
-  }, [templateMetadata]);
 
   // redirect to 404 page when going to /edit page outside of Storm
   useEffect(() => {
@@ -166,29 +142,70 @@ export const Editor = ({
     }
   }, [templateMetadata?.isDevMode]);
 
-  const clearLocalStorage = () => {
-    if (templateMetadata?.isThemeMode) {
-      clearThemeLocalStorage();
-    } else {
-      clearVisualConfigLocalStorage();
+  useEffect(() => {
+    iFrameLoaded({ payload: { message: "iFrame is loaded" } });
+  }, []);
+
+  useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
+    devLogger.logData("SAVE_STATE", payload);
+    setSaveState(payload as LayoutSaveState);
+    setSaveStateFetched(true);
+    send({ status: "success", payload: { message: "saveState received" } });
+  });
+
+  useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
+    const themeSaveState = {
+      history: payload?.history
+        ? jsonFromEscapedJsonString(payload?.history)
+        : [],
+      index: payload?.index ?? 0,
+    };
+    devLogger.logData("THEME_SAVE_STATE", payload);
+    setThemeSaveState(themeSaveState);
+    setThemeSaveStateFetched(true);
+    send({
+      status: "success",
+      payload: { message: "themeSaveState received" },
+    });
+  });
+
+  useReceiveMessage(
+    "getVisualConfigurationData",
+    TARGET_ORIGINS,
+    (send, payload) => {
+      const vcd = jsonFromEscapedJsonString(payload.visualConfigurationData);
+      devLogger.logData("VISUAL_CONFIGURATION_DATA", vcd);
+      setVisualConfigurationData(vcd);
+      setVisualConfigurationDataFetched(true);
+      send({
+        status: "success",
+        payload: { message: "getVisualConfigurationData received" },
+      });
     }
-  };
+  );
 
-  /**
-   * Clears the user's theming in localStorage
-   */
-  const clearThemeLocalStorage = () => {
-    devLogger.logFunc("clearThemeLocalStorage");
-    window.localStorage.removeItem(buildThemeLocalStorageKey());
-  };
+  useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
+    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
+    devLogger.logData("THEME_DATA", themeData);
+    setThemeData(themeData);
+    setThemeDataFetched(true);
+    send({
+      status: "success",
+      payload: { message: "getThemeData received" },
+    });
+  });
 
-  /**
-   * Clears the user's visual configuration in localStorage and resets the current Puck history
-   */
-  const clearVisualConfigLocalStorage = () => {
-    devLogger.logFunc("clearVisualConfigLocalStorage");
-    window.localStorage.removeItem(buildVisualConfigLocalStorageKey());
-  };
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      templateMetadata?.isDevMode &&
+      devPageSets
+    ) {
+      pushPageSets({
+        payload: { ...devPageSets, siteStream: devSiteStream },
+      });
+    }
+  }, [templateMetadata?.isDevMode, devPageSets]);
 
   /**
    * Clears localStorage and resets the save data in the DB
@@ -261,7 +278,7 @@ export const Editor = ({
 
       // Use localStorage directly if it exists
       if (localHistoryArray) {
-        devLogger.log("Dev Mode - Using localStorage");
+        devLogger.log("Layout Dev Mode - Using layout data from localStorage");
         const localHistories = JSON.parse(localHistoryArray);
         const localHistoryIndex = localHistories.length - 1;
         setPuckInitialHistory({
@@ -274,7 +291,9 @@ export const Editor = ({
       }
 
       // Otherwise start fresh from Content
-      devLogger.log("Dev Mode - No localStorage. Using data from Content");
+      devLogger.log(
+        "Layout Dev Mode - No localStorage. Using layout data from Content"
+      );
       if (visualConfigurationData) {
         setPuckInitialHistory({
           histories: [{ id: "root", state: { data: visualConfigurationData } }],
@@ -290,7 +309,9 @@ export const Editor = ({
     if (!saveState) {
       clearLocalStorage();
 
-      devLogger.log("Prod Mode - No saveState. Using data from Content");
+      devLogger.log(
+        "Layout Prod Mode - No saveState. Using layout data from Content"
+      );
       if (visualConfigurationData) {
         setPuckInitialHistory({
           histories: [{ id: "root", state: { data: visualConfigurationData } }],
@@ -309,7 +330,9 @@ export const Editor = ({
 
     // No localStorage, start from saveState
     if (!localHistoryArray) {
-      devLogger.log("Prod Mode - No localStorage. Using saveState");
+      devLogger.log(
+        "Layout Prod Mode - No localStorage. Using layout saveState"
+      );
       setPuckInitialHistory({
         histories: visualConfigurationData
           ? [
@@ -338,7 +361,9 @@ export const Editor = ({
 
     // If local storage reset Puck history to it
     if (localHistoryIndex !== -1) {
-      devLogger.log("Prod Mode - Using localStorage");
+      devLogger.log(
+        "Layout Prod Mode - Using localStorage visual configuration"
+      );
       setPuckInitialHistory({
         histories: JSON.parse(localHistoryArray),
         index: localHistoryIndex,
@@ -354,11 +379,12 @@ export const Editor = ({
     setPuckInitialHistory,
     setPuckInitialHistoryFetched,
     clearLocalStorage,
-    getVisualConfigLocalStorageKey,
+    buildVisualConfigLocalStorageKey,
   ]);
 
   // Handles sending the devSaveStateData on initial load so that nothing isn't rendered for preview.
-  // Subsequent changes are sent via handleHistoryChange in InternalEditor.tsx.
+  // Subsequent changes are sent via handleHistoryChange in InternalLayoutEditor.tsx and handleThemeChange
+  // in InternalThemeEditor.tsx
   useEffect(() => {
     if (!puckInitialHistoryFetched || templateMetadata?.isThemeMode) {
       return;
@@ -374,12 +400,11 @@ export const Editor = ({
     });
   }, [puckInitialHistoryFetched, puckInitialHistory, templateMetadata]);
 
-  useEffect(() => {
-    if (puckInitialHistory) {
-      devLogger.logData("PUCK_INITIAL_HISTORY", puckInitialHistory);
-    }
-  }, [puckInitialHistory]);
-
+  /*
+   * Determines the initial theme data to send to the editor.
+   * Prod mode: If DB theme_save_state exists, use that. Otherwise, pull from Content
+   * Dev mode: If localstorage theme data exists, use that. Otherwise, pull from Content
+   */
   const loadThemeInitialHistory = useCallback(() => {
     if (
       !themeSaveStateFetched ||
@@ -400,21 +425,20 @@ export const Editor = ({
 
       // Use localStorage directly if it exists
       if (localHistoryArray) {
-        devLogger.log("Dev Mode - Using theme localStorage");
+        devLogger.log("Theme Dev Mode - Using theme localStorage");
         const localHistories = JSON.parse(localHistoryArray);
         const localHistoryIndex = localHistories.length - 1;
         setThemeInitialHistory({
           history: localHistories,
           index: localHistoryIndex,
         });
-        devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
         setThemeInitialHistoryFetched(true);
         return;
       }
 
       // Otherwise start fresh from Content
       devLogger.log(
-        "Dev Mode - No localStorage. Using theme data from Content"
+        "Theme Dev Mode - No localStorage. Using theme data from Content"
       );
       if (themeData) {
         setThemeInitialHistory({
@@ -422,39 +446,31 @@ export const Editor = ({
           index: 0,
         });
       }
-      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
       setThemeInitialHistoryFetched(true);
       return;
     }
 
-    // Nothing in save_state table, start fresh from Content
+    // Nothing in theme_save_state table, start fresh from Content
     if (!themeSaveState) {
       clearLocalStorage();
 
-      devLogger.log("Prod Mode - No saveState. Using theme data from Content");
+      devLogger.log(
+        "Theme Prod Mode - No saveState. Using theme data from Content"
+      );
       if (themeData) {
         setThemeInitialHistory({
           history: [themeData],
           index: 0,
         });
       }
-      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
       setThemeInitialHistoryFetched(true);
 
       return;
     }
 
-    // Check localStorage for existing themes
-    // const localHistoryArray = window.localStorage.getItem(
-    //   buildThemeLocalStorageKey()
-    // );
-
-    // No localStorage for themes, start from themeSaveState
-    //if (!localHistoryArray) {
+    // themeSaveState exists, combine with themeData from content
     if (themeData) {
-      devLogger.log(
-        "Prod Mode - No themeLocalStorage. Using themeSaveState and themeData"
-      );
+      devLogger.log("Theme Prod Mode - Using themeSaveState and themeData");
       const history = themeData
         ? [themeData, ...themeSaveState.history]
         : [...themeSaveState.history];
@@ -464,31 +480,41 @@ export const Editor = ({
       };
       setThemeInitialHistory(themeInitialHistory);
       setThemeInitialHistoryFetched(true);
-      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
       return;
     }
 
-    devLogger.log("No loadThemeInitialHistory case matched, setting to blank.");
+    devLogger.log(
+      "No loadThemeInitialHistory case matched, setting to empty theme."
+    );
     setThemeInitialHistory({
       history: [{}],
       index: 0,
     });
-    devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
     setThemeInitialHistoryFetched(true);
-    // If local storage reset theme history to it
-    // devLogger.log("Prod Mode - Using themeLocalStorage");
-    // setThemeInitialHistory({
-    //   history: JSON.parse(localHistoryArray),
-    //   index: themeSaveState.index,
-    // });
-    // setThemeInitialHistoryFetched(true);
-    // return;
   }, [
     setThemeInitialHistory,
     setThemeInitialHistoryFetched,
     clearLocalStorage,
-    getThemeLocalStorageKey,
+    buildThemeLocalStorageKey,
   ]);
+
+  // Log PUCK_INITIAL_HISTORY (layout) on load
+  useEffect(() => {
+    if (puckInitialHistory) {
+      devLogger.logData("PUCK_INITIAL_HISTORY", puckInitialHistory);
+    }
+  }, [puckInitialHistory]);
+
+  // Log THEME_INITIAL_HISTORY on load and update theme in editor to reflect save state
+  useEffect(() => {
+    devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
+    if (themeInitialHistory && themeConfig && templateMetadata?.isThemeMode) {
+      updateThemeInEditor(
+        themeInitialHistory.history[themeInitialHistory.index],
+        themeConfig
+      );
+    }
+  }, [themeInitialHistory, themeConfig, templateMetadata?.isThemeMode]);
 
   // Handles sending the sendDevThemeSaveStateData on initial load so that nothing isn't rendered for preview.
   // Subsequent changes are sent via handleChange in ThemeSidebar.tsx.
@@ -505,71 +531,6 @@ export const Editor = ({
     });
   }, [themeInitialHistoryFetched, themeInitialHistory, templateMetadata]);
 
-  useEffect(() => {
-    iFrameLoaded({ payload: { message: "iFrame is loaded" } });
-  }, []);
-
-  useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
-    devLogger.logData("SAVE_STATE", payload);
-    setSaveState(payload as LayoutSaveState);
-    setSaveStateFetched(true);
-    send({ status: "success", payload: { message: "saveState received" } });
-  });
-
-  useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
-    const themeSaveState = {
-      history: payload?.history
-        ? jsonFromEscapedJsonString(payload?.history)
-        : [],
-      index: payload?.index ?? 0,
-    };
-    devLogger.logData("THEME_SAVE_STATE", payload);
-    setThemeSaveState(themeSaveState);
-    setThemeSaveStateFetched(true);
-    send({
-      status: "success",
-      payload: { message: "themeSaveState received" },
-    });
-  });
-
-  useReceiveMessage(
-    "getVisualConfigurationData",
-    TARGET_ORIGINS,
-    (send, payload) => {
-      const vcd = jsonFromEscapedJsonString(payload.visualConfigurationData);
-      devLogger.logData("VISUAL_CONFIGURATION_DATA", vcd);
-      setVisualConfigurationData(vcd);
-      setVisualConfigurationDataFetched(true);
-      send({
-        status: "success",
-        payload: { message: "getVisualConfigurationData received" },
-      });
-    }
-  );
-
-  useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
-    devLogger.logData("THEME_DATA", themeData);
-    setThemeData(themeData);
-    setThemeDataFetched(true);
-    send({
-      status: "success",
-      payload: { message: "getThemeData received" },
-    });
-  });
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      templateMetadata?.isDevMode &&
-      devPageSets
-    ) {
-      pushPageSets({
-        payload: { ...devPageSets, siteStream: devSiteStream },
-      });
-    }
-  }, [templateMetadata?.isDevMode, devPageSets]);
-
   const isLoading =
     !puckConfig ||
     !templateMetadata ||
@@ -581,17 +542,6 @@ export const Editor = ({
       (!themeDataFetched ||
         !themeSaveStateFetched ||
         !themeInitialHistoryFetched));
-
-  useEffect(() => {
-    devLogger.logFunc("themeInitialHistory useEffect");
-    if (themeInitialHistory && themeConfig && templateMetadata?.isThemeMode) {
-      devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
-      updateThemeInEditor(
-        themeInitialHistory.history[themeInitialHistory.index],
-        themeConfig
-      );
-    }
-  }, [themeInitialHistory, themeConfig, templateMetadata?.isThemeMode]);
 
   const progress: number =
     (100 * // @ts-expect-error adding bools is fine
@@ -624,6 +574,7 @@ export const Editor = ({
             setThemeHistory={setThemeInitialHistory}
             clearThemeHistory={clearHistory}
             sendDevThemeSaveStateData={sendDevThemeSaveStateData}
+            buildThemeLocalStorageKey={buildThemeLocalStorageKey}
           />
         ) : (
           <InternalLayoutEditor
@@ -636,7 +587,7 @@ export const Editor = ({
             saveLayoutSaveState={saveLayoutSaveState}
             publishVisualConfiguration={publishVisualConfiguration}
             sendDevSaveStateData={sendDevLayoutSaveStateData}
-            buildVisualConfigLocalStorageKey={buildThemeLocalStorageKey}
+            buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
           />
         )
       ) : (

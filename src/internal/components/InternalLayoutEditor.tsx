@@ -7,7 +7,6 @@ import {
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
-import { getVisualConfigLocalStorageKey } from "../utils/localStorageHelper.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -87,7 +86,7 @@ export const InternalLayoutEditor = ({
         }
       }
     },
-    [templateMetadata, getVisualConfigLocalStorageKey, layoutSaveState]
+    [templateMetadata, buildVisualConfigLocalStorageKey, layoutSaveState]
   );
 
   const handleClearLocalChanges = () => {
