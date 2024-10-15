@@ -120,9 +120,9 @@ export const InternalLayoutEditor = ({
         overrides={{
           header: () => (
             <LayoutHeader
-              handleClearLocalChanges={handleClearLocalChanges}
-              handleHistoryChange={handleHistoryChange}
-              handlePublishLayout={handlePublishLayout}
+              onClearLocalChanges={handleClearLocalChanges}
+              onHistoryChange={handleHistoryChange}
+              onPublishLayout={handlePublishLayout}
               isDevMode={templateMetadata.isDevMode}
             />
           ),

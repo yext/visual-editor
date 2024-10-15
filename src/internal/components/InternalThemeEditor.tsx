@@ -128,7 +128,7 @@ export const InternalThemeEditor = ({
             <ThemeHeader
               themeConfig={themeConfig}
               themeHistory={themeHistory}
-              handlePublishTheme={handlePublishTheme}
+              onPublishTheme={handlePublishTheme}
               isDevMode={templateMetadata.isDevMode}
               setThemeHistory={setThemeHistory}
               clearThemeHistory={clearThemeHistory}
@@ -140,7 +140,7 @@ export const InternalThemeEditor = ({
             <ThemeSidebar
               themeConfig={themeConfig}
               themeHistory={themeHistory!}
-              handleThemeChange={handleThemeChange}
+              onThemeChange={handleThemeChange}
             />
           ),
         }}

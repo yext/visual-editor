@@ -10,7 +10,7 @@ import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 
 type ThemeHeaderProps = {
-  handlePublishTheme: () => Promise<void>;
+  onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
   setThemeHistory: (themeHistory: ThemeSaveState) => void;
   themeConfig?: ThemeConfig;
@@ -22,7 +22,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   const {
     isDevMode,
     setThemeHistory,
-    handlePublishTheme,
+    onPublishTheme,
     themeConfig,
     themeHistory,
     clearThemeHistory,
@@ -70,7 +70,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             variant="secondary"
             disabled={themeHistory?.history.length === 1}
             onClick={async () => {
-              await handlePublishTheme();
+              await onPublishTheme();
               setThemeHistory({
                 history: [
                   themeHistory?.history[themeHistory?.history.length - 1],

@@ -11,14 +11,11 @@ import { ThemeSaveState } from "../../types/themeSaveState.ts";
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
   themeHistory: ThemeSaveState;
-  handleThemeChange: (
-    parentStyleKey: string,
-    value: Record<string, any>
-  ) => void;
+  onThemeChange: (parentStyleKey: string, value: Record<string, any>) => void;
 };
 
 const ThemeSidebar = (props: ThemeSidebarProps) => {
-  const { themeConfig, themeHistory, handleThemeChange } = props;
+  const { themeConfig, themeHistory, onThemeChange } = props;
   if (!themeConfig) {
     return (
       <div>
@@ -51,7 +48,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
           <AutoFieldPrivate
             key={parentStyleKey}
             field={field}
-            onChange={(value) => handleThemeChange(parentStyleKey, value)}
+            onChange={(value) => onThemeChange(parentStyleKey, value)}
             value={values}
           />
         );

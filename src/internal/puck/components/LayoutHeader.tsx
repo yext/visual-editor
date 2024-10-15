@@ -10,19 +10,15 @@ import "../ui/puck.css";
 import "../../../components/index.css";
 
 type LayoutHeaderProps = {
-  handleClearLocalChanges: () => void;
-  handleHistoryChange: (histories: History[], index: number) => void;
-  handlePublishLayout: (data: Data) => Promise<void>;
+  onClearLocalChanges: () => void;
+  onHistoryChange: (histories: History[], index: number) => void;
+  onPublishLayout: (data: Data) => Promise<void>;
   isDevMode: boolean;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
-  const {
-    handleClearLocalChanges,
-    handleHistoryChange,
-    handlePublishLayout,
-    isDevMode,
-  } = props;
+  const { onClearLocalChanges, onHistoryChange, onPublishLayout, isDevMode } =
+    props;
 
   const {
     appState,
@@ -38,8 +34,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   } = usePuck();
 
   useEffect(() => {
-    handleHistoryChange(histories, index);
-  }, [index, histories, handleHistoryChange]);
+    onHistoryChange(histories, index);
+  }, [index, histories, onHistoryChange]);
 
   return (
     <header className="puck-header">
@@ -64,7 +60,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         <ClearLocalChangesButton
           disabled={histories.length === 1}
           onClearLocalChanges={() => {
-            handleClearLocalChanges();
+            onClearLocalChanges();
             setHistories([
               { id: "root", state: { data: histories[0].state.data } },
             ]);
@@ -75,8 +71,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             variant="secondary"
             disabled={histories.length === 1}
             onClick={async () => {
-              await handlePublishLayout(appState.data);
-              handleClearLocalChanges();
+              await onPublishLayout(appState.data);
+              onClearLocalChanges();
               setHistories([{ id: "root", state: { data: appState.data } }]);
             }}
           >
