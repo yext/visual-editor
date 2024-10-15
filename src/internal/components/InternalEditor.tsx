@@ -29,6 +29,7 @@ interface InternalEditorProps {
   saveVisualConfigData: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   saveThemeData: (data: any) => void;
+  sendDevThemeSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
   devLogger: DevLogger;
   themeConfig?: ThemeConfig;
@@ -54,6 +55,7 @@ export const InternalEditor = ({
   devLogger,
   themeConfig,
   saveThemeSaveState,
+  sendDevThemeSaveStateData,
   themeHistory,
   setThemeHistory,
 }: InternalEditorProps) => {
@@ -198,8 +200,11 @@ export const InternalEditor = ({
                 <ThemeSidebar
                   themeConfig={themeConfig}
                   saveTheme={saveThemeSaveState}
+                  sendDevThemeSaveStateData={sendDevThemeSaveStateData}
                   themeHistory={themeHistory!}
                   setThemeHistory={setThemeHistory}
+                  templateMetadata={templateMetadata}
+                  devLogger={devLogger}
                 />
               )
             : undefined,
