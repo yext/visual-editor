@@ -6,20 +6,19 @@ import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
-import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
-import { generateCssVariablesFromPuckFields } from "../../utils/internalThemeResolver.ts";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import { Payload } from "../../hooks/useMessage.ts";
 
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
-  saveTheme: (themeSaveState: Payload) => void;
   themeHistory: ThemeSaveState;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  handleThemeChange: (
+    parentStyleKey: string,
+    value: Record<string, any>
+  ) => void;
 };
 
 const ThemeSidebar = (props: ThemeSidebarProps) => {
-  const { saveTheme, themeConfig, themeHistory, setThemeHistory } = props;
+  const { themeConfig, themeHistory, handleThemeChange } = props;
   if (!themeConfig) {
     return (
       <div>
@@ -31,25 +30,6 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       </div>
     );
   }
-
-  const handleChange = (topLevelKey: string, newValue: any) => {
-    const newThemeValues = {
-      ...themeHistory.history[themeHistory.index],
-      ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
-    };
-    updateThemeInEditor(newThemeValues, themeConfig);
-    const newHistory = {
-      history: [...themeHistory.history, newThemeValues],
-      index: themeHistory.index + 1,
-    };
-    saveTheme({
-      payload: {
-        history: JSON.stringify(newHistory.history),
-        index: newHistory.index,
-      },
-    });
-    setThemeHistory(newHistory);
-  };
 
   return (
     <div>
@@ -71,7 +51,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
           <AutoFieldPrivate
             key={parentStyleKey}
             field={field}
-            onChange={(value) => handleChange(parentStyleKey, value)}
+            onChange={(value) => handleThemeChange(parentStyleKey, value)}
             value={values}
           />
         );

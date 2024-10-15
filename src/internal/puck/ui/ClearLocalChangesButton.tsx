@@ -13,10 +13,10 @@ import {
 import { Button } from "../ui/button.tsx";
 import "../../../components/index.css";
 
-interface ClearLocalChangesButtonProps {
+type ClearLocalChangesButtonProps = {
   disabled: boolean;
   onClearLocalChanges: () => void;
-}
+};
 
 export const ClearLocalChangesButton = ({
   disabled,

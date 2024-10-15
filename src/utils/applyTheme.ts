@@ -1,4 +1,5 @@
 import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
+import { DevLogger } from "./devLogger.ts";
 import { SavedTheme, ThemeConfig } from "./themeResolver.ts";
 
 export type Document = {
@@ -6,12 +7,15 @@ export type Document = {
 };
 
 const THEME_STYLE_TAG_ID = "visual-editor-theme";
+const devLogger = new DevLogger();
 
 export const applyTheme = (
   document: Document,
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
+  devLogger.logFunc("applyTheme");
+
   const savedThemes: Record<string, any>[] = document?._site?.pagesTheme;
 
   let savedTheme;
@@ -37,6 +41,8 @@ const internalApplyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
+  devLogger.logFunc("internalApplyTheme");
+
   const themeValuesToApply = internalThemeResolver(
     themeConfig,
     savedThemeValues
@@ -45,6 +51,8 @@ const internalApplyTheme = (
   if (!themeValuesToApply || Object.keys(themeValuesToApply).length === 0) {
     return base ?? "";
   }
+  devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
+
   return (
     `${base ?? ""}<style id="${THEME_STYLE_TAG_ID}" type="text/css">.components{` +
     Object.entries(themeValuesToApply)
@@ -58,6 +66,8 @@ export const updateThemeInEditor = async (
   newTheme: SavedTheme,
   themeConfig: ThemeConfig
 ) => {
+  devLogger.logFunc("updateThemeInEditor");
+
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
       "preview-frame"

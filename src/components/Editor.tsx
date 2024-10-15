@@ -37,11 +37,11 @@ export const TARGET_ORIGINS = [
   "https://app.eu.yext.com",
 ];
 
-export interface EditorProps {
+export type EditorProps = {
   document: any;
   componentRegistry: Map<string, Config<any>>;
   themeConfig?: ThemeConfig;
-}
+};
 
 const devLogger = new DevLogger();
 
@@ -97,7 +97,7 @@ export const Editor = ({
   useQuickFindShortcut();
 
   const buildVisualConfigLocalStorageKey = useCallback(() => {
-    if (!templateMetadata) {
+    if (!templateMetadata || templateMetadata.isThemeMode) {
       return "";
     }
 
@@ -111,7 +111,7 @@ export const Editor = ({
   }, [templateMetadata]);
 
   const buildThemeLocalStorageKey = useCallback(() => {
-    if (!templateMetadata) {
+    if (!templateMetadata || !templateMetadata.isThemeMode) {
       return "";
     }
 
@@ -589,7 +589,6 @@ export const Editor = ({
             isLoading={isLoading}
             templateMetadata={templateMetadata}
             publishThemeConfiguration={publishThemeConfiguration}
-            devLogger={devLogger}
             themeConfig={themeConfig}
             saveThemeSaveState={saveThemeSaveState}
             themeHistory={themeInitialHistory}
@@ -608,7 +607,6 @@ export const Editor = ({
             publishVisualConfiguration={publishVisualConfiguration}
             sendDevSaveStateData={sendDevLayoutSaveStateData}
             buildVisualConfigLocalStorageKey={buildThemeLocalStorageKey}
-            devLogger={devLogger}
           />
         )
       ) : (

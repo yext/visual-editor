@@ -8,20 +8,23 @@ import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeSaveState } from "../types/themeSaveState.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
+import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
+import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 
-interface InternalThemeEditorProps {
+const devLogger = new DevLogger();
+
+type InternalThemeEditorProps = {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
   isLoading: boolean;
   templateMetadata: TemplateMetadata;
   publishThemeConfiguration: (data: any) => void;
-  devLogger: DevLogger;
   themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
   themeHistory?: ThemeSaveState;
   setThemeHistory: (themeHistory: ThemeSaveState) => void;
   clearThemeHistory: () => void;
-}
+};
 
 // Render Puck editor
 export const InternalThemeEditor = ({
@@ -30,7 +33,6 @@ export const InternalThemeEditor = ({
   isLoading,
   templateMetadata,
   publishThemeConfiguration,
-  devLogger,
   themeConfig,
   saveThemeSaveState,
   themeHistory,
@@ -48,6 +50,34 @@ export const InternalThemeEditor = ({
         ),
       },
     });
+  };
+
+  const handleThemeChange = (topLevelKey: string, newValue: any) => {
+    if (!themeHistory || !themeConfig) {
+      return;
+    }
+
+    const newThemeValues = {
+      ...themeHistory.history[themeHistory.index],
+      ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
+    };
+
+    const newHistory = {
+      history: [...themeHistory.history, newThemeValues],
+      index: themeHistory.index + 1,
+    };
+
+    if (!templateMetadata.isDevMode) {
+      saveThemeSaveState({
+        payload: {
+          history: JSON.stringify(newHistory.history),
+          index: newHistory.index,
+        },
+      });
+    }
+
+    updateThemeInEditor(newThemeValues, themeConfig);
+    setThemeHistory(newHistory);
   };
 
   const change = async () => {
@@ -90,9 +120,8 @@ export const InternalThemeEditor = ({
           fields: () => (
             <ThemeSidebar
               themeConfig={themeConfig}
-              saveTheme={saveThemeSaveState}
               themeHistory={themeHistory!}
-              setThemeHistory={setThemeHistory}
+              handleThemeChange={handleThemeChange}
             />
           ),
         }}

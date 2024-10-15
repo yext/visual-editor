@@ -14,7 +14,9 @@ import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 
-interface InternalLayoutEditorProps {
+const devLogger = new DevLogger();
+
+type InternalLayoutEditorProps = {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
   isLoading: boolean;
@@ -25,8 +27,7 @@ interface InternalLayoutEditorProps {
   publishVisualConfiguration: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
-  devLogger: DevLogger;
-}
+};
 
 // Render Puck editor
 export const InternalLayoutEditor = ({
@@ -40,7 +41,6 @@ export const InternalLayoutEditor = ({
   publishVisualConfiguration,
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
-  devLogger,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const historyIndex = useRef<number>(0);

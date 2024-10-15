@@ -13,8 +13,11 @@ export type DevLoggerPrefix =
   | "THEME_VALUES_TO_APPLY";
 
 export class DevLogger {
-  constructor(private enabled: boolean = false) {
-    if (!this.enabled) {
+  private static enabled: boolean;
+
+  constructor(enabled: boolean = false) {
+    DevLogger.enabled = enabled;
+    if (!DevLogger.enabled) {
       return;
     }
 
@@ -22,9 +25,9 @@ export class DevLogger {
   }
 
   enable = (enabled: boolean) => {
-    this.enabled = enabled;
+    DevLogger.enabled = enabled;
 
-    if (!this.enabled) {
+    if (!DevLogger.enabled) {
       return;
     }
 
@@ -32,7 +35,7 @@ export class DevLogger {
   };
 
   logData = (devLoggerPrefix: DevLoggerPrefix, payload: any) => {
-    if (!this.enabled) {
+    if (!DevLogger.enabled) {
       return;
     }
 
@@ -40,7 +43,7 @@ export class DevLogger {
   };
 
   logFunc = (functionName: string) => {
-    if (!this.enabled) {
+    if (!DevLogger.enabled) {
       return;
     }
 
@@ -48,7 +51,7 @@ export class DevLogger {
   };
 
   log = (text: string) => {
-    if (!this.enabled) {
+    if (!DevLogger.enabled) {
       return;
     }
 
