@@ -39,6 +39,16 @@ export type EventHandler = (
   payload: Payload
 ) => unknown;
 
+export const TARGET_ORIGINS = [
+  "http://localhost",
+  "https://dev.yext.com",
+  "https://qa.yext.com",
+  "https://sandbox.yext.com",
+  "https://www.yext.com",
+  "https://app-qa.eu.yext.com",
+  "https://app.eu.yext.com",
+];
+
 const postMessage = (
   data: PostMessageInternal,
   target: MessageEvent["source"],
@@ -214,5 +224,76 @@ const statusSetter = (setStatus: Dispatch<SetStateAction<MessageStatus>>) => {
     } else if (status === "error") {
       setStatus("error");
     }
+  };
+};
+
+export const useMessageSenders = () => {
+  const { sendToParent: iFrameLoaded } = useSendMessageToParent(
+    "iFrameLoaded",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: sendDevLayoutSaveStateData } = useSendMessageToParent(
+    "sendDevSaveStateData",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: pushPageSets } = useSendMessageToParent(
+    "pushPageSets",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: saveLayoutSaveState } = useSendMessageToParent(
+    "saveSaveState",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: deleteLayoutSaveState } = useSendMessageToParent(
+    "deleteSaveState",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: publishVisualConfiguration } = useSendMessageToParent(
+    "saveVisualConfigData",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: saveThemeSaveState } = useSendMessageToParent(
+    "saveThemeSaveState",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: deleteThemeSaveState } = useSendMessageToParent(
+    "deleteThemeSaveState",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: publishThemeConfiguration } = useSendMessageToParent(
+    "saveThemeData",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: openQuickFind } = useSendMessageToParent(
+    "openQuickFind",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: sendDevThemeSaveStateData } = useSendMessageToParent(
+    "sendDevThemeSaveStateData",
+    TARGET_ORIGINS
+  );
+
+  return {
+    iFrameLoaded,
+    sendDevLayoutSaveStateData,
+    pushPageSets,
+    saveLayoutSaveState,
+    deleteLayoutSaveState,
+    publishVisualConfiguration,
+    saveThemeSaveState,
+    deleteThemeSaveState,
+    publishThemeConfiguration,
+    openQuickFind,
+    sendDevThemeSaveStateData,
   };
 };

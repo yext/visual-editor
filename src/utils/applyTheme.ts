@@ -15,6 +15,7 @@ export const applyTheme = (
   base?: string
 ): string => {
   devLogger.logFunc("applyTheme");
+
   const savedThemes: Record<string, any>[] = document?._site?.pagesTheme;
 
   let savedTheme;
@@ -46,11 +47,12 @@ const internalApplyTheme = (
     themeConfig,
     savedThemeValues
   );
-  devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
 
   if (!themeValuesToApply || Object.keys(themeValuesToApply).length === 0) {
     return base ?? "";
   }
+  devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
+
   return (
     `${base ?? ""}<style id="${THEME_STYLE_TAG_ID}" type="text/css">.components{` +
     Object.entries(themeValuesToApply)

@@ -6,33 +6,16 @@ import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
-import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
-import { generateCssVariablesFromPuckFields } from "../../utils/internalThemeResolver.ts";
 import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import { Payload } from "../../hooks/useMessage.ts";
-import { TemplateMetadata } from "../../types/templateMetadata.ts";
-import { DevLogger } from "../../../utils/devLogger.ts";
 
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
-  saveTheme: (themeSaveState: Payload) => void;
-  sendDevThemeSaveStateData: (data: any) => void;
   themeHistory: ThemeSaveState;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
-  templateMetadata: TemplateMetadata;
-  devLogger: DevLogger;
+  onThemeChange: (parentStyleKey: string, value: Record<string, any>) => void;
 };
 
 const ThemeSidebar = (props: ThemeSidebarProps) => {
-  const {
-    saveTheme,
-    sendDevThemeSaveStateData,
-    themeConfig,
-    themeHistory,
-    setThemeHistory,
-    templateMetadata,
-    devLogger,
-  } = props;
+  const { themeConfig, themeHistory, onThemeChange } = props;
   if (!themeConfig) {
     return (
       <div>
@@ -44,38 +27,6 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       </div>
     );
   }
-
-  const handleChange = (topLevelKey: string, newValue: any) => {
-    const newThemeValues = {
-      ...themeHistory.history[themeHistory.index],
-      ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
-    };
-    updateThemeInEditor(newThemeValues, themeConfig);
-    const newHistory = {
-      history: [...themeHistory.history, newThemeValues],
-      index: themeHistory.index + 1,
-    };
-
-    if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
-      devLogger.logFunc("sendDevThemeSaveStateData");
-      sendDevThemeSaveStateData({
-        payload: {
-          devThemeSaveStateData: JSON.stringify(
-            newHistory.history[newHistory.index]
-          ),
-        },
-      });
-    } else {
-      devLogger.logFunc("saveTheme");
-      saveTheme({
-        payload: {
-          history: JSON.stringify(newHistory.history),
-          index: newHistory.index,
-        },
-      });
-    }
-    setThemeHistory(newHistory);
-  };
 
   return (
     <div>
@@ -97,7 +48,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
           <AutoFieldPrivate
             key={parentStyleKey}
             field={field}
-            onChange={(value) => handleChange(parentStyleKey, value)}
+            onChange={(value) => onThemeChange(parentStyleKey, value)}
             value={values}
           />
         );
