@@ -1,13 +1,13 @@
-import "../ui/Puck.css";
 import React from "react";
 import { Data, usePuck, type History } from "@measured/puck";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
-import "../../../components/index.css";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
+import "../ui/Puck.css";
+import "../../../components/index.css";
 
 type LayoutHeaderProps = {
   handleClearLocalChanges: () => void;
