@@ -1,7 +1,11 @@
-import { Role } from "../../components/Editor.tsx";
 import { useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
+
+export const Role = {
+  GLOBAL: "global",
+  INDIVIDUAL: "individual",
+};
 
 const ROLE = "ROLE_",
   SITE = "SITE_",
@@ -45,14 +49,6 @@ export const useLocalStorage = (
     );
   }, [templateMetadata]);
 
-  const clearLocalStorage = () => {
-    if (templateMetadata?.isThemeMode) {
-      clearThemeLocalStorage();
-    } else {
-      clearVisualConfigLocalStorage();
-    }
-  };
-
   /**
    * Clears the user's theming in localStorage
    */
@@ -70,7 +66,8 @@ export const useLocalStorage = (
   };
 
   return {
-    clearLocalStorage,
+    clearThemeLocalStorage,
+    clearVisualConfigLocalStorage,
     buildVisualConfigLocalStorageKey,
     buildThemeLocalStorageKey,
   };
@@ -86,7 +83,7 @@ function getVisualConfigLocalStorageKey(
   const devPrefix = isDevMode ? "dev" : "";
   if (!role || !templateId || (!entityId && !layoutId)) {
     throw new Error(
-      "Unable to generate local storage key, missing query parameters"
+      `Unable to generate local storage key, missing query parameters${!entityId && " entityId"}${!layoutId && " layoutId"}`
     );
   }
   if (role === Role.INDIVIDUAL) {
@@ -109,7 +106,7 @@ function getThemeLocalStorageKey(
 ): string {
   if (!themeEntityId) {
     throw new Error(
-      "Unable to generate local storage key for themes, missing query parameters"
+      "Unable to generate local storage key for themes, missing themeEntityId"
     );
   }
   return (isDevMode ? "dev" : "") + SITE + siteId + THEME + themeEntityId;
