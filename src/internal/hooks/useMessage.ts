@@ -278,6 +278,11 @@ export const useMessageSenders = () => {
     TARGET_ORIGINS
   );
 
+  const { sendToParent: sendDevThemeSaveStateData } = useSendMessageToParent(
+    "sendDevThemeSaveStateData",
+    TARGET_ORIGINS
+  );
+
   return {
     iFrameLoaded,
     sendDevLayoutSaveStateData,
@@ -289,5 +294,6 @@ export const useMessageSenders = () => {
     deleteThemeSaveState,
     publishThemeConfiguration,
     openQuickFind,
+    sendDevThemeSaveStateData,
   };
 };

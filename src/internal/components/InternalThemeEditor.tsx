@@ -24,6 +24,7 @@ type InternalThemeEditorProps = {
   themeHistory?: ThemeSaveState;
   setThemeHistory: (themeHistory: ThemeSaveState) => void;
   clearThemeHistory: () => void;
+  sendDevThemeSaveStateData: (data: any) => void;
 };
 
 // Render Puck editor
@@ -38,6 +39,7 @@ export const InternalThemeEditor = ({
   themeHistory,
   setThemeHistory,
   clearThemeHistory,
+  sendDevThemeSaveStateData,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
 
@@ -67,7 +69,17 @@ export const InternalThemeEditor = ({
       index: themeHistory.index + 1,
     };
 
-    if (!templateMetadata.isDevMode) {
+    if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
+      devLogger.logFunc("sendDevThemeSaveStateData");
+      sendDevThemeSaveStateData({
+        payload: {
+          devThemeSaveStateData: JSON.stringify(
+            newHistory.history[newHistory.index]
+          ),
+        },
+      });
+    } else {
+      devLogger.logFunc("saveTheme");
       saveThemeSaveState({
         payload: {
           history: JSON.stringify(newHistory.history),
