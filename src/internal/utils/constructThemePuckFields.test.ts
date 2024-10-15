@@ -16,7 +16,7 @@ export const exampleThemeConfig: ThemeConfig = {
           size: {
             label: "Font Size",
             type: "number",
-            default: "12px",
+            default: 12,
             plugin: "fontSize",
           },
           family: {
@@ -109,7 +109,7 @@ describe("constructThemePuckFields", () => {
           objectFields: {
             size: {
               label: "Font Size",
-              type: "text",
+              type: "number",
             },
             family: {
               label: "Font Family",
@@ -167,14 +167,14 @@ describe("convertStyleToPuckField", () => {
       label: "Font Size",
       type: "number",
       plugin: "fontSize",
-      default: "0",
+      default: 0,
     };
 
     const result = convertStyleToPuckField(numberStyle);
 
     expect(result).toEqual({
       label: "Font Size",
-      type: "text",
+      type: "number",
     });
   });
 
@@ -235,7 +235,7 @@ describe("constructThemePuckValues", () => {
 
     expect(result).toEqual({
       font: {
-        size: "16px", // from saved values
+        size: 16, // from saved values
         family: "arial", // from saved values
       },
       color: {
@@ -262,7 +262,7 @@ describe("constructThemePuckValues", () => {
 
     expect(result).toEqual({
       font: {
-        size: "12px", // default value
+        size: 12, // default value
         family: "helvetica", // default value
       },
       color: {
@@ -292,7 +292,7 @@ describe("constructThemePuckValues", () => {
 
     expect(result).toEqual({
       font: {
-        size: "14px", // from saved values
+        size: 14, // from saved values
         family: "helvetica", // default value
       },
       color: {
