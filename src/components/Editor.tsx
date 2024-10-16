@@ -112,7 +112,7 @@ export const Editor = ({
       visualConfigurationDataFetched +
       ((themeDataFetched || !templateMetadata?.isThemeMode) ?? 0) +
       ((themeSaveStateFetched || !templateMetadata?.isThemeMode) ?? 0)) /
-      7);
+      (!templateMetadata?.isThemeMode ? 6 : 5));
 
   return (
     <>
