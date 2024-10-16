@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMessageSenders } from "./useMessage.ts";
+import { useCommonMessageSenders } from "./useMessageSenders.ts";
 
 /**
  * useQuickFindShortcut listens for keydown events and sends a
@@ -7,7 +7,7 @@ import { useMessageSenders } from "./useMessage.ts";
  * mimicking the behavior of storm.
  */
 export const useQuickFindShortcut = () => {
-  const { openQuickFind } = useMessageSenders();
+  const { openQuickFind } = useCommonMessageSenders();
   const keyboardHandler = (event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "k") {
       openQuickFind();

@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
 import { InitialHistory, Config } from "@measured/puck";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { useMessageSenders } from "../hooks/useMessage.ts";
-import { useLocalStorage } from "../hooks/useLocalStorage.ts";
+import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
+import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 
 const devLogger = new DevLogger();
 
@@ -31,10 +30,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     saveLayoutSaveState,
     publishVisualConfiguration,
     deleteLayoutSaveState,
-  } = useMessageSenders();
+  } = useLayoutMessageSenders();
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
-    useLocalStorage(templateMetadata);
+    useLayoutLocalStorage(templateMetadata);
 
   const [puckInitialHistory, setPuckInitialHistory] = useState<
     InitialHistory | undefined
@@ -212,23 +211,19 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const isLoading = !puckInitialHistoryFetched;
 
   return (
-    <>
-      {!isLoading ? (
-        <InternalLayoutEditor
-          puckConfig={puckConfig}
-          puckInitialHistory={puckInitialHistory}
-          isLoading={isLoading}
-          clearHistory={clearHistory}
-          templateMetadata={templateMetadata}
-          layoutSaveState={layoutSaveState}
-          saveLayoutSaveState={saveLayoutSaveState}
-          publishVisualConfiguration={publishVisualConfiguration}
-          sendDevSaveStateData={sendDevLayoutSaveStateData}
-          buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
-        />
-      ) : (
-        <LoadingScreen progress={90} />
-      )}
-    </>
+    !isLoading && (
+      <InternalLayoutEditor
+        puckConfig={puckConfig}
+        puckInitialHistory={puckInitialHistory}
+        isLoading={isLoading}
+        clearHistory={clearHistory}
+        templateMetadata={templateMetadata}
+        layoutSaveState={layoutSaveState}
+        saveLayoutSaveState={saveLayoutSaveState}
+        publishVisualConfiguration={publishVisualConfiguration}
+        sendDevSaveStateData={sendDevLayoutSaveStateData}
+        buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
+      />
+    )
   );
 };

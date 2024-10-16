@@ -1,6 +1,6 @@
 import { ObjectField, SelectField, TextField } from "@measured/puck";
 import { ParentStyle, SavedTheme, Style } from "../../utils/themeResolver.ts";
-import { ColorSelector } from "../../components/ColorSelector.tsx";
+import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 
 export const constructThemePuckFields = (parentStyle: ParentStyle) => {
   const field: ObjectField = {

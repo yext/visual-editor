@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Field, FieldLabel } from "@measured/puck";
-import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
+import { RenderProps } from "../../utils/renderEntityFields.ts";
 import { Color, ColorResult, SketchPicker } from "react-color";
 
 export type ColorSelectorProps = {

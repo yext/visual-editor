@@ -1,22 +1,19 @@
 import { useEffect, useState } from "react";
-import {
-  TARGET_ORIGINS,
-  useMessageSenders,
-  useReceiveMessage,
-} from "../internal/hooks/useMessage.ts";
-import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
-import { DevLogger } from "../utils/devLogger.ts";
-import { LayoutSaveState } from "../internal/types/saveState.ts";
+import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
+import { TemplateMetadata } from "../types/templateMetadata.ts";
+import { DevLogger } from "../../utils/devLogger.ts";
+import { LayoutSaveState } from "../types/saveState.ts";
 import { Config } from "@measured/puck";
-import { ThemeSaveState } from "../internal/types/themeSaveState.ts";
-import { jsonFromEscapedJsonString } from "../internal/utils/jsonFromEscapedJsonString.ts";
+import { ThemeSaveState } from "../types/themeSaveState.ts";
+import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
+import { useCommonMessageSenders } from "./useMessageSenders.ts";
 
 const devLogger = new DevLogger();
 
 export const useMessageReceivers = (
   componentRegistry: Map<string, Config<any>>
 ) => {
-  const { iFrameLoaded } = useMessageSenders();
+  const { iFrameLoaded } = useCommonMessageSenders();
 
   // Trigger data flow from parent
   useEffect(() => {
