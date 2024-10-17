@@ -29,69 +29,71 @@ export function resolveVisualEditorData(
   }
 
   const { document } = data;
+
   const entityConfigurations: VisualConfiguration[] =
     document.visualConfigurations ?? [];
   const entityLayoutConfigurations: PagesLayout[] = document.pageLayouts ?? [];
   const siteLayoutConfigurations: VisualLayout[] =
     document._site?.defaultLayouts;
 
+  let visualTemplate: any;
+
   // check base entity
   for (const entityConfiguration of entityConfigurations) {
     if (entityConfiguration.pageSet === pageSet) {
-      const visualTemplate = JSON.parse(
+      visualTemplate = JSON.parse(
         validateOrDefault(entityConfiguration.data, pageSet)
       );
-      return {
-        ...data,
-        document: {
-          ...document,
-          visualTemplate,
-        },
-      };
+      break;
     }
   }
+
   // check layouts referenced by the base entity
-  for (const entityLayout of entityLayoutConfigurations) {
-    if (entityLayout.visualConfiguration?.pageSet === pageSet) {
-      const visualTemplate = JSON.parse(
-        validateOrDefault(entityLayout.visualConfiguration.data, pageSet)
-      );
-      return {
-        ...data,
-        document: {
-          ...document,
-          visualTemplate,
-        },
-      };
-    }
-  }
-  if (siteLayoutConfigurations) {
-    // check layouts referenced by the site entity
-    for (const siteLayout of siteLayoutConfigurations) {
-      if (siteLayout.visualConfiguration?.pageSet === pageSet) {
-        const visualTemplate = JSON.parse(
-          validateOrDefault(siteLayout.visualConfiguration.data, pageSet)
+  if (!visualTemplate) {
+    for (const entityLayout of entityLayoutConfigurations) {
+      if (entityLayout.visualConfiguration?.pageSet === pageSet) {
+        visualTemplate = JSON.parse(
+          validateOrDefault(entityLayout.visualConfiguration.data, pageSet)
         );
-        return {
-          ...data,
-          document: {
-            ...document,
-            visualTemplate,
-          },
-        };
+        break;
       }
     }
   }
 
-  console.warn(`Unable to find puck data for pageSet: ${pageSet}`);
-  const visualTemplate = JSON.parse(defaultData);
-  return {
-    ...data,
-    document: {
-      ...document,
-      visualTemplate,
-    },
-  };
+  // check layouts referenced by the site entity
+  if (!visualTemplate && siteLayoutConfigurations) {
+    for (const siteLayout of siteLayoutConfigurations) {
+      if (siteLayout.visualConfiguration?.pageSet === pageSet) {
+        visualTemplate = JSON.parse(
+          validateOrDefault(siteLayout.visualConfiguration.data, pageSet)
+        );
+        break;
+      }
+    }
+  }
+
+  // fallback to no visualTemplate data
+  if (!visualTemplate) {
+    console.warn(`Unable to find puck data for pageSet: ${pageSet}`);
+    visualTemplate = JSON.parse(defaultData);
+  }
+
+  const updatedDocument = data;
+  updatedDocument.document.visualTemplate = visualTemplate;
+
+  // Handles previewing themes which is put on a custom property because we can't override _site fields
+  const themeForPreview = document._customDataOverrides?.pagesTheme;
+  if (themeForPreview) {
+    if (!updatedDocument.document._site) {
+      updatedDocument.document._site = {
+        pagesTheme: themeForPreview,
+      };
+    } else {
+      updatedDocument.document._site.pagesTheme = themeForPreview;
+    }
+  }
+
+  return updatedDocument;
 }
 
 function validateOrDefault(puckData: string, templateName: string): string {
