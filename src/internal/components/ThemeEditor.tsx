@@ -66,7 +66,11 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     }
 
     setPuckInitialHistoryFetched(true);
-  }, [setPuckInitialHistory, setPuckInitialHistoryFetched]);
+  }, [
+    setPuckInitialHistory,
+    setPuckInitialHistoryFetched,
+    visualConfigurationData,
+  ]);
 
   /*
    * Determines the initial theme data to send to the editor.
