@@ -1,6 +1,6 @@
-import { Puck, Config, InitialHistory } from "@measured/puck";
+import { Puck, Config, InitialHistory, usePuck } from "@measured/puck";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -44,6 +44,14 @@ export const InternalThemeEditor = ({
   buildThemeLocalStorageKey,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
+
+  const {
+    history: { setHistories },
+  } = usePuck();
+
+  useEffect(() => {
+    setHistories(puckInitialHistory?.histories || []);
+  }, [puckInitialHistory]);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");

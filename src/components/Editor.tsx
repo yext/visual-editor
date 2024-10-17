@@ -380,6 +380,7 @@ export const Editor = ({
     setPuckInitialHistoryFetched,
     clearLocalStorage,
     buildVisualConfigLocalStorageKey,
+    visualConfigurationData,
   ]);
 
   // Handles sending the devSaveStateData on initial load so that nothing isn't rendered for preview.
