@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
 import { InitialHistory, Config } from "@measured/puck";
-import {} from "../types/saveState.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
