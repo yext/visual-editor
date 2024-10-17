@@ -99,7 +99,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         setThemeInitialHistory({
           history: localHistories,
           index: localHistoryIndex,
-          hash: generateId("localThemeHistory"),
+          hash: generateId("history"),
         });
         setThemeInitialHistoryFetched(true);
         return;
@@ -113,7 +113,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         setThemeInitialHistory({
           history: [themeData],
           index: 0,
-          hash: generateId("themeHistory"),
+          hash: generateId("history"),
         });
       }
       setThemeInitialHistoryFetched(true);
@@ -131,7 +131,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         setThemeInitialHistory({
           history: [themeData],
           index: 0,
-          hash: generateId("themeHistory"),
+          hash: generateId("history"),
         });
       }
       setThemeInitialHistoryFetched(true);
@@ -148,7 +148,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       const themeInitialHistory = {
         history: history,
         index: history.length - 1,
-        hash: generateId("themeHistory"),
+        hash: themeSaveState.hash,
       };
       setThemeInitialHistory(themeInitialHistory);
       setThemeInitialHistoryFetched(true);

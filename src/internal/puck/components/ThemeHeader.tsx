@@ -63,7 +63,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             setThemeHistory({
               history: [themeHistory?.history[0]],
               index: 0,
-              hash: themeHistory?.hash ?? generateId("themeHistory"),
+              hash: themeHistory?.hash ?? generateId("history"),
             });
           }}
         />

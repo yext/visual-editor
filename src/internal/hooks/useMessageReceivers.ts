@@ -85,7 +85,7 @@ export const useMessageReceivers = (
         ? jsonFromEscapedJsonString(payload?.history)
         : [],
       index: payload?.index ?? 0,
-      hash: payload?.hash ?? generateId("themeHistory"),
+      hash: payload?.hash ?? generateId("history"),
     };
     devLogger.logData("THEME_SAVE_STATE", payload);
     setThemeSaveState(themeSaveState);
