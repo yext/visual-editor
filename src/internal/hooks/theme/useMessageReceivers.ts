@@ -27,14 +27,8 @@ export const useThemeMessageReceivers = () => {
     useState<boolean>(false); // needed because themeSaveState can be empty
 
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
-    const themeSaveState = {
-      history: payload?.history
-        ? jsonFromEscapedJsonString(payload?.history)
-        : [],
-      index: payload?.index ?? 0,
-    };
     devLogger.logData("THEME_SAVE_STATE", payload);
-    setThemeSaveState(themeSaveState);
+    setThemeSaveState(payload as ThemeSaveState);
     setThemeSaveStateFetched(true);
     send({
       status: "success",
