@@ -1,5 +1,5 @@
 import { Puck, Config, InitialHistory } from "@measured/puck";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
@@ -21,8 +21,8 @@ type InternalThemeEditorProps = {
   publishThemeConfiguration: (data: any) => void;
   themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
-  themeHistory?: ThemeSaveState;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  themeInitialHistory?: ThemeSaveState;
+  setThemeInitialHistory: (themeHistory: ThemeSaveState) => void;
   clearThemeHistory: () => void;
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
@@ -37,13 +37,18 @@ export const InternalThemeEditor = ({
   publishThemeConfiguration,
   themeConfig,
   saveThemeSaveState,
-  themeHistory,
-  setThemeHistory,
+  themeInitialHistory,
+  setThemeInitialHistory,
   clearThemeHistory,
   sendDevThemeSaveStateData,
   buildThemeLocalStorageKey,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
+  const [themeHistory, setThemeHistory] = useState(themeInitialHistory);
+
+  useEffect(() => {
+    setThemeHistory(themeInitialHistory);
+  }, [themeInitialHistory]);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
@@ -56,20 +61,10 @@ export const InternalThemeEditor = ({
     });
   };
 
-  const handleThemeChange = (topLevelKey: string, newValue: any) => {
-    if (!themeHistory || !themeConfig) {
+  const handleThemeChange = (newHistory: ThemeSaveState) => {
+    if (!themeConfig) {
       return;
     }
-
-    const newThemeValues = {
-      ...themeHistory.history[themeHistory.index],
-      ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
-    };
-
-    const newHistory = {
-      history: [...themeHistory.history, newThemeValues],
-      index: themeHistory.index + 1,
-    };
 
     window.localStorage.setItem(
       buildThemeLocalStorageKey(),
@@ -95,7 +90,7 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(newThemeValues, themeConfig);
+    updateThemeInEditor(newHistory.history[newHistory.index], themeConfig);
     setThemeHistory(newHistory);
   };
 
@@ -108,6 +103,44 @@ export const InternalThemeEditor = ({
       return;
     }
   };
+
+  const fieldsOverride = useCallback(() => {
+    if (!themeInitialHistory) {
+      return <></>;
+    }
+
+    const [internalThemeHistory, setInternalThemeHistory] =
+      useState(themeInitialHistory);
+
+    const internalHandleThemeChance = (
+      topLevelKey: string,
+      newValue: Record<string, any>
+    ) => {
+      if (!internalThemeHistory) {
+        return;
+      }
+
+      const newThemeValues = {
+        ...internalThemeHistory.history[internalThemeHistory.index],
+        ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
+      };
+      const newHistory = {
+        history: [...internalThemeHistory.history, newThemeValues],
+        index: internalThemeHistory.index + 1,
+      };
+
+      setInternalThemeHistory(newHistory);
+      handleThemeChange(newHistory);
+    };
+
+    return (
+      <ThemeSidebar
+        themeConfig={themeConfig}
+        themeValues={internalThemeHistory.history[internalThemeHistory.index]}
+        onThemeChange={internalHandleThemeChance}
+      />
+    );
+  }, [themeInitialHistory]);
 
   return (
     <EntityFieldProvider>
@@ -130,19 +163,13 @@ export const InternalThemeEditor = ({
               themeHistory={themeHistory}
               onPublishTheme={handlePublishTheme}
               isDevMode={templateMetadata.isDevMode}
-              setThemeHistory={setThemeHistory}
+              setThemeInitialHistory={setThemeInitialHistory}
               clearThemeHistory={clearThemeHistory}
             />
           ),
           actionBar: () => <></>,
           components: () => <></>,
-          fields: () => (
-            <ThemeSidebar
-              themeConfig={themeConfig}
-              themeHistory={themeHistory!}
-              onThemeChange={handleThemeChange}
-            />
-          ),
+          fields: fieldsOverride,
         }}
       />
     </EntityFieldProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { RenderProps } from "../../utils/renderEntityFields.ts";
 import { Color, ColorResult, SketchPicker } from "react-color";
@@ -8,10 +8,8 @@ export type ColorSelectorProps = {
 };
 
 export const ColorSelector = (props: ColorSelectorProps): Field => {
-  return {
-    type: "custom",
-    label: props.label,
-    render: ({ field, value, onChange }: RenderProps) => {
+  const colorSelectorRenderer = useCallback(
+    ({ field, value, onChange }: RenderProps) => {
       const [isOpen, setIsOpen] = useState(false);
 
       const fieldStyles = colorPickerStyles(value);
@@ -46,6 +44,13 @@ export const ColorSelector = (props: ColorSelectorProps): Field => {
         </>
       );
     },
+    []
+  );
+
+  return {
+    type: "custom",
+    label: props.label,
+    render: colorSelectorRenderer,
   };
 };
 
