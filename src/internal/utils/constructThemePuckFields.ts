@@ -1,6 +1,6 @@
-import { ObjectField, SelectField, TextField } from "@measured/puck";
+import { ObjectField, SelectField, NumberField } from "@measured/puck";
 import { ParentStyle, SavedTheme, Style } from "../../utils/themeResolver.ts";
-import { ColorSelector } from "../../components/ColorSelector.tsx";
+import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 
 export const constructThemePuckFields = (parentStyle: ParentStyle) => {
   const field: ObjectField = {
@@ -27,8 +27,8 @@ export const convertStyleToPuckField = (style: Style) => {
     case "number":
       return {
         label: style.label,
-        type: "text",
-      } as TextField;
+        type: "number",
+      } as NumberField;
     case "select":
       return {
         label: style.label,
@@ -49,8 +49,20 @@ export const constructThemePuckValues = (
 
   Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
-      value[styleKey] =
-        savedThemeValues?.[`--${parentKey}-${styleKey}`] ?? style.default;
+      const storedValue = savedThemeValues?.[`--${parentKey}-${styleKey}`];
+
+      if (storedValue) {
+        if (style.type === "number") {
+          const convertedNumber = Number.parseInt(storedValue);
+          value[styleKey] = isNaN(convertedNumber)
+            ? style.default
+            : convertedNumber;
+        } else {
+          value[styleKey] = storedValue;
+        }
+      } else {
+        value[styleKey] = style.default;
+      }
     } else {
       value[styleKey] = constructThemePuckValues(
         savedThemeValues,

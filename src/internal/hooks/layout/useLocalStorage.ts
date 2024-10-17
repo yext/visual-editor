@@ -1,22 +1,24 @@
-import { Role } from "../../components/Editor.tsx";
 import { useCallback } from "react";
-import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { DevLogger } from "../../utils/devLogger.ts";
+import { TemplateMetadata } from "../../types/templateMetadata.ts";
+import { DevLogger } from "../../../utils/devLogger.ts";
+
+const Roles = {
+  GLOBAL: "global",
+  INDIVIDUAL: "individual",
+};
 
 const ROLE = "ROLE_",
-  SITE = "SITE_",
   TEMPLATE = "TEMPLATE_",
   LAYOUT = "LAYOUT_",
-  ENTITY = "ENTITY_",
-  THEME = "THEME_";
+  ENTITY = "ENTITY_";
 
 const devLogger = new DevLogger();
 
 /**
- * useLocalStorage contains helper functions for reading and clearing local storage
+ * useLayoutLocalStorage contains helper functions for reading and clearing local storage
  * @param templateMetadata The template metadata for the active template (undefined if not loaded)
  */
-export const useLocalStorage = (
+export const useLayoutLocalStorage = (
   templateMetadata: TemplateMetadata | undefined
 ) => {
   const buildVisualConfigLocalStorageKey = useCallback(() => {
@@ -33,34 +35,6 @@ export const useLocalStorage = (
     );
   }, [templateMetadata]);
 
-  const buildThemeLocalStorageKey = useCallback(() => {
-    if (!templateMetadata) {
-      return "";
-    }
-
-    return getThemeLocalStorageKey(
-      templateMetadata.isDevMode,
-      templateMetadata.siteId,
-      templateMetadata.themeEntityId
-    );
-  }, [templateMetadata]);
-
-  const clearLocalStorage = () => {
-    if (templateMetadata?.isThemeMode) {
-      clearThemeLocalStorage();
-    } else {
-      clearVisualConfigLocalStorage();
-    }
-  };
-
-  /**
-   * Clears the user's theming in localStorage
-   */
-  const clearThemeLocalStorage = () => {
-    devLogger.logFunc("clearThemeLocalStorage");
-    window.localStorage.removeItem(buildThemeLocalStorageKey());
-  };
-
   /**
    * Clears the user's visual configuration in localStorage and resets the current Puck history
    */
@@ -70,9 +44,8 @@ export const useLocalStorage = (
   };
 
   return {
-    clearLocalStorage,
+    clearVisualConfigLocalStorage,
     buildVisualConfigLocalStorageKey,
-    buildThemeLocalStorageKey,
   };
 };
 
@@ -86,10 +59,10 @@ function getVisualConfigLocalStorageKey(
   const devPrefix = isDevMode ? "dev" : "";
   if (!role || !templateId || (!entityId && !layoutId)) {
     throw new Error(
-      "Unable to generate local storage key, missing query parameters"
+      `Unable to generate local storage key, missing query parameters${!entityId && " entityId"}${!layoutId && " layoutId"}`
     );
   }
-  if (role === Role.INDIVIDUAL) {
+  if (role === Roles.INDIVIDUAL) {
     if (!entityId) {
       throw new Error(`EntityId required for role ${role}`);
     }
@@ -100,17 +73,4 @@ function getVisualConfigLocalStorageKey(
     throw new Error(`LayoutId required for role ${role}`);
   }
   return devPrefix + ROLE + role + TEMPLATE + templateId + LAYOUT + layoutId;
-}
-
-function getThemeLocalStorageKey(
-  isDevMode: boolean,
-  siteId: number,
-  themeEntityId?: number
-): string {
-  if (!themeEntityId) {
-    throw new Error(
-      "Unable to generate local storage key for themes, missing query parameters"
-    );
-  }
-  return (isDevMode ? "dev" : "") + SITE + siteId + THEME + themeEntityId;
 }

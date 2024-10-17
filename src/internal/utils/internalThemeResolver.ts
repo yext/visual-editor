@@ -32,7 +32,11 @@ const extractCssVariablesFromThemeConfig = (
 ) => {
   Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
     if ("default" in style) {
-      result[`--${parentKey}-${styleKey}`] = style.default;
+      if (style.type === "number") {
+        result[`--${parentKey}-${styleKey}`] = `${style.default}px`;
+      } else {
+        result[`--${parentKey}-${styleKey}`] = style.default;
+      }
     } else {
       extractCssVariablesFromThemeConfig(
         style,
@@ -75,6 +79,8 @@ export const generateCssVariablesFromPuckFields = (
         `${parentKey}-${fieldKey}`,
         result
       );
+    } else if (typeof fieldValue === "number") {
+      result[`--${parentKey}-${fieldKey}`] = fieldValue + "px";
     } else {
       result[`--${parentKey}-${fieldKey}`] = fieldValue;
     }

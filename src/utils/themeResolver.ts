@@ -3,7 +3,7 @@ export type Style =
       label: string;
       plugin: string;
       type: "number";
-      default: string;
+      default: number;
     }
   | {
       label: string;
@@ -42,7 +42,7 @@ export type TailwindConfig = {
   };
 };
 
-export type SavedTheme = Record<string, string | number>;
+export type SavedTheme = Record<string, string>;
 
 const extractDefaults = (
   styles: {
@@ -121,9 +121,9 @@ const isObject = (value: any): value is PlainObject => {
  * giving priority to the developer-specified theming.
  */
 export const themeResolver = (
-  deverloperTheming: TailwindConfig,
+  developerTheming: TailwindConfig,
   marketerTheming: ThemeConfig
 ): TailwindConfig => {
   const marketerTailwindConfig = convertToTailwindConfig(marketerTheming);
-  return deepMerge(deverloperTheming, marketerTailwindConfig);
+  return deepMerge(developerTheming, marketerTailwindConfig);
 };
