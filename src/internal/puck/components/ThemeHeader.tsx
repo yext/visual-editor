@@ -8,6 +8,7 @@ import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
+import { InitialHistory, usePuck } from "@measured/puck";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -16,6 +17,7 @@ type ThemeHeaderProps = {
   themeConfig?: ThemeConfig;
   themeHistory?: ThemeSaveState;
   clearThemeHistory: () => void;
+  puckInitialHistory: InitialHistory | undefined;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {
@@ -26,7 +28,16 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     themeConfig,
     themeHistory,
     clearThemeHistory,
+    puckInitialHistory,
   } = props;
+
+  const {
+    history: { setHistories },
+  } = usePuck();
+
+  useEffect(() => {
+    setHistories(puckInitialHistory?.histories || []);
+  }, [puckInitialHistory]);
 
   useEffect(() => {
     // Hide the components list and fields list titles
