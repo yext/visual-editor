@@ -9,27 +9,21 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { generateId } from "../utils/generateId.ts";
+import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
+import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 
 const devLogger = new DevLogger();
 
 type ThemeEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
-  themeSaveState: ThemeSaveState | undefined;
-  themeData: any;
   visualConfigurationData: any;
   themeConfig: ThemeConfig | undefined;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
-  const {
-    puckConfig,
-    templateMetadata,
-    themeSaveState,
-    themeData,
-    visualConfigurationData,
-    themeConfig,
-  } = props;
+  const { puckConfig, templateMetadata, visualConfigurationData, themeConfig } =
+    props;
 
   const {
     sendDevThemeSaveStateData,
@@ -37,6 +31,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     publishThemeConfiguration,
     deleteThemeSaveState,
   } = useThemeMessageSenders();
+
+  const { themeData, themeDataFetched, themeSaveState, themeSaveStateFetched } =
+    useThemeMessageReceivers();
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);
@@ -183,9 +180,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [themeInitialHistory, themeConfig]);
 
   useEffect(() => {
+    if (!themeSaveStateFetched || !themeDataFetched) {
+      return;
+    }
     loadPuckInitialHistory();
     loadThemeInitialHistory();
-  }, [templateMetadata]);
+  }, [templateMetadata, themeSaveStateFetched, themeDataFetched]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
@@ -218,24 +218,36 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     });
   }, [themeInitialHistoryFetched, themeInitialHistory, templateMetadata]);
 
-  const isLoading = !puckInitialHistoryFetched || !themeInitialHistoryFetched;
+  const isLoading =
+    !puckInitialHistoryFetched ||
+    !themeInitialHistoryFetched ||
+    !themeDataFetched ||
+    !themeSaveStateFetched;
 
-  return (
-    !isLoading && (
-      <InternalThemeEditor
-        puckConfig={puckConfig}
-        puckInitialHistory={puckInitialHistory}
-        isLoading={isLoading}
-        templateMetadata={templateMetadata}
-        publishThemeConfiguration={publishThemeConfiguration}
-        themeConfig={themeConfig}
-        saveThemeSaveState={saveThemeSaveState}
-        themeHistory={themeInitialHistory}
-        setThemeHistory={setThemeInitialHistory}
-        clearThemeHistory={clearHistory}
-        sendDevThemeSaveStateData={sendDevThemeSaveStateData}
-        buildThemeLocalStorageKey={buildThemeLocalStorageKey}
-      />
-    )
+  const progress =
+    60 + // @ts-expect-error adding bools is fine
+    (puckInitialHistoryFetched +
+      themeInitialHistoryFetched +
+      themeDataFetched +
+      themeSaveStateFetched) *
+      10;
+
+  return !isLoading ? (
+    <InternalThemeEditor
+      puckConfig={puckConfig}
+      puckInitialHistory={puckInitialHistory}
+      isLoading={isLoading}
+      templateMetadata={templateMetadata}
+      publishThemeConfiguration={publishThemeConfiguration}
+      themeConfig={themeConfig}
+      saveThemeSaveState={saveThemeSaveState}
+      themeHistory={themeInitialHistory}
+      setThemeHistory={setThemeInitialHistory}
+      clearThemeHistory={clearHistory}
+      sendDevThemeSaveStateData={sendDevThemeSaveStateData}
+      buildThemeLocalStorageKey={buildThemeLocalStorageKey}
+    />
+  ) : (
+    <LoadingScreen progress={progress} />
   );
 };

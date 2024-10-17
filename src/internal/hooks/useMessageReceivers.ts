@@ -2,16 +2,13 @@ import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { LayoutSaveState } from "../types/saveState.ts";
 import { Config } from "@measured/puck";
-import { ThemeSaveState } from "../types/themeSaveState.ts";
 import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
-import { generateId } from "../utils/generateId.ts";
 
 const devLogger = new DevLogger();
 
-export const useMessageReceivers = (
+export const useCommonMessageReceivers = (
   componentRegistry: Map<string, Config<any>>
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
@@ -29,22 +26,6 @@ export const useMessageReceivers = (
   const [visualConfigurationData, setVisualConfigurationData] = useState<any>(); // json data
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
-
-  // Layout from DB
-  const [layoutSaveState, setLayoutSaveState] = useState<LayoutSaveState>();
-  const [layoutSaveStateFetched, setLayoutSaveStateFetched] =
-    useState<boolean>(false); // needed because saveState can be empty
-
-  // Theme from Content
-  const [themeData, setThemeData] = useState<any>(); // json data
-  const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
-
-  // Theme from DB
-  const [themeSaveState, setThemeSaveState] = useState<
-    ThemeSaveState | undefined
-  >(undefined);
-  const [themeSaveStateFetched, setThemeSaveStateFetched] =
-    useState<boolean>(false); // needed because themeSaveState can be empty
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry.get(payload.templateId);
@@ -72,51 +53,10 @@ export const useMessageReceivers = (
     }
   );
 
-  useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
-    devLogger.logData("SAVE_STATE", payload);
-    setLayoutSaveState(payload as LayoutSaveState);
-    setLayoutSaveStateFetched(true);
-    send({ status: "success", payload: { message: "saveState received" } });
-  });
-
-  useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
-    const themeSaveState = {
-      history: payload?.history
-        ? jsonFromEscapedJsonString(payload?.history)
-        : [],
-      index: payload?.index ?? 0,
-      hash: payload?.hash ?? generateId("history"),
-    };
-    devLogger.logData("THEME_SAVE_STATE", payload);
-    setThemeSaveState(themeSaveState);
-    setThemeSaveStateFetched(true);
-    send({
-      status: "success",
-      payload: { message: "themeSaveState received" },
-    });
-  });
-
-  useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
-    devLogger.logData("THEME_DATA", themeData);
-    setThemeData(themeData);
-    setThemeDataFetched(true);
-    send({
-      status: "success",
-      payload: { message: "getThemeData received" },
-    });
-  });
-
   return {
     visualConfigurationData,
     visualConfigurationDataFetched,
     templateMetadata,
     puckConfig,
-    themeData,
-    themeDataFetched,
-    layoutSaveState,
-    layoutSaveStateFetched,
-    themeSaveState,
-    themeSaveStateFetched,
   };
 };

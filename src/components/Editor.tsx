@@ -7,7 +7,7 @@ import "@measured/puck/puck.css";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
-import { useMessageReceivers } from "../internal/hooks/useMessageReceivers.ts";
+import { useCommonMessageReceivers } from "../internal/hooks/useMessageReceivers.ts";
 import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
@@ -38,13 +38,7 @@ export const Editor = ({
     puckConfig,
     visualConfigurationData,
     visualConfigurationDataFetched,
-    layoutSaveState,
-    layoutSaveStateFetched,
-    themeData,
-    themeDataFetched,
-    themeSaveState,
-    themeSaveStateFetched,
-  } = useMessageReceivers(componentRegistry);
+  } = useCommonMessageReceivers(componentRegistry);
 
   const { pushPageSets } = useCommonMessageSenders();
 
@@ -98,21 +92,15 @@ export const Editor = ({
     !puckConfig ||
     !templateMetadata ||
     !document ||
-    !(layoutSaveStateFetched || templateMetadata?.isThemeMode) ||
-    !visualConfigurationDataFetched ||
-    !(themeDataFetched || !templateMetadata?.isThemeMode) ||
-    !(themeSaveStateFetched || !templateMetadata?.isThemeMode);
+    !visualConfigurationDataFetched;
 
   const progress: number =
-    100 * // @ts-expect-error adding bools is fine
+    60 * // @ts-expect-error adding bools is fine
     ((!!puckConfig +
       !!templateMetadata +
       !!document +
-      ((layoutSaveStateFetched || templateMetadata?.isThemeMode) ?? 0) +
-      visualConfigurationDataFetched +
-      ((themeDataFetched || !templateMetadata?.isThemeMode) ?? 0) +
-      ((themeSaveStateFetched || !templateMetadata?.isThemeMode) ?? 0)) /
-      7);
+      visualConfigurationDataFetched) /
+      4);
 
   return (
     <>
@@ -121,8 +109,6 @@ export const Editor = ({
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            themeSaveState={themeSaveState}
-            themeData={themeData}
             visualConfigurationData={visualConfigurationData}
             themeConfig={themeConfig}
           />
@@ -130,7 +116,6 @@ export const Editor = ({
           <LayoutEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            layoutSaveState={layoutSaveState}
             visualConfigurationData={visualConfigurationData}
           />
         )
