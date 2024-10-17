@@ -4,7 +4,6 @@ import { ThemeSaveState } from "../../types/themeSaveState.ts";
 import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
-import { v4 as uuidv4 } from "uuid";
 
 const devLogger = new DevLogger();
 
@@ -28,15 +27,8 @@ export const useThemeMessageReceivers = () => {
     useState<boolean>(false); // needed because themeSaveState can be empty
 
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
-    const themeSaveState = {
-      history: payload?.history
-        ? jsonFromEscapedJsonString(payload?.history)
-        : [],
-      index: payload?.index ?? 0,
-      hash: payload?.hash ?? uuidv4(),
-    };
     devLogger.logData("THEME_SAVE_STATE", payload);
-    setThemeSaveState(themeSaveState);
+    setThemeSaveState(payload as ThemeSaveState);
     setThemeSaveStateFetched(true);
     send({
       status: "success",

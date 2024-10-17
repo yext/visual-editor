@@ -1,4 +1,4 @@
-import { AutoFieldPrivate } from "@measured/puck";
+import { AutoFieldPrivate, type History } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
@@ -6,11 +6,10 @@ import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
-import { ThemeSaveState } from "../../types/themeSaveState.ts";
 
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
-  themeHistory: ThemeSaveState;
+  themeHistory: History[];
   onThemeChange: (parentStyleKey: string, value: Record<string, any>) => void;
 };
 
@@ -39,7 +38,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       {Object.entries(themeConfig).map(([parentStyleKey, parentStyle]) => {
         const field = constructThemePuckFields(parentStyle);
         const values = constructThemePuckValues(
-          themeHistory.history[themeHistory.index],
+          themeHistory[themeHistory.length - 1]?.state?.data,
           parentStyle,
           parentStyleKey
         );

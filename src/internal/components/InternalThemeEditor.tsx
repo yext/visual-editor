@@ -1,4 +1,4 @@
-import { Puck, Config, InitialHistory } from "@measured/puck";
+import { Puck, Config, InitialHistory, type History } from "@measured/puck";
 import React from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -6,10 +6,10 @@ import { EntityFieldProvider } from "../../components/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { ThemeSaveState } from "../types/themeSaveState.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { v4 as uuidv4 } from "uuid";
 
 const devLogger = new DevLogger();
 
@@ -21,8 +21,8 @@ type InternalThemeEditorProps = {
   publishThemeConfiguration: (data: any) => void;
   themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
-  themeHistory?: ThemeSaveState;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  themeHistory?: InitialHistory;
+  setThemeHistory: (themeHistory: InitialHistory) => void;
   clearThemeHistory: () => void;
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
@@ -50,7 +50,7 @@ export const InternalThemeEditor = ({
     publishThemeConfiguration({
       payload: {
         saveThemeData: JSON.stringify(
-          themeHistory?.history[themeHistory?.index]
+          themeHistory?.histories?.[themeHistory.index ?? 0]?.state?.data
         ),
       },
     });
@@ -62,19 +62,20 @@ export const InternalThemeEditor = ({
     }
 
     const newThemeValues = {
-      ...themeHistory.history[themeHistory.index],
       ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
     };
 
     const newHistory = {
-      history: [...themeHistory.history, newThemeValues],
-      index: themeHistory.index + 1,
-      hash: themeHistory.hash,
+      histories: [
+        ...themeHistory.histories,
+        { id: uuidv4(), state: { data: newThemeValues } },
+      ] as History[],
+      index: themeHistory.histories.length,
     };
 
     window.localStorage.setItem(
       buildThemeLocalStorageKey(),
-      JSON.stringify(newHistory.history)
+      JSON.stringify(newHistory.histories)
     );
 
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
@@ -82,7 +83,7 @@ export const InternalThemeEditor = ({
       sendDevThemeSaveStateData({
         payload: {
           devThemeSaveStateData: JSON.stringify(
-            newHistory.history[newHistory.index]
+            newHistory.histories[newHistory.index ?? 0]?.state?.data
           ),
         },
       });
@@ -90,9 +91,11 @@ export const InternalThemeEditor = ({
       devLogger.logFunc("saveTheme");
       saveThemeSaveState({
         payload: {
-          history: JSON.stringify(newHistory.history),
+          histories: JSON.stringify(
+            newHistory.histories[newHistory.index ?? 0]?.state?.data
+          ),
           index: newHistory.index,
-          hash: newHistory.hash,
+          hash: newHistory.histories[newHistory.index ?? 0]?.id,
         },
       });
     }
@@ -141,7 +144,7 @@ export const InternalThemeEditor = ({
           fields: () => (
             <ThemeSidebar
               themeConfig={themeConfig}
-              themeHistory={themeHistory!}
+              themeHistory={themeHistory!.histories}
               onThemeChange={handleThemeChange}
             />
           ),

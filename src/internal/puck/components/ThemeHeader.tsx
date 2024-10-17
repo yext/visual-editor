@@ -2,20 +2,19 @@ import "../ui/puck.css";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../components/index.css";
-import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
+import { SavedTheme, ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { v4 as uuidv4 } from "uuid";
+import { InitialHistory } from "@measured/puck";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  setThemeHistory: (themeHistory: InitialHistory) => void;
   themeConfig?: ThemeConfig;
-  themeHistory?: ThemeSaveState;
+  themeHistory?: InitialHistory;
   clearThemeHistory: () => void;
 };
 
@@ -54,31 +53,43 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-center"></div>
       <div className="actions">
         <ClearLocalChangesButton
-          disabled={themeHistory?.history.length === 1}
+          disabled={themeHistory?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();
             if (themeConfig) {
-              updateThemeInEditor(themeHistory?.history[0], themeConfig);
+              updateThemeInEditor(
+                themeHistory?.histories?.[0]?.state
+                  ?.data as unknown as SavedTheme,
+                themeConfig
+              );
             }
             setThemeHistory({
-              history: [themeHistory?.history[0]],
-              index: 0,
-              hash: themeHistory?.hash ?? uuidv4(),
+              histories: [
+                {
+                  id: "root",
+                  state: { data: themeHistory?.histories?.[0]?.state?.data },
+                },
+              ],
             });
           }}
         />
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={themeHistory?.history.length === 1}
+            disabled={themeHistory?.histories?.length === 1}
             onClick={async () => {
               await onPublishTheme();
               setThemeHistory({
-                history: [
-                  themeHistory?.history[themeHistory?.history.length - 1],
+                histories: [
+                  {
+                    id: "root",
+                    state: {
+                      data: themeHistory?.histories?.[
+                        themeHistory?.histories?.length - 1
+                      ]?.state?.data,
+                    },
+                  },
                 ],
-                index: 0,
-                hash: uuidv4(),
               });
             }}
           >
