@@ -8,6 +8,7 @@ import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
+import { generateId } from "../utils/generateId.ts";
 
 const devLogger = new DevLogger();
 
@@ -46,7 +47,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
     useState<boolean>(false);
   const [themeInitialHistory, setThemeInitialHistory] =
-    useState<ThemeSaveState>({ history: [{}], index: 0 });
+    useState<ThemeSaveState>({ history: [{}], index: 0, hash: "" });
   const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
     useState<boolean>(false);
 
@@ -98,6 +99,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         setThemeInitialHistory({
           history: localHistories,
           index: localHistoryIndex,
+          hash: generateId("localThemeHistory"),
         });
         setThemeInitialHistoryFetched(true);
         return;
@@ -111,6 +113,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         setThemeInitialHistory({
           history: [themeData],
           index: 0,
+          hash: generateId("themeHistory"),
         });
       }
       setThemeInitialHistoryFetched(true);
@@ -128,6 +131,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         setThemeInitialHistory({
           history: [themeData],
           index: 0,
+          hash: generateId("themeHistory"),
         });
       }
       setThemeInitialHistoryFetched(true);
@@ -144,6 +148,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       const themeInitialHistory = {
         history: history,
         index: history.length - 1,
+        hash: generateId("themeHistory"),
       };
       setThemeInitialHistory(themeInitialHistory);
       setThemeInitialHistoryFetched(true);
@@ -156,6 +161,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     setThemeInitialHistory({
       history: [{}],
       index: 0,
+      hash: "",
     });
     setThemeInitialHistoryFetched(true);
   }, [

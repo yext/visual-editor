@@ -8,6 +8,7 @@ import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
+import { generateId } from "../../utils/generateId.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -62,6 +63,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             setThemeHistory({
               history: [themeHistory?.history[0]],
               index: 0,
+              hash: themeHistory?.hash ?? generateId("themeHistory"),
             });
           }}
         />
@@ -76,6 +78,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
                   themeHistory?.history[themeHistory?.history.length - 1],
                 ],
                 index: 0,
+                hash: "",
               });
             }}
           >

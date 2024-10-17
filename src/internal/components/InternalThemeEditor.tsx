@@ -10,6 +10,7 @@ import { ThemeSaveState } from "../types/themeSaveState.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { generateId } from "../utils/generateId.ts";
 
 const devLogger = new DevLogger();
 
@@ -69,6 +70,7 @@ export const InternalThemeEditor = ({
     const newHistory = {
       history: [...themeHistory.history, newThemeValues],
       index: themeHistory.index + 1,
+      hash: generateId("history"),
     };
 
     window.localStorage.setItem(
@@ -91,6 +93,7 @@ export const InternalThemeEditor = ({
         payload: {
           history: JSON.stringify(newHistory.history),
           index: newHistory.index,
+          hash: newHistory.hash,
         },
       });
     }

@@ -7,6 +7,7 @@ import { Config } from "@measured/puck";
 import { ThemeSaveState } from "../types/themeSaveState.ts";
 import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
+import { generateId } from "../utils/generateId.ts";
 
 const devLogger = new DevLogger();
 
@@ -84,6 +85,7 @@ export const useMessageReceivers = (
         ? jsonFromEscapedJsonString(payload?.history)
         : [],
       index: payload?.index ?? 0,
+      hash: payload?.hash ?? generateId("themeHistory"),
     };
     devLogger.logData("THEME_SAVE_STATE", payload);
     setThemeSaveState(themeSaveState);
