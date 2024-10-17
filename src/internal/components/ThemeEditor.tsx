@@ -147,13 +147,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       return;
     }
 
-    devLogger.log(
-      "No loadThemeInitialHistory case matched, setting to empty theme."
-    );
-    setThemeInitialHistory({
-      history: [{}],
-      index: 0,
-    });
+    devLogger.log("No loadThemeInitialHistory case matched.");
     setThemeInitialHistoryFetched(true);
   }, [
     setThemeInitialHistory,
@@ -235,8 +229,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       publishThemeConfiguration={publishThemeConfiguration}
       themeConfig={themeConfig}
       saveThemeSaveState={saveThemeSaveState}
-      themeHistory={themeInitialHistory}
-      setThemeHistory={setThemeInitialHistory}
+      themeInitialHistory={themeInitialHistory}
+      setThemeInitialHistory={setThemeInitialHistory}
       clearThemeHistory={clearHistory}
       sendDevThemeSaveStateData={sendDevThemeSaveStateData}
       buildThemeLocalStorageKey={buildThemeLocalStorageKey}
