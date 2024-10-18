@@ -3,8 +3,7 @@ import { InitialHistory, Config } from "@measured/puck";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { ThemeSaveState } from "../types/themeSaveState.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { SavedTheme, ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
@@ -42,8 +41,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   >();
   const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
     useState<boolean>(false);
-  const [themeInitialHistory, setThemeInitialHistory] =
-    useState<ThemeSaveState>({ history: [{}], index: 0 });
+  const [themeInitialHistory, setThemeInitialHistory] = useState<
+    InitialHistory | undefined
+  >();
   const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
     useState<boolean>(false);
 
@@ -91,9 +91,11 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
         const localHistories = JSON.parse(localHistoryArray);
-        const localHistoryIndex = localHistories.length - 1;
+        const localHistoryIndex = JSON.parse(localHistoryArray).findIndex(
+          (item: any) => item.id === themeSaveState?.hash
+        );
         setThemeInitialHistory({
-          history: localHistories,
+          histories: localHistories,
           index: localHistoryIndex,
         });
         setThemeInitialHistoryFetched(true);
@@ -106,7 +108,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       );
       if (themeData) {
         setThemeInitialHistory({
-          history: [themeData],
+          histories: [{ id: "root", state: { data: themeData } }],
           index: 0,
         });
       }
@@ -123,7 +125,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       );
       if (themeData) {
         setThemeInitialHistory({
-          history: [themeData],
+          histories: [{ id: "root", state: { data: themeData } }],
           index: 0,
         });
       }
@@ -139,7 +141,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         ? [themeData, ...themeSaveState.history]
         : [...themeSaveState.history];
       const themeInitialHistory = {
-        history: history,
+        histories: history,
         index: history.length - 1,
       };
       setThemeInitialHistory(themeInitialHistory);
@@ -151,7 +153,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       "No loadThemeInitialHistory case matched, setting to empty theme."
     );
     setThemeInitialHistory({
-      history: [{}],
+      histories: [{ id: "root", state: {} }],
       index: 0,
     });
     setThemeInitialHistoryFetched(true);
@@ -167,7 +169,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     devLogger.logData("THEME_INITIAL_HISTORY", themeInitialHistory);
     if (themeInitialHistory && themeConfig) {
       updateThemeInEditor(
-        themeInitialHistory.history[themeInitialHistory.index],
+        themeInitialHistory.histories[themeInitialHistory.index ?? 0]?.state
+          ?.data as unknown as SavedTheme,
         themeConfig
       );
     }
@@ -204,7 +207,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       return;
     }
 
-    const themeToSend = themeInitialHistory?.history[themeInitialHistory.index];
+    const themeToSend =
+      themeInitialHistory?.histories[themeInitialHistory.index ?? 0]?.state
+        ?.data;
 
     devLogger.logFunc("sendDevThemeSaveStateData useEffect");
     sendDevThemeSaveStateData({
