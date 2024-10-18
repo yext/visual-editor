@@ -13,7 +13,7 @@ import { InitialHistory, usePuck } from "@measured/puck";
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  setThemeInitialHistory: (themeHistory: ThemeSaveState) => void;
   themeConfig?: ThemeConfig;
   themeHistory?: ThemeSaveState;
   clearThemeHistory: () => void;
@@ -23,7 +23,7 @@ type ThemeHeaderProps = {
 export const ThemeHeader = (props: ThemeHeaderProps) => {
   const {
     isDevMode,
-    setThemeHistory,
+    setThemeInitialHistory,
     onPublishTheme,
     themeConfig,
     themeHistory,
@@ -70,7 +70,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             if (themeConfig) {
               updateThemeInEditor(themeHistory?.history[0], themeConfig);
             }
-            setThemeHistory({
+            setThemeInitialHistory({
               history: [themeHistory?.history[0]],
               index: 0,
             });
@@ -82,7 +82,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             disabled={themeHistory?.history.length === 1}
             onClick={async () => {
               await onPublishTheme();
-              setThemeHistory({
+              setThemeInitialHistory({
                 history: [
                   themeHistory?.history[themeHistory?.history.length - 1],
                 ],
