@@ -137,6 +137,7 @@ export const InternalThemeEditor = ({
               isDevMode={templateMetadata.isDevMode}
               setThemeHistory={setThemeHistory}
               clearThemeHistory={clearThemeHistory}
+              puckInitialHistory={puckInitialHistory}
             />
           ),
           actionBar: () => <></>,
