@@ -1,15 +1,18 @@
 export type ThemeSaveState = {
-  history: any; // json object
-  index: number;
+  history: ThemeHistory;
   hash: string;
 };
 
 export type ThemeHistories = {
-  histories: History[];
-  index?: number;
+  histories: ThemeHistory[];
+  index: number;
 };
 
-export type History<D = any> = {
-  state: D;
-  id?: string;
+export type ThemeHistory = {
+  state: {
+    data?: {
+      [key: string]: string;
+    };
+  };
+  id: string;
 };

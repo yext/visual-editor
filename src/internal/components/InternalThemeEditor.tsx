@@ -10,7 +10,7 @@ import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { v4 as uuidv4 } from "uuid";
-import { ThemeHistories, History } from "../types/themeData.ts";
+import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -70,7 +70,7 @@ export const InternalThemeEditor = ({
       histories: [
         ...themeHistory.histories,
         { id: uuidv4(), state: { data: newThemeValues } },
-      ] as History[],
+      ] as ThemeHistory[],
       index: themeHistory.histories.length,
     };
 
@@ -92,10 +92,9 @@ export const InternalThemeEditor = ({
       devLogger.logFunc("saveTheme");
       saveThemeSaveState({
         payload: {
-          histories: JSON.stringify(
+          history: JSON.stringify(
             newHistory.histories[newHistory.index ?? 0]?.state?.data
           ),
-          index: newHistory.index,
           hash: newHistory.histories[newHistory.index ?? 0]?.id,
         },
       });

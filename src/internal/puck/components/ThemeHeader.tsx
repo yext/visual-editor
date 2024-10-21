@@ -69,18 +69,18 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             clearThemeHistory();
             if (themeConfig) {
               updateThemeInEditor(
-                themeHistory?.histories?.[0]?.state
-                  ?.data as unknown as SavedTheme,
+                themeHistory?.histories?.[0]?.state?.data as SavedTheme,
                 themeConfig
               );
             }
             setThemeHistory({
               histories: [
                 {
-                  id: "root",
+                  id: themeHistory?.histories?.[0]?.id ?? "",
                   state: { data: themeHistory?.histories?.[0]?.state?.data },
                 },
               ],
+              index: 0,
             });
           }}
         />
@@ -93,7 +93,10 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
               setThemeHistory({
                 histories: [
                   {
-                    id: "root",
+                    id:
+                      themeHistory?.histories[
+                        themeHistory?.histories?.length - 1
+                      ]?.id ?? "",
                     state: {
                       data: themeHistory?.histories?.[
                         themeHistory?.histories?.length - 1
@@ -101,6 +104,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
                     },
                   },
                 ],
+                index: 0,
               });
             }}
           >

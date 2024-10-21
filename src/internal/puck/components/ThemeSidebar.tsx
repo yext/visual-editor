@@ -6,11 +6,11 @@ import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
-import { History } from "../../types/themeData.ts";
+import { ThemeHistory } from "../../types/themeData.ts";
 
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
-  themeHistory: History[];
+  themeHistory: ThemeHistory[];
   onThemeChange: (parentStyleKey: string, value: Record<string, any>) => void;
 };
 
