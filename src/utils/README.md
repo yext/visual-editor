@@ -54,8 +54,6 @@ import type { Config } from "tailwindcss";
 import { themeConfig } from "./theme.config";
 import { themeResolver } from "@yext/visual-editor";
 
-console.log(themeResolver({}, themeConfig));
-
 export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
@@ -70,14 +68,14 @@ export default {
 
 ## applyTheme
 
-Used in Head Config to apply the styles set in Theme Manager.
+Used as part of the [Head Config Interface](https://github.com/yext/pages/blob/main/packages/pages/docs/api/pages.headconfig.md) to apply the styles set in Theme Manager to a template.
 
 ### Props
 
 | Name        | Type                | Description                                  |
 | ----------- | ------------------- | -------------------------------------------- |
-| document    | Record<string, any> | The Yext stream document                     |
-| themeConfig | ThemeConfig         | The styles to be available in Theme Manager  |
+| document    | Record<string, any> | The Yext entity document                     |
+| themeConfig | ThemeConfig         | The styles available in Theme Manager        |
 | base?       | string              | Additional data to be injected into the head |
 
 ### Usage
@@ -88,7 +86,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   return {
-    // -- additional getHeadConfig options --
+    // -- additional HeadConfig options --
     other: applyTheme(document, themeConfig),
   };
 };
