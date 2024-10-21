@@ -81,3 +81,5 @@ out
 .turbo
 
 dist/
+
+.DS_Store
