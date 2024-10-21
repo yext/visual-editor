@@ -39,7 +39,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       {Object.entries(themeConfig).map(([parentStyleKey, parentStyle]) => {
         const field = constructThemePuckFields(parentStyle);
         const values = constructThemePuckValues(
-          themeHistory[themeHistory.length - 1]?.state?.data,
+          themeHistory[themeHistory.length - 1]?.data,
           parentStyle,
           parentStyleKey
         );

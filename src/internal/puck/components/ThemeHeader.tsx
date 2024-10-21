@@ -13,9 +13,9 @@ import { ThemeHistories } from "../../types/themeData.ts";
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
-  setThemeHistory: (themeHistory: ThemeHistories) => void;
+  setThemeHistories: (themeHistories: ThemeHistories) => void;
   themeConfig?: ThemeConfig;
-  themeHistory?: ThemeHistories;
+  themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
 };
@@ -23,10 +23,10 @@ type ThemeHeaderProps = {
 export const ThemeHeader = (props: ThemeHeaderProps) => {
   const {
     isDevMode,
-    setThemeHistory,
+    setThemeHistories,
     onPublishTheme,
     themeConfig,
-    themeHistory,
+    themeHistories,
     clearThemeHistory,
     puckInitialHistory,
   } = props;
@@ -64,20 +64,20 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-center"></div>
       <div className="actions">
         <ClearLocalChangesButton
-          disabled={themeHistory?.histories?.length === 1}
+          disabled={themeHistories?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();
             if (themeConfig) {
               updateThemeInEditor(
-                themeHistory?.histories?.[0]?.state?.data as SavedTheme,
+                themeHistories?.histories?.[0]?.data as SavedTheme,
                 themeConfig
               );
             }
-            setThemeHistory({
+            setThemeHistories({
               histories: [
                 {
-                  id: themeHistory?.histories?.[0]?.id ?? "",
-                  state: { data: themeHistory?.histories?.[0]?.state?.data },
+                  id: themeHistories?.histories?.[0]?.id ?? "",
+                  data: themeHistories?.histories?.[0]?.data ?? {},
                 },
               ],
               index: 0,
@@ -87,25 +87,9 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={themeHistory?.histories?.length === 1}
+            disabled={themeHistories?.histories?.length === 1}
             onClick={async () => {
               await onPublishTheme();
-              setThemeHistory({
-                histories: [
-                  {
-                    id:
-                      themeHistory?.histories[
-                        themeHistory?.histories?.length - 1
-                      ]?.id ?? "",
-                    state: {
-                      data: themeHistory?.histories?.[
-                        themeHistory?.histories?.length - 1
-                      ]?.state?.data,
-                    },
-                  },
-                ],
-                index: 0,
-              });
             }}
           >
             Publish

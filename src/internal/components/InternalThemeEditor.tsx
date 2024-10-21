@@ -22,8 +22,8 @@ type InternalThemeEditorProps = {
   publishThemeConfiguration: (data: any) => void;
   themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
-  themeHistory?: ThemeHistories;
-  setThemeHistory: (themeHistory: ThemeHistories) => void;
+  themeHistories?: ThemeHistories;
+  setThemeHistories: (themeHistory: ThemeHistories) => void;
   clearThemeHistory: () => void;
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
@@ -38,8 +38,8 @@ export const InternalThemeEditor = ({
   publishThemeConfiguration,
   themeConfig,
   saveThemeSaveState,
-  themeHistory,
-  setThemeHistory,
+  themeHistories,
+  setThemeHistories,
   clearThemeHistory,
   sendDevThemeSaveStateData,
   buildThemeLocalStorageKey,
@@ -51,28 +51,40 @@ export const InternalThemeEditor = ({
     publishThemeConfiguration({
       payload: {
         saveThemeData: JSON.stringify(
-          themeHistory?.histories?.[themeHistory.index]?.state?.data
+          themeHistories?.histories?.[themeHistories.index]?.data
         ),
       },
+    });
+
+    clearThemeHistory();
+
+    setThemeHistories({
+      histories: [
+        {
+          id: themeHistories?.histories[themeHistories.index]?.id ?? "",
+          data: themeHistories?.histories?.[themeHistories.index]?.data ?? {},
+        },
+      ],
+      index: 0,
     });
   };
 
   const handleThemeChange = (topLevelKey: string, newValue: any) => {
-    if (!themeHistory || !themeConfig) {
+    if (!themeHistories || !themeConfig) {
       return;
     }
 
     const newThemeValues = {
-      ...themeHistory.histories[themeHistory.index]?.state?.data,
+      ...themeHistories.histories[themeHistories.index]?.data,
       ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
     };
 
     const newHistory = {
       histories: [
-        ...themeHistory.histories,
-        { id: uuidv4(), state: { data: newThemeValues } },
+        ...themeHistories.histories,
+        { id: uuidv4(), data: newThemeValues },
       ] as ThemeHistory[],
-      index: themeHistory.histories.length,
+      index: themeHistories.histories.length,
     };
 
     window.localStorage.setItem(
@@ -85,7 +97,7 @@ export const InternalThemeEditor = ({
       sendDevThemeSaveStateData({
         payload: {
           devThemeSaveStateData: JSON.stringify(
-            newHistory.histories[newHistory.index]?.state?.data
+            newHistory.histories[newHistory.index]?.data
           ),
         },
       });
@@ -93,16 +105,14 @@ export const InternalThemeEditor = ({
       devLogger.logFunc("saveTheme");
       saveThemeSaveState({
         payload: {
-          history: JSON.stringify(
-            newHistory.histories[newHistory.index]?.state?.data
-          ),
+          history: JSON.stringify(newHistory.histories[newHistory.index]?.data),
           hash: newHistory.histories[newHistory.index]?.id,
         },
       });
     }
 
     updateThemeInEditor(newThemeValues, themeConfig);
-    setThemeHistory(newHistory);
+    setThemeHistories(newHistory);
   };
 
   const change = async () => {
@@ -133,10 +143,10 @@ export const InternalThemeEditor = ({
           header: () => (
             <ThemeHeader
               themeConfig={themeConfig}
-              themeHistory={themeHistory}
+              themeHistories={themeHistories}
               onPublishTheme={handlePublishTheme}
               isDevMode={templateMetadata.isDevMode}
-              setThemeHistory={setThemeHistory}
+              setThemeHistories={setThemeHistories}
               clearThemeHistory={clearThemeHistory}
               puckInitialHistory={puckInitialHistory}
             />
@@ -146,7 +156,7 @@ export const InternalThemeEditor = ({
           fields: () => (
             <ThemeSidebar
               themeConfig={themeConfig}
-              themeHistory={themeHistory!.histories}
+              themeHistory={themeHistories!.histories}
               onThemeChange={handleThemeChange}
             />
           ),

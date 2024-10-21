@@ -8,11 +8,9 @@ export type ThemeHistories = {
   index: number;
 };
 
+export type ThemeData = Record<string, string>;
+
 export type ThemeHistory = {
-  state: {
-    data?: {
-      [key: string]: string;
-    };
-  };
+  data: ThemeData;
   id: string;
 };
