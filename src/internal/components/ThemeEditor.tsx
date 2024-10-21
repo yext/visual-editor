@@ -9,6 +9,7 @@ import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
+import { ThemeHistories } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -42,7 +43,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
     useState<boolean>(false);
   const [themeInitialHistory, setThemeInitialHistory] = useState<
-    InitialHistory | undefined
+    ThemeHistories | undefined
   >();
   const [themeInitialHistoryFetched, setThemeInitialHistoryFetched] =
     useState<boolean>(false);

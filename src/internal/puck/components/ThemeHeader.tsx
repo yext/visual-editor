@@ -8,13 +8,14 @@ import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, usePuck } from "@measured/puck";
+import { ThemeHistories } from "../../types/themeData.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
-  setThemeHistory: (themeHistory: InitialHistory) => void;
+  setThemeHistory: (themeHistory: ThemeHistories) => void;
   themeConfig?: ThemeConfig;
-  themeHistory?: InitialHistory;
+  themeHistory?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
 };

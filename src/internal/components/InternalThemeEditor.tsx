@@ -1,4 +1,4 @@
-import { Puck, Config, InitialHistory, type History } from "@measured/puck";
+import { Puck, Config, InitialHistory } from "@measured/puck";
 import React from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -10,6 +10,7 @@ import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { v4 as uuidv4 } from "uuid";
+import { ThemeHistories, History } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -21,8 +22,8 @@ type InternalThemeEditorProps = {
   publishThemeConfiguration: (data: any) => void;
   themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
-  themeHistory?: InitialHistory;
-  setThemeHistory: (themeHistory: InitialHistory) => void;
+  themeHistory?: ThemeHistories;
+  setThemeHistory: (themeHistory: ThemeHistories) => void;
   clearThemeHistory: () => void;
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;

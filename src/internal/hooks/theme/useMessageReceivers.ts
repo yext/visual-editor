@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DevLogger } from "../../../utils/devLogger.ts";
-import { ThemeSaveState } from "../../types/themeSaveState.ts";
+import { ThemeSaveState } from "../../types/themeData.ts";
 import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";

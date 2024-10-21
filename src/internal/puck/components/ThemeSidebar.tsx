@@ -1,4 +1,4 @@
-import { AutoFieldPrivate, type History } from "@measured/puck";
+import { AutoFieldPrivate } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
@@ -6,6 +6,7 @@ import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
+import { History } from "../../types/themeData.ts";
 
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
