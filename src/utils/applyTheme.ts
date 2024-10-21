@@ -33,13 +33,16 @@ export const applyTheme = (
   if (savedTheme?.themeConfiguration) {
     overrides = JSON.parse(savedTheme.themeConfiguration?.data);
   }
-  return internalApplyTheme(overrides, themeConfig, base);
+
+  if (Object.keys(themeConfig).length > 0) {
+    return `${base ?? ""}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
+  }
+  return base ?? "";
 };
 
 const internalApplyTheme = (
   savedThemeValues: Record<string, any>,
-  themeConfig: ThemeConfig,
-  base?: string
+  themeConfig: ThemeConfig
 ): string => {
   devLogger.logFunc("internalApplyTheme");
 
@@ -49,16 +52,16 @@ const internalApplyTheme = (
   );
 
   if (!themeValuesToApply || Object.keys(themeValuesToApply).length === 0) {
-    return base ?? "";
+    return "";
   }
   devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
 
   return (
-    `${base ?? ""}<style id="${THEME_STYLE_TAG_ID}" type="text/css">.components{` +
+    `.components{` +
     Object.entries(themeValuesToApply)
       .map(([key, value]) => `${key}:${value} !important`)
       .join(";") +
-    "}</style>"
+    "}"
   );
 };
 
@@ -75,7 +78,7 @@ export const updateThemeInEditor = async (
     const styleTag = iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
     if (styleTag) {
       observer.disconnect();
-      styleTag.outerHTML = internalApplyTheme(newTheme, themeConfig);
+      styleTag.innerText = internalApplyTheme(newTheme, themeConfig);
     }
   });
 
