@@ -48,23 +48,22 @@ export const InternalThemeEditor = ({
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
+    if (!themeHistories) {
+      return;
+    }
+
+    const currentThemeHistory = themeHistories.histories[themeHistories.index];
+
     publishThemeConfiguration({
       payload: {
-        saveThemeData: JSON.stringify(
-          themeHistories?.histories?.[themeHistories.index]?.data
-        ),
+        saveThemeData: JSON.stringify(currentThemeHistory.data),
       },
     });
 
     clearThemeHistory();
 
     setThemeHistories({
-      histories: [
-        {
-          id: themeHistories?.histories[themeHistories.index]?.id ?? "",
-          data: themeHistories?.histories?.[themeHistories.index]?.data ?? {},
-        },
-      ],
+      histories: [currentThemeHistory],
       index: 0,
     });
   };
