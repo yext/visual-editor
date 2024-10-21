@@ -51,7 +51,7 @@ export const InternalThemeEditor = ({
     publishThemeConfiguration({
       payload: {
         saveThemeData: JSON.stringify(
-          themeHistory?.histories?.[themeHistory.index ?? 0]?.state?.data
+          themeHistory?.histories?.[themeHistory.index]?.state?.data
         ),
       },
     });
@@ -63,6 +63,7 @@ export const InternalThemeEditor = ({
     }
 
     const newThemeValues = {
+      ...themeHistory.histories[themeHistory.index]?.state?.data,
       ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
     };
 
@@ -84,7 +85,7 @@ export const InternalThemeEditor = ({
       sendDevThemeSaveStateData({
         payload: {
           devThemeSaveStateData: JSON.stringify(
-            newHistory.histories[newHistory.index ?? 0]?.state?.data
+            newHistory.histories[newHistory.index]?.state?.data
           ),
         },
       });
@@ -93,9 +94,9 @@ export const InternalThemeEditor = ({
       saveThemeSaveState({
         payload: {
           history: JSON.stringify(
-            newHistory.histories[newHistory.index ?? 0]?.state?.data
+            newHistory.histories[newHistory.index]?.state?.data
           ),
-          hash: newHistory.histories[newHistory.index ?? 0]?.id,
+          hash: newHistory.histories[newHistory.index]?.id,
         },
       });
     }

@@ -183,8 +183,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     devLogger.logData("THEME_INITIAL_HISTORY", themeHistory);
     if (themeHistory && themeConfig) {
       updateThemeInEditor(
-        themeHistory.histories[themeHistory.index ?? 0]?.state
-          ?.data as unknown as SavedTheme,
+        themeHistory.histories[themeHistory.index]?.state?.data as SavedTheme,
         themeConfig
       );
     }
@@ -222,7 +221,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     }
 
     const themeToSend =
-      themeHistory?.histories[themeHistory.index ?? 0]?.state?.data;
+      themeHistory?.histories[themeHistory.index]?.state?.data;
 
     devLogger.logFunc("sendDevThemeSaveStateData useEffect");
     sendDevThemeSaveStateData({
