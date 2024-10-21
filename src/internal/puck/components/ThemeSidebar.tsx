@@ -6,11 +6,11 @@ import {
   constructThemePuckFields,
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
-import { ThemeSaveState } from "../../types/themeSaveState.ts";
+import { ThemeHistory } from "../../types/themeData.ts";
 
 type ThemeSidebarProps = {
   themeConfig?: ThemeConfig;
-  themeHistory: ThemeSaveState;
+  themeHistory: ThemeHistory[];
   onThemeChange: (parentStyleKey: string, value: Record<string, any>) => void;
 };
 
@@ -39,7 +39,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
       {Object.entries(themeConfig).map(([parentStyleKey, parentStyle]) => {
         const field = constructThemePuckFields(parentStyle);
         const values = constructThemePuckValues(
-          themeHistory.history[themeHistory.index],
+          themeHistory[themeHistory.length - 1]?.data,
           parentStyle,
           parentStyleKey
         );

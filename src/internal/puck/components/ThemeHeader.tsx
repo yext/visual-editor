@@ -2,20 +2,20 @@ import "../ui/puck.css";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../components/index.css";
-import { ThemeSaveState } from "../../types/themeSaveState.ts";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
+import { SavedTheme, ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, usePuck } from "@measured/puck";
+import { ThemeHistories } from "../../types/themeData.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
-  setThemeHistory: (themeHistory: ThemeSaveState) => void;
+  setThemeHistories: (themeHistories: ThemeHistories) => void;
   themeConfig?: ThemeConfig;
-  themeHistory?: ThemeSaveState;
+  themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
 };
@@ -23,10 +23,10 @@ type ThemeHeaderProps = {
 export const ThemeHeader = (props: ThemeHeaderProps) => {
   const {
     isDevMode,
-    setThemeHistory,
+    setThemeHistories,
     onPublishTheme,
     themeConfig,
-    themeHistory,
+    themeHistories,
     clearThemeHistory,
     puckInitialHistory,
   } = props;
@@ -64,14 +64,22 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-center"></div>
       <div className="actions">
         <ClearLocalChangesButton
-          disabled={themeHistory?.history.length === 1}
+          disabled={themeHistories?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();
             if (themeConfig) {
-              updateThemeInEditor(themeHistory?.history[0], themeConfig);
+              updateThemeInEditor(
+                themeHistories?.histories?.[0]?.data as SavedTheme,
+                themeConfig
+              );
             }
-            setThemeHistory({
-              history: [themeHistory?.history[0]],
+            setThemeHistories({
+              histories: [
+                {
+                  id: themeHistories?.histories?.[0]?.id ?? "",
+                  data: themeHistories?.histories?.[0]?.data ?? {},
+                },
+              ],
               index: 0,
             });
           }}
@@ -79,15 +87,9 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={themeHistory?.history.length === 1}
+            disabled={themeHistories?.histories?.length === 1}
             onClick={async () => {
               await onPublishTheme();
-              setThemeHistory({
-                history: [
-                  themeHistory?.history[themeHistory?.history.length - 1],
-                ],
-                index: 0,
-              });
             }}
           >
             Publish
