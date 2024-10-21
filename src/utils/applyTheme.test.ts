@@ -76,7 +76,7 @@ describe("buildCssOverridesStyle", () => {
     );
   });
 
-  it("should return the base string unmodified when c_theme is empty", () => {
+  it("should return the base string unmodified when themeConfig is empty", () => {
     const base = "<style>div{color:blue}</style>";
     const result = applyTheme({} as Document, {}, base);
 
