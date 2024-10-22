@@ -42,7 +42,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   >();
   const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
     useState<boolean>(false);
-  const [themeHistories, setThemeHistories] = useState<
+  const [themeInitialHistories, setThemeInitialHistories] = useState<
     ThemeHistories | undefined
   >();
   const [themeHistoryFetched, setThemeHistoryFetched] =
@@ -97,7 +97,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
         const localHistories = JSON.parse(localHistoryArray);
         const localHistoryIndex = localHistories.length - 1;
-        setThemeHistories({
+        setThemeInitialHistories({
           histories: localHistories,
           index: localHistoryIndex,
         });
@@ -110,7 +110,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         "Theme Dev Mode - No localStorage. Using theme data from Content"
       );
       if (themeData) {
-        setThemeHistories({
+        setThemeInitialHistories({
           histories: [{ id: "root", data: themeData }],
           index: 0,
         });
@@ -127,7 +127,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         "Theme Prod Mode - No saveState. Using theme data from Content"
       );
       if (themeData) {
-        setThemeHistories({
+        setThemeInitialHistories({
           histories: [{ id: "root", data: themeData }],
           index: 0,
         });
@@ -145,7 +145,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     // No localStorage, start from themeSaveState
     if (!localHistoryArray) {
       devLogger.log("Theme Prod Mode - No localStorage. Using themeSaveState");
-      setThemeHistories({
+      setThemeInitialHistories({
         histories: themeData
           ? [
               { id: "root", data: themeData },
@@ -165,7 +165,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     // If local storage reset theme history to it
     if (localHistoryIndex !== -1) {
       devLogger.log("Theme Prod Mode - Using localStorage theme data");
-      setThemeHistories({
+      setThemeInitialHistories({
         histories: JSON.parse(localHistoryArray),
         index: localHistoryIndex,
       });
@@ -176,7 +176,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     // otherwise start fresh - this user doesn't have localStorage that reflects the theme saved state
     clearThemeLocalStorage();
   }, [
-    setThemeHistories,
+    setThemeInitialHistories,
     setThemeHistoryFetched,
     clearThemeLocalStorage,
     buildThemeLocalStorageKey,
@@ -184,14 +184,15 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
   // Log THEME_INITIAL_HISTORY on load and update theme in editor to reflect save state
   useEffect(() => {
-    devLogger.logData("THEME_INITIAL_HISTORY", themeHistories);
-    if (themeHistories && themeConfig) {
+    devLogger.logData("THEME_INITIAL_HISTORIES", themeInitialHistories);
+    if (themeInitialHistories && themeConfig) {
       updateThemeInEditor(
-        themeHistories.histories[themeHistories.index]?.data as SavedTheme,
+        themeInitialHistories.histories[themeInitialHistories.index]
+          ?.data as SavedTheme,
         themeConfig
       );
     }
-  }, [themeHistories, themeConfig]);
+  }, [themeInitialHistories, themeConfig]);
 
   useEffect(() => {
     if (!themeSaveStateFetched || !themeDataFetched) {
@@ -217,21 +218,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     deleteThemeSaveState();
   };
 
-  // Handles sending the sendDevThemeSaveStateData on initial load so that nothing isn't rendered for preview.
-  // Subsequent changes are sent via handleChange in ThemeSidebar.tsx.
-  useEffect(() => {
-    if (!themeHistoryFetched) {
-      return;
-    }
-
-    const themeToSend = themeHistories?.histories[themeHistories.index]?.data;
-
-    devLogger.logFunc("sendDevThemeSaveStateData useEffect");
-    sendDevThemeSaveStateData({
-      payload: { devThemeSaveStateData: JSON.stringify(themeToSend) },
-    });
-  }, [themeHistoryFetched, themeHistories, templateMetadata]);
-
   const isLoading =
     !puckInitialHistoryFetched ||
     !themeHistoryFetched ||
@@ -255,8 +241,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       publishThemeConfiguration={publishThemeConfiguration}
       themeConfig={themeConfig}
       saveThemeSaveState={saveThemeSaveState}
-      themeHistories={themeHistories}
-      setThemeHistories={setThemeHistories}
+      themeInitialHistories={themeInitialHistories}
+      setThemeInitialHistories={setThemeInitialHistories}
       clearThemeHistory={clearHistory}
       sendDevThemeSaveStateData={sendDevThemeSaveStateData}
       buildThemeLocalStorageKey={buildThemeLocalStorageKey}

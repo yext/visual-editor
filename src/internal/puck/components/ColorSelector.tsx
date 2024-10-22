@@ -1,52 +1,39 @@
 import React, { useState } from "react";
-import { Field, FieldLabel } from "@measured/puck";
+import { FieldLabel } from "@measured/puck";
 import { RenderProps } from "../../utils/renderEntityFields.ts";
 import { Color, ColorResult, SketchPicker } from "react-color";
 
-export type ColorSelectorProps = {
-  label: string;
-};
+export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-export const ColorSelector = (props: ColorSelectorProps): Field => {
-  return {
-    type: "custom",
-    label: props.label,
-    render: ({ field, value, onChange }: RenderProps) => {
-      const [isOpen, setIsOpen] = useState(false);
-
-      const fieldStyles = colorPickerStyles(value);
-      return (
-        <>
-          <FieldLabel
-            label={field.label || "Label is undefined"}
-            className="ve-mt-2.5"
-          >
-            <div
-              style={fieldStyles.swatch}
-              onClick={() => setIsOpen((current) => !current)}
-            >
-              <div style={fieldStyles.color} />
-            </div>
-            {isOpen && (
-              <div style={fieldStyles.popover}>
-                <div
-                  style={fieldStyles.cover}
-                  onClick={() => setIsOpen(false)}
-                />
-                <SketchPicker
-                  disableAlpha={true}
-                  color={value}
-                  onChange={(colorResult: ColorResult) => {
-                    onChange(colorResult.hex);
-                  }}
-                />
-              </div>
-            )}
-          </FieldLabel>
-        </>
-      );
-    },
-  };
+  const fieldStyles = colorPickerStyles(value);
+  return (
+    <>
+      <FieldLabel
+        label={field.label || "Label is undefined"}
+        className="ve-mt-2.5"
+      >
+        <div
+          style={fieldStyles.swatch}
+          onClick={() => setIsOpen((current) => !current)}
+        >
+          <div style={fieldStyles.color} />
+        </div>
+        {isOpen && (
+          <div style={fieldStyles.popover}>
+            <div style={fieldStyles.cover} onClick={() => setIsOpen(false)} />
+            <SketchPicker
+              disableAlpha={true}
+              color={value}
+              onChange={(colorResult: ColorResult) => {
+                onChange(colorResult.hex);
+              }}
+            />
+          </div>
+        )}
+      </FieldLabel>
+    </>
+  );
 };
 
 const colorPickerStyles = (color: Color) => {

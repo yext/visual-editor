@@ -13,7 +13,7 @@ import { ThemeHistories } from "../../types/themeData.ts";
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
-  setThemeHistories: (themeHistories: ThemeHistories) => void;
+  setThemeInitialHistories: (themeHistories: ThemeHistories) => void;
   themeConfig?: ThemeConfig;
   themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
@@ -23,7 +23,7 @@ type ThemeHeaderProps = {
 export const ThemeHeader = (props: ThemeHeaderProps) => {
   const {
     isDevMode,
-    setThemeHistories,
+    setThemeInitialHistories,
     onPublishTheme,
     themeConfig,
     themeHistories,
@@ -73,7 +73,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
                 themeConfig
               );
             }
-            setThemeHistories({
+            setThemeInitialHistories({
               histories: [
                 {
                   id: themeHistories?.histories?.[0]?.id ?? "",
