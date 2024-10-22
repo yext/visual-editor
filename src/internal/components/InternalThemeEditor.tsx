@@ -1,5 +1,5 @@
 import { Puck, Config, InitialHistory } from "@measured/puck";
-import React from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/EntityField.tsx";
@@ -45,6 +45,11 @@ export const InternalThemeEditor = ({
   buildThemeLocalStorageKey,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
+  const themeHistoriesRef = useRef(themeHistories);
+
+  useEffect(() => {
+    themeHistoriesRef.current = themeHistories;
+  }, [themeHistories]);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
@@ -69,21 +74,22 @@ export const InternalThemeEditor = ({
   };
 
   const handleThemeChange = (topLevelKey: string, newValue: any) => {
-    if (!themeHistories || !themeConfig) {
+    if (!themeHistoriesRef.current || !themeConfig) {
       return;
     }
 
     const newThemeValues = {
-      ...themeHistories.histories[themeHistories.index]?.data,
+      ...themeHistoriesRef.current.histories[themeHistoriesRef.current.index]
+        ?.data,
       ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
     };
 
     const newHistory = {
       histories: [
-        ...themeHistories.histories,
+        ...themeHistoriesRef.current.histories,
         { id: uuidv4(), data: newThemeValues },
       ] as ThemeHistory[],
-      index: themeHistories.histories.length,
+      index: themeHistoriesRef.current.histories.length,
     };
 
     window.localStorage.setItem(
@@ -124,6 +130,16 @@ export const InternalThemeEditor = ({
     }
   };
 
+  const fieldsOverride = useCallback(() => {
+    return (
+      <ThemeSidebar
+        themeHistoriesRef={themeHistoriesRef}
+        themeConfig={themeConfig}
+        onThemeChange={handleThemeChange}
+      />
+    );
+  }, []);
+
   return (
     <EntityFieldProvider>
       <Puck
@@ -152,13 +168,7 @@ export const InternalThemeEditor = ({
           ),
           actionBar: () => <></>,
           components: () => <></>,
-          fields: () => (
-            <ThemeSidebar
-              themeConfig={themeConfig}
-              themeHistory={themeHistories!.histories}
-              onThemeChange={handleThemeChange}
-            />
-          ),
+          fields: fieldsOverride,
         }}
       />
     </EntityFieldProvider>

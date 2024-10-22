@@ -182,9 +182,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     buildThemeLocalStorageKey,
   ]);
 
-  // Log THEME_INITIAL_HISTORY on load and update theme in editor to reflect save state
+  // Log THEME_HISTORIES on load and update theme in editor to reflect save state
   useEffect(() => {
-    devLogger.logData("THEME_INITIAL_HISTORY", themeHistories);
+    devLogger.logData("THEME_HISTORIES", themeHistories);
     if (themeHistories && themeConfig) {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as SavedTheme,
