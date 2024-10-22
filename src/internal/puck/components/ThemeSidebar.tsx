@@ -1,4 +1,4 @@
-import { AutoFieldPrivate } from "@measured/puck";
+import { AutoField, FieldLabel } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
@@ -45,12 +45,17 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
         );
 
         return (
-          <AutoFieldPrivate
+          <FieldLabel
+            label={field.label ?? ""}
+            className="theme-field"
             key={parentStyleKey}
-            field={field}
-            onChange={(value) => onThemeChange(parentStyleKey, value)}
-            value={values}
-          />
+          >
+            <AutoField
+              field={field}
+              onChange={(value) => onThemeChange(parentStyleKey, value)}
+              value={values}
+            />
+          </FieldLabel>
         );
       })}
     </div>
