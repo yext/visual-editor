@@ -1,3 +1,33 @@
+#### 0.0.13 (2024-10-22)
+
+##### Chores
+
+- clean up theme manager (#85) (bbe4f51a)
+
+##### Documentation Changes
+
+- themeResolver and applyTheme documentation (#97) (2305fae8)
+
+##### New Features
+
+- add hash to ThemeSaveState (#91) (e1060b72)
+- add theme preview support (#92) (dd6b369d)
+- add dev mode theme preview (#86) (aac0527a)
+
+##### Bug Fixes
+
+- sidebar loses focus on input (#100) (d2049ec3)
+- remove outerHTML vulnerability (#95) (396042c1)
+- update puck history with new layout's config in theme mode (#93) (cd002787)
+
+##### Refactors
+
+- switch <AutoFieldPrivate> to <AutoField> (#98) (c5e80f46)
+- separate message receivers (#90) (7309a905)
+- simplify Editor.tsx and create LayoutEditor and ThemeEditor (#88) (243ef26a)
+- always use px for theme number fields (#89) (f186516c)
+- separate theme manager and visual editor internal editors (#87) (7049a562)
+
 #### 0.0.12 (2024-10-11)
 
 ##### Bug Fixes
