@@ -1,4 +1,9 @@
-import { ObjectField, SelectField, NumberField } from "@measured/puck";
+import {
+  ObjectField,
+  SelectField,
+  NumberField,
+  CustomField,
+} from "@measured/puck";
 import { ParentStyle, SavedTheme, Style } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 
@@ -36,7 +41,11 @@ export const convertStyleToPuckField = (style: Style) => {
         options: style.options,
       } as SelectField;
     case "color":
-      return ColorSelector({ label: style.label });
+      return {
+        label: style.label,
+        type: "custom",
+        render: ColorSelector,
+      } as CustomField;
   }
 };
 
