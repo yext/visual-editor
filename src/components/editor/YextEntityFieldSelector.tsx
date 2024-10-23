@@ -1,13 +1,13 @@
 import React from "react";
 import { AutoField, FieldLabel, Field } from "@measured/puck";
-import { RenderProps } from "../internal/utils/renderEntityFields.tsx";
+import { RenderProps } from "../../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
   getFilteredEntityFields,
   RenderEntityFieldFilter,
-} from "../internal/utils/getFilteredEntityFields.ts";
-import { RadioGroup, RadioGroupItem } from "../internal/puck/ui/radio.tsx";
-import { Label } from "../internal/puck/ui/label.tsx";
+} from "../../internal/utils/getFilteredEntityFields.ts";
+import { RadioGroup, RadioGroupItem } from "../../internal/puck/ui/radio.tsx";
+import { Label } from "../../internal/puck/ui/label.tsx";
 
 export type YextEntityField = {
   field: string;

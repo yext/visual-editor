@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../internal/puck/ui/Tooltip.tsx";
+} from "../../internal/puck/ui/Tooltip.tsx";
 import React from "react";
 
 type EntityFieldProps = {

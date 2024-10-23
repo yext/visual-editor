@@ -7,7 +7,7 @@ import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import "../ui/puck.css";
-import "../../../components/index.css";
+import "../../../components/editor/index.css";
 
 type LayoutHeaderProps = {
   onClearLocalChanges: () => void;
