@@ -8,4 +8,4 @@ export {
   DocumentProvider,
   useDocument,
   DocumentContext,
-} from "./useDocument.js";
+} from "./useDocument.tsx";
