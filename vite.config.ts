@@ -8,7 +8,7 @@ export default defineConfig(() => ({
   plugins: [react(), dts()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
+      entry: [path.resolve(__dirname, "src/index.ts"), path.resolve(__dirname, "src/components/puck/components.ts")],
       name: "visual-editor",
       formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },

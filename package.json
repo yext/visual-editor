@@ -22,7 +22,16 @@
         "default": "./dist/visual-editor.cjs"
       }
     },
-    "./components": "./dist/components/puck",
+    "./components": {
+      "import": {
+        "types": "./dist/components/puck/components.d.ts",
+        "default": "./dist/visual-editor.js"
+      },
+      "require": {
+        "types": "./dist/components/puck/components.d.cts",
+        "default": "./dist/visual-editor.cjs"
+      }
+    },
     "./style.css": "./dist/style.css"
   },
   "scripts": {

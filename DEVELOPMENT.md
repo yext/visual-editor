@@ -88,8 +88,8 @@ For consistency custom css class should also have the "ve-" prefix.
 
 ### Exports
 
-Everything the library exports can be found in `src/index.ts`. Each subdirectory (components,
-hooks, and utils) have their own `index.ts` which lists out more verbose exports. You should
+Everything the library exports can be found in `src/components.ts`. Each subdirectory (components,
+hooks, and utils) have their own `components.ts` which lists out more verbose exports. You should
 follow this pattern when modifying exports. Do not publicly export anything from internal.
 
 ### Automated jobs
