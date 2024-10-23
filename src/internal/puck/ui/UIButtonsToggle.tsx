@@ -4,7 +4,7 @@ import { usePuck } from "@measured/puck";
 import { PanelLeft, PanelRight } from "lucide-react";
 import { useCallback } from "react";
 import { Button } from "../ui/button.tsx";
-import "../../../components/index.css";
+import "../../../components/editor/index.css";
 
 export const UIButtonsToggle = () => {
   const {

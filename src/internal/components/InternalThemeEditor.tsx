@@ -2,7 +2,7 @@ import { Puck, Config, InitialHistory } from "@measured/puck";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityFieldProvider } from "../../components/EntityField.tsx";
+import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
 import { ThemeConfig } from "../../utils/themeResolver.ts";

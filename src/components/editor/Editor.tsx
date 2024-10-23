@@ -1,16 +1,16 @@
 import "./index.css";
 import React, { useEffect, useState } from "react";
-import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
-import { Toaster } from "../internal/puck/ui/Toaster.tsx";
+import { LoadingScreen } from "../../internal/puck/components/LoadingScreen.tsx";
+import { Toaster } from "../../internal/puck/ui/Toaster.tsx";
 import { type Config } from "@measured/puck";
 import "@measured/puck/puck.css";
-import { DevLogger } from "../utils/devLogger.ts";
-import { ThemeConfig } from "../utils/themeResolver.ts";
-import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
-import { useCommonMessageReceivers } from "../internal/hooks/useMessageReceivers.ts";
-import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
-import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
-import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
+import { DevLogger } from "../../utils/devLogger.ts";
+import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { useQuickFindShortcut } from "../../internal/hooks/useQuickFindShortcut.ts";
+import { useCommonMessageReceivers } from "../../internal/hooks/useMessageReceivers.ts";
+import { LayoutEditor } from "../../internal/components/LayoutEditor.tsx";
+import { ThemeEditor } from "../../internal/components/ThemeEditor.tsx";
+import { useCommonMessageSenders } from "../../internal/hooks/useMessageSenders.ts";
 
 const devLogger = new DevLogger();
 
