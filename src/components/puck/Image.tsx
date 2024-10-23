@@ -6,10 +6,10 @@ import {
   YextEntityField,
   resolveYextEntityField,
   YextEntityFieldSelector,
-} from "../index.ts";
-import { cn } from "../internal/utils/cn.ts";
+} from "../../index.ts";
+import { cn } from "../../internal/utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
-import { useDocument } from "../hooks/index.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 
 const imageWrapperVariants = cva("", {
   variants: {
@@ -96,8 +96,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
     document,
     imageField
   );
-
-  console.log(resolvedImage);
 
   if (!resolvedImage) {
     return null;
