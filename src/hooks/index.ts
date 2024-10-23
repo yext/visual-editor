@@ -4,3 +4,8 @@ export {
   EntityFieldsProvider,
   usePlatformBridgeEntityFields,
 } from "./useEntityFields.tsx";
+export {
+  DocumentProvider,
+  useDocument,
+  DocumentContext,
+} from "./useDocument.js";
