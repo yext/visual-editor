@@ -24,11 +24,11 @@
     },
     "./components": {
       "import": {
-        "types": "./dist/components/puck/components.d.ts",
+        "types": "./dist/components.d.ts",
         "default": "./dist/visual-editor.js"
       },
       "require": {
-        "types": "./dist/components/puck/components.d.cts",
+        "types": "./dist/components.d.cts",
         "default": "./dist/visual-editor.cjs"
       }
     },
