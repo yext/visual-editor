@@ -22,6 +22,7 @@
         "default": "./dist/visual-editor.cjs"
       }
     },
+    "./components": "./dist/components/puck",
     "./style.css": "./dist/style.css"
   },
   "scripts": {
