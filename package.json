@@ -4,7 +4,6 @@
   "version": "0.0.13",
   "type": "module",
   "author": "sumo@yext.com",
-  "types": "dist/index.d.ts",
   "main": "dist/visual-editor.cjs",
   "module": "dist/visual-editor.js",
   "sideEffects": false,
@@ -33,6 +32,16 @@
       }
     },
     "./style.css": "./dist/style.css"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ],
+      "components": [
+        "dist/components.d.ts"
+      ]
+    }
   },
   "scripts": {
     "build": "tsc && vite build",
