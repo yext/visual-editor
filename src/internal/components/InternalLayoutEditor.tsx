@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityFieldProvider } from "../../components/EntityField.tsx";
+import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";

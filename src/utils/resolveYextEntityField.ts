@@ -1,4 +1,4 @@
-import { YextEntityField } from "../components/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../components/editor/YextEntityFieldSelector.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,
