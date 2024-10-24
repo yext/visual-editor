@@ -39,6 +39,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
   textSize: {
     label: "Text Size",
     type: "number",
+    min: 1,
   },
   fontWeight: {
     label: "Font Weight",
@@ -56,7 +57,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
     ],
   },
   color: {
-    label: "Text color",
+    label: "Color",
     type: "select",
     options: [
       { label: "Primary", value: "primary" },
@@ -79,6 +80,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
 };
 
 export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
+  label: "Body Text",
   fields: bodyTextFields,
   defaultProps: {
     text: {
@@ -86,7 +88,6 @@ export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
       constantValue: "Text",
       constantValueEnabled: true,
     },
-    textSize: "default",
     fontWeight: "normal",
     color: "text",
     textTransform: "none",

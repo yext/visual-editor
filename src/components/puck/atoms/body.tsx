@@ -3,21 +3,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../../internal/utils/cn.ts";
 
 // Define the variants for the body component
-const bodyVariants = cva("", {
+const bodyVariants = cva("components", {
   variants: {
-    textSize: {
-      default: "",
-    },
     fontWeight: {
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
+      thin: "ve-font-thin",
+      extralight: "ve-font-extralight",
+      light: "ve-font-light",
+      normal: "ve-font-normal",
+      medium: "ve-font-medium",
+      semibold: "ve-font-semibold",
+      bold: "ve-font-bold",
+      extrabold: "ve-font-extrabold",
+      black: "ve-font-black",
     },
     color: {
       primary: "text-primary",
@@ -27,14 +24,13 @@ const bodyVariants = cva("", {
       background: "text-primary-background",
     },
     textTransform: {
-      none: "normal-case",
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
+      none: "ve-normal-case",
+      uppercase: "ve-uppercase",
+      lowercase: "ve-lowercase",
+      capitalize: "ve-capitalize",
     },
   },
   defaultVariants: {
-    textSize: "default",
     fontWeight: "normal",
     color: "text",
     textTransform: "none",
@@ -44,18 +40,23 @@ const bodyVariants = cva("", {
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
-    VariantProps<typeof bodyVariants> {}
+    VariantProps<typeof bodyVariants> {
+  textSize?: number;
+}
 
 const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   (
     { className, textSize, fontWeight, color, textTransform, ...props },
     ref
   ) => {
+    const dynamicStyles = {
+      fontSize: (textSize ?? 16) + "px",
+    };
+
     return (
       <p
         className={cn(
           bodyVariants({
-            textSize,
             fontWeight,
             color,
             textTransform,
@@ -63,6 +64,7 @@ const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
           })
         )}
         ref={ref}
+        style={dynamicStyles}
         {...props}
       >
         {props.children}
