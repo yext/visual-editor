@@ -8,7 +8,6 @@ import {
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.js";
 import { EntityField } from "../editor/EntityField.js";
-import "./index.css";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField;

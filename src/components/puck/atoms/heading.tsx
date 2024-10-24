@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../../internal/utils/cn.ts";
-import "../index.css";
 
 // Define the variants for the heading component
 const headingVariants = cva("font-bold", {
@@ -67,7 +66,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     >;
 
     const dynamicStyles = {
-      fontSize: (size ?? 16) + "px",
+      fontSize: size ? size + "px" : undefined,
     };
 
     return (
@@ -78,7 +77,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           cn(headingVariants({ color, className, weight, transform, level }))
         }
         ref={ref}
-        style={dynamicStyles}
+        style={dynamicStyles ?? ""}
         {...props}
       >
         {props.children}
