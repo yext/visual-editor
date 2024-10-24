@@ -45,6 +45,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
     label: "Font Weight",
     type: "select",
     options: [
+      { label: "Default", value: "default" },
       { label: "Thin", value: "thin" },
       { label: "Extra Light", value: "extralight" },
       { label: "Light", value: "light" },
@@ -60,6 +61,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
     label: "Color",
     type: "select",
     options: [
+      { label: "Default", value: "default" },
       { label: "Primary", value: "primary" },
       { label: "Secondary", value: "secondary" },
       { label: "Accent", value: "accent" },
@@ -88,8 +90,8 @@ export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
       constantValue: "Text",
       constantValueEnabled: true,
     },
-    fontWeight: "normal",
-    color: "text",
+    fontWeight: "default",
+    color: "default",
     textTransform: "none",
   },
   render: (props) => <BodyText {...props} />,

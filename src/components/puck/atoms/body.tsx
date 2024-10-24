@@ -6,6 +6,7 @@ import { cn } from "../../../internal/utils/cn.ts";
 const bodyVariants = cva("components", {
   variants: {
     fontWeight: {
+      default: "",
       thin: "ve-font-thin",
       extralight: "ve-font-extralight",
       light: "ve-font-light",
@@ -17,6 +18,7 @@ const bodyVariants = cva("components", {
       black: "ve-font-black",
     },
     color: {
+      default: "",
       primary: "text-primary",
       secondary: "text-secondary",
       accent: "text-accent",
@@ -31,8 +33,8 @@ const bodyVariants = cva("components", {
     },
   },
   defaultVariants: {
-    fontWeight: "normal",
-    color: "text",
+    fontWeight: "default",
+    color: "default",
     textTransform: "none",
   },
 });
