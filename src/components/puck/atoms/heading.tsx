@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../internal/utils/cn.ts";
+import { cn } from "../../../internal/utils/cn.ts";
 
 // Define the variants for the heading component
 const headingVariants = cva("font-bold", {
@@ -12,6 +12,10 @@ const headingVariants = cva("font-bold", {
       4: "font-heading4 text-heading4-fontSize text-heading4-color",
       5: "font-heading5 text-heading5-fontSize text-heading5-color",
       6: "font-heading6 text-heading6-fontSize text-heading6-color",
+    },
+    weight: {
+      default: "font-normal",
+      bold: "font-bold",
     },
     size: {
       default: "",
@@ -25,10 +29,18 @@ const headingVariants = cva("font-bold", {
       secondary: "text-secondary",
       accent: "text-accent",
     },
+    transform: {
+      none: "",
+      uppercase: "uppercase",
+      lowercase: "lowercase",
+      capitalize: "capitalize",
+    },
   },
   defaultVariants: {
     size: "default",
     color: "default",
+    weight: "default",
+    transform: "none",
   },
 });
 
