@@ -52,7 +52,7 @@ const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
     ref
   ) => {
     const dynamicStyles = {
-      fontSize: (textSize ?? 16) + "px",
+      fontSize: textSize ? textSize + "px" : undefined,
     };
 
     return (
@@ -66,7 +66,7 @@ const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
           })
         )}
         ref={ref}
-        style={dynamicStyles}
+        style={dynamicStyles ?? ""}
         {...props}
       >
         {props.children}
