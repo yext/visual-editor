@@ -57,6 +57,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
             label={field.label ?? ""}
             className="theme-field"
             key={parentStyleKey}
+            el="div"
           >
             <AutoField
               field={field}

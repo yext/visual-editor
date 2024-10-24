@@ -33,7 +33,7 @@ Used in a component's render function to pull in the selected entity field's val
 
 ### Usage
 
-See [YextEntityFieldSelector](../components/README.md#YextEntityFieldSelector)
+See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
 ## themeResolver
 

@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/AlertDialog.tsx";
 import { Button } from "../ui/button.tsx";
-import "../../../components/index.css";
+import "../../../components/editor/index.css";
 
 type ClearLocalChangesButtonProps = {
   disabled: boolean;
