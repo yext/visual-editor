@@ -194,12 +194,18 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [themeHistories, themeConfig]);
 
   useEffect(() => {
+    console.log("This useEffect", themeSaveStateFetched, themeDataFetched);
     if (!themeSaveStateFetched || !themeDataFetched) {
       return;
     }
     loadPuckInitialHistory();
     loadThemeHistory();
-  }, [templateMetadata, themeSaveStateFetched, themeDataFetched]);
+  }, [
+    templateMetadata,
+    themeSaveStateFetched,
+    themeDataFetched,
+    visualConfigurationData,
+  ]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
