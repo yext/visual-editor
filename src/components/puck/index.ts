@@ -1,2 +1,2 @@
 export * from "./atoms/index.ts";
-export { myPuck } from "./myPuck.tsx";
+export { ImageWrapperComponent, type ImageWrapperProps } from "./Image.tsx";
