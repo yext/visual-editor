@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField, FieldLabel, Field } from "@measured/puck";
+import {AutoField, FieldLabel, Field, CustomField, TextField} from "@measured/puck";
 import { RenderProps } from "../../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
@@ -8,6 +8,7 @@ import {
 } from "../../internal/utils/getFilteredEntityFields.ts";
 import { RadioGroup, RadioGroupItem } from "../../internal/puck/ui/radio.tsx";
 import { Label } from "../../internal/puck/ui/label.tsx";
+import { ImageType } from "@yext/pages-components";
 
 export type YextEntityField = {
   field: string;
@@ -21,16 +22,75 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
   };
 
-const SUPPORTED_CONSTANT_VALUE_TYPES: EntityFieldTypes[] = [
-  "type.string",
-  "type.phone",
-];
-const shouldDisplayConstantValueField = (typeFilter: EntityFieldTypes[]) => {
-  for (const constantValueType of SUPPORTED_CONSTANT_VALUE_TYPES) {
-    if (typeFilter.includes(constantValueType)) {
-      return true;
+const TEXT_CONSTANT_CONFIG: TextField = {
+  type: "text",
+};
+
+const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
+  type: "custom",
+  render: ({name, onChange, value}) => {
+    return <>
+    <input name={"Alternate Text"} onChange={(e) => {
+      onChange({
+        ...value,
+        alternateText: e.currentTarget.value,
+      });
+    }}/>
+      <input name={"Height"} onChange={(e) => {
+        const height = Number(e.currentTarget.value);
+        if (height) {
+          onChange({
+            ...value,
+            height: +e.currentTarget.value,
+          });
+        }
+      }}/>
+      <input name={"Width"} onChange={(e) => {
+        const width = Number(e.currentTarget.value);
+        if (width) {
+          onChange({
+            ...value,
+            width: +e.currentTarget.value,
+          });
+        }
+      }}/>
+      <input name={"URL"} onChange={(e) => {
+        onChange({
+          ...value,
+          url: e.currentTarget.value,
+        });
+      }}/>
+    </>
+  }
+}
+
+const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TEXT_CONSTANT_CONFIG,
+  "type.phone": TEXT_CONSTANT_CONFIG,
+  "type.image": IMAGE_CONSTANT_CONFIG,
+}
+
+/**
+ * Returns the constant type configuration if all types match
+ * @param typeFilter
+ */
+const returnConstantFieldConfig = (typeFilter: EntityFieldTypes[]): Field | undefined => {
+  let fieldConfiguration: Field | undefined;
+  for (const entityFieldType of typeFilter) {
+    const mappedConfiguration = TYPE_TO_CONSTANT_CONFIG[entityFieldType];
+    if (!mappedConfiguration) {
+      console.log(`No mapped configuration for ${entityFieldType}`);
+      return;
+    }
+    if (!fieldConfiguration) {
+      fieldConfiguration = mappedConfiguration;
+    }
+    if (fieldConfiguration !== mappedConfiguration) {
+      console.log(`Could not resolve configuration for ${entityFieldType}`);
+      return;
     }
   }
+  return fieldConfiguration;
 };
 
 /**
@@ -44,6 +104,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
+
+      console.log(`Filtered entity fields for ${props.label} are ${JSON.stringify(filteredEntityFields)}\n`);
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
@@ -54,7 +116,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
 
       return (
         <>
-          {shouldDisplayConstantValueField(props.filter.types) && (
+          {!!returnConstantFieldConfig(props.filter.types) && (
             <ToggleMode
               constantValueEnabled={value?.constantValueEnabled}
               toggleConstantValueEnabled={toggleConstantValueEnabled}
