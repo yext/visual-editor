@@ -14,7 +14,8 @@ const headingVariants = cva("font-bold", {
       6: "font-heading6 text-heading6-fontSize text-heading6-color",
     },
     weight: {
-      default: "font-normal",
+      default: "",
+      normal: "font-normal",
       bold: "font-bold",
     },
     size: {

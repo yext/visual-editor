@@ -47,6 +47,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
     type: "radio",
     options: [
       { label: "Default", value: "default" },
+      { label: "Normal", value: "normal" },
       { label: "Bold", value: "bold" },
     ],
   },
