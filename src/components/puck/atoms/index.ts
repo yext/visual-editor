@@ -1,1 +1,1 @@
-export { Heading, headingVariants } from "./heading.tsx";
+export { Heading, type HeadingProps, headingVariants } from "./heading.tsx";
