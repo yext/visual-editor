@@ -26,7 +26,7 @@ const bodyVariants = cva("components", {
       background: "text-primary-background",
     },
     textTransform: {
-      none: "ve-normal-case",
+      none: "",
       uppercase: "ve-uppercase",
       lowercase: "ve-lowercase",
       capitalize: "ve-capitalize",
