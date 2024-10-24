@@ -79,6 +79,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
 };
 
 export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
+  label: "Heading Text",
   fields: headingTextFields,
   defaultProps: {
     text: {
