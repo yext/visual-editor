@@ -27,11 +27,11 @@ const headingVariants = cva("font-bold", {
     },
     color: {
       default: "",
-      primary: "ve-text-primary",
-      secondary: "ve-text-secondary",
-      accent: "ve-text-accent",
-      text: "ve-text-text",
-      background: "ve-text-primary-background",
+      primary: "text-primary",
+      secondary: "text-secondary",
+      accent: "text-accent",
+      text: "text-text",
+      background: "text-primary-background",
     },
     transform: {
       none: "",
