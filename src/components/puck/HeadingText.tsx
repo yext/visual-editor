@@ -60,12 +60,8 @@ const headingTextFields: Fields<HeadingTextProps> = {
   },
   size: {
     label: "Text Size",
-    type: "select",
-    options: [
-      { value: "page", label: "Page" },
-      { value: "section", label: "Section" },
-      { value: "subheading", label: "Subheading" },
-    ],
+    type: "number",
+    min: 1,
   },
   color: {
     type: "select",
@@ -101,7 +97,6 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     content: "Heading",
     level: 2,
     weight: "default",
-    size: "section",
     color: "default",
     transform: "none",
   },

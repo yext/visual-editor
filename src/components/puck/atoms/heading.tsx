@@ -15,39 +15,32 @@ const headingVariants = cva("font-bold", {
     },
     weight: {
       default: "",
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
-    },
-    size: {
-      default: "",
-      page: "text-5xl",
-      section: "text-[34px]",
-      subheading: "text-2xl",
+      thin: "ve-font-thin",
+      extralight: "ve-font-extralight",
+      light: "ve-font-light",
+      normal: "ve-font-normal",
+      medium: "ve-font-medium",
+      semibold: "ve-font-semibold",
+      bold: "ve-font-bold",
+      extrabold: "ve-font-extrabold",
+      black: "ve-font-black",
     },
     color: {
       default: "",
-      primary: "text-primary",
-      secondary: "text-secondary",
-      accent: "text-accent",
-      text: "text-text",
-      background: "text-primary-background",
+      primary: "ve-text-primary",
+      secondary: "ve-text-secondary",
+      accent: "ve-text-accent",
+      text: "ve-text-text",
+      background: "ve-text-primary-background",
     },
     transform: {
       none: "",
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
+      uppercase: "ve-uppercase",
+      lowercase: "ve-lowercase",
+      capitalize: "ve-capitalize",
     },
   },
   defaultVariants: {
-    size: "default",
     color: "default",
     weight: "default",
     transform: "none",
@@ -62,20 +55,29 @@ export interface HeadingProps
   extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
   level?: HeadingLevel;
+  size?: number;
 }
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ className, level = 1, size, color, ...props }, ref) => {
+  ({ className, level = 1, size, color, weight, transform, ...props }, ref) => {
     const Tag = `h${level}` as keyof Pick<
       JSX.IntrinsicElements,
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
     >;
 
+    const dynamicStyles = {
+      fontSize: size ? size + "px" : undefined,
+    };
+
     return (
       <Tag
-        id="hello"
-        className={cn(headingVariants({ size, color, className, level }))}
+        id="tag"
+        className={
+          "components " +
+          cn(headingVariants({ color, className, weight, transform, level }))
+        }
         ref={ref}
+        style={dynamicStyles ?? ""}
         {...props}
       >
         {props.children}
