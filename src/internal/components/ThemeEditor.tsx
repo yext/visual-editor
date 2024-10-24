@@ -194,7 +194,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [themeHistories, themeConfig]);
 
   useEffect(() => {
-    console.log("This useEffect", themeSaveStateFetched, themeDataFetched);
     if (!themeSaveStateFetched || !themeDataFetched) {
       return;
     }
