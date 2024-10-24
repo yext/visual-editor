@@ -199,7 +199,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     }
     loadPuckInitialHistory();
     loadThemeHistory();
-  }, [templateMetadata, themeSaveStateFetched, themeDataFetched]);
+  }, [
+    templateMetadata,
+    themeSaveStateFetched,
+    themeDataFetched,
+    visualConfigurationData,
+  ]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
