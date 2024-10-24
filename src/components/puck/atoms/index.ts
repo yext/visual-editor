@@ -1,1 +1,1 @@
-export * from "./myAtom.tsx";
+export { Heading, headingVariants } from "./heading.tsx";
