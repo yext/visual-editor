@@ -116,6 +116,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
 };
 
 export const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
+  label: "Image",
   fields: imageWrapperFields,
   defaultProps: {
     image: {
