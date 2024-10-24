@@ -15,8 +15,15 @@ const headingVariants = cva("font-bold", {
     },
     weight: {
       default: "",
+      thin: "font-thin",
+      extralight: "font-extralight",
+      light: "font-light",
       normal: "font-normal",
+      medium: "font-medium",
+      semibold: "font-semibold",
       bold: "font-bold",
+      extrabold: "font-extrabold",
+      black: "font-black",
     },
     size: {
       default: "",
@@ -29,6 +36,8 @@ const headingVariants = cva("font-bold", {
       primary: "text-primary",
       secondary: "text-secondary",
       accent: "text-accent",
+      text: "text-text",
+      background: "text-primary-background",
     },
     transform: {
       none: "",

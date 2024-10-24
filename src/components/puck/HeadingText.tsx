@@ -44,14 +44,22 @@ const headingTextFields: Fields<HeadingTextProps> = {
   },
   weight: {
     label: "Font Weight",
-    type: "radio",
+    type: "select",
     options: [
       { label: "Default", value: "default" },
+      { label: "Thin", value: "thin" },
+      { label: "Extra Light", value: "extralight" },
+      { label: "Light", value: "light" },
       { label: "Normal", value: "normal" },
+      { label: "Medium", value: "medium" },
+      { label: "Semibold", value: "semibold" },
       { label: "Bold", value: "bold" },
+      { label: "Extrabold", value: "extrabold" },
+      { label: "Black", value: "black" },
     ],
   },
   size: {
+    label: "Text Size",
     type: "select",
     options: [
       { value: "page", label: "Page" },
@@ -62,10 +70,12 @@ const headingTextFields: Fields<HeadingTextProps> = {
   color: {
     type: "select",
     options: [
-      { value: "default", label: "Default" },
-      { value: "primary", label: "Primary" },
-      { value: "secondary", label: "Secondary" },
-      { value: "accent", label: "Accent" },
+      { label: "Default", value: "default" },
+      { label: "Primary", value: "primary" },
+      { label: "Secondary", value: "secondary" },
+      { label: "Accent", value: "accent" },
+      { label: "Text", value: "text" },
+      { label: "Background", value: "background" },
     ],
   },
   transform: {
