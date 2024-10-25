@@ -1,7 +1,7 @@
 type VisualConfiguration = {
   pageSet: string;
   data: string;
-  siteId: number;
+  siteId: string;
 };
 
 type PagesLayout = {
@@ -40,7 +40,10 @@ export function resolveVisualEditorData(
 
   // check base entity
   for (const entityConfiguration of entityConfigurations) {
-    if (entityConfiguration.pageSet === pageSet) {
+    if (
+      entityConfiguration.pageSet === pageSet &&
+      entityConfiguration.siteId === String(document.siteId)
+    ) {
       visualTemplate = JSON.parse(
         validateOrDefault(entityConfiguration.data, pageSet)
       );
@@ -51,7 +54,10 @@ export function resolveVisualEditorData(
   // check layouts referenced by the base entity
   if (!visualTemplate) {
     for (const entityLayout of entityLayoutConfigurations) {
-      if (entityLayout.visualConfiguration?.pageSet === pageSet) {
+      if (
+        entityLayout.visualConfiguration?.pageSet === pageSet &&
+        entityLayout.visualConfiguration?.siteId === String(document.siteId)
+      ) {
         visualTemplate = JSON.parse(
           validateOrDefault(entityLayout.visualConfiguration.data, pageSet)
         );
@@ -63,7 +69,10 @@ export function resolveVisualEditorData(
   // check layouts referenced by the site entity
   if (!visualTemplate && siteLayoutConfigurations) {
     for (const siteLayout of siteLayoutConfigurations) {
-      if (siteLayout.visualConfiguration?.pageSet === pageSet) {
+      if (
+        siteLayout.visualConfiguration?.pageSet === pageSet &&
+        siteLayout.visualConfiguration?.siteId === String(document.siteId)
+      ) {
         visualTemplate = JSON.parse(
           validateOrDefault(siteLayout.visualConfiguration.data, pageSet)
         );
