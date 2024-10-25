@@ -58,11 +58,11 @@ const headingTextFields: Fields<HeadingTextProps> = {
       { label: "Black", value: "black" },
     ],
   },
-  size: {
-    label: "Text Size",
-    type: "number",
-    min: 1,
-  },
+  // size: {
+  //   label: "Text Size",
+  //   type: "number",
+  //   min: 1,
+  // },
   color: {
     type: "select",
     options: [
@@ -96,8 +96,8 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     },
     content: "Heading",
     level: 2,
-    weight: "default",
-    color: "default",
+    weight: "bold",
+    color: "primary",
     transform: "none",
   },
   render: (props) => <HeadingText {...props} />,
