@@ -2,7 +2,7 @@ import { YextEntityField } from "../components/editor/YextEntityFieldSelector.ts
 
 export const resolveYextEntityField = <T>(
   document: any,
-  entityField: YextEntityField
+  entityField: YextEntityField<T>
 ): T | undefined => {
   if (
     !entityField ||

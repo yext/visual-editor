@@ -10,7 +10,7 @@ import {
 import { EntityField } from "../editor/EntityField.js";
 
 export interface HeadingTextProps extends HeadingProps {
-  text: YextEntityField;
+  text: YextEntityField<string>;
 }
 
 const HeadingText = React.forwardRef<HTMLHeadingElement, HeadingTextProps>(

@@ -15,9 +15,9 @@ import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fiel
 
 const devLogger = new DevLogger();
 
-export type YextEntityField = {
+export type YextEntityField<T> = {
   field: string;
-  constantValue: string;
+  constantValue: T;
   constantValueEnabled?: boolean;
 };
 
@@ -62,9 +62,9 @@ const returnConstantFieldConfig = (
 /**
  * Allows the user to select an entity field from the document and set a constant value.
  */
-export const YextEntityFieldSelector = <T extends Record<string, any>>(
+export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
-): Field<YextEntityField> => {
+): Field<YextEntityField<U>> => {
   const constantFieldConfig = returnConstantFieldConfig(props.filter.types);
   return {
     type: "custom",

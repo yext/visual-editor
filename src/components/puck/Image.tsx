@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps } from "@yext/pages-components";
+import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
   EntityField,
   YextEntityField,
@@ -42,11 +42,11 @@ const imageWrapperVariants = cva("", {
 
 export interface ImageWrapperProps
   extends VariantProps<typeof imageWrapperVariants> {
-  image: YextEntityField;
+  image: YextEntityField<ImageType>;
 }
 
 const imageWrapperFields: Fields<ImageWrapperProps> = {
-  image: YextEntityFieldSelector<any>({
+  image: YextEntityFieldSelector<any, ImageType>({
     label: "Image",
     filter: {
       types: ["type.image"],
@@ -121,7 +121,12 @@ export const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
   defaultProps: {
     image: {
       field: "primaryPhoto",
-      constantValue: "",
+      constantValue: {
+        alternateText: "",
+        height: 240,
+        width: 240,
+        url: "",
+      },
     },
     size: "medium",
     aspectRatio: "auto",
