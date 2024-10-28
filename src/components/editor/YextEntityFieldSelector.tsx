@@ -37,45 +37,43 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
   render: ({ onChange, value }) => {
     return (
       <>
-        <input
-          placeholder={"Alternate Text"}
-          onChange={(e) => {
+        <AutoField
+          field={{ type: "text" }}
+          value={value.alternateText}
+          onChange={(fieldValue) => {
             onChange({
               ...value,
-              alternateText: e.currentTarget.value,
+              alternateText: fieldValue,
             });
           }}
         />
-        <input
-          placeholder={"Height"}
-          onChange={(e) => {
-            const height = Number(e.currentTarget.value);
-            if (height) {
-              onChange({
-                ...value,
-                height: +e.currentTarget.value,
-              });
-            }
-          }}
-        />
-        <input
-          placeholder={"Width"}
-          onChange={(e) => {
-            const width = Number(e.currentTarget.value);
-            if (width) {
-              onChange({
-                ...value,
-                width: +e.currentTarget.value,
-              });
-            }
-          }}
-        />
-        <input
-          placeholder={"URL"}
-          onChange={(e) => {
+        <AutoField
+          field={{ type: "number" }}
+          value={value.width}
+          onChange={(fieldValue) => {
             onChange({
               ...value,
-              url: e.currentTarget.value,
+              width: fieldValue,
+            });
+          }}
+        />
+        <AutoField
+          field={{ type: "number" }}
+          value={value.height}
+          onChange={(fieldValue) => {
+            onChange({
+              ...value,
+              height: fieldValue,
+            });
+          }}
+        />
+        <AutoField
+          field={{ type: "text" }}
+          value={value.url}
+          onChange={(fieldValue) => {
+            onChange({
+              ...value,
+              url: fieldValue,
             });
           }}
         />
