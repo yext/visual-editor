@@ -44,7 +44,9 @@ const assignDefinitions = (entityFields: any): YextSchemaField[] => {
         typeRegistryId: field.typeRegistryId,
         isList: field.isList,
       },
-      children: field.children ?? [],
+      children: field.children
+        ? { fields: assignDefinitions(field.children) }
+        : {},
     };
   });
 };
