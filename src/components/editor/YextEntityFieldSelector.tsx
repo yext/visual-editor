@@ -37,7 +37,10 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
   render: ({ onChange, value }) => {
     return (
       <>
-        <FieldLabel label={"Alternate Text"}>
+        <FieldLabel
+          label={"Alternate Text"}
+          className="ve-inline-block ve-pt-4"
+        >
           <AutoField
             field={{ type: "text" }}
             value={value.alternateText}
@@ -49,7 +52,7 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
             }}
           />
         </FieldLabel>
-        <FieldLabel label={"Height"}>
+        <FieldLabel label={"Height"} className="ve-inline-block ve-pt-4">
           <AutoField
             field={{ type: "number" }}
             value={value.width}
@@ -61,7 +64,7 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
             }}
           />
         </FieldLabel>
-        <FieldLabel label={"Width"}>
+        <FieldLabel label={"Width"} className="ve-inline-block ve-pt-4">
           <AutoField
             field={{ type: "number" }}
             value={value.height}
@@ -73,7 +76,7 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
             }}
           />
         </FieldLabel>
-        <FieldLabel label={"URL"}>
+        <FieldLabel label={"URL"} className="ve-inline-block ve-pt-4">
           <AutoField
             field={{ type: "text" }}
             value={value.url}
