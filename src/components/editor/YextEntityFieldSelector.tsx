@@ -55,11 +55,11 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         <FieldLabel label={"Height"} className="ve-inline-block ve-pt-4">
           <AutoField
             field={{ type: "number" }}
-            value={value.width}
+            value={value.height}
             onChange={(fieldValue) => {
               onChange({
                 ...value,
-                width: fieldValue,
+                height: fieldValue,
               });
             }}
           />
@@ -67,11 +67,11 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         <FieldLabel label={"Width"} className="ve-inline-block ve-pt-4">
           <AutoField
             field={{ type: "number" }}
-            value={value.height}
+            value={value.width}
             onChange={(fieldValue) => {
               onChange({
                 ...value,
-                height: fieldValue,
+                width: fieldValue,
               });
             }}
           />
