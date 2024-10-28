@@ -6,6 +6,7 @@ import {
   CustomField,
   TextField,
 } from "@measured/puck";
+import { ImageType } from "@yext/pages-components";
 import { RenderProps } from "../../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
@@ -14,7 +15,9 @@ import {
 } from "../../internal/utils/getFilteredEntityFields.ts";
 import { RadioGroup, RadioGroupItem } from "../../internal/puck/ui/radio.tsx";
 import { Label } from "../../internal/puck/ui/label.tsx";
-import { ImageType } from "@yext/pages-components";
+import { DevLogger } from "../../utils/devLogger.ts";
+
+const devLogger = new DevLogger();
 
 export type YextEntityField = {
   field: string;
@@ -110,14 +113,14 @@ const returnConstantFieldConfig = (
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = TYPE_TO_CONSTANT_CONFIG[entityFieldType];
     if (!mappedConfiguration) {
-      console.log(`No mapped configuration for ${entityFieldType}`);
+      devLogger.log(`No mapped configuration for ${entityFieldType}`);
       return;
     }
     if (!fieldConfiguration) {
       fieldConfiguration = mappedConfiguration;
     }
     if (fieldConfiguration !== mappedConfiguration) {
-      console.log(`Could not resolve configuration for ${entityFieldType}`);
+      devLogger.log(`Could not resolve configuration for ${entityFieldType}`);
       return;
     }
   }
