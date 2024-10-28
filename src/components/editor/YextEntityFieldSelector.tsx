@@ -1,5 +1,12 @@
 import React from "react";
-import { AutoField, FieldLabel, Field } from "@measured/puck";
+import {
+  AutoField,
+  FieldLabel,
+  Field,
+  CustomField,
+  TextField,
+} from "@measured/puck";
+import { ImageType } from "@yext/pages-components";
 import { RenderProps } from "../../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
@@ -8,6 +15,9 @@ import {
 } from "../../internal/utils/getFilteredEntityFields.ts";
 import { RadioGroup, RadioGroupItem } from "../../internal/puck/ui/radio.tsx";
 import { Label } from "../../internal/puck/ui/label.tsx";
+import { DevLogger } from "../../utils/devLogger.ts";
+
+const devLogger = new DevLogger();
 
 export type YextEntityField = {
   field: string;
@@ -21,16 +31,100 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
   };
 
-const SUPPORTED_CONSTANT_VALUE_TYPES: EntityFieldTypes[] = [
-  "type.string",
-  "type.phone",
-];
-const shouldDisplayConstantValueField = (typeFilter: EntityFieldTypes[]) => {
-  for (const constantValueType of SUPPORTED_CONSTANT_VALUE_TYPES) {
-    if (typeFilter.includes(constantValueType)) {
-      return true;
+const TEXT_CONSTANT_CONFIG: TextField = {
+  type: "text",
+};
+
+const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
+  type: "custom",
+  render: ({ onChange, value }) => {
+    return (
+      <>
+        <FieldLabel
+          label={"Alternate Text"}
+          className="ve-inline-block ve-pt-4"
+        >
+          <AutoField
+            field={{ type: "text" }}
+            value={value.alternateText}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                alternateText: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+        <FieldLabel label={"Height"} className="ve-inline-block ve-pt-4">
+          <AutoField
+            field={{ type: "number" }}
+            value={value.height}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                height: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+        <FieldLabel label={"Width"} className="ve-inline-block ve-pt-4">
+          <AutoField
+            field={{ type: "number" }}
+            value={value.width}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                width: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+        <FieldLabel label={"URL"} className="ve-inline-block ve-pt-4">
+          <AutoField
+            field={{ type: "text" }}
+            value={value.url}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                url: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+      </>
+    );
+  },
+};
+
+const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TEXT_CONSTANT_CONFIG,
+  "type.phone": TEXT_CONSTANT_CONFIG,
+  "type.image": IMAGE_CONSTANT_CONFIG,
+};
+
+/**
+ * Returns the constant type configuration if all types match
+ * @param typeFilter
+ */
+const returnConstantFieldConfig = (
+  typeFilter: EntityFieldTypes[]
+): Field | undefined => {
+  let fieldConfiguration: Field | undefined;
+  for (const entityFieldType of typeFilter) {
+    const mappedConfiguration = TYPE_TO_CONSTANT_CONFIG[entityFieldType];
+    if (!mappedConfiguration) {
+      devLogger.log(`No mapped configuration for ${entityFieldType}`);
+      return;
+    }
+    if (!fieldConfiguration) {
+      fieldConfiguration = mappedConfiguration;
+    }
+    if (fieldConfiguration !== mappedConfiguration) {
+      devLogger.log(`Could not resolve configuration for ${entityFieldType}`);
+      return;
     }
   }
+  return fieldConfiguration;
 };
 
 /**
@@ -39,11 +133,13 @@ const shouldDisplayConstantValueField = (typeFilter: EntityFieldTypes[]) => {
 export const YextEntityFieldSelector = <T extends Record<string, any>>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField> => {
+  const constantFieldConfig = returnConstantFieldConfig(props.filter.types);
   return {
     type: "custom",
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
+
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
@@ -54,7 +150,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
 
       return (
         <>
-          {shouldDisplayConstantValueField(props.filter.types) && (
+          {!!constantFieldConfig && (
             <ToggleMode
               constantValueEnabled={value?.constantValueEnabled}
               toggleConstantValueEnabled={toggleConstantValueEnabled}
@@ -93,19 +189,19 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
               label={"Constant Value"}
               className="entityField-constantValue"
             >
-              <AutoField
-                onChange={(newConstantValue) =>
-                  onChange({
-                    field: value?.field ?? "",
-                    constantValue: newConstantValue,
-                    constantValueEnabled: true,
-                  })
-                }
-                value={value?.constantValue}
-                field={{
-                  type: "text",
-                }}
-              />
+              {constantFieldConfig && (
+                <AutoField
+                  onChange={(newConstantValue) =>
+                    onChange({
+                      field: value?.field ?? "",
+                      constantValue: newConstantValue,
+                      constantValueEnabled: true,
+                    })
+                  }
+                  value={value?.constantValue}
+                  field={constantFieldConfig}
+                />
+              )}
             </FieldLabel>
           )}
         </>
