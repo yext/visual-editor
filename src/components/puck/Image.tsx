@@ -92,7 +92,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   rounded,
 }) => {
   const document = useDocument();
-  console.log(`Image document is ${JSON.stringify(document)}\n`);
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
     document,
     imageField
@@ -102,7 +101,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
     return null;
   }
 
-  console.log(`Resolved image for ${imageField} is ${JSON.stringify(resolvedImage)}\n`);
   return (
     <EntityField displayName="Image" fieldId={imageField.field}>
       <div

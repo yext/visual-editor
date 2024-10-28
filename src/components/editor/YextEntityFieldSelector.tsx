@@ -134,9 +134,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>>(
     render: ({ field, value, onChange }: RenderProps) => {
       const filteredEntityFields = getFilteredEntityFields(props.filter);
 
-      console.log(
-        `Filtered entity fields for ${props.label} are ${JSON.stringify(filteredEntityFields)}\n`
-      );
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
