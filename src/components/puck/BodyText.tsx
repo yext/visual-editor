@@ -10,7 +10,7 @@ import { EntityField } from "../editor/EntityField.js";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.js";
 
 export interface BodyTextProps extends BodyProps {
-  text: YextEntityField;
+  text: YextEntityField<string>;
 }
 
 const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
