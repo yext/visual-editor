@@ -37,46 +37,54 @@ const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
   render: ({ onChange, value }) => {
     return (
       <>
-        <AutoField
-          field={{ type: "text" }}
-          value={value.alternateText}
-          onChange={(fieldValue) => {
-            onChange({
-              ...value,
-              alternateText: fieldValue,
-            });
-          }}
-        />
-        <AutoField
-          field={{ type: "number" }}
-          value={value.width}
-          onChange={(fieldValue) => {
-            onChange({
-              ...value,
-              width: fieldValue,
-            });
-          }}
-        />
-        <AutoField
-          field={{ type: "number" }}
-          value={value.height}
-          onChange={(fieldValue) => {
-            onChange({
-              ...value,
-              height: fieldValue,
-            });
-          }}
-        />
-        <AutoField
-          field={{ type: "text" }}
-          value={value.url}
-          onChange={(fieldValue) => {
-            onChange({
-              ...value,
-              url: fieldValue,
-            });
-          }}
-        />
+        <FieldLabel label={"Alternate Text"}>
+          <AutoField
+            field={{ type: "text" }}
+            value={value.alternateText}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                alternateText: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+        <FieldLabel label={"Height"}>
+          <AutoField
+            field={{ type: "number" }}
+            value={value.width}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                width: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+        <FieldLabel label={"Width"}>
+          <AutoField
+            field={{ type: "number" }}
+            value={value.height}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                height: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
+        <FieldLabel label={"URL"}>
+          <AutoField
+            field={{ type: "text" }}
+            value={value.url}
+            onChange={(fieldValue) => {
+              onChange({
+                ...value,
+                url: fieldValue,
+              });
+            }}
+          />
+        </FieldLabel>
       </>
     );
   },
