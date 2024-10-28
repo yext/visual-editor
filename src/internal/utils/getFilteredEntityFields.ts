@@ -29,6 +29,7 @@ type DisallowList<T extends Record<string, any>> = {
 
 type EntityFieldTypesFilter = {
   types: EntityFieldTypes[];
+  includeListsOnly?: boolean;
 };
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
@@ -84,7 +85,7 @@ const walkSubfields = (
   }
 
   if (schemaField.definition.isList) {
-    return []; // skip all children of list types
+    return [{ name: fieldNameInternal, schemaField: schemaField }]; // skip all children of list types
   }
 
   const fieldNames: EntityFieldNameAndSchema[] = [
@@ -195,6 +196,10 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     });
     filteredEntitySubFields = updatedFilteredEntitySubFields;
   }
+
+  filteredEntitySubFields = filteredEntitySubFields.filter(
+    (field) => !!field.definition.isList === !!filter?.includeListsOnly
+  );
 
   return filteredEntitySubFields;
 };
