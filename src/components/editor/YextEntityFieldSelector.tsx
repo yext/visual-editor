@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  AutoField,
-  FieldLabel,
-  Field,
-  CustomField,
-  TextField,
-} from "@measured/puck";
-import { ImageType } from "@yext/pages-components";
+import { AutoField, FieldLabel, Field } from "@measured/puck";
 import { RenderProps } from "../../internal/utils/renderEntityFields.tsx";
 import {
   EntityFieldTypes,
@@ -16,6 +9,9 @@ import {
 import { RadioGroup, RadioGroupItem } from "../../internal/puck/ui/radio.tsx";
 import { Label } from "../../internal/puck/ui/label.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { IMAGE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Image.tsx";
+import { TEXT_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Text.tsx";
+import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Address.tsx";
 
 const devLogger = new DevLogger();
 
@@ -31,75 +27,11 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
   };
 
-const TEXT_CONSTANT_CONFIG: TextField = {
-  type: "text",
-};
-
-const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
-  type: "custom",
-  render: ({ onChange, value }) => {
-    return (
-      <>
-        <FieldLabel
-          label={"Alternate Text"}
-          className="ve-inline-block ve-pt-4"
-        >
-          <AutoField
-            field={{ type: "text" }}
-            value={value.alternateText}
-            onChange={(fieldValue) => {
-              onChange({
-                ...value,
-                alternateText: fieldValue,
-              });
-            }}
-          />
-        </FieldLabel>
-        <FieldLabel label={"Height"} className="ve-inline-block ve-pt-4">
-          <AutoField
-            field={{ type: "number" }}
-            value={value.height}
-            onChange={(fieldValue) => {
-              onChange({
-                ...value,
-                height: fieldValue,
-              });
-            }}
-          />
-        </FieldLabel>
-        <FieldLabel label={"Width"} className="ve-inline-block ve-pt-4">
-          <AutoField
-            field={{ type: "number" }}
-            value={value.width}
-            onChange={(fieldValue) => {
-              onChange({
-                ...value,
-                width: fieldValue,
-              });
-            }}
-          />
-        </FieldLabel>
-        <FieldLabel label={"URL"} className="ve-inline-block ve-pt-4">
-          <AutoField
-            field={{ type: "text" }}
-            value={value.url}
-            onChange={(fieldValue) => {
-              onChange({
-                ...value,
-                url: fieldValue,
-              });
-            }}
-          />
-        </FieldLabel>
-      </>
-    );
-  },
-};
-
 const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
   "type.phone": TEXT_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
+  "type.address": ADDRESS_CONSTANT_CONFIG,
 };
 
 /**
