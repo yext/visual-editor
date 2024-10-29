@@ -30,18 +30,16 @@ export const EntityField = ({
     tooltipContent = `${displayName}`;
   }
 
+  if (!tooltipsVisible) {
+    return children;
+  }
+
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={tooltipsVisible && !!tooltipContent}>
+        <Tooltip open={!!tooltipContent}>
           <TooltipTrigger asChild>
-            <div
-              className={
-                tooltipsVisible
-                  ? "ve-outline-2 ve-outline-dotted" + " ve-outline-[#5A58F2]"
-                  : ""
-              }
-            >
+            <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
               {children}
             </div>
           </TooltipTrigger>
