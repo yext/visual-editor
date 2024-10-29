@@ -32,10 +32,19 @@ test("resolveVisualEditorData returns value from entity visual configuration", a
           document: {
             visualConfigurations: [
               {
+                visualConfiguration: {
+                  pageSet: "location",
+                  data: {},
+                  siteId: "789",
+                },
+              },
+              {
                 pageSet: "location",
                 data: puckData,
+                siteId: "123456",
               },
             ],
+            siteId: 123456,
           },
         },
         "location"
@@ -51,11 +60,20 @@ test("resolveVisualEditorData returns value from pagesLayouts", async () => {
       resolveVisualEditorData(
         {
           document: {
+            siteId: 123456,
             pageLayouts: [
               {
                 visualConfiguration: {
                   pageSet: "location",
+                  data: {},
+                  siteId: "789",
+                },
+              },
+              {
+                visualConfiguration: {
+                  pageSet: "location",
                   data: puckData,
+                  siteId: "123456",
                 },
               },
             ],
@@ -74,12 +92,21 @@ test("resolveVisualEditorData returns value from _site defaultLayouts", async ()
       resolveVisualEditorData(
         {
           document: {
+            siteId: 123456,
             _site: {
               defaultLayouts: [
                 {
                   visualConfiguration: {
                     pageSet: "location",
+                    data: {},
+                    siteId: "789",
+                  },
+                },
+                {
+                  visualConfiguration: {
+                    pageSet: "location",
                     data: puckData,
+                    siteId: "123456",
                   },
                 },
               ],
