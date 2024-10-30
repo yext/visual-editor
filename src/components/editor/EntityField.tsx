@@ -31,7 +31,7 @@ export const EntityField = ({
   if (displayName && fieldId) {
     tooltipContent = `${displayName} (${fieldId})`;
   } else if (fieldId) {
-    tooltipContent = `(${fieldId})`;
+    tooltipContent = `${fieldId}`;
   } else if (displayName) {
     tooltipContent = `${displayName}`;
   }
@@ -39,7 +39,7 @@ export const EntityField = ({
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={!!tooltipContent || !constantValueEnabled}>
+        <Tooltip open={!!tooltipContent && !constantValueEnabled}>
           <TooltipTrigger asChild>
             <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
               {children}
