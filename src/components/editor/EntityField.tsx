@@ -14,21 +14,8 @@ type EntityFieldProps = {
   children: React.ReactNode;
 };
 
-export const EntityField = ({
-  displayName,
-  fieldId,
-  children,
-}: EntityFieldProps) => {
+export const EntityField = ({ fieldId, children }: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
-
-  let tooltipContent = "";
-  if (displayName && fieldId) {
-    tooltipContent = `${displayName} (${fieldId})`;
-  } else if (fieldId) {
-    tooltipContent = `(${fieldId})`;
-  } else if (displayName) {
-    tooltipContent = `${displayName}`;
-  }
 
   if (!tooltipsVisible) {
     return children;
@@ -37,14 +24,14 @@ export const EntityField = ({
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={!!tooltipContent}>
+        <Tooltip open={!!fieldId}>
           <TooltipTrigger asChild>
             <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
               {children}
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{tooltipContent}</p>
+            <p>{fieldId}</p>
             <TooltipArrow fill="bg-popover" />
           </TooltipContent>
         </Tooltip>
