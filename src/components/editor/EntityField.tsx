@@ -11,27 +11,42 @@ import React from "react";
 type EntityFieldProps = {
   displayName?: string;
   fieldId?: string;
+  constantValueEnabled?: boolean;
   children: React.ReactNode;
 };
 
-export const EntityField = ({ fieldId, children }: EntityFieldProps) => {
+export const EntityField = ({
+  displayName,
+  fieldId,
+  constantValueEnabled,
+  children,
+}: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
 
   if (!tooltipsVisible) {
     return children;
   }
 
+  let tooltipContent = "";
+  if (displayName && fieldId) {
+    tooltipContent = `${displayName} (${fieldId})`;
+  } else if (fieldId) {
+    tooltipContent = `(${fieldId})`;
+  } else if (displayName) {
+    tooltipContent = `${displayName}`;
+  }
+
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={!!fieldId}>
+        <Tooltip open={!!tooltipContent || !constantValueEnabled}>
           <TooltipTrigger asChild>
             <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
               {children}
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{fieldId}</p>
+            <p>{tooltipContent}</p>
             <TooltipArrow fill="bg-popover" />
           </TooltipContent>
         </Tooltip>
