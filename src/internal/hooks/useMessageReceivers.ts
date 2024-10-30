@@ -24,7 +24,7 @@ export const useCommonMessageReceivers = (
 
   // Layout from Content
   const [visualConfigurationData, setVisualConfigurationData] =
-    useState<Data>(); // json data
+    useState<Data>();
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
 
