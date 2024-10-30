@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { Config } from "@measured/puck";
+import { Config, Data } from "@measured/puck";
 import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 
@@ -23,7 +23,8 @@ export const useCommonMessageReceivers = (
   const [puckConfig, setPuckConfig] = useState<Config>();
 
   // Layout from Content
-  const [visualConfigurationData, setVisualConfigurationData] = useState<any>(); // json data
+  const [visualConfigurationData, setVisualConfigurationData] =
+    useState<Data>(); // json data
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
 
@@ -42,7 +43,9 @@ export const useCommonMessageReceivers = (
     "getVisualConfigurationData",
     TARGET_ORIGINS,
     (send, payload) => {
-      const vcd = jsonFromEscapedJsonString(payload.visualConfigurationData);
+      const vcd = jsonFromEscapedJsonString(
+        payload.visualConfigurationData
+      ) as Data;
       devLogger.logData("VISUAL_CONFIGURATION_DATA", vcd);
       setVisualConfigurationData(vcd);
       setVisualConfigurationDataFetched(true);

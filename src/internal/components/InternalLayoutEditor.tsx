@@ -4,6 +4,7 @@ import {
   Config,
   type History,
   InitialHistory,
+  AppState,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -49,7 +50,7 @@ export const InternalLayoutEditor = ({
    * to the parent which saves the state to the VES database.
    */
   const handleHistoryChange = useCallback(
-    (histories: History[], index: number) => {
+    (histories: History<Partial<AppState>>[], index: number) => {
       if (
         index !== 0 &&
         historyIndex.current !== index &&
