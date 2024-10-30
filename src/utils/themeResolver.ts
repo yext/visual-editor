@@ -61,11 +61,11 @@ export const convertToTailwindConfig = (
       }
 
       if ("default" in style) {
-        // It's a Style, give assign a class name and CSS variable
+        // If it's type Style, assign a class name and CSS variable
         output[style.plugin][`${themeSectionKey}-${styleKey}`] =
           `var(--${style.plugin}-${themeSectionKey}-${styleKey})`;
       } else if ("styles" in style) {
-        // If it's a StyleGroup, construct an object with class names and CSS variables
+        // If it's type StyleGroup, construct an object with class names and CSS variables
         const styleGroupValues: Record<string, any> = {};
 
         for (const subkey in style.styles) {
