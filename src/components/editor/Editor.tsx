@@ -109,14 +109,14 @@ export const Editor = ({
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            visualConfigurationData={visualConfigurationData}
+            visualConfigurationData={visualConfigurationData!}
             themeConfig={themeConfig}
           />
         ) : (
           <LayoutEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            visualConfigurationData={visualConfigurationData}
+            visualConfigurationData={visualConfigurationData!}
           />
         )
       ) : (

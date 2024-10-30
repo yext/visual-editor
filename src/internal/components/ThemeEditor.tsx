@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { InitialHistory, Config } from "@measured/puck";
+import { InitialHistory, Config, Data } from "@measured/puck";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -9,14 +9,14 @@ import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
-import { ThemeData, ThemeHistories } from "../types/themeData.ts";
+import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
 type ThemeEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
-  visualConfigurationData: any;
+  visualConfigurationData: Data;
   themeConfig: ThemeConfig | undefined;
 };
 
@@ -95,7 +95,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
-        const localHistories = JSON.parse(localHistoryArray);
+        const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
         const localHistoryIndex = localHistories.length - 1;
         setThemeHistories({
           histories: localHistories,

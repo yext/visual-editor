@@ -1,5 +1,5 @@
 import React from "react";
-import { Data, usePuck, type History } from "@measured/puck";
+import { AppState, Data, usePuck, type History } from "@measured/puck";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
@@ -31,7 +31,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       hasFuture,
       setHistories,
     },
-  } = usePuck();
+  } = usePuck() as {
+    appState: ReturnType<typeof usePuck>["appState"];
+    history: Omit<ReturnType<typeof usePuck>["history"], "histories"> & {
+      histories: History<Partial<AppState>>[];
+    };
+  };
 
   useEffect(() => {
     onHistoryChange(histories, index);
