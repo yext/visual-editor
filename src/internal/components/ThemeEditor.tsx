@@ -196,17 +196,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [themeHistories, themeConfig]);
 
   useEffect(() => {
-    if (!themeSaveStateFetched || !document) {
+    if (!themeSaveStateFetched) {
       return;
     }
     loadPuckInitialHistory();
     loadThemeHistory();
-  }, [
-    templateMetadata,
-    themeSaveStateFetched,
-    document,
-    visualConfigurationData,
-  ]);
+  }, [templateMetadata, themeSaveStateFetched]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
