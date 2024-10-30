@@ -4,7 +4,6 @@ import { InitialHistory, Config } from "@measured/puck";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
 import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
@@ -92,9 +91,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Layout Dev Mode - Using layout data from localStorage");
-        const localHistories = JSON.parse(localHistoryArray);
+        const localHistories = JSON.parse(localHistoryArray) as History[];
         const localHistoryIndex = localHistories.length - 1;
         setPuckInitialHistory({
+          // @ts-expect-error https://github.com/measuredco/puck/issues/673
           histories: localHistories,
           index: localHistoryIndex,
           appendData: false,
@@ -152,13 +152,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
               { id: "root", state: { data: visualConfigurationData } },
               {
                 id: layoutSaveState.hash,
-                state: jsonFromEscapedJsonString(layoutSaveState.history),
+                state: { data: layoutSaveState.history.data },
               },
             ]
           : [
               {
                 id: layoutSaveState.hash,
-                state: jsonFromEscapedJsonString(layoutSaveState.history),
+                state: { data: layoutSaveState.history.data },
               },
             ],
         index: visualConfigurationData ? 1 : 0,

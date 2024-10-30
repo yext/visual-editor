@@ -9,8 +9,8 @@ import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
-import { ThemeHistories } from "../types/themeData.ts";
 import { parseConfigsFromDocument } from "../utils/parseConfigsFromDocument.ts";
+import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -97,7 +97,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
-        const localHistories = JSON.parse(localHistoryArray);
+        const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
         const localHistoryIndex = localHistories.length - 1;
         setThemeHistories({
           histories: localHistories,

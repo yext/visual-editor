@@ -1,4 +1,6 @@
+import { AppState } from "@measured/puck";
+
 export type LayoutSaveState = {
-  history: any; // json object
+  history: AppState;
   hash: string;
 };
