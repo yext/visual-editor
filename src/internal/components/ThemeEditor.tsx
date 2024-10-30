@@ -3,13 +3,13 @@ import { InitialHistory, Config } from "@measured/puck";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { SavedTheme, ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
-import { ThemeHistories } from "../types/themeData.ts";
+import { ThemeData, ThemeHistories } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -187,7 +187,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     devLogger.logData("THEME_HISTORIES", themeHistories);
     if (themeHistories && themeConfig) {
       updateThemeInEditor(
-        themeHistories.histories[themeHistories.index]?.data as SavedTheme,
+        themeHistories.histories[themeHistories.index]?.data as ThemeData,
         themeConfig
       );
     }

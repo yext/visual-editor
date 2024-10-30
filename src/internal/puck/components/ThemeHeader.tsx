@@ -2,13 +2,13 @@ import "../ui/puck.css";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../components/editor/index.css";
-import { SavedTheme, ThemeConfig } from "../../../utils/themeResolver.ts";
+import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, usePuck } from "@measured/puck";
-import { ThemeHistories } from "../../types/themeData.ts";
+import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -69,7 +69,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             clearThemeHistory();
             if (themeConfig) {
               updateThemeInEditor(
-                themeHistories?.histories?.[0]?.data as SavedTheme,
+                themeHistories?.histories?.[0]?.data as ThemeData,
                 themeConfig
               );
             }

@@ -10,7 +10,7 @@ describe("buildCssOverridesStyle", () => {
         pagesTheme: [
           {
             themeConfiguration: {
-              data: JSON.stringify({ "--colors-text": "red" }),
+              data: JSON.stringify({ "--colors-palette-text": "red" }),
               siteId: 123,
             },
           },
@@ -21,11 +21,11 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-text:red !important;" +
-        "--colors-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-lg:8px !important;" +
-        "--borderRadius-sm:4px !important" +
+        "--colors-palette-text:red !important;" +
+        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
+        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
+        "--borderRadius-border-lg:8px !important;" +
+        "--borderRadius-border-sm:4px !important" +
         "}</style>"
     );
   });
@@ -38,9 +38,9 @@ describe("buildCssOverridesStyle", () => {
           {
             themeConfiguration: {
               data: JSON.stringify({
-                "--colors-primary-DEFAULT": "hsl(0 68% 51%)",
-                "--colors-primary-foreground": "hsl(0 0% 100%)",
-                "--borderRadius-lg": "20px",
+                "--colors-palette-primary-DEFAULT": "hsl(0 68% 51%)",
+                "--colors-palette-primary-foreground": "hsl(0 0% 100%)",
+                "--borderRadius-border-lg": "20px",
               }),
               siteId: 123,
             },
@@ -53,11 +53,11 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-text:black !important;" +
-        "--colors-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-lg:20px !important;" +
-        "--borderRadius-sm:4px !important" +
+        "--colors-palette-text:black !important;" +
+        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
+        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
+        "--borderRadius-border-lg:20px !important;" +
+        "--borderRadius-border-sm:4px !important" +
         "}</style>"
     );
   });
@@ -67,11 +67,11 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-text:black !important;" +
-        "--colors-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-lg:8px !important;" +
-        "--borderRadius-sm:4px !important" +
+        "--colors-palette-text:black !important;" +
+        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
+        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
+        "--borderRadius-border-lg:8px !important;" +
+        "--borderRadius-border-sm:4px !important" +
         "}</style>"
     );
   });
@@ -97,18 +97,18 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-text:black !important;" +
-        "--colors-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-lg:8px !important;" +
-        "--borderRadius-sm:4px !important" +
+        "--colors-palette-text:black !important;" +
+        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
+        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
+        "--borderRadius-border-lg:8px !important;" +
+        "--borderRadius-border-sm:4px !important" +
         "}</style>"
     );
   });
 });
 
 const themeConfig: ThemeConfig = {
-  colors: {
+  palette: {
     label: "Colors",
     styles: {
       text: {
@@ -117,19 +117,17 @@ const themeConfig: ThemeConfig = {
         type: "color",
         default: "black",
       },
-
       primary: {
         label: "Primary",
+        plugin: "colors",
         styles: {
           DEFAULT: {
             label: "Default",
-            plugin: "colors",
             type: "color",
             default: "hsl(0 68% 51%)",
           },
           foreground: {
             label: "Default",
-            plugin: "colors",
             type: "color",
             default: "hsl(0 0% 100%)",
           },
@@ -137,7 +135,7 @@ const themeConfig: ThemeConfig = {
       },
     },
   },
-  borderRadius: {
+  border: {
     label: "Border Radius",
     styles: {
       lg: {

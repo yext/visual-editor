@@ -1,39 +1,41 @@
-export type Style =
+export type CoreStyle =
   | {
       label: string;
-      plugin: string;
       type: "number";
       default: number;
     }
   | {
       label: string;
-      plugin: string;
       type: "select";
       default: string;
       options: StyleSelectOption[];
     }
   | {
       label: string;
-      plugin: string;
       type: "color";
       default: string;
     };
+
+export type Style = CoreStyle & { plugin: string };
 
 export type StyleSelectOption = {
   label: string;
   value: string;
 };
 
-export type ParentStyle = {
+export type StyleGroup = {
   label: string;
-  styles: { [key: string]: Style | ParentStyle };
+  plugin: string;
+  styles: { [key: string]: CoreStyle };
+};
+
+export type ThemeConfigSection = {
+  label: string;
+  styles: { [key: string]: Style | StyleGroup };
 };
 
 export type ThemeConfig = {
-  [key: string]: {
-    label: string;
-    styles: { [key: string]: Style | ParentStyle };
-  };
+  [key: string]: ThemeConfigSection;
 };
 
 export type TailwindConfig = {
@@ -42,37 +44,40 @@ export type TailwindConfig = {
   };
 };
 
-export type SavedTheme = Record<string, string>;
-
-const extractDefaults = (
-  styles: {
-    [key: string]: Style | ParentStyle;
-  },
-  parentKey = ""
-): { [key: string]: string | { [key: string]: string } } => {
-  const result: any = {};
-
-  for (const key in styles) {
-    const style = styles[key];
-
-    if ("default" in style) {
-      // It's a Style, give it a CSS variable
-      result[key] = `var(--${parentKey}-${key})`;
-    } else if ("styles" in style) {
-      // It's a ParentStyle, recurse to children
-      result[key] = extractDefaults(style.styles, `${parentKey}-${key}`);
-    }
-  }
-
-  return result;
-};
-
-export const convertToTailwindConfig = (input: ThemeConfig): TailwindConfig => {
+export const convertToTailwindConfig = (
+  themeConfig: ThemeConfig
+): TailwindConfig => {
   const output: TailwindConfig = {};
 
-  for (const category in input) {
-    const categoryData = input[category];
-    output[category] = extractDefaults(categoryData.styles, category);
+  for (const themeSectionKey in themeConfig) {
+    const themeSectionStyles = themeConfig[themeSectionKey].styles;
+
+    for (const styleKey in themeSectionStyles) {
+      const style = themeSectionStyles[styleKey];
+
+      if (!output[style.plugin]) {
+        // add theme extension to tailwindConfig if it does not exist
+        output[style.plugin] = {};
+      }
+
+      if ("default" in style) {
+        // It's a Style, give assign a class name and CSS variable
+        output[style.plugin][`${themeSectionKey}-${styleKey}`] =
+          `var(--${style.plugin}-${themeSectionKey}-${styleKey})`;
+      } else if ("styles" in style) {
+        // If it's a StyleGroup, construct an object with class names and CSS variables
+        const styleGroupValues: Record<string, any> = {};
+
+        for (const subkey in style.styles) {
+          styleGroupValues[subkey] =
+            `var(--${style.plugin}-${themeSectionKey}-${styleKey}-${subkey})`;
+        }
+
+        // add the object extension to the tailwindConfig
+        output[style.plugin][`${themeSectionKey}-${styleKey}`] =
+          styleGroupValues;
+      }
+    }
   }
 
   return output;

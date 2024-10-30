@@ -1,6 +1,7 @@
-import { Style, ThemeConfig } from "../../utils/themeResolver.ts";
+import { CoreStyle, Style, ThemeConfig } from "../../utils/themeResolver.ts";
 import { describe, it, expect } from "vitest";
 import {
+  assignValue,
   constructThemePuckFields,
   constructThemePuckValues,
   convertStyleToPuckField,
@@ -10,82 +11,70 @@ export const exampleThemeConfig: ThemeConfig = {
   text: {
     label: "Text",
     styles: {
-      font: {
-        label: "Font",
-        styles: {
-          size: {
-            label: "Font Size",
-            type: "number",
-            default: 12,
-            plugin: "fontSize",
-          },
-          family: {
-            label: "Font Family",
-            plugin: "fontFamily",
-            default: "helvetica",
-            type: "select",
-            options: [
-              {
-                label: "Helvetica",
-                value: "helvetica",
-              },
-              {
-                label: "Times New Roman",
-                value: "timesNewRoman",
-              },
-              {
-                label: "Arial",
-                value: "arial",
-              },
-            ],
-          },
-        },
+      size: {
+        label: "Size",
+        plugin: "fontSize",
+        type: "number",
+        default: 12,
       },
-      color: {
-        label: "Color",
-        styles: {
-          lightMode: {
-            label: "Light Mode",
-            styles: {
-              mainColor: {
-                label: "Main Color",
-                plugin: "fontColor",
-                type: "color",
-                default: "black",
-              },
-              secondaryColor: {
-                label: "Secondary Color",
-                plugin: "fontColor",
-                type: "color",
-                default: "grey",
-              },
-            },
+      family: {
+        label: "Font Family",
+        plugin: "fontFamily",
+        default: "helvetica",
+        type: "select",
+        options: [
+          {
+            label: "Helvetica",
+            value: "helvetica",
           },
-          darkMode: {
-            label: "Dark Mode",
-            styles: {
-              mainColor: {
-                label: "Main Color",
-                plugin: "fontColor",
-                type: "color",
-                default: "black",
-              },
-              secondaryColor: {
-                label: "Secondary Color",
-                plugin: "fontColor",
-                type: "color",
-                default: "grey",
-              },
-            },
+          {
+            label: "Times New Roman",
+            value: "timesNewRoman",
           },
-        },
+          {
+            label: "Arial",
+            value: "arial",
+          },
+        ],
       },
     },
   },
-  heading: {
-    label: "Headings",
+  color: {
+    label: "Color",
     styles: {
-      color: {
+      lightMode: {
+        label: "Light Mode",
+        plugin: "colors",
+        styles: {
+          mainColor: {
+            label: "Main Color",
+            type: "color",
+            default: "black",
+          },
+          secondaryColor: {
+            label: "Secondary Color",
+            type: "color",
+            default: "grey",
+          },
+        },
+      },
+      darkMode: {
+        label: "Dark Mode",
+        plugin: "colors",
+        styles: {
+          mainColor: {
+            label: "Main Color",
+            type: "color",
+            default: "black",
+          },
+          secondaryColor: {
+            label: "Secondary Color",
+            type: "color",
+            default: "grey",
+          },
+        },
+      },
+      heading: {
         label: "Heading Color",
         type: "color",
         plugin: "colors",
@@ -95,6 +84,95 @@ export const exampleThemeConfig: ThemeConfig = {
   },
 };
 
+// export const exampleThemeConfig: ThemeConfig = {
+//   text: {
+//     label: "Text",
+//     styles: {
+//       font: {
+//         label: "Font",
+//         plugin: "fontSize",
+//         styles: {
+//           size: {
+//             label: "Font Size",
+//             type: "number",
+//             default: 12,
+//           },
+//           family: {
+//             label: "Font Family",
+//             plugin: "fontFamily",
+//             default: "helvetica",
+//             type: "select",
+//             options: [
+//               {
+//                 label: "Helvetica",
+//                 value: "helvetica",
+//               },
+//               {
+//                 label: "Times New Roman",
+//                 value: "timesNewRoman",
+//               },
+//               {
+//                 label: "Arial",
+//                 value: "arial",
+//               },
+//             ],
+//           },
+//         },
+//       },
+//       color: {
+//         label: "Color",
+//         styles: {
+//           lightMode: {
+//             label: "Light Mode",
+//             styles: {
+//               mainColor: {
+//                 label: "Main Color",
+//                 plugin: "fontColor",
+//                 type: "color",
+//                 default: "black",
+//               },
+//               secondaryColor: {
+//                 label: "Secondary Color",
+//                 plugin: "fontColor",
+//                 type: "color",
+//                 default: "grey",
+//               },
+//             },
+//           },
+//           darkMode: {
+//             label: "Dark Mode",
+//             styles: {
+//               mainColor: {
+//                 label: "Main Color",
+//                 plugin: "fontColor",
+//                 type: "color",
+//                 default: "black",
+//               },
+//               secondaryColor: {
+//                 label: "Secondary Color",
+//                 plugin: "fontColor",
+//                 type: "color",
+//                 default: "grey",
+//               },
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+//   heading: {
+//     label: "Headings",
+//     styles: {
+//       color: {
+//         label: "Heading Color",
+//         type: "color",
+//         plugin: "colors",
+//         default: "#FF0000",
+//       },
+//     },
+//   },
+// };
+
 describe("constructThemePuckFields", () => {
   it("constructs theme fields from a parent style", () => {
     const result = constructThemePuckFields(exampleThemeConfig.text);
@@ -103,58 +181,13 @@ describe("constructThemePuckFields", () => {
       label: "Text",
       type: "object",
       objectFields: {
-        font: {
-          label: "Font",
-          type: "object",
-          objectFields: {
-            size: {
-              label: "Font Size",
-              type: "number",
-            },
-            family: {
-              label: "Font Family",
-              type: "select",
-              options: [
-                { label: "Helvetica", value: "helvetica" },
-                { label: "Times New Roman", value: "timesNewRoman" },
-                { label: "Arial", value: "arial" },
-              ],
-            },
-          },
+        size: {
+          label: "Size",
+          type: "number",
         },
-        color: {
-          label: "Color",
-          type: "object",
-          objectFields: {
-            lightMode: {
-              label: "Light Mode",
-              type: "object",
-              objectFields: {
-                mainColor: {
-                  label: "Main Color",
-                  type: "custom",
-                },
-                secondaryColor: {
-                  label: "Secondary Color",
-                  type: "custom",
-                },
-              },
-            },
-            darkMode: {
-              label: "Dark Mode",
-              type: "object",
-              objectFields: {
-                mainColor: {
-                  label: "Main Color",
-                  type: "custom",
-                },
-                secondaryColor: {
-                  label: "Secondary Color",
-                  type: "custom",
-                },
-              },
-            },
-          },
+        family: {
+          label: "Font Family",
+          type: "select",
         },
       },
     });
@@ -216,38 +249,97 @@ describe("convertStyleToPuckField", () => {
   });
 });
 
+describe("assignValue", () => {
+  it("returns the default value when there is no stored value", () => {
+    const style: CoreStyle = {
+      label: "Style",
+      type: "number",
+      default: 10,
+    };
+
+    const result = assignValue(style, undefined);
+    expect(result).toEqual(10);
+  });
+
+  it("returns the stored value for color fields", () => {
+    const storedValue = "#FFFFFF";
+    const style: CoreStyle = {
+      label: "Style",
+      type: "color",
+      default: "#000000",
+    };
+
+    const result = assignValue(style, storedValue);
+    expect(result).toEqual("#FFFFFF");
+  });
+
+  it("returns the stored value for select fields", () => {
+    const storedValue = "a";
+    const style: CoreStyle = {
+      label: "Style",
+      type: "select",
+      default: "b",
+      options: [
+        { label: "A", value: "a" },
+        { label: "B", value: "b" },
+      ],
+    };
+
+    const result = assignValue(style, storedValue);
+    expect(result).toEqual("a");
+  });
+
+  it("returns the stored value for number fields", () => {
+    const storedValue = "10px";
+    const style: CoreStyle = {
+      label: "Style",
+      type: "number",
+      default: 0,
+    };
+
+    const result = assignValue(style, storedValue);
+    expect(result).toEqual(10);
+  });
+
+  it("returns the default value for corrupted number fields", () => {
+    const storedValue = "abcdef";
+    const style: CoreStyle = {
+      label: "Style",
+      type: "number",
+      default: 5,
+    };
+
+    const result = assignValue(style, storedValue);
+    expect(result).toEqual(5);
+  });
+});
+
 describe("constructThemePuckValues", () => {
   it("constructs theme puck values using saved theme values", () => {
     const savedThemeValues = {
-      "--text-font-size": "16px",
-      "--text-font-family": "arial",
-      "--text-color-lightMode-mainColor": "blue",
-      "--text-color-lightMode-secondaryColor": "lightgrey",
-      "--text-color-darkMode-mainColor": "black",
-      "--text-color-darkMode-secondaryColor": "grey",
+      "--colors-color-lightMode-mainColor": "green",
+      "--colors-color-lightMode-secondaryColor": "orange",
+      "--colors-color-darkMode-mainColor": "blue",
+      "--colors-color-darkMode-secondaryColor": "purple",
+      "--colors-color-heading": "red",
     };
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text,
-      "text"
+      exampleThemeConfig.color,
+      "color"
     );
 
     expect(result).toEqual({
-      font: {
-        size: 16, // from saved values
-        family: "arial", // from saved values
+      lightMode: {
+        mainColor: "green",
+        secondaryColor: "orange",
       },
-      color: {
-        lightMode: {
-          mainColor: "blue", // from saved values
-          secondaryColor: "lightgrey", // from saved values
-        },
-        darkMode: {
-          mainColor: "black", // default value
-          secondaryColor: "grey", // default value
-        },
+      darkMode: {
+        mainColor: "blue",
+        secondaryColor: "purple",
       },
+      heading: "red",
     });
   });
 
@@ -256,55 +348,46 @@ describe("constructThemePuckValues", () => {
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text,
-      "text"
+      exampleThemeConfig.color,
+      "color"
     );
 
     expect(result).toEqual({
-      font: {
-        size: 12, // default value
-        family: "helvetica", // default value
+      lightMode: {
+        mainColor: "black",
+        secondaryColor: "grey",
       },
-      color: {
-        lightMode: {
-          mainColor: "black", // default value
-          secondaryColor: "grey", // default value
-        },
-        darkMode: {
-          mainColor: "black", // default value
-          secondaryColor: "grey", // default value
-        },
+      darkMode: {
+        mainColor: "black",
+        secondaryColor: "grey",
       },
+      heading: "#FF0000",
     });
   });
 
   it("handles a mix of saved and default theme values", () => {
     const savedThemeValues = {
-      "--text-font-size": "14px",
-      "--text-color-lightMode-mainColor": "red",
+      "--colors-color-lightMode-mainColor": "green",
+      "--colors-color-lightMode-secondaryColor": "orange",
+      "--colors-color-heading": "red",
     };
 
     const result = constructThemePuckValues(
       savedThemeValues,
-      exampleThemeConfig.text,
-      "text"
+      exampleThemeConfig.color,
+      "color"
     );
 
     expect(result).toEqual({
-      font: {
-        size: 14, // from saved values
-        family: "helvetica", // default value
+      lightMode: {
+        mainColor: "green",
+        secondaryColor: "orange",
       },
-      color: {
-        lightMode: {
-          mainColor: "red", // from saved values
-          secondaryColor: "grey", // default value
-        },
-        darkMode: {
-          mainColor: "black", // default value
-          secondaryColor: "grey", // default value
-        },
+      darkMode: {
+        mainColor: "black",
+        secondaryColor: "grey",
       },
+      heading: "red",
     });
   });
 });
