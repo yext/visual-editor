@@ -18,7 +18,10 @@ const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
     const document = useDocument();
 
     return (
-      <EntityField fieldId={text.field}>
+      <EntityField
+        fieldId={text.field}
+        constantValueEnabled={text.constantValueEnabled}
+      >
         <Body ref={ref} {...bodyProps}>
           {resolveYextEntityField(document, text)}
         </Body>

@@ -102,7 +102,10 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   }
 
   return (
-    <EntityField displayName="Image" fieldId={imageField.field}>
+    <EntityField
+      fieldId={imageField.field}
+      constantValueEnabled={imageField.constantValueEnabled}
+    >
       <div
         className={cn(
           imageWrapperVariants({ size, aspectRatio }),
