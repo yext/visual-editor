@@ -8,17 +8,24 @@ import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts
 import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
+import { parseConfigsFromDocument } from "../utils/parseConfigsFromDocument.ts";
+import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { SavedTheme, ThemeConfig } from "../../utils/themeResolver.ts";
 
 const devLogger = new DevLogger();
 
 type LayoutEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
-  visualConfigurationData: any;
+  themeConfig: ThemeConfig | undefined;
+  document: any;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
-  const { puckConfig, templateMetadata, visualConfigurationData } = props;
+  const { puckConfig, templateMetadata, themeConfig, document } = props;
+
+  const { visualConfigurationData, themeData } =
+    parseConfigsFromDocument(document);
 
   const {
     sendDevLayoutSaveStateData,
@@ -47,6 +54,16 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     clearVisualConfigLocalStorage();
     deleteLayoutSaveState();
   };
+
+  /**
+   * Apply the themes from Content
+   */
+  useEffect(() => {
+    devLogger.logData("THEME_DATA", themeData);
+    if (themeData && themeConfig) {
+      updateThemeInEditor(themeData as SavedTheme, themeConfig);
+    }
+  }, [themeData, themeConfig]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination

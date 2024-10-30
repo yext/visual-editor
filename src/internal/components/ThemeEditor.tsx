@@ -10,19 +10,19 @@ import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeHistories } from "../types/themeData.ts";
+import { parseConfigsFromDocument } from "../utils/parseConfigsFromDocument.ts";
 
 const devLogger = new DevLogger();
 
 type ThemeEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
-  visualConfigurationData: any;
   themeConfig: ThemeConfig | undefined;
+  document: any;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
-  const { puckConfig, templateMetadata, visualConfigurationData, themeConfig } =
-    props;
+  const { puckConfig, templateMetadata, themeConfig, document } = props;
 
   const {
     sendDevThemeSaveStateData,
@@ -31,8 +31,10 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     deleteThemeSaveState,
   } = useThemeMessageSenders();
 
-  const { themeData, themeDataFetched, themeSaveState, themeSaveStateFetched } =
-    useThemeMessageReceivers();
+  const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers();
+
+  const { visualConfigurationData, themeData } =
+    parseConfigsFromDocument(document);
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);
@@ -194,7 +196,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [themeHistories, themeConfig]);
 
   useEffect(() => {
-    if (!themeSaveStateFetched || !themeDataFetched) {
+    if (!themeSaveStateFetched || !document) {
       return;
     }
     loadPuckInitialHistory();
@@ -202,7 +204,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [
     templateMetadata,
     themeSaveStateFetched,
-    themeDataFetched,
+    document,
     visualConfigurationData,
   ]);
 
@@ -240,14 +242,14 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const isLoading =
     !puckInitialHistoryFetched ||
     !themeHistoryFetched ||
-    !themeDataFetched ||
+    !document ||
     !themeSaveStateFetched;
 
   const progress =
     60 + // @ts-expect-error adding bools is fine
     (puckInitialHistoryFetched +
       themeHistoryFetched +
-      themeDataFetched +
+      document +
       themeSaveStateFetched) *
       10;
 

@@ -33,12 +33,8 @@ export const Editor = ({
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
 
-  const {
-    templateMetadata,
-    puckConfig,
-    visualConfigurationData,
-    visualConfigurationDataFetched,
-  } = useCommonMessageReceivers(componentRegistry);
+  const { templateMetadata, puckConfig } =
+    useCommonMessageReceivers(componentRegistry);
 
   const { pushPageSets } = useCommonMessageSenders();
 
@@ -88,19 +84,11 @@ export const Editor = ({
     }
   }, [templateMetadata?.isDevMode, devPageSets]);
 
-  const isLoading =
-    !puckConfig ||
-    !templateMetadata ||
-    !document ||
-    !visualConfigurationDataFetched;
+  const isLoading = !puckConfig || !templateMetadata || !document;
 
   const progress: number =
     60 * // @ts-expect-error adding bools is fine
-    ((!!puckConfig +
-      !!templateMetadata +
-      !!document +
-      visualConfigurationDataFetched) /
-      4);
+    ((!!puckConfig + !!templateMetadata + !!document) / 3);
 
   return (
     <>
@@ -109,14 +97,15 @@ export const Editor = ({
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            visualConfigurationData={visualConfigurationData}
             themeConfig={themeConfig}
+            document={document}
           />
         ) : (
           <LayoutEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            visualConfigurationData={visualConfigurationData}
+            themeConfig={themeConfig}
+            document={document}
           />
         )
       ) : (
