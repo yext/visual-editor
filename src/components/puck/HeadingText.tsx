@@ -18,10 +18,7 @@ const HeadingText = React.forwardRef<HTMLHeadingElement, HeadingTextProps>(
     const document = useDocument();
 
     return (
-      <EntityField
-        fieldId={text.field}
-        constantValueEnabled={text.constantValueEnabled}
-      >
+      <EntityField fieldId={text.field}>
         <Heading ref={ref} {...headingProps}>
           {resolveYextEntityField(document, text)}
         </Heading>

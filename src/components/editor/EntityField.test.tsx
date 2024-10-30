@@ -23,7 +23,7 @@ describe("EntityField component", () => {
       return (
         <>
           <button onClick={toggleTooltips}>Toggle</button>
-          <EntityField fieldId="123" constantValueEnabled={false}>
+          <EntityField displayName="Test Field" fieldId="123">
             <div>Content</div>
           </EntityField>
         </>
@@ -37,13 +37,13 @@ describe("EntityField component", () => {
     );
 
     expect(screen.getByText("Content")).toBeDefined();
-    expect(screen.queryAllByText("123")).toHaveLength(0);
+    expect(screen.queryAllByText("Test Field (123)")).toHaveLength(0);
 
     act(() => {
       screen.getByText("Toggle").click();
     });
 
     expect(screen.getByText("Content")).toBeDefined();
-    expect(screen.queryAllByText("123")).toBeDefined();
+    expect(screen.queryAllByText("Test Field (123)")).toBeDefined();
   });
 });

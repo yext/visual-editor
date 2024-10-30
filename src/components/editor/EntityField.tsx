@@ -9,16 +9,12 @@ import {
 import React from "react";
 
 type EntityFieldProps = {
+  displayName?: string;
   fieldId?: string;
-  constantValueEnabled?: boolean;
   children: React.ReactNode;
 };
 
-export const EntityField = ({
-  fieldId,
-  children,
-  constantValueEnabled,
-}: EntityFieldProps) => {
+export const EntityField = ({ fieldId, children }: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
 
   if (!tooltipsVisible) {
@@ -28,7 +24,7 @@ export const EntityField = ({
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={!!fieldId && !constantValueEnabled}>
+        <Tooltip open={!!fieldId}>
           <TooltipTrigger asChild>
             <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
               {children}
