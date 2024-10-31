@@ -33,8 +33,11 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
   const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers();
 
-  const { visualConfigurationData, themeData } =
-    parseConfigsFromDocument(document);
+  const { visualConfigurationData, themeData } = parseConfigsFromDocument(
+    document,
+    templateMetadata.templateId,
+    templateMetadata.siteId
+  );
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);

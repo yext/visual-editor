@@ -23,8 +23,11 @@ type LayoutEditorProps = {
 export const LayoutEditor = (props: LayoutEditorProps) => {
   const { puckConfig, templateMetadata, themeConfig, document } = props;
 
-  const { visualConfigurationData, themeData } =
-    parseConfigsFromDocument(document);
+  const { visualConfigurationData, themeData } = parseConfigsFromDocument(
+    document,
+    templateMetadata.templateId,
+    templateMetadata.siteId
+  );
 
   const {
     sendDevLayoutSaveStateData,
