@@ -5,7 +5,7 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeConfig, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
@@ -73,7 +73,11 @@ export const InternalThemeEditor = ({
     });
   };
 
-  const handleThemeChange = (topLevelKey: string, newValue: any) => {
+  const handleThemeChange = (
+    themeSectionKey: string,
+    themeSection: ThemeConfigSection,
+    newValue: Record<string, any>
+  ) => {
     if (!themeHistoriesRef.current || !themeConfig) {
       return;
     }
@@ -81,7 +85,11 @@ export const InternalThemeEditor = ({
     const newThemeValues = {
       ...themeHistoriesRef.current.histories[themeHistoriesRef.current.index]
         ?.data,
-      ...generateCssVariablesFromPuckFields(newValue, topLevelKey),
+      ...generateCssVariablesFromPuckFields(
+        newValue,
+        themeSectionKey,
+        themeSection
+      ),
     };
 
     const newHistory = {

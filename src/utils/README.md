@@ -35,6 +35,139 @@ Used in a component's render function to pull in the selected entity field's val
 
 See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
+## ThemeConfig
+
+The ThemeConfig object defines the styles available for editing in Theme Manager. It is used
+by themeResolver, applyTheme, and Editor.
+
+### Defining a ThemeConfig
+
+Each style must specify a label, type, default value, and plugin. The label will be displayed in the
+Theme Manager UI. The type can be "color", "number" or "select". If type "select", an array of options
+must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
+a plugin can be nested one level deep together under a shared label.
+
+```ts
+export const themeConfig: ThemeConfig = {
+  sectionA: {
+    label: "Section A",
+    styles: {
+      style1: {
+        label: "Style 1",
+        type: "number",
+        default: 0,
+        plugin: "fontSize",
+      },
+      style2: {
+        label: "Style 2",
+        plugin: "colors",
+        styles: {
+          substyleA: {
+            label: "Sub-Style A"
+            type: "color"
+            default: "#000000"
+          },
+          substyleB: {
+            label: "Sub-Style B"
+            type: "color"
+            default: "#FFFFFF"
+          },
+        },
+      },
+    },
+  },
+  sectionB: {
+    label: "Section B"
+    styles: {
+      style3: {
+        label: "Style 3",
+        type: "select",
+        default: "normal",
+        options: [
+          {value: "normal", label: "Normal"}
+          {value: "bold", label: "Bold"}
+        ]
+        plugin: "fontWeight",
+      },
+    },
+  },
+};
+```
+
+The Theme Manger UI will display the theme configuration fields in the order
+and structure specified in the themeConfig.
+
+### Using Theme Manager Classes
+
+Theme Manger uses Tailwind to create classes of the following form: `[tailwindUtility]-[sectionName]-[styleName]-[subStyleName?]` where `tailwindUtility` is the Tailwind Utility class prefix used by the style's core plugin. These classes should be used in components to apply the Theme Manager styles.
+
+For example, in the themeConfig above, the following classes would be available:
+
+- `text-parentA-style1`
+- `text-parentA-style2-substyleA`
+- `text-parentA-style2-substyleB`
+- ... other color utilities such as `bg-parentA-style2-substyleA`
+- `font-parentB-style3`
+
+### Referencing Other Theme Values
+
+Underlying these classes are a set of CSS variables that follow the form `--[pluginName]-[sectionName]-[styleName]-[subStyleName?]`.
+
+The themeConfig above creates the following CSS variables:
+
+- `--fontSize-parentA-style1`
+- `--colors-parentA-style2-substyleA`
+- `--colors-parentA-style2-substyleB`
+- `--fontWeight-parentB-style3`
+
+It is not necessary to directly use these CSS variables. However, they can be used to link styles together.
+
+#### Example
+
+```ts
+export const themeConfig: ThemeConfig = {
+  palette: {
+    label: "Color Palette",
+    styles: {
+      primary: {
+        label: "Primary",
+        type: "color",
+        default: "black",
+        plugin: "colors",
+      },
+      secondary: {
+        label: "Secondary",
+        type: "color",
+        default: "white",
+        plugin: "colors",
+      },
+    },
+  },
+  headings: {
+    label: "Headings"
+    styles: {
+      textColor: {
+        label: "Text Color",
+        type: "select",
+        default: "var(--colors-palette-primary)",
+        options: [
+          {value: "var(--colors-palette-primary)", label: "Primary"}
+          {value: "var(--colors-palette-secondary)", label: "Secondary"}
+        ]
+        plugin: "colors",
+      },
+    },
+  },
+};
+```
+
+This example creates the following classes:
+
+- `text-palette-primary`
+- `text-palette-secondary`
+- ... other color utilities like bg-palette-primary
+- `text-headings-textColor` - can switch between the primary or secondary color
+
 ## themeResolver
 
 Used in tailwind.config.ts to combine hard-coded styles with editable Theme Manager styles.

@@ -1,7 +1,10 @@
 import { AutoField, FieldLabel } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
+import {
+  ThemeConfig,
+  ThemeConfigSection,
+} from "../../../utils/themeResolver.ts";
 import {
   constructThemePuckFields,
   constructThemePuckValues,
@@ -11,7 +14,11 @@ import { ThemeHistories } from "../../types/themeData.ts";
 type ThemeSidebarProps = {
   themeHistoriesRef: React.MutableRefObject<ThemeHistories | undefined>;
   themeConfig?: ThemeConfig;
-  onThemeChange: (parentStyleKey: string, value: Record<string, any>) => void;
+  onThemeChange: (
+    themeSectionKey: string,
+    themeSection: ThemeConfigSection,
+    value: Record<string, any>
+  ) => void;
 };
 
 const ThemeSidebar = (props: ThemeSidebarProps) => {
@@ -44,24 +51,26 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
           entire site.
         </AlertDescription>
       </Alert>
-      {Object.entries(themeConfig).map(([parentStyleKey, parentStyle]) => {
-        const field = constructThemePuckFields(parentStyle);
+      {Object.entries(themeConfig).map(([themeSectionKey, themeSection]) => {
+        const field = constructThemePuckFields(themeSection);
         const values = constructThemePuckValues(
           themeData,
-          parentStyle,
-          parentStyleKey
+          themeSection,
+          themeSectionKey
         );
 
         return (
           <FieldLabel
             label={field.label ?? ""}
             className="theme-field"
-            key={parentStyleKey}
+            key={themeSectionKey}
             el="div"
           >
             <AutoField
               field={field}
-              onChange={(value) => onThemeChange(parentStyleKey, value)}
+              onChange={(value) =>
+                onThemeChange(themeSectionKey, themeSection, value)
+              }
               value={values}
             />
           </FieldLabel>

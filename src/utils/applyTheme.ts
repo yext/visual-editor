@@ -1,6 +1,7 @@
+import { ThemeData } from "../internal/types/themeData.ts";
 import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
-import { SavedTheme, ThemeConfig } from "./themeResolver.ts";
+import { ThemeConfig } from "./themeResolver.ts";
 
 export type Document = {
   [key: string]: any;
@@ -41,7 +42,7 @@ export const applyTheme = (
 };
 
 const internalApplyTheme = (
-  savedThemeValues: Record<string, any>,
+  savedThemeValues: ThemeData,
   themeConfig: ThemeConfig
 ): string => {
   devLogger.logFunc("internalApplyTheme");
@@ -66,7 +67,7 @@ const internalApplyTheme = (
 };
 
 export const updateThemeInEditor = async (
-  newTheme: SavedTheme,
+  newTheme: ThemeData,
   themeConfig: ThemeConfig
 ) => {
   devLogger.logFunc("updateThemeInEditor");
