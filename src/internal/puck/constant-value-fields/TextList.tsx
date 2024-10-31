@@ -3,6 +3,8 @@ import { AutoField, IconButton, Button, CustomField } from "@measured/puck";
 import { Trash2 as TrashIcon } from "lucide-react";
 import { Plus as PlusIcon } from "lucide-react";
 
+const TEXT_LIST_BUTTON_COLOR: string = "#969696";
+
 export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
   render: ({ onChange, value }) => {
@@ -42,7 +44,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
               value={item}
               onChange={(itemValue) => updateItem(index, itemValue)}
             />
-            <span style={{ color: "#969696" }}>
+            <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
                 variant={"secondary"}
@@ -54,7 +56,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
             </span>
           </div>
         ))}
-        <span style={{ color: "#969696", width: "auto" }}>
+        <span style={{ color: TEXT_LIST_BUTTON_COLOR, width: "auto" }}>
           <Button
             onClick={addItem}
             variant={"secondary"}
