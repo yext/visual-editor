@@ -4,30 +4,43 @@ import {
   NumberField,
   CustomField,
 } from "@measured/puck";
-import { ParentStyle, SavedTheme, Style } from "../../utils/themeResolver.ts";
+import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
+import { ThemeData } from "../types/themeData.ts";
 
-export const constructThemePuckFields = (parentStyle: ParentStyle) => {
+// Converts a ThemeConfigSection into a Puck fields object
+export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
   const field: ObjectField = {
-    label: parentStyle.label,
+    label: themeSection.label,
     type: "object",
     objectFields: {},
   };
 
-  Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
+  Object.entries(themeSection.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
       const styleField = convertStyleToPuckField(style);
       if (styleField) {
         field.objectFields[styleKey] = styleField;
       }
     } else {
-      field.objectFields[styleKey] = constructThemePuckFields(style);
+      const styleGroupFields: ObjectField = {
+        label: style.label,
+        type: "object",
+        objectFields: {},
+      };
+      for (const subkey in style.styles) {
+        styleGroupFields.objectFields[subkey] = convertStyleToPuckField(
+          style.styles[subkey]
+        );
+      }
+      field.objectFields[styleKey] = styleGroupFields;
     }
   });
   return field;
 };
 
-export const convertStyleToPuckField = (style: Style) => {
+// Determines which Puck field type to use for a style
+export const convertStyleToPuckField = (style: CoreStyle) => {
   switch (style.type) {
     case "number":
       return {
@@ -49,36 +62,49 @@ export const convertStyleToPuckField = (style: Style) => {
   }
 };
 
+// Converts a ThemeConfigSection into a Puck values object
 export const constructThemePuckValues = (
-  savedThemeValues: SavedTheme | undefined,
-  parentStyle: ParentStyle,
-  parentKey: string = ""
+  savedThemeValues: ThemeData | undefined,
+  themeSection: ThemeConfigSection,
+  sectionKey: string = ""
 ) => {
   const value: Record<string, any> = {};
 
-  Object.entries(parentStyle.styles).forEach(([styleKey, style]) => {
+  Object.entries(themeSection.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
-      const storedValue = savedThemeValues?.[`--${parentKey}-${styleKey}`];
-
-      if (storedValue) {
-        if (style.type === "number") {
-          const convertedNumber = Number.parseInt(storedValue);
-          value[styleKey] = isNaN(convertedNumber)
-            ? style.default
-            : convertedNumber;
-        } else {
-          value[styleKey] = storedValue;
-        }
-      } else {
-        value[styleKey] = style.default;
-      }
+      const storedValue =
+        savedThemeValues?.[`--${style.plugin}-${sectionKey}-${styleKey}`];
+      value[styleKey] = assignValue(style, storedValue);
     } else {
-      value[styleKey] = constructThemePuckValues(
-        savedThemeValues,
-        style,
-        `${parentKey}-${styleKey}`
-      );
+      const styleGroupValues: Record<string, any> = {};
+      for (const subkey in style.styles) {
+        const substyle = style.styles[subkey];
+        const storedValue =
+          savedThemeValues?.[
+            `--${style.plugin}-${sectionKey}-${styleKey}-${subkey}`
+          ];
+        styleGroupValues[subkey] = assignValue(substyle, storedValue);
+      }
+      value[styleKey] = styleGroupValues;
     }
   });
   return value;
+};
+
+// Determines whether to use the default or stored value
+// Also removes "px" from stored number values to send to puck
+export const assignValue = (
+  style: CoreStyle,
+  storedValue: string | undefined
+) => {
+  if (storedValue) {
+    if (style.type === "number") {
+      const convertedNumber = Number.parseInt(storedValue);
+      return isNaN(convertedNumber) ? style.default : convertedNumber;
+    } else {
+      return storedValue;
+    }
+  } else {
+    return style.default;
+  }
 };

@@ -18,7 +18,7 @@ describe("themeResolver", () => {
     const result = deepMerge(developerTailwindConfig, marketerTailwindConfig);
     expect(result).toEqual(mergedConfig);
     expect(consoleSpy).toHaveBeenLastCalledWith(
-      "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from theme.config.ts (var(--borderRadius-sm))"
+      "Both theme.config.ts and tailwind.config.ts provided a value for button-primary. Using the value from theme.config.ts (var(--colors-button-primary))"
     );
   });
 
@@ -29,178 +29,364 @@ describe("themeResolver", () => {
       const consoleSpy = vi.spyOn(console, "warn");
       const result = themeResolver(developerTailwindConfig, testThemeConfig);
       expect(result).toEqual(mergedConfig);
-      expect(consoleSpy).toHaveBeenCalledTimes(3);
+      expect(consoleSpy).toHaveBeenCalledTimes(1);
       expect(consoleSpy).toHaveBeenLastCalledWith(
-        "Both theme.config.ts and tailwind.config.ts provided a value for sm. Using the value from theme.config.ts (var(--borderRadius-sm))"
+        "Both theme.config.ts and tailwind.config.ts provided a value for button-primary. Using the value from theme.config.ts (var(--colors-button-primary))"
       );
     }
   );
 });
 
+const getColorOptions = () => {
+  return [
+    { label: "Primary", value: "var(--colors-palette-primary)" },
+    { label: "Secondary", value: "var(--colors-palette-secondary)" },
+    { label: "Accent", value: "var(--colors-palette-accent)" },
+    { label: "Text", value: "var(--colors-palette-text)" },
+    { label: "Background", value: "var(--colors-palette-background)" },
+    { label: "Foreground", value: "var(--colors-palette-foreground)" },
+  ];
+};
+
+const getWeightOptions = () => {
+  return [
+    { label: "Thin", value: "100" },
+    { label: "Extralight", value: "200" },
+    { label: "Light", value: "300" },
+    { label: "Normal", value: "400" },
+    { label: "Medium", value: "500" },
+    { label: "Semibold", value: "600" },
+    { label: "Bold", value: "700" },
+    { label: "Extrabold", value: "800" },
+    { label: "Black", value: "900" },
+  ];
+};
+
 export const testThemeConfig: ThemeConfig = {
-  colors: {
-    label: "Colors",
+  palette: {
+    label: "Color Palette",
     styles: {
+      primary: {
+        label: "Primary",
+        type: "color",
+        default: "#D83B18",
+        plugin: "colors",
+      },
+      secondary: {
+        label: "Secondary",
+        type: "color",
+        default: "#871900",
+        plugin: "colors",
+      },
+      accent: {
+        label: "Accent",
+        type: "color",
+        default: "#FFFFFF",
+        plugin: "colors",
+      },
       text: {
         label: "Text",
-        plugin: "colors",
         type: "color",
-        default: "black",
-      },
-      border: {
-        label: "Border",
+        default: "#000000",
         plugin: "colors",
-        type: "color",
-        default: "hsl(214 100% 39%)",
-      },
-      input: {
-        label: "Input",
-        plugin: "colors",
-        type: "color",
-        default: "hsl(214.3 31.8% 91.4%)",
-      },
-      ring: {
-        label: "Ring",
-        plugin: "colors",
-        type: "color",
-        default: "hsl(215 20.2% 65.1%)",
       },
       background: {
         label: "Background",
         plugin: "colors",
-        type: "color",
-        default: "hsl(0 0% 100%)",
+        styles: {
+          light: {
+            label: "Light",
+            type: "color",
+            default: "#FFFFFF",
+          },
+          DEFAULT: {
+            label: "Default",
+            type: "color",
+            default: "#F7F7F7",
+          },
+          dark: {
+            label: "Dark",
+            type: "color",
+            default: "#F0F0F0",
+          },
+        },
       },
       foreground: {
         label: "Foreground",
-        plugin: "colors",
         type: "color",
-        default: "hsl(0 2% 11%)",
+        plugin: "colors",
+        default: "#000000",
       },
-      primary: {
-        label: "Primary",
-        styles: {
-          DEFAULT: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(0 68% 51%)",
-          },
-          foreground: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(0 0% 100%)",
-          },
-        },
+    },
+  },
+  heading1: {
+    label: "Heading 1",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 24,
       },
-      secondary: {
-        label: "Secondary",
-        styles: {
-          DEFAULT: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(11 100% 26%)",
-          },
-          foreground: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(0 0% 100%)",
-          },
-        },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "700",
       },
-      destructive: {
-        label: "Destructive",
-        styles: {
-          DEFAULT: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(0 100% 50%)",
-          },
-          foreground: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(210 40% 98%)",
-          },
-        },
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-primary)",
       },
-      muted: {
-        label: "Muted",
-        styles: {
-          DEFAULT: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(210 40% 96.1%)",
-          },
-          foreground: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(215.4 16.3% 46.9%)",
-          },
-        },
+    },
+  },
+  heading2: {
+    label: "Heading 2",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 24,
       },
-      accent: {
-        label: "Accent",
-        styles: {
-          DEFAULT: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(166 55% 67%)",
-          },
-          foreground: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(0 0% 0%)",
-          },
-        },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "700",
       },
-      popover: {
-        label: "Secondary",
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-primary)",
+      },
+    },
+  },
+  heading3: {
+    label: "Heading 3",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 24,
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "700",
+      },
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-primary)",
+      },
+    },
+  },
+  heading4: {
+    label: "Heading 4",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 24,
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "700",
+      },
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-secondary)",
+      },
+    },
+  },
+  heading5: {
+    label: "Heading 5",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 24,
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "700",
+      },
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-secondary)",
+      },
+    },
+  },
+  heading6: {
+    label: "Heading 6",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 24,
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "700",
+      },
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-secondary)",
+      },
+    },
+  },
+  body: {
+    label: "Body Text",
+    styles: {
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 12,
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "400",
+      },
+      color: {
+        label: "Text Color",
+        plugin: "colors",
         styles: {
-          DEFAULT: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(225 7% 12%)",
+          light: {
+            label: "Light Mode",
+            type: "select",
+            options: getColorOptions(),
+            default: "var(--colors-palette-text)",
           },
-          foreground: {
-            label: "Default",
-            plugin: "colors",
-            type: "color",
-            default: "hsl(0 0% 100%)",
+          dark: {
+            label: "Dark Mode",
+            type: "select",
+            options: getColorOptions(),
+            default: "var(--colors-palette-text)",
           },
         },
       },
     },
   },
-  borderRadius: {
-    label: "Border Radius",
+  grid: {
+    label: "Grid Section",
     styles: {
-      lg: {
-        label: "Large Border Radius",
-        plugin: "borderRadius",
+      verticalSpacing: {
+        label: "Vertical Spacing",
         type: "number",
+        plugin: "gap",
         default: 8,
       },
-      md: {
-        label: "Medium Border Radius",
-        plugin: "borderRadius",
-        type: "number",
-        default: 6,
+      maxWidth: {
+        label: "Maximum Width",
+        type: "select",
+        plugin: "maxWidth",
+        options: [
+          { label: "2XL", value: "1536px" },
+          { label: "XL", value: "1280px" },
+          { label: "LG", value: "1024px" },
+        ],
+        default: "1280px",
       },
-      sm: {
-        label: "Small Border Radius",
-        plugin: "borderRadius",
+      backgroundColor: {
+        label: "Background Color",
+        type: "select",
+        plugin: "backgroundColor",
+        options: getColorOptions(),
+        default: "var(--colors-palette-background)",
+      },
+    },
+  },
+  button: {
+    label: "Button",
+    styles: {
+      borderRadius: {
+        label: "Border Radius",
         type: "number",
-        default: 4,
+        plugin: "borderRadius",
+        default: 20,
+      },
+      primary: {
+        label: "Primary Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-primary)",
+      },
+      primaryForeground: {
+        label: "Primary Foreground Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-foreground)",
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: getWeightOptions(),
+        default: "400",
+      },
+      fontSize: {
+        label: "Font Size",
+        type: "number",
+        plugin: "fontSize",
+        default: 12,
+      },
+    },
+  },
+  page: {
+    label: "Page",
+    styles: {
+      backgroundColor: {
+        label: "Background Color",
+        type: "select",
+        plugin: "backgroundColor",
+        options: getColorOptions(),
+        default: "var(--colors-palette-background)",
+      },
+      footer: {
+        label: "Footer Background Color",
+        type: "color",
+        plugin: "backgroundColor",
+        default: "#000000",
       },
     },
   },
@@ -208,49 +394,69 @@ export const testThemeConfig: ThemeConfig = {
 
 const marketerTailwindConfig: TailwindConfig = {
   colors: {
-    text: "var(--colors-text)",
-    border: "var(--colors-border)",
-    input: "var(--colors-input)",
-    ring: "var(--colors-ring)",
-    background: "var(--colors-background)",
-    foreground: "var(--colors-foreground)",
-    primary: {
-      DEFAULT: "var(--colors-primary-DEFAULT)",
-      foreground: "var(--colors-primary-foreground)",
+    "palette-primary": "var(--colors-palette-primary)",
+    "palette-secondary": "var(--colors-palette-secondary)",
+    "palette-accent": "var(--colors-palette-accent)",
+    "palette-text": "var(--colors-palette-text)",
+    "palette-background": {
+      light: "var(--colors-palette-background-light)",
+      DEFAULT: "var(--colors-palette-background-DEFAULT)",
+      dark: "var(--colors-palette-background-dark)",
     },
-    secondary: {
-      DEFAULT: "var(--colors-secondary-DEFAULT)",
-      foreground: "var(--colors-secondary-foreground)",
+    "palette-foreground": "var(--colors-palette-foreground)",
+    "heading1-color": "var(--colors-heading1-color)",
+    "heading2-color": "var(--colors-heading2-color)",
+    "heading3-color": "var(--colors-heading3-color)",
+    "heading4-color": "var(--colors-heading4-color)",
+    "heading5-color": "var(--colors-heading5-color)",
+    "heading6-color": "var(--colors-heading6-color)",
+    "body-color": {
+      light: "var(--colors-body-color-light)",
+      dark: "var(--colors-body-color-dark)",
     },
-    destructive: {
-      DEFAULT: "var(--colors-destructive-DEFAULT)",
-      foreground: "var(--colors-destructive-foreground)",
-    },
-    muted: {
-      DEFAULT: "var(--colors-muted-DEFAULT)",
-      foreground: "var(--colors-muted-foreground)",
-    },
-    accent: {
-      DEFAULT: "var(--colors-accent-DEFAULT)",
-      foreground: "var(--colors-accent-foreground)",
-    },
-    popover: {
-      DEFAULT: "var(--colors-popover-DEFAULT)",
-      foreground: "var(--colors-popover-foreground)",
-    },
+    "button-primary": "var(--colors-button-primary)",
+    "button-primaryForeground": "var(--colors-button-primaryForeground)",
+  },
+  fontSize: {
+    "heading1-fontSize": "var(--fontSize-heading1-fontSize)",
+    "heading2-fontSize": "var(--fontSize-heading2-fontSize)",
+    "heading3-fontSize": "var(--fontSize-heading3-fontSize)",
+    "heading4-fontSize": "var(--fontSize-heading4-fontSize)",
+    "heading5-fontSize": "var(--fontSize-heading5-fontSize)",
+    "heading6-fontSize": "var(--fontSize-heading6-fontSize)",
+    "body-fontSize": "var(--fontSize-body-fontSize)",
+    "button-fontSize": "var(--fontSize-button-fontSize)",
+  },
+  fontWeight: {
+    "heading1-fontWeight": "var(--fontWeight-heading1-fontWeight)",
+    "heading2-fontWeight": "var(--fontWeight-heading2-fontWeight)",
+    "heading3-fontWeight": "var(--fontWeight-heading3-fontWeight)",
+    "heading4-fontWeight": "var(--fontWeight-heading4-fontWeight)",
+    "heading5-fontWeight": "var(--fontWeight-heading5-fontWeight)",
+    "heading6-fontWeight": "var(--fontWeight-heading6-fontWeight)",
+    "body-fontWeight": "var(--fontWeight-body-fontWeight)",
+    "button-fontWeight": "var(--fontWeight-button-fontWeight)",
+  },
+  gap: {
+    "grid-verticalSpacing": "var(--gap-grid-verticalSpacing)",
+  },
+  maxWidth: {
+    "grid-maxWidth": "var(--maxWidth-grid-maxWidth)",
+  },
+  backgroundColor: {
+    "grid-backgroundColor": "var(--backgroundColor-grid-backgroundColor)",
+    "page-backgroundColor": "var(--backgroundColor-page-backgroundColor)",
+    "page-footer": "var(--backgroundColor-page-footer)",
   },
   borderRadius: {
-    lg: "var(--borderRadius-lg)",
-    md: "var(--borderRadius-md)",
-    sm: "var(--borderRadius-sm)",
+    "button-borderRadius": "var(--borderRadius-button-borderRadius)",
   },
 };
 
 const developerTailwindConfig: TailwindConfig = {
-  borderRadius: {
-    lg: "0px",
-    md: "0px",
-    sm: "0px",
+  colors: {
+    ring: "var(--colors-ring)",
+    "button-primary": "#000000",
   },
   keyframes: {
     "accordion-down": {
@@ -279,41 +485,63 @@ const developerTailwindConfig: TailwindConfig = {
 
 const mergedConfig: TailwindConfig = {
   colors: {
-    text: "var(--colors-text)",
-    border: "var(--colors-border)",
-    input: "var(--colors-input)",
-    ring: "var(--colors-ring)",
-    background: "var(--colors-background)",
-    foreground: "var(--colors-foreground)",
-    primary: {
-      DEFAULT: "var(--colors-primary-DEFAULT)",
-      foreground: "var(--colors-primary-foreground)",
+    ring: "var(--colors-ring)", // from developer tailwindConfig
+    "palette-primary": "var(--colors-palette-primary)",
+    "palette-secondary": "var(--colors-palette-secondary)",
+    "palette-accent": "var(--colors-palette-accent)",
+    "palette-text": "var(--colors-palette-text)",
+    "palette-background": {
+      light: "var(--colors-palette-background-light)",
+      DEFAULT: "var(--colors-palette-background-DEFAULT)",
+      dark: "var(--colors-palette-background-dark)",
     },
-    secondary: {
-      DEFAULT: "var(--colors-secondary-DEFAULT)",
-      foreground: "var(--colors-secondary-foreground)",
+    "palette-foreground": "var(--colors-palette-foreground)",
+    "heading1-color": "var(--colors-heading1-color)",
+    "heading2-color": "var(--colors-heading2-color)",
+    "heading3-color": "var(--colors-heading3-color)",
+    "heading4-color": "var(--colors-heading4-color)",
+    "heading5-color": "var(--colors-heading5-color)",
+    "heading6-color": "var(--colors-heading6-color)",
+    "body-color": {
+      light: "var(--colors-body-color-light)",
+      dark: "var(--colors-body-color-dark)",
     },
-    destructive: {
-      DEFAULT: "var(--colors-destructive-DEFAULT)",
-      foreground: "var(--colors-destructive-foreground)",
-    },
-    muted: {
-      DEFAULT: "var(--colors-muted-DEFAULT)",
-      foreground: "var(--colors-muted-foreground)",
-    },
-    accent: {
-      DEFAULT: "var(--colors-accent-DEFAULT)",
-      foreground: "var(--colors-accent-foreground)",
-    },
-    popover: {
-      DEFAULT: "var(--colors-popover-DEFAULT)",
-      foreground: "var(--colors-popover-foreground)",
-    },
+    "button-primary": "var(--colors-button-primary)", // theme.config takes priority
+    "button-primaryForeground": "var(--colors-button-primaryForeground)",
+  },
+  fontSize: {
+    "heading1-fontSize": "var(--fontSize-heading1-fontSize)",
+    "heading2-fontSize": "var(--fontSize-heading2-fontSize)",
+    "heading3-fontSize": "var(--fontSize-heading3-fontSize)",
+    "heading4-fontSize": "var(--fontSize-heading4-fontSize)",
+    "heading5-fontSize": "var(--fontSize-heading5-fontSize)",
+    "heading6-fontSize": "var(--fontSize-heading6-fontSize)",
+    "body-fontSize": "var(--fontSize-body-fontSize)",
+    "button-fontSize": "var(--fontSize-button-fontSize)",
+  },
+  fontWeight: {
+    "heading1-fontWeight": "var(--fontWeight-heading1-fontWeight)",
+    "heading2-fontWeight": "var(--fontWeight-heading2-fontWeight)",
+    "heading3-fontWeight": "var(--fontWeight-heading3-fontWeight)",
+    "heading4-fontWeight": "var(--fontWeight-heading4-fontWeight)",
+    "heading5-fontWeight": "var(--fontWeight-heading5-fontWeight)",
+    "heading6-fontWeight": "var(--fontWeight-heading6-fontWeight)",
+    "body-fontWeight": "var(--fontWeight-body-fontWeight)",
+    "button-fontWeight": "var(--fontWeight-button-fontWeight)",
+  },
+  gap: {
+    "grid-verticalSpacing": "var(--gap-grid-verticalSpacing)",
+  },
+  maxWidth: {
+    "grid-maxWidth": "var(--maxWidth-grid-maxWidth)",
+  },
+  backgroundColor: {
+    "grid-backgroundColor": "var(--backgroundColor-grid-backgroundColor)",
+    "page-backgroundColor": "var(--backgroundColor-page-backgroundColor)",
+    "page-footer": "var(--backgroundColor-page-footer)",
   },
   borderRadius: {
-    lg: "var(--borderRadius-lg)", // theme.config takes priority
-    md: "var(--borderRadius-md)", // theme.config takes priority
-    sm: "var(--borderRadius-sm)", // theme.config takes priority
+    "button-borderRadius": "var(--borderRadius-button-borderRadius)",
   },
   keyframes: {
     "accordion-down": {
@@ -331,6 +559,11 @@ const mergedConfig: TailwindConfig = {
   },
   container: {
     center: true,
-    padding: { DEFAULT: "1rem", sm: "2rem", lg: "4rem", xl: "5rem" },
+    padding: {
+      DEFAULT: "1rem",
+      sm: "2rem",
+      lg: "4rem",
+      xl: "5rem",
+    },
   },
 };
