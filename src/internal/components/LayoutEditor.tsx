@@ -9,7 +9,8 @@ import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.t
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { parseConfigsFromDocument } from "../utils/parseConfigsFromDocument.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
-import { SavedTheme, ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeData } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -63,7 +64,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   useEffect(() => {
     devLogger.logData("THEME_DATA", themeData);
     if (themeData && themeConfig) {
-      updateThemeInEditor(themeData as SavedTheme, themeConfig);
+      updateThemeInEditor(themeData as ThemeData, themeConfig);
     }
   }, [themeData, themeConfig]);
 
