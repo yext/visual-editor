@@ -1,8 +1,7 @@
 import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursStatus } from "@yext/pages-components";
-import { config } from "process";
-import { useDocument } from "../../hooks/useDocument.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import { cn } from "../../internal/utils/cn.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { EntityField } from "../editor/EntityField.tsx";
@@ -19,7 +18,7 @@ export interface HoursStatusProps {
 }
 
 const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
-  hours: YextEntityFieldSelector<typeof config, any>({
+  hours: YextEntityFieldSelector({
     label: "Hours",
     filter: {
       types: ["type.hours"],
