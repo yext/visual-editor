@@ -43,7 +43,7 @@ export function resolveVisualEditorData(
   for (const entityConfiguration of entityConfigurations) {
     if (
       entityConfiguration.pageSet === pageSet &&
-      (!siteId || entityConfiguration.siteId === siteId)
+      (!siteId || Number(entityConfiguration.siteId) === siteId)
     ) {
       visualTemplate = JSON.parse(
         validateOrDefault(entityConfiguration.data, pageSet)
@@ -57,7 +57,7 @@ export function resolveVisualEditorData(
     for (const entityLayout of entityLayoutConfigurations) {
       if (
         entityLayout.visualConfiguration?.pageSet === pageSet &&
-        (!siteId || entityLayout.visualConfiguration.siteId === siteId)
+        (!siteId || Number(entityLayout.visualConfiguration.siteId) === siteId)
       ) {
         visualTemplate = JSON.parse(
           validateOrDefault(entityLayout.visualConfiguration.data, pageSet)
@@ -72,7 +72,7 @@ export function resolveVisualEditorData(
     for (const siteLayout of siteLayoutConfigurations) {
       if (
         siteLayout.visualConfiguration?.pageSet === pageSet &&
-        (!siteId || siteLayout.visualConfiguration.siteId === siteId)
+        (!siteId || Number(siteLayout.visualConfiguration.siteId) === siteId)
       ) {
         visualTemplate = JSON.parse(
           validateOrDefault(siteLayout.visualConfiguration.data, pageSet)
