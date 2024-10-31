@@ -12,6 +12,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Image.tsx";
 import { TEXT_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Address.tsx";
+import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/TextList.tsx";
 
 const devLogger = new DevLogger();
 
@@ -34,16 +35,35 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.address": ADDRESS_CONSTANT_CONFIG,
 };
 
+const getConstantConfigFromType = (
+  type: EntityFieldTypes,
+  isList: boolean
+): Field<any> => {
+  if (isList) {
+    return TEXT_LIST_CONSTANT_CONFIG;
+  }
+  const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
+  if (!constantConfig) {
+    devLogger.log(`No constant configuration for ${type}`);
+    return TEXT_CONSTANT_CONFIG;
+  }
+  return constantConfig;
+};
+
 /**
  * Returns the constant type configuration if all types match
  * @param typeFilter
  */
 const returnConstantFieldConfig = (
-  typeFilter: EntityFieldTypes[]
+  typeFilter: EntityFieldTypes[],
+  isList: boolean
 ): Field | undefined => {
   let fieldConfiguration: Field | undefined;
   for (const entityFieldType of typeFilter) {
-    const mappedConfiguration = TYPE_TO_CONSTANT_CONFIG[entityFieldType];
+    const mappedConfiguration = getConstantConfigFromType(
+      entityFieldType,
+      isList
+    );
     if (!mappedConfiguration) {
       devLogger.log(`No mapped configuration for ${entityFieldType}`);
       return;
@@ -65,7 +85,10 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
-  const constantFieldConfig = returnConstantFieldConfig(props.filter.types);
+  const constantFieldConfig = returnConstantFieldConfig(
+    props.filter.types,
+    !!props.filter.includeListsOnly
+  );
   return {
     type: "custom",
     label: props.label,
