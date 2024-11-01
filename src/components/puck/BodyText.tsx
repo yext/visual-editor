@@ -2,12 +2,12 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Body, BodyProps, bodyVariants } from "./atoms/body.js";
 import { useDocument } from "../../hooks/useDocument.js";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.js";
+import { EntityField } from "../editor/EntityField.js";
 import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.js";
-import { EntityField } from "../editor/EntityField.js";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.js";
 
 export interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
@@ -19,8 +19,8 @@ const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 
     return (
       <EntityField
-        fieldId={text.field}
-        constantValueEnabled={text.constantValueEnabled}
+        displayName="Body"
+        fieldId={text.constantValueEnabled ? "constant value" : text.field}
       >
         <Body ref={ref} {...bodyProps}>
           {resolveYextEntityField(document, text)}
@@ -39,11 +39,6 @@ const bodyTextFields: Fields<BodyTextProps> = {
       types: ["type.string"],
     },
   }),
-  textSize: {
-    label: "Text Size",
-    type: "number",
-    min: 1,
-  },
   fontWeight: {
     label: "Font Weight",
     type: "select",

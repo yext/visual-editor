@@ -1,15 +1,17 @@
-import * as React from "react";
+import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Image, ImageProps, ImageType } from "@yext/pages-components";
-import {
-  EntityField,
-  YextEntityField,
-  resolveYextEntityField,
-  YextEntityFieldSelector,
-} from "../../index.ts";
-import { cn } from "../../internal/utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "../../internal/utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { EntityField } from "../editor/EntityField.tsx";
+import {
+  YextEntityField,
+  YextEntityFieldSelector,
+} from "../editor/YextEntityFieldSelector.tsx";
+
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 const imageWrapperVariants = cva("", {
   variants: {
@@ -102,14 +104,11 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   }
 
   return (
-    <EntityField
-      fieldId={imageField.field}
-      constantValueEnabled={imageField.constantValueEnabled}
-    >
+    <EntityField displayName="Image" fieldId={imageField.field}>
       <div
         className={cn(
-          imageWrapperVariants({ size, aspectRatio }),
-          rounded && "overflow-hidden rounded-lg"
+          imageWrapperVariants({ size, aspectRatio, rounded }),
+          "overflow-hidden"
         )}
       >
         <Image image={resolvedImage} className="w-full h-full object-cover" />
@@ -126,10 +125,11 @@ export const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
       field: "primaryPhoto",
       constantValue: {
         alternateText: "",
-        height: 240,
-        width: 240,
-        url: "",
+        height: 360,
+        width: 640,
+        url: PLACEHOLDER_IMAGE_URL,
       },
+      constantValueEnabled: true,
     },
     size: "medium",
     aspectRatio: "auto",

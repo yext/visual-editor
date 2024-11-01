@@ -1,13 +1,13 @@
-import * as React from "react";
+import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
 import { useDocument } from "../../hooks/useDocument.js";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.js";
+import { EntityField } from "../editor/EntityField.js";
 import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.js";
-import { EntityField } from "../editor/EntityField.js";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
@@ -19,8 +19,8 @@ const HeadingText = React.forwardRef<HTMLHeadingElement, HeadingTextProps>(
 
     return (
       <EntityField
-        fieldId={text.field}
-        constantValueEnabled={text.constantValueEnabled}
+        displayName={"Heading " + headingProps.level}
+        fieldId={text.constantValueEnabled ? "constant value" : text.field}
       >
         <Heading ref={ref} {...headingProps}>
           {resolveYextEntityField(document, text)}
@@ -61,12 +61,8 @@ const headingTextFields: Fields<HeadingTextProps> = {
       { label: "Black", value: "black" },
     ],
   },
-  size: {
-    label: "Text Size",
-    type: "number",
-    min: 1,
-  },
   color: {
+    label: "Font Color",
     type: "select",
     options: [
       { label: "Default", value: "default" },
@@ -75,9 +71,11 @@ const headingTextFields: Fields<HeadingTextProps> = {
       { label: "Accent", value: "accent" },
       { label: "Text", value: "text" },
       { label: "Background", value: "background" },
+      { label: "Foreground", value: "foreground" },
     ],
   },
   transform: {
+    label: "Text Transform",
     type: "select",
     options: [
       { value: "none", label: "None" },
