@@ -260,6 +260,7 @@ export const GridSectionComponent: ComponentConfig<GridSectionProps> = {
     distribution,
     backgroundColor,
     maxContentWidth,
+    horizontalSpacing,
     puck: { renderDropZone },
   }) => (
     <GridSection
@@ -268,6 +269,7 @@ export const GridSectionComponent: ComponentConfig<GridSectionProps> = {
       distribution={distribution}
       backgroundColor={backgroundColor}
       maxContentWidth={maxContentWidth}
+      horizontalSpacing={horizontalSpacing}
     />
   ),
 };
