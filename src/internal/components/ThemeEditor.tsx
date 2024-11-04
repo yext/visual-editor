@@ -87,7 +87,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
     // Only load Content data for theme mode
     if (visualConfigurationData) {
-      devLogger.logData("VISUAL_CONFIGURATION_DATA", visualConfigurationData);
       setPuckInitialHistory({
         histories: [{ id: "root", state: { data: visualConfigurationData } }],
         appendData: false,
