@@ -38,6 +38,8 @@ export const Editor = ({
     puckConfig,
     visualConfigurationData,
     visualConfigurationDataFetched,
+    themeData,
+    themeDataFetched,
   } = useCommonMessageReceivers(componentRegistry);
 
   const { pushPageSets } = useCommonMessageSenders();
@@ -92,15 +94,17 @@ export const Editor = ({
     !puckConfig ||
     !templateMetadata ||
     !document ||
-    !visualConfigurationDataFetched;
+    !visualConfigurationDataFetched ||
+    !themeDataFetched;
 
   const progress: number =
     60 * // @ts-expect-error adding bools is fine
     ((!!puckConfig +
       !!templateMetadata +
       !!document +
-      visualConfigurationDataFetched) /
-      4);
+      visualConfigurationDataFetched +
+      themeDataFetched) /
+      5);
 
   return (
     <>
@@ -110,6 +114,7 @@ export const Editor = ({
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
             visualConfigurationData={visualConfigurationData!}
+            themeData={themeData!}
             themeConfig={themeConfig}
           />
         ) : (
@@ -117,6 +122,8 @@ export const Editor = ({
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
             visualConfigurationData={visualConfigurationData!}
+            themeData={themeData!}
+            themeConfig={themeConfig}
           />
         )
       ) : (
