@@ -7,9 +7,10 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
-import { ThemeData } from "../types/themeData.ts";
+import { ThemeData, ThemeHistory } from "../types/themeData.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 
 const devLogger = new DevLogger();
 
@@ -42,6 +43,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
+  const { buildThemeLocalStorageKey } = useThemeLocalStorage(templateMetadata);
 
   const [puckInitialHistory, setPuckInitialHistory] = useState<
     InitialHistory | undefined
@@ -63,7 +65,26 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    */
   useEffect(() => {
     devLogger.logData("THEME_DATA", themeData);
-    if (themeData && themeConfig) {
+    if (!themeConfig) {
+      return;
+    }
+    const localHistoryArray = window.localStorage.getItem(
+      buildThemeLocalStorageKey()
+    );
+
+    // use theme from localStorage when in dev mode
+    if (templateMetadata.isDevMode && !!localHistoryArray) {
+      const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
+      if (localHistories.length > 0) {
+        updateThemeInEditor(
+          localHistories[localHistories.length - 1].data,
+          themeConfig
+        );
+        return;
+      }
+    }
+
+    if (themeData) {
       updateThemeInEditor(themeData as ThemeData, themeConfig);
     }
   }, [themeData, themeConfig]);

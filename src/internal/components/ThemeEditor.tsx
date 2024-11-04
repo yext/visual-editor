@@ -10,6 +10,7 @@ import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
+import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 
 const devLogger = new DevLogger();
 
@@ -41,6 +42,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);
+  const { buildVisualConfigLocalStorageKey } =
+    useLayoutLocalStorage(templateMetadata);
 
   const [puckInitialHistory, setPuckInitialHistory] = useState<
     InitialHistory | undefined
@@ -62,6 +65,23 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       return;
     }
     devLogger.logFunc("loadPuckInitialHistory");
+    const localHistoryArray = window.localStorage.getItem(
+      buildVisualConfigLocalStorageKey()
+    );
+
+    // use layout from localStorage when in dev mode
+    if (templateMetadata.isDevMode && !!localHistoryArray) {
+      const localHistories = JSON.parse(localHistoryArray) as History[];
+      if (localHistories.length > 0) {
+        setPuckInitialHistory({
+          // @ts-expect-error https://github.com/measuredco/puck/issues/673
+          histories: localHistories,
+          index: localHistories.length - 1,
+          appendData: false,
+        });
+      }
+      return;
+    }
 
     // Only load Content data for theme mode
     if (visualConfigurationData) {
