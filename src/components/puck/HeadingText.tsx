@@ -8,6 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.js";
+import { NumberFieldWithDefaultOption } from "../editor/NumberOrDefaultField.js";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
@@ -45,6 +46,10 @@ const headingTextFields: Fields<HeadingTextProps> = {
     min: 1,
     max: 6,
   },
+  fontSize: NumberFieldWithDefaultOption({
+    label: "Font Size",
+    defaultCustomValue: 24,
+  }),
   weight: {
     label: "Font Weight",
     type: "select",
@@ -97,6 +102,7 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     },
     content: "Heading",
     level: 2,
+    fontSize: "default",
     weight: "default",
     color: "default",
     transform: "none",
