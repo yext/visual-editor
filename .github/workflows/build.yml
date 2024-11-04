@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.1
+        uses: pnpm/action-setup@v4.0.0
 
       - name: Install deps
         run: pnpm i
@@ -35,6 +35,6 @@ jobs:
       - name: Create build-output artifact
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: build-output
+          name: build-output-${{ matrix.node-version }}
           path: "./dist"
           overwrite: true

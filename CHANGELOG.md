@@ -1,3 +1,44 @@
+#### 0.0.14 (2024-11-04)
+
+##### Chores
+
+- update pnpm version (#132) (831da8fb)
+- update Puck (43b4b424)
+
+##### New Features
+
+- add coordinate type EntityFieldTypes (#129) (a1d78a5c)
+- pass themeData from content to layoutEditor (#130) (c0da8771)
+- add visual editor components (#128) (bcdb0ff6)
+- correctly support constant values for text lists (#127) (fea00f2c)
+- change entity tooltip to just fieldId (#122) (ff30ff56)
+- add generic support for constant value (#120) (a7118d2c)
+- support address constant values (#119) (0a7a62f3)
+- add support for image constant value (#116) (dbbc40e3)
+- update getFilteredEntityFields to return lists (#118) (94abcbe5)
+- add body text component (#108) (20935966)
+- add header text component (#103) (3ddb00d2)
+- add Image component (#102) (14d894a7)
+
+##### Bug Fixes
+
+- props QA for GridSection and HoursStatus (#131) (23de363f)
+- entity field tooltips mess up css layout (#121) (d9b6fba9)
+- formatting of entity fields when used in devMode (#117) (de7337c2)
+- adjust colors in header component (#113) (8322fca5)
+- header component (#112) (7ab5ced1)
+- add label to ImageWrapperComponent (#109) (9a3e87b6)
+- preview doesn't update on layout switch (#107) (d3966ec5)
+- theme sidebar padding issue (#104) (784ba96f)
+
+##### Refactors
+
+- new theme.config format (#126) (085c673a)
+- type layout data (#125) (9b8bb7bc)
+- cleanup components (#110) (7f4e6450)
+- setup folders for visual-editor components (#106) (0c7549c1)
+- move useDocument, DocumentProvider from pages (#101) (0dd123e6)
+
 #### 0.0.13 (2024-10-22)
 
 ##### Chores
