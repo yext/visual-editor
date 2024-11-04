@@ -64,7 +64,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    * Apply the themes from Content
    */
   useEffect(() => {
-    if (!themeConfig) {
+    if (!themeConfig || !templateMetadata?.themeEntityId) {
       return;
     }
     const localHistoryArray = window.localStorage.getItem(
