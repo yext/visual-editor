@@ -7,6 +7,9 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
+import { ThemeData } from "../types/themeData.ts";
+import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 
 const devLogger = new DevLogger();
 
@@ -14,10 +17,18 @@ type LayoutEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
   visualConfigurationData: Data;
+  themeData: ThemeData;
+  themeConfig: ThemeConfig | undefined;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
-  const { puckConfig, templateMetadata, visualConfigurationData } = props;
+  const {
+    puckConfig,
+    templateMetadata,
+    visualConfigurationData,
+    themeData,
+    themeConfig,
+  } = props;
 
   const {
     sendDevLayoutSaveStateData,
@@ -46,6 +57,16 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     clearVisualConfigLocalStorage();
     deleteLayoutSaveState();
   };
+
+  /**
+   * Apply the themes from Content
+   */
+  useEffect(() => {
+    devLogger.logData("THEME_DATA", themeData);
+    if (themeData && themeConfig) {
+      updateThemeInEditor(themeData as ThemeData, themeConfig);
+    }
+  }, [themeData, themeConfig]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination

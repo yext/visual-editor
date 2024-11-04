@@ -17,12 +17,18 @@ type ThemeEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
   visualConfigurationData: Data;
+  themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
-  const { puckConfig, templateMetadata, visualConfigurationData, themeConfig } =
-    props;
+  const {
+    puckConfig,
+    templateMetadata,
+    visualConfigurationData,
+    themeData,
+    themeConfig,
+  } = props;
 
   const {
     sendDevThemeSaveStateData,
@@ -31,8 +37,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     deleteThemeSaveState,
   } = useThemeMessageSenders();
 
-  const { themeData, themeDataFetched, themeSaveState, themeSaveStateFetched } =
-    useThemeMessageReceivers();
+  const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers();
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);
@@ -194,17 +199,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [themeHistories, themeConfig]);
 
   useEffect(() => {
-    if (!themeSaveStateFetched || !themeDataFetched) {
+    if (!themeSaveStateFetched) {
       return;
     }
     loadPuckInitialHistory();
     loadThemeHistory();
-  }, [
-    templateMetadata,
-    themeSaveStateFetched,
-    themeDataFetched,
-    visualConfigurationData,
-  ]);
+  }, [templateMetadata, themeSaveStateFetched, visualConfigurationData]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
@@ -240,16 +240,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const isLoading =
     !puckInitialHistoryFetched ||
     !themeHistoryFetched ||
-    !themeDataFetched ||
     !themeSaveStateFetched;
 
   const progress =
     60 + // @ts-expect-error adding bools is fine
-    (puckInitialHistoryFetched +
-      themeHistoryFetched +
-      themeDataFetched +
-      themeSaveStateFetched) *
-      10;
+    (puckInitialHistoryFetched + themeHistoryFetched + themeSaveStateFetched) *
+      13.33;
 
   return !isLoading ? (
     <InternalThemeEditor

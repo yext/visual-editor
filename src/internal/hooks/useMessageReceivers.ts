@@ -5,6 +5,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@measured/puck";
 import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
+import { ThemeData } from "../types/themeData.ts";
 
 const devLogger = new DevLogger();
 
@@ -27,6 +28,10 @@ export const useCommonMessageReceivers = (
     useState<Data>();
   const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
     useState<boolean>(false); // needed because visualConfigurationData can be empty
+
+  // Theme from Content
+  const [themeData, setThemeData] = useState<ThemeData>();
+  const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry.get(payload.templateId);
@@ -56,9 +61,22 @@ export const useCommonMessageReceivers = (
     }
   );
 
+  useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
+    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
+    devLogger.logData("THEME_DATA", themeData);
+    setThemeData(themeData as ThemeData);
+    setThemeDataFetched(true);
+    send({
+      status: "success",
+      payload: { message: "getThemeData received" },
+    });
+  });
+
   return {
     visualConfigurationData,
     visualConfigurationDataFetched,
+    themeData,
+    themeDataFetched,
     templateMetadata,
     puckConfig,
   };

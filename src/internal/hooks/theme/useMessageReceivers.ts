@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { DevLogger } from "../../../utils/devLogger.ts";
-import { ThemeData, ThemeSaveState } from "../../types/themeData.ts";
-import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString.ts";
+import { ThemeSaveState } from "../../types/themeData.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 
@@ -14,10 +13,6 @@ export const useThemeMessageReceivers = () => {
   useEffect(() => {
     iFrameLoaded({ payload: { message: "Theme Editor is loaded" } });
   }, []);
-
-  // Theme from Content
-  const [themeData, setThemeData] = useState<ThemeData>();
-  const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
 
   // Theme from DB
   const [themeSaveState, setThemeSaveState] = useState<
@@ -36,20 +31,7 @@ export const useThemeMessageReceivers = () => {
     });
   });
 
-  useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
-    devLogger.logData("THEME_DATA", themeData);
-    setThemeData(themeData as ThemeData);
-    setThemeDataFetched(true);
-    send({
-      status: "success",
-      payload: { message: "getThemeData received" },
-    });
-  });
-
   return {
-    themeData,
-    themeDataFetched,
     themeSaveState,
     themeSaveStateFetched,
   };
