@@ -95,7 +95,7 @@ export const Editor = ({
     !templateMetadata ||
     !document ||
     !visualConfigurationDataFetched ||
-    !themeDataFetched;
+    (templateMetadata?.themeEntityId && !themeDataFetched);
 
   const progress: number =
     60 * // @ts-expect-error adding bools is fine
@@ -103,7 +103,7 @@ export const Editor = ({
       !!templateMetadata +
       !!document +
       visualConfigurationDataFetched +
-      themeDataFetched) /
+      (themeDataFetched || !templateMetadata?.themeEntityId)) /
       5);
 
   return (
