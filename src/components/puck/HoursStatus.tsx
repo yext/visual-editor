@@ -15,6 +15,8 @@ export interface HoursStatusProps {
   className?: string;
   showCurrentStatus?: boolean;
   timeFormat?: "12h" | "24h";
+  dayOfWeekFormat?: "short" | "long";
+  showDayNames?: boolean;
 }
 
 const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
@@ -40,6 +42,22 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
       { label: "24-hour", value: "24h" },
     ],
   },
+  showDayNames: {
+    type: "radio",
+    label: "Show Day Names",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  },
+  dayOfWeekFormat: {
+    type: "select",
+    label: "Day of Week Format",
+    options: [
+      { label: "Short", value: "short" },
+      { label: "Long", value: "long" },
+    ],
+  },
 };
 
 const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
@@ -47,6 +65,8 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   className,
   showCurrentStatus,
   timeFormat,
+  showDayNames,
+  dayOfWeekFormat,
 }) => {
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
@@ -62,6 +82,8 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
         className={cn("font-semibold mb-2", className)}
         currentTemplate={showCurrentStatus ? undefined : () => <></>}
         separatorTemplate={showCurrentStatus ? undefined : () => <></>}
+        dayOfWeekTemplate={showDayNames ? undefined : () => <></>}
+        dayOptions={{ weekday: dayOfWeekFormat }}
         timeOptions={{ hour12: timeFormat === "12h" }}
         timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
       />
@@ -80,6 +102,8 @@ export const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
     className: "",
     showCurrentStatus: true,
     timeFormat: "12h",
+    showDayNames: true,
+    dayOfWeekFormat: "long",
   },
   render: (props) => <HoursStatusWrapper {...props} />,
 };
