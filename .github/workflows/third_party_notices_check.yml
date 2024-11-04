@@ -20,7 +20,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.1
+        uses: pnpm/action-setup@v4.0.0
 
       - name: Global install generate-license-file
         run: pnpm add -g generate-license-file
