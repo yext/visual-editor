@@ -72,11 +72,16 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     // use layout from localStorage when in dev mode
     if (templateMetadata.isDevMode && !!localHistoryArray) {
       const localHistories = JSON.parse(localHistoryArray) as History[];
-      if (localHistories.length > 0) {
+      const localHistoryIndex = localHistories.length - 1;
+      if (localHistoryIndex >= 0) {
+        devLogger.logData(
+          "LOCAL_VISUAL_CONFIGURATION_DATA",
+          localHistories[localHistoryIndex].state
+        );
         setPuckInitialHistory({
           // @ts-expect-error https://github.com/measuredco/puck/issues/673
           histories: localHistories,
-          index: localHistories.length - 1,
+          index: localHistoryIndex,
           appendData: false,
         });
       }
@@ -85,6 +90,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
     // Only load Content data for theme mode
     if (visualConfigurationData) {
+      devLogger.logData("VISUAL_CONFIGURATION_DATA", visualConfigurationData);
       setPuckInitialHistory({
         histories: [{ id: "root", state: { data: visualConfigurationData } }],
         appendData: false,

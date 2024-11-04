@@ -64,7 +64,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    * Apply the themes from Content
    */
   useEffect(() => {
-    devLogger.logData("THEME_DATA", themeData);
     if (!themeConfig) {
       return;
     }
@@ -76,15 +75,15 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     if (templateMetadata.isDevMode && !!localHistoryArray) {
       const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
       if (localHistories.length > 0) {
-        updateThemeInEditor(
-          localHistories[localHistories.length - 1].data,
-          themeConfig
-        );
+        const localThemeData = localHistories[localHistories.length - 1].data;
+        devLogger.logData("LOCAL_THEME_DATA", localThemeData);
+        updateThemeInEditor(localThemeData, themeConfig);
         return;
       }
     }
 
     if (themeData) {
+      devLogger.logData("THEME_DATA", themeData);
       updateThemeInEditor(themeData as ThemeData, themeConfig);
     }
   }, [themeData, themeConfig]);
