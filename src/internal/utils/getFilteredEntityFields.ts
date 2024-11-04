@@ -40,6 +40,7 @@ export type EntityFieldTypes =
   | "type.hours"
   | "type.address"
   | "type.phone"
+  | "type.coordinate"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
