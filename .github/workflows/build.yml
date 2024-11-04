@@ -35,6 +35,6 @@ jobs:
       - name: Create build-output artifact
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: build-output
+          name: build-output-${{ matrix.node-version }}
           path: "./dist"
           overwrite: true
