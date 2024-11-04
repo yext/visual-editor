@@ -76,14 +76,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
       if (localHistories.length > 0) {
         const localThemeData = localHistories[localHistories.length - 1].data;
-        devLogger.logData("LOCAL_THEME_DATA", localThemeData);
+        devLogger.log("Layout Dev Mode - Using theme data from local storage");
         updateThemeInEditor(localThemeData, themeConfig);
         return;
       }
     }
 
     if (themeData) {
-      devLogger.logData("THEME_DATA", themeData);
       updateThemeInEditor(themeData as ThemeData, themeConfig);
     }
   }, [themeData, themeConfig]);
