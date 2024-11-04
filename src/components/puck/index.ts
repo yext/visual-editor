@@ -1,5 +1,9 @@
 export * from "./atoms/index.ts";
 export { AddressComponent, type AddressProps } from "./Address.tsx";
+export {
+  GetDirectionsComponent,
+  type GetDirectionsProps,
+} from "./GetDirections.tsx";
 export { BodyTextComponent, type BodyTextProps } from "./BodyText.tsx";
 export { CTAWrapperComponent, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { EmailsComponent, type EmailsProps } from "./Emails.tsx";
