@@ -31,13 +31,7 @@ export const useCommonMessageReceivers = (
 
   // Theme from Content
   const [themeData, setThemeData] = useState<ThemeData>();
-  const [themeDataFetched, setThemeDataFetched] = useState<boolean>(
-    !templateMetadata?.themeEntityId
-  ); // needed because themeData can be empty
-
-  useEffect(() => {
-    setThemeDataFetched(!templateMetadata?.themeEntityId);
-  }, [templateMetadata?.themeEntityId, setThemeDataFetched]);
+  const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry.get(payload.templateId);
