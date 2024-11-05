@@ -17,6 +17,7 @@ import {
 import { config } from "process";
 import { VariantProps } from "class-variance-authority";
 import { Button, ButtonProps } from "./atoms/button.tsx";
+import { NumberOrDefault } from "../editor/NumberOrDefaultField.tsx";
 
 export type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
@@ -25,6 +26,7 @@ export type GetDirectionsProps = {
   size: ButtonProps["size"];
   alignment: "items-start" | "items-center";
   padding: VariantProps<typeof sectionVariants>["padding"];
+  fontSize?: NumberOrDefault;
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
@@ -88,6 +90,7 @@ const GetDirections = ({
   padding,
   coordinate: coordinateField,
   getDirectionsProvider,
+  fontSize,
 }: GetDirectionsProps) => {
   const document = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -111,7 +114,12 @@ const GetDirections = ({
       className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
-      <Button asChild variant={variant} size={size}>
+      <Button
+        asChild
+        variant={variant}
+        size={size}
+        fontSize={fontSize ?? "default"}
+      >
         <Link href={searchQuery ?? ""}>{"Get Directions"}</Link>
       </Button>
     </Section>
