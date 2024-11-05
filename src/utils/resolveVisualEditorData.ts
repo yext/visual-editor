@@ -21,7 +21,7 @@ const defaultData = JSON.stringify({
 export function resolveVisualEditorData(
   data: any,
   pageSet: string | undefined
-): string {
+): any {
   if (!pageSet) {
     throw new Error(
       "Unable to parse puck data, template name must be defined in config."
@@ -29,6 +29,7 @@ export function resolveVisualEditorData(
   }
 
   const { document } = data;
+  const siteId = document?.siteId;
 
   const entityConfigurations: VisualConfiguration[] =
     document.visualConfigurations ?? [];
@@ -40,7 +41,10 @@ export function resolveVisualEditorData(
 
   // check base entity
   for (const entityConfiguration of entityConfigurations) {
-    if (entityConfiguration.pageSet === pageSet) {
+    if (
+      entityConfiguration.pageSet === pageSet &&
+      (!siteId || Number(entityConfiguration.siteId) === siteId)
+    ) {
       visualTemplate = JSON.parse(
         validateOrDefault(entityConfiguration.data, pageSet)
       );
@@ -51,7 +55,10 @@ export function resolveVisualEditorData(
   // check layouts referenced by the base entity
   if (!visualTemplate) {
     for (const entityLayout of entityLayoutConfigurations) {
-      if (entityLayout.visualConfiguration?.pageSet === pageSet) {
+      if (
+        entityLayout.visualConfiguration?.pageSet === pageSet &&
+        (!siteId || Number(entityLayout.visualConfiguration.siteId) === siteId)
+      ) {
         visualTemplate = JSON.parse(
           validateOrDefault(entityLayout.visualConfiguration.data, pageSet)
         );
@@ -63,7 +70,10 @@ export function resolveVisualEditorData(
   // check layouts referenced by the site entity
   if (!visualTemplate && siteLayoutConfigurations) {
     for (const siteLayout of siteLayoutConfigurations) {
-      if (siteLayout.visualConfiguration?.pageSet === pageSet) {
+      if (
+        siteLayout.visualConfiguration?.pageSet === pageSet &&
+        (!siteId || Number(siteLayout.visualConfiguration.siteId) === siteId)
+      ) {
         visualTemplate = JSON.parse(
           validateOrDefault(siteLayout.visualConfiguration.data, pageSet)
         );
