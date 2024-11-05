@@ -1,4 +1,5 @@
 export * from "./atoms/index.ts";
+export * from "./registry/output/index.ts";
 export { AddressComponent, type AddressProps } from "./Address.tsx";
 export {
   GetDirectionsComponent,

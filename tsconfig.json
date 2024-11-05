@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
 
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+    },
+
     "target": "ESNext",
     "jsx": "react-jsx",
 
@@ -26,7 +31,8 @@
     "strict": true,
 
     "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
   },
   "include": ["src", "index.d.ts", ".eslintrc.json"],
   "exclude": ["node_modules"]
