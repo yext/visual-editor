@@ -1,12 +1,13 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
+import { Heading, HeadingProps, headingVariants } from "./atoms/heading.tsx";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  NumberFieldWithDefaultOption
 } from "../../index.ts";
 
 export interface HeadingTextProps extends HeadingProps {
@@ -45,6 +46,10 @@ const headingTextFields: Fields<HeadingTextProps> = {
     min: 1,
     max: 6,
   },
+  fontSize: NumberFieldWithDefaultOption({
+    label: "Font Size",
+    defaultCustomValue: 24,
+  }),
   weight: {
     label: "Font Weight",
     type: "select",
@@ -97,6 +102,7 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     },
     content: "Heading",
     level: 2,
+    fontSize: "default",
     weight: "default",
     color: "default",
     transform: "none",

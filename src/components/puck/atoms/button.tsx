@@ -2,6 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
+import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 const buttonVariants = cva(
   "py-4 components inline-flex items-center justify-center whitespace-nowrap rounded-button-borderRadius text-button-fontSize font-button-fontWeight ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ",
@@ -34,13 +35,18 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  fontSize?: NumberOrDefault;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, fontSize, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
+        style={{
+          fontSize:
+            !fontSize || fontSize === "default" ? undefined : fontSize + "px",
+        }}
         className={clsx(className, buttonVariants({ variant, size }))}
         ref={ref}
         {...props}

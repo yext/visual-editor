@@ -5,7 +5,7 @@ import {
   EntityField,
   EntityFieldProvider,
   useEntityField,
-} from "./EntityField.js";
+} from "./EntityField.tsx";
 
 beforeAll(() => {
   global.ResizeObserver = class {
