@@ -15,7 +15,7 @@ export const useThemeLocalStorage = (
   templateMetadata: TemplateMetadata | undefined
 ) => {
   const buildThemeLocalStorageKey = useCallback(() => {
-    if (!templateMetadata) {
+    if (!templateMetadata?.themeEntityId) {
       return "";
     }
 
