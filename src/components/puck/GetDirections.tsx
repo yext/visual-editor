@@ -55,7 +55,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     label: "Size",
     type: "radio",
     options: [
-      { label: "Default", value: "defaut" },
+      { label: "Default", value: "default" },
       { label: "Small", value: "small" },
       { label: "Large", value: "large" },
       { label: "Icon", value: "icon" },
@@ -111,7 +111,7 @@ const GetDirections = ({
       className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
-      <Button asChild variant={variant} size={size}>
+      <Button asChild variant={variant} size={size} fontSize={"default"}>
         <Link href={searchQuery ?? ""}>{"Get Directions"}</Link>
       </Button>
     </Section>
