@@ -9,9 +9,7 @@ export const components: Registry = [
   {
     name: "HeadingText",
     type: "registry:component",
-    registryDependencies: [
-      "https://reliably-numerous-kit.pgsdemo.com/components/heading.json",
-    ],
+    registryDependencies: ["heading"],
     files: ["HeadingText.tsx"],
   },
 ];

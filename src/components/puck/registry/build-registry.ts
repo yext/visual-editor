@@ -54,7 +54,7 @@ const main = async () => {
     await fs.rm(PUBLIC_FOLDER_INDEX_PATH);
   }
 
-  const componentNames = [];
+  const componentNames = ["index"];
 
   // make a json file and put it in public folder
   for (let i = 0; i < registryComponents.length; i++) {
@@ -83,6 +83,18 @@ const main = async () => {
       "utf-8"
     );
   }
+
+  // write and export the top level index file
+  await writeFileRecursive(
+    `${PUBLIC_FOLDER_BASE_PATH}/topLevel.json`,
+    JSON.stringify(registryComponents)
+  );
+
+  await fs.appendFile(
+    PUBLIC_FOLDER_INDEX_PATH,
+    `import { default as index } from "./topLevel.json"\n`,
+    "utf-8"
+  );
 
   // export all json objects
   await fs.appendFile(
