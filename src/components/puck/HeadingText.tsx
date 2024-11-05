@@ -7,7 +7,7 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  NumberFieldWithDefaultOption
+  NumberFieldWithDefaultOption,
 } from "../../index.ts";
 
 export interface HeadingTextProps extends HeadingProps {
