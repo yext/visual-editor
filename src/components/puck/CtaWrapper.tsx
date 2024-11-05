@@ -9,17 +9,28 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
+import {
+  NumberFieldWithDefaultOption,
+  NumberOrDefault,
+} from "../editor/NumberOrDefaultField.tsx";
 
-export interface CTAWrapperProps extends CTAProps {
+export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
+  variant: CTAProps["variant"];
+  fontSize: NumberOrDefault;
+  className?: CTAProps["className"];
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
-  entityField: YextEntityFieldSelector<any, CTAProps>({
+  entityField: YextEntityFieldSelector({
     label: "Entity Field",
     filter: {
       types: ["c_cta"],
     },
+  }),
+  fontSize: NumberFieldWithDefaultOption({
+    label: "Font Size",
+    defaultCustomValue: 12,
   }),
   variant: {
     type: "select",
@@ -37,6 +48,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
   entityField,
   variant,
   className,
+  fontSize,
   ...rest
 }) => {
   const document = useDocument();
@@ -54,6 +66,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         url={cta?.url ?? "#"}
         variant={variant}
         className={cn(className)}
+        fontSize={fontSize}
         {...rest}
       />
     </EntityField>
@@ -73,6 +86,7 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
       },
     },
     variant: "primary",
+    fontSize: "default",
   },
   render: (props) => <CTAWrapper {...props} />,
 };

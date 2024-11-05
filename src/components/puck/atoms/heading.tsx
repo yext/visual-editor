@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { type NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 // Define the variants for the heading component
 const headingVariants = cva("components", {
@@ -54,10 +55,14 @@ export interface HeadingProps
   extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
   level?: HeadingLevel;
+  fontSize: NumberOrDefault;
 }
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ className, level = 1, color, weight, transform, ...props }, ref) => {
+  (
+    { className, level = 1, color, weight, transform, fontSize, ...props },
+    ref
+  ) => {
     const Tag = `h${level}` as keyof Pick<
       JSX.IntrinsicElements,
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
@@ -66,6 +71,9 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     return (
       <Tag
         id="tag"
+        style={{
+          fontSize: fontSize === "default" ? undefined : fontSize + "px",
+        }}
         className={headingVariants({
           color,
           className,

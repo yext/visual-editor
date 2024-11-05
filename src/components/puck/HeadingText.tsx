@@ -1,13 +1,14 @@
 import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
-import { useDocument } from "../../hooks/useDocument.js";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.js";
-import { EntityField } from "../editor/EntityField.js";
+import { Heading, HeadingProps, headingVariants } from "./atoms/heading.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { EntityField } from "../editor/EntityField.tsx";
 import {
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.js";
+} from "../editor/YextEntityFieldSelector.tsx";
+import { NumberFieldWithDefaultOption } from "../editor/NumberOrDefaultField.tsx";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
@@ -45,6 +46,10 @@ const headingTextFields: Fields<HeadingTextProps> = {
     min: 1,
     max: 6,
   },
+  fontSize: NumberFieldWithDefaultOption({
+    label: "Font Size",
+    defaultCustomValue: 24,
+  }),
   weight: {
     label: "Font Weight",
     type: "select",
@@ -97,6 +102,7 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     },
     content: "Heading",
     level: 2,
+    fontSize: "default",
     weight: "default",
     color: "default",
     transform: "none",

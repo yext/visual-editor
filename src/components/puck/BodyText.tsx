@@ -1,13 +1,14 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, BodyProps, bodyVariants } from "./atoms/body.js";
-import { useDocument } from "../../hooks/useDocument.js";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.js";
-import { EntityField } from "../editor/EntityField.js";
+import { Body, BodyProps, bodyVariants } from "./atoms/body.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { EntityField } from "../editor/EntityField.tsx";
 import {
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.js";
+} from "../editor/YextEntityFieldSelector.tsx";
+import { NumberFieldWithDefaultOption } from "../editor/NumberOrDefaultField.tsx";
 
 export interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
@@ -38,6 +39,10 @@ const bodyTextFields: Fields<BodyTextProps> = {
     filter: {
       types: ["type.string"],
     },
+  }),
+  fontSize: NumberFieldWithDefaultOption({
+    label: "Font Size",
+    defaultCustomValue: 12,
   }),
   fontWeight: {
     label: "Font Weight",
@@ -88,6 +93,7 @@ export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
       constantValue: "Text",
       constantValueEnabled: true,
     },
+    fontSize: "default",
     fontWeight: "default",
     color: "default",
     textTransform: "none",

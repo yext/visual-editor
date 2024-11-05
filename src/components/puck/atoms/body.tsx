@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
+import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 // Define the variants for the body component
 const bodyVariants = cva("components text-body-fontSize", {
@@ -42,12 +43,20 @@ const bodyVariants = cva("components text-body-fontSize", {
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
-    VariantProps<typeof bodyVariants> {}
+    VariantProps<typeof bodyVariants> {
+  fontSize: NumberOrDefault;
+}
 
 const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
-  ({ className, fontWeight, color, textTransform, ...props }, ref) => {
+  (
+    { className, fontWeight, color, textTransform, fontSize, ...props },
+    ref
+  ) => {
     return (
       <p
+        style={{
+          fontSize: fontSize === "default" ? undefined : fontSize + "px",
+        }}
         className={clsx(
           className,
           bodyVariants({
