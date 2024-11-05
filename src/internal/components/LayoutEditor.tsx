@@ -85,7 +85,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     if (themeData) {
       updateThemeInEditor(themeData as ThemeData, themeConfig);
     }
-  }, [themeData, themeConfig]);
+  }, [themeData, themeConfig, templateMetadata]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination
