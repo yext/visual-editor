@@ -35,7 +35,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  fontSize: NumberOrDefault;
+  fontSize?: NumberOrDefault;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -44,7 +44,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         style={{
-          fontSize: fontSize === "default" ? undefined : fontSize + "px",
+          fontSize:
+            !fontSize || fontSize === "default" ? undefined : fontSize + "px",
         }}
         className={clsx(className, buttonVariants({ variant, size }))}
         ref={ref}
