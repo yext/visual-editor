@@ -8,50 +8,52 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
-import clsx from "clsx";
 
-const textListVariants = cva("list-inside text-body-FontSize p-8", {
-  variants: {
-    fontWeight: {
-      default: "font-body-fontWeight",
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
+const textListVariants = cva(
+  "list-disc components list-inside text-body-fontSize",
+  {
+    variants: {
+      fontWeight: {
+        default: "font-body-fontWeight",
+        thin: "font-thin",
+        extralight: "font-extralight",
+        light: "font-light",
+        normal: "font-normal",
+        medium: "font-medium",
+        semibold: "font-semibold",
+        bold: "font-bold",
+        extrabold: "font-extrabold",
+        black: "font-black",
+      },
+      color: {
+        default: "text-palette-body-color",
+        primary: "text-palette-primary",
+        secondary: "text-palette-secondary",
+        accent: "text-palette-accent",
+        text: "text-palette-text",
+        background: "text-palette-background",
+      },
+      textTransform: {
+        none: "",
+        uppercase: "uppercase",
+        lowercase: "lowercase",
+        capitalize: "capitalize",
+      },
+      padding: {
+        default: "px-4 py-16 md:px-8",
+        none: "p-0",
+        small: "px-4 py-8 md:px-8",
+        large: "px-[200px] py-24 md:px-8",
+      },
     },
-    color: {
-      default: "text-palette-body-color",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
+    defaultVariants: {
+      padding: "none",
+      fontWeight: "default",
+      color: "default",
+      textTransform: "none",
     },
-    textTransform: {
-      none: "",
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
-    },
-    padding: {
-      default: "px-4 py-16 md:px-8",
-      none: "p-0",
-      small: "px-4 py-8 md:px-8",
-      large: "px-[200px] py-24 md:px-8",
-    },
-  },
-  defaultVariants: {
-    padding: "none",
-    fontWeight: "default",
-    color: "default",
-    textTransform: "none",
-  },
-});
+  }
+);
 
 export interface TextListProps extends VariantProps<typeof textListVariants> {
   list: YextEntityField<string[]>;
@@ -134,10 +136,12 @@ const TextList: React.FC<TextListProps> = ({
   return (
     <EntityField displayName="Text List" fieldId={textListField.field}>
       <ul
-        className={clsx(
-          textListVariants({ padding, fontWeight, color, textTransform }),
-          "list-disc components"
-        )}
+        className={textListVariants({
+          padding,
+          fontWeight,
+          color,
+          textTransform,
+        })}
       >
         {resolvedTextList.map((text: any, index: any) => (
           <li key={index} className="mb-2">
