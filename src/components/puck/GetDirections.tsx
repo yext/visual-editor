@@ -114,12 +114,7 @@ const GetDirections = ({
       className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
-      <Button
-        asChild
-        variant={variant}
-        size={size}
-        fontSize={fontSize ?? "default"}
-      >
+      <Button asChild variant={variant} size={size} fontSize={fontSize}>
         <Link href={searchQuery ?? ""}>{"Get Directions"}</Link>
       </Button>
     </Section>
