@@ -1,15 +1,39 @@
 // Based on https://github.com/shadcn-ui/ui/blob/main/apps/www/scripts/build-registry.mts
-import { registryComponents } from "./registry.ts";
-import { promises as fs, existsSync } from "fs";
-import { z } from "zod";
-import { registryItemFileSchema } from "./schema.ts";
+import fs from "fs";
+import z from "zod";
 import path from "path";
+import { registryComponents } from "./registry.ts";
+import { registryItemFileSchema } from "./schema.ts";
 
-const REGISTRY_BASE_PATH = "./src/components/puck";
-const PUBLIC_FOLDER_BASE_PATH = "./src/components/puck/registry/output";
-const PUBLIC_FOLDER_INDEX_PATH = `${PUBLIC_FOLDER_BASE_PATH}/index.ts`;
-const COMPONENT_FOLDER_PATH = "components";
-const VISUAL_EDITOR_PATH = "../../index.ts";
+const DIST_DIR = `../../../../dist`;
+const SLUG = `components`;
+const COMPONENT_PATH = `${DIST_DIR}/${SLUG}/styles/default`;
+const COLOR_PATH = `${DIST_DIR}/${SLUG}/colors`;
+const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
+
+const VISUAL_EDITOR_IMPORT_PATH = "../../index.ts";
+
+const styleIndex = {
+  name: "default",
+  type: "registry:style",
+  cssVars: {},
+  files: [],
+};
+
+const colorIndex = {
+  inlineColors: {
+    light: {},
+    dark: {},
+  },
+  cssVars: {
+    light: {},
+    dark: {},
+  },
+  inlineColorsTemplate: "",
+  cssVarsTemplate: "",
+};
+
+const iconsIndex = {};
 
 type File = z.infer<typeof registryItemFileSchema>;
 
@@ -18,10 +42,10 @@ async function writeFileRecursive(filePath: string, data: string) {
 
   try {
     // Ensure the directory exists, recursively creating directories as needed
-    await fs.mkdir(dir, { recursive: true });
+    await fs.promises.mkdir(dir, { recursive: true });
 
     // Write the file
-    await fs.writeFile(filePath, data, "utf-8");
+    await fs.promises.writeFile(filePath, data, "utf-8");
   } catch (error) {
     console.error("Error writing file: ", error);
   }
@@ -30,16 +54,16 @@ async function writeFileRecursive(filePath: string, data: string) {
 const getComponentFiles = async (files: File[]) => {
   const filesArrayPromises = (files ?? []).map(async (file) => {
     if (typeof file === "string") {
-      const filePath = `${REGISTRY_BASE_PATH}/${file}`;
-      const fileContent = await fs.readFile(filePath, "utf-8");
+      const filePath = `../${file}`;
+      const fileContent = await fs.promises.readFile(filePath, "utf-8");
       return {
         type: "registry:component",
         content: fileContent.replaceAll(
-          VISUAL_EDITOR_PATH,
+          VISUAL_EDITOR_IMPORT_PATH,
           "@yext/visual-editor"
         ),
         path: file,
-        target: `${COMPONENT_FOLDER_PATH}/${file}`,
+        target: `${SLUG}/${file}`,
       };
     }
   });
@@ -48,15 +72,28 @@ const getComponentFiles = async (files: File[]) => {
   return filesArray;
 };
 
-const main = async () => {
-  // Delete index.ts if it exists
-  if (existsSync(PUBLIC_FOLDER_INDEX_PATH)) {
-    await fs.rm(PUBLIC_FOLDER_INDEX_PATH);
+export const buildRegistry = async () => {
+  // Delete dist folder if it exists
+  if (fs.existsSync(DIST_DIR)) {
+    fs.rmSync(DIST_DIR, { recursive: true });
   }
+
+  // Create directories if they do not exist
+  for (const path of [COMPONENT_PATH, COLOR_PATH, ICONS_PATH]) {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path, { recursive: true });
+    }
+  }
+
+  // Write index files
+  fs.writeFileSync(`${COMPONENT_PATH}/index.json`, JSON.stringify(styleIndex));
+  fs.writeFileSync(`${COLOR_PATH}/neutral.json`, JSON.stringify(colorIndex));
+  fs.writeFileSync(`${ICONS_PATH}/index.json`, JSON.stringify(iconsIndex));
+  fs.copyFileSync(`../registry/artifacts.json`, `${DIST_DIR}/artifacts.json`);
 
   const componentNames = ["index"];
 
-  // make a json file and put it in public folder
+  // generate JSON files for each component
   for (let i = 0; i < registryComponents.length; i++) {
     const component = registryComponents[i];
     componentNames.push(component.name);
@@ -73,41 +110,21 @@ const main = async () => {
       null,
       2
     );
-    const jsonPath = `${PUBLIC_FOLDER_BASE_PATH}/${component.name}.json`;
+    const jsonPath = `${COMPONENT_PATH}/${component.name}.json`;
     await writeFileRecursive(jsonPath, json);
-
-    // import new json file in index.ts
-    await fs.appendFile(
-      PUBLIC_FOLDER_INDEX_PATH,
-      `import { default as ${component.name} } from "./${component.name}.json"\n`,
-      "utf-8"
-    );
   }
 
   // write and export the top level index file
   await writeFileRecursive(
-    `${PUBLIC_FOLDER_BASE_PATH}/topLevel.json`,
+    `${DIST_DIR}/${SLUG}/index.json`,
     JSON.stringify(registryComponents)
-  );
-
-  await fs.appendFile(
-    PUBLIC_FOLDER_INDEX_PATH,
-    `import { default as index } from "./topLevel.json"\n`,
-    "utf-8"
-  );
-
-  // export all json objects
-  await fs.appendFile(
-    PUBLIC_FOLDER_INDEX_PATH,
-    `export const componentRegistries = {${componentNames.join(", ")}} \n`,
-    "utf-8"
   );
 };
 
-main()
+buildRegistry()
   .then(() => {
     console.log("Registry files created successfully");
   })
   .catch((err) => {
-    console.error(err);
+    console.error("Error creating registry files: ", err);
   });

@@ -25,7 +25,7 @@
     "./style.css": "./dist/style.css"
   },
   "scripts": {
-    "build": "pnpm run generate-registry && tsc && vite build",
+    "build": "tsc && vite build",
     "test": "vitest run",
     "prettier": "prettier --write --cache .",
     "lint": "eslint --cache --fix src/ scripts/",
@@ -34,7 +34,7 @@
     "release": "tsx scripts/release.ts",
     "prepare": "husky && pnpm build",
     "generate-notices": "generate-license-file",
-    "generate-registry": "tsx ./src/components/puck/registry/build-registry.ts"
+    "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
   },
   "dependencies": {
     "@measured/puck": "0.16.2-canary.18657a4",
@@ -65,7 +65,7 @@
     "tsx": "^4.16.3"
   },
   "engines": {
-    "node": "^17 || ^18 || ^20"
+    "node": "^18 || ^20"
   },
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
