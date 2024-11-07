@@ -8,55 +8,67 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
+import { Phone as PhoneIcon } from "lucide-react";
 
-const phoneVariants = cva("components text-body-fontSize", {
-  variants: {
-    fontWeight: {
-      default: "font-body-fontWeight",
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
+const phoneVariants = cva(
+  "components flex gap-2 items-center text-body-fontSize",
+  {
+    variants: {
+      fontWeight: {
+        default: "font-body-fontWeight",
+        thin: "font-thin",
+        extralight: "font-extralight",
+        light: "font-light",
+        normal: "font-normal",
+        medium: "font-medium",
+        semibold: "font-semibold",
+        bold: "font-bold",
+        extrabold: "font-extrabold",
+        black: "font-black",
+      },
+      color: {
+        default: "text-body-color",
+        primary: "text-palette-primary",
+        secondary: "text-palette-secondary",
+        accent: "text-palette-accent",
+        text: "text-palette-text",
+        background: "text-palette-background",
+        foreground: "text-palette-foreground",
+      },
     },
-    color: {
-      default: "text-body-color",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-      foreground: "text-palette-foreground",
+    defaultVariants: {
+      fontWeight: "default",
+      color: "default",
     },
-  },
-  defaultVariants: {
-    fontWeight: "default",
-    color: "default",
-  },
-});
+  }
+);
 
 export interface PhoneProps extends VariantProps<typeof phoneVariants> {
   phone: YextEntityField<string>;
+  format?: "domestic" | "international";
   textSize?: number;
 }
 
 /*
- * formatUsPhoneNumber formats a US phone number into one of the following forms,
- * depending on whether the number includes the +1 area code:
- * +1 (123) 456-7890 or (123) 456-7890. If the number is not a US phone number,
- * it returns the original phone number string unchanged.
+ * formatPhoneNumber formats a phone number into one of the following forms,
+ * depending on whether format is set to domestic or international:
+ * (123) 456-7890 or +1 (123) 456-7890. A variety of 1-3 digit international
+ * codes are accepted. If formatting fails, the original string is returned.
  */
-const formatUsPhoneNumber = (phoneNumberString: string): string => {
+const formatPhoneNumber = (
+  phoneNumberString: string,
+  format: string = "domestic"
+): string => {
   const cleaned = ("" + phoneNumberString).replace(/\D/g, "");
-  const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+  const match = cleaned.match(/^(?:\+?(\d{1,3}))?(\d{3})(\d{3})(\d{4})$/);
+
   if (match) {
-    const intlCode = match[1] ? "+1 " : "";
-    return [intlCode, "(", match[2], ") ", match[3], "-", match[4]].join("");
+    const countryCode = match[1] ? `+${match[1]} ` : "";
+    return format === "international"
+      ? `${countryCode}(${match[2]}) ${match[3]}-${match[4]}`
+      : `(${match[2]}) ${match[3]}-${match[4]}`;
   }
+
   return phoneNumberString;
 };
 
@@ -67,6 +79,14 @@ const PhoneFields: Fields<PhoneProps> = {
       types: ["type.phone"],
     },
   }),
+  format: {
+    label: "Format",
+    type: "radio",
+    options: [
+      { label: "Domestic", value: "domestic" },
+      { label: "International", value: "international" },
+    ],
+  },
   fontWeight: {
     label: "Font Weight",
     type: "select",
@@ -97,7 +117,7 @@ const PhoneFields: Fields<PhoneProps> = {
   },
 };
 
-const Phone: React.FC<PhoneProps> = ({ phone, fontWeight, color }) => {
+const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
   const document = useDocument();
   const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
@@ -108,7 +128,8 @@ const Phone: React.FC<PhoneProps> = ({ phone, fontWeight, color }) => {
   return (
     <EntityField displayName="Phone" fieldId={phone.field}>
       <p className={phoneVariants({ fontWeight, color })}>
-        {formatUsPhoneNumber(resolvedPhone)}
+        <PhoneIcon className="w-4 h-4" />
+        {formatPhoneNumber(resolvedPhone, format)}
       </p>
     </EntityField>
   );
