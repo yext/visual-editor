@@ -10,35 +10,38 @@ import {
 } from "../editor/YextEntityFieldSelector.tsx";
 import { Phone as PhoneIcon } from "lucide-react";
 
-const phoneVariants = cva("components flex text-body-fontSize", {
-  variants: {
-    fontWeight: {
-      default: "font-body-fontWeight",
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
+const phoneVariants = cva(
+  "components flex gap-2 items-center text-body-fontSize",
+  {
+    variants: {
+      fontWeight: {
+        default: "font-body-fontWeight",
+        thin: "font-thin",
+        extralight: "font-extralight",
+        light: "font-light",
+        normal: "font-normal",
+        medium: "font-medium",
+        semibold: "font-semibold",
+        bold: "font-bold",
+        extrabold: "font-extrabold",
+        black: "font-black",
+      },
+      color: {
+        default: "text-body-color",
+        primary: "text-palette-primary",
+        secondary: "text-palette-secondary",
+        accent: "text-palette-accent",
+        text: "text-palette-text",
+        background: "text-palette-background",
+        foreground: "text-palette-foreground",
+      },
     },
-    color: {
-      default: "text-body-color",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-      foreground: "text-palette-foreground",
+    defaultVariants: {
+      fontWeight: "default",
+      color: "default",
     },
-  },
-  defaultVariants: {
-    fontWeight: "default",
-    color: "default",
-  },
-});
+  }
+);
 
 export interface PhoneProps extends VariantProps<typeof phoneVariants> {
   phone: YextEntityField<string>;
@@ -125,7 +128,7 @@ const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
   return (
     <EntityField displayName="Phone" fieldId={phone.field}>
       <p className={phoneVariants({ fontWeight, color })}>
-        <PhoneIcon />
+        <PhoneIcon className="w-4 h-4" />
         {formatPhoneNumber(resolvedPhone, format)}
       </p>
     </EntityField>
