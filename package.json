@@ -36,7 +36,7 @@
     "generate-notices": "generate-license-file"
   },
   "dependencies": {
-    "@measured/puck": "0.16.2-canary.18657a4",
+    "@measured/puck": "0.16.2-canary.a1988b5",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",

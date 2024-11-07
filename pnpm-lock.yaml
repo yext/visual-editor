@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@measured/puck':
-        specifier: 0.16.2-canary.18657a4
-        version: 0.16.2-canary.18657a4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.16.2-canary.a1988b5
+        version: 0.16.2-canary.a1988b5(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.1
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1542,8 +1542,8 @@ packages:
       react: ^16.8.5 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
 
-  '@measured/puck@0.16.2-canary.18657a4':
-    resolution: {integrity: sha512-PWRc833ucnhzKou8XTuoiD9+dceqEslDuUcs+CHqBTmFQU6EdsgHz18cgxRsc1S0djS9KL84MPJ7Nqe5j6Q7FQ==}
+  '@measured/puck@0.16.2-canary.a1988b5':
+    resolution: {integrity: sha512-O7UN0r7/vVhA+USjbx79frObZcXIC+VDPoTML2xqZpkThCVnbFFK0ndBXzcztvQvF9tWDBtErElhKjth+lo3jg==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0
 
@@ -7097,7 +7097,7 @@ snapshots:
       - '@types/react-dom'
       - react-native
 
-  '@measured/puck@0.16.2-canary.18657a4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@measured/puck@0.16.2-canary.a1988b5(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@measured/dnd': 16.6.0-canary.4cba1d1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       deep-diff: 1.0.2
