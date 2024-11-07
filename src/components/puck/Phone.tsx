@@ -10,7 +10,7 @@ import {
 } from "../editor/YextEntityFieldSelector.tsx";
 import { Phone as PhoneIcon } from "lucide-react";
 
-const phoneVariants = cva("components flex gap-2 text-body-fontSize", {
+const phoneVariants = cva("components flex text-body-fontSize", {
   variants: {
     fontWeight: {
       default: "font-body-fontWeight",
@@ -125,9 +125,7 @@ const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
   return (
     <EntityField displayName="Phone" fieldId={phone.field}>
       <p className={phoneVariants({ fontWeight, color })}>
-        <div className="m-2">
-          <PhoneIcon />
-        </div>
+        <PhoneIcon />
         {formatPhoneNumber(resolvedPhone, format)}
       </p>
     </EntityField>
