@@ -1,4 +1,5 @@
-// Based on https://github.com/shadcn-ui/ui/blob/main/apps/www/scripts/build-registry.mts
+// Based on https://github.com/bwestwood11/ui-cart/blob/main/scripts/build-registry.ts
+// which is a simplified version of https://github.com/shadcn-ui/ui/blob/main/apps/www/scripts/build-registry.mts
 import fs from "fs";
 import z from "zod";
 import path from "path";
@@ -11,7 +12,8 @@ const COMPONENT_PATH = `${DIST_DIR}/${SLUG}/styles/default`;
 const COLOR_PATH = `${DIST_DIR}/${SLUG}/colors`;
 const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
 
-const VISUAL_EDITOR_IMPORT_PATH = "../../index.ts";
+// matches import { ... } from "..." where the import path starts with ../../
+const IMPORT_PATTERN = /from "(\.\.\/\.\.\/[^"]+)"/g;
 
 const styleIndex = {
   name: "default",
@@ -58,9 +60,9 @@ const getComponentFiles = async (files: File[]) => {
       const fileContent = await fs.promises.readFile(filePath, "utf-8");
       return {
         type: "registry:component",
-        content: fileContent.replaceAll(
-          VISUAL_EDITOR_IMPORT_PATH,
-          "@yext/visual-editor"
+        content: fileContent.replace(
+          IMPORT_PATTERN,
+          `from "@yext/visual-editor"`
         ),
         path: file,
         target: `${SLUG}/${file}`,
@@ -117,6 +119,10 @@ export const buildRegistry = async () => {
   // write and export the top level index file
   await writeFileRecursive(
     `${DIST_DIR}/${SLUG}/index.json`,
+    JSON.stringify(registryComponents)
+  );
+  await writeFileRecursive(
+    `${DIST_DIR}/${SLUG}/registry/index.json`,
     JSON.stringify(registryComponents)
   );
 };

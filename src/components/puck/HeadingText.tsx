@@ -1,13 +1,13 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps, headingVariants } from "./atoms/heading.tsx";
+import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  NumberFieldWithDefaultOption
+  NumberFieldWithDefaultOption,
 } from "../../index.ts";
 
 export interface HeadingTextProps extends HeadingProps {
