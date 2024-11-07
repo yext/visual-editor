@@ -1,3 +1,14 @@
+#### 0.0.16 (2024-11-07)
+
+##### Chores
+
+- update Puck (9763e7b4)
+
+##### Bug Fixes
+
+- additional components qa (#139) (c0b4392c)
+- constant value in GetDirections component (#141) (b7bb846b)
+
 #### 0.0.15 (2024-11-06)
 
 ##### New Features
