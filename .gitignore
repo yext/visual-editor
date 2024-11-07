@@ -83,5 +83,3 @@ out
 dist/
 
 .DS_Store
-
-src/components/puck/registry/output

@@ -65,7 +65,7 @@
     "tsx": "^4.16.3"
   },
   "engines": {
-    "node": "^18 || ^20"
+    "node": "^17 || ^18 || ^20"
   },
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
