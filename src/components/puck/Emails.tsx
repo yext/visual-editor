@@ -11,7 +11,7 @@ import {
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
 
-const emailsVariants = cva("list-inside p-8", {
+const emailsVariants = cva("list-inside", {
   variants: {
     fontSize: {
       default: "text-body-fontSize",
@@ -162,7 +162,7 @@ const Emails: React.FC<EmailsProps> = ({
           .slice(0, Math.min(resolvedEmailList.length, listLength))
           .map((text: any, index: any) => (
             <li key={index} className={`mb-2 flex items-center`}>
-              <img className={"m-2"} src={mailIcon} />
+              <img className={"mr-2"} src={mailIcon} />
               <span>{includeHyperlink ? <a href={text}>{text}</a> : text}</span>
             </li>
           ))}
