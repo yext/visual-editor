@@ -57,7 +57,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     label: "Size",
     type: "radio",
     options: [
-      { label: "Default", value: "defaut" },
+      { label: "Default", value: "default" },
       { label: "Small", value: "small" },
       { label: "Large", value: "large" },
       { label: "Icon", value: "icon" },

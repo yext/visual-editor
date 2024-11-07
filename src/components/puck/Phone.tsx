@@ -1,6 +1,5 @@
 import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { cn } from "../../internal/utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
@@ -10,7 +9,7 @@ import {
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
 
-const phoneVariants = cva("components", {
+const phoneVariants = cva("components text-body-fontSize", {
   variants: {
     fontWeight: {
       default: "font-body-fontWeight",
@@ -68,11 +67,6 @@ const PhoneFields: Fields<PhoneProps> = {
       types: ["type.phone"],
     },
   }),
-  textSize: {
-    label: "Text Size",
-    type: "number",
-    min: 1,
-  },
   fontWeight: {
     label: "Font Weight",
     type: "select",
@@ -103,25 +97,17 @@ const PhoneFields: Fields<PhoneProps> = {
   },
 };
 
-const Phone: React.FC<PhoneProps> = ({
-  phone,
-  textSize,
-  fontWeight,
-  color,
-}) => {
+const Phone: React.FC<PhoneProps> = ({ phone, fontWeight, color }) => {
   const document = useDocument();
-  const resolvedPhone: any = resolveYextEntityField(document, phone);
+  const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
-  const dynamicStyles = {
-    fontSize: textSize ? textSize + "px" : undefined,
-  };
+  if (!resolvedPhone) {
+    return;
+  }
 
   return (
     <EntityField displayName="Phone" fieldId={phone.field}>
-      <p
-        className={cn(phoneVariants({ fontWeight, color }))}
-        style={dynamicStyles ?? ""}
-      >
+      <p className={phoneVariants({ fontWeight, color })}>
         {formatUsPhoneNumber(resolvedPhone)}
       </p>
     </EntityField>
