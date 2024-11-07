@@ -9285,7 +9285,7 @@ The following npm packages may be included in this product:
 
  - @esbuild/linux-x64@0.23.1
  - @icons/material@0.2.4
- - @measured/puck@0.16.2-canary.18657a4
+ - @measured/puck@0.16.2-canary.a1988b5
  - @radix-ui/primitive@1.1.0
  - @radix-ui/react-alert-dialog@1.1.2
  - @radix-ui/react-arrow@1.1.0
