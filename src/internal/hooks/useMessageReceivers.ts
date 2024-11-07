@@ -62,7 +62,10 @@ export const useCommonMessageReceivers = (
   );
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    const themeData = jsonFromEscapedJsonString(payload as unknown as string);
+    const payloadString = payload as unknown as string;
+    const themeData = payloadString
+      ? jsonFromEscapedJsonString(payloadString)
+      : {};
     devLogger.logData("THEME_DATA", themeData);
     setThemeData(themeData as ThemeData);
     setThemeDataFetched(true);
