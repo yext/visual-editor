@@ -1,3 +1,28 @@
+#### 0.0.16 (2024-11-07)
+
+##### Chores
+
+- update Puck (9763e7b4)
+
+##### Bug Fixes
+
+- additional components qa (#139) (c0b4392c)
+- constant value in GetDirections component (#141) (b7bb846b)
+
+#### 0.0.15 (2024-11-06)
+
+##### New Features
+
+- add fontSize to getDirections (#140) (29e733b4)
+- add NumberOrDefaultField (#133) (e06808ed)
+- handle siteId in resolveVisualEditorData (#137) (75cbbb63)
+- use localStorage when in dev mode (#134) (e7c3fd3a)
+- add GetDirections component (#135) (ce63ff99)
+
+##### Bug Fixes
+
+- layout editor no longer requires themeId (#136) (c71255ce)
+
 #### 0.0.14 (2024-11-04)
 
 ##### Chores

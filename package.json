@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "type": "module",
   "author": "sumo@yext.com",
   "types": "dist/index.d.ts",
@@ -37,7 +37,7 @@
     "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
   },
   "dependencies": {
-    "@measured/puck": "0.16.2-canary.18657a4",
+    "@measured/puck": "0.16.2-canary.a1988b5",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",
