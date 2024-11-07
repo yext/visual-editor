@@ -1,0 +1,16 @@
+{
+  "name": "visual-editor-component-registry",
+  "version": "0.0.0",
+  "description": "Created by Yext",
+  "main": "build-registry.ts",
+  "type": "module",
+  "scripts": {
+    "generate": "tsx build-registry.ts"
+  },
+  "engines": {
+    "node": "^18.4.0 || >=20.2.0"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  }
+}

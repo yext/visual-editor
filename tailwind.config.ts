@@ -1,7 +1,12 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
+  content: [
+    "./src/internal/**/*.{html,js,jsx,ts,tsx}",
+    "./src/hooks/**/*.{html,js,jsx,ts,tsx}",
+    "./src/utils/**/*.{html,js,jsx,ts,tsx}",
+    "./src/components/editor/**/*.{html,js,jsx,ts,tsx}",
+  ],
   prefix: "ve-",
   theme: {
     extend: {

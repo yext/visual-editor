@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { type NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
+import { type NumberOrDefault } from "../../editor/NumberOrDefaultField.js";
 
 // Define the variants for the heading component
 const headingVariants = cva("components", {

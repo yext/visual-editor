@@ -1,0 +1,10 @@
+buildConfiguration:
+  buildCommand: cd src/components/puck/registry && npm run generate
+  installDependenciesStep:
+    command: cd src/components/puck/registry && npm install
+    requiredFiles:
+      - src/components/puck/registry/package.json
+      - src/components/puck/registry/package-lock.json
+      - .nvmrc
+livePreviewConfiguration:
+  setupCommand: ":"

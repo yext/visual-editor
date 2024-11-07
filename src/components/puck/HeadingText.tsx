@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps, headingVariants } from "./atoms/heading.tsx";
+import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
 import {
   useDocument,
   resolveYextEntityField,
