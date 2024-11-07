@@ -115,7 +115,7 @@ const GetDirections = ({
       padding={padding}
     >
       <Button asChild variant={variant} size={size} fontSize={fontSize}>
-        <Link href={searchQuery ?? ""}>{"Get Directions"}</Link>
+        <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
       </Button>
     </Section>
   );
