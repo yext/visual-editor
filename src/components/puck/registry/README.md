@@ -2,7 +2,7 @@
 
 ## Generate registry locally
 
-`cd src/components/puck/registry && npm i && npm run generate`
+`pnpm run generate-registry`
 
 ## Add a new component
 
