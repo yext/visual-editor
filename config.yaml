@@ -5,6 +5,5 @@ buildConfiguration:
     requiredFiles:
       - src/components/puck/registry/package.json
       - src/components/puck/registry/package-lock.json
-      - .nvmrc
 livePreviewConfiguration:
   setupCommand: ":"
