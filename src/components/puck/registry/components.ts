@@ -15,4 +15,15 @@ export const ui: Registry = [
     registryDependencies: ["heading"],
     files: ["HeadingText.tsx"],
   },
+  {
+    name: "body",
+    type: "registry:component",
+    files: ["atoms/body.tsx"],
+  },
+  {
+    name: "BodyText",
+    type: "registry:ui",
+    registryDependencies: ["body"],
+    files: ["BodyText.tsx"],
+  },
 ];

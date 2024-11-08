@@ -1,14 +1,14 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, BodyProps, bodyVariants } from "./atoms/body.tsx";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
+import { Body, BodyProps, bodyVariants } from "./atoms/body.js";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-import { NumberFieldWithDefaultOption } from "../editor/NumberOrDefaultField.tsx";
+  NumberFieldWithDefaultOption,
+} from "../../index.ts";
 
 export interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
