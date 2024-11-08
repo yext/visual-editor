@@ -1,7 +1,7 @@
 {
   "name": "visual-editor-component-registry",
   "version": "0.0.0",
-  "description": "Created by Yext",
+  "description": "A component library registry for visual-editor components to work with the ShadCN CLI",
   "main": "build-registry.ts",
   "type": "module",
   "scripts": {

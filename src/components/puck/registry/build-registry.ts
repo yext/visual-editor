@@ -1,6 +1,7 @@
 // Based on https://github.com/bwestwood11/ui-cart/blob/main/scripts/build-registry.ts
 // which is a simplified version of https://github.com/shadcn-ui/ui/blob/main/apps/www/scripts/build-registry.mts
-import fs from "fs";
+import { writeFile, copyFile, mkdir, readFile } from "node:fs/promises";
+import { existsSync, rmSync, mkdirSync } from "fs";
 import z from "zod";
 import path from "path";
 import { registryComponents } from "./registry.ts";
@@ -8,9 +9,10 @@ import { registryItemFileSchema } from "./schema.ts";
 
 const DIST_DIR = `../../../../dist`;
 const SLUG = `components`;
-const COMPONENT_PATH = `${DIST_DIR}/${SLUG}/styles/default`;
 const COLOR_PATH = `${DIST_DIR}/${SLUG}/colors`;
 const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
+const THEMES_PATH = `${DIST_DIR}/${SLUG}/styles`;
+const COMPONENT_PATH = `${THEMES_PATH}/default`;
 
 // matches import { ... } from "..." where the import path starts with ../../
 const IMPORT_PATTERN = /from "(\.\.\/\.\.\/[^"]+)"/g;
@@ -37,6 +39,8 @@ const colorIndex = {
 
 const iconsIndex = {};
 
+const themeIndex = [{ name: "default", label: "Default" }];
+
 type File = z.infer<typeof registryItemFileSchema>;
 
 async function writeFileRecursive(filePath: string, data: string) {
@@ -44,10 +48,10 @@ async function writeFileRecursive(filePath: string, data: string) {
 
   try {
     // Ensure the directory exists, recursively creating directories as needed
-    await fs.promises.mkdir(dir, { recursive: true });
+    await mkdir(dir, { recursive: true });
 
     // Write the file
-    await fs.promises.writeFile(filePath, data, "utf-8");
+    await writeFile(filePath, data, "utf-8");
   } catch (error) {
     console.error("Error writing file: ", error);
   }
@@ -57,7 +61,7 @@ const getComponentFiles = async (files: File[]) => {
   const filesArrayPromises = (files ?? []).map(async (file) => {
     if (typeof file === "string") {
       const filePath = `../${file}`;
-      const fileContent = await fs.promises.readFile(filePath, "utf-8");
+      const fileContent = await readFile(filePath, "utf-8");
       return {
         type: "registry:component",
         content: fileContent.replace(
@@ -76,22 +80,23 @@ const getComponentFiles = async (files: File[]) => {
 
 export const buildRegistry = async () => {
   // Delete dist folder if it exists
-  if (fs.existsSync(DIST_DIR)) {
-    fs.rmSync(DIST_DIR, { recursive: true });
+  if (existsSync(DIST_DIR)) {
+    rmSync(DIST_DIR, { recursive: true });
   }
 
   // Create directories if they do not exist
   for (const path of [COMPONENT_PATH, COLOR_PATH, ICONS_PATH]) {
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path, { recursive: true });
+    if (!existsSync(path)) {
+      mkdirSync(path, { recursive: true });
     }
   }
 
   // Write index files
-  fs.writeFileSync(`${COMPONENT_PATH}/index.json`, JSON.stringify(styleIndex));
-  fs.writeFileSync(`${COLOR_PATH}/neutral.json`, JSON.stringify(colorIndex));
-  fs.writeFileSync(`${ICONS_PATH}/index.json`, JSON.stringify(iconsIndex));
-  fs.copyFileSync(`../registry/artifacts.json`, `${DIST_DIR}/artifacts.json`);
+  await writeFile(`${COMPONENT_PATH}/index.json`, JSON.stringify(styleIndex));
+  await writeFile(`${COLOR_PATH}/neutral.json`, JSON.stringify(colorIndex));
+  await writeFile(`${ICONS_PATH}/index.json`, JSON.stringify(iconsIndex));
+  await writeFile(`${THEMES_PATH}/index.json`, JSON.stringify(themeIndex));
+  await copyFile(`../registry/artifacts.json`, `${DIST_DIR}/artifacts.json`);
 
   const componentNames = ["index"];
 

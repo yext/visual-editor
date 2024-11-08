@@ -2,10 +2,8 @@ import type { Config } from "tailwindcss";
 
 export default {
   content: [
-    "./src/internal/**/*.{html,js,jsx,ts,tsx}",
-    "./src/hooks/**/*.{html,js,jsx,ts,tsx}",
-    "./src/utils/**/*.{html,js,jsx,ts,tsx}",
-    "./src/components/editor/**/*.{html,js,jsx,ts,tsx}",
+    "./src/**/*.{html,js,jsx,ts,tsx}",
+    "!./src/components/puck/registry/**", // exclude the registry
   ],
   prefix: "ve-",
   theme: {

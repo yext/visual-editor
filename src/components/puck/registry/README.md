@@ -20,3 +20,13 @@ Add a new object to `ui` in `components.ts`.
 - Do not use .ts or .tsx imports
 - Imports from the @yext/visual-editor package must have a local path that is captured by the
   `IMPORT_PATTERN` in `build-registry.ts`
+
+## Running shadcn locally
+
+Useful for debugging the our registry with the shadcn CLI.
+
+1. `git clone https://github.com/shadcn-ui/ui.git`
+2. `pnpm i`
+3. `cd packages/shadcn` (`packages/cli` is the old cli)
+4. `pnpm run dev`
+5. `REGISTRY_URL=https://reliably-numerous-kit.pgsdemo.com/components node ui/packages/shadcn/dist/index.js add`
