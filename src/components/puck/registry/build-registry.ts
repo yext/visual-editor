@@ -12,19 +12,18 @@ const SLUG = `components`;
 const COLORS_PATH = `${DIST_DIR}/${SLUG}/colors`;
 const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
 const STYLES_PATH = `${DIST_DIR}/${SLUG}/styles`;
-const DEFAULT_STYLE_PATH = `${STYLES_PATH}/default`;
-const NEW_YORK_STYLE_PATH = `${STYLES_PATH}/new-york`;
+const YEXT_STYLE_PATH = `${STYLES_PATH}/yext`;
 const COMPONENTS_SRC_PATH = `./src/components/puck`;
 
 // matches import { ... } from "..." where the import path starts with ../../
 const IMPORT_PATTERN = /from "(\.\.\/\.\.\/[^"]+)"/g;
 
-const getStyleIndex = (name: string) => ({
-  name: name,
+const styleIndex = {
+  name: "yext",
   type: "registry:style",
   cssVars: {},
   files: [],
-});
+};
 
 const colorsIndex = {
   inlineColors: {
@@ -41,10 +40,7 @@ const colorsIndex = {
 
 const iconsIndex = {};
 
-const stylesIndex = [
-  { name: "default", label: "Default" },
-  { name: "new-york", label: "New York" },
-];
+const stylesIndex = [{ name: "yext", label: "Yext" }];
 
 async function writeFileRecursive(filePath: string, data: string) {
   const dir = path.dirname(filePath); // Extract the directory path
@@ -90,12 +86,8 @@ export const buildRegistry = async () => {
   // Write all index files
   await Promise.all([
     writeFileRecursive(
-      `${DEFAULT_STYLE_PATH}/index.json`,
-      JSON.stringify(getStyleIndex("default"))
-    ),
-    writeFileRecursive(
-      `${NEW_YORK_STYLE_PATH}/index.json`,
-      JSON.stringify(getStyleIndex("new-york"))
+      `${YEXT_STYLE_PATH}/index.json`,
+      JSON.stringify(styleIndex)
     ),
     writeFileRecursive(
       `${COLORS_PATH}/neutral.json`,
@@ -138,10 +130,7 @@ export const buildRegistry = async () => {
       null,
       2
     );
-    await Promise.all([
-      writeFileRecursive(`${DEFAULT_STYLE_PATH}/${component.name}.json`, json),
-      writeFileRecursive(`${NEW_YORK_STYLE_PATH}/${component.name}.json`, json),
-    ]);
+    await writeFileRecursive(`${YEXT_STYLE_PATH}/${component.name}.json`, json);
   }
 };
 

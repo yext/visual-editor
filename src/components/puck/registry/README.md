@@ -17,7 +17,8 @@ Add a new object to `ui` in `components.ts`.
 
 ## Requirements for components
 
-- Do not use .ts or .tsx imports
+- Do not use .ts or .tsx imports because of the starter's tsconfig
+- Default package imports should be avoided because of the starter's tsconfig
 - Imports from the @yext/visual-editor package must have a local path that is captured by the
   `IMPORT_PATTERN` in `build-registry.ts`
 
