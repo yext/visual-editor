@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { cn } from "../../internal/utils/cn.ts";
+import { yextCn } from "../../index.js";
 
 const flexContainerVariants = cva("flex", {
   variants: {
@@ -62,7 +62,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
   ) => {
     return (
       <div
-        className={cn(
+        className={yextCn(
           flexContainerVariants({
             direction,
             alignment,

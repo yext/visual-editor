@@ -1,15 +1,15 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { cn } from "../../internal/utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import mailIcon from "./assets/mail_outline.svg";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  yextCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "../../index.js";
 
 const emailsVariants = cva("list-inside", {
   variants: {
@@ -152,7 +152,7 @@ const Emails: React.FC<EmailsProps> = ({
   return (
     <EntityField displayName="Email List" fieldId={emailListField.field}>
       <ul
-        className={cn(
+        className={yextCn(
           "components",
           emailsVariants({ fontSize, fontWeight, color }),
           `${includeHyperlink ? "text-blue-600 dark:text-blue-500 hover:underline" : ""}`

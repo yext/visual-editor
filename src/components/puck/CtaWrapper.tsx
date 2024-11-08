@@ -1,18 +1,16 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps } from "./atoms/cta.tsx";
-import { cn } from "../../internal/utils/cn.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
+import { CTA, CTAProps } from "./atoms/cta.js";
 import {
+  yextCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-import {
   NumberFieldWithDefaultOption,
   NumberOrDefault,
-} from "../editor/NumberOrDefaultField.tsx";
+} from "../../index.ts";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
@@ -65,7 +63,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         label={cta?.name}
         url={cta?.url ?? "#"}
         variant={variant}
-        className={cn(className)}
+        className={yextCn(className)}
         fontSize={fontSize}
         {...rest}
       />

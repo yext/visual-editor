@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   AddressType,
@@ -7,17 +7,17 @@ import {
   Link,
   Address as RenderAddress,
 } from "@yext/pages-components";
-import { Section, sectionVariants } from "./atoms/section.tsx";
+import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
 import { config } from "process";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "../../index.ts";
 
 export type AddressProps = {
   address: YextEntityField<AddressType>;

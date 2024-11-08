@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 import { Link } from "@yext/pages-components";
-import { Button, ButtonProps } from "./button.tsx";
+import { Button, ButtonProps } from "./button.js";
 import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 export interface CTAProps

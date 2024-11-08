@@ -1,6 +1,7 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Section, sectionVariants } from "./atoms/section.tsx";
+import { Section, sectionVariants } from "./atoms/section.js";
+import { Button, ButtonProps } from "./atoms/button.js";
 import {
   getDirections,
   GetDirectionsConfig,
@@ -8,16 +9,14 @@ import {
   Coordinate,
 } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import {
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-import { config } from "process";
+  NumberOrDefault,
+  useDocument,
+  resolveYextEntityField,
+} from "../../index.js";
 import { VariantProps } from "class-variance-authority";
-import { Button, ButtonProps } from "./atoms/button.tsx";
-import { NumberOrDefault } from "../editor/NumberOrDefaultField.tsx";
 
 export type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
@@ -30,7 +29,7 @@ export type GetDirectionsProps = {
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
-  coordinate: YextEntityFieldSelector<typeof config, Coordinate>({
+  coordinate: YextEntityFieldSelector<any, Coordinate>({
     label: "Get Directions",
     filter: { types: ["type.coordinate"] },
   }),
