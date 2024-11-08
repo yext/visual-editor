@@ -23,7 +23,7 @@ Add a new object to `ui` in `components.ts`.
 
 ## Running shadcn locally
 
-Useful for debugging the our registry with the shadcn CLI.
+Useful for debugging our registry with the shadcn CLI.
 
 1. `git clone https://github.com/shadcn-ui/ui.git`
 2. `pnpm i`

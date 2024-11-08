@@ -7,12 +7,13 @@ import path from "path";
 import { registryComponents } from "./registry.ts";
 import { registryItemFileSchema } from "./schema.ts";
 
-const DIST_DIR = `../../../../dist`;
+const DIST_DIR = `./dist`;
 const SLUG = `components`;
 const COLOR_PATH = `${DIST_DIR}/${SLUG}/colors`;
 const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
 const THEMES_PATH = `${DIST_DIR}/${SLUG}/styles`;
 const COMPONENT_PATH = `${THEMES_PATH}/default`;
+const COMPONENTS_SRC_PATH = `./src/components/puck`;
 
 // matches import { ... } from "..." where the import path starts with ../../
 const IMPORT_PATTERN = /from "(\.\.\/\.\.\/[^"]+)"/g;
@@ -60,7 +61,7 @@ async function writeFileRecursive(filePath: string, data: string) {
 const getComponentFiles = async (files: File[]) => {
   const filesArrayPromises = (files ?? []).map(async (file) => {
     if (typeof file === "string") {
-      const filePath = `../${file}`;
+      const filePath = `${COMPONENTS_SRC_PATH}/${file}`;
       const fileContent = await readFile(filePath, "utf-8");
       return {
         type: "registry:component",
@@ -96,7 +97,10 @@ export const buildRegistry = async () => {
   await writeFile(`${COLOR_PATH}/neutral.json`, JSON.stringify(colorIndex));
   await writeFile(`${ICONS_PATH}/index.json`, JSON.stringify(iconsIndex));
   await writeFile(`${THEMES_PATH}/index.json`, JSON.stringify(themeIndex));
-  await copyFile(`../registry/artifacts.json`, `${DIST_DIR}/artifacts.json`);
+  await copyFile(
+    `${COMPONENTS_SRC_PATH}/registry/artifacts.json`,
+    `${DIST_DIR}/artifacts.json`
+  );
 
   const componentNames = ["index"];
 
