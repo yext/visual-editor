@@ -1,0 +1,10 @@
+buildConfiguration:
+  buildCommand: pnpm run generate-registry
+  installDependenciesStep:
+    command: npm install -g pnpm && pnpm i --ignore-scripts
+    requiredFiles:
+      - package.json
+      - pnpm-lock.yaml
+      - tsconfig.json
+livePreviewConfiguration:
+  setupCommand: ":"

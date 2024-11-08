@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 // Define the variants for the body component
