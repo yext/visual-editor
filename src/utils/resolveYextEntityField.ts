@@ -13,11 +13,8 @@ export const resolveYextEntityField = <T>(
     return undefined;
   }
 
-  if (entityField.constantValueEnabled) {
+  if (entityField.constantValueEnabled || !entityField.field) {
     return entityField.constantValue as T;
-  }
-  if (entityField.field === "") {
-    return undefined;
   }
 
   try {
