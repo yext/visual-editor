@@ -26,9 +26,9 @@ const buttonVariants = cva(
       borderRadius: {
         default: "",
         none: "rounded-none",
-        small: "rounded-sm",
         medium: "rounded-md",
         large: "rounded-lg",
+        full: "rounded-full",
       },
     },
     defaultVariants: {

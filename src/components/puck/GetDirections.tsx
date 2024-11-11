@@ -69,9 +69,9 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     options: [
       { label: "Default", value: "default" },
       { label: "None", value: "none" },
-      { label: "Small", value: "small" },
       { label: "Medium", value: "medium" },
       { label: "Large", value: "large" },
+      { label: "Full", value: "full" },
     ],
   },
   alignment: {
