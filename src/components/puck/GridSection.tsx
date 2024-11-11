@@ -1,8 +1,8 @@
-import React from "react";
+import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Section } from "./atoms/section.tsx";
-import { cn } from "../../internal/utils/cn.ts";
+import { Section } from "./atoms/section.js";
+import { yextCn } from "../../index.js";
 
 const backgroundVariants = cva("components", {
   variants: {
@@ -103,7 +103,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
         className={backgroundVariants({ maxContentWidth, backgroundColor })}
       >
         <div
-          className={cn(
+          className={yextCn(
             gridSectionVariants({
               horizontalSpacing,
               className,
@@ -122,7 +122,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
             ({ span, verticalAlignment, verticalSpacing, padding }, idx) => (
               <div
                 key={idx}
-                className={cn(
+                className={yextCn(
                   columnVariants({
                     verticalAlignment,
                     verticalSpacing,

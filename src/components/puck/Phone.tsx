@@ -1,13 +1,13 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { cva, type VariantProps } from "class-variance-authority";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
 
 const phoneVariants = cva(

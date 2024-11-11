@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import clsx from "clsx";
+import { clsx } from "clsx";
 
 const sectionVariants = cva("mx-auto", {
   variants: {

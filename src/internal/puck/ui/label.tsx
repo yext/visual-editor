@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../utils/cn.ts";
+import { yextCn } from "../../../utils/yextCn.ts";
 
 const labelVariants = cva(
   "ve-text-sm ve-font-medium ve-leading-none peer-disabled:ve-cursor-not-allowed peer-disabled:ve-opacity-70"
@@ -14,7 +14,7 @@ const Label = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
-    className={cn(labelVariants(), className)}
+    className={yextCn(labelVariants(), className)}
     {...props}
   />
 ));

@@ -8,7 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   NumberFieldWithDefaultOption,
-} from "../../index.ts";
+} from "../../index.js";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;

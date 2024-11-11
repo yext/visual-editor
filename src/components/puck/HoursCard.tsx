@@ -1,11 +1,10 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
-import { Section, sectionVariants } from "./atoms/section.tsx";
+import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { EntityField } from "../editor/EntityField.tsx";
+import { EntityField, useDocument } from "../../index.js";
 
 export type HoursCardProps = {
   startOfWeek: keyof DayOfWeekNames | "today";
