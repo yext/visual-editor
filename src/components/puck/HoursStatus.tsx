@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { HoursStatus } from "@yext/pages-components";
+import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
   yextCn,
   useDocument,
@@ -11,7 +11,7 @@ import {
 } from "../../index.js";
 
 export interface HoursStatusProps {
-  hours: YextEntityField<any>;
+  hours: YextEntityField<HoursType>;
   className?: string;
   showCurrentStatus?: boolean;
   timeFormat?: "12h" | "24h";
@@ -97,7 +97,7 @@ export const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
   defaultProps: {
     hours: {
       field: "hours",
-      constantValue: "",
+      constantValue: {},
     },
     className: "",
     showCurrentStatus: true,
