@@ -19,14 +19,22 @@ const buttonVariants = cva(
       },
       size: {
         default: "w-full md:w-fit h-10 px-4 py-2",
-        sm: "h-9 px-3",
-        lg: "h-11 px-8",
+        small: "h-9 px-3",
+        large: "h-11 px-8",
         icon: "h-10 w-10",
+      },
+      borderRadius: {
+        default: "",
+        none: "rounded-none",
+        small: "rounded-sm",
+        medium: "rounded-md",
+        large: "rounded-lg",
       },
     },
     defaultVariants: {
       variant: "primary",
       size: "default",
+      borderRadius: "default",
     },
   }
 );
@@ -39,7 +47,18 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, fontSize, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      borderRadius,
+      asChild = false,
+      fontSize,
+      ...props
+    },
+    ref
+  ) => {
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
@@ -47,7 +66,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           fontSize:
             !fontSize || fontSize === "default" ? undefined : fontSize + "px",
         }}
-        className={clsx(className, buttonVariants({ variant, size }))}
+        className={clsx(
+          className,
+          buttonVariants({ variant, size, borderRadius })
+        )}
         ref={ref}
         {...props}
       />

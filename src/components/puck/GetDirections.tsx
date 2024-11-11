@@ -24,6 +24,7 @@ export type GetDirectionsProps = {
   getDirectionsProvider: GetDirectionsConfig["provider"];
   variant: ButtonProps["variant"];
   size: ButtonProps["size"];
+  borderRadius: ButtonProps["borderRadius"];
   alignment: "items-start" | "items-center";
   padding: VariantProps<typeof sectionVariants>["padding"];
   fontSize?: NumberOrDefault;
@@ -63,6 +64,17 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
       { label: "Icon", value: "icon" },
     ],
   },
+  borderRadius: {
+    label: "Border Radius",
+    type: "radio",
+    options: [
+      { label: "Default", value: "default" },
+      { label: "None", value: "none" },
+      { label: "Small", value: "small" },
+      { label: "Medium", value: "medium" },
+      { label: "Large", value: "large" },
+    ],
+  },
   alignment: {
     label: "Align card",
     type: "radio",
@@ -86,6 +98,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
 const GetDirections = ({
   variant,
   size,
+  borderRadius,
   alignment,
   padding,
   coordinate: coordinateField,
@@ -114,7 +127,13 @@ const GetDirections = ({
       className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
-      <Button asChild variant={variant} size={size} fontSize={fontSize}>
+      <Button
+        asChild
+        variant={variant}
+        size={size}
+        fontSize={fontSize}
+        borderRadius={borderRadius}
+      >
         <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
       </Button>
     </Section>
@@ -126,6 +145,7 @@ export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   defaultProps: {
     variant: "primary",
     size: "default",
+    borderRadius: "default",
     alignment: "items-start",
     padding: "none",
     getDirectionsProvider: "google",
