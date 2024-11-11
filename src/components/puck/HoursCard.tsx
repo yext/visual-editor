@@ -4,9 +4,16 @@ import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
 import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
-import { EntityField, useDocument } from "../../index.js";
+import {
+  EntityField,
+  resolveYextEntityField,
+  useDocument,
+  YextEntityField,
+  YextEntityFieldSelector,
+} from "../../index.js";
 
 export type HoursCardProps = {
+  hours: YextEntityField<HoursType>;
   startOfWeek: keyof DayOfWeekNames | "today";
   collapseDays: boolean;
   showAdditionalHoursText: boolean;
@@ -14,36 +21,13 @@ export type HoursCardProps = {
   padding: VariantProps<typeof sectionVariants>["padding"];
 };
 
-type Interval = {
-  start: any;
-  end: any;
-};
-
-type HolidayHours = {
-  date: string;
-  openIntervals?: Interval[];
-  isClosed?: boolean;
-  isRegularHours?: boolean;
-};
-
-type DayHour = {
-  openIntervals?: Interval[];
-  isClosed?: boolean;
-};
-
-type Hours = {
-  monday?: DayHour;
-  tuesday?: DayHour;
-  wednesday?: DayHour;
-  thursday?: DayHour;
-  friday?: DayHour;
-  saturday?: DayHour;
-  sunday?: DayHour;
-  holidayHours?: HolidayHours[];
-  reopenDate?: string;
-};
-
 const hoursCardFields: Fields<HoursCardProps> = {
+  hours: YextEntityFieldSelector({
+    label: "Hours",
+    filter: {
+      types: ["type.hours"],
+    },
+  }),
   startOfWeek: {
     label: "Start of the week",
     type: "radio",
@@ -95,14 +79,17 @@ const hoursCardFields: Fields<HoursCardProps> = {
 };
 
 const HoursCard = ({
+  hours: hoursField,
   startOfWeek,
   collapseDays,
   showAdditionalHoursText,
   alignment,
   padding,
 }: HoursCardProps) => {
-  const { hours, additionalHoursText } = useDocument() as {
-    hours: Hours;
+  const document = useDocument();
+  const hours = resolveYextEntityField(document, hoursField);
+
+  const { additionalHoursText } = document as {
     additionalHoursText: string;
   };
 
@@ -115,7 +102,7 @@ const HoursCard = ({
         {hours && (
           <EntityField displayName="Hours" fieldId="hours">
             <HoursTable
-              hours={hours as HoursType}
+              hours={hours}
               startOfWeek={startOfWeek}
               collapseDays={collapseDays}
             />
@@ -134,6 +121,10 @@ const HoursCard = ({
 export const HoursCardComponent: ComponentConfig<HoursCardProps> = {
   fields: hoursCardFields,
   defaultProps: {
+    hours: {
+      field: "hours",
+      constantValue: {},
+    },
     startOfWeek: "today",
     collapseDays: false,
     showAdditionalHoursText: true,
