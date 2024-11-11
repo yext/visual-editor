@@ -79,8 +79,6 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
       field: "",
       constantValue: {
         name: "Call to Action",
-        variant: "primary",
-        fontSize: "default",
       },
     },
     variant: "primary",
