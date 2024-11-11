@@ -61,7 +61,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
     >
       <CTA
         label={cta?.name}
-        url={cta?.url ?? "#"}
+        url={cta?.url || "#"}
         variant={variant}
         className={yextCn(className)}
         fontSize={fontSize}
@@ -78,9 +78,9 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     entityField: {
       field: "",
       constantValue: {
-        label: "Call to Action",
+        name: "Call to Action",
         variant: "primary",
-        size: "default",
+        fontSize: "default",
       },
     },
     variant: "primary",
