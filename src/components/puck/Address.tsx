@@ -10,7 +10,6 @@ import {
 import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
-import { config } from "process";
 import {
   useDocument,
   resolveYextEntityField,
@@ -27,7 +26,7 @@ export type AddressProps = {
 };
 
 const addressFields: Fields<AddressProps> = {
-  address: YextEntityFieldSelector<typeof config, AddressType>({
+  address: YextEntityFieldSelector<any, AddressType>({
     label: "Address",
     filter: { types: ["type.address"] },
   }),
