@@ -9,6 +9,7 @@ export interface CTAProps
   url?: string;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
+  borderRadius?: ButtonProps["borderRadius"];
   fontSize?: NumberOrDefault;
 }
 
@@ -17,6 +18,7 @@ const CTA = ({
   url,
   variant,
   size,
+  borderRadius,
   className,
   fontSize = "default",
 }: CTAProps) => {
@@ -26,6 +28,7 @@ const CTA = ({
       className={className}
       variant={variant}
       size={size}
+      borderRadius={borderRadius}
       fontSize={fontSize}
     >
       <Link href={url ?? ""}>{label}</Link>
