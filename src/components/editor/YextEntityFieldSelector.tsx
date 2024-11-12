@@ -38,14 +38,14 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 const getConstantConfigFromType = (
   type: EntityFieldTypes,
   isList: boolean
-): Field<any> => {
+): Field<any> | undefined => {
   if (isList) {
     return TEXT_LIST_CONSTANT_CONFIG;
   }
   const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
     devLogger.log(`No constant configuration for ${type}`);
-    return TEXT_CONSTANT_CONFIG;
+    return;
   }
   return constantConfig;
 };
