@@ -47,8 +47,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     type: "radio",
     options: [
       { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Outline", value: "outline" },
       { label: "Link", value: "link" },
     ],
   },
@@ -123,7 +121,7 @@ const GetDirections = ({
 export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
-    variant: "default",
+    variant: "primary",
     size: "default",
     alignment: "items-start",
     padding: "none",
