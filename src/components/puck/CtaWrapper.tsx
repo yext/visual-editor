@@ -83,7 +83,7 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
         size: "default",
       },
     },
-    variant: "primary",
+    variant: "default",
     fontSize: "default",
   },
   render: (props) => <CTAWrapper {...props} />,

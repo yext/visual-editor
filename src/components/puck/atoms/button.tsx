@@ -5,10 +5,12 @@ import { clsx } from "clsx";
 import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 const buttonVariants = cva(
-  "py-4 components inline-flex items-center justify-center whitespace-nowrap rounded-button-borderRadius text-button-fontSize font-button-fontWeight bg-button-backgroundColor text-button-textColor ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ",
+  "py-4 components inline-flex items-center justify-center whitespace-nowrap rounded-button-borderRadius text-button-fontSize font-button-fontWeight ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ",
   {
     variants: {
       variant: {
+        default:
+          "bg-button-backgroundColor text-button-textColor border-2 border-button-backgroundColor hover:border-button-textColor focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor",
         primary:
           "bg-palette-primary text-palette-secondary border-2 border-palette-primary hover:border-palette-secondary focus:border-palette-secondary active:bg-palette-secondary active:text-palette-primary active:border-palette-primary",
         secondary:
@@ -25,7 +27,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "primary",
+      variant: "default",
       size: "default",
     },
   }

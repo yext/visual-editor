@@ -123,7 +123,7 @@ const GetDirections = ({
 export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
-    variant: "primary",
+    variant: "default",
     size: "default",
     alignment: "items-start",
     padding: "none",
