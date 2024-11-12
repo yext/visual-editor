@@ -11,12 +11,12 @@ export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
       fields: [
         {
           label: "Label",
-          field: "name",
+          field: "label",
           fieldType: "text",
         },
         {
-          label: "URL",
-          field: "url",
+          label: "Link",
+          field: "link",
           fieldType: "text",
         },
       ],

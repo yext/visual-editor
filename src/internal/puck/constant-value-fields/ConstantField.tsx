@@ -28,7 +28,11 @@ function ConstantField<T extends Record<string, any>>(
   fieldProps: ConstantFieldProps
 ): ReactElement {
   return (
-    <FieldLabel label={fieldProps.label} className="ve-inline-block ve-pt-4">
+    <FieldLabel
+      label={fieldProps.label}
+      className="ve-inline-block ve-pt-4"
+      key={`constant-${fieldProps.field}-label`}
+    >
       <AutoField
         field={{ type: fieldProps.fieldType }}
         value={props.value[fieldProps.field] as T}

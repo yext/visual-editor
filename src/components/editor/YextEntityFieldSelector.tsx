@@ -34,7 +34,7 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.phone": TEXT_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
-  c_cta: CTA_CONSTANT_CONFIG,
+  "type.cta": CTA_CONSTANT_CONFIG,
 };
 
 const getConstantConfigFromType = (
