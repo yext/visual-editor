@@ -1,6 +1,10 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
+import {
+  DayOfWeekNames,
+  HoursTable as HoursTableComponent,
+  HoursType,
+} from "@yext/pages-components";
 import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
@@ -78,7 +82,7 @@ const hoursCardFields: Fields<HoursCardProps> = {
   },
 };
 
-const HoursCard = ({
+const HoursTable = ({
   hours: hoursField,
   startOfWeek,
   collapseDays,
@@ -101,7 +105,7 @@ const HoursCard = ({
       <div>
         {hours && (
           <EntityField displayName="Hours" fieldId="hours">
-            <HoursTable
+            <HoursTableComponent
               hours={hours}
               startOfWeek={startOfWeek}
               collapseDays={collapseDays}
@@ -131,6 +135,6 @@ export const HoursCardComponent: ComponentConfig<HoursCardProps> = {
     alignment: "items-center",
     padding: "none",
   },
-  label: "Hours Card",
-  render: (props) => <HoursCard {...props} />,
+  label: "Hours Table",
+  render: (props) => <HoursTable {...props} />,
 };
