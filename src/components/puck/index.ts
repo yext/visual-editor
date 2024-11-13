@@ -13,7 +13,7 @@ export {
 } from "./FlexContainer.tsx";
 export { GridSectionComponent, type GridSectionProps } from "./GridSection.tsx";
 export { HeadingTextComponent, type HeadingTextProps } from "./HeadingText.tsx";
-export { HoursCardComponent, type HoursCardProps } from "./HoursCard.tsx";
+export { HoursCardComponent, type HoursCardProps } from "./HoursTable.tsx";
 export { HoursStatusComponent, type HoursStatusProps } from "./HoursStatus.tsx";
 export { ImageWrapperComponent, type ImageWrapperProps } from "./Image.tsx";
 export { PhoneComponent, type PhoneProps } from "./Phone.tsx";

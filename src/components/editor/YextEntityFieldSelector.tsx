@@ -13,6 +13,7 @@ import { IMAGE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields
 import { TEXT_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Address.tsx";
 import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/TextList.tsx";
+import { CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 
 const devLogger = new DevLogger();
 
@@ -33,19 +34,20 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.phone": TEXT_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
+  "type.cta": CTA_CONSTANT_CONFIG,
 };
 
 const getConstantConfigFromType = (
   type: EntityFieldTypes,
   isList: boolean
-): Field<any> => {
+): Field<any> | undefined => {
   if (isList) {
     return TEXT_LIST_CONSTANT_CONFIG;
   }
   const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
     devLogger.log(`No constant configuration for ${type}`);
-    return TEXT_CONSTANT_CONFIG;
+    return;
   }
   return constantConfig;
 };
