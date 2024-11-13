@@ -6,7 +6,7 @@ import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 export interface CTAProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
-  url?: string;
+  link?: string;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
   borderRadius?: ButtonProps["borderRadius"];
@@ -15,7 +15,7 @@ export interface CTAProps
 
 const CTA = ({
   label,
-  url,
+  link,
   variant,
   size,
   borderRadius,
@@ -31,7 +31,7 @@ const CTA = ({
       borderRadius={borderRadius}
       fontSize={fontSize}
     >
-      <Link href={url ?? ""}>{label}</Link>
+      <Link href={link ?? ""}>{label}</Link>
     </Button>
   );
 };

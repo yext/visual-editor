@@ -23,7 +23,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
   entityField: YextEntityFieldSelector({
     label: "Entity Field",
     filter: {
-      types: ["c_cta"],
+      types: ["type.cta"],
     },
   }),
   fontSize: NumberFieldWithDefaultOption({
@@ -58,8 +58,8 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
       }
     >
       <CTA
-        label={cta?.name}
-        url={cta?.url ?? "#"}
+        label={cta?.label}
+        link={cta?.link || "#"}
         variant={variant}
         className={yextCn(className)}
         fontSize={fontSize}
@@ -76,9 +76,7 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     entityField: {
       field: "",
       constantValue: {
-        label: "Call to Action",
-        variant: "primary",
-        size: "default",
+        name: "Call to Action",
       },
     },
     variant: "primary",
