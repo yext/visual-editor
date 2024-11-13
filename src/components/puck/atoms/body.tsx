@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 // Define the variants for the body component
-const bodyVariants = cva("components text-body-fontSize", {
+const bodyVariants = cva("components text-body-fontSize font-body-fontFamily", {
   variants: {
     fontWeight: {
       default: "font-body-fontWeight",

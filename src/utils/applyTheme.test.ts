@@ -20,7 +20,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      defaultGoogleFontsLinkTags +
+        '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:red !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -52,7 +53,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      defaultGoogleFontsLinkTags +
+        '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -66,7 +68,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme({} as Document, themeConfig);
 
     expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      defaultGoogleFontsLinkTags +
+        '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -96,7 +99,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      defaultGoogleFontsLinkTags +
+        '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -153,3 +157,13 @@ const themeConfig: ThemeConfig = {
     },
   },
 };
+
+const defaultGoogleFontsLinkTags =
+  '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Asap:ital,wght@0,100..900;1,100..900' +
+  "&family=Bitter:ital,wght@0,100..900;1,100..900&family=Cabin:ital,wght@0,400..700;1,400..700&family=Cinzel:wght@400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800" +
+  "&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Inconsolata:wght@200..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lora:ital,wght@0,400..700;1,400..700" +
+  "&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900" +
+  "&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:wght@100..900&family=Roboto+Slab:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900" +
+  '&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">';

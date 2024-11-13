@@ -98,7 +98,7 @@ describe("constructThemePuckFields", () => {
         },
         family: {
           label: "Font Family",
-          type: "select",
+          type: "custom",
         },
       },
     });
@@ -114,7 +114,7 @@ describe("convertStyleToPuckField", () => {
       default: 0,
     };
 
-    const result = convertStyleToPuckField(numberStyle);
+    const result = convertStyleToPuckField(numberStyle, numberStyle.plugin);
 
     expect(result).toEqual({
       label: "Font Size",
@@ -124,6 +124,26 @@ describe("convertStyleToPuckField", () => {
 
   it("converts select style to select field", () => {
     const selectStyle: Style = {
+      label: "Underline",
+      type: "select",
+      plugin: "fontStyle",
+      default: "none",
+      options: [
+        { label: "Underline", value: "underline" },
+        { label: "None", value: "" },
+      ],
+    };
+    const result = convertStyleToPuckField(selectStyle, selectStyle.plugin);
+
+    expect(result).toEqual({
+      label: "Underline",
+      type: "select",
+      options: selectStyle.options,
+    });
+  });
+
+  it("converts fontFamily style to font select field", () => {
+    const fontFamilyStyle: Style = {
       label: "Font Family",
       type: "select",
       plugin: "fontFamily",
@@ -134,12 +154,15 @@ describe("convertStyleToPuckField", () => {
       ],
     };
 
-    const result = convertStyleToPuckField(selectStyle);
+    const result = convertStyleToPuckField(
+      fontFamilyStyle,
+      fontFamilyStyle.plugin
+    );
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       label: "Font Family",
-      type: "select",
-      options: selectStyle.options,
+      type: "custom",
+      options: fontFamilyStyle.options,
     });
   });
 
@@ -151,7 +174,7 @@ describe("convertStyleToPuckField", () => {
       plugin: "colors",
     };
 
-    const result = convertStyleToPuckField(colorStyle);
+    const result = convertStyleToPuckField(colorStyle, colorStyle.plugin);
 
     expect(result).toMatchObject({
       label: "Main Color",
