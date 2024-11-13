@@ -18,3 +18,4 @@ export { HoursStatusComponent, type HoursStatusProps } from "./HoursStatus.tsx";
 export { ImageWrapperComponent, type ImageWrapperProps } from "./Image.tsx";
 export { PhoneComponent, type PhoneProps } from "./Phone.tsx";
 export { TextListComponent, type TextListProps } from "./TextList.tsx";
+export { PromoComponent, type PromoProps } from "./Promo.tsx";
