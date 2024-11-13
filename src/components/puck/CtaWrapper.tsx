@@ -35,8 +35,6 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     label: "Variant",
     options: [
       { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Outline", value: "outline" },
       { label: "Link", value: "link" },
     ],
   },

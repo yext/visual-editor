@@ -10,12 +10,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-palette-primary text-palette-secondary border-2 border-palette-primary hover:border-palette-secondary focus:border-palette-secondary active:bg-palette-secondary active:text-palette-primary active:border-palette-primary",
-        secondary:
-          "bg-palette-secondary text-palette-primary border-2 border-palette-secondary hover:border-palette-primary focus:border-palette-primary active:bg-palette-primary active:text-palette-secondary active:border-palette-secondary",
-        outline:
-          "border-palette-primary bg-palette-background border-2 hover:border-palette-background focus:border-palette-background active:bg-palette-primary active:text-palette-background",
-        link: "text-palette-primary underline-offset-4 underline hover:no-underline",
+          "bg-button-backgroundColor text-button-textColor border-2 border-button-backgroundColor hover:border-button-textColor focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor",
+        link: "text-button-textColor underline-offset-4 underline",
       },
       size: {
         default: "w-full md:w-fit h-10 px-4 py-2",
