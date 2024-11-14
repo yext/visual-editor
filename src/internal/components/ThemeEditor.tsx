@@ -82,6 +82,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
           appendData: false,
         });
       }
+      setPuckInitialHistoryFetched(true);
       return;
     }
 
