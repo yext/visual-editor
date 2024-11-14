@@ -38,7 +38,7 @@ const constructFontSelectOptions = (fonts: FontList) => {
     const fontDetails = fonts[fontName];
     fontOptions.push({
       label: fontName,
-      value: `"${fontName}", ${fontDetails.fallback}`,
+      value: `'${fontName}', ${fontDetails.fallback}`,
     });
   }
   return fontOptions;
