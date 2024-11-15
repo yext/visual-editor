@@ -87,7 +87,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
           // @ts-expect-error https://github.com/measuredco/puck/issues/673
           histories: localHistories.map((h) => {
             // strip ui state
-            return { id: h.id, state: { ...h.state.data } };
+            return { id: h.id, state: { data: { ...h.state.data } } };
           }),
           index: localHistoryIndex,
           appendData: false,
