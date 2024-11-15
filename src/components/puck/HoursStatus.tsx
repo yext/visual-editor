@@ -79,7 +79,10 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
     <EntityField displayName="Hours" fieldId={hoursField.field}>
       <HoursStatus
         hours={hours}
-        className={yextCn("font-semibold mb-2", className)}
+        className={yextCn(
+          "components font-semibold mb-2 font-body-fontFamily",
+          className
+        )}
         currentTemplate={showCurrentStatus ? undefined : () => <></>}
         separatorTemplate={showCurrentStatus ? undefined : () => <></>}
         dayOfWeekTemplate={showDayNames ? undefined : () => <></>}

@@ -121,7 +121,7 @@ const GetDirections = ({
 
   return (
     <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
+      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
       <Button
