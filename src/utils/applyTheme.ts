@@ -1,13 +1,15 @@
 import { ThemeData } from "../internal/types/themeData.ts";
 import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
+import { googleFontLinkTags } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 
 export type Document = {
   [key: string]: any;
 };
 
-const THEME_STYLE_TAG_ID = "visual-editor-theme";
+export const THEME_STYLE_TAG_ID = "visual-editor-theme";
+export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
 const devLogger = new DevLogger();
 
 export const applyTheme = (
@@ -36,7 +38,7 @@ export const applyTheme = (
   }
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
+    return `${base ?? ""}${googleFontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
   }
   return base ?? "";
 };
@@ -74,7 +76,7 @@ export const updateThemeInEditor = async (
 
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
-      "preview-frame"
+      PUCK_PREVIEW_IFRAME_ID
     ) as HTMLIFrameElement;
     const styleTag = iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
     if (styleTag) {
