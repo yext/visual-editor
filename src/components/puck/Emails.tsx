@@ -9,9 +9,10 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  getFontWeightOverrideOptions,
 } from "../../index.js";
 
-const emailsVariants = cva("list-inside", {
+const emailsVariants = cva("list-inside font-body-fontFamily", {
   variants: {
     fontSize: {
       default: "text-body-fontSize",
@@ -83,22 +84,6 @@ const EmailsFields: Fields<EmailsProps> = {
       { label: "3xl", value: "3xl" },
       { label: "4xl", value: "4xl" },
       { label: "5xl", value: "5xl" },
-    ],
-  },
-  fontWeight: {
-    label: "Font Weight",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Thin", value: "thin" },
-      { label: "Extra Light", value: "extralight" },
-      { label: "Light", value: "light" },
-      { label: "Normal", value: "normal" },
-      { label: "Medium", value: "medium" },
-      { label: "Semibold", value: "semibold" },
-      { label: "Bold", value: "bold" },
-      { label: "Extrabold", value: "extrabold" },
-      { label: "Black", value: "black" },
     ],
   },
   color: {
@@ -181,6 +166,19 @@ export const EmailsComponent: ComponentConfig<EmailsProps> = {
     },
     includeHyperlink: true,
     listLength: 5,
+  },
+  resolveFields: async () => {
+    const fontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-body-fontFamily`,
+    });
+    return {
+      ...EmailsFields,
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
+    };
   },
   render: (props) => <Emails {...props} />,
 };
