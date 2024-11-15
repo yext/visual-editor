@@ -1,6 +1,7 @@
+import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "./applyTheme.ts";
 import { StyleSelectOption } from "./themeResolver.ts";
 
-type FontList = Record<string, FontSpecification>;
+export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
   minWeight: number; // minimum weight the font supports
   maxWeight: number; // maximum weight the font supports
@@ -10,7 +11,7 @@ type FontSpecification = {
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
-const defaultFontsSpecification: FontList = {
+export const defaultFonts: FontRegistry = {
   Alegreya: { italics: true, minWeight: 400, maxWeight: 900, fallback: "serif" },
   Asap: { italics: true, minWeight: 100, maxWeight: 900, fallback: "sans-serif" },
   Bitter: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
@@ -32,7 +33,7 @@ const defaultFontsSpecification: FontList = {
   "Ubuntu Sans": { italics: true, minWeight: 100, maxWeight: 800, fallback: 'sans-serif' },
 };
 
-const constructFontSelectOptions = (fonts: FontList) => {
+export const constructFontSelectOptions = (fonts: FontRegistry) => {
   const fontOptions: StyleSelectOption[] = [];
   for (const fontName in fonts) {
     const fontDetails = fonts[fontName];
@@ -44,18 +45,13 @@ const constructFontSelectOptions = (fonts: FontList) => {
   return fontOptions;
 };
 
-// The list of fonts to be used in theme.config.ts
-export const visualEditorFonts = constructFontSelectOptions(
-  defaultFontsSpecification
-);
-
 /*
  * generateGoogleFontsURL takes a list of fonts and the available values for
  * their variable font axes and the <link> tags needed to load Google fonts
  * Note: Google does not return font file URLs if the params
  * fall outside of the font's supported values
  */
-const constructGoogleFontLinkTags = (fonts: FontList) => {
+const constructGoogleFontLinkTags = (fonts: FontRegistry) => {
   const prefix = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?`;
@@ -75,6 +71,111 @@ const constructGoogleFontLinkTags = (fonts: FontList) => {
   return prefix + params + postfix;
 };
 
-export const googleFontLinkTags = constructGoogleFontLinkTags(
-  defaultFontsSpecification
-);
+export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
+
+const defaultWeightOptions = [
+  { label: "Thin", value: "100" },
+  { label: "Extralight", value: "200" },
+  { label: "Light", value: "300" },
+  { label: "Normal", value: "400" },
+  { label: "Medium", value: "500" },
+  { label: "Semibold", value: "600" },
+  { label: "Bold", value: "700" },
+  { label: "Extrabold", value: "800" },
+  { label: "Black", value: "900" },
+];
+
+type getFontWeightParams = {
+  fontCssVariable?: string;
+  weightOptions?: StyleSelectOption[];
+  fontList?: FontRegistry;
+};
+
+/*
+ * getFontWeightOptions returns the available font weights for a given CSS variable
+ * for use in the theme.config.
+ * Must return synchronously because the theme.config is processed synchronously
+ */
+export const getFontWeightOptions = (options: getFontWeightParams) => {
+  const { fontCssVariable, weightOptions = defaultWeightOptions } = options;
+  if (!fontCssVariable || typeof window === "undefined") {
+    // return all options if no variable provided, or not in browser
+    return weightOptions;
+  }
+
+  // get the preview iframe
+  const iframe = document.getElementById(
+    PUCK_PREVIEW_IFRAME_ID
+  ) as HTMLIFrameElement;
+  const styleElement = iframe?.contentDocument?.getElementById(
+    "visual-editor-theme"
+  ) as HTMLStyleElement;
+
+  if (!styleElement) {
+    return defaultWeightOptions;
+  }
+
+  return filterFontWeights(styleElement, options);
+};
+
+/*
+ * getFontWeightOverrideOptions returns the available font weights for a given CSS variable
+ * for use in the resolveFields function of individual components.
+ * Must return a promise because resolveFields runs before the iframe is loaded.
+ */
+export const getFontWeightOverrideOptions = async (
+  options: getFontWeightParams
+) => {
+  return new Promise<StyleSelectOption[]>((resolve) => {
+    const observer = new MutationObserver(() => {
+      const iframe = document.getElementById(
+        PUCK_PREVIEW_IFRAME_ID
+      ) as HTMLIFrameElement;
+      const styleTag = iframe.contentDocument?.getElementById(
+        THEME_STYLE_TAG_ID
+      ) as HTMLStyleElement;
+      if (styleTag) {
+        observer.disconnect();
+        const weights = filterFontWeights(styleTag, options);
+        resolve([{ label: "Default", value: "default" }, ...weights]);
+      }
+    });
+
+    observer.observe(document, {
+      childList: true,
+      subtree: true,
+    });
+  });
+};
+
+/*
+ * filterFontWeights captures the font name from the CSS value and then returns
+ * the available font weights for that font.
+ */
+const filterFontWeights = (
+  styleElement: HTMLStyleElement,
+  {
+    fontCssVariable,
+    weightOptions = defaultWeightOptions,
+    fontList = defaultFonts,
+  }: getFontWeightParams
+) => {
+  // get the font name from css variable in the style tag
+  const styleContent = styleElement.textContent || styleElement.innerHTML;
+  const regex = new RegExp( // matches Arial in "'Arial', sans-serif"
+    `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
+    "i"
+  );
+  const fontName = styleContent.match(regex)?.[2];
+
+  if (!fontName || !fontList[fontName]) {
+    return weightOptions;
+  }
+
+  // filter the font weights by the font's allowed values
+  return weightOptions.filter(
+    (weight) =>
+      Number(weight.value) <= fontList[fontName].maxWeight &&
+      Number(weight.value) >= fontList[fontName].minWeight
+  );
+};

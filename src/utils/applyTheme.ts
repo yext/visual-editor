@@ -8,7 +8,8 @@ export type Document = {
   [key: string]: any;
 };
 
-const THEME_STYLE_TAG_ID = "visual-editor-theme";
+export const THEME_STYLE_TAG_ID = "visual-editor-theme";
+export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
 const devLogger = new DevLogger();
 
 export const applyTheme = (
@@ -75,7 +76,7 @@ export const updateThemeInEditor = async (
 
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
-      "preview-frame"
+      PUCK_PREVIEW_IFRAME_ID
     ) as HTMLIFrameElement;
     const styleTag = iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
     if (styleTag) {

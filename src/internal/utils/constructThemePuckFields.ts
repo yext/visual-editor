@@ -59,7 +59,10 @@ export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
           render: ({ onChange, value }: RenderProps) =>
             FontSelector({
               label: style.label,
-              options: style.options,
+              options:
+                typeof style.options === "function"
+                  ? style.options()
+                  : style.options,
               value,
               onChange,
             }),
@@ -68,7 +71,10 @@ export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
         return {
           label: style.label,
           type: "select",
-          options: style.options,
+          options:
+            typeof style.options === "function"
+              ? style.options()
+              : style.options,
         } as SelectField;
       }
     case "color":
