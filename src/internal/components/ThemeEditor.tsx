@@ -17,6 +17,7 @@ import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts"
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
+import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 
 const devLogger = new DevLogger();
 
@@ -37,8 +38,10 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     themeConfig,
   } = props;
 
+  const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
+    useCommonMessageSenders();
+
   const {
-    sendDevThemeSaveStateData,
     saveThemeSaveState,
     publishThemeConfiguration,
     deleteThemeSaveState,
@@ -91,6 +94,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
           }),
           index: localHistoryIndex,
           appendData: false,
+        });
+        const layoutToSend =
+          puckInitialHistory?.histories[puckInitialHistory.histories.length - 1]
+            .state.data;
+        sendDevLayoutSaveStateData({
+          payload: { devSaveStateData: JSON.stringify(layoutToSend) },
         });
       }
       setPuckInitialHistoryFetched(true);

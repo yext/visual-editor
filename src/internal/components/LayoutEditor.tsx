@@ -11,6 +11,7 @@ import { ThemeData, ThemeHistory } from "../types/themeData.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
+import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 
 const devLogger = new DevLogger();
 
@@ -32,11 +33,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   } = props;
 
   const {
-    sendDevLayoutSaveStateData,
     saveLayoutSaveState,
     publishVisualConfiguration,
     deleteLayoutSaveState,
   } = useLayoutMessageSenders();
+
+  const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
+    useCommonMessageSenders();
 
   const { layoutSaveState, layoutSaveStateFetched } =
     useLayoutMessageReceivers();
@@ -77,6 +80,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       if (localHistories.length > 0) {
         const localThemeData = localHistories[localHistories.length - 1].data;
         devLogger.log("Layout Dev Mode - Using theme data from local storage");
+        sendDevThemeSaveStateData({
+          payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
+        });
         updateThemeInEditor(localThemeData, themeConfig);
         return;
       }

@@ -16,15 +16,9 @@ export const useLayoutMessageSenders = () => {
     TARGET_ORIGINS
   );
 
-  const { sendToParent: sendDevLayoutSaveStateData } = useSendMessageToParent(
-    "sendDevSaveStateData",
-    TARGET_ORIGINS
-  );
-
   return {
     saveLayoutSaveState,
     deleteLayoutSaveState,
     publishVisualConfiguration,
-    sendDevLayoutSaveStateData,
   };
 };
