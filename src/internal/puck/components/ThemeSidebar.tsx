@@ -82,10 +82,10 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
         return (
           <div key={themeSectionKey} className="theme-field">
             <button
-              className="flex items-center gap-0.5"
+              className="ve-flex ve-items-center ve-w-full ve-justify-between"
               onClick={() => toggleSection(themeSectionKey)}
             >
-              {isCollapsed ? `${field.label ?? ""}` : `${field.label ?? ""}`}
+              {`${field.label ?? ""}`}
               <div>
                 {isCollapsed ? (
                   <ChevronDown size={12} />

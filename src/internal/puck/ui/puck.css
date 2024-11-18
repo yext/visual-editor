@@ -47,8 +47,8 @@
   color: var(--puck-color-grey-04);
   font-size: var(--puck-font-size-xxs);
   font-weight: 600;
-  padding-bottom: 12px;
-  padding-left: 4px;
+  padding: 12px 0 12px 4px;
+  border-bottom: 1px solid #e5e5f0;
 }
 
 .theme-field > :first-child {
