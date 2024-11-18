@@ -1,4 +1,4 @@
-import { AutoField, FieldLabel } from "@measured/puck";
+import { AutoField } from "@measured/puck";
 import React from "react";
 import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
 import {
@@ -10,6 +10,8 @@ import {
   constructThemePuckValues,
 } from "../../utils/constructThemePuckFields.ts";
 import { ThemeHistories } from "../../types/themeData.ts";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import "@measured/puck/dist/index.css";
 
 type ThemeSidebarProps = {
   themeHistoriesRef: React.MutableRefObject<ThemeHistories | undefined>;
@@ -40,6 +42,22 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
     );
   }
 
+  const [collapsedSections, setCollapsedSections] = React.useState<{
+    [x: string]: boolean;
+  }>(
+    Object.keys(themeConfig).reduce(
+      (acc, key) => ({ ...acc, [key]: false }),
+      {}
+    )
+  );
+
+  const toggleSection = (key: string) => {
+    setCollapsedSections((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   const themeData =
     themeHistoriesRef.current?.histories[themeHistoriesRef.current?.index].data;
 
@@ -59,21 +77,33 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
           themeSectionKey
         );
 
+        const isCollapsed = collapsedSections[themeSectionKey];
+
         return (
-          <FieldLabel
-            label={field.label ?? ""}
-            className="theme-field"
-            key={themeSectionKey}
-            el="div"
-          >
-            <AutoField
-              field={field}
-              onChange={(value) =>
-                onThemeChange(themeSectionKey, themeSection, value)
-              }
-              value={values}
-            />
-          </FieldLabel>
+          <div key={themeSectionKey} className="theme-field">
+            <button
+              className="flex items-center gap-0.5"
+              onClick={() => toggleSection(themeSectionKey)}
+            >
+              {isCollapsed ? `${field.label ?? ""}` : `${field.label ?? ""}`}
+              <div>
+                {isCollapsed ? (
+                  <ChevronDown size={12} />
+                ) : (
+                  <ChevronUp size={12} />
+                )}
+              </div>
+            </button>
+            {!isCollapsed && (
+              <AutoField
+                field={field}
+                onChange={(value) =>
+                  onThemeChange(themeSectionKey, themeSection, value)
+                }
+                value={values}
+              />
+            )}
+          </div>
         );
       })}
     </div>

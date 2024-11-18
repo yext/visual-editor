@@ -44,7 +44,11 @@
 }
 
 .theme-field {
-  padding: 0;
+  color: var(--puck-color-grey-04);
+  font-size: var(--puck-font-size-xxs);
+  font-weight: 600;
+  padding-bottom: 12px;
+  padding-left: 4px;
 }
 
 .theme-field > :first-child {
