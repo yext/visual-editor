@@ -16,9 +16,21 @@ export const useCommonMessageSenders = () => {
     TARGET_ORIGINS
   );
 
+  const { sendToParent: sendDevLayoutSaveStateData } = useSendMessageToParent(
+    "sendDevSaveStateData",
+    TARGET_ORIGINS
+  );
+
+  const { sendToParent: sendDevThemeSaveStateData } = useSendMessageToParent(
+    "sendDevThemeSaveStateData",
+    TARGET_ORIGINS
+  );
+
   return {
     iFrameLoaded,
     pushPageSets,
     openQuickFind,
+    sendDevLayoutSaveStateData,
+    sendDevThemeSaveStateData,
   };
 };
