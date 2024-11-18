@@ -16,15 +16,9 @@ export const useThemeMessageSenders = () => {
     TARGET_ORIGINS
   );
 
-  const { sendToParent: sendDevThemeSaveStateData } = useSendMessageToParent(
-    "sendDevThemeSaveStateData",
-    TARGET_ORIGINS
-  );
-
   return {
     saveThemeSaveState,
     deleteThemeSaveState,
     publishThemeConfiguration,
-    sendDevThemeSaveStateData,
   };
 };
