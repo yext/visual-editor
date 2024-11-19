@@ -3,7 +3,7 @@ import { yextCn } from "../../../utils/yextCn.ts";
 import React from "react";
 
 const alertVariants = cva(
-  "ve-relative ve-rounded ve-border ve-m-4 ve-mb-0 ve-p-4 ve-[&>svg~*]:pl-7 ve-[&>svg+div]:translate-y-[-3px] ve-[&>svg]:absolute ve-[&>svg]:left-4 ve-[&>svg]:top-4 ve-[&>svg]:text-foreground",
+  "ve-relative ve-rounded ve-border ve-mx-4 ve-my-3 ve-p-4 ve-[&>svg~*]:pl-7 ve-[&>svg+div]:translate-y-[-3px] ve-[&>svg]:absolute ve-[&>svg]:left-4 ve-[&>svg]:top-4 ve-[&>svg]:text-foreground",
   {
     variants: {
       variant: {

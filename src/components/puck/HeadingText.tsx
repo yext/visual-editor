@@ -8,6 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   NumberFieldWithDefaultOption,
+  getFontWeightOverrideOptions,
 } from "../../index.js";
 
 export interface HeadingTextProps extends HeadingProps {
@@ -50,22 +51,6 @@ const headingTextFields: Fields<HeadingTextProps> = {
     label: "Font Size",
     defaultCustomValue: 24,
   }),
-  weight: {
-    label: "Font Weight",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Thin", value: "thin" },
-      { label: "Extra Light", value: "extralight" },
-      { label: "Light", value: "light" },
-      { label: "Normal", value: "normal" },
-      { label: "Medium", value: "medium" },
-      { label: "Semibold", value: "semibold" },
-      { label: "Bold", value: "bold" },
-      { label: "Extrabold", value: "extrabold" },
-      { label: "Black", value: "black" },
-    ],
-  },
   color: {
     label: "Font Color",
     type: "select",
@@ -106,6 +91,19 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     weight: "default",
     color: "default",
     transform: "none",
+  },
+  resolveFields: async (data) => {
+    const fontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-heading${data.props.level}-fontFamily`,
+    });
+    return {
+      ...headingTextFields,
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
+    };
   },
   render: (props) => <HeadingText {...props} />,
 };

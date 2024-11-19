@@ -83,10 +83,10 @@ export const ui: Registry = [
     files: ["HeadingText.tsx"],
   },
   {
-    name: "HoursCard",
+    name: "HoursTable",
     type: "registry:ui",
     registryDependencies: ["section"],
-    files: ["HoursCard.tsx"],
+    files: ["HoursTable.tsx"],
   },
   {
     name: "HoursStatus",

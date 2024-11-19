@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { InitialHistory, Config, Data } from "@measured/puck";
+import {
+  InitialHistory,
+  Config,
+  Data,
+  History,
+  AppState,
+} from "@measured/puck";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -11,6 +17,7 @@ import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts"
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
+import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 
 const devLogger = new DevLogger();
 
@@ -31,8 +38,10 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     themeConfig,
   } = props;
 
+  const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
+    useCommonMessageSenders();
+
   const {
-    sendDevThemeSaveStateData,
     saveThemeSaveState,
     publishThemeConfiguration,
     deleteThemeSaveState,
@@ -71,17 +80,29 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
     // use layout from localStorage when in dev mode
     if (templateMetadata.isDevMode && !!localHistoryArray) {
-      const localHistories = JSON.parse(localHistoryArray) as History[];
+      const localHistories = JSON.parse(
+        localHistoryArray
+      ) as History<AppState>[];
       const localHistoryIndex = localHistories.length - 1;
       if (localHistoryIndex >= 0) {
         devLogger.log("Theme Dev Mode - Using layout data from local storage");
         setPuckInitialHistory({
           // @ts-expect-error https://github.com/measuredco/puck/issues/673
-          histories: localHistories,
+          histories: localHistories.map((h) => {
+            // strip ui state
+            return { id: h.id, state: { data: { ...h.state.data } } };
+          }),
           index: localHistoryIndex,
           appendData: false,
         });
+        const layoutToSend =
+          puckInitialHistory?.histories[puckInitialHistory.histories.length - 1]
+            .state.data;
+        sendDevLayoutSaveStateData({
+          payload: { devSaveStateData: JSON.stringify(layoutToSend) },
+        });
       }
+      setPuckInitialHistoryFetched(true);
       return;
     }
 
