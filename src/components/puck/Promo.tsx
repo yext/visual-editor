@@ -9,16 +9,13 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   NumberOrDefault,
-  HeadingProps,
   NumberFieldWithDefaultOption,
-  CTAProps,
-  ImageWrapperProps,
-  Section,
-  Heading,
-  Body,
-  CTA,
 } from "../../index.js";
-import { imageWrapperVariants } from "./Image.tsx";
+import { Body } from "./atoms/body.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
+import { Section } from "./atoms/section.js";
+import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
