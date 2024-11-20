@@ -8,8 +8,7 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  NumberOrDefault,
-  NumberFieldWithDefaultOption,
+  FontSizeSelector,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
@@ -23,13 +22,13 @@ export interface PromoProps {
   orientation: "left" | "right";
   title: {
     text: YextEntityField<string>;
-    fontSize: NumberOrDefault;
+    fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
     transform: HeadingProps["transform"];
   };
   description: {
     text: YextEntityField<string>;
-    fontSize: NumberOrDefault;
+    fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
     transform: HeadingProps["transform"];
   };
@@ -42,7 +41,7 @@ export interface PromoProps {
   cta: {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
-    fontSize: NumberOrDefault;
+    fontSize: HeadingProps["fontSize"];
   };
 }
 
@@ -65,10 +64,7 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      fontSize: NumberFieldWithDefaultOption({
-        label: "Font Size",
-        defaultCustomValue: 48,
-      }),
+      fontSize: FontSizeSelector(),
       color: {
         label: "Font Color",
         type: "select",
@@ -104,10 +100,7 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      fontSize: NumberFieldWithDefaultOption({
-        label: "Font Size",
-        defaultCustomValue: 12,
-      }),
+      fontSize: FontSizeSelector(),
       color: {
         label: "Font Color",
         type: "select",
@@ -194,10 +187,7 @@ const promoFields: Fields<PromoProps> = {
           { label: "Link", value: "link" },
         ],
       },
-      fontSize: NumberFieldWithDefaultOption({
-        label: "Font Size",
-        defaultCustomValue: 12,
-      }),
+      fontSize: FontSizeSelector(),
     },
   },
 };

@@ -83,7 +83,6 @@ export const FontSizeSelector = (): Field => {
                   tailwindConfig,
                   option.value
                 );
-                console.log(option.value, customFontSize);
                 const fontSizePx = customFontSize
                   ? customFontSize.toString()
                   : option.px;
