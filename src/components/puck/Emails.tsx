@@ -11,17 +11,46 @@ import {
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
 } from "../../index.js";
-import {
-  colorVariants,
-  fontSizeVariants,
-  fontWeightVariants,
-} from "./variants.js";
 
 const emailsVariants = cva("list-inside font-body-fontFamily", {
   variants: {
-    fontSize: fontSizeVariants,
-    fontWeight: fontWeightVariants,
-    color: colorVariants,
+    fontSize: {
+      default: "text-body-fontSize",
+      xs: "text-xs",
+      sm: "text-sm",
+      medium: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+      "2xl": "text-2xl",
+      "3xl": "text-3xl",
+      "4xl": "text-4xl",
+      "5xl": "text-5xl",
+      "6xl": "text-6xl",
+      "7xl": "text-7xl",
+      "8xl": "text-8xl",
+      "9xl": "text-9xl",
+    },
+    fontWeight: {
+      default: "font-body-fontWeight",
+      thin: "font-thin",
+      extralight: "font-extralight",
+      light: "font-light",
+      normal: "font-normal",
+      medium: "font-medium",
+      semibold: "font-semibold",
+      bold: "font-bold",
+      extrabold: "font-extrabold",
+      black: "font-black",
+    },
+    color: {
+      default: "text-body-color",
+      primary: "text-palette-primary",
+      secondary: "text-palette-secondary",
+      accent: "text-palette-accent",
+      text: "text-palette-text",
+      background: "text-palette-background",
+      foreground: "text-palette-foreground",
+    },
   },
   defaultVariants: {
     fontSize: "default",
