@@ -58,7 +58,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
       { label: "Default", value: "default" },
       { label: "Small", value: "small" },
       { label: "Large", value: "large" },
-      { label: "Icon", value: "icon" },
     ],
   },
   borderRadius: {
