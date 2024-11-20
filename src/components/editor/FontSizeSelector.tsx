@@ -21,7 +21,7 @@ const fontSizeOptions = [
   { label: "9XL", value: "9xl", px: "128" },
 ];
 
-function convertToPixels(fontSize: string): number {
+export const convertToPixels = (fontSize: string): number => {
   // If the font size is already in px, just extract the number
   if (fontSize.endsWith("px")) {
     return parseFloat(fontSize);
@@ -49,9 +49,9 @@ function convertToPixels(fontSize: string): number {
 
   // If no unit recognized, throw an error
   throw new Error("Unknown font size unit");
-}
+};
 
-const getCustomFontSize = (
+export const getCustomFontSize = (
   tailwindConfig: TailwindConfig,
   value: string
 ): number => {
@@ -65,32 +65,46 @@ const getCustomFontSize = (
   return 0;
 };
 
-export const FontSizeSelector = (): Field => {
+type FontSizeOption = {
+  label: string;
+  value: string;
+  px: string;
+};
+
+export const convertDefaultFontSizesToOptions = (
+  fontSizes: FontSizeOption[],
+  tailwindConfig: TailwindConfig
+) => {
+  return fontSizes.map((option) => {
+    const customFontSize = getCustomFontSize(tailwindConfig, option.value);
+    const fontSizePx = customFontSize ? customFontSize.toString() : option.px;
+    return {
+      label: option.label + (option.px ? ` (${fontSizePx}px)` : ""),
+      value: option.value,
+    };
+  });
+};
+
+export const FontSizeSelector = (label?: string): Field => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
-        <FieldLabel label={"Font Size"} icon={<ChevronDown size={16} />}>
+        <FieldLabel
+          label={label ?? "Font Size"}
+          icon={<ChevronDown size={16} />}
+        >
           <AutoField
             value={value}
             onChange={onChange}
             field={{
               type: "select",
-              options: fontSizeOptions.map((option) => {
-                const customFontSize = getCustomFontSize(
-                  tailwindConfig,
-                  option.value
-                );
-                const fontSizePx = customFontSize
-                  ? customFontSize.toString()
-                  : option.px;
-                return {
-                  label: option.label + (option.px ? ` (${fontSizePx}px)` : ""),
-                  value: option.value,
-                };
-              }),
+              options: convertDefaultFontSizesToOptions(
+                fontSizeOptions,
+                tailwindConfig
+              ),
             }}
           />
         </FieldLabel>

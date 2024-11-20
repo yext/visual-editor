@@ -18,6 +18,7 @@ information.
 
 ```tsx
 import { themeConfig } from "../../theme.config"
+import tailwindConfig from "../../tailwind.config";
 
 // All the available components for locations
 const locationConfig: Config<LocationProps> = {
@@ -35,15 +36,17 @@ const Edit: () => JSX.Element = () => {
   const entityFields = usePlatformBridgeEntityFields();
 
   return (
-    <DocumentProvider value={entityDocument}>
-      <EntityFieldsProvider entityFields={entityFields}>
-        <Editor
-          document={entityDocument}
-          componentRegistry={componentRegistry}
-          themeConfig={themeConfig}
-        />
-      </EntityFieldsProvider>
-    </DocumentProvider>
+    <VisualEditorProvider
+      document={entityDocument}
+      entityFields={entityFields}
+      tailwindConfig={tailwindConfig}
+    >
+      <Editor
+        document={entityDocument}
+        componentRegistry={componentRegistry}
+        themeConfig={themeConfig}
+      />
+    </VisualEditorProvider>
   );
 };
 ```
