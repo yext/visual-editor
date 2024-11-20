@@ -9,15 +9,12 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
-import {
-  NumberFieldWithDefaultOption,
-  NumberOrDefault,
-} from "../editor/NumberOrDefaultField.tsx";
+import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
-  fontSize: NumberOrDefault;
+  fontSize: CTAProps["fontSize"];
   className?: CTAProps["className"];
 }
 
@@ -28,10 +25,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       types: ["c_cta"],
     },
   }),
-  fontSize: NumberFieldWithDefaultOption({
-    label: "Font Size",
-    defaultCustomValue: 12,
-  }),
+  fontSize: FontSizeSelector(),
   variant: {
     type: "select",
     label: "Variant",

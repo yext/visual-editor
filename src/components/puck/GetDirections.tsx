@@ -17,7 +17,7 @@ import {
 import { config } from "process";
 import { VariantProps } from "class-variance-authority";
 import { Button, ButtonProps } from "./atoms/button.tsx";
-import { NumberOrDefault } from "../editor/NumberOrDefaultField.tsx";
+import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
 
 export type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
@@ -26,7 +26,7 @@ export type GetDirectionsProps = {
   size: ButtonProps["size"];
   alignment: "items-start" | "items-center";
   padding: VariantProps<typeof sectionVariants>["padding"];
-  fontSize?: NumberOrDefault;
+  fontSize: ButtonProps["fontSize"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
@@ -63,6 +63,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
       { label: "Icon", value: "icon" },
     ],
   },
+  fontSize: FontSizeSelector(),
   alignment: {
     label: "Align card",
     type: "radio",
@@ -126,6 +127,7 @@ export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   defaultProps: {
     variant: "primary",
     size: "default",
+    fontSize: "default",
     alignment: "items-start",
     padding: "none",
     getDirectionsProvider: "google",

@@ -1,11 +1,10 @@
 export { usePlatformBridgeDocument } from "./usePlatformBridgeDocument.ts";
 export {
   useEntityFields,
-  EntityFieldsProvider,
   usePlatformBridgeEntityFields,
 } from "./useEntityFields.tsx";
+export { useDocument, DocumentContext } from "./useDocument.tsx";
 export {
-  DocumentProvider,
-  useDocument,
-  DocumentContext,
-} from "./useDocument.tsx";
+  useTailwindConfig,
+  TailwindConfigContext,
+} from "./useTailwindConfig.tsx";

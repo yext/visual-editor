@@ -10,3 +10,4 @@ export {
   type NumberFieldWithDefaultOptionProps,
   type NumberOrDefault,
 } from "./NumberOrDefaultField.tsx";
+export { FontSizeSelector } from "./FontSizeSelector.tsx";

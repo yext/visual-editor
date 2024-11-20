@@ -8,7 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
-import { NumberFieldWithDefaultOption } from "../editor/NumberOrDefaultField.tsx";
+import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
 
 export interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
@@ -40,10 +40,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
       types: ["type.string"],
     },
   }),
-  fontSize: NumberFieldWithDefaultOption({
-    label: "Font Size",
-    defaultCustomValue: 12,
-  }),
+  fontSize: FontSizeSelector(),
   fontWeight: {
     label: "Font Weight",
     type: "select",

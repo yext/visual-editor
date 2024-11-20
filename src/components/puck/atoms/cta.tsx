@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.tsx";
-import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 export interface CTAProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,17 +8,10 @@ export interface CTAProps
   url?: string;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
-  fontSize?: NumberOrDefault;
+  fontSize?: ButtonProps["fontSize"];
 }
 
-const CTA = ({
-  label,
-  url,
-  variant,
-  size,
-  className,
-  fontSize = "default",
-}: CTAProps) => {
+const CTA = ({ label, url, variant, size, className, fontSize }: CTAProps) => {
   return (
     <Button
       asChild

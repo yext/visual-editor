@@ -8,7 +8,8 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../editor/YextEntityFieldSelector.tsx";
-import { NumberFieldWithDefaultOption } from "../editor/NumberOrDefaultField.tsx";
+// import { useTailwindConfig } from "../../hooks/useTailwindConfig.tsx";
+import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
@@ -17,6 +18,9 @@ export interface HeadingTextProps extends HeadingProps {
 const HeadingText = React.forwardRef<HTMLHeadingElement, HeadingTextProps>(
   ({ text, ...headingProps }, ref) => {
     const document = useDocument();
+    // const tailwindConfig = useTailwindConfig();
+
+    // console.log(tailwindConfig);
 
     return (
       <EntityField
@@ -46,10 +50,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
     min: 1,
     max: 6,
   },
-  fontSize: NumberFieldWithDefaultOption({
-    label: "Font Size",
-    defaultCustomValue: 24,
-  }),
+  fontSize: FontSizeSelector(),
   weight: {
     label: "Font Weight",
     type: "select",
