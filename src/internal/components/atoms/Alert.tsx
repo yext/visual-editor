@@ -1,9 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../utils/cn.ts";
+import { yextCn } from "../../../utils/yextCn.ts";
 import React from "react";
 
 const alertVariants = cva(
-  "ve-relative ve-rounded ve-border ve-m-4 ve-mb-0 ve-p-4 ve-[&>svg~*]:pl-7 ve-[&>svg+div]:translate-y-[-3px] ve-[&>svg]:absolute ve-[&>svg]:left-4 ve-[&>svg]:top-4 ve-[&>svg]:text-foreground",
+  "ve-relative ve-rounded ve-border ve-mx-4 ve-my-3 ve-p-4 ve-[&>svg~*]:pl-7 ve-[&>svg+div]:translate-y-[-3px] ve-[&>svg]:absolute ve-[&>svg]:left-4 ve-[&>svg]:top-4 ve-[&>svg]:text-foreground",
   {
     variants: {
       variant: {
@@ -25,7 +25,7 @@ const Alert = React.forwardRef<
   <div
     ref={ref}
     role="alert"
-    className={cn(alertVariants({ variant }), className)}
+    className={yextCn(alertVariants({ variant }), className)}
     {...props}
   />
 ));
@@ -37,7 +37,7 @@ const AlertTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h5
     ref={ref}
-    className={cn(
+    className={yextCn(
       "ve-mb-1 ve-font-medium ve-leading-none ve-tracking-tight",
       className
     )}
@@ -52,7 +52,7 @@ const AlertDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("ve-text-sm [&_p]:ve-leading-relaxed", className)}
+    className={yextCn("ve-text-sm [&_p]:ve-leading-relaxed", className)}
     {...props}
   />
 ));

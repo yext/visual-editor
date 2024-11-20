@@ -1,17 +1,17 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { HoursStatus } from "@yext/pages-components";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { cn } from "../../internal/utils/cn.ts";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
+import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
+  yextCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "../../index.js";
 
 export interface HoursStatusProps {
-  hours: YextEntityField<any>;
+  hours: YextEntityField<HoursType>;
   className?: string;
   showCurrentStatus?: boolean;
   timeFormat?: "12h" | "24h";
@@ -79,7 +79,10 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
     <EntityField displayName="Hours" fieldId={hoursField.field}>
       <HoursStatus
         hours={hours}
-        className={cn("font-semibold mb-2", className)}
+        className={yextCn(
+          "components font-semibold mb-2 font-body-fontFamily",
+          className
+        )}
         currentTemplate={showCurrentStatus ? undefined : () => <></>}
         separatorTemplate={showCurrentStatus ? undefined : () => <></>}
         dayOfWeekTemplate={showDayNames ? undefined : () => <></>}
@@ -97,7 +100,7 @@ export const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
   defaultProps: {
     hours: {
       field: "hours",
-      constantValue: "",
+      constantValue: {},
     },
     className: "",
     showCurrentStatus: true,

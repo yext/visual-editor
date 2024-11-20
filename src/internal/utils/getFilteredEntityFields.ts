@@ -41,6 +41,7 @@ export type EntityFieldTypes =
   | "type.address"
   | "type.phone"
   | "type.coordinate"
+  | "type.cta"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = [

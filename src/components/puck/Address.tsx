@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   AddressType,
@@ -7,17 +7,16 @@ import {
   Link,
   Address as RenderAddress,
 } from "@yext/pages-components";
-import { Section, sectionVariants } from "./atoms/section.tsx";
+import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
-import { config } from "process";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "../../index.ts";
 
 export type AddressProps = {
   address: YextEntityField<AddressType>;
@@ -27,7 +26,7 @@ export type AddressProps = {
 };
 
 const addressFields: Fields<AddressProps> = {
-  address: YextEntityFieldSelector<typeof config, AddressType>({
+  address: YextEntityFieldSelector<any, AddressType>({
     label: "Address",
     filter: { types: ["type.address"] },
   }),
@@ -77,7 +76,7 @@ const Address = ({
 
   return (
     <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
+      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
       {address && (

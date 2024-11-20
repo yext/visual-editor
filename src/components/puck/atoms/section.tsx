@@ -1,12 +1,12 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import clsx from "clsx";
+import { clsx } from "clsx";
 
 const sectionVariants = cva("mx-auto", {
   variants: {
     padding: {
       default: "px-4 py-16 md:px-8",
-      none: "p-0",
+      none: "",
       small: "px-4 py-8 md:px-8",
       large: "px-[200px] py-24 md:px-8",
     },

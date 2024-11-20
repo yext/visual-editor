@@ -1,15 +1,15 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps } from "./atoms/cta.tsx";
-import { cn } from "../../internal/utils/cn.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
+import { CTA, CTAProps } from "./atoms/cta.js";
 import {
+  yextCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
+  FontSizeSelector,
+} from "../../index.ts";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
@@ -22,7 +22,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
   entityField: YextEntityFieldSelector({
     label: "Entity Field",
     filter: {
-      types: ["c_cta"],
+      types: ["type.cta"],
     },
   }),
   fontSize: FontSizeSelector(),
@@ -31,8 +31,6 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     label: "Variant",
     options: [
       { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Outline", value: "outline" },
       { label: "Link", value: "link" },
     ],
   },
@@ -56,10 +54,10 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
       }
     >
       <CTA
-        label={cta?.name}
-        url={cta?.url ?? "#"}
+        label={cta?.label}
+        link={cta?.link || "#"}
         variant={variant}
-        className={cn(className)}
+        className={yextCn(className)}
         fontSize={fontSize}
         {...rest}
       />
@@ -74,9 +72,7 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     entityField: {
       field: "",
       constantValue: {
-        label: "Call to Action",
-        variant: "primary",
-        size: "default",
+        name: "Call to Action",
       },
     },
     variant: "primary",

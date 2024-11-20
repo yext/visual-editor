@@ -33,7 +33,8 @@
     "ci-publish": "tsx scripts/publishCI.ts",
     "release": "tsx scripts/release.ts",
     "prepare": "husky && pnpm build",
-    "generate-notices": "generate-license-file"
+    "generate-notices": "generate-license-file",
+    "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
   },
   "dependencies": {
     "@measured/puck": "0.16.2-canary.a1988b5",
@@ -109,7 +110,8 @@
     "typescript": "^5.5.4",
     "vite": "^5.3.5",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.0.5"
+    "vitest": "^2.0.5",
+    "zod": "^3.23.8"
   },
   "peerDependencies": {
     "react": "^17.0.2 || ^18.2.0",

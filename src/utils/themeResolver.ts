@@ -8,7 +8,7 @@ export type CoreStyle =
       label: string;
       type: "select";
       default: string;
-      options: StyleSelectOption[];
+      options: StyleSelectOption[] | (() => StyleSelectOption[]);
     }
   | {
       label: string;

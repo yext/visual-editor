@@ -1,17 +1,18 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { cn } from "../../internal/utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import mailIcon from "./assets/mail_outline.svg";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  yextCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+  getFontWeightOverrideOptions,
+} from "../../index.js";
 
-const emailsVariants = cva("list-inside", {
+const emailsVariants = cva("list-inside font-body-fontFamily", {
   variants: {
     fontSize: {
       default: "text-body-fontSize",
@@ -89,22 +90,6 @@ const EmailsFields: Fields<EmailsProps> = {
       { label: "5xl", value: "5xl" },
     ],
   },
-  fontWeight: {
-    label: "Font Weight",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Thin", value: "thin" },
-      { label: "Extra Light", value: "extralight" },
-      { label: "Light", value: "light" },
-      { label: "Normal", value: "normal" },
-      { label: "Medium", value: "medium" },
-      { label: "Semibold", value: "semibold" },
-      { label: "Bold", value: "bold" },
-      { label: "Extrabold", value: "extrabold" },
-      { label: "Black", value: "black" },
-    ],
-  },
   color: {
     label: "Color",
     type: "select",
@@ -156,7 +141,7 @@ const Emails: React.FC<EmailsProps> = ({
   return (
     <EntityField displayName="Email List" fieldId={emailListField.field}>
       <ul
-        className={cn(
+        className={yextCn(
           "components",
           emailsVariants({ fontSize, fontWeight, color }),
           `${includeHyperlink ? "text-blue-600 dark:text-blue-500 hover:underline" : ""}`
@@ -185,6 +170,19 @@ export const EmailsComponent: ComponentConfig<EmailsProps> = {
     },
     includeHyperlink: true,
     listLength: 5,
+  },
+  resolveFields: async () => {
+    const fontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-body-fontFamily`,
+    });
+    return {
+      ...EmailsFields,
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
+    };
   },
   render: (props) => <Emails {...props} />,
 };

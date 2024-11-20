@@ -1,15 +1,15 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../internal/utils/cn.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  yextCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "../../index.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -106,7 +106,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   return (
     <EntityField displayName="Image" fieldId={imageField.field}>
       <div
-        className={cn(
+        className={yextCn(
           imageWrapperVariants({ size, aspectRatio, rounded }),
           "overflow-hidden"
         )}

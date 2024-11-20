@@ -1,30 +1,31 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { cva, type VariantProps } from "class-variance-authority";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
+  getFontWeightOverrideOptions,
+} from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
 
 const phoneVariants = cva(
-  "components flex gap-2 items-center text-body-fontSize",
+  "components flex gap-2 items-center text-body-fontSize font-body-fontFamily",
   {
     variants: {
       fontWeight: {
         default: "font-body-fontWeight",
-        thin: "font-thin",
-        extralight: "font-extralight",
-        light: "font-light",
-        normal: "font-normal",
-        medium: "font-medium",
-        semibold: "font-semibold",
-        bold: "font-bold",
-        extrabold: "font-extrabold",
-        black: "font-black",
+        "100": "font-thin",
+        "200": "font-extralight",
+        "300": "font-light",
+        "400": "font-normal",
+        "500": "font-medium",
+        "600": "font-semibold",
+        "700": "font-bold",
+        "800": "font-extrabold",
+        "900": "font-black",
       },
       color: {
         default: "text-body-color",
@@ -144,6 +145,19 @@ export const PhoneComponent: ComponentConfig<PhoneProps> = {
       field: "mainPhone",
       constantValue: "",
     },
+  },
+  resolveFields: async () => {
+    const fontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-body-fontFamily`,
+    });
+    return {
+      ...PhoneFields,
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
+    };
   },
   render: (props) => <Phone {...props} />,
 };

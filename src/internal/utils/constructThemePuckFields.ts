@@ -7,6 +7,8 @@ import {
 import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
+import { FontSelector } from "../puck/components/FontSelector.tsx";
+import { RenderProps } from "./renderEntityFields.tsx";
 
 // Converts a ThemeConfigSection into a Puck fields object
 export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
@@ -18,7 +20,7 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
 
   Object.entries(themeSection.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
-      const styleField = convertStyleToPuckField(style);
+      const styleField = convertStyleToPuckField(style, style.plugin);
       if (styleField) {
         field.objectFields[styleKey] = styleField;
       }
@@ -30,7 +32,8 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
       };
       for (const subkey in style.styles) {
         styleGroupFields.objectFields[subkey] = convertStyleToPuckField(
-          style.styles[subkey]
+          style.styles[subkey],
+          style.plugin
         );
       }
       field.objectFields[styleKey] = styleGroupFields;
@@ -40,7 +43,7 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
 };
 
 // Determines which Puck field type to use for a style
-export const convertStyleToPuckField = (style: CoreStyle) => {
+export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
   switch (style.type) {
     case "number":
       return {
@@ -48,11 +51,32 @@ export const convertStyleToPuckField = (style: CoreStyle) => {
         type: "number",
       } as NumberField;
     case "select":
-      return {
-        label: style.label,
-        type: "select",
-        options: style.options,
-      } as SelectField;
+      if (plugin === "fontFamily") {
+        return {
+          label: style.label,
+          type: "custom",
+          options: style.options,
+          render: ({ onChange, value }: RenderProps) =>
+            FontSelector({
+              label: style.label,
+              options:
+                typeof style.options === "function"
+                  ? style.options()
+                  : style.options,
+              value,
+              onChange,
+            }),
+        } as CustomField;
+      } else {
+        return {
+          label: style.label,
+          type: "select",
+          options:
+            typeof style.options === "function"
+              ? style.options()
+              : style.options,
+        } as SelectField;
+      }
     case "color":
       return {
         label: style.label,

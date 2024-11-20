@@ -1,15 +1,15 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps, headingVariants } from "./atoms/heading.tsx";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
+import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-// import { useTailwindConfig } from "../../hooks/useTailwindConfig.tsx";
-import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
+  FontSizeSelector,
+  getFontWeightOverrideOptions,
+} from "../../index.js";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
@@ -18,9 +18,6 @@ export interface HeadingTextProps extends HeadingProps {
 const HeadingText = React.forwardRef<HTMLHeadingElement, HeadingTextProps>(
   ({ text, ...headingProps }, ref) => {
     const document = useDocument();
-    // const tailwindConfig = useTailwindConfig();
-
-    // console.log(tailwindConfig);
 
     return (
       <EntityField
@@ -51,22 +48,6 @@ const headingTextFields: Fields<HeadingTextProps> = {
     max: 6,
   },
   fontSize: FontSizeSelector(),
-  weight: {
-    label: "Font Weight",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Thin", value: "thin" },
-      { label: "Extra Light", value: "extralight" },
-      { label: "Light", value: "light" },
-      { label: "Normal", value: "normal" },
-      { label: "Medium", value: "medium" },
-      { label: "Semibold", value: "semibold" },
-      { label: "Bold", value: "bold" },
-      { label: "Extrabold", value: "extrabold" },
-      { label: "Black", value: "black" },
-    ],
-  },
   color: {
     label: "Font Color",
     type: "select",
@@ -107,6 +88,19 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     weight: "default",
     color: "default",
     transform: "none",
+  },
+  resolveFields: async (data) => {
+    const fontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-heading${data.props.level}-fontFamily`,
+    });
+    return {
+      ...headingTextFields,
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
+    };
   },
   render: (props) => <HeadingText {...props} />,
 };

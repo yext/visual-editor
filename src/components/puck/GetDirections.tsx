@@ -1,6 +1,7 @@
-import React from "react";
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Section, sectionVariants } from "./atoms/section.tsx";
+import { Section, sectionVariants } from "./atoms/section.js";
+import { Button, ButtonProps } from "./atoms/button.js";
 import {
   getDirections,
   GetDirectionsConfig,
@@ -8,29 +9,28 @@ import {
   Coordinate,
 } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import {
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-import { config } from "process";
+  useDocument,
+  resolveYextEntityField,
+  FontSizeSelector,
+} from "../../index.js";
 import { VariantProps } from "class-variance-authority";
-import { Button, ButtonProps } from "./atoms/button.tsx";
-import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
 
 export type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
   getDirectionsProvider: GetDirectionsConfig["provider"];
   variant: ButtonProps["variant"];
   size: ButtonProps["size"];
+  borderRadius: ButtonProps["borderRadius"];
   alignment: "items-start" | "items-center";
   padding: VariantProps<typeof sectionVariants>["padding"];
   fontSize: ButtonProps["fontSize"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
-  coordinate: YextEntityFieldSelector<typeof config, Coordinate>({
+  coordinate: YextEntityFieldSelector<any, Coordinate>({
     label: "Get Directions",
     filter: { types: ["type.coordinate"] },
   }),
@@ -48,8 +48,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     type: "radio",
     options: [
       { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Outline", value: "outline" },
       { label: "Link", value: "link" },
     ],
   },
@@ -64,6 +62,17 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     ],
   },
   fontSize: FontSizeSelector(),
+  borderRadius: {
+    label: "Border Radius",
+    type: "radio",
+    options: [
+      { label: "Default", value: "default" },
+      { label: "None", value: "none" },
+      { label: "Medium", value: "medium" },
+      { label: "Large", value: "large" },
+      { label: "Full", value: "full" },
+    ],
+  },
   alignment: {
     label: "Align card",
     type: "radio",
@@ -87,6 +96,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
 const GetDirections = ({
   variant,
   size,
+  borderRadius,
   alignment,
   padding,
   coordinate: coordinateField,
@@ -112,10 +122,16 @@ const GetDirections = ({
 
   return (
     <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontWeight text-body-fontSize text-body-color`}
+      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
       padding={padding}
     >
-      <Button asChild variant={variant} size={size} fontSize={fontSize}>
+      <Button
+        asChild
+        variant={variant}
+        size={size}
+        fontSize={fontSize}
+        borderRadius={borderRadius}
+      >
         <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
       </Button>
     </Section>
@@ -128,6 +144,7 @@ export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
     variant: "primary",
     size: "default",
     fontSize: "default",
+    borderRadius: "default",
     alignment: "items-start",
     padding: "none",
     getDirectionsProvider: "google",

@@ -1,14 +1,15 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, BodyProps, bodyVariants } from "./atoms/body.tsx";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { EntityField } from "../editor/EntityField.tsx";
+import { Body, BodyProps, bodyVariants } from "./atoms/body.js";
 import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-} from "../editor/YextEntityFieldSelector.tsx";
-import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
+  getFontWeightOverrideOptions,
+  FontSizeSelector,
+} from "../../index.ts";
 
 export interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
@@ -41,22 +42,6 @@ const bodyTextFields: Fields<BodyTextProps> = {
     },
   }),
   fontSize: FontSizeSelector(),
-  fontWeight: {
-    label: "Font Weight",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Thin", value: "thin" },
-      { label: "Extra Light", value: "extralight" },
-      { label: "Light", value: "light" },
-      { label: "Normal", value: "normal" },
-      { label: "Medium", value: "medium" },
-      { label: "Semibold", value: "semibold" },
-      { label: "Bold", value: "bold" },
-      { label: "Extrabold", value: "extrabold" },
-      { label: "Black", value: "black" },
-    ],
-  },
   color: {
     label: "Color",
     type: "select",
@@ -94,6 +79,19 @@ export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
     fontWeight: "default",
     color: "default",
     textTransform: "none",
+  },
+  resolveFields: async () => {
+    const fontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: "--fontFamily-body-fontFamily",
+    });
+    return {
+      ...bodyTextFields,
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
+    };
   },
   render: (props) => <BodyText {...props} />,
 };

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import clsx from "clsx";
+import { clsx } from "clsx";
 
 // Define the variants for the body component
-const bodyVariants = cva("components", {
+const bodyVariants = cva("components font-body-fontFamily", {
   variants: {
     fontSize: {
       default: "text-body-fontSize",
@@ -23,15 +23,15 @@ const bodyVariants = cva("components", {
     },
     fontWeight: {
       default: "font-body-fontWeight",
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
+      "100": "font-thin",
+      "200": "font-extralight",
+      "300": "font-light",
+      "400": "font-normal",
+      "500": "font-medium",
+      "600": "font-semibold",
+      "700": "font-bold",
+      "800": "font-extrabold",
+      "900": "font-black",
     },
     color: {
       default: "text-body-color",
