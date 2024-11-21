@@ -1,11 +1,17 @@
 import { CoreStyle, Style, ThemeConfig } from "../../utils/themeResolver.ts";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   assignValue,
   constructThemePuckFields,
   constructThemePuckValues,
   convertStyleToPuckField,
 } from "./constructThemePuckFields.ts";
+
+vi.mock("react", async () => {
+  return {
+    useCallback: (fn: any) => fn,
+  };
+});
 
 export const exampleThemeConfig: ThemeConfig = {
   text: {
