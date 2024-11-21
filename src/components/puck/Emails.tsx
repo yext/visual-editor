@@ -25,6 +25,10 @@ const emailsVariants = cva("list-inside font-body-fontFamily", {
       "3xl": "text-3xl",
       "4xl": "text-4xl",
       "5xl": "text-5xl",
+      "6xl": "text-6xl",
+      "7xl": "text-7xl",
+      "8xl": "text-8xl",
+      "9xl": "text-9xl",
     },
     fontWeight: {
       default: "font-body-fontWeight",

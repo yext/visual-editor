@@ -348,3 +348,38 @@ export const MyComponent: ComponentConfig<MyComponentProps> = {
   render: (props) => <Component {...props} />,
 };
 ```
+
+## VisualEditorProvider
+
+Use this component in your `edit.tsx` file. Required for components using the [useEntityFields](#useentityfields) or [usePlatformBridgeEntityFields](#usePlatformBridgeEntityFields) hook, and to allow styling options to update based on your Tailwind config.
+
+### Usage
+
+```tsx
+import {
+  Editor,
+  usePlatformBridgeDocument,
+  usePlatformBridgeEntityFields,
+  EntityFieldsProvider,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
+
+const Edit: () => JSX.Element = () => {
+  const entityDocument = usePlatformBridgeDocument();
+  const entityFields = usePlatformBridgeEntityFields();
+
+  return (
+    <VisualEditorProvider
+      document={entityDocument}
+      entityFields={entityFields}
+      tailwindConfig={tailwindConfig}
+    >
+      <Editor
+        document={entityDocument}
+        componentRegistry={componentRegistry}
+        themeConfig={themeConfig}
+      />
+    </VisualEditorProvider>
+  );
+};
+```

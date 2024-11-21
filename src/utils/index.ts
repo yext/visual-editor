@@ -10,3 +10,4 @@ export {
   getFontWeightOverrideOptions,
   constructFontSelectOptions,
 } from "./visualEditorFonts.ts";
+export { VisualEditorProvider } from "./VisualEditorProvider.tsx";

@@ -2,10 +2,9 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { clsx } from "clsx";
-import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 const buttonVariants = cva(
-  "py-4 components inline-flex items-center justify-center whitespace-nowrap rounded-button-borderRadius text-button-fontSize font-body-fontFamily font-button-fontWeight ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ",
+  "py-4 components inline-flex items-center justify-center whitespace-nowrap rounded-button-borderRadius font-body-fontFamily font-button-fontWeight ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ",
   {
     variants: {
       variant: {
@@ -19,6 +18,22 @@ const buttonVariants = cva(
         large: "h-11 px-8",
         icon: "h-10 w-10",
       },
+      fontSize: {
+        default: "text-button-fontSize",
+        xs: "text-xs",
+        sm: "text-sm",
+        base: "text-base",
+        lg: "text-lg",
+        xl: "text-xl",
+        "2xl": "text-2xl",
+        "3xl": "text-3xl",
+        "4xl": "text-4xl",
+        "5xl": "text-5xl",
+        "6xl": "text-6xl",
+        "7xl": "text-7xl",
+        "8xl": "text-8xl",
+        "9xl": "text-9xl",
+      },
       borderRadius: {
         default: "",
         none: "rounded-none",
@@ -30,6 +45,7 @@ const buttonVariants = cva(
     defaultVariants: {
       variant: "primary",
       size: "default",
+      fontSize: "default",
       borderRadius: "default",
     },
   }
@@ -39,7 +55,6 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  fontSize?: NumberOrDefault;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -58,13 +73,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        style={{
-          fontSize:
-            !fontSize || fontSize === "default" ? undefined : fontSize + "px",
-        }}
         className={clsx(
           className,
-          buttonVariants({ variant, size, borderRadius })
+          buttonVariants({ variant, size, borderRadius, fontSize })
         )}
         ref={ref}
         {...props}

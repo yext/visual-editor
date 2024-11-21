@@ -12,9 +12,9 @@ import "@yext/pages-components/style.css";
 import {
   YextEntityField,
   YextEntityFieldSelector,
-  NumberOrDefault,
   useDocument,
   resolveYextEntityField,
+  FontSizeSelector,
 } from "../../index.js";
 import { VariantProps } from "class-variance-authority";
 
@@ -26,7 +26,7 @@ export type GetDirectionsProps = {
   borderRadius: ButtonProps["borderRadius"];
   alignment: "items-start" | "items-center";
   padding: VariantProps<typeof sectionVariants>["padding"];
-  fontSize?: NumberOrDefault;
+  fontSize: ButtonProps["fontSize"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
@@ -60,6 +60,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
       { label: "Large", value: "large" },
     ],
   },
+  fontSize: FontSizeSelector(),
   borderRadius: {
     label: "Border Radius",
     type: "radio",
@@ -141,6 +142,7 @@ export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   defaultProps: {
     variant: "primary",
     size: "default",
+    fontSize: "default",
     borderRadius: "default",
     alignment: "items-start",
     padding: "none",

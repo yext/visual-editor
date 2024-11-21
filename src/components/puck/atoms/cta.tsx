@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Link } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 export interface CTAProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,7 +9,7 @@ export interface CTAProps
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
   borderRadius?: ButtonProps["borderRadius"];
-  fontSize?: NumberOrDefault;
+  fontSize?: ButtonProps["fontSize"];
 }
 
 const CTA = ({

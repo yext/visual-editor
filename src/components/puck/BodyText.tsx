@@ -7,8 +7,8 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  NumberFieldWithDefaultOption,
   getFontWeightOverrideOptions,
+  FontSizeSelector,
 } from "../../index.ts";
 
 export interface BodyTextProps extends BodyProps {
@@ -41,10 +41,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
       types: ["type.string"],
     },
   }),
-  fontSize: NumberFieldWithDefaultOption({
-    label: "Font Size",
-    defaultCustomValue: 12,
-  }),
+  fontSize: FontSizeSelector(),
   color: {
     label: "Color",
     type: "select",

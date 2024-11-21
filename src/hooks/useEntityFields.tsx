@@ -55,27 +55,13 @@ const EntityFieldsContext = React.createContext<YextSchemaField[] | undefined>(
   undefined
 );
 
-type EntityFieldsProviderProps = {
-  entityFields: YextSchemaField[];
-  children: React.ReactNode;
-};
-
-export const EntityFieldsProvider = ({
-  entityFields,
-  children,
-}: EntityFieldsProviderProps) => {
-  return (
-    <EntityFieldsContext.Provider value={entityFields}>
-      {children}
-    </EntityFieldsContext.Provider>
-  );
-};
-
-export const useEntityFields = () => {
+const useEntityFields = () => {
   const context = React.useContext(EntityFieldsContext);
   if (!context) {
-    throw new Error("useEntityFields must be used within a DocumentProvider");
+    throw new Error("useEntityFields must be used within VisualEditorProvider");
   }
 
   return context;
 };
+
+export { useEntityFields, EntityFieldsContext };

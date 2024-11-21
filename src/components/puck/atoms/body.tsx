@@ -1,11 +1,26 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { clsx } from "clsx";
-import { NumberOrDefault } from "../../editor/NumberOrDefaultField.tsx";
 
 // Define the variants for the body component
-const bodyVariants = cva("components text-body-fontSize font-body-fontFamily", {
+const bodyVariants = cva("components font-body-fontFamily", {
   variants: {
+    fontSize: {
+      default: "text-body-fontSize",
+      xs: "text-xs",
+      sm: "text-sm",
+      base: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+      "2xl": "text-2xl",
+      "3xl": "text-3xl",
+      "4xl": "text-4xl",
+      "5xl": "text-5xl",
+      "6xl": "text-6xl",
+      "7xl": "text-7xl",
+      "8xl": "text-8xl",
+      "9xl": "text-9xl",
+    },
     fontWeight: {
       default: "font-body-fontWeight",
       "100": "font-thin",
@@ -34,6 +49,7 @@ const bodyVariants = cva("components text-body-fontSize font-body-fontFamily", {
     },
   },
   defaultVariants: {
+    fontSize: "default",
     fontWeight: "default",
     color: "default",
     textTransform: "none",
@@ -43,23 +59,19 @@ const bodyVariants = cva("components text-body-fontSize font-body-fontFamily", {
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
-    VariantProps<typeof bodyVariants> {
-  fontSize: NumberOrDefault;
-}
+    VariantProps<typeof bodyVariants> {}
 
 const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   (
-    { className, fontWeight, color, textTransform, fontSize, ...props },
+    { className, fontSize, fontWeight, color, textTransform, ...props },
     ref
   ) => {
     return (
       <p
-        style={{
-          fontSize: fontSize === "default" ? undefined : fontSize + "px",
-        }}
         className={clsx(
           className,
           bodyVariants({
+            fontSize,
             fontWeight,
             color,
             textTransform,

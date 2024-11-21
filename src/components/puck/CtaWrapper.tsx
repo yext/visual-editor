@@ -8,14 +8,13 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  NumberFieldWithDefaultOption,
-  NumberOrDefault,
+  FontSizeSelector,
 } from "../../index.ts";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
-  fontSize: NumberOrDefault;
+  fontSize: CTAProps["fontSize"];
   className?: CTAProps["className"];
 }
 
@@ -26,10 +25,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       types: ["type.cta"],
     },
   }),
-  fontSize: NumberFieldWithDefaultOption({
-    label: "Font Size",
-    defaultCustomValue: 12,
-  }),
+  fontSize: FontSizeSelector(),
   variant: {
     type: "select",
     label: "Variant",

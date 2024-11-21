@@ -7,7 +7,7 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  NumberFieldWithDefaultOption,
+  FontSizeSelector,
   getFontWeightOverrideOptions,
 } from "../../index.js";
 
@@ -47,10 +47,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
     min: 1,
     max: 6,
   },
-  fontSize: NumberFieldWithDefaultOption({
-    label: "Font Size",
-    defaultCustomValue: 24,
-  }),
+  fontSize: FontSizeSelector(),
   color: {
     label: "Font Color",
     type: "select",
