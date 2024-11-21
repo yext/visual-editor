@@ -1,3 +1,40 @@
+#### 0.0.17 (2024-11-21)
+
+##### Chores
+
+- upgrade puck (#166) (1ca31d13)
+
+##### New Features
+
+- use select for fontSize (#164) (32138590)
+- add Promo component (#157) (69af3f70)
+- add collapsible theme (#162) (d9037881)
+- add theme body font to all components (#159) (1e0d94a6)
+- font family selection (#154) (4d789359)
+- add constant value support for CTA (#150) (f674a8fd)
+- add additional button tw from theme (#151) (e7c75238)
+- add border radius props to button (#146) (53c5bd74)
+- hoursCard uses hours entity field (#148) (5dad9e72)
+- add all components to registry (#145) (a476e399)
+- add shadcn cli registry (#138) (b13f4f78)
+
+##### Bug Fixes
+
+- adjust components' exported names (#142) (938c3e30)
+- adjust Get Directions component (#165) (f1943a7f)
+- rename HoursCard to HoursTable in registry (#163) (d8935908)
+- dev mode previews don't match puck iframe (#161) (6bd8d37c)
+- dev mode ui state stuck in theme manager (#160) (a5c19f3c)
+- adjust Grid components padding (#158) (b6c697e0)
+- theme manager dev mode stuck loading (#155) (78ffbb37)
+- make theme sidebar padding more consistent (#156) (7eac8887)
+- rename HoursCard to HoursTable (#153) (265d5a51)
+- hide constant value option if not defined (#152) (eda95977)
+- use constantValue if no entity field is selected (#149) (cba1d17b)
+- cannot access before initialization error (#147) (966065ee)
+- adjust email padding (#144) (458501d4)
+- adjust phone component (#143) (6d37d9d1)
+
 #### 0.0.16 (2024-11-07)
 
 ##### Chores
