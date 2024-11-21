@@ -7,7 +7,7 @@ export { FlexContainer, type FlexContainerProps } from "./FlexContainer.tsx";
 export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";
 export { GridSection, type GridSectionProps } from "./GridSection.tsx";
 export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
-export { HoursCard, type HoursCardProps } from "./HoursCard.tsx";
+export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";

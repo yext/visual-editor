@@ -16,7 +16,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 
-type HoursCardProps = {
+type HoursTableProps = {
   hours: YextEntityField<HoursType>;
   startOfWeek: keyof DayOfWeekNames | "today";
   collapseDays: boolean;
@@ -25,7 +25,7 @@ type HoursCardProps = {
   padding: VariantProps<typeof sectionVariants>["padding"];
 };
 
-const hoursCardFields: Fields<HoursCardProps> = {
+const hoursTableFields: Fields<HoursTableProps> = {
   hours: YextEntityFieldSelector({
     label: "Hours",
     filter: {
@@ -89,7 +89,7 @@ const HoursTable = ({
   showAdditionalHoursText,
   alignment,
   padding,
-}: HoursCardProps) => {
+}: HoursTableProps) => {
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
 
@@ -122,8 +122,8 @@ const HoursTable = ({
   );
 };
 
-const HoursCardComponent: ComponentConfig<HoursCardProps> = {
-  fields: hoursCardFields,
+const HoursTableComponent: ComponentConfig<HoursTableProps> = {
+  fields: hoursTableFields,
   defaultProps: {
     hours: {
       field: "hours",
@@ -139,4 +139,4 @@ const HoursCardComponent: ComponentConfig<HoursCardProps> = {
   render: (props) => <HoursTable {...props} />,
 };
 
-export { HoursCardComponent as HoursCard, type HoursCardProps };
+export { HoursTableComponent as HoursTable, type HoursTableProps };
