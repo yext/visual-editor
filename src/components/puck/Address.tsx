@@ -18,7 +18,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.ts";
 
-export type AddressProps = {
+type AddressProps = {
   address: YextEntityField<AddressType>;
   getDirectionsProvider: GetDirectionsConfig["provider"];
   alignment: "items-start" | "items-center";
@@ -109,7 +109,7 @@ const Address = ({
   );
 };
 
-export const AddressComponent: ComponentConfig<AddressProps> = {
+const AddressComponent: ComponentConfig<AddressProps> = {
   fields: addressFields,
   defaultProps: {
     alignment: "items-start",
@@ -129,3 +129,5 @@ export const AddressComponent: ComponentConfig<AddressProps> = {
   label: "Address",
   render: (props) => <Address {...props} />,
 };
+
+export { type AddressProps, AddressComponent as Address };

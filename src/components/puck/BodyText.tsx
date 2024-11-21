@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, BodyProps, bodyVariants } from "./atoms/body.js";
+import { Body, BodyProps } from "./atoms/body.js";
 import {
   useDocument,
   resolveYextEntityField,
@@ -11,7 +11,7 @@ import {
   FontSizeSelector,
 } from "../../index.ts";
 
-export interface BodyTextProps extends BodyProps {
+interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
 }
 
@@ -66,7 +66,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
   },
 };
 
-export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
+const BodyTextComponent: ComponentConfig<BodyTextProps> = {
   label: "Body Text",
   fields: bodyTextFields,
   defaultProps: {
@@ -96,4 +96,4 @@ export const BodyTextComponent: ComponentConfig<BodyTextProps> = {
   render: (props) => <BodyText {...props} />,
 };
 
-export { BodyText, bodyVariants };
+export { BodyTextComponent as BodyText, type BodyTextProps };
