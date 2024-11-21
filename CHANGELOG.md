@@ -1,3 +1,13 @@
+#### 0.0.18 (2024-11-21)
+
+##### New Features
+
+- collapse theme sidebar by default (#169) (1b2840d1)
+
+##### Bug Fixes
+
+- rename HoursTable again (#168) (b0ffbd66)
+
 #### 0.0.17 (2024-11-21)
 
 ##### Chores
