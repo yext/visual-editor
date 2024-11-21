@@ -1,10 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  DayOfWeekNames,
-  HoursTable as HoursTableComponent,
-  HoursType,
-} from "@yext/pages-components";
+import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
 import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import { VariantProps } from "class-variance-authority";
@@ -16,7 +12,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 
-type HoursCardProps = {
+type HoursTableProps = {
   hours: YextEntityField<HoursType>;
   startOfWeek: keyof DayOfWeekNames | "today";
   collapseDays: boolean;
@@ -25,7 +21,7 @@ type HoursCardProps = {
   padding: VariantProps<typeof sectionVariants>["padding"];
 };
 
-const hoursCardFields: Fields<HoursCardProps> = {
+const hoursTableFields: Fields<HoursTableProps> = {
   hours: YextEntityFieldSelector({
     label: "Hours",
     filter: {
@@ -82,14 +78,14 @@ const hoursCardFields: Fields<HoursCardProps> = {
   },
 };
 
-const HoursTable = ({
+const VisualEditorHoursTable = ({
   hours: hoursField,
   startOfWeek,
   collapseDays,
   showAdditionalHoursText,
   alignment,
   padding,
-}: HoursCardProps) => {
+}: HoursTableProps) => {
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
 
@@ -105,7 +101,7 @@ const HoursTable = ({
       <div>
         {hours && (
           <EntityField displayName="Hours" fieldId="hours">
-            <HoursTableComponent
+            <HoursTable
               hours={hours}
               startOfWeek={startOfWeek}
               collapseDays={collapseDays}
@@ -122,8 +118,8 @@ const HoursTable = ({
   );
 };
 
-const HoursCardComponent: ComponentConfig<HoursCardProps> = {
-  fields: hoursCardFields,
+const HoursTableComponent: ComponentConfig<HoursTableProps> = {
+  fields: hoursTableFields,
   defaultProps: {
     hours: {
       field: "hours",
@@ -136,7 +132,7 @@ const HoursCardComponent: ComponentConfig<HoursCardProps> = {
     padding: "none",
   },
   label: "Hours Table",
-  render: (props) => <HoursTable {...props} />,
+  render: (props) => <VisualEditorHoursTable {...props} />,
 };
 
-export { HoursCardComponent as HoursCard, type HoursCardProps };
+export { HoursTableComponent as HoursTable, type HoursTableProps };
