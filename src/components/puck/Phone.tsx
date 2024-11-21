@@ -44,7 +44,7 @@ const phoneVariants = cva(
   }
 );
 
-export interface PhoneProps extends VariantProps<typeof phoneVariants> {
+interface PhoneProps extends VariantProps<typeof phoneVariants> {
   phone: YextEntityField<string>;
   format?: "domestic" | "international";
   textSize?: number;
@@ -136,7 +136,7 @@ const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
   );
 };
 
-export const PhoneComponent: ComponentConfig<PhoneProps> = {
+const PhoneComponent: ComponentConfig<PhoneProps> = {
   label: "Phone",
   fields: PhoneFields,
   defaultProps: {
@@ -162,4 +162,4 @@ export const PhoneComponent: ComponentConfig<PhoneProps> = {
   render: (props) => <Phone {...props} />,
 };
 
-export { Phone, phoneVariants };
+export { PhoneComponent as Phone, type PhoneProps };

@@ -81,11 +81,11 @@ const columnVariants = cva("flex flex-col gap-y-grid-verticalSpacing", {
   },
 });
 
-export interface ColumnProps extends VariantProps<typeof columnVariants> {
+interface ColumnProps extends VariantProps<typeof columnVariants> {
   span?: number;
 }
 
-export interface GridSectionProps
+interface GridSectionProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof gridSectionVariants>,
     VariantProps<typeof backgroundVariants> {
@@ -231,7 +231,7 @@ const gridSectionFields: Fields<GridSectionProps> = {
   },
 };
 
-export const GridSectionComponent: ComponentConfig<GridSectionProps> = {
+const GridSectionComponent: ComponentConfig<GridSectionProps> = {
   label: "Grid Section",
   fields: gridSectionFields,
   defaultProps: {
@@ -270,4 +270,4 @@ export const GridSectionComponent: ComponentConfig<GridSectionProps> = {
   ),
 };
 
-export { GridSection, gridSectionVariants };
+export { GridSectionComponent as GridSection, type GridSectionProps };

@@ -10,7 +10,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 
-export interface HoursStatusProps {
+interface HoursStatusProps {
   hours: YextEntityField<HoursType>;
   className?: string;
   showCurrentStatus?: boolean;
@@ -94,7 +94,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   );
 };
 
-export const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
+const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
   label: "Hours Status",
   fields: hoursStatusWrapperFields,
   defaultProps: {
@@ -110,3 +110,5 @@ export const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
   },
   render: (props) => <HoursStatusWrapper {...props} />,
 };
+
+export { HoursStatusComponent as HoursStatus, type HoursStatusProps };

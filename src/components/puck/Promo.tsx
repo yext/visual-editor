@@ -18,7 +18,7 @@ import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-export interface PromoProps {
+interface PromoProps {
   orientation: "left" | "right";
   title: {
     text: YextEntityField<string>;
@@ -324,4 +324,4 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
   render: (props) => <PromoWrapper {...props} />,
 };
 
-export { PromoWrapper };
+export { PromoComponent as Promo, type PromoProps };

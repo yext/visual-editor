@@ -41,7 +41,7 @@ const flexContainerVariants = cva("flex", {
   },
 });
 
-export interface FlexContainerProps
+interface FlexContainerProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof flexContainerVariants> {
   renderDropZone?: any;
@@ -131,7 +131,7 @@ const flexContainerFields: Fields<FlexContainerProps> = {
   },
 };
 
-export const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
+const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
   label: "Flex Container",
   fields: flexContainerFields,
   defaultProps: {
@@ -158,4 +158,4 @@ export const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
   ),
 };
 
-export { FlexContainer, flexContainerVariants };
+export { FlexContainerComponent as FlexContainer, type FlexContainerProps };

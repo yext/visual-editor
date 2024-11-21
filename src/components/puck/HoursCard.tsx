@@ -16,7 +16,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 
-export type HoursCardProps = {
+type HoursCardProps = {
   hours: YextEntityField<HoursType>;
   startOfWeek: keyof DayOfWeekNames | "today";
   collapseDays: boolean;
@@ -122,7 +122,7 @@ const HoursTable = ({
   );
 };
 
-export const HoursCardComponent: ComponentConfig<HoursCardProps> = {
+const HoursCardComponent: ComponentConfig<HoursCardProps> = {
   fields: hoursCardFields,
   defaultProps: {
     hours: {
@@ -138,3 +138,5 @@ export const HoursCardComponent: ComponentConfig<HoursCardProps> = {
   label: "Hours Table",
   render: (props) => <HoursTable {...props} />,
 };
+
+export { HoursCardComponent as HoursCard, type HoursCardProps };

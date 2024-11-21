@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps, headingVariants } from "./atoms/heading.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import {
   useDocument,
   resolveYextEntityField,
@@ -11,7 +11,7 @@ import {
   getFontWeightOverrideOptions,
 } from "../../index.js";
 
-export interface HeadingTextProps extends HeadingProps {
+interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
 }
 
@@ -73,7 +73,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
   },
 };
 
-export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
+const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
   label: "Heading Text",
   fields: headingTextFields,
   defaultProps: {
@@ -105,4 +105,4 @@ export const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
   render: (props) => <HeadingText {...props} />,
 };
 
-export { HeadingText, headingVariants };
+export { HeadingTextComponent as HeadingText, type HeadingTextProps };
