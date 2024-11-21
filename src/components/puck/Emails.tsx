@@ -59,7 +59,7 @@ const emailsVariants = cva("list-inside font-body-fontFamily", {
   },
 });
 
-export interface EmailsProps extends VariantProps<typeof emailsVariants> {
+interface EmailsProps extends VariantProps<typeof emailsVariants> {
   list: YextEntityField<string[]>;
   includeHyperlink: boolean;
   listLength: number;
@@ -160,7 +160,7 @@ const Emails: React.FC<EmailsProps> = ({
   );
 };
 
-export const EmailsComponent: ComponentConfig<EmailsProps> = {
+const EmailsComponent: ComponentConfig<EmailsProps> = {
   label: "Emails",
   fields: EmailsFields,
   defaultProps: {
@@ -187,4 +187,4 @@ export const EmailsComponent: ComponentConfig<EmailsProps> = {
   render: (props) => <Emails {...props} />,
 };
 
-export { Emails, emailsVariants };
+export { EmailsComponent as Emails, type EmailsProps };

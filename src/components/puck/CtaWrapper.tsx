@@ -11,7 +11,7 @@ import {
   FontSizeSelector,
 } from "../../index.ts";
 
-export interface CTAWrapperProps {
+interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
   fontSize: CTAProps["fontSize"];
@@ -65,7 +65,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
   );
 };
 
-export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
+const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
   label: "Call to Action",
   fields: ctaWrapperFields,
   defaultProps: {
@@ -81,4 +81,4 @@ export const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
   render: (props) => <CTAWrapper {...props} />,
 };
 
-export { CTAWrapper };
+export { CTAWrapperComponent as CTAWrapper, type CTAWrapperProps };

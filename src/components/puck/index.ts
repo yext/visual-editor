@@ -1,21 +1,15 @@
 export * from "./atoms/index.ts";
-export { AddressComponent, type AddressProps } from "./Address.tsx";
-export {
-  GetDirectionsComponent,
-  type GetDirectionsProps,
-} from "./GetDirections.tsx";
-export { BodyTextComponent, type BodyTextProps } from "./BodyText.tsx";
-export { CTAWrapperComponent, type CTAWrapperProps } from "./CtaWrapper.tsx";
-export { EmailsComponent, type EmailsProps } from "./Emails.tsx";
-export {
-  FlexContainerComponent,
-  type FlexContainerProps,
-} from "./FlexContainer.tsx";
-export { GridSectionComponent, type GridSectionProps } from "./GridSection.tsx";
-export { HeadingTextComponent, type HeadingTextProps } from "./HeadingText.tsx";
-export { HoursCardComponent, type HoursCardProps } from "./HoursTable.tsx";
-export { HoursStatusComponent, type HoursStatusProps } from "./HoursStatus.tsx";
-export { ImageWrapperComponent, type ImageWrapperProps } from "./Image.tsx";
-export { PhoneComponent, type PhoneProps } from "./Phone.tsx";
-export { TextListComponent, type TextListProps } from "./TextList.tsx";
-export { PromoComponent, type PromoProps } from "./Promo.tsx";
+export { Address, type AddressProps } from "./Address.tsx";
+export { BodyText, type BodyTextProps } from "./BodyText.tsx";
+export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
+export { Emails, type EmailsProps } from "./Emails.tsx";
+export { FlexContainer, type FlexContainerProps } from "./FlexContainer.tsx";
+export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";
+export { GridSection, type GridSectionProps } from "./GridSection.tsx";
+export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
+export { HoursCard, type HoursCardProps } from "./HoursCard.tsx";
+export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
+export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
+export { Phone, type PhoneProps } from "./Phone.tsx";
+export { Promo, type PromoProps } from "./Promo.tsx";
+export { TextList, type TextListProps } from "./TextList.tsx";

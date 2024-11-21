@@ -42,8 +42,7 @@ const imageWrapperVariants = cva("", {
   },
 });
 
-export interface ImageWrapperProps
-  extends VariantProps<typeof imageWrapperVariants> {
+interface ImageWrapperProps extends VariantProps<typeof imageWrapperVariants> {
   image: YextEntityField<ImageType>;
 }
 
@@ -117,7 +116,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   );
 };
 
-export const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
+const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
   label: "Image",
   fields: imageWrapperFields,
   defaultProps: {
@@ -138,4 +137,8 @@ export const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
   render: (props) => <ImageWrapper {...props} />,
 };
 
-export { ImageWrapper, imageWrapperVariants };
+export {
+  ImageWrapperComponent as ImageWrapper,
+  type ImageWrapperProps,
+  imageWrapperVariants,
+};

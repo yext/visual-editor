@@ -56,7 +56,7 @@ const textListVariants = cva(
   }
 );
 
-export interface TextListProps extends VariantProps<typeof textListVariants> {
+interface TextListProps extends VariantProps<typeof textListVariants> {
   list: YextEntityField<string[]>;
   textSize?: number;
 }
@@ -138,7 +138,7 @@ const TextList: React.FC<TextListProps> = ({
   );
 };
 
-export const TextListComponent: ComponentConfig<TextListProps> = {
+const TextListComponent: ComponentConfig<TextListProps> = {
   label: "Text List",
   fields: textListFields,
   defaultProps: {
@@ -164,4 +164,4 @@ export const TextListComponent: ComponentConfig<TextListProps> = {
   render: (props) => <TextList {...props} />,
 };
 
-export { TextList, textListVariants };
+export { TextListComponent as TextList, type TextListProps };

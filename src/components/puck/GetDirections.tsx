@@ -18,7 +18,7 @@ import {
 } from "../../index.js";
 import { VariantProps } from "class-variance-authority";
 
-export type GetDirectionsProps = {
+type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
   getDirectionsProvider: GetDirectionsConfig["provider"];
   variant: ButtonProps["variant"];
@@ -137,7 +137,7 @@ const GetDirections = ({
   );
 };
 
-export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
+const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
@@ -158,3 +158,5 @@ export const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   label: "Get Directions",
   render: (props) => <GetDirections {...props} />,
 };
+
+export { GetDirectionsComponent as GetDirections, type GetDirectionsProps };
