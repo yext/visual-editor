@@ -45,10 +45,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
   const [collapsedSections, setCollapsedSections] = React.useState<{
     [x: string]: boolean;
   }>(
-    Object.keys(themeConfig).reduce(
-      (acc, key) => ({ ...acc, [key]: false }),
-      {}
-    )
+    Object.keys(themeConfig).reduce((acc, key) => ({ ...acc, [key]: true }), {})
   );
 
   const toggleSection = (key: string) => {
