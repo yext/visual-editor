@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
-import { yextCn } from "../../index.js";
+import { themeMangerCn } from "../../index.js";
 
 const paddingClasses = [
   { label: "0", value: "py-0" },
@@ -112,18 +112,18 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
   ) => {
     return (
       <Section
-        className={yextCn(
+        className={themeMangerCn(
           backgroundVariants({ maxContentWidth, backgroundColor }),
           verticalPadding
         )}
         padding="none"
       >
         <div
-          className={yextCn(
+          className={themeMangerCn(
             gridSectionVariants({
               horizontalSpacing,
-              className,
-            })
+            }),
+            className
           )}
           ref={ref}
           style={{
@@ -137,7 +137,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
           {columns.map(({ span, verticalAlignment }, idx) => (
             <div
               key={idx}
-              className={yextCn(
+              className={themeMangerCn(
                 columnVariants({
                   verticalAlignment,
                 })

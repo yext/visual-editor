@@ -3,7 +3,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { cva, type VariantProps } from "class-variance-authority";
 import mailIcon from "./assets/mail_outline.svg";
 import {
-  yextCn,
+  themeMangerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -32,15 +32,15 @@ const emailsVariants = cva("list-inside font-body-fontFamily", {
     },
     fontWeight: {
       default: "font-body-fontWeight",
-      thin: "font-thin",
-      extralight: "font-extralight",
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-      black: "font-black",
+      "100": "font-thin",
+      "200": "font-extralight",
+      "300": "font-light",
+      "400": "font-normal",
+      "500": "font-medium",
+      "600": "font-semibold",
+      "700": "font-bold",
+      "800": "font-extrabold",
+      "900": "font-black",
     },
     color: {
       default: "text-body-color",
@@ -49,7 +49,6 @@ const emailsVariants = cva("list-inside font-body-fontFamily", {
       accent: "text-palette-accent",
       text: "text-palette-text",
       background: "text-palette-background",
-      foreground: "text-palette-foreground",
     },
   },
   defaultVariants: {
@@ -141,7 +140,7 @@ const Emails: React.FC<EmailsProps> = ({
   return (
     <EntityField displayName="Email List" fieldId={emailListField.field}>
       <ul
-        className={yextCn(
+        className={themeMangerCn(
           "components",
           emailsVariants({ fontSize, fontWeight, color }),
           `${includeHyperlink ? "text-blue-600 dark:text-blue-500 hover:underline" : ""}`

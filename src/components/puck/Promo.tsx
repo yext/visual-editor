@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
-  yextCn,
+  themeMangerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -75,7 +75,6 @@ const promoFields: Fields<PromoProps> = {
           { label: "Accent", value: "accent" },
           { label: "Text", value: "text" },
           { label: "Background", value: "background" },
-          { label: "Foreground", value: "foreground" },
         ],
       },
       transform: {
@@ -111,7 +110,6 @@ const promoFields: Fields<PromoProps> = {
           { label: "Accent", value: "accent" },
           { label: "Text", value: "text" },
           { label: "Background", value: "background" },
-          { label: "Foreground", value: "foreground" },
         ],
       },
       transform: {
@@ -213,7 +211,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
   return (
     <Section className="components">
       <div
-        className={yextCn(
+        className={themeMangerCn(
           "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
           orientation === "right" && "md:flex-row-reverse"
         )}
@@ -221,7 +219,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
         {resolvedImage && (
           <EntityField displayName="Image" fieldId={image.image.field}>
             <div
-              className={yextCn(
+              className={themeMangerCn(
                 imageWrapperVariants({
                   size: image.size,
                   rounded: image.rounded,

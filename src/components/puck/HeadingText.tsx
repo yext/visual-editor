@@ -58,7 +58,6 @@ const headingTextFields: Fields<HeadingTextProps> = {
       { label: "Accent", value: "accent" },
       { label: "Text", value: "text" },
       { label: "Background", value: "background" },
-      { label: "Foreground", value: "foreground" },
     ],
   },
   transform: {

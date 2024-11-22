@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { yextCn } from "../../index.js";
+import { themeMangerCn } from "../../index.js";
 
 const flexContainerVariants = cva("flex", {
   variants: {
@@ -62,14 +62,14 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
   ) => {
     return (
       <div
-        className={yextCn(
+        className={themeMangerCn(
           flexContainerVariants({
             direction,
             alignment,
             justification,
             spacing,
-            className,
-          })
+          }),
+          className
         )}
         ref={ref}
         {...props}
@@ -146,6 +146,7 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
     alignment,
     justification,
     spacing,
+    className,
     puck: { renderDropZone },
   }) => (
     <FlexContainer
@@ -153,6 +154,7 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
       direction={direction}
       alignment={alignment}
       justification={justification}
+      className={className}
       spacing={spacing}
     />
   ),

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
-import { yextCn } from "../../../utils/yextCn.ts";
-import { buttonVariants } from "../../components/atoms/Button.tsx";
+import { cn } from "../../../utils/cn.ts";
+import { buttonVariants } from "./button.tsx";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 
@@ -14,7 +14,7 @@ const AlertDialogOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
-    className={yextCn(
+    className={cn(
       "ve-fixed ve-inset-0 ve-z-50 ve-bg-black/80 data-[state=open]:ve-animate-in" +
         " data-[state=closed]:ve-animate-out data-[state=closed]:ve-fade-out-0" +
         " data-[state=open]:ve-fade-in-0",
@@ -34,7 +34,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogOverlay />
     <AlertDialogPrimitive.Content
       ref={ref}
-      className={yextCn(
+      className={cn(
         "ve-fixed ve-left-[50%] ve-top-[50%] ve-z-50 ve-grid ve-w-full ve-max-w-lg" +
           " ve-translate-x-[-50%] ve-translate-y-[-50%] ve-gap-4 ve-border ve-bg-background" +
           " ve-p-6 ve-shadow-lg ve-duration-200 data-[state=open]:ve-animate-in" +
@@ -57,7 +57,7 @@ const AlertDialogHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={yextCn(
+    className={cn(
       "ve-flex ve-flex-col ve-space-y-2 ve-text-center sm:ve-text-left",
       className
     )}
@@ -71,7 +71,7 @@ const AlertDialogFooter = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={yextCn(
+    className={cn(
       "ve-flex ve-flex-col-reverse sm:ve-flex-row sm:ve-justify-end sm:ve-space-x-2",
       className
     )}
@@ -86,7 +86,7 @@ const AlertDialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Title
     ref={ref}
-    className={yextCn("ve-text-lg ve-font-semibold", className)}
+    className={cn("ve-text-lg ve-font-semibold", className)}
     {...props}
   />
 ));
@@ -98,7 +98,7 @@ const AlertDialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
     ref={ref}
-    className={yextCn("ve-text-sm ve-text-muted-foreground", className)}
+    className={cn("ve-text-sm ve-text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -111,7 +111,7 @@ const AlertDialogAction = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}
-    className={yextCn(buttonVariants(), className)}
+    className={cn(buttonVariants(), className)}
     {...props}
   />
 ));
@@ -123,7 +123,7 @@ const AlertDialogCancel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Cancel
     ref={ref}
-    className={yextCn(
+    className={cn(
       buttonVariants({ variant: "outline" }),
       "ve-mt-2 sm:ve-mt-0",
       className

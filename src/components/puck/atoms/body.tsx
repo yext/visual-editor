@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { clsx } from "clsx";
+import { themeMangerCn } from "../../../index.ts";
 
 // Define the variants for the body component
 const bodyVariants = cva("components font-body-fontFamily", {
@@ -68,15 +68,15 @@ const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   ) => {
     return (
       <p
-        className={clsx(
-          className,
+        className={themeMangerCn(
           bodyVariants({
             fontSize,
             fontWeight,
             color,
             textTransform,
             className,
-          })
+          }),
+          className
         )}
         ref={ref}
         {...props}
