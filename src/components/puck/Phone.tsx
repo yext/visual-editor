@@ -34,7 +34,6 @@ const phoneVariants = cva(
         accent: "text-palette-accent",
         text: "text-palette-text",
         background: "text-palette-background",
-        foreground: "text-palette-foreground",
       },
     },
     defaultVariants: {

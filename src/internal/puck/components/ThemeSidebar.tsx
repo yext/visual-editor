@@ -1,6 +1,6 @@
 import { AutoField } from "@measured/puck";
 import React from "react";
-import { Alert, AlertDescription } from "../../components/atoms/Alert.tsx";
+import { Alert, AlertDescription } from "../ui/atoms/Alert.tsx";
 import {
   ThemeConfig,
   ThemeConfigSection,

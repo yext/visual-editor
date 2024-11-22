@@ -2,7 +2,6 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import {
-  yextCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -57,7 +56,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         label={cta?.label}
         link={cta?.link || "#"}
         variant={variant}
-        className={yextCn(className)}
+        className={className}
         fontSize={fontSize}
         {...rest}
       />

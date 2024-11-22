@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { yextCn } from "../../../utils/yextCn.ts";
+import { cn } from "../../../utils/cn.ts";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -17,7 +17,7 @@ const TooltipContent = React.forwardRef<
   <TooltipPrimitive.Content
     ref={ref}
     sideOffset={sideOffset}
-    className={yextCn(
+    className={cn(
       "ve-z-50 ve-overflow-hidden ve-rounded-[6px] ve-bg-popover ve-px-3 ve-py-1.5 ve-text-sm" +
         " ve-text-popover-foreground",
       className

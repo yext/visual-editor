@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { clsx } from "clsx";
+import { themeMangerCn } from "../../../index.ts";
 
 const sectionVariants = cva("mx-auto", {
   variants: {
@@ -31,7 +31,10 @@ const Section = React.forwardRef<HTMLDivElement, SectionProps>(
     return (
       <div className="components bg-main">
         <div
-          className={clsx(className, sectionVariants({ padding, maxWidth }))}
+          className={themeMangerCn(
+            sectionVariants({ padding, maxWidth }),
+            className
+          )}
           ref={ref}
           {...props}
         >

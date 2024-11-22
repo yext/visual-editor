@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Circle } from "lucide-react";
-import { yextCn } from "../../../utils/yextCn.ts";
+import { cn } from "../../../utils/cn.ts";
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
@@ -9,7 +9,7 @@ const RadioGroup = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
-      className={yextCn("ve-grid ve-gap-2", className)}
+      className={cn("ve-grid ve-gap-2", className)}
       {...props}
       ref={ref}
     />
@@ -24,7 +24,7 @@ const RadioGroupItem = React.forwardRef<
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
-      className={yextCn(
+      className={cn(
         "ve-aspect-square ve-h-4 ve-w-4 ve-rounded-full ve-border ve-border-[#dcdcdc] ve-ring-offset focus:ve-outline-none focus-visible:ve-ring-2 focus-visible:ve-ring-offset-2 disabled:ve-cursor-not-allowed disabled:ve-opacity-50",
         className
       )}

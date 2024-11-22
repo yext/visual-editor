@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
-  yextCn,
+  themeMangerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -79,7 +79,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
     <EntityField displayName="Hours" fieldId={hoursField.field}>
       <HoursStatus
         hours={hours}
-        className={yextCn(
+        className={themeMangerCn(
           "components font-semibold mb-2 font-body-fontFamily",
           className
         )}

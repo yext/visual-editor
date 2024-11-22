@@ -383,3 +383,42 @@ const Edit: () => JSX.Element = () => {
   );
 };
 ```
+
+## themeManagerCn
+
+A configured instance of [tailwind-merge](https://www.npmjs.com/package/tailwind-merge).
+Accepts a string and returns merged classes, with the right-most classes taking precedence. Use this in custom components to merge tailwind classes while respecting classes created by the default theme.config. If you customize your theme.config, you will probably need to use your own
+tailwind-merge extension.
+
+### Usage
+
+```tsx
+import { themeManagerCn } from "@yext/visual-editor";
+import { cva } from "class-variance-authority";
+
+const componentVariants = cva("components font-body-fontWeight", {
+  variants: {
+    fontWeight: {
+      default: "",
+      bold: "bold",
+    },
+  },
+});
+
+const MyComponent = ({ fontWeight, className }) => {
+  return (
+    <p
+      className={themeManagerCn(
+        componentVariants(fontWeight),
+        "font-sm",
+        className
+      )}
+    >
+      My test
+    </p>
+  );
+};
+```
+
+In this example, class names will be merged in the following order of precedence:
+`cva` base string < selected `cva` variant(s) (in the order they appear in `componentVariants`'s definition) < the string literal (`"font-sm"`) < `MyComponent`'s `className` prop
