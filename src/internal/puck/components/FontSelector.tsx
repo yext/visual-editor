@@ -48,7 +48,10 @@ export const FontSelector = ({
               <button
                 key={option.value}
                 value={option.value}
-                onClick={() => handleFontChange(option.value)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleFontChange(option.value);
+                }}
                 style={{
                   fontFamily: option.value,
                   backgroundColor:

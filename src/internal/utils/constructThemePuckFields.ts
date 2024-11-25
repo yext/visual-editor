@@ -9,6 +9,7 @@ import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
 import { RenderProps } from "./renderEntityFields.tsx";
+import { useCallback } from "react";
 
 // Converts a ThemeConfigSection into a Puck fields object
 export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
@@ -56,16 +57,19 @@ export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
           label: style.label,
           type: "custom",
           options: style.options,
-          render: ({ onChange, value }: RenderProps) =>
-            FontSelector({
-              label: style.label,
-              options:
-                typeof style.options === "function"
-                  ? style.options()
-                  : style.options,
-              value,
-              onChange,
-            }),
+          render: useCallback(
+            ({ onChange, value }: RenderProps) =>
+              FontSelector({
+                label: style.label,
+                options:
+                  typeof style.options === "function"
+                    ? style.options()
+                    : style.options,
+                value,
+                onChange,
+              }),
+            []
+          ),
         } as CustomField;
       } else {
         return {
