@@ -22,5 +22,4 @@ This library provides components necessary to set up a Pages repository that can
 
 | Function                                                                 |
 |--------------------------------------------------------------------------|
-| [resolveVisualEditorData](./src/utils/README.md#resolvevisualeditordata) |
 | [resolveYextEntityField](./src/utils/README.md#resolveYextEntityField) |
