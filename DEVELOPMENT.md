@@ -20,7 +20,7 @@ InternalEditor once all the requisite data is loaded.
 Find usePlatformBridgeDocument in this directory. This calls internal useMessage hooks to fetch data
 from the Yext platform.
 
-#### utils
+#### [utils](./src/utils/README.md)
 
 #### internal
 
