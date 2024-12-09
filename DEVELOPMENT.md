@@ -22,8 +22,6 @@ from the Yext platform.
 
 #### utils
 
-Find resolveVisualEditorData in this directory. This is a largely self-contained utility function.
-
 #### internal
 
 This directory houses all the code internal to the library. Find useMessage hooks, Puck-specific
