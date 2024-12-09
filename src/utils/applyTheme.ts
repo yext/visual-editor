@@ -19,7 +19,8 @@ export const applyTheme = (
 ): string => {
   devLogger.logFunc("applyTheme");
 
-  const savedThemes: Record<string, any>[] = document?._site?.pagesTheme;
+  const savedThemes: Record<string, any>[] =
+    document?._customDataOverrides?.pagesTheme;
 
   let savedTheme;
   if (savedThemes?.length > 0) {
