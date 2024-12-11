@@ -1,25 +1,5 @@
 # Utils
 
-## resolveVisualEditorData
-
-This is a helper function to be used in transformProps within your template tsx files (ex.
-`location.tsx`).
-
-### Params
-
-| Name         | Type   | Usage                                              |
-| ------------ | ------ | -------------------------------------------------- |
-| data         | any    | pass through document from transformProps args     |
-| templateName | string | name of the template defined in the TemplateConfig |
-
-### Usage
-
-```tsx
-export const transformProps = async (data) => {
-  return resolveVisualEditorData(data, "location");
-};
-```
-
 ## resolveYextEntityField
 
 Used in a component's render function to pull in the selected entity field's value from the document or use the constant value.

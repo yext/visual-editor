@@ -6,7 +6,7 @@ describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
     const document: Document = {
       siteId: 123,
-      _site: {
+      _customDataOverrides: {
         pagesTheme: [
           {
             themeConfiguration: {
@@ -34,7 +34,7 @@ describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with multiple overrides in c_theme", () => {
     const document: Document = {
       siteId: 123,
-      _site: {
+      _customDataOverrides: {
         pagesTheme: [
           {
             themeConfiguration: {
@@ -88,7 +88,7 @@ describe("buildCssOverridesStyle", () => {
 
   it("should ignore saved values that are no longer in the themeConfig", () => {
     const document: Document = {
-      _site: {
+      _customDataOverrides: {
         pagesTheme: [
           {
             themeConfiguration: { data: JSON.stringify({ "--absdag": "red" }) },
