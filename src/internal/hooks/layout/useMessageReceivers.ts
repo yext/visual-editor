@@ -20,18 +20,21 @@ export const useLayoutMessageReceivers = () => {
   const [layoutSaveStateFetched, setLayoutSaveStateFetched] =
     useState<boolean>(false); // needed because saveState can be empty
 
-  useReceiveMessage("getSaveState", TARGET_ORIGINS, (send, payload) => {
-    let layoutSaveState;
-    if (payload) {
-      layoutSaveState = {
-        ...payload,
+  useReceiveMessage("getLayoutSaveState", TARGET_ORIGINS, (send, payload) => {
+    let receivedLayoutSaveState;
+    if (payload && payload.history) {
+      receivedLayoutSaveState = {
+        hash: payload.hash,
         history: jsonFromEscapedJsonString(payload.history),
       } as LayoutSaveState;
     }
-    devLogger.logData("SAVE_STATE", layoutSaveState);
-    setLayoutSaveState(layoutSaveState);
+    devLogger.logData("LAYOUT_SAVE_STATE", receivedLayoutSaveState);
+    setLayoutSaveState(receivedLayoutSaveState);
     setLayoutSaveStateFetched(true);
-    send({ status: "success", payload: { message: "saveState received" } });
+    send({
+      status: "success",
+      payload: { message: "layoutSaveState received" },
+    });
   });
 
   return {

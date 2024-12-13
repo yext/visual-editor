@@ -1,7 +1,7 @@
 export type DevLoggerPrefix =
   | "TEMPLATE_METADATA"
   | "PUCK_CONFIG"
-  | "SAVE_STATE"
+  | "LAYOUT_SAVE_STATE"
   | "THEME_SAVE_STATE"
   | "VISUAL_CONFIGURATION_DATA"
   | "THEME_DATA"
