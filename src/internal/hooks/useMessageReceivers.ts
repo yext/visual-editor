@@ -24,10 +24,8 @@ export const useCommonMessageReceivers = (
   const [puckConfig, setPuckConfig] = useState<Config>();
 
   // Layout from Content
-  const [visualConfigurationData, setVisualConfigurationData] =
-    useState<Data>();
-  const [visualConfigurationDataFetched, setVisualConfigurationDataFetched] =
-    useState<boolean>(false); // needed because visualConfigurationData can be empty
+  const [layoutData, setLayoutData] = useState<Data>();
+  const [layoutDataFetched, setLayoutDataFetched] = useState<boolean>(false); // needed because layoutData can be empty
 
   // Theme from Content
   const [themeData, setThemeData] = useState<ThemeData>();
@@ -44,22 +42,16 @@ export const useCommonMessageReceivers = (
     send({ status: "success", payload: { message: "payload received" } });
   });
 
-  useReceiveMessage(
-    "getVisualConfigurationData",
-    TARGET_ORIGINS,
-    (send, payload) => {
-      const vcd = jsonFromEscapedJsonString(
-        payload.visualConfigurationData
-      ) as Data;
-      devLogger.logData("VISUAL_CONFIGURATION_DATA", vcd);
-      setVisualConfigurationData(vcd);
-      setVisualConfigurationDataFetched(true);
-      send({
-        status: "success",
-        payload: { message: "getVisualConfigurationData received" },
-      });
-    }
-  );
+  useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
+    const data = jsonFromEscapedJsonString(payload.layoutData) as Data;
+    devLogger.logData("LAYOUT_DATA", data);
+    setLayoutData(data);
+    setLayoutDataFetched(true);
+    send({
+      status: "success",
+      payload: { message: "getLayoutData received" },
+    });
+  });
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
     const payloadString = payload as unknown as string;
@@ -76,8 +68,8 @@ export const useCommonMessageReceivers = (
   });
 
   return {
-    visualConfigurationData,
-    visualConfigurationDataFetched,
+    layoutData,
+    layoutDataFetched,
     themeData,
     themeDataFetched,
     templateMetadata,

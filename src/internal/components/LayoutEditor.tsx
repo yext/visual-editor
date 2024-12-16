@@ -18,23 +18,18 @@ const devLogger = new DevLogger();
 type LayoutEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
-  visualConfigurationData: Data;
+  layoutData: Data;
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
-  const {
-    puckConfig,
-    templateMetadata,
-    visualConfigurationData,
-    themeData,
-    themeConfig,
-  } = props;
+  const { puckConfig, templateMetadata, layoutData, themeData, themeConfig } =
+    props;
 
   const {
     saveLayoutSaveState,
-    publishVisualConfiguration,
+    publishLayoutConfiguration,
     deleteLayoutSaveState,
   } = useLayoutMessageSenders();
 
@@ -136,9 +131,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       devLogger.log(
         "Layout Dev Mode - No localStorage. Using layout data from Content"
       );
-      if (visualConfigurationData) {
+      if (layoutData) {
         setPuckInitialHistory({
-          histories: [{ id: "root", state: { data: visualConfigurationData } }],
+          histories: [{ id: "root", state: { data: layoutData } }],
           appendData: false,
         });
       }
@@ -154,9 +149,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       devLogger.log(
         "Layout Prod Mode - No saveState. Using layout data from Content"
       );
-      if (visualConfigurationData) {
+      if (layoutData) {
         setPuckInitialHistory({
-          histories: [{ id: "root", state: { data: visualConfigurationData } }],
+          histories: [{ id: "root", state: { data: layoutData } }],
           appendData: false,
         });
       }
@@ -176,9 +171,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         "Layout Prod Mode - No localStorage. Using layout saveState"
       );
       setPuckInitialHistory({
-        histories: visualConfigurationData
+        histories: layoutData
           ? [
-              { id: "root", state: { data: visualConfigurationData } },
+              { id: "root", state: { data: layoutData } },
               {
                 id: layoutSaveState.hash,
                 state: { data: layoutSaveState.history.data },
@@ -190,7 +185,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
                 state: { data: layoutSaveState.history.data },
               },
             ],
-        index: visualConfigurationData ? 1 : 0,
+        index: layoutData ? 1 : 0,
         appendData: false,
       });
       setPuckInitialHistoryFetched(true);
@@ -268,7 +263,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}
       saveLayoutSaveState={saveLayoutSaveState}
-      publishVisualConfiguration={publishVisualConfiguration}
+      publishLayoutConfiguration={publishLayoutConfiguration}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
     />
