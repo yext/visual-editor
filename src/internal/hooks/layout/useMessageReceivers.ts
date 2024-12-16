@@ -22,7 +22,7 @@ export const useLayoutMessageReceivers = () => {
 
   useReceiveMessage("getLayoutSaveState", TARGET_ORIGINS, (send, payload) => {
     let receivedLayoutSaveState;
-    if (payload && payload.history) {
+    if (payload?.history) {
       receivedLayoutSaveState = {
         hash: payload.hash,
         history: jsonFromEscapedJsonString(payload.history),

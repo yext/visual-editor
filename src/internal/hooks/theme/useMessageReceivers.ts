@@ -24,7 +24,7 @@ export const useThemeMessageReceivers = () => {
 
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
     let receivedThemeSaveState;
-    if (payload && payload.history) {
+    if (payload?.history) {
       receivedThemeSaveState = {
         hash: payload.hash,
         history: jsonFromEscapedJsonString(payload.history),
