@@ -36,8 +36,8 @@ export const Editor = ({
   const {
     templateMetadata,
     puckConfig,
-    visualConfigurationData,
-    visualConfigurationDataFetched,
+    layoutData,
+    layoutDataFetched,
     themeData,
     themeDataFetched,
   } = useCommonMessageReceivers(componentRegistry);
@@ -94,7 +94,7 @@ export const Editor = ({
     !puckConfig ||
     !templateMetadata ||
     !document ||
-    !visualConfigurationDataFetched ||
+    !layoutDataFetched ||
     !themeDataFetched;
 
   const progress: number =
@@ -102,7 +102,7 @@ export const Editor = ({
     ((!!puckConfig +
       !!templateMetadata +
       !!document +
-      visualConfigurationDataFetched +
+      layoutDataFetched +
       themeDataFetched) /
       5);
 
@@ -113,7 +113,7 @@ export const Editor = ({
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            visualConfigurationData={visualConfigurationData!}
+            layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
           />
@@ -121,7 +121,7 @@ export const Editor = ({
           <LayoutEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
-            visualConfigurationData={visualConfigurationData!}
+            layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
           />

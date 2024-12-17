@@ -2,23 +2,23 @@ import { TARGET_ORIGINS, useSendMessageToParent } from "../useMessage.ts";
 
 export const useLayoutMessageSenders = () => {
   const { sendToParent: saveLayoutSaveState } = useSendMessageToParent(
-    "saveSaveState",
+    "saveLayoutSaveState",
     TARGET_ORIGINS
   );
 
   const { sendToParent: deleteLayoutSaveState } = useSendMessageToParent(
-    "deleteSaveState",
+    "deleteLayoutSaveState",
     TARGET_ORIGINS
   );
 
-  const { sendToParent: publishVisualConfiguration } = useSendMessageToParent(
-    "saveVisualConfigData",
+  const { sendToParent: publishLayout } = useSendMessageToParent(
+    "publishLayout",
     TARGET_ORIGINS
   );
 
   return {
     saveLayoutSaveState,
     deleteLayoutSaveState,
-    publishVisualConfiguration,
+    publishLayout,
   };
 };

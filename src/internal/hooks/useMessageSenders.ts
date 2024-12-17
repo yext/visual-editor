@@ -17,7 +17,7 @@ export const useCommonMessageSenders = () => {
   );
 
   const { sendToParent: sendDevLayoutSaveStateData } = useSendMessageToParent(
-    "sendDevSaveStateData",
+    "sendDevLayoutSaveStateData",
     TARGET_ORIGINS
   );
 

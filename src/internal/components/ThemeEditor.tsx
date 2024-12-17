@@ -24,28 +24,20 @@ const devLogger = new DevLogger();
 type ThemeEditorProps = {
   puckConfig: Config;
   templateMetadata: TemplateMetadata;
-  visualConfigurationData: Data;
+  layoutData: Data;
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
-  const {
-    puckConfig,
-    templateMetadata,
-    visualConfigurationData,
-    themeData,
-    themeConfig,
-  } = props;
+  const { puckConfig, templateMetadata, layoutData, themeData, themeConfig } =
+    props;
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
 
-  const {
-    saveThemeSaveState,
-    publishThemeConfiguration,
-    deleteThemeSaveState,
-  } = useThemeMessageSenders();
+  const { saveThemeSaveState, publishTheme, deleteThemeSaveState } =
+    useThemeMessageSenders();
 
   const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers();
 
@@ -107,19 +99,15 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     }
 
     // Only load Content data for theme mode
-    if (visualConfigurationData) {
+    if (layoutData) {
       setPuckInitialHistory({
-        histories: [{ id: "root", state: { data: visualConfigurationData } }],
+        histories: [{ id: "root", state: { data: layoutData } }],
         appendData: false,
       });
     }
 
     setPuckInitialHistoryFetched(true);
-  }, [
-    setPuckInitialHistory,
-    setPuckInitialHistoryFetched,
-    visualConfigurationData,
-  ]);
+  }, [setPuckInitialHistory, setPuckInitialHistoryFetched, layoutData]);
 
   /*
    * Determines the initial theme data to send to the editor.
@@ -247,7 +235,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     }
     loadPuckInitialHistory();
     loadThemeHistory();
-  }, [templateMetadata, themeSaveStateFetched, visualConfigurationData]);
+  }, [templateMetadata, themeSaveStateFetched, layoutData]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
@@ -296,7 +284,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       puckInitialHistory={puckInitialHistory}
       isLoading={isLoading}
       templateMetadata={templateMetadata}
-      publishThemeConfiguration={publishThemeConfiguration}
+      publishTheme={publishTheme}
       themeConfig={themeConfig}
       saveThemeSaveState={saveThemeSaveState}
       themeHistories={themeHistories}

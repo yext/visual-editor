@@ -3,7 +3,7 @@ export type DevLoggerPrefix =
   | "PUCK_CONFIG"
   | "LAYOUT_SAVE_STATE"
   | "THEME_SAVE_STATE"
-  | "VISUAL_CONFIGURATION_DATA"
+  | "LAYOUT_DATA"
   | "THEME_DATA"
   | "THEME_HISTORIES"
   | "DOCUMENT"

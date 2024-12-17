@@ -11,14 +11,14 @@ export const useThemeMessageSenders = () => {
     TARGET_ORIGINS
   );
 
-  const { sendToParent: publishThemeConfiguration } = useSendMessageToParent(
-    "saveThemeData",
+  const { sendToParent: publishTheme } = useSendMessageToParent(
+    "publishTheme",
     TARGET_ORIGINS
   );
 
   return {
     saveThemeSaveState,
     deleteThemeSaveState,
-    publishThemeConfiguration,
+    publishTheme,
   };
 };

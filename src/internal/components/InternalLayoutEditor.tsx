@@ -24,7 +24,7 @@ type InternalLayoutEditorProps = {
   templateMetadata: TemplateMetadata;
   layoutSaveState: LayoutSaveState | undefined;
   saveLayoutSaveState: (data: any) => void;
-  publishVisualConfiguration: (data: any) => void;
+  publishLayout: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
 };
@@ -38,7 +38,7 @@ export const InternalLayoutEditor = ({
   templateMetadata,
   layoutSaveState,
   saveLayoutSaveState,
-  publishVisualConfiguration,
+  publishLayout,
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
 }: InternalLayoutEditorProps) => {
@@ -96,8 +96,8 @@ export const InternalLayoutEditor = ({
   };
 
   const handlePublishLayout = async (data: Data) => {
-    publishVisualConfiguration({
-      payload: { visualConfigurationData: JSON.stringify(data) },
+    publishLayout({
+      payload: { layoutData: JSON.stringify(data) },
     });
   };
 
