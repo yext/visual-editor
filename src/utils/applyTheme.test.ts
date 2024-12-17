@@ -6,15 +6,8 @@ describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
     const document: Document = {
       siteId: 123,
-      _customDataOverrides: {
-        pagesTheme: [
-          {
-            themeConfiguration: {
-              data: JSON.stringify({ "--colors-palette-text": "red" }),
-              siteId: 123,
-            },
-          },
-        ],
+      __: {
+        theme: JSON.stringify({ "--colors-palette-text": "red" }),
       },
     };
     const result = applyTheme(document, themeConfig);
@@ -34,19 +27,12 @@ describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with multiple overrides in c_theme", () => {
     const document: Document = {
       siteId: 123,
-      _customDataOverrides: {
-        pagesTheme: [
-          {
-            themeConfiguration: {
-              data: JSON.stringify({
-                "--colors-palette-primary-DEFAULT": "hsl(0 68% 51%)",
-                "--colors-palette-primary-foreground": "hsl(0 0% 100%)",
-                "--borderRadius-border-lg": "20px",
-              }),
-              siteId: 123,
-            },
-          },
-        ],
+      __: {
+        theme: JSON.stringify({
+          "--colors-palette-primary-DEFAULT": "hsl(0 68% 51%)",
+          "--colors-palette-primary-foreground": "hsl(0 0% 100%)",
+          "--borderRadius-border-lg": "20px",
+        }),
       },
     };
 
@@ -88,12 +74,8 @@ describe("buildCssOverridesStyle", () => {
 
   it("should ignore saved values that are no longer in the themeConfig", () => {
     const document: Document = {
-      _customDataOverrides: {
-        pagesTheme: [
-          {
-            themeConfiguration: { data: JSON.stringify({ "--absdag": "red" }) },
-          },
-        ],
+      __: {
+        theme: JSON.stringify({ "--absdag": "red" }),
       },
     };
     const result = applyTheme(document, themeConfig);
