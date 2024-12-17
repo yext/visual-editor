@@ -36,11 +36,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
 
-  const {
-    saveThemeSaveState,
-    publishThemeConfiguration,
-    deleteThemeSaveState,
-  } = useThemeMessageSenders();
+  const { saveThemeSaveState, publishTheme, deleteThemeSaveState } =
+    useThemeMessageSenders();
 
   const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers();
 
@@ -287,7 +284,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       puckInitialHistory={puckInitialHistory}
       isLoading={isLoading}
       templateMetadata={templateMetadata}
-      publishThemeConfiguration={publishThemeConfiguration}
+      publishTheme={publishTheme}
       themeConfig={themeConfig}
       saveThemeSaveState={saveThemeSaveState}
       themeHistories={themeHistories}

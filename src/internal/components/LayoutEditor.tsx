@@ -27,11 +27,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const { puckConfig, templateMetadata, layoutData, themeData, themeConfig } =
     props;
 
-  const {
-    saveLayoutSaveState,
-    publishLayoutConfiguration,
-    deleteLayoutSaveState,
-  } = useLayoutMessageSenders();
+  const { saveLayoutSaveState, publishLayout, deleteLayoutSaveState } =
+    useLayoutMessageSenders();
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
@@ -263,7 +260,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}
       saveLayoutSaveState={saveLayoutSaveState}
-      publishLayoutConfiguration={publishLayoutConfiguration}
+      publishLayout={publishLayout}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
     />

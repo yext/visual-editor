@@ -19,7 +19,7 @@ type InternalThemeEditorProps = {
   puckInitialHistory: InitialHistory | undefined;
   isLoading: boolean;
   templateMetadata: TemplateMetadata;
-  publishThemeConfiguration: (data: any) => void;
+  publishTheme: (data: any) => void;
   themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
   themeHistories?: ThemeHistories;
@@ -35,7 +35,7 @@ export const InternalThemeEditor = ({
   puckInitialHistory,
   isLoading,
   templateMetadata,
-  publishThemeConfiguration,
+  publishTheme,
   themeConfig,
   saveThemeSaveState,
   themeHistories,
@@ -59,7 +59,7 @@ export const InternalThemeEditor = ({
 
     const currentThemeHistory = themeHistories.histories[themeHistories.index];
 
-    publishThemeConfiguration({
+    publishTheme({
       payload: {
         saveThemeData: JSON.stringify(currentThemeHistory.data),
       },

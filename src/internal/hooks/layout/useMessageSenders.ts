@@ -11,14 +11,14 @@ export const useLayoutMessageSenders = () => {
     TARGET_ORIGINS
   );
 
-  const { sendToParent: publishLayoutConfiguration } = useSendMessageToParent(
-    "publishLayoutConfiguration",
+  const { sendToParent: publishLayout } = useSendMessageToParent(
+    "publishLayout",
     TARGET_ORIGINS
   );
 
   return {
     saveLayoutSaveState,
     deleteLayoutSaveState,
-    publishLayoutConfiguration,
+    publishLayout,
   };
 };
