@@ -6,6 +6,12 @@ import { ThemeConfig } from "./themeResolver.ts";
 
 export type Document = {
   [key: string]: any;
+  __?: {
+    layout?: string;
+    theme?: string;
+    codeTemplate?: string;
+    name?: string;
+  };
 };
 
 export const THEME_STYLE_TAG_ID = "visual-editor-theme";
@@ -19,24 +25,8 @@ export const applyTheme = (
 ): string => {
   devLogger.logFunc("applyTheme");
 
-  const savedThemes: Record<string, any>[] =
-    document?._customDataOverrides?.pagesTheme ?? document?._site?.pagesTheme;
-
-  let savedTheme;
-  if (savedThemes?.length > 0) {
-    savedTheme =
-      document.siteId !== 0
-        ? savedThemes.find(
-            (theme) =>
-              Number(theme.themeConfiguration.siteId) === document.siteId
-          )
-        : savedThemes[0]; // siteId is not set on local data documents, so default to the first one
-  }
-
-  let overrides;
-  if (savedTheme?.themeConfiguration) {
-    overrides = JSON.parse(savedTheme.themeConfiguration?.data);
-  }
+  const publishedTheme = document?.__?.theme;
+  const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
 
   if (Object.keys(themeConfig).length > 0) {
     return `${base ?? ""}${googleFontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
