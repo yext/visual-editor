@@ -77,6 +77,11 @@ export const ui: Registry = [
     files: ["GridSection.tsx"],
   },
   {
+    name: "Header",
+    type: "registry:ui",
+    files: ["Header.tsx"],
+  },
+  {
     name: "HeadingText",
     type: "registry:ui",
     registryDependencies: ["heading"],
