@@ -6,6 +6,7 @@ export { Emails, type EmailsProps } from "./Emails.tsx";
 export { FlexContainer, type FlexContainerProps } from "./FlexContainer.tsx";
 export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";
 export { GridSection, type GridSectionProps } from "./GridSection.tsx";
+export { Header, type HeaderProps } from "./Header.tsx";
 export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
