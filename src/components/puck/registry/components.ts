@@ -114,4 +114,10 @@ export const ui: Registry = [
     files: ["Promo.tsx"],
     registryDependencies: ["section", "heading", "cta", "body", "Image"],
   },
+  {
+    name: "Card",
+    type: "registry:ui",
+    files: ["Card.tsx"],
+    registryDependencies: ["section", "heading", "cta", "body", "Image"],
+  },
 ];
