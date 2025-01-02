@@ -1,0 +1,387 @@
+import * as React from "react";
+import { ComponentConfig, Fields } from "@measured/puck";
+import { Image, ImageProps, ImageType } from "@yext/pages-components";
+import {
+  themeMangerCn,
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
+  YextEntityField,
+  YextEntityFieldSelector,
+  FontSizeSelector,
+  BodyProps,
+} from "../../index.js";
+import { Body } from "./atoms/body.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
+import { Section } from "./atoms/section.js";
+import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
+
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+
+interface CardProps {
+  orientation: "left" | "right";
+  heading: {
+    text: YextEntityField<string>;
+    fontSize: HeadingProps["fontSize"];
+    color: HeadingProps["color"];
+    transform: HeadingProps["transform"];
+  };
+  subheading: {
+    text: YextEntityField<string>;
+    fontSize: HeadingProps["fontSize"];
+    color: HeadingProps["color"];
+    transform: HeadingProps["transform"];
+  };
+  body: {
+    text: YextEntityField<string>;
+    fontSize: BodyProps["fontSize"];
+    color: BodyProps["color"];
+    transform: BodyProps["textTransform"];
+  };
+  image: {
+    image: YextEntityField<ImageType>;
+    size: ImageWrapperProps["size"];
+    aspectRatio: ImageWrapperProps["aspectRatio"];
+    rounded: ImageWrapperProps["rounded"];
+  };
+  cta: {
+    entityField: YextEntityField<CTAProps>;
+    variant: CTAProps["variant"];
+    fontSize: HeadingProps["fontSize"];
+  };
+}
+
+const cardFields: Fields<CardProps> = {
+  orientation: {
+    type: "select",
+    label: "Orientation",
+    options: [
+      { label: "Left", value: "left" },
+      { label: "Right", value: "right" },
+    ],
+  },
+  heading: {
+    type: "object",
+    label: "Title",
+    objectFields: {
+      text: YextEntityFieldSelector<any, string>({
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      fontSize: FontSizeSelector(),
+      color: {
+        label: "Font Color",
+        type: "select",
+        options: [
+          { label: "Default", value: "default" },
+          { label: "Primary", value: "primary" },
+          { label: "Secondary", value: "secondary" },
+          { label: "Accent", value: "accent" },
+          { label: "Text", value: "text" },
+          { label: "Background", value: "background" },
+        ],
+      },
+      transform: {
+        label: "Text Transform",
+        type: "select",
+        options: [
+          { value: "none", label: "None" },
+          { value: "lowercase", label: "Lowercase" },
+          { value: "uppercase", label: "Uppercase" },
+          { value: "capitalize", label: "Capitalize" },
+        ],
+      },
+    },
+  },
+  subheading: {
+    type: "object",
+    label: "Description",
+    objectFields: {
+      text: YextEntityFieldSelector<any, string>({
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      fontSize: FontSizeSelector(),
+      color: {
+        label: "Font Color",
+        type: "select",
+        options: [
+          { label: "Default", value: "default" },
+          { label: "Primary", value: "primary" },
+          { label: "Secondary", value: "secondary" },
+          { label: "Accent", value: "accent" },
+          { label: "Text", value: "text" },
+          { label: "Background", value: "background" },
+        ],
+      },
+      transform: {
+        label: "Text Transform",
+        type: "select",
+        options: [
+          { value: "none", label: "None" },
+          { value: "lowercase", label: "Lowercase" },
+          { value: "uppercase", label: "Uppercase" },
+          { value: "capitalize", label: "Capitalize" },
+        ],
+      },
+    },
+  },
+  body: {
+    type: "object",
+    label: "Description",
+    objectFields: {
+      text: YextEntityFieldSelector<any, string>({
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      fontSize: FontSizeSelector(),
+      color: {
+        label: "Font Color",
+        type: "select",
+        options: [
+          { label: "Default", value: "default" },
+          { label: "Primary", value: "primary" },
+          { label: "Secondary", value: "secondary" },
+          { label: "Accent", value: "accent" },
+          { label: "Text", value: "text" },
+          { label: "Background", value: "background" },
+        ],
+      },
+      transform: {
+        label: "Text Transform",
+        type: "select",
+        options: [
+          { value: "none", label: "None" },
+          { value: "lowercase", label: "Lowercase" },
+          { value: "uppercase", label: "Uppercase" },
+          { value: "capitalize", label: "Capitalize" },
+        ],
+      },
+    },
+  },
+  image: {
+    type: "object",
+    label: "Image",
+    objectFields: {
+      image: YextEntityFieldSelector<any, ImageType>({
+        label: "Image",
+        filter: {
+          types: ["type.image"],
+        },
+      }),
+      size: {
+        type: "select",
+        label: "Size",
+        options: [
+          { label: "Small", value: "small" },
+          { label: "Medium", value: "medium" },
+          { label: "Large", value: "large" },
+          { label: "Full Width", value: "full" },
+        ],
+      },
+      aspectRatio: {
+        type: "select",
+        label: "Aspect Ratio",
+        options: [
+          { label: "Auto", value: "auto" },
+          { label: "Square", value: "square" },
+          { label: "Video (16:9)", value: "video" },
+          { label: "Portrait (3:4)", value: "portrait" },
+        ],
+      },
+      rounded: {
+        type: "select",
+        label: "Rounded Corners",
+        options: [
+          { label: "None", value: "none" },
+          { label: "Small", value: "small" },
+          { label: "Medium", value: "medium" },
+          { label: "Large", value: "large" },
+          { label: "Full", value: "full" },
+        ],
+      },
+    },
+  },
+  cta: {
+    type: "object",
+    label: "Call to Action",
+    objectFields: {
+      entityField: YextEntityFieldSelector({
+        label: "Entity Field",
+        filter: {
+          types: ["type.cta"],
+        },
+      }),
+      variant: {
+        type: "select",
+        label: "Variant",
+        options: [
+          { label: "Primary", value: "primary" },
+          { label: "Link", value: "link" },
+        ],
+      },
+      fontSize: FontSizeSelector(),
+    },
+  },
+};
+
+const CardWrapper = ({
+  orientation,
+  heading,
+  subheading,
+  body,
+  image,
+  cta,
+}: CardProps) => {
+  const document = useDocument();
+  const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
+    document,
+    image.image
+  );
+  const resolvedCTA = resolveYextEntityField(document, cta.entityField);
+
+  if (!resolvedImage) {
+    return null;
+  }
+
+  return (
+    <Section className="components">
+      <div
+        className={themeMangerCn(
+          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
+          orientation === "right" && "md:flex-row-reverse"
+        )}
+      >
+        {resolvedImage && (
+          <EntityField displayName="Image" fieldId={image.image.field}>
+            <div
+              className={themeMangerCn(
+                imageWrapperVariants({
+                  size: image.size,
+                  rounded: image.rounded,
+                  aspectRatio: image.aspectRatio,
+                }),
+                "overflow-hidden"
+              )}
+            >
+              <Image
+                image={resolvedImage}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </EntityField>
+        )}
+        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
+          {heading?.text && (
+            <Heading
+              fontSize={heading.fontSize}
+              color={heading.color}
+              transform={heading.transform}
+            >
+              {resolveYextEntityField(document, heading.text)}
+            </Heading>
+          )}
+          {subheading?.text && (
+            <Heading
+              fontSize={subheading.fontSize}
+              color={subheading.color}
+              transform={subheading.transform}
+            >
+              {resolveYextEntityField(document, subheading.text)}
+            </Heading>
+          )}
+          {body?.text && (
+            <Body
+              fontSize={body.fontSize}
+              textTransform={body.transform}
+              color={body.color}
+            >
+              {resolveYextEntityField(document, body.text)}
+            </Body>
+          )}
+          {resolvedCTA && (
+            <CTA
+              variant={cta.variant}
+              label={resolvedCTA.name}
+              link={resolvedCTA.link ?? "#"}
+              fontSize={cta.fontSize}
+            />
+          )}
+        </div>
+      </div>
+    </Section>
+  );
+};
+
+export const CardComponent: ComponentConfig<CardProps> = {
+  label: "Card",
+  fields: cardFields,
+  defaultProps: {
+    orientation: "left",
+    heading: {
+      text: {
+        field: "",
+        constantValue: "Heading",
+        constantValueEnabled: true,
+      },
+      fontSize: "3xl",
+      color: "default",
+      transform: "none",
+    },
+    subheading: {
+      text: {
+        field: "",
+        constantValue: "SubHeading",
+        constantValueEnabled: true,
+      },
+      fontSize: "xl",
+      color: "default",
+      transform: "none",
+    },
+    body: {
+      text: {
+        field: "",
+        constantValue: "Body",
+        constantValueEnabled: true,
+      },
+      fontSize: "default",
+      color: "default",
+      transform: "none",
+    },
+    image: {
+      image: {
+        field: "primaryPhoto",
+        constantValue: {
+          alternateText: "",
+          height: 360,
+          width: 640,
+          url: PLACEHOLDER_IMAGE_URL,
+        },
+        constantValueEnabled: true,
+      },
+      size: "full",
+      rounded: "none",
+      aspectRatio: "auto",
+    },
+    cta: {
+      entityField: {
+        field: "",
+        constantValue: {
+          name: "Call to Action",
+        },
+      },
+      fontSize: "default",
+      variant: "primary",
+    },
+  },
+  render: (props) => <CardWrapper {...props} />,
+};
+
+export { CardComponent as Card, type CardProps };

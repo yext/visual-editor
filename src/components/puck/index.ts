@@ -1,6 +1,7 @@
 export * from "./atoms/index.ts";
 export { Address, type AddressProps } from "./Address.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
+export { Card, type CardProps } from "./Card.tsx";
 export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
 export { FlexContainer, type FlexContainerProps } from "./FlexContainer.tsx";
