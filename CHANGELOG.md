@@ -1,3 +1,25 @@
+#### 0.0.19 (2025-01-02)
+
+##### Chores
+
+- update puck and remove unused deps (#176) (5837c249)
+- remove resolveVisualEditorData (#171) (b8e5d865)
+
+##### New Features
+
+- add header component (#175) (c76e89f9)
+
+##### Bug Fixes
+
+- font selector does not work with recent puck canaries (#167) (fe05cea4)
+
+##### Refactors
+
+- rename messengers (#173) (4f5612cb)
+- read theme from document.\_\_.theme (#174) (0dfeac0f)
+- update save state receivers (#172) (7eae66eb)
+- custom twMerge and tailwind cleanup (#170) (d2241c46)
+
 #### 0.0.18 (2024-11-21)
 
 ##### New Features
