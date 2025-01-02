@@ -87,16 +87,10 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
-  const constantFieldConfig = returnConstantFieldConfig(
-    props.filter.types,
-    !!props.filter.includeListsOnly
-  );
   return {
     type: "custom",
     label: props.label,
     render: ({ field, value, onChange }: RenderProps) => {
-      const filteredEntityFields = getFilteredEntityFields(props.filter);
-
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
@@ -107,59 +101,23 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 
       return (
         <>
-          {!!constantFieldConfig && (
-            <ToggleMode
-              constantValueEnabled={value?.constantValueEnabled}
-              toggleConstantValueEnabled={toggleConstantValueEnabled}
+          <ConstantValueModeToggler
+            constantValueEnabled={value?.constantValueEnabled}
+            toggleConstantValueEnabled={toggleConstantValueEnabled}
+          />
+          {value?.constantValueEnabled ? (
+            <ConstantValueInput<T>
+              onChange={onChange}
+              value={value}
+              filter={props.filter}
             />
-          )}
-          {!value?.constantValueEnabled ? (
-            <FieldLabel
-              label={field.label || "Label is undefined"}
-              className="ve-mt-2.5"
-            >
-              <AutoField
-                field={{
-                  type: "select",
-                  options: [
-                    { value: "", label: "Select a Content field" },
-                    ...filteredEntityFields.map((entityFieldNameToSchema) => {
-                      return {
-                        label: entityFieldNameToSchema.name,
-                        value: entityFieldNameToSchema.name,
-                      };
-                    }),
-                  ],
-                }}
-                onChange={(selectedEntityField) => {
-                  onChange({
-                    field: selectedEntityField,
-                    constantValue: value?.constantValue ?? "",
-                    constantValueEnabled: false,
-                  });
-                }}
-                value={value?.field}
-              />
-            </FieldLabel>
           ) : (
-            <FieldLabel
-              label={"Constant Value"}
-              className="entityField-constantValue"
-            >
-              {constantFieldConfig && (
-                <AutoField
-                  onChange={(newConstantValue) =>
-                    onChange({
-                      field: value?.field ?? "",
-                      constantValue: newConstantValue,
-                      constantValueEnabled: true,
-                    })
-                  }
-                  value={value?.constantValue}
-                  field={constantFieldConfig}
-                />
-              )}
-            </FieldLabel>
+            <EntityFieldInput<T>
+              onChange={onChange}
+              value={value}
+              filter={props.filter}
+              label={field.label}
+            />
           )}
         </>
       );
@@ -167,7 +125,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   };
 };
 
-const ToggleMode = ({
+const ConstantValueModeToggler = ({
   constantValueEnabled,
   toggleConstantValueEnabled,
 }: {
@@ -195,5 +153,77 @@ const ToggleMode = ({
         </div>
       </RadioGroup>
     </div>
+  );
+};
+
+type InputProps<T extends Record<string, any>> = {
+  filter: RenderEntityFieldFilter<T>;
+  onChange: (value: any) => void;
+  value: any;
+  label?: string;
+};
+
+const ConstantValueInput = <T extends Record<string, any>>({
+  filter,
+  onChange,
+  value,
+}: InputProps<T>) => {
+  const constantFieldConfig = returnConstantFieldConfig(
+    filter.types,
+    !!filter.includeListsOnly
+  );
+
+  return (
+    <FieldLabel label={"Constant Value"} className="entityField-constantValue">
+      {constantFieldConfig && (
+        <AutoField
+          onChange={(newConstantValue) =>
+            onChange({
+              field: value?.field ?? "",
+              constantValue: newConstantValue,
+              constantValueEnabled: true,
+            })
+          }
+          value={value?.constantValue}
+          field={constantFieldConfig}
+        />
+      )}
+    </FieldLabel>
+  );
+};
+
+const EntityFieldInput = <T extends Record<string, any>>({
+  filter,
+  onChange,
+  value,
+  label,
+}: InputProps<T>) => {
+  const filteredEntityFields = getFilteredEntityFields(filter);
+
+  return (
+    <FieldLabel label={label ?? "Entity Field"} className="ve-mt-2.5">
+      <AutoField
+        field={{
+          type: "select",
+          options: [
+            { value: "", label: "Select a Content field" },
+            ...filteredEntityFields.map((entityFieldNameToSchema) => {
+              return {
+                label: entityFieldNameToSchema.name,
+                value: entityFieldNameToSchema.name,
+              };
+            }),
+          ],
+        }}
+        onChange={(selectedEntityField) => {
+          onChange({
+            field: selectedEntityField,
+            constantValue: value?.constantValue ?? "",
+            constantValueEnabled: false,
+          });
+        }}
+        value={value?.field}
+      />
+    </FieldLabel>
   );
 };
