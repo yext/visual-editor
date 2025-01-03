@@ -1,3 +1,19 @@
+#### 0.0.20 (2025-01-03)
+
+##### New Features
+
+- add footer (#180) (570514e0)
+- add card component (#177) (8e97f23f)
+
+##### Bug Fixes
+
+- header links fail build (#179) (d29c582f)
+- entity field selection (#178) (c6311712)
+
+##### Refactors
+
+- update props for cta and get directions (#181) (f558b2f2)
+
 #### 0.0.19 (2025-01-02)
 
 ##### Chores
