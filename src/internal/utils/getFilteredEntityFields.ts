@@ -44,13 +44,7 @@ export type EntityFieldTypes =
   | "type.cta"
   | `c_${string}`;
 
-const DEFAULT_DISALLOWED_ENTITY_FIELDS = [
-  "uid",
-  "meta",
-  "slug",
-  "c_visualConfigurations",
-  "c_pages_layouts",
-];
+const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
 
 // Populate this with fields that aren't allowed to have subfields.
 const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = [];

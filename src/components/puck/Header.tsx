@@ -9,7 +9,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.ts";
 import { cva, VariantProps } from "class-variance-authority";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 const PLACEHOLDER_LOGO_URL = "https://placehold.co/50";
 
@@ -62,7 +62,6 @@ const headerFields: Fields<HeaderProps> = {
     },
     getItemSummary: (_, i) => `Link ${i !== undefined ? i + 1 : ""}`,
     defaultItemProps: {
-      id: v4(),
       cta: {
         field: "",
         constantValue: { link: "#", label: "Link" },
@@ -125,16 +124,28 @@ export const Header: ComponentConfig<HeaderProps> = {
   label: "Header",
   render: (props) => <HeaderComponent {...props} />,
   resolveData: ({ props }, { lastData }) => {
+    // generate a unique id for each of the links
     if (lastData?.props.links.length === props.links.length) {
       return { props };
     }
+
+    // handle duplication by assigning a new id
+    const ids: string[] = [];
+    const resolveId = (id?: string) => {
+      if (!id || ids.includes(id)) {
+        const newId = uuidv4();
+        ids.push(newId);
+        return id;
+      }
+      return id;
+    };
 
     return {
       props: {
         ...props,
         links: props.links.map((link) => ({
           ...link,
-          id: link.id ?? v4(),
+          id: resolveId(link.id),
         })),
       },
     };
@@ -151,14 +162,13 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
       const resolvedCTA = resolveYextEntityField<CTA>(document, link.cta);
       if (resolvedCTA) {
         return {
-          id: link.id!,
+          id: link.id,
           ...resolvedCTA,
         };
       }
     })
     .filter((link) => link !== undefined);
 
-  console.log(resolvedLinks, links);
   return (
     <header
       className={themeMangerCn(
@@ -174,7 +184,7 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
           <ul className="flex space-x-8">
             {resolvedLinks?.map((item, idx) => (
               <li
-                key={item.id}
+                key={item.id ?? idx}
                 className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
               >
                 <Link cta={item} eventName={`link${idx}`} />
