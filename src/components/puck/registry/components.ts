@@ -73,7 +73,7 @@ export const ui: Registry = [
   {
     name: "GetDirections",
     type: "registry:ui",
-    registryDependencies: ["button", "section"],
+    registryDependencies: ["button"],
     files: ["GetDirections.tsx"],
   },
   {
