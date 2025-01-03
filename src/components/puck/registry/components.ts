@@ -65,6 +65,12 @@ export const ui: Registry = [
     files: ["FlexContainer.tsx"],
   },
   {
+    name: "Footer",
+    type: "registry:ui",
+    registryDependencies: ["body"],
+    files: ["Footer.tsx"],
+  },
+  {
     name: "GetDirections",
     type: "registry:ui",
     registryDependencies: ["button", "section"],
