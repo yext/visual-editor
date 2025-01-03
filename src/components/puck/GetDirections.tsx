@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Section, sectionVariants } from "./atoms/section.js";
 import { Button, ButtonProps } from "./atoms/button.js";
 import {
   getDirections,
@@ -16,7 +15,6 @@ import {
   resolveYextEntityField,
   FontSizeSelector,
 } from "../../index.js";
-import { VariantProps } from "class-variance-authority";
 
 type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
@@ -24,8 +22,6 @@ type GetDirectionsProps = {
   variant: ButtonProps["variant"];
   size: ButtonProps["size"];
   borderRadius: ButtonProps["borderRadius"];
-  alignment: "items-start" | "items-center";
-  padding: VariantProps<typeof sectionVariants>["padding"];
   fontSize: ButtonProps["fontSize"];
 };
 
@@ -72,32 +68,12 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
       { label: "Full", value: "full" },
     ],
   },
-  alignment: {
-    label: "Align card",
-    type: "radio",
-    options: [
-      { label: "Left", value: "items-start" },
-      { label: "Center", value: "items-center" },
-    ],
-  },
-  padding: {
-    label: "Padding",
-    type: "radio",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "default" },
-      { label: "Large", value: "large" },
-    ],
-  },
 };
 
 const GetDirections = ({
   variant,
   size,
   borderRadius,
-  alignment,
-  padding,
   coordinate: coordinateField,
   getDirectionsProvider,
   fontSize,
@@ -120,20 +96,15 @@ const GetDirections = ({
   );
 
   return (
-    <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
-      padding={padding}
+    <Button
+      asChild
+      variant={variant}
+      size={size}
+      fontSize={fontSize}
+      borderRadius={borderRadius}
     >
-      <Button
-        asChild
-        variant={variant}
-        size={size}
-        fontSize={fontSize}
-        borderRadius={borderRadius}
-      >
-        <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
-      </Button>
-    </Section>
+      <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
+    </Button>
   );
 };
 
@@ -144,8 +115,6 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
     size: "default",
     fontSize: "default",
     borderRadius: "default",
-    alignment: "items-start",
-    padding: "none",
     getDirectionsProvider: "google",
     coordinate: {
       field: "yextDisplayCoordinate",

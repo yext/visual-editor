@@ -13,6 +13,8 @@ import {
 interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
+  size: CTAProps["size"];
+  borderRadius: CTAProps["borderRadius"];
   fontSize: CTAProps["fontSize"];
   className?: CTAProps["className"];
 }
@@ -24,13 +26,33 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       types: ["type.cta"],
     },
   }),
-  fontSize: FontSizeSelector(),
   variant: {
     type: "select",
     label: "Variant",
     options: [
       { label: "Primary", value: "primary" },
       { label: "Link", value: "link" },
+    ],
+  },
+  size: {
+    label: "Size",
+    type: "radio",
+    options: [
+      { label: "Default", value: "default" },
+      { label: "Small", value: "small" },
+      { label: "Large", value: "large" },
+    ],
+  },
+  fontSize: FontSizeSelector(),
+  borderRadius: {
+    label: "Border Radius",
+    type: "radio",
+    options: [
+      { label: "Default", value: "default" },
+      { label: "None", value: "none" },
+      { label: "Medium", value: "medium" },
+      { label: "Large", value: "large" },
+      { label: "Full", value: "full" },
     ],
   },
 };
@@ -40,7 +62,8 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
   variant,
   className,
   fontSize,
-  ...rest
+  size,
+  borderRadius,
 }) => {
   const document = useDocument();
   const cta = resolveYextEntityField(document, entityField);
@@ -58,7 +81,8 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         variant={variant}
         className={className}
         fontSize={fontSize}
-        {...rest}
+        size={size}
+        borderRadius={borderRadius}
       />
     </EntityField>
   );
@@ -76,6 +100,8 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     },
     variant: "primary",
     fontSize: "default",
+    borderRadius: "default",
+    size: "default",
   },
   render: (props) => <CTAWrapper {...props} />,
 };
