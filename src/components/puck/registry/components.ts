@@ -42,6 +42,12 @@ export const ui: Registry = [
     files: ["Address.tsx"],
   },
   {
+    name: "Banner",
+    type: "registry:ui",
+    registryDependencies: ["body"],
+    files: ["Banner.tsx"],
+  },
+  {
     name: "BodyText",
     type: "registry:ui",
     registryDependencies: ["body"],
