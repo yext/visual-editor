@@ -33,8 +33,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@yext/pages-components':
-        specifier: ^1.0.2
-        version: 1.0.2(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
+        specifier: ^1.0.0
+        version: 1.0.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -1726,8 +1726,8 @@ packages:
   '@yext/analytics@1.0.0-beta.5':
     resolution: {integrity: sha512-nMEm6/lqWOJNWp8JzFSMBD+zQhv765T1UsCTmxk0bPrUM/fswOpq8iGtMC/BU3Ll0kWSqkKKSRjhW0bTVBauag==}
 
-  '@yext/pages-components@1.0.2':
-    resolution: {integrity: sha512-2k6g+0781r91GB+1crTiiArYZoBbQQbotkRIz480chpKceX0agGYi6cpPkD+HQLlOYk8x3vZgpKhWkb5/IC/eA==}
+  '@yext/pages-components@1.0.4':
+    resolution: {integrity: sha512-IrmKRPjNZvBryKN/lTtnfCD3QXsSlzrtEYhzPhw0xG0U++vRldH9D4LA3RRDw63KPTnqhtwjcYGCi9UOPuLF0g==}
     engines: {node: ^17 || ^18 || ^20}
     peerDependencies:
       react: ^17.0.2 || ^18.2.0
@@ -5969,7 +5969,7 @@ snapshots:
     dependencies:
       ulidx: 2.4.1
 
-  '@yext/pages-components@1.0.2(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)':
+  '@yext/pages-components@1.0.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)':
     dependencies:
       '@lexical/code': 0.12.6(lexical@0.12.6)
       '@lexical/hashtag': 0.12.6(lexical@0.12.6)
