@@ -1,3 +1,13 @@
+#### 0.0.21 (2025-01-09)
+
+##### New Features
+
+- add Banner component (#182) (d12ba2b9)
+
+##### Refactors
+
+- move pages-components to external peer to enable analytics (#183) (c12dd35c)
+
 #### 0.0.20 (2025-01-03)
 
 ##### New Features
