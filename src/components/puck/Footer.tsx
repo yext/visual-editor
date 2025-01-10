@@ -227,7 +227,9 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
                 key={item.id ?? idx}
                 className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
               >
-                <Link cta={item} eventName={`link${idx}`} />
+                {item.link && (
+                  <Link cta={item} eventName={`footer-link-${item.label}`} />
+                )}
               </li>
             ))}
           </ul>
