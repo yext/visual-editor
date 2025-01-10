@@ -1,3 +1,9 @@
+#### 0.0.22 (2025-01-10)
+
+##### Bug Fixes
+
+- undefined header and footer links (#184) (545c4581)
+
 #### 0.0.21 (2025-01-09)
 
 ##### New Features
