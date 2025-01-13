@@ -62,7 +62,7 @@ const ThemeSidebar = (props: ThemeSidebarProps) => {
     <div>
       <Alert>
         <AlertDescription>
-          Changes to the theme will affect all templates and layouts for the
+          Changes to the theme will affect all page sets and layouts for the
           entire site.
         </AlertDescription>
       </Alert>
