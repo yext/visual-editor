@@ -58,6 +58,7 @@ interface CardProps {
     fontSize: HeadingProps["fontSize"];
   };
   backgroundColor:
+    | "bg-card-backgroundColor"
     | "bg-palette-primary"
     | "bg-palette-secondary"
     | "bg-palette-accent"
@@ -255,13 +256,14 @@ const cardFields: Fields<CardProps> = {
   },
   backgroundColor: {
     label: "Background Color",
-    type: "radio",
+    type: "select",
     options: [
-      { label: "Background", value: "bg-palette-background" },
+      { label: "Default", value: "bg-card-backgroundColor" },
       { label: "Primary", value: "bg-palette-primary" },
       { label: "Secondary", value: "bg-palette-secondary" },
       { label: "Accent", value: "bg-palette-accent" },
       { label: "Text", value: "bg-palette-text" },
+      { label: "Background", value: "bg-palette-background" },
     ],
   },
 };
@@ -422,7 +424,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
       fontSize: "default",
       variant: "primary",
     },
-    backgroundColor: "bg-palette-background",
+    backgroundColor: "bg-card-backgroundColor",
   },
   render: (props) => <CardWrapper {...props} />,
 };
