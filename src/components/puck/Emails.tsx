@@ -138,7 +138,11 @@ const Emails: React.FC<EmailsProps> = ({
   }
 
   return (
-    <EntityField displayName="Email List" fieldId={emailListField.field}>
+    <EntityField
+      displayName="Email List"
+      fieldId={emailListField.field}
+      constantValueEnabled={emailListField.constantValueEnabled}
+    >
       <ul
         className={themeMangerCn(
           "components",

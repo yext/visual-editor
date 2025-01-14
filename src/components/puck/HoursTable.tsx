@@ -100,7 +100,11 @@ const VisualEditorHoursTable = ({
     >
       <div>
         {hours && (
-          <EntityField displayName="Hours" fieldId="hours">
+          <EntityField
+            displayName="Hours"
+            fieldId="hours"
+            constantValueEnabled={hoursField.constantValueEnabled}
+          >
             <HoursTable
               hours={hours}
               startOfWeek={startOfWeek}

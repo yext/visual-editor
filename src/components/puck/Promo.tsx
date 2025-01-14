@@ -217,7 +217,11 @@ const PromoWrapper: React.FC<PromoProps> = ({
         )}
       >
         {resolvedImage && (
-          <EntityField displayName="Image" fieldId={image.image.field}>
+          <EntityField
+            displayName="Image"
+            fieldId={image.image.field}
+            constantValueEnabled={image.image.constantValueEnabled}
+          >
             <div
               className={themeMangerCn(
                 imageWrapperVariants({

@@ -71,9 +71,8 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
   return (
     <EntityField
       displayName="CTA"
-      fieldId={
-        entityField.constantValueEnabled ? "constant value" : entityField.field
-      }
+      fieldId={entityField.field}
+      constantValueEnabled={entityField.constantValueEnabled}
     >
       <CTA
         label={cta?.label}

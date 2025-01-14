@@ -119,7 +119,11 @@ const TextList: React.FC<TextListProps> = ({
   }
 
   return (
-    <EntityField displayName="Text List" fieldId={textListField.field}>
+    <EntityField
+      displayName="Text List"
+      fieldId={textListField.field}
+      constantValueEnabled={textListField.constantValueEnabled}
+    >
       <ul
         className={textListVariants({
           padding,
