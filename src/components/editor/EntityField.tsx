@@ -23,7 +23,7 @@ export const EntityField = ({
 }: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
 
-  if (!tooltipsVisible) {
+  if (!tooltipsVisible || constantValueEnabled) {
     return children;
   }
 
@@ -39,7 +39,7 @@ export const EntityField = ({
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={!!tooltipContent && !constantValueEnabled}>
+        <Tooltip open={!!tooltipContent}>
           <TooltipTrigger asChild>
             <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
               {children}
