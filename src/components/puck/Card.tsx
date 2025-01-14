@@ -324,7 +324,7 @@ const CardWrapper = ({
             </EntityField>
           )}
           {subheading?.text && (
-            <EntityField displayName="Heading" fieldId={subheading.text.field}>
+            <EntityField displayName="Subtitle" fieldId={subheading.text.field}>
               <Heading
                 fontSize={subheading.fontSize}
                 color={subheading.color}
@@ -336,7 +336,7 @@ const CardWrapper = ({
             </EntityField>
           )}
           {body?.text && (
-            <EntityField displayName="Heading" fieldId={body.text.field}>
+            <EntityField displayName="Description" fieldId={body.text.field}>
               <Body
                 fontSize={body.fontSize}
                 textTransform={body.transform}
