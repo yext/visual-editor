@@ -83,7 +83,7 @@ const Address = ({
         <div>
           <EntityField
             displayName="Address"
-            fieldId="address"
+            fieldId={addressField.field}
             constantValueEnabled={addressField.constantValueEnabled}
           >
             <RenderAddress
