@@ -102,7 +102,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       return (
         <>
           <ConstantValueModeToggler
-            label={props.label}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
           />
@@ -127,16 +126,15 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 };
 
 const ConstantValueModeToggler = ({
-  label,
   constantValueEnabled,
   toggleConstantValueEnabled,
 }: {
-  label: string;
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
 }) => {
-  const entityButtonId = `ve-use-entity-value-${label.toLowerCase()}`;
-  const constantButtonId = `ve-use-constant-value-${label.toLowerCase()}`;
+  const random = Math.floor(Math.random() * 999999);
+  const entityButtonId = `ve-use-entity-value-${random}`;
+  const constantButtonId = `ve-use-constant-value-${random}`;
   return (
     <div className="ve-mb-2 ve-w-full">
       <RadioGroup defaultValue={constantValueEnabled?.toString() ?? "false"}>
