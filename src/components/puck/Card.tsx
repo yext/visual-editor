@@ -260,23 +260,29 @@ const CardWrapper = ({
         )}
       >
         {resolvedImage && (
-          <EntityField displayName="Image" fieldId={image.image.field}>
-            <div
-              className={themeMangerCn(
-                imageWrapperVariants({
-                  size: image.size,
-                  rounded: image.rounded,
-                  aspectRatio: image.aspectRatio,
-                }),
-                "overflow-hidden"
-              )}
+          <div className="w-full">
+            <EntityField
+              displayName="Image"
+              fieldId={image.image.field}
+              constantValueEnabled={image.image.constantValueEnabled}
             >
-              <Image
-                image={resolvedImage}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </EntityField>
+              <div
+                className={themeMangerCn(
+                  imageWrapperVariants({
+                    size: image.size,
+                    rounded: image.rounded,
+                    aspectRatio: image.aspectRatio,
+                  }),
+                  "overflow-hidden"
+                )}
+              >
+                <Image
+                  image={resolvedImage}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </EntityField>
+          </div>
         )}
         <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
           {heading?.text && (

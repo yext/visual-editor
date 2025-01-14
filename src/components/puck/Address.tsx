@@ -83,9 +83,8 @@ const Address = ({
         <div>
           <EntityField
             displayName="Address"
-            fieldId={
-              addressField.constantValueEnabled ? "constant value" : "address"
-            }
+            fieldId="address"
+            constantValueEnabled={addressField.constantValueEnabled}
           >
             <RenderAddress
               address={address as AddressType}

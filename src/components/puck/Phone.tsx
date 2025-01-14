@@ -126,7 +126,11 @@ const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
   }
 
   return (
-    <EntityField displayName="Phone" fieldId={phone.field}>
+    <EntityField
+      displayName="Phone"
+      fieldId={phone.field}
+      constantValueEnabled={phone.constantValueEnabled}
+    >
       <p className={phoneVariants({ fontWeight, color })}>
         <PhoneIcon className="w-4 h-4" />
         {formatPhoneNumber(resolvedPhone, format)}
