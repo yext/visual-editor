@@ -40,11 +40,6 @@ export default {
           foreground: "hsl(0 0% 100%)",
         },
       },
-      borderRadius: {
-        lg: `2rem`,
-        md: `calc(2rem - 2px)`,
-        sm: "calc(2rem - 4px)",
-      },
       container: {
         center: true,
         padding: {
