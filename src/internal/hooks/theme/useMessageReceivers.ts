@@ -27,7 +27,7 @@ export const useThemeMessageReceivers = () => {
     if (payload?.history) {
       receivedThemeSaveState = {
         hash: payload.hash,
-        history: jsonFromEscapedJsonString(payload.history),
+        history: { data: jsonFromEscapedJsonString(payload.history) },
       } as ThemeSaveState;
     }
     devLogger.logData("THEME_SAVE_STATE", receivedThemeSaveState);
