@@ -43,6 +43,8 @@ export const InternalLayoutEditor = ({
   buildVisualConfigLocalStorageKey,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
+  const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
+    useState<boolean>(false);
   const historyIndex = useRef<number>(0);
 
   /**
@@ -121,6 +123,8 @@ export const InternalLayoutEditor = ({
         overrides={{
           header: () => (
             <LayoutHeader
+              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
+              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               onClearLocalChanges={handleClearLocalChanges}
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
