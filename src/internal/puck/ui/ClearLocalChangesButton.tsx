@@ -16,21 +16,23 @@ import "../../../components/editor/index.css";
 type ClearLocalChangesButtonProps = {
   disabled: boolean;
   onClearLocalChanges: () => void;
+  modalOpen: boolean;
+  setModalOpen: (newValue: boolean) => void;
 };
 
 export const ClearLocalChangesButton = ({
   disabled,
   onClearLocalChanges,
+  modalOpen,
+  setModalOpen,
 }: ClearLocalChangesButtonProps) => {
-  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
-
   const handleClearLocalChanges = () => {
     onClearLocalChanges();
-    setDialogOpen(false);
+    setModalOpen(false);
   };
 
   return (
-    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <AlertDialog open={modalOpen} onOpenChange={setModalOpen}>
       <AlertDialogTrigger disabled={disabled} asChild>
         <Button variant="outline">Clear Local Changes</Button>
       </AlertDialogTrigger>

@@ -14,11 +14,19 @@ type LayoutHeaderProps = {
   onHistoryChange: (histories: History[], index: number) => void;
   onPublishLayout: (data: Data) => Promise<void>;
   isDevMode: boolean;
+  clearLocalChangesModalOpen: boolean;
+  setClearLocalChangesModalOpen: (newValue: boolean) => void;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
-  const { onClearLocalChanges, onHistoryChange, onPublishLayout, isDevMode } =
-    props;
+  const {
+    onClearLocalChanges,
+    onHistoryChange,
+    onPublishLayout,
+    isDevMode,
+    clearLocalChangesModalOpen,
+    setClearLocalChangesModalOpen,
+  } = props;
 
   const {
     appState,
@@ -63,6 +71,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           <RotateCw className="sm-icon" />
         </Button>
         <ClearLocalChangesButton
+          modalOpen={clearLocalChangesModalOpen}
+          setModalOpen={setClearLocalChangesModalOpen}
           disabled={histories.length === 1}
           onClearLocalChanges={() => {
             onClearLocalChanges();

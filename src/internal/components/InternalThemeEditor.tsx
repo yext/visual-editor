@@ -45,6 +45,8 @@ export const InternalThemeEditor = ({
   buildThemeLocalStorageKey,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
+  const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
+    useState<boolean>(false);
   const themeHistoriesRef = useRef(themeHistories);
 
   useEffect(() => {
@@ -172,6 +174,8 @@ export const InternalThemeEditor = ({
               setThemeHistories={setThemeHistories}
               clearThemeHistory={clearThemeHistory}
               puckInitialHistory={puckInitialHistory}
+              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
+              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
             />
           ),
           actionBar: () => <></>,
