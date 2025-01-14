@@ -13,7 +13,12 @@ import {
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps } from "./atoms/heading.js";
+import {
+  Heading,
+  HeadingProps,
+  HeadingLevel,
+  headingOptions,
+} from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 
@@ -26,12 +31,14 @@ interface CardProps {
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
     transform: HeadingProps["transform"];
+    level: HeadingLevel;
   };
   subheading: {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
     transform: HeadingProps["transform"];
+    level: HeadingLevel;
   };
   body: {
     text: YextEntityField<string>;
@@ -94,6 +101,11 @@ const cardFields: Fields<CardProps> = {
           { value: "capitalize", label: "Capitalize" },
         ],
       },
+      level: {
+        label: "Level",
+        type: "select",
+        options: headingOptions,
+      },
     },
   },
   subheading: {
@@ -128,6 +140,11 @@ const cardFields: Fields<CardProps> = {
           { value: "uppercase", label: "Uppercase" },
           { value: "capitalize", label: "Capitalize" },
         ],
+      },
+      level: {
+        label: "Level",
+        type: "select",
+        options: headingOptions,
       },
     },
   },
@@ -284,6 +301,7 @@ const CardWrapper = ({
               fontSize={heading.fontSize}
               color={heading.color}
               transform={heading.transform}
+              level={heading.level}
             >
               {resolveYextEntityField(document, heading.text)}
             </Heading>
@@ -293,6 +311,7 @@ const CardWrapper = ({
               fontSize={subheading.fontSize}
               color={subheading.color}
               transform={subheading.transform}
+              level={subheading.level}
             >
               {resolveYextEntityField(document, subheading.text)}
             </Heading>
@@ -331,9 +350,10 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "Heading",
         constantValueEnabled: true,
       },
-      fontSize: "3xl",
+      fontSize: "default",
       color: "default",
       transform: "none",
+      level: 1,
     },
     subheading: {
       text: {
@@ -341,9 +361,10 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "SubHeading",
         constantValueEnabled: true,
       },
-      fontSize: "xl",
+      fontSize: "default",
       color: "default",
       transform: "none",
+      level: 2,
     },
     body: {
       text: {
