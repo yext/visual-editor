@@ -18,6 +18,8 @@ type ThemeHeaderProps = {
   themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
+  clearLocalChangesModalOpen: boolean;
+  setClearLocalChangesModalOpen: (newValue: boolean) => void;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {
@@ -29,6 +31,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     themeHistories,
     clearThemeHistory,
     puckInitialHistory,
+    clearLocalChangesModalOpen,
+    setClearLocalChangesModalOpen,
   } = props;
 
   const {
@@ -64,6 +68,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-center"></div>
       <div className="actions">
         <ClearLocalChangesButton
+          modalOpen={clearLocalChangesModalOpen}
+          setModalOpen={setClearLocalChangesModalOpen}
           disabled={themeHistories?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();

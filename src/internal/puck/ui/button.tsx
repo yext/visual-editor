@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../../utils/cn.ts";
 
 const buttonVariants = cva(
-  "ve-inline-flex ve-items-center ve-justify-center ve-whitespace-nowrap ve-rounded-md ve-text-sm" +
+  "ve-inline-flex ve-items-center ve-justify-center ve-whitespace-nowrap ve-rounded-full ve-text-sm" +
     " ve-font-medium ve-ring-offset-background ve-transition-colors focus-visible:ve-outline-none" +
     " focus-visible:ve-ring-2 focus-visible:ve-ring-ring focus-visible:ve-ring-offset-2" +
     " disabled:ve-pointer-events-none disabled:ve-opacity-50",
@@ -24,9 +24,9 @@ const buttonVariants = cva(
         link: "ve-text-primary ve-underline-offset-4 hover:ve-underline",
       },
       size: {
-        default: "ve-h-10 ve-rounded-md ve-px-4 ve-py-2",
-        sm: "ve-h-9 ve-rounded-md ve-px-3",
-        lg: "ve-h-11 ve-rounded-md ve-px-8",
+        default: "ve-h-10 ve-px-4 ve-py-2",
+        sm: "ve-h-9 ve-px-3",
+        lg: "ve-h-11 ve-px-8",
         icon: "ve-h-10 ve-w-10",
       },
     },
