@@ -57,6 +57,12 @@ interface CardProps {
     variant: CTAProps["variant"];
     fontSize: HeadingProps["fontSize"];
   };
+  backgroundColor:
+    | "bg-palette-primary"
+    | "bg-palette-secondary"
+    | "bg-palette-accent"
+    | "bg-palette-text"
+    | "bg-palette-background";
 }
 
 const cardFields: Fields<CardProps> = {
@@ -110,7 +116,7 @@ const cardFields: Fields<CardProps> = {
   },
   subheading: {
     type: "object",
-    label: "Description",
+    label: "Subtitle",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
         label: "Entity Field",
@@ -247,6 +253,17 @@ const cardFields: Fields<CardProps> = {
       fontSize: FontSizeSelector(),
     },
   },
+  backgroundColor: {
+    label: "Background Color",
+    type: "radio",
+    options: [
+      { label: "Background", value: "bg-palette-background" },
+      { label: "Primary", value: "bg-palette-primary" },
+      { label: "Secondary", value: "bg-palette-secondary" },
+      { label: "Accent", value: "bg-palette-accent" },
+      { label: "Text", value: "bg-palette-text" },
+    ],
+  },
 };
 
 const CardWrapper = ({
@@ -256,6 +273,7 @@ const CardWrapper = ({
   body,
   image,
   cta,
+  backgroundColor,
 }: CardProps) => {
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
@@ -264,16 +282,13 @@ const CardWrapper = ({
   );
   const resolvedCTA = resolveYextEntityField(document, cta.entityField);
 
-  if (!resolvedImage) {
-    return null;
-  }
-
   return (
     <Section className="components">
       <div
         className={themeMangerCn(
           "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
-          orientation === "right" && "md:flex-row-reverse"
+          orientation === "right" && "md:flex-row-reverse",
+          backgroundColor
         )}
       >
         {resolvedImage && (
@@ -297,33 +312,39 @@ const CardWrapper = ({
         )}
         <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
           {heading?.text && (
-            <Heading
-              fontSize={heading.fontSize}
-              color={heading.color}
-              transform={heading.transform}
-              level={heading.level}
-            >
-              {resolveYextEntityField(document, heading.text)}
-            </Heading>
+            <EntityField displayName="Heading" fieldId={heading.text.field}>
+              <Heading
+                fontSize={heading.fontSize}
+                color={heading.color}
+                transform={heading.transform}
+                level={heading.level}
+              >
+                {resolveYextEntityField(document, heading.text)}
+              </Heading>
+            </EntityField>
           )}
           {subheading?.text && (
-            <Heading
-              fontSize={subheading.fontSize}
-              color={subheading.color}
-              transform={subheading.transform}
-              level={subheading.level}
-            >
-              {resolveYextEntityField(document, subheading.text)}
-            </Heading>
+            <EntityField displayName="Heading" fieldId={subheading.text.field}>
+              <Heading
+                fontSize={subheading.fontSize}
+                color={subheading.color}
+                transform={subheading.transform}
+                level={subheading.level}
+              >
+                {resolveYextEntityField(document, subheading.text)}
+              </Heading>
+            </EntityField>
           )}
           {body?.text && (
-            <Body
-              fontSize={body.fontSize}
-              textTransform={body.transform}
-              color={body.color}
-            >
-              {resolveYextEntityField(document, body.text)}
-            </Body>
+            <EntityField displayName="Heading" fieldId={body.text.field}>
+              <Body
+                fontSize={body.fontSize}
+                textTransform={body.transform}
+                color={body.color}
+              >
+                {resolveYextEntityField(document, body.text)}
+              </Body>
+            </EntityField>
           )}
           {resolvedCTA && (
             <CTA
@@ -401,6 +422,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
       fontSize: "default",
       variant: "primary",
     },
+    backgroundColor: "bg-palette-background",
   },
   render: (props) => <CardWrapper {...props} />,
 };
