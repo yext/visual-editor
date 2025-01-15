@@ -132,24 +132,27 @@ const ConstantValueModeToggler = ({
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
 }) => {
+  const random = Math.floor(Math.random() * 999999);
+  const entityButtonId = `ve-use-entity-value-${random}`;
+  const constantButtonId = `ve-use-constant-value-${random}`;
   return (
     <div className="ve-mb-2 ve-w-full">
       <RadioGroup defaultValue={constantValueEnabled?.toString() ?? "false"}>
         <div className="ve-flex ve-items-center ve-space-x-2">
           <RadioGroupItem
             value="false"
-            id="ve-use-entity-value"
+            id={entityButtonId}
             onClick={() => toggleConstantValueEnabled(false)}
           />
-          <Label htmlFor="ve-use-entity-value">Use Entity Value</Label>
+          <Label htmlFor={entityButtonId}>Use Entity Value</Label>
         </div>
         <div className="ve-flex ve-items-center ve-space-x-2">
           <RadioGroupItem
             value="true"
-            id="ve-use-constant-value"
+            id={constantButtonId}
             onClick={() => toggleConstantValueEnabled(true)}
           />
-          <Label htmlFor="ve-use-constant-value">Use Constant Value</Label>
+          <Label htmlFor={constantButtonId}>Use Constant Value</Label>
         </div>
       </RadioGroup>
     </div>

@@ -65,7 +65,7 @@ const headingVariants = cva("components", {
 });
 
 // Define the valid levels for the heading element
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 // Omit 'color' from HTMLAttributes<HTMLHeadingElement> to avoid conflict
 export interface HeadingProps
@@ -107,4 +107,31 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 );
 Heading.displayName = "Heading";
 
-export { Heading, headingVariants };
+const headingOptions = [
+  {
+    label: "1",
+    value: 1,
+  },
+  {
+    label: "2",
+    value: 2,
+  },
+  {
+    label: "3",
+    value: 3,
+  },
+  {
+    label: "4",
+    value: 4,
+  },
+  {
+    label: "5",
+    value: 5,
+  },
+  {
+    label: "6",
+    value: 6,
+  },
+];
+
+export { Heading, headingVariants, headingOptions };

@@ -13,7 +13,12 @@ import {
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps } from "./atoms/heading.js";
+import {
+  Heading,
+  HeadingProps,
+  HeadingLevel,
+  headingOptions,
+} from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 
@@ -26,12 +31,14 @@ interface CardProps {
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
     transform: HeadingProps["transform"];
+    level: HeadingLevel;
   };
   subheading: {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
     transform: HeadingProps["transform"];
+    level: HeadingLevel;
   };
   body: {
     text: YextEntityField<string>;
@@ -50,6 +57,13 @@ interface CardProps {
     variant: CTAProps["variant"];
     fontSize: HeadingProps["fontSize"];
   };
+  backgroundColor:
+    | "bg-card-backgroundColor"
+    | "bg-palette-primary"
+    | "bg-palette-secondary"
+    | "bg-palette-accent"
+    | "bg-palette-text"
+    | "bg-palette-background";
 }
 
 const cardFields: Fields<CardProps> = {
@@ -94,11 +108,16 @@ const cardFields: Fields<CardProps> = {
           { value: "capitalize", label: "Capitalize" },
         ],
       },
+      level: {
+        label: "Level",
+        type: "select",
+        options: headingOptions,
+      },
     },
   },
   subheading: {
     type: "object",
-    label: "Description",
+    label: "Subtitle",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
         label: "Entity Field",
@@ -128,6 +147,11 @@ const cardFields: Fields<CardProps> = {
           { value: "uppercase", label: "Uppercase" },
           { value: "capitalize", label: "Capitalize" },
         ],
+      },
+      level: {
+        label: "Level",
+        type: "select",
+        options: headingOptions,
       },
     },
   },
@@ -230,6 +254,18 @@ const cardFields: Fields<CardProps> = {
       fontSize: FontSizeSelector(),
     },
   },
+  backgroundColor: {
+    label: "Background Color",
+    type: "select",
+    options: [
+      { label: "Default", value: "bg-card-backgroundColor" },
+      { label: "Primary", value: "bg-palette-primary" },
+      { label: "Secondary", value: "bg-palette-secondary" },
+      { label: "Accent", value: "bg-palette-accent" },
+      { label: "Text", value: "bg-palette-text" },
+      { label: "Background", value: "bg-palette-background" },
+    ],
+  },
 };
 
 const CardWrapper = ({
@@ -239,6 +275,7 @@ const CardWrapper = ({
   body,
   image,
   cta,
+  backgroundColor,
 }: CardProps) => {
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
@@ -247,16 +284,13 @@ const CardWrapper = ({
   );
   const resolvedCTA = resolveYextEntityField(document, cta.entityField);
 
-  if (!resolvedImage) {
-    return null;
-  }
-
   return (
     <Section className="components">
       <div
         className={themeMangerCn(
           "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
-          orientation === "right" && "md:flex-row-reverse"
+          orientation === "right" && "md:flex-row-reverse",
+          backgroundColor
         )}
       >
         {resolvedImage && (
@@ -286,31 +320,39 @@ const CardWrapper = ({
         )}
         <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
           {heading?.text && (
-            <Heading
-              fontSize={heading.fontSize}
-              color={heading.color}
-              transform={heading.transform}
-            >
-              {resolveYextEntityField(document, heading.text)}
-            </Heading>
+            <EntityField displayName="Heading" fieldId={heading.text.field}>
+              <Heading
+                fontSize={heading.fontSize}
+                color={heading.color}
+                transform={heading.transform}
+                level={heading.level}
+              >
+                {resolveYextEntityField(document, heading.text)}
+              </Heading>
+            </EntityField>
           )}
           {subheading?.text && (
-            <Heading
-              fontSize={subheading.fontSize}
-              color={subheading.color}
-              transform={subheading.transform}
-            >
-              {resolveYextEntityField(document, subheading.text)}
-            </Heading>
+            <EntityField displayName="Subtitle" fieldId={subheading.text.field}>
+              <Heading
+                fontSize={subheading.fontSize}
+                color={subheading.color}
+                transform={subheading.transform}
+                level={subheading.level}
+              >
+                {resolveYextEntityField(document, subheading.text)}
+              </Heading>
+            </EntityField>
           )}
           {body?.text && (
-            <Body
-              fontSize={body.fontSize}
-              textTransform={body.transform}
-              color={body.color}
-            >
-              {resolveYextEntityField(document, body.text)}
-            </Body>
+            <EntityField displayName="Description" fieldId={body.text.field}>
+              <Body
+                fontSize={body.fontSize}
+                textTransform={body.transform}
+                color={body.color}
+              >
+                {resolveYextEntityField(document, body.text)}
+              </Body>
+            </EntityField>
           )}
           {resolvedCTA && (
             <CTA
@@ -337,9 +379,10 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "Heading",
         constantValueEnabled: true,
       },
-      fontSize: "3xl",
+      fontSize: "default",
       color: "default",
       transform: "none",
+      level: 1,
     },
     subheading: {
       text: {
@@ -347,9 +390,10 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "SubHeading",
         constantValueEnabled: true,
       },
-      fontSize: "xl",
+      fontSize: "default",
       color: "default",
       transform: "none",
+      level: 2,
     },
     body: {
       text: {
@@ -386,6 +430,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
       fontSize: "default",
       variant: "primary",
     },
+    backgroundColor: "bg-card-backgroundColor",
   },
   render: (props) => <CardWrapper {...props} />,
 };
