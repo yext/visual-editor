@@ -276,7 +276,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const progress = // @ts-expect-error adding bools is fine
     60 + (puckInitialHistoryFetched + layoutSaveStateFetched) * 20;
 
-  return !isLoading || localDev ? (
+  return !isLoading ? (
     <InternalLayoutEditor
       puckConfig={puckConfig}
       puckInitialHistory={puckInitialHistory}
