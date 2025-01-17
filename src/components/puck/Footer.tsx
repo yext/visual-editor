@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link, CTA } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
+  EntityField,
   FontSizeSelector,
   getFontWeightOverrideOptions,
   resolveYextEntityField,
@@ -228,7 +229,13 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
                 className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
               >
                 {item.link && (
-                  <Link cta={item} eventName={`footer-link-${item.label}`} />
+                  <EntityField
+                    displayName="Link"
+                    fieldId={links[idx].cta.field}
+                    constantValueEnabled={links[idx].cta.constantValueEnabled}
+                  >
+                    <Link cta={item} eventName={`footer-link-${item.label}`} />
+                  </EntityField>
                 )}
               </li>
             ))}
@@ -236,14 +243,20 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
         </div>
       </div>
       <div className="mx-auto max-w-6xl px-4 pt-3 pb-4">
-        <Body
-          fontSize={copyright.fontSize}
-          textTransform={copyright.textTransform}
-          fontWeight={copyright.fontWeight}
-          color={copyright.color}
+        <EntityField
+          displayName="Copyright Text"
+          fieldId={copyright.text.field}
+          constantValueEnabled={copyright.text.constantValueEnabled}
         >
-          {resolvedCopyrightText}
-        </Body>
+          <Body
+            fontSize={copyright.fontSize}
+            textTransform={copyright.textTransform}
+            fontWeight={copyright.fontWeight}
+            color={copyright.color}
+          >
+            {resolvedCopyrightText}
+          </Body>
+        </EntityField>
       </div>
     </footer>
   );
