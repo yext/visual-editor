@@ -3,7 +3,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   AddressType,
   getDirections,
-  GetDirectionsConfig,
   Link,
   Address as RenderAddress,
 } from "@yext/pages-components";
@@ -20,9 +19,9 @@ import {
 
 type AddressProps = {
   address: YextEntityField<AddressType>;
-  getDirectionsProvider: GetDirectionsConfig["provider"];
   alignment: "items-start" | "items-center";
   padding: VariantProps<typeof sectionVariants>["padding"];
+  showGetDirections: boolean;
 };
 
 const addressFields: Fields<AddressProps> = {
@@ -30,15 +29,6 @@ const addressFields: Fields<AddressProps> = {
     label: "Address",
     filter: { types: ["type.address"] },
   }),
-  getDirectionsProvider: {
-    label: "Maps Provider",
-    type: "radio",
-    options: [
-      { label: "Google", value: "google" },
-      { label: "Apple", value: "apple" },
-      { label: "Bing", value: "bing" },
-    ],
-  },
   alignment: {
     label: "Align card",
     type: "radio",
@@ -57,13 +47,21 @@ const addressFields: Fields<AddressProps> = {
       { label: "Large", value: "large" },
     ],
   },
+  showGetDirections: {
+    label: "Show Directions",
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  },
 };
 
 const Address = ({
   alignment,
   padding,
   address: addressField,
-  getDirectionsProvider,
+  showGetDirections,
 }: AddressProps) => {
   const document = useDocument();
   const address = resolveYextEntityField(document, addressField);
@@ -71,7 +69,7 @@ const Address = ({
     address as AddressType,
     undefined,
     undefined,
-    { provider: getDirectionsProvider }
+    { provider: "google" }
   );
 
   return (
@@ -90,7 +88,7 @@ const Address = ({
               address={address as AddressType}
               lines={[["line1"], ["line2", "city", "region", "postalCode"]]}
             />
-            {coordinates && (
+            {coordinates && showGetDirections && (
               <Link
                 cta={{
                   link: coordinates,
@@ -113,7 +111,6 @@ const AddressComponent: ComponentConfig<AddressProps> = {
   defaultProps: {
     alignment: "items-start",
     padding: "none",
-    getDirectionsProvider: "google",
     address: {
       field: "address",
       constantValue: {
@@ -124,6 +121,7 @@ const AddressComponent: ComponentConfig<AddressProps> = {
         countryCode: "",
       },
     },
+    showGetDirections: true,
   },
   label: "Address",
   render: (props) => <Address {...props} />,
