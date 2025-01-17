@@ -30,7 +30,7 @@ function ConstantField<T extends Record<string, any>>(
   return (
     <FieldLabel
       label={fieldProps.label}
-      className="ve-inline-block ve-pt-4"
+      className="ve-inline-block ve-pt-4 w-full"
       key={`constant-${fieldProps.field}-label`}
     >
       <AutoField
