@@ -48,7 +48,7 @@ const addressFields: Fields<AddressProps> = {
     ],
   },
   showGetDirections: {
-    label: "Show Directions",
+    label: "Show Get Directions Link",
     type: "radio",
     options: [
       { label: "Yes", value: true },
