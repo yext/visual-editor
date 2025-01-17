@@ -1,3 +1,5 @@
+import { Roles } from "../hooks/layout/useLocalStorage.ts";
+
 export type TemplateMetadata = {
   role: string;
   siteId: number;
@@ -11,13 +13,25 @@ export type TemplateMetadata = {
   isThemeMode: boolean;
 };
 
-export const DevTemplateMetadata: TemplateMetadata = {
-  role: "developer",
-  siteId: 0,
-  templateId: "dev",
-  entityId: 0,
-  isDevMode: true,
-  isxYextDebug: true,
-  isThemeMode: false,
-  devOverride: false,
-};
+export function generateTemplateMetadata(): TemplateMetadata {
+  return {
+    role: Roles.INDIVIDUAL,
+    siteId: 1337,
+    templateId: "dev",
+    entityId: hashCode(window.location.href),
+    isDevMode: true,
+    isxYextDebug: true,
+    isThemeMode: false,
+    devOverride: false,
+  };
+}
+
+function hashCode(s: string) {
+  let hash = 0;
+  for (let i = 0, len = s.length; i < len; i++) {
+    const chr = s.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash);
+}

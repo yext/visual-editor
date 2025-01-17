@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { DevLogger } from "../../../utils/devLogger.ts";
 
-const Roles = {
+export const Roles = {
   GLOBAL: "global",
   INDIVIDUAL: "individual",
 };

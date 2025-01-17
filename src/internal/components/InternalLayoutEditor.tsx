@@ -55,9 +55,6 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
-      if (localDev) {
-        return;
-      }
       if (
         index !== 0 &&
         historyIndex.current !== index &&
@@ -73,6 +70,10 @@ export const InternalLayoutEditor = ({
           buildVisualConfigLocalStorageKey(),
           JSON.stringify(histories)
         );
+
+        if (localDev) {
+          return;
+        }
 
         if (layoutSaveState?.hash !== histories[index].id) {
           if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
@@ -109,7 +110,7 @@ export const InternalLayoutEditor = ({
   };
 
   const change = async () => {
-    if (isLoading || localDev) {
+    if (isLoading) {
       return;
     }
     if (!canEdit) {

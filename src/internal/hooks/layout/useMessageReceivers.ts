@@ -7,7 +7,7 @@ import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString
 
 const devLogger = new DevLogger();
 
-export const useLayoutMessageReceivers = () => {
+export const useLayoutMessageReceivers = (localDev: boolean) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
   // Trigger additional data flow from parent
@@ -18,7 +18,7 @@ export const useLayoutMessageReceivers = () => {
   // Layout from DB
   const [layoutSaveState, setLayoutSaveState] = useState<LayoutSaveState>();
   const [layoutSaveStateFetched, setLayoutSaveStateFetched] =
-    useState<boolean>(false); // needed because saveState can be empty
+    useState<boolean>(localDev); // needed because saveState can be empty
 
   useReceiveMessage("getLayoutSaveState", TARGET_ORIGINS, (send, payload) => {
     let receivedLayoutSaveState;

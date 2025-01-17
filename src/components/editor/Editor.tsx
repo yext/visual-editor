@@ -39,7 +39,6 @@ export const Editor = ({
     templateMetadata,
     puckConfig,
     layoutData,
-    resetLayoutData,
     layoutDataFetched,
     themeData,
     themeDataFetched,
@@ -112,7 +111,7 @@ export const Editor = ({
   return (
     <>
       {!isLoading ? (
-        templateMetadata?.isThemeMode ? (
+        templateMetadata.isThemeMode ? (
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
@@ -128,7 +127,6 @@ export const Editor = ({
             themeData={themeData!}
             themeConfig={themeConfig}
             localDev={!!localDev}
-            resetLayoutData={resetLayoutData}
           />
         )
       ) : (

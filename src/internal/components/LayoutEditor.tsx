@@ -22,7 +22,6 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
-  resetLayoutData: () => void;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -33,7 +32,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeData,
     themeConfig,
     localDev,
-    resetLayoutData,
   } = props;
 
   const { saveLayoutSaveState, publishLayout, deleteLayoutSaveState } =
@@ -43,7 +41,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     useCommonMessageSenders();
 
   const { layoutSaveState, layoutSaveStateFetched } =
-    useLayoutMessageReceivers();
+    useLayoutMessageReceivers(localDev);
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
@@ -60,11 +58,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    */
   const clearHistory = () => {
     devLogger.logFunc("clearHistory");
+    clearVisualConfigLocalStorage();
     if (localDev) {
-      resetLayoutData();
       return;
     }
-    clearVisualConfigLocalStorage();
     deleteLayoutSaveState();
   };
 
@@ -110,7 +107,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    *  - if no match, use saveState directly and clear localStorage
    */
   const loadPuckInitialHistory = useCallback(() => {
-    if (!templateMetadata || localDev) {
+    if (!templateMetadata) {
       return;
     }
 
@@ -240,7 +237,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   }, [setPuckInitialHistory, setPuckInitialHistoryFetched, localDev]);
 
   useEffect(() => {
-    if (!layoutSaveStateFetched) {
+    if (!layoutSaveStateFetched && !localDev) {
       return;
     }
     loadPuckInitialHistory();
@@ -270,9 +267,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     });
   }, [puckInitialHistoryFetched, puckInitialHistory, templateMetadata]);
 
-  const isLoading = localDev
-    ? false
-    : !puckInitialHistoryFetched || !layoutSaveStateFetched;
+  const isLoading = !puckInitialHistoryFetched || !layoutSaveStateFetched;
   const progress = // @ts-expect-error adding bools is fine
     60 + (puckInitialHistoryFetched + layoutSaveStateFetched) * 20;
 

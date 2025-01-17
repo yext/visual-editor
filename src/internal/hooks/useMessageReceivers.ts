@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
 import {
-  DevTemplateMetadata,
+  generateTemplateMetadata,
   TemplateMetadata,
 } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -36,16 +36,12 @@ export const useCommonMessageReceivers = (
   const [themeData, setThemeData] = useState<ThemeData>();
   const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
 
-  // used in localDev mode to reset the layout to the default/empty state
-  const resetLayoutData = () => {
-    setLayoutData(document.__.layout);
-  };
-
   // in localDev mode, return default data and mark all data as fetched
   useEffect(() => {
     if (localDev) {
-      setTemplateMetadata(DevTemplateMetadata);
-      const puckConfig = componentRegistry.get(DevTemplateMetadata.templateId);
+      const devMetadata = generateTemplateMetadata();
+      setTemplateMetadata(devMetadata);
+      const puckConfig = componentRegistry.get(devMetadata.templateId);
       setPuckConfig(puckConfig);
       setLayoutData(document.__.layout);
       setLayoutDataFetched(true);
@@ -66,7 +62,6 @@ export const useCommonMessageReceivers = (
   if (localDev) {
     return {
       layoutData,
-      resetLayoutData,
       layoutDataFetched,
       themeData,
       themeDataFetched,
@@ -113,7 +108,6 @@ export const useCommonMessageReceivers = (
 
   return {
     layoutData,
-    resetLayoutData,
     layoutDataFetched,
     themeData,
     themeDataFetched,
