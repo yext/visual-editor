@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link, CTA, ImageType, Image } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
+  EntityField,
   resolveYextEntityField,
   themeMangerCn,
   useDocument,
@@ -178,7 +179,16 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
     >
       <div className="mx-auto flex max-w-6xl flex-1 items-center justify-between px-4 py-6">
         {resolvedLogo && (
-          <Image image={resolvedLogo} className="w-full h-full object-cover" />
+          <EntityField
+            displayName="Logo"
+            fieldId={logo.image.field}
+            constantValueEnabled={logo.image.constantValueEnabled}
+          >
+            <Image
+              image={resolvedLogo}
+              className="w-full h-full object-cover"
+            />
+          </EntityField>
         )}
         <div className="flex items-center justify-end space-x-4">
           <ul className="flex space-x-8">
@@ -188,7 +198,13 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
                 className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
               >
                 {item.link && (
-                  <Link cta={item} eventName={`header-link-${item.label}`} />
+                  <EntityField
+                    displayName="Link"
+                    fieldId={links[idx].cta.field}
+                    constantValueEnabled={links[idx].cta.constantValueEnabled}
+                  >
+                    <Link cta={item} eventName={`header-link-${item.label}`} />
+                  </EntityField>
                 )}
               </li>
             ))}
