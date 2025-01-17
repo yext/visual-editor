@@ -28,22 +28,16 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
     };
 
     return (
-      <div>
+      <div className="ve-inline-block ve-pt-4 w-full">
         {localItems.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "8px",
-              gap: "4px",
-            }}
-          >
-            <AutoField
-              field={{ type: "text" }}
-              value={item}
-              onChange={(itemValue) => updateItem(index, itemValue)}
-            />
+          <div key={index} className="ve-flex ve-items-center ve-mb-2 ve-gap-2">
+            <div className="ve-grow">
+              <AutoField
+                field={{ type: "text" }}
+                value={item}
+                onChange={(itemValue) => updateItem(index, itemValue)}
+              />
+            </div>
             <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
