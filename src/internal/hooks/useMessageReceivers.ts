@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
-import { TemplateMetadata } from "../types/templateMetadata.ts";
+import {
+  DevTemplateMetadata,
+  TemplateMetadata,
+} from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@measured/puck";
 import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
@@ -10,7 +13,9 @@ import { ThemeData } from "../types/themeData.ts";
 const devLogger = new DevLogger();
 
 export const useCommonMessageReceivers = (
-  componentRegistry: Map<string, Config<any>>
+  componentRegistry: Map<string, Config<any>>,
+  document: any,
+  localDev: boolean
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -30,6 +35,45 @@ export const useCommonMessageReceivers = (
   // Theme from Content
   const [themeData, setThemeData] = useState<ThemeData>();
   const [themeDataFetched, setThemeDataFetched] = useState<boolean>(false); // needed because themeData can be empty
+
+  // used in localDev mode to reset the layout to the default/empty state
+  const resetLayoutData = () => {
+    setLayoutData(document.__.layout);
+  };
+
+  // in localDev mode, return default data and mark all data as fetched
+  useEffect(() => {
+    if (localDev) {
+      setTemplateMetadata(DevTemplateMetadata);
+      const puckConfig = componentRegistry.get(DevTemplateMetadata.templateId);
+      setPuckConfig(puckConfig);
+      setLayoutData(document.__.layout);
+      setLayoutDataFetched(true);
+      setThemeData(document.__.theme);
+      setThemeDataFetched(true);
+    }
+  }, [
+    localDev,
+    setTemplateMetadata,
+    setPuckConfig,
+    setLayoutData,
+    setLayoutDataFetched,
+    setThemeData,
+    setThemeDataFetched,
+  ]);
+
+  // return default data for localDev mode
+  if (localDev) {
+    return {
+      layoutData,
+      resetLayoutData,
+      layoutDataFetched,
+      themeData,
+      themeDataFetched,
+      templateMetadata,
+      puckConfig,
+    };
+  }
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry.get(payload.templateId);
@@ -69,6 +113,7 @@ export const useCommonMessageReceivers = (
 
   return {
     layoutData,
+    resetLayoutData,
     layoutDataFetched,
     themeData,
     themeDataFetched,

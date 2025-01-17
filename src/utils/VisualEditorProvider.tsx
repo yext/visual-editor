@@ -2,7 +2,7 @@ import React from "react";
 import { DocumentContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TailwindConfig } from "./themeResolver.ts";
-import { YextSchemaField } from "../internal/types/entityFields.ts";
+import { YextSchemaField } from "../types/entityFields.ts";
 import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =

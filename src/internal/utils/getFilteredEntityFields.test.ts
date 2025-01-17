@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, vi } from "vitest";
 import { getFilteredEntityFields } from "./getFilteredEntityFields.ts";
 import { useEntityFields } from "../../hooks/useEntityFields.tsx";
-import { YextSchemaField } from "../types/entityFields.ts";
+import { YextSchemaField } from "../../types/entityFields.ts";
 
 // Mock the useEntityFields hook
 vi.mock("../../hooks/useEntityFields.tsx", () => ({

@@ -4,7 +4,7 @@ import {
   TARGET_ORIGINS,
 } from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
-import { YextSchemaField } from "../internal/types/entityFields.ts";
+import { YextSchemaField } from "../types/entityFields.ts";
 
 /**
  * Under the hood we receive a Stream for a template, but we expose

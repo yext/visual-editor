@@ -18,12 +18,14 @@ export type EditorProps = {
   document: any;
   componentRegistry: Map<string, Config<any>>;
   themeConfig?: ThemeConfig;
+  localDev?: boolean;
 };
 
 export const Editor = ({
   document,
   componentRegistry,
   themeConfig,
+  localDev,
 }: EditorProps) => {
   if (document) {
     devLogger.logData("DOCUMENT", document);
@@ -37,10 +39,11 @@ export const Editor = ({
     templateMetadata,
     puckConfig,
     layoutData,
+    resetLayoutData,
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry);
+  } = useCommonMessageReceivers(componentRegistry, document, !!localDev);
 
   const { pushPageSets } = useCommonMessageSenders();
 
@@ -48,7 +51,7 @@ export const Editor = ({
 
   // redirect to 404 page when going to /edit page outside of Storm
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !localDev) {
       const ancestors = window.location.ancestorOrigins;
       if (ancestors.length === 0) {
         window.location.assign("/404.html");
@@ -109,7 +112,7 @@ export const Editor = ({
   return (
     <>
       {!isLoading ? (
-        templateMetadata.isThemeMode ? (
+        templateMetadata?.isThemeMode ? (
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
@@ -124,6 +127,8 @@ export const Editor = ({
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
+            localDev={!!localDev}
+            resetLayoutData={resetLayoutData}
           />
         )
       ) : (

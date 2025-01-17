@@ -27,6 +27,7 @@ type InternalLayoutEditorProps = {
   publishLayout: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
+  localDev: boolean;
 };
 
 // Render Puck editor
@@ -41,6 +42,7 @@ export const InternalLayoutEditor = ({
   publishLayout,
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
+  localDev,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
@@ -53,6 +55,9 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
+      if (localDev) {
+        return;
+      }
       if (
         index !== 0 &&
         historyIndex.current !== index &&
@@ -104,7 +109,7 @@ export const InternalLayoutEditor = ({
   };
 
   const change = async () => {
-    if (isLoading) {
+    if (isLoading || localDev) {
       return;
     }
     if (!canEdit) {
