@@ -1,32 +1,12 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
 import { themeMangerCn } from "../../index.js";
-
-const paddingClasses = [
-  { label: "0", value: "py-0" },
-  { label: "0.5", value: "py-0.5" },
-  { label: "1", value: "py-1" },
-  { label: "1.5", value: "py-1.5" },
-  { label: "2", value: "py-2" },
-  { label: "2.5", value: "py-2.5" },
-  { label: "3", value: "py-3" },
-  { label: "3.5", value: "py-3.5" },
-  { label: "4", value: "py-4" },
-  { label: "5", value: "py-5" },
-  { label: "6", value: "py-6" },
-  { label: "7", value: "py-7" },
-  { label: "8", value: "py-8" },
-  { label: "9", value: "py-9" },
-  { label: "10", value: "py-10" },
-  { label: "11", value: "py-11" },
-  { label: "12", value: "py-12" },
-  { label: "14", value: "py-14" },
-  { label: "16", value: "py-16" },
-  { label: "20", value: "py-20" },
-  { label: "24", value: "py-24" },
-];
+import {
+  verticalPaddingClasses,
+  horizontalPaddingClasses,
+} from "./options/paddingClasses.js";
 
 const backgroundVariants = cva("components", {
   variants: {
@@ -51,22 +31,6 @@ const backgroundVariants = cva("components", {
   },
 });
 
-const gridSectionVariants = cva(
-  "components flex flex-col min-h-0 min-w-0 md:grid md:grid-cols-12 mx-auto gap-y-grid-verticalSpacing",
-  {
-    variants: {
-      horizontalSpacing: {
-        small: "gap-x-2 md:gap-x-4",
-        medium: "gap-x-8 md:gap-x-12",
-        large: "gap-x-12 md:gap-x-16",
-      },
-    },
-    defaultVariants: {
-      horizontalSpacing: "medium",
-    },
-  }
-);
-
 const columnVariants = cva("flex flex-col gap-y-grid-verticalSpacing", {
   variants: {
     verticalAlignment: {
@@ -87,24 +51,22 @@ interface ColumnProps extends VariantProps<typeof columnVariants> {
 
 interface GridSectionProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof gridSectionVariants>,
     VariantProps<typeof backgroundVariants> {
+  gap: number;
   verticalPadding: string;
-  distribution: "auto" | "manual";
+  horizontalPadding: string;
   columns: ColumnProps[];
-  renderDropZone?: any;
 }
 
 const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
   (
     {
       className,
-      distribution,
       columns,
-      horizontalSpacing,
+      gap,
       verticalPadding,
+      horizontalPadding,
       maxContentWidth,
-      renderDropZone,
       backgroundColor,
       ...props
     },
@@ -114,23 +76,20 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
       <Section
         className={themeMangerCn(
           backgroundVariants({ maxContentWidth, backgroundColor }),
-          verticalPadding
+          verticalPadding,
+          horizontalPadding
         )}
         padding="none"
       >
         <div
           className={themeMangerCn(
-            gridSectionVariants({
-              horizontalSpacing,
-            }),
+            "components flex flex-col min-h-0 min-w-0 md:grid md:grid-cols-12 mx-auto gap-y-grid-verticalSpacing",
             className
           )}
           ref={ref}
           style={{
-            gridTemplateColumns:
-              distribution === "manual"
-                ? "repeat(12, 1fr)"
-                : `repeat(${columns.length}, 1fr)`,
+            gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+            gap,
           }}
           {...props}
         >
@@ -143,13 +102,10 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
                 })
               )}
               style={{
-                gridColumn:
-                  span && distribution === "manual"
-                    ? `span ${Math.max(Math.min(span, 12), 1)}`
-                    : "",
+                gridColumn: span,
               }}
             >
-              {renderDropZone({ zone: `column-${idx}` })}
+              <DropZone zone={`column-${idx}`} />
             </div>
           ))}
         </div>
@@ -161,13 +117,6 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridSectionProps> = {
-  distribution: {
-    type: "radio",
-    options: [
-      { value: "auto", label: "Auto" },
-      { value: "manual", label: "Manual" },
-    ],
-  },
   columns: {
     type: "array",
     getItemSummary: (col, id) =>
@@ -196,16 +145,17 @@ const gridSectionFields: Fields<GridSectionProps> = {
   verticalPadding: {
     label: "Vertical Padding",
     type: "select",
-    options: paddingClasses,
+    options: verticalPaddingClasses,
   },
-  horizontalSpacing: {
-    label: "Horizontal Spacing",
+  horizontalPadding: {
+    label: "Horizontal Padding",
     type: "select",
-    options: [
-      { value: "small", label: "Small" },
-      { value: "medium", label: "Medium" },
-      { value: "large", label: "Large" },
-    ],
+    options: horizontalPaddingClasses,
+  },
+  gap: {
+    label: "Gap",
+    type: "number",
+    min: 0,
   },
   maxContentWidth: {
     label: "Maximum Content Width",
@@ -235,7 +185,6 @@ const GridSectionComponent: ComponentConfig<GridSectionProps> = {
   label: "Grid Section",
   fields: gridSectionFields,
   defaultProps: {
-    distribution: "auto",
     columns: [
       {
         verticalAlignment: "start",
@@ -245,27 +194,26 @@ const GridSectionComponent: ComponentConfig<GridSectionProps> = {
       },
     ],
     verticalPadding: "default",
+    horizontalPadding: "default",
     backgroundColor: "default",
-    horizontalSpacing: "medium",
+    gap: 0,
     maxContentWidth: "default",
   },
   render: ({
     columns,
-    distribution,
     backgroundColor,
     maxContentWidth,
-    horizontalSpacing,
+    gap,
     verticalPadding,
-    puck: { renderDropZone },
+    horizontalPadding,
   }) => (
     <GridSection
-      renderDropZone={renderDropZone}
       columns={columns}
-      distribution={distribution}
       backgroundColor={backgroundColor}
       maxContentWidth={maxContentWidth}
-      horizontalSpacing={horizontalSpacing}
+      gap={gap}
       verticalPadding={verticalPadding}
+      horizontalPadding={horizontalPadding}
     />
   ),
 };

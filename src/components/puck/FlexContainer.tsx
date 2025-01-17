@@ -1,7 +1,11 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { themeMangerCn } from "../../index.js";
+import {
+  horizontalPaddingClasses,
+  verticalPaddingClasses,
+} from "./options/paddingClasses.js";
 
 const flexContainerVariants = cva("flex", {
   variants: {
@@ -9,23 +13,10 @@ const flexContainerVariants = cva("flex", {
       row: "flex-row",
       column: "flex-col",
     },
-    alignment: {
-      start: "items-start",
-      center: "items-center",
-      end: "items-end",
-      stretch: "items-stretch",
-    },
     justification: {
       start: "justify-start",
       center: "justify-center",
       end: "justify-end",
-      spaceBetween: "justify-between",
-      spaceAround: "justify-around",
-    },
-    spacing: {
-      small: "gap-2",
-      medium: "gap-4",
-      large: "gap-8",
     },
     wrap: {
       wrap: "flex-wrap",
@@ -34,9 +25,7 @@ const flexContainerVariants = cva("flex", {
   },
   defaultVariants: {
     direction: "column",
-    alignment: "start",
     justification: "start",
-    spacing: "medium",
     wrap: "nowrap",
   },
 });
@@ -44,7 +33,9 @@ const flexContainerVariants = cva("flex", {
 interface FlexContainerProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof flexContainerVariants> {
-  renderDropZone?: any;
+  gap: number;
+  verticalPadding: string;
+  horizontalPadding: string;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
@@ -52,10 +43,11 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
     {
       className,
       direction,
-      alignment,
       justification,
-      spacing,
-      renderDropZone,
+      wrap,
+      gap,
+      verticalPadding,
+      horizontalPadding,
       ...props
     },
     ref
@@ -65,16 +57,17 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
         className={themeMangerCn(
           flexContainerVariants({
             direction,
-            alignment,
             justification,
-            spacing,
+            wrap,
           }),
+          verticalPadding,
+          horizontalPadding,
           className
         )}
         ref={ref}
         {...props}
       >
-        {renderDropZone({ zone: "flex-container" })}
+        <DropZone zone="flex-container" style={{ gap }} />
       </div>
     );
   }
@@ -91,35 +84,19 @@ const flexContainerFields: Fields<FlexContainerProps> = {
       { value: "column", label: "Vertical" },
     ],
   },
-  alignment: {
-    label: "Alignment",
-    type: "select",
-    options: [
-      { value: "start", label: "Start" },
-      { value: "center", label: "Center" },
-      { value: "end", label: "End" },
-      { value: "stretch", label: "Stretch" },
-    ],
-  },
   justification: {
-    label: "Justification",
+    label: "Justify Content",
     type: "select",
     options: [
       { value: "start", label: "Start" },
       { value: "center", label: "Center" },
       { value: "end", label: "End" },
-      { value: "spaceBetween", label: "Space Between" },
-      { value: "spaceAround", label: "Space Around" },
     ],
   },
-  spacing: {
-    label: "Spacing",
-    type: "select",
-    options: [
-      { value: "small", label: "Small" },
-      { value: "medium", label: "Medium" },
-      { value: "large", label: "Large" },
-    ],
+  gap: {
+    label: "Gap",
+    type: "number",
+    min: 0,
   },
   wrap: {
     label: "Wrap",
@@ -129,6 +106,16 @@ const flexContainerFields: Fields<FlexContainerProps> = {
       { value: "wrap", label: "Wrap" },
     ],
   },
+  verticalPadding: {
+    label: "Vertical Padding",
+    type: "select",
+    options: verticalPaddingClasses,
+  },
+  horizontalPadding: {
+    label: "Horizontal Padding",
+    type: "select",
+    options: horizontalPaddingClasses,
+  },
 };
 
 const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
@@ -136,26 +123,29 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
   fields: flexContainerFields,
   defaultProps: {
     direction: "column",
-    alignment: "start",
     justification: "start",
-    spacing: "medium",
     wrap: "nowrap",
+    gap: 0,
+    verticalPadding: "0",
+    horizontalPadding: "0",
   },
   render: ({
     direction,
-    alignment,
     justification,
-    spacing,
+    wrap,
+    gap,
+    verticalPadding,
+    horizontalPadding,
     className,
-    puck: { renderDropZone },
   }) => (
     <FlexContainer
-      renderDropZone={renderDropZone}
       direction={direction}
-      alignment={alignment}
       justification={justification}
+      wrap={wrap}
+      gap={gap}
+      verticalPadding={verticalPadding}
+      horizontalPadding={horizontalPadding}
       className={className}
-      spacing={spacing}
     />
   ),
 };
