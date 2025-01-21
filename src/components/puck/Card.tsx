@@ -12,6 +12,7 @@ import {
   BodyProps,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
+import { ButtonProps } from "./atoms/button.tsx";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import {
   Heading,
@@ -55,7 +56,7 @@ interface CardProps {
   cta: {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
-    fontSize: HeadingProps["fontSize"];
+    fontSize: ButtonProps["fontSize"];
   };
   backgroundColor:
     | "bg-card-backgroundColor"

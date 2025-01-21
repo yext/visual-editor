@@ -11,6 +11,7 @@ import {
   FontSizeSelector,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
+import { ButtonProps } from "./atoms/button.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
@@ -41,7 +42,7 @@ interface PromoProps {
   cta: {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
-    fontSize: HeadingProps["fontSize"];
+    fontSize: ButtonProps["fontSize"];
   };
 }
 
