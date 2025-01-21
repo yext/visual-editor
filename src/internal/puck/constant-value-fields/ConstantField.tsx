@@ -17,7 +17,7 @@ export function ConstantFields<T extends Record<string, any>>(
 ): ReactElement {
   const fields: ReactElement[] = [];
   props.fields.forEach((field) => {
-    fields.push(ConstantField(props, field));
+    fields.push(ConstantField<T>(props, field));
   });
 
   return <>{fields}</>;
