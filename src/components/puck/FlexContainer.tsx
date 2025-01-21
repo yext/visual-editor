@@ -41,13 +41,21 @@ const flexContainerVariants = cva("flex", {
   },
 });
 
+type DropZoneProps = {
+  zone: string;
+  allow?: string[];
+  disallow?: string[];
+  style?: React.CSSProperties;
+};
+
 interface FlexContainerProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof flexContainerVariants> {
-  renderDropZone?: any;
-}
+    VariantProps<typeof flexContainerVariants> {}
 
-const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
+const FlexContainer = React.forwardRef<
+  HTMLDivElement,
+  FlexContainerProps & { renderDropZone: React.FC<DropZoneProps> }
+>(
   (
     {
       className,
@@ -74,7 +82,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
         ref={ref}
         {...props}
       >
-        {renderDropZone({ zone: "flex-container" })}
+        {renderDropZone({ zone: "flex-container", disallow: ["Banner"] })}
       </div>
     );
   }
