@@ -193,8 +193,27 @@ const ConstantValueInput = <T extends Record<string, any>>({
     !!filter.includeListsOnly
   );
 
-  return (
-    constantFieldConfig && (
+  if (!constantFieldConfig) {
+    return;
+  }
+
+  return constantFieldConfig.type === "custom" ? (
+    <AutoField
+      onChange={(newConstantValue) =>
+        onChange({
+          field: value?.field ?? "",
+          constantValue: newConstantValue,
+          constantValueEnabled: true,
+        })
+      }
+      value={value?.constantValue}
+      field={constantFieldConfig}
+    />
+  ) : (
+    <FieldLabel
+      label={constantFieldConfig.label ?? "Value"}
+      className="ve-inline-block ve-pt-4 w-full"
+    >
       <AutoField
         onChange={(newConstantValue) =>
           onChange({
@@ -206,7 +225,7 @@ const ConstantValueInput = <T extends Record<string, any>>({
         value={value?.constantValue}
         field={constantFieldConfig}
       />
-    )
+    </FieldLabel>
   );
 };
 
