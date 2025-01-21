@@ -41,7 +41,7 @@ interface PromoProps {
   cta: {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
-    fontSize: HeadingProps["fontSize"];
+    fontSize: CTAProps["fontSize"];
   };
 }
 
