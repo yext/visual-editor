@@ -5,6 +5,7 @@ overwrite: true
 eol: lf
 ci: true
 no-spinner: true
+exclude: ["pages-visual-editor-starter"]
 replace:
   doctrine@2.1.0: node_modules/.pnpm/doctrine@2.1.0/node_modules/doctrine/LICENSE
   axe-core@4.9.1: node_modules/.pnpm/axe-core@4.9.1/node_modules/axe-core/LICENSE
