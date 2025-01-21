@@ -14,6 +14,7 @@ import {
   useDocument,
   resolveYextEntityField,
   FontSizeSelector,
+  EntityField,
 } from "../../index.js";
 
 type GetDirectionsProps = {
@@ -96,15 +97,21 @@ const GetDirections = ({
   );
 
   return (
-    <Button
-      asChild
-      variant={variant}
-      size={size}
-      fontSize={fontSize}
-      borderRadius={borderRadius}
+    <EntityField
+      displayName="Get Directions"
+      fieldId={coordinateField.field}
+      constantValueEnabled={coordinateField.constantValueEnabled}
     >
-      <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
-    </Button>
+      <Button
+        asChild
+        variant={variant}
+        size={size}
+        fontSize={fontSize}
+        borderRadius={borderRadius}
+      >
+        <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
+      </Button>
+    </EntityField>
   );
 };
 
