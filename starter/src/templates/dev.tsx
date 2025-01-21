@@ -62,16 +62,6 @@ export const config = {
   },
 } as const satisfies TemplateConfig;
 
-export const transformProps = async (data: any) => {
-  data.document.__.layout = {
-    root: {},
-    content: [],
-    zones: {},
-  };
-
-  return data;
-};
-
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
