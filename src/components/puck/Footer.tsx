@@ -13,7 +13,6 @@ import {
 } from "../../index.ts";
 import { Body, BodyProps } from "./atoms/body.tsx";
 import { cva, VariantProps } from "class-variance-authority";
-import { v4 as uuidv4 } from "uuid";
 
 const footerVariants = cva("", {
   variants: {
@@ -35,7 +34,7 @@ export interface FooterProps extends VariantProps<typeof footerVariants> {
   copyright: BodyProps & {
     text: YextEntityField<string>;
   };
-  links: { cta: YextEntityField<CTA>; id?: string }[];
+  links: { cta: YextEntityField<CTA> }[];
 }
 
 const footerFields: Fields<FooterProps> = {
@@ -164,33 +163,6 @@ export const Footer: ComponentConfig<FooterProps> = {
       },
     };
   },
-  resolveData: ({ props }, { lastData }) => {
-    // generate a unique id for each of the links
-    if (lastData?.props.links.length === props.links.length) {
-      return { props };
-    }
-
-    // handle duplication by assigning a new id
-    const ids: string[] = [];
-    const resolveId = (id?: string) => {
-      if (!id || ids.includes(id)) {
-        const newId = uuidv4();
-        ids.push(newId);
-        return id;
-      }
-      return id;
-    };
-
-    return {
-      props: {
-        ...props,
-        links: props.links.map((link) => ({
-          ...link,
-          id: resolveId(link.id),
-        })),
-      },
-    };
-  },
 };
 
 const FooterComponent: React.FC<FooterProps> = (props) => {
@@ -198,16 +170,9 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
   const { links, backgroundColor, copyright } = props;
 
   const resolvedLinks = links
-    ?.map((link) => {
-      const resolvedCTA = resolveYextEntityField<CTA>(document, link.cta);
-      if (resolvedCTA) {
-        return {
-          id: link.id,
-          ...resolvedCTA,
-        };
-      }
-    })
+    ?.map((link) => resolveYextEntityField<CTA>(document, link.cta))
     .filter((link) => link !== undefined);
+
   const resolvedCopyrightText = resolveYextEntityField<string>(
     document,
     copyright.text
@@ -225,7 +190,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
           <ul className="flex space-x-8">
             {resolvedLinks?.map((item, idx) => (
               <li
-                key={item.id ?? idx}
+                key={idx}
                 className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
               >
                 {item.link && (
