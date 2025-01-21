@@ -2,13 +2,7 @@ import { useCallback } from "react";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { DevLogger } from "../../../utils/devLogger.ts";
 
-export const Roles = {
-  GLOBAL: "global",
-  INDIVIDUAL: "individual",
-};
-
-const ROLE = "ROLE_",
-  TEMPLATE = "TEMPLATE_",
+const TEMPLATE = "TEMPLATE_",
   LAYOUT = "LAYOUT_",
   ENTITY = "ENTITY_";
 
@@ -28,7 +22,6 @@ export const useLayoutLocalStorage = (
 
     return getVisualConfigLocalStorageKey(
       templateMetadata.isDevMode && !templateMetadata.devOverride,
-      templateMetadata.role,
       templateMetadata.templateId,
       templateMetadata.layoutId,
       templateMetadata.entityId
@@ -51,26 +44,24 @@ export const useLayoutLocalStorage = (
 
 function getVisualConfigLocalStorageKey(
   isDevMode: boolean,
-  role: string,
   templateId: string,
   layoutId?: number,
   entityId?: number
 ): string {
   const devPrefix = isDevMode ? "dev" : "";
-  if (!role || !templateId || (!entityId && !layoutId)) {
+  if (!templateId || (!entityId && !layoutId)) {
     throw new Error(
       `Unable to generate local storage key, missing query parameters${!entityId && " entityId"}${!layoutId && " layoutId"}`
     );
   }
-  if (role === Roles.INDIVIDUAL) {
-    if (!entityId) {
-      throw new Error(`EntityId required for role ${role}`);
-    }
-    return devPrefix + ROLE + role + TEMPLATE + templateId + ENTITY + entityId;
+
+  let key = devPrefix + TEMPLATE + templateId;
+  if (layoutId) {
+    key += LAYOUT + layoutId;
+  }
+  if (entityId) {
+    key += ENTITY + entityId;
   }
 
-  if (!layoutId) {
-    throw new Error(`LayoutId required for role ${role}`);
-  }
-  return devPrefix + ROLE + role + TEMPLATE + templateId + LAYOUT + layoutId;
+  return key;
 }

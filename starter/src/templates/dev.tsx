@@ -1,12 +1,12 @@
 import "@yext/visual-editor/style.css";
 import {
+  GetHeadConfig,
+  GetPath,
+  HeadConfig,
   Template,
   TemplateConfig,
-  GetPath,
   TemplateProps,
   TemplateRenderProps,
-  GetHeadConfig,
-  HeadConfig,
 } from "@yext/pages";
 import { componentRegistry } from "../ve.config";
 import {
@@ -61,19 +61,15 @@ export const config = {
     isVETemplate: true,
   },
 } as const satisfies TemplateConfig;
+
 export const transformProps = async (data: any) => {
-  const emptyLayout = {
+  data.document.__.layout = {
     root: {},
     content: [],
     zones: {},
   };
-  const updatedDocument = data;
-  if (!updatedDocument.document.__) {
-    updatedDocument.document.__ = {};
-  }
-  updatedDocument.document.__.layout = emptyLayout;
 
-  return updatedDocument;
+  return data;
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
@@ -100,7 +96,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
 
 export const getPath: GetPath<TemplateProps> = ({ document }) => {
   const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  return "dev/" + document.address
+  return document.address
     ? `${localePath}${document.address.region}/${document.address.city}/${
         document.address.line1
       }-${document.id.toString()}`

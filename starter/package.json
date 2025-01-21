@@ -6,11 +6,11 @@
   "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
-    "dev": "pages dev",
+    "dev": "pages dev --local --no-prod-url",
     "prod": "pages prod",
     "build": "pages build",
     "update": "cd .. && pnpm i && pnpm pack && cd starter && rm -rf node_modules/@yext/ package-lock.json && npm i && yext pages generate-test-data",
-    "updateAndRun": "npm run update && npm run dev -- --local --no-prod-url",
+    "updateAndRun": "npm run update && npm run dev",
     "components": "REGISTRY_URL=https://reliably-numerous-kit.pgsdemo.com/components npx shadcn add"
   },
   "engines": {

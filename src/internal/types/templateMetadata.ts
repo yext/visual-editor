@@ -1,7 +1,4 @@
-import { Roles } from "../hooks/layout/useLocalStorage.ts";
-
 export type TemplateMetadata = {
-  role: string;
   siteId: number;
   templateId: string;
   layoutId?: number;
@@ -15,10 +12,10 @@ export type TemplateMetadata = {
 
 export function generateTemplateMetadata(): TemplateMetadata {
   return {
-    role: Roles.INDIVIDUAL,
     siteId: 1337,
     templateId: "dev",
     entityId: hashCode(window.location.href),
+    layoutId: hashCode(window.location.href),
     isDevMode: true,
     isxYextDebug: true,
     isThemeMode: false,
