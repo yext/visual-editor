@@ -4,13 +4,13 @@ import { AutoField, FieldLabel } from "@measured/puck";
 type ConstantFieldOption = {
   label: string;
   value: string;
-}
+};
 
 type ConstantFieldProps = {
   label: string;
   field: string;
   fieldType: "text" | "number" | "select";
-  options?: ConstantFieldOption[]
+  options?: ConstantFieldOption[];
 };
 
 type ConstantFieldsProps<T extends Record<string, any>> = {

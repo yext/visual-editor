@@ -32,7 +32,9 @@ const CTA = ({
       borderRadius={borderRadius}
       fontSize={fontSize}
     >
-      <Link href={linkType == "PHONE" ? `tel:${link}` : link ?? ""}>{label}</Link>
+      <Link href={linkType == "PHONE" ? `tel:${link}` : (link ?? "")}>
+        {label}
+      </Link>
     </Button>
   );
 };
