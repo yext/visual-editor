@@ -79,7 +79,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       },
     ],
     other: [applyTheme(document, themeConfig), buildSchema(document)].join(
-      "\n"
+      "\n",
     ),
   };
 };

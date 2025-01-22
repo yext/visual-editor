@@ -36,7 +36,7 @@ export async function getPackageInfo(): Promise<{
 }> {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  const pkgDir = path.resolve(__dirname, "..");
+  const pkgDir = path.resolve(__dirname, "../packages/visual-editor");
 
   const pkgPath = path.resolve(pkgDir, "package.json");
   const pkg: Pkg = await import(pkgPath);
@@ -59,7 +59,7 @@ export async function getPackageInfo(): Promise<{
 export async function run(
   bin: string,
   args: string[],
-  opts: ExecaOptions<"utf8"> = {}
+  opts: ExecaOptions<"utf8"> = {},
 ): Promise<ExecaReturnValue<string>> {
   return execa(bin, args, { stdio: "inherit", ...opts });
 }
@@ -67,11 +67,11 @@ export async function run(
 export async function dryRun(
   bin: string,
   args: string[],
-  opts?: ExecaOptions<"utf8">
+  opts?: ExecaOptions<"utf8">,
 ): Promise<void> {
   return console.log(
     colors.blue(`[dryrun] ${bin} ${args.join(" ")}`),
-    opts || ""
+    opts || "",
   );
 }
 
@@ -93,7 +93,7 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
 
   function inc(
     i: ReleaseType,
-    tag = currentAlpha ? "alpha" : currentBeta ? "beta" : "rc"
+    tag = currentAlpha ? "alpha" : currentBeta ? "beta" : "rc",
   ) {
     const incVersion = semver.inc(currentVersion, i, tag);
     if (incVersion) {
@@ -143,7 +143,7 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
       {
         title: "major",
         value: inc("major"),
-      }
+      },
     );
   } else if (currentAlpha) {
     versionChoices.push({
@@ -184,7 +184,7 @@ export function updateVersion(pkgPath: string, version: string): void {
 
 export async function publishPackage(
   pkdDir: string,
-  tag?: string
+  tag?: string,
 ): Promise<void> {
   const publicArgs = ["publish", "--access", "public"];
   if (tag) {
@@ -212,14 +212,14 @@ export async function logRecentCommits(): Promise<void> {
   console.log(
     colors.bold(
       `\n${colors.blue(`i`)} Commits of since ${colors.green(
-        tag
-      )} ${colors.gray(`(${sha.slice(0, 5)})`)}`
-    )
+        tag,
+      )} ${colors.gray(`(${sha.slice(0, 5)})`)}`,
+    ),
   );
   await run(
     "git",
     ["--no-pager", "log", `${sha}..HEAD`, "--oneline", "--", `.`],
-    { stdio: "inherit" }
+    { stdio: "inherit" },
   );
   console.log();
 }

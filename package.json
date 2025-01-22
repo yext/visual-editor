@@ -1,112 +1,71 @@
 {
-  "name": "@yext/visual-editor",
-  "description": "Component library for Yext Pages Visual Editor",
-  "version": "0.0.22",
-  "type": "module",
+  "name": "visual-editor",
+  "version": "0.0.1",
+  "description": "A monorepo containing all packages used by Yext Visual Editor",
   "author": "sumo@yext.com",
-  "types": "dist/index.d.ts",
-  "main": "dist/visual-editor.cjs",
-  "module": "dist/visual-editor.js",
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/visual-editor.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/visual-editor.cjs"
-      }
-    },
-    "./style.css": "./dist/style.css"
-  },
+  "license": "BSD-3-Clause",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "build": "tsc && vite build",
-    "test": "vitest run",
-    "prettier": "prettier --write --cache .",
-    "lint": "eslint --cache --fix src/ scripts/",
-    "autofix": "pnpm run lint && pnpm run prettier",
-    "ci-publish": "tsx scripts/publishCI.ts",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
     "release": "tsx scripts/release.ts",
-    "prepare": "husky && pnpm build",
-    "generate-notices": "generate-license-file",
-    "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
+    "fmt": "prettier --write --cache .",
+    "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
+    "lint": "eslint --cache --fix .",
+    "docs": "pnpm -r run api-extractor && pnpm -r run generate-docs && pnpm run fmt",
+    "ci-publish": "tsx scripts/publishCI.ts",
+    "prepare": "husky install"
   },
-  "dependencies": {
-    "@measured/puck": "0.17.4",
-    "@radix-ui/react-alert-dialog": "^1.1.1",
-    "@radix-ui/react-label": "^2.1.0",
-    "@radix-ui/react-progress": "^1.1.0",
-    "@radix-ui/react-radio-group": "^1.2.1",
-    "@radix-ui/react-slot": "^1.1.0",
-    "@radix-ui/react-switch": "^1.1.0",
-    "@radix-ui/react-tooltip": "^1.1.2",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "eslint": "^9.8.0",
-    "eslint-plugin-react": "^7.35.0",
-    "lucide-react": "^0.414.0",
-    "next-themes": "^0.3.0",
-    "picocolors": "^1.0.1",
-    "prettier": "^3.3.3",
-    "prompts": "^2.4.2",
-    "react-color": "^2.19.3",
-    "sonner": "^1.5.0",
-    "tailwind-merge": "^2.4.0",
-    "tsx": "^4.16.3"
-  },
-  "engines": {
-    "node": "^17 || ^18 || ^20"
-  },
-  "packageManager": "pnpm@9.12.3",
   "lint-staged": {
     "*": "prettier --write --cache --ignore-unknown",
     "*.{ts,js,tsx,jsx}": "eslint --cache --fix"
   },
+  "engines": {
+    "node": ">=17"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yext/visual-editor.git"
+  },
+  "homepage": "https://github.com/yext/visual-editor#readme",
   "devDependencies": {
-    "@eslint/compat": "^1.1.1",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.8.0",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.0.1",
+    "ts-node": "^10.9.2",
     "@types/fs-extra": "^11.0.4",
+    "@types/lodash": "^4.14.202",
     "@types/minimist": "^1.2.5",
-    "@types/node": "^20.14.11",
+    "@types/node": "^20.10.6",
     "@types/prompts": "^2.4.9",
-    "@types/react": "^18.3.3",
-    "@types/react-color": "^3.0.12",
-    "@types/react-dom": "^18.3.0",
-    "@types/semver": "^7.5.8",
-    "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.1",
-    "@typescript-eslint/parser": "^8.0.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.2",
-    "eslint-plugin-import": "^2.29.1",
+    "@types/semver": "^7.5.6",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
+    "@typescript-eslint/parser": "^8.14.0",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.2",
     "execa": "^8.0.1",
     "fs-extra": "^11.2.0",
-    "generate-license-file": "^3.5.0",
-    "globals": "^15.8.0",
-    "husky": "^9.1.4",
-    "jsdom": "^24.1.1",
-    "lint-staged": "^15.2.7",
+    "generate-changelog": "^1.8.0",
+    "generate-license-file": "^3.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "minimist": "^1.2.8",
-    "semver": "^7.6.3",
-    "tailwindcss": "^3.4.6",
-    "tsup": "8.3.5",
-    "typescript": "^5.5.4",
-    "uuid": "11.0.3",
-    "vite": "^5.3.5",
-    "vitest": "^2.0.5",
-    "zod": "^3.23.8"
+    "picocolors": "^1.0.0",
+    "prettier": "^3.3.3",
+    "prompts": "^2.4.2",
+    "semver": "^7.5.4",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3",
+    "yaml": "^2.3.4"
   },
-  "peerDependencies": {
-    "@yext/pages-components": "^1.0.0",
-    "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+  "packageManager": "pnpm@9.12.3",
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "^5.3.5"
+      }
+    }
   }
 }

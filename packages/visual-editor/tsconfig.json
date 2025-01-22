@@ -4,10 +4,7 @@
     "jsx": "react-jsx",
 
     "moduleResolution": "Node",
-    "types": [
-      "vite/client",
-      "node"
-    ],
+    "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true,
 
     "allowJs": true,
@@ -26,7 +23,7 @@
 
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "include": ["src", "index.d.ts", ".eslintrc.json"],
   "exclude": ["node_modules"]

@@ -1,5 +1,3 @@
 packages:
-  - "*/"
-  - "!dist/"
-  - "!starter/*"
-  - "starter/*"
+  - "packages/visual-editor"
+  - "starter"
