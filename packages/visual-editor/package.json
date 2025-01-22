@@ -31,7 +31,7 @@
     "lint": "eslint --cache --fix src/ scripts/",
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
-    "generate-notices": "generate-license-file",
+    "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
     "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
   },
   "dependencies": {
@@ -53,6 +53,7 @@
     "prettier": "^3.3.3",
     "prompts": "^2.4.2",
     "react-color": "^2.19.3",
+    "react-error-boundary": "^5.0.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
     "tsx": "^4.16.3"
