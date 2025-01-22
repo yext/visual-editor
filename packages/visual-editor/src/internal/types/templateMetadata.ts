@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify'
+
 export type TemplateMetadata = {
   siteId: number;
   templateId: string;
@@ -11,11 +13,12 @@ export type TemplateMetadata = {
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
+  const cleanString = DOMPurify.sanitize(window.location.href);
   return {
     siteId: 1337,
     templateId: "dev",
-    entityId: hashCode(window.location.href),
-    layoutId: hashCode(window.location.href),
+    entityId: hashCode(cleanString),
+    layoutId: hashCode(cleanString),
     isDevMode: true,
     isxYextDebug: true,
     isThemeMode: false,
@@ -23,7 +26,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
   };
 }
 
-function hashCode(s: string) {
+function hashCode(s: string): number {
   let hash = 0;
   for (let i = 0, len = s.length; i < len; i++) {
     const chr = s.charCodeAt(i);
