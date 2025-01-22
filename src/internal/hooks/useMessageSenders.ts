@@ -26,11 +26,17 @@ export const useCommonMessageSenders = () => {
     TARGET_ORIGINS
   );
 
+  const { sendToParent: sendError } = useSendMessageToParent(
+    "sendError",
+    TARGET_ORIGINS
+  );
+
   return {
     iFrameLoaded,
     pushPageSets,
     openQuickFind,
     sendDevLayoutSaveStateData,
     sendDevThemeSaveStateData,
+    sendError,
   };
 };
