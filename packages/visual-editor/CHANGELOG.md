@@ -2,7 +2,7 @@
 
 ##### New Features
 
-*  add localDev mode (fd0423be)
+- add localDev mode (fd0423be)
 
 #### 0.0.23 (2025-01-22)
 
