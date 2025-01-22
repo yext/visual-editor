@@ -106,6 +106,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
                   justifyContent,
                 }}
                 zone={`column-${idx}`}
+                disallow={["Banner"]}
               />
             </div>
           ))}

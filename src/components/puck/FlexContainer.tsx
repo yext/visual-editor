@@ -44,6 +44,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
             gap,
             flexWrap: wrap,
           }}
+          disallow={["Banner"]}
         />
       </div>
     );
