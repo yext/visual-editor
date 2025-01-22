@@ -1,5 +1,6 @@
 import "./index.css";
-import React, { useEffect, useState } from "react";
+import React, { ErrorInfo, useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../../internal/puck/ui/Toaster.tsx";
 import { type Config } from "@measured/puck";
@@ -44,9 +45,15 @@ export const Editor = ({
     themeDataFetched,
   } = useCommonMessageReceivers(componentRegistry, document, !!localDev);
 
-  const { pushPageSets } = useCommonMessageSenders();
+  const { pushPageSets, sendError } = useCommonMessageSenders();
 
   useQuickFindShortcut();
+
+  const logError = (error: Error, info: ErrorInfo) => {
+    sendError({
+      payload: { error, info },
+    });
+  };
 
   // redirect to 404 page when going to /edit page outside of Storm
   useEffect(() => {
@@ -109,7 +116,7 @@ export const Editor = ({
       5);
 
   return (
-    <>
+    <ErrorBoundary fallback={<></>} onError={logError}>
       {!isLoading ? (
         templateMetadata.isThemeMode ? (
           <ThemeEditor
@@ -133,6 +140,6 @@ export const Editor = ({
         parentLoaded && <LoadingScreen progress={progress} />
       )}
       <Toaster closeButton richColors />
-    </>
+    </ErrorBoundary>
   );
 };

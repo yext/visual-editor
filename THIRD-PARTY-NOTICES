@@ -12739,11 +12739,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 -----------
 
-The following npm package may be included in this product:
+The following npm packages may be included in this product:
 
  - react-error-boundary@3.1.4
+ - react-error-boundary@5.0.0
 
-This package contains the following license:
+These packages each contain the following license:
 
 The MIT License (MIT)
 Copyright (c) 2020 Brian Vaughn
