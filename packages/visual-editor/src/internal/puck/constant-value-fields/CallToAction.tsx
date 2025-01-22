@@ -26,7 +26,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
           options: [
             {
               label: "Other",
-              value: "OTHER",
+              value: "Other",
             },
             {
               label: "URL",
@@ -34,13 +34,13 @@ export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
             },
             {
               label: "Phone",
-              value: "PHONE",
+              value: "Phone",
             },
             {
               label: "Email",
-              value: "EMAIL",
-            },
-          ],
+              value: "Email",
+            }
+          ]
         },
       ],
     });

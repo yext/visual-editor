@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Link } from "@yext/pages-components";
+import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 
 export interface CTAProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   link?: string;
-  linkType?: string;
+  linkType?: LinkType;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
   borderRadius?: ButtonProps["borderRadius"];
@@ -32,9 +32,10 @@ const CTA = ({
       borderRadius={borderRadius}
       fontSize={fontSize}
     >
-      <Link href={linkType == "PHONE" ? `tel:${link}` : (link ?? "")}>
-        {label}
-      </Link>
+      <Link cta={{
+        link: link ?? "",
+        linkType: linkType,
+      }}>{label}</Link>
     </Button>
   );
 };
