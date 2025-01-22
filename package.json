@@ -14,7 +14,7 @@
     "fmt": "prettier --write --cache .",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
     "prettier": "pnpm -r run prettier",
-    "lint": "eslint --cache --fix .",
+    "lint": "pnpm -r run lint",
     "docs": "pnpm -r run api-extractor && pnpm -r run generate-docs && pnpm run fmt",
     "ci-publish": "tsx scripts/publishCI.ts",
     "prepare": "husky install"
