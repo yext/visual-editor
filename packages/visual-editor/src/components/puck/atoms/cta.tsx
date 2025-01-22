@@ -32,10 +32,14 @@ const CTA = ({
       borderRadius={borderRadius}
       fontSize={fontSize}
     >
-      <Link cta={{
-        link: link ?? "",
-        linkType: linkType,
-      }}>{label}</Link>
+      <Link
+        cta={{
+          link: link ?? "",
+          linkType: linkType,
+        }}
+      >
+        {label}
+      </Link>
     </Button>
   );
 };

@@ -39,8 +39,8 @@ export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
             {
               label: "Email",
               value: "Email",
-            }
-          ]
+            },
+          ],
         },
       ],
     });
