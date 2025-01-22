@@ -85,6 +85,13 @@ interface ColumnProps extends VariantProps<typeof columnVariants> {
   span?: number;
 }
 
+type DropZoneProps = {
+  zone: string;
+  allow?: string[];
+  disallow?: string[];
+  style?: React.CSSProperties;
+};
+
 interface GridSectionProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof gridSectionVariants>,
@@ -92,10 +99,12 @@ interface GridSectionProps
   verticalPadding: string;
   distribution: "auto" | "manual";
   columns: ColumnProps[];
-  renderDropZone?: any;
 }
 
-const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
+const GridSection = React.forwardRef<
+  HTMLDivElement,
+  GridSectionProps & { renderDropZone: React.FC<DropZoneProps> }
+>(
   (
     {
       className,
@@ -149,7 +158,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
                     : "",
               }}
             >
-              {renderDropZone({ zone: `column-${idx}` })}
+              {renderDropZone({ zone: `column-${idx}`, disallow: ["Banner"] })}
             </div>
           ))}
         </div>

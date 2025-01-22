@@ -43,7 +43,7 @@ const bannerFields: Fields<BannerProps> = {
   fontSize: FontSizeSelector(),
   textColor: {
     label: "Text Color",
-    type: "radio",
+    type: "select",
     options: [
       { label: "Default", value: "default" },
       { label: "Primary", value: "primary" },
@@ -55,7 +55,7 @@ const bannerFields: Fields<BannerProps> = {
   },
   backgroundColor: {
     label: "Background Color",
-    type: "radio",
+    type: "select",
     options: [
       { label: "Background", value: "bg-palette-background" },
       { label: "Primary", value: "bg-palette-primary" },
