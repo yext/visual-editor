@@ -37,7 +37,7 @@
     "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
   },
   "dependencies": {
-    "@measured/puck": "0.17.1",
+    "@measured/puck": "0.18.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",

@@ -8,7 +8,7 @@ import {
   horizontalPaddingClasses,
 } from "./options/paddingClasses.js";
 
-const backgroundVariants = cva("components", {
+const outerBackgroundVariants = cva("components w-full", {
   variants: {
     backgroundColor: {
       default: "bg-grid-backgroundColor",
@@ -18,40 +18,38 @@ const backgroundVariants = cva("components", {
       text: "bg-palette-text",
       background: "bg-palette-background",
     },
-    maxContentWidth: {
-      default: "max-w-grid-maxWidth",
-      lg: "max-w-[1024px]",
-      xl: "max-w-[1280px]",
-      xxl: "max-w-[1536px]",
-    },
   },
   defaultVariants: {
     backgroundColor: "default",
-    maxContentWidth: "default",
   },
 });
 
-const columnVariants = cva("flex flex-col gap-y-grid-verticalSpacing", {
-  variants: {
-    verticalAlignment: {
-      start: "justify-start",
-      center: "justify-center",
-      end: "justify-end",
-      spaceBetween: "justify-between",
+const innerBackgroundVariants = cva(
+  "components flex flex-col min-h-0 min-w-0 md:grid md:grid-cols-12 mx-auto",
+  {
+    variants: {
+      maxContentWidth: {
+        default: "max-w-grid-maxWidth",
+        lg: "max-w-[1024px]",
+        xl: "max-w-[1280px]",
+        xxl: "max-w-[1536px]",
+      },
     },
-  },
-  defaultVariants: {
-    verticalAlignment: "start",
-  },
-});
+    defaultVariants: {
+      maxContentWidth: "default",
+    },
+  }
+);
 
-interface ColumnProps extends VariantProps<typeof columnVariants> {
+interface ColumnProps {
+  justifyContent: "center" | "start" | "end" | "spaceBetween";
   span?: number;
 }
 
 interface GridSectionProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof backgroundVariants> {
+    VariantProps<typeof outerBackgroundVariants>,
+    VariantProps<typeof innerBackgroundVariants> {
   gap: number;
   verticalPadding: string;
   horizontalPadding: string;
@@ -75,15 +73,16 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
     return (
       <Section
         className={themeMangerCn(
-          backgroundVariants({ maxContentWidth, backgroundColor }),
+          outerBackgroundVariants({ backgroundColor }),
           verticalPadding,
           horizontalPadding
         )}
+        maxWidth="full"
         padding="none"
       >
         <div
           className={themeMangerCn(
-            "components flex flex-col min-h-0 min-w-0 md:grid md:grid-cols-12 mx-auto gap-y-grid-verticalSpacing",
+            innerBackgroundVariants({ maxContentWidth }),
             className
           )}
           ref={ref}
@@ -93,19 +92,21 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
           }}
           {...props}
         >
-          {columns.map(({ span, verticalAlignment }, idx) => (
+          {columns.map(({ span, justifyContent }, idx) => (
             <div
               key={idx}
-              className={themeMangerCn(
-                columnVariants({
-                  verticalAlignment,
-                })
-              )}
               style={{
                 gridColumn: span,
               }}
             >
-              <DropZone zone={`column-${idx}`} />
+              <DropZone
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent,
+                }}
+                zone={`column-${idx}`}
+              />
             </div>
           ))}
         </div>
@@ -130,7 +131,7 @@ const gridSectionFields: Fields<GridSectionProps> = {
         min: 0,
         max: 12,
       },
-      verticalAlignment: {
+      justifyContent: {
         label: "Vertical Alignment",
         type: "select",
         options: [
@@ -187,10 +188,10 @@ const GridSectionComponent: ComponentConfig<GridSectionProps> = {
   defaultProps: {
     columns: [
       {
-        verticalAlignment: "start",
+        justifyContent: "start",
       },
       {
-        verticalAlignment: "start",
+        justifyContent: "start",
       },
     ],
     verticalPadding: "default",
