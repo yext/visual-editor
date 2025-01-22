@@ -55,7 +55,7 @@ interface CardProps {
   cta: {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
-    fontSize: HeadingProps["fontSize"];
+    fontSize: CTAProps["fontSize"];
   };
   backgroundColor:
     | "bg-card-backgroundColor"

@@ -168,7 +168,7 @@ const EmailsComponent: ComponentConfig<EmailsProps> = {
   fields: EmailsFields,
   defaultProps: {
     list: {
-      field: "",
+      field: "emails",
       constantValue: [],
     },
     includeHyperlink: true,

@@ -10,3 +10,4 @@ export {
   constructFontSelectOptions,
 } from "./visualEditorFonts.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
+export { normalizeSlug, validateSlug } from "./slugifier.ts";

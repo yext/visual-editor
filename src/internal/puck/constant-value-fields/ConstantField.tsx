@@ -17,7 +17,7 @@ export function ConstantFields<T extends Record<string, any>>(
 ): ReactElement {
   const fields: ReactElement[] = [];
   props.fields.forEach((field) => {
-    fields.push(ConstantField(props, field));
+    fields.push(ConstantField<T>(props, field));
   });
 
   return <>{fields}</>;
@@ -30,7 +30,7 @@ function ConstantField<T extends Record<string, any>>(
   return (
     <FieldLabel
       label={fieldProps.label}
-      className="ve-inline-block ve-pt-4"
+      className="ve-inline-block ve-pt-4 w-full"
       key={`constant-${fieldProps.field}-label`}
     >
       <AutoField

@@ -14,6 +14,7 @@ import { TEXT_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/
 import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Address.tsx";
 import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
+import { PHONE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Phone.tsx";
 
 const devLogger = new DevLogger();
 
@@ -31,10 +32,14 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
 
 const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
-  "type.phone": TEXT_CONSTANT_CONFIG,
+  "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
   "type.cta": CTA_CONSTANT_CONFIG,
+};
+
+const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TEXT_LIST_CONSTANT_CONFIG,
 };
 
 const getConstantConfigFromType = (
@@ -42,7 +47,7 @@ const getConstantConfigFromType = (
   isList: boolean
 ): Field<any> | undefined => {
   if (isList) {
-    return TEXT_LIST_CONSTANT_CONFIG;
+    return LIST_TYPE_TO_CONSTANT_CONFIG[type];
   }
   const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
@@ -102,6 +107,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       return (
         <>
           <ConstantValueModeToggler
+            fieldTypeFilter={props.filter.types}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
           />
@@ -126,17 +132,26 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 };
 
 const ConstantValueModeToggler = ({
+  fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
 }: {
+  fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
 }) => {
   const random = Math.floor(Math.random() * 999999);
   const entityButtonId = `ve-use-entity-value-${random}`;
   const constantButtonId = `ve-use-constant-value-${random}`;
+
+  const constantValueInputSupported = fieldTypeFilter.some(
+    (fieldType) =>
+      Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
+      Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
+  );
+
   return (
-    <div className="ve-mb-2 ve-w-full">
+    <div className="ve-w-full">
       <RadioGroup defaultValue={constantValueEnabled?.toString() ?? "false"}>
         <div className="ve-flex ve-items-center ve-space-x-2">
           <RadioGroupItem
@@ -146,14 +161,16 @@ const ConstantValueModeToggler = ({
           />
           <Label htmlFor={entityButtonId}>Use Entity Value</Label>
         </div>
-        <div className="ve-flex ve-items-center ve-space-x-2">
-          <RadioGroupItem
-            value="true"
-            id={constantButtonId}
-            onClick={() => toggleConstantValueEnabled(true)}
-          />
-          <Label htmlFor={constantButtonId}>Use Constant Value</Label>
-        </div>
+        {constantValueInputSupported && (
+          <div className="ve-flex ve-items-center ve-space-x-2">
+            <RadioGroupItem
+              value="true"
+              id={constantButtonId}
+              onClick={() => toggleConstantValueEnabled(true)}
+            />
+            <Label htmlFor={constantButtonId}>Use Constant Value</Label>
+          </div>
+        )}
       </RadioGroup>
     </div>
   );
@@ -176,21 +193,38 @@ const ConstantValueInput = <T extends Record<string, any>>({
     !!filter.includeListsOnly
   );
 
-  return (
-    <FieldLabel label={"Constant Value"} className="entityField-constantValue">
-      {constantFieldConfig && (
-        <AutoField
-          onChange={(newConstantValue) =>
-            onChange({
-              field: value?.field ?? "",
-              constantValue: newConstantValue,
-              constantValueEnabled: true,
-            })
-          }
-          value={value?.constantValue}
-          field={constantFieldConfig}
-        />
-      )}
+  if (!constantFieldConfig) {
+    return;
+  }
+
+  return constantFieldConfig.type === "custom" ? (
+    <AutoField
+      onChange={(newConstantValue) =>
+        onChange({
+          field: value?.field ?? "",
+          constantValue: newConstantValue,
+          constantValueEnabled: true,
+        })
+      }
+      value={value?.constantValue}
+      field={constantFieldConfig}
+    />
+  ) : (
+    <FieldLabel
+      label={constantFieldConfig.label ?? "Value"}
+      className="ve-inline-block ve-pt-4 w-full"
+    >
+      <AutoField
+        onChange={(newConstantValue) =>
+          onChange({
+            field: value?.field ?? "",
+            constantValue: newConstantValue,
+            constantValueEnabled: true,
+          })
+        }
+        value={value?.constantValue}
+        field={constantFieldConfig}
+      />
     </FieldLabel>
   );
 };
@@ -204,7 +238,10 @@ const EntityFieldInput = <T extends Record<string, any>>({
   const filteredEntityFields = getFilteredEntityFields(filter);
 
   return (
-    <FieldLabel label={label ?? "Entity Field"} className="ve-mt-2.5">
+    <FieldLabel
+      label={label ?? "Entity Field"}
+      className="ve-inline-block ve-w-full ve-pt-4"
+    >
       <AutoField
         field={{
           type: "select",

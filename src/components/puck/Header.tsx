@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link, CTA, ImageType, Image } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
+  EntityField,
   resolveYextEntityField,
   themeMangerCn,
   useDocument,
@@ -9,7 +10,6 @@ import {
   YextEntityFieldSelector,
 } from "../../index.ts";
 import { cva, VariantProps } from "class-variance-authority";
-import { v4 as uuidv4 } from "uuid";
 
 const PLACEHOLDER_LOGO_URL = "https://placehold.co/50";
 
@@ -33,7 +33,7 @@ export interface HeaderProps extends VariantProps<typeof headerVariants> {
   logo: {
     image: YextEntityField<ImageType>;
   };
-  links: { cta: YextEntityField<CTA>; id?: string }[];
+  links: { cta: YextEntityField<CTA> }[];
 }
 
 const headerFields: Fields<HeaderProps> = {
@@ -123,33 +123,6 @@ export const Header: ComponentConfig<HeaderProps> = {
   },
   label: "Header",
   render: (props) => <HeaderComponent {...props} />,
-  resolveData: ({ props }, { lastData }) => {
-    // generate a unique id for each of the links
-    if (lastData?.props.links.length === props.links.length) {
-      return { props };
-    }
-
-    // handle duplication by assigning a new id
-    const ids: string[] = [];
-    const resolveId = (id?: string) => {
-      if (!id || ids.includes(id)) {
-        const newId = uuidv4();
-        ids.push(newId);
-        return id;
-      }
-      return id;
-    };
-
-    return {
-      props: {
-        ...props,
-        links: props.links.map((link) => ({
-          ...link,
-          id: resolveId(link.id),
-        })),
-      },
-    };
-  },
 };
 
 const HeaderComponent: React.FC<HeaderProps> = (props) => {
@@ -157,16 +130,9 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
   const { logo, links, backgroundColor } = props;
 
   const resolvedLogo = resolveYextEntityField<ImageType>(document, logo.image);
+
   const resolvedLinks = links
-    ?.map((link) => {
-      const resolvedCTA = resolveYextEntityField<CTA>(document, link.cta);
-      if (resolvedCTA) {
-        return {
-          id: link.id,
-          ...resolvedCTA,
-        };
-      }
-    })
+    ?.map((link) => resolveYextEntityField<CTA>(document, link.cta))
     .filter((link) => link !== undefined);
 
   return (
@@ -178,17 +144,32 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
     >
       <div className="mx-auto flex max-w-6xl flex-1 items-center justify-between px-4 py-6">
         {resolvedLogo && (
-          <Image image={resolvedLogo} className="w-full h-full object-cover" />
+          <EntityField
+            displayName="Logo"
+            fieldId={logo.image.field}
+            constantValueEnabled={logo.image.constantValueEnabled}
+          >
+            <Image
+              image={resolvedLogo}
+              className="w-full h-full object-cover"
+            />
+          </EntityField>
         )}
         <div className="flex items-center justify-end space-x-4">
           <ul className="flex space-x-8">
             {resolvedLinks?.map((item, idx) => (
               <li
-                key={item.id ?? idx}
+                key={idx}
                 className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
               >
                 {item.link && (
-                  <Link cta={item} eventName={`header-link-${item.label}`} />
+                  <EntityField
+                    displayName="Link"
+                    fieldId={links[idx].cta.field}
+                    constantValueEnabled={links[idx].cta.constantValueEnabled}
+                  >
+                    <Link cta={item} eventName={`header-link-${item.label}`} />
+                  </EntityField>
                 )}
               </li>
             ))}

@@ -1,3 +1,37 @@
+#### 0.0.23 (2025-01-22)
+
+##### Chores
+
+- upgrade puck to 0.17.4 (#203) (6dc417c9)
+
+##### New Features
+
+- set up error boundary and send errors to parent (#207) (d978bf58)
+- pressing enter creates new item in list (#205) (0a267288)
+- normalizeSlug (#191) (aa9778ff)
+- address component updates (#196) (ae900fc9)
+- set default field for emails component (#197) (cc88bed6)
+
+##### Bug Fixes
+
+- add entity field to get directions component (#204) (2bcf4bd9)
+- resolveData stuck when updating footer props (#200) (3db59a55)
+- error in constant text fields (#199) (af2a77f4)
+- limit font-size for buttons (#198) (588b003d)
+- add entity field tooltips to header and footer (#195) (01ec7a86)
+- card component fixes (#189) (32d828a7)
+- themeSaveState didn't match data from messenger (#190) (7b44d62a)
+- entityField Wrapper (#186) (9056af08)
+- reset border radius (#187) (c2ee5d3c)
+- clear local changes closes on save state update (#188) (29c35f83)
+- adjust wording from "templates" to "page sets" (#185) (dcfc7445)
+
+##### Refactors
+
+- banner component updates (#202) (a6a6be7a)
+- remove uuid from Header and Footer (#201) (8cc1f39a)
+- update constant value field styling (#193) (9333bfbc)
+
 #### 0.0.22 (2025-01-10)
 
 ##### Bug Fixes

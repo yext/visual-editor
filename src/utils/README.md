@@ -402,3 +402,13 @@ const MyComponent = ({ fontWeight, className }) => {
 
 In this example, class names will be merged in the following order of precedence:
 `cva` base string < selected `cva` variant(s) (in the order they appear in `componentVariants`'s definition) < the string literal (`"font-sm"`) < `MyComponent`'s `className` prop
+
+## normalizeSlug
+
+Check that the string is a valid slug.
+
+## validateSlug
+
+Normalizes the provided content by converting upper case to lower case, replacing white spaces, '?', and '#', with a "-",
+and stripping all other illegal characters.
+Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`

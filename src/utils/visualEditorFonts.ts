@@ -121,13 +121,13 @@ export const getFontWeightOptions = (options: getFontWeightParams) => {
 /*
  * getFontWeightOverrideOptions returns the available font weights for a given CSS variable
  * for use in the resolveFields function of individual components.
- * Must return a promise because resolveFields runs before the iframe is loaded.
+ * Must return a promise because resolveFields can run before the iframe is loaded.
  */
 export const getFontWeightOverrideOptions = async (
   options: getFontWeightParams
 ) => {
   return new Promise<StyleSelectOption[]>((resolve) => {
-    const observer = new MutationObserver(() => {
+    const getAndFilterFontWeights = () => {
       const iframe = document.getElementById(
         PUCK_PREVIEW_IFRAME_ID
       ) as HTMLIFrameElement;
@@ -139,8 +139,14 @@ export const getFontWeightOverrideOptions = async (
         const weights = filterFontWeights(styleTag, options);
         resolve([{ label: "Default", value: "default" }, ...weights]);
       }
-    });
+    };
 
+    const observer = new MutationObserver(getAndFilterFontWeights);
+
+    // Try to run, will succeed if the style tag has already loaded
+    getAndFilterFontWeights();
+
+    // If not, observe mutations until it loads
     observer.observe(document, {
       childList: true,
       subtree: true,
