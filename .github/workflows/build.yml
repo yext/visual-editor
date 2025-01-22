@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./packages/${{ inputs.package }}"
     strategy:
       matrix:
         node-version: [18.x, 20.x]
@@ -36,5 +39,5 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: build-output-${{ matrix.node-version }}
-          path: "./dist"
+          path: "./packages/${{ inputs.package }}/dist"
           overwrite: true
