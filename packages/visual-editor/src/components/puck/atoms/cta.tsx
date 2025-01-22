@@ -6,6 +6,7 @@ export interface CTAProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   link?: string;
+  linkType?: string;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
   borderRadius?: ButtonProps["borderRadius"];
@@ -15,6 +16,7 @@ export interface CTAProps
 const CTA = ({
   label,
   link,
+  linkType,
   variant,
   size,
   borderRadius,
@@ -30,7 +32,7 @@ const CTA = ({
       borderRadius={borderRadius}
       fontSize={fontSize}
     >
-      <Link href={link ?? ""}>{label}</Link>
+      <Link href={linkType == "PHONE" ? `tel:${link}` : link ?? ""}>{label}</Link>
     </Button>
   );
 };

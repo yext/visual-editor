@@ -1,10 +1,16 @@
 import React, { ReactElement } from "react";
 import { AutoField, FieldLabel } from "@measured/puck";
 
+type ConstantFieldOption = {
+  label: string;
+  value: string;
+}
+
 type ConstantFieldProps = {
   label: string;
   field: string;
-  fieldType: "text" | "number";
+  fieldType: "text" | "number" | "select";
+  options?: ConstantFieldOption[]
 };
 
 type ConstantFieldsProps<T extends Record<string, any>> = {
@@ -34,7 +40,7 @@ function ConstantField<T extends Record<string, any>>(
       key={`constant-${fieldProps.field}-label`}
     >
       <AutoField
-        field={{ type: fieldProps.fieldType }}
+        field={{ type: fieldProps.fieldType, options: fieldProps.options }}
         value={props.value[fieldProps.field] as T}
         onChange={(fieldValue) => {
           props.onChange({
