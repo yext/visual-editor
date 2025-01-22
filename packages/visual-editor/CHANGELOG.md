@@ -1,5 +1,11 @@
 #### 0.0.23 (2025-01-22)
 
+##### New Features
+
+*  add localDev mode (fd0423be)
+
+#### 0.0.23 (2025-01-22)
+
 ##### Chores
 
 - upgrade puck to 0.17.4 (#203) (6dc417c9)
