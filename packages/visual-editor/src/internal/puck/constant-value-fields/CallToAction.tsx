@@ -19,6 +19,29 @@ export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
           field: "link",
           fieldType: "text",
         },
+        {
+          label: "Link Type",
+          field: "linkType",
+          fieldType: "select",
+          options: [
+            {
+              label: "Other",
+              value: "Other",
+            },
+            {
+              label: "URL",
+              value: "URL",
+            },
+            {
+              label: "Phone",
+              value: "Phone",
+            },
+            {
+              label: "Email",
+              value: "Email",
+            },
+          ],
+        },
       ],
     });
   },
