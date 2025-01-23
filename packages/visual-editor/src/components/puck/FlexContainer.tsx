@@ -1,88 +1,53 @@
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { ComponentConfig, Fields } from "@measured/puck";
-import { themeMangerCn } from "../../index.js";
+import { ComponentConfig, DropZone, Fields } from "@measured/puck";
+import { tailwindSpacingClasses } from "./options/spacingClasses.js";
 
-const flexContainerVariants = cva("flex", {
-  variants: {
-    direction: {
-      row: "flex-row",
-      column: "flex-col",
-    },
-    alignment: {
-      start: "items-start",
-      center: "items-center",
-      end: "items-end",
-      stretch: "items-stretch",
-    },
-    justification: {
-      start: "justify-start",
-      center: "justify-center",
-      end: "justify-end",
-      spaceBetween: "justify-between",
-      spaceAround: "justify-around",
-    },
-    spacing: {
-      small: "gap-2",
-      medium: "gap-4",
-      large: "gap-8",
-    },
-    wrap: {
-      wrap: "flex-wrap",
-      nowrap: "flex-nowrap",
-    },
-  },
-  defaultVariants: {
-    direction: "column",
-    alignment: "start",
-    justification: "start",
-    spacing: "medium",
-    wrap: "nowrap",
-  },
-});
+interface FlexContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+  gap: number;
+  justifyContent: "start" | "center" | "end";
+  direction: "row" | "column";
+  wrap: "wrap" | "nowrap";
+  verticalPadding: number;
+  horizontalPadding: number;
+}
 
-type DropZoneProps = {
-  zone: string;
-  allow?: string[];
-  disallow?: string[];
-  style?: React.CSSProperties;
-};
-
-interface FlexContainerProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof flexContainerVariants> {}
-
-const FlexContainer = React.forwardRef<
-  HTMLDivElement,
-  FlexContainerProps & { renderDropZone: React.FC<DropZoneProps> }
->(
+const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
   (
     {
       className,
       direction,
-      alignment,
-      justification,
-      spacing,
-      renderDropZone,
+      justifyContent,
+      wrap,
+      gap,
+      verticalPadding,
+      horizontalPadding,
       ...props
     },
     ref
   ) => {
     return (
       <div
-        className={themeMangerCn(
-          flexContainerVariants({
-            direction,
-            alignment,
-            justification,
-            spacing,
-          }),
-          className
-        )}
+        className={className}
         ref={ref}
+        style={{
+          paddingTop: verticalPadding,
+          paddingBottom: verticalPadding,
+          paddingRight: horizontalPadding,
+          paddingLeft: horizontalPadding,
+        }}
         {...props}
       >
-        {renderDropZone({ zone: "flex-container", disallow: ["Banner"] })}
+        <DropZone
+          zone="flex-container"
+          style={{
+            display: "flex",
+            justifyContent,
+            flexDirection: direction,
+            gap,
+            flexWrap: wrap,
+          }}
+          disallow={["Banner"]}
+        />
       </div>
     );
   }
@@ -99,35 +64,19 @@ const flexContainerFields: Fields<FlexContainerProps> = {
       { value: "column", label: "Vertical" },
     ],
   },
-  alignment: {
-    label: "Alignment",
+  justifyContent: {
+    label: "Justify Content",
     type: "select",
     options: [
       { value: "start", label: "Start" },
       { value: "center", label: "Center" },
       { value: "end", label: "End" },
-      { value: "stretch", label: "Stretch" },
     ],
   },
-  justification: {
-    label: "Justification",
+  gap: {
+    label: "Gap",
     type: "select",
-    options: [
-      { value: "start", label: "Start" },
-      { value: "center", label: "Center" },
-      { value: "end", label: "End" },
-      { value: "spaceBetween", label: "Space Between" },
-      { value: "spaceAround", label: "Space Around" },
-    ],
-  },
-  spacing: {
-    label: "Spacing",
-    type: "select",
-    options: [
-      { value: "small", label: "Small" },
-      { value: "medium", label: "Medium" },
-      { value: "large", label: "Large" },
-    ],
+    options: tailwindSpacingClasses,
   },
   wrap: {
     label: "Wrap",
@@ -137,6 +86,16 @@ const flexContainerFields: Fields<FlexContainerProps> = {
       { value: "wrap", label: "Wrap" },
     ],
   },
+  verticalPadding: {
+    label: "Vertical Padding",
+    type: "select",
+    options: tailwindSpacingClasses,
+  },
+  horizontalPadding: {
+    label: "Horizontal Padding",
+    type: "select",
+    options: tailwindSpacingClasses,
+  },
 };
 
 const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
@@ -144,26 +103,29 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
   fields: flexContainerFields,
   defaultProps: {
     direction: "column",
-    alignment: "start",
-    justification: "start",
-    spacing: "medium",
+    justifyContent: "start",
     wrap: "nowrap",
+    gap: 0,
+    verticalPadding: 0,
+    horizontalPadding: 0,
   },
   render: ({
     direction,
-    alignment,
-    justification,
-    spacing,
+    justifyContent,
+    wrap,
+    gap,
+    verticalPadding,
+    horizontalPadding,
     className,
-    puck: { renderDropZone },
   }) => (
     <FlexContainer
-      renderDropZone={renderDropZone}
       direction={direction}
-      alignment={alignment}
-      justification={justification}
+      justifyContent={justifyContent}
+      wrap={wrap}
+      gap={gap}
+      verticalPadding={verticalPadding}
+      horizontalPadding={horizontalPadding}
       className={className}
-      spacing={spacing}
     />
   ),
 };
