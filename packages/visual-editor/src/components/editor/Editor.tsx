@@ -20,6 +20,7 @@ export type EditorProps = {
   componentRegistry: Map<string, Config<any>>;
   themeConfig?: ThemeConfig;
   localDev?: boolean;
+  forceThemeMode?: boolean;
 };
 
 export const Editor = ({
@@ -27,6 +28,7 @@ export const Editor = ({
   componentRegistry,
   themeConfig,
   localDev,
+  forceThemeMode,
 }: EditorProps) => {
   if (document) {
     devLogger.logData("DOCUMENT", document);
@@ -118,13 +120,14 @@ export const Editor = ({
   return (
     <ErrorBoundary fallback={<></>} onError={logError}>
       {!isLoading ? (
-        templateMetadata.isThemeMode ? (
+          (templateMetadata.isThemeMode || forceThemeMode) ? (
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
+            localDev={!!localDev}
           />
         ) : (
           <LayoutEditor

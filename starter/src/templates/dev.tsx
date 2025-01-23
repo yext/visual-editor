@@ -19,6 +19,8 @@ import { themeConfig } from "../../theme.config";
 import { buildSchema } from "../utils/buildSchema";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
+import React from "react";
+import { Button as ChakraButton } from "@chakra-ui/button";
 
 export const config = {
   name: "dev-location",
@@ -95,23 +97,36 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 };
 
 const Dev: Template<TemplateRenderProps> = (props) => {
+  const [themeMode, setThemeMode]= React.useState<boolean>(false);
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
 
   return (
-    <VisualEditorProvider
-      document={document}
-      entityFields={entityFields}
-      tailwindConfig={tailwindConfig}
-    >
-      <Editor
-        document={document}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-        localDev={true}
-      />
-    </VisualEditorProvider>
+      <div>
+        <div className={"flex-container"}>
+          <ChakraButton className={"toggle-button"} onClick={() => {
+            setThemeMode(!themeMode);
+          }}>
+            {themeMode ? "Theme Mode" : "Layout Mode"}
+          </ChakraButton>
+        </div>
+        <div>
+          <VisualEditorProvider
+              document={document}
+              entityFields={entityFields}
+              tailwindConfig={tailwindConfig}
+          >
+            <Editor
+                document={document}
+                componentRegistry={componentRegistry}
+                themeConfig={themeConfig}
+                localDev={true}
+                forceThemeMode={themeMode}
+            />
+          </VisualEditorProvider>
+        </div>
+      </div>
   );
 };
 

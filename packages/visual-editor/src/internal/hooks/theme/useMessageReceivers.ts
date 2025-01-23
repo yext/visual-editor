@@ -7,7 +7,7 @@ import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString
 
 const devLogger = new DevLogger();
 
-export const useThemeMessageReceivers = () => {
+export const useThemeMessageReceivers = (localDev: boolean) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
   // Trigger additional data flow from parent
@@ -16,11 +16,9 @@ export const useThemeMessageReceivers = () => {
   }, []);
 
   // Theme from DB
-  const [themeSaveState, setThemeSaveState] = useState<
-    ThemeSaveState | undefined
-  >(undefined);
+  const [themeSaveState, setThemeSaveState] = useState<ThemeSaveState | undefined>();
   const [themeSaveStateFetched, setThemeSaveStateFetched] =
-    useState<boolean>(false); // needed because themeSaveState can be empty
+    useState<boolean>(localDev); // needed because themeSaveState can be empty
 
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
     let receivedThemeSaveState;

@@ -227,17 +227,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   ]);
 
   useEffect(() => {
-    if (localDev) {
-      setPuckInitialHistory({
-        histories: [{ id: "root", state: { data: layoutData } }],
-        appendData: false,
-      });
-      setPuckInitialHistoryFetched(true);
-    }
-  }, [setPuckInitialHistory, setPuckInitialHistoryFetched, localDev]);
-
-  useEffect(() => {
-    if (!layoutSaveStateFetched && !localDev) {
+    if (!layoutSaveStateFetched) {
       return;
     }
     loadPuckInitialHistory();

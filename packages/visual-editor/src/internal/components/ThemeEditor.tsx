@@ -27,10 +27,11 @@ type ThemeEditorProps = {
   layoutData: Data;
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
+  localDev: boolean;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
-  const { puckConfig, templateMetadata, layoutData, themeData, themeConfig } =
+  const { puckConfig, templateMetadata, layoutData, themeData, themeConfig, localDev } =
     props;
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
@@ -39,7 +40,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const { saveThemeSaveState, publishTheme, deleteThemeSaveState } =
     useThemeMessageSenders();
 
-  const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers();
+  const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers(localDev);
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);
@@ -250,6 +251,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const clearHistory = () => {
     devLogger.logFunc("clearHistory");
     clearThemeLocalStorage();
+    if (localDev) {
+      return;
+    }
     deleteThemeSaveState();
   };
 
@@ -292,6 +296,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       clearThemeHistory={clearHistory}
       sendDevThemeSaveStateData={sendDevThemeSaveStateData}
       buildThemeLocalStorageKey={buildThemeLocalStorageKey}
+      localDev={localDev}
     />
   ) : (
     <LoadingScreen progress={progress} />

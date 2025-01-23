@@ -13,7 +13,7 @@ export type TemplateMetadata = {
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
-  const cleanString = DOMPurify.sanitize(window.location.href);
+  const cleanString = DOMPurify.sanitize(window.location.href).split('?')[0];
   return {
     siteId: 1337,
     templateId: "dev",
