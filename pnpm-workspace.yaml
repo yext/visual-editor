@@ -1,0 +1,3 @@
+packages:
+  - "packages/visual-editor"
+  - "starter"

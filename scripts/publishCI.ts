@@ -12,7 +12,7 @@ const [, version] = tag.split("v");
 const { currentVersion, pkgDir } = await getPackageInfo();
 if (currentVersion !== version) {
   console.error(
-    `Package version from tag "${version}" mismatches with current version "${currentVersion}"`
+    `Package version from tag "${version}" mismatches with current version "${currentVersion}"`,
   );
   process.exit(1);
 }
