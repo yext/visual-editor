@@ -1,3 +1,15 @@
+#### 0.0.24 (2025-01-23)
+
+##### Chores
+
+- upgrade puck to v0.18.0 (#209) (6fff18c3)
+
+##### New Features
+
+- adjust Grid and Flex (#192) (d3ff492d)
+- add link type to CTA (#208) (b828558a)
+- add localDev mode (#194) (306db499)
+
 #### 0.0.23 (2025-01-22)
 
 ##### New Features
