@@ -6608,7 +6608,7 @@ The following npm packages may be included in this product:
 
  - @esbuild/linux-x64@0.23.1
  - @icons/material@0.2.4
- - @measured/puck@0.17.1
+ - @measured/puck@0.17.4
  - @radix-ui/primitive@1.1.0
  - @radix-ui/react-alert-dialog@1.1.2
  - @radix-ui/react-arrow@1.1.0
@@ -9947,11 +9947,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 -----------
 
-The following npm package may be included in this product:
+The following npm packages may be included in this product:
 
  - react-error-boundary@3.1.4
+ - react-error-boundary@5.0.0
 
-This package contains the following license:
+These packages each contain the following license:
 
 The MIT License (MIT)
 Copyright (c) 2020 Brian Vaughn

@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@measured/puck':
-        specifier: 0.17.1
-        version: 0.17.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.17.4
+        version: 0.17.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.1
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -71,6 +71,9 @@ importers:
       react-dom:
         specifier: ^17.0.2 || ^18.2.0
         version: 18.3.1(react@18.3.1)
+      react-error-boundary:
+        specifier: ^5.0.0
+        version: 5.0.0(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -951,8 +954,8 @@ packages:
       react: ^16.8.5 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
 
-  '@measured/puck@0.17.1':
-    resolution: {integrity: sha512-sBvZ4yAgLbR4CFidgZ3tnkAoie5/eNGCgHXuYZjC1Cyb8WvKXNiYvljTA+zH5MeuXMig1cehID+zTlMjyC+khQ==}
+  '@measured/puck@0.17.4':
+    resolution: {integrity: sha512-KPSjOWeRX0CAObYC9aXJx+LUlW1sSJwrMY9PijqiThVF1FumivFQVt+3FdtxvD67Z8k1/6nT5jjQ60ALcsLhGw==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -3570,6 +3573,11 @@ packages:
     peerDependencies:
       react: '>=16.13.1'
 
+  react-error-boundary@5.0.0:
+    resolution: {integrity: sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==}
+    peerDependencies:
+      react: '>=16.13.1'
+
   react-hotkeys-hook@4.6.1:
     resolution: {integrity: sha512-XlZpbKUj9tkfgPgT9gA+1p7Ey6vFIZHttUjPqpTdyT5nqQ8mHL7elxvSbaC+dpSiHUSmr21Ya1mDxBZG3aje4Q==}
     peerDependencies:
@@ -5110,7 +5118,7 @@ snapshots:
       - '@types/react-dom'
       - react-native
 
-  '@measured/puck@0.17.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@measured/puck@0.17.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@measured/dnd': 16.6.0-canary.4cba1d1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       deep-diff: 1.0.2
@@ -8142,6 +8150,11 @@ snapshots:
       scheduler: 0.23.2
 
   react-error-boundary@3.1.4(react@18.3.1):
+    dependencies:
+      '@babel/runtime': 7.26.0
+      react: 18.3.1
+
+  react-error-boundary@5.0.0(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.26.0
       react: 18.3.1

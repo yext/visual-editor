@@ -7,7 +7,7 @@ const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
 export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
-  render: ({ onChange, value }) => {
+  render: ({ onChange, value, id }) => {
     const [localItems, setLocalItems] = useState<string[]>(value);
 
     const updateItem = (index: number, value: string) => {
@@ -27,8 +27,39 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
       setLocalItems([...localItems, ""]);
     };
 
+    const handleKeyUp = (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.key === "Enter") {
+        const currentLength = localItems.length;
+
+        addItem();
+
+        // wait for new field to be rendered, then focus
+        const fieldsDiv = document.getElementById(id);
+        if (fieldsDiv) {
+          const observer = new MutationObserver(() => {
+            const newField = document.getElementById(
+              `${id}-value-${currentLength}`
+            );
+            if (newField) {
+              observer.disconnect();
+              newField.focus();
+            }
+          });
+
+          observer.observe(fieldsDiv, {
+            childList: true,
+            subtree: true,
+          });
+        }
+      }
+    };
+
     return (
-      <div className="ve-inline-block ve-pt-4 w-full">
+      <div
+        id={id}
+        className="ve-inline-block ve-pt-4 w-full"
+        onKeyUp={handleKeyUp}
+      >
         {localItems.map((item, index) => (
           <div key={index} className="ve-flex ve-items-center ve-mb-2 ve-gap-2">
             <div className="ve-grow">
@@ -36,13 +67,15 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
                 field={{ type: "text" }}
                 value={item}
                 onChange={(itemValue) => updateItem(index, itemValue)}
+                id={`${id}-value-${index}`}
               />
             </div>
             <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
-                variant={"secondary"}
-                title={"Delete"}
+                variant="secondary"
+                title="Delete Item"
+                type="button"
                 disabled={localItems.length === 1}
               >
                 <TrashIcon />
