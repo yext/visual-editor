@@ -16,7 +16,9 @@ export const useThemeMessageReceivers = (localDev: boolean) => {
   }, []);
 
   // Theme from DB
-  const [themeSaveState, setThemeSaveState] = useState<ThemeSaveState | undefined>();
+  const [themeSaveState, setThemeSaveState] = useState<
+    ThemeSaveState | undefined
+  >();
   const [themeSaveStateFetched, setThemeSaveStateFetched] =
     useState<boolean>(localDev); // needed because themeSaveState can be empty
 

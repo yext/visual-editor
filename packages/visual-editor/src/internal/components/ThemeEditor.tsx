@@ -31,8 +31,14 @@ type ThemeEditorProps = {
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
-  const { puckConfig, templateMetadata, layoutData, themeData, themeConfig, localDev } =
-    props;
+  const {
+    puckConfig,
+    templateMetadata,
+    layoutData,
+    themeData,
+    themeConfig,
+    localDev,
+  } = props;
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
@@ -40,7 +46,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const { saveThemeSaveState, publishTheme, deleteThemeSaveState } =
     useThemeMessageSenders();
 
-  const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers(localDev);
+  const { themeSaveState, themeSaveStateFetched } =
+    useThemeMessageReceivers(localDev);
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);

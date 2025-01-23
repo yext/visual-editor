@@ -120,7 +120,7 @@ export const Editor = ({
   return (
     <ErrorBoundary fallback={<></>} onError={logError}>
       {!isLoading ? (
-          (templateMetadata.isThemeMode || forceThemeMode) ? (
+        templateMetadata.isThemeMode || forceThemeMode ? (
           <ThemeEditor
             puckConfig={puckConfig}
             templateMetadata={templateMetadata}
