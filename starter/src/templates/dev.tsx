@@ -16,7 +16,7 @@ import {
   YextSchemaField,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
-import { buildSchema } from "../utils/buildSchema.ts";
+import { buildSchema } from "../utils/buildSchema";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 
