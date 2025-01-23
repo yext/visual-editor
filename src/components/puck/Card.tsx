@@ -30,6 +30,7 @@ interface CardProps {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
+    weight: HeadingProps["weight"];
     transform: HeadingProps["transform"];
     level: HeadingLevel;
   };
@@ -37,6 +38,7 @@ interface CardProps {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
+    weight: HeadingProps["weight"];
     transform: HeadingProps["transform"];
     level: HeadingLevel;
   };
@@ -44,6 +46,7 @@ interface CardProps {
     text: YextEntityField<string>;
     fontSize: BodyProps["fontSize"];
     color: BodyProps["color"];
+    weight: BodyProps["fontWeight"];
     transform: BodyProps["textTransform"];
   };
   image: {
@@ -65,6 +68,49 @@ interface CardProps {
     | "bg-palette-text"
     | "bg-palette-background";
 }
+
+const fontWeightOptions = [
+  {
+    label: "Default",
+    value: "default",
+  },
+  {
+    label: "Thin",
+    value: "100",
+  },
+  {
+    label: "Extralight",
+    value: "200",
+  },
+  {
+    label: "Light",
+    value: "300",
+  },
+  {
+    label: "Normal",
+    value: "400",
+  },
+  {
+    label: "Medium",
+    value: "500",
+  },
+  {
+    label: "Semibold",
+    value: "600",
+  },
+  {
+    label: "Bold",
+    value: "700",
+  },
+  {
+    label: "Extrabold",
+    value: "800",
+  },
+  {
+    label: "Black",
+    value: "900",
+  },
+];
 
 const cardFields: Fields<CardProps> = {
   orientation: {
@@ -97,6 +143,11 @@ const cardFields: Fields<CardProps> = {
           { label: "Text", value: "text" },
           { label: "Background", value: "background" },
         ],
+      },
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
       },
       transform: {
         label: "Text Transform",
@@ -138,6 +189,11 @@ const cardFields: Fields<CardProps> = {
           { label: "Background", value: "background" },
         ],
       },
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
+      },
       transform: {
         label: "Text Transform",
         type: "select",
@@ -177,6 +233,11 @@ const cardFields: Fields<CardProps> = {
           { label: "Text", value: "text" },
           { label: "Background", value: "background" },
         ],
+      },
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: fontWeightOptions,
       },
       transform: {
         label: "Text Transform",
@@ -326,6 +387,7 @@ const CardWrapper = ({
                 color={heading.color}
                 transform={heading.transform}
                 level={heading.level}
+                weight={heading.weight}
               >
                 {resolveYextEntityField(document, heading.text)}
               </Heading>
@@ -338,6 +400,7 @@ const CardWrapper = ({
                 color={subheading.color}
                 transform={subheading.transform}
                 level={subheading.level}
+                weight={subheading.weight}
               >
                 {resolveYextEntityField(document, subheading.text)}
               </Heading>
@@ -349,6 +412,7 @@ const CardWrapper = ({
                 fontSize={body.fontSize}
                 textTransform={body.transform}
                 color={body.color}
+                fontWeight={body.weight}
               >
                 {resolveYextEntityField(document, body.text)}
               </Body>
@@ -380,6 +444,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
+      weight: "default",
       color: "default",
       transform: "none",
       level: 1,
@@ -391,6 +456,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
+      weight: "default",
       color: "default",
       transform: "none",
       level: 2,
@@ -402,6 +468,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
+      weight: "default",
       color: "default",
       transform: "none",
     },
