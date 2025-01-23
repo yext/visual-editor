@@ -15,7 +15,6 @@
     "node": "^18.4.0 || >=20.2.0"
   },
   "dependencies": {
-    "@chakra-ui/button": "^2.1.0",
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.1.5",
     "@mantine/core": "^7.10.1",
