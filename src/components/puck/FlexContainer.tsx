@@ -1,18 +1,14 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { themeMangerCn } from "../../index.js";
-import {
-  horizontalPaddingClasses,
-  verticalPaddingClasses,
-} from "./options/paddingClasses.js";
+import { tailwindSpacingClasses } from "./options/spacingClasses.js";
 
 interface FlexContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   gap: number;
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   wrap: "wrap" | "nowrap";
-  verticalPadding: string;
-  horizontalPadding: string;
+  verticalPadding: number;
+  horizontalPadding: number;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
@@ -31,8 +27,14 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
   ) => {
     return (
       <div
-        className={themeMangerCn(verticalPadding, horizontalPadding, className)}
+        className={className}
         ref={ref}
+        style={{
+          paddingTop: verticalPadding,
+          paddingBottom: verticalPadding,
+          paddingRight: horizontalPadding,
+          paddingLeft: horizontalPadding,
+        }}
         {...props}
       >
         <DropZone
@@ -73,8 +75,8 @@ const flexContainerFields: Fields<FlexContainerProps> = {
   },
   gap: {
     label: "Gap",
-    type: "number",
-    min: 0,
+    type: "select",
+    options: tailwindSpacingClasses,
   },
   wrap: {
     label: "Wrap",
@@ -87,12 +89,12 @@ const flexContainerFields: Fields<FlexContainerProps> = {
   verticalPadding: {
     label: "Vertical Padding",
     type: "select",
-    options: verticalPaddingClasses,
+    options: tailwindSpacingClasses,
   },
   horizontalPadding: {
     label: "Horizontal Padding",
     type: "select",
-    options: horizontalPaddingClasses,
+    options: tailwindSpacingClasses,
   },
 };
 
@@ -104,8 +106,8 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
     justifyContent: "start",
     wrap: "nowrap",
     gap: 0,
-    verticalPadding: "0",
-    horizontalPadding: "0",
+    verticalPadding: 0,
+    horizontalPadding: 0,
   },
   render: ({
     direction,

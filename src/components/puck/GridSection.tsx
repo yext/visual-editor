@@ -3,10 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
 import { themeMangerCn } from "../../index.js";
-import {
-  verticalPaddingClasses,
-  horizontalPaddingClasses,
-} from "./options/paddingClasses.js";
+import { tailwindSpacingClasses } from "./options/spacingClasses.js";
 
 const outerBackgroundVariants = cva("components w-full", {
   variants: {
@@ -51,8 +48,8 @@ interface GridSectionProps
     VariantProps<typeof outerBackgroundVariants>,
     VariantProps<typeof innerBackgroundVariants> {
   gap: number;
-  verticalPadding: string;
-  horizontalPadding: string;
+  verticalPadding: number;
+  horizontalPadding: number;
   columns: ColumnProps[];
 }
 
@@ -72,11 +69,13 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
   ) => {
     return (
       <Section
-        className={themeMangerCn(
-          outerBackgroundVariants({ backgroundColor }),
-          verticalPadding,
-          horizontalPadding
-        )}
+        className={themeMangerCn(outerBackgroundVariants({ backgroundColor }))}
+        style={{
+          paddingTop: verticalPadding,
+          paddingBottom: verticalPadding,
+          paddingRight: horizontalPadding,
+          paddingLeft: horizontalPadding,
+        }}
         maxWidth="full"
         padding="none"
       >
@@ -147,17 +146,17 @@ const gridSectionFields: Fields<GridSectionProps> = {
   verticalPadding: {
     label: "Vertical Padding",
     type: "select",
-    options: verticalPaddingClasses,
+    options: tailwindSpacingClasses,
   },
   horizontalPadding: {
     label: "Horizontal Padding",
     type: "select",
-    options: horizontalPaddingClasses,
+    options: tailwindSpacingClasses,
   },
   gap: {
     label: "Gap",
-    type: "number",
-    min: 0,
+    type: "select",
+    options: tailwindSpacingClasses,
   },
   maxContentWidth: {
     label: "Maximum Content Width",
@@ -195,10 +194,10 @@ const GridSectionComponent: ComponentConfig<GridSectionProps> = {
         justifyContent: "start",
       },
     ],
-    verticalPadding: "default",
-    horizontalPadding: "default",
-    backgroundColor: "default",
     gap: 0,
+    verticalPadding: 0,
+    horizontalPadding: 0,
+    backgroundColor: "default",
     maxContentWidth: "default",
   },
   render: ({
