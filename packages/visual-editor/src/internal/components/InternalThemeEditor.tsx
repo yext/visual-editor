@@ -27,6 +27,7 @@ type InternalThemeEditorProps = {
   clearThemeHistory: () => void;
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
+  localDev: boolean;
 };
 
 // Render Puck editor
@@ -43,6 +44,7 @@ export const InternalThemeEditor = ({
   clearThemeHistory,
   sendDevThemeSaveStateData,
   buildThemeLocalStorageKey,
+  localDev,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
@@ -106,6 +108,12 @@ export const InternalThemeEditor = ({
       buildThemeLocalStorageKey(),
       JSON.stringify(newHistory.histories)
     );
+
+    if (localDev) {
+      updateThemeInEditor(newThemeValues, themeConfig);
+      setThemeHistories(newHistory);
+      return;
+    }
 
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       devLogger.logFunc("sendDevThemeSaveStateData");
