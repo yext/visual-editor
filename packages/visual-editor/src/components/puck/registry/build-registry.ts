@@ -13,7 +13,7 @@ const COLORS_PATH = `${DIST_DIR}/${SLUG}/colors`;
 const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
 const STYLES_PATH = `${DIST_DIR}/${SLUG}/styles`;
 const YEXT_STYLE_PATH = `${STYLES_PATH}/yext`;
-const COMPONENTS_SRC_PATH = `./src/components/puck`;
+const COMPONENTS_SRC_PATH = `./packages/visual-editor/src/components/puck`;
 
 // matches import { ... } from "..." where the import path starts with ../../
 const IMPORT_PATTERN = /from "(\.\.\/\.\.\/[^"]+)"/g;

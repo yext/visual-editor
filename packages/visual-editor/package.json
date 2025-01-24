@@ -31,8 +31,7 @@
     "lint": "eslint --cache --fix src/",
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
-    "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
-    "generate-registry": "tsx src/components/puck/registry/build-registry.ts"
+    "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
     "@measured/puck": "0.18.0",
