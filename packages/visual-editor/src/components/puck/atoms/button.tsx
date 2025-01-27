@@ -16,7 +16,6 @@ const buttonVariants = cva(
         link: "text-button-textColor underline-offset-4 underline",
       },
       size: {
-        default: "w-full md:w-fit h-10 px-4 py-2",
         small: "h-9 px-3",
         large: "h-11 px-8",
         icon: "h-10 w-10",
@@ -47,7 +46,7 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: "primary",
-      size: "default",
+      size: "small",
       fontSize: "default",
       borderRadius: "default",
     },
