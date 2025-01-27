@@ -11,3 +11,7 @@ export {
 } from "./visualEditorFonts.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export { normalizeSlug, validateSlug } from "./slugifier.ts";
+export {
+  getFontSizeOptions,
+  getBorderRadiusOptions,
+} from "./themeConfigOptions.ts";

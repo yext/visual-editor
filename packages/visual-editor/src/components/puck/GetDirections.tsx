@@ -15,6 +15,7 @@ import {
   resolveYextEntityField,
   FontSizeSelector,
   EntityField,
+  getBorderRadiusOptions,
 } from "../../index.js";
 
 type GetDirectionsProps = {
@@ -52,7 +53,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     label: "Size",
     type: "radio",
     options: [
-      { label: "Default", value: "default" },
       { label: "Small", value: "small" },
       { label: "Large", value: "large" },
     ],
@@ -60,13 +60,10 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
   fontSize: FontSizeSelector(),
   borderRadius: {
     label: "Border Radius",
-    type: "radio",
+    type: "select",
     options: [
       { label: "Default", value: "default" },
-      { label: "None", value: "none" },
-      { label: "Medium", value: "medium" },
-      { label: "Large", value: "large" },
-      { label: "Full", value: "full" },
+      ...getBorderRadiusOptions(),
     ],
   },
 };
@@ -119,7 +116,7 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
-    size: "default",
+    size: "small",
     fontSize: "default",
     borderRadius: "default",
     getDirectionsProvider: "google",

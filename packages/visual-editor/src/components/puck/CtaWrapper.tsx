@@ -38,7 +38,6 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     label: "Size",
     type: "radio",
     options: [
-      { label: "Default", value: "default" },
       { label: "Small", value: "small" },
       { label: "Large", value: "large" },
     ],
@@ -101,7 +100,7 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     variant: "primary",
     fontSize: "default",
     borderRadius: "default",
-    size: "default",
+    size: "small",
   },
   render: (props) => <CTAWrapper {...props} />,
 };
