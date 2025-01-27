@@ -74,15 +74,15 @@ const constructGoogleFontLinkTags = (fonts: FontRegistry) => {
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
 
 const defaultWeightOptions = [
-  { label: "Thin", value: "100" },
-  { label: "Extralight", value: "200" },
-  { label: "Light", value: "300" },
-  { label: "Normal", value: "400" },
-  { label: "Medium", value: "500" },
-  { label: "Semibold", value: "600" },
-  { label: "Bold", value: "700" },
-  { label: "Extrabold", value: "800" },
-  { label: "Black", value: "900" },
+  { label: "Thin (100)", value: "100" },
+  { label: "Extralight (200)", value: "200" },
+  { label: "Light (300)", value: "300" },
+  { label: "Normal (400)", value: "400" },
+  { label: "Medium (500)", value: "500" },
+  { label: "Semibold (600)", value: "600" },
+  { label: "Bold (700)", value: "700" },
+  { label: "Extrabold (800)", value: "800" },
+  { label: "Black (900)", value: "900" },
 ];
 
 type getFontWeightParams = {

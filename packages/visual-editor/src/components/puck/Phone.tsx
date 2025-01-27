@@ -87,22 +87,6 @@ const PhoneFields: Fields<PhoneProps> = {
       { label: "International", value: "international" },
     ],
   },
-  fontWeight: {
-    label: "Font Weight",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Thin", value: "thin" },
-      { label: "Extra Light", value: "extralight" },
-      { label: "Light", value: "light" },
-      { label: "Normal", value: "normal" },
-      { label: "Medium", value: "medium" },
-      { label: "Semibold", value: "semibold" },
-      { label: "Bold", value: "bold" },
-      { label: "Extrabold", value: "extrabold" },
-      { label: "Black", value: "black" },
-    ],
-  },
   color: {
     label: "Color",
     type: "select",
