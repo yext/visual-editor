@@ -60,13 +60,14 @@ export const Editor = ({
   // redirect to 404 page when going to /edit page outside of Storm
   useEffect(() => {
     if (typeof window !== "undefined" && !localDev) {
-      const ancestors = window.location.ancestorOrigins;
-      if (ancestors.length === 0) {
+      const referrer = window.document.referrer;
+
+      if (!referrer) {
         window.location.assign("/404.html");
       } else if (
-        !ancestors[0].includes("pagescdn") &&
-        !ancestors[0].includes("yext.com") &&
-        !ancestors[0].includes("localhost")
+        !referrer.includes("pagescdn") &&
+        !referrer.includes("yext.com") &&
+        !referrer.includes("localhost")
       ) {
         window.location.assign("/404.html");
       } else {
