@@ -163,9 +163,9 @@ const gridSectionFields: Fields<GridSectionProps> = {
     type: "select",
     options: [
       { value: "default", label: "Default" },
-      { value: "lg", label: "LG" },
-      { value: "xl", label: "XL" },
-      { value: "xxl", label: "2XL" },
+      { value: "lg", label: "LG (1024px)" },
+      { value: "xl", label: "XL (1280px)" },
+      { value: "xxl", label: "2XL (1536px)" },
     ],
   },
   backgroundColor: {

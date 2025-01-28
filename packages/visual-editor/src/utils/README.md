@@ -412,3 +412,39 @@ Check that the string is a valid slug.
 Normalizes the provided content by converting upper case to lower case, replacing white spaces, '?', and '#', with a "-",
 and stripping all other illegal characters.
 Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`
+
+## getFontSizeOptions
+
+Returns a list of font size options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
+
+| Tailwind Class | Label       | Value |
+| -------------- | ----------- | ----- |
+| text-xs        | XS (12px)   | 12px  |
+| text-sm        | SM (14px)   | 14px  |
+| text-base      | Base (16px) | 16px  |
+| text-lg        | LG (18px)   | 18px  |
+| text-xl        | XL (20px)   | 20px  |
+| text-2xl       | 2XL (24px)  | 24px  |
+| text-3xl       | 3XL (30px)  | 30px  |
+| text-4xl       | 4XL (36px)  | 36px  |
+| text-5xl       | 5XL (48px)  | 48px  |
+| text-6xl       | 6XL (60px)  | 60px  |
+| text-7xl       | 7XL (72px)  | 72px  |
+| text-8xl       | 8XL (96px)  | 96px  |
+| text-9xl       | 9XL (128px) | 128px |
+
+## getBorderRadiusOptions
+
+Returns a list of border radius options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
+
+| Tailwind Class | Label         | Value  |
+| -------------- | ------------- | ------ |
+| rounded-none   | None (0px)    | 0px    |
+| rounded-xs     | XS (2px)      | 2px    |
+| rounded-sm     | SM (4px)      | 4px    |
+| rounded-md     | MD (6px)      | 6px    |
+| rounded-lg     | LG (8px)      | 8px    |
+| rounded-xl     | XL (12px)     | 12px   |
+| rounded-2xl    | 2XL (16px)    | 16px   |
+| rounded-3xl    | 3XL (24px)    | 24px   |
+| rounded-full   | Full (9999px) | 9999px |

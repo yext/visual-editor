@@ -8,6 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   FontSizeSelector,
+  BorderRadiusSelector,
 } from "../../index.ts";
 
 interface CTAWrapperProps {
@@ -38,23 +39,12 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     label: "Size",
     type: "radio",
     options: [
-      { label: "Default", value: "default" },
       { label: "Small", value: "small" },
       { label: "Large", value: "large" },
     ],
   },
   fontSize: FontSizeSelector(),
-  borderRadius: {
-    label: "Border Radius",
-    type: "radio",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "None", value: "none" },
-      { label: "Medium", value: "medium" },
-      { label: "Large", value: "large" },
-      { label: "Full", value: "full" },
-    ],
-  },
+  borderRadius: BorderRadiusSelector(),
 };
 
 const CTAWrapper: React.FC<CTAWrapperProps> = ({
@@ -101,7 +91,7 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     variant: "primary",
     fontSize: "default",
     borderRadius: "default",
-    size: "default",
+    size: "small",
   },
   render: (props) => <CTAWrapper {...props} />,
 };
