@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { themeMangerCn } from "../../../index.ts";
 
 const buttonVariants = cva(
-  "py-4 components inline-flex items-center justify-center whitespace-nowrap rounded-button-borderRadius font-body-fontFamily font-button-fontWeight " +
+  "py-4 components inline-flex items-center justify-center whitespace-nowrap font-body-fontFamily font-button-fontWeight " +
     "ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
     "disabled:pointer-events-none disabled:opacity-50",
   {
@@ -32,16 +32,16 @@ const buttonVariants = cva(
         "4xl": "text-4xl",
       },
       borderRadius: {
-        default: "",
-        "0px": "rounded-none",
-        "2px": "rounded-xs",
-        "4px": "rounded-sm",
-        "6px": "rounded-md",
-        "8px": "rounded-lg",
-        "12px": "rounded-xl",
-        "16px": "rounded-2xl",
-        "24px": "rounded-3xl",
-        "9999px": "rounded-full",
+        default: "rounded-button-borderRadius",
+        none: "rounded-none",
+        xs: "rounded-xs",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        xl: "rounded-xl",
+        "2xl": "rounded-2xl",
+        "3xl": "rounded-3xl",
+        full: "rounded-full",
       },
     },
     defaultVariants: {

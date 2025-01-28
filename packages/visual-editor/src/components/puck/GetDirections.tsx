@@ -15,7 +15,7 @@ import {
   resolveYextEntityField,
   FontSizeSelector,
   EntityField,
-  getBorderRadiusOptions,
+  BorderRadiusSelector,
 } from "../../index.js";
 
 type GetDirectionsProps = {
@@ -58,14 +58,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     ],
   },
   fontSize: FontSizeSelector(),
-  borderRadius: {
-    label: "Border Radius",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      ...getBorderRadiusOptions(),
-    ],
-  },
+  borderRadius: BorderRadiusSelector(),
 };
 
 const GetDirections = ({

@@ -11,3 +11,4 @@ export {
   type NumberOrDefault,
 } from "./NumberOrDefaultField.tsx";
 export { FontSizeSelector } from "./FontSizeSelector.tsx";
+export { BorderRadiusSelector } from "./BorderRadiusSelector.tsx";

@@ -415,7 +415,7 @@ Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`
 
 ## getFontSizeOptions
 
-Returns a list of font size options to be used in the theme.config. The labels and values correspond to tailwind's default classes.
+Returns a list of font size options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
 
 | Tailwind Class | Label       | Value |
 | -------------- | ----------- | ----- |
@@ -435,7 +435,7 @@ Returns a list of font size options to be used in the theme.config. The labels a
 
 ## getBorderRadiusOptions
 
-Returns a list of border radius options to be used in the theme.config. The labels and values correspond to tailwind's default classes.
+Returns a list of border radius options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
 
 | Tailwind Class | Label         | Value  |
 | -------------- | ------------- | ------ |
