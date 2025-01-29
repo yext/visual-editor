@@ -11,7 +11,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "../../index.ts";
-import { Body, BodyProps } from "./atoms/body.tsx";
+import { Body, BodyProps } from "./atoms/body.js";
 import { cva, VariantProps } from "class-variance-authority";
 
 const footerVariants = cva("", {

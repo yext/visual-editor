@@ -5,6 +5,11 @@ import { Registry } from "./schema.ts";
 
 export const ui: Registry["items"] = [
   {
+    name: "spacingClasses",
+    type: "registry:component",
+    files: [{ path: "options/spacingClasses.ts", type: "registry:component" }],
+  },
+  {
     name: "heading",
     type: "registry:component",
     files: [{ path: "atoms/heading.tsx", type: "registry:component" }],
@@ -71,6 +76,7 @@ export const ui: Registry["items"] = [
   {
     name: "FlexContainer",
     type: "registry:ui",
+    registryDependencies: ["spacingClasses"],
     files: [{ path: "FlexContainer.tsx", type: "registry:ui" }],
   },
   {
@@ -88,7 +94,7 @@ export const ui: Registry["items"] = [
   {
     name: "GridSection",
     type: "registry:ui",
-    registryDependencies: ["section"],
+    registryDependencies: ["section", "spacingClasses"],
     files: [{ path: "GridSection.tsx", type: "registry:ui" }],
   },
   {
