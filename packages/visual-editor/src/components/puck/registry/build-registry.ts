@@ -58,19 +58,17 @@ type File = z.infer<typeof registryItemFileSchema>;
 // Read the files specified in registry.ts, insert the @yext/visual-editor import and output JSON
 const getComponentFiles = async (files: File[]) => {
   const filesArrayPromises = (files ?? []).map(async (file) => {
-    if (typeof file === "string") {
-      const filePath = `${COMPONENTS_SRC_PATH}/${file}`;
-      const fileContent = await readFile(filePath, "utf-8");
-      return {
-        type: "registry:component",
-        content: fileContent.replace(
-          IMPORT_PATTERN,
-          `from "@yext/visual-editor"`
-        ),
-        path: file,
-        target: `${SLUG}/${file}`,
-      };
-    }
+    const filePath = `${COMPONENTS_SRC_PATH}/${file.path}`;
+    const fileContent = await readFile(filePath, "utf-8");
+    return {
+      type: "registry:component",
+      content: fileContent.replace(
+        IMPORT_PATTERN,
+        `from "@yext/visual-editor"`
+      ),
+      path: file.path,
+      target: `${SLUG}/${file.path}`,
+    };
   });
   const filesArray = await Promise.all(filesArrayPromises);
 
