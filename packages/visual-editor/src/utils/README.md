@@ -448,3 +448,23 @@ Returns a list of border radius options to be optionally used in the theme.confi
 | rounded-2xl    | 2XL (16px)    | 16px   |
 | rounded-3xl    | 3XL (24px)    | 24px   |
 | rounded-full   | Full (9999px) | 9999px |
+
+## applyAnalytics
+
+Returns a Google Tag Manager script that uses the Google Tag Manager ID
+set in the Theme Editor.
+
+### Usage
+
+```tsx
+export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
+  document,
+}): HeadConfig => {
+  return {
+    title: document.name,
+    other: [applyAnalytics(document), applyTheme(document, themeConfig)].join(
+      "\n"
+    ),
+  };
+};
+```
