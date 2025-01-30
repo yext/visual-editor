@@ -1,4 +1,4 @@
-// Based on https://github.com/shadcn-ui/ui/blob/main/apps/www/registry/schema.ts
+// Based on https://github.com/shadcn-ui/ui/blob/main/packages/shadcn/src/registry/schema.ts
 import { z } from "zod";
 
 export const blockChunkSchema = z.object({
@@ -15,33 +15,45 @@ export const blockChunkSchema = z.object({
 });
 
 export const registryItemTypeSchema = z.enum([
-  "registry:style",
   "registry:lib",
-  "registry:example",
   "registry:block",
   "registry:component",
   "registry:ui",
   "registry:hook",
-  "registry:theme",
   "registry:page",
+  "registry:file",
+
+  // Internal use only
+  "registry:theme",
+  "registry:example",
+  "registry:style",
+  "registry:internal",
 ]);
 
-export const registryItemFileSchema = z.union([
-  z.string(),
+export const registryItemFileSchema = z.discriminatedUnion("type", [
+  // Target is required for registry:file and registry:page
   z.object({
     path: z.string(),
     content: z.string().optional(),
-    type: registryItemTypeSchema,
+    type: z.enum(["registry:file", "registry:page"]),
+    target: z.string(),
+  }),
+  z.object({
+    path: z.string(),
+    content: z.string().optional(),
+    type: registryItemTypeSchema.exclude(["registry:file", "registry:page"]),
     target: z.string().optional(),
   }),
 ]);
 
 export const registryItemTailwindSchema = z.object({
-  config: z.object({
-    content: z.array(z.string()).optional(),
-    theme: z.record(z.string(), z.any()).optional(),
-    plugins: z.array(z.string()).optional(),
-  }),
+  config: z
+    .object({
+      content: z.array(z.string()).optional(),
+      theme: z.record(z.string(), z.any()).optional(),
+      plugins: z.array(z.string()).optional(),
+    })
+    .optional(),
 });
 
 export const registryItemCssVarsSchema = z.object({
@@ -49,9 +61,12 @@ export const registryItemCssVarsSchema = z.object({
   dark: z.record(z.string(), z.string()).optional(),
 });
 
-export const registryEntrySchema = z.object({
+export const registryItemSchema = z.object({
+  $schema: z.string().optional(),
   name: z.string(),
   type: registryItemTypeSchema,
+  title: z.string().optional(),
+  author: z.string().min(2).optional(),
   description: z.string().optional(),
   dependencies: z.array(z.string()).optional(),
   devDependencies: z.array(z.string()).optional(),
@@ -59,33 +74,53 @@ export const registryEntrySchema = z.object({
   files: z.array(registryItemFileSchema).optional(),
   tailwind: registryItemTailwindSchema.optional(),
   cssVars: registryItemCssVarsSchema.optional(),
-  source: z.string().optional(),
-  category: z.string().optional(),
-  subcategory: z.string().optional(),
-  chunks: z.array(blockChunkSchema).optional(),
+  meta: z.record(z.string(), z.any()).optional(),
   docs: z.string().optional(),
+  categories: z.array(z.string()).optional(),
 });
 
-export const registrySchema = z.array(registryEntrySchema);
+export type RegistryItem = z.infer<typeof registryItemSchema>;
 
-export type RegistryEntry = z.infer<typeof registryEntrySchema>;
+export const registrySchema = z.object({
+  name: z.string(),
+  homepage: z.string(),
+  items: z.array(registryItemSchema),
+});
 
 export type Registry = z.infer<typeof registrySchema>;
 
-export const blockSchema = registryEntrySchema.extend({
-  type: z.literal("registry:block"),
-  style: z.enum(["default", "new-york"]),
-  component: z.any(),
-  container: z
-    .object({
-      height: z.string().nullish(),
-      className: z.string().nullish(),
-    })
-    .optional(),
-  code: z.string(),
-  highlightedCode: z.string(),
+export const registryIndexSchema = z.array(registryItemSchema);
+
+export const stylesSchema = z.array(
+  z.object({
+    name: z.string(),
+    label: z.string(),
+  })
+);
+
+export const iconsSchema = z.record(
+  z.string(),
+  z.record(z.string(), z.string())
+);
+
+export const registryBaseColorSchema = z.object({
+  inlineColors: z.object({
+    light: z.record(z.string(), z.string()),
+    dark: z.record(z.string(), z.string()),
+  }),
+  cssVars: z.object({
+    light: z.record(z.string(), z.string()),
+    dark: z.record(z.string(), z.string()),
+  }),
+  inlineColorsTemplate: z.string(),
+  cssVarsTemplate: z.string(),
 });
 
-export type Block = z.infer<typeof blockSchema>;
-
-export type BlockChunk = z.infer<typeof blockChunkSchema>;
+export const registryResolvedItemsTreeSchema = registryItemSchema.pick({
+  dependencies: true,
+  devDependencies: true,
+  files: true,
+  tailwind: true,
+  cssVars: true,
+  docs: true,
+});
