@@ -17,7 +17,7 @@ type AnalyticsFieldsSidebarProps = {
 export const AnalyticsFieldsSidebar = (props: AnalyticsFieldsSidebarProps) => {
   const { themeData, onThemeChange } = props;
 
-  const handleThemeChange = (key: string, value: any) => {
+  const handleAnalyticsChange = (key: string, value: any) => {
     const newValues = {
       ...themeData,
       siteAttributes: {
@@ -40,7 +40,7 @@ export const AnalyticsFieldsSidebar = (props: AnalyticsFieldsSidebarProps) => {
           >
             <AutoField
               field={field}
-              onChange={(v) => handleThemeChange(key, v)}
+              onChange={(v) => handleAnalyticsChange(key, v)}
               value={themeData.siteAttributes?.[key] ?? ""}
             />
           </FieldLabel>
