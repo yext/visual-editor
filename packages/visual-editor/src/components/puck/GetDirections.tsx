@@ -99,7 +99,9 @@ const GetDirections = ({
         fontSize={fontSize}
         borderRadius={borderRadius}
       >
-        <Link href={searchQuery ?? "#"}>{"Get Directions"}</Link>
+        <Link href={searchQuery ?? "#"} target="_blank">
+          {"Get Directions"}
+        </Link>
       </Button>
     </EntityField>
   );
