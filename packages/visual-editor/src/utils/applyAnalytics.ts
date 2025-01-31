@@ -1,6 +1,10 @@
 export const applyAnalytics = (document: Record<string, any>) => {
-  const googleTagManagerId: string =
-    document?.__?.theme?.siteAttributes?.googleTagManagerId;
+  if (!document?.__?.theme) {
+    return;
+  }
+
+  const googleTagManagerId: string = JSON.parse(document.__.theme)
+    ?.siteAttributes?.googleTagManagerId;
 
   if (googleTagManagerId) {
     return `<!-- Google tag (gtag.js) -->
