@@ -73,13 +73,15 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     if (!themeConfig) {
       return;
     }
-    const localHistoryArray = lzstring.decompress(
-      window.localStorage.getItem(buildThemeLocalStorageKey()) || ""
-    );
 
     // use theme from localStorage when in dev mode
-    if (templateMetadata.isDevMode && !!localHistoryArray) {
-      const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
+    if (templateMetadata.isDevMode) {
+      const localHistoryArray = lzstring.decompress(
+        window.localStorage.getItem(buildThemeLocalStorageKey()) || ""
+      );
+      const localHistories = (
+        localHistoryArray ? JSON.parse(localHistoryArray) : []
+      ) as ThemeHistory[];
       if (localHistories.length > 0) {
         const localThemeData = localHistories[localHistories.length - 1].data;
         devLogger.log("Layout Dev Mode - Using theme data from local storage");
@@ -168,58 +170,28 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       return;
     }
 
-    // Check localStorage for existing Puck history
-    const localHistoryArray = lzstring.decompress(
-      window.localStorage.getItem(buildVisualConfigLocalStorageKey()) || ""
-    );
-
-    // No localStorage, start from saveState
-    if (!localHistoryArray) {
-      devLogger.log(
-        "Layout Prod Mode - No localStorage. Using layout saveState"
-      );
-      setPuckInitialHistory({
-        histories: layoutData
-          ? [
-              { id: "root", state: { data: layoutData } },
-              {
-                id: layoutSaveState.hash,
-                state: { data: layoutSaveState.history.data },
-              },
-            ]
-          : [
-              {
-                id: layoutSaveState.hash,
-                state: { data: layoutSaveState.history.data },
-              },
-            ],
-        index: layoutData ? 1 : 0,
-        appendData: false,
-      });
-      setPuckInitialHistoryFetched(true);
-      return;
-    }
-
-    const localHistoryIndex = JSON.parse(localHistoryArray).findIndex(
-      (item: any) => item.id === layoutSaveState?.hash
-    );
-
-    // If local storage reset Puck history to it
-    if (localHistoryIndex !== -1) {
-      devLogger.log(
-        "Layout Prod Mode - Using localStorage visual configuration"
-      );
-      setPuckInitialHistory({
-        histories: JSON.parse(localHistoryArray),
-        index: localHistoryIndex,
-        appendData: false,
-      });
-      setPuckInitialHistoryFetched(true);
-      return;
-    }
-
-    // otherwise start fresh - this user doesn't have localStorage that reflects the saved state
-    clearVisualConfigLocalStorage();
+    // Start from saveState
+    devLogger.log("Layout Prod Mode - Using layout saveState");
+    setPuckInitialHistory({
+      histories: layoutData
+        ? [
+            { id: "root", state: { data: layoutData } },
+            {
+              id: layoutSaveState.hash,
+              state: { data: layoutSaveState.history.data },
+            },
+          ]
+        : [
+            {
+              id: layoutSaveState.hash,
+              state: { data: layoutSaveState.history.data },
+            },
+          ],
+      index: layoutData ? 1 : 0,
+      appendData: false,
+    });
+    setPuckInitialHistoryFetched(true);
+    return;
   }, [
     setPuckInitialHistory,
     setPuckInitialHistoryFetched,

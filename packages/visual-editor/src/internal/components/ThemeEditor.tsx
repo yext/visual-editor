@@ -74,15 +74,15 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     if (!templateMetadata) {
       return;
     }
-    devLogger.logFunc("loadPuckInitialHistory");
-    const localHistoryArray = lzstring.decompress(
-      window.localStorage.getItem(buildVisualConfigLocalStorageKey()) || ""
-    );
 
     // use layout from localStorage when in dev mode
-    if (templateMetadata.isDevMode && !!localHistoryArray) {
-      const localHistories = JSON.parse(
-        localHistoryArray
+    if (templateMetadata.isDevMode) {
+      devLogger.logFunc("loadPuckInitialHistory");
+      const localHistoryArray = lzstring.decompress(
+        window.localStorage.getItem(buildVisualConfigLocalStorageKey()) || ""
+      );
+      const localHistories = (
+        localHistoryArray ? JSON.parse(localHistoryArray) : []
       ) as History<AppState>[];
       const localHistoryIndex = localHistories.length - 1;
       if (localHistoryIndex >= 0) {
@@ -166,8 +166,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
     // Nothing in theme_save_state table, start fresh from Content
     if (!themeSaveState) {
-      clearThemeLocalStorage();
-
       devLogger.log(
         "Theme Prod Mode - No saveState. Using theme data from Content"
       );
@@ -182,44 +180,19 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       return;
     }
 
-    // Check localStorage for existing theme history
-    const localHistoryArray = lzstring.decompress(
-      window.localStorage.getItem(buildThemeLocalStorageKey()) || ""
-    );
-
-    // No localStorage, start from themeSaveState
-    if (!localHistoryArray) {
-      devLogger.log("Theme Prod Mode - No localStorage. Using themeSaveState");
-      setThemeHistories({
-        histories: themeData
-          ? [
-              { id: "root", data: themeData },
-              { id: themeSaveState.hash, data: themeSaveState.history.data },
-            ]
-          : [{ id: themeSaveState.hash, data: themeSaveState.history.data }],
-        index: themeData ? 1 : 0,
-      });
-      setThemeHistoryFetched(true);
-      return;
-    }
-
-    const localHistoryIndex = JSON.parse(localHistoryArray).findIndex(
-      (item: any) => item.id === themeSaveState?.hash
-    );
-
-    // If local storage reset theme history to it
-    if (localHistoryIndex !== -1) {
-      devLogger.log("Theme Prod Mode - Using localStorage theme data");
-      setThemeHistories({
-        histories: JSON.parse(localHistoryArray),
-        index: localHistoryIndex,
-      });
-      setThemeHistoryFetched(true);
-      return;
-    }
-
-    // otherwise start fresh - this user doesn't have localStorage that reflects the theme saved state
-    clearThemeLocalStorage();
+    // Start from themeSaveState
+    devLogger.log("Theme Prod Mode - Using themeSaveState");
+    setThemeHistories({
+      histories: themeData
+        ? [
+            { id: "root", data: themeData },
+            { id: themeSaveState.hash, data: themeSaveState.history.data },
+          ]
+        : [{ id: themeSaveState.hash, data: themeSaveState.history.data }],
+      index: themeData ? 1 : 0,
+    });
+    setThemeHistoryFetched(true);
+    return;
   }, [
     setThemeHistories,
     setThemeHistoryFetched,
