@@ -104,12 +104,12 @@ export const InternalThemeEditor = ({
       index: themeHistoriesRef.current.histories.length,
     };
 
-    window.localStorage.setItem(
-      buildThemeLocalStorageKey(),
-      lzstring.compress(JSON.stringify(newHistory.histories))
-    );
-
     if (localDev) {
+      devLogger.logFunc("saveThemeToLocalStorage");
+      window.localStorage.setItem(
+        buildThemeLocalStorageKey(),
+        lzstring.compress(JSON.stringify(newHistory.histories))
+      );
       updateThemeInEditor(newThemeValues, themeConfig);
       setThemeHistories(newHistory);
       return;

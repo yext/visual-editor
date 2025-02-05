@@ -66,13 +66,12 @@ export const InternalLayoutEditor = ({
         devLogger.logData("PUCK_HISTORY", histories);
         historyIndex.current = index;
 
-        devLogger.logFunc("saveToLocalStorage");
-        window.localStorage.setItem(
-          buildVisualConfigLocalStorageKey(),
-          lzstring.compress(JSON.stringify(histories))
-        );
-
         if (localDev) {
+          devLogger.logFunc("saveLayoutToLocalStorage");
+          window.localStorage.setItem(
+            buildVisualConfigLocalStorageKey(),
+            lzstring.compress(JSON.stringify(histories))
+          );
           return;
         }
 
