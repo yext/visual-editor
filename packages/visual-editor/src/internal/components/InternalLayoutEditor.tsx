@@ -13,6 +13,7 @@ import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
+import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
 
@@ -65,13 +66,12 @@ export const InternalLayoutEditor = ({
         devLogger.logData("PUCK_HISTORY", histories);
         historyIndex.current = index;
 
-        devLogger.logFunc("saveToLocalStorage");
-        window.localStorage.setItem(
-          buildVisualConfigLocalStorageKey(),
-          JSON.stringify(histories)
-        );
-
         if (localDev) {
+          devLogger.logFunc("saveLayoutToLocalStorage");
+          window.localStorage.setItem(
+            buildVisualConfigLocalStorageKey(),
+            lzstring.compress(JSON.stringify(histories))
+          );
           return;
         }
 
