@@ -74,10 +74,10 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     if (!templateMetadata) {
       return;
     }
+    devLogger.logFunc("loadPuckInitialHistory");
 
     // use layout from localStorage when in dev mode
     if (templateMetadata.isDevMode) {
-      devLogger.logFunc("loadPuckInitialHistory");
       const localHistoryArray = lzstring.decompress(
         window.localStorage.getItem(buildVisualConfigLocalStorageKey()) || ""
       );
