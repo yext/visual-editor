@@ -18,6 +18,7 @@ import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
+import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
 
@@ -74,8 +75,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       return;
     }
     devLogger.logFunc("loadPuckInitialHistory");
-    const localHistoryArray = window.localStorage.getItem(
-      buildVisualConfigLocalStorageKey()
+    const localHistoryArray = lzstring.decompress(
+      window.localStorage.getItem(buildVisualConfigLocalStorageKey()) || ""
     );
 
     // use layout from localStorage when in dev mode
@@ -132,8 +133,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing theme history
-      const localHistoryArray = window.localStorage.getItem(
-        buildThemeLocalStorageKey()
+      const localHistoryArray = lzstring.decompress(
+        window.localStorage.getItem(buildThemeLocalStorageKey()) || ""
       );
 
       // Use localStorage directly if it exists
@@ -182,8 +183,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     }
 
     // Check localStorage for existing theme history
-    const localHistoryArray = window.localStorage.getItem(
-      buildThemeLocalStorageKey()
+    const localHistoryArray = lzstring.decompress(
+      window.localStorage.getItem(buildThemeLocalStorageKey()) || ""
     );
 
     // No localStorage, start from themeSaveState

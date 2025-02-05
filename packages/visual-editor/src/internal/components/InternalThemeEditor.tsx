@@ -14,6 +14,7 @@ import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
+import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
 
@@ -105,7 +106,7 @@ export const InternalThemeEditor = ({
 
     window.localStorage.setItem(
       buildThemeLocalStorageKey(),
-      JSON.stringify(newHistory.histories)
+      lzstring.compress(JSON.stringify(newHistory.histories))
     );
 
     if (localDev) {

@@ -13,6 +13,7 @@ import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
+import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
 
@@ -68,7 +69,7 @@ export const InternalLayoutEditor = ({
         devLogger.logFunc("saveToLocalStorage");
         window.localStorage.setItem(
           buildVisualConfigLocalStorageKey(),
-          JSON.stringify(histories)
+          lzstring.compress(JSON.stringify(histories))
         );
 
         if (localDev) {
