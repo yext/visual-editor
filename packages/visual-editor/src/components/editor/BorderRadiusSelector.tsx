@@ -4,8 +4,7 @@ import { useTailwindConfig } from "../../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 
-const borderRadiusOptions = [
-  { label: "Default", value: "default", px: "" },
+export const borderRadiusOptions = [
   { label: "None", value: "none", px: "0" },
   { label: "XS", value: "xs", px: "2" },
   { label: "SM", value: "sm", px: "4" },
@@ -107,7 +106,10 @@ export const BorderRadiusSelector = (label?: string): Field => {
             field={{
               type: "select",
               options: convertDefaultBorderRadiusToOptions(
-                borderRadiusOptions,
+                [
+                  { label: "Default", value: "default", px: "" },
+                  ...borderRadiusOptions,
+                ],
                 tailwindConfig
               ),
             }}

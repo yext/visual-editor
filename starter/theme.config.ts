@@ -366,7 +366,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: getFontSizeOptions(false),
         default: "12px",
       },
       backgroundColor: {

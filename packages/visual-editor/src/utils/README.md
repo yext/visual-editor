@@ -415,6 +415,14 @@ Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`
 
 ## getFontSizeOptions
 
+### Props
+
+| Name              | Type     | Description                                               |
+| ----------------- | -------- | --------------------------------------------------------- |
+| includeLargeSizes | boolean? | Defaults to true. If set to false, only returns XS to 4XL |
+
+### Usage
+
 Returns a list of font size options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
 
 | Tailwind Class | Label       | Value |

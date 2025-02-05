@@ -4,22 +4,28 @@ import { useTailwindConfig } from "../../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 
-const fontSizeOptions = [
-  { label: "Default", value: "default", px: "" },
-  { label: "XS", value: "xs", px: "12" },
-  { label: "SM", value: "sm", px: "14" },
-  { label: "Base", value: "base", px: "16" },
-  { label: "LG", value: "lg", px: "18" },
-  { label: "XL", value: "xl", px: "20" },
-  { label: "2XL", value: "2xl", px: "24" },
-  { label: "3XL", value: "3xl", px: "30" },
-  { label: "4XL", value: "4xl", px: "36" },
-  { label: "5XL", value: "5xl", px: "48" },
-  { label: "6XL", value: "6xl", px: "60" },
-  { label: "7XL", value: "7xl", px: "72" },
-  { label: "8XL", value: "8xl", px: "96" },
-  { label: "9XL", value: "9xl", px: "128" },
-];
+export const fontSizeOptions = (includeLargeSizes = true) => {
+  const fontSizeOptions = [
+    { label: "XS", value: "xs", px: "12" },
+    { label: "SM", value: "sm", px: "14" },
+    { label: "Base", value: "base", px: "16" },
+    { label: "LG", value: "lg", px: "18" },
+    { label: "XL", value: "xl", px: "20" },
+    { label: "2XL", value: "2xl", px: "24" },
+    { label: "3XL", value: "3xl", px: "30" },
+    { label: "4XL", value: "4xl", px: "36" },
+  ];
+  const largeFontSizeOptions = [
+    { label: "5XL", value: "5xl", px: "48" },
+    { label: "6XL", value: "6xl", px: "60" },
+    { label: "7XL", value: "7xl", px: "72" },
+    { label: "8XL", value: "8xl", px: "96" },
+    { label: "9XL", value: "9xl", px: "128" },
+  ];
+  return includeLargeSizes
+    ? [...fontSizeOptions, ...largeFontSizeOptions]
+    : fontSizeOptions;
+};
 
 export const convertToPixels = (fontSize: string): number => {
   // If the font size is already in px, just extract the number
@@ -85,7 +91,10 @@ export const convertDefaultFontSizesToOptions = (
   });
 };
 
-export const FontSizeSelector = (label?: string): Field => {
+export const FontSizeSelector = (
+  label?: string,
+  includeLargeSizes = true
+): Field => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {
@@ -102,7 +111,10 @@ export const FontSizeSelector = (label?: string): Field => {
             field={{
               type: "select",
               options: convertDefaultFontSizesToOptions(
-                fontSizeOptions,
+                [
+                  { label: "Default", value: "default", px: "" },
+                  ...fontSizeOptions(includeLargeSizes),
+                ],
                 tailwindConfig
               ),
             }}
