@@ -4,10 +4,13 @@ import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
-import ThemeSidebar from "../puck/components/ThemeSidebar.tsx";
-import { ThemeConfig, ThemeConfigSection } from "../../utils/themeResolver.ts";
+import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebars/ThemeEditorRightSidebar.tsx";
+import {
+  ThemeEditorLeftSidebar,
+  ThemeEditorModes,
+} from "../puck/components/theme-editor-sidebars/ThemeEditorLeftSidebar.tsx";
+import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
-import { generateCssVariablesFromPuckFields } from "../utils/internalThemeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
@@ -49,11 +52,21 @@ export const InternalThemeEditor = ({
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
+
+  // Puck remounts the sidebar overrides each render so they have to be
+  // wrapped in useCallback to maintain internal state. Refs can be used
+  // to pass parent state into the overrides.
   const themeHistoriesRef = useRef(themeHistories);
+  const [mode, setMode] = useState<ThemeEditorModes>("theme");
+  const modeRef = useRef<ThemeEditorModes>("theme");
 
   useEffect(() => {
     themeHistoriesRef.current = themeHistories;
   }, [themeHistories]);
+
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
@@ -77,24 +90,10 @@ export const InternalThemeEditor = ({
     });
   };
 
-  const handleThemeChange = (
-    themeSectionKey: string,
-    themeSection: ThemeConfigSection,
-    newValue: Record<string, any>
-  ) => {
+  const handleThemeChange = (newThemeValues: Record<string, any>) => {
     if (!themeHistoriesRef.current || !themeConfig) {
       return;
     }
-
-    const newThemeValues = {
-      ...themeHistoriesRef.current.histories[themeHistoriesRef.current.index]
-        ?.data,
-      ...generateCssVariablesFromPuckFields(
-        newValue,
-        themeSectionKey,
-        themeSection
-      ),
-    };
 
     const newHistory = {
       histories: [
@@ -150,12 +149,17 @@ export const InternalThemeEditor = ({
 
   const fieldsOverride = useCallback(() => {
     return (
-      <ThemeSidebar
+      <ThemeEditorRightSidebar
         themeHistoriesRef={themeHistoriesRef}
         themeConfig={themeConfig}
         onThemeChange={handleThemeChange}
+        modeRef={modeRef}
       />
     );
+  }, []);
+
+  const componentsOverride = useCallback(() => {
+    return <ThemeEditorLeftSidebar setMode={setMode} modeRef={modeRef} />;
   }, []);
 
   return (
@@ -187,7 +191,7 @@ export const InternalThemeEditor = ({
             />
           ),
           actionBar: () => <></>,
-          components: () => <></>,
+          components: componentsOverride,
           fields: fieldsOverride,
         }}
       />

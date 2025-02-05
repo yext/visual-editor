@@ -46,10 +46,10 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   useEffect(() => {
     // Hide the components list and fields list titles
     const componentList = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-leftSideBar'] > div[class*='SidebarSection--noBorderTop']"
+      "[class*='PuckLayout-leftSideBar'] h2"
     );
     if (componentList) {
-      componentList.style.display = "none";
+      componentList.innerText = "Mode";
     }
     const fieldListTitle = document.querySelector<HTMLElement>(
       "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
