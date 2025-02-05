@@ -4,9 +4,8 @@ import { useTailwindConfig } from "../../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 
-const fontSizeOptions = (isButton = false) => {
+export const fontSizeOptions = (includeLargeSizes = true) => {
   const fontSizeOptions = [
-    { label: "Default", value: "default", px: "" },
     { label: "XS", value: "xs", px: "12" },
     { label: "SM", value: "sm", px: "14" },
     { label: "Base", value: "base", px: "16" },
@@ -23,9 +22,9 @@ const fontSizeOptions = (isButton = false) => {
     { label: "8XL", value: "8xl", px: "96" },
     { label: "9XL", value: "9xl", px: "128" },
   ];
-  return isButton
-    ? fontSizeOptions
-    : [...fontSizeOptions, ...largeFontSizeOptions];
+  return includeLargeSizes
+    ? [...fontSizeOptions, ...largeFontSizeOptions]
+    : fontSizeOptions;
 };
 
 export const convertToPixels = (fontSize: string): number => {
@@ -92,7 +91,10 @@ export const convertDefaultFontSizesToOptions = (
   });
 };
 
-export const FontSizeSelector = (label?: string, isButton?: boolean): Field => {
+export const FontSizeSelector = (
+  label?: string,
+  includeLargeSizes = true
+): Field => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {
@@ -109,7 +111,10 @@ export const FontSizeSelector = (label?: string, isButton?: boolean): Field => {
             field={{
               type: "select",
               options: convertDefaultFontSizesToOptions(
-                fontSizeOptions(isButton),
+                [
+                  { label: "Default", value: "default", px: "" },
+                  ...fontSizeOptions(includeLargeSizes),
+                ],
                 tailwindConfig
               ),
             }}

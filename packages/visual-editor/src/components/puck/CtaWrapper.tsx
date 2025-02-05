@@ -43,7 +43,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       { label: "Large", value: "large" },
     ],
   },
-  fontSize: FontSizeSelector("Font Size", true),
+  fontSize: FontSizeSelector("Font Size", false),
   borderRadius: BorderRadiusSelector(),
 };
 
