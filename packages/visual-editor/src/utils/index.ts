@@ -15,3 +15,4 @@ export {
   getFontSizeOptions,
   getBorderRadiusOptions,
 } from "./themeConfigOptions.ts";
+export { applyAnalytics } from "./applyAnalytics.ts";
