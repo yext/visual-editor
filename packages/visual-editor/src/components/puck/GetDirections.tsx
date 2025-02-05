@@ -57,7 +57,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
       { label: "Large", value: "large" },
     ],
   },
-  fontSize: FontSizeSelector(),
+  fontSize: FontSizeSelector("Font Size", true),
   borderRadius: BorderRadiusSelector(),
 };
 
