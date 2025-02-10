@@ -13,6 +13,7 @@ import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { YextEntityFieldSelector } from "../../components/editor/YextEntityFieldSelector.tsx";
 import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
@@ -122,7 +123,38 @@ export const InternalLayoutEditor = ({
   return (
     <EntityFieldProvider>
       <Puck
-        config={puckConfig}
+        config={{
+          ...puckConfig,
+          root: {
+            ...puckConfig.root,
+            fields: {
+              title: YextEntityFieldSelector<any, string>({
+                label: "Title",
+                filter: {
+                  types: ["type.string"],
+                },
+              }),
+              description: YextEntityFieldSelector<any, string>({
+                label: "Description",
+                filter: {
+                  types: ["type.string"],
+                },
+              }),
+            },
+            defaultProps: {
+              title: {
+                field: "name",
+                constantValue: "",
+                constantValueEnabled: false,
+              },
+              description: {
+                field: "description",
+                constantValue: "",
+                constantValueEnabled: false,
+              },
+            },
+          },
+        }}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
