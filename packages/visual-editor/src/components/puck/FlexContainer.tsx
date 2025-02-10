@@ -114,12 +114,9 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
     backgroundColor: "default",
   },
   resolveFields: (data, params) => {
-    // If the FlexContainer has a Flex or Grid as the parent, the defaultProps should
+    // If the Flex has a parent component, the defaultProps should
     // be adjusted and maxContentWidth should not be a field.
-    if (
-      params.parent?.type === "FlexContainer" ||
-      params.parent?.type === "GridSection"
-    ) {
+    if (params.parent) {
       // the props values should only be changed initially
       if (!data.props.maxContentWidth) {
         data.props.verticalPadding = "0";
