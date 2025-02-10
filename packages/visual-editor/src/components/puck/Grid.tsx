@@ -11,14 +11,14 @@ interface ColumnProps {
   span?: number;
 }
 
-interface GridSectionProps
+interface GridProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutVariants>,
     VariantProps<typeof innerLayoutVariants> {
   columns: ColumnProps[];
 }
 
-const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
+const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
   (
     {
       className,
@@ -64,9 +64,8 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
               }}
             >
               <DropZone
+                className="flex flex-col"
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
                   justifyContent,
                 }}
                 zone={`column-${idx}`}
@@ -82,7 +81,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
 
 GridSection.displayName = "GridSection";
 
-const gridSectionFields: Fields<GridSectionProps> = {
+const gridSectionFields: Fields<GridProps> = {
   columns: {
     type: "array",
     getItemSummary: (col, id) =>
@@ -111,7 +110,7 @@ const gridSectionFields: Fields<GridSectionProps> = {
   ...layoutFields,
 };
 
-const GridSectionComponent: ComponentConfig<GridSectionProps> = {
+const GridSectionComponent: ComponentConfig<GridProps> = {
   label: "Grid",
   fields: gridSectionFields,
   defaultProps: {
@@ -179,4 +178,4 @@ const GridSectionComponent: ComponentConfig<GridSectionProps> = {
   ),
 };
 
-export { GridSectionComponent as GridSection, type GridSectionProps };
+export { GridSectionComponent as Grid, type GridProps };

@@ -9,7 +9,7 @@ import {
   layoutVariants,
 } from "./Layout.tsx";
 
-interface FlexContainerProps
+interface FlexProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutVariants>,
     VariantProps<typeof innerLayoutVariants> {
@@ -18,7 +18,7 @@ interface FlexContainerProps
   wrap: "wrap" | "nowrap";
 }
 
-const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
+const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
   (
     {
       className,
@@ -54,10 +54,9 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
           )}
         >
           <DropZone
-            className={themeMangerCn(layoutVariants({ gap }))}
+            className={themeMangerCn(layoutVariants({ gap }), "flex")}
             zone="flex-container"
             style={{
-              display: "flex",
               justifyContent,
               flexDirection: direction,
               flexWrap: wrap,
@@ -72,7 +71,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
 
 FlexContainer.displayName = "Flex";
 
-const flexContainerFields: Fields<FlexContainerProps> = {
+const flexContainerFields: Fields<FlexProps> = {
   direction: {
     label: "Direction",
     type: "select",
@@ -101,7 +100,7 @@ const flexContainerFields: Fields<FlexContainerProps> = {
   ...layoutFields,
 };
 
-const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
+const FlexContainerComponent: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
@@ -170,4 +169,4 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
   ),
 };
 
-export { FlexContainerComponent as FlexContainer, type FlexContainerProps };
+export { FlexContainerComponent as Flex, type FlexProps };
