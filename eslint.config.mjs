@@ -21,7 +21,7 @@ export default [
   ...compat.extends(
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
   ),
   {
     plugins: {
@@ -58,6 +58,8 @@ export default [
     },
 
     rules: {
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
       "typescriptEslint/no-explicit-any": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "typescriptEslint/no-empty-function": "off",

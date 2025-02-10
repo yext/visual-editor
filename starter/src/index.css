@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  margin-bottom: -80px;
+
+  .toggle-button {
+    z-index: 2000;
+    outline: black double 1px;
+    background: #eeeeee;
+    padding: 4px 40px;
+    border-radius: 15px;
+  }
+}

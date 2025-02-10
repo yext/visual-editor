@@ -8,6 +8,9 @@ on:
 jobs:
   license-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./packages/visual-editor"
     steps:
       - uses: actions/checkout@v4.1.6
         with:
