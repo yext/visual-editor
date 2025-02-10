@@ -6,6 +6,7 @@ import {
   themeResolver,
   ThemeConfig,
 } from "./themeResolver.ts";
+import { getSpacingOptions } from "./themeConfigOptions.ts";
 
 describe("themeResolver", () => {
   test("convert theme config to tailwind config", () => {
@@ -305,14 +306,28 @@ export const testThemeConfig: ThemeConfig = {
       },
     },
   },
-  grid: {
-    label: "Grid Section",
+  pageSection: {
+    label: "Page Section",
     styles: {
-      verticalSpacing: {
-        label: "Vertical Spacing",
+      gap: {
+        label: "gap",
         type: "number",
         plugin: "gap",
         default: 8,
+      },
+      verticalPadding: {
+        label: "Vertical Padding",
+        type: "select",
+        plugin: "verticalPadding",
+        options: getSpacingOptions(),
+        default: "0px",
+      },
+      horizontalPadding: {
+        label: "Horizontal Padding",
+        type: "select",
+        plugin: "horizontalPadding",
+        options: getSpacingOptions(),
+        default: "0px",
       },
       maxWidth: {
         label: "Maximum Width",
@@ -438,13 +453,22 @@ const marketerTailwindConfig: TailwindConfig = {
     "button-fontWeight": "var(--fontWeight-button-fontWeight)",
   },
   gap: {
-    "grid-verticalSpacing": "var(--gap-grid-verticalSpacing)",
+    "pageSection-gap": "var(--gap-pageSection-gap)",
   },
   maxWidth: {
-    "grid-maxWidth": "var(--maxWidth-grid-maxWidth)",
+    "pageSection-maxWidth": "var(--maxWidth-pageSection-maxWidth)",
+  },
+  verticalPadding: {
+    "pageSection-verticalPadding":
+      "var(--verticalPadding-pageSection-verticalPadding)",
+  },
+  horizontalPadding: {
+    "pageSection-horizontalPadding":
+      "var(--horizontalPadding-pageSection-horizontalPadding)",
   },
   backgroundColor: {
-    "grid-backgroundColor": "var(--backgroundColor-grid-backgroundColor)",
+    "pageSection-backgroundColor":
+      "var(--backgroundColor-pageSection-backgroundColor)",
     "page-backgroundColor": "var(--backgroundColor-page-backgroundColor)",
     "page-footer": "var(--backgroundColor-page-footer)",
   },
@@ -530,13 +554,22 @@ const mergedConfig: TailwindConfig = {
     "button-fontWeight": "var(--fontWeight-button-fontWeight)",
   },
   gap: {
-    "grid-verticalSpacing": "var(--gap-grid-verticalSpacing)",
+    "pageSection-gap": "var(--gap-pageSection-gap)",
   },
   maxWidth: {
-    "grid-maxWidth": "var(--maxWidth-grid-maxWidth)",
+    "pageSection-maxWidth": "var(--maxWidth-pageSection-maxWidth)",
+  },
+  verticalPadding: {
+    "pageSection-verticalPadding":
+      "var(--verticalPadding-pageSection-verticalPadding)",
+  },
+  horizontalPadding: {
+    "pageSection-horizontalPadding":
+      "var(--horizontalPadding-pageSection-horizontalPadding)",
   },
   backgroundColor: {
-    "grid-backgroundColor": "var(--backgroundColor-grid-backgroundColor)",
+    "pageSection-backgroundColor":
+      "var(--backgroundColor-pageSection-backgroundColor)",
     "page-backgroundColor": "var(--backgroundColor-page-backgroundColor)",
     "page-footer": "var(--backgroundColor-page-footer)",
   },

@@ -1,42 +1,10 @@
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
 import { themeMangerCn } from "../../index.js";
-import { tailwindSpacingClasses } from "./options/spacingClasses.js";
-
-const outerBackgroundVariants = cva("components w-full", {
-  variants: {
-    backgroundColor: {
-      default: "bg-grid-backgroundColor",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-    },
-  },
-  defaultVariants: {
-    backgroundColor: "default",
-  },
-});
-
-const innerBackgroundVariants = cva(
-  "components flex flex-col min-h-0 min-w-0 md:grid md:grid-cols-12 mx-auto",
-  {
-    variants: {
-      maxContentWidth: {
-        default: "max-w-grid-maxWidth",
-        lg: "max-w-[1024px]",
-        xl: "max-w-[1280px]",
-        xxl: "max-w-[1536px]",
-      },
-    },
-    defaultVariants: {
-      maxContentWidth: "default",
-    },
-  }
-);
+import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
+import { layoutFields } from "./Layout.tsx";
 
 interface ColumnProps {
   justifyContent: "center" | "start" | "end" | "spaceBetween";
@@ -45,11 +13,8 @@ interface ColumnProps {
 
 interface GridSectionProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof outerBackgroundVariants>,
-    VariantProps<typeof innerBackgroundVariants> {
-  gap: number;
-  verticalPadding: number;
-  horizontalPadding: number;
+    VariantProps<typeof layoutVariants>,
+    VariantProps<typeof innerLayoutVariants> {
   columns: ColumnProps[];
 }
 
@@ -69,25 +34,25 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
   ) => {
     return (
       <Section
-        className={themeMangerCn(outerBackgroundVariants({ backgroundColor }))}
-        style={{
-          paddingTop: verticalPadding,
-          paddingBottom: verticalPadding,
-          paddingRight: horizontalPadding,
-          paddingLeft: horizontalPadding,
-        }}
+        className={themeMangerCn(
+          layoutVariants({
+            backgroundColor,
+            verticalPadding,
+            horizontalPadding,
+          })
+        )}
         maxWidth="full"
         padding="none"
       >
         <div
           className={themeMangerCn(
-            innerBackgroundVariants({ maxContentWidth }),
+            layoutVariants({ gap }),
+            innerLayoutVariants({ maxContentWidth }),
             className
           )}
           ref={ref}
           style={{
             gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
-            gap,
           }}
           {...props}
         >
@@ -143,47 +108,11 @@ const gridSectionFields: Fields<GridSectionProps> = {
       },
     },
   },
-  verticalPadding: {
-    label: "Vertical Padding",
-    type: "select",
-    options: tailwindSpacingClasses,
-  },
-  horizontalPadding: {
-    label: "Horizontal Padding",
-    type: "select",
-    options: tailwindSpacingClasses,
-  },
-  gap: {
-    label: "Gap",
-    type: "select",
-    options: tailwindSpacingClasses,
-  },
-  maxContentWidth: {
-    label: "Maximum Content Width",
-    type: "select",
-    options: [
-      { value: "default", label: "Default" },
-      { value: "lg", label: "LG (1024px)" },
-      { value: "xl", label: "XL (1280px)" },
-      { value: "xxl", label: "2XL (1536px)" },
-    ],
-  },
-  backgroundColor: {
-    label: "Background Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
+  ...layoutFields,
 };
 
 const GridSectionComponent: ComponentConfig<GridSectionProps> = {
-  label: "Grid Section",
+  label: "Grid",
   fields: gridSectionFields,
   defaultProps: {
     columns: [
@@ -194,11 +123,45 @@ const GridSectionComponent: ComponentConfig<GridSectionProps> = {
         justifyContent: "start",
       },
     ],
-    gap: 0,
-    verticalPadding: 0,
-    horizontalPadding: 0,
+    gap: "default",
+    verticalPadding: "default",
+    horizontalPadding: "default",
     backgroundColor: "default",
-    maxContentWidth: "default",
+  },
+  resolveFields: (data, params) => {
+    // If the GridSection has a Flex or Grid as the parent, the defaultProps should
+    // be adjusted and maxContentWidth should not be a field.
+    if (
+      params.parent?.type === "FlexContainer" ||
+      params.parent?.type === "GridSection"
+    ) {
+      // the props values should only be changed initially
+      if (!data.props.maxContentWidth) {
+        data.props.verticalPadding = "0";
+        data.props.horizontalPadding = "0";
+        data.props.gap = "0";
+        data.props.backgroundColor = "inherit";
+        data.props.maxContentWidth = "none";
+      }
+      return gridSectionFields;
+    }
+
+    if (!data.props.maxContentWidth) {
+      data.props.maxContentWidth = "default";
+    }
+    return {
+      ...gridSectionFields,
+      maxContentWidth: {
+        label: "Maximum Content Width",
+        type: "select",
+        options: [
+          { value: "default", label: "Default" },
+          { value: "lg", label: "LG (1024px)" },
+          { value: "xl", label: "XL (1280px)" },
+          { value: "xxl", label: "2XL (1536px)" },
+        ],
+      },
+    };
   },
   render: ({
     columns,

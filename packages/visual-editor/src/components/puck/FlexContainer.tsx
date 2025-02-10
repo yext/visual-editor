@@ -1,14 +1,21 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { tailwindSpacingClasses } from "./options/spacingClasses.js";
+import { VariantProps } from "class-variance-authority";
+import { Section } from "./atoms/section.js";
+import { themeMangerCn } from "../../utils/cn.js";
+import {
+  innerLayoutVariants,
+  layoutFields,
+  layoutVariants,
+} from "./Layout.tsx";
 
-interface FlexContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  gap: number;
+interface FlexContainerProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof layoutVariants>,
+    VariantProps<typeof innerLayoutVariants> {
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   wrap: "wrap" | "nowrap";
-  verticalPadding: number;
-  horizontalPadding: number;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
@@ -21,39 +28,49 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexContainerProps>(
       gap,
       verticalPadding,
       horizontalPadding,
-      ...props
+      backgroundColor,
+      maxContentWidth,
     },
     ref
   ) => {
     return (
-      <div
-        className={className}
-        ref={ref}
-        style={{
-          paddingTop: verticalPadding,
-          paddingBottom: verticalPadding,
-          paddingRight: horizontalPadding,
-          paddingLeft: horizontalPadding,
-        }}
-        {...props}
-      >
-        <DropZone
-          zone="flex-container"
-          style={{
-            display: "flex",
-            justifyContent,
-            flexDirection: direction,
+      <Section
+        className={themeMangerCn(
+          layoutVariants({
+            backgroundColor,
+            verticalPadding,
+            horizontalPadding,
             gap,
-            flexWrap: wrap,
-          }}
-          disallow={["Banner"]}
-        />
-      </div>
+          })
+        )}
+        ref={ref}
+        maxWidth="full"
+        padding="none"
+      >
+        <div
+          className={themeMangerCn(
+            innerLayoutVariants({ maxContentWidth }),
+            className
+          )}
+        >
+          <DropZone
+            className={themeMangerCn(layoutVariants({ gap }))}
+            zone="flex-container"
+            style={{
+              display: "flex",
+              justifyContent,
+              flexDirection: direction,
+              flexWrap: wrap,
+            }}
+            disallow={["Banner"]}
+          />
+        </div>
+      </Section>
     );
   }
 );
 
-FlexContainer.displayName = "FlexContainer";
+FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexContainerProps> = {
   direction: {
@@ -73,11 +90,6 @@ const flexContainerFields: Fields<FlexContainerProps> = {
       { value: "end", label: "End" },
     ],
   },
-  gap: {
-    label: "Gap",
-    type: "select",
-    options: tailwindSpacingClasses,
-  },
   wrap: {
     label: "Wrap",
     type: "select",
@@ -86,28 +98,55 @@ const flexContainerFields: Fields<FlexContainerProps> = {
       { value: "wrap", label: "Wrap" },
     ],
   },
-  verticalPadding: {
-    label: "Vertical Padding",
-    type: "select",
-    options: tailwindSpacingClasses,
-  },
-  horizontalPadding: {
-    label: "Horizontal Padding",
-    type: "select",
-    options: tailwindSpacingClasses,
-  },
+  ...layoutFields,
 };
 
 const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
-  label: "Flex Container",
+  label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
     direction: "column",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: 0,
-    verticalPadding: 0,
-    horizontalPadding: 0,
+    gap: "default",
+    verticalPadding: "default",
+    horizontalPadding: "default",
+    backgroundColor: "default",
+  },
+  resolveFields: (data, params) => {
+    // If the FlexContainer has a Flex or Grid as the parent, the defaultProps should
+    // be adjusted and maxContentWidth should not be a field.
+    if (
+      params.parent?.type === "FlexContainer" ||
+      params.parent?.type === "GridSection"
+    ) {
+      // the props values should only be changed initially
+      if (!data.props.maxContentWidth) {
+        data.props.verticalPadding = "0";
+        data.props.horizontalPadding = "0";
+        data.props.gap = "0";
+        data.props.backgroundColor = "inherit";
+        data.props.maxContentWidth = "none";
+      }
+      return flexContainerFields;
+    }
+
+    if (!data.props.maxContentWidth) {
+      data.props.maxContentWidth = "default";
+    }
+    return {
+      ...flexContainerFields,
+      maxContentWidth: {
+        label: "Maximum Content Width",
+        type: "select",
+        options: [
+          { value: "default", label: "Default" },
+          { value: "lg", label: "LG (1024px)" },
+          { value: "xl", label: "XL (1280px)" },
+          { value: "xxl", label: "2XL (1536px)" },
+        ],
+      },
+    };
   },
   render: ({
     direction,
@@ -117,6 +156,8 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
     verticalPadding,
     horizontalPadding,
     className,
+    backgroundColor,
+    maxContentWidth,
   }) => (
     <FlexContainer
       direction={direction}
@@ -126,6 +167,8 @@ const FlexContainerComponent: ComponentConfig<FlexContainerProps> = {
       verticalPadding={verticalPadding}
       horizontalPadding={horizontalPadding}
       className={className}
+      backgroundColor={backgroundColor}
+      maxContentWidth={maxContentWidth}
     />
   ),
 };
