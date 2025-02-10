@@ -75,14 +75,6 @@ const fontWeightOptions = [
     value: "default",
   },
   {
-    label: "Thin",
-    value: "100",
-  },
-  {
-    label: "Extralight",
-    value: "200",
-  },
-  {
     label: "Light",
     value: "300",
   },
@@ -105,10 +97,6 @@ const fontWeightOptions = [
   {
     label: "Extrabold",
     value: "800",
-  },
-  {
-    label: "Black",
-    value: "900",
   },
 ];
 
