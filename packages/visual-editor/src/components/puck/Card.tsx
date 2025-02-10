@@ -10,6 +10,7 @@ import {
   YextEntityFieldSelector,
   FontSizeSelector,
   BodyProps,
+  getFontWeightOverrideOptions,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
@@ -30,6 +31,7 @@ interface CardProps {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
+    weight: HeadingProps["weight"];
     transform: HeadingProps["transform"];
     level: HeadingLevel;
   };
@@ -37,6 +39,7 @@ interface CardProps {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
     color: HeadingProps["color"];
+    weight: HeadingProps["weight"];
     transform: HeadingProps["transform"];
     level: HeadingLevel;
   };
@@ -44,6 +47,7 @@ interface CardProps {
     text: YextEntityField<string>;
     fontSize: BodyProps["fontSize"];
     color: BodyProps["color"];
+    weight: BodyProps["fontWeight"];
     transform: BodyProps["textTransform"];
   };
   image: {
@@ -98,6 +102,11 @@ const cardFields: Fields<CardProps> = {
           { label: "Background", value: "background" },
         ],
       },
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: [],
+      },
       transform: {
         label: "Text Transform",
         type: "select",
@@ -138,6 +147,11 @@ const cardFields: Fields<CardProps> = {
           { label: "Background", value: "background" },
         ],
       },
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: [],
+      },
       transform: {
         label: "Text Transform",
         type: "select",
@@ -177,6 +191,11 @@ const cardFields: Fields<CardProps> = {
           { label: "Text", value: "text" },
           { label: "Background", value: "background" },
         ],
+      },
+      weight: {
+        label: "Font Weight",
+        type: "select",
+        options: [],
       },
       transform: {
         label: "Text Transform",
@@ -326,6 +345,7 @@ const CardWrapper = ({
                 color={heading.color}
                 transform={heading.transform}
                 level={heading.level}
+                weight={heading.weight}
               >
                 {resolveYextEntityField(document, heading.text)}
               </Heading>
@@ -338,6 +358,7 @@ const CardWrapper = ({
                 color={subheading.color}
                 transform={subheading.transform}
                 level={subheading.level}
+                weight={subheading.weight}
               >
                 {resolveYextEntityField(document, subheading.text)}
               </Heading>
@@ -349,6 +370,7 @@ const CardWrapper = ({
                 fontSize={body.fontSize}
                 textTransform={body.transform}
                 color={body.color}
+                fontWeight={body.weight}
               >
                 {resolveYextEntityField(document, body.text)}
               </Body>
@@ -380,6 +402,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
+      weight: "default",
       color: "default",
       transform: "none",
       level: 1,
@@ -391,6 +414,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
+      weight: "default",
       color: "default",
       transform: "none",
       level: 2,
@@ -402,6 +426,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
+      weight: "default",
       color: "default",
       transform: "none",
     },
@@ -431,6 +456,59 @@ export const CardComponent: ComponentConfig<CardProps> = {
       variant: "primary",
     },
     backgroundColor: "bg-card-backgroundColor",
+  },
+  resolveFields: async (data): Promise<Fields<CardProps>> => {
+    const headingFontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-heading${data.props.heading.level}-fontFamily`,
+    });
+    const subheadingFontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: `--fontFamily-heading${data.props.subheading.level}-fontFamily`,
+    });
+    const bodyFontWeightOptions = await getFontWeightOverrideOptions({
+      fontCssVariable: "--fontFamily-body-fontFamily",
+    });
+    return {
+      ...cardFields,
+      heading: {
+        ...cardFields.heading,
+        // @ts-expect-error ts(2322) 'objectFields' does not exist in type 'TextField'
+        objectFields: {
+          // @ts-expect-error ts(2339) objectFields does exist on the heading field
+          ...cardFields.heading.objectFields,
+          weight: {
+            label: "Font Weight",
+            type: "select",
+            options: headingFontWeightOptions,
+          },
+        },
+      },
+      subheading: {
+        ...cardFields.subheading,
+        // @ts-expect-error ts(2322) 'objectFields' does not exist in type 'TextField'
+        objectFields: {
+          // @ts-expect-error ts(2339) objectFields does exist on the subheading field
+          ...cardFields.subheading.objectFields,
+          weight: {
+            label: "Font Weight",
+            type: "select",
+            options: subheadingFontWeightOptions,
+          },
+        },
+      },
+      body: {
+        ...cardFields.body,
+        // @ts-expect-error ts(2322) 'objectFields' does not exist in type 'TextField'
+        objectFields: {
+          // @ts-expect-error ts(2339) objectFields does exist on the body field
+          ...cardFields.body.objectFields,
+          weight: {
+            label: "Font Weight",
+            type: "select",
+            options: bodyFontWeightOptions,
+          },
+        },
+      },
+    };
   },
   render: (props) => <CardWrapper {...props} />,
 };
