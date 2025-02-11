@@ -3,7 +3,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { cva, type VariantProps } from "class-variance-authority";
 import mailIcon from "./assets/mail_outline.svg";
 import {
-  themeMangerCn,
+  themeManagerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -144,7 +144,7 @@ const Emails: React.FC<EmailsProps> = ({
       constantValueEnabled={emailListField.constantValueEnabled}
     >
       <ul
-        className={themeMangerCn(
+        className={themeManagerCn(
           "components",
           emailsVariants({ fontSize, fontWeight, color }),
           `${includeHyperlink ? "text-blue-600 dark:text-blue-500 hover:underline" : ""}`
