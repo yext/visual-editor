@@ -10,6 +10,7 @@ import {
   getFontWeightOverrideOptions,
 } from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
+import parsePhoneNumber from "libphonenumber-js";
 
 const phoneVariants = cva(
   "components flex gap-2 items-center text-body-fontSize font-body-fontFamily",
@@ -59,17 +60,16 @@ const formatPhoneNumber = (
   phoneNumberString: string,
   format: string = "domestic"
 ): string => {
-  const cleaned = ("" + phoneNumberString).replace(/\D/g, "");
-  const match = cleaned.match(/^(?:\+?(\d{1,3}))?(\d{3})(\d{3})(\d{4})$/);
+  const parsedPhoneNumber = parsePhoneNumber(phoneNumberString);
+  console.log(parsePhoneNumber);
 
-  if (match) {
-    const countryCode = match[1] ? `+${match[1]} ` : "";
-    return format === "international"
-      ? `${countryCode}(${match[2]}) ${match[3]}-${match[4]}`
-      : `(${match[2]}) ${match[3]}-${match[4]}`;
+  if (!parsedPhoneNumber) {
+    return phoneNumberString;
   }
 
-  return phoneNumberString;
+  return format === "international"
+    ? parsedPhoneNumber.formatInternational()
+    : parsedPhoneNumber.formatNational();
 };
 
 const PhoneFields: Fields<PhoneProps> = {
