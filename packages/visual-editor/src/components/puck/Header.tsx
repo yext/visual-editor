@@ -4,7 +4,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   EntityField,
   resolveYextEntityField,
-  themeMangerCn,
+  themeManagerCn,
   useDocument,
   YextEntityField,
   YextEntityFieldSelector,
@@ -137,7 +137,7 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
 
   return (
     <header
-      className={themeMangerCn(
+      className={themeManagerCn(
         "w-full bg-white components",
         headerVariants({ backgroundColor })
       )}

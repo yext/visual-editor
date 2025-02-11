@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeMangerCn } from "../../../index.ts";
+import { themeManagerCn } from "../../../index.ts";
 
 const buttonVariants = cva(
   "py-4 components inline-flex items-center justify-center whitespace-nowrap font-body-fontFamily font-button-fontWeight " +
@@ -75,7 +75,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={themeMangerCn(
+        className={themeManagerCn(
           buttonVariants({ variant, size, borderRadius, fontSize }),
           className
         )}
