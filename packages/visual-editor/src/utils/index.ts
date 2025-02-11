@@ -16,3 +16,4 @@ export {
   getBorderRadiusOptions,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
+export { getMetaData } from "./getMetaData.ts";
