@@ -6,7 +6,7 @@ export type RootConfig = {
   [key: string]: any;
 };
 
-export function getMetaData(document: any): RootConfig {
+export function getPageMetadata(document: any): RootConfig {
   const emptyMetaData = {
     title: "",
     description: "",
