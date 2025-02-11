@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeMangerCn } from "../../../index.ts";
+import { themeManagerCn } from "../../../index.ts";
 
 // Define the variants for the heading component
 const headingVariants = cva("components", {
@@ -87,7 +87,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     return (
       <Tag
         id="tag"
-        className={themeMangerCn(
+        className={themeManagerCn(
           headingVariants({
             fontSize,
             color,

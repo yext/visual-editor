@@ -1,7 +1,7 @@
 export { applyTheme } from "./applyTheme.ts";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
-export { themeMangerCn, themeMangerTwMergeConfiguration } from "./cn.ts";
+export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {
   defaultFonts,
   type FontRegistry,

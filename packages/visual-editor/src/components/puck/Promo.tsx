@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
-  themeMangerCn,
+  themeManagerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -211,7 +211,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
   return (
     <Section className="components">
       <div
-        className={themeMangerCn(
+        className={themeManagerCn(
           "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
           orientation === "right" && "md:flex-row-reverse"
         )}
@@ -223,7 +223,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
             constantValueEnabled={image.image.constantValueEnabled}
           >
             <div
-              className={themeMangerCn(
+              className={themeManagerCn(
                 imageWrapperVariants({
                   size: image.size,
                   rounded: image.rounded,

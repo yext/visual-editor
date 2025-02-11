@@ -17,7 +17,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 // any class uses the tailwind utility "font" and ends with "-fontFamily" (like our font-heading1-fontFamily, font-body-fontFamily)
 // will be merged with other fontFamily classes (such as "font-serif")
 
-export const themeMangerTwMergeConfiguration = {
+export const themeManagerTwMergeConfiguration = {
   extend: {
     classGroups: {
       "font-family": [
@@ -50,10 +50,10 @@ export const themeMangerTwMergeConfiguration = {
   },
 };
 
-const customTwMerge = extendTailwindMerge(themeMangerTwMergeConfiguration);
+const customTwMerge = extendTailwindMerge(themeManagerTwMergeConfiguration);
 
 // For use in the component library
-export function themeMangerCn(...inputs: ClassValue[]) {
+export function themeManagerCn(...inputs: ClassValue[]) {
   return customTwMerge(clsx(inputs));
 }
 
