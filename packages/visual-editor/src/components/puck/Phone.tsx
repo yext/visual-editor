@@ -61,8 +61,6 @@ const formatPhoneNumber = (
   format: string = "domestic"
 ): string => {
   const parsedPhoneNumber = parsePhoneNumber(phoneNumberString);
-  console.log(parsePhoneNumber);
-
   if (!parsedPhoneNumber) {
     return phoneNumberString;
   }
