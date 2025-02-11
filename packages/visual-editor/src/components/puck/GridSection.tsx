@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
-import { themeMangerCn } from "../../index.js";
+import { themeManagerCn } from "../../index.js";
 import { tailwindSpacingClasses } from "./options/spacingClasses.js";
 
 const outerBackgroundVariants = cva("components w-full", {
@@ -69,7 +69,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
   ) => {
     return (
       <Section
-        className={themeMangerCn(outerBackgroundVariants({ backgroundColor }))}
+        className={themeManagerCn(outerBackgroundVariants({ backgroundColor }))}
         style={{
           paddingTop: verticalPadding,
           paddingBottom: verticalPadding,
@@ -80,7 +80,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridSectionProps>(
         padding="none"
       >
         <div
-          className={themeMangerCn(
+          className={themeManagerCn(
             innerBackgroundVariants({ maxContentWidth }),
             className
           )}

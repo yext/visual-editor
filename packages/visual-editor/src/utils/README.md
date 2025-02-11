@@ -74,12 +74,12 @@ export const themeConfig: ThemeConfig = {
 };
 ```
 
-The Theme Manger UI will display the theme configuration fields in the order
+The Theme Manager UI will display the theme configuration fields in the order
 and structure specified in the themeConfig.
 
 ### Using Theme Manager Classes
 
-Theme Manger uses Tailwind to create classes of the following form: `[tailwindUtility]-[sectionName]-[styleName]-[subStyleName?]` where `tailwindUtility` is the Tailwind Utility class prefix used by the style's core plugin. These classes should be used in components to apply the Theme Manager styles.
+Theme Manager uses Tailwind to create classes of the following form: `[tailwindUtility]-[sectionName]-[styleName]-[subStyleName?]` where `tailwindUtility` is the Tailwind Utility class prefix used by the style's core plugin. These classes should be used in components to apply the Theme Manager styles.
 
 For example, in the themeConfig above, the following classes would be available:
 

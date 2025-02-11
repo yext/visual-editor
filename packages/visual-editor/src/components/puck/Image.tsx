@@ -3,7 +3,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import { cva, type VariantProps } from "class-variance-authority";
 import {
-  themeMangerCn,
+  themeManagerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -109,7 +109,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
       constantValueEnabled={imageField.constantValueEnabled}
     >
       <div
-        className={themeMangerCn(
+        className={themeManagerCn(
           imageWrapperVariants({ size, aspectRatio, rounded }),
           "overflow-hidden"
         )}

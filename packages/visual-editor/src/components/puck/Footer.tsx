@@ -6,7 +6,7 @@ import {
   FontSizeSelector,
   getFontWeightOverrideOptions,
   resolveYextEntityField,
-  themeMangerCn,
+  themeManagerCn,
   useDocument,
   YextEntityField,
   YextEntityFieldSelector,
@@ -180,7 +180,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
 
   return (
     <footer
-      className={themeMangerCn(
+      className={themeManagerCn(
         "w-full bg-white components",
         footerVariants({ backgroundColor })
       )}
