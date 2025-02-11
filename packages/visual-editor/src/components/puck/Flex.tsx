@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { VariantProps } from "class-variance-authority";
 import { Section } from "./atoms/section.js";
-import { themeMangerCn } from "../../utils/cn.js";
+import { themeManagerCn } from "../../utils/cn.js";
 import {
   innerLayoutVariants,
   layoutFields,
@@ -35,7 +35,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
   ) => {
     return (
       <Section
-        className={themeMangerCn(
+        className={themeManagerCn(
           layoutVariants({
             backgroundColor,
             verticalPadding,
@@ -48,13 +48,13 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
         padding="none"
       >
         <div
-          className={themeMangerCn(
+          className={themeManagerCn(
             innerLayoutVariants({ maxContentWidth }),
             className
           )}
         >
           <DropZone
-            className={themeMangerCn(layoutVariants({ gap }), "flex")}
+            className={themeManagerCn(layoutVariants({ gap }), "flex")}
             zone="flex-container"
             style={{
               justifyContent,

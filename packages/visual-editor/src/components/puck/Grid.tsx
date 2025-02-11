@@ -2,7 +2,7 @@ import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
-import { themeMangerCn } from "../../index.js";
+import { themeManagerCn } from "../../index.js";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { layoutFields } from "./Layout.tsx";
 
@@ -34,7 +34,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
   ) => {
     return (
       <Section
-        className={themeMangerCn(
+        className={themeManagerCn(
           layoutVariants({
             backgroundColor,
             verticalPadding,
@@ -45,7 +45,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
         padding="none"
       >
         <div
-          className={themeMangerCn(
+          className={themeManagerCn(
             layoutVariants({ gap }),
             innerLayoutVariants({ maxContentWidth }),
             className
