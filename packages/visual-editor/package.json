@@ -92,6 +92,7 @@
     "generate-license-file": "^3.5.0",
     "husky": "^9.1.4",
     "jsdom": "^24.1.1",
+    "libphonenumber-js": "^1.11.19",
     "lint-staged": "^15.2.7",
     "minimist": "^1.2.8",
     "semver": "^7.6.3",
