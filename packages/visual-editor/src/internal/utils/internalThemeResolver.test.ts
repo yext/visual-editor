@@ -118,20 +118,24 @@ const defaultThemeValues = {
   "--fontWeight-heading6-fontWeight": "700",
   "--fontWeight-body-fontWeight": "400",
   "--fontWeight-button-fontWeight": "400",
-  "--gap-grid-verticalSpacing": "8px",
-  "--backgroundColor-grid-backgroundColor": "var(--colors-palette-background)",
+  "--gap-pageSection-gap": "8px",
+  "--verticalPadding-pageSection-verticalPadding": "0px",
+  "--horizontalPadding-pageSection-horizontalPadding": "0px",
+  "--backgroundColor-pageSection-backgroundColor":
+    "var(--colors-palette-background)",
   "--backgroundColor-page-backgroundColor": "var(--colors-palette-background)",
   "--backgroundColor-page-footer": "#000000",
-  "--maxWidth-grid-maxWidth": "1280px",
+  "--maxWidth-pageSection-maxWidth": "1280px",
   "--borderRadius-button-borderRadius": "20px",
 };
 
 const savedThemeValues = {
   "--colors-palette-text": "grey",
   "--colors-palette-background-DEFAULT": "#EEEEEE",
-  "--gap-grid-verticalSpacing": "16px",
+  "--gap-pageSection-gap": "16px",
   "--fontWeight-heading1-fontWeight": "900",
-  "--backgroundColor-grid-backgroundColor": "var(--colors-palette-primary)",
+  "--backgroundColor-pageSection-backgroundColor":
+    "var(--colors-palette-primary)",
 };
 
 const combinedThemeValues = {
@@ -169,10 +173,13 @@ const combinedThemeValues = {
   "--fontWeight-heading6-fontWeight": "700",
   "--fontWeight-body-fontWeight": "400",
   "--fontWeight-button-fontWeight": "400",
-  "--gap-grid-verticalSpacing": "16px", // from saved theme
-  "--backgroundColor-grid-backgroundColor": "var(--colors-palette-primary)", // from saved theme
+  "--gap-pageSection-gap": "16px", // from saved theme
+  "--backgroundColor-pageSection-backgroundColor":
+    "var(--colors-palette-primary)", // from saved theme
   "--backgroundColor-page-backgroundColor": "var(--colors-palette-background)",
   "--backgroundColor-page-footer": "#000000",
-  "--maxWidth-grid-maxWidth": "1280px",
+  "--maxWidth-pageSection-maxWidth": "1280px",
+  "--verticalPadding-pageSection-verticalPadding": "0px",
+  "--horizontalPadding-pageSection-horizontalPadding": "0px",
   "--borderRadius-button-borderRadius": "20px",
 };

@@ -495,6 +495,40 @@ Returns a list of border radius options to be optionally used in the theme.confi
 | rounded-3xl    | 3XL (24px)    | 24px   |
 | rounded-full   | Full (9999px) | 9999px |
 
+## getSpacingOptions
+
+### Props
+
+| Name        | Type   | Description              |
+| ----------- | ------ | ------------------------ |
+| spacingType | string | Either "padding" or "gap |
+
+Returns a list of spacing options to be optionally used in the theme.config. It can be used for padding or gap. The labels and values correspond to tailwind's default classes.
+
+| Label      | Value |
+| ---------- | ----- |
+| 0 (0px)    | 0     |
+| 0.5 (2px)  | 0.5   |
+| 1 (4px)    | 1     |
+| 1.5 (6px)  | 1.5   |
+| 2 (8px)    | 2     |
+| 2.5 (10px) | 2.5   |
+| 3 (12px)   | 3     |
+| 3.5 (14px) | 3.5   |
+| 4 (16px)   | 4     |
+| 5 (20px)   | 5     |
+| 6 (24px)   | 6     |
+| 7 (28px)   | 7     |
+| 8 (32px)   | 8     |
+| 9 (36px)   | 9     |
+| 10 (40px)  | 10    |
+| 11 (44px)  | 11    |
+| 12 (48px)  | 12    |
+| 14 (56px)  | 14    |
+| 16 (64px)  | 16    |
+| 20 (80px)  | 20    |
+| 24 (96px)  | 24    |
+
 ## applyAnalytics
 
 Returns a Google Tag Manager script that uses the Google Tag Manager ID
