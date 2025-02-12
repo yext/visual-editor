@@ -8,6 +8,13 @@ import {
 } from "../../internal/puck/ui/Tooltip.tsx";
 import React from "react";
 
+const MemoizedChildren = React.memo(
+  ({ children }: { children: React.ReactNode }) => {
+    return <>{children}</>;
+  }
+);
+MemoizedChildren.displayName = "MemoizedChildren";
+
 type EntityFieldProps = {
   displayName?: string;
   fieldId?: string;
@@ -23,7 +30,7 @@ export const EntityField = ({
 }: EntityFieldProps) => {
   const { tooltipsVisible } = useEntityField();
 
-  if (!tooltipsVisible || constantValueEnabled) {
+  if (constantValueEnabled) {
     return children;
   }
 
@@ -39,10 +46,16 @@ export const EntityField = ({
   return (
     <div>
       <TooltipProvider>
-        <Tooltip open={!!tooltipContent}>
+        <Tooltip open={!!tooltipContent && tooltipsVisible}>
           <TooltipTrigger asChild>
-            <div className="ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]">
-              {children}
+            <div
+              className={
+                tooltipsVisible
+                  ? "ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]"
+                  : ""
+              }
+            >
+              <MemoizedChildren>{children}</MemoizedChildren>
             </div>
           </TooltipTrigger>
           <TooltipContent>
