@@ -5,11 +5,6 @@ import { Registry } from "./schema.ts";
 
 export const ui: Registry["items"] = [
   {
-    name: "spacingClasses",
-    type: "registry:component",
-    files: [{ path: "options/spacingClasses.ts", type: "registry:component" }],
-  },
-  {
     name: "heading",
     type: "registry:component",
     files: [{ path: "atoms/heading.tsx", type: "registry:component" }],
@@ -44,6 +39,11 @@ export const ui: Registry["items"] = [
     ],
   },
   {
+    name: "layout",
+    type: "registry:component",
+    files: [{ path: "Layout.tsx", type: "registry:component" }],
+  },
+  {
     name: "Address",
     type: "registry:ui",
     registryDependencies: ["section"],
@@ -74,10 +74,10 @@ export const ui: Registry["items"] = [
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
   },
   {
-    name: "FlexContainer",
+    name: "Flex",
     type: "registry:ui",
-    registryDependencies: ["spacingClasses"],
-    files: [{ path: "FlexContainer.tsx", type: "registry:ui" }],
+    registryDependencies: ["layout"],
+    files: [{ path: "Flex.tsx", type: "registry:ui" }],
   },
   {
     name: "Footer",
@@ -92,10 +92,10 @@ export const ui: Registry["items"] = [
     files: [{ path: "GetDirections.tsx", type: "registry:ui" }],
   },
   {
-    name: "GridSection",
+    name: "Grid",
     type: "registry:ui",
-    registryDependencies: ["section", "spacingClasses"],
-    files: [{ path: "GridSection.tsx", type: "registry:ui" }],
+    registryDependencies: ["section", "layout"],
+    files: [{ path: "Grid.tsx", type: "registry:ui" }],
   },
   {
     name: "Header",

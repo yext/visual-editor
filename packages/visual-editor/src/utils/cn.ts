@@ -28,9 +28,9 @@ export const themeManagerTwMergeConfiguration = {
       ],
       "font-size": [{ text: [(value: string) => value.endsWith("-fontSize")] }],
       "text-color": [{ text: [(value: string) => value.endsWith("-color")] }],
-      "gap-y": [
-        { "gap-y": [(value: string) => value.endsWith("-verticalSpacing")] },
-      ],
+      gap: [{ gap: [(value: string) => value.endsWith("-gap")] }],
+      py: [{ py: [(value: string) => value.endsWith("-verticalPadding")] }],
+      px: [{ px: [(value: string) => value.endsWith("-horizontalPadding")] }],
       "max-w": [
         {
           "max-w": [(value: string) => value.endsWith("-maxWidth")],
