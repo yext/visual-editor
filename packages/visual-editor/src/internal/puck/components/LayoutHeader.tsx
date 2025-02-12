@@ -16,7 +16,6 @@ type LayoutHeaderProps = {
   isDevMode: boolean;
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
-  hasRootChanges: boolean;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -27,7 +26,6 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     isDevMode,
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
-    hasRootChanges,
   } = props;
 
   const {
@@ -75,7 +73,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         <ClearLocalChangesButton
           modalOpen={clearLocalChangesModalOpen}
           setModalOpen={setClearLocalChangesModalOpen}
-          disabled={!hasRootChanges && histories.length === 1}
+          disabled={histories.length === 1}
           onClearLocalChanges={() => {
             onClearLocalChanges();
             setHistories([
@@ -86,7 +84,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         {!isDevMode && (
           <Button
             variant="secondary"
-            disabled={!hasRootChanges && histories.length === 1}
+            disabled={histories.length === 1}
             onClick={async () => {
               await onPublishLayout(appState.data);
               onClearLocalChanges();

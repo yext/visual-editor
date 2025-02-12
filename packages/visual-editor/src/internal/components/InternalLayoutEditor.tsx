@@ -50,8 +50,6 @@ export const InternalLayoutEditor = ({
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
-  const [rootState, setRootState] = useState<string>("");
-  const [hasRootChanges, setHasRootChanges] = useState<boolean>(false);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -104,31 +102,21 @@ export const InternalLayoutEditor = ({
   const handleClearLocalChanges = () => {
     clearHistory();
     historyIndex.current = 0;
-    setRootState(JSON.stringify(puckConfig.root));
-    setHasRootChanges(false);
   };
 
   const handlePublishLayout = async (data: Data) => {
     publishLayout({
       payload: { layoutData: JSON.stringify(data) },
     });
-    setRootState(JSON.stringify(puckConfig.root));
-    setHasRootChanges(false);
   };
 
-  const change = async (data: any) => {
+  const change = async () => {
     if (isLoading) {
       return;
     }
     if (!canEdit) {
       setCanEdit(true);
       return;
-    }
-    const rootString = JSON.stringify(data.root);
-    // if we trigger a state update on every change, then text field inputs break
-    if (!hasRootChanges && rootState !== rootString) {
-      setHasRootChanges(true);
-      setRootState(rootString);
     }
   };
 
@@ -179,7 +167,6 @@ export const InternalLayoutEditor = ({
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
               isDevMode={templateMetadata.isDevMode}
-              hasRootChanges={hasRootChanges}
             />
           ),
         }}
