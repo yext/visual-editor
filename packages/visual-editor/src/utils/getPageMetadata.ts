@@ -1,29 +1,22 @@
 import { resolveYextEntityField } from "./resolveYextEntityField.ts";
 
 export type RootConfig = {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   [key: string]: any;
 };
 
-export function getPageMetadata(document: any): RootConfig {
-  const emptyMetaData = {
-    title: "",
-    description: "",
-  };
+export function getPageMetadata(document: Record<string, any>): RootConfig {
   const layoutString = document?.__?.layout;
   if (!layoutString) {
-    return emptyMetaData;
+    return {};
   }
   const layout = JSON.parse(layoutString);
   const root = layout?.root;
   if (!root) {
-    return emptyMetaData;
+    return {};
   }
-  const metaData: RootConfig = {
-    title: resolveYextEntityField(document, root.title) ?? "",
-    description: resolveYextEntityField(document, root.description) ?? "",
-  };
+  const metaData: RootConfig = {};
   Object.keys(root).forEach((key: string) => {
     metaData[key] = resolveYextEntityField(document, root[key]) ?? "";
   });

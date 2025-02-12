@@ -1,5 +1,43 @@
 # Utils
 
+## getPageMetadata
+
+Returns an object containing the key/value pairs from the root/page level configuration.
+
+These can be used to populate meta fields on the live page in getHeadConfig.
+
+### Props
+
+| Name     | Type                |
+| -------- | ------------------- |
+| document | Record<string, any> |
+
+### Usage
+
+```ts
+// src/templates/<template>.tsx in site repository
+import { TemplateRenderProps, GetHeadConfig, HeadConfig } from "@yext/pages";
+import { getPageMetadata } from "@yext/visual-editor";
+
+export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
+  document,
+}): HeadConfig => {
+  const { title, description } = getPageMetadata(document);
+  return {
+    title: title,
+    tags: [
+      {
+        type: "meta",
+        attributes: {
+          name: "description",
+          content: description,
+        },
+      },
+    ],
+  };
+};
+```
+
 ## resolveYextEntityField
 
 Used in a component's render function to pull in the selected entity field's value from the document or use the constant value.

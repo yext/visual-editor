@@ -27,3 +27,6 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Packed files
+*.tgz
