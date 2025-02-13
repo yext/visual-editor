@@ -58,13 +58,14 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
         >
           {columns.map(({ span, justifyContent }, idx) => (
             <div
+              className="w-full"
               key={idx}
               style={{
                 gridColumn: span,
               }}
             >
               <DropZone
-                className="flex flex-col"
+                className="flex flex-col w-full"
                 style={{
                   justifyContent,
                 }}
