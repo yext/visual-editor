@@ -1,3 +1,9 @@
+#### 0.0.28 (2025-02-13)
+
+##### New Features
+
+- add page level fields for Title and Description (#225) (c99be212)
+
 #### 0.0.27 (2025-02-13)
 
 ##### Bug Fixes
