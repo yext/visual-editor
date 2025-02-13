@@ -1,3 +1,44 @@
+#### 0.0.27 (2025-02-13)
+
+##### Bug Fixes
+
+- small grid and flex changes (#230) (67c12e32)
+
+#### 0.0.26 (2025-02-13)
+
+#### 0.0.25 (2025-02-13)
+
+##### Chores
+
+- update to puck 0.18.2 (#228) (7f954fcd)
+- update to puck v0.18.1 (#216) (8edf00da)
+- update postcss config to esm (#211) (9e95082c)
+
+##### New Features
+
+- further adjust grid and flex components (#224) (72aabe92)
+- add weight to card prop (#206) (556fac14)
+- add applyAnalytics (#220) (e3840080)
+- add analytics ui to theme editor (#219) (2d3ee099)
+- update testing starter's theme.config (#215) (c62176d4)
+- adjust labels and values for props (#213) (57925f27)
+- add theme mode to localDev mode (#210) (6c83779b)
+- **deps:** add lz-compression for local storage (#221) (bb0c23bf)
+
+##### Bug Fixes
+
+- prevent re-renders on entity field tooltip toggle (#229) (79428427)
+- format phone numbers correctly (#227) (a9080a85)
+- update button font size options (#222) (e286359e)
+- links open in new tab (#218) (4b72408a)
+- update shadcn component registry (#217) (593b9323)
+- editor does not load in firefox (#214) (20ee49ab)
+- update component registry paths (#212) (fbb61d20)
+
+##### Code Style Changes
+
+- rename manger -> manager (#226) (b281697c)
+
 #### 0.0.24 (2025-01-23)
 
 ##### Chores
