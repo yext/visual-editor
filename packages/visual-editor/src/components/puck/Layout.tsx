@@ -30,6 +30,7 @@ export const layoutVariants = cva("components w-full", {
       "24": "gap-24",
     },
     verticalPadding: {
+      none: "",
       default: "py-pageSection-verticalPadding",
       "0": "py-0",
       "0.5": "py-0.5",
@@ -54,6 +55,7 @@ export const layoutVariants = cva("components w-full", {
       "24": "py-24",
     },
     horizontalPadding: {
+      none: "",
       default: "px-pageSection-horizontalPadding",
       "0": "px-0",
       "0.5": "px-0.5",
@@ -78,6 +80,7 @@ export const layoutVariants = cva("components w-full", {
       "24": "px-24",
     },
     backgroundColor: {
+      none: "",
       default: "bg-pageSection-backgroundColor",
       primary: "bg-palette-primary",
       secondary: "bg-palette-secondary",
@@ -89,9 +92,9 @@ export const layoutVariants = cva("components w-full", {
   },
   defaultVariants: {
     gap: "none",
-    verticalPadding: "default",
-    horizontalPadding: "default",
-    backgroundColor: "default",
+    verticalPadding: "none",
+    horizontalPadding: "none",
+    backgroundColor: "none",
   },
 });
 
