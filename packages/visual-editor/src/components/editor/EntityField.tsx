@@ -8,12 +8,13 @@ import {
 } from "../../internal/puck/ui/Tooltip.tsx";
 import React from "react";
 
-const MemoizedChildren = React.memo(
-  ({ children }: { children: React.ReactNode }) => {
-    return <>{children}</>;
-  }
-);
-MemoizedChildren.displayName = "MemoizedChildren";
+const MemoizedChildren = React.memo(function MemoizedChildren({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
+});
 
 type EntityFieldProps = {
   displayName?: string;
