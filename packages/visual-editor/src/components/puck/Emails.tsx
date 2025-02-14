@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { Link } from "@yext/pages-components";
 import { cva, type VariantProps } from "class-variance-authority";
 import mailIcon from "./assets/mail_outline.svg";
 import {
@@ -155,7 +156,13 @@ const Emails: React.FC<EmailsProps> = ({
           .map((text: any, index: any) => (
             <li key={index} className={`mb-2 flex items-center`}>
               <img className={"mr-2"} src={mailIcon} />
-              <span>{includeHyperlink ? <a href={text}>{text}</a> : text}</span>
+              <span>
+                {includeHyperlink ? (
+                  <Link href={text ?? "#"}>{text}</Link>
+                ) : (
+                  text
+                )}
+              </span>
             </li>
           ))}
       </ul>
