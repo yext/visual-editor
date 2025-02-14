@@ -9,6 +9,7 @@ import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, usePuck } from "@measured/puck";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
+import { RotateCcw, RotateCw } from "lucide-react";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -59,6 +60,46 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     }
   }, []);
 
+  const canUndo = (): boolean => {
+    if (!themeHistories) {
+      return false;
+    }
+    if (themeHistories.index === 0) {
+      return false;
+    }
+    return true;
+  };
+
+  const undo = () => {
+    if (!themeHistories) {
+      return false;
+    }
+    setThemeHistories({
+      histories: themeHistories?.histories,
+      index: themeHistories?.index - 1,
+    });
+  };
+
+  const canRedo = (): boolean => {
+    if (!themeHistories) {
+      return false;
+    }
+    if (themeHistories.index === themeHistories.histories.length - 1) {
+      return false;
+    }
+    return true;
+  };
+
+  const redo = () => {
+    if (!themeHistories) {
+      return;
+    }
+    setThemeHistories({
+      histories: themeHistories?.histories,
+      index: themeHistories?.index + 1,
+    });
+  };
+
   return (
     <header className="puck-header">
       <div className="header-left">
@@ -67,6 +108,23 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       </div>
       <div className="header-center"></div>
       <div className="actions">
+        <Button
+          variant="ghost"
+          size="icon"
+          disabled={!canUndo()}
+          onClick={undo}
+        >
+          <RotateCcw className="sm-icon" />
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          disabled={!canRedo()}
+          onClick={redo}
+        >
+          <RotateCw className="sm-icon" />
+        </Button>
         <ClearLocalChangesButton
           modalOpen={clearLocalChangesModalOpen}
           setModalOpen={setClearLocalChangesModalOpen}
