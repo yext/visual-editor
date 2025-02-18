@@ -72,7 +72,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   const undo = () => {
     if (!themeHistories) {
-      return false;
+      return;
     }
     setThemeHistories({
       histories: themeHistories?.histories,
@@ -113,6 +113,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           size="icon"
           disabled={!canUndo()}
           onClick={undo}
+          aria-label="Undo"
         >
           <RotateCcw className="sm-icon" />
         </Button>
@@ -122,6 +123,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           size="icon"
           disabled={!canRedo()}
           onClick={redo}
+          aria-label="Redo"
         >
           <RotateCw className="sm-icon" />
         </Button>
