@@ -98,10 +98,13 @@ export const InternalThemeEditor = ({
 
     const newHistory = {
       histories: [
-        ...themeHistoriesRef.current.histories,
+        ...themeHistoriesRef.current.histories.slice(
+          0,
+          themeHistoriesRef.current.index + 1
+        ),
         { id: uuidv4(), data: newThemeValues },
       ] as ThemeHistory[],
-      index: themeHistoriesRef.current.histories.length,
+      index: themeHistoriesRef.current.index + 1,
     };
 
     if (localDev) {
