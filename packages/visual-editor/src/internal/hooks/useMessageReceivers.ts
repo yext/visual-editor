@@ -44,7 +44,7 @@ export const useCommonMessageReceivers = (
       const puckConfig = componentRegistry.get(devMetadata.templateId);
       setPuckConfig(puckConfig);
       setLayoutData({
-        root: {},
+        root: { props: {} },
         content: [],
         zones: {},
       });

@@ -99,6 +99,17 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   }, [themeData, themeConfig, templateMetadata]);
 
   /**
+   * Generate the data state. Ensures that the 'root.props' field is present.
+   * This may not be necessary in the future.
+   * See: https://github.com/measuredco/puck/issues/894
+   *
+   * @param data layoutData from content or saveState
+   */
+  function generateState(data: any): any {
+    return { data: { ...data, root: { props: { ...data?.root?.props } } } };
+  }
+
+  /**
    * Determines the initialHistory to send to Puck. It is based on a combination
    * of localStorage and saveState (from the DB).
    *
@@ -143,7 +154,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       );
       if (layoutData) {
         setPuckInitialHistory({
-          histories: [{ id: "root", state: { data: layoutData } }],
+          histories: [{ id: "root", state: generateState(layoutData) }],
           appendData: false,
         });
       }
@@ -161,7 +172,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       );
       if (layoutData) {
         setPuckInitialHistory({
-          histories: [{ id: "root", state: { data: layoutData } }],
+          histories: [{ id: "root", state: generateState(layoutData) }],
           appendData: false,
         });
       }
@@ -175,16 +186,16 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     setPuckInitialHistory({
       histories: layoutData
         ? [
-            { id: "root", state: { data: layoutData } },
+            { id: "root", state: generateState(layoutData) },
             {
               id: layoutSaveState.hash,
-              state: { data: layoutSaveState.history.data },
+              state: generateState(layoutSaveState.history.data),
             },
           ]
         : [
             {
               id: layoutSaveState.hash,
-              state: { data: layoutSaveState.history.data },
+              state: generateState(layoutSaveState.history.data),
             },
           ],
       index: layoutData ? 1 : 0,
