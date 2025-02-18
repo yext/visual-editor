@@ -64,10 +64,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     if (!themeHistories) {
       return false;
     }
-    if (themeHistories.index === 0) {
-      return false;
-    }
-    return true;
+    return themeHistories.index > 0;
   };
 
   const undo = () => {
@@ -75,8 +72,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       return;
     }
     setThemeHistories({
-      histories: themeHistories?.histories,
-      index: themeHistories?.index - 1,
+      histories: themeHistories.histories,
+      index: themeHistories.index - 1,
     });
   };
 
@@ -84,10 +81,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     if (!themeHistories) {
       return false;
     }
-    if (themeHistories.index === themeHistories.histories.length - 1) {
-      return false;
-    }
-    return true;
+    return themeHistories.index < themeHistories.histories.length - 1;
   };
 
   const redo = () => {
@@ -95,8 +89,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       return;
     }
     setThemeHistories({
-      histories: themeHistories?.histories,
-      index: themeHistories?.index + 1,
+      histories: themeHistories.histories,
+      index: themeHistories.index + 1,
     });
   };
 
