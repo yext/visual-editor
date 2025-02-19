@@ -365,6 +365,20 @@ export const themeConfig: ThemeConfig = {
         options: getColorOptions(),
         default: "var(--colors-palette-background)",
       },
+      linkColor: {
+        label: "Link Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-primary)",
+      },
+      linkFontSize: {
+        label: "Link Font Size",
+        type: "select",
+        plugin: "fontSize",
+        options: getFontSizeOptions(false),
+        default: "16px",
+      },
     },
   },
   button: {
