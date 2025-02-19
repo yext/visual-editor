@@ -39,6 +39,11 @@ export const ui: Registry["items"] = [
     ],
   },
   {
+    name: "maybeLink",
+    type: "registry:component",
+    files: [{ path: "assets/maybeLink.tsx", type: "registry:component" }],
+  },
+  {
     name: "layout",
     type: "registry:component",
     files: [{ path: "Layout.tsx", type: "registry:component" }],
@@ -60,6 +65,12 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     registryDependencies: ["body"],
     files: [{ path: "BodyText.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Breadcrumbs",
+    type: "registry:ui",
+    registryDependencies: ["maybeLink"],
+    files: [{ path: "Breadcrumbs.tsx", type: "registry:ui" }],
   },
   {
     name: "CtaWrapper",
