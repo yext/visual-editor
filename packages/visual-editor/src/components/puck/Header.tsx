@@ -160,7 +160,7 @@ const HeaderComponent: React.FC<HeaderProps> = (props) => {
             {resolvedLinks?.map((item, idx) => (
               <li
                 key={idx}
-                className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
+                className="cursor-pointer font-bold text-header-linkColor text-header-linkFontSize hover:underline"
               >
                 {item.link && (
                   <EntityField

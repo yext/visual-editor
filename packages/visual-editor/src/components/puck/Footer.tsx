@@ -191,7 +191,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
             {resolvedLinks?.map((item, idx) => (
               <li
                 key={idx}
-                className="cursor-pointer font-bold text-palette-primary hover:text-palette-secondary"
+                className="cursor-pointer font-bold font-body-fontFamily text-footer-linkColor text-footer-linkFontSize hover:underline"
               >
                 {item.link && (
                   <EntityField
