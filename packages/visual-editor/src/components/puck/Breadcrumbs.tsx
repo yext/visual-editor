@@ -24,7 +24,7 @@ const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
 
   return (
     <div>
-      {breadcrumbs?.length && (
+      {breadcrumbs?.length > 0 && (
         <nav className="my-4" aria-label="Breadcrumb">
           <ol className="components flex flex-wrap text-link-fontSize text-body-color">
             {breadcrumbs.map(({ name, slug }, idx) => {
