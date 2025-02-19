@@ -88,6 +88,10 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
+          name: "dm_directoryParents_default_directory",
+          fullObject: true,
+        },
+        {
           name: "driveThroughHours",
           fullObject: true,
         },
@@ -7896,6 +7900,42 @@ export const devTemplateStream = {
                       },
                     },
                   ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "dm_directoryParents_default_directory",
+          definition: {
+            name: "dm_directoryParents_default_directory",
+            registryId: "location.custom.1000125503.directory_parents.1",
+            typeRegistryId: "type.entity_reference",
+            type: {
+              documentType: "DOCUMENT_TYPE_ENTITY",
+            },
+            isList: true,
+          },
+          children: {
+            fields: [
+              {
+                name: "name",
+                definition: {
+                  name: "name",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "slug",
+                definition: {
+                  name: "slug",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
                 },
               },
             ],

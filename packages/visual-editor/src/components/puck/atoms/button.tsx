@@ -12,8 +12,8 @@ const buttonVariants = cva(
       variant: {
         primary:
           "bg-button-backgroundColor text-button-textColor border-2 border-button-backgroundColor hover:border-button-textColor " +
-          "focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor",
-        link: "text-button-textColor underline-offset-4 underline",
+          "focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor text-button-fontSize",
+        link: "text-link-color text-link-fontSize underline-offset-4 underline hover:no-underline",
       },
       size: {
         small: "h-9 px-3",
@@ -21,7 +21,7 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
       },
       fontSize: {
-        default: "text-button-fontSize",
+        default: "",
         xs: "text-xs",
         sm: "text-sm",
         base: "text-base",

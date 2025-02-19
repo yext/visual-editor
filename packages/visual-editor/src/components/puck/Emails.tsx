@@ -10,25 +10,21 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
+  FontSizeSelector,
 } from "../../index.js";
 
-const emailsVariants = cva("list-inside font-body-fontFamily", {
+const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
     fontSize: {
-      default: "text-body-fontSize",
+      default: "",
       xs: "text-xs",
       sm: "text-sm",
-      medium: "text-base",
+      base: "text-base",
       lg: "text-lg",
       xl: "text-xl",
       "2xl": "text-2xl",
       "3xl": "text-3xl",
       "4xl": "text-4xl",
-      "5xl": "text-5xl",
-      "6xl": "text-6xl",
-      "7xl": "text-7xl",
-      "8xl": "text-8xl",
-      "9xl": "text-9xl",
     },
     fontWeight: {
       default: "font-body-fontWeight",
@@ -43,24 +39,50 @@ const emailsVariants = cva("list-inside font-body-fontFamily", {
       "900": "font-black",
     },
     color: {
-      default: "text-body-color",
+      default: "",
       primary: "text-palette-primary",
       secondary: "text-palette-secondary",
       accent: "text-palette-accent",
       text: "text-palette-text",
       background: "text-palette-background",
     },
+    includeHyperlink: {
+      true: "underline hover:no-underline",
+      false: "",
+    },
   },
+  compoundVariants: [
+    {
+      includeHyperlink: true,
+      fontSize: "default",
+      className: "text-link-fontSize",
+    },
+    {
+      includeHyperlink: false,
+      fontSize: "default",
+      className: "text-body-fontSize",
+    },
+    {
+      includeHyperlink: true,
+      color: "default",
+      className: "text-link-color",
+    },
+    {
+      includeHyperlink: false,
+      color: "default",
+      className: "text-body-color",
+    },
+  ],
   defaultVariants: {
     fontSize: "default",
     fontWeight: "default",
     color: "default",
+    includeHyperlink: true,
   },
 });
 
 interface EmailsProps extends VariantProps<typeof emailsVariants> {
   list: YextEntityField<string[]>;
-  includeHyperlink: boolean;
   listLength: number;
 }
 
@@ -73,22 +95,7 @@ const EmailsFields: Fields<EmailsProps> = {
       includeListsOnly: true,
     },
   }),
-  fontSize: {
-    label: "Font Size",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Extra Small", value: "xs" },
-      { label: "Small", value: "sm" },
-      { label: "Medium", value: "medium" },
-      { label: "Large", value: "lg" },
-      { label: "Extra Large", value: "xl" },
-      { label: "2xl", value: "2xl" },
-      { label: "3xl", value: "3xl" },
-      { label: "4xl", value: "4xl" },
-      { label: "5xl", value: "5xl" },
-    ],
-  },
+  fontSize: FontSizeSelector("Font Size", false),
   color: {
     label: "Color",
     type: "select",
@@ -145,9 +152,7 @@ const Emails: React.FC<EmailsProps> = ({
     >
       <ul
         className={themeManagerCn(
-          "components",
-          emailsVariants({ fontSize, fontWeight, color }),
-          `${includeHyperlink ? "text-blue-600 dark:text-blue-500 hover:underline" : ""}`
+          emailsVariants({ fontSize, fontWeight, color, includeHyperlink })
         )}
       >
         {resolvedEmailList
