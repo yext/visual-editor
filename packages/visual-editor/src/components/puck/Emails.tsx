@@ -13,7 +13,7 @@ import {
   FontSizeSelector,
 } from "../../index.js";
 
-const emailsVariants = cva("list-inside font-body-fontFamily", {
+const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
     fontSize: {
       default: "",
@@ -39,24 +39,50 @@ const emailsVariants = cva("list-inside font-body-fontFamily", {
       "900": "font-black",
     },
     color: {
-      default: "text-link-color",
+      default: "",
       primary: "text-palette-primary",
       secondary: "text-palette-secondary",
       accent: "text-palette-accent",
       text: "text-palette-text",
       background: "text-palette-background",
     },
+    includeHyperlink: {
+      true: "underline hover:no-underline",
+      false: "",
+    },
   },
+  compoundVariants: [
+    {
+      includeHyperlink: true,
+      fontSize: "default",
+      className: "text-link-fontSize",
+    },
+    {
+      includeHyperlink: false,
+      fontSize: "default",
+      className: "text-body-fontSize",
+    },
+    {
+      includeHyperlink: true,
+      color: "default",
+      className: "text-link-color",
+    },
+    {
+      includeHyperlink: false,
+      color: "default",
+      className: "text-body-color",
+    },
+  ],
   defaultVariants: {
     fontSize: "default",
     fontWeight: "default",
     color: "default",
+    includeHyperlink: true,
   },
 });
 
 interface EmailsProps extends VariantProps<typeof emailsVariants> {
   list: YextEntityField<string[]>;
-  includeHyperlink: boolean;
   listLength: number;
 }
 
@@ -126,9 +152,7 @@ const Emails: React.FC<EmailsProps> = ({
     >
       <ul
         className={themeManagerCn(
-          "components",
-          `${includeHyperlink ? "underline hover:no-underline text-link-fontSize" : "text-body-fontSize"}`,
-          emailsVariants({ fontSize, fontWeight, color })
+          emailsVariants({ fontSize, fontWeight, color, includeHyperlink })
         )}
       >
         {resolvedEmailList
