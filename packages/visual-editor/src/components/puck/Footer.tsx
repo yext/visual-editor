@@ -58,6 +58,43 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
 
   const links = document?._site?.footer?.links ?? [];
   const copyrightMessage = document?._site?.copyrightMessage;
+  const socialLinks = [
+    {
+      name: "facebook",
+      link: document?._site?.facebookPageUrl,
+      label: <FaFacebook className="w-5 h-5 mr-4" />,
+    },
+    {
+      name: "instagram",
+      link: document?._site?.instagramHandle,
+      label: <FaInstagram className="w-5 h-5 mr-4" />,
+    },
+    {
+      name: "youtube",
+      link: document?._site?.youTubeChannelUrl,
+      label: <FaYoutube className="w-5 h-5 mr-4" />,
+    },
+    {
+      name: "linkedIn",
+      link: document?._site?.linkedInUrl,
+      label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
+    },
+    {
+      name: "twitter",
+      link: document?._site?.twitterHandle,
+      label: <FaTwitter className="w-5 h-5 mr-4" />,
+    },
+    {
+      name: "pinterest",
+      link: document?._site?.pinterestUrl,
+      label: <FaPinterest className="w-5 h-5 mr-4" />,
+    },
+    {
+      name: "titok",
+      link: document?._site?.tikTokUrl,
+      label: <FaTiktok className="w-5 h-5 mr-4" />,
+    },
+  ].filter((link) => link.link);
 
   return (
     <footer
@@ -68,24 +105,33 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     >
       <div className="container mx-auto flex flex-col px-4 pt-4 pb-3">
         <div className="flex flex-col sm:flex-row justify-between w-full items-center text-footer-linkColor text-footer-linkFontSize font-body-fontFamily">
-          <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
-            <FooterLinks links={links} />
-          </EntityField>
-          <EntityField
-            displayName="Footer Social Icons"
-            fieldId={"site.footer"}
-          >
-            <FooterSocialIcons site={document?._site} />
-          </EntityField>
+          {links && (
+            <EntityField
+              displayName="Footer Links"
+              fieldId={"site.footer.links"}
+            >
+              <FooterLinks links={links} />
+            </EntityField>
+          )}
+          {socialLinks && (
+            <EntityField
+              displayName="Footer Social Icons"
+              fieldId={"site.footer"}
+            >
+              <FooterSocialIcons socialLinks={socialLinks} />
+            </EntityField>
+          )}
         </div>
-        <div className="text-body-fontSize text-body-color text-center sm:text-left">
-          <EntityField
-            displayName="Copyright Text"
-            fieldId="site.copyrightMessage"
-          >
-            <Body>{copyrightMessage}</Body>
-          </EntityField>
-        </div>
+        {copyrightMessage && (
+          <div className="text-body-fontSize text-body-color text-center sm:text-left">
+            <EntityField
+              displayName="Copyright Text"
+              fieldId="site.copyrightMessage"
+            >
+              <Body>{copyrightMessage}</Body>
+            </EntityField>
+          </div>
+        )}
       </div>
     </footer>
   );
@@ -107,45 +153,7 @@ const FooterLinks = (props: { links: CTA[] }) => {
   );
 };
 
-const FooterSocialIcons = ({ site }: { site: any }) => {
-  const socialLinks = [
-    {
-      name: "facebook",
-      link: site?.facebookPageUrl,
-      label: <FaFacebook className="w-5 h-5 mr-4" />,
-    },
-    {
-      name: "instagram",
-      link: site?.instagramHandle,
-      label: <FaInstagram className="w-5 h-5 mr-4" />,
-    },
-    {
-      name: "youtube",
-      link: site?.youTubeChannelUrl,
-      label: <FaYoutube className="w-5 h-5 mr-4" />,
-    },
-    {
-      name: "linkedIn",
-      link: site?.linkedInUrl,
-      label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
-    },
-    {
-      name: "twitter",
-      link: site?.twitterHandle,
-      label: <FaTwitter className="w-5 h-5 mr-4" />,
-    },
-    {
-      name: "pinterest",
-      link: site?.pinterestUrl,
-      label: <FaPinterest className="w-5 h-5 mr-4" />,
-    },
-    {
-      name: "titok",
-      link: site?.tikTokUrl,
-      label: <FaTiktok className="w-5 h-5 mr-4" />,
-    },
-  ].filter((link) => link.link);
-
+const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
   return (
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
       {socialLinks.map((socialLink, idx) =>
