@@ -5,6 +5,7 @@ import { LoadingScreen } from "../../internal/puck/components/LoadingScreen.tsx"
 import { Toaster } from "../../internal/puck/ui/Toaster.tsx";
 import { type Config } from "@measured/puck";
 import "@measured/puck/puck.css";
+import { useEntityFields } from "../../hooks/useEntityFields.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../../internal/hooks/useQuickFindShortcut.ts";
@@ -37,6 +38,7 @@ export const Editor = ({
   const [devPageSets, setDevPageSets] = useState<any>(undefined);
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
+  const entityFields = useEntityFields();
 
   const {
     templateMetadata,
@@ -107,7 +109,8 @@ export const Editor = ({
     !templateMetadata ||
     !document ||
     !layoutDataFetched ||
-    !themeDataFetched;
+    !themeDataFetched ||
+    entityFields === null;
 
   const progress: number =
     60 * // @ts-expect-error adding bools is fine
@@ -115,8 +118,9 @@ export const Editor = ({
       !!templateMetadata +
       !!document +
       layoutDataFetched +
-      themeDataFetched) /
-      5);
+      themeDataFetched +
+      (entityFields === null)) /
+      6);
 
   return (
     <ErrorBoundary fallback={<></>} onError={logError}>
