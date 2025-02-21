@@ -11,7 +11,7 @@ import { YextSchemaField } from "../types/entityFields.ts";
  * hooks with a more user-friendly name.
  */
 export const usePlatformBridgeEntityFields = () => {
-  const [entityFields, setEntityFields] = useState<any>(undefined);
+  const [entityFields, setEntityFields] = useState<any>([]);
 
   useReceiveMessage("getTemplateStream", TARGET_ORIGINS, (send, payload) => {
     setEntityFields(payload.stream.schema.fields);
