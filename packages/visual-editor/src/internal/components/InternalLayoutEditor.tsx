@@ -120,41 +120,45 @@ export const InternalLayoutEditor = ({
     }
   };
 
+  const puckConfigWithRootFields = React.useMemo(() => {
+    return {
+      ...puckConfig,
+      root: {
+        ...puckConfig.root,
+        fields: {
+          title: YextEntityFieldSelector<any, string>({
+            label: "Title",
+            filter: {
+              types: ["type.string"],
+            },
+          }),
+          description: YextEntityFieldSelector<any, string>({
+            label: "Description",
+            filter: {
+              types: ["type.string"],
+            },
+          }),
+        },
+        defaultProps: {
+          title: {
+            field: "name",
+            constantValue: "",
+            constantValueEnabled: false,
+          },
+          description: {
+            field: "description",
+            constantValue: "",
+            constantValueEnabled: false,
+          },
+        },
+      },
+    };
+  }, [puckConfig]);
+
   return (
     <EntityFieldProvider>
       <Puck
-        config={{
-          ...puckConfig,
-          root: {
-            ...puckConfig.root,
-            fields: {
-              title: YextEntityFieldSelector<any, string>({
-                label: "Title",
-                filter: {
-                  types: ["type.string"],
-                },
-              }),
-              description: YextEntityFieldSelector<any, string>({
-                label: "Description",
-                filter: {
-                  types: ["type.string"],
-                },
-              }),
-            },
-            defaultProps: {
-              title: {
-                field: "name",
-                constantValue: "",
-                constantValueEnabled: false,
-              },
-              description: {
-                field: "description",
-                constantValue: "",
-                constantValueEnabled: false,
-              },
-            },
-          },
-        }}
+        config={puckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
