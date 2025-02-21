@@ -1,3 +1,19 @@
+#### 0.0.29 (2025-02-21)
+
+##### Chores
+
+- update semgrep_check.yml to use ubuntu-latest (#231) (e5c273be)
+
+##### New Features
+
+- add breadcrumbs component (#235) (55423b26)
+- add link styling section to theme config (#234) (2e6aba07)
+- add undo/redo buttons to theme manager (#232) (41fac97e)
+
+##### Bug Fixes
+
+- editor flickers when saving state (#238) (f4486910)
+
 #### 0.0.28 (2025-02-13)
 
 ##### New Features
