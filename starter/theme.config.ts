@@ -391,6 +391,25 @@ export const themeConfig: ThemeConfig = {
         type: "select",
         plugin: "fontSize",
         options: getFontSizeOptions(false),
+        default: "16px",
+      },
+    },
+  },
+  link: {
+    label: "Link Styling",
+    styles: {
+      color: {
+        label: "Text Color",
+        type: "select",
+        plugin: "colors",
+        options: getColorOptions(),
+        default: "var(--colors-palette-primary)",
+      },
+      fontSize: {
+        label: "Font Size",
+        type: "select",
+        plugin: "fontSize",
+        options: getFontSizeOptions(false),
         default: "12px",
       },
     },
