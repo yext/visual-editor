@@ -119,11 +119,13 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         )}
       </div>
 
-      <HeaderMobileMenu
-        isOpen={menuOpen}
-        links={links}
-        backgroundColor={backgroundColor}
-      />
+      {links?.length > 0 && (
+        <HeaderMobileMenu
+          isOpen={menuOpen}
+          links={links}
+          backgroundColor={backgroundColor}
+        />
+      )}
     </header>
   );
 };
