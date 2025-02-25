@@ -61,37 +61,51 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
   const socialLinks = [
     {
       name: "facebook",
-      link: document?._site?.facebookPageUrl,
+      link: document?._site?.facebookPageUrl
+        ? `https://www.facebook.com/${document._site.facebookPageUrl}`
+        : null,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
     },
     {
       name: "instagram",
-      link: document?._site?.instagramHandle,
+      link: document?._site?.instagramHandle
+        ? `https://www.instagram.com/${document._site.instagramHandle}`
+        : null,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
     },
     {
       name: "youtube",
-      link: document?._site?.youTubeChannelUrl,
+      link: document?._site?.youTubeChannelUrl
+        ? `https://www.youtube.com/${document._site.youTubeChannelUrl}`
+        : null,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
     },
     {
       name: "linkedIn",
-      link: document?._site?.linkedInUrl,
+      link: document?._site?.linkedInUrl
+        ? `https://www.linkedin.com/in/${document._site.linkedInUrl}`
+        : null,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
     },
     {
       name: "twitter",
-      link: document?._site?.twitterHandle,
+      link: document?._site?.twitterHandle
+        ? `https://twitter.com/${document._site.twitterHandle}`
+        : null,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
     },
     {
       name: "pinterest",
-      link: document?._site?.pinterestUrl,
+      link: document?._site?.pinterestUrl
+        ? `https://www.pinterest.com/${document._site.pinterestUrl}`
+        : null,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
-      name: "titok",
-      link: document?._site?.tikTokUrl,
+      name: "tiktok",
+      link: document?._site?.tikTokUrl
+        ? `https://www.tiktok.com/@${document._site.tikTokUrl}`
+        : null,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
   ].filter((link) => link.link);
