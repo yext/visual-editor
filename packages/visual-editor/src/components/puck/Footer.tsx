@@ -13,6 +13,13 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 
+type socialLink = {
+  name: string;
+  link: string;
+  prefix: string;
+  label: any;
+};
+
 const footerVariants = cva("", {
   variants: {
     backgroundColor: {
@@ -58,39 +65,46 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
 
   const links = document?._site?.footer?.links ?? [];
   const copyrightMessage = document?._site?.copyrightMessage;
-  const socialLinks = [
+  const socialLinks: socialLink[] = [
     {
       name: "facebook",
+      prefix: "https://www.facebook.com/",
       link: document?._site?.facebookPageUrl,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
     },
     {
       name: "instagram",
+      prefix: "https://www.instagram.com/",
       link: document?._site?.instagramHandle,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
     },
     {
       name: "youtube",
+      prefix: "https://www.youtube.com/",
       link: document?._site?.youTubeChannelUrl,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
     },
     {
       name: "linkedIn",
+      prefix: "https://www.linkedin.com/",
       link: document?._site?.linkedInUrl,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
     },
     {
       name: "twitter",
+      prefix: "https://www.twitter.com/",
       link: document?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
     },
     {
       name: "pinterest",
+      prefix: "https://www.pinterest.com/",
       link: document?._site?.pinterestUrl,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
       name: "titok",
+      prefix: "https://www.tiktok.com/@",
       link: document?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
@@ -158,7 +172,11 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
       {socialLinks.map((socialLink, idx) =>
         socialLink.link ? (
-          <Link key={idx} href={socialLink.link} eventName={socialLink.name}>
+          <Link
+            key={idx}
+            href={prependUrl(socialLink.prefix, socialLink.link)}
+            eventName={socialLink.name}
+          >
             {socialLink.label}
           </Link>
         ) : null
@@ -166,5 +184,12 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
     </div>
   );
 };
+
+function prependUrl(prefix: string, link: string): string {
+  if (link.startsWith(prefix)) {
+    return link;
+  }
+  return `${prefix}${link}`;
+}
 
 export { Footer, type FooterProps };
