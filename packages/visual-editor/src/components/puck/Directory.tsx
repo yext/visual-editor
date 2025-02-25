@@ -1,15 +1,9 @@
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
-import { ComponentConfig, Fields } from "@measured/puck";
-import { MaybeLink, MaybeLinkProps } from "./atoms/maybeLink.tsx";
+import { ComponentConfig } from "@measured/puck";
+import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { Address, HoursStatus } from "@yext/pages-components";
-import { FontSizeSelector } from "../editor/FontSizeSelector.tsx";
-import { VariantProps } from "class-variance-authority";
-import {
-  innerLayoutVariants,
-  // layoutFields,
-  layoutVariants,
-} from "./Layout.tsx";
+import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { Section } from "./atoms/section.tsx";
 import { themeManagerCn } from "../../utils/index.ts";
 
@@ -31,23 +25,19 @@ const sortDirectoryByAlphabetical = (directoryChildren: any[]) => {
 const DirectoryCard = ({
   profile,
   relativePrefixToRoot,
-  linkStyles,
 }: {
   profile: any;
   relativePrefixToRoot: string;
-  linkStyles: any;
 }) => {
   return (
     <div className="bg-white px-6 py-8 border h-full">
       <MaybeLink
-        className="hover:underline mb-4"
+        className="hover:underline text-link-fontSize text-link-color mb-4"
         href={
           relativePrefixToRoot && profile.slug
             ? relativePrefixToRoot + profile.slug
             : ""
         }
-        color={linkStyles.color}
-        fontSize={linkStyles.fontSize}
       >
         {profile.name}
       </MaybeLink>
@@ -74,20 +64,9 @@ const DirectoryCard = ({
 const DirectoryGrid = ({
   directoryChildren,
   relativePrefixToRoot,
-  linkStyles,
-  gridStyles: {
-    backgroundColor,
-    verticalPadding,
-    horizontalPadding,
-    gap,
-    maxContentWidth,
-    numColumns,
-  },
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
-  linkStyles: any;
-  gridStyles: any;
 }) => {
   const sortedDirectoryChildren =
     sortDirectoryByAlphabetical(directoryChildren);
@@ -96,9 +75,9 @@ const DirectoryGrid = ({
     <Section
       className={themeManagerCn(
         layoutVariants({
-          backgroundColor,
-          verticalPadding,
-          horizontalPadding,
+          backgroundColor: "default",
+          verticalPadding: "default",
+          horizontalPadding: "default",
         })
       )}
       maxWidth="full"
@@ -106,11 +85,11 @@ const DirectoryGrid = ({
     >
       <div
         className={themeManagerCn(
-          layoutVariants({ gap }),
-          innerLayoutVariants({ maxContentWidth })
+          layoutVariants({ gap: "default" }),
+          innerLayoutVariants({ maxContentWidth: "default" })
         )}
         style={{
-          gridTemplateColumns: `repeat(${numColumns}, 1fr)`,
+          gridTemplateColumns: `repeat(3, 1fr)`,
         }}
       >
         {sortedDirectoryChildren.map((child, idx) => (
@@ -118,7 +97,6 @@ const DirectoryGrid = ({
             <DirectoryCard
               profile={child.profile}
               relativePrefixToRoot={relativePrefixToRoot}
-              linkStyles={linkStyles}
             />
           </div>
         ))}
@@ -130,11 +108,9 @@ const DirectoryGrid = ({
 const DirectoryList = ({
   directoryChildren,
   relativePrefixToRoot,
-  linkStyles,
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
-  linkStyles: any;
 }) => {
   const sortedDirectoryChildren =
     sortDirectoryByAlphabetical(directoryChildren);
@@ -145,14 +121,12 @@ const DirectoryList = ({
         {sortedDirectoryChildren.map((child, idx) => (
           <li className="p-3" key={idx}>
             <MaybeLink
-              className="inline-block after:content-[attr(data-count)] after:ml-2 hover:underline"
+              className="inline-block after:content-[attr(data-count)] after:ml-2 hover:underline text-link-fontSize text-link-color"
               href={
                 relativePrefixToRoot
                   ? relativePrefixToRoot + child.slug
                   : child.slug
               }
-              color={linkStyles.color}
-              fontSize={linkStyles.fontSize}
             >
               {child.name}
             </MaybeLink>
@@ -169,14 +143,12 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
   return (
     <>
-      <BreadcrumbsComponent separator={separator} link={props.link} />
+      <BreadcrumbsComponent separator={separator} />
       {document.dm_directoryChildren &&
         isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={document.relativePrefixToRoot}
-            linkStyles={props.link}
-            gridStyles={props}
           />
         )}
       {document.dm_directoryChildren &&
@@ -184,79 +156,16 @@ const DirectoryComponent = (props: DirectoryProps) => {
           <DirectoryList
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={document.relativePrefixToRoot}
-            linkStyles={props.link}
           />
         )}
     </>
   );
 };
 
-const directoryFields: Fields<DirectoryProps> = {
-  link: {
-    type: "object",
-    label: "Link",
-    objectFields: {
-      fontSize: FontSizeSelector(),
-      color: {
-        label: "Font Color",
-        type: "select",
-        options: [
-          { label: "Default", value: "default" },
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-          { label: "Accent", value: "accent" },
-          { label: "Text", value: "text" },
-          { label: "Background", value: "background" },
-        ],
-      },
-    },
-  },
-  // GridOrList: {
-  //   label: "Grid or List",
-  //   type: "radio",
-  //   options: [
-  //     { label: "Grid", value: "grid" },
-  //     { label: "List", value: "list" },
-  //   ],
-  // },
-};
-
-export interface DirectoryProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {
+export interface DirectoryProps {
   separator?: string;
-  link: {
-    fontSize: MaybeLinkProps["fontSize"];
-    color: MaybeLinkProps["color"];
-  };
-  // GridOrList: string;
-  NumberOfColumns?: number;
 }
 
 export const Directory: ComponentConfig<DirectoryProps> = {
-  fields: directoryFields,
-  defaultProps: {
-    link: {
-      fontSize: "default",
-      color: "default",
-    },
-    // GridOrList: "",
-  },
-  // resolveFields: (data) => {
-  //   if (data.props.GridOrList === "grid") {
-  //     return {
-  //       ...directoryFields,
-  //       ...layoutFields,
-  //       NumberOfColumns: {
-  //         label: "# of Columns",
-  //         type: "number",
-  //         max: 12,
-  //         min: 1,
-  //       },
-  //     };
-  //   }
-  //   return directoryFields;
-  // },
   render: (props) => <DirectoryComponent {...props} />,
 };

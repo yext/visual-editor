@@ -1,12 +1,8 @@
 import { useDocument } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
-import { MaybeLink, MaybeLinkProps } from "./atoms/maybeLink.js";
+import { MaybeLink } from "./atoms/maybeLink.js";
 
 export type BreadcrumbsProps = {
-  link?: {
-    fontSize?: MaybeLinkProps["fontSize"];
-    color?: MaybeLinkProps["color"];
-  };
   separator?: string;
 };
 
@@ -40,9 +36,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
                 <li key={idx}>
                   <MaybeLink
                     href={isLast ? "" : href}
-                    fontSize={props.link?.fontSize}
-                    color={props.link?.color}
-                    className="underline hover:no-underline"
+                    className="text-link-color underline hover:no-underline"
                   >
                     {name}
                   </MaybeLink>
