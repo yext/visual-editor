@@ -16,8 +16,8 @@ import {
 type socialLink = {
   name: string;
   link: string;
-  prefix: string;
   label: any;
+  prefix?: string;
 };
 
 const footerVariants = cva("", {
@@ -68,43 +68,38 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
   const socialLinks: socialLink[] = [
     {
       name: "facebook",
-      prefix: "https://www.facebook.com/",
       link: document?._site?.facebookPageUrl,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
     },
     {
       name: "instagram",
-      prefix: "https://www.instagram.com/",
+      prefix: "//www.instagram.com/",
       link: document?._site?.instagramHandle,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
     },
     {
       name: "youtube",
-      prefix: "https://www.youtube.com/",
       link: document?._site?.youTubeChannelUrl,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
     },
     {
       name: "linkedIn",
-      prefix: "https://www.linkedin.com/",
       link: document?._site?.linkedInUrl,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
     },
     {
       name: "twitter",
-      prefix: "https://www.twitter.com/",
+      prefix: "//www.twitter.com/",
       link: document?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
     },
     {
       name: "pinterest",
-      prefix: "https://www.pinterest.com/",
       link: document?._site?.pinterestUrl,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
       name: "titok",
-      prefix: "https://www.tiktok.com/@",
       link: document?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
@@ -185,8 +180,8 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
   );
 };
 
-function prependUrl(prefix: string, link: string): string {
-  if (link.startsWith(prefix)) {
+function prependUrl(link: string, prefix?: string): string {
+  if (!prefix || link.startsWith(prefix)) {
     return link;
   }
   return `${prefix}${link}`;
