@@ -11,8 +11,8 @@ import {
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
   FontSizeSelector,
-  CTA,
 } from "../../index.js";
+import { Link } from "@yext/pages-components";
 
 const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
@@ -162,14 +162,14 @@ const Emails: React.FC<EmailsProps> = ({
             <li key={index} className={`mb-2 flex items-center`}>
               <img className={"mr-2"} src={mailIcon} />
               {includeHyperlink ? (
-                <CTA
-                  label={text}
-                  link={text}
-                  linkType={"Email"}
-                  variant={"link"}
+                <Link
+                  cta={{
+                    link: text,
+                    label: text,
+                    linkType: "Email",
+                  }}
                   className={classNameCn}
-                  borderRadius={"none"}
-                ></CTA>
+                />
               ) : (
                 <span>{text}</span>
               )}
