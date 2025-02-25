@@ -162,14 +162,14 @@ const FooterLinks = (props: { links: CTA[] }) => {
   );
 };
 
-const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
+const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
   return (
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
-      {socialLinks.map((socialLink, idx) =>
+      {socialLinks.map((socialLink: socialLink, idx: number) =>
         socialLink.link ? (
           <Link
             key={idx}
-            href={prependUrl(socialLink.prefix, socialLink.link)}
+            href={`${socialLink.prefix}${socialLink.link}`}
             eventName={socialLink.name}
           >
             {socialLink.label}
@@ -179,12 +179,5 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
     </div>
   );
 };
-
-function prependUrl(link: string, prefix?: string): string {
-  if (!prefix || link.startsWith(prefix)) {
-    return link;
-  }
-  return `${prefix}${link}`;
-}
 
 export { Footer, type FooterProps };
