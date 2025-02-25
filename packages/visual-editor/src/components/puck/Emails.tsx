@@ -13,7 +13,6 @@ import {
   FontSizeSelector,
   CTA,
 } from "../../index.js";
-import { LinkTypes } from "@yext/pages-components";
 
 const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
@@ -165,8 +164,8 @@ const Emails: React.FC<EmailsProps> = ({
               {includeHyperlink ? (
                 <CTA
                   label={text}
-                  linkType={LinkTypes.Email}
                   link={text}
+                  linkType={"Email"}
                   variant={"link"}
                   className={classNameCn}
                   borderRadius={"none"}
