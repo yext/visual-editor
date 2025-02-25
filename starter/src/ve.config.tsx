@@ -38,6 +38,8 @@ import {
   FooterProps,
   Breadcrumbs,
   BreadcrumbsProps,
+  Directory,
+  DirectoryProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -47,6 +49,7 @@ type MainProps = {
   Breadcrumbs: BreadcrumbsProps;
   Card: CardProps;
   CTA: CTAWrapperProps;
+  Directory: DirectoryProps;
   Emails: EmailsProps;
   Flex: FlexProps;
   Footer: FooterProps;
@@ -70,6 +73,7 @@ export const mainConfig: Config<MainProps> = {
     Breadcrumbs,
     Card,
     CTA,
+    Directory,
     Emails,
     Flex,
     Footer,
