@@ -13,6 +13,13 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 
+type socialLink = {
+  name: string;
+  link: string;
+  label: any;
+  prefix?: string;
+};
+
 const footerVariants = cva("", {
   variants: {
     backgroundColor: {
@@ -58,7 +65,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
 
   const links = document?._site?.footer?.links ?? [];
   const copyrightMessage = document?._site?.copyrightMessage;
-  const socialLinks = [
+  const socialLinks: socialLink[] = [
     {
       name: "facebook",
       link: document?._site?.facebookPageUrl,
@@ -66,6 +73,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     },
     {
       name: "instagram",
+      prefix: "//www.instagram.com/",
       link: document?._site?.instagramHandle,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
     },
@@ -81,6 +89,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     },
     {
       name: "twitter",
+      prefix: "//www.twitter.com/",
       link: document?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
     },
@@ -153,12 +162,16 @@ const FooterLinks = (props: { links: CTA[] }) => {
   );
 };
 
-const FooterSocialIcons = ({ socialLinks }: { socialLinks: any[] }) => {
+const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
   return (
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
-      {socialLinks.map((socialLink, idx) =>
+      {socialLinks.map((socialLink: socialLink, idx: number) =>
         socialLink.link ? (
-          <Link key={idx} href={socialLink.link} eventName={socialLink.name}>
+          <Link
+            key={idx}
+            href={`${socialLink.prefix}${socialLink.link}`}
+            eventName={socialLink.name}
+          >
             {socialLink.label}
           </Link>
         ) : null
