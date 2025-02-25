@@ -61,9 +61,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
   const socialLinks = [
     {
       name: "facebook",
-      link: document?._site?.facebookPageUrl
-        ? `https://www.facebook.com/${document._site.facebookPageUrl}`
-        : null,
+      link: document?._site?.facebookPageUrl,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
     },
     {
@@ -75,16 +73,12 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     },
     {
       name: "youtube",
-      link: document?._site?.youTubeChannelUrl
-        ? `https://www.youtube.com/${document._site.youTubeChannelUrl}`
-        : null,
+      link: document?._site?.youTubeChannelUrl,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
     },
     {
       name: "linkedIn",
-      link: document?._site?.linkedInUrl
-        ? `https://www.linkedin.com/in/${document._site.linkedInUrl}`
-        : null,
+      link: document?._site?.linkedInUrl,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
     },
     {
@@ -96,16 +90,12 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     },
     {
       name: "pinterest",
-      link: document?._site?.pinterestUrl
-        ? `https://www.pinterest.com/${document._site.pinterestUrl}`
-        : null,
+      link: document?._site?.pinterestUrl,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
-      name: "tiktok",
-      link: document?._site?.tikTokUrl
-        ? `https://www.tiktok.com/@${document._site.tikTokUrl}`
-        : null,
+      name: "titok",
+      link: document?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
   ].filter((link) => link.link);
