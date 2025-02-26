@@ -13,12 +13,17 @@ const isDirectoryGrid = (children: string | any[]): boolean => {
   return children.length > 0 && "address" in children[0];
 };
 
-const sortDirectoryByAlphabetical = (directoryChildren: any[]) => {
+// sortAlphabetically takes in an array of objects and sorts them alphabetically.
+// They are sorted by the value of the field declared by sortBy.
+// ex. if sortBy is name, the directoryChildren will be ordered by name alphabetically.
+const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
   const sortFn = (p1: any, p2: any) => {
-    if (p1.name === p2.name) {
+    const val1 = p1[sortBy] ?? "";
+    const val2 = p2[sortBy] ?? "";
+    if (val1 === val2) {
       return 0;
     }
-    return p1.name < p2.name ? -1 : 1;
+    return val1 < val2 ? -1 : 1;
   };
 
   return directoryChildren.sort(sortFn);
@@ -70,8 +75,7 @@ const DirectoryGrid = ({
   directoryChildren: any[];
   relativePrefixToRoot: string;
 }) => {
-  const sortedDirectoryChildren =
-    sortDirectoryByAlphabetical(directoryChildren);
+  const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
     <Section
@@ -115,8 +119,7 @@ const DirectoryList = ({
   directoryChildren: any[];
   relativePrefixToRoot: string;
 }) => {
-  const sortedDirectoryChildren =
-    sortDirectoryByAlphabetical(directoryChildren);
+  const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
     <div className="container components">
