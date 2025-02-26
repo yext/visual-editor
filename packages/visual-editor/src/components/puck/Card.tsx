@@ -13,7 +13,7 @@ import {
   getFontWeightOverrideOptions,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
-import { CTA, CTAProps } from "./atoms/cta.js";
+import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import {
   Heading,
   HeadingProps,
@@ -58,6 +58,7 @@ interface CardProps {
   };
   cta: {
     entityField: YextEntityField<CTAProps>;
+    linkType: CTAProps["linkType"];
     variant: CTAProps["variant"];
     fontSize: CTAProps["fontSize"];
   };
@@ -271,6 +272,7 @@ const cardFields: Fields<CardProps> = {
         ],
       },
       fontSize: FontSizeSelector(),
+      linkType: linkTypeFields,
     },
   },
   backgroundColor: {
@@ -379,9 +381,10 @@ const CardWrapper = ({
           {resolvedCTA && (
             <CTA
               variant={cta.variant}
-              label={resolvedCTA.name}
-              link={resolvedCTA.link ?? "#"}
+              label={resolvedCTA.label ?? ""}
+              link={resolvedCTA?.link || "#"}
               fontSize={cta.fontSize}
+              linkType={cta.linkType}
             />
           )}
         </div>
@@ -454,6 +457,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
       },
       fontSize: "default",
       variant: "primary",
+      linkType: "URL",
     },
     backgroundColor: "bg-card-backgroundColor",
   },

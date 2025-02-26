@@ -94,8 +94,8 @@ const GetDirections = ({
     >
       <CTA
         label={"Get Directions"}
-        link={searchQuery ?? "#"}
-        linkType={"URL"}
+        link={searchQuery || "#"}
+        linkType={"DRIVING_DIRECTIONS"}
         size={size}
         variant={variant}
         fontSize={fontSize}

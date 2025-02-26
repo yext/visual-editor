@@ -11,7 +11,7 @@ import {
   FontSizeSelector,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
-import { CTA, CTAProps } from "./atoms/cta.js";
+import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
@@ -42,6 +42,7 @@ interface PromoProps {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
     fontSize: CTAProps["fontSize"];
+    linkType: CTAProps["linkType"];
   };
 }
 
@@ -186,6 +187,7 @@ const promoFields: Fields<PromoProps> = {
         ],
       },
       fontSize: FontSizeSelector(),
+      linkType: linkTypeFields,
     },
   },
 };
@@ -261,8 +263,9 @@ const PromoWrapper: React.FC<PromoProps> = ({
           {resolvedCTA && (
             <CTA
               variant={cta.variant}
-              label={resolvedCTA.name}
-              link={resolvedCTA.link ?? "#"}
+              label={resolvedCTA.label ?? ""}
+              link={resolvedCTA?.link || "#"}
+              linkType={cta.linkType}
               fontSize={cta.fontSize}
             />
           )}
@@ -321,6 +324,7 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
       },
       fontSize: "default",
       variant: "primary",
+      linkType: "URL",
     },
   },
   render: (props) => <PromoWrapper {...props} />,
