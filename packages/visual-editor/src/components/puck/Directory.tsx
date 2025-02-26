@@ -7,7 +7,9 @@ import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { Section } from "./atoms/section.tsx";
 import { themeManagerCn } from "../../utils/index.ts";
 
-const isDirectoryGrid = (children: string | any[]) => {
+// isDirectoryGrid indicates whether the children should appear in
+// DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
+const isDirectoryGrid = (children: string | any[]): boolean => {
   return children.length > 0 && "address" in children[0];
 };
 
@@ -22,6 +24,7 @@ const sortDirectoryByAlphabetical = (directoryChildren: any[]) => {
   return directoryChildren.sort(sortFn);
 };
 
+// DirectoryCard is the card used within DirectoryGrid.
 const DirectoryCard = ({
   profile,
   relativePrefixToRoot,
@@ -30,18 +33,17 @@ const DirectoryCard = ({
   relativePrefixToRoot: string;
 }) => {
   return (
-    <div className="bg-white px-6 py-8 border h-full">
+    <div className="bg-card-backgroundColor px-6 py-8 border h-full">
       <MaybeLink
-        className="hover:underline text-link-fontSize text-link-color mb-4"
+        className="hover:underline text-heading1-fontSize text-link-color mb-4"
         href={
           relativePrefixToRoot && profile.slug
             ? relativePrefixToRoot + profile.slug
-            : ""
+            : profile.slug
         }
       >
         {profile.name}
       </MaybeLink>
-
       {profile.hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-color">
           <HoursStatus
@@ -51,7 +53,6 @@ const DirectoryCard = ({
           />
         </div>
       )}
-
       {profile.address && (
         <div className="font-body-fontFamily text-body-color">
           <Address address={profile.address} lines={[["line1"]]} />
@@ -61,6 +62,7 @@ const DirectoryCard = ({
   );
 };
 
+// DirectoryGrid uses PageSection's theme config for styling.
 const DirectoryGrid = ({
   directoryChildren,
   relativePrefixToRoot,
@@ -86,7 +88,8 @@ const DirectoryGrid = ({
       <div
         className={themeManagerCn(
           layoutVariants({ gap: "default" }),
-          innerLayoutVariants({ maxContentWidth: "default" })
+          innerLayoutVariants({ maxContentWidth: "default" }),
+          "flex flex-col md:grid md:grid-cols-12"
         )}
         style={{
           gridTemplateColumns: `repeat(3, 1fr)`,
@@ -95,7 +98,7 @@ const DirectoryGrid = ({
         {sortedDirectoryChildren.map((child, idx) => (
           <div className="w-full" key={idx}>
             <DirectoryCard
-              profile={child.profile}
+              profile={child}
               relativePrefixToRoot={relativePrefixToRoot}
             />
           </div>
@@ -116,8 +119,8 @@ const DirectoryList = ({
     sortDirectoryByAlphabetical(directoryChildren);
 
   return (
-    <div className="container my-8 components">
-      <ul className="lg:columns-4 md:columns-3 sm:columns-2 columns-1 -m-3">
+    <div className="container components">
+      <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => (
           <li className="p-3" key={idx}>
             <MaybeLink
@@ -143,7 +146,9 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
   return (
     <>
-      <BreadcrumbsComponent separator={separator} />
+      <div className="flex justify-center">
+        <BreadcrumbsComponent separator={separator} />
+      </div>
       {document.dm_directoryChildren &&
         isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryGrid
