@@ -1,10 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Button, ButtonProps } from "./atoms/button.js";
+import { ButtonProps } from "./atoms/button.js";
 import {
   getDirections,
   GetDirectionsConfig,
-  Link,
   Coordinate,
 } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
@@ -16,6 +15,7 @@ import {
   FontSizeSelector,
   EntityField,
   BorderRadiusSelector,
+  CTA,
 } from "../../index.js";
 
 type GetDirectionsProps = {
@@ -92,17 +92,15 @@ const GetDirections = ({
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
-      <Button
-        asChild
-        variant={variant}
+      <CTA
+        label={"Get Directions"}
+        link={searchQuery ?? "#"}
+        linkType={"URL"}
         size={size}
+        variant={variant}
         fontSize={fontSize}
         borderRadius={borderRadius}
-      >
-        <Link href={searchQuery ?? "#"} target="_blank">
-          {"Get Directions"}
-        </Link>
-      </Button>
+      />
     </EntityField>
   );
 };
