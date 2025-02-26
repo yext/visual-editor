@@ -11,7 +11,9 @@ import { YextSchemaField } from "../types/entityFields.ts";
  * hooks with a more user-friendly name.
  */
 export const usePlatformBridgeEntityFields = () => {
-  const [entityFields, setEntityFields] = useState<any>(undefined);
+  const [entityFields, setEntityFields] = useState<YextSchemaField[] | null>(
+    null
+  );
 
   useReceiveMessage("getTemplateStream", TARGET_ORIGINS, (send, payload) => {
     setEntityFields(payload.stream.schema.fields);
@@ -29,7 +31,7 @@ export const usePlatformBridgeEntityFields = () => {
     });
   });
 
-  return entityFields as YextSchemaField[];
+  return entityFields;
 };
 
 const assignDefinitions = (entityFields: any): YextSchemaField[] => {
@@ -51,13 +53,15 @@ const assignDefinitions = (entityFields: any): YextSchemaField[] => {
   });
 };
 
-const EntityFieldsContext = React.createContext<YextSchemaField[] | undefined>(
-  undefined
-);
+const EntityFieldsContext = React.createContext<
+  YextSchemaField[] | null | undefined
+>(undefined);
 
 const useEntityFields = () => {
   const context = React.useContext(EntityFieldsContext);
-  if (!context) {
+  // context === undefined means useEntityFields outside VisualEditorProvider
+  // context === null means usePlatformBridgeEntityFields has not received a message yet
+  if (context === undefined) {
     throw new Error("useEntityFields must be used within VisualEditorProvider");
   }
 

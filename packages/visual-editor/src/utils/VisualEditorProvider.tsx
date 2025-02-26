@@ -15,7 +15,7 @@ type UniversalProps<T> = {
 };
 
 type EditorProps = {
-  entityFields: YextSchemaField[];
+  entityFields: YextSchemaField[] | null;
   tailwindConfig: TailwindConfig;
 };
 
