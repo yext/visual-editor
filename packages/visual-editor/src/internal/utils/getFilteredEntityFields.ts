@@ -140,6 +140,9 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   filter: RenderEntityFieldFilter<T>
 ) => {
   const entityFields = useEntityFields();
+  if (!entityFields) {
+    return [];
+  }
 
   let filteredEntityFields = entityFields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)

@@ -1,17 +1,19 @@
 import * as React from "react";
-import { Link, CTA, ImageType, Image } from "@yext/pages-components";
+import { Link, CTA, Image, ComplexImageType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  EntityField,
-  resolveYextEntityField,
-  themeManagerCn,
-  useDocument,
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "../../index.ts";
 import { cva, VariantProps } from "class-variance-authority";
+import { EntityField, useDocument } from "../../index.ts";
+import { MaybeLink } from "./atoms/maybeLink.tsx";
+import { FaTimes, FaBars } from "react-icons/fa";
 
-const PLACEHOLDER_LOGO_URL = "https://placehold.co/50";
+const PLACEHOLDER_IMAGE: ComplexImageType = {
+  image: {
+    url: "https://placehold.co/50",
+    height: 50,
+    width: 50,
+    alternateText: "Placeholder Logo",
+  },
+};
 
 const headerVariants = cva("", {
   variants: {
@@ -29,46 +31,9 @@ const headerVariants = cva("", {
   },
 });
 
-export interface HeaderProps extends VariantProps<typeof headerVariants> {
-  logo: {
-    image: YextEntityField<ImageType>;
-  };
-  links: { cta: YextEntityField<CTA> }[];
-}
+export type HeaderProps = VariantProps<typeof headerVariants>;
 
 const headerFields: Fields<HeaderProps> = {
-  logo: {
-    type: "object",
-    label: "Logo",
-    objectFields: {
-      image: YextEntityFieldSelector<any, ImageType>({
-        label: "Image",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-    },
-  },
-  links: {
-    type: "array",
-    label: "Links",
-    arrayFields: {
-      cta: YextEntityFieldSelector<any, CTA>({
-        label: "Call To Action",
-        filter: {
-          types: ["type.cta"],
-        },
-      }),
-    },
-    getItemSummary: (_, i) => `Link ${i !== undefined ? i + 1 : ""}`,
-    defaultItemProps: {
-      cta: {
-        field: "",
-        constantValue: { link: "#", label: "Link" },
-        constantValueEnabled: true,
-      },
-    },
-  },
   backgroundColor: {
     label: "Background Color",
     type: "select",
@@ -85,97 +50,146 @@ const headerFields: Fields<HeaderProps> = {
 
 export const Header: ComponentConfig<HeaderProps> = {
   fields: headerFields,
-  defaultProps: {
-    logo: {
-      image: {
-        field: "",
-        constantValue: {
-          height: 50,
-          width: 50,
-          url: PLACEHOLDER_LOGO_URL,
-        },
-        constantValueEnabled: true,
-      },
-    },
-    links: [
-      {
-        cta: {
-          field: "",
-          constantValue: { link: "#", label: "Link" },
-          constantValueEnabled: true,
-        },
-      },
-      {
-        cta: {
-          field: "",
-          constantValue: { link: "#", label: "Link" },
-          constantValueEnabled: true,
-        },
-      },
-      {
-        cta: {
-          field: "",
-          constantValue: { link: "#", label: "Link" },
-          constantValueEnabled: true,
-        },
-      },
-    ],
-  },
   label: "Header",
   render: (props) => <HeaderComponent {...props} />,
 };
 
 const HeaderComponent: React.FC<HeaderProps> = (props) => {
-  const document = useDocument();
-  const { logo, links, backgroundColor } = props;
+  const document: {
+    _site?: {
+      header?: {
+        links?: CTA[];
+      };
+      logo?: ComplexImageType;
+    };
+  } = useDocument();
+  const { backgroundColor } = props;
+  const links = document._site?.header?.links ?? [];
+  const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  const resolvedLogo = resolveYextEntityField<ImageType>(document, logo.image);
+  return (
+    <HeaderLayout links={links} logo={logo} backgroundColor={backgroundColor} />
+  );
+};
 
-  const resolvedLinks = links
-    ?.map((link) => resolveYextEntityField<CTA>(document, link.cta))
-    .filter((link) => link !== undefined);
+interface HeaderLayoutProps extends HeaderProps {
+  links: CTA[];
+  logoLink?: string;
+  logo?: ComplexImageType;
+}
+
+const HeaderLayout = (props: HeaderLayoutProps) => {
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const { logo, logoLink, links, backgroundColor } = props;
 
   return (
     <header
-      className={themeManagerCn(
-        "w-full bg-white components",
-        headerVariants({ backgroundColor })
-      )}
+      className={`components font-body-fontFamily relative ${headerVariants({ backgroundColor })}`}
     >
-      <div className="mx-auto flex max-w-6xl flex-1 items-center justify-between px-4 py-6">
-        {resolvedLogo && (
+      <div className="container mx-auto py-5 flex justify-start md:justify-between px-4 sm:px-8 lg:px-16 xl:px-20 items-center">
+        {logo && (
           <EntityField
-            displayName="Logo"
-            fieldId={logo.image.field}
-            constantValueEnabled={logo.image.constantValueEnabled}
+            displayName="Business Logo"
+            fieldId={"site.businessLogo"}
           >
-            <Image
-              image={resolvedLogo}
-              className="w-full h-full object-cover"
-            />
+            <HeaderLogo logo={logo} logoLink={logoLink} />
           </EntityField>
         )}
-        <div className="flex items-center justify-end space-x-4">
-          <ul className="flex space-x-8">
-            {resolvedLinks?.map((item, idx) => (
-              <li
-                key={idx}
-                className="cursor-pointer font-bold text-header-linkColor text-header-linkFontSize hover:underline"
-              >
-                {item.link && (
-                  <EntityField
-                    displayName="Link"
-                    fieldId={links[idx].cta.field}
-                    constantValueEnabled={links[idx].cta.constantValueEnabled}
-                  >
-                    <Link cta={item} eventName={`header-link-${item.label}`} />
-                  </EntityField>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+
+        {links?.length > 0 && (
+          <>
+            <EntityField
+              displayName="Header Links"
+              fieldId={"site.header.links"}
+            >
+              <HeaderLinks links={links} />
+            </EntityField>
+            <button
+              className="flex md:hidden absolute p-4 right-0 top-1/2 -translate-y-1/2"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close header menu" : "Open header menu"}
+            >
+              {menuOpen ? (
+                <FaTimes size={"1.5rem"} />
+              ) : (
+                <FaBars size={"1.5rem"} />
+              )}
+            </button>
+          </>
+        )}
       </div>
+
+      {links?.length > 0 && (
+        <HeaderMobileMenu
+          isOpen={menuOpen}
+          links={links}
+          backgroundColor={backgroundColor}
+        />
+      )}
     </header>
+  );
+};
+
+const HeaderLogo = (props: { logo: ComplexImageType; logoLink?: string }) => {
+  return (
+    <MaybeLink href={props.logoLink}>
+      <div className="flex mr-2 h-[50px]">
+        <Image
+          image={props.logo}
+          layout="aspect"
+          aspectRatio={props.logo.image.width / props.logo.image.height}
+        />
+      </div>
+    </MaybeLink>
+  );
+};
+
+const HeaderLinks = (props: { links: CTA[] }) => {
+  return (
+    <div className="hidden md:flex items-center">
+      <ul className="flex gap-4 lg:gap-10">
+        {props.links.map((item: CTA, idx) => (
+          <li key={item.link}>
+            <Link
+              className="text-header-linkColor text-header-linkFontSize hover:underline"
+              cta={item}
+              eventName={`headerlink${idx}`}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+type HeaderMobileMenuProps = {
+  isOpen?: boolean;
+  links: CTA[];
+  backgroundColor: VariantProps<typeof headerVariants>["backgroundColor"];
+};
+
+const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
+  const { isOpen, backgroundColor, links } = props;
+  return (
+    <div
+      className={
+        `${isOpen ? "visible" : "hidden"} ${headerVariants({ backgroundColor })}` +
+        "components absolute top-full left-0 right-0 h-screen z-50"
+      }
+    >
+      <div className={`container ${headerVariants({ backgroundColor })}`}>
+        <ul className="flex flex-col px-4">
+          {links.map((item: CTA, idx) => (
+            <li key={item.link}>
+              <Link
+                className="py-3 block text-header-linkColor text-header-linkFontSize"
+                cta={item}
+                eventName={`headermobilelink${idx}`}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };

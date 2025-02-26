@@ -48,6 +48,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
           className={themeManagerCn(
             layoutVariants({ gap }),
             innerLayoutVariants({ maxContentWidth }),
+            "flex flex-col md:grid md:grid-cols-12",
             className
           )}
           ref={ref}

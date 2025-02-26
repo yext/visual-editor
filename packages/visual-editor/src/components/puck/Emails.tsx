@@ -12,6 +12,7 @@ import {
   getFontWeightOverrideOptions,
   FontSizeSelector,
 } from "../../index.js";
+import { Link } from "@yext/pages-components";
 
 const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
@@ -144,23 +145,34 @@ const Emails: React.FC<EmailsProps> = ({
     resolvedEmailList = [resolvedEmailList];
   }
 
+  const classNameCn = themeManagerCn(
+    emailsVariants({ fontSize, fontWeight, color, includeHyperlink })
+  );
+
   return (
     <EntityField
       displayName="Email List"
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >
-      <ul
-        className={themeManagerCn(
-          emailsVariants({ fontSize, fontWeight, color, includeHyperlink })
-        )}
-      >
+      <ul className={classNameCn}>
         {resolvedEmailList
           .slice(0, Math.min(resolvedEmailList.length, listLength))
           .map((text: any, index: any) => (
             <li key={index} className={`mb-2 flex items-center`}>
               <img className={"mr-2"} src={mailIcon} />
-              <span>{includeHyperlink ? <a href={text}>{text}</a> : text}</span>
+              {includeHyperlink ? (
+                <Link
+                  cta={{
+                    link: text,
+                    label: text,
+                    linkType: "Email",
+                  }}
+                  className={classNameCn}
+                />
+              ) : (
+                <span>{text}</span>
+              )}
             </li>
           ))}
       </ul>

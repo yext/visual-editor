@@ -1,3 +1,20 @@
+#### 0.0.30 (2025-02-25)
+
+##### New Features
+
+- prepend prefix to social fields (#241) (221b98a7)
+- update Emails to use Link component (#223) (daa3f087)
+
+##### Bug Fixes
+
+- grid columns on mobile (#242) (a83837ce)
+- useEntityFields must be used within VisualEditorProvider (#239) (d06dfee7)
+
+##### Refactors
+
+- header changes (#236) (4d4472c2)
+- footer adjustments (#237) (d7f747a8)
+
 #### 0.0.29 (2025-02-21)
 
 ##### Chores
