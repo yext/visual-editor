@@ -104,10 +104,10 @@ import {
   EntityFieldType,
   YextEntityFieldSelector,
   resolveYextEntityField,
+  useDocument,
 } from "@yext/visual-editor";
 import { MyFieldType, TemplateStream } from "../types/autogen";
 import { config } from "../templates/myTemplate";
-import { useDocument } from "@yext/pages/util";
 
 export type ExampleProps = {
   myField: {
