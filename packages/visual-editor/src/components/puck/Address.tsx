@@ -93,7 +93,7 @@ const Address = ({
                 cta={{
                   link: coordinates,
                   label: "Get Directions",
-                  linkType: "URL",
+                  linkType: "DRIVING_DIRECTIONS",
                 }}
                 target="_blank"
                 className="font-bold text-link-color text-link-fontSize underline hover:no-underline md:px-4;"
