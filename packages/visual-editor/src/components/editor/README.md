@@ -37,7 +37,9 @@ const Edit: () => JSX.Element = () => {
 
   return (
     <VisualEditorProvider
-      document={entityDocument}
+      templateProps={{
+        document: entityDocument
+      }}
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >

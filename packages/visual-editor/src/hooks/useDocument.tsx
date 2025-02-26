@@ -1,14 +1,28 @@
 import * as React from "react";
 
-const DocumentContext = React.createContext<any | undefined>(undefined);
+const TemplatePropsContext = React.createContext<any | undefined>(undefined);
 
-const useDocument = <T,>(): T => {
-  const context = React.useContext(DocumentContext);
+const useTemplateProps = <T,>(): T => {
+  const context = React.useContext(TemplatePropsContext);
   if (!context) {
-    throw new Error("useDocument must be used within VisualEditorProvider");
+    throw new Error(
+      "useTemplateProps must be used within VisualEditorProvider"
+    );
   }
 
   return context as T;
 };
 
-export { useDocument, DocumentContext };
+const useDocument = <T,>(): T => {
+  const context = React.useContext(TemplatePropsContext);
+  if (!context) {
+    throw new Error("useDocument must be used within VisualEditorProvider");
+  }
+  if (!context.document) {
+    throw new Error("document does not exist on TemplateProps");
+  }
+
+  return context.document as T;
+};
+
+export { useDocument, useTemplateProps, TemplatePropsContext };

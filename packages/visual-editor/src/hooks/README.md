@@ -1,17 +1,49 @@
 # Hooks
 
+## useTemplateProps
+
+A React hook that returns the templateProps stored in Context. Must be used within the VisualEditorProvider.
+
+ex.
+
+```tsx
+export const MyComponent = () => {
+  const { document, relativePrefixToRoot } = useTemplateProps();
+};
+```
+
+## useDocument
+
+A React hook that returns a Content stream document stored in Context. Must be used within the VisualEditorProvider
+
+ex.
+
+```tsx
+export const MyComponent = () => {
+  const {
+    hours,
+    address,
+    name: locationName,
+    c_hero: hero,
+  } = useDocument<LocationStream>();
+};
+```
+
 ## usePlatformBridgeDocument
 
 Use this hook to capture the entityDocument from the Yext platform in your `edit.tsx` file.
 This is a requirement to make your repo VE compatible and should only be used once - in `edit.tsx`.
 
-Meant to be used in conjunction with the [VisualEditorProvider](https://github.com/yext/pages/blob/main/packages/pages/src/utils/README.md#visualeditorprovider) from @yext/pages. This provides the data for [useDocument()](https://github.com/yext/pages/blob/main/packages/pages/src/util/README.md#usedocument) to capture while viewing templates from the Visual Editor in platform.
+Meant to be used in conjunction with the [VisualEditorProvider](../utils/README.md#visualeditorprovider). This provides the data for [useDocument()](#usedocument) to capture while viewing templates from the Visual Editor in platform.
 
 ### Usage
 
 ```tsx
-import { Editor, usePlatformBridgeDocument } from "@yext/visual-editor";
-import { VisualEditorProvider } from "@yext/pages";
+import {
+  Editor,
+  usePlatformBridgeDocument,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 
 const Edit: () => JSX.Element = () => {
   const entityDocument = usePlatformBridgeDocument();
@@ -19,7 +51,9 @@ const Edit: () => JSX.Element = () => {
 
   return (
     <VisualEditorProvider
-      document={entityDocument}
+      templateProps={{
+        document: entityDocument,
+      }}
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >
@@ -55,7 +89,9 @@ const Edit: () => JSX.Element = () => {
 
   return (
     <VisualEditorProvider
-      document={entityDocument}
+      templateProps={{
+        document: entityDocument,
+      }}
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >

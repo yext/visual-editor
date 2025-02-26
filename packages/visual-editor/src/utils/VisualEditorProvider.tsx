@@ -1,5 +1,5 @@
 import React from "react";
-import { DocumentContext } from "../hooks/useDocument.tsx";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TailwindConfig } from "./themeResolver.ts";
 import { YextSchemaField } from "../types/entityFields.ts";
@@ -10,7 +10,7 @@ type AllOrNothing<T extends Record<string, any>> =
   | Partial<Record<keyof T, never>>;
 
 type UniversalProps<T> = {
-  document: T;
+  templateProps: T;
   children: React.ReactNode;
 };
 
@@ -23,19 +23,19 @@ type VisualEditorProviderProps<T> = UniversalProps<T> &
   AllOrNothing<EditorProps>;
 
 const VisualEditorProvider = <T,>({
-  document,
+  templateProps,
   entityFields,
   tailwindConfig,
   children,
 }: VisualEditorProviderProps<T>) => {
   return (
-    <DocumentContext.Provider value={document}>
+    <TemplatePropsContext.Provider value={templateProps}>
       <EntityFieldsContext.Provider value={entityFields}>
         <TailwindConfigContext.Provider value={tailwindConfig}>
           {children}
         </TailwindConfigContext.Provider>
       </EntityFieldsContext.Provider>
-    </DocumentContext.Provider>
+    </TemplatePropsContext.Provider>
   );
 };
 
