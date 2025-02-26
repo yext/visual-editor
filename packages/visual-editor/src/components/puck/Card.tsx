@@ -382,7 +382,7 @@ const CardWrapper = ({
             <CTA
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
-              link={resolvedCTA?.link || "#"}
+              link={resolvedCTA.link || "#"}
               fontSize={cta.fontSize}
               linkType={cta.linkType}
             />

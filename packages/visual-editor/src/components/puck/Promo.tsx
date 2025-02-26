@@ -264,7 +264,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
             <CTA
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
-              link={resolvedCTA?.link || "#"}
+              link={resolvedCTA.link || "#"}
               linkType={cta.linkType}
               fontSize={cta.fontSize}
             />
