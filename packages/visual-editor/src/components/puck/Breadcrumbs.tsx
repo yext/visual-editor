@@ -17,7 +17,7 @@ const getDirectoryParents = (
   return [];
 };
 
-const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
+export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
   const document = useDocument<any>();
   const breadcrumbs = getDirectoryParents(document);

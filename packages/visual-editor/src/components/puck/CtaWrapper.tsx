@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps } from "./atoms/cta.js";
+import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import {
   useDocument,
   resolveYextEntityField,
@@ -17,6 +17,7 @@ interface CTAWrapperProps {
   size: CTAProps["size"];
   borderRadius: CTAProps["borderRadius"];
   fontSize: CTAProps["fontSize"];
+  linkType: CTAProps["linkType"];
   className?: CTAProps["className"];
 }
 
@@ -43,6 +44,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       { label: "Large", value: "large" },
     ],
   },
+  linkType: linkTypeFields,
   fontSize: FontSizeSelector("Font Size", false),
   borderRadius: BorderRadiusSelector(),
 };
@@ -91,6 +93,7 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     variant: "primary",
     fontSize: "default",
     borderRadius: "default",
+    linkType: "URL",
     size: "small",
   },
   render: (props) => <CTAWrapper {...props} />,
