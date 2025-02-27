@@ -79,6 +79,12 @@ export const ui: Registry["items"] = [
     files: [{ path: "CtaWrapper.tsx", type: "registry:ui" }],
   },
   {
+    name: "Directory",
+    type: "registry:ui",
+    registryDependencies: ["maybeLink, Breadcrumbs"],
+    files: [{ path: "Directory.tsx", type: "registry:ui" }],
+  },
+  {
     name: "Emails",
     type: "registry:ui",
     registryDependencies: ["mail_outline"],

@@ -7906,6 +7906,42 @@ export const devTemplateStream = {
           },
         },
         {
+          name: "dm_directoryChildren",
+          definition: {
+            name: "dm_directoryChildren",
+            registryId: "location.custom.1000125503.directory_children.1",
+            typeRegistryId: "type.entity_reference",
+            type: {
+              documentType: "DOCUMENT_TYPE_ENTITY",
+            },
+            isList: true,
+          },
+          children: {
+            fields: [
+              {
+                name: "name",
+                definition: {
+                  name: "name",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "slug",
+                definition: {
+                  name: "slug",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
           name: "dm_directoryParents_default_directory",
           definition: {
             name: "dm_directoryParents_default_directory",

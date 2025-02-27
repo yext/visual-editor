@@ -18,3 +18,4 @@ export { Phone, type PhoneProps } from "./Phone.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";
+export { Directory, type DirectoryProps } from "./Directory.tsx";
