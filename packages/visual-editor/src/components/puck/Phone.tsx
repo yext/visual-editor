@@ -143,7 +143,7 @@ const Phone: React.FC<PhoneProps> = ({
             cta={{
               link: resolvedPhone,
               label: formattedPhoneNumber,
-              linkType: "Phone",
+              linkType: "PHONE",
             }}
             className={classNameCn}
           />
