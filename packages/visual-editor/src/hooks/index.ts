@@ -3,7 +3,11 @@ export {
   useEntityFields,
   usePlatformBridgeEntityFields,
 } from "./useEntityFields.tsx";
-export { useDocument, DocumentContext } from "./useDocument.tsx";
+export {
+  useDocument,
+  useTemplateProps,
+  TemplatePropsContext,
+} from "./useDocument.tsx";
 export {
   useTailwindConfig,
   TailwindConfigContext,

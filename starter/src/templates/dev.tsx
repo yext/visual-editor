@@ -121,7 +121,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
       </div>
       <div>
         <VisualEditorProvider
-          document={document}
+          templateProps={props}
           entityFields={entityFields}
           tailwindConfig={tailwindConfig}
         >
