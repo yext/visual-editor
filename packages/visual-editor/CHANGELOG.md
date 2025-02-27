@@ -1,3 +1,15 @@
+#### 0.0.31 (2025-02-27)
+
+##### New Features
+
+- add includeHyperlink option to Phone component (#246) (fd1f0190)
+- add useTemplateProps (#245) (88c0caca)
+- add Directory component (#243) (d7a4c754)
+
+##### Refactors
+
+- update components to use Link (#244) (a4f88b4b)
+
 #### 0.0.30 (2025-02-25)
 
 ##### New Features
