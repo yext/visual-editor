@@ -122,7 +122,7 @@ const DirectoryList = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <div className="container components">
+    <div className="container components mx-auto px-4 sm:px-8 lg:px-16 xl:px-20">
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => (
           <li className="p-3" key={idx}>
