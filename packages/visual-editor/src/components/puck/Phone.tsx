@@ -11,6 +11,7 @@ import {
 } from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
 import parsePhoneNumber from "libphonenumber-js";
+import { Link } from "@yext/pages-components";
 
 const phoneVariants = cva(
   "components flex gap-2 items-center text-body-fontSize font-body-fontFamily",
@@ -36,10 +37,15 @@ const phoneVariants = cva(
         text: "text-palette-text",
         background: "text-palette-background",
       },
+      includeHyperlink: {
+        true: "underline hover:no-underline",
+        false: "",
+      },
     },
     defaultVariants: {
       fontWeight: "default",
       color: "default",
+      includeHyperlink: true,
     },
   }
 );
@@ -97,9 +103,23 @@ const PhoneFields: Fields<PhoneProps> = {
       { label: "Background", value: "background" },
     ],
   },
+  includeHyperlink: {
+    label: "Include Hyperlink",
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  },
 };
 
-const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
+const Phone: React.FC<PhoneProps> = ({
+  phone,
+  format,
+  fontWeight,
+  color,
+  includeHyperlink,
+}) => {
   const document = useDocument();
   const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
@@ -107,15 +127,29 @@ const Phone: React.FC<PhoneProps> = ({ phone, format, fontWeight, color }) => {
     return;
   }
 
+  const formattedPhoneNumber: string = formatPhoneNumber(resolvedPhone, format);
+  const classNameCn = phoneVariants({ fontWeight, color, includeHyperlink });
+
   return (
     <EntityField
       displayName="Phone"
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >
-      <p className={phoneVariants({ fontWeight, color })}>
+      <p className={classNameCn}>
         <PhoneIcon className="w-4 h-4" />
-        {formatPhoneNumber(resolvedPhone, format)}
+        {includeHyperlink ? (
+          <Link
+            cta={{
+              link: resolvedPhone,
+              label: formattedPhoneNumber,
+              linkType: "PHONE",
+            }}
+            className={classNameCn}
+          />
+        ) : (
+          <span>{formattedPhoneNumber}</span>
+        )}
       </p>
     </EntityField>
   );
@@ -130,6 +164,7 @@ const PhoneComponent: ComponentConfig<PhoneProps> = {
       field: "mainPhone",
       constantValue: "",
     },
+    includeHyperlink: true,
   },
   resolveFields: async () => {
     const fontWeightOptions = await getFontWeightOverrideOptions({
