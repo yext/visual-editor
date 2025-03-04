@@ -194,6 +194,9 @@ importers:
       "@testing-library/react":
         specifier: ^16.0.1
         version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@testing-library/react-hooks":
+        specifier: ^8.0.1
+        version: 8.0.1(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@types/fs-extra":
         specifier: ^11.0.4
         version: 11.0.4
@@ -3118,6 +3121,25 @@ packages:
         integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==,
       }
     engines: { node: ">=18" }
+
+  "@testing-library/react-hooks@8.0.1":
+    resolution:
+      {
+        integrity: sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==,
+      }
+    engines: { node: ">=12" }
+    peerDependencies:
+      "@types/react": ^16.9.0 || ^17.0.0
+      react: ^16.9.0 || ^17.0.0
+      react-dom: ^16.9.0 || ^17.0.0
+      react-test-renderer: ^16.9.0 || ^17.0.0
+    peerDependenciesMeta:
+      "@types/react":
+        optional: true
+      react-dom:
+        optional: true
+      react-test-renderer:
+        optional: true
 
   "@testing-library/react@16.0.1":
     resolution:
@@ -11958,6 +11980,15 @@ snapshots:
       dom-accessibility-api: 0.5.16
       lz-string: 1.5.0
       pretty-format: 27.5.1
+
+  "@testing-library/react-hooks@8.0.1(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
+    dependencies:
+      "@babel/runtime": 7.26.0
+      react: 18.3.1
+      react-error-boundary: 3.1.4(react@18.3.1)
+    optionalDependencies:
+      "@types/react": 18.3.12
+      react-dom: 18.3.1(react@18.3.1)
 
   "@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
     dependencies:
