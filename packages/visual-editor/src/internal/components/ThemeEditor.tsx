@@ -18,6 +18,7 @@ import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
+import { useProgress } from "../hooks/useProgress.ts";
 import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
@@ -253,15 +254,14 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     });
   }, [themeHistoryFetched, themeHistories, templateMetadata]);
 
-  const isLoading =
-    !puckInitialHistoryFetched ||
-    !themeHistoryFetched ||
-    !themeSaveStateFetched;
-
-  const progress =
-    60 + // @ts-expect-error adding bools is fine
-    (puckInitialHistoryFetched + themeHistoryFetched + themeSaveStateFetched) *
-      13.33;
+  const { isLoading, progress } = useProgress({
+    minProgress: 60,
+    completionCriteria: [
+      puckInitialHistoryFetched,
+      themeHistoryFetched,
+      themeSaveStateFetched,
+    ],
+  });
 
   return !isLoading ? (
     <InternalThemeEditor
