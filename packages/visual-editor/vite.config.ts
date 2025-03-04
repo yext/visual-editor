@@ -5,10 +5,16 @@ import type { Plugin } from "vite";
 import { exec } from "node:child_process";
 
 export default defineConfig(() => ({
+  define: {
+    'process.env.PLUGIN': 'false',
+  },
   plugins: [react(), dts()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
+      entry: {
+        "visual-editor": path.resolve(__dirname, "src/index.ts"),
+        "plugin/plugin": path.resolve(__dirname, "src/vite-plugin/index.ts"),
+      },
       name: "visual-editor",
       formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },

@@ -26,6 +26,7 @@
   },
   "scripts": {
     "build": "tsc && vite build",
+    "buildAll": "tsc && vite build && vite build --config vite.config.plugin.ts",
     "test": "vitest run",
     "prettier": "prettier --write --cache .",
     "lint": "eslint --cache --fix src/",
