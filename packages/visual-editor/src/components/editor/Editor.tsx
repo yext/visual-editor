@@ -13,6 +13,7 @@ import { useCommonMessageReceivers } from "../../internal/hooks/useMessageReceiv
 import { LayoutEditor } from "../../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../../internal/hooks/useMessageSenders.ts";
+import { useProgress } from "../../internal/hooks/useProgress.ts";
 
 const devLogger = new DevLogger();
 
@@ -104,31 +105,25 @@ export const Editor = ({
     }
   }, [templateMetadata?.isDevMode, devPageSets]);
 
-  const isLoading =
-    !puckConfig ||
-    !templateMetadata ||
-    !document ||
-    !layoutDataFetched ||
-    !themeDataFetched ||
-    entityFields === null;
-
-  const progress: number =
-    60 * // @ts-expect-error adding bools is fine
-    ((!!puckConfig +
-      !!templateMetadata +
-      !!document +
-      layoutDataFetched +
-      themeDataFetched +
-      (entityFields === null)) /
-      6);
+  const { isLoading, progress } = useProgress({
+    maxProgress: 60,
+    completionCriteria: [
+      !!puckConfig,
+      !!templateMetadata,
+      !!document,
+      layoutDataFetched,
+      themeDataFetched,
+      entityFields !== null,
+    ],
+  });
 
   return (
     <ErrorBoundary fallback={<></>} onError={logError}>
       {!isLoading ? (
-        templateMetadata.isThemeMode || forceThemeMode ? (
+        templateMetadata?.isThemeMode || forceThemeMode ? (
           <ThemeEditor
-            puckConfig={puckConfig}
-            templateMetadata={templateMetadata}
+            puckConfig={puckConfig!}
+            templateMetadata={templateMetadata!}
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
@@ -136,8 +131,8 @@ export const Editor = ({
           />
         ) : (
           <LayoutEditor
-            puckConfig={puckConfig}
-            templateMetadata={templateMetadata}
+            puckConfig={puckConfig!}
+            templateMetadata={templateMetadata!}
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
