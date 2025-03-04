@@ -119,11 +119,11 @@ export const Editor = ({
 
   return (
     <ErrorBoundary fallback={<></>} onError={logError}>
-      {!isLoading && puckConfig && templateMetadata ? (
+      {!isLoading ? (
         templateMetadata?.isThemeMode || forceThemeMode ? (
           <ThemeEditor
-            puckConfig={puckConfig}
-            templateMetadata={templateMetadata}
+            puckConfig={puckConfig!}
+            templateMetadata={templateMetadata!}
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
@@ -131,8 +131,8 @@ export const Editor = ({
           />
         ) : (
           <LayoutEditor
-            puckConfig={puckConfig}
-            templateMetadata={templateMetadata}
+            puckConfig={puckConfig!}
+            templateMetadata={templateMetadata!}
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
