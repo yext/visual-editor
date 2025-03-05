@@ -107,7 +107,7 @@ export const InternalThemeEditor = ({
       index: themeHistoriesRef.current.index + 1,
     };
 
-    if (localDev) {
+    if (localDev || templateMetadata.isDevMode) {
       devLogger.logFunc("saveThemeToLocalStorage");
       window.localStorage.setItem(
         buildThemeLocalStorageKey(),
