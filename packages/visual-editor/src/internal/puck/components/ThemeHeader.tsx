@@ -37,11 +37,18 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   } = props;
 
   const {
+    dispatch,
     history: { setHistories },
   } = usePuck();
 
   useEffect(() => {
     setHistories(puckInitialHistory?.histories || []);
+    dispatch({
+      type: "setUi",
+      ui: {
+        previewMode: "interactive",
+      },
+    });
   }, [puckInitialHistory]);
 
   useEffect(() => {
@@ -59,9 +66,13 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       fieldListTitle.style.display = "none";
     }
     // Disable component selection in the preview
-    const puckPreview = document.getElementById("puck-preview");
-    if (puckPreview) {
-      puckPreview.style.pointerEvents = "none";
+    const puckPreview =
+      document.querySelector<HTMLIFrameElement>("#preview-frame");
+    if (puckPreview?.contentDocument) {
+      puckPreview.contentDocument.addEventListener("click", (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+      });
     }
   }, []);
 
