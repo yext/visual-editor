@@ -19,6 +19,13 @@ export default defineConfig(() => ({
       formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     rollupOptions: {
+      onLog(level, log, handler) {
+        if (level === 'warn' && log.plugin === 'vite:resolve') {
+          return // ignores warning about plugin:vite:resolve
+        } else {
+          handler(level, log);
+        }
+      },
       external: [
         "react",
         "react-dom",

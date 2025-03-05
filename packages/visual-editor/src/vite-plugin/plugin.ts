@@ -12,17 +12,16 @@ export const yextVisualEditorPlugin = (): Plugin => {
 
   const filesToCleanup: string[] = [];
 
-  // Define the files to generate
+  // files to generate
   const virtualFiles: Record<string, string> = {
-    "src/templates/main.tsx": getEditTemplate(),
-    "src/templates/edit.tsx": getMainTemplate(),
+    "src/templates/main.tsx": getMainTemplate(),
+    "src/templates/edit.tsx": getEditTemplate(),
   };
 
   return {
     name: "vite-plugin-yext-visual-editor",
-
     buildStart() {
-      console.log("Generating visual editor files...");
+      console.log("\nGenerating visual editor files...");
       Object.entries(virtualFiles).forEach(([fileName, content]) => {
         const filePath = path.join(process.cwd(), fileName);
         filesToCleanup.push(filePath);
@@ -31,7 +30,6 @@ export const yextVisualEditorPlugin = (): Plugin => {
         console.log(`✅ Created: ${filePath}`);
       });
     },
-
     buildEnd() {
       console.log("Cleaning up generated files...");
       filesToCleanup.forEach((filePath) => {
