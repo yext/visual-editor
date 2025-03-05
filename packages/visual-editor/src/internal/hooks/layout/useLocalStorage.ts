@@ -3,8 +3,7 @@ import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { DevLogger } from "../../../utils/devLogger.ts";
 
 const TEMPLATE = "TEMPLATE_",
-  LAYOUT = "LAYOUT_",
-  ENTITY = "ENTITY_";
+  LAYOUT = "LAYOUT_";
 
 const devLogger = new DevLogger();
 
@@ -23,8 +22,7 @@ export const useLayoutLocalStorage = (
     return getVisualConfigLocalStorageKey(
       templateMetadata.isDevMode && !templateMetadata.devOverride,
       templateMetadata.templateId,
-      templateMetadata.layoutId,
-      templateMetadata.entityId
+      templateMetadata.layoutId
     );
   }, [templateMetadata]);
 
@@ -45,22 +43,18 @@ export const useLayoutLocalStorage = (
 function getVisualConfigLocalStorageKey(
   isDevMode: boolean,
   templateId: string,
-  layoutId?: number,
-  entityId?: number
+  layoutId?: number
 ): string {
   const devPrefix = isDevMode ? "dev" : "";
-  if (!templateId || (!entityId && !layoutId)) {
+  if (!templateId || !layoutId) {
     throw new Error(
-      `Unable to generate local storage key, missing query parameters${!entityId && " entityId"}${!layoutId && " layoutId"}`
+      `Unable to generate local storage key, missing query parameters${!layoutId && " layoutId"}`
     );
   }
 
   let key = devPrefix + TEMPLATE + templateId;
   if (layoutId) {
     key += LAYOUT + layoutId;
-  }
-  if (entityId) {
-    key += ENTITY + entityId;
   }
 
   return key;
