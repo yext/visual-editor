@@ -23,7 +23,7 @@ type LayoutEditorProps = {
   layoutData: Data;
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
-  localDev: boolean;
+  standAloneMode: boolean;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -33,7 +33,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     layoutData,
     themeData,
     themeConfig,
-    localDev,
+    standAloneMode,
   } = props;
 
   const { saveLayoutSaveState, publishLayout, deleteLayoutSaveState } =
@@ -43,7 +43,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     useCommonMessageSenders();
 
   const { layoutSaveState, layoutSaveStateFetched } =
-    useLayoutMessageReceivers(localDev);
+    useLayoutMessageReceivers(standAloneMode);
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
@@ -61,7 +61,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const clearHistory = () => {
     devLogger.logFunc("clearHistory");
     clearVisualConfigLocalStorage();
-    if (localDev) {
+    if (standAloneMode) {
       return;
     }
     deleteLayoutSaveState();
@@ -248,7 +248,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       publishLayout={publishLayout}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
-      localDev={localDev}
+      standAloneMode={standAloneMode}
     />
   ) : (
     <LoadingScreen progress={progress} />
