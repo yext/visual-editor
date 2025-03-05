@@ -169,7 +169,7 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
         socialLink.link ? (
           <Link
             key={idx}
-            href={`${socialLink.prefix}${socialLink.link}`}
+            href={`${socialLink.prefix ?? ""}${socialLink.link}`}
             eventName={socialLink.name}
           >
             {socialLink.label}
