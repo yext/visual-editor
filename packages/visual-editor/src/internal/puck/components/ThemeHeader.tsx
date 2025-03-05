@@ -58,6 +58,11 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     if (fieldListTitle) {
       fieldListTitle.style.display = "none";
     }
+    // Disable component selection in the preview
+    const puckPreview = document.getElementById("puck-preview");
+    if (puckPreview) {
+      puckPreview.style.pointerEvents = "none";
+    }
   }, []);
 
   const canUndo = (): boolean => {
