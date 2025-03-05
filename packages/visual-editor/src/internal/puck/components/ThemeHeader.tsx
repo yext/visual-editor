@@ -66,14 +66,20 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       fieldListTitle.style.display = "none";
     }
     // Disable component selection in the preview
+    const clickBlocker = (event: MouseEvent) => {
+      event.stopPropagation();
+      event.preventDefault();
+    };
     const puckPreview =
       document.querySelector<HTMLIFrameElement>("#preview-frame");
     if (puckPreview?.contentDocument) {
-      puckPreview.contentDocument.addEventListener("click", (event) => {
-        event.stopPropagation();
-        event.preventDefault();
-      });
+      puckPreview.contentDocument.addEventListener("click", clickBlocker);
     }
+    return () => {
+      if (puckPreview?.contentDocument) {
+        puckPreview.contentDocument.removeEventListener("click", clickBlocker);
+      }
+    };
   }, []);
 
   const canUndo = (): boolean => {
