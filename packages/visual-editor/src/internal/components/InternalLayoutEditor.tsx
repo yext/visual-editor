@@ -67,7 +67,7 @@ export const InternalLayoutEditor = ({
         devLogger.logData("PUCK_HISTORY", histories);
         historyIndex.current = index;
 
-        if (localDev) {
+        if (localDev || templateMetadata.isDevMode) {
           devLogger.logFunc("saveLayoutToLocalStorage");
           window.localStorage.setItem(
             buildVisualConfigLocalStorageKey(),
