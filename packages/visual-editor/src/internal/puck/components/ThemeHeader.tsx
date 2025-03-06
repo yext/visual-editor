@@ -66,19 +66,22 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       fieldListTitle.style.display = "none";
     }
     // Disable component selection in the preview
-    const clickBlocker = (event: MouseEvent) => {
-      event.stopPropagation();
-      event.preventDefault();
-    };
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     const puckPreview =
       document.querySelector<HTMLIFrameElement>("#preview-frame");
     if (puckPreview?.contentDocument) {
-      puckPreview.contentDocument.addEventListener("click", clickBlocker);
+      puckPreview.contentDocument.addEventListener(
+        "click",
+        (event: MouseEvent) => {
+          event.stopPropagation();
+          event.preventDefault();
+        },
+        { signal }
+      );
     }
     return () => {
-      if (puckPreview?.contentDocument) {
-        puckPreview.contentDocument.removeEventListener("click", clickBlocker);
-      }
+      abortController.abort();
     };
   }, []);
 
