@@ -180,6 +180,7 @@ export const InternalThemeEditor = ({
             />
           ),
           actionBar: () => <></>,
+          components: () => <></>,
           fields: fieldsOverride,
         }}
       />
