@@ -97,7 +97,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   return (
     <header className="puck-header">
       <div className="header-left">
-        <UIButtonsToggle />
+        <UIButtonsToggle showLeft={false} />
         <EntityFieldsToggle />
       </div>
       <div className="header-center"></div>
