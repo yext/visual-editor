@@ -5,10 +5,6 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebars/ThemeEditorRightSidebar.tsx";
-import {
-  ThemeEditorLeftSidebar,
-  ThemeEditorModes,
-} from "../puck/components/theme-editor-sidebars/ThemeEditorLeftSidebar.tsx";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
@@ -58,16 +54,10 @@ export const InternalThemeEditor = ({
   // wrapped in useCallback to maintain internal state. Refs can be used
   // to pass parent state into the overrides.
   const themeHistoriesRef = useRef(themeHistories);
-  const [mode, setMode] = useState<ThemeEditorModes>("theme");
-  const modeRef = useRef<ThemeEditorModes>("theme");
 
   useEffect(() => {
     themeHistoriesRef.current = themeHistories;
   }, [themeHistories]);
-
-  useEffect(() => {
-    modeRef.current = mode;
-  }, [mode]);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
@@ -157,13 +147,8 @@ export const InternalThemeEditor = ({
         themeHistoriesRef={themeHistoriesRef}
         themeConfig={themeConfig}
         onThemeChange={handleThemeChange}
-        modeRef={modeRef}
       />
     );
-  }, []);
-
-  const componentsOverride = useCallback(() => {
-    return <ThemeEditorLeftSidebar setMode={setMode} modeRef={modeRef} />;
   }, []);
 
   return (
@@ -195,7 +180,6 @@ export const InternalThemeEditor = ({
             />
           ),
           actionBar: () => <></>,
-          components: componentsOverride,
           fields: fieldsOverride,
         }}
       />
