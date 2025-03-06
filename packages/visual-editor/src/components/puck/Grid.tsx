@@ -5,6 +5,7 @@ import { Section } from "./atoms/section.js";
 import { themeManagerCn } from "../../index.js";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { layoutFields } from "./Layout.tsx";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 
 interface ColumnProps {
   justifyContent: "center" | "start" | "end" | "spaceBetween";
@@ -97,16 +98,12 @@ const gridSectionFields: Fields<GridProps> = {
         min: 0,
         max: 12,
       },
-      justifyContent: {
-        label: "Vertical Alignment",
-        type: "select",
-        options: [
-          { value: "start", label: "Start" },
-          { value: "center", label: "Center" },
-          { value: "end", label: "End" },
-          { value: "spaceBetween", label: "Space Between" },
-        ],
-      },
+      justifyContent: BasicSelector("Vertical Alignment", [
+        { value: "start", label: "Start" },
+        { value: "center", label: "Center" },
+        { value: "end", label: "End" },
+        { value: "spaceBetween", label: "Space Between" },
+      ]),
     },
   },
   ...layoutFields,
@@ -149,16 +146,12 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
     }
     return {
       ...gridSectionFields,
-      maxContentWidth: {
-        label: "Maximum Content Width",
-        type: "select",
-        options: [
-          { value: "default", label: "Default" },
-          { value: "lg", label: "LG (1024px)" },
-          { value: "xl", label: "XL (1280px)" },
-          { value: "xxl", label: "2XL (1536px)" },
-        ],
-      },
+      maxContentWidth: BasicSelector("Maximum Content Width", [
+        { value: "default", label: "Default" },
+        { value: "lg", label: "LG (1024px)" },
+        { value: "xl", label: "XL (1280px)" },
+        { value: "xxl", label: "2XL (1536px)" },
+      ]),
     };
   },
   render: ({

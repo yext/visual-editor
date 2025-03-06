@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 import {
   useDocument,
   resolveYextEntityField,
@@ -28,14 +29,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       types: ["type.cta"],
     },
   }),
-  variant: {
-    type: "select",
-    label: "Variant",
-    options: [
-      { label: "Primary", value: "primary" },
-      { label: "Link", value: "link" },
-    ],
-  },
+  variant: BasicSelector("Variant", [
+    { label: "Primary", value: "primary" },
+    { label: "Link", value: "link" },
+  ]),
   size: {
     label: "Size",
     type: "radio",

@@ -8,6 +8,7 @@ import {
   layoutFields,
   layoutVariants,
 } from "./Layout.tsx";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 
 interface FlexProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -72,31 +73,19 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: {
-    label: "Direction",
-    type: "select",
-    options: [
-      { value: "row", label: "Horizontal" },
-      { value: "column", label: "Vertical" },
-    ],
-  },
-  justifyContent: {
-    label: "Justify Content",
-    type: "select",
-    options: [
-      { value: "start", label: "Start" },
-      { value: "center", label: "Center" },
-      { value: "end", label: "End" },
-    ],
-  },
-  wrap: {
-    label: "Wrap",
-    type: "select",
-    options: [
-      { value: "nowrap", label: "No Wrap" },
-      { value: "wrap", label: "Wrap" },
-    ],
-  },
+  direction: BasicSelector("Direction", [
+    { value: "row", label: "Horizontal" },
+    { value: "column", label: "Vertical" },
+  ]),
+  justifyContent: BasicSelector("Justify Content", [
+    { value: "start", label: "Start" },
+    { value: "center", label: "Center" },
+    { value: "end", label: "End" },
+  ]),
+  wrap: BasicSelector("Wrap", [
+    { value: "nowrap", label: "No Wrap" },
+    { value: "wrap", label: "Wrap" },
+  ]),
   ...layoutFields,
 };
 
@@ -132,16 +121,12 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     }
     return {
       ...flexContainerFields,
-      maxContentWidth: {
-        label: "Maximum Content Width",
-        type: "select",
-        options: [
-          { value: "default", label: "Default" },
-          { value: "lg", label: "LG (1024px)" },
-          { value: "xl", label: "XL (1280px)" },
-          { value: "xxl", label: "2XL (1536px)" },
-        ],
-      },
+      maxContentWidth: BasicSelector("Maximum Content Width", [
+        { value: "default", label: "Default" },
+        { value: "lg", label: "LG (1024px)" },
+        { value: "xl", label: "XL (1280px)" },
+        { value: "xxl", label: "2XL (1536px)" },
+      ]),
     };
   },
   render: ({
