@@ -20,6 +20,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
 
   return {
     name: "vite-plugin-yext-visual-editor",
+    apply: "build",
     buildStart() {
       console.log("\nGenerating visual editor files...");
       Object.entries(virtualFiles).forEach(([fileName, content]) => {
@@ -27,14 +28,14 @@ export const yextVisualEditorPlugin = (): Plugin => {
         filesToCleanup.push(filePath);
         fs.ensureFileSync(filePath);
         fs.writeFileSync(filePath, content);
-        console.log(`✅ Created: ${filePath}`);
+        console.log(`Created: ${filePath}`);
       });
     },
     buildEnd() {
       console.log("Cleaning up generated files...");
       filesToCleanup.forEach((filePath) => {
         fs.rmSync(filePath, { force: true });
-        console.log(`🗑️ Removed: ${filePath}`);
+        console.log(`Removed: ${filePath}`);
       });
     },
   };
