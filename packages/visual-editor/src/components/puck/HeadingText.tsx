@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Heading, HeadingProps } from "./atoms/heading.js";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 import {
   useDocument,
   resolveYextEntityField,
@@ -49,28 +50,20 @@ const headingTextFields: Fields<HeadingTextProps> = {
     max: 6,
   },
   fontSize: FontSizeSelector(),
-  color: {
-    label: "Font Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
-  transform: {
-    label: "Text Transform",
-    type: "select",
-    options: [
-      { value: "none", label: "None" },
-      { value: "lowercase", label: "Lowercase" },
-      { value: "uppercase", label: "Uppercase" },
-      { value: "capitalize", label: "Capitalize" },
-    ],
-  },
+  color: BasicSelector("Font Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
+  transform: BasicSelector("Text Transform", [
+    { value: "none", label: "None" },
+    { value: "lowercase", label: "Lowercase" },
+    { value: "uppercase", label: "Uppercase" },
+    { value: "capitalize", label: "Capitalize" },
+  ]),
 };
 
 const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
@@ -95,11 +88,7 @@ const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     });
     return {
       ...headingTextFields,
-      weight: {
-        label: "Font Weight",
-        type: "select",
-        options: fontWeightOptions,
-      },
+      weight: BasicSelector("Font Weight", fontWeightOptions),
     };
   },
   render: (props) => <HeadingText {...props} />,

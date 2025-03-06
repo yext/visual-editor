@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
+import { BasicSelector } from "../../editor/BasicSelector.tsx";
 import { Field } from "@measured/puck";
 
 export interface CTAProps
@@ -14,18 +15,14 @@ export interface CTAProps
   fontSize?: ButtonProps["fontSize"];
 }
 
-const linkTypeFields: Field = {
-  type: "select",
-  label: "Link Type",
-  options: [
-    { label: "URL", value: "URL" },
-    { label: "Email", value: "EMAIL" },
-    { label: "Phone", value: "PHONE" },
-    { label: "Driving Directions", value: "DRIVING_DIRECTIONS" },
-    { label: "Click to Website", value: "CLICK_TO_WEBSITE" },
-    { label: "Other", value: "OTHER" },
-  ],
-};
+const linkTypeFields: Field = BasicSelector("Link Type", [
+  { label: "URL", value: "URL" },
+  { label: "Email", value: "EMAIL" },
+  { label: "Phone", value: "PHONE" },
+  { label: "Driving Directions", value: "DRIVING_DIRECTIONS" },
+  { label: "Click to Website", value: "CLICK_TO_WEBSITE" },
+  { label: "Other", value: "OTHER" },
+]);
 
 const CTA = ({
   label,

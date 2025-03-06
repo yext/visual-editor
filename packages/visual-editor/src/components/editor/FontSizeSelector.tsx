@@ -1,8 +1,9 @@
 import React from "react";
-import { AutoField, Field, FieldLabel } from "@measured/puck";
+import { Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
+import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 
 export const fontSizeOptions = (includeLargeSizes = true) => {
   const fontSizeOptions = [
@@ -99,25 +100,27 @@ export const FontSizeSelector = (
     type: "custom",
     render: ({ value, onChange }) => {
       const tailwindConfig: TailwindConfig = useTailwindConfig();
+      const options = convertDefaultFontSizesToOptions(
+        [
+          { label: "Default", value: "default", px: "" },
+          ...fontSizeOptions(includeLargeSizes),
+        ],
+        tailwindConfig
+      );
+
+      console.log(value);
 
       return (
         <FieldLabel
           label={label ?? "Font Size"}
           icon={<ChevronDown size={16} />}
         >
-          <AutoField
-            value={value}
-            onChange={onChange}
-            field={{
-              type: "select",
-              options: convertDefaultFontSizesToOptions(
-                [
-                  { label: "Default", value: "default", px: "" },
-                  ...fontSizeOptions(includeLargeSizes),
-                ],
-                tailwindConfig
-              ),
-            }}
+          <Combobox
+            defaultValue={
+              options.find((option) => option.value === value) ?? options[0]
+            }
+            onChange={(option: any) => onChange(option)}
+            options={options}
           />
         </FieldLabel>
       );

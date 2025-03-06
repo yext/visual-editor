@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Body, BodyProps } from "./atoms/body.js";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 import {
   useDocument,
   resolveYextEntityField,
@@ -43,28 +44,20 @@ const bodyTextFields: Fields<BodyTextProps> = {
     },
   }),
   fontSize: FontSizeSelector(),
-  color: {
-    label: "Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
-  textTransform: {
-    label: "Text Transform",
-    type: "select",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Uppercase", value: "uppercase" },
-      { label: "Lowercase", value: "lowercase" },
-      { label: "Capitalize", value: "capitalize" },
-    ],
-  },
+  color: BasicSelector("Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
+  textTransform: BasicSelector("Text Transform", [
+    { label: "None", value: "none" },
+    { label: "Uppercase", value: "uppercase" },
+    { label: "Lowercase", value: "lowercase" },
+    { label: "Capitalize", value: "capitalize" },
+  ]),
 };
 
 const BodyTextComponent: ComponentConfig<BodyTextProps> = {
@@ -87,11 +80,7 @@ const BodyTextComponent: ComponentConfig<BodyTextProps> = {
     });
     return {
       ...bodyTextFields,
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        options: fontWeightOptions,
-      },
+      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
     };
   },
   render: (props) => <BodyText {...props} />,

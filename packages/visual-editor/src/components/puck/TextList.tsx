@@ -9,6 +9,7 @@ import {
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
 } from "../../index.js";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 
 const textListVariants = cva(
   "list-disc components list-inside text-body-fontSize font-body-fontFamily",
@@ -79,28 +80,20 @@ const textListFields: Fields<TextListProps> = {
       { label: "Large", value: "large" },
     ],
   },
-  color: {
-    label: "Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
-  textTransform: {
-    label: "Text Transform",
-    type: "select",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Uppercase", value: "uppercase" },
-      { label: "Lowercase", value: "lowercase" },
-      { label: "Capitalize", value: "capitalize" },
-    ],
-  },
+  color: BasicSelector("Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
+  textTransform: BasicSelector("Text Transform", [
+    { label: "None", value: "none" },
+    { label: "Uppercase", value: "uppercase" },
+    { label: "Lowercase", value: "lowercase" },
+    { label: "Capitalize", value: "capitalize" },
+  ]),
 };
 
 const TextList: React.FC<TextListProps> = ({
@@ -158,11 +151,7 @@ const TextListComponent: ComponentConfig<TextListProps> = {
     });
     return {
       ...textListFields,
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        options: fontWeightOptions,
-      },
+      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
     };
   },
   render: (props) => <TextList {...props} />,
