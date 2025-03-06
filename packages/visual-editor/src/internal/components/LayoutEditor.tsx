@@ -12,6 +12,7 @@ import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
+import { useProgress } from "../hooks/useProgress.ts";
 import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
@@ -230,9 +231,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     });
   }, [puckInitialHistoryFetched, puckInitialHistory, templateMetadata]);
 
-  const isLoading = !puckInitialHistoryFetched || !layoutSaveStateFetched;
-  const progress = // @ts-expect-error adding bools is fine
-    60 + (puckInitialHistoryFetched + layoutSaveStateFetched) * 20;
+  const { isLoading, progress } = useProgress({
+    minProgress: 60,
+    completionCriteria: [puckInitialHistoryFetched, layoutSaveStateFetched],
+  });
 
   return !isLoading ? (
     <InternalLayoutEditor
