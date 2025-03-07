@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/plugin"
+  },
+  "include": ["src/vite-plugin/index.ts"],
+  "exclude": ["node_modules"]
+}
