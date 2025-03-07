@@ -9,6 +9,7 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  BasicSelector,
 } from "../../index.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -53,37 +54,25 @@ const imageWrapperFields: Fields<ImageWrapperProps> = {
       types: ["type.image"],
     },
   }),
-  size: {
-    type: "select",
-    label: "Size",
-    options: [
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "medium" },
-      { label: "Large", value: "large" },
-      { label: "Full Width", value: "full" },
-    ],
-  },
-  aspectRatio: {
-    type: "select",
-    label: "Aspect Ratio",
-    options: [
-      { label: "Auto", value: "auto" },
-      { label: "Square", value: "square" },
-      { label: "Video (16:9)", value: "video" },
-      { label: "Portrait (3:4)", value: "portrait" },
-    ],
-  },
-  rounded: {
-    type: "select",
-    label: "Rounded Corners",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "medium" },
-      { label: "Large", value: "large" },
-      { label: "Full", value: "full" },
-    ],
-  },
+  size: BasicSelector("Size", [
+    { label: "Small", value: "small" },
+    { label: "Medium", value: "medium" },
+    { label: "Large", value: "large" },
+    { label: "Full Width", value: "full" },
+  ]),
+  aspectRatio: BasicSelector("Aspect Ratio", [
+    { label: "Auto", value: "auto" },
+    { label: "Square", value: "square" },
+    { label: "Video (16:9)", value: "video" },
+    { label: "Portrait (3:4)", value: "portrait" },
+  ]),
+  rounded: BasicSelector("Rounded Corners", [
+    { label: "None", value: "none" },
+    { label: "Small", value: "small" },
+    { label: "Medium", value: "medium" },
+    { label: "Large", value: "large" },
+    { label: "Full", value: "full" },
+  ]),
 };
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({

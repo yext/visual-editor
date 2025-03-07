@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, CTA, Image, ComplexImageType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { cva, VariantProps } from "class-variance-authority";
-import { EntityField, useDocument } from "../../index.ts";
+import { EntityField, useDocument, BasicSelector } from "../../index.ts";
 import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -34,18 +34,14 @@ const headerVariants = cva("", {
 export type HeaderProps = VariantProps<typeof headerVariants>;
 
 const headerFields: Fields<HeaderProps> = {
-  backgroundColor: {
-    label: "Background Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
+  backgroundColor: BasicSelector("Background Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {

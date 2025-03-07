@@ -1,6 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
-import { SpacingSelector } from "../editor/SpacingSelector.tsx";
+import { SpacingSelector, BasicSelector } from "../../index.js";
 
 export const layoutVariants = cva("components w-full", {
   variants: {
@@ -122,18 +122,14 @@ interface layoutProps
     VariantProps<typeof innerLayoutVariants> {}
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: {
-    label: "Background Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
+  backgroundColor: BasicSelector("Background Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
   gap: SpacingSelector("gap", "Gap"),
   verticalPadding: SpacingSelector("padding", "Vertical Padding"),
   horizontalPadding: SpacingSelector("padding", "Horizontal Padding"),
