@@ -14,6 +14,7 @@ import {
   BasicSelector,
 } from "../../index.js";
 import { Link } from "@yext/pages-components";
+import { BasicSelector } from "../editor/BasicSelector.js";
 
 const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {

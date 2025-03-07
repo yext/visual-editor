@@ -9,6 +9,7 @@ import {
   getFontWeightOverrideOptions,
 } from "../../index.ts";
 import { Body, BodyProps } from "./atoms/body.js";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export type BannerProps = {

@@ -13,6 +13,7 @@ import {
 import { Phone as PhoneIcon } from "lucide-react";
 import parsePhoneNumber from "libphonenumber-js";
 import { Link } from "@yext/pages-components";
+import { BasicSelector } from "../editor/BasicSelector.js";
 
 const phoneVariants = cva(
   "components flex gap-2 items-center text-body-fontSize font-body-fontFamily",

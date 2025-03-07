@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
 import {
   useDocument,
   resolveYextEntityField,
