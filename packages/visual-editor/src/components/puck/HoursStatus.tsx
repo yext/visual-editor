@@ -35,10 +35,14 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
       { label: "No", value: false },
     ],
   },
-  timeFormat: BasicSelector("Time Format", [
-    { label: "12-hour", value: "12h" },
-    { label: "24-hour", value: "24h" },
-  ]),
+  timeFormat: {
+    type: "radio",
+    label: "Time Format",
+    options: [
+      { label: "12-hour", value: "12h" },
+      { label: "24-hour", value: "24h" },
+    ],
+  },
   showDayNames: {
     type: "radio",
     label: "Show Day Names",
