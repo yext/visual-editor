@@ -21,7 +21,7 @@ export type EditorProps = {
   document: any;
   componentRegistry: Map<string, Config<any>>;
   themeConfig?: ThemeConfig;
-  standAloneMode?: boolean;
+  localDev?: boolean;
   forceThemeMode?: boolean;
 };
 
@@ -29,7 +29,7 @@ export const Editor = ({
   document,
   componentRegistry,
   themeConfig,
-  standAloneMode,
+  localDev,
   forceThemeMode,
 }: EditorProps) => {
   if (document) {
@@ -48,7 +48,7 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, document, !!standAloneMode);
+  } = useCommonMessageReceivers(componentRegistry, document, !!localDev);
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -62,7 +62,7 @@ export const Editor = ({
 
   // redirect to 404 page when going to /edit page outside of Storm
   useEffect(() => {
-    if (typeof window !== "undefined" && !standAloneMode) {
+    if (typeof window !== "undefined" && !localDev) {
       const referrer = window.document.referrer;
 
       if (!referrer) {
@@ -127,7 +127,7 @@ export const Editor = ({
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
-            standAloneMode={!!standAloneMode}
+            localDev={!!localDev}
           />
         ) : (
           <LayoutEditor
@@ -136,7 +136,7 @@ export const Editor = ({
             layoutData={layoutData!}
             themeData={themeData!}
             themeConfig={themeConfig}
-            standAloneMode={!!standAloneMode}
+            localDev={!!localDev}
           />
         )
       ) : (

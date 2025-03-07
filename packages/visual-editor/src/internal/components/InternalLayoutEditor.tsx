@@ -29,7 +29,7 @@ type InternalLayoutEditorProps = {
   publishLayout: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
-  standAloneMode: boolean;
+  localDev: boolean;
 };
 
 // Render Puck editor
@@ -44,7 +44,7 @@ export const InternalLayoutEditor = ({
   publishLayout,
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
-  standAloneMode,
+  localDev,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
@@ -67,13 +67,13 @@ export const InternalLayoutEditor = ({
         devLogger.logData("PUCK_HISTORY", histories);
         historyIndex.current = index;
 
-        if (standAloneMode || templateMetadata.isDevMode) {
+        if (localDev || templateMetadata.isDevMode) {
           devLogger.logFunc("saveLayoutToLocalStorage");
           window.localStorage.setItem(
             buildVisualConfigLocalStorageKey(),
             lzstring.compress(JSON.stringify(histories))
           );
-          if (standAloneMode) {
+          if (localDev) {
             return;
           }
         }
