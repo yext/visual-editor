@@ -7,9 +7,8 @@ import {
   FontSizeSelector,
   BasicSelector,
   getFontWeightOverrideOptions,
-} from "../../index.ts";
+} from "../../index.js";
 import { Body, BodyProps } from "./atoms/body.js";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export type BannerProps = {

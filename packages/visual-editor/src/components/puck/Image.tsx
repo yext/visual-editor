@@ -9,8 +9,8 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  BasicSelector,
 } from "../../index.js";
-import { BasicSelector } from "../editor/BasicSelector.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 

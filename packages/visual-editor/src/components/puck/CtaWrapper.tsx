@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
 import {
   useDocument,
   resolveYextEntityField,
@@ -11,7 +10,7 @@ import {
   FontSizeSelector,
   BorderRadiusSelector,
   BasicSelector,
-} from "../../index.ts";
+} from "../../index.js";
 
 interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;

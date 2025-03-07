@@ -8,8 +8,8 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  BasicSelector,
 } from "../../index.js";
-import { BasicSelector } from "../editor/index.js";
 
 interface HoursStatusProps {
   hours: YextEntityField<HoursType>;

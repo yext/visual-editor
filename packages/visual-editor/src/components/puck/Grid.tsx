@@ -2,10 +2,9 @@ import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
-import { themeManagerCn } from "../../index.js";
+import { themeManagerCn, BasicSelector } from "../../index.js";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { layoutFields } from "./Layout.tsx";
-import { BasicSelector } from "../editor/index.js";
 
 interface ColumnProps {
   justifyContent: "center" | "start" | "end" | "spaceBetween";

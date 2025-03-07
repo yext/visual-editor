@@ -9,13 +9,13 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   FontSizeSelector,
+  BasicSelector,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
-import { BasicSelector } from "../editor/BasicSelector.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 

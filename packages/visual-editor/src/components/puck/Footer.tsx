@@ -1,8 +1,13 @@
 import * as React from "react";
 import { Link, CTA } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, EntityField, themeManagerCn, useDocument } from "../../index.ts";
-import { BasicSelector } from "../editor/index.js";
+import {
+  Body,
+  EntityField,
+  themeManagerCn,
+  useDocument,
+  BasicSelector,
+} from "../../index.ts";
 import { cva, VariantProps } from "class-variance-authority";
 import {
   FaFacebook,

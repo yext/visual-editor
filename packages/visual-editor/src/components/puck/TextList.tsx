@@ -8,8 +8,8 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
+  BasicSelector,
 } from "../../index.js";
-import { BasicSelector } from "../editor/index.js";
 
 const textListVariants = cva(
   "list-disc components list-inside text-body-fontSize font-body-fontFamily",
