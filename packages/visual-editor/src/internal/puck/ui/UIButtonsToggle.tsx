@@ -6,7 +6,13 @@ import { useCallback } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../components/editor/index.css";
 
-export const UIButtonsToggle = () => {
+type UIButtonsToggleProps = {
+  showLeft: boolean;
+};
+
+export const UIButtonsToggle = (props: UIButtonsToggleProps) => {
+  const { showLeft } = props;
+
   const {
     dispatch,
     appState: {
@@ -35,15 +41,17 @@ export const UIButtonsToggle = () => {
 
   return (
     <>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          toggleSidebars("left");
-        }}
-      >
-        <PanelLeft className="sm-icon" />
-      </Button>
+      {showLeft && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {
+            toggleSidebars("left");
+          }}
+        >
+          <PanelLeft className="sm-icon" />
+        </Button>
+      )}
       <Button
         variant="ghost"
         size="icon"
