@@ -38,6 +38,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   const {
     history: { setHistories },
+    dispatch,
   } = usePuck();
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, [puckInitialHistory]);
 
   useEffect(() => {
+    // Hide the components list and fields list titles
     const fieldListTitle = document.querySelector<HTMLElement>(
       "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
     );
@@ -87,7 +89,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     });
   };
 
-  const { dispatch } = usePuck();
   useEffect(() => {
     dispatch({
       type: "setUi",
