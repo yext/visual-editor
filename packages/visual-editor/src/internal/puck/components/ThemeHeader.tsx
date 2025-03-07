@@ -36,27 +36,47 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   } = props;
 
   const {
+    dispatch,
     history: { setHistories },
+    dispatch,
   } = usePuck();
 
   useEffect(() => {
     setHistories(puckInitialHistory?.histories || []);
+    dispatch({
+      type: "setUi",
+      ui: {
+        previewMode: "interactive",
+      },
+    });
   }, [puckInitialHistory]);
 
   useEffect(() => {
     // Hide the components list and fields list titles
-    const componentList = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-leftSideBar'] h2"
-    );
-    if (componentList) {
-      componentList.innerText = "Mode";
-    }
     const fieldListTitle = document.querySelector<HTMLElement>(
       "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
     );
     if (fieldListTitle) {
       fieldListTitle.style.display = "none";
     }
+    // Disable component selection in the preview
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    const puckPreview =
+      document.querySelector<HTMLIFrameElement>("#preview-frame");
+    if (puckPreview?.contentDocument) {
+      puckPreview.contentDocument.addEventListener(
+        "click",
+        (event: MouseEvent) => {
+          event.stopPropagation();
+          event.preventDefault();
+        },
+        { signal }
+      );
+    }
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const canUndo = (): boolean => {
@@ -93,10 +113,17 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     });
   };
 
+  useEffect(() => {
+    dispatch({
+      type: "setUi",
+      ui: { leftSideBarVisible: false },
+    });
+  }, [dispatch]);
+
   return (
     <header className="puck-header">
       <div className="header-left">
-        <UIButtonsToggle />
+        <UIButtonsToggle showLeft={false} />
       </div>
       <div className="header-center"></div>
       <div className="actions">

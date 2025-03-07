@@ -53,7 +53,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   return (
     <header className="puck-header">
       <div className="header-left">
-        <UIButtonsToggle />
+        <UIButtonsToggle showLeft={true} />
         <EntityFieldsToggle />
       </div>
       <div className="header-center"></div>
