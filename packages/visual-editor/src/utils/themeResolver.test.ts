@@ -30,7 +30,7 @@ describe("themeResolver", () => {
       const consoleSpy = vi.spyOn(console, "warn");
       const result = themeResolver(developerTailwindConfig, testThemeConfig);
       expect(result).toEqual(mergedConfig);
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledTimes(2);
       expect(consoleSpy).toHaveBeenLastCalledWith(
         "Both theme.config.ts and tailwind.config.ts provided a value for button-primary. Using the value from theme.config.ts (var(--colors-button-primary))"
       );
