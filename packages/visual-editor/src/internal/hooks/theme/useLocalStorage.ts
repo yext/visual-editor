@@ -43,12 +43,12 @@ export const useThemeLocalStorage = (
 function getThemeLocalStorageKey(
   isDevMode: boolean,
   siteId: number,
-  themeEntityId?: number
+  themeId?: number
 ): string {
-  if (!themeEntityId) {
+  if (!themeId) {
     throw new Error(
-      "Unable to generate local storage key for themes, missing themeEntityId"
+      "Unable to generate local storage key for themes, missing themeId"
     );
   }
-  return (isDevMode ? "dev" : "") + SITE + siteId + THEME + themeEntityId;
+  return (isDevMode ? "dev" : "") + SITE + siteId + THEME + themeId;
 }

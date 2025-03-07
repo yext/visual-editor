@@ -21,7 +21,9 @@ export type EditorProps = {
   document: any;
   componentRegistry: Map<string, Config<any>>;
   themeConfig?: ThemeConfig;
+  // localDev is used for running VE outside of the platform
   localDev?: boolean;
+  // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
 };
 
@@ -80,6 +82,7 @@ export const Editor = ({
   }, []);
 
   useEffect(() => {
+    // templateMetadata.isDevMode indicates in-platform dev mode
     if (templateMetadata?.isDevMode) {
       try {
         // @ts-expect-error pageSets is a global variable set by pagesJS
