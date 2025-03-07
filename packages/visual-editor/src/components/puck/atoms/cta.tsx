@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { BasicSelector } from "../../editor/BasicSelector.tsx";
+import { BasicSelector } from "../../editor/index.js";
 import { Field } from "@measured/puck";
 
 export interface CTAProps

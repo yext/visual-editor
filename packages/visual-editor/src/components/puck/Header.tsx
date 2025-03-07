@@ -4,7 +4,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { cva, VariantProps } from "class-variance-authority";
 import { EntityField, useDocument } from "../../index.ts";
 import { MaybeLink } from "./atoms/maybeLink.tsx";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { BasicSelector } from "../editor/index.js";
 import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {

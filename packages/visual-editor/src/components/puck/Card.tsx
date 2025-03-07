@@ -9,6 +9,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   FontSizeSelector,
+  BasicSelector,
   BodyProps,
   getFontWeightOverrideOptions,
 } from "../../index.js";
@@ -22,7 +23,6 @@ import {
 } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
-import { BasicSelector } from "../editor/BasicSelector.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 

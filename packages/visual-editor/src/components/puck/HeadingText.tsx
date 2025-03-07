@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Heading, HeadingProps } from "./atoms/heading.js";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { BasicSelector } from "../editor/index.js";
 import {
   useDocument,
   resolveYextEntityField,

@@ -9,7 +9,7 @@ import {
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
 } from "../../index.js";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { BasicSelector } from "../editor/index.js";
 
 const textListVariants = cva(
   "list-disc components list-inside text-body-fontSize font-body-fontFamily",

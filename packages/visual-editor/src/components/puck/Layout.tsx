@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
-import { SpacingSelector } from "../editor/SpacingSelector.tsx";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { SpacingSelector } from "../editor/index.js";
+import { BasicSelector } from "../editor/index.js";
 
 export const layoutVariants = cva("components w-full", {
   variants: {

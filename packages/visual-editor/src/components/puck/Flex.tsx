@@ -8,7 +8,7 @@ import {
   layoutFields,
   layoutVariants,
 } from "./Layout.tsx";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { BasicSelector } from "../editor/index.js";
 
 interface FlexProps
   extends React.HTMLAttributes<HTMLDivElement>,

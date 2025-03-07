@@ -5,7 +5,7 @@ import { Section } from "./atoms/section.js";
 import { themeManagerCn } from "../../index.js";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { layoutFields } from "./Layout.tsx";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { BasicSelector } from "../editor/index.js";
 
 interface ColumnProps {
   justifyContent: "center" | "start" | "end" | "spaceBetween";
