@@ -108,8 +108,6 @@ export const FontSizeSelector = (
         tailwindConfig
       );
 
-      console.log(value);
-
       return (
         <FieldLabel
           label={label ?? "Font Size"}
