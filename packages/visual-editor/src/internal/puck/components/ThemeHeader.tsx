@@ -38,6 +38,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   const {
     history: { setHistories },
+    dispatch,
   } = usePuck();
 
   useEffect(() => {
@@ -46,12 +47,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   useEffect(() => {
     // Hide the components list and fields list titles
-    const componentList = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-leftSideBar'] h2"
-    );
-    if (componentList) {
-      componentList.innerText = "Mode";
-    }
     const fieldListTitle = document.querySelector<HTMLElement>(
       "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
     );
@@ -93,6 +88,13 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       index: themeHistories.index + 1,
     });
   };
+
+  useEffect(() => {
+    dispatch({
+      type: "setUi",
+      ui: { leftSideBarVisible: false },
+    });
+  }, [dispatch]);
 
   return (
     <header className="puck-header">

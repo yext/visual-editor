@@ -4,20 +4,17 @@ import { ThemeConfig } from "../../../../utils/themeResolver.ts";
 import { OnThemeChangeFunc, ThemeHistories } from "../../../types/themeData.ts";
 import "@measured/puck/dist/index.css";
 import { ThemeFieldsSidebar } from "./ThemeFieldsSidebar.tsx";
-import { AnalyticsFieldsSidebar } from "./AnalyticsFieldsSidebar.tsx";
-import { ThemeEditorModes } from "./ThemeEditorLeftSidebar.tsx";
 
 type ThemeEditorRightSidebarProps = {
   themeHistoriesRef: React.MutableRefObject<ThemeHistories | undefined>;
   themeConfig?: ThemeConfig;
   onThemeChange: OnThemeChangeFunc;
-  modeRef: React.MutableRefObject<ThemeEditorModes>;
 };
 
 export const ThemeEditorRightSidebar = (
   props: ThemeEditorRightSidebarProps
 ) => {
-  const { themeConfig, themeHistoriesRef, onThemeChange, modeRef } = props;
+  const { themeConfig, themeHistoriesRef, onThemeChange } = props;
 
   if (!themeHistoriesRef.current) {
     return;
@@ -46,20 +43,11 @@ export const ThemeEditorRightSidebar = (
         </AlertDescription>
       </Alert>
 
-      {modeRef.current === "theme" && (
-        <ThemeFieldsSidebar
-          themeConfig={themeConfig}
-          themeData={themeData}
-          onThemeChange={onThemeChange}
-        />
-      )}
-
-      {modeRef.current === "analytics" && (
-        <AnalyticsFieldsSidebar
-          themeData={themeData}
-          onThemeChange={onThemeChange}
-        />
-      )}
+      <ThemeFieldsSidebar
+        themeConfig={themeConfig}
+        themeData={themeData}
+        onThemeChange={onThemeChange}
+      />
     </div>
   );
 };
