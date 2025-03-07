@@ -4,7 +4,6 @@ import { Button } from "../ui/button.tsx";
 import "../../../components/editor/index.css";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
-import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, usePuck } from "@measured/puck";
@@ -124,7 +123,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     <header className="puck-header">
       <div className="header-left">
         <UIButtonsToggle showLeft={false} />
-        <EntityFieldsToggle />
       </div>
       <div className="header-center"></div>
       <div className="actions">
