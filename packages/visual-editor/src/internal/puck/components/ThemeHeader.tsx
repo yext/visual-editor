@@ -39,7 +39,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   const {
     dispatch,
     history: { setHistories },
-    dispatch,
   } = usePuck();
 
   useEffect(() => {

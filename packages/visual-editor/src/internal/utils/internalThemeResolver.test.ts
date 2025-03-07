@@ -4,7 +4,7 @@ import {
   generateCssVariablesFromThemeConfig,
   internalThemeResolver,
 } from "./internalThemeResolver.ts";
-import { testThemeConfig } from "../../utils/themeResolver.test.ts";
+import { testThemeConfig } from "../../utils/testData.ts";
 
 describe("internalThemeResolver", () => {
   test("combines saved and default values", () => {
