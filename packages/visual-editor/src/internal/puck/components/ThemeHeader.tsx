@@ -37,12 +37,19 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   } = props;
 
   const {
+    dispatch,
     history: { setHistories },
     dispatch,
   } = usePuck();
 
   useEffect(() => {
     setHistories(puckInitialHistory?.histories || []);
+    dispatch({
+      type: "setUi",
+      ui: {
+        previewMode: "interactive",
+      },
+    });
   }, [puckInitialHistory]);
 
   useEffect(() => {
@@ -53,6 +60,24 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     if (fieldListTitle) {
       fieldListTitle.style.display = "none";
     }
+    // Disable component selection in the preview
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    const puckPreview =
+      document.querySelector<HTMLIFrameElement>("#preview-frame");
+    if (puckPreview?.contentDocument) {
+      puckPreview.contentDocument.addEventListener(
+        "click",
+        (event: MouseEvent) => {
+          event.stopPropagation();
+          event.preventDefault();
+        },
+        { signal }
+      );
+    }
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const canUndo = (): boolean => {
