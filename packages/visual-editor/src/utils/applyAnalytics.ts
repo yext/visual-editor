@@ -3,7 +3,7 @@ export const applyAnalytics = (document: Record<string, any>) => {
     return;
   }
 
-  const googleTagManagerId: string = JSON.parse(document.__.theme)
+  const googleTagManagerId: string = JSON.parse(document.__.siteSettings)
     ?.siteAttributes?.googleTagManagerId;
 
   if (googleTagManagerId) {
