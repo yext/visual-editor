@@ -73,7 +73,9 @@ export const InternalLayoutEditor = ({
             buildVisualConfigLocalStorageKey(),
             lzstring.compress(JSON.stringify(histories))
           );
-          return;
+          if (localDev) {
+            return;
+          }
         }
 
         if (layoutSaveState?.hash !== histories[index].id) {

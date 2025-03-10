@@ -13,7 +13,8 @@ const devLogger = new DevLogger();
  * @param templateMetadata The template metadata for the active template (undefined if not loaded)
  */
 export const useLayoutLocalStorage = (
-  templateMetadata: TemplateMetadata | undefined
+  templateMetadata: TemplateMetadata | undefined,
+  scopeToEntityId: boolean = false
 ) => {
   const buildVisualConfigLocalStorageKey = useCallback(() => {
     if (!templateMetadata) {
@@ -22,6 +23,7 @@ export const useLayoutLocalStorage = (
 
     return getVisualConfigLocalStorageKey(
       templateMetadata.isDevMode && !templateMetadata.devOverride,
+      scopeToEntityId,
       templateMetadata.templateId,
       templateMetadata.layoutId,
       templateMetadata.entityId
@@ -44,6 +46,7 @@ export const useLayoutLocalStorage = (
 
 function getVisualConfigLocalStorageKey(
   isDevMode: boolean,
+  scopeToEntityId: boolean,
   templateId: string,
   layoutId?: number,
   entityId?: number
@@ -59,7 +62,7 @@ function getVisualConfigLocalStorageKey(
   if (layoutId) {
     key += LAYOUT + layoutId;
   }
-  if (entityId) {
+  if (scopeToEntityId && entityId) {
     key += ENTITY + entityId;
   }
 
