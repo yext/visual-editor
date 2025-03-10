@@ -9,6 +9,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   FontSizeSelector,
+  BasicSelector,
   BodyProps,
   getFontWeightOverrideOptions,
 } from "../../index.js";
@@ -72,14 +73,10 @@ interface CardProps {
 }
 
 const cardFields: Fields<CardProps> = {
-  orientation: {
-    type: "select",
-    label: "Orientation",
-    options: [
-      { label: "Left", value: "left" },
-      { label: "Right", value: "right" },
-    ],
-  },
+  orientation: BasicSelector("Orientation", [
+    { label: "Left", value: "left" },
+    { label: "Right", value: "right" },
+  ]),
   heading: {
     type: "object",
     label: "Title",
@@ -91,38 +88,22 @@ const cardFields: Fields<CardProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: {
-        label: "Font Color",
-        type: "select",
-        options: [
-          { label: "Default", value: "default" },
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-          { label: "Accent", value: "accent" },
-          { label: "Text", value: "text" },
-          { label: "Background", value: "background" },
-        ],
-      },
-      weight: {
-        label: "Font Weight",
-        type: "select",
-        options: [],
-      },
-      transform: {
-        label: "Text Transform",
-        type: "select",
-        options: [
-          { value: "none", label: "None" },
-          { value: "lowercase", label: "Lowercase" },
-          { value: "uppercase", label: "Uppercase" },
-          { value: "capitalize", label: "Capitalize" },
-        ],
-      },
-      level: {
-        label: "Level",
-        type: "select",
-        options: headingOptions,
-      },
+      color: BasicSelector("Font Color", [
+        { label: "Default", value: "default" },
+        { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Accent", value: "accent" },
+        { label: "Text", value: "text" },
+        { label: "Background", value: "background" },
+      ]),
+      weight: BasicSelector("Font Weight", []),
+      transform: BasicSelector("Text Transform", [
+        { value: "none", label: "None" },
+        { value: "lowercase", label: "Lowercase" },
+        { value: "uppercase", label: "Uppercase" },
+        { value: "capitalize", label: "Capitalize" },
+      ]),
+      level: BasicSelector("Level", headingOptions),
     },
   },
   subheading: {
@@ -136,38 +117,22 @@ const cardFields: Fields<CardProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: {
-        label: "Font Color",
-        type: "select",
-        options: [
-          { label: "Default", value: "default" },
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-          { label: "Accent", value: "accent" },
-          { label: "Text", value: "text" },
-          { label: "Background", value: "background" },
-        ],
-      },
-      weight: {
-        label: "Font Weight",
-        type: "select",
-        options: [],
-      },
-      transform: {
-        label: "Text Transform",
-        type: "select",
-        options: [
-          { value: "none", label: "None" },
-          { value: "lowercase", label: "Lowercase" },
-          { value: "uppercase", label: "Uppercase" },
-          { value: "capitalize", label: "Capitalize" },
-        ],
-      },
-      level: {
-        label: "Level",
-        type: "select",
-        options: headingOptions,
-      },
+      color: BasicSelector("Font Color", [
+        { label: "Default", value: "default" },
+        { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Accent", value: "accent" },
+        { label: "Text", value: "text" },
+        { label: "Background", value: "background" },
+      ]),
+      weight: BasicSelector("Font Weight", []),
+      transform: BasicSelector("Text Transform", [
+        { value: "none", label: "None" },
+        { value: "lowercase", label: "Lowercase" },
+        { value: "uppercase", label: "Uppercase" },
+        { value: "capitalize", label: "Capitalize" },
+      ]),
+      level: BasicSelector("Level", headingOptions),
     },
   },
   body: {
@@ -181,33 +146,21 @@ const cardFields: Fields<CardProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: {
-        label: "Font Color",
-        type: "select",
-        options: [
-          { label: "Default", value: "default" },
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-          { label: "Accent", value: "accent" },
-          { label: "Text", value: "text" },
-          { label: "Background", value: "background" },
-        ],
-      },
-      weight: {
-        label: "Font Weight",
-        type: "select",
-        options: [],
-      },
-      transform: {
-        label: "Text Transform",
-        type: "select",
-        options: [
-          { value: "none", label: "None" },
-          { value: "lowercase", label: "Lowercase" },
-          { value: "uppercase", label: "Uppercase" },
-          { value: "capitalize", label: "Capitalize" },
-        ],
-      },
+      color: BasicSelector("Font Color", [
+        { label: "Default", value: "default" },
+        { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Accent", value: "accent" },
+        { label: "Text", value: "text" },
+        { label: "Background", value: "background" },
+      ]),
+      weight: BasicSelector("Font Weight", []),
+      transform: BasicSelector("Text Transform", [
+        { value: "none", label: "None" },
+        { value: "lowercase", label: "Lowercase" },
+        { value: "uppercase", label: "Uppercase" },
+        { value: "capitalize", label: "Capitalize" },
+      ]),
     },
   },
   image: {
@@ -220,37 +173,25 @@ const cardFields: Fields<CardProps> = {
           types: ["type.image"],
         },
       }),
-      size: {
-        type: "select",
-        label: "Size",
-        options: [
-          { label: "Small", value: "small" },
-          { label: "Medium", value: "medium" },
-          { label: "Large", value: "large" },
-          { label: "Full Width", value: "full" },
-        ],
-      },
-      aspectRatio: {
-        type: "select",
-        label: "Aspect Ratio",
-        options: [
-          { label: "Auto", value: "auto" },
-          { label: "Square", value: "square" },
-          { label: "Video (16:9)", value: "video" },
-          { label: "Portrait (3:4)", value: "portrait" },
-        ],
-      },
-      rounded: {
-        type: "select",
-        label: "Rounded Corners",
-        options: [
-          { label: "None", value: "none" },
-          { label: "Small", value: "small" },
-          { label: "Medium", value: "medium" },
-          { label: "Large", value: "large" },
-          { label: "Full", value: "full" },
-        ],
-      },
+      size: BasicSelector("Size", [
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+        { label: "Full Width", value: "full" },
+      ]),
+      aspectRatio: BasicSelector("Aspect Ratio", [
+        { label: "Auto", value: "auto" },
+        { label: "Square", value: "square" },
+        { label: "Video (16:9)", value: "video" },
+        { label: "Portrait (3:4)", value: "portrait" },
+      ]),
+      rounded: BasicSelector("Rounded Corners", [
+        { label: "None", value: "none" },
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+        { label: "Full", value: "full" },
+      ]),
     },
   },
   cta: {
@@ -263,30 +204,22 @@ const cardFields: Fields<CardProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: {
-        type: "select",
-        label: "Variant",
-        options: [
-          { label: "Primary", value: "primary" },
-          { label: "Link", value: "link" },
-        ],
-      },
+      variant: BasicSelector("Variant", [
+        { label: "Primary", value: "primary" },
+        { label: "Link", value: "link" },
+      ]),
       fontSize: FontSizeSelector(),
       linkType: linkTypeFields,
     },
   },
-  backgroundColor: {
-    label: "Background Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "bg-card-backgroundColor" },
-      { label: "Primary", value: "bg-palette-primary" },
-      { label: "Secondary", value: "bg-palette-secondary" },
-      { label: "Accent", value: "bg-palette-accent" },
-      { label: "Text", value: "bg-palette-text" },
-      { label: "Background", value: "bg-palette-background" },
-    ],
-  },
+  backgroundColor: BasicSelector("Background Color", [
+    { label: "Default", value: "bg-card-backgroundColor" },
+    { label: "Primary", value: "bg-palette-primary" },
+    { label: "Secondary", value: "bg-palette-secondary" },
+    { label: "Accent", value: "bg-palette-accent" },
+    { label: "Text", value: "bg-palette-text" },
+    { label: "Background", value: "bg-palette-background" },
+  ]),
 };
 
 const CardWrapper = ({
@@ -479,11 +412,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         objectFields: {
           // @ts-expect-error ts(2339) objectFields does exist on the heading field
           ...cardFields.heading.objectFields,
-          weight: {
-            label: "Font Weight",
-            type: "select",
-            options: headingFontWeightOptions,
-          },
+          weight: BasicSelector("Font Weight", headingFontWeightOptions),
         },
       },
       subheading: {
@@ -492,11 +421,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         objectFields: {
           // @ts-expect-error ts(2339) objectFields does exist on the subheading field
           ...cardFields.subheading.objectFields,
-          weight: {
-            label: "Font Weight",
-            type: "select",
-            options: subheadingFontWeightOptions,
-          },
+          weight: BasicSelector("Font Weight", subheadingFontWeightOptions),
         },
       },
       body: {
@@ -505,11 +430,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         objectFields: {
           // @ts-expect-error ts(2339) objectFields does exist on the body field
           ...cardFields.body.objectFields,
-          weight: {
-            label: "Font Weight",
-            type: "select",
-            options: bodyFontWeightOptions,
-          },
+          weight: BasicSelector("Font Weight", bodyFontWeightOptions),
         },
       },
     };

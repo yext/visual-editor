@@ -8,6 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
+  BasicSelector,
 } from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
 import parsePhoneNumber from "libphonenumber-js";
@@ -91,18 +92,14 @@ const PhoneFields: Fields<PhoneProps> = {
       { label: "International", value: "international" },
     ],
   },
-  color: {
-    label: "Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
+  color: BasicSelector("Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
   includeHyperlink: {
     label: "Include Hyperlink",
     type: "radio",
@@ -172,11 +169,7 @@ const PhoneComponent: ComponentConfig<PhoneProps> = {
     });
     return {
       ...PhoneFields,
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        options: fontWeightOptions,
-      },
+      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
     };
   },
   render: (props) => <Phone {...props} />,

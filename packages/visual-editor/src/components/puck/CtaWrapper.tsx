@@ -9,7 +9,8 @@ import {
   YextEntityFieldSelector,
   FontSizeSelector,
   BorderRadiusSelector,
-} from "../../index.ts";
+  BasicSelector,
+} from "../../index.js";
 
 interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
@@ -28,14 +29,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       types: ["type.cta"],
     },
   }),
-  variant: {
-    type: "select",
-    label: "Variant",
-    options: [
-      { label: "Primary", value: "primary" },
-      { label: "Link", value: "link" },
-    ],
-  },
+  variant: BasicSelector("Variant", [
+    { label: "Primary", value: "primary" },
+    { label: "Link", value: "link" },
+  ]),
   size: {
     label: "Size",
     type: "radio",
