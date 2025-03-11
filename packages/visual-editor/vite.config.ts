@@ -5,27 +5,14 @@ import type { Plugin } from "vite";
 import { exec } from "node:child_process";
 
 export default defineConfig(() => ({
-  define: {
-    'process.env.PLUGIN': 'false',
-  },
   plugins: [react(), dts()],
   build: {
     lib: {
-      entry: {
-        "visual-editor": path.resolve(__dirname, "src/index.ts"),
-        "plugin/plugin": path.resolve(__dirname, "src/vite-plugin/index.ts"),
-      },
+      entry: path.resolve(__dirname, "src/index.ts"),
       name: "visual-editor",
       formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     rollupOptions: {
-      onLog(level, log, handler) {
-        if (level === 'warn' && log.plugin === 'vite:resolve') {
-          return // ignores warning about plugin:vite:resolve
-        } else {
-          handler(level, log);
-        }
-      },
       external: [
         "react",
         "react-dom",

@@ -2,14 +2,8 @@ import { defineConfig } from "vite";
 import path from "node:path";
 
 export default defineConfig(() => ({
-  define: {
-    "process.env.PLUGIN": "true",
-  },
-  css: {
-    postcss: "./postcss.config.cts",
-  },
   build: {
-    emptyOutDir: false,
+    emptyOutDir: true,
     outDir: "dist/plugin",
     lib: {
       entry: {

@@ -22,12 +22,15 @@
         "default": "./dist/visual-editor.cjs"
       }
     },
+    "./plugin": {
+      "default": "./dist/plugin/plugin.js"
+    },
     "./style.css": "./dist/style.css"
   },
   "scripts": {
     "build:components": "tsc && vite build",
-    "build:plugin": "tsc && vite build --config vite.config.plugin.ts",
-    "build": "tsc && vite build && vite build --config vite.config.plugin.ts",
+    "build:plugin": "vite build --config vite.config.plugin.ts",
+    "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "vitest run",
     "prettier": "prettier --write --cache .",
     "lint": "eslint --cache --fix src/",
