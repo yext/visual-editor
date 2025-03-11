@@ -1,7 +1,13 @@
 import * as React from "react";
 import { Link, CTA } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, EntityField, themeManagerCn, useDocument } from "../../index.ts";
+import {
+  Body,
+  EntityField,
+  themeManagerCn,
+  useDocument,
+  BasicSelector,
+} from "../../index.ts";
 import { cva, VariantProps } from "class-variance-authority";
 import {
   FaFacebook,
@@ -39,18 +45,14 @@ const footerVariants = cva("", {
 type FooterProps = VariantProps<typeof footerVariants>;
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: {
-    label: "Background Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
+  backgroundColor: BasicSelector("Background Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
 };
 
 const Footer: ComponentConfig<FooterProps> = {

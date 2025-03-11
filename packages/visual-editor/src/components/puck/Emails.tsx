@@ -11,6 +11,7 @@ import {
   YextEntityFieldSelector,
   getFontWeightOverrideOptions,
   FontSizeSelector,
+  BasicSelector,
 } from "../../index.js";
 import { Link } from "@yext/pages-components";
 
@@ -97,18 +98,14 @@ const EmailsFields: Fields<EmailsProps> = {
     },
   }),
   fontSize: FontSizeSelector("Font Size", false),
-  color: {
-    label: "Color",
-    type: "select",
-    options: [
-      { label: "Default", value: "default" },
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Accent", value: "accent" },
-      { label: "Text", value: "text" },
-      { label: "Background", value: "background" },
-    ],
-  },
+  color: BasicSelector("Color", [
+    { label: "Default", value: "default" },
+    { label: "Primary", value: "primary" },
+    { label: "Secondary", value: "secondary" },
+    { label: "Accent", value: "accent" },
+    { label: "Text", value: "text" },
+    { label: "Background", value: "background" },
+  ]),
   includeHyperlink: {
     label: "Include Hyperlink",
     type: "radio",
@@ -197,11 +194,7 @@ const EmailsComponent: ComponentConfig<EmailsProps> = {
     });
     return {
       ...EmailsFields,
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        options: fontWeightOptions,
-      },
+      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
     };
   },
   render: (props) => <Emails {...props} />,

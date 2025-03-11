@@ -9,6 +9,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   FontSizeSelector,
+  BasicSelector,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
@@ -47,14 +48,10 @@ interface PromoProps {
 }
 
 const promoFields: Fields<PromoProps> = {
-  orientation: {
-    type: "select",
-    label: "Orientation",
-    options: [
-      { label: "Left", value: "left" },
-      { label: "Right", value: "right" },
-    ],
-  },
+  orientation: BasicSelector("Orientation", [
+    { label: "Left", value: "left" },
+    { label: "Right", value: "right" },
+  ]),
   title: {
     type: "object",
     label: "Title",
@@ -66,28 +63,20 @@ const promoFields: Fields<PromoProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: {
-        label: "Font Color",
-        type: "select",
-        options: [
-          { label: "Default", value: "default" },
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-          { label: "Accent", value: "accent" },
-          { label: "Text", value: "text" },
-          { label: "Background", value: "background" },
-        ],
-      },
-      transform: {
-        label: "Text Transform",
-        type: "select",
-        options: [
-          { value: "none", label: "None" },
-          { value: "lowercase", label: "Lowercase" },
-          { value: "uppercase", label: "Uppercase" },
-          { value: "capitalize", label: "Capitalize" },
-        ],
-      },
+      color: BasicSelector("Font Color", [
+        { label: "Default", value: "default" },
+        { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Accent", value: "accent" },
+        { label: "Text", value: "text" },
+        { label: "Background", value: "background" },
+      ]),
+      transform: BasicSelector("Text Transform", [
+        { value: "none", label: "None" },
+        { value: "lowercase", label: "Lowercase" },
+        { value: "uppercase", label: "Uppercase" },
+        { value: "capitalize", label: "Capitalize" },
+      ]),
     },
   },
   description: {
@@ -101,28 +90,20 @@ const promoFields: Fields<PromoProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: {
-        label: "Font Color",
-        type: "select",
-        options: [
-          { label: "Default", value: "default" },
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-          { label: "Accent", value: "accent" },
-          { label: "Text", value: "text" },
-          { label: "Background", value: "background" },
-        ],
-      },
-      transform: {
-        label: "Text Transform",
-        type: "select",
-        options: [
-          { value: "none", label: "None" },
-          { value: "lowercase", label: "Lowercase" },
-          { value: "uppercase", label: "Uppercase" },
-          { value: "capitalize", label: "Capitalize" },
-        ],
-      },
+      color: BasicSelector("Font Color", [
+        { label: "Default", value: "default" },
+        { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
+        { label: "Accent", value: "accent" },
+        { label: "Text", value: "text" },
+        { label: "Background", value: "background" },
+      ]),
+      transform: BasicSelector("Text Transform", [
+        { value: "none", label: "None" },
+        { value: "lowercase", label: "Lowercase" },
+        { value: "uppercase", label: "Uppercase" },
+        { value: "capitalize", label: "Capitalize" },
+      ]),
     },
   },
   image: {
@@ -135,37 +116,25 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.image"],
         },
       }),
-      size: {
-        type: "select",
-        label: "Size",
-        options: [
-          { label: "Small", value: "small" },
-          { label: "Medium", value: "medium" },
-          { label: "Large", value: "large" },
-          { label: "Full Width", value: "full" },
-        ],
-      },
-      aspectRatio: {
-        type: "select",
-        label: "Aspect Ratio",
-        options: [
-          { label: "Auto", value: "auto" },
-          { label: "Square", value: "square" },
-          { label: "Video (16:9)", value: "video" },
-          { label: "Portrait (3:4)", value: "portrait" },
-        ],
-      },
-      rounded: {
-        type: "select",
-        label: "Rounded Corners",
-        options: [
-          { label: "None", value: "none" },
-          { label: "Small", value: "small" },
-          { label: "Medium", value: "medium" },
-          { label: "Large", value: "large" },
-          { label: "Full", value: "full" },
-        ],
-      },
+      size: BasicSelector("Size", [
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+        { label: "Full Width", value: "full" },
+      ]),
+      aspectRatio: BasicSelector("Aspect Ratio", [
+        { label: "Auto", value: "auto" },
+        { label: "Square", value: "square" },
+        { label: "Video (16:9)", value: "video" },
+        { label: "Portrait (3:4)", value: "portrait" },
+      ]),
+      rounded: BasicSelector("Rounded Corners", [
+        { label: "None", value: "none" },
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+        { label: "Full", value: "full" },
+      ]),
     },
   },
   cta: {
@@ -178,14 +147,10 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: {
-        type: "select",
-        label: "Variant",
-        options: [
-          { label: "Primary", value: "primary" },
-          { label: "Link", value: "link" },
-        ],
-      },
+      variant: BasicSelector("Variant", [
+        { label: "Primary", value: "primary" },
+        { label: "Link", value: "link" },
+      ]),
       fontSize: FontSizeSelector(),
       linkType: linkTypeFields,
     },
