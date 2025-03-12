@@ -1,0 +1,36 @@
+{
+  "__": {
+    "entityPageSet": {},
+    "name": "dev-location"
+  },
+  "_site": null,
+  "address": {
+    "city": "Las Vegas",
+    "countryCode": "US",
+    "line1": "Casino St",
+    "localizedCountryName": "United States",
+    "localizedRegionName": "Nevada",
+    "postalCode": "12345",
+    "region": "NV"
+  },
+  "businessId": 1000146856,
+  "id": "casino_st",
+  "locale": "en",
+  "meta": {
+    "entityType": {
+      "id": "location",
+      "uid": 0
+    },
+    "locale": "en"
+  },
+  "name": "Supernova BBQ",
+  "siteDomain": "",
+  "siteId": 0,
+  "siteInternalHostName": "",
+  "slug": "locations/casino_st",
+  "uid": 8695734,
+  "yextDisplayCoordinate": {
+    "latitude": 36.171563,
+    "longitude": -115.1391009
+  }
+}
