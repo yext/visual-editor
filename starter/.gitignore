@@ -1,6 +1,5 @@
 node_modules/
 sites-rendered-output/
-localData/
 dist/
 .yext
 .yextrc
