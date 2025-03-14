@@ -62,21 +62,13 @@ export const Editor = ({
     });
   };
 
-  // redirect to 404 page when going to /edit page outside of Storm
+  // redirect to 404 page when going to /edit outside of iframe
   useEffect(() => {
     if (typeof window !== "undefined" && !localDev) {
-      const referrer = window.document.referrer;
-
-      if (!referrer) {
-        window.location.assign("/404.html");
-      } else if (
-        !referrer.includes("pagescdn") &&
-        !referrer.includes("yext.com") &&
-        !referrer.includes("localhost")
-      ) {
-        window.location.assign("/404.html");
-      } else {
+      if (window.parent !== window.self) {
         setParentLoaded(true);
+      } else {
+        window.location.assign("/404.html");
       }
     }
   }, []);
