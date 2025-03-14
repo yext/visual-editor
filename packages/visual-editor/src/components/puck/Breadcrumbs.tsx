@@ -1,4 +1,4 @@
-import { useDocument } from "../../index.js";
+import { useTemplateProps } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
 import { MaybeLink } from "./atoms/maybeLink.js";
 
@@ -19,8 +19,14 @@ const getDirectoryParents = (
 
 export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
-  const document = useDocument<any>();
-  const breadcrumbs = getDirectoryParents(document);
+  const { document, relativePrefixToRoot } = useTemplateProps<any>();
+  let breadcrumbs = getDirectoryParents(document);
+  if (breadcrumbs) {
+    // append the current and filter out missing or malformed data
+    breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
+      (b) => b.name
+    );
+  }
 
   return (
     <div>
@@ -29,8 +35,8 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
           <ol className="components flex flex-wrap text-link-fontSize text-body-color">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
-              const href = document.relativePrefixToRoot
-                ? document.relativePrefixToRoot + slug
+              const href = relativePrefixToRoot
+                ? relativePrefixToRoot + slug
                 : slug;
               return (
                 <li key={idx}>
