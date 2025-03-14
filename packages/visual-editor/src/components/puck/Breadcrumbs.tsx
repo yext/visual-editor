@@ -20,7 +20,10 @@ const getDirectoryParents = (
 export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
-  const breadcrumbs = getDirectoryParents(document);
+  let breadcrumbs = getDirectoryParents(document);
+  if (breadcrumbs) {
+    breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }];
+  }
 
   return (
     <div>
