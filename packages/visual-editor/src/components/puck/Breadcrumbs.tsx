@@ -22,7 +22,10 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
   if (breadcrumbs) {
-    breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }];
+    // append the current and filter out missing or malformed data
+    breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
+      (b) => b.name
+    );
   }
 
   return (
