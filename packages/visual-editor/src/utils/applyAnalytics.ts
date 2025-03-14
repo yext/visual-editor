@@ -1,9 +1,9 @@
 export const applyAnalytics = (document: Record<string, any>) => {
-  if (!document?.__?.theme) {
+  if (!document?.__?.visualEditorConfig) {
     return;
   }
 
-  const googleTagManagerId: string = JSON.parse(document.__.theme)
+  const googleTagManagerId: string = JSON.parse(document.__.visualEditorConfig)
     ?.siteAttributes?.googleTagManagerId;
 
   if (googleTagManagerId) {
