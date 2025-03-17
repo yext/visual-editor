@@ -1,11 +1,10 @@
-import { useDocument } from "../../hooks/useDocument.tsx";
+import { useTemplateProps, themeManagerCn } from "../../index.js";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { Address, HoursStatus } from "@yext/pages-components";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { Section } from "./atoms/section.tsx";
-import { themeManagerCn } from "../../utils/index.ts";
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -145,7 +144,7 @@ const DirectoryList = ({
 
 const DirectoryComponent = (props: DirectoryProps) => {
   const { separator = "/" } = props;
-  const document = useDocument<any>();
+  const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   return (
     <>
@@ -156,14 +155,14 @@ const DirectoryComponent = (props: DirectoryProps) => {
         isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
-            relativePrefixToRoot={document.relativePrefixToRoot}
+            relativePrefixToRoot={relativePrefixToRoot}
           />
         )}
       {document.dm_directoryChildren &&
         !isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryList
             directoryChildren={document.dm_directoryChildren}
-            relativePrefixToRoot={document.relativePrefixToRoot}
+            relativePrefixToRoot={relativePrefixToRoot}
           />
         )}
     </>
