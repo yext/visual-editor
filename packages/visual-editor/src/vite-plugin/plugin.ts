@@ -1,7 +1,8 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Plugin } from "vite";
-import { editTemplate, mainTemplate } from "./getTemplates.ts";
+import mainTemplate from "./templates/main.tsx?raw";
+import editTemplate from "./templates/edit.tsx?raw";
 
 // files to generate
 const virtualFiles: Record<string, string> = {
