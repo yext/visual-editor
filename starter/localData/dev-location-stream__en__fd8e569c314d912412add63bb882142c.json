@@ -1,0 +1,37 @@
+{
+  "__": {
+    "entityPageSet": {},
+    "name": "dev-location"
+  },
+  "_site": null,
+  "address": {
+    "city": "North Bethesda",
+    "countryCode": "US",
+    "line1": "12345 Parklawn Drive",
+    "line2": "4",
+    "localizedCountryName": "United States",
+    "localizedRegionName": "Maryland",
+    "postalCode": "20852",
+    "region": "MD"
+  },
+  "businessId": 1000146856,
+  "id": "parklawn_drive",
+  "locale": "en",
+  "meta": {
+    "entityType": {
+      "id": "location",
+      "uid": 0
+    },
+    "locale": "en"
+  },
+  "name": "Supernova BBQ",
+  "siteDomain": "",
+  "siteId": 0,
+  "siteInternalHostName": "",
+  "slug": "location/parklawn_drive",
+  "uid": 8745421,
+  "yextDisplayCoordinate": {
+    "latitude": 39.0606577,
+    "longitude": -77.1110885
+  }
+}
