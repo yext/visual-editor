@@ -3,20 +3,21 @@ import fs from "fs-extra";
 import { Plugin } from "vite";
 import { editTemplate, mainTemplate } from "./getTemplates.ts";
 
+// files to generate
+const virtualFiles: Record<string, string> = {
+  "src/templates/main.tsx": mainTemplate,
+  "src/templates/edit.tsx": editTemplate,
+};
+
 export const yextVisualEditorPlugin = (): Plugin => {
   let isBuildMode = false;
   const filesToCleanup: string[] = [];
-
-  // files to generate
-  const virtualFiles: Record<string, string> = {
-    "src/templates/main.tsx": mainTemplate,
-    "src/templates/edit.tsx": editTemplate,
-  };
 
   const generateFiles = () => {
     Object.entries(virtualFiles).forEach(([fileName, content]) => {
       const filePath = path.join(process.cwd(), fileName);
       filesToCleanup.push(filePath);
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
       fs.writeFileSync(filePath, content);
     });
   };
@@ -30,14 +31,20 @@ export const yextVisualEditorPlugin = (): Plugin => {
   // cleanup on interruption (ctrl + C)
   process.on("SIGINT", () => {
     cleanupFiles();
-    setTimeout(() => process.exit(0), 100); // without this cleanup doesn't finish before process.exit
+    process.nextTick(() => process.exit(0));
+  });
+
+  process.on("SIGTERM", () => {
+    cleanupFiles();
+    process.nextTick(() => process.exit(0));
   });
 
   return {
     name: "vite-plugin-yext-visual-editor",
-    apply: "serve",
     configureServer(server) {
-      if (isBuildMode) return;
+      if (isBuildMode) {
+        return;
+      }
       generateFiles();
       server.httpServer?.on("close", () => {
         cleanupFiles();
@@ -47,15 +54,21 @@ export const yextVisualEditorPlugin = (): Plugin => {
       isBuildMode = command === "build";
     },
     buildStart() {
-      if (!isBuildMode) return;
+      if (!isBuildMode) {
+        return;
+      }
       generateFiles();
     },
     buildEnd() {
-      if (!isBuildMode) return;
+      if (!isBuildMode) {
+        return;
+      }
       cleanupFiles();
     },
     closeBundle() {
-      if (!isBuildMode) return;
+      if (!isBuildMode) {
+        return;
+      }
       cleanupFiles();
     },
   };
