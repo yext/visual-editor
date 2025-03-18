@@ -45,7 +45,19 @@ export const yextVisualEditorPlugin = (): Plugin => {
     config(_, { command }) {
       isBuildMode = command === "build";
     },
+    configureServer(server) {
+      if (isBuildMode) {
+        return;
+      }
+      generateFiles();
+      server.httpServer?.on("close", () => {
+        cleanupFiles();
+      });
+    },
     buildStart() {
+      if (!isBuildMode) {
+        return;
+      }
       generateFiles();
     },
     buildEnd() {
