@@ -25,6 +25,6 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src", "index.d.ts", ".eslintrc.json"],
+  "include": ["src/index.ts", "index.d.ts", ".eslintrc.json"],
   "exclude": ["node_modules"]
 }

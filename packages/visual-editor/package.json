@@ -22,13 +22,18 @@
         "default": "./dist/visual-editor.cjs"
       }
     },
+    "./plugin": {
+      "default": "./dist/plugin/plugin.js"
+    },
     "./style.css": "./dist/style.css"
   },
   "scripts": {
-    "build": "tsc && vite build",
+    "build:components": "tsc && vite build",
+    "build:plugin": "vite build --config vite.config.plugin.ts",
+    "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "vitest run",
     "prettier": "prettier --write --cache .",
-    "lint": "eslint --cache --fix src/",
+    "lint": "eslint --cache --fix src/ --ignore-pattern 'src/vite-plugin/templates/*'",
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite"
