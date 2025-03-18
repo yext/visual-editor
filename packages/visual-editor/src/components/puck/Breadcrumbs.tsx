@@ -6,11 +6,16 @@ export type BreadcrumbsProps = {
   separator?: string;
 };
 
+// getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
+// the directory parent are not objects, returns an empty array.
 const getDirectoryParents = (
   document: Record<string, any>
 ): Array<{ slug: string; name: string }> => {
   for (const key in document) {
-    if (key.startsWith("dm_directoryParents_")) {
+    if (
+      key.startsWith("dm_directoryParents_") &&
+      typeof document[key]?.[0] === "object"
+    ) {
       return document[key];
     }
   }
