@@ -10,17 +10,12 @@ import {
 import * as React from "react";
 
 type LocatorProps = {
-  text: string;
   apiKey: string;
 };
 
 const fields: Fields<LocatorProps> = {
-  text: {
-    label: "Text",
-    type: "text",
-  },
   apiKey: {
-    label: "Api Key",
+    label: "API Key",
     type: "text",
   },
 };
@@ -28,7 +23,6 @@ const fields: Fields<LocatorProps> = {
 const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields,
   defaultProps: {
-    text: "Some Placeholder",
     apiKey: "Fake Key",
   },
   label: "Locator",
