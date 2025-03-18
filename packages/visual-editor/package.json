@@ -33,7 +33,7 @@
     "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "vitest run",
     "prettier": "prettier --write --cache .",
-    "lint": "eslint --cache --fix src/",
+    "lint": "eslint --cache --fix src/ --ignore-pattern 'src/vite-plugin/templates/*'",
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite"
@@ -72,7 +72,7 @@
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
     "*": "prettier --write --cache --ignore-unknown",
-    "*.{ts,js,tsx,jsx}": "eslint --cache --fix --ignore-pattern 'src/vite-plugin/templates/*'"
+    "*.{ts,js,tsx,jsx}": "eslint --cache --fix"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",

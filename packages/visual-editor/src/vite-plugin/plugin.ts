@@ -42,22 +42,10 @@ export const yextVisualEditorPlugin = (): Plugin => {
 
   return {
     name: "vite-plugin-yext-visual-editor",
-    configureServer(server) {
-      if (isBuildMode) {
-        return;
-      }
-      generateFiles();
-      server.httpServer?.on("close", () => {
-        cleanupFiles();
-      });
-    },
     config(_, { command }) {
       isBuildMode = command === "build";
     },
     buildStart() {
-      if (!isBuildMode) {
-        return;
-      }
       generateFiles();
     },
     buildEnd() {
