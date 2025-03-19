@@ -8,6 +8,7 @@ import {
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
 import * as React from "react";
+import { useDocument } from "@yext/visual-editor";
 
 type LocatorProps = {
   apiKey: string;
@@ -29,13 +30,16 @@ const LocatorComponent: ComponentConfig<LocatorProps> = {
   render: (props) => <Locator {...props} />,
 };
 
-const Locator: React.FC<LocatorProps> = (props) => {
+const Locator: React.FC<LocatorProps> = ({ apiKey }) => {
+  const document: {
+    businessId: number;
+  } = useDocument();
   const config = {
-    apiKey: props.apiKey,
+    apiKey,
     experienceKey: "jacob-test",
     locale: "en",
     experienceVersion: "STAGING",
-    businessId: 70452,
+    businessId: document.businessId,
     cloudRegion: CloudRegion.US,
     cloudChoice: CloudChoice.GLOBAL_MULTI,
     environment: Environment.PROD,
