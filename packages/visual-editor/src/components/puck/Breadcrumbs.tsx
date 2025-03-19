@@ -6,16 +6,35 @@ export type BreadcrumbsProps = {
   separator?: string;
 };
 
+// getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
+// the directory parent are not the expected objects, returns an empty array.
 const getDirectoryParents = (
   document: Record<string, any>
 ): Array<{ slug: string; name: string }> => {
   for (const key in document) {
-    if (key.startsWith("dm_directoryParents_")) {
+    if (
+      key.startsWith("dm_directoryParents_") &&
+      isValidDirectoryParents(document[key])
+    ) {
       return document[key];
     }
   }
   return [];
 };
+
+// isValidDirectoryParents returns true if the array from dm_directoryParents
+// matches this type: Array<{ slug: string; name: string }>
+function isValidDirectoryParents(value: any[]): boolean {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (item) =>
+        typeof item === "object" &&
+        typeof item?.name === "string" &&
+        typeof item?.slug === "string"
+    )
+  );
+}
 
 export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
