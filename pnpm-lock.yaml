@@ -125,8 +125,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@yext/pages-components":
-        specifier: ^1.1.0
-        version: 1.1.1(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
+        specifier: ^1.1.4
+        version: 1.1.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -391,8 +391,8 @@ importers:
         specifier: 1.2.0-beta.4
         version: 1.2.0-beta.4(@algolia/client-search@5.20.4)(@types/node@20.17.6)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(vite@5.4.10(@types/node@20.17.6))
       "@yext/pages-components":
-        specifier: ^1.1.0
-        version: 1.1.1(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
+        specifier: ^1.1.4
+        version: 1.1.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
       "@yext/visual-editor":
         specifier: workspace:*
         version: link:../packages/visual-editor
@@ -3847,10 +3847,10 @@ packages:
         integrity: sha512-D8ahIRIVtdvV7Ycup13OY930waOzi50gzwXO7Cpa4SK0+eREg3YMxsNxbXpgXVoEdwKaMw/xhsKy3Cy0fTcQZA==,
       }
 
-  "@yext/pages-components@1.1.1":
+  "@yext/pages-components@1.1.4":
     resolution:
       {
-        integrity: sha512-j+E84FdSHHPw83pxw+5uxZpG9thnDHQmyAcOknnN26thgCgJcBQVu9ZmciztOTmywTBKqKPlcRhcIF1cwkGvRg==,
+        integrity: sha512-AJXSBpZgWFyAgmOoHJ7q6kbVmlOq4GgoLPFs5UkmFsj9BiWCASewaIAljA7NxDXvq+VrI14BFWkZQuLLqbhpPg==,
       }
     engines: { node: ^18 || ^20 || ^22 }
     peerDependencies:
@@ -12696,7 +12696,7 @@ snapshots:
     dependencies:
       ulidx: 2.4.1
 
-  "@yext/pages-components@1.1.1(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)":
+  "@yext/pages-components@1.1.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)":
     dependencies:
       "@lexical/code": 0.12.6(lexical@0.12.6)
       "@lexical/hashtag": 0.12.6(lexical@0.12.6)
@@ -15025,7 +15025,7 @@ snapshots:
   micromark@3.2.0:
     dependencies:
       "@types/debug": 4.1.12
-      debug: 4.3.7
+      debug: 4.4.0
       decode-named-character-reference: 1.0.2
       micromark-core-commonmark: 1.1.0
       micromark-factory-space: 1.1.0
