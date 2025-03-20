@@ -4,30 +4,20 @@ import {
   resolveYextEntityField,
   YextEntityFieldSelector,
   useDocument,
-  FontSizeSelector,
   BasicSelector,
-  getFontWeightOverrideOptions,
 } from "../../index.js";
-import { Body, BodyProps } from "./atoms/body.js";
+import { Body } from "./atoms/body.js";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export type BannerProps = {
   text: YextEntityField<string>;
-  textAlignment: "justify-end" | "justify-start" | "justify-center";
-  fontSize: BodyProps["fontSize"];
-  fontWeight?: BodyProps["fontWeight"];
-  textColor: BodyProps["color"];
-  backgroundColor:
-    | "bg-palette-primary"
-    | "bg-palette-secondary"
-    | "bg-palette-accent"
-    | "bg-palette-text"
-    | "bg-palette-background";
+  textAlignment: "left" | "right" | "center";
+  backgroundColor: "bg-palette-primary" | "bg-palette-secondary";
 };
 
 const bannerFields: Fields<BannerProps> = {
   text: YextEntityFieldSelector<any, string>({
-    label: "Entity Field",
+    label: "Text",
     filter: {
       types: ["type.string"],
     },
@@ -36,45 +26,38 @@ const bannerFields: Fields<BannerProps> = {
     label: "Text Alignment",
     type: "radio",
     options: [
-      { label: "Left", value: "justify-start" },
-      { label: "Center", value: "justify-center" },
-      { label: "Right", value: "justify-end" },
+      { label: "Left", value: "left" },
+      { label: "Center", value: "center" },
+      { label: "Right", value: "right" },
     ],
   },
-  fontSize: FontSizeSelector(),
-  textColor: BasicSelector("Text Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
   backgroundColor: BasicSelector("Background Color", [
-    { label: "Background", value: "bg-palette-background" },
-    { label: "Primary", value: "bg-palette-primary" },
-    { label: "Secondary", value: "bg-palette-secondary" },
-    { label: "Accent", value: "bg-palette-accent" },
-    { label: "Text", value: "bg-palette-text" },
+    { label: "Dark Primary", value: "bg-palette-primary" },
+    { label: "Dark Secondary", value: "bg-palette-secondary" },
   ]),
 };
 
 const BannerComponent = ({
   text,
   textAlignment,
-  fontSize,
-  fontWeight,
-  textColor,
   backgroundColor,
 }: BannerProps) => {
   const document = useDocument();
   const resolvedText = resolveYextEntityField<string>(document, text);
+
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[textAlignment];
+
+  const textColor =
+    backgroundColor === "bg-palette-primary" ? "secondary" : "primary";
+
   return (
     <div className={`Banner ${backgroundColor} components px-4 md:px-20 py-6`}>
-      <div className={`flex ${textAlignment} items-center`}>
-        <Body color={textColor} fontWeight={fontWeight} fontSize={fontSize}>
-          {resolvedText}
-        </Body>
+      <div className={`flex ${justifyClass} items-center`}>
+        <Body color={textColor}>{resolvedText}</Body>
       </div>
     </div>
   );
@@ -88,20 +71,8 @@ export const Banner: ComponentConfig<BannerProps> = {
       constantValue: "Banner Text",
       constantValueEnabled: true,
     },
-    textAlignment: "justify-center",
-    fontSize: "base",
-    fontWeight: "default",
-    textColor: "default",
-    backgroundColor: "bg-palette-background",
-  },
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: "--fontFamily-body-fontFamily",
-    });
-    return {
-      ...bannerFields,
-      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
-    };
+    textAlignment: "center",
+    backgroundColor: "bg-palette-primary",
   },
   render: (props) => <BannerComponent {...props} />,
 };

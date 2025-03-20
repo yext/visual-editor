@@ -3,8 +3,9 @@ export const applyAnalytics = (document: Record<string, any>) => {
     return;
   }
 
-  const googleTagManagerId: string = JSON.parse(document.__.visualEditorConfig)
-    ?.siteAttributes?.googleTagManagerId;
+  const googleTagManagerId: string = JSON.parse(
+    document.__.visualEditorConfig
+  )?.googleTagManagerId;
 
   if (googleTagManagerId) {
     return `<!-- Google tag (gtag.js) -->
