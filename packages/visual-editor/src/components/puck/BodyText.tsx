@@ -18,7 +18,6 @@ const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, variant }, ref) => {
     const document = useDocument();
 
-    // Map variant to fontSize
     const variantToFontSize: Record<
       BodyTextProps["variant"],
       NonNullable<BodyProps["fontSize"]>
