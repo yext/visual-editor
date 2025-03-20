@@ -361,7 +361,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "Body",
         constantValueEnabled: true,
       },
-      fontSize: "default",
+      fontSize: "base",
       weight: "default",
       color: "default",
       transform: "none",

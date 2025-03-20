@@ -7,9 +7,6 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  getFontWeightOverrideOptions,
-  FontSizeSelector,
-  BasicSelector,
 } from "../../index.js";
 
 interface BodyTextProps extends BodyProps {
@@ -38,26 +35,20 @@ BodyText.displayName = "BodyText";
 
 const bodyTextFields: Fields<BodyTextProps> = {
   text: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "Text",
     filter: {
       types: ["type.string"],
     },
   }),
-  fontSize: FontSizeSelector(),
-  color: BasicSelector("Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
-  textTransform: BasicSelector("Text Transform", [
-    { label: "None", value: "none" },
-    { label: "Uppercase", value: "uppercase" },
-    { label: "Lowercase", value: "lowercase" },
-    { label: "Capitalize", value: "capitalize" },
-  ]),
+  fontSize: {
+    label: "Variant",
+    type: "radio",
+    options: [
+      { label: "Small", value: "sm" },
+      { label: "Base", value: "base" },
+      { label: "Large", value: "lg" },
+    ],
+  },
 };
 
 const BodyTextComponent: ComponentConfig<BodyTextProps> = {
@@ -69,19 +60,7 @@ const BodyTextComponent: ComponentConfig<BodyTextProps> = {
       constantValue: "Text",
       constantValueEnabled: true,
     },
-    fontSize: "default",
-    fontWeight: "default",
-    color: "default",
-    textTransform: "none",
-  },
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: "--fontFamily-body-fontFamily",
-    });
-    return {
-      ...bodyTextFields,
-      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
-    };
+    fontSize: "base",
   },
   render: (props) => <BodyText {...props} />,
 };
