@@ -4,18 +4,14 @@ import {
   resolveYextEntityField,
   YextEntityFieldSelector,
   useDocument,
-  FontSizeSelector,
   BasicSelector,
-  getFontWeightOverrideOptions,
 } from "../../index.js";
-import { Body, BodyProps } from "./atoms/body.js";
+import { Body } from "./atoms/body.js";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export type BannerProps = {
   text: YextEntityField<string>;
   textAlignment: "left" | "right" | "center";
-  fontSize: BodyProps["fontSize"];
-  fontWeight?: BodyProps["fontWeight"];
   backgroundColor: "bg-palette-primary" | "bg-palette-secondary";
 };
 
@@ -35,7 +31,6 @@ const bannerFields: Fields<BannerProps> = {
       { label: "Right", value: "right" },
     ],
   },
-  fontSize: FontSizeSelector(),
   backgroundColor: BasicSelector("Background Color", [
     { label: "Dark Primary", value: "bg-palette-primary" },
     { label: "Dark Secondary", value: "bg-palette-secondary" },
@@ -45,8 +40,6 @@ const bannerFields: Fields<BannerProps> = {
 const BannerComponent = ({
   text,
   textAlignment,
-  fontSize,
-  fontWeight,
   backgroundColor,
 }: BannerProps) => {
   const document = useDocument();
@@ -64,9 +57,7 @@ const BannerComponent = ({
   return (
     <div className={`Banner ${backgroundColor} components px-4 md:px-20 py-6`}>
       <div className={`flex ${justifyClass} items-center`}>
-        <Body color={textColor} fontWeight={fontWeight} fontSize={fontSize}>
-          {resolvedText}
-        </Body>
+        <Body color={textColor}>{resolvedText}</Body>
       </div>
     </div>
   );
@@ -81,18 +72,7 @@ export const Banner: ComponentConfig<BannerProps> = {
       constantValueEnabled: true,
     },
     textAlignment: "center",
-    fontSize: "default",
-    fontWeight: "default",
     backgroundColor: "bg-palette-primary",
-  },
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: "--fontFamily-body-fontFamily",
-    });
-    return {
-      ...bannerFields,
-      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
-    };
   },
   render: (props) => <BannerComponent {...props} />,
 };
