@@ -11,7 +11,7 @@ import {
   FontSizeSelector,
   BasicSelector,
 } from "../../index.js";
-import { Body } from "./atoms/body.js";
+import { Body, BodyProps } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
@@ -29,9 +29,9 @@ interface PromoProps {
   };
   description: {
     text: YextEntityField<string>;
-    fontSize: HeadingProps["fontSize"];
-    color: HeadingProps["color"];
-    transform: HeadingProps["transform"];
+    fontSize: BodyProps["fontSize"];
+    color: BodyProps["color"];
+    transform: BodyProps["textTransform"];
   };
   image: {
     image: YextEntityField<ImageType>;
@@ -261,7 +261,7 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
         constantValue: "Description",
         constantValueEnabled: true,
       },
-      fontSize: "default",
+      fontSize: "base",
       color: "default",
       transform: "none",
     },

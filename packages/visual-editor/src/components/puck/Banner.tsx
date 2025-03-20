@@ -89,7 +89,7 @@ export const Banner: ComponentConfig<BannerProps> = {
       constantValueEnabled: true,
     },
     textAlignment: "justify-center",
-    fontSize: "default",
+    fontSize: "base",
     fontWeight: "default",
     textColor: "default",
     backgroundColor: "bg-palette-background",

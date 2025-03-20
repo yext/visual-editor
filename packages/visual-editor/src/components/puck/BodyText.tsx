@@ -9,24 +9,13 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 
-interface BodyTextProps {
+interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
-  variant: "small" | "base" | "large";
 }
 
 const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
-  ({ text, variant }, ref) => {
+  ({ text, ...bodyProps }, ref) => {
     const document = useDocument();
-
-    const variantToFontSize: Record<
-      BodyTextProps["variant"],
-      NonNullable<BodyProps["fontSize"]>
-    > = {
-      small: "xs",
-      base: "base",
-      large: "xl",
-    };
-    const fontSize = variantToFontSize[variant];
 
     return (
       <EntityField
@@ -34,7 +23,7 @@ const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >
-        <Body ref={ref} fontSize={fontSize}>
+        <Body ref={ref} {...bodyProps}>
           {resolveYextEntityField(document, text)}
         </Body>
       </EntityField>
@@ -51,13 +40,13 @@ const bodyTextFields: Fields<BodyTextProps> = {
       types: ["type.string"],
     },
   }),
-  variant: {
+  fontSize: {
     label: "Variant",
     type: "radio",
     options: [
-      { label: "Small", value: "small" },
+      { label: "Small", value: "sm" },
       { label: "Base", value: "base" },
-      { label: "Large", value: "large" },
+      { label: "Large", value: "lg" },
     ],
   },
 };
@@ -71,7 +60,7 @@ const BodyTextComponent: ComponentConfig<BodyTextProps> = {
       constantValue: "Text",
       constantValueEnabled: true,
     },
-    variant: "base",
+    fontSize: "base",
   },
   render: (props) => <BodyText {...props} />,
 };
