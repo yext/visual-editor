@@ -9,76 +9,17 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  getFontWeightOverrideOptions,
-  FontSizeSelector,
-  BasicSelector,
 } from "../../index.js";
 import { Link } from "@yext/pages-components";
 
 const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
-    fontSize: {
-      default: "",
-      xs: "text-xs",
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
-      "3xl": "text-3xl",
-      "4xl": "text-4xl",
-    },
-    fontWeight: {
-      default: "font-body-fontWeight",
-      "100": "font-thin",
-      "200": "font-extralight",
-      "300": "font-light",
-      "400": "font-normal",
-      "500": "font-medium",
-      "600": "font-semibold",
-      "700": "font-bold",
-      "800": "font-extrabold",
-      "900": "font-black",
-    },
-    color: {
-      default: "",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-    },
     includeHyperlink: {
       true: "underline hover:no-underline",
       false: "",
     },
   },
-  compoundVariants: [
-    {
-      includeHyperlink: true,
-      fontSize: "default",
-      className: "text-link-fontSize",
-    },
-    {
-      includeHyperlink: false,
-      fontSize: "default",
-      className: "text-body-fontSize",
-    },
-    {
-      includeHyperlink: true,
-      color: "default",
-      className: "text-link-color",
-    },
-    {
-      includeHyperlink: false,
-      color: "default",
-      className: "text-body-color",
-    },
-  ],
   defaultVariants: {
-    fontSize: "default",
-    fontWeight: "default",
-    color: "default",
     includeHyperlink: true,
   },
 });
@@ -90,22 +31,13 @@ interface EmailsProps extends VariantProps<typeof emailsVariants> {
 
 const EmailsFields: Fields<EmailsProps> = {
   list: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "Emails",
     filter: {
       types: ["type.string"],
       allowList: ["emails"],
       includeListsOnly: true,
     },
   }),
-  fontSize: FontSizeSelector("Font Size", false),
-  color: BasicSelector("Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
   includeHyperlink: {
     label: "Include Hyperlink",
     type: "radio",
@@ -124,9 +56,6 @@ const EmailsFields: Fields<EmailsProps> = {
 
 const Emails: React.FC<EmailsProps> = ({
   list: emailListField,
-  fontSize,
-  fontWeight,
-  color,
   includeHyperlink,
   listLength,
 }) => {
@@ -142,9 +71,7 @@ const Emails: React.FC<EmailsProps> = ({
     resolvedEmailList = [resolvedEmailList];
   }
 
-  const classNameCn = themeManagerCn(
-    emailsVariants({ fontSize, fontWeight, color, includeHyperlink })
-  );
+  const classNameCn = themeManagerCn(emailsVariants({ includeHyperlink }));
 
   return (
     <EntityField
@@ -158,7 +85,7 @@ const Emails: React.FC<EmailsProps> = ({
           .map((text: any, index: any) => (
             <li key={index} className={`mb-2 flex items-center`}>
               <img className={"mr-2"} src={mailIcon} />
-              {includeHyperlink ? (
+              {includeHyperlink && !!text ? (
                 <Link
                   cta={{
                     link: text,
@@ -187,15 +114,6 @@ const EmailsComponent: ComponentConfig<EmailsProps> = {
     },
     includeHyperlink: true,
     listLength: 5,
-  },
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: `--fontFamily-body-fontFamily`,
-    });
-    return {
-      ...EmailsFields,
-      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
-    };
   },
   render: (props) => <Emails {...props} />,
 };
