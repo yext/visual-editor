@@ -62,11 +62,9 @@ const BannerComponent = ({
     backgroundColor === "bg-palette-primary" ? "secondary" : "primary";
 
   return (
-    <div
-      className={`Banner w-full ${backgroundColor} components px-4 md:px-20 py-6`}
-    >
+    <div className={`Banner ${backgroundColor} components px-4 md:px-20 py-6`}>
       <div className={`flex ${justifyClass} items-center`}>
-        <Body fontWeight={fontWeight} fontSize={fontSize} color={textColor}>
+        <Body color={textColor} fontWeight={fontWeight} fontSize={fontSize}>
           {resolvedText}
         </Body>
       </div>
