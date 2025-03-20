@@ -6,9 +6,9 @@ import {
   Link,
   Address as RenderAddress,
 } from "@yext/pages-components";
+import { Body } from "./atoms/body.js";
 import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
-import { VariantProps } from "class-variance-authority";
 import {
   useDocument,
   resolveYextEntityField,
@@ -19,8 +19,6 @@ import {
 
 type AddressProps = {
   address: YextEntityField<AddressType>;
-  alignment: "items-start" | "items-center";
-  padding: VariantProps<typeof sectionVariants>["padding"];
   showGetDirections: boolean;
 };
 
@@ -29,24 +27,6 @@ const addressFields: Fields<AddressProps> = {
     label: "Address",
     filter: { types: ["type.address"] },
   }),
-  alignment: {
-    label: "Align card",
-    type: "radio",
-    options: [
-      { label: "Left", value: "items-start" },
-      { label: "Center", value: "items-center" },
-    ],
-  },
-  padding: {
-    label: "Padding",
-    type: "radio",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "default" },
-      { label: "Large", value: "large" },
-    ],
-  },
   showGetDirections: {
     label: "Show Get Directions Link",
     type: "radio",
@@ -58,8 +38,6 @@ const addressFields: Fields<AddressProps> = {
 };
 
 const Address = ({
-  alignment,
-  padding,
   address: addressField,
   showGetDirections,
 }: AddressProps) => {
@@ -74,33 +52,32 @@ const Address = ({
 
   return (
     <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
-      padding={padding}
+      className={sectionVariants({ className: "components flex items-start" })}
     >
       {address && (
-        <div>
-          <EntityField
-            displayName="Address"
-            fieldId={addressField.field}
-            constantValueEnabled={addressField.constantValueEnabled}
-          >
+        <EntityField
+          displayName="Address"
+          fieldId={addressField.field}
+          constantValueEnabled={addressField.constantValueEnabled}
+        >
+          <Body fontSize="base">
             <RenderAddress
               address={address as AddressType}
               lines={[["line1"], ["line2", "city", "region", "postalCode"]]}
             />
-            {coordinates && showGetDirections && (
-              <Link
-                cta={{
-                  link: coordinates,
-                  label: "Get Directions",
-                  linkType: "DRIVING_DIRECTIONS",
-                }}
-                target="_blank"
-                className="font-bold text-link-color text-link-fontSize underline hover:no-underline md:px-4;"
-              />
-            )}
-          </EntityField>
-        </div>
+          </Body>
+          {coordinates && showGetDirections && (
+            <Link
+              cta={{
+                link: coordinates,
+                label: "Get Directions",
+                linkType: "DRIVING_DIRECTIONS",
+              }}
+              target="_blank"
+              className="font-bold text-link-color text-link-fontSize underline hover:no-underline mt-2 block"
+            />
+          )}
+        </EntityField>
       )}
     </Section>
   );
@@ -109,8 +86,6 @@ const Address = ({
 const AddressComponent: ComponentConfig<AddressProps> = {
   fields: addressFields,
   defaultProps: {
-    alignment: "items-start",
-    padding: "none",
     address: {
       field: "address",
       constantValue: {
@@ -120,6 +95,7 @@ const AddressComponent: ComponentConfig<AddressProps> = {
         postalCode: "",
         countryCode: "",
       },
+      constantValueEnabled: true,
     },
     showGetDirections: true,
   },
