@@ -16,7 +16,12 @@ export const BasicSelector = (
             defaultValue={
               options.find((option) => option.value === value) ?? options[0]
             }
-            onChange={(option: any) => onChange(option)}
+            // option from onChange is the label of the selected option, but Puck's onChange expects the value
+            onChange={(option: any) =>
+              onChange(
+                (options.find((o) => o.label === option) ?? options[0]).value
+              )
+            }
             options={options}
           />
         </FieldLabel>

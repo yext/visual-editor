@@ -1,15 +1,13 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps } from "./atoms/heading.js";
+import { Heading, headingOptions, HeadingProps } from "./atoms/heading.js";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  FontSizeSelector,
   BasicSelector,
-  getFontWeightOverrideOptions,
 } from "../../index.js";
 
 interface HeadingTextProps extends HeadingProps {
@@ -43,27 +41,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
       types: ["type.string"],
     },
   }),
-  level: {
-    type: "number",
-    label: "Heading Level",
-    min: 1,
-    max: 6,
-  },
-  fontSize: FontSizeSelector(),
-  color: BasicSelector("Font Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
-  transform: BasicSelector("Text Transform", [
-    { value: "none", label: "None" },
-    { value: "lowercase", label: "Lowercase" },
-    { value: "uppercase", label: "Uppercase" },
-    { value: "capitalize", label: "Capitalize" },
-  ]),
+  level: BasicSelector("Heading Level", headingOptions),
 };
 
 const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
@@ -77,19 +55,6 @@ const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     },
     content: "Heading",
     level: 2,
-    fontSize: "default",
-    weight: "default",
-    color: "default",
-    transform: "none",
-  },
-  resolveFields: async (data) => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: `--fontFamily-heading${data.props.level}-fontFamily`,
-    });
-    return {
-      ...headingTextFields,
-      weight: BasicSelector("Font Weight", fontWeightOptions),
-    };
   },
   render: (props) => <HeadingText {...props} />,
 };
