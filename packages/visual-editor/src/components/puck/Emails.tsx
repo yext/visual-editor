@@ -19,6 +19,16 @@ const emailsVariants = cva("components list-inside font-body-fontFamily", {
       false: "",
     },
   },
+  compoundVariants: [
+    {
+      includeHyperlink: true,
+      className: "text-link-fontSize text-link-color",
+    },
+    {
+      includeHyperlink: false,
+      className: "text-body-fontSize text-body-color",
+    },
+  ],
   defaultVariants: {
     includeHyperlink: true,
   },
