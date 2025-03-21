@@ -40,7 +40,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
-  if (breadcrumbs) {
+  if (breadcrumbs?.length > 0) {
     // append the current and filter out missing or malformed data
     breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
       (b) => b.name
@@ -50,7 +50,10 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   return (
     <div>
       {breadcrumbs?.length > 0 && (
-        <nav className="my-4" aria-label="Breadcrumb">
+        <nav
+          className="container mx-auto my-4 px-4 sm:px-8 lg:px-16 xl:px-20 items-center"
+          aria-label="Breadcrumb"
+        >
           <ol className="components flex flex-wrap text-link-fontSize text-body-color">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
