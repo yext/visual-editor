@@ -36,16 +36,11 @@ function isValidDirectoryParents(value: any[]): boolean {
   );
 }
 
-// BreadcrumbsComponent renders breadcrumbs for DM related pages.
-// If there are no dm_directoryParents nor dm_directoryChildren,
-// then displays nothing. In the case of a root DM page, there are
-// no dm_directoryParents but there are dm_directoryChildren so
-// that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
-  if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
+  if (breadcrumbs) {
     // append the current and filter out missing or malformed data
     breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
       (b) => b.name
@@ -55,10 +50,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   return (
     <div>
       {breadcrumbs?.length > 0 && (
-        <nav
-          className="container mx-auto my-4 px-4 sm:px-8 lg:px-16 xl:px-20 items-center"
-          aria-label="Breadcrumb"
-        >
+        <nav className="my-4" aria-label="Breadcrumb">
           <ol className="components flex flex-wrap text-link-fontSize text-body-color">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
