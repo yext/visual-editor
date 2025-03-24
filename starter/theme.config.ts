@@ -39,19 +39,19 @@ export const themeConfig: ThemeConfig = {
       primary: {
         label: "Primary",
         type: "color",
-        default: "#D83B18",
+        default: "#CF0A2C",
         plugin: "colors",
       },
       secondary: {
         label: "Secondary",
         type: "color",
-        default: "#FFFFFF",
+        default: "#737B82",
         plugin: "colors",
       },
       tertiary: {
         label: "Tertiary",
         type: "color",
-        default: "#FFFFFF",
+        default: "#FF7E7E",
         plugin: "colors",
       },
       quaternary: {
