@@ -18,7 +18,7 @@ interface CTAWrapperProps {
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
   entityField: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "CTA",
     filter: {
       types: ["type.cta"],
     },
