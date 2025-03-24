@@ -6,11 +6,21 @@ import { themeManagerCn } from "../../../index.ts";
 const headingVariants = cva("components", {
   variants: {
     level: {
-      1: "font-heading1-fontWeight text-heading1-fontSize text-heading1-color font-heading1-fontFamily",
-      2: "font-heading2-fontWeight text-heading2-fontSize text-heading2-color font-heading2-fontFamily",
-      3: "font-heading3-fontWeight text-heading3-fontSize text-heading3-color font-heading3-fontFamily",
-      4: "font-heading4-fontWeight text-heading4-fontSize text-heading4-color font-heading4-fontFamily",
-      5: "font-heading5-fontWeight text-heading5-fontSize text-heading5-color font-heading5-fontFamily",
+      1:
+        "font-heading2-fontWeight text-heading2-fontSize text-heading2-color font-heading2-fontFamily " +
+        "sm:font-heading1-fontWeight sm:text-heading1-fontSize sm:text-heading1-color sm:font-heading1-fontFamily",
+      2:
+        "font-heading3-fontWeight text-heading3-fontSize text-heading3-color font-heading3-fontFamily " +
+        "sm:font-heading2-fontWeight sm:text-heading2-fontSize sm:text-heading2-color sm:font-heading2-fontFamily",
+      3:
+        "font-heading4-fontWeight text-heading4-fontSize text-heading4-color font-heading4-fontFamily " +
+        "sm:font-heading3-fontWeight sm:text-heading3-fontSize sm:text-heading3-color sm:font-heading3-fontFamily",
+      4:
+        "font-heading5-fontWeight text-heading5-fontSize text-heading5-color font-heading5-fontFamily " +
+        "sm:font-heading4-fontWeight sm:text-heading4-fontSize sm:text-heading4-color sm:font-heading4-fontFamily",
+      5:
+        "font-heading6-fontWeight text-heading6-fontSize text-heading6-color font-heading6-fontFamily " +
+        "sm:font-heading5-fontWeight sm:text-heading5-fontSize sm:text-heading5-color sm:font-heading5-fontFamily",
       6: "font-heading6-fontWeight text-heading6-fontSize text-heading6-color font-heading6-fontFamily",
     },
     fontSize: {
@@ -108,30 +118,12 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 Heading.displayName = "Heading";
 
 const headingOptions = [
-  {
-    label: "1",
-    value: 1,
-  },
-  {
-    label: "2",
-    value: 2,
-  },
-  {
-    label: "3",
-    value: 3,
-  },
-  {
-    label: "4",
-    value: 4,
-  },
-  {
-    label: "5",
-    value: 5,
-  },
-  {
-    label: "6",
-    value: 6,
-  },
+  { label: "H1", value: 1 },
+  { label: "H2", value: 2 },
+  { label: "H3", value: 3 },
+  { label: "H4", value: 4 },
+  { label: "H5", value: 5 },
+  { label: "H6", value: 6 },
 ];
 
 export { Heading, headingVariants, headingOptions };
