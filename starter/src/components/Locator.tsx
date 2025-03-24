@@ -68,7 +68,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
         kind: "fieldValue",
         fieldId: params.newFilter.fieldId,
         value: params.newFilter.value,
-        matcher: Matcher.Equals,
+        matcher: Matcher.Near,
       },
     };
     searchActions.setStaticFilters([locationFilter]);
