@@ -24,7 +24,7 @@ type GetDirectionsProps = {
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
   coordinate: YextEntityFieldSelector<any, Coordinate>({
-    label: "CTA",
+    label: "Coordinates",
     filter: { types: ["type.coordinate"] },
   }),
   getDirectionsProvider: {
@@ -99,7 +99,7 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
     },
   },
   label: "Get Directions",
-  render: (props) => <GetDirections {...props} />,
+  render: (props: GetDirectionsProps) => <GetDirections {...props} />,
 };
 
 export { GetDirectionsComponent as GetDirections, type GetDirectionsProps };
