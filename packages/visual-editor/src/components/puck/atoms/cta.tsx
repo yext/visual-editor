@@ -24,25 +24,9 @@ const linkTypeFields: Field = BasicSelector("Link Type", [
   { label: "Other", value: "OTHER" },
 ]);
 
-const CTA = ({
-  label,
-  link,
-  linkType,
-  variant,
-  size,
-  borderRadius,
-  className,
-  fontSize = "default",
-}: CTAProps) => {
+const CTA = ({ label, link, linkType, variant, size, className }: CTAProps) => {
   return (
-    <Button
-      asChild
-      className={className}
-      variant={variant}
-      size={size}
-      borderRadius={borderRadius}
-      fontSize={fontSize}
-    >
+    <Button asChild className={className} variant={variant} size={size}>
       <Link
         cta={{
           link: link ?? "",
