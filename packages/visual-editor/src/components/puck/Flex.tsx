@@ -96,10 +96,10 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     direction: "column",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: "default",
+    gap: "0",
     verticalPadding: "default",
     horizontalPadding: "default",
-    backgroundColor: "default",
+    backgroundColor: "none",
   },
   resolveFields: (data, params) => {
     // If the Flex has a parent component, the defaultProps should
