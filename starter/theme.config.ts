@@ -34,64 +34,37 @@ const fontWeightOptions = (fontVariable?: string) => {
 
 export const themeConfig: ThemeConfig = {
   palette: {
-    label: "Color Palette",
+    label: "Colors",
     styles: {
       primary: {
         label: "Primary",
         type: "color",
-        default: "#D83B18",
+        default: "#CF0A2C",
         plugin: "colors",
       },
       secondary: {
         label: "Secondary",
         type: "color",
-        default: "#FFFFFF",
+        default: "#737B82",
         plugin: "colors",
       },
-      accent: {
-        label: "Accent",
+      tertiary: {
+        label: "Tertiary",
         type: "color",
-        default: "#FFFFFF",
+        default: "#FF7E7E",
         plugin: "colors",
       },
-      text: {
-        label: "Text",
+      quaternary: {
+        label: "Quaternary",
         type: "color",
         default: "#000000",
         plugin: "colors",
       },
-      background: {
-        label: "Background",
-        type: "color",
-        plugin: "colors",
-        default: "#FFFFFF",
-      },
     },
   },
-  heading1: {
-    label: "Heading 1",
+  h1: {
+    label: "H1",
     styles: {
-      fontSize: {
-        label: "Font Size",
-        type: "select",
-        plugin: "fontSize",
-        options: getFontSizeOptions(),
-        default: "48px",
-      },
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-heading1-fontFamily"),
-        default: "700",
-      },
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
       fontFamily: {
         label: "Font",
         type: "select",
@@ -99,11 +72,6 @@ export const themeConfig: ThemeConfig = {
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
-    },
-  },
-  heading2: {
-    label: "Heading 2",
-    styles: {
       fontSize: {
         label: "Font Size",
         type: "select",
@@ -115,16 +83,14 @@ export const themeConfig: ThemeConfig = {
         label: "Font Weight",
         type: "select",
         plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-heading2-fontFamily"),
+        options: fontWeightOptions("--fontFamily-h1-fontFamily"),
         default: "700",
       },
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
+    },
+  },
+  h2: {
+    label: "H2",
+    styles: {
       fontFamily: {
         label: "Font",
         type: "select",
@@ -132,11 +98,6 @@ export const themeConfig: ThemeConfig = {
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
-    },
-  },
-  heading3: {
-    label: "Heading 3",
-    styles: {
       fontSize: {
         label: "Font Size",
         type: "select",
@@ -148,16 +109,14 @@ export const themeConfig: ThemeConfig = {
         label: "Font Weight",
         type: "select",
         plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-heading3-fontFamily"),
+        options: fontWeightOptions("--fontFamily-h2-fontFamily"),
         default: "700",
       },
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
+    },
+  },
+  h3: {
+    label: "H3",
+    styles: {
       fontFamily: {
         label: "Font",
         type: "select",
@@ -165,11 +124,6 @@ export const themeConfig: ThemeConfig = {
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
-    },
-  },
-  heading4: {
-    label: "Heading 4",
-    styles: {
       fontSize: {
         label: "Font Size",
         type: "select",
@@ -181,16 +135,14 @@ export const themeConfig: ThemeConfig = {
         label: "Font Weight",
         type: "select",
         plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-heading4-fontFamily"),
+        options: fontWeightOptions("--fontFamily-h3-fontFamily"),
         default: "700",
       },
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
+    },
+  },
+  h4: {
+    label: "H4",
+    styles: {
       fontFamily: {
         label: "Font",
         type: "select",
@@ -198,11 +150,6 @@ export const themeConfig: ThemeConfig = {
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
-    },
-  },
-  heading5: {
-    label: "Heading 5",
-    styles: {
       fontSize: {
         label: "Font Size",
         type: "select",
@@ -214,16 +161,14 @@ export const themeConfig: ThemeConfig = {
         label: "Font Weight",
         type: "select",
         plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-heading5-fontFamily"),
+        options: fontWeightOptions("--fontFamily-h4-fontFamily"),
         default: "700",
       },
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
+    },
+  },
+  h5: {
+    label: "H5",
+    styles: {
       fontFamily: {
         label: "Font",
         type: "select",
@@ -231,11 +176,6 @@ export const themeConfig: ThemeConfig = {
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
-    },
-  },
-  heading6: {
-    label: "Heading 6",
-    styles: {
       fontSize: {
         label: "Font Size",
         type: "select",
@@ -247,28 +187,47 @@ export const themeConfig: ThemeConfig = {
         label: "Font Weight",
         type: "select",
         plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-heading6-fontFamily"),
+        options: fontWeightOptions("--fontFamily-h5-fontFamily"),
         default: "700",
       },
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
+    },
+  },
+  h6: {
+    label: "H6",
+    styles: {
       fontFamily: {
         label: "Font",
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
+      },
+      fontSize: {
+        label: "Font Size",
+        type: "select",
+        plugin: "fontSize",
+        options: getFontSizeOptions(),
+        default: "24px",
+      },
+      fontWeight: {
+        label: "Font Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: fontWeightOptions("--fontFamily-h6-fontFamily"),
+        default: "700",
       },
     },
   },
   body: {
     label: "Body Text",
     styles: {
+      fontFamily: {
+        label: "Font",
+        type: "select",
+        plugin: "fontFamily",
+        options: fontOptions,
+        default: "'Open Sans', sans-serif",
+      },
       fontSize: {
         label: "Font Size",
         type: "select",
@@ -283,59 +242,33 @@ export const themeConfig: ThemeConfig = {
         options: fontWeightOptions("--fontFamily-body-fontFamily"),
         default: "400",
       },
-      color: {
-        label: "Text Color",
-        plugin: "colors",
-        type: "select",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
-      },
-      fontFamily: {
-        label: "Font",
-        type: "select",
-        plugin: "fontFamily",
-        options: fontOptions,
-        default: "'Open Sans', sans-serif",
-      },
     },
   },
   pageSection: {
     label: "Page Section",
     styles: {
-      maxWidth: {
-        label: "Maximum Width",
+      contentWidth: {
+        label: "Content Width",
         type: "select",
         plugin: "maxWidth",
         options: [
-          { label: "2XL (1536px)", value: "1536px" },
-          { label: "XL (1280px)", value: "1280px" },
-          { label: "LG (1024px)", value: "1024px" },
+          { label: "Compact (768px)", value: "768px" },
+          { label: "Narrow (960px)", value: "960px" },
+          { label: "Standard (1024px)", value: "1024px" },
+          { label: "Wide (1280px)", value: "1280px" },
+          { label: "Extra Wide (1440px)", value: "1440px" },
         ],
-        default: "1280px",
+        default: "1024px",
       },
-      backgroundColor: {
-        label: "Background Color",
-        type: "select",
-        plugin: "backgroundColor",
-        options: getColorOptions(),
-        default: "var(--colors-palette-background)",
-      },
-      gap: {
-        label: "Gap",
-        type: "select",
-        plugin: "gap",
-        options: getSpacingOptions(),
-        default: "0px",
-      },
-      verticalPadding: {
-        label: "Vertical Padding",
+      topPadding: {
+        label: "Top Padding",
         type: "select",
         plugin: "padding",
         options: getSpacingOptions(),
         default: "0px",
       },
-      horizontalPadding: {
-        label: "Horizontal Padding",
+      bottomPadding: {
+        label: "Bottom Padding",
         type: "select",
         plugin: "padding",
         options: getSpacingOptions(),

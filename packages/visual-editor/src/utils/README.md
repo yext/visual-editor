@@ -62,7 +62,7 @@ by themeResolver, applyTheme, and Editor.
 
 Each style must specify a label, type, default value, and plugin. The label will be displayed in the
 Theme Manager UI. The type can be "color", "number" or "select". If type "select", an array of options
-must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
+must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://v3.tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
 a plugin can be nested one level deep together under a shared label.
 
 ```ts

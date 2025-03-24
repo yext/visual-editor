@@ -81,7 +81,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
       <HoursStatus
         hours={hours}
         className={themeManagerCn(
-          "components mb-2 font-heading5-fontWeight font-heading5-fontFamily",
+          "components mb-2 font-h5-fontWeight font-h5-fontFamily",
           className
         )}
         currentTemplate={showCurrentStatus ? undefined : () => <></>}

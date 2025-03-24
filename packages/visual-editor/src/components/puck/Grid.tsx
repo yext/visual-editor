@@ -120,10 +120,10 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
         justifyContent: "start",
       },
     ],
-    gap: "default",
+    gap: "0",
     verticalPadding: "default",
     horizontalPadding: "default",
-    backgroundColor: "default",
+    backgroundColor: "none",
   },
   resolveFields: (data, params) => {
     // If the Grid has a parent component, the defaultProps should

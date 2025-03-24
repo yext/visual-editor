@@ -39,7 +39,7 @@ const DirectoryCard = ({
   return (
     <div className="bg-card-backgroundColor px-6 py-8 border h-full">
       <MaybeLink
-        className="hover:underline text-heading1-fontSize text-link-color mb-4"
+        className="hover:underline text-h1-fontSize text-link-color mb-4"
         href={
           relativePrefixToRoot && profile.slug
             ? relativePrefixToRoot + profile.slug
@@ -80,7 +80,7 @@ const DirectoryGrid = ({
     <Section
       className={themeManagerCn(
         layoutVariants({
-          backgroundColor: "default",
+          backgroundColor: "none",
           verticalPadding: "default",
           horizontalPadding: "default",
         })
@@ -90,7 +90,7 @@ const DirectoryGrid = ({
     >
       <div
         className={themeManagerCn(
-          layoutVariants({ gap: "default" }),
+          layoutVariants({ gap: "0" }),
           innerLayoutVariants({ maxContentWidth: "default" }),
           "flex flex-col md:grid md:grid-cols-12"
         )}

@@ -6,7 +6,6 @@ export const layoutVariants = cva("components w-full", {
   variants: {
     gap: {
       none: "",
-      default: "gap-pageSection-gap",
       "0": "gap-0",
       "0.5": "gap-0.5",
       "1": "gap-1",
@@ -81,7 +80,6 @@ export const layoutVariants = cva("components w-full", {
     },
     backgroundColor: {
       none: "",
-      default: "bg-pageSection-backgroundColor",
       primary: "bg-palette-primary",
       secondary: "bg-palette-secondary",
       accent: "bg-palette-accent",
@@ -104,7 +102,7 @@ export const innerLayoutVariants = cva(
     variants: {
       maxContentWidth: {
         none: "",
-        default: "max-w-pageSection-maxWidth",
+        default: "max-w-pageSection-contentWidth",
         lg: "max-w-[1024px]",
         xl: "max-w-[1280px]",
         xxl: "max-w-[1536px]",

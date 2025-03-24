@@ -7,21 +7,21 @@ const headingVariants = cva("components", {
   variants: {
     level: {
       1:
-        "font-heading2-fontWeight text-heading2-fontSize text-heading2-color font-heading2-fontFamily " +
-        "sm:font-heading1-fontWeight sm:text-heading1-fontSize sm:text-heading1-color sm:font-heading1-fontFamily",
+        "font-h2-fontWeight text-h2-fontSize text-h2-color font-h2-fontFamily " +
+        "sm:font-h1-fontWeight sm:text-h1-fontSize sm:text-h1-color sm:font-h1-fontFamily",
       2:
-        "font-heading3-fontWeight text-heading3-fontSize text-heading3-color font-heading3-fontFamily " +
-        "sm:font-heading2-fontWeight sm:text-heading2-fontSize sm:text-heading2-color sm:font-heading2-fontFamily",
+        "font-h3-fontWeight text-h3-fontSize text-h3-color font-h3-fontFamily " +
+        "sm:font-h2-fontWeight sm:text-h2-fontSize sm:text-h2-color sm:font-h2-fontFamily",
       3:
-        "font-heading4-fontWeight text-heading4-fontSize text-heading4-color font-heading4-fontFamily " +
-        "sm:font-heading3-fontWeight sm:text-heading3-fontSize sm:text-heading3-color sm:font-heading3-fontFamily",
+        "font-h4-fontWeight text-h4-fontSize text-h4-color font-h4-fontFamily " +
+        "sm:font-h3-fontWeight sm:text-h3-fontSize sm:text-h3-color sm:font-h3-fontFamily",
       4:
-        "font-heading5-fontWeight text-heading5-fontSize text-heading5-color font-heading5-fontFamily " +
-        "sm:font-heading4-fontWeight sm:text-heading4-fontSize sm:text-heading4-color sm:font-heading4-fontFamily",
+        "font-h5-fontWeight text-h5-fontSize text-h5-color font-h5-fontFamily " +
+        "sm:font-h4-fontWeight sm:text-h4-fontSize sm:text-h4-color sm:font-h4-fontFamily",
       5:
-        "font-heading6-fontWeight text-heading6-fontSize text-heading6-color font-heading6-fontFamily " +
-        "sm:font-heading5-fontWeight sm:text-heading5-fontSize sm:text-heading5-color sm:font-heading5-fontFamily",
-      6: "font-heading6-fontWeight text-heading6-fontSize text-heading6-color font-heading6-fontFamily",
+        "font-h6-fontWeight text-h6-fontSize text-h6-color font-h6-fontFamily " +
+        "sm:font-h5-fontWeight sm:text-h5-fontSize sm:text-h5-color sm:font-h5-fontFamily",
+      6: "font-h6-fontWeight text-h6-fontSize text-h6-color font-h6-fontFamily",
     },
     fontSize: {
       default: "",
