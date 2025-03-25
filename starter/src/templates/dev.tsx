@@ -125,6 +125,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     environment: Environment.PROD,
   };
   const searcher = provideHeadless(config);
+
   return (
     <div>
       <div className={"flex-container"}>
