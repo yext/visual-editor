@@ -25,7 +25,7 @@ export default {
             "hsl(from var(--colors-palette-secondary) h s 20)",
           gray: {
             100: "#F9F9F9",
-            200: "EDEDED",
+            200: "#EDEDED",
             300: "#D4D4D4",
             400: "#BABABA",
             500: "#7A7A7A",
