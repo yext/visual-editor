@@ -160,8 +160,6 @@ const PromoWrapper: React.FC<PromoProps> = ({
     return null;
   }
 
-  console.log(image.aspectRatio);
-
   return (
     <Section className="components">
       <div
