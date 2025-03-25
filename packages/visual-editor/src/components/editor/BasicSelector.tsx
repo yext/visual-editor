@@ -5,7 +5,7 @@ import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 
 export const BasicSelector = (
   label: string,
-  options: { label: string; value: any }[]
+  options: { label: string; value: any; color?: string }[]
 ): Field => {
   return {
     type: "custom",
