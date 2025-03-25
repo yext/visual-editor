@@ -531,6 +531,29 @@ Returns a list of spacing options to be optionally used in the theme.config. It 
 | 20 (80px)  | 20    |
 | 24 (96px)  | 24    |
 
+## backgroundColors
+
+An object of the following shape containing the seven auto-generated background styles.
+
+```js
+{
+  backgroundKey: {
+    label: "Background Label",
+    value: "Background Tailwind Classes"
+  }
+}
+```
+
+| Key         | Label        | Background Color | Text Color |
+| ----------- | ------------ | ---------------- | ---------- |
+| background1 | Background 1 | white            | black      |
+| background2 | Background 2 | primary-light    | black      |
+| background3 | Background 3 | secondary-light  | black      |
+| background4 | Background 4 | tertiary-light   | black      |
+| background5 | Background 5 | quaternary-light | black      |
+| background6 | Background 6 | primary-dark     | white      |
+| background7 | Background 7 | secondary-dark   | white      |
+
 ## applyAnalytics
 
 Returns a Google Tag Manager script that uses the Google Tag Manager ID

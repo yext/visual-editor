@@ -18,8 +18,8 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import {
-  BackgroundColorOption,
-  getBackgroundColorOptions,
+  type BackgroundStyle,
+  backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 
 type socialLink = {
@@ -30,20 +30,20 @@ type socialLink = {
 };
 
 type FooterProps = {
-  backgroundColor?: BackgroundColorOption;
+  backgroundColor?: BackgroundStyle;
 };
 
 const footerFields: Fields<FooterProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    getBackgroundColorOptions()
+    Object.values(backgroundColors)
   ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
   fields: footerFields,
   defaultProps: {
-    backgroundColor: getBackgroundColorOptions()[0].value,
+    backgroundColor: backgroundColors.background1.value,
   },
   label: "Footer",
   render: (props) => <FooterComponent {...props} />,

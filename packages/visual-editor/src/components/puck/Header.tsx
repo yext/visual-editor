@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, CTA, Image, ComplexImageType } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
-import { EntityField, useDocument, BasicSelector } from "../../index.ts";
+import { ComponentConfig } from "@measured/puck";
+import { EntityField, useDocument } from "../../index.ts";
 import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -14,23 +14,11 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
   },
 };
 
-export type HeaderProps = object;
-
-const headerFields: Fields<HeaderProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
-};
+export type HeaderProps = Record<string, never>;
 
 export const Header: ComponentConfig<HeaderProps> = {
-  fields: headerFields,
   label: "Header",
-  render: (props) => <HeaderComponent {...props} />,
+  render: () => <HeaderComponent />,
 };
 
 const HeaderComponent: React.FC<HeaderProps> = () => {
@@ -48,7 +36,7 @@ const HeaderComponent: React.FC<HeaderProps> = () => {
   return <HeaderLayout links={links} logo={logo} />;
 };
 
-interface HeaderLayoutProps extends HeaderProps {
+interface HeaderLayoutProps {
   links: CTA[];
   logoLink?: string;
   logo?: ComplexImageType;
