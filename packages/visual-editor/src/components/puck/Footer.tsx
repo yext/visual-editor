@@ -8,7 +8,6 @@ import {
   useDocument,
   BasicSelector,
 } from "../../index.ts";
-import { cva, VariantProps } from "class-variance-authority";
 import {
   FaFacebook,
   FaInstagram,
@@ -18,6 +17,10 @@ import {
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
+import {
+  type BackgroundStyle,
+  backgroundColors,
+} from "../../utils/themeConfigOptions.ts";
 
 type socialLink = {
   name: string;
@@ -26,37 +29,22 @@ type socialLink = {
   prefix?: string;
 };
 
-const footerVariants = cva("", {
-  variants: {
-    backgroundColor: {
-      default: "bg-footer-backgroundColor",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-    },
-  },
-  defaultVariants: {
-    backgroundColor: "default",
-  },
-});
-
-type FooterProps = VariantProps<typeof footerVariants>;
+type FooterProps = {
+  backgroundColor?: BackgroundStyle;
+};
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    Object.values(backgroundColors)
+  ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
   fields: footerFields,
+  defaultProps: {
+    backgroundColor: backgroundColors.background1.value,
+  },
   label: "Footer",
   render: (props) => <FooterComponent {...props} />,
 };
@@ -111,7 +99,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     <footer
       className={themeManagerCn(
         "w-full bg-white components",
-        footerVariants({ backgroundColor })
+        backgroundColor?.bgColor
       )}
     >
       <div className="container mx-auto flex flex-col px-4 pt-4 pb-3">
@@ -134,7 +122,9 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
           )}
         </div>
         {copyrightMessage && (
-          <div className="text-body-fontSize text-body-color text-center sm:text-left">
+          <div
+            className={`text-body-fontSize text-center sm:text-left ${backgroundColor?.textColor}`}
+          >
             <EntityField
               displayName="Copyright Text"
               fieldId="site.copyrightMessage"
