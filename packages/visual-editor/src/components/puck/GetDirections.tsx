@@ -12,9 +12,7 @@ import {
   YextEntityFieldSelector,
   useDocument,
   resolveYextEntityField,
-  FontSizeSelector,
   EntityField,
-  BorderRadiusSelector,
   CTA,
 } from "../../index.js";
 
@@ -22,14 +20,11 @@ type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
   getDirectionsProvider: GetDirectionsConfig["provider"];
   variant: ButtonProps["variant"];
-  size: ButtonProps["size"];
-  borderRadius: ButtonProps["borderRadius"];
-  fontSize: ButtonProps["fontSize"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
   coordinate: YextEntityFieldSelector<any, Coordinate>({
-    label: "Get Directions",
+    label: "Coordinates",
     filter: { types: ["type.coordinate"] },
   }),
   getDirectionsProvider: {
@@ -45,29 +40,16 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     label: "Variant",
     type: "radio",
     options: [
-      { label: "Primary", value: "primary" },
+      { label: "Button", value: "primary" },
       { label: "Link", value: "link" },
     ],
   },
-  size: {
-    label: "Size",
-    type: "radio",
-    options: [
-      { label: "Small", value: "small" },
-      { label: "Large", value: "large" },
-    ],
-  },
-  fontSize: FontSizeSelector("Font Size", false),
-  borderRadius: BorderRadiusSelector(),
 };
 
 const GetDirections = ({
   variant,
-  size,
-  borderRadius,
   coordinate: coordinateField,
   getDirectionsProvider,
-  fontSize,
 }: GetDirectionsProps) => {
   const document = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -96,10 +78,8 @@ const GetDirections = ({
         label={"Get Directions"}
         link={searchQuery || "#"}
         linkType={"DRIVING_DIRECTIONS"}
-        size={size}
+        size={"small"}
         variant={variant}
-        fontSize={fontSize}
-        borderRadius={borderRadius}
       />
     </EntityField>
   );
@@ -109,9 +89,6 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
-    size: "small",
-    fontSize: "default",
-    borderRadius: "default",
     getDirectionsProvider: "google",
     coordinate: {
       field: "yextDisplayCoordinate",
@@ -122,7 +99,7 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
     },
   },
   label: "Get Directions",
-  render: (props) => <GetDirections {...props} />,
+  render: (props: GetDirectionsProps) => <GetDirections {...props} />,
 };
 
 export { GetDirectionsComponent as GetDirections, type GetDirectionsProps };
