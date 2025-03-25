@@ -147,7 +147,7 @@ const HeaderLinks = (props: { links: CTA[] }) => {
         {props.links.map((item: CTA, idx) => (
           <li key={item.link}>
             <Link
-              className="text-header-linkColor text-header-linkFontSize hover:underline"
+              className="text-header-linkColor text-header-linkFontSize font-header-linkFontWeight hover:underline"
               cta={item}
               eventName={`headerlink${idx}`}
             />
@@ -178,7 +178,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
           {links.map((item: CTA, idx) => (
             <li key={item.link}>
               <Link
-                className="py-3 block text-header-linkColor text-header-linkFontSize"
+                className="py-3 block text-header-linkColor text-header-linkFontSize font-header-linkFontWeight"
                 cta={item}
                 eventName={`headermobilelink${idx}`}
               />
