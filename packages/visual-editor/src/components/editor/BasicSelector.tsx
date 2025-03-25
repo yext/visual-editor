@@ -9,22 +9,20 @@ export const BasicSelector = (
 ): Field => {
   return {
     type: "custom",
-    render: ({ value, onChange }) => {
+    render: ({
+      value,
+      onChange,
+    }: {
+      value: any;
+      onChange: (selectedOption: any) => void;
+    }) => {
       return (
         <FieldLabel label={label} icon={<ChevronDown size={16} />}>
           <Combobox
             defaultValue={
               options.find((option) => option.value === value) ?? options[0]
             }
-            // option from onChange is the stringified value of the selected option
-            onChange={(option: any) => {
-              onChange(
-                (
-                  options.find((o) => o.value.toString() === option) ??
-                  options[0]
-                )?.value
-              );
-            }}
+            onChange={onChange}
             options={options}
           />
         </FieldLabel>
