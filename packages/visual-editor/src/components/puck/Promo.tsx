@@ -59,12 +59,17 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.image"],
         },
       }),
-      aspectRatio: BasicSelector("Aspect Ratio", [
-        { label: "Auto", value: "auto" },
-        { label: "Square", value: "square" },
-        { label: "Video (16:9)", value: "video" },
-        { label: "Portrait (3:4)", value: "portrait" },
-      ]),
+      // TODO (SUMO-7090): Replace with BasicSelector
+      aspectRatio: {
+        type: "select",
+        label: "Aspect Ratio",
+        options: [
+          { label: "Auto", value: "auto" },
+          { label: "Square", value: "square" },
+          { label: "Video (16:9)", value: "video" },
+          { label: "Portrait (3:4)", value: "portrait" },
+        ],
+      },
     },
   },
   title: {
@@ -155,11 +160,13 @@ const PromoWrapper: React.FC<PromoProps> = ({
     return null;
   }
 
+  console.log(image.aspectRatio);
+
   return (
     <Section className="components">
       <div
         className={themeManagerCn(
-          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
+          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8 bg-white",
           styles.orientation === "right" && "md:flex-row-reverse",
           styles.backgroundColor
         )}
@@ -174,8 +181,9 @@ const PromoWrapper: React.FC<PromoProps> = ({
               className={themeManagerCn(
                 imageWrapperVariants({
                   aspectRatio: image.aspectRatio,
+                  size: "full",
                 }),
-                "overflow-hidden w-full h-full"
+                "overflow-hidden"
               )}
             >
               <Image
@@ -199,6 +207,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
+              className="md:w-fit"
             />
           )}
         </div>
@@ -207,8 +216,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
   );
 };
 
-export const PromoComponent: ComponentConfig<PromoProps> = {
-  label: "Promo",
+const Promo: ComponentConfig<PromoProps> = {
   fields: promoFields,
   defaultProps: {
     image: {
@@ -228,9 +236,8 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
       text: {
         field: "name",
         constantValue: "Title",
-        constantValueEnabled: true,
       },
-      level: 1,
+      level: 3,
     },
     description: {
       text: {
@@ -257,4 +264,4 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
   render: (props) => <PromoWrapper {...props} />,
 };
 
-export { PromoComponent as Promo, type PromoProps };
+export { Promo, type PromoProps };
