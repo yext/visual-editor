@@ -2,7 +2,6 @@ import * as React from "react";
 import { Link, CTA } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  Body,
   EntityField,
   themeManagerCn,
   useDocument,
@@ -115,7 +114,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
       )}
     >
       <div className="container mx-auto flex flex-col px-4 pt-4 pb-3">
-        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-footer-linkColor text-footer-linkFontSize font-body-fontFamily">
+        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-footer-linkColor text-footer-linkFontSize font-body-fontFamily font-footer-linkFontWeight">
           {links && (
             <EntityField
               displayName="Footer Links"
@@ -134,12 +133,12 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
           )}
         </div>
         {copyrightMessage && (
-          <div className="text-body-fontSize text-body-color text-center sm:text-left">
+          <div className="text-footer-copyrightFontSize font-footer-copyrightFontWeight text-body-color text-center sm:text-left">
             <EntityField
               displayName="Copyright Text"
               fieldId="site.copyrightMessage"
             >
-              <Body>{copyrightMessage}</Body>
+              {copyrightMessage}
             </EntityField>
           </div>
         )}
