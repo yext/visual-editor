@@ -338,13 +338,6 @@ export const themeConfig: ThemeConfig = {
         options: getColorOptions(),
         default: "var(--colors-palette-primary)",
       },
-      fontSize: {
-        label: "Font Size",
-        type: "select",
-        plugin: "fontSize",
-        options: getFontSizeOptions(false),
-        default: "12px",
-      },
     },
   },
   button: {

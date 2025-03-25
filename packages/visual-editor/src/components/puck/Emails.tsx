@@ -12,17 +12,20 @@ import {
 } from "../../index.js";
 import { Link } from "@yext/pages-components";
 
-const emailsVariants = cva("components list-inside font-body-fontFamily", {
-  variants: {
-    includeHyperlink: {
-      true: "underline hover:no-underline text-link-fontSize text-link-color",
-      false: "text-body-fontSize",
+const emailsVariants = cva(
+  "components list-inside font-body-fontFamily text-body-fontSize",
+  {
+    variants: {
+      includeHyperlink: {
+        true: "underline hover:no-underline text-link-color",
+        false: "",
+      },
     },
-  },
-  defaultVariants: {
-    includeHyperlink: true,
-  },
-});
+    defaultVariants: {
+      includeHyperlink: true,
+    },
+  }
+);
 
 interface EmailsProps extends VariantProps<typeof emailsVariants> {
   list: YextEntityField<string[]>;

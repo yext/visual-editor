@@ -112,4 +112,8 @@ export const defaultThemeTailwindExtensions = {
       900: "#121212",
     },
   },
+  fontSize: {
+    "body-sm-fontSize": "calc(var(--fontSize-body-fontSize) - 2px)",
+    "body-lg-fontSize": "calc(var(--fontSize-body-fontSize) + 2px)",
+  },
 };

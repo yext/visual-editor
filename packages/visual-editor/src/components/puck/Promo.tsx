@@ -28,8 +28,7 @@ interface PromoProps {
   };
   description: {
     text: YextEntityField<string>;
-    fontSize: BodyProps["fontSize"];
-    transform: BodyProps["textTransform"];
+    variant: BodyProps["variant"];
   };
   image: {
     image: YextEntityField<ImageType>;
@@ -79,13 +78,15 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      fontSize: FontSizeSelector(),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: [
+          { label: "Small", value: "sm" },
+          { label: "Base", value: "base" },
+          { label: "Large", value: "lg" },
+        ],
+      },
     },
   },
   image: {
@@ -195,10 +196,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
             </Heading>
           )}
           {description?.text && (
-            <Body
-              fontSize={description.fontSize}
-              textTransform={description.transform}
-            >
+            <Body variant={description.variant}>
               {resolveYextEntityField(document, description.text)}
             </Body>
           )}
@@ -237,8 +235,7 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
         constantValue: "Description",
         constantValueEnabled: true,
       },
-      fontSize: "base",
-      transform: "none",
+      variant: "base",
     },
     image: {
       image: {
