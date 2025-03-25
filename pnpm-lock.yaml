@@ -134,8 +134,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       cmdk:
-        specifier: ^1.0.4
-        version: 1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.1.1
+        version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       dompurify:
         specifier: ^3.2.3
         version: 3.2.4
@@ -2232,6 +2232,22 @@ packages:
     resolution:
       {
         integrity: sha512-Yj4dZtqa2o+kG61fzB0H2qUvmwBA2oyQroGLyNtBj1beo1khoQ3q1a2AO8rrQYjd8256CO9+N8L9tvsS+bnIyA==,
+      }
+    peerDependencies:
+      "@types/react": "*"
+      "@types/react-dom": "*"
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      "@types/react":
+        optional: true
+      "@types/react-dom":
+        optional: true
+
+  "@radix-ui/react-dialog@1.1.6":
+    resolution:
+      {
+        integrity: sha512-/IVhJV5AceX620DUJ4uYVMymzsipdKBzo3edo+omeskCKGm9FRHM0ebIdbPnlQVJqyuHbuBltQUOG2mOTq2IYw==,
       }
     peerDependencies:
       "@types/react": "*"
@@ -4574,10 +4590,10 @@ packages:
       }
     engines: { node: ^18.17.0 || >=20.5.0 }
 
-  cmdk@1.0.4:
+  cmdk@1.1.1:
     resolution:
       {
-        integrity: sha512-AnsjfHyHpQ/EFeAnG216WY7A5LiYCoZzCSygiLvfXC3H3LFGCprErteUcszaVluGOhuOTbJS3jWHrSDYPBBygg==,
+        integrity: sha512-Vsv7kFaXm+ptHDMZ7izaRsP70GgrW9NBNGswt9OZaVBLlE0SNpDq8eu/VGXyF9r7M0azK3Wy7OlYXsuyYLFzHg==,
       }
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
@@ -11612,6 +11628,28 @@ snapshots:
       "@types/react": 18.3.12
       "@types/react-dom": 18.3.1
 
+  "@radix-ui/react-dialog@1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
+    dependencies:
+      "@radix-ui/primitive": 1.1.1
+      "@radix-ui/react-compose-refs": 1.1.1(@types/react@18.3.12)(react@18.3.1)
+      "@radix-ui/react-context": 1.1.1(@types/react@18.3.12)(react@18.3.1)
+      "@radix-ui/react-dismissable-layer": 1.1.5(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-focus-guards": 1.1.1(@types/react@18.3.12)(react@18.3.1)
+      "@radix-ui/react-focus-scope": 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-id": 1.1.0(@types/react@18.3.12)(react@18.3.1)
+      "@radix-ui/react-portal": 1.1.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-presence": 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-primitive": 2.0.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-slot": 1.1.2(@types/react@18.3.12)(react@18.3.1)
+      "@radix-ui/react-use-controllable-state": 1.1.0(@types/react@18.3.12)(react@18.3.1)
+      aria-hidden: 1.2.4
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-remove-scroll: 2.6.3(@types/react@18.3.12)(react@18.3.1)
+    optionalDependencies:
+      "@types/react": 18.3.12
+      "@types/react-dom": 18.3.1
+
   "@radix-ui/react-direction@1.1.0(@types/react@18.3.12)(react@18.3.1)":
     dependencies:
       react: 18.3.1
@@ -13271,14 +13309,14 @@ snapshots:
 
   cmd-shim@7.0.0: {}
 
-  cmdk@1.0.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  cmdk@1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      "@radix-ui/react-dialog": 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-compose-refs": 1.1.1(@types/react@18.3.12)(react@18.3.1)
+      "@radix-ui/react-dialog": 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@radix-ui/react-id": 1.1.0(@types/react@18.3.12)(react@18.3.1)
       "@radix-ui/react-primitive": 2.0.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      use-sync-external-store: 1.4.0(react@18.3.1)
     transitivePeerDependencies:
       - "@types/react"
       - "@types/react-dom"
@@ -16834,6 +16872,7 @@ snapshots:
   use-sync-external-store@1.4.0(react@18.3.1):
     dependencies:
       react: 18.3.1
+    optional: true
 
   util-deprecate@1.0.2: {}
 

@@ -56,7 +56,7 @@ export const Combobox = ({
               {options.map((option) => (
                 <CommandItem
                   key={option.key}
-                  value={option.value}
+                  value={option.value.toString()}
                   onSelect={(currentValue) => {
                     onChange(currentValue);
                     setOpen(false);
