@@ -7,52 +7,38 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  FontSizeSelector,
-  BorderRadiusSelector,
-  BasicSelector,
 } from "../../index.js";
 
 interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
-  size: CTAProps["size"];
-  borderRadius: CTAProps["borderRadius"];
-  fontSize: CTAProps["fontSize"];
   linkType: CTAProps["linkType"];
   className?: CTAProps["className"];
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
   entityField: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "CTA",
     filter: {
       types: ["type.cta"],
     },
   }),
-  variant: BasicSelector("Variant", [
-    { label: "Primary", value: "primary" },
-    { label: "Link", value: "link" },
-  ]),
-  size: {
-    label: "Size",
+  variant: {
+    label: "Variant",
     type: "radio",
     options: [
-      { label: "Small", value: "small" },
-      { label: "Large", value: "large" },
+      { label: "Primary", value: "primary" },
+      { label: "Outline", value: "secondary" },
+      { label: "Link", value: "link" },
     ],
   },
   linkType: linkTypeFields,
-  fontSize: FontSizeSelector("Font Size", false),
-  borderRadius: BorderRadiusSelector(),
 };
 
 const CTAWrapper: React.FC<CTAWrapperProps> = ({
   entityField,
   variant,
   className,
-  fontSize,
-  size,
-  borderRadius,
 }) => {
   const document = useDocument();
   const cta = resolveYextEntityField(document, entityField);
@@ -69,9 +55,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         linkType={cta?.linkType}
         variant={variant}
         className={className}
-        fontSize={fontSize}
-        size={size}
-        borderRadius={borderRadius}
+        size={"small"}
       />
     </EntityField>
   );
@@ -88,12 +72,9 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
       },
     },
     variant: "primary",
-    fontSize: "default",
-    borderRadius: "default",
     linkType: "URL",
-    size: "small",
   },
-  render: (props) => <CTAWrapper {...props} />,
+  render: (props: CTAWrapperProps) => <CTAWrapper {...props} />,
 };
 
 export { CTAWrapperComponent as CTAWrapper, type CTAWrapperProps };
