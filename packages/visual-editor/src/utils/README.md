@@ -531,6 +531,19 @@ Returns a list of spacing options to be optionally used in the theme.config. It 
 | 20 (80px)  | 20    |
 | 24 (96px)  | 24    |
 
+## defaultThemeTailwindExtensions
+
+A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
+
+#### Usage
+
+```tsx
+// tailwind.config.ts
+theme: {
+  extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
+},
+```
+
 ## backgroundColors
 
 An object of the following shape containing the seven auto-generated background styles.
