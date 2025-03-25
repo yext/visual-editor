@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../../index.ts";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 const sectionVariants = cva("mx-auto", {
   variants: {
@@ -24,12 +25,16 @@ const sectionVariants = cva("mx-auto", {
 
 export interface SectionProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof sectionVariants> {}
+    VariantProps<typeof sectionVariants> {
+  background?: BackgroundStyle;
+}
 
 const Section = React.forwardRef<HTMLDivElement, SectionProps>(
-  ({ className, padding, maxWidth, ...props }, ref) => {
+  ({ className, padding, maxWidth, background, ...props }, ref) => {
     return (
-      <div className="components bg-main">
+      <div
+        className={`components ${background?.bgColor} ${background?.textColor}`}
+      >
         <div
           className={themeManagerCn(
             sectionVariants({ padding, maxWidth }),

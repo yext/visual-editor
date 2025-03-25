@@ -8,11 +8,15 @@ import {
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions.js";
 
 export type BannerProps = {
   text: YextEntityField<string>;
   textAlignment: "left" | "right" | "center";
-  backgroundColor: "bg-palette-primary" | "bg-palette-secondary";
+  backgroundColor?: BackgroundStyle;
 };
 
 const bannerFields: Fields<BannerProps> = {
@@ -31,10 +35,14 @@ const bannerFields: Fields<BannerProps> = {
       { label: "Right", value: "right" },
     ],
   },
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Dark Primary", value: "bg-palette-primary" },
-    { label: "Dark Secondary", value: "bg-palette-secondary" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    // only allow the dark backgrounds
+    Object.values({
+      dark1: backgroundColors.background6,
+      dark2: backgroundColors.background7,
+    })
+  ),
 };
 
 const BannerComponent = ({
@@ -51,13 +59,14 @@ const BannerComponent = ({
     right: "justify-end",
   }[textAlignment];
 
-  const textColor =
-    backgroundColor === "bg-palette-primary" ? "secondary" : "primary";
-
   return (
-    <div className={`Banner ${backgroundColor} components px-4 md:px-20 py-6`}>
-      <div className={`flex ${justifyClass} items-center`}>
-        <Body color={textColor}>{resolvedText}</Body>
+    <div
+      className={`Banner ${backgroundColor?.bgColor} components px-4 md:px-20 py-6`}
+    >
+      <div
+        className={`flex ${justifyClass} items-center ${backgroundColor?.textColor}`}
+      >
+        <Body>{resolvedText}</Body>
       </div>
     </div>
   );
@@ -72,7 +81,7 @@ export const Banner: ComponentConfig<BannerProps> = {
       constantValueEnabled: true,
     },
     textAlignment: "center",
-    backgroundColor: "bg-palette-primary",
+    backgroundColor: backgroundColors.background6.value,
   },
   render: (props) => <BannerComponent {...props} />,
 };

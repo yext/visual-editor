@@ -24,13 +24,11 @@ interface PromoProps {
   title: {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
-    color: HeadingProps["color"];
     transform: HeadingProps["transform"];
   };
   description: {
     text: YextEntityField<string>;
     fontSize: BodyProps["fontSize"];
-    color: BodyProps["color"];
     transform: BodyProps["textTransform"];
   };
   image: {
@@ -63,14 +61,6 @@ const promoFields: Fields<PromoProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
       transform: BasicSelector("Text Transform", [
         { value: "none", label: "None" },
         { value: "lowercase", label: "Lowercase" },
@@ -90,14 +80,6 @@ const promoFields: Fields<PromoProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
       transform: BasicSelector("Text Transform", [
         { value: "none", label: "None" },
         { value: "lowercase", label: "Lowercase" },
@@ -208,11 +190,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
         )}
         <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
           {title?.text && (
-            <Heading
-              fontSize={title.fontSize}
-              color={title.color}
-              transform={title.transform}
-            >
+            <Heading fontSize={title.fontSize} transform={title.transform}>
               {resolveYextEntityField(document, title.text)}
             </Heading>
           )}
@@ -220,7 +198,6 @@ const PromoWrapper: React.FC<PromoProps> = ({
             <Body
               fontSize={description.fontSize}
               textTransform={description.transform}
-              color={description.color}
             >
               {resolveYextEntityField(document, description.text)}
             </Body>
@@ -252,7 +229,6 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
         constantValueEnabled: true,
       },
       fontSize: "default",
-      color: "default",
       transform: "none",
     },
     description: {
@@ -262,7 +238,6 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
         constantValueEnabled: true,
       },
       fontSize: "base",
-      color: "default",
       transform: "none",
     },
     image: {

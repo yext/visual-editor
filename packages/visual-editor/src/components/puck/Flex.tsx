@@ -1,19 +1,17 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { VariantProps } from "class-variance-authority";
 import { Section } from "./atoms/section.js";
 import { themeManagerCn } from "../../utils/cn.js";
 import {
   innerLayoutVariants,
   layoutFields,
+  layoutProps,
   layoutVariants,
 } from "./Layout.tsx";
 import { BasicSelector } from "../../index.js";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
-interface FlexProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {
+interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   wrap: "wrap" | "nowrap";
@@ -36,9 +34,9 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
   ) => {
     return (
       <Section
+        background={backgroundColor}
         className={themeManagerCn(
           layoutVariants({
-            backgroundColor,
             verticalPadding,
             horizontalPadding,
             gap,
@@ -99,7 +97,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     gap: "0",
     verticalPadding: "default",
     horizontalPadding: "default",
-    backgroundColor: "none",
+    backgroundColor: backgroundColors.background1.value,
   },
   resolveFields: (data, params) => {
     // If the Flex has a parent component, the defaultProps should
@@ -110,7 +108,6 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
         data.props.verticalPadding = "0";
         data.props.horizontalPadding = "0";
         data.props.gap = "0";
-        data.props.backgroundColor = "inherit";
         data.props.maxContentWidth = "none";
       }
       return flexContainerFields;

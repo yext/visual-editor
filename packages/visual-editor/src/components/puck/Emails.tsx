@@ -16,7 +16,7 @@ const emailsVariants = cva("components list-inside font-body-fontFamily", {
   variants: {
     includeHyperlink: {
       true: "underline hover:no-underline text-link-fontSize text-link-color",
-      false: "text-body-fontSize text-body-color",
+      false: "text-body-fontSize",
     },
   },
   defaultVariants: {

@@ -89,7 +89,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
-      name: "titok",
+      name: "tiktok",
       link: document?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
