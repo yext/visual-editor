@@ -15,6 +15,9 @@ export {
   getFontSizeOptions,
   getBorderRadiusOptions,
   getSpacingOptions,
+  backgroundColors,
+  defaultThemeTailwindExtensions,
+  type BackgroundStyle,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
