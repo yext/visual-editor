@@ -95,7 +95,7 @@ const VisualEditorHoursTable = ({
 
   return (
     <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
+      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize`}
       padding={padding}
     >
       <div>

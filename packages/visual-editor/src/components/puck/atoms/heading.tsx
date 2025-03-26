@@ -51,14 +51,6 @@ const headingVariants = cva("components", {
       "800": "font-extrabold",
       "900": "font-black",
     },
-    color: {
-      default: "",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-    },
     transform: {
       none: "",
       uppercase: "uppercase",
@@ -68,7 +60,6 @@ const headingVariants = cva("components", {
   },
   defaultVariants: {
     fontSize: "default",
-    color: "primary",
     weight: "default",
     transform: "none",
   },
@@ -85,10 +76,7 @@ export interface HeadingProps
 }
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-  (
-    { className, level = 1, color, weight, transform, fontSize, ...props },
-    ref
-  ) => {
+  ({ className, level = 1, weight, transform, fontSize, ...props }, ref) => {
     const Tag = `h${level}` as keyof Pick<
       JSX.IntrinsicElements,
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
@@ -100,7 +88,6 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         className={themeManagerCn(
           headingVariants({
             fontSize,
-            color,
             weight,
             transform,
             level,

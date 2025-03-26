@@ -71,10 +71,10 @@ type BorderRadiusOption = {
 };
 
 export const convertDefaultBorderRadiusToOptions = (
-  borderRadiuss: BorderRadiusOption[],
+  borderRadius: BorderRadiusOption[],
   tailwindConfig: TailwindConfig
 ) => {
-  return borderRadiuss.map((option) => {
+  return borderRadius.map((option) => {
     const customBorderRadius = getCustomBorderRadius(
       tailwindConfig,
       option.value
