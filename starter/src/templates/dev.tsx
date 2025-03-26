@@ -20,6 +20,13 @@ import { buildSchema } from "../utils/buildSchema.ts";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
+import {
+  CloudChoice,
+  CloudRegion,
+  Environment,
+  provideHeadless,
+  SearchHeadlessProvider,
+} from "@yext/search-headless-react";
 
 export const config = {
   name: "dev-location",
@@ -107,6 +114,18 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
+  const config = {
+    apiKey: "",
+    experienceKey: "jacob-test",
+    locale: "en",
+    experienceVersion: "STAGING",
+    verticalKey: "locations",
+    businessId: document.businessId,
+    cloudRegion: CloudRegion.US,
+    cloudChoice: CloudChoice.GLOBAL_MULTI,
+    environment: Environment.PROD,
+  };
+  const searcher = provideHeadless(config);
 
   return (
     <div>
@@ -121,6 +140,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         </button>
       </div>
       <div>
+      <SearchHeadlessProvider searcher={searcher}>
         <VisualEditorProvider
           templateProps={props}
           entityFields={{ fields: entityFields }}
@@ -134,6 +154,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
             forceThemeMode={themeMode}
           />
         </VisualEditorProvider>
+      </SearchHeadlessProvider>
       </div>
     </div>
   );
