@@ -59,7 +59,6 @@ export const layoutVariants = cva("components w-full", {
     },
     horizontalPadding: {
       none: "",
-      default: "px-pageSection-horizontalPadding",
       "0": "px-0",
       "0.5": "px-0.5",
       "1": "px-1",

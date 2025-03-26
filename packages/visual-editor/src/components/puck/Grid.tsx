@@ -82,7 +82,7 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
     columns: 2,
     gap: "0",
     verticalPadding: "default",
-    horizontalPadding: "default",
+    horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
     columnFormatting: "default",
   },
@@ -92,7 +92,6 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
     if (params.parent) {
       // the props values should only be changed initially
       data.props.verticalPadding = "0";
-      data.props.horizontalPadding = "0";
       data.props.gap = "0";
       data.props.columnFormatting = "forceHorizontal";
       return gridSectionFields;

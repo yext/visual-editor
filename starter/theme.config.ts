@@ -260,15 +260,8 @@ export const themeConfig: ThemeConfig = {
         ],
         default: "1024px",
       },
-      topPadding: {
-        label: "Top Padding",
-        type: "select",
-        plugin: "padding",
-        options: getSpacingOptions(),
-        default: "0px",
-      },
-      bottomPadding: {
-        label: "Bottom Padding",
+      verticalPadding: {
+        label: "Top/Bottom Padding",
         type: "select",
         plugin: "padding",
         options: getSpacingOptions(),

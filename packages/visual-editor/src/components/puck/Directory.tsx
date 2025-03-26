@@ -82,7 +82,7 @@ const DirectoryGrid = ({
       className={themeManagerCn(
         layoutVariants({
           verticalPadding: "default",
-          horizontalPadding: "default",
+          horizontalPadding: "0",
         })
       )}
       background={backgroundColors.background1.value}
