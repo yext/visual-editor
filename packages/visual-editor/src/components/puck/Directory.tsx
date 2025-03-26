@@ -5,6 +5,7 @@ import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { Address, HoursStatus } from "@yext/pages-components";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { Section } from "./atoms/section.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -37,7 +38,7 @@ const DirectoryCard = ({
   relativePrefixToRoot: string;
 }) => {
   return (
-    <div className="bg-card-backgroundColor px-6 py-8 border h-full">
+    <div className="px-6 py-8 border h-full">
       <MaybeLink
         className="hover:underline text-h1-fontSize text-link-color mb-4"
         href={
@@ -49,7 +50,7 @@ const DirectoryCard = ({
         {profile.name}
       </MaybeLink>
       {profile.hours && (
-        <div className="mb-2 font-semibold font-body-fontFamily text-body-color">
+        <div className="mb-2 font-semibold font-body-fontFamily">
           <HoursStatus
             hours={profile.hours}
             timezone={profile.timezone}
@@ -58,7 +59,7 @@ const DirectoryCard = ({
         </div>
       )}
       {profile.address && (
-        <div className="font-body-fontFamily text-body-color">
+        <div className="font-body-fontFamily">
           <Address address={profile.address} lines={[["line1"]]} />
         </div>
       )}
@@ -80,11 +81,11 @@ const DirectoryGrid = ({
     <Section
       className={themeManagerCn(
         layoutVariants({
-          backgroundColor: "none",
           verticalPadding: "default",
           horizontalPadding: "default",
         })
       )}
+      background={backgroundColors.background1.value}
       maxWidth="full"
       padding="none"
     >

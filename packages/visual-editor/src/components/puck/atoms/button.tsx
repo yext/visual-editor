@@ -13,6 +13,10 @@ const buttonVariants = cva(
         primary:
           "bg-button-backgroundColor text-button-textColor border-2 border-button-backgroundColor hover:border-button-textColor " +
           "focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor text-button-fontSize",
+        // TODO: Update to use styles set in the theme
+        seconday:
+          "bg-button-backgroundColor text-button-textColor border-2 border-button-backgroundColor hover:border-button-textColor " +
+          "focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor text-button-fontSize",
         link: "text-link-color text-link-fontSize underline-offset-4 underline hover:no-underline",
       },
       size: {

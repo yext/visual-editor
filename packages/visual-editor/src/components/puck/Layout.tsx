@@ -1,6 +1,10 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
 import { SpacingSelector, BasicSelector } from "../../index.js";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions.js";
 
 export const layoutVariants = cva("components w-full", {
   variants: {
@@ -78,21 +82,11 @@ export const layoutVariants = cva("components w-full", {
       "20": "px-20",
       "24": "px-24",
     },
-    backgroundColor: {
-      none: "",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-      inherit: "bg-inherit",
-    },
   },
   defaultVariants: {
     gap: "none",
     verticalPadding: "none",
     horizontalPadding: "none",
-    backgroundColor: "none",
   },
 });
 
@@ -114,20 +108,18 @@ export const innerLayoutVariants = cva(
   }
 );
 
-interface layoutProps
+export interface layoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {}
+    VariantProps<typeof innerLayoutVariants> {
+  backgroundColor?: BackgroundStyle;
+}
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    Object.values(backgroundColors)
+  ),
   gap: SpacingSelector("gap", "Gap"),
   verticalPadding: SpacingSelector("padding", "Vertical Padding"),
   horizontalPadding: SpacingSelector("padding", "Horizontal Padding"),
