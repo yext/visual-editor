@@ -30,14 +30,6 @@ const phoneVariants = cva(
         "800": "font-extrabold",
         "900": "font-black",
       },
-      color: {
-        default: "text-body-color",
-        primary: "text-palette-primary",
-        secondary: "text-palette-secondary",
-        accent: "text-palette-accent",
-        text: "text-palette-text",
-        background: "text-palette-background",
-      },
       includeHyperlink: {
         true: "underline hover:no-underline",
         false: "",
@@ -45,7 +37,6 @@ const phoneVariants = cva(
     },
     defaultVariants: {
       fontWeight: "default",
-      color: "default",
       includeHyperlink: true,
     },
   }
@@ -92,14 +83,6 @@ const PhoneFields: Fields<PhoneProps> = {
       { label: "International", value: "international" },
     ],
   },
-  color: BasicSelector("Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
   includeHyperlink: {
     label: "Include Hyperlink",
     type: "radio",
@@ -114,7 +97,6 @@ const Phone: React.FC<PhoneProps> = ({
   phone,
   format,
   fontWeight,
-  color,
   includeHyperlink,
 }) => {
   const document = useDocument();
@@ -125,7 +107,7 @@ const Phone: React.FC<PhoneProps> = ({
   }
 
   const formattedPhoneNumber: string = formatPhoneNumber(resolvedPhone, format);
-  const classNameCn = phoneVariants({ fontWeight, color, includeHyperlink });
+  const classNameCn = phoneVariants({ fontWeight, includeHyperlink });
 
   return (
     <EntityField

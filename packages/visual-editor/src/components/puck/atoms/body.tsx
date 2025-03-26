@@ -22,14 +22,6 @@ const bodyVariants = cva("components font-body-fontFamily", {
       "800": "font-extrabold",
       "900": "font-black",
     },
-    color: {
-      default: "text-body-color",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-    },
     textTransform: {
       none: "",
       uppercase: "uppercase",
@@ -40,7 +32,6 @@ const bodyVariants = cva("components font-body-fontFamily", {
   defaultVariants: {
     fontSize: "base",
     fontWeight: "default",
-    color: "default",
     textTransform: "none",
   },
 });
@@ -51,17 +42,13 @@ export interface BodyProps
     VariantProps<typeof bodyVariants> {}
 
 const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
-  (
-    { className, fontSize, fontWeight, color, textTransform, ...props },
-    ref
-  ) => {
+  ({ className, fontSize, fontWeight, textTransform, ...props }, ref) => {
     return (
       <p
         className={themeManagerCn(
           bodyVariants({
             fontSize,
             fontWeight,
-            color,
             textTransform,
             className,
           }),
