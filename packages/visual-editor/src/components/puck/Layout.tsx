@@ -87,12 +87,18 @@ export const layoutVariants = cva("components w-full", {
       background: "bg-palette-background",
       inherit: "bg-inherit",
     },
+    columnFormatting: {
+      none: "",
+      default: "md:grid md:grid-cols-12",
+      forceHorizontal: "!grid grid-cols-12",
+    },
   },
   defaultVariants: {
     gap: "none",
     verticalPadding: "none",
     horizontalPadding: "none",
     backgroundColor: "none",
+    columnFormatting: "none",
   },
 });
 
@@ -121,6 +127,7 @@ interface layoutProps
 
 export const layoutFields: Fields<layoutProps> = {
   backgroundColor: BasicSelector("Background Color", [
+    // TODO: Replace with new color selector dropdown
     { label: "Default", value: "default" },
     { label: "Primary", value: "primary" },
     { label: "Secondary", value: "secondary" },
@@ -129,6 +136,6 @@ export const layoutFields: Fields<layoutProps> = {
     { label: "Background", value: "background" },
   ]),
   gap: SpacingSelector("gap", "Gap"),
-  verticalPadding: SpacingSelector("padding", "Vertical Padding"),
-  horizontalPadding: SpacingSelector("padding", "Horizontal Padding"),
+  verticalPadding: SpacingSelector("padding", "Top/Bottom Padding"),
+  horizontalPadding: SpacingSelector("padding", "Left/Right Padding"),
 };

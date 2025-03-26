@@ -71,7 +71,7 @@ const convertDefaultSpacingsToOptions = (
     );
     const spacingPx = customSpacing ? customSpacing.toString() : option.px;
     return {
-      label: option.label + (option.px ? ` (${spacingPx}px)` : ""),
+      label: option.px ? `${spacingPx}px` : option.label,
       value: option.value,
     };
   });
