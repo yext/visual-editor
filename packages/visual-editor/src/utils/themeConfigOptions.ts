@@ -88,6 +88,15 @@ export const backgroundColors: Record<string, BackgroundOption> = {
   },
 };
 
+export const headingLevelOptions = [
+  { label: "H1", value: 1 },
+  { label: "H2", value: 2 },
+  { label: "H3", value: 3 },
+  { label: "H4", value: 4 },
+  { label: "H5", value: 5 },
+  { label: "H6", value: 6 },
+];
+
 // Tailwind Theme Extensions (https://v3.tailwindcss.com/docs/theme#extending-the-default-theme)
 // to use in the tailwind.config.ts in conjunction with themeResolver and the theme.config
 export const defaultThemeTailwindExtensions = {

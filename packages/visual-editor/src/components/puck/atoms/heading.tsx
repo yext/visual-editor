@@ -104,13 +104,4 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 );
 Heading.displayName = "Heading";
 
-const headingOptions = [
-  { label: "H1", value: 1 },
-  { label: "H2", value: 2 },
-  { label: "H3", value: 3 },
-  { label: "H4", value: 4 },
-  { label: "H5", value: 5 },
-  { label: "H6", value: 6 },
-];
-
-export { Heading, headingVariants, headingOptions };
+export { Heading, headingVariants };
