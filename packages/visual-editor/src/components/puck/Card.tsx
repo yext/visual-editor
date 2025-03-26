@@ -15,10 +15,11 @@ import {
   backgroundColors,
   BackgroundStyle,
   headingLevelOptions,
+  HeadingLevel,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
-import { Heading, HeadingProps, HeadingLevel } from "./atoms/heading.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 

@@ -88,6 +88,10 @@ export const backgroundColors: Record<string, BackgroundOption> = {
   },
 };
 
+// Defines the valid levels for the heading element
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+// Provides a mapping of label to value for BasicSelector
 export const headingLevelOptions = [
   { label: "H1", value: 1 },
   { label: "H2", value: 2 },
