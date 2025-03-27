@@ -344,9 +344,6 @@ importers:
       "@types/node":
         specifier: ^20.12.3
         version: 20.17.6
-      "@yext/components-maps":
-        specifier: ^2.2.7
-        version: 2.2.7(@yext/components-geo@1.1.4)(@yext/components-performance@1.1.4)(@yext/components-util@1.1.7(@yext/components-spinner-modal@1.1.4))
       "@yext/search-headless-react":
         specifier: ^2.5.0
         version: 2.5.0(encoding@0.1.13)(react@18.3.1)
@@ -4023,47 +4020,6 @@ packages:
       {
         integrity: sha512-D8ahIRIVtdvV7Ycup13OY930waOzi50gzwXO7Cpa4SK0+eREg3YMxsNxbXpgXVoEdwKaMw/xhsKy3Cy0fTcQZA==,
       }
-
-  "@yext/components-geo@1.1.4":
-    resolution:
-      {
-        integrity: sha512-bTrtT5MZ2es0NGWSFccVUGscG1+Z0LWiEywjkZ/vKuGenMFYwUiiapyEgLx6cjMqj6YUZMOzDe6SZAfveKh6iw==,
-      }
-    engines: { node: ">=12.16.x" }
-
-  "@yext/components-maps@2.2.7":
-    resolution:
-      {
-        integrity: sha512-3T2FagidNTPnpDI5FDay9Rq4pJYXZbO5DtVImhFbVytdH4vRPZq06gh+7SRiJHF4z8viKxyqu99phYdHsBHQAg==,
-      }
-    engines: { node: ">=12.16.x" }
-    peerDependencies:
-      "@yext/components-geo": 1.1.4
-      "@yext/components-performance": 1.1.4
-      "@yext/components-util": 1.1.7
-
-  "@yext/components-performance@1.1.4":
-    resolution:
-      {
-        integrity: sha512-m27zdDmg8r+uXHi3f3FRZt0a5+DhZ/GSSvRq9+nk0H8S+GCSY5y66hyVVNa5mJeOjQOdBwZYbMuFVQdRRgNAjA==,
-      }
-    engines: { node: ">=12.16.x" }
-
-  "@yext/components-spinner-modal@1.1.4":
-    resolution:
-      {
-        integrity: sha512-Xv6IpKuoUpim8PzCAVdcMGn4LExqCY0lJYfQgxm70WUYkrSsLQbowMfrbEZYcVB74Bj0oDcT5EACw4JT+4eqzQ==,
-      }
-    engines: { node: ">=12.16.x" }
-
-  "@yext/components-util@1.1.7":
-    resolution:
-      {
-        integrity: sha512-qb8KJDUmkp2Tt8KWo53WxdwypST1yBRSucMdCUYeA6xVDfiqvXYylmuqpi+me0phjpHlDteX9KBRNwzjZE3KBw==,
-      }
-    engines: { node: ">=12.16.x" }
-    peerDependencies:
-      "@yext/components-spinner-modal": 1.1.4
 
   "@yext/pages-components@1.1.1":
     resolution:
@@ -13645,22 +13601,6 @@ snapshots:
   "@yext/analytics@1.0.1":
     dependencies:
       ulidx: 2.4.1
-
-  "@yext/components-geo@1.1.4": {}
-
-  "@yext/components-maps@2.2.7(@yext/components-geo@1.1.4)(@yext/components-performance@1.1.4)(@yext/components-util@1.1.7(@yext/components-spinner-modal@1.1.4))":
-    dependencies:
-      "@yext/components-geo": 1.1.4
-      "@yext/components-performance": 1.1.4
-      "@yext/components-util": 1.1.7(@yext/components-spinner-modal@1.1.4)
-
-  "@yext/components-performance@1.1.4": {}
-
-  "@yext/components-spinner-modal@1.1.4": {}
-
-  "@yext/components-util@1.1.7(@yext/components-spinner-modal@1.1.4)":
-    dependencies:
-      "@yext/components-spinner-modal": 1.1.4
 
   "@yext/pages-components@1.1.1(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)":
     dependencies:
