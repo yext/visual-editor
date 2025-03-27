@@ -1,17 +1,22 @@
-// Based on https://css-tricks.com/converting-color-spaces-in-javascript/
-export const hexToRGB = (h: string) => {
+/**
+ * hexToRGB converts a hex color to rgb
+ * @param H hex string beginning with '#'
+ * @returns {number[] | undefined} [r, g, b] if conversion succeeds
+ */
+export const hexToRGB = (H: string): number[] | undefined => {
+  // Based on https://css-tricks.com/converting-color-spaces-in-javascript/
   let r: string, g: string, b: string;
 
-  if (h.length == 4) {
+  if (H.length == 4) {
     // 3 character hex
-    r = "0x" + h[1] + h[1];
-    g = "0x" + h[2] + h[2];
-    b = "0x" + h[3] + h[3];
-  } else if (h.length == 7) {
+    r = "0x" + H[1] + H[1];
+    g = "0x" + H[2] + H[2];
+    b = "0x" + H[3] + H[3];
+  } else if (H.length == 7) {
     // 6 character hex
-    r = "0x" + h[1] + h[2];
-    g = "0x" + h[3] + h[4];
-    b = "0x" + h[5] + h[6];
+    r = "0x" + H[1] + H[2];
+    g = "0x" + H[3] + H[4];
+    b = "0x" + H[5] + H[6];
   } else {
     return;
   }
@@ -19,8 +24,13 @@ export const hexToRGB = (h: string) => {
   return [+r, +g, +b];
 };
 
-// Based on https://css-tricks.com/converting-color-spaces-in-javascript/
-export const hexToHSL = (H: string) => {
+/**
+ * hexToHSL converts a hex color to hsl
+ * @param H hex string beginning with '#'
+ * @returns {number[] | undefined} [h, s, l] if conversion succeeds
+ */
+export const hexToHSL = (H: string): number[] | undefined => {
+  // Based on https://css-tricks.com/converting-color-spaces-in-javascript/
   // Convert hex to RGB first
   const rgb = hexToRGB(H);
   if (!rgb || rgb.length !== 3) {
@@ -55,7 +65,12 @@ export const hexToHSL = (H: string) => {
   return [h, s, l];
 };
 
-export const luminanceFromRGB = (rgb: number[]) => {
+/**
+ * luminanceFromRGB converts a rgb color string to
+ * @param H [r, g, b]
+ * @returns {number | undefined} luminance if conversion succeeds
+ */
+export const luminanceFromRGB = (rgb: number[]): number | undefined => {
   if (rgb.length !== 3 || rgb.some((v) => v > 255 || v < 0)) {
     return;
   }
@@ -67,17 +82,24 @@ export const luminanceFromRGB = (rgb: number[]) => {
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 };
 
-// WCAG 2.1 SC 1.4.3 (Level AA)
-// The visual presentation of text and images of text has a contrast ratio of at least 4.5:1, except for
-// large-scale text and images of large-scale text have a contrast ratio of at least 3:1.
-// Large-scale text means with at least 18 point or 14 point bold.
-// Based on https://dev.to/alvaromontoro/building-your-own-color-contrast-checker-4j7o
+/**
+ * passesWcagAAColorContrast checks color contrast based on WCAG 2.1 SC 1.4.3 (Level AA)
+ * The visual presentation of text and images of text has a contrast ratio of at least 4.5:1, except for
+ * large-scale text and images of large-scale text have a contrast ratio of at least 3:1.
+ * Large-scale text means with at least 18 point or 14 point bold.
+ * @param rgb1 [r, g, b]
+ * @param rgb2 [r, g, b]
+ * @param fontSizePt the font size in points
+ * @param fontWeight the numerical font weight (100-900)
+ * @returns {boolean} Whether the colors pass the contrast check. False if color conversion fails
+ */
 export const passesWcagAAColorContrast = (
   rgb1: number[],
   rgb2: number[],
   fontSizePt: number,
   fontWeight: number
-) => {
+): boolean => {
+  // Based on https://dev.to/alvaromontoro/building-your-own-color-contrast-checker-4j7o
   if (rgb1.length !== 3 || rgb2.length !== 3) {
     return false;
   }
@@ -99,13 +121,20 @@ export const passesWcagAAColorContrast = (
   }
 };
 
-// getContrastingColor returns the hex code for white or black
-// depending on which meets WCAG color contrast standards
+/**
+ * getContrastingColor returns the hex code for white or black
+ * depending on which meets WCAG color contrast standards
+ * @param hexColor the hex string to contrast with
+ * @param fontSizePx the font size in pixels (determines minimum contrast ratio)
+ * @param fontWeight the numerical font weight (100-900) (determines minimum contrast ratio)
+ * @returns '#000000' or '#FFFFFF' depending on which has proper contrast with hexColor.
+ *          '#000000' is returned if color conversions fail.
+ */
 export const getContrastingColor = (
   hexColor: string,
   fontSizePx: number,
   fontWeight: number
-) => {
+): string => {
   const rgb = hexToRGB(hexColor);
   const fontSizePt = fontSizePx * 0.75;
 
@@ -127,9 +156,21 @@ export const getContrastingColor = (
   return `#000000`;
 };
 
-export const srgbToHsl = (r: number, g: number, b: number) => {
+/**
+ * srgbToHSL converts srgb colors to hsl values.
+ * @param rgb [r, g, b]
+ * @returns {number[] | undefined} [h, s, l] if conversion suceeeds
+ */
+export const srgbToHSL = (rgb: number[]): number[] | undefined => {
   // based on https://codepen.io/himonoye/pen/ByaraoG?editors=1111
   // and https://www.rapidtables.com/convert/color/rgb-to-hsl.html
+  if (rgb.length !== 3 || rgb.some((v) => v > 1 || v < 0)) {
+    return;
+  }
+
+  const r = rgb[0],
+    g = rgb[1],
+    b = rgb[2];
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   const sum = min + max;

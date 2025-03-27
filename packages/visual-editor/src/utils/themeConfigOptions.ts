@@ -130,6 +130,6 @@ export const letterSpacingOptions = [
 export const textTransformOptions = [
   { label: "Normal", value: "none" },
   { label: "Uppercase", value: "uppercase" },
-  { label: "lowercase", value: "lowercase" },
-  { label: "capitalize", value: "capitalize" },
+  { label: "Lowercase", value: "lowercase" },
+  { label: "Capitalize", value: "capitalize" },
 ];

@@ -66,9 +66,11 @@ const internalApplyTheme = (
   );
 };
 
-// generateContrastingColors computes whether each color is
-// light or dark and adds a corresponding -contrast value that
-// is either black (for light colors) or white (for dark colors)
+/**
+ * generateContrastingColors computes whether each color is
+ * light or dark and adds a corresponding -contrast value that
+ * is either black (for light colors) or white (for dark colors)
+ */
 const generateContrastingColors = (themeData: ThemeData) => {
   const contrastingColors: Record<string, string> = {};
   Object.entries(themeData).forEach(([cssVariableName, value]) => {
