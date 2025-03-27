@@ -1,20 +1,17 @@
 import * as React from "react";
-import { type VariantProps } from "class-variance-authority";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
 import { themeManagerCn, BasicSelector } from "../../index.js";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
-import { layoutFields } from "./Layout.tsx";
+import { layoutFields, layoutProps } from "./Layout.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 interface ColumnProps {
   justifyContent: "center" | "start" | "end" | "spaceBetween";
   span?: number;
 }
 
-interface GridProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {
+interface GridProps extends layoutProps {
   columns: ColumnProps[];
 }
 
@@ -34,9 +31,9 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
   ) => {
     return (
       <Section
+        background={backgroundColor}
         className={themeManagerCn(
           layoutVariants({
-            backgroundColor,
             verticalPadding,
             horizontalPadding,
           })
@@ -123,7 +120,7 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
     gap: "0",
     verticalPadding: "default",
     horizontalPadding: "default",
-    backgroundColor: "none",
+    backgroundColor: backgroundColors.background1.value,
   },
   resolveFields: (data, params) => {
     // If the Grid has a parent component, the defaultProps should
@@ -134,7 +131,6 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
         data.props.verticalPadding = "0";
         data.props.horizontalPadding = "0";
         data.props.gap = "0";
-        data.props.backgroundColor = "inherit";
         data.props.maxContentWidth = "none";
       }
       return gridSectionFields;
