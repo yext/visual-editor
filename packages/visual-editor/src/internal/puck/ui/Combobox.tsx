@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
 type ComboboxOption = {
   label: string;
   value: any;
-  color?: string;
+  color?: string; // ex. "bg-palette-primary-light"
 };
 
 type ComboboxProps = {
@@ -46,7 +46,7 @@ export const Combobox = ({
               {defaultValue.color && (
                 <div
                   className={cn(
-                    "ve-ring-1 ve-ring-inset ve-ring-ring	ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2",
+                    "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2",
                     options.find(
                       (option) => option.value === defaultValue.value
                     )?.color
