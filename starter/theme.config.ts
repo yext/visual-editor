@@ -353,7 +353,7 @@ export const themeConfig: ThemeConfig = {
           { label: "Yes", value: "block" },
           { label: "No", value: "none" },
         ],
-        default: "visible",
+        default: "block",
       },
     },
   },
