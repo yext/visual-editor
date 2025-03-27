@@ -15,9 +15,11 @@ import {
 } from "@yext/search-headless-react";
 import * as React from "react";
 import { cva, VariantProps } from "class-variance-authority";
-import { BasicSelector, themeManagerCn } from "@yext/visual-editor";
+import { BasicSelector, Button, themeManagerCn } from "@yext/visual-editor";
 import { normalizeSlug } from "@yext/visual-editor";
 import { useEffect, useState } from "react";
+import { HoursStatus } from "@yext/pages-components";
+import { Address, Hours } from "../types/autogen.ts";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -148,45 +150,12 @@ const LocationCard: CardComponent<Location> = ({
               {formatPhoneNumber(location.mainPhone)}
             </a>
           )}
-          {location.hours && <p className="text-lg">Hours:</p>}
           {location.hours && (
-            <ul>
-              {location.hours.monday && (
-                <li className="text-xs" key="monday">
-                  {HoursText("Monday", location.hours.monday)}
-                </li>
-              )}
-              {location.hours.tuesday && (
-                <li className="text-xs" key="tuesday">
-                  {HoursText("Tuesday", location.hours.tuesday)}
-                </li>
-              )}
-              {location.hours.wednesday && (
-                <li className="text-xs" key="wednesday">
-                  {HoursText("Wednesday", location.hours.wednesday)}
-                </li>
-              )}
-              {location.hours.thursday && (
-                <li className="text-xs" key="thursday">
-                  {HoursText("Thursday", location.hours.thursday)}
-                </li>
-              )}
-              {location.hours.friday && (
-                <li className="text-xs" key="friday">
-                  {HoursText("Friday", location.hours.friday)}
-                </li>
-              )}
-              {location.hours.saturday && (
-                <li className="text-xs" key="saturday">
-                  {HoursText("Saturday", location.hours.saturday)}
-                </li>
-              )}
-              {location.hours.sunday && (
-                <li className="text-xs" key="sunday">
-                  {HoursText("Sunday", location.hours.sunday)}
-                </li>
-              )}
-            </ul>
+            <HoursStatus
+              hours={location.hours}
+              timezone={location.timezone}
+              className="text-sm"
+            ></HoursStatus>
           )}
           <div>
             <a
@@ -200,7 +169,7 @@ const LocationCard: CardComponent<Location> = ({
           </div>
           <div>
             {location.yextDisplayCoordinate && (
-              <button
+              <Button
                 onClick={() =>
                   window.open(
                     getGoogleMapsLink(
@@ -217,7 +186,7 @@ const LocationCard: CardComponent<Location> = ({
                 className="flex flex-col text-sm py-3 bg-rose-500 text-stone-50 rounded-lg drop-shadow-md"
               >
                 Get Directions
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -242,16 +211,6 @@ function formatPhoneNumber(phoneNumber: string) {
   return null;
 }
 
-const HoursText = (dayOfWeek: string, hours: DayHour) => {
-  return hours.isClosed ? (
-    <p>{dayOfWeek}: Closed</p>
-  ) : (
-    dayOfWeek +
-      ": " +
-      hours.openIntervals?.map((i) => i.start + "-" + i.end).join(", ")
-  );
-};
-
 const getPath = (location: Location) => {
   if (location.slug) {
     return location.slug;
@@ -267,47 +226,6 @@ const getPath = (location: Location) => {
   return normalizeSlug(path);
 };
 
-export interface Interval {
-  start?: any;
-  end?: any;
-}
-
-export interface DayHour {
-  openIntervals?: Interval[];
-  isClosed?: boolean;
-}
-
-export interface HolidayHours {
-  date: string;
-  openIntervals?: Interval[];
-  isClosed?: boolean;
-  isRegularHours?: boolean;
-}
-
-export interface Hours {
-  monday?: DayHour;
-  tuesday?: DayHour;
-  wednesday?: DayHour;
-  thursday?: DayHour;
-  friday?: DayHour;
-  saturday?: DayHour;
-  sunday?: DayHour;
-  holidayHours?: HolidayHours[];
-  reopenDate?: string;
-}
-
-interface Address {
-  line1?: string;
-  line2?: string;
-  line3?: string;
-  sublocality?: string;
-  city?: string;
-  region?: string;
-  postalCode?: string;
-  extraDescription?: string;
-  countryCode?: string;
-}
-
 interface Location {
   address: Address;
   hours?: Hours;
@@ -316,6 +234,7 @@ interface Location {
   name: string;
   neighborhood?: string;
   slug?: string;
+  timezone: string;
   yextDisplayCoordinate?: Coordinate;
 }
 
