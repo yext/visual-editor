@@ -1,11 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { ButtonProps } from "./atoms/button.js";
-import {
-  getDirections,
-  GetDirectionsConfig,
-  Coordinate,
-} from "@yext/pages-components";
+import { getDirections, Coordinate } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
   YextEntityField,
@@ -18,7 +14,6 @@ import {
 
 type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
-  getDirectionsProvider: GetDirectionsConfig["provider"];
   variant: ButtonProps["variant"];
 };
 
@@ -27,15 +22,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     label: "Coordinates",
     filter: { types: ["type.coordinate"] },
   }),
-  getDirectionsProvider: {
-    label: "Maps Provider",
-    type: "radio",
-    options: [
-      { label: "Google", value: "google" },
-      { label: "Apple", value: "apple" },
-      { label: "Bing", value: "bing" },
-    ],
-  },
   variant: {
     label: "Variant",
     type: "radio",
@@ -49,7 +35,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
 const GetDirections = ({
   variant,
   coordinate: coordinateField,
-  getDirectionsProvider,
 }: GetDirectionsProps) => {
   const document = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -64,7 +49,7 @@ const GetDirections = ({
     undefined,
     undefined,
     undefined,
-    { provider: getDirectionsProvider },
+    { provider: "google" },
     coordinate
   );
 
@@ -89,7 +74,6 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
-    getDirectionsProvider: "google",
     coordinate: {
       field: "yextDisplayCoordinate",
       constantValue: {
