@@ -37,7 +37,7 @@ const TextList: React.FC<TextListProps> = ({ list: textListField }) => {
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >
-      <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight text-body-color">
+      <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
         {resolvedTextList.map((text: any, index: any) => (
           <li key={index} className="mb-2">
             {text}
