@@ -11,6 +11,8 @@ import {
   BasicSelector,
   Body,
   ImageWrapperProps,
+  BackgroundStyle,
+  backgroundColors,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
@@ -37,13 +39,7 @@ interface PromoProps {
     visible: boolean;
   };
   styles: {
-    backgroundColor:
-      | "bg-card-backgroundColor"
-      | "bg-palette-primary"
-      | "bg-palette-secondary"
-      | "bg-palette-accent"
-      | "bg-palette-text"
-      | "bg-palette-background";
+    backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
   };
 }
@@ -59,17 +55,12 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.image"],
         },
       }),
-      // TODO (SUMO-7090): Replace with BasicSelector
-      aspectRatio: {
-        type: "select",
-        label: "Aspect Ratio",
-        options: [
-          { label: "Auto", value: "auto" },
-          { label: "Square", value: "square" },
-          { label: "Video (16:9)", value: "video" },
-          { label: "Portrait (3:4)", value: "portrait" },
-        ],
-      },
+      aspectRatio: BasicSelector("Aspect Ratio", [
+        { label: "Auto", value: "auto" },
+        { label: "Square", value: "square" },
+        { label: "Video (16:9)", value: "video" },
+        { label: "Portrait (3:4)", value: "portrait" },
+      ]),
     },
   },
   title: {
@@ -126,14 +117,14 @@ const promoFields: Fields<PromoProps> = {
     label: "Styles",
     type: "object",
     objectFields: {
-      backgroundColor: BasicSelector("Background Color", [
-        { label: "Default", value: "bg-promo-backgroundColor" },
-        { label: "Primary", value: "bg-palette-primary" },
-        { label: "Secondary", value: "bg-palette-secondary" },
-        { label: "Accent", value: "bg-palette-accent" },
-        { label: "Text", value: "bg-palette-text" },
-        { label: "Background", value: "bg-palette-background" },
-      ]),
+      backgroundColor: BasicSelector(
+        "Background Color",
+        Object.values(backgroundColors).map(({ label, value }) => ({
+          label,
+          value,
+          color: value.bgColor,
+        }))
+      ),
       orientation: BasicSelector("Image Orientation", [
         { label: "Left", value: "left" },
         { label: "Right", value: "right" },
@@ -166,7 +157,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
         className={themeManagerCn(
           "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8 bg-white",
           styles.orientation === "right" && "md:flex-row-reverse",
-          styles.backgroundColor
+          styles.backgroundColor?.bgColor
         )}
       >
         {resolvedImage && (
@@ -255,7 +246,7 @@ const Promo: ComponentConfig<PromoProps> = {
       visible: true,
     },
     styles: {
-      backgroundColor: "bg-card-backgroundColor",
+      backgroundColor: backgroundColors.background1.value,
       orientation: "left",
     },
   },
