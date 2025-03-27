@@ -1,19 +1,35 @@
 import * as React from "react";
-import { Link } from "@yext/pages-components";
+import { CTAProps, CTA } from "../../../index.js";
 
 type maybeLinkProps = {
   href?: string;
   children?: React.ReactNode;
   className?: string;
   eventName?: string;
+  variant?: CTAProps["variant"];
+  alwaysHideCaret?: boolean;
 };
 
 const MaybeLink = (props: maybeLinkProps) => {
-  if (props.href) {
+  const {
+    href,
+    children,
+    className,
+    eventName,
+    alwaysHideCaret,
+    variant = "link",
+  } = props;
+  if (href) {
     return (
-      <Link href={props.href} {...props}>
-        {props.children}
-      </Link>
+      <CTA
+        link={href}
+        label={children}
+        linkType="URL"
+        eventName={eventName}
+        variant={variant}
+        className={className}
+        alwaysHideCaret={alwaysHideCaret}
+      />
     );
   } else {
     return <>{props.children}</>;

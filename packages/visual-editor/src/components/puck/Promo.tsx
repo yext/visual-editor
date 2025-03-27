@@ -209,7 +209,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              className="md:w-fit"
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -253,7 +253,7 @@ const Promo: ComponentConfig<PromoProps> = {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
         },
       },
       variant: "primary",

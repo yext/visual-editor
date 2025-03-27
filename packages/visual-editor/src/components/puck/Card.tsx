@@ -60,7 +60,6 @@ interface CardProps {
     entityField: YextEntityField<CTAProps>;
     linkType: CTAProps["linkType"];
     variant: CTAProps["variant"];
-    fontSize: CTAProps["fontSize"];
   };
   backgroundColor?: BackgroundStyle;
 }
@@ -176,9 +175,9 @@ const cardFields: Fields<CardProps> = {
       }),
       variant: BasicSelector("Variant", [
         { label: "Primary", value: "primary" },
+        { label: "Secondary", value: "secondary" },
         { label: "Link", value: "link" },
       ]),
-      fontSize: FontSizeSelector(),
       linkType: linkTypeFields,
     },
   },
@@ -274,7 +273,6 @@ const CardWrapper = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              fontSize={cta.fontSize}
               linkType={cta.linkType}
             />
           )}
@@ -338,10 +336,9 @@ export const CardComponent: ComponentConfig<CardProps> = {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
         },
       },
-      fontSize: "default",
       variant: "primary",
       linkType: "URL",
     },
