@@ -17,7 +17,6 @@ import {
 import * as React from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { BasicSelector, themeManagerCn } from "@yext/visual-editor";
-// import { MapboxMap } from "./MapboxMap2";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 
 const DEFAULT_FIELD = "builtin.location";

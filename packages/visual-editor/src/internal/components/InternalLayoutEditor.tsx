@@ -7,12 +7,13 @@ import {
   AppState,
 } from "@measured/puck";
 import React from "react";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { YextEntityFieldSelector } from "../../components/editor/YextEntityFieldSelector.tsx";
 import * as lzstring from "lz-string";
 
@@ -175,33 +176,8 @@ export const InternalLayoutEditor = ({
               isDevMode={templateMetadata.isDevMode}
             />
           ),
-          iframe: ({ children, document }) => {
-            useEffect(() => {
-              if (!document) return;
-
-              // Ensure Mapbox script is loaded in the iframe
-              if (!document.getElementById("mapbox-script")) {
-                const script = document.createElement("script");
-                script.id = "mapbox-script";
-                script.src =
-                  "https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js";
-                document.body.appendChild(script);
-              }
-
-              // Ensure Mapbox stylesheet is loaded in the iframe
-              if (!document.getElementById("mapbox-stylesheet")) {
-                const link = document.createElement("link");
-                link.id = "mapbox-stylesheet";
-                link.href =
-                  "https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css";
-                link.rel = "stylesheet";
-                document.body.appendChild(link);
-              }
-            }, [document]);
-            return <>{children}</>;
-          },
+          iframe: loadMapboxIntoIframe,
         }}
-        // iframe={{enabled:false}}
       />
     </EntityFieldProvider>
   );

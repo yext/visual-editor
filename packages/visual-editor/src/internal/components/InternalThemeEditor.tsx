@@ -8,6 +8,7 @@ import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebar
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
@@ -182,31 +183,7 @@ export const InternalThemeEditor = ({
           actionBar: () => <></>,
           components: () => <></>,
           fields: fieldsOverride,
-          iframe: ({ children, document }) => {
-            useEffect(() => {
-              if (!document) return;
-
-              // Ensure Mapbox script is loaded in the iframe
-              if (!document.getElementById("mapbox-script")) {
-                const script = document.createElement("script");
-                script.id = "mapbox-script";
-                script.src =
-                  "https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js";
-                document.body.appendChild(script);
-              }
-
-              // Ensure Mapbox stylesheet is loaded in the iframe
-              if (!document.getElementById("mapbox-stylesheet")) {
-                const link = document.createElement("link");
-                link.id = "mapbox-stylesheet";
-                link.href =
-                  "https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css";
-                link.rel = "stylesheet";
-                document.body.appendChild(link);
-              }
-            }, [document]);
-            return <>{children}</>;
-          },
+          iframe: loadMapboxIntoIframe,
         }}
       />
     </EntityFieldProvider>
