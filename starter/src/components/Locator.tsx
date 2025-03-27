@@ -188,16 +188,16 @@ const Locator: React.FC<LocatorProps> = (props) => {
 
   return (
     <>
-      <div className="flex w-full h-full aspect-[3/2]">
+      <div className="flex w-full h-full aspect-[1/2] md:aspect-[3/2]">
         {/* Left Section: FilterSearch + Results. Full width for small screens */}
-        <div className="w-full md:w-1/3 p-4">
+        <div className="w-full md:w-1/3 p-4 h-full flex flex-col">
           <FilterSearch
             searchFields={[
               { fieldApiName: DEFAULT_FIELD, entityType: DEFAULT_ENTITY_TYPE },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
           />
-          <div>
+          <div id="innerDiv" className="flex-grow overflow-y-auto">
             {resultCount > 0 && (
               <VerticalResults CardComponent={StandardCard} />
             )}
