@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -12,6 +11,8 @@ import {
   BasicSelector,
   BodyProps,
   getFontWeightOverrideOptions,
+  Image,
+  ImageProps,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
@@ -22,11 +23,15 @@ import {
   headingOptions,
 } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
+import {
+  ImageWrapperFields,
+  ImageWrapperProps,
+  resolvedImageFields,
+} from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -50,12 +55,7 @@ interface CardProps {
     text: YextEntityField<string>;
     variant: BodyProps["variant"];
   };
-  image: {
-    image: YextEntityField<ImageType>;
-    size: ImageWrapperProps["size"];
-    aspectRatio: ImageWrapperProps["aspectRatio"];
-    rounded: ImageWrapperProps["rounded"];
-  };
+  image: ImageWrapperProps;
   cta: {
     entityField: YextEntityField<CTAProps>;
     linkType: CTAProps["linkType"];
@@ -137,31 +137,7 @@ const cardFields: Fields<CardProps> = {
     type: "object",
     label: "Image",
     objectFields: {
-      image: YextEntityFieldSelector<any, ImageType>({
-        label: "Image",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-      size: BasicSelector("Size", [
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full Width", value: "full" },
-      ]),
-      aspectRatio: BasicSelector("Aspect Ratio", [
-        { label: "Auto", value: "auto" },
-        { label: "Square", value: "square" },
-        { label: "Video (16:9)", value: "video" },
-        { label: "Portrait (3:4)", value: "portrait" },
-      ]),
-      rounded: BasicSelector("Rounded Corners", [
-        { label: "None", value: "none" },
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full", value: "full" },
-      ]),
+      ...ImageWrapperFields,
     },
   },
   cta: {
@@ -219,21 +195,13 @@ const CardWrapper = ({
               fieldId={image.image.field}
               constantValueEnabled={image.image.constantValueEnabled}
             >
-              <div
-                className={themeManagerCn(
-                  imageWrapperVariants({
-                    size: image.size,
-                    rounded: image.rounded,
-                    aspectRatio: image.aspectRatio,
-                  }),
-                  "overflow-hidden"
-                )}
-              >
-                <Image
-                  image={resolvedImage}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <Image
+                image={resolvedImage}
+                layout={image.layout}
+                width={image.width}
+                height={image.height}
+                aspectRatio={image.aspectRatio}
+              />
             </EntityField>
           </div>
         )}
@@ -323,16 +291,14 @@ export const CardComponent: ComponentConfig<CardProps> = {
       image: {
         field: "primaryPhoto",
         constantValue: {
-          alternateText: "",
           height: 360,
           width: 640,
           url: PLACEHOLDER_IMAGE_URL,
         },
         constantValueEnabled: true,
       },
-      size: "full",
-      rounded: "none",
-      aspectRatio: "auto",
+      layout: "auto",
+      aspectRatio: 1.78,
     },
     cta: {
       entityField: {
@@ -385,6 +351,11 @@ export const CardComponent: ComponentConfig<CardProps> = {
           ...cardFields.body.objectFields,
           weight: BasicSelector("Font Weight", bodyFontWeightOptions),
         },
+      },
+      image: {
+        ...cardFields.image,
+        // @ts-expect-error ts(2322) 'objectFields' does not exist in type 'TextField'
+        objectFields: resolvedImageFields(data.props.image.layout),
       },
     };
   },

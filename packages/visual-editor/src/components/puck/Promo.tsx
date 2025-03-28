@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -9,8 +8,9 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   BasicSelector,
+  ImageProps,
+  Image,
   Body,
-  ImageWrapperProps,
   BackgroundStyle,
   backgroundColors,
   BodyProps,
@@ -18,15 +18,16 @@ import {
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import { imageWrapperVariants } from "./Image.js";
+import {
+  ImageWrapperFields,
+  ImageWrapperProps,
+  resolvedImageFields,
+} from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 interface PromoProps {
-  image: {
-    image: YextEntityField<ImageType>;
-    aspectRatio: ImageWrapperProps["aspectRatio"];
-  };
+  image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
     level: HeadingProps["level"];
@@ -51,18 +52,7 @@ const promoFields: Fields<PromoProps> = {
     type: "object",
     label: "Image",
     objectFields: {
-      image: YextEntityFieldSelector<any, ImageType>({
-        label: "Image",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-      aspectRatio: BasicSelector("Aspect Ratio", [
-        { label: "Auto", value: "auto" },
-        { label: "Square", value: "square" },
-        { label: "Video (16:9)", value: "video" },
-        { label: "Portrait (3:4)", value: "portrait" },
-      ]),
+      ...ImageWrapperFields,
     },
   },
   title: {
@@ -177,20 +167,13 @@ const PromoWrapper: React.FC<PromoProps> = ({
             fieldId={image.image.field}
             constantValueEnabled={image.image.constantValueEnabled}
           >
-            <div
-              className={themeManagerCn(
-                imageWrapperVariants({
-                  aspectRatio: image.aspectRatio,
-                  size: "full",
-                }),
-                "overflow-hidden"
-              )}
-            >
-              <Image
-                image={resolvedImage}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <Image
+              image={resolvedImage}
+              layout={image.layout}
+              width={image.width}
+              height={image.height}
+              aspectRatio={image.aspectRatio}
+            />
           </EntityField>
         )}
         <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
@@ -225,14 +208,14 @@ const Promo: ComponentConfig<PromoProps> = {
       image: {
         field: "primaryPhoto",
         constantValue: {
-          alternateText: "",
           height: 360,
           width: 640,
           url: PLACEHOLDER_IMAGE_URL,
         },
         constantValueEnabled: true,
       },
-      aspectRatio: "auto",
+      layout: "auto",
+      aspectRatio: 1.78,
     },
     title: {
       text: {
@@ -263,6 +246,15 @@ const Promo: ComponentConfig<PromoProps> = {
       backgroundColor: backgroundColors.background1.value,
       orientation: "left",
     },
+  },
+  resolveFields(data) {
+    return {
+      ...promoFields,
+      image: {
+        ...promoFields.image,
+        objectFields: resolvedImageFields(data.props.image.layout),
+      },
+    };
   },
   render: (props) => <PromoWrapper {...props} />,
 };
