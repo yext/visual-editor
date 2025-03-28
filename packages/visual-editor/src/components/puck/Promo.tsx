@@ -13,6 +13,7 @@ import {
   ImageWrapperProps,
   BackgroundStyle,
   backgroundColors,
+  BodyProps,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
