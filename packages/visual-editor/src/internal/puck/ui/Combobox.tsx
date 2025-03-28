@@ -21,7 +21,7 @@ type ComboboxOption = {
 
 type ComboboxProps = {
   defaultValue: ComboboxOption;
-  onChange: (value: any) => void;
+  onChange: (value: string) => void;
   options: Array<ComboboxOption>;
 };
 
@@ -75,10 +75,7 @@ export const Combobox = ({
                   key={option.label}
                   value={option.value.toString()}
                   onSelect={(currentValue) => {
-                    onChange(
-                      options.find((o) => o.value.toString() === currentValue)
-                        ?.value ?? options[0]?.value
-                    );
+                    onChange(currentValue);
                     setOpen(false);
                   }}
                 >
