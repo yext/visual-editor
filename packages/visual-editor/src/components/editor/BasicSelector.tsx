@@ -3,10 +3,19 @@ import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 
-export const BasicSelector = (
-  label: string,
-  options: { label: string; value: any; color?: string }[]
-): Field => {
+type Option = {
+  label: string;
+  value: any;
+  color?: string;
+};
+
+type StringifiedOption = {
+  label: string;
+  value: string;
+  color?: string;
+};
+
+export const BasicSelector = (label: string, options: Option[]): Field => {
   return {
     type: "custom",
     render: ({
@@ -16,14 +25,34 @@ export const BasicSelector = (
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
+      if (!options || options.length === 0) {
+        return (
+          <FieldLabel label={label} icon={<ChevronDown size={16} />}>
+            <p>No options available</p>
+          </FieldLabel>
+        );
+      }
+      const stringifiedValue: string = JSON.stringify(value);
+      const stringifiedOptions: StringifiedOption[] = options.map((option) => ({
+        ...option,
+        value: JSON.stringify(option.value) as string,
+      }));
       return (
         <FieldLabel label={label} icon={<ChevronDown size={16} />}>
           <Combobox
             defaultValue={
-              options.find((option) => option.value === value) ?? options[0]
+              stringifiedOptions.find(
+                (option) => option.value === stringifiedValue
+              ) ?? stringifiedOptions[0]
             }
-            onChange={onChange}
-            options={options}
+            onChange={(selectedOption) =>
+              onChange(
+                options.find(
+                  (option) => JSON.stringify(option.value) === selectedOption
+                )?.value ?? options[0].value
+              )
+            }
+            options={stringifiedOptions}
           />
         </FieldLabel>
       );
