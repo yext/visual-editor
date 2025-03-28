@@ -26,6 +26,7 @@ import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 import {
   backgroundColors,
   BackgroundStyle,
+  ctaVariantOptions,
 } from "../../utils/themeConfigOptions.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -60,7 +61,6 @@ interface CardProps {
     entityField: YextEntityField<CTAProps>;
     linkType: CTAProps["linkType"];
     variant: CTAProps["variant"];
-    fontSize: CTAProps["fontSize"];
   };
   backgroundColor?: BackgroundStyle;
 }
@@ -174,11 +174,11 @@ const cardFields: Fields<CardProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Link", value: "link" },
-      ]),
-      fontSize: FontSizeSelector(),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
       linkType: linkTypeFields,
     },
   },
@@ -274,7 +274,6 @@ const CardWrapper = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              fontSize={cta.fontSize}
               linkType={cta.linkType}
             />
           )}
@@ -338,10 +337,9 @@ export const CardComponent: ComponentConfig<CardProps> = {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
         },
       },
-      fontSize: "default",
       variant: "primary",
       linkType: "URL",
     },

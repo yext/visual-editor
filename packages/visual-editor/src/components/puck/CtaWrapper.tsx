@@ -7,6 +7,7 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  ctaVariantOptions,
 } from "../../index.js";
 
 interface CTAWrapperProps {
@@ -26,11 +27,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
   variant: {
     label: "Variant",
     type: "radio",
-    options: [
-      { label: "Primary", value: "primary" },
-      { label: "Outline", value: "secondary" },
-      { label: "Link", value: "link" },
-    ],
+    options: ctaVariantOptions,
   },
   linkType: linkTypeFields,
 };
@@ -55,7 +52,6 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         linkType={cta?.linkType}
         variant={variant}
         className={className}
-        size={"small"}
       />
     </EntityField>
   );
@@ -68,7 +64,7 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     entityField: {
       field: "",
       constantValue: {
-        name: "Call to Action",
+        label: "Call to Action",
       },
     },
     variant: "primary",

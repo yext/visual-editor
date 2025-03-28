@@ -1,4 +1,4 @@
-import { useTemplateProps } from "../../index.js";
+import { Body, useTemplateProps } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
 import { MaybeLink } from "./atoms/maybeLink.js";
 
@@ -51,19 +51,21 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
     <div>
       {breadcrumbs?.length > 0 && (
         <nav className="my-4" aria-label="Breadcrumb">
-          <ol className="components flex flex-wrap text-body-sm-fontSize">
+          <ol className="components flex flex-wrap">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
               const href = relativePrefixToRoot
                 ? relativePrefixToRoot + slug
                 : slug;
               return (
-                <li key={idx}>
+                <li key={idx} className="flex items-center">
                   <MaybeLink
                     href={isLast ? "" : href}
-                    className={"text-link-color underline hover:no-underline"}
+                    // Force body-sm and link-fontFamily for all breadcrumbs
+                    className="text-body-sm-fontSize font-link-fontFamily"
+                    alwaysHideCaret={true}
                   >
-                    {name}
+                    <Body variant={"sm"}>{name}</Body>
                   </MaybeLink>
                   {!isLast && <span className="mx-2">{separator}</span>}
                 </li>

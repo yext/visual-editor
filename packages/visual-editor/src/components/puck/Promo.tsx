@@ -14,6 +14,7 @@ import {
   BackgroundStyle,
   backgroundColors,
   BodyProps,
+  ctaVariantOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
@@ -109,11 +110,11 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Primary CTA Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Link", value: "link" },
-      ]),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
       visible: {
         label: "Show Primary CTA",
         type: "radio",
@@ -209,7 +210,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              className="md:w-fit"
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -253,7 +254,7 @@ const Promo: ComponentConfig<PromoProps> = {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
         },
       },
       variant: "primary",

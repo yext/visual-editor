@@ -3,7 +3,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   AddressType,
   getDirections,
-  Link,
   Address as RenderAddress,
 } from "@yext/pages-components";
 import { Body } from "./atoms/body.js";
@@ -15,6 +14,7 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  CTA,
 } from "../../index.ts";
 
 type AddressProps = {
@@ -67,14 +67,12 @@ const Address = ({
             />
           </Body>
           {coordinates && showGetDirections && (
-            <Link
-              cta={{
-                link: coordinates,
-                label: "Get Directions",
-                linkType: "DRIVING_DIRECTIONS",
-              }}
+            <CTA
+              link={coordinates}
+              label="Get Directions"
+              linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              className="font-bold text-link-color text-body-fontSize underline hover:no-underline mt-2 block"
+              variant="link"
             />
           )}
         </EntityField>
