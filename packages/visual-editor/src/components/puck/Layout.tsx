@@ -59,7 +59,6 @@ export const layoutVariants = cva("components w-full", {
     },
     horizontalPadding: {
       none: "",
-      default: "px-pageSection-horizontalPadding",
       "0": "px-0",
       "0.5": "px-0.5",
       "1": "px-1",
@@ -82,11 +81,17 @@ export const layoutVariants = cva("components w-full", {
       "20": "px-20",
       "24": "px-24",
     },
+    columnFormatting: {
+      none: "",
+      default: "md:grid md:grid-cols-12",
+      forceHorizontal: "!grid grid-cols-12",
+    },
   },
   defaultVariants: {
     gap: "none",
     verticalPadding: "none",
     horizontalPadding: "none",
+    columnFormatting: "none",
   },
 });
 
@@ -121,6 +126,6 @@ export const layoutFields: Fields<layoutProps> = {
     Object.values(backgroundColors)
   ),
   gap: SpacingSelector("gap", "Gap"),
-  verticalPadding: SpacingSelector("padding", "Vertical Padding"),
-  horizontalPadding: SpacingSelector("padding", "Horizontal Padding"),
+  verticalPadding: SpacingSelector("padding", "Top/Bottom Padding"),
+  horizontalPadding: SpacingSelector("padding", "Left/Right Padding"),
 };
