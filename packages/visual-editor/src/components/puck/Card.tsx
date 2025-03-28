@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps, ImageType } from "@yext/pages-components";
+import { ImageType } from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -12,6 +12,8 @@ import {
   BasicSelector,
   BodyProps,
   getFontWeightOverrideOptions,
+  Image,
+  ImageProps,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
@@ -22,7 +24,6 @@ import {
   headingOptions,
 } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 import {
   backgroundColors,
   BackgroundStyle,
@@ -53,10 +54,8 @@ interface CardProps {
     transform: BodyProps["textTransform"];
   };
   image: {
-    image: YextEntityField<ImageType>;
-    size: ImageWrapperProps["size"];
-    aspectRatio: ImageWrapperProps["aspectRatio"];
-    rounded: ImageWrapperProps["rounded"];
+    image: YextEntityField<any>;
+    aspectRatio: ImageProps["aspectRatio"];
   };
   cta: {
     entityField: YextEntityField<CTAProps>;
@@ -144,24 +143,11 @@ const cardFields: Fields<CardProps> = {
           types: ["type.image"],
         },
       }),
-      size: BasicSelector("Size", [
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full Width", value: "full" },
-      ]),
       aspectRatio: BasicSelector("Aspect Ratio", [
         { label: "Auto", value: "auto" },
         { label: "Square", value: "square" },
         { label: "Video (16:9)", value: "video" },
         { label: "Portrait (3:4)", value: "portrait" },
-      ]),
-      rounded: BasicSelector("Rounded Corners", [
-        { label: "None", value: "none" },
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full", value: "full" },
       ]),
     },
   },
@@ -220,21 +206,11 @@ const CardWrapper = ({
               fieldId={image.image.field}
               constantValueEnabled={image.image.constantValueEnabled}
             >
-              <div
-                className={themeManagerCn(
-                  imageWrapperVariants({
-                    size: image.size,
-                    rounded: image.rounded,
-                    aspectRatio: image.aspectRatio,
-                  }),
-                  "overflow-hidden"
-                )}
-              >
-                <Image
-                  image={resolvedImage}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <Image
+                image={resolvedImage}
+                resize={"auto"}
+                aspectRatio={image.aspectRatio}
+              />
             </EntityField>
           </div>
         )}
@@ -330,15 +306,10 @@ export const CardComponent: ComponentConfig<CardProps> = {
       image: {
         field: "primaryPhoto",
         constantValue: {
-          alternateText: "",
-          height: 360,
-          width: 640,
           url: PLACEHOLDER_IMAGE_URL,
         },
         constantValueEnabled: true,
       },
-      size: "full",
-      rounded: "none",
       aspectRatio: "auto",
     },
     cta: {

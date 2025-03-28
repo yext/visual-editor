@@ -1,50 +1,24 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps, ImageType } from "@yext/pages-components";
-import { cva, type VariantProps } from "class-variance-authority";
 import {
-  themeManagerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
   BasicSelector,
+  Image,
+  ImageProps,
 } from "../../index.js";
+import { ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-const imageWrapperVariants = cva("", {
-  variants: {
-    size: {
-      small: "max-w-xs",
-      medium: "max-w-md",
-      large: "max-w-xl",
-      full: "w-full",
-    },
-    aspectRatio: {
-      auto: "aspect-auto",
-      square: "aspect-square",
-      video: "aspect-video",
-      portrait: "aspect-[3/4]",
-    },
-    rounded: {
-      none: "",
-      small: "rounded-sm",
-      medium: "rounded-md",
-      large: "rounded-lg",
-      full: "rounded-full",
-    },
-  },
-  defaultVariants: {
-    size: "medium",
-    aspectRatio: "auto",
-    rounded: null,
-  },
-});
-
-interface ImageWrapperProps extends VariantProps<typeof imageWrapperVariants> {
-  image: YextEntityField<ImageType>;
+interface ImageWrapperProps {
+  image: YextEntityField<any>;
+  resize: ImageProps["resize"];
+  aspectRatio: ImageProps["aspectRatio"];
+  width?: ImageProps["width"];
 }
 
 const imageWrapperFields: Fields<ImageWrapperProps> = {
@@ -54,32 +28,27 @@ const imageWrapperFields: Fields<ImageWrapperProps> = {
       types: ["type.image"],
     },
   }),
-  size: BasicSelector("Size", [
-    { label: "Small", value: "small" },
-    { label: "Medium", value: "medium" },
-    { label: "Large", value: "large" },
-    { label: "Full Width", value: "full" },
-  ]),
+  resize: {
+    label: "Size",
+    type: "radio",
+    options: [
+      { label: "Auto", value: "auto" },
+      { label: "Fixed", value: "fixed" },
+    ],
+  },
   aspectRatio: BasicSelector("Aspect Ratio", [
     { label: "Auto", value: "auto" },
     { label: "Square", value: "square" },
     { label: "Video (16:9)", value: "video" },
     { label: "Portrait (3:4)", value: "portrait" },
   ]),
-  rounded: BasicSelector("Rounded Corners", [
-    { label: "None", value: "none" },
-    { label: "Small", value: "small" },
-    { label: "Medium", value: "medium" },
-    { label: "Large", value: "large" },
-    { label: "Full", value: "full" },
-  ]),
 };
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
   image: imageField,
-  size,
+  resize,
   aspectRatio,
-  rounded,
+  width,
 }) => {
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
@@ -97,14 +66,12 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >
-      <div
-        className={themeManagerCn(
-          imageWrapperVariants({ size, aspectRatio, rounded }),
-          "overflow-hidden"
-        )}
-      >
-        <Image image={resolvedImage} className="w-full h-full object-cover" />
-      </div>
+      <Image
+        image={resolvedImage}
+        resize={resize}
+        aspectRatio={aspectRatio}
+        width={width}
+      />
     </EntityField>
   );
 };
@@ -116,22 +83,28 @@ const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
     image: {
       field: "primaryPhoto",
       constantValue: {
-        alternateText: "",
-        height: 360,
-        width: 640,
         url: PLACEHOLDER_IMAGE_URL,
       },
       constantValueEnabled: true,
     },
-    size: "medium",
+    resize: "auto",
     aspectRatio: "auto",
-    rounded: "none",
+    width: 640,
+  },
+  resolveFields(data) {
+    if (data.props.resize === "fixed") {
+      return {
+        ...imageWrapperFields,
+        width: {
+          label: "Width",
+          type: "number",
+          min: 0,
+        },
+      };
+    }
+    return imageWrapperFields;
   },
   render: (props) => <ImageWrapper {...props} />,
 };
 
-export {
-  ImageWrapperComponent as ImageWrapper,
-  type ImageWrapperProps,
-  imageWrapperVariants,
-};
+export { ImageWrapperComponent as ImageWrapper, type ImageWrapperProps };
