@@ -1,9 +1,8 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
-import { Section, sectionVariants } from "./atoms/section.js";
+import { Section } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
-import { VariantProps } from "class-variance-authority";
 import {
   EntityField,
   resolveYextEntityField,
@@ -18,7 +17,6 @@ type HoursTableProps = {
   collapseDays: boolean;
   showAdditionalHoursText: boolean;
   alignment: "items-start" | "items-center";
-  padding: VariantProps<typeof sectionVariants>["padding"];
 };
 
 const hoursTableFields: Fields<HoursTableProps> = {
@@ -66,16 +64,6 @@ const hoursTableFields: Fields<HoursTableProps> = {
       { label: "Center", value: "items-center" },
     ],
   },
-  padding: {
-    label: "Padding",
-    type: "radio",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "default" },
-      { label: "Large", value: "large" },
-    ],
-  },
 };
 
 const VisualEditorHoursTable = ({
@@ -84,7 +72,6 @@ const VisualEditorHoursTable = ({
   collapseDays,
   showAdditionalHoursText,
   alignment,
-  padding,
 }: HoursTableProps) => {
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
@@ -96,7 +83,6 @@ const VisualEditorHoursTable = ({
   return (
     <Section
       className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize`}
-      padding={padding}
     >
       <div>
         {hours && (
@@ -135,10 +121,9 @@ const HoursTableComponent: ComponentConfig<HoursTableProps> = {
     collapseDays: false,
     showAdditionalHoursText: true,
     alignment: "items-center",
-    padding: "none",
   },
   label: "Hours Table",
-  render: (props) => <VisualEditorHoursTable {...props} />,
+  render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };
 
 export { HoursTableComponent as HoursTable, type HoursTableProps };
