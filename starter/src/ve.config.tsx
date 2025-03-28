@@ -42,6 +42,8 @@ import {
   DirectoryProps,
   Promo,
   PromoProps,
+  HeroSectionProps,
+  HeroSection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -65,6 +67,7 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
+  HeroSection: HeroSectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -88,6 +91,7 @@ const components: Config<MainProps>["components"] = {
   Footer,
   Directory,
   Breadcrumbs,
+  HeroSection,
 };
 
 const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
