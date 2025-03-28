@@ -4,20 +4,11 @@ import {
   FontRegistry,
   getFontWeightOptions,
   constructFontSelectOptions,
-  getBorderRadiusOptions,
   getFontSizeOptions,
   getSpacingOptions,
+  letterSpacingOptions,
+  textTransformOptions,
 } from "@yext/visual-editor";
-
-const getColorOptions = () => {
-  return [
-    { label: "Primary", value: "var(--colors-palette-primary)" },
-    { label: "Secondary", value: "var(--colors-palette-secondary)" },
-    { label: "Accent", value: "var(--colors-palette-accent)" },
-    { label: "Text", value: "var(--colors-palette-text)" },
-    { label: "Background", value: "var(--colors-palette-background)" },
-  ];
-};
 
 const fonts: FontRegistry = {
   // other developer defined fonts here
@@ -269,114 +260,93 @@ export const themeConfig: ThemeConfig = {
       },
     },
   },
-  header: {
-    label: "Header",
+  button: {
+    label: "Button",
     styles: {
-      backgroundColor: {
-        label: "Background Color",
+      fontFamily: {
+        label: "Font",
         type: "select",
-        plugin: "backgroundColor",
-        options: getColorOptions(),
-        default: "var(--colors-palette-background)",
-      },
-      linkColor: {
-        label: "Link Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-primary)",
-      },
-      linkFontSize: {
-        label: "Link Font Size",
-        type: "select",
-        plugin: "fontSize",
-        options: getFontSizeOptions(false),
-        default: "16px",
-      },
-    },
-  },
-  footer: {
-    label: "Footer",
-    styles: {
-      backgroundColor: {
-        label: "Background Color",
-        type: "select",
-        plugin: "backgroundColor",
-        options: getColorOptions(),
-        default: "var(--colors-palette-background)",
-      },
-      linkColor: {
-        label: "Link Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-primary)",
-      },
-      linkFontSize: {
-        label: "Link Font Size",
-        type: "select",
-        plugin: "fontSize",
-        options: getFontSizeOptions(false),
-        default: "16px",
-      },
-    },
-  },
-  link: {
-    label: "Link Styling",
-    styles: {
-      color: {
-        label: "Text Color",
-        type: "select",
-        plugin: "colors",
-        options: getColorOptions(),
-        default: "var(--colors-palette-primary)",
+        plugin: "fontFamily",
+        options: fontOptions,
+        default: "'Open Sans', sans-serif",
       },
       fontSize: {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(false),
-        default: "12px",
-      },
-    },
-  },
-  button: {
-    label: "Button",
-    styles: {
-      borderRadius: {
-        label: "Border Radius",
-        type: "select",
-        plugin: "borderRadius",
-        options: getBorderRadiusOptions(),
+        options: getFontSizeOptions(),
         default: "16px",
       },
       fontWeight: {
         label: "Font Weight",
         type: "select",
         plugin: "fontWeight",
-        options: fontWeightOptions("--fontFamily-body-fontFamily"),
+        options: fontWeightOptions("--fontFamily-button-fontFamily"),
         default: "400",
+      },
+      textTransform: {
+        label: "Text Transform",
+        type: "select",
+        plugin: "textTransform",
+        options: textTransformOptions,
+        default: "none",
+      },
+      letterSpacing: {
+        label: "Letter Spacing",
+        type: "select",
+        plugin: "letterSpacing",
+        options: letterSpacingOptions,
+        default: "0em",
+      },
+    },
+  },
+  link: {
+    label: "Links",
+    styles: {
+      fontFamily: {
+        label: "Font",
+        type: "select",
+        plugin: "fontFamily",
+        options: fontOptions,
+        default: "'Open Sans', sans-serif",
       },
       fontSize: {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(false),
-        default: "12px",
+        options: getFontSizeOptions(),
+        default: "16px",
       },
-      backgroundColor: {
-        label: "Background Color",
+      fontWeight: {
+        label: "Font Weight",
         type: "select",
-        plugin: "backgroundColor",
-        options: getColorOptions(),
-        default: "var(--colors-palette-background)",
+        plugin: "fontWeight",
+        options: fontWeightOptions("--fontFamily-link-fontFamily"),
+        default: "400",
       },
-      textColor: {
-        label: "Text Color",
-        plugin: "colors",
+      textTransform: {
+        label: "Text Transform",
         type: "select",
-        options: getColorOptions(),
-        default: "var(--colors-palette-text)",
+        plugin: "textTransform",
+        options: textTransformOptions,
+        default: "none",
+      },
+      letterSpacing: {
+        label: "Letter Spacing",
+        type: "select",
+        plugin: "letterSpacing",
+        options: letterSpacingOptions,
+        default: "0em",
+      },
+      caret: {
+        label: "Include Caret",
+        type: "select",
+        plugin: "display",
+        options: [
+          { label: "Yes", value: "block" },
+          { label: "No", value: "none" },
+        ],
+        default: "block",
       },
     },
   },
