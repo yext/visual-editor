@@ -87,7 +87,7 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-     variant: {
+      variant: {
         label: "Variant",
         type: "radio",
         options: [
