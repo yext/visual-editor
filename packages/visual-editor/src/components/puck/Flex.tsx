@@ -1,15 +1,17 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
-import { themeManagerCn } from "../../utils/cn.js";
 import {
   innerLayoutVariants,
   layoutFields,
   layoutProps,
   layoutVariants,
 } from "./Layout.tsx";
-import { BasicSelector } from "../../index.js";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import {
+  BasicSelector,
+  backgroundColors,
+  themeManagerCn,
+} from "../../index.js";
 
 interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";

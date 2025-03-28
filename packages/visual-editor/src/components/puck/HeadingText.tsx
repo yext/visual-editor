@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, headingOptions, HeadingProps } from "./atoms/heading.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import {
   useDocument,
   resolveYextEntityField,
@@ -8,6 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   BasicSelector,
+  headingLevelOptions,
 } from "../../index.js";
 
 interface HeadingTextProps extends HeadingProps {
@@ -41,7 +42,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
       types: ["type.string"],
     },
   }),
-  level: BasicSelector("Heading Level", headingOptions),
+  level: BasicSelector("Heading Level", headingLevelOptions),
 };
 
 const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {

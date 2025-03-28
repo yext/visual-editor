@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn } from "../../../index.ts";
-import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
+import { themeManagerCn, BackgroundStyle } from "../../../index.ts";
 
 const sectionVariants = cva("mx-auto", {
   variants: {
