@@ -42,6 +42,8 @@ import {
   DirectoryProps,
   Promo,
   PromoProps,
+  HeroSectionProps,
+  HeroSection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -65,6 +67,7 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
+  HeroSection: HeroSectionProps;
 };
 
 // All the available components for locations
@@ -90,6 +93,7 @@ export const mainConfig: Config<MainProps> = {
     Phone,
     Promo,
     TextList,
+    HeroSection,
   },
   root: {
     render: ({ children }) => {
