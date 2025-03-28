@@ -60,7 +60,7 @@ const Address = ({
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >
-          <Body fontSize="base">
+          <Body variant="base">
             <RenderAddress
               address={address as AddressType}
               lines={[["line1"], ["line2", "city", "region", "postalCode"]]}
@@ -74,7 +74,7 @@ const Address = ({
                 linkType: "DRIVING_DIRECTIONS",
               }}
               target="_blank"
-              className="font-bold text-link-color text-link-fontSize underline hover:no-underline mt-2 block"
+              className="font-bold text-link-color text-body-fontSize underline hover:no-underline mt-2 block"
             />
           )}
         </EntityField>

@@ -51,7 +51,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
     <div>
       {breadcrumbs?.length > 0 && (
         <nav className="my-4" aria-label="Breadcrumb">
-          <ol className="components flex flex-wrap text-link-fontSize">
+          <ol className="components flex flex-wrap text-body-sm-fontSize">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
               const href = relativePrefixToRoot
@@ -61,7 +61,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
                 <li key={idx}>
                   <MaybeLink
                     href={isLast ? "" : href}
-                    className="text-link-color underline hover:no-underline"
+                    className={"text-link-color underline hover:no-underline"}
                   >
                     {name}
                   </MaybeLink>
