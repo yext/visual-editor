@@ -18,7 +18,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { BasicSelector, Button, themeManagerCn } from "@yext/visual-editor";
 import { normalizeSlug } from "@yext/visual-editor";
 import { useEffect, useState } from "react";
-import { HoursStatus } from "@yext/pages-components";
+import { HoursStatus, Link } from "@yext/pages-components";
 import { Address, Hours } from "../types/autogen.ts";
 
 const DEFAULT_FIELD = "builtin.location";
@@ -155,17 +155,17 @@ const LocationCard: CardComponent<Location> = ({
               hours={location.hours}
               timezone={location.timezone}
               className="text-sm"
-            ></HoursStatus>
+            />
           )}
           <div>
-            <a
+            <Link
               target={"_blank"}
               href={getPath(location)}
               className="text-sm py-1000 text-blue-700 cursor-pointer"
               rel="noreferrer"
             >
               <input type="submit" value="View More Information" />
-            </a>
+            </Link>
           </div>
           <div>
             {location.yextDisplayCoordinate && (
