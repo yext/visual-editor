@@ -26,6 +26,7 @@ import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 import {
   backgroundColors,
   BackgroundStyle,
+  ctaVariantOptions,
 } from "../../utils/themeConfigOptions.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -173,11 +174,11 @@ const cardFields: Fields<CardProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Link", value: "link" },
-      ]),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
       linkType: linkTypeFields,
     },
   },

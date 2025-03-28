@@ -10,6 +10,7 @@ import {
   resolveYextEntityField,
   EntityField,
   CTA,
+  ctaVariantOptions,
 } from "../../index.js";
 
 type GetDirectionsProps = {
@@ -25,11 +26,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
   variant: {
     label: "Variant",
     type: "radio",
-    options: [
-      { label: "Primary", value: "primary" },
-      { label: "Secondary", value: "secondary" },
-      { label: "Link", value: "link" },
-    ],
+    options: ctaVariantOptions,
   },
 };
 

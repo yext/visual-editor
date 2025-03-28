@@ -14,6 +14,7 @@ import {
   BackgroundStyle,
   backgroundColors,
   BodyProps,
+  ctaVariantOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
@@ -109,11 +110,11 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Primary CTA Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Link", value: "link" },
-      ]),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
       visible: {
         label: "Show Primary CTA",
         type: "radio",

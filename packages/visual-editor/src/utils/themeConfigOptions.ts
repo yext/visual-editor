@@ -137,3 +137,9 @@ export const textTransformOptions = [
   { label: "Lowercase", value: "lowercase" },
   { label: "Capitalize", value: "capitalize" },
 ];
+
+export const ctaVariantOptions = [
+  { label: "Primary", value: "primary" },
+  { label: "Secondary", value: "secondary" },
+  { label: "Link", value: "link" },
+];

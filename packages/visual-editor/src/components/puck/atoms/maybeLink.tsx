@@ -19,6 +19,7 @@ const MaybeLink = (props: maybeLinkProps) => {
     alwaysHideCaret,
     variant = "link",
   } = props;
+
   if (href) {
     return (
       <CTA
