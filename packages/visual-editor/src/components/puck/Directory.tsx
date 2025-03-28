@@ -82,7 +82,7 @@ const DirectoryGrid = ({
       className={themeManagerCn(
         layoutVariants({
           verticalPadding: "default",
-          horizontalPadding: "default",
+          horizontalPadding: "0",
         })
       )}
       background={backgroundColors.background1.value}
@@ -127,7 +127,7 @@ const DirectoryList = ({
         {sortedDirectoryChildren.map((child, idx) => (
           <li className="p-3" key={idx}>
             <MaybeLink
-              className="inline-block after:content-[attr(data-count)] after:ml-2 hover:underline text-link-fontSize text-link-color"
+              className="inline-block after:content-[attr(data-count)] after:ml-2 hover:underline text-body-fontSize text-link-color"
               href={
                 relativePrefixToRoot
                   ? relativePrefixToRoot + child.slug

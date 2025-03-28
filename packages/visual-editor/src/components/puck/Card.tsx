@@ -49,9 +49,7 @@ interface CardProps {
   };
   body: {
     text: YextEntityField<string>;
-    fontSize: BodyProps["fontSize"];
-    weight: BodyProps["fontWeight"];
-    transform: BodyProps["textTransform"];
+    variant: BodyProps["variant"];
   };
   image: {
     image: YextEntityField<any>;
@@ -123,14 +121,15 @@ const cardFields: Fields<CardProps> = {
           types: ["type.string"],
         },
       }),
-      fontSize: FontSizeSelector(),
-      weight: BasicSelector("Font Weight", []),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      variant: {
+        type: "radio",
+        label: "Variant",
+        options: [
+          { label: "Small", value: "sm" },
+          { label: "Base", value: "base" },
+          { label: "Large", value: "lg" },
+        ],
+      },
     },
   },
   image: {
@@ -241,11 +240,7 @@ const CardWrapper = ({
           )}
           {body?.text && (
             <EntityField displayName="Description" fieldId={body.text.field}>
-              <Body
-                fontSize={body.fontSize}
-                textTransform={body.transform}
-                fontWeight={body.weight}
-              >
+              <Body variant={body.variant}>
                 {resolveYextEntityField(document, body.text)}
               </Body>
             </EntityField>
@@ -298,9 +293,7 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "Body",
         constantValueEnabled: true,
       },
-      fontSize: "base",
-      weight: "default",
-      transform: "none",
+      variant: "base",
     },
     image: {
       image: {

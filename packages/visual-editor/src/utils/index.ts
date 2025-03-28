@@ -18,6 +18,8 @@ export {
   backgroundColors,
   defaultThemeTailwindExtensions,
   type BackgroundStyle,
+  letterSpacingOptions,
+  textTransformOptions,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
