@@ -66,7 +66,7 @@ export const hexToHSL = (H: string): number[] | undefined => {
 };
 
 /**
- * luminanceFromRGB converts a rgb color string to
+ * luminanceFromRGB returns the luminance value from an rgb color
  * @param H [r, g, b]
  * @returns {number | undefined} luminance if conversion succeeds
  */
@@ -83,7 +83,7 @@ export const luminanceFromRGB = (rgb: number[]): number | undefined => {
 };
 
 /**
- * passesWcagAAColorContrast checks color contrast based on WCAG 2.1 SC 1.4.3 (Level AA)
+ * isColorContrastWcagCompliant checks color contrast based on WCAG 2.1 SC 1.4.3 (Level AA)
  * The visual presentation of text and images of text has a contrast ratio of at least 4.5:1, except for
  * large-scale text and images of large-scale text have a contrast ratio of at least 3:1.
  * Large-scale text means with at least 18 point or 14 point bold.
@@ -93,7 +93,7 @@ export const luminanceFromRGB = (rgb: number[]): number | undefined => {
  * @param fontWeight the numerical font weight (100-900)
  * @returns {boolean} Whether the colors pass the contrast check. False if color conversion fails
  */
-export const passesWcagAAColorContrast = (
+export const isColorContrastWcagCompliant = (
   rgb1: number[],
   rgb2: number[],
   fontSizePt: number,
@@ -143,12 +143,14 @@ export const getContrastingColor = (
   }
 
   // Compare with black
-  if (passesWcagAAColorContrast(rgb, [0, 0, 0], fontSizePt, fontWeight)) {
+  if (isColorContrastWcagCompliant(rgb, [0, 0, 0], fontSizePt, fontWeight)) {
     return "#000000";
   }
 
   // Compare with white
-  if (passesWcagAAColorContrast(rgb, [255, 255, 255], fontSizePt, fontWeight)) {
+  if (
+    isColorContrastWcagCompliant(rgb, [255, 255, 255], fontSizePt, fontWeight)
+  ) {
     return "#FFFFFF";
   }
 

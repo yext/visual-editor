@@ -4,7 +4,7 @@ import {
   hexToRGB,
   hexToHSL,
   luminanceFromRGB,
-  passesWcagAAColorContrast,
+  isColorContrastWcagCompliant,
   srgbToHSL,
 } from "./colors.ts";
 
@@ -82,50 +82,50 @@ describe("srgbToHSL", () => {
   });
 });
 
-describe("passesWcagAAColorContrast", () => {
+describe("isColorContrastWcagCompliant", () => {
   it("should return false for values that always fail", () => {
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [182, 47, 47], 12, 400)
+      isColorContrastWcagCompliant([67, 67, 112], [182, 47, 47], 12, 400)
     ).toBe(false);
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [182, 47, 47], 12, 900)
+      isColorContrastWcagCompliant([67, 67, 112], [182, 47, 47], 12, 900)
     ).toBe(false);
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [182, 47, 47], 20, 400)
+      isColorContrastWcagCompliant([67, 67, 112], [182, 47, 47], 20, 400)
     ).toBe(false);
   });
 
   it("should return true for values that always pass", () => {
-    expect(passesWcagAAColorContrast([0, 0, 0], [255, 255, 255], 12, 400)).toBe(
-      true
-    );
-    expect(passesWcagAAColorContrast([0, 0, 0], [255, 255, 255], 12, 900)).toBe(
-      true
-    );
-    expect(passesWcagAAColorContrast([0, 0, 0], [255, 255, 255], 20, 400)).toBe(
-      true
-    );
+    expect(
+      isColorContrastWcagCompliant([0, 0, 0], [255, 255, 255], 12, 400)
+    ).toBe(true);
+    expect(
+      isColorContrastWcagCompliant([0, 0, 0], [255, 255, 255], 12, 900)
+    ).toBe(true);
+    expect(
+      isColorContrastWcagCompliant([0, 0, 0], [255, 255, 255], 20, 400)
+    ).toBe(true);
   });
 
   it("should return true or false for values that depend on font size and weight", () => {
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [229, 154, 154], 12, 400)
+      isColorContrastWcagCompliant([67, 67, 112], [229, 154, 154], 12, 400)
     ).toBe(false);
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [229, 154, 154], 12, 900)
+      isColorContrastWcagCompliant([67, 67, 112], [229, 154, 154], 12, 900)
     ).toBe(false);
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [229, 154, 154], 14, 900)
+      isColorContrastWcagCompliant([67, 67, 112], [229, 154, 154], 14, 900)
     ).toBe(true);
     expect(
-      passesWcagAAColorContrast([67, 67, 112], [229, 154, 154], 20, 400)
+      isColorContrastWcagCompliant([67, 67, 112], [229, 154, 154], 20, 400)
     ).toBe(true);
   });
 
   it("should return false for invalid values", () => {
     expect(
-      passesWcagAAColorContrast([10000, 67, 112], [229, 154, 154], 12, 400)
+      isColorContrastWcagCompliant([10000, 67, 112], [229, 154, 154], 12, 400)
     ).toBe(false);
-    expect(passesWcagAAColorContrast([], [], 12, 400)).toBe(false);
+    expect(isColorContrastWcagCompliant([], [], 12, 400)).toBe(false);
   });
 });
