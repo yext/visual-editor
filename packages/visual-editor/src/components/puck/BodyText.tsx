@@ -40,7 +40,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
       types: ["type.string"],
     },
   }),
-  fontSize: {
+  variant: {
     label: "Variant",
     type: "radio",
     options: [
@@ -60,7 +60,7 @@ const BodyTextComponent: ComponentConfig<BodyTextProps> = {
       constantValue: "Text",
       constantValueEnabled: true,
     },
-    fontSize: "base",
+    variant: "base",
   },
   render: (props) => <BodyText {...props} />,
 };

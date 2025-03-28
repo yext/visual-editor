@@ -100,7 +100,9 @@ const VisualEditorHoursTable = ({
         )}
         {additionalHoursText && showAdditionalHoursText && (
           <EntityField displayName="Hours Text" fieldId="additionalHoursText">
-            <div className="mt-4">{additionalHoursText}</div>
+            <div className="mt-4 text-body-sm-fontSize">
+              {additionalHoursText}
+            </div>
           </EntityField>
         )}
       </div>
