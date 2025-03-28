@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { ImageType } from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -28,6 +27,11 @@ import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
+import {
+  ImageWrapperFields,
+  ImageWrapperProps,
+  resolvedImageFields,
+} from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -51,10 +55,7 @@ interface CardProps {
     text: YextEntityField<string>;
     variant: BodyProps["variant"];
   };
-  image: {
-    image: YextEntityField<any>;
-    aspectRatio: ImageProps["aspectRatio"];
-  };
+  image: ImageWrapperProps;
   cta: {
     entityField: YextEntityField<CTAProps>;
     linkType: CTAProps["linkType"];
@@ -136,18 +137,7 @@ const cardFields: Fields<CardProps> = {
     type: "object",
     label: "Image",
     objectFields: {
-      image: YextEntityFieldSelector<any, ImageType>({
-        label: "Image",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-      aspectRatio: BasicSelector("Aspect Ratio", [
-        { label: "Auto", value: "auto" },
-        { label: "Square", value: "square" },
-        { label: "Video (16:9)", value: "video" },
-        { label: "Portrait (3:4)", value: "portrait" },
-      ]),
+      ...ImageWrapperFields,
     },
   },
   cta: {
@@ -207,7 +197,9 @@ const CardWrapper = ({
             >
               <Image
                 image={resolvedImage}
-                resize={"auto"}
+                layout={image.layout}
+                width={image.width}
+                height={image.height}
                 aspectRatio={image.aspectRatio}
               />
             </EntityField>
@@ -299,11 +291,14 @@ export const CardComponent: ComponentConfig<CardProps> = {
       image: {
         field: "primaryPhoto",
         constantValue: {
+          height: 360,
+          width: 640,
           url: PLACEHOLDER_IMAGE_URL,
         },
         constantValueEnabled: true,
       },
-      aspectRatio: "auto",
+      layout: "auto",
+      aspectRatio: 1.78,
     },
     cta: {
       entityField: {
@@ -356,6 +351,11 @@ export const CardComponent: ComponentConfig<CardProps> = {
           ...cardFields.body.objectFields,
           weight: BasicSelector("Font Weight", bodyFontWeightOptions),
         },
+      },
+      image: {
+        ...cardFields.image,
+        // @ts-expect-error ts(2322) 'objectFields' does not exist in type 'TextField'
+        objectFields: resolvedImageFields(data.props.image.layout),
       },
     };
   },
