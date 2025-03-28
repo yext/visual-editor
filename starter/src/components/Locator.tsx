@@ -141,14 +141,14 @@ const LocationCard: CardComponent<Location> = ({
           <p className="text-sm">{location.address.line1}</p>
           <p className="text-sm">{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</p>
           {location.mainPhone && (
-            <a
+            <Link
               target={"_blank"}
               href={`tel:${location.mainPhone}`}
               className="text-sm py-5"
               rel="noreferrer"
             >
               {formatPhoneNumber(location.mainPhone)}
-            </a>
+            </Link>
           )}
           {location.hours && (
             <HoursStatus
@@ -218,10 +218,9 @@ const getPath = (location: Location) => {
 
   // TODO: in the same way that locale is hardcoded to 'en' in dev.tsx we may need to eventually have the
   // right language populated here.
-  const localePath = "en";
   const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
-    : `${localePath}${location.id}`;
+    ? `${location.address.region}/${location.address.city}/${location.address.line1}`
+    : `${location.id}`;
 
   return normalizeSlug(path);
 };
