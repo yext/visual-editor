@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { srgbToHSL } from "./button.tsx";
+import { srgbToHSL } from "./srgbToHSL.ts";
 
 describe("srgbToHSL", () => {
   it("should correctly calculate RGB", () => {
