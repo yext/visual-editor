@@ -14,15 +14,13 @@ import {
   BackgroundStyle,
   backgroundColors,
   BodyProps,
+  ImageWrapperFields,
+  ImageWrapperProps,
+  resolvedImageFields,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import {
-  ImageWrapperFields,
-  ImageWrapperProps,
-  resolvedImageFields,
-} from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 

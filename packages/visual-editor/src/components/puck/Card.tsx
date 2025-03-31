@@ -13,6 +13,9 @@ import {
   getFontWeightOverrideOptions,
   Image,
   ImageProps,
+  ImageWrapperFields,
+  ImageWrapperProps,
+  resolvedImageFields,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
@@ -27,11 +30,6 @@ import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
-import {
-  ImageWrapperFields,
-  ImageWrapperProps,
-  resolvedImageFields,
-} from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
