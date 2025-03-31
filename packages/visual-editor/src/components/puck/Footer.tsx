@@ -107,7 +107,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
       )}
     >
       <div className="container mx-auto flex flex-col px-4 pt-4 pb-3">
-        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-palette-primary-dark text-link-fontSize font-body-fontFamily">
+        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-footer-linkColor text-footer-linkFontSize font-body-fontFamily">
           {links && (
             <EntityField
               displayName="Footer Links"
