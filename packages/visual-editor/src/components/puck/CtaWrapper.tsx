@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
 import {
   useDocument,
   resolveYextEntityField,
@@ -13,7 +13,6 @@ import {
 interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
-  linkType: CTAProps["linkType"];
   className?: CTAProps["className"];
 }
 
@@ -29,7 +28,6 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     type: "radio",
     options: ctaVariantOptions,
   },
-  linkType: linkTypeFields,
 };
 
 const CTAWrapper: React.FC<CTAWrapperProps> = ({
@@ -68,7 +66,6 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
       },
     },
     variant: "primary",
-    linkType: "URL",
   },
   render: (props: CTAWrapperProps) => <CTAWrapper {...props} />,
 };

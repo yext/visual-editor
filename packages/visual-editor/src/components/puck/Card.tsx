@@ -14,7 +14,7 @@ import {
   getFontWeightOverrideOptions,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
 import {
   Heading,
   HeadingProps,
@@ -59,7 +59,6 @@ interface CardProps {
   };
   cta: {
     entityField: YextEntityField<CTAProps>;
-    linkType: CTAProps["linkType"];
     variant: CTAProps["variant"];
   };
   backgroundColor?: BackgroundStyle;
@@ -179,7 +178,6 @@ const cardFields: Fields<CardProps> = {
         type: "radio",
         options: ctaVariantOptions,
       },
-      linkType: linkTypeFields,
     },
   },
   backgroundColor: BasicSelector(
@@ -274,7 +272,7 @@ const CardWrapper = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              linkType={cta.linkType}
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -338,10 +336,10 @@ export const CardComponent: ComponentConfig<CardProps> = {
         field: "",
         constantValue: {
           label: "Call to Action",
+          linkType: "URL",
         },
       },
       variant: "primary",
-      linkType: "URL",
     },
     backgroundColor: backgroundColors.background1.value,
   },

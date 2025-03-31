@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { BasicSelector, themeManagerCn } from "../../../index.js";
-import { Field } from "@measured/puck";
+import { themeManagerCn } from "../../../index.js";
 import { FaAngleRight } from "react-icons/fa";
 
 export interface CTAProps {
@@ -15,15 +14,6 @@ export interface CTAProps {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
 }
-
-const linkTypeFields: Field = BasicSelector("Link Type", [
-  { label: "URL", value: "URL" },
-  { label: "Email", value: "EMAIL" },
-  { label: "Phone", value: "PHONE" },
-  { label: "Driving Directions", value: "DRIVING_DIRECTIONS" },
-  { label: "Click to Website", value: "CLICK_TO_WEBSITE" },
-  { label: "Other", value: "OTHER" },
-]);
 
 const CTA = ({
   label,
@@ -73,4 +63,4 @@ const CTA = ({
 
 CTA.displayName = "CTA";
 
-export { CTA, linkTypeFields };
+export { CTA };
