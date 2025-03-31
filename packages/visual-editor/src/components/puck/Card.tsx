@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
+  ThemeOptions,
   themeManagerCn,
   useDocument,
   resolveYextEntityField,
@@ -18,7 +19,6 @@ import {
   resolvedImageFields,
   backgroundColors,
   BackgroundStyle,
-  headingLevelOptions,
   HeadingLevel,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
@@ -81,7 +81,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", headingLevelOptions),
+      level: BasicSelector("Level", ThemeOptions.HEADINGS),
     },
   },
   subheading: {
@@ -102,7 +102,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", headingLevelOptions),
+      level: BasicSelector("Level", ThemeOptions.HEADINGS),
     },
   },
   body: {
@@ -151,10 +151,7 @@ const cardFields: Fields<CardProps> = {
       linkType: linkTypeFields,
     },
   },
-  backgroundColor: BasicSelector(
-    "Background Color",
-    Object.values(backgroundColors)
-  ),
+  backgroundColor: BasicSelector("Background Color", ThemeOptions.BG_COLORS),
 };
 
 const CardWrapper = ({

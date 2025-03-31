@@ -8,7 +8,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   BasicSelector,
-  headingLevelOptions,
+  ThemeOptions,
 } from "../../index.js";
 
 interface HeadingTextProps extends HeadingProps {
@@ -42,7 +42,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
       types: ["type.string"],
     },
   }),
-  level: BasicSelector("Heading Level", headingLevelOptions),
+  level: BasicSelector("Heading Level", ThemeOptions.HEADINGS),
 };
 
 const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {

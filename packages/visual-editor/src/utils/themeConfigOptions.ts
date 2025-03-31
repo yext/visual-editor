@@ -88,11 +88,20 @@ export const backgroundColors: Record<string, BackgroundOption> = {
   },
 };
 
+// When used in BasicSelector, the color is displayed in the dropdown.
+const backgroundColorsWithDropdownColor = Object.values(backgroundColors).map(
+  ({ label, value }) => ({
+    label,
+    value,
+    color: value.bgColor,
+  })
+);
+
 // Defines the valid levels for the heading element
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 // Provides a mapping of label to value for BasicSelector
-export const headingLevelOptions = [
+const headingLevelOptions = [
   { label: "H1", value: 1 },
   { label: "H2", value: 2 },
   { label: "H3", value: 3 },
@@ -135,7 +144,7 @@ export const defaultThemeTailwindExtensions = {
   },
 };
 
-export const letterSpacingOptions = [
+const letterSpacingOptions = [
   { label: "Tighter", value: "-0.05em" },
   { label: "Tight", value: "-0.025em" },
   { label: "Normal", value: "0em" },
@@ -144,9 +153,17 @@ export const letterSpacingOptions = [
   { label: "Widest", value: "0.1em" },
 ];
 
-export const textTransformOptions = [
+const textTransformOptions = [
   { label: "Normal", value: "none" },
   { label: "Uppercase", value: "uppercase" },
   { label: "Lowercase", value: "lowercase" },
   { label: "Capitalize", value: "capitalize" },
 ];
+
+export const ThemeOptions = {
+  HEADINGS: headingLevelOptions,
+  TEXT_TRANSFORM: textTransformOptions,
+  LETTER_SPACING: letterSpacingOptions,
+  BG_COLORS: Object.values(backgroundColors),
+  BG_COLORS_WITH_DROPDOWN_COLOR: backgroundColorsWithDropdownColor,
+};

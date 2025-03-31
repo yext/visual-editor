@@ -17,7 +17,7 @@ import {
   ImageWrapperFields,
   ImageWrapperProps,
   resolvedImageFields,
-  headingLevelOptions,
+  ThemeOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
@@ -64,7 +64,10 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Business Name Heading Level", headingLevelOptions),
+      level: BasicSelector(
+        "Business Name Heading Level",
+        ThemeOptions.HEADINGS
+      ),
     },
   },
   description: {
@@ -119,11 +122,7 @@ const promoFields: Fields<PromoProps> = {
     objectFields: {
       backgroundColor: BasicSelector(
         "Background Color",
-        Object.values(backgroundColors).map(({ label, value }) => ({
-          label,
-          value,
-          color: value.bgColor,
-        }))
+        ThemeOptions.BG_COLORS_WITH_DROPDOWN_COLOR
       ),
       orientation: BasicSelector("Image Orientation", [
         { label: "Left", value: "left" },

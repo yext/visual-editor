@@ -16,12 +16,10 @@ export {
   getBorderRadiusOptions,
   getSpacingOptions,
   backgroundColors,
+  ThemeOptions,
   defaultThemeTailwindExtensions,
   type BackgroundStyle,
-  headingLevelOptions,
   type HeadingLevel,
-  letterSpacingOptions,
-  textTransformOptions,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
