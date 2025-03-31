@@ -1,11 +1,14 @@
-import { useTemplateProps, themeManagerCn } from "../../index.js";
+import {
+  useTemplateProps,
+  themeManagerCn,
+  backgroundColors,
+} from "../../index.js";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { Address, HoursStatus } from "@yext/pages-components";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 import { Section } from "./atoms/section.tsx";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
