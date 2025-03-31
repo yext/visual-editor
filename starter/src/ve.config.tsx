@@ -67,29 +67,63 @@ type MainProps = {
   TextList: TextListProps;
 };
 
+const components: Config<MainProps>["components"] = {
+  Banner,
+  Card,
+  Promo,
+  Flex,
+  Grid,
+  Address,
+  BodyText,
+  CTA,
+  Emails,
+  GetDirections,
+  HeadingText,
+  HoursStatus,
+  HoursTable,
+  ImageWrapper,
+  Phone,
+  TextList,
+  Header,
+  Footer,
+  Directory,
+  Breadcrumbs,
+};
+
+const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
+
+const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
+
+const contentBlocks: (keyof MainProps)[] = [
+  "Address",
+  "BodyText",
+  "CTA",
+  "Emails",
+  "GetDirections",
+  "HeadingText",
+  "HoursStatus",
+  "HoursTable",
+  "ImageWrapper",
+  "Phone",
+  "TextList",
+];
+
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
-  components: {
-    Address,
-    Banner,
-    BodyText,
-    Breadcrumbs,
-    Card,
-    CTA,
-    Directory,
-    Emails,
-    Flex,
-    Footer,
-    GetDirections,
-    Grid,
-    Header,
-    HeadingText,
-    HoursTable,
-    HoursStatus,
-    ImageWrapper,
-    Phone,
-    Promo,
-    TextList,
+  components,
+  categories: {
+    pageSections: {
+      title: "Page Sections",
+      components: pageSections,
+    },
+    layoutBlocks: {
+      title: "Layout Blocks",
+      components: layoutBlocks,
+    },
+    contentBlocks: {
+      title: "Content Blocks",
+      components: contentBlocks,
+    },
   },
   root: {
     render: ({ children }) => {
