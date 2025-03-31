@@ -73,19 +73,31 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: BasicSelector("Direction", [
-    { value: "row", label: "Horizontal" },
-    { value: "column", label: "Vertical" },
-  ]),
-  justifyContent: BasicSelector("Justify Content", [
-    { value: "start", label: "Start" },
-    { value: "center", label: "Center" },
-    { value: "end", label: "End" },
-  ]),
-  wrap: BasicSelector("Wrap", [
-    { value: "nowrap", label: "No Wrap" },
-    { value: "wrap", label: "Wrap" },
-  ]),
+  direction: {
+    label: "Direction",
+    type: "radio",
+    options: [
+      { label: "Horizontal", value: "row" },
+      { label: "Vertical", value: "column" },
+    ],
+  },
+  justifyContent: {
+    label: "Justify Content",
+    type: "radio",
+    options: [
+      { label: "Start", value: "start" },
+      { label: "Center", value: "center" },
+      { label: "End", value: "end" },
+    ],
+  },
+  wrap: {
+    label: "Wrap",
+    type: "radio",
+    options: [
+      { label: "No Wrap", value: "nowrap" },
+      { label: "Wrap", value: "wrap" },
+    ],
+  },
   ...layoutFields,
 };
 
@@ -93,7 +105,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
-    direction: "column",
+    direction: "row",
     justifyContent: "start",
     wrap: "nowrap",
     gap: "0",
@@ -137,7 +149,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     className,
     backgroundColor,
     maxContentWidth,
-  }) => (
+  }: FlexProps) => (
     <FlexContainer
       direction={direction}
       justifyContent={justifyContent}
