@@ -544,6 +544,23 @@ theme: {
 },
 ```
 
+## headingLevelOptions
+
+The set of heading levels (H1 through H6) for use with BasicSelector.
+
+#### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", headingLevelOptions),
+    },
+  },
+```
+
 ## backgroundColors
 
 An object of the following shape containing the seven auto-generated background styles.

@@ -1,10 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
 import { Section } from "./atoms/section.js";
-import { themeManagerCn } from "../../index.js";
+import { themeManagerCn, backgroundColors } from "../../index.js";
 import { layoutVariants } from "./Layout.tsx";
 import { layoutFields, layoutProps } from "./Layout.tsx";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 interface GridProps extends layoutProps {
   columns: number;

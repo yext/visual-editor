@@ -18,6 +18,8 @@ export {
   backgroundColors,
   defaultThemeTailwindExtensions,
   type BackgroundStyle,
+  headingLevelOptions,
+  type HeadingLevel,
   letterSpacingOptions,
   textTransformOptions,
   ctaVariantOptions,

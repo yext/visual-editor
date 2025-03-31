@@ -8,6 +8,8 @@ import {
   useDocument,
   BasicSelector,
   CTA,
+  type BackgroundStyle,
+  backgroundColors,
 } from "../../index.ts";
 import {
   FaFacebook,
@@ -18,10 +20,6 @@ import {
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
-import {
-  type BackgroundStyle,
-  backgroundColors,
-} from "../../utils/themeConfigOptions.ts";
 
 type socialLink = {
   name: string;
