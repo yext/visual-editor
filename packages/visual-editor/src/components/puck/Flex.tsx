@@ -111,7 +111,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
   },
-  resolveFields: (data: { props: FlexProps }, params: { parent: any }) => {
+  resolveFields: (data, params) => {
     // If the Flex has a parent component, the defaultProps should
     // be adjusted and maxContentWidth should not be a field.
     if (params.parent) {
