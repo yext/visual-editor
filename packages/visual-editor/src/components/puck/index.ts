@@ -13,12 +13,7 @@ export { Header, type HeaderProps } from "./Header.tsx";
 export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
-export {
-  ImageWrapper,
-  type ImageWrapperProps,
-  ImageWrapperFields,
-  resolvedImageFields,
-} from "./Image.tsx";
+export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
