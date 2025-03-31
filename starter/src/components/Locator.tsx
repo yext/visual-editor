@@ -120,6 +120,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
       };
       searchActions.setStaticFilters([locationFilter]);
       searchActions.executeVerticalQuery();
+      setSearchState("loading");
       setShowSearchAreaButton(false);
     }
   };
@@ -184,6 +185,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
       })
       .then(() => {
         searchActions.executeVerticalQuery();
+        setSearchState("loading");
       });
   }, []);
 
