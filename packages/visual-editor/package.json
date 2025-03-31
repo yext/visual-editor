@@ -74,7 +74,8 @@
     "react-error-boundary": "^5.0.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
-    "tsx": "^4.16.3"
+    "tsx": "^4.16.3",
+    "mapbox-gl": "^2.9.2"
   },
   "engines": {
     "node": "^18 || ^20.2.0 || ^22"
@@ -128,7 +129,8 @@
     "vite": "^5.3.5",
     "vitepress": "^1.6.3",
     "vitest": "^3.1.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@types/mapbox-gl": "^2.7.5"
   },
   "peerDependencies": {
     "@yext/pages-components": "^1.1.4",

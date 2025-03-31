@@ -13,6 +13,7 @@ import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import * as lzstring from "lz-string";
 
@@ -175,6 +176,7 @@ export const InternalLayoutEditor = ({
               isDevMode={templateMetadata.isDevMode}
             />
           ),
+          iframe: loadMapboxIntoIframe,
         }}
       />
     </EntityTooltipsProvider>
