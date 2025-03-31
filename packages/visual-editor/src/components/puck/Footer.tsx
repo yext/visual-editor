@@ -121,7 +121,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
         </div>
         {copyrightMessage && (
           <div
-            className={`text-body-fontSize text-center sm:text-left ${backgroundColor?.textColor}`}
+            className={`text-body-sm-fontSize text-center sm:text-left ${backgroundColor?.textColor}`}
           >
             <EntityField
               displayName="Copyright Text"

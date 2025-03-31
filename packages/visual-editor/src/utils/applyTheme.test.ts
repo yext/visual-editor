@@ -91,6 +91,35 @@ describe("buildCssOverridesStyle", () => {
         "}</style>"
     );
   });
+
+  it("should generate contrasting palette colors", () => {
+    const document: Document = {
+      __: {
+        theme: JSON.stringify({ "--colors-palette-primary": "#7ED321" }),
+      },
+    };
+    const result = applyTheme(document, {
+      palette: {
+        label: "Colors",
+        styles: {
+          primary: {
+            label: "Primary",
+            plugin: "colors",
+            type: "color",
+            default: "#000000",
+          },
+        },
+      },
+    });
+
+    expect(result).toBe(
+      defaultGoogleFontsLinkTags +
+        '<style id="visual-editor-theme" type="text/css">.components{' +
+        "--colors-palette-primary:#7ED321 !important;" +
+        "--colors-palette-primary-contrast:#FFFFFF !important" +
+        "}</style>"
+    );
+  });
 });
 
 const themeConfig: ThemeConfig = {

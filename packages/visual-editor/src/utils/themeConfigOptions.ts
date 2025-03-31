@@ -114,6 +114,10 @@ export const defaultThemeTailwindExtensions = {
     "palette-primary-dark": "hsl(from var(--colors-palette-primary) h s 20)",
     "palette-secondary-dark":
       "hsl(from var(--colors-palette-secondary) h s 20)",
+    "palette-primary-contrast": "var(--colors-palette-primary-contrast)",
+    "palette-secondary-contrast": "var(--colors-palette-secondary-contrast)",
+    "palette-tertiary-contrast": "var(--colors-palette-tertiary-contrast)",
+    "palette-quaternary-contrast": "var(--colors-palette-quaternary-contrast)",
     gray: {
       100: "#F9F9F9",
       200: "#EDEDED",
@@ -125,4 +129,24 @@ export const defaultThemeTailwindExtensions = {
       900: "#121212",
     },
   },
+  fontSize: {
+    "body-sm-fontSize": "calc(var(--fontSize-body-fontSize) - 2px)",
+    "body-lg-fontSize": "calc(var(--fontSize-body-fontSize) + 2px)",
+  },
 };
+
+export const letterSpacingOptions = [
+  { label: "Tighter", value: "-0.05em" },
+  { label: "Tight", value: "-0.025em" },
+  { label: "Normal", value: "0em" },
+  { label: "Wide", value: "0.025em" },
+  { label: "Wider", value: "0.05em" },
+  { label: "Widest", value: "0.1em" },
+];
+
+export const textTransformOptions = [
+  { label: "Normal", value: "none" },
+  { label: "Uppercase", value: "uppercase" },
+  { label: "Lowercase", value: "lowercase" },
+  { label: "Capitalize", value: "capitalize" },
+];

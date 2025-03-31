@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
 type ComboboxOption = {
   label: string;
   value: any;
+  color?: string; // ex. "bg-palette-primary-light"
 };
 
 type ComboboxProps = {
@@ -40,10 +41,26 @@ export const Combobox = ({
           aria-expanded={open}
           className="ve-w-full ve-justify-between ve-rounded-sm"
         >
-          {defaultValue
-            ? options.find((option) => option.value === defaultValue.value)
-                ?.label
-            : `Select an option`}
+          {defaultValue ? (
+            <div className="ve-flex ve-items-center">
+              {defaultValue.color && (
+                <div
+                  className={cn(
+                    "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2",
+                    options.find(
+                      (option) => option.value === defaultValue.value
+                    )?.color
+                  )}
+                />
+              )}
+              {
+                options.find((option) => option.value === defaultValue.value)
+                  ?.label
+              }
+            </div>
+          ) : (
+            `Select an option`
+          )}
           <ChevronsUpDown className="ve-ml-2 ve-h-4 ve-w-4 ve-shrink-0 ve-opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -73,6 +90,14 @@ export const Combobox = ({
                         : "ve-opacity-0"
                     )}
                   />
+                  {option.color && (
+                    <div
+                      className={cn(
+                        "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2 components",
+                        option.color
+                      )}
+                    />
+                  )}
                   {option.label}
                 </CommandItem>
               ))}

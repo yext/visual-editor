@@ -98,7 +98,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     wrap: "nowrap",
     gap: "0",
     verticalPadding: "default",
-    horizontalPadding: "default",
+    horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
   },
   resolveFields: (data, params) => {
@@ -108,7 +108,6 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
       // the props values should only be changed initially
       if (!data.props.maxContentWidth) {
         data.props.verticalPadding = "0";
-        data.props.horizontalPadding = "0";
         data.props.gap = "0";
         data.props.maxContentWidth = "none";
       }

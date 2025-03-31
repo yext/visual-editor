@@ -3,38 +3,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../../index.ts";
 
 // Define the variants for the body component
-const bodyVariants = cva("components font-body-fontFamily", {
-  variants: {
-    fontSize: {
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
+const bodyVariants = cva(
+  "components font-body-fontFamily font-body-fontWeight",
+  {
+    variants: {
+      variant: {
+        sm: "text-body-sm-fontSize",
+        base: "text-body-fontSize",
+        lg: "text-body-lg-fontSize",
+      },
     },
-    fontWeight: {
-      default: "font-body-fontWeight",
-      "100": "font-thin",
-      "200": "font-extralight",
-      "300": "font-light",
-      "400": "font-normal",
-      "500": "font-medium",
-      "600": "font-semibold",
-      "700": "font-bold",
-      "800": "font-extrabold",
-      "900": "font-black",
+    defaultVariants: {
+      variant: "base",
     },
-    textTransform: {
-      none: "",
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
-    },
-  },
-  defaultVariants: {
-    fontSize: "base",
-    fontWeight: "default",
-    textTransform: "none",
-  },
-});
+  }
+);
 
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
@@ -42,14 +25,12 @@ export interface BodyProps
     VariantProps<typeof bodyVariants> {}
 
 const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
-  ({ className, fontSize, fontWeight, textTransform, ...props }, ref) => {
+  ({ className, variant, ...props }, ref) => {
     return (
       <p
         className={themeManagerCn(
           bodyVariants({
-            fontSize,
-            fontWeight,
-            textTransform,
+            variant,
             className,
           }),
           className

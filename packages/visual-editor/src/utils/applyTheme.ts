@@ -3,6 +3,7 @@ import { internalThemeResolver } from "../internal/utils/internalThemeResolver.t
 import { DevLogger } from "./devLogger.ts";
 import { googleFontLinkTags } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
+import { hexToHSL } from "./colors.ts";
 
 export type Document = {
   [key: string]: any;
@@ -40,14 +41,20 @@ const internalApplyTheme = (
 ): string => {
   devLogger.logFunc("internalApplyTheme");
 
-  const themeValuesToApply = internalThemeResolver(
+  const mergedThemeValues = internalThemeResolver(
     themeConfig,
     savedThemeValues
   );
 
-  if (!themeValuesToApply || Object.keys(themeValuesToApply).length === 0) {
+  if (!mergedThemeValues || Object.keys(mergedThemeValues).length === 0) {
     return "";
   }
+
+  const themeValuesToApply = {
+    ...mergedThemeValues,
+    ...generateContrastingColors(mergedThemeValues),
+  };
+
   devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
 
   return (
@@ -57,6 +64,26 @@ const internalApplyTheme = (
       .join(";") +
     "}"
   );
+};
+
+/**
+ * generateContrastingColors computes whether each color is
+ * light or dark and adds a corresponding -contrast value that
+ * is either black (for light colors) or white (for dark colors)
+ */
+const generateContrastingColors = (themeData: ThemeData) => {
+  const contrastingColors: Record<string, string> = {};
+  Object.entries(themeData).forEach(([cssVariableName, value]) => {
+    if (cssVariableName.includes("--colors")) {
+      const hsl = hexToHSL(value);
+      if (hsl && hsl[2] >= 50) {
+        contrastingColors[cssVariableName + "-contrast"] = "#000000";
+      } else if (hsl) {
+        contrastingColors[cssVariableName + "-contrast"] = "#FFFFFF";
+      }
+    }
+  });
+  return contrastingColors;
 };
 
 export const updateThemeInEditor = async (
