@@ -14,9 +14,10 @@ import {
   BackgroundStyle,
   backgroundColors,
   BodyProps,
+  headingLevelOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 import { imageWrapperVariants } from "./Image.js";
 
@@ -75,7 +76,7 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Business Name Heading", headingOptions),
+      level: BasicSelector("Business Name Heading Level", headingLevelOptions),
     },
   },
   description: {
