@@ -92,18 +92,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ? window.getComputedStyle(parent).backgroundColor
           : undefined;
         if (backgroundColor) {
-          // Extract r g b from "color(srgb r g b)"
+          // Extract r g b from "color(srgb r g b)" or "rgb(r, g, b)"
           const srgb = backgroundColor
             .match(/color\(srgb\s([0-9.]+)\s([0-9.]+)\s([0-9.]+)\)/)
             ?.slice(1)
             ?.map(Number);
+          const rgb = backgroundColor
+            .match(/rgb\(([0-9.]+),\s([0-9.]+),\s([0-9.]+)\)/)
+            ?.slice(1)
+            ?.map(Number);
 
           // Convert to hsl and compare with lightness threshold
-          if (srgb) {
-            const hsl = srgbToHSL(srgb);
-            if (hsl?.[2] && !isNaN(hsl[2])) {
-              setHasDarkBackground(hsl[2] < 50);
-            }
+          const hsl = srgb
+            ? srgbToHSL(srgb)
+            : rgb
+              ? srgbToHSL(rgb.map((c) => c / 255))
+              : undefined;
+          if (hsl?.[2] && !isNaN(hsl[2])) {
+            setHasDarkBackground(hsl[2] < 50);
           }
         }
       }
