@@ -42,7 +42,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
       types: ["type.string"],
     },
   }),
-  level: BasicSelector("Heading Level", ThemeOptions.HEADINGS),
+  level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
 };
 
 const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {

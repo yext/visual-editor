@@ -161,7 +161,7 @@ const textTransformOptions = [
 ];
 
 export const ThemeOptions = {
-  HEADINGS: headingLevelOptions,
+  HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BG_COLORS: Object.values(backgroundColors),

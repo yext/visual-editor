@@ -81,7 +81,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", ThemeOptions.HEADINGS),
+      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
     },
   },
   subheading: {
@@ -102,7 +102,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", ThemeOptions.HEADINGS),
+      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
     },
   },
   body: {

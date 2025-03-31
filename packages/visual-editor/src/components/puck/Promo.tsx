@@ -66,7 +66,7 @@ const promoFields: Fields<PromoProps> = {
       }),
       level: BasicSelector(
         "Business Name Heading Level",
-        ThemeOptions.HEADINGS
+        ThemeOptions.HEADING_LEVEL
       ),
     },
   },
