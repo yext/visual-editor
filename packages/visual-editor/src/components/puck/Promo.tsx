@@ -13,6 +13,7 @@ import {
   ImageWrapperProps,
   BackgroundStyle,
   backgroundColors,
+  BodyProps,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
@@ -32,6 +33,7 @@ interface PromoProps {
   };
   description: {
     text: YextEntityField<string>;
+    variant: BodyProps["variant"];
   };
   cta: {
     entityField: YextEntityField<CTAProps>;
@@ -86,6 +88,15 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: [
+          { label: "Small", value: "sm" },
+          { label: "Base", value: "base" },
+          { label: "Large", value: "lg" },
+        ],
+      },
     },
   },
   cta: {
@@ -189,7 +200,9 @@ const PromoWrapper: React.FC<PromoProps> = ({
             </Heading>
           )}
           {description?.text && (
-            <Body>{resolveYextEntityField(document, description.text)}</Body>
+            <Body variant={description.variant}>
+              {resolveYextEntityField(document, description.text)}
+            </Body>
           )}
           {resolvedCTA && cta.visible && (
             <CTA
@@ -234,6 +247,7 @@ const Promo: ComponentConfig<PromoProps> = {
         constantValue: "Description",
         constantValueEnabled: true,
       },
+      variant: "base",
     },
     cta: {
       entityField: {
