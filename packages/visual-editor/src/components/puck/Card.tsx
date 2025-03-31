@@ -16,20 +16,15 @@ import {
   ImageWrapperFields,
   ImageWrapperProps,
   resolvedImageFields,
+  backgroundColors,
+  BackgroundStyle,
+  headingLevelOptions,
+  HeadingLevel,
 } from "../../index.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
-import {
-  Heading,
-  HeadingProps,
-  HeadingLevel,
-  headingOptions,
-} from "./atoms/heading.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import {
-  backgroundColors,
-  BackgroundStyle,
-} from "../../utils/themeConfigOptions.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -86,7 +81,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", headingOptions),
+      level: BasicSelector("Level", headingLevelOptions),
     },
   },
   subheading: {
@@ -107,7 +102,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", headingOptions),
+      level: BasicSelector("Level", headingLevelOptions),
     },
   },
   body: {

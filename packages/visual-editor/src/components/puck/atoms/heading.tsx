@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn } from "../../../index.ts";
+import { themeManagerCn, HeadingLevel } from "../../../index.ts";
 
 // Define the variants for the heading component
 const headingVariants = cva("components", {
@@ -65,9 +65,6 @@ const headingVariants = cva("components", {
   },
 });
 
-// Define the valid levels for the heading element
-export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
 // Omit 'color' from HTMLAttributes<HTMLHeadingElement> to avoid conflict
 export interface HeadingProps
   extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
@@ -104,13 +101,4 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 );
 Heading.displayName = "Heading";
 
-const headingOptions = [
-  { label: "H1", value: 1 },
-  { label: "H2", value: 2 },
-  { label: "H3", value: 3 },
-  { label: "H4", value: 4 },
-  { label: "H5", value: 5 },
-  { label: "H6", value: 6 },
-];
-
-export { Heading, headingVariants, headingOptions };
+export { Heading, headingVariants };

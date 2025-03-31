@@ -17,9 +17,10 @@ import {
   ImageWrapperFields,
   ImageWrapperProps,
   resolvedImageFields,
+  headingLevelOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -63,7 +64,7 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Business Name Heading", headingOptions),
+      level: BasicSelector("Business Name Heading Level", headingLevelOptions),
     },
   },
   description: {
