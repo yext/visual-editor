@@ -13,15 +13,14 @@ import {
   getFontWeightOverrideOptions,
   Image,
   ImageProps,
-  ImageWrapperFields,
   ImageWrapperProps,
-  resolvedImageFields,
   backgroundColors,
   BackgroundStyle,
   headingLevelOptions,
   HeadingLevel,
   ctaVariantOptions,
 } from "../../index.js";
+import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 import { Body } from "./atoms/body.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";

@@ -15,11 +15,10 @@ import {
   backgroundColors,
   BodyProps,
   ctaVariantOptions,
-  ImageWrapperFields,
   ImageWrapperProps,
-  resolvedImageFields,
   headingLevelOptions,
 } from "../../index.js";
+import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
