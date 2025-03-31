@@ -3,15 +3,9 @@ import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 
-type Option = {
+type Option<T = any> = {
   label: string;
-  value: any;
-  color?: string;
-};
-
-type StringifiedOption = {
-  label: string;
-  value: string;
+  value: T;
   color?: string;
 };
 
@@ -33,7 +27,7 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
         );
       }
       const stringifiedValue: string = JSON.stringify(value);
-      const stringifiedOptions: StringifiedOption[] = options.map((option) => ({
+      const stringifiedOptions: Option<string>[] = options.map((option) => ({
         ...option,
         value: JSON.stringify(option.value) as string,
       }));
