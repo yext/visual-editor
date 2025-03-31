@@ -1,4 +1,4 @@
-import { DropZone, type Config } from "@measured/puck";
+import { type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
@@ -126,8 +126,8 @@ export const mainConfig: Config<MainProps> = {
     },
   },
   root: {
-    render: () => {
-      return <DropZone zone="root" disallow={contentBlocks} />;
+    render: ({ children }) => {
+      return <>{children}</>;
     },
   },
 };
