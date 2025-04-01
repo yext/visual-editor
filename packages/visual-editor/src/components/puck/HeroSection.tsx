@@ -274,7 +274,10 @@ const HeroSectionWrapper = ({
                   hoursField.entityField.constantValueEnabled
                 }
               >
-                <HoursStatus hours={hours} timezone={document.timezone} />
+                <HoursStatus
+                  hours={hours}
+                  timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+                />
               </EntityField>
             )}
           </header>
