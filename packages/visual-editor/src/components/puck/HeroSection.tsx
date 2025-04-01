@@ -283,7 +283,7 @@ const HeroSectionWrapper = ({
           </header>
           {((primaryCta && primaryCtaField.showCTA) ||
             (secondaryCta && secondaryCtaField.showCTA)) && (
-            <nav
+            <div
               className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
               aria-label="Call to Actions"
             >
@@ -319,7 +319,7 @@ const HeroSectionWrapper = ({
                   />
                 </EntityField>
               )}
-            </nav>
+            </div>
           )}
         </div>
         {image && (
