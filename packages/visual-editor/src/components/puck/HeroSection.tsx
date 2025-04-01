@@ -281,49 +281,49 @@ const HeroSectionWrapper = ({
               </EntityField>
             )}
           </header>
-          {(primaryCta && primaryCtaField.showCTA) ||
-            (secondaryCta && secondaryCtaField.showCTA && (
-              <nav
-                className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-                aria-label="Call to Actions"
-              >
-                {primaryCta && primaryCtaField.showCTA && (
-                  <EntityField
-                    displayName="Primary CTA"
-                    fieldId={primaryCtaField.entityField.field}
-                    constantValueEnabled={
-                      primaryCtaField.entityField.constantValueEnabled
-                    }
-                  >
-                    <CTA
-                      variant={primaryCtaField.variant}
-                      label={primaryCta?.label ?? ""}
-                      link={primaryCta?.link || "#"}
-                      linkType={primaryCta?.linkType}
-                    />
-                  </EntityField>
-                )}
-                {secondaryCta && secondaryCtaField.showCTA && (
-                  <EntityField
-                    displayName="Secondary CTA"
-                    fieldId={secondaryCtaField.entityField.field}
-                    constantValueEnabled={
-                      secondaryCtaField.entityField.constantValueEnabled
-                    }
-                  >
-                    <CTA
-                      variant={secondaryCtaField.variant}
-                      label={secondaryCta?.label ?? ""}
-                      link={secondaryCta?.link || "#"}
-                      linkType={secondaryCta?.linkType}
-                    />
-                  </EntityField>
-                )}
-              </nav>
-            ))}
+          {((primaryCta && primaryCtaField.showCTA) ||
+            (secondaryCta && secondaryCtaField.showCTA)) && (
+            <nav
+              className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
+              aria-label="Call to Actions"
+            >
+              {primaryCta && primaryCtaField.showCTA && (
+                <EntityField
+                  displayName="Primary CTA"
+                  fieldId={primaryCtaField.entityField.field}
+                  constantValueEnabled={
+                    primaryCtaField.entityField.constantValueEnabled
+                  }
+                >
+                  <CTA
+                    variant={primaryCtaField.variant}
+                    label={primaryCta?.label ?? ""}
+                    link={primaryCta?.link || "#"}
+                    linkType={primaryCta?.linkType}
+                  />
+                </EntityField>
+              )}
+              {secondaryCta && secondaryCtaField.showCTA && (
+                <EntityField
+                  displayName="Secondary CTA"
+                  fieldId={secondaryCtaField.entityField.field}
+                  constantValueEnabled={
+                    secondaryCtaField.entityField.constantValueEnabled
+                  }
+                >
+                  <CTA
+                    variant={secondaryCtaField.variant}
+                    label={secondaryCta?.label ?? ""}
+                    link={secondaryCta?.link || "#"}
+                    linkType={secondaryCta?.linkType}
+                  />
+                </EntityField>
+              )}
+            </nav>
+          )}
         </div>
         {image && (
-          <div className="w-full">
+          <figure className="w-full">
             <EntityField
               displayName="Image"
               fieldId={imageField.image.field}
@@ -337,7 +337,7 @@ const HeroSectionWrapper = ({
                 aspectRatio={imageField.aspectRatio}
               />
             </EntityField>
-          </div>
+          </figure>
         )}
       </section>
     </Section>
