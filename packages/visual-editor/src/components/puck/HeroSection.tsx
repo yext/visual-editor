@@ -1,11 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  HoursStatus,
-  HoursType,
-  Image,
-  ImageType,
-} from "@yext/pages-components";
+import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
   useDocument,
   resolveYextEntityField,
@@ -13,21 +8,30 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   BasicSelector,
-  BackgroundStyle,
+  Image,
+  ImageProps,
+  ImageWrapperProps,
   backgroundColors,
+  BackgroundStyle,
+  headingLevelOptions,
+  HeadingLevel,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps, headingOptions } from "./atoms/heading.js";
+import { Heading } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-// Define Props
+import { ImageWrapperFields } from "./Image.js";
+
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+
 interface HeroSectionProps {
+  image: ImageWrapperProps;
   businessName: {
     entityField: YextEntityField<string>;
-    level: HeadingProps["level"];
+    level: HeadingLevel;
   };
   localGeoModifier: {
     entityField: YextEntityField<string>;
-    level: HeadingProps["level"];
+    level: HeadingLevel;
   };
 
   hours: {
@@ -44,28 +48,35 @@ interface HeroSectionProps {
     variant: CTAProps["variant"];
     showCTA: boolean;
   };
-  image: {
-    entityField: YextEntityField<ImageType>;
-  };
   styles: {
     backgroundColor?: BackgroundStyle;
     imageOrientation: "left" | "right";
   };
 }
 
-//Define fields Should be of fields<props in step1>
-const defaultFields: Fields<HeroSectionProps> = {
+const heroSectionFields: Fields<HeroSectionProps> = {
+  image: {
+    type: "object",
+    label: "Image",
+    objectFields: {
+      ...ImageWrapperFields,
+      image: {
+        ...ImageWrapperFields.image,
+        label: "Value",
+      },
+    },
+  },
   businessName: {
     label: "Business Name",
     type: "object",
     objectFields: {
       entityField: YextEntityFieldSelector({
-        label: "Name",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", headingOptions),
+      level: BasicSelector("Heading Level", headingLevelOptions),
     },
   },
   localGeoModifier: {
@@ -73,12 +84,12 @@ const defaultFields: Fields<HeroSectionProps> = {
     type: "object",
     objectFields: {
       entityField: YextEntityFieldSelector({
-        label: "Name",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", headingOptions),
+      level: BasicSelector("Heading Level", headingLevelOptions),
     },
   },
   hours: {
@@ -136,7 +147,7 @@ const defaultFields: Fields<HeroSectionProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Variant", [
+      variant: BasicSelector("Button Variant", [
         { label: "Primary", value: "primary" },
         { label: "Secondary", value: "secondary" },
         { label: "Link", value: "link" },
@@ -151,38 +162,26 @@ const defaultFields: Fields<HeroSectionProps> = {
       },
     },
   },
-  image: {
-    label: "Image",
-    type: "object",
-    objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Photo",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-    },
-  },
   styles: {
     label: "Styles",
     type: "object",
     objectFields: {
       backgroundColor: BasicSelector(
         "Background Color",
-        Object.values(backgroundColors)
+        Object.values(backgroundColors).map(({ label, value }) => ({
+          label,
+          value,
+          color: value.bgColor,
+        }))
       ),
-      imageOrientation: {
-        label: "Image Orientation",
-        type: "radio",
-        options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
-        ],
-      },
+      imageOrientation: BasicSelector("Image Orientation", [
+        { label: "Left", value: "left" },
+        { label: "Right", value: "right" },
+      ]),
     },
   },
 };
-//Define the Component Wrapper with props
+
 const HeroSectionWrapper = ({
   businessName: businessNameField,
   localGeoModifier: localGeoModifierField,
@@ -213,34 +212,49 @@ const HeroSectionWrapper = ({
     document,
     secondaryCtaField.entityField
   );
-  const image = resolveYextEntityField<ImageType>(
+  const image = resolveYextEntityField<ImageProps["image"]>(
     document,
-    imageField.entityField
+    imageField.image
   );
 
   return (
-    <Section background={styles.backgroundColor}>
-      <article
-        className={`flex flex-col gap-6 md:gap-10 ${styles.imageOrientation === "right" ? `md:flex-row` : `md:flex-row-reverse`}`}
+    <Section
+      background={styles.backgroundColor}
+      aria-label="Hero Banner Section"
+    >
+      <section
+        className={`flex flex-col gap-6 md:gap-10 ${
+          styles.imageOrientation === "right"
+            ? "md:flex-row"
+            : "md:flex-row-reverse"
+        }`}
+        aria-label="Hero Content Wrapper"
       >
-        <article className="flex flex-col justify-center gap-y-6 w-full break-all md:gap-y-8">
-          <header className="flex flex-col gap-y-4">
-            <section className="flex flex-col gap-y-0">
+        <div
+          className="flex flex-col justify-center gap-y-6 w-full break-words md:gap-y-8"
+          aria-labelledby="hero-heading"
+        >
+          <header className="flex flex-col gap-y-4" aria-label="Hero Header">
+            <section
+              className="flex flex-col gap-y-0"
+              aria-label="Business Information"
+            >
               {businessName && (
                 <EntityField
+                  displayName="Business Name"
                   fieldId={businessNameField.entityField.field}
                   constantValueEnabled={
                     businessNameField.entityField.constantValueEnabled
                   }
                 >
-                  <Heading level={businessNameField.level}>
+                  <Heading id="hero-heading" level={businessNameField.level}>
                     {businessName}
                   </Heading>
                 </EntityField>
               )}
-
               {localGeoModifier && (
                 <EntityField
+                  displayName="Local GeoModifier"
                   fieldId={localGeoModifierField.entityField.field}
                   constantValueEnabled={
                     localGeoModifierField.entityField.constantValueEnabled
@@ -254,83 +268,101 @@ const HeroSectionWrapper = ({
             </section>
             {hours && hoursField.showHours && (
               <EntityField
+                displayName="Hours"
                 fieldId={hoursField.entityField.field}
                 constantValueEnabled={
                   hoursField.entityField.constantValueEnabled
                 }
               >
-                <HoursStatus
-                  hours={hours}
-                  timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
-                />
+                <HoursStatus hours={hours} timezone={document.timezone} />
               </EntityField>
             )}
           </header>
-
-          <nav
-            className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label="Call to Action Buttons"
-          >
-            {primaryCta && primaryCtaField.showCTA && (
-              <EntityField
-                fieldId={primaryCtaField.entityField.field}
-                constantValueEnabled={
-                  primaryCtaField.entityField.constantValueEnabled
-                }
+          {(primaryCta && primaryCtaField.showCTA) ||
+            (secondaryCta && secondaryCtaField.showCTA && (
+              <nav
+                className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
+                aria-label="Call to Actions"
               >
-                <CTA
-                  variant={primaryCtaField.variant}
-                  label={primaryCta?.label ?? ""}
-                  link={primaryCta?.link || "#"}
-                  linkType={primaryCta?.linkType}
-                />
-              </EntityField>
-            )}
-            {secondaryCta && secondaryCtaField.showCTA && (
-              <EntityField
-                fieldId={secondaryCtaField.entityField.field}
-                constantValueEnabled={
-                  secondaryCtaField.entityField.constantValueEnabled
-                }
-              >
-                <CTA
-                  variant={secondaryCtaField.variant}
-                  label={secondaryCta?.label ?? ""}
-                  link={secondaryCta?.link || "#"}
-                  linkType={secondaryCta?.linkType}
-                />
-              </EntityField>
-            )}
-          </nav>
-        </article>
+                {primaryCta && primaryCtaField.showCTA && (
+                  <EntityField
+                    displayName="Primary CTA"
+                    fieldId={primaryCtaField.entityField.field}
+                    constantValueEnabled={
+                      primaryCtaField.entityField.constantValueEnabled
+                    }
+                  >
+                    <CTA
+                      variant={primaryCtaField.variant}
+                      label={primaryCta?.label ?? ""}
+                      link={primaryCta?.link || "#"}
+                      linkType={primaryCta?.linkType}
+                    />
+                  </EntityField>
+                )}
+                {secondaryCta && secondaryCtaField.showCTA && (
+                  <EntityField
+                    displayName="Secondary CTA"
+                    fieldId={secondaryCtaField.entityField.field}
+                    constantValueEnabled={
+                      secondaryCtaField.entityField.constantValueEnabled
+                    }
+                  >
+                    <CTA
+                      variant={secondaryCtaField.variant}
+                      label={secondaryCta?.label ?? ""}
+                      link={secondaryCta?.link || "#"}
+                      linkType={secondaryCta?.linkType}
+                    />
+                  </EntityField>
+                )}
+              </nav>
+            ))}
+        </div>
         {image && (
-          <EntityField
-            fieldId={imageField.entityField.field}
-            constantValueEnabled={imageField.entityField.constantValueEnabled}
-          >
-            <figure className={`max-w-2xl`}>
+          <div className="w-full">
+            <EntityField
+              displayName="Image"
+              fieldId={imageField.image.field}
+              constantValueEnabled={imageField.image.constantValueEnabled}
+            >
               <Image
                 image={image}
-                className="w-full h-full object-cover rounded-md"
+                layout={imageField.layout}
+                width={imageField.width}
+                height={imageField.height}
+                aspectRatio={imageField.aspectRatio}
               />
-            </figure>
-          </EntityField>
+            </EntityField>
+          </div>
         )}
-      </article>
+      </section>
     </Section>
   );
 };
 
-// Create the component of type ComponentConfig<props>
 const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
   label: "Hero Section",
-  fields: defaultFields,
+  fields: heroSectionFields,
   defaultProps: {
+    image: {
+      image: {
+        field: "",
+        constantValue: {
+          height: 360,
+          width: 640,
+          url: PLACEHOLDER_IMAGE_URL,
+        },
+        constantValueEnabled: true,
+      },
+      layout: "auto",
+      aspectRatio: 1.78,
+    },
     businessName: {
       entityField: {
         field: "name",
         constantValue: "Business Name",
-        constantValueEnabled: undefined,
+        constantValueEnabled: false,
       },
       level: 3,
     },
@@ -338,7 +370,7 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "address.city",
         constantValue: "Geomodifier Name",
-        constantValueEnabled: undefined,
+        constantValueEnabled: false,
       },
       level: 1,
     },
@@ -346,15 +378,15 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "hours",
         constantValue: {},
-        constantValueEnabled: undefined,
+        constantValueEnabled: false,
       },
       showHours: true,
     },
     primaryCta: {
       entityField: {
-        field: "c_primaryCta",
+        field: "",
         constantValue: {
-          label: "Call To Action",
+          label: "Call to Action",
           link: "#",
           linkType: "URL",
         },
@@ -365,34 +397,22 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
     },
     secondaryCta: {
       entityField: {
-        field: "c_secondaryCta",
+        field: "",
         constantValue: {
-          label: "Call To Action",
+          label: "Call to Action",
           link: "#",
           linkType: "URL",
         },
         constantValueEnabled: true,
       },
-      variant: "seconday",
+      variant: "secondary",
       showCTA: true,
     },
-    image: {
-      entityField: {
-        field: "c_hero.image",
-        constantValue: {
-          alternateText: "placeholdder image",
-          height: 360,
-          width: 640,
-          url: "https://placehold.co/640x360",
-        },
-        constantValueEnabled: undefined,
-      },
-    },
     styles: {
+      backgroundColor: backgroundColors.background1.value,
       imageOrientation: "right",
     },
   },
-
   render: (props) => <HeroSectionWrapper {...props} />,
 };
 
