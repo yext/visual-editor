@@ -136,12 +136,12 @@ export const defaultThemeTailwindExtensions = {
 };
 
 export const letterSpacingOptions = [
-  { label: "Tighter", value: "-0.05em" },
-  { label: "Tight", value: "-0.025em" },
-  { label: "Normal", value: "0em" },
-  { label: "Wide", value: "0.025em" },
-  { label: "Wider", value: "0.05em" },
-  { label: "Widest", value: "0.1em" },
+  { label: "Tighter (-0.05em)", value: "-0.05em" },
+  { label: "Tight (-0.025em)", value: "-0.025em" },
+  { label: "Normal (0em)", value: "0em" },
+  { label: "Wide (0.025em)", value: "0.025em" },
+  { label: "Wider (0.05em)", value: "0.05em" },
+  { label: "Widest (0.1em)", value: "0.1em" },
 ];
 
 export const textTransformOptions = [
@@ -149,4 +149,10 @@ export const textTransformOptions = [
   { label: "Uppercase", value: "uppercase" },
   { label: "Lowercase", value: "lowercase" },
   { label: "Capitalize", value: "capitalize" },
+];
+
+export const ctaVariantOptions = [
+  { label: "Primary", value: "primary" },
+  { label: "Secondary", value: "secondary" },
+  { label: "Link", value: "link" },
 ];

@@ -22,6 +22,7 @@ export {
   type HeadingLevel,
   letterSpacingOptions,
   textTransformOptions,
+  ctaVariantOptions,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
