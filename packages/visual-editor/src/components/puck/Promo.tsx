@@ -152,12 +152,11 @@ const PromoWrapper: React.FC<PromoProps> = ({
   }
 
   return (
-    <Section className="components">
+    <Section className="components" background={styles.backgroundColor}>
       <div
         className={themeManagerCn(
-          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8 bg-white",
-          styles.orientation === "right" && "md:flex-row-reverse",
-          styles.backgroundColor?.bgColor
+          "flex flex-col md:flex-row overflow-hidden md:gap-8",
+          styles.orientation === "right" && "md:flex-row-reverse"
         )}
       >
         {resolvedImage && (

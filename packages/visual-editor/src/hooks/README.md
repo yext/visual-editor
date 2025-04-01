@@ -108,3 +108,37 @@ const Edit: () => JSX.Element = () => {
 ## useEntityFields
 
 A React hook that returns entityFields available to your TemplateConfig's stream. Must be used within an [EntityFieldsProvider](#entityfieldsprovider).
+
+## useBackground and BackgroundProvider
+
+A React hook that returns the active BackgroundStyle for a given component. It is scoped, so `useBackground` will return the most specific
+background to a component if there are multiple in the hierarchy. Background context is automatically set
+set by `<Section>`. If a component sets the background color without using `<Section>`, then `BackgroundProvider` must be used.
+
+#### Usage
+
+```tsx
+
+const ChildComponent = () => {
+  const background = useBackground()
+  console.log(background)
+  return <></>
+}
+
+const MyComponent = () => {
+  return (
+    <Section background={{bgColor: "bg-white", textColor:"text-black"}}>
+      <Section background={{bgColor: "bg-blue", textColor:"text-red"}}>
+        <ChildComponent /> // prints '{bgColor: "bg-blue", textColor:"text-red"}'
+      </Section>
+      <ChildComponent /> // prints '{bgColor: "bg-white", textColor:"text-black"}'
+      <BackgroundProvider value={{bgColor: "bg-green", textColor:"text-purple"}}>
+        // background setting elements must be wrapped in BackgroundProvider
+        <div style={{backgroundColor: "green", color: "purple"}}>
+          <ChildComponent /> // prints '{bgColor: "bg-green", textColor:"text-purple"}'
+        </div>
+      </BackgroundProvider>
+    </Section>
+  )
+}
+```
