@@ -35,7 +35,11 @@ type FooterProps = {
 const footerFields: Fields<FooterProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    Object.values(backgroundColors)
+    Object.values(backgroundColors).map(({ label, value }) => ({
+      label,
+      value,
+      color: value.bgColor,
+    }))
   ),
 };
 
