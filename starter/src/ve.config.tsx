@@ -44,6 +44,8 @@ import {
   PromoProps,
 } from "@yext/visual-editor";
 
+import { Locator, LocatorProps } from "./components/Locator.js"; // only for hot reloading; final code should be imported above
+
 type MainProps = {
   Address: AddressProps;
   Banner: BannerProps;
@@ -62,6 +64,7 @@ type MainProps = {
   HoursTable: HoursTableProps;
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
+  Locator: LocatorProps;
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
@@ -88,6 +91,7 @@ const components: Config<MainProps>["components"] = {
   Footer,
   Directory,
   Breadcrumbs,
+  Locator,
 };
 
 const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
