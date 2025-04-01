@@ -153,6 +153,7 @@ const FooterLinks = (props: { links: CTAType[] }) => {
             eventName={`footerlink${idx}`}
             variant="link"
             alwaysHideCaret={true}
+            className="pr-8"
           />
         </li>
       ))}
