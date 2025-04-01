@@ -323,7 +323,7 @@ const HeroSectionWrapper = ({
           )}
         </div>
         {image && (
-          <figure className="w-full">
+          <div className="w-full" role="region" aria-label="Hero Image">
             <EntityField
               displayName="Image"
               fieldId={imageField.image.field}
@@ -337,7 +337,7 @@ const HeroSectionWrapper = ({
                 aspectRatio={imageField.aspectRatio}
               />
             </EntityField>
-          </figure>
+          </div>
         )}
       </section>
     </Section>
