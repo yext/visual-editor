@@ -14,15 +14,15 @@ import {
   getFontWeightOverrideOptions,
   Image,
   ImageProps,
-  ImageWrapperFields,
   ImageWrapperProps,
-  resolvedImageFields,
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
+  ctaVariantOptions,
 } from "../../index.js";
+import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 import { Body } from "./atoms/body.js";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
 
@@ -51,9 +51,7 @@ interface CardProps {
   image: ImageWrapperProps;
   cta: {
     entityField: YextEntityField<CTAProps>;
-    linkType: CTAProps["linkType"];
     variant: CTAProps["variant"];
-    fontSize: CTAProps["fontSize"];
   };
   backgroundColor?: BackgroundStyle;
 }
@@ -143,12 +141,11 @@ const cardFields: Fields<CardProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Link", value: "link" },
-      ]),
-      fontSize: FontSizeSelector(),
-      linkType: linkTypeFields,
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
     },
   },
   backgroundColor: BasicSelector("Background Color", ThemeOptions.BG_COLORS),
@@ -232,8 +229,7 @@ const CardWrapper = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              fontSize={cta.fontSize}
-              linkType={cta.linkType}
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -294,12 +290,11 @@ export const CardComponent: ComponentConfig<CardProps> = {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
+          linkType: "URL",
         },
       },
-      fontSize: "default",
       variant: "primary",
-      linkType: "URL",
     },
     backgroundColor: backgroundColors.background1.value,
   },

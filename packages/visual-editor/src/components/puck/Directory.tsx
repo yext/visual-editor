@@ -1,7 +1,9 @@
 import {
   useTemplateProps,
   themeManagerCn,
+  Heading,
   backgroundColors,
+  Body,
 } from "../../index.js";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -41,19 +43,20 @@ const DirectoryCard = ({
   relativePrefixToRoot: string;
 }) => {
   return (
-    <div className="px-6 py-8 border h-full">
+    <div className="p-8 border border-gray-400 rounded h-full">
       <MaybeLink
-        className="hover:underline text-h1-fontSize text-link-color mb-4"
+        alwaysHideCaret={true}
+        className="mb-4"
         href={
           relativePrefixToRoot && profile.slug
             ? relativePrefixToRoot + profile.slug
             : profile.slug
         }
       >
-        {profile.name}
+        <Heading level={5}>{profile.name}</Heading>
       </MaybeLink>
       {profile.hours && (
-        <div className="mb-2 font-semibold font-body-fontFamily">
+        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
           <HoursStatus
             hours={profile.hours}
             timezone={profile.timezone}
@@ -62,7 +65,7 @@ const DirectoryCard = ({
         </div>
       )}
       {profile.address && (
-        <div className="font-body-fontFamily">
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
           <Address address={profile.address} lines={[["line1"]]} />
         </div>
       )}
@@ -85,7 +88,7 @@ const DirectoryGrid = ({
       className={themeManagerCn(
         layoutVariants({
           verticalPadding: "default",
-          horizontalPadding: "0",
+          horizontalPadding: "4",
         })
       )}
       background={backgroundColors.background1.value}
@@ -94,21 +97,19 @@ const DirectoryGrid = ({
     >
       <div
         className={themeManagerCn(
-          layoutVariants({ gap: "0" }),
           innerLayoutVariants({ maxContentWidth: "default" }),
-          "flex flex-col md:grid md:grid-cols-12"
+          "flex flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
         )}
         style={{
           gridTemplateColumns: `repeat(3, 1fr)`,
         }}
       >
         {sortedDirectoryChildren.map((child, idx) => (
-          <div className="w-full" key={idx}>
-            <DirectoryCard
-              profile={child}
-              relativePrefixToRoot={relativePrefixToRoot}
-            />
-          </div>
+          <DirectoryCard
+            key={idx}
+            profile={child}
+            relativePrefixToRoot={relativePrefixToRoot}
+          />
         ))}
       </div>
     </Section>
@@ -128,16 +129,16 @@ const DirectoryList = ({
     <div className="container components mx-auto px-4 sm:px-8 lg:px-16 xl:px-20">
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => (
-          <li className="p-3" key={idx}>
+          <li key={idx}>
             <MaybeLink
-              className="inline-block after:content-[attr(data-count)] after:ml-2 hover:underline text-body-fontSize text-link-color"
+              variant="directoryLink"
               href={
                 relativePrefixToRoot
                   ? relativePrefixToRoot + child.slug
                   : child.slug
               }
             >
-              {child.name}
+              <Body>{child.name}</Body>
             </MaybeLink>
           </li>
         ))}

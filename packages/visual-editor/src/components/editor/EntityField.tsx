@@ -29,11 +29,13 @@ export const EntityField = ({
   constantValueEnabled,
   children,
 }: EntityFieldProps) => {
-  const { tooltipsVisible } = useEntityField();
+  const tooltipsContext = useEntityTooltips();
 
-  if (constantValueEnabled) {
+  if (!tooltipsContext || constantValueEnabled) {
     return children;
   }
+
+  const { tooltipsVisible } = tooltipsContext;
 
   let tooltipContent = "";
   if (displayName && fieldId) {
@@ -45,7 +47,7 @@ export const EntityField = ({
   }
 
   return (
-    <div>
+    <div className="ve-w-fit">
       <TooltipProvider>
         <Tooltip open={!!tooltipContent && tooltipsVisible}>
           <TooltipTrigger asChild>
@@ -69,16 +71,16 @@ export const EntityField = ({
   );
 };
 
-type EntityFieldContextProps = {
+type EntityTooltipsContext = {
   tooltipsVisible: boolean;
   toggleTooltips: () => void;
 };
 
-const EntityFieldContext = createContext<EntityFieldContextProps | undefined>(
+const EntityTooltipsContext = createContext<EntityTooltipsContext | undefined>(
   undefined
 );
 
-export const EntityFieldProvider = ({
+export const EntityTooltipsProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -90,19 +92,12 @@ export const EntityFieldProvider = ({
   };
 
   return (
-    <EntityFieldContext.Provider value={{ tooltipsVisible, toggleTooltips }}>
+    <EntityTooltipsContext.Provider value={{ tooltipsVisible, toggleTooltips }}>
       {children}
-    </EntityFieldContext.Provider>
+    </EntityTooltipsContext.Provider>
   );
 };
 
-export const useEntityField = () => {
-  const context = useContext(EntityFieldContext);
-  if (!context) {
-    return {
-      tooltipsVisible: false,
-      toggleTooltips: () => {},
-    };
-  }
-  return context;
+export const useEntityTooltips = () => {
+  return useContext(EntityTooltipsContext);
 };

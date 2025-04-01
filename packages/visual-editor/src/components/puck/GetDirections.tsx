@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { ButtonProps } from "./atoms/button.js";
+import { CTAProps } from "./atoms/cta.js";
 import { getDirections, Coordinate } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
@@ -10,11 +10,12 @@ import {
   resolveYextEntityField,
   EntityField,
   CTA,
+  ctaVariantOptions,
 } from "../../index.js";
 
 type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
-  variant: ButtonProps["variant"];
+  variant: CTAProps["variant"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
@@ -25,10 +26,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
   variant: {
     label: "Variant",
     type: "radio",
-    options: [
-      { label: "Button", value: "primary" },
-      { label: "Link", value: "link" },
-    ],
+    options: ctaVariantOptions,
   },
 };
 
@@ -63,7 +61,6 @@ const GetDirections = ({
         label={"Get Directions"}
         link={searchQuery || "#"}
         linkType={"DRIVING_DIRECTIONS"}
-        size={"small"}
         variant={variant}
       />
     </EntityField>

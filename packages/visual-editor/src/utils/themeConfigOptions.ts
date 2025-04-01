@@ -145,12 +145,12 @@ export const defaultThemeTailwindExtensions = {
 };
 
 const letterSpacingOptions = [
-  { label: "Tighter", value: "-0.05em" },
-  { label: "Tight", value: "-0.025em" },
-  { label: "Normal", value: "0em" },
-  { label: "Wide", value: "0.025em" },
-  { label: "Wider", value: "0.05em" },
-  { label: "Widest", value: "0.1em" },
+  { label: "Tighter (-0.05em)", value: "-0.05em" },
+  { label: "Tight (-0.025em)", value: "-0.025em" },
+  { label: "Normal (0em)", value: "0em" },
+  { label: "Wide (0.025em)", value: "0.025em" },
+  { label: "Wider (0.05em)", value: "0.05em" },
+  { label: "Widest (0.1em)", value: "0.1em" },
 ];
 
 const textTransformOptions = [
@@ -160,10 +160,17 @@ const textTransformOptions = [
   { label: "Capitalize", value: "capitalize" },
 ];
 
+const ctaVariantOptions = [
+  { label: "Primary", value: "primary" },
+  { label: "Secondary", value: "secondary" },
+  { label: "Link", value: "link" },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BG_COLORS: Object.values(backgroundColors),
   BG_COLORS_WITH_DROPDOWN_COLOR: backgroundColorsWithDropdownColor,
+  CTA_VARIANTS: ctaVariantOptions,
 };
