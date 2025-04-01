@@ -1,12 +1,15 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
 import { SpacingSelector, BasicSelector } from "../../index.js";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions.js";
 
 export const layoutVariants = cva("components w-full", {
   variants: {
     gap: {
       none: "",
-      default: "gap-pageSection-gap",
       "0": "gap-0",
       "0.5": "gap-0.5",
       "1": "gap-1",
@@ -56,7 +59,6 @@ export const layoutVariants = cva("components w-full", {
     },
     horizontalPadding: {
       none: "",
-      default: "px-pageSection-horizontalPadding",
       "0": "px-0",
       "0.5": "px-0.5",
       "1": "px-1",
@@ -79,22 +81,17 @@ export const layoutVariants = cva("components w-full", {
       "20": "px-20",
       "24": "px-24",
     },
-    backgroundColor: {
+    columnFormatting: {
       none: "",
-      default: "bg-pageSection-backgroundColor",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-      inherit: "bg-inherit",
+      default: "md:grid md:grid-cols-12",
+      forceHorizontal: "!grid grid-cols-12",
     },
   },
   defaultVariants: {
     gap: "none",
     verticalPadding: "none",
     horizontalPadding: "none",
-    backgroundColor: "none",
+    columnFormatting: "none",
   },
 });
 
@@ -104,7 +101,7 @@ export const innerLayoutVariants = cva(
     variants: {
       maxContentWidth: {
         none: "",
-        default: "max-w-pageSection-maxWidth",
+        default: "max-w-pageSection-contentWidth",
         lg: "max-w-[1024px]",
         xl: "max-w-[1280px]",
         xxl: "max-w-[1536px]",
@@ -116,21 +113,19 @@ export const innerLayoutVariants = cva(
   }
 );
 
-interface layoutProps
+export interface layoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {}
+    VariantProps<typeof innerLayoutVariants> {
+  backgroundColor?: BackgroundStyle;
+}
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    Object.values(backgroundColors)
+  ),
   gap: SpacingSelector("gap", "Gap"),
-  verticalPadding: SpacingSelector("padding", "Vertical Padding"),
-  horizontalPadding: SpacingSelector("padding", "Horizontal Padding"),
+  verticalPadding: SpacingSelector("padding", "Top/Bottom Padding"),
+  horizontalPadding: SpacingSelector("padding", "Left/Right Padding"),
 };

@@ -15,8 +15,14 @@ export const ui: Registry["items"] = [
     files: [{ path: "atoms/body.tsx", type: "registry:component" }],
   },
   {
+    name: "srgbToHSL",
+    type: "registry:component",
+    files: [{ path: "atoms/srgbToHSL.tsx", type: "registry:component" }],
+  },
+  {
     name: "button",
     type: "registry:component",
+    registryDependencies: ["srgbToHSL"],
     files: [{ path: "atoms/button.tsx", type: "registry:component" }],
   },
   {
@@ -24,6 +30,11 @@ export const ui: Registry["items"] = [
     type: "registry:component",
     registryDependencies: ["button"],
     files: [{ path: "atoms/cta.tsx", type: "registry:component" }],
+  },
+  {
+    name: "image",
+    type: "registry:component",
+    files: [{ path: "atoms/image.tsx", type: "registry:component" }],
   },
   {
     name: "section",
@@ -139,6 +150,7 @@ export const ui: Registry["items"] = [
   {
     name: "Image",
     type: "registry:ui",
+    registryDependencies: ["image"],
     files: [{ path: "Image.tsx", type: "registry:ui" }],
   },
   {
@@ -155,12 +167,12 @@ export const ui: Registry["items"] = [
     name: "Promo",
     type: "registry:ui",
     files: [{ path: "Promo.tsx", type: "registry:ui" }],
-    registryDependencies: ["section", "heading", "cta", "body", "Image"],
+    registryDependencies: ["section", "heading", "cta", "body", "image"],
   },
   {
     name: "Card",
     type: "registry:ui",
     files: [{ path: "Card.tsx", type: "registry:ui" }],
-    registryDependencies: ["section", "heading", "cta", "body", "Image"],
+    registryDependencies: ["section", "heading", "cta", "body", "image"],
   },
 ];

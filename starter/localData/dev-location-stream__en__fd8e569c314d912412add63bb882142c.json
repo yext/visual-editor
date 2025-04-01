@@ -3,7 +3,58 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
-  "_site": null,
+  "_site": {
+    "copyrightMessage": "© 2025 Yext",
+    "favicon": {
+      "height": 1152,
+      "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
+      "width": 1152
+    },
+    "footer": {
+      "links": [
+        {
+          "label": "Privacy Policy",
+          "link": "https://www.yext.com/privacy-policy",
+          "linkType": "URL"
+        },
+        {
+          "label": "Contact Us",
+          "link": "sumo@yext.com",
+          "linkType": "EMAIL"
+        }
+      ]
+    },
+    "header": {
+      "links": [
+        { "label": "Home", "link": "index.html", "linkType": "OTHER" },
+        {
+          "label": "More Info",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        { "label": "Call Us", "link": "+12125550110", "linkType": "PHONE" }
+      ]
+    },
+    "id": "site-63590",
+    "instagramHandle": "yextinc",
+    "logo": {
+      "image": {
+        "alternateText": "The Galaxy Grill Logo",
+        "height": 1152,
+        "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
+        "width": 1152
+      }
+    },
+    "meta": { "entityType": { "id": "site", "uid": 29107 }, "locale": "en" },
+    "uid": 8932936,
+    "youTubeChannelUrl": "https://www.youtube.com/c/yext"
+  },
+  "dm_directoryParents_63590_locations": [
+    { "name": "Locations Directory", "slug": "en/index.html" },
+    { "name": "US", "slug": "en/us" },
+    { "name": "MD", "slug": "en/us/md" },
+    { "name": "North Bethesda", "slug": "en/us/md/north-bethesda" }
+  ],
   "address": {
     "city": "North Bethesda",
     "countryCode": "US",

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -8,138 +7,90 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  FontSizeSelector,
   BasicSelector,
+  ImageProps,
+  Image,
+  Body,
+  BackgroundStyle,
+  backgroundColors,
+  BodyProps,
+  ctaVariantOptions,
+  ImageWrapperProps,
+  headingLevelOptions,
 } from "../../index.js";
-import { Body } from "./atoms/body.js";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
+import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 interface PromoProps {
-  orientation: "left" | "right";
+  image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
-    fontSize: HeadingProps["fontSize"];
-    color: HeadingProps["color"];
-    transform: HeadingProps["transform"];
+    level: HeadingProps["level"];
   };
   description: {
     text: YextEntityField<string>;
-    fontSize: HeadingProps["fontSize"];
-    color: HeadingProps["color"];
-    transform: HeadingProps["transform"];
-  };
-  image: {
-    image: YextEntityField<ImageType>;
-    size: ImageWrapperProps["size"];
-    aspectRatio: ImageWrapperProps["aspectRatio"];
-    rounded: ImageWrapperProps["rounded"];
+    variant: BodyProps["variant"];
   };
   cta: {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
-    fontSize: CTAProps["fontSize"];
-    linkType: CTAProps["linkType"];
+    visible: boolean;
+  };
+  styles: {
+    backgroundColor?: BackgroundStyle;
+    orientation: "left" | "right";
   };
 }
 
 const promoFields: Fields<PromoProps> = {
-  orientation: BasicSelector("Orientation", [
-    { label: "Left", value: "left" },
-    { label: "Right", value: "right" },
-  ]),
-  title: {
-    type: "object",
-    label: "Title",
-    objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
-    },
-  },
-  description: {
-    type: "object",
-    label: "Description",
-    objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
-    },
-  },
   image: {
     type: "object",
     label: "Image",
     objectFields: {
-      image: YextEntityFieldSelector<any, ImageType>({
-        label: "Image",
+      ...ImageWrapperFields,
+    },
+  },
+  title: {
+    type: "object",
+    label: "Business Name Heading Value",
+    objectFields: {
+      text: YextEntityFieldSelector<any, string>({
+        label: "Entity Field",
         filter: {
-          types: ["type.image"],
+          types: ["type.string"],
         },
       }),
-      size: BasicSelector("Size", [
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full Width", value: "full" },
-      ]),
-      aspectRatio: BasicSelector("Aspect Ratio", [
-        { label: "Auto", value: "auto" },
-        { label: "Square", value: "square" },
-        { label: "Video (16:9)", value: "video" },
-        { label: "Portrait (3:4)", value: "portrait" },
-      ]),
-      rounded: BasicSelector("Rounded Corners", [
-        { label: "None", value: "none" },
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full", value: "full" },
-      ]),
+      level: BasicSelector("Business Name Heading Level", headingLevelOptions),
+    },
+  },
+  description: {
+    type: "object",
+    label: "Text",
+    objectFields: {
+      text: YextEntityFieldSelector<any, string>({
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: [
+          { label: "Small", value: "sm" },
+          { label: "Base", value: "base" },
+          { label: "Large", value: "lg" },
+        ],
+      },
     },
   },
   cta: {
     type: "object",
-    label: "Call to Action",
+    label: "Primary CTA Value",
     objectFields: {
       entityField: YextEntityFieldSelector({
         label: "Entity Field",
@@ -147,22 +98,47 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Link", value: "link" },
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
+      visible: {
+        label: "Show Primary CTA",
+        type: "radio",
+        options: [
+          { label: "Show", value: true },
+          { label: "Hide", value: false },
+        ],
+      },
+    },
+  },
+  styles: {
+    label: "Styles",
+    type: "object",
+    objectFields: {
+      backgroundColor: BasicSelector(
+        "Background Color",
+        Object.values(backgroundColors).map(({ label, value }) => ({
+          label,
+          value,
+          color: value.bgColor,
+        }))
+      ),
+      orientation: BasicSelector("Image Orientation", [
+        { label: "Left", value: "left" },
+        { label: "Right", value: "right" },
       ]),
-      fontSize: FontSizeSelector(),
-      linkType: linkTypeFields,
     },
   },
 };
 
 const PromoWrapper: React.FC<PromoProps> = ({
-  orientation,
+  image,
   title,
   description,
-  image,
   cta,
+  styles,
 }) => {
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
@@ -179,8 +155,9 @@ const PromoWrapper: React.FC<PromoProps> = ({
     <Section className="components">
       <div
         className={themeManagerCn(
-          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
-          orientation === "right" && "md:flex-row-reverse"
+          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8 bg-white",
+          styles.orientation === "right" && "md:flex-row-reverse",
+          styles.backgroundColor?.bgColor
         )}
       >
         {resolvedImage && (
@@ -189,49 +166,32 @@ const PromoWrapper: React.FC<PromoProps> = ({
             fieldId={image.image.field}
             constantValueEnabled={image.image.constantValueEnabled}
           >
-            <div
-              className={themeManagerCn(
-                imageWrapperVariants({
-                  size: image.size,
-                  rounded: image.rounded,
-                  aspectRatio: image.aspectRatio,
-                }),
-                "overflow-hidden"
-              )}
-            >
-              <Image
-                image={resolvedImage}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <Image
+              image={resolvedImage}
+              layout={image.layout}
+              width={image.width}
+              height={image.height}
+              aspectRatio={image.aspectRatio}
+            />
           </EntityField>
         )}
         <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
           {title?.text && (
-            <Heading
-              fontSize={title.fontSize}
-              color={title.color}
-              transform={title.transform}
-            >
+            <Heading level={title.level}>
               {resolveYextEntityField(document, title.text)}
             </Heading>
           )}
           {description?.text && (
-            <Body
-              fontSize={description.fontSize}
-              textTransform={description.transform}
-              color={description.color}
-            >
+            <Body variant={description.variant}>
               {resolveYextEntityField(document, description.text)}
             </Body>
           )}
-          {resolvedCTA && (
+          {resolvedCTA && cta.visible && (
             <CTA
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              linkType={cta.linkType}
-              fontSize={cta.fontSize}
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -240,20 +200,28 @@ const PromoWrapper: React.FC<PromoProps> = ({
   );
 };
 
-export const PromoComponent: ComponentConfig<PromoProps> = {
-  label: "Promo",
+const Promo: ComponentConfig<PromoProps> = {
   fields: promoFields,
   defaultProps: {
-    orientation: "left",
-    title: {
-      text: {
-        field: "",
-        constantValue: "Title",
+    image: {
+      image: {
+        field: "primaryPhoto",
+        constantValue: {
+          height: 360,
+          width: 640,
+          url: PLACEHOLDER_IMAGE_URL,
+        },
         constantValueEnabled: true,
       },
-      fontSize: "default",
-      color: "default",
-      transform: "none",
+      layout: "auto",
+      aspectRatio: 1.78,
+    },
+    title: {
+      text: {
+        field: "name",
+        constantValue: "Title",
+      },
+      level: 3,
     },
     description: {
       text: {
@@ -261,38 +229,33 @@ export const PromoComponent: ComponentConfig<PromoProps> = {
         constantValue: "Description",
         constantValueEnabled: true,
       },
-      fontSize: "default",
-      color: "default",
-      transform: "none",
-    },
-    image: {
-      image: {
-        field: "primaryPhoto",
-        constantValue: {
-          alternateText: "",
-          height: 360,
-          width: 640,
-          url: PLACEHOLDER_IMAGE_URL,
-        },
-        constantValueEnabled: true,
-      },
-      size: "medium",
-      rounded: "none",
-      aspectRatio: "auto",
+      variant: "base",
     },
     cta: {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
         },
       },
-      fontSize: "default",
       variant: "primary",
-      linkType: "URL",
+      visible: true,
     },
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      orientation: "left",
+    },
+  },
+  resolveFields(data) {
+    return {
+      ...promoFields,
+      image: {
+        ...promoFields.image,
+        objectFields: resolvedImageFields(data.props.image.layout),
+      },
+    };
   },
   render: (props) => <PromoWrapper {...props} />,
 };
 
-export { PromoComponent as Promo, type PromoProps };
+export { Promo, type PromoProps };

@@ -62,7 +62,7 @@ by themeResolver, applyTheme, and Editor.
 
 Each style must specify a label, type, default value, and plugin. The label will be displayed in the
 Theme Manager UI. The type can be "color", "number" or "select". If type "select", an array of options
-must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
+must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://v3.tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
 a plugin can be nested one level deep together under a shared label.
 
 ```ts
@@ -530,6 +530,59 @@ Returns a list of spacing options to be optionally used in the theme.config. It 
 | 16 (64px)  | 16    |
 | 20 (80px)  | 20    |
 | 24 (96px)  | 24    |
+
+## defaultThemeTailwindExtensions
+
+A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
+
+#### Usage
+
+```tsx
+// tailwind.config.ts
+theme: {
+  extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
+},
+```
+
+## headingLevelOptions
+
+The set of heading levels (H1 through H6) for use with BasicSelector.
+
+#### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", headingLevelOptions),
+    },
+  },
+```
+
+## backgroundColors
+
+An object of the following shape containing the seven auto-generated background styles.
+
+```js
+{
+  backgroundKey: {
+    label: "Background Label",
+    value: "Background Tailwind Classes"
+  }
+}
+```
+
+| Key         | Label        | Background Color | Text Color |
+| ----------- | ------------ | ---------------- | ---------- |
+| background1 | Background 1 | white            | black      |
+| background2 | Background 2 | primary-light    | black      |
+| background3 | Background 3 | secondary-light  | black      |
+| background4 | Background 4 | tertiary-light   | black      |
+| background5 | Background 5 | quaternary-light | black      |
+| background6 | Background 6 | primary-dark     | white      |
+| background7 | Background 7 | secondary-dark   | white      |
 
 ## applyAnalytics
 

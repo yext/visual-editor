@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Image, ImageProps, ImageType } from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -12,17 +11,20 @@ import {
   BasicSelector,
   BodyProps,
   getFontWeightOverrideOptions,
-} from "../../index.js";
-import { Body } from "./atoms/body.js";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
-import {
-  Heading,
-  HeadingProps,
+  Image,
+  ImageProps,
+  ImageWrapperProps,
+  backgroundColors,
+  BackgroundStyle,
+  headingLevelOptions,
   HeadingLevel,
-  headingOptions,
-} from "./atoms/heading.js";
+  ctaVariantOptions,
+} from "../../index.js";
+import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
+import { Body } from "./atoms/body.js";
+import { CTA, CTAProps } from "./atoms/cta.js";
+import { Heading, HeadingProps } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import { imageWrapperVariants, ImageWrapperProps } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -31,7 +33,6 @@ interface CardProps {
   heading: {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
-    color: HeadingProps["color"];
     weight: HeadingProps["weight"];
     transform: HeadingProps["transform"];
     level: HeadingLevel;
@@ -39,37 +40,20 @@ interface CardProps {
   subheading: {
     text: YextEntityField<string>;
     fontSize: HeadingProps["fontSize"];
-    color: HeadingProps["color"];
     weight: HeadingProps["weight"];
     transform: HeadingProps["transform"];
     level: HeadingLevel;
   };
   body: {
     text: YextEntityField<string>;
-    fontSize: BodyProps["fontSize"];
-    color: BodyProps["color"];
-    weight: BodyProps["fontWeight"];
-    transform: BodyProps["textTransform"];
+    variant: BodyProps["variant"];
   };
-  image: {
-    image: YextEntityField<ImageType>;
-    size: ImageWrapperProps["size"];
-    aspectRatio: ImageWrapperProps["aspectRatio"];
-    rounded: ImageWrapperProps["rounded"];
-  };
+  image: ImageWrapperProps;
   cta: {
     entityField: YextEntityField<CTAProps>;
-    linkType: CTAProps["linkType"];
     variant: CTAProps["variant"];
-    fontSize: CTAProps["fontSize"];
   };
-  backgroundColor:
-    | "bg-card-backgroundColor"
-    | "bg-palette-primary"
-    | "bg-palette-secondary"
-    | "bg-palette-accent"
-    | "bg-palette-text"
-    | "bg-palette-background";
+  backgroundColor?: BackgroundStyle;
 }
 
 const cardFields: Fields<CardProps> = {
@@ -88,14 +72,6 @@ const cardFields: Fields<CardProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
       weight: BasicSelector("Font Weight", []),
       transform: BasicSelector("Text Transform", [
         { value: "none", label: "None" },
@@ -103,7 +79,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", headingOptions),
+      level: BasicSelector("Level", headingLevelOptions),
     },
   },
   subheading: {
@@ -117,14 +93,6 @@ const cardFields: Fields<CardProps> = {
         },
       }),
       fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
       weight: BasicSelector("Font Weight", []),
       transform: BasicSelector("Text Transform", [
         { value: "none", label: "None" },
@@ -132,7 +100,7 @@ const cardFields: Fields<CardProps> = {
         { value: "uppercase", label: "Uppercase" },
         { value: "capitalize", label: "Capitalize" },
       ]),
-      level: BasicSelector("Level", headingOptions),
+      level: BasicSelector("Level", headingLevelOptions),
     },
   },
   body: {
@@ -145,53 +113,22 @@ const cardFields: Fields<CardProps> = {
           types: ["type.string"],
         },
       }),
-      fontSize: FontSizeSelector(),
-      color: BasicSelector("Font Color", [
-        { label: "Default", value: "default" },
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Accent", value: "accent" },
-        { label: "Text", value: "text" },
-        { label: "Background", value: "background" },
-      ]),
-      weight: BasicSelector("Font Weight", []),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      variant: {
+        type: "radio",
+        label: "Variant",
+        options: [
+          { label: "Small", value: "sm" },
+          { label: "Base", value: "base" },
+          { label: "Large", value: "lg" },
+        ],
+      },
     },
   },
   image: {
     type: "object",
     label: "Image",
     objectFields: {
-      image: YextEntityFieldSelector<any, ImageType>({
-        label: "Image",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-      size: BasicSelector("Size", [
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full Width", value: "full" },
-      ]),
-      aspectRatio: BasicSelector("Aspect Ratio", [
-        { label: "Auto", value: "auto" },
-        { label: "Square", value: "square" },
-        { label: "Video (16:9)", value: "video" },
-        { label: "Portrait (3:4)", value: "portrait" },
-      ]),
-      rounded: BasicSelector("Rounded Corners", [
-        { label: "None", value: "none" },
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "Full", value: "full" },
-      ]),
+      ...ImageWrapperFields,
     },
   },
   cta: {
@@ -204,22 +141,17 @@ const cardFields: Fields<CardProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Link", value: "link" },
-      ]),
-      fontSize: FontSizeSelector(),
-      linkType: linkTypeFields,
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ctaVariantOptions,
+      },
     },
   },
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "bg-card-backgroundColor" },
-    { label: "Primary", value: "bg-palette-primary" },
-    { label: "Secondary", value: "bg-palette-secondary" },
-    { label: "Accent", value: "bg-palette-accent" },
-    { label: "Text", value: "bg-palette-text" },
-    { label: "Background", value: "bg-palette-background" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    Object.values(backgroundColors)
+  ),
 };
 
 const CardWrapper = ({
@@ -239,12 +171,11 @@ const CardWrapper = ({
   const resolvedCTA = resolveYextEntityField(document, cta.entityField);
 
   return (
-    <Section className="components">
+    <Section background={backgroundColor} className={`components`}>
       <div
         className={themeManagerCn(
-          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8",
-          orientation === "right" && "md:flex-row-reverse",
-          backgroundColor
+          "flex flex-col md:flex-row overflow-hidden md:gap-8",
+          orientation === "right" && "md:flex-row-reverse"
         )}
       >
         {resolvedImage && (
@@ -254,21 +185,13 @@ const CardWrapper = ({
               fieldId={image.image.field}
               constantValueEnabled={image.image.constantValueEnabled}
             >
-              <div
-                className={themeManagerCn(
-                  imageWrapperVariants({
-                    size: image.size,
-                    rounded: image.rounded,
-                    aspectRatio: image.aspectRatio,
-                  }),
-                  "overflow-hidden"
-                )}
-              >
-                <Image
-                  image={resolvedImage}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <Image
+                image={resolvedImage}
+                layout={image.layout}
+                width={image.width}
+                height={image.height}
+                aspectRatio={image.aspectRatio}
+              />
             </EntityField>
           </div>
         )}
@@ -277,7 +200,6 @@ const CardWrapper = ({
             <EntityField displayName="Heading" fieldId={heading.text.field}>
               <Heading
                 fontSize={heading.fontSize}
-                color={heading.color}
                 transform={heading.transform}
                 level={heading.level}
                 weight={heading.weight}
@@ -290,7 +212,6 @@ const CardWrapper = ({
             <EntityField displayName="Subtitle" fieldId={subheading.text.field}>
               <Heading
                 fontSize={subheading.fontSize}
-                color={subheading.color}
                 transform={subheading.transform}
                 level={subheading.level}
                 weight={subheading.weight}
@@ -301,12 +222,7 @@ const CardWrapper = ({
           )}
           {body?.text && (
             <EntityField displayName="Description" fieldId={body.text.field}>
-              <Body
-                fontSize={body.fontSize}
-                textTransform={body.transform}
-                color={body.color}
-                fontWeight={body.weight}
-              >
+              <Body variant={body.variant}>
                 {resolveYextEntityField(document, body.text)}
               </Body>
             </EntityField>
@@ -316,8 +232,7 @@ const CardWrapper = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              fontSize={cta.fontSize}
-              linkType={cta.linkType}
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -339,7 +254,6 @@ export const CardComponent: ComponentConfig<CardProps> = {
       },
       fontSize: "default",
       weight: "default",
-      color: "default",
       transform: "none",
       level: 1,
     },
@@ -351,7 +265,6 @@ export const CardComponent: ComponentConfig<CardProps> = {
       },
       fontSize: "default",
       weight: "default",
-      color: "default",
       transform: "none",
       level: 2,
     },
@@ -361,38 +274,32 @@ export const CardComponent: ComponentConfig<CardProps> = {
         constantValue: "Body",
         constantValueEnabled: true,
       },
-      fontSize: "default",
-      weight: "default",
-      color: "default",
-      transform: "none",
+      variant: "base",
     },
     image: {
       image: {
         field: "primaryPhoto",
         constantValue: {
-          alternateText: "",
           height: 360,
           width: 640,
           url: PLACEHOLDER_IMAGE_URL,
         },
         constantValueEnabled: true,
       },
-      size: "full",
-      rounded: "none",
-      aspectRatio: "auto",
+      layout: "auto",
+      aspectRatio: 1.78,
     },
     cta: {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
+          linkType: "URL",
         },
       },
-      fontSize: "default",
       variant: "primary",
-      linkType: "URL",
     },
-    backgroundColor: "bg-card-backgroundColor",
+    backgroundColor: backgroundColors.background1.value,
   },
   resolveFields: async (data): Promise<Fields<CardProps>> => {
     const headingFontWeightOptions = await getFontWeightOverrideOptions({
@@ -432,6 +339,11 @@ export const CardComponent: ComponentConfig<CardProps> = {
           ...cardFields.body.objectFields,
           weight: BasicSelector("Font Weight", bodyFontWeightOptions),
         },
+      },
+      image: {
+        ...cardFields.image,
+        // @ts-expect-error ts(2322) 'objectFields' does not exist in type 'TextField'
+        objectFields: resolvedImageFields(data.props.image.layout),
       },
     };
   },

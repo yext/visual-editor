@@ -17,21 +17,13 @@
           "link": "https://www.yext.com/privacy-policy",
           "linkType": "URL"
         },
-        {
-          "label": "Contact Us",
-          "link": "sumo@yext.com",
-          "linkType": "EMAIL"
-        }
+        { "label": "Contact Us", "link": "sumo@yext.com", "linkType": "EMAIL" }
       ]
     },
     "header": {
       "links": [
         { "label": "Home", "link": "index.html", "linkType": "OTHER" },
-        {
-          "label": "More Info",
-          "link": "https://yext.com",
-          "linkType": "URL"
-        },
+        { "label": "More Info", "link": "https://yext.com", "linkType": "URL" },
         { "label": "Call Us", "link": "+12125550110", "linkType": "PHONE" }
       ]
     },
@@ -49,39 +41,21 @@
     "uid": 8932936,
     "youTubeChannelUrl": "https://www.youtube.com/c/yext"
   },
+  "businessId": 1000152098,
+  "dm_childEntityIds": ["8932945"],
+  "dm_directoryChildren": [{ "name": "Arlington", "slug": "us/va/arlington" }],
+  "dm_directoryManagerId": "63590-locations",
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    { "name": "US", "slug": "en/us" },
-    { "name": "NV", "slug": "en/us/nv" },
-    { "name": "Las Vegas", "slug": "en/us/nv/las-vegas" }
+    { "name": "US", "slug": "en/us" }
   ],
-  "address": {
-    "city": "Las Vegas",
-    "countryCode": "US",
-    "line1": "Casino St",
-    "localizedCountryName": "United States",
-    "localizedRegionName": "Nevada",
-    "postalCode": "12345",
-    "region": "NV"
-  },
-  "businessId": 1000146856,
-  "id": "casino_st",
+  "id": "dm-region-va",
   "locale": "en",
-  "meta": {
-    "entityType": {
-      "id": "location",
-      "uid": 0
-    },
-    "locale": "en"
-  },
-  "name": "Supernova BBQ",
+  "meta": { "entityType": { "id": "dm_region", "uid": 60736 }, "locale": "en" },
+  "name": "DM Region VA",
   "siteDomain": "",
-  "siteId": 0,
+  "siteId": 63590,
   "siteInternalHostName": "",
-  "slug": "locations/casino_st",
-  "uid": 8695734,
-  "yextDisplayCoordinate": {
-    "latitude": 36.171563,
-    "longitude": -115.1391009
-  }
+  "slug": "us/va",
+  "uid": 8932944
 }

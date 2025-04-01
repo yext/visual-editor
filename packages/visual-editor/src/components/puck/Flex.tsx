@@ -1,19 +1,19 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { VariantProps } from "class-variance-authority";
 import { Section } from "./atoms/section.js";
-import { themeManagerCn } from "../../utils/cn.js";
 import {
   innerLayoutVariants,
   layoutFields,
+  layoutProps,
   layoutVariants,
 } from "./Layout.tsx";
-import { BasicSelector } from "../../index.js";
+import {
+  BasicSelector,
+  backgroundColors,
+  themeManagerCn,
+} from "../../index.js";
 
-interface FlexProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {
+interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   wrap: "wrap" | "nowrap";
@@ -36,9 +36,9 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
   ) => {
     return (
       <Section
+        background={backgroundColor}
         className={themeManagerCn(
           layoutVariants({
-            backgroundColor,
             verticalPadding,
             horizontalPadding,
             gap,
@@ -73,19 +73,31 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: BasicSelector("Direction", [
-    { value: "row", label: "Horizontal" },
-    { value: "column", label: "Vertical" },
-  ]),
-  justifyContent: BasicSelector("Justify Content", [
-    { value: "start", label: "Start" },
-    { value: "center", label: "Center" },
-    { value: "end", label: "End" },
-  ]),
-  wrap: BasicSelector("Wrap", [
-    { value: "nowrap", label: "No Wrap" },
-    { value: "wrap", label: "Wrap" },
-  ]),
+  direction: {
+    label: "Direction",
+    type: "radio",
+    options: [
+      { label: "Horizontal", value: "row" },
+      { label: "Vertical", value: "column" },
+    ],
+  },
+  justifyContent: {
+    label: "Justify Content",
+    type: "radio",
+    options: [
+      { label: "Start", value: "start" },
+      { label: "Center", value: "center" },
+      { label: "End", value: "end" },
+    ],
+  },
+  wrap: {
+    label: "Wrap",
+    type: "radio",
+    options: [
+      { label: "No Wrap", value: "nowrap" },
+      { label: "Wrap", value: "wrap" },
+    ],
+  },
   ...layoutFields,
 };
 
@@ -93,13 +105,13 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
-    direction: "column",
+    direction: "row",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: "default",
+    gap: "0",
     verticalPadding: "default",
-    horizontalPadding: "default",
-    backgroundColor: "default",
+    horizontalPadding: "0",
+    backgroundColor: backgroundColors.background1.value,
   },
   resolveFields: (data, params) => {
     // If the Flex has a parent component, the defaultProps should
@@ -108,9 +120,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
       // the props values should only be changed initially
       if (!data.props.maxContentWidth) {
         data.props.verticalPadding = "0";
-        data.props.horizontalPadding = "0";
         data.props.gap = "0";
-        data.props.backgroundColor = "inherit";
         data.props.maxContentWidth = "none";
       }
       return flexContainerFields;
@@ -139,7 +149,7 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
     className,
     backgroundColor,
     maxContentWidth,
-  }) => (
+  }: FlexProps) => (
     <FlexContainer
       direction={direction}
       justifyContent={justifyContent}

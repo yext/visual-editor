@@ -3,58 +3,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../../index.ts";
 
 // Define the variants for the body component
-const bodyVariants = cva("components font-body-fontFamily", {
-  variants: {
-    fontSize: {
-      default: "text-body-fontSize",
-      xs: "text-xs",
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
-      "3xl": "text-3xl",
-      "4xl": "text-4xl",
-      "5xl": "text-5xl",
-      "6xl": "text-6xl",
-      "7xl": "text-7xl",
-      "8xl": "text-8xl",
-      "9xl": "text-9xl",
+const bodyVariants = cva(
+  "components font-body-fontFamily font-body-fontWeight",
+  {
+    variants: {
+      variant: {
+        sm: "text-body-sm-fontSize",
+        base: "text-body-fontSize",
+        lg: "text-body-lg-fontSize",
+      },
     },
-    fontWeight: {
-      default: "font-body-fontWeight",
-      "100": "font-thin",
-      "200": "font-extralight",
-      "300": "font-light",
-      "400": "font-normal",
-      "500": "font-medium",
-      "600": "font-semibold",
-      "700": "font-bold",
-      "800": "font-extrabold",
-      "900": "font-black",
+    defaultVariants: {
+      variant: "base",
     },
-    color: {
-      default: "text-body-color",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-    },
-    textTransform: {
-      none: "",
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
-    },
-  },
-  defaultVariants: {
-    fontSize: "default",
-    fontWeight: "default",
-    color: "default",
-    textTransform: "none",
-  },
-});
+  }
+);
 
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
@@ -62,18 +25,12 @@ export interface BodyProps
     VariantProps<typeof bodyVariants> {}
 
 const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
-  (
-    { className, fontSize, fontWeight, color, textTransform, ...props },
-    ref
-  ) => {
+  ({ className, variant, ...props }, ref) => {
     return (
       <p
         className={themeManagerCn(
           bodyVariants({
-            fontSize,
-            fontWeight,
-            color,
-            textTransform,
+            variant,
             className,
           }),
           className

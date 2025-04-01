@@ -1,73 +1,38 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { ButtonProps } from "./atoms/button.js";
-import {
-  getDirections,
-  GetDirectionsConfig,
-  Coordinate,
-} from "@yext/pages-components";
+import { CTAProps } from "./atoms/cta.js";
+import { getDirections, Coordinate } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
   YextEntityField,
   YextEntityFieldSelector,
   useDocument,
   resolveYextEntityField,
-  FontSizeSelector,
   EntityField,
-  BorderRadiusSelector,
   CTA,
+  ctaVariantOptions,
 } from "../../index.js";
 
 type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
-  getDirectionsProvider: GetDirectionsConfig["provider"];
-  variant: ButtonProps["variant"];
-  size: ButtonProps["size"];
-  borderRadius: ButtonProps["borderRadius"];
-  fontSize: ButtonProps["fontSize"];
+  variant: CTAProps["variant"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
   coordinate: YextEntityFieldSelector<any, Coordinate>({
-    label: "Get Directions",
+    label: "Coordinates",
     filter: { types: ["type.coordinate"] },
   }),
-  getDirectionsProvider: {
-    label: "Maps Provider",
-    type: "radio",
-    options: [
-      { label: "Google", value: "google" },
-      { label: "Apple", value: "apple" },
-      { label: "Bing", value: "bing" },
-    ],
-  },
   variant: {
     label: "Variant",
     type: "radio",
-    options: [
-      { label: "Primary", value: "primary" },
-      { label: "Link", value: "link" },
-    ],
+    options: ctaVariantOptions,
   },
-  size: {
-    label: "Size",
-    type: "radio",
-    options: [
-      { label: "Small", value: "small" },
-      { label: "Large", value: "large" },
-    ],
-  },
-  fontSize: FontSizeSelector("Font Size", false),
-  borderRadius: BorderRadiusSelector(),
 };
 
 const GetDirections = ({
   variant,
-  size,
-  borderRadius,
   coordinate: coordinateField,
-  getDirectionsProvider,
-  fontSize,
 }: GetDirectionsProps) => {
   const document = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -82,7 +47,7 @@ const GetDirections = ({
     undefined,
     undefined,
     undefined,
-    { provider: getDirectionsProvider },
+    { provider: "google" },
     coordinate
   );
 
@@ -96,10 +61,7 @@ const GetDirections = ({
         label={"Get Directions"}
         link={searchQuery || "#"}
         linkType={"DRIVING_DIRECTIONS"}
-        size={size}
         variant={variant}
-        fontSize={fontSize}
-        borderRadius={borderRadius}
       />
     </EntityField>
   );
@@ -109,10 +71,6 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
-    size: "small",
-    fontSize: "default",
-    borderRadius: "default",
-    getDirectionsProvider: "google",
     coordinate: {
       field: "yextDisplayCoordinate",
       constantValue: {
@@ -122,7 +80,7 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
     },
   },
   label: "Get Directions",
-  render: (props) => <GetDirections {...props} />,
+  render: (props: GetDirectionsProps) => <GetDirections {...props} />,
 };
 
 export { GetDirectionsComponent as GetDirections, type GetDirectionsProps };

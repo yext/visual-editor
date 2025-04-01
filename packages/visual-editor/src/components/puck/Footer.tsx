@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, CTA } from "@yext/pages-components";
+import { Link, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Body,
@@ -7,8 +7,10 @@ import {
   themeManagerCn,
   useDocument,
   BasicSelector,
+  CTA,
+  type BackgroundStyle,
+  backgroundColors,
 } from "../../index.ts";
-import { cva, VariantProps } from "class-variance-authority";
 import {
   FaFacebook,
   FaInstagram,
@@ -26,37 +28,22 @@ type socialLink = {
   prefix?: string;
 };
 
-const footerVariants = cva("", {
-  variants: {
-    backgroundColor: {
-      default: "bg-footer-backgroundColor",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-    },
-  },
-  defaultVariants: {
-    backgroundColor: "default",
-  },
-});
-
-type FooterProps = VariantProps<typeof footerVariants>;
+type FooterProps = {
+  backgroundColor?: BackgroundStyle;
+};
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    Object.values(backgroundColors)
+  ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
   fields: footerFields,
+  defaultProps: {
+    backgroundColor: backgroundColors.background1.value,
+  },
   label: "Footer",
   render: (props) => <FooterComponent {...props} />,
 };
@@ -101,7 +88,7 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
-      name: "titok",
+      name: "tiktok",
       link: document?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
@@ -111,11 +98,11 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
     <footer
       className={themeManagerCn(
         "w-full bg-white components",
-        footerVariants({ backgroundColor })
+        backgroundColor?.bgColor
       )}
     >
       <div className="container mx-auto flex flex-col px-4 pt-4 pb-3">
-        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-footer-linkColor text-footer-linkFontSize font-body-fontFamily">
+        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
           {links && (
             <EntityField
               displayName="Footer Links"
@@ -134,7 +121,9 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
           )}
         </div>
         {copyrightMessage && (
-          <div className="text-body-fontSize text-body-color text-center sm:text-left">
+          <div
+            className={`text-body-sm-fontSize text-center sm:text-left ${backgroundColor?.textColor}`}
+          >
             <EntityField
               displayName="Copyright Text"
               fieldId="site.copyrightMessage"
@@ -148,15 +137,18 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
   );
 };
 
-const FooterLinks = (props: { links: CTA[] }) => {
+const FooterLinks = (props: { links: CTAType[] }) => {
   return (
     <ul className="flex flex-col sm:flex-row items-center pb-4">
-      {props.links.map((item: CTA, idx) => (
+      {props.links.map((item, idx) => (
         <li key={item.link}>
-          <Link
-            className="mr-4 lg:mr-10 hover:underline mb-4 sm:mb-0"
-            cta={item}
+          <CTA
+            link={item.link}
+            label={item.label}
+            linkType={item.linkType}
             eventName={`footerlink${idx}`}
+            variant="link"
+            alwaysHideCaret={true}
           />
         </li>
       ))}
