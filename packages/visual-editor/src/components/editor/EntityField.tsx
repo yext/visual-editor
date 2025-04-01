@@ -47,7 +47,7 @@ export const EntityField = ({
   }
 
   return (
-    <div id="tooltip" className="ve-w-fit">
+    <div className="ve-w-fit">
       <TooltipProvider>
         <Tooltip open={!!tooltipContent && tooltipsVisible}>
           <TooltipTrigger asChild>
