@@ -38,6 +38,48 @@ const components: Config<MainProps>["components"] = {
   ...OtherCategoryComponents,
 };
 
+const components: Config<MainProps>["components"] = {
+  Banner,
+  Card,
+  Promo,
+  Flex,
+  Grid,
+  Address,
+  BodyText,
+  CTA,
+  Emails,
+  GetDirections,
+  HeadingText,
+  HoursStatus,
+  HoursTable,
+  ImageWrapper,
+  Phone,
+  TextList,
+  Header,
+  Footer,
+  Directory,
+  Breadcrumbs,
+  Locator,
+};
+
+const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
+
+const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
+
+const contentBlocks: (keyof MainProps)[] = [
+  "Address",
+  "BodyText",
+  "CTA",
+  "Emails",
+  "GetDirections",
+  "HeadingText",
+  "HoursStatus",
+  "HoursTable",
+  "ImageWrapper",
+  "Phone",
+  "TextList",
+];
+
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
   components,

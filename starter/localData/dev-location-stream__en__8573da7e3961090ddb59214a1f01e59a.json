@@ -4,8 +4,6 @@
     "name": "dev-location"
   },
   "_site": {
-    "name": "Example Business",
-    "siteName": "Example Business Pages",
     "copyrightMessage": "© 2025 Yext",
     "favicon": {
       "height": 1152,
@@ -53,23 +51,9 @@
   },
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    {
-      "name": "US",
-      "slug": "en/us",
-      "dm_addressCountryDisplayName": "United States"
-    },
-    {
-      "name": "NY",
-      "slug": "en/us/ny",
-      "dm_addressCountryDisplayName": "United States",
-      "dm_addressRegionDisplayName": "New York"
-    },
-    {
-      "name": "Brooklyn",
-      "slug": "en/us/ny/brooklyn",
-      "dm_addressCountryDisplayName": "United States",
-      "dm_addressRegionDisplayName": "New York"
-    }
+    { "name": "US", "slug": "en/us" },
+    { "name": "NY", "slug": "en/us/ny" },
+    { "name": "Brooklyn", "slug": "en/us/ny/brooklyn" }
   ],
   "additionalHoursText": "these are the additional hours",
   "address": {
@@ -81,100 +65,7 @@
     "postalCode": "11211",
     "region": "NY"
   },
-  "logo": {
-    "image": {
-      "alternateText": "The Galaxy Grill Logo",
-      "height": 1152,
-      "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
-      "width": 1152
-    }
-  },
   "businessId": 1000146856,
-  "c_featuredDesserts": {
-    "products": [
-      {
-        "description": "Baked in-house daily",
-        "image": {
-          "image": {
-            "height": 1200,
-            "url": "https://a.mktgcdn.com/p-dev/YgQ9mYy3Risu_41OPbbkmB4wRvFDo6hfKEPik_oyKjg/1200x1200.jpg",
-            "width": 1200
-          }
-        },
-        "name": "Cake"
-      },
-      {
-        "cta": {
-          "label": "Read More",
-          "link": "http://google.com",
-          "linkType": "URL"
-        },
-        "description": "Rated best in the city",
-        "image": {
-          "image": {
-            "height": 960,
-            "url": "https://a.mktgcdn.com/p-dev/sCEMc7bVDHaaUey7myPLYK2BYb1fh_Z_N1ZVLq9Ro1M/623x960.jpg",
-            "width": 623
-          }
-        },
-        "name": "Cannoli"
-      }
-    ],
-    "title": "Save Room For Dessert"
-  },
-  "c_featuredMenuItems": {
-    "products": [
-      {
-        "cta": {
-          "label": "Order now",
-          "link": "order",
-          "linkType": "OTHER"
-        },
-        "description": "Tasty wood-fired pizza",
-        "image": {
-          "image": {
-            "height": 225,
-            "url": "https://a.mktgcdn.com/p-dev/iJ-BBUMOQK6sMqcEU4nqxFJb_p9x42gCLq94ErVpSVU/225x225.jpg",
-            "width": 225
-          }
-        },
-        "name": "Pizza"
-      },
-      {
-        "cta": {
-          "label": "Order Deliver",
-          "link": "http://grubhub.com",
-          "linkType": "URL"
-        },
-        "description": "The perfect lunch!",
-        "image": {
-          "image": {
-            "height": 194,
-            "url": "https://a.mktgcdn.com/p-dev/Ebblku3bBquZ7CpvPN6oaa_oOBBrJNEXyHlvufIkOlA/259x194.jpg",
-            "width": 259
-          }
-        },
-        "name": "Italian Sub"
-      },
-      {
-        "cta": {
-          "label": "Call to Order",
-          "link": "+12125550110",
-          "linkType": "PHONE"
-        },
-        "description": "Our dinner specialty!",
-        "image": {
-          "image": {
-            "height": 183,
-            "url": "https://a.mktgcdn.com/p-dev/tLwqROL0FeRcTVVbhAiJgf1XmUG0HoWPu4xlt4rEHzU/275x183.jpg",
-            "width": 275
-          }
-        },
-        "name": "Lasagna"
-      }
-    ],
-    "title": "Featured Menu Items"
-  },
   "c_deliveryPromo": {
     "cta": {
       "name": "Order Now"
@@ -495,13 +386,10 @@
     },
     "locale": "en"
   },
-  "emails": ["test@test.com", "test1@test.com"],
   "name": "Galaxy Grill",
   "services": ["Delivery", "Catering", "Carry Out", "Dine In"],
   "siteDomain": "",
   "siteId": 0,
-  "mainPhone": "+12222222222",
-  "mobilePhone": "+13333333333",
   "siteInternalHostName": "",
   "slug": "locations/288-grand-st",
   "uid": 8694639,

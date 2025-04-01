@@ -46,7 +46,7 @@ export const Combobox = ({
               {defaultValue.color && (
                 <div
                   className={cn(
-                    "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2 components",
+                    "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2",
                     options.find(
                       (option) => option.value === defaultValue.value
                     )?.color
@@ -72,7 +72,6 @@ export const Combobox = ({
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
-                  className="cursor-pointer"
                   key={option.label}
                   value={option.value.toString()}
                   onSelect={(currentValue) => {

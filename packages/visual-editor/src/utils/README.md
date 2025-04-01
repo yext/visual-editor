@@ -604,6 +604,59 @@ An object of the following shape containing the two auto-generated dark backgrou
 | background6 | Background 6 | primary-dark     | white      |
 | background7 | Background 7 | secondary-dark   | white      |
 
+## defaultThemeTailwindExtensions
+
+A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
+
+#### Usage
+
+```tsx
+// tailwind.config.ts
+theme: {
+  extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
+},
+```
+
+## headingLevelOptions
+
+The set of heading levels (H1 through H6) for use with BasicSelector.
+
+#### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", headingLevelOptions),
+    },
+  },
+```
+
+## backgroundColors
+
+An object of the following shape containing the seven auto-generated background styles.
+
+```js
+{
+  backgroundKey: {
+    label: "Background Label",
+    value: "Background Tailwind Classes"
+  }
+}
+```
+
+| Key         | Label        | Background Color | Text Color |
+| ----------- | ------------ | ---------------- | ---------- |
+| background1 | Background 1 | white            | black      |
+| background2 | Background 2 | primary-light    | black      |
+| background3 | Background 3 | secondary-light  | black      |
+| background4 | Background 4 | tertiary-light   | black      |
+| background5 | Background 5 | quaternary-light | black      |
+| background6 | Background 6 | primary-dark     | white      |
+| background7 | Background 7 | secondary-dark   | white      |
+
 ## applyAnalytics
 
 Returns a Google Tag Manager script that uses the Google Tag Manager ID

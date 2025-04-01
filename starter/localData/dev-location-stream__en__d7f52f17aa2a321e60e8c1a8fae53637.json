@@ -4,8 +4,6 @@
     "name": "dev-location"
   },
   "_site": {
-    "name": "Example Business",
-    "siteName": "Example Business Pages",
     "copyrightMessage": "© 2025 Yext",
     "favicon": {
       "height": 1152,
@@ -53,23 +51,9 @@
   },
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    {
-      "name": "US",
-      "slug": "en/us",
-      "dm_addressCountryDisplayName": "United States"
-    },
-    {
-      "name": "NY",
-      "slug": "en/us/ny",
-      "dm_addressCountryDisplayName": "United States",
-      "dm_addressRegionDisplayName": "New York"
-    },
-    {
-      "name": "New York",
-      "slug": "en/us/ny/new-york",
-      "dm_addressCountryDisplayName": "United States",
-      "dm_addressRegionDisplayName": "New York"
-    }
+    { "name": "US", "slug": "en/us" },
+    { "name": "NY", "slug": "en/us/ny" },
+    { "name": "New York", "slug": "en/us/ny/new-york" }
   ],
   "additionalHoursText": "tacos",
   "address": {

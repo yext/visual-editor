@@ -4,8 +4,6 @@
     "name": "dev-location"
   },
   "_site": {
-    "name": "Example Business",
-    "siteName": "Example Business Pages",
     "copyrightMessage": "© 2025 Yext",
     "favicon": {
       "height": 1152,
@@ -53,23 +51,9 @@
   },
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    {
-      "name": "US",
-      "slug": "en/us",
-      "dm_addressCountryDisplayName": "United States"
-    },
-    {
-      "name": "VA",
-      "slug": "en/us/va",
-      "dm_addressCountryDisplayName": "United States",
-      "dm_addressRegionDisplayName": "Virginia"
-    },
-    {
-      "name": "Arlington",
-      "slug": "en/us/va/arlington",
-      "dm_addressCountryDisplayName": "United States",
-      "dm_addressRegionDisplayName": "Virginia"
-    }
+    { "name": "US", "slug": "en/us" },
+    { "name": "VA", "slug": "en/us/va" },
+    { "name": "Arlington", "slug": "en/us/va/arlington" }
   ],
   "additionalHoursText": "Closed on Christmas.",
   "address": {
