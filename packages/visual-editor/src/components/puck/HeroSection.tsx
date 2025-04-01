@@ -389,7 +389,7 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "",
         constantValue: {
-          label: "Call to Action",
+          label: "Call To Action",
           link: "#",
           linkType: "URL",
         },
@@ -402,7 +402,7 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "",
         constantValue: {
-          label: "Call to Action",
+          label: "Call To Action",
           link: "#",
           linkType: "URL",
         },
