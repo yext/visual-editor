@@ -5,7 +5,7 @@ import { themeManagerCn } from "../../../index.ts";
 import { srgbToHSL } from "./srgbToHSL.ts";
 
 const buttonVariants = cva(
-  "components h-fit flex items-center justify-center whitespace-nowrap transition-colors",
+  "components h-fit flex items-center justify-center whitespace-nowrap",
   {
     variants: {
       variant: {
@@ -112,6 +112,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           if (hsl?.[2] && !isNaN(hsl[2])) {
             setHasDarkBackground(hsl[2] < 50);
           }
+        } else {
+          setHasDarkBackground(false);
         }
       }
 

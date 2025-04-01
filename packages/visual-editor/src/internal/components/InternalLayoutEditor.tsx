@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
+import { EntityTooltipsProvider } from "../../components/editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -158,7 +158,7 @@ export const InternalLayoutEditor = ({
   }, [puckConfig]);
 
   return (
-    <EntityFieldProvider>
+    <EntityTooltipsProvider>
       <Puck
         config={puckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
@@ -177,6 +177,6 @@ export const InternalLayoutEditor = ({
           ),
         }}
       />
-    </EntityFieldProvider>
+    </EntityTooltipsProvider>
   );
 };
