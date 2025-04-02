@@ -6,8 +6,7 @@ import {
   constructFontSelectOptions,
   getFontSizeOptions,
   getSpacingOptions,
-  letterSpacingOptions,
-  textTransformOptions,
+  ThemeOptions,
 } from "@yext/visual-editor";
 
 const fonts: FontRegistry = {
@@ -288,14 +287,14 @@ export const themeConfig: ThemeConfig = {
         label: "Text Transform",
         type: "select",
         plugin: "textTransform",
-        options: textTransformOptions,
+        options: ThemeOptions.TEXT_TRANSFORM,
         default: "none",
       },
       letterSpacing: {
         label: "Letter Spacing",
         type: "select",
         plugin: "letterSpacing",
-        options: letterSpacingOptions,
+        options: ThemeOptions.LETTER_SPACING,
         default: "0em",
       },
     },
@@ -328,14 +327,14 @@ export const themeConfig: ThemeConfig = {
         label: "Text Transform",
         type: "select",
         plugin: "textTransform",
-        options: textTransformOptions,
+        options: ThemeOptions.TEXT_TRANSFORM,
         default: "none",
       },
       letterSpacing: {
         label: "Letter Spacing",
         type: "select",
         plugin: "letterSpacing",
-        options: letterSpacingOptions,
+        options: ThemeOptions.LETTER_SPACING,
         default: "0em",
       },
       caret: {

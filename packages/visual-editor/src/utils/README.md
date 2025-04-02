@@ -544,23 +544,6 @@ theme: {
 },
 ```
 
-## headingLevelOptions
-
-The set of heading levels (H1 through H6) for use with BasicSelector.
-
-#### Usage
-
-```tsx
-const myComponentFields: Fields<MyComponentProps> = {
-  heading: {
-    type: "object",
-    label: "Heading",
-    objectFields: {
-      level: BasicSelector("Level", headingLevelOptions),
-    },
-  },
-```
-
 ## backgroundColors
 
 An object of the following shape containing the seven auto-generated background styles.
@@ -602,4 +585,32 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     ),
   };
 };
+```
+
+## ThemeOptions
+
+Contains preset options to be used when defining a component's fields.
+
+#### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
+    },
+  },
+  cta: {
+    type: "object",
+    label: "Call to Action",
+    objectFields: {
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ThemeOptions.CTA_VARIANT,
+      },
+    },
+  },
 ```

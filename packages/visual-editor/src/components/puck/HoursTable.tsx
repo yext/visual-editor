@@ -1,7 +1,10 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
-import { Section } from "./atoms/section.js";
+import {
+  DayOfWeekNames,
+  HoursTable as HoursTableJS,
+  HoursType,
+} from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
   EntityField,
@@ -9,9 +12,10 @@ import {
   useDocument,
   YextEntityField,
   YextEntityFieldSelector,
+  Section,
 } from "../../index.js";
 
-type HoursTableProps = {
+export type HoursTableProps = {
   hours: YextEntityField<HoursType>;
   startOfWeek: keyof DayOfWeekNames | "today";
   collapseDays: boolean;
@@ -91,7 +95,7 @@ const VisualEditorHoursTable = ({
             fieldId="hours"
             constantValueEnabled={hoursField.constantValueEnabled}
           >
-            <HoursTable
+            <HoursTableJS
               hours={hours}
               startOfWeek={startOfWeek}
               collapseDays={collapseDays}
@@ -110,7 +114,7 @@ const VisualEditorHoursTable = ({
   );
 };
 
-const HoursTableComponent: ComponentConfig<HoursTableProps> = {
+export const HoursTable: ComponentConfig<HoursTableProps> = {
   fields: hoursTableFields,
   defaultProps: {
     hours: {
@@ -125,5 +129,3 @@ const HoursTableComponent: ComponentConfig<HoursTableProps> = {
   label: "Hours Table",
   render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };
-
-export { HoursTableComponent as HoursTable, type HoursTableProps };

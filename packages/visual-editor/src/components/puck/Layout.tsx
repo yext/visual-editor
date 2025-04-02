@@ -122,7 +122,10 @@ export interface layoutProps
 }
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: BasicSelector("Background Color", ThemeOptions.BG_COLORS),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    ThemeOptions.BACKGROUND_COLOR
+  ),
   gap: SpacingSelector("gap", "Gap"),
   verticalPadding: SpacingSelector("padding", "Top/Bottom Padding"),
   horizontalPadding: SpacingSelector("padding", "Left/Right Padding"),

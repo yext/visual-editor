@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../../index.ts";
 import { srgbToHSL } from "./srgbToHSL.ts";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "components h-fit flex items-center justify-center whitespace-nowrap",
   {
     variants: {
@@ -68,7 +68,7 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const [hasDarkBackground, setHasDarkBackground] = React.useState(false);
@@ -147,5 +147,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 Button.displayName = "Button";
-
-export { Button, buttonVariants };

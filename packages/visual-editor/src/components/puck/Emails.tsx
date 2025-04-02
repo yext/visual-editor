@@ -11,7 +11,7 @@ import {
   Body,
 } from "../../index.js";
 
-interface EmailsProps {
+export interface EmailsProps {
   list: YextEntityField<string[]>;
   listLength: number;
   includeHyperlink: boolean;
@@ -42,7 +42,7 @@ const EmailsFields: Fields<EmailsProps> = {
   },
 };
 
-const Emails: React.FC<EmailsProps> = ({
+const EmailsComponent: React.FC<EmailsProps> = ({
   list: emailListField,
   includeHyperlink,
   listLength,
@@ -84,8 +84,7 @@ const Emails: React.FC<EmailsProps> = ({
   );
 };
 
-const EmailsComponent: ComponentConfig<EmailsProps> = {
-  label: "Emails",
+export const Emails: ComponentConfig<EmailsProps> = {
   fields: EmailsFields,
   defaultProps: {
     list: {
@@ -95,7 +94,5 @@ const EmailsComponent: ComponentConfig<EmailsProps> = {
     includeHyperlink: true,
     listLength: 5,
   },
-  render: (props) => <Emails {...props} />,
+  render: (props) => <EmailsComponent {...props} />,
 };
-
-export { EmailsComponent as Emails, type EmailsProps };

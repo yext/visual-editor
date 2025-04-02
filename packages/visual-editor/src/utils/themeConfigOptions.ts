@@ -89,7 +89,7 @@ export const backgroundColors: Record<string, BackgroundOption> = {
 };
 
 // When used in BasicSelector, the color is displayed in the dropdown.
-const backgroundColorsWithDropdownColor = Object.values(backgroundColors).map(
+const backgroundColorOptions = Object.values(backgroundColors).map(
   ({ label, value }) => ({
     label,
     value,
@@ -166,11 +166,31 @@ const ctaVariantOptions = [
   { label: "Link", value: "link" },
 ];
 
+const alignmentOptions = [
+  { label: "Left", value: "left" },
+  { label: "Center", value: "center" },
+  { label: "Right", value: "right" },
+];
+
+const justifyContentOptions = [
+  { label: "Start", value: "start" },
+  { label: "Center", value: "center" },
+  { label: "End", value: "end" },
+];
+
+const bodyVariantOptions = [
+  { label: "Small", value: "sm" },
+  { label: "Base", value: "base" },
+  { label: "Large", value: "lg" },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
-  BG_COLORS: Object.values(backgroundColors),
-  BG_COLORS_WITH_DROPDOWN_COLOR: backgroundColorsWithDropdownColor,
-  CTA_VARIANTS: ctaVariantOptions,
+  BACKGROUND_COLOR: backgroundColorOptions,
+  CTA_VARIANT: ctaVariantOptions,
+  ALIGNMENT: alignmentOptions,
+  JUSTIFY_CONTENT: justifyContentOptions,
+  BODY_VARIANT: bodyVariantOptions,
 };

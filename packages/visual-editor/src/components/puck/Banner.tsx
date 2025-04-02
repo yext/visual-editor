@@ -5,8 +5,9 @@ import {
   YextEntityFieldSelector,
   useDocument,
   BasicSelector,
+  ThemeOptions,
+  Body,
 } from "../../index.js";
-import { Body } from "./atoms/body.js";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   backgroundColors,
@@ -29,11 +30,7 @@ const bannerFields: Fields<BannerProps> = {
   textAlignment: {
     label: "Text Alignment",
     type: "radio",
-    options: [
-      { label: "Left", value: "left" },
-      { label: "Center", value: "center" },
-      { label: "Right", value: "right" },
-    ],
+    options: ThemeOptions.ALIGNMENT,
   },
   backgroundColor: BasicSelector(
     "Background Color",

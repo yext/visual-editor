@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../../index.ts";
 
 // Define the variants for the body component
-const bodyVariants = cva(
+export const bodyVariants = cva(
   "components font-body-fontFamily font-body-fontWeight",
   {
     variants: {
@@ -24,7 +24,7 @@ export interface BodyProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
     VariantProps<typeof bodyVariants> {}
 
-const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
+export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   ({ className, variant, ...props }, ref) => {
     return (
       <p
@@ -44,5 +44,3 @@ const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   }
 );
 Body.displayName = "Body";
-
-export { Body, bodyVariants };

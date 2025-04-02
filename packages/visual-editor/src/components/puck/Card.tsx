@@ -10,6 +10,7 @@ import {
   YextEntityFieldSelector,
   FontSizeSelector,
   BasicSelector,
+  Body,
   BodyProps,
   getFontWeightOverrideOptions,
   Image,
@@ -18,17 +19,17 @@ import {
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-  ctaVariantOptions,
+  CTA,
+  CTAProps,
+  Heading,
+  HeadingProps,
+  Section,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
-import { Body } from "./atoms/body.js";
-import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps } from "./atoms/heading.js";
-import { Section } from "./atoms/section.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-interface CardProps {
+export interface CardProps {
   orientation: "left" | "right";
   heading: {
     text: YextEntityField<string>;
@@ -73,12 +74,7 @@ const cardFields: Fields<CardProps> = {
       }),
       fontSize: FontSizeSelector(),
       weight: BasicSelector("Font Weight", []),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      transform: BasicSelector("Text Transform", ThemeOptions.TEXT_TRANSFORM),
       level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
     },
   },
@@ -94,12 +90,7 @@ const cardFields: Fields<CardProps> = {
       }),
       fontSize: FontSizeSelector(),
       weight: BasicSelector("Font Weight", []),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      transform: BasicSelector("Text Transform", ThemeOptions.TEXT_TRANSFORM),
       level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
     },
   },
@@ -116,11 +107,7 @@ const cardFields: Fields<CardProps> = {
       variant: {
         type: "radio",
         label: "Variant",
-        options: [
-          { label: "Small", value: "sm" },
-          { label: "Base", value: "base" },
-          { label: "Large", value: "lg" },
-        ],
+        options: ThemeOptions.BODY_VARIANT,
       },
     },
   },
@@ -144,11 +131,14 @@ const cardFields: Fields<CardProps> = {
       variant: {
         label: "Variant",
         type: "radio",
-        options: ctaVariantOptions,
+        options: ThemeOptions.CTA_VARIANT,
       },
     },
   },
-  backgroundColor: BasicSelector("Background Color", ThemeOptions.BG_COLORS),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    ThemeOptions.BACKGROUND_COLOR
+  ),
 };
 
 const CardWrapper = ({
@@ -238,8 +228,7 @@ const CardWrapper = ({
   );
 };
 
-export const CardComponent: ComponentConfig<CardProps> = {
-  label: "Card",
+export const Card: ComponentConfig<CardProps> = {
   fields: cardFields,
   defaultProps: {
     orientation: "left",
@@ -346,5 +335,3 @@ export const CardComponent: ComponentConfig<CardProps> = {
   },
   render: (props) => <CardWrapper {...props} />,
 };
-
-export { CardComponent as Card, type CardProps };

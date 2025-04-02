@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn, BackgroundStyle } from "../../../index.ts";
 
-const sectionVariants = cva("mx-auto", {
+export const sectionVariants = cva("mx-auto", {
   variants: {
     padding: {
       default: "px-4 py-16 md:px-8",
@@ -28,7 +28,7 @@ export interface SectionProps
   background?: BackgroundStyle;
 }
 
-const Section = React.forwardRef<HTMLDivElement, SectionProps>(
+export const Section = React.forwardRef<HTMLDivElement, SectionProps>(
   ({ className, padding, maxWidth, background, ...props }, ref) => {
     return (
       <div
@@ -49,5 +49,3 @@ const Section = React.forwardRef<HTMLDivElement, SectionProps>(
   }
 );
 Section.displayName = "Section";
-
-export { Section, sectionVariants };

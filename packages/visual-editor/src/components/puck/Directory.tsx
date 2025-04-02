@@ -4,13 +4,17 @@ import {
   Heading,
   backgroundColors,
   Body,
+  MaybeLink,
+  Section,
 } from "../../index.js";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
-import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { Address, HoursStatus } from "@yext/pages-components";
 import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
-import { Section } from "./atoms/section.tsx";
+
+export interface DirectoryProps {
+  separator?: string;
+}
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -173,10 +177,6 @@ const DirectoryComponent = (props: DirectoryProps) => {
     </>
   );
 };
-
-export interface DirectoryProps {
-  separator?: string;
-}
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   render: (props) => <DirectoryComponent {...props} />,

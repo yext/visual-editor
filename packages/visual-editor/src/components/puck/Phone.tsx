@@ -12,7 +12,7 @@ import {
 import { Phone as PhoneIcon } from "lucide-react";
 import parsePhoneNumber from "libphonenumber-js";
 
-interface PhoneProps {
+export interface PhoneProps {
   phone: YextEntityField<string>;
   format?: "domestic" | "international";
   includeHyperlink: boolean;
@@ -63,7 +63,11 @@ const PhoneFields: Fields<PhoneProps> = {
   },
 };
 
-const Phone: React.FC<PhoneProps> = ({ phone, format, includeHyperlink }) => {
+const PhoneComponent: React.FC<PhoneProps> = ({
+  phone,
+  format,
+  includeHyperlink,
+}) => {
   const document = useDocument();
   const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
@@ -96,8 +100,7 @@ const Phone: React.FC<PhoneProps> = ({ phone, format, includeHyperlink }) => {
   );
 };
 
-const PhoneComponent: ComponentConfig<PhoneProps> = {
-  label: "Phone",
+export const Phone: ComponentConfig<PhoneProps> = {
   fields: PhoneFields,
   defaultProps: {
     phone: {
@@ -106,7 +109,5 @@ const PhoneComponent: ComponentConfig<PhoneProps> = {
     },
     includeHyperlink: true,
   },
-  render: (props) => <Phone {...props} />,
+  render: (props) => <PhoneComponent {...props} />,
 };
-
-export { PhoneComponent as Phone, type PhoneProps };

@@ -15,7 +15,7 @@ export interface CTAProps {
   alwaysHideCaret?: boolean;
 }
 
-const CTA = ({
+export const CTA = ({
   label,
   link,
   linkType,
@@ -62,5 +62,3 @@ const CTA = ({
 };
 
 CTA.displayName = "CTA";
-
-export { CTA };
