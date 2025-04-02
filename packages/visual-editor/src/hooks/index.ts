@@ -12,3 +12,4 @@ export {
   useTailwindConfig,
   TailwindConfigContext,
 } from "./useTailwindConfig.tsx";
+export { useBackground, BackgroundProvider } from "./useBackground.tsx";
