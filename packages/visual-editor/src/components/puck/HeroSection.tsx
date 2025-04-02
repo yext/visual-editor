@@ -20,7 +20,7 @@ import {
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading } from "./atoms/heading.js";
 import { Section } from "./atoms/section.js";
-import { ImageWrapperFields } from "./Image.js";
+import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -34,7 +34,6 @@ interface HeroSectionProps {
     entityField: YextEntityField<string>;
     level: HeadingLevel;
   };
-
   hours: {
     entityField: YextEntityField<HoursType>;
     showHours: boolean;
@@ -240,7 +239,7 @@ const HeroSectionWrapper = ({
                     businessNameField.entityField.constantValueEnabled
                   }
                 >
-                  <Heading id="hero-heading" level={businessNameField.level}>
+                  <Heading level={businessNameField.level}>
                     {businessName}
                   </Heading>
                 </EntityField>
@@ -408,6 +407,15 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
       backgroundColor: backgroundColors.background1.value,
       imageOrientation: "right",
     },
+  },
+  resolveFields(data) {
+    return {
+      ...heroSectionFields,
+      image: {
+        ...heroSectionFields.image,
+        objectFields: resolvedImageFields(data.props.image.layout),
+      },
+    };
   },
   render: (props) => <HeroSectionWrapper {...props} />,
 };
