@@ -79,6 +79,7 @@ const convertDefaultSpacingsToOptions = (
 
 export const SpacingSelector = (
   spacingType: "padding" | "gap",
+  includeDefault: boolean,
   label?: string
 ): Field => {
   return {
@@ -98,10 +99,12 @@ export const SpacingSelector = (
               type: "select",
               options: convertDefaultSpacingsToOptions(
                 spacingType,
-                [
-                  { label: "Default", value: "default", px: "" },
-                  ...spacingOptions,
-                ],
+                includeDefault
+                  ? [
+                      { label: "Default", value: "default", px: "" },
+                      ...spacingOptions,
+                    ]
+                  : spacingOptions,
                 tailwindConfig
               ),
             }}

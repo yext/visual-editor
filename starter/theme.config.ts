@@ -256,7 +256,7 @@ export const themeConfig: ThemeConfig = {
         type: "select",
         plugin: "padding",
         options: getSpacingOptions(),
-        default: "0px",
+        default: "32px",
       },
     },
   },

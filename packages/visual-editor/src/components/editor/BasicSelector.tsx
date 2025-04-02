@@ -9,7 +9,10 @@ type Option<T = any> = {
   color?: string;
 };
 
-export const BasicSelector = (label: string, options: Option[]): Field => {
+export const BasicSelector = <T,>(
+  label: string,
+  options: Option<T>[]
+): Field<T> => {
   return {
     type: "custom",
     render: ({

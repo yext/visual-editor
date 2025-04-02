@@ -7,6 +7,7 @@ import { layoutFields, layoutProps } from "./Layout.tsx";
 
 interface GridProps extends layoutProps {
   columns: number;
+  insideDropZone?: boolean;
 }
 
 const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
@@ -19,6 +20,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
       horizontalPadding,
       backgroundColor,
       columnFormatting,
+      insideDropZone,
       ...props
     },
     ref
@@ -38,7 +40,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
         <div
           className={themeManagerCn(
             layoutVariants({ gap, columnFormatting }),
-            "flex flex-col min-h-0 min-w-0 mx-auto max-w-pageSection-contentWidth",
+            `flex flex-col min-h-0 min-w-0 mx-auto ${insideDropZone ? "" : "max-w-pageSection-contentWidth"}`,
             className
           )}
           ref={ref}
@@ -52,7 +54,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
               <DropZone
                 className="flex flex-col w-full"
                 zone={`column-${idx}`}
-                disallow={["Banner"]}
+                disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
               />
             </div>
           ))}
@@ -90,15 +92,18 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
     // be adjusted.
     if (params.parent) {
       // the props values should only be changed initially
-      data.props.verticalPadding = "0";
-      data.props.gap = "0";
-      data.props.columnFormatting = "forceHorizontal";
-      return gridSectionFields;
+      if (!data.props.insideDropZone) {
+        data.props.verticalPadding = "0";
+        data.props.gap = "0";
+        data.props.horizontalPadding = "0";
+        data.props.columnFormatting = "forceHorizontal";
+      }
+      data.props.insideDropZone = true;
+    } else {
+      data.props.insideDropZone = false;
     }
 
-    return {
-      ...gridSectionFields,
-    };
+    return gridSectionFields;
   },
   render: ({
     columns,

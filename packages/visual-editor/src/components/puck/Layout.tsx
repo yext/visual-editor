@@ -117,7 +117,7 @@ export interface layoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutVariants>,
     VariantProps<typeof innerLayoutVariants> {
-  backgroundColor?: BackgroundStyle;
+  backgroundColor: BackgroundStyle;
 }
 
 export const layoutFields: Fields<layoutProps> = {
@@ -125,7 +125,7 @@ export const layoutFields: Fields<layoutProps> = {
     "Background Color",
     Object.values(backgroundColors)
   ),
-  gap: SpacingSelector("gap", "Gap"),
-  verticalPadding: SpacingSelector("padding", "Top/Bottom Padding"),
-  horizontalPadding: SpacingSelector("padding", "Left/Right Padding"),
+  gap: SpacingSelector("gap", false, "Gap"),
+  verticalPadding: SpacingSelector("padding", true, "Top/Bottom Padding"),
+  horizontalPadding: SpacingSelector("padding", false, "Left/Right Padding"),
 };

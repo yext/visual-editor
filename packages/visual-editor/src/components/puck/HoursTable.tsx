@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
-import { Section } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import {
   EntityField,
@@ -81,32 +80,28 @@ const VisualEditorHoursTable = ({
   };
 
   return (
-    <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize`}
-    >
-      <div>
-        {hours && (
-          <EntityField
-            displayName="Hours"
-            fieldId="hours"
-            constantValueEnabled={hoursField.constantValueEnabled}
-          >
-            <HoursTable
-              hours={hours}
-              startOfWeek={startOfWeek}
-              collapseDays={collapseDays}
-            />
-          </EntityField>
-        )}
-        {additionalHoursText && showAdditionalHoursText && (
-          <EntityField displayName="Hours Text" fieldId="additionalHoursText">
-            <div className="mt-4 text-body-sm-fontSize">
-              {additionalHoursText}
-            </div>
-          </EntityField>
-        )}
-      </div>
-    </Section>
+    <div className={`flex flex-col ${alignment}`}>
+      {hours && (
+        <EntityField
+          displayName="Hours"
+          fieldId="hours"
+          constantValueEnabled={hoursField.constantValueEnabled}
+        >
+          <HoursTable
+            hours={hours}
+            startOfWeek={startOfWeek}
+            collapseDays={collapseDays}
+          />
+        </EntityField>
+      )}
+      {additionalHoursText && showAdditionalHoursText && (
+        <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+          <div className="mt-4 text-body-sm-fontSize">
+            {additionalHoursText}
+          </div>
+        </EntityField>
+      )}
+    </div>
   );
 };
 

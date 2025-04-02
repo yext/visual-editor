@@ -41,7 +41,7 @@ interface PromoProps {
     visible: boolean;
   };
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor: BackgroundStyle;
     orientation: "left" | "right";
   };
 }

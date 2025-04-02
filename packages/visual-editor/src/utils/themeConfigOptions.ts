@@ -92,7 +92,7 @@ export const backgroundColors: Record<string, BackgroundOption> = {
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 // Provides a mapping of label to value for BasicSelector
-export const headingLevelOptions = [
+export const headingLevelOptions: { label: string; value: HeadingLevel }[] = [
   { label: "H1", value: 1 },
   { label: "H2", value: 2 },
   { label: "H3", value: 3 },

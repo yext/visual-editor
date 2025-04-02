@@ -53,7 +53,7 @@ interface CardProps {
     entityField: YextEntityField<CTAProps>;
     variant: CTAProps["variant"];
   };
-  backgroundColor?: BackgroundStyle;
+  backgroundColor: BackgroundStyle;
 }
 
 const cardFields: Fields<CardProps> = {
@@ -73,12 +73,15 @@ const cardFields: Fields<CardProps> = {
       }),
       fontSize: FontSizeSelector(),
       weight: BasicSelector("Font Weight", []),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      transform: BasicSelector<CardProps["subheading"]["transform"]>(
+        "Text Transform",
+        [
+          { value: "none", label: "None" },
+          { value: "lowercase", label: "Lowercase" },
+          { value: "uppercase", label: "Uppercase" },
+          { value: "capitalize", label: "Capitalize" },
+        ]
+      ),
       level: BasicSelector("Level", headingLevelOptions),
     },
   },
@@ -94,12 +97,15 @@ const cardFields: Fields<CardProps> = {
       }),
       fontSize: FontSizeSelector(),
       weight: BasicSelector("Font Weight", []),
-      transform: BasicSelector("Text Transform", [
-        { value: "none", label: "None" },
-        { value: "lowercase", label: "Lowercase" },
-        { value: "uppercase", label: "Uppercase" },
-        { value: "capitalize", label: "Capitalize" },
-      ]),
+      transform: BasicSelector<CardProps["subheading"]["transform"]>(
+        "Text Transform",
+        [
+          { value: "none", label: "None" },
+          { value: "lowercase", label: "Lowercase" },
+          { value: "uppercase", label: "Uppercase" },
+          { value: "capitalize", label: "Capitalize" },
+        ]
+      ),
       level: BasicSelector("Level", headingLevelOptions),
     },
   },

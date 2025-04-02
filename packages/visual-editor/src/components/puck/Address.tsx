@@ -6,7 +6,6 @@ import {
   Address as RenderAddress,
 } from "@yext/pages-components";
 import { Body } from "./atoms/body.js";
-import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import {
   useDocument,
@@ -51,9 +50,7 @@ const Address = ({
   );
 
   return (
-    <Section
-      className={sectionVariants({ className: "components flex items-start" })}
-    >
+    <>
       {address && (
         <EntityField
           displayName="Address"
@@ -77,7 +74,7 @@ const Address = ({
           )}
         </EntityField>
       )}
-    </Section>
+    </>
   );
 };
 

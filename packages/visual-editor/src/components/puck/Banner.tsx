@@ -16,7 +16,7 @@ import {
 export type BannerProps = {
   text: YextEntityField<string>;
   textAlignment: "left" | "right" | "center";
-  backgroundColor?: BackgroundStyle;
+  backgroundColor: BackgroundStyle;
 };
 
 const bannerFields: Fields<BannerProps> = {

@@ -69,7 +69,7 @@ const headingVariants = cva("components", {
 export interface HeadingProps
   extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
-  level?: HeadingLevel;
+  level: HeadingLevel;
 }
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
