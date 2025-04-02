@@ -127,17 +127,25 @@ const ChildComponent = () => {
 
 const MyComponent = () => {
   return (
+    // section automatically applies the background color and sets the context
     <Section background={{bgColor: "bg-white", textColor:"text-black"}}>
       <Section background={{bgColor: "bg-blue", textColor:"text-red"}}>
         <ChildComponent /> // prints '{bgColor: "bg-blue", textColor:"text-red"}'
       </Section>
       <ChildComponent /> // prints '{bgColor: "bg-white", textColor:"text-black"}'
+
+      // If applying a background color via a div or other element,
+      // you should set the background context manually
       <BackgroundProvider value={{bgColor: "bg-green", textColor:"text-purple"}}>
-        // background setting elements must be wrapped in BackgroundProvider
         <div style={{backgroundColor: "green", color: "purple"}}>
           <ChildComponent /> // prints '{bgColor: "bg-green", textColor:"text-purple"}'
         </div>
       </BackgroundProvider>
+
+      <div style={{backgroundColor: "orange", color: "gray"}}>
+          // the context was not set for this div, so useBackground will return the parent's value
+          <ChildComponent /> // prints '{bgColor: "bg-white", textColor:"text-black"}'
+      </div>
     </Section>
   )
 }
