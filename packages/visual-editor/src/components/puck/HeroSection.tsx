@@ -15,6 +15,7 @@ import {
   BackgroundStyle,
   headingLevelOptions,
   HeadingLevel,
+  ctaVariantOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading } from "./atoms/heading.js";
@@ -122,11 +123,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Button Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Link", value: "link" },
-      ]),
+      variant: BasicSelector("Button Variant", ctaVariantOptions),
       showCTA: {
         label: "CTA",
         type: "radio",
@@ -147,11 +144,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Button Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Link", value: "link" },
-      ]),
+      variant: BasicSelector("Button Variant", ctaVariantOptions),
       showCTA: {
         label: "CTA",
         type: "radio",
