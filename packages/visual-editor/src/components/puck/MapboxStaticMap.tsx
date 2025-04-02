@@ -28,6 +28,24 @@ const mapboxFields: Fields<MapboxStaticProps> = {
   }),
 };
 
+const getPrimaryColor = (document: any) => {
+  if (document?.__?.theme) {
+    return (
+      JSON.parse(document?.__?.theme)?.["--colors-palette-primary"] ?? "000000"
+    );
+  } else {
+    const iframe = window.document.querySelector("iframe");
+    const componentElement =
+      iframe?.contentDocument?.querySelector(".components");
+    return componentElement
+      ? getComputedStyle(componentElement)
+          .getPropertyValue("--colors-palette-primary")
+          .trim()
+          .replace("#", "")
+      : "000000";
+  }
+};
+
 const MapboxStaticMap = ({
   apiKey,
   coordinate: coordinateField,
@@ -36,31 +54,21 @@ const MapboxStaticMap = ({
   zoom = 14,
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
-  const document = useDocument();
+  const document = useDocument<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     coordinateField
   );
 
   if (!coordinate) {
-    console.warn("yextDisplayCoordinate is not present in the stream");
+    console.warn(`${coordinateField} is not present in the stream`);
     return <></>;
   } else if (!apiKey) {
     console.warn("API Key is required for MapboxStaticMap");
     return <></>;
   }
 
-  const iframe = window.document.querySelector("iframe");
-  const componentElement =
-    iframe?.contentDocument?.querySelector(".components");
-  const primaryColor = componentElement
-    ? getComputedStyle(componentElement)
-        .getPropertyValue("--colors-palette-primary")
-        .trim()
-        .replace("#", "")
-    : "000000";
-
-  const marker = `pin-l+${primaryColor}(${coordinate.longitude},${coordinate.latitude})`;
+  const marker = `pin-l+${getPrimaryColor(document)}(${coordinate.longitude},${coordinate.latitude})`;
 
   return (
     <img
