@@ -183,7 +183,7 @@ const HeroSectionWrapper = ({
   image: imageField,
   styles,
 }: HeroSectionProps) => {
-  const document = useDocument();
+  const document = useDocument() as any;
   const businessName = resolveYextEntityField<string>(
     document,
     businessNameField.entityField
@@ -208,6 +208,10 @@ const HeroSectionWrapper = ({
     document,
     imageField.image
   );
+
+  const { timezone } = document as {
+    timezone: string;
+  };
 
   return (
     <Section
@@ -266,10 +270,7 @@ const HeroSectionWrapper = ({
                   hoursField.entityField.constantValueEnabled
                 }
               >
-                <HoursStatus
-                  hours={hours}
-                  timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
-                />
+                <HoursStatus hours={hours} timezone={timezone} />
               </EntityField>
             )}
           </header>
