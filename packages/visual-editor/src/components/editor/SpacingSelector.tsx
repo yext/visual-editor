@@ -78,9 +78,9 @@ const convertDefaultSpacingsToOptions = (
 };
 
 export const SpacingSelector = (
+  label: string,
   spacingType: "padding" | "gap",
-  includeDefault: boolean,
-  label?: string
+  includeDefault: boolean
 ): Field => {
   return {
     type: "custom",
@@ -88,10 +88,7 @@ export const SpacingSelector = (
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
-        <FieldLabel
-          label={label ?? spacingType}
-          icon={<ChevronDown size={16} />}
-        >
+        <FieldLabel label={label} icon={<ChevronDown size={16} />}>
           <AutoField
             value={value}
             onChange={onChange}
