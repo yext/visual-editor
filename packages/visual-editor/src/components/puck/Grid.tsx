@@ -1,11 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { Section } from "./atoms/section.js";
-import { themeManagerCn, backgroundColors } from "../../index.js";
-import { layoutVariants } from "./Layout.tsx";
-import { layoutFields, layoutProps } from "./Layout.tsx";
+import { themeManagerCn, backgroundColors, Section } from "../../index.js";
+import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 
-interface GridProps extends layoutProps {
+export interface GridProps extends layoutProps {
   columns: number;
 }
 
@@ -74,7 +72,7 @@ const gridSectionFields: Fields<GridProps> = {
   ...layoutFields,
 };
 
-const GridSectionComponent: ComponentConfig<GridProps> = {
+export const Grid: ComponentConfig<GridProps> = {
   label: "Grid",
   fields: gridSectionFields,
   defaultProps: {
@@ -100,23 +98,5 @@ const GridSectionComponent: ComponentConfig<GridProps> = {
       ...gridSectionFields,
     };
   },
-  render: ({
-    columns,
-    backgroundColor,
-    gap,
-    verticalPadding,
-    horizontalPadding,
-    columnFormatting,
-  }: GridProps) => (
-    <GridSection
-      columns={columns}
-      backgroundColor={backgroundColor}
-      gap={gap}
-      verticalPadding={verticalPadding}
-      horizontalPadding={horizontalPadding}
-      columnFormatting={columnFormatting}
-    />
-  ),
+  render: (props) => <GridSection {...props} />,
 };
-
-export { GridSectionComponent as Grid, type GridProps };

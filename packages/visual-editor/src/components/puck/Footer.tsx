@@ -10,6 +10,7 @@ import {
   CTA,
   type BackgroundStyle,
   backgroundColors,
+  ThemeOptions,
 } from "../../index.ts";
 import {
   FaFacebook,
@@ -35,20 +36,16 @@ type FooterProps = {
 const footerFields: Fields<FooterProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    Object.values(backgroundColors).map(({ label, value }) => ({
-      label,
-      value,
-      color: value.bgColor,
-    }))
+    ThemeOptions.BACKGROUND_COLOR
   ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
+  label: "Footer",
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
   },
-  label: "Footer",
   render: (props) => <FooterComponent {...props} />,
 };
 

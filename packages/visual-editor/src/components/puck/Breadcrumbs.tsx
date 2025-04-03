@@ -1,6 +1,5 @@
-import { Body, useTemplateProps } from "../../index.js";
+import { Body, useTemplateProps, MaybeLink } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
-import { MaybeLink } from "./atoms/maybeLink.js";
 
 export type BreadcrumbsProps = {
   separator?: string;
@@ -84,5 +83,6 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
 };
 
 export const Breadcrumbs: ComponentConfig<BreadcrumbsProps> = {
+  label: "Breadcrumbs",
   render: (props) => <BreadcrumbsComponent {...props} />,
 };

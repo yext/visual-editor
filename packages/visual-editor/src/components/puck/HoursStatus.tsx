@@ -1,6 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { HoursStatus, HoursType } from "@yext/pages-components";
+import {
+  HoursStatus as HoursStatusJS,
+  HoursType,
+} from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -11,7 +14,7 @@ import {
   BasicSelector,
 } from "../../index.js";
 
-interface HoursStatusProps {
+export interface HoursStatusProps {
   hours: YextEntityField<HoursType>;
   className?: string;
   showCurrentStatus?: boolean;
@@ -78,7 +81,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >
-      <HoursStatus
+      <HoursStatusJS
         hours={hours}
         className={themeManagerCn(
           "components mb-2 font-body-fontWeight text-body-lg-fontSize",
@@ -95,7 +98,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   );
 };
 
-const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
+export const HoursStatus: ComponentConfig<HoursStatusProps> = {
   label: "Hours Status",
   fields: hoursStatusWrapperFields,
   defaultProps: {
@@ -111,5 +114,3 @@ const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
   },
   render: (props) => <HoursStatusWrapper {...props} />,
 };
-
-export { HoursStatusComponent as HoursStatus, type HoursStatusProps };
