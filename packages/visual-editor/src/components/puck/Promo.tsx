@@ -15,16 +15,18 @@ import {
   backgroundColors,
   BodyProps,
   ImageWrapperProps,
-  headingLevelOptions,
+  ThemeOptions,
+  Heading,
+  HeadingProps,
+  CTA,
+  CTAProps,
+  Section,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
-import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps } from "./atoms/heading.js";
-import { Section } from "./atoms/section.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-interface PromoProps {
+export interface PromoProps {
   image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
@@ -63,7 +65,10 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Business Name Heading Level", headingLevelOptions),
+      level: BasicSelector(
+        "Business Name Heading Level",
+        ThemeOptions.HEADING_LEVEL
+      ),
     },
   },
   description: {
@@ -79,11 +84,7 @@ const promoFields: Fields<PromoProps> = {
       variant: {
         label: "Variant",
         type: "radio",
-        options: [
-          { label: "Small", value: "sm" },
-          { label: "Base", value: "base" },
-          { label: "Large", value: "lg" },
-        ],
+        options: ThemeOptions.BODY_VARIANT,
       },
     },
   },
@@ -97,11 +98,11 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Primary CTA Variant", [
-        { label: "Primary", value: "primary" },
-        { label: "Secondary", value: "secondary" },
-        { label: "Link", value: "link" },
-      ]),
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ThemeOptions.CTA_VARIANT,
+      },
       visible: {
         label: "Show Primary CTA",
         type: "radio",
@@ -118,11 +119,7 @@ const promoFields: Fields<PromoProps> = {
     objectFields: {
       backgroundColor: BasicSelector(
         "Background Color",
-        Object.values(backgroundColors).map(({ label, value }) => ({
-          label,
-          value,
-          color: value.bgColor,
-        }))
+        ThemeOptions.BACKGROUND_COLOR
       ),
       orientation: BasicSelector("Image Orientation", [
         { label: "Left", value: "left" },
@@ -151,12 +148,11 @@ const PromoWrapper: React.FC<PromoProps> = ({
   }
 
   return (
-    <Section className="components">
+    <Section className="components" background={styles.backgroundColor}>
       <div
         className={themeManagerCn(
-          "flex flex-col md:flex-row bg-white overflow-hidden md:gap-8 bg-white",
-          styles.orientation === "right" && "md:flex-row-reverse",
-          styles.backgroundColor?.bgColor
+          "flex flex-col md:flex-row overflow-hidden md:gap-8",
+          styles.orientation === "right" && "md:flex-row-reverse"
         )}
       >
         {resolvedImage && (
@@ -190,7 +186,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
               variant={cta.variant}
               label={resolvedCTA.label ?? ""}
               link={resolvedCTA.link || "#"}
-              className="md:w-fit"
+              linkType={resolvedCTA.linkType}
             />
           )}
         </div>
@@ -199,7 +195,8 @@ const PromoWrapper: React.FC<PromoProps> = ({
   );
 };
 
-const Promo: ComponentConfig<PromoProps> = {
+export const Promo: ComponentConfig<PromoProps> = {
+  label: "Promo",
   fields: promoFields,
   defaultProps: {
     image: {
@@ -234,7 +231,7 @@ const Promo: ComponentConfig<PromoProps> = {
       entityField: {
         field: "",
         constantValue: {
-          name: "Call to Action",
+          label: "Call to Action",
         },
       },
       variant: "primary",
@@ -256,5 +253,3 @@ const Promo: ComponentConfig<PromoProps> = {
   },
   render: (props) => <PromoWrapper {...props} />,
 };
-
-export { Promo, type PromoProps };

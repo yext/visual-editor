@@ -1,10 +1,11 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
-import { SpacingSelector, BasicSelector } from "../../index.js";
 import {
-  backgroundColors,
+  SpacingSelector,
+  BasicSelector,
+  ThemeOptions,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions.js";
+} from "../../index.js";
 
 export const layoutVariants = cva("components w-full", {
   variants: {
@@ -123,9 +124,9 @@ export interface layoutProps
 export const layoutFields: Fields<layoutProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    Object.values(backgroundColors)
+    ThemeOptions.BACKGROUND_COLOR
   ),
-  gap: SpacingSelector("gap", "Gap"),
-  verticalPadding: SpacingSelector("padding", "Top/Bottom Padding"),
-  horizontalPadding: SpacingSelector("padding", "Left/Right Padding"),
+  gap: SpacingSelector("Gap", "gap", false),
+  verticalPadding: SpacingSelector("Top/Bottom Padding", "padding", true),
+  horizontalPadding: SpacingSelector("Left/Right Padding", "padding", false),
 };

@@ -453,84 +453,6 @@ Normalizes the provided content by converting upper case to lower case, replacin
 and stripping all other illegal characters.
 Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`
 
-## getFontSizeOptions
-
-### Props
-
-| Name              | Type     | Description                                               |
-| ----------------- | -------- | --------------------------------------------------------- |
-| includeLargeSizes | boolean? | Defaults to true. If set to false, only returns XS to 4XL |
-
-### Usage
-
-Returns a list of font size options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
-
-| Tailwind Class | Label       | Value |
-| -------------- | ----------- | ----- |
-| text-xs        | XS (12px)   | 12px  |
-| text-sm        | SM (14px)   | 14px  |
-| text-base      | Base (16px) | 16px  |
-| text-lg        | LG (18px)   | 18px  |
-| text-xl        | XL (20px)   | 20px  |
-| text-2xl       | 2XL (24px)  | 24px  |
-| text-3xl       | 3XL (30px)  | 30px  |
-| text-4xl       | 4XL (36px)  | 36px  |
-| text-5xl       | 5XL (48px)  | 48px  |
-| text-6xl       | 6XL (60px)  | 60px  |
-| text-7xl       | 7XL (72px)  | 72px  |
-| text-8xl       | 8XL (96px)  | 96px  |
-| text-9xl       | 9XL (128px) | 128px |
-
-## getBorderRadiusOptions
-
-Returns a list of border radius options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
-
-| Tailwind Class | Label         | Value  |
-| -------------- | ------------- | ------ |
-| rounded-none   | None (0px)    | 0px    |
-| rounded-xs     | XS (2px)      | 2px    |
-| rounded-sm     | SM (4px)      | 4px    |
-| rounded-md     | MD (6px)      | 6px    |
-| rounded-lg     | LG (8px)      | 8px    |
-| rounded-xl     | XL (12px)     | 12px   |
-| rounded-2xl    | 2XL (16px)    | 16px   |
-| rounded-3xl    | 3XL (24px)    | 24px   |
-| rounded-full   | Full (9999px) | 9999px |
-
-## getSpacingOptions
-
-### Props
-
-| Name        | Type   | Description              |
-| ----------- | ------ | ------------------------ |
-| spacingType | string | Either "padding" or "gap |
-
-Returns a list of spacing options to be optionally used in the theme.config. It can be used for padding or gap. The labels and values correspond to tailwind's default classes.
-
-| Label      | Value |
-| ---------- | ----- |
-| 0 (0px)    | 0     |
-| 0.5 (2px)  | 0.5   |
-| 1 (4px)    | 1     |
-| 1.5 (6px)  | 1.5   |
-| 2 (8px)    | 2     |
-| 2.5 (10px) | 2.5   |
-| 3 (12px)   | 3     |
-| 3.5 (14px) | 3.5   |
-| 4 (16px)   | 4     |
-| 5 (20px)   | 5     |
-| 6 (24px)   | 6     |
-| 7 (28px)   | 7     |
-| 8 (32px)   | 8     |
-| 9 (36px)   | 9     |
-| 10 (40px)  | 10    |
-| 11 (44px)  | 11    |
-| 12 (48px)  | 12    |
-| 14 (56px)  | 14    |
-| 16 (64px)  | 16    |
-| 20 (80px)  | 20    |
-| 24 (96px)  | 24    |
-
 ## defaultThemeTailwindExtensions
 
 A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
@@ -542,23 +464,6 @@ A set of Tailwind extensions to complement the default theme.config, including a
 theme: {
   extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
 },
-```
-
-## headingLevelOptions
-
-The set of heading levels (H1 through H6) for use with BasicSelector.
-
-#### Usage
-
-```tsx
-const myComponentFields: Fields<MyComponentProps> = {
-  heading: {
-    type: "object",
-    label: "Heading",
-    objectFields: {
-      level: BasicSelector("Level", headingLevelOptions),
-    },
-  },
 ```
 
 ## backgroundColors
@@ -602,4 +507,141 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     ),
   };
 };
+```
+
+## ThemeOptions
+
+Contains preset options to be used when defining a component's fields.
+
+| Name             | Options                                             |
+| ---------------- | --------------------------------------------------- |
+| HEADING_LEVEL    | [`headingLevelOptions`](#headingLevelOptions)       |
+| TEXT_TRANSFORM   | [`textTransformOptions`](#textTransformOptions)     |
+| LETTER_SPACING   | [`letterSpacingOptions`](#letterSpacingOptions)     |
+| BACKGROUND_COLOR | [`backgroundColorOptions`](#backgroundColorOptions) |
+| CTA_VARIANT      | [`ctaVariantOptions`](#ctaVariantOptions)           |
+| ALIGNMENT        | [`alignmentOptions`](#alignmentOptions)             |
+| JUSTIFY_CONTENT  | [`justifyContentOptions`](#justifyContentOptions)   |
+| BODY_VARIANT     | [`bodyVariantOptions`](#bodyVariantOptions)         |
+| BORDER_RADIUS    | [`borderRadiusOptions`](#borderRadiusOptions)       |
+| SPACING          | [`spacingOptions`](#spacingOptions)                 |
+| FONT_SIZE        | [`fontSizeOptions`](#fontSizeOptions)               |
+
+### Available Options
+
+#### headingLevelOptions
+
+| Label | Value |
+| ----- | ----- |
+| H1    | 1     |
+| H2    | 2     |
+| H3    | 3     |
+| H4    | 4     |
+| H5    | 5     |
+| H6    | 6     |
+
+#### letterSpacingOptions
+
+| Label             | Value      |
+| ----------------- | ---------- |
+| Tighter (-0.05em) | "-0.05em"  |
+| Tight (-0.025em)  | "-0.025em" |
+| Normal (0em)      | "0em"      |
+| Wide (0.025em)    | "0.025em"  |
+| Wider (0.05em)    | "0.05em"   |
+| Widest (0.1em)    | "0.1em"    |
+
+#### backgroundColorOptions
+
+| Label        | Value                         |
+| ------------ | ----------------------------- |
+| Background 1 | `bg-white`                    |
+| Background 2 | `bg-palette-primary-light`    |
+| Background 3 | `bg-palette-secondary-light`  |
+| Background 4 | `bg-palette-tertiary-light`   |
+| Background 5 | `bg-palette-quaternary-light` |
+| Background 6 | `bg-palette-primary-dark`     |
+| Background 7 | `bg-palette-secondary-dark`   |
+
+#### textTransformOptions
+
+| Label      | Value        |
+| ---------- | ------------ |
+| Normal     | "none"       |
+| Uppercase  | "uppercase"  |
+| Lowercase  | "lowercase"  |
+| Capitalize | "capitalize" |
+
+#### ctaVariantOptions
+
+| Label     | Value       |
+| --------- | ----------- |
+| Primary   | "primary"   |
+| Secondary | "secondary" |
+| Link      | "link"      |
+
+#### alignmentOptions
+
+| Label  | Value    |
+| ------ | -------- |
+| Left   | "left"   |
+| Center | "center" |
+| Right  | "right"  |
+
+#### justifyContentOptions
+
+| Label  | Value    |
+| ------ | -------- |
+| Start  | "start"  |
+| Center | "center" |
+| End    | "end"    |
+
+#### bodyVariantOptions
+
+| Label | Value  |
+| ----- | ------ |
+| Small | "sm"   |
+| Base  | "base" |
+| Large | "lg"   |
+
+#### fontSizeOptions
+
+| Label       | Value   |
+| ----------- | ------- |
+| XS (12px)   | "12px"  |
+| SM (14px)   | "14px"  |
+| Base (16px) | "16px"  |
+| LG (18px)   | "18px"  |
+| XL (20px)   | "20px"  |
+| 2XL (24px)  | "24px"  |
+| 3XL (30px)  | "30px"  |
+| 4XL (36px)  | "36px"  |
+| 5XL (48px)  | "48px"  |
+| 6XL (60px)  | "60px"  |
+| 7XL (72px)  | "72px"  |
+| 8XL (96px)  | "96px"  |
+| 9XL (128px) | "128px" |
+
+### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
+    },
+  },
+  cta: {
+    type: "object",
+    label: "Call to Action",
+    objectFields: {
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ThemeOptions.CTA_VARIANT,
+      },
+    },
+  },
 ```

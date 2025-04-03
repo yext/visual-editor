@@ -1,8 +1,12 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn, BackgroundStyle } from "../../../index.ts";
+import {
+  themeManagerCn,
+  BackgroundStyle,
+  BackgroundProvider,
+} from "../../../index.ts";
 
-const sectionVariants = cva("mx-auto", {
+export const sectionVariants = cva("mx-auto", {
   variants: {
     padding: {
       default: "px-4 py-16 md:px-8",
@@ -28,11 +32,15 @@ export interface SectionProps
   background?: BackgroundStyle;
 }
 
-const Section = React.forwardRef<HTMLDivElement, SectionProps>(
+export const Section = React.forwardRef<HTMLDivElement, SectionProps>(
   ({ className, padding, maxWidth, background, ...props }, ref) => {
-    return (
+    const SectionContainer = (
       <div
-        className={`components ${background?.bgColor} ${background?.textColor}`}
+        className={themeManagerCn(
+          "components",
+          background?.bgColor,
+          background?.textColor
+        )}
       >
         <div
           className={themeManagerCn(
@@ -46,8 +54,15 @@ const Section = React.forwardRef<HTMLDivElement, SectionProps>(
         </div>
       </div>
     );
+
+    // If background is set, create a new background context scope
+    return background ? (
+      <BackgroundProvider value={background}>
+        {SectionContainer}
+      </BackgroundProvider>
+    ) : (
+      SectionContainer
+    );
   }
 );
 Section.displayName = "Section";
-
-export { Section, sectionVariants };

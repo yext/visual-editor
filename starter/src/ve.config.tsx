@@ -1,4 +1,4 @@
-import { type Config } from "@measured/puck";
+import { DropZone, type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
@@ -42,6 +42,8 @@ import {
   DirectoryProps,
   Promo,
   PromoProps,
+  MapboxStaticMap,
+  MapboxStaticProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -62,6 +64,7 @@ type MainProps = {
   HoursTable: HoursTableProps;
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
+  MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
@@ -88,9 +91,15 @@ const components: Config<MainProps>["components"] = {
   Footer,
   Directory,
   Breadcrumbs,
+  MapboxStaticMap,
 };
 
-const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
+const pageSections: (keyof MainProps)[] = [
+  "Banner",
+  "Breadcrumbs",
+  "Card",
+  "Promo",
+];
 
 const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
 
@@ -104,6 +113,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "HoursStatus",
   "HoursTable",
   "ImageWrapper",
+  "MapboxStaticMap",
   "Phone",
   "TextList",
 ];
@@ -126,8 +136,14 @@ export const mainConfig: Config<MainProps> = {
     },
   },
   root: {
-    render: ({ children }) => {
-      return <>{children}</>;
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          disallow={contentBlocks}
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
     },
   },
 };

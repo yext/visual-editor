@@ -1,51 +1,21 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { cva, type VariantProps } from "class-variance-authority";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  getFontWeightOverrideOptions,
-  BasicSelector,
+  CTA,
+  Body,
 } from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
 import parsePhoneNumber from "libphonenumber-js";
-import { Link } from "@yext/pages-components";
 
-const phoneVariants = cva(
-  "components flex gap-2 items-center text-body-fontSize font-body-fontFamily",
-  {
-    variants: {
-      fontWeight: {
-        default: "font-body-fontWeight",
-        "100": "font-thin",
-        "200": "font-extralight",
-        "300": "font-light",
-        "400": "font-normal",
-        "500": "font-medium",
-        "600": "font-semibold",
-        "700": "font-bold",
-        "800": "font-extrabold",
-        "900": "font-black",
-      },
-      includeHyperlink: {
-        true: "underline hover:no-underline",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      fontWeight: "default",
-      includeHyperlink: true,
-    },
-  }
-);
-
-interface PhoneProps extends VariantProps<typeof phoneVariants> {
+export interface PhoneProps {
   phone: YextEntityField<string>;
   format?: "domestic" | "international";
-  textSize?: number;
+  includeHyperlink: boolean;
 }
 
 /*
@@ -93,10 +63,9 @@ const PhoneFields: Fields<PhoneProps> = {
   },
 };
 
-const Phone: React.FC<PhoneProps> = ({
+const PhoneComponent: React.FC<PhoneProps> = ({
   phone,
   format,
-  fontWeight,
   includeHyperlink,
 }) => {
   const document = useDocument();
@@ -107,7 +76,6 @@ const Phone: React.FC<PhoneProps> = ({
   }
 
   const formattedPhoneNumber: string = formatPhoneNumber(resolvedPhone, format);
-  const classNameCn = phoneVariants({ fontWeight, includeHyperlink });
 
   return (
     <EntityField
@@ -115,46 +83,32 @@ const Phone: React.FC<PhoneProps> = ({
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >
-      <p className={classNameCn}>
+      <div className={"components flex gap-2 items-center"}>
         <PhoneIcon className="w-4 h-4" />
         {includeHyperlink ? (
-          <Link
-            cta={{
-              link: resolvedPhone,
-              label: formattedPhoneNumber,
-              linkType: "PHONE",
-            }}
-            className={classNameCn}
+          <CTA
+            link={resolvedPhone}
+            label={formattedPhoneNumber}
+            linkType="PHONE"
+            variant="link"
           />
         ) : (
-          <span>{formattedPhoneNumber}</span>
+          <Body>{formattedPhoneNumber}</Body>
         )}
-      </p>
+      </div>
     </EntityField>
   );
 };
 
-const PhoneComponent: ComponentConfig<PhoneProps> = {
+export const Phone: ComponentConfig<PhoneProps> = {
   label: "Phone",
   fields: PhoneFields,
   defaultProps: {
-    textSize: 16,
     phone: {
       field: "mainPhone",
       constantValue: "",
     },
     includeHyperlink: true,
   },
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: `--fontFamily-body-fontFamily`,
-    });
-    return {
-      ...PhoneFields,
-      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
-    };
-  },
-  render: (props) => <Phone {...props} />,
+  render: (props) => <PhoneComponent {...props} />,
 };
-
-export { PhoneComponent as Phone, type PhoneProps };

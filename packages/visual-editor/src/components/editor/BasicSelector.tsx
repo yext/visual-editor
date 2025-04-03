@@ -26,27 +26,32 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
           </FieldLabel>
         );
       }
-      const stringifiedValue: string = JSON.stringify(value);
-      const stringifiedOptions: Option<string>[] = options.map((option) => ({
+
+      // The values that we pass into the Combobox should match the labels
+      // so that the search functionality works as expected.
+      const labelOptions: Option<string>[] = options.map((option) => ({
         ...option,
-        value: JSON.stringify(option.value) as string,
+        value: option.label,
       }));
+
       return (
         <FieldLabel label={label} icon={<ChevronDown size={16} />}>
           <Combobox
             defaultValue={
-              stringifiedOptions.find(
-                (option) => option.value === stringifiedValue
-              ) ?? stringifiedOptions[0]
+              labelOptions[
+                options.findIndex(
+                  (option) =>
+                    JSON.stringify(option.value) === JSON.stringify(value)
+                )
+              ] ?? labelOptions[0]
             }
             onChange={(selectedOption) =>
               onChange(
-                options.find(
-                  (option) => JSON.stringify(option.value) === selectedOption
-                )?.value ?? options[0].value
+                options.find((option) => option.label === selectedOption)
+                  ?.value ?? options[0].value
               )
             }
-            options={stringifiedOptions}
+            options={labelOptions}
           />
         </FieldLabel>
       );

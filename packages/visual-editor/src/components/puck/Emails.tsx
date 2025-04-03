@@ -1,35 +1,20 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { cva, type VariantProps } from "class-variance-authority";
 import mailIcon from "./assets/mail_outline.svg";
 import {
-  themeManagerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  CTA,
+  Body,
 } from "../../index.js";
-import { Link } from "@yext/pages-components";
 
-const emailsVariants = cva(
-  "components list-inside font-body-fontFamily text-body-fontSize",
-  {
-    variants: {
-      includeHyperlink: {
-        true: "underline hover:no-underline text-link-color",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      includeHyperlink: true,
-    },
-  }
-);
-
-interface EmailsProps extends VariantProps<typeof emailsVariants> {
+export interface EmailsProps {
   list: YextEntityField<string[]>;
   listLength: number;
+  includeHyperlink: boolean;
 }
 
 const EmailsFields: Fields<EmailsProps> = {
@@ -57,24 +42,18 @@ const EmailsFields: Fields<EmailsProps> = {
   },
 };
 
-const Emails: React.FC<EmailsProps> = ({
+const EmailsComponent: React.FC<EmailsProps> = ({
   list: emailListField,
   includeHyperlink,
   listLength,
 }) => {
   const document = useDocument();
-  let resolvedEmailList: any = resolveYextEntityField(document, emailListField);
+  let resolvedEmailList = resolveYextEntityField(document, emailListField);
   if (!resolvedEmailList) {
-    resolvedEmailList = [
-      "sample_email1@gmail.com",
-      "sample_email2@yahoo.com",
-      "sample_email3@msn.com",
-    ];
+    return;
   } else if (!Array.isArray(resolvedEmailList)) {
     resolvedEmailList = [resolvedEmailList];
   }
-
-  const classNameCn = themeManagerCn(emailsVariants({ includeHyperlink }));
 
   return (
     <EntityField
@@ -82,23 +61,21 @@ const Emails: React.FC<EmailsProps> = ({
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >
-      <ul className={classNameCn}>
+      <ul className="components list-inside">
         {resolvedEmailList
           .slice(0, Math.min(resolvedEmailList.length, listLength))
-          .map((text: any, index: any) => (
+          .map((email, index) => (
             <li key={index} className={`mb-2 flex items-center`}>
-              <img className={"mr-2"} src={mailIcon} />
-              {includeHyperlink && !!text ? (
-                <Link
-                  cta={{
-                    link: text,
-                    label: text,
-                    linkType: "Email",
-                  }}
-                  className={classNameCn}
+              <img className={"mr-2 my-auto"} src={mailIcon} />
+              {includeHyperlink && !!email ? (
+                <CTA
+                  link={email}
+                  label={email}
+                  linkType="EMAIL"
+                  variant="link"
                 />
               ) : (
-                <span>{text}</span>
+                <Body>{email}</Body>
               )}
             </li>
           ))}
@@ -107,7 +84,7 @@ const Emails: React.FC<EmailsProps> = ({
   );
 };
 
-const EmailsComponent: ComponentConfig<EmailsProps> = {
+export const Emails: ComponentConfig<EmailsProps> = {
   label: "Emails",
   fields: EmailsFields,
   defaultProps: {
@@ -118,7 +95,5 @@ const EmailsComponent: ComponentConfig<EmailsProps> = {
     includeHyperlink: true,
     listLength: 5,
   },
-  render: (props) => <Emails {...props} />,
+  render: (props) => <EmailsComponent {...props} />,
 };
-
-export { EmailsComponent as Emails, type EmailsProps };

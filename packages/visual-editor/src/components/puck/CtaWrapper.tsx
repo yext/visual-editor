@@ -1,18 +1,19 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  ThemeOptions,
+  CTA,
+  CTAProps,
 } from "../../index.js";
 
-interface CTAWrapperProps {
+export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
-  linkType: CTAProps["linkType"];
   className?: CTAProps["className"];
 }
 
@@ -26,16 +27,11 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
   variant: {
     label: "Variant",
     type: "radio",
-    options: [
-      { label: "Primary", value: "primary" },
-      { label: "Outline", value: "secondary" },
-      { label: "Link", value: "link" },
-    ],
+    options: ThemeOptions.CTA_VARIANT,
   },
-  linkType: linkTypeFields,
 };
 
-const CTAWrapper: React.FC<CTAWrapperProps> = ({
+const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   entityField,
   variant,
   className,
@@ -55,26 +51,22 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         linkType={cta?.linkType}
         variant={variant}
         className={className}
-        size={"small"}
       />
     </EntityField>
   );
 };
 
-const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
+export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
   label: "Call to Action",
   fields: ctaWrapperFields,
   defaultProps: {
     entityField: {
       field: "",
       constantValue: {
-        name: "Call to Action",
+        label: "Call to Action",
       },
     },
     variant: "primary",
-    linkType: "URL",
   },
-  render: (props: CTAWrapperProps) => <CTAWrapper {...props} />,
+  render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
 };
-
-export { CTAWrapperComponent as CTAWrapper, type CTAWrapperProps };

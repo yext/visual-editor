@@ -25,20 +25,28 @@ export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
           fieldType: "select",
           options: [
             {
-              label: "Other",
-              value: "Other",
-            },
-            {
               label: "URL",
               value: "URL",
             },
             {
-              label: "Phone",
-              value: "Phone",
+              label: "Email",
+              value: "EMAIL",
             },
             {
-              label: "Email",
-              value: "Email",
+              label: "Phone",
+              value: "PHONE",
+            },
+            {
+              label: "Click to Website",
+              value: "CLICK_TO_WEBSITE",
+            },
+            {
+              label: "Driving Directions",
+              value: "DRIVING_DIRECTIONS",
+            },
+            {
+              label: "Other",
+              value: "OTHER",
             },
           ],
         },

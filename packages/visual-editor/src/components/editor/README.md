@@ -155,3 +155,42 @@ const Example = ({ myField }: ExampleProps) => {
   );
 };
 ```
+
+## BasicSelector
+
+`BasicSelector` creates a labeled field and searchable dropdown with the provided options. Each option consists of a label, value, and an optional color. This can be used when creating the Fields for a new component.
+
+### Props
+
+| Name    | Type          | Description                       |
+| ------- | ------------- | --------------------------------- |
+| label   | `string`      | The label for the selector field. |
+| options | `Option<T>[]` | An array of selectable options.   |
+
+#### `Option<T>` Object
+
+| Name   | Type      | Description                                                                           |
+| ------ | --------- | ------------------------------------------------------------------------------------- |
+| label  | `string`  | The display label of the option.                                                      |
+| value  | `T`       | The associated value of the option.                                                   |
+| color? | `string?` | (Optional) A tailwind color class. Will be used to display the color in the dropdown. |
+
+### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", [
+        { label: "H1", value: 1 },
+        { label: "H2", value: 2 },
+        { label: "H3", value: 3 },
+        { label: "H4", value: 4 },
+        { label: "H5", value: 5 },
+        { label: "H6", value: 6 },
+      ]),
+    },
+  },
+```

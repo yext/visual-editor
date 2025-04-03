@@ -1,6 +1,5 @@
-import { useTemplateProps } from "../../index.js";
+import { Body, useTemplateProps, MaybeLink } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
-import { MaybeLink } from "./atoms/maybeLink.js";
 
 export type BreadcrumbsProps = {
   separator?: string;
@@ -36,11 +35,16 @@ function isValidDirectoryParents(value: any[]): boolean {
   );
 }
 
+// BreadcrumbsComponent renders breadcrumbs for DM related pages.
+// If there are no dm_directoryParents nor dm_directoryChildren,
+// then displays nothing. In the case of a root DM page, there are
+// no dm_directoryParents but there are dm_directoryChildren so
+// that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
-  if (breadcrumbs) {
+  if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
     // append the current and filter out missing or malformed data
     breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
       (b) => b.name
@@ -48,22 +52,24 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   }
 
   return (
-    <div>
+    <div className="components px-4 sm:px-0 sm:mx-auto max-w-pageSection-contentWidth w-full py-4">
       {breadcrumbs?.length > 0 && (
         <nav className="my-4" aria-label="Breadcrumb">
-          <ol className="components flex flex-wrap text-body-sm-fontSize">
+          <ol className="flex flex-wrap">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
               const href = relativePrefixToRoot
                 ? relativePrefixToRoot + slug
                 : slug;
               return (
-                <li key={idx}>
+                <li key={idx} className="flex items-center">
                   <MaybeLink
                     href={isLast ? "" : href}
-                    className={"text-link-color underline hover:no-underline"}
+                    // Force body-sm and link-fontFamily for all breadcrumbs
+                    className="text-body-sm-fontSize font-link-fontFamily"
+                    alwaysHideCaret={true}
                   >
-                    {name}
+                    <Body variant={"sm"}>{name}</Body>
                   </MaybeLink>
                   {!isLast && <span className="mx-2">{separator}</span>}
                 </li>
@@ -77,5 +83,6 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
 };
 
 export const Breadcrumbs: ComponentConfig<BreadcrumbsProps> = {
+  label: "Breadcrumbs",
   render: (props) => <BreadcrumbsComponent {...props} />,
 };

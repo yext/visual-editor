@@ -1,8 +1,11 @@
 import * as React from "react";
-import { Link, CTA, Image, ComplexImageType } from "@yext/pages-components";
+import {
+  CTA as CTAType,
+  Image,
+  ComplexImageType,
+} from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
-import { EntityField, useDocument } from "../../index.ts";
-import { MaybeLink } from "./atoms/maybeLink.tsx";
+import { CTA, EntityField, useDocument, MaybeLink } from "../../index.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
@@ -25,7 +28,7 @@ const HeaderComponent: React.FC<HeaderProps> = () => {
   const document: {
     _site?: {
       header?: {
-        links?: CTA[];
+        links?: CTAType[];
       };
       logo?: ComplexImageType;
     };
@@ -37,7 +40,7 @@ const HeaderComponent: React.FC<HeaderProps> = () => {
 };
 
 interface HeaderLayoutProps {
-  links: CTA[];
+  links: CTAType[];
   logoLink?: string;
   logo?: ComplexImageType;
 }
@@ -52,8 +55,8 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
     >
       <div
         className={
-          "container mx-auto py-5 flex justify-start md:justify-between " +
-          "px-4 sm:px-8 lg:px-16 xl:px-20 items-center"
+          "w-full px-4 sm:px-0 sm:mx-auto max-w-pageSection-contentWidth py-2 sm:py-6 " +
+          "flex justify-start md:justify-between items-center"
         }
       >
         {logo && (
@@ -109,16 +112,19 @@ const HeaderLogo = (props: { logo: ComplexImageType; logoLink?: string }) => {
   );
 };
 
-const HeaderLinks = (props: { links: CTA[] }) => {
+const HeaderLinks = (props: { links: CTAType[] }) => {
   return (
     <div className="hidden md:flex items-center">
       <ul className="flex gap-4 lg:gap-10">
-        {props.links.map((item: CTA, idx) => (
+        {props.links.map((item, idx) => (
           <li key={item.link}>
-            <Link
-              className="text-header-linkColor text-header-linkFontSize hover:underline"
-              cta={item}
+            <CTA
+              label={item.label}
+              link={item.link}
+              linkType={item.linkType}
+              variant="link"
               eventName={`headerlink${idx}`}
+              alwaysHideCaret={true}
             />
           </li>
         ))}
@@ -129,7 +135,7 @@ const HeaderLinks = (props: { links: CTA[] }) => {
 
 type HeaderMobileMenuProps = {
   isOpen?: boolean;
-  links: CTA[];
+  links: CTAType[];
 };
 
 const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
@@ -143,11 +149,13 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
     >
       <div className={`container bg-white text-black`}>
         <ul className="flex flex-col px-4">
-          {links.map((item: CTA, idx) => (
+          {links.map((item: CTAType, idx) => (
             <li key={item.link}>
-              <Link
-                className="py-3 block text-header-linkColor text-header-linkFontSize"
-                cta={item}
+              <CTA
+                link={item.link}
+                label={item.label}
+                linkType={item.linkType}
+                variant="link"
                 eventName={`headermobilelink${idx}`}
               />
             </li>

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { ButtonProps } from "./atoms/button.js";
 import { getDirections, Coordinate } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
@@ -10,11 +9,13 @@ import {
   resolveYextEntityField,
   EntityField,
   CTA,
+  CTAProps,
+  ThemeOptions,
 } from "../../index.js";
 
-type GetDirectionsProps = {
+export type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
-  variant: ButtonProps["variant"];
+  variant: CTAProps["variant"];
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
@@ -25,14 +26,11 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
   variant: {
     label: "Variant",
     type: "radio",
-    options: [
-      { label: "Button", value: "primary" },
-      { label: "Link", value: "link" },
-    ],
+    options: ThemeOptions.CTA_VARIANT,
   },
 };
 
-const GetDirections = ({
+const GetDirectionsComponent = ({
   variant,
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
@@ -63,14 +61,14 @@ const GetDirections = ({
         label={"Get Directions"}
         link={searchQuery || "#"}
         linkType={"DRIVING_DIRECTIONS"}
-        size={"small"}
         variant={variant}
       />
     </EntityField>
   );
 };
 
-const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
+export const GetDirections: ComponentConfig<GetDirectionsProps> = {
+  label: "Get Directions",
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
@@ -82,8 +80,5 @@ const GetDirectionsComponent: ComponentConfig<GetDirectionsProps> = {
       },
     },
   },
-  label: "Get Directions",
-  render: (props: GetDirectionsProps) => <GetDirections {...props} />,
+  render: (props) => <GetDirectionsComponent {...props} />,
 };
-
-export { GetDirectionsComponent as GetDirections, type GetDirectionsProps };
