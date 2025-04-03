@@ -13,8 +13,6 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   CTA,
-  Section,
-  sectionVariants,
   Body,
 } from "../../index.ts";
 
@@ -52,9 +50,7 @@ const AddressComponent = ({
   );
 
   return (
-    <Section
-      className={sectionVariants({ className: "components flex items-start" })}
-    >
+    <>
       {address && (
         <EntityField
           displayName="Address"
@@ -78,7 +74,7 @@ const AddressComponent = ({
           )}
         </EntityField>
       )}
-    </Section>
+    </>
   );
 };
 
