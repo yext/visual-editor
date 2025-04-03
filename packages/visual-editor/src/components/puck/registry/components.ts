@@ -12,7 +12,6 @@ export const ui: Registry["items"] = [
   {
     name: "button",
     type: "registry:component",
-    registryDependencies: ["srgbToHSL"],
     files: [{ path: "atoms/button.tsx", type: "registry:component" }],
   },
   {
@@ -40,11 +39,6 @@ export const ui: Registry["items"] = [
     name: "section",
     type: "registry:component",
     files: [{ path: "atoms/section.tsx", type: "registry:component" }],
-  },
-  {
-    name: "srgbToHSL",
-    type: "registry:component",
-    files: [{ path: "atoms/srgbToHSL.tsx", type: "registry:component" }],
   },
   {
     name: "mail_outline",
