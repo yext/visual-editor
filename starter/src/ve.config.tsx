@@ -111,6 +111,8 @@ const pageSections: (keyof MainProps)[] = [
   "Breadcrumbs",
   "Card",
   "Promo",
+  "HeroSection",
+  "CoreInfoSection",
   "Testimonials",
 ];
 

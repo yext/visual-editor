@@ -19,12 +19,12 @@ import {
   BasicSelector,
   backgroundColors,
   BackgroundStyle,
-  headingLevelOptions,
   HeadingLevel,
   Heading,
   CTA,
   Body,
   Section,
+  ThemeOptions,
 } from "../../index.js";
 
 interface phoneNumberSectionProps {
@@ -82,14 +82,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     label: "Styles",
     type: "object",
     objectFields: {
-      headingLevel: BasicSelector("Heading Level", headingLevelOptions),
+      headingLevel: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
       backgroundColor: BasicSelector(
         "Background Color",
-        Object.values(backgroundColors).map(({ label, value }) => ({
-          label,
-          value,
-          color: value.bgColor,
-        }))
+        ThemeOptions.BACKGROUND_COLOR
       ),
     },
   },

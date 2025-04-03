@@ -13,9 +13,8 @@ import {
   ImageWrapperProps,
   backgroundColors,
   BackgroundStyle,
-  headingLevelOptions,
   HeadingLevel,
-  ctaVariantOptions,
+  ThemeOptions,
 } from "../../index.js";
 import { CTA, CTAProps } from "./atoms/cta.js";
 import { Heading } from "./atoms/heading.js";
@@ -76,7 +75,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", headingLevelOptions),
+      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
     },
   },
   localGeoModifier: {
@@ -89,7 +88,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", headingLevelOptions),
+      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
     },
   },
   hours: {
@@ -122,7 +121,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Button Variant", ctaVariantOptions),
+      variant: BasicSelector("Button Variant", ThemeOptions.CTA_VARIANT),
       showCTA: {
         label: "CTA",
         type: "radio",
@@ -143,7 +142,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Button Variant", ctaVariantOptions),
+      variant: BasicSelector("Button Variant", ThemeOptions.CTA_VARIANT),
       showCTA: {
         label: "CTA",
         type: "radio",
@@ -160,11 +159,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     objectFields: {
       backgroundColor: BasicSelector(
         "Background Color",
-        Object.values(backgroundColors).map(({ label, value }) => ({
-          label,
-          value,
-          color: value.bgColor,
-        }))
+        ThemeOptions.BACKGROUND_COLOR
       ),
       imageOrientation: BasicSelector("Image Orientation", [
         { label: "Left", value: "left" },
