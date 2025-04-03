@@ -12,9 +12,6 @@ export {
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export { normalizeSlug, validateSlug } from "./slugifier.ts";
 export {
-  getFontSizeOptions,
-  getBorderRadiusOptions,
-  getSpacingOptions,
   backgroundColors,
   ThemeOptions,
   defaultThemeTailwindExtensions,

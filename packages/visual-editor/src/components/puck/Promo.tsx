@@ -197,6 +197,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
 };
 
 export const Promo: ComponentConfig<PromoProps> = {
+  label: "Promo",
   fields: promoFields,
   defaultProps: {
     image: {

@@ -99,6 +99,7 @@ const flexContainerFields: Fields<FlexProps> = {
 };
 
 export const Flex: ComponentConfig<FlexProps> = {
+  label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
     direction: "row",

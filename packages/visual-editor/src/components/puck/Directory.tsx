@@ -179,5 +179,6 @@ const DirectoryComponent = (props: DirectoryProps) => {
 };
 
 export const Directory: ComponentConfig<DirectoryProps> = {
+  label: "Directory",
   render: (props) => <DirectoryComponent {...props} />,
 };

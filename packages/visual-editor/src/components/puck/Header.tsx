@@ -20,6 +20,7 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 export type HeaderProps = Record<string, never>;
 
 export const Header: ComponentConfig<HeaderProps> = {
+  label: "Header",
   render: () => <HeaderComponent />,
 };
 

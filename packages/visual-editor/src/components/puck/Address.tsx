@@ -83,6 +83,7 @@ const AddressComponent = ({
 };
 
 export const Address: ComponentConfig<AddressProps> = {
+  label: "Address",
   fields: addressFields,
   defaultProps: {
     address: {

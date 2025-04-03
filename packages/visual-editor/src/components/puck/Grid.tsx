@@ -73,6 +73,7 @@ const gridSectionFields: Fields<GridProps> = {
 };
 
 export const Grid: ComponentConfig<GridProps> = {
+  label: "Grid",
   fields: gridSectionFields,
   defaultProps: {
     columns: 2,

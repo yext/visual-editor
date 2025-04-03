@@ -41,11 +41,11 @@ const footerFields: Fields<FooterProps> = {
 };
 
 const Footer: ComponentConfig<FooterProps> = {
+  label: "Footer",
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
   },
-  label: "Footer",
   render: (props) => <FooterComponent {...props} />,
 };
 

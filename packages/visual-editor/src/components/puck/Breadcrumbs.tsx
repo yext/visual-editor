@@ -78,5 +78,6 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
 };
 
 export const Breadcrumbs: ComponentConfig<BreadcrumbsProps> = {
+  label: "Breadcrumbs",
   render: (props) => <BreadcrumbsComponent {...props} />,
 };

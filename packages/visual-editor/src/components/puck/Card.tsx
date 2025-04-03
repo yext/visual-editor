@@ -229,6 +229,7 @@ const CardWrapper = ({
 };
 
 export const Card: ComponentConfig<CardProps> = {
+  label: "Card",
   fields: cardFields,
   defaultProps: {
     orientation: "left",

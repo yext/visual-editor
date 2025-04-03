@@ -101,6 +101,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 };
 
 export const Phone: ComponentConfig<PhoneProps> = {
+  label: "Phone",
   fields: PhoneFields,
   defaultProps: {
     phone: {

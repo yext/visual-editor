@@ -4,8 +4,6 @@ import {
   FontRegistry,
   getFontWeightOptions,
   constructFontSelectOptions,
-  getFontSizeOptions,
-  getSpacingOptions,
   ThemeOptions,
 } from "@yext/visual-editor";
 
@@ -66,7 +64,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
@@ -92,7 +90,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
@@ -118,7 +116,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
@@ -144,7 +142,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
@@ -170,7 +168,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
@@ -196,7 +194,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
@@ -222,7 +220,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "16px",
       },
       fontWeight: {
@@ -254,7 +252,7 @@ export const themeConfig: ThemeConfig = {
         label: "Top/Bottom Padding",
         type: "select",
         plugin: "padding",
-        options: getSpacingOptions(),
+        options: ThemeOptions.SPACING,
         default: "0px",
       },
     },
@@ -273,7 +271,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "16px",
       },
       fontWeight: {
@@ -313,7 +311,7 @@ export const themeConfig: ThemeConfig = {
         label: "Font Size",
         type: "select",
         plugin: "fontSize",
-        options: getFontSizeOptions(),
+        options: ThemeOptions.FONT_SIZE,
         default: "16px",
       },
       fontWeight: {

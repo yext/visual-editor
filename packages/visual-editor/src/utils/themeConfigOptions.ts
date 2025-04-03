@@ -2,7 +2,7 @@ import { borderRadiusOptions } from "../components/editor/BorderRadiusSelector.t
 import { fontSizeOptions } from "../components/editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../components/editor/SpacingSelector.tsx";
 
-export const getFontSizeOptions = (includeLargeSizes = true) => {
+const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {
     return {
       label: option.label + ` (${option.px}px)`,
@@ -11,7 +11,7 @@ export const getFontSizeOptions = (includeLargeSizes = true) => {
   });
 };
 
-export const getBorderRadiusOptions = () => {
+const getBorderRadiusOptions = () => {
   return borderRadiusOptions.map((option) => {
     return {
       label: option.label + ` (${option.px}px)`,
@@ -20,7 +20,7 @@ export const getBorderRadiusOptions = () => {
   });
 };
 
-export const getSpacingOptions = () => {
+const getSpacingOptions = () => {
   return spacingOptions.map((option) => {
     return {
       label: option.label + ` (${option.px}px)`,
@@ -193,4 +193,7 @@ export const ThemeOptions = {
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
+  BORDER_RADIUS: getBorderRadiusOptions,
+  SPACING: getSpacingOptions,
+  FONT_SIZE: getFontSizeOptions,
 };

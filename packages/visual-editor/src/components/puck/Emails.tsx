@@ -85,6 +85,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 };
 
 export const Emails: ComponentConfig<EmailsProps> = {
+  label: "Emails",
   fields: EmailsFields,
   defaultProps: {
     list: {
