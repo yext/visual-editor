@@ -45,7 +45,7 @@ import {
   MapboxStaticMap,
   MapboxStaticProps,
   Testimonials,
-  TestimonialProps,
+  TestimonialsProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -70,7 +70,7 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
-  Testimonials: TestimonialProps;
+  Testimonials: TestimonialsProps;
 };
 
 const components: Config<MainProps>["components"] = {

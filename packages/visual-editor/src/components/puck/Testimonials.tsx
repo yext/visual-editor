@@ -15,7 +15,7 @@ import {
   BackgroundStyle,
 } from "../../index.js";
 
-export interface TestimonialProps {
+export interface TestimonialsProps {
   backgroundColor?: BackgroundStyle;
   cardBackgroundColor?: BackgroundStyle;
   sectionHeading: {
@@ -29,7 +29,7 @@ export interface TestimonialProps {
   }>;
 }
 
-const testimonialFields: Fields<TestimonialProps> = {
+const testimonialFields: Fields<TestimonialsProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
     Object.values(backgroundColors)
@@ -77,7 +77,7 @@ const testimonialFields: Fields<TestimonialProps> = {
   },
 };
 
-const TestimonialWrapper: React.FC<TestimonialProps> = (props) => {
+const TestimonialsWrapper: React.FC<TestimonialsProps> = (props) => {
   const { backgroundColor, cardBackgroundColor, sectionHeading, testimonials } =
     props;
   const document = useDocument();
@@ -112,7 +112,7 @@ const TestimonialWrapper: React.FC<TestimonialProps> = (props) => {
             return (
               <div
                 key={index}
-                className={`flex flex-col rounded-lg overflow-hidden border border-palette-border`}
+                className={`flex flex-col rounded-lg overflow-hidden border`}
               >
                 <Section background={backgroundColors.background1.value}>
                   {resolvedTestimonial && (
@@ -134,7 +134,7 @@ const TestimonialWrapper: React.FC<TestimonialProps> = (props) => {
   );
 };
 
-export const Testimonials: ComponentConfig<TestimonialProps> = {
+export const Testimonials: ComponentConfig<TestimonialsProps> = {
   label: "Testimonials",
   fields: testimonialFields,
   defaultProps: {
@@ -205,5 +205,5 @@ export const Testimonials: ComponentConfig<TestimonialProps> = {
       },
     ],
   },
-  render: (props) => <TestimonialWrapper {...props} />,
+  render: (props) => <TestimonialsWrapper {...props} />,
 };
