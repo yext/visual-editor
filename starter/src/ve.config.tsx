@@ -1,4 +1,4 @@
-import { type Config } from "@measured/puck";
+import { DropZone, type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
@@ -46,6 +46,8 @@ import {
   HeroSection,
   MapboxStaticMap,
   MapboxStaticProps,
+  Testimonials,
+  TestimonialsProps,
   CoreInfoSectionProps,
   CoreInfoSection,
 } from "@yext/visual-editor";
@@ -72,6 +74,7 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
+  Testimonials: TestimonialsProps;
   HeroSection: HeroSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
 };
@@ -99,10 +102,17 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   HeroSection,
   MapboxStaticMap,
+  Testimonials,
   CoreInfoSection,
 };
 
-const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
+const pageSections: (keyof MainProps)[] = [
+  "Banner",
+  "Breadcrumbs",
+  "Card",
+  "Promo",
+  "Testimonials",
+];
 
 const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
 
@@ -139,8 +149,14 @@ export const mainConfig: Config<MainProps> = {
     },
   },
   root: {
-    render: ({ children }) => {
-      return <>{children}</>;
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          disallow={contentBlocks}
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
     },
   },
 };

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { Section } from "./atoms/section.js";
 import {
   innerLayoutVariants,
   layoutFields,
@@ -8,21 +7,22 @@ import {
   layoutVariants,
 } from "./Layout.tsx";
 import {
-  BasicSelector,
   backgroundColors,
   themeManagerCn,
+  ThemeOptions,
+  Section,
 } from "../../index.js";
 
-interface FlexProps extends layoutProps {
+export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   wrap: "wrap" | "nowrap";
+  insideDropZone?: boolean;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
   (
     {
-      className,
       direction,
       justifyContent,
       wrap,
@@ -30,7 +30,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       verticalPadding,
       horizontalPadding,
       backgroundColor,
-      maxContentWidth,
+      insideDropZone,
     },
     ref
   ) => {
@@ -50,8 +50,9 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       >
         <div
           className={themeManagerCn(
-            innerLayoutVariants({ maxContentWidth }),
-            className
+            innerLayoutVariants({
+              maxContentWidth: insideDropZone ? "none" : "default",
+            })
           )}
         >
           <DropZone
@@ -62,7 +63,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
               flexDirection: direction,
               flexWrap: wrap,
             }}
-            disallow={["Banner"]}
+            disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
           />
         </div>
       </Section>
@@ -84,11 +85,7 @@ const flexContainerFields: Fields<FlexProps> = {
   justifyContent: {
     label: "Justify Content",
     type: "radio",
-    options: [
-      { label: "Start", value: "start" },
-      { label: "Center", value: "center" },
-      { label: "End", value: "end" },
-    ],
+    options: ThemeOptions.JUSTIFY_CONTENT,
   },
   wrap: {
     label: "Wrap",
@@ -101,67 +98,33 @@ const flexContainerFields: Fields<FlexProps> = {
   ...layoutFields,
 };
 
-const FlexContainerComponent: ComponentConfig<FlexProps> = {
+export const Flex: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
     direction: "row",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: "0",
+    gap: "8",
     verticalPadding: "default",
-    horizontalPadding: "0",
+    horizontalPadding: "4",
     backgroundColor: backgroundColors.background1.value,
   },
   resolveFields: (data, params) => {
-    // If the Flex has a parent component, the defaultProps should
-    // be adjusted and maxContentWidth should not be a field.
+    // If the Flex has a parent component, the defaultProps should be adjusted.
     if (params.parent) {
       // the props values should only be changed initially
-      if (!data.props.maxContentWidth) {
+      if (!data.props.insideDropZone) {
         data.props.verticalPadding = "0";
+        data.props.horizontalPadding = "0";
         data.props.gap = "0";
-        data.props.maxContentWidth = "none";
       }
-      return flexContainerFields;
+      data.props.insideDropZone = true;
+    } else {
+      data.props.insideDropZone = false;
     }
 
-    if (!data.props.maxContentWidth) {
-      data.props.maxContentWidth = "default";
-    }
-    return {
-      ...flexContainerFields,
-      maxContentWidth: BasicSelector("Maximum Content Width", [
-        { value: "default", label: "Default" },
-        { value: "lg", label: "LG (1024px)" },
-        { value: "xl", label: "XL (1280px)" },
-        { value: "xxl", label: "2XL (1536px)" },
-      ]),
-    };
+    return flexContainerFields;
   },
-  render: ({
-    direction,
-    justifyContent,
-    wrap,
-    gap,
-    verticalPadding,
-    horizontalPadding,
-    className,
-    backgroundColor,
-    maxContentWidth,
-  }: FlexProps) => (
-    <FlexContainer
-      direction={direction}
-      justifyContent={justifyContent}
-      wrap={wrap}
-      gap={gap}
-      verticalPadding={verticalPadding}
-      horizontalPadding={horizontalPadding}
-      className={className}
-      backgroundColor={backgroundColor}
-      maxContentWidth={maxContentWidth}
-    />
-  ),
+  render: (props) => <FlexContainer {...props} />,
 };
-
-export { FlexContainerComponent as Flex, type FlexProps };

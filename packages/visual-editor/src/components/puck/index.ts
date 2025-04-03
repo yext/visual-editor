@@ -25,3 +25,4 @@ export {
   CoreInfoSection,
   type CoreInfoSectionProps,
 } from "./CoreInfoSection.tsx";
+export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";

@@ -13,7 +13,7 @@ import { ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-interface ImageWrapperProps {
+export interface ImageWrapperProps {
   image: YextEntityField<ImageType>;
   layout: ImageProps["layout"];
   aspectRatio?: ImageProps["aspectRatio"];
@@ -21,7 +21,7 @@ interface ImageWrapperProps {
   height?: ImageProps["height"];
 }
 
-const ImageWrapperFields: Fields<ImageWrapperProps> = {
+export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   image: YextEntityFieldSelector<any, ImageType>({
     label: "Image",
     filter: {
@@ -71,7 +71,7 @@ const ImageWrapperFields: Fields<ImageWrapperProps> = {
   },
 };
 
-const ImageWrapper: React.FC<ImageWrapperProps> = ({
+const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   image: imageField,
   layout,
   aspectRatio,
@@ -105,7 +105,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   );
 };
 
-const resolvedImageFields = (layout: "auto" | "fixed") => {
+export const resolvedImageFields = (layout: "auto" | "fixed") => {
   return {
     image: ImageWrapperFields["image"],
     layout: ImageWrapperFields["layout"],
@@ -120,7 +120,7 @@ const resolvedImageFields = (layout: "auto" | "fixed") => {
   };
 };
 
-const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
+export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
   label: "Image",
   fields: ImageWrapperFields,
   defaultProps: {
@@ -139,12 +139,5 @@ const ImageWrapperComponent: ComponentConfig<ImageWrapperProps> = {
   resolveFields(data) {
     return resolvedImageFields(data.props.layout);
   },
-  render: (props) => <ImageWrapper {...props} />,
-};
-
-export {
-  ImageWrapperComponent as ImageWrapper,
-  type ImageWrapperProps,
-  ImageWrapperFields,
-  resolvedImageFields,
+  render: (props) => <ImageWrapperComponent {...props} />,
 };

@@ -5,8 +5,6 @@ import {
   getDirections,
   Address as RenderAddress,
 } from "@yext/pages-components";
-import { Body } from "./atoms/body.js";
-import { Section, sectionVariants } from "./atoms/section.js";
 import "@yext/pages-components/style.css";
 import {
   useDocument,
@@ -15,9 +13,10 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   CTA,
+  Body,
 } from "../../index.ts";
 
-type AddressProps = {
+export type AddressProps = {
   address: YextEntityField<AddressType>;
   showGetDirections: boolean;
 };
@@ -37,7 +36,7 @@ const addressFields: Fields<AddressProps> = {
   },
 };
 
-const Address = ({
+const AddressComponent = ({
   address: addressField,
   showGetDirections,
 }: AddressProps) => {
@@ -51,9 +50,7 @@ const Address = ({
   );
 
   return (
-    <Section
-      className={sectionVariants({ className: "components flex items-start" })}
-    >
+    <>
       {address && (
         <EntityField
           displayName="Address"
@@ -77,11 +74,12 @@ const Address = ({
           )}
         </EntityField>
       )}
-    </Section>
+    </>
   );
 };
 
-const AddressComponent: ComponentConfig<AddressProps> = {
+export const Address: ComponentConfig<AddressProps> = {
+  label: "Address",
   fields: addressFields,
   defaultProps: {
     address: {
@@ -97,8 +95,5 @@ const AddressComponent: ComponentConfig<AddressProps> = {
     },
     showGetDirections: true,
   },
-  label: "Address",
-  render: (props) => <Address {...props} />,
+  render: (props) => <AddressComponent {...props} />,
 };
-
-export { type AddressProps, AddressComponent as Address };

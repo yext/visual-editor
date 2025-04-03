@@ -12,17 +12,11 @@ export {
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export { normalizeSlug, validateSlug } from "./slugifier.ts";
 export {
-  getFontSizeOptions,
-  getBorderRadiusOptions,
-  getSpacingOptions,
   backgroundColors,
+  ThemeOptions,
   defaultThemeTailwindExtensions,
   type BackgroundStyle,
-  headingLevelOptions,
   type HeadingLevel,
-  letterSpacingOptions,
-  textTransformOptions,
-  ctaVariantOptions,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";

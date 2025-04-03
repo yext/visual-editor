@@ -5,8 +5,7 @@ import {
   ComplexImageType,
 } from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
-import { CTA, EntityField, useDocument } from "../../index.ts";
-import { MaybeLink } from "./atoms/maybeLink.tsx";
+import { CTA, EntityField, useDocument, MaybeLink } from "../../index.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
@@ -56,8 +55,8 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
     >
       <div
         className={
-          "container mx-auto py-5 flex justify-start md:justify-between " +
-          "px-4 sm:px-8 lg:px-16 xl:px-20 items-center"
+          "w-full px-4 sm:px-0 sm:mx-auto max-w-pageSection-contentWidth py-2 sm:py-6 " +
+          "flex justify-start md:justify-between items-center"
         }
       >
         {logo && (

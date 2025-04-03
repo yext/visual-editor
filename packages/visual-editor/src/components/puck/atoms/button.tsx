@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn, useBackground } from "../../../index.ts";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "components h-fit flex items-center justify-center whitespace-nowrap",
   {
     variants: {
@@ -67,7 +67,7 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const background = useBackground();
@@ -95,5 +95,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 Button.displayName = "Button";
-
-export { Button, buttonVariants };

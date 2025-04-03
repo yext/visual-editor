@@ -14,18 +14,19 @@ import {
   BackgroundStyle,
   backgroundColors,
   BodyProps,
-  ctaVariantOptions,
   ImageWrapperProps,
-  headingLevelOptions,
+  ThemeOptions,
+  Heading,
+  HeadingProps,
+  CTA,
+  CTAProps,
+  Section,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
-import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading, HeadingProps } from "./atoms/heading.js";
-import { Section } from "./atoms/section.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-interface PromoProps {
+export interface PromoProps {
   image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
@@ -64,7 +65,10 @@ const promoFields: Fields<PromoProps> = {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Business Name Heading Level", headingLevelOptions),
+      level: BasicSelector(
+        "Business Name Heading Level",
+        ThemeOptions.HEADING_LEVEL
+      ),
     },
   },
   description: {
@@ -80,11 +84,7 @@ const promoFields: Fields<PromoProps> = {
       variant: {
         label: "Variant",
         type: "radio",
-        options: [
-          { label: "Small", value: "sm" },
-          { label: "Base", value: "base" },
-          { label: "Large", value: "lg" },
-        ],
+        options: ThemeOptions.BODY_VARIANT,
       },
     },
   },
@@ -101,7 +101,7 @@ const promoFields: Fields<PromoProps> = {
       variant: {
         label: "Variant",
         type: "radio",
-        options: ctaVariantOptions,
+        options: ThemeOptions.CTA_VARIANT,
       },
       visible: {
         label: "Show Primary CTA",
@@ -119,11 +119,7 @@ const promoFields: Fields<PromoProps> = {
     objectFields: {
       backgroundColor: BasicSelector(
         "Background Color",
-        Object.values(backgroundColors).map(({ label, value }) => ({
-          label,
-          value,
-          color: value.bgColor,
-        }))
+        ThemeOptions.BACKGROUND_COLOR
       ),
       orientation: BasicSelector("Image Orientation", [
         { label: "Left", value: "left" },
@@ -199,7 +195,8 @@ const PromoWrapper: React.FC<PromoProps> = ({
   );
 };
 
-const Promo: ComponentConfig<PromoProps> = {
+export const Promo: ComponentConfig<PromoProps> = {
+  label: "Promo",
   fields: promoFields,
   defaultProps: {
     image: {
@@ -256,5 +253,3 @@ const Promo: ComponentConfig<PromoProps> = {
   },
   render: (props) => <PromoWrapper {...props} />,
 };
-
-export { Promo, type PromoProps };

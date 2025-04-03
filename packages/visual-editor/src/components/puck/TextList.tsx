@@ -8,7 +8,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 
-interface TextListProps {
+export interface TextListProps {
   list: YextEntityField<string[]>;
 }
 
@@ -22,7 +22,9 @@ const textListFields: Fields<TextListProps> = {
   }),
 };
 
-const TextList: React.FC<TextListProps> = ({ list: textListField }) => {
+const TextListComponent: React.FC<TextListProps> = ({
+  list: textListField,
+}) => {
   const document = useDocument();
   let resolvedTextList: any = resolveYextEntityField(document, textListField);
   if (!resolvedTextList) {
@@ -48,7 +50,7 @@ const TextList: React.FC<TextListProps> = ({ list: textListField }) => {
   );
 };
 
-const TextListComponent: ComponentConfig<TextListProps> = {
+export const TextList: ComponentConfig<TextListProps> = {
   label: "Text List",
   fields: textListFields,
   defaultProps: {
@@ -57,7 +59,5 @@ const TextListComponent: ComponentConfig<TextListProps> = {
       constantValue: [],
     },
   },
-  render: (props) => <TextList {...props} />,
+  render: (props) => <TextListComponent {...props} />,
 };
-
-export { TextListComponent as TextList, type TextListProps };

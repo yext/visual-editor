@@ -1,16 +1,17 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps } from "./atoms/cta.js";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  ctaVariantOptions,
+  ThemeOptions,
+  CTA,
+  CTAProps,
 } from "../../index.js";
 
-interface CTAWrapperProps {
+export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
   className?: CTAProps["className"];
@@ -26,11 +27,11 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
   variant: {
     label: "Variant",
     type: "radio",
-    options: ctaVariantOptions,
+    options: ThemeOptions.CTA_VARIANT,
   },
 };
 
-const CTAWrapper: React.FC<CTAWrapperProps> = ({
+const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   entityField,
   variant,
   className,
@@ -55,7 +56,7 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
   );
 };
 
-const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
+export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
   label: "Call to Action",
   fields: ctaWrapperFields,
   defaultProps: {
@@ -67,7 +68,5 @@ const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
     },
     variant: "primary",
   },
-  render: (props: CTAWrapperProps) => <CTAWrapper {...props} />,
+  render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
 };
-
-export { CTAWrapperComponent as CTAWrapper, type CTAWrapperProps };
