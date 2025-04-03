@@ -32,11 +32,11 @@ export interface TestimonialsProps {
 const testimonialFields: Fields<TestimonialsProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    Object.values(backgroundColors)
+    ThemeOptions.BACKGROUND_COLOR
   ),
   cardBackgroundColor: BasicSelector(
     "Card Background Color",
-    Object.values(backgroundColors)
+    ThemeOptions.BACKGROUND_COLOR
   ),
   sectionHeading: {
     type: "object",
