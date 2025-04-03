@@ -55,11 +55,18 @@
     { "name": "NY", "slug": "en/us/ny" },
     { "name": "Brooklyn", "slug": "en/us/ny/brooklyn" }
   ],
+  "mainPhone": "+14065556789",
+  "emails": [
+    "john.doe@parksidebank.com",
+    "john.doe@parksidebank.com",
+    "john.doe@parksidebank.com"
+  ],
   "additionalHoursText": "these are the additional hours",
   "address": {
     "city": "Brooklyn",
     "countryCode": "US",
     "line1": "288 Grand St",
+    "line2": "288 flat",
     "localizedCountryName": "United States",
     "localizedRegionName": "New York",
     "postalCode": "11211",
