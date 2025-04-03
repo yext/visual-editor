@@ -1,3 +1,42 @@
+#### 0.0.33 (2025-03-21)
+
+##### Bug Fixes
+
+- adjust breadcrumbs (#278) (1f0db194)
+
+#### 0.0.32 (2025-03-20)
+
+##### Chores
+
+- update pages components to 1.1.4 (#267) (9b1209c8)
+- include local data in starter (#261) (f8433966)
+
+##### New Features
+
+- add yextVisualEditorPlugin() (#252) (b8f55213)
+- get googleTagManagerId from visualEditorConfig instead of theme (#259) (20894caf)
+- convert select fields to autocomplete combobox (#258) (e1d93afc)
+- disable component selection in theme mode (#249) (9c4b7214)
+- remove theme left panel, not needed after removing GTM (#255) (8727bdde)
+- remove left toggle for theme manager (#254) (00a7e95b)
+
+##### Bug Fixes
+
+- google tag manager id path (#268) (54286cdc)
+- add checks for breadcrumbs (#266) (8c4add71)
+- adjust plugin on server start (#265) (dbccc919)
+- read relativePrefixToRoot from templateProps (#262) (3787d8e6)
+- editor returns error 404 when in reseller account (#260) (3ceb9167)
+- visual editor fails to build (#257) (e395589d)
+- write to localstorage in dev mode (#248) (d3861d8d)
+- undefined footer links (#250) (307db820)
+- prevent loading bar from going backwards (#247) (1d06d28b)
+
+##### Refactors
+
+- localstorage updates (#251) (f6f28b2b)
+- remove entity fields toggle from theme editor (#253) (2f499827)
+
 #### 0.0.31 (2025-02-27)
 
 ##### New Features

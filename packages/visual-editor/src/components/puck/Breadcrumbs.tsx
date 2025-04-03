@@ -35,11 +35,16 @@ function isValidDirectoryParents(value: any[]): boolean {
   );
 }
 
+// BreadcrumbsComponent renders breadcrumbs for DM related pages.
+// If there are no dm_directoryParents nor dm_directoryChildren,
+// then displays nothing. In the case of a root DM page, there are
+// no dm_directoryParents but there are dm_directoryChildren so
+// that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
-  if (breadcrumbs) {
+  if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
     // append the current and filter out missing or malformed data
     breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
       (b) => b.name
