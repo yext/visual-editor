@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn, HeadingLevel } from "../../../index.ts";
 
 // Define the variants for the heading component
-const headingVariants = cva("components", {
+export const headingVariants = cva("components", {
   variants: {
     level: {
       1:
@@ -72,7 +72,7 @@ export interface HeadingProps
   level: HeadingLevel;
 }
 
-const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
+export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ className, level = 1, weight, transform, fontSize, ...props }, ref) => {
     const Tag = `h${level}` as keyof Pick<
       JSX.IntrinsicElements,
@@ -100,5 +100,3 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   }
 );
 Heading.displayName = "Heading";
-
-export { Heading, headingVariants };

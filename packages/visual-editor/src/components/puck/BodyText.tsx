@@ -1,19 +1,35 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Body, BodyProps } from "./atoms/body.js";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
+  ThemeOptions,
+  Body,
+  BodyProps,
 } from "../../index.js";
 
-interface BodyTextProps extends BodyProps {
+export interface BodyTextProps extends BodyProps {
   text: YextEntityField<string>;
 }
 
-const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
+const bodyTextFields: Fields<BodyTextProps> = {
+  text: YextEntityFieldSelector({
+    label: "Text",
+    filter: {
+      types: ["type.string"],
+    },
+  }),
+  variant: {
+    label: "Variant",
+    type: "radio",
+    options: ThemeOptions.BODY_VARIANT,
+  },
+};
+
+const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
     const document = useDocument();
 
@@ -31,27 +47,9 @@ const BodyText = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   }
 );
 
-BodyText.displayName = "BodyText";
+BodyTextComponent.displayName = "BodyText";
 
-const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextEntityFieldSelector({
-    label: "Text",
-    filter: {
-      types: ["type.string"],
-    },
-  }),
-  variant: {
-    label: "Variant",
-    type: "radio",
-    options: [
-      { label: "Small", value: "sm" },
-      { label: "Base", value: "base" },
-      { label: "Large", value: "lg" },
-    ],
-  },
-};
-
-const BodyTextComponent: ComponentConfig<BodyTextProps> = {
+export const BodyText: ComponentConfig<BodyTextProps> = {
   label: "Body Text",
   fields: bodyTextFields,
   defaultProps: {
@@ -62,7 +60,5 @@ const BodyTextComponent: ComponentConfig<BodyTextProps> = {
     },
     variant: "base",
   },
-  render: (props) => <BodyText {...props} />,
+  render: (props) => <BodyTextComponent {...props} />,
 };
-
-export { BodyTextComponent as BodyText, type BodyTextProps };

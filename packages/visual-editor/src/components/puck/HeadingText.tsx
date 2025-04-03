@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Heading, HeadingProps } from "./atoms/heading.js";
 import {
   useDocument,
   resolveYextEntityField,
@@ -8,32 +7,35 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   BasicSelector,
-  headingLevelOptions,
+  ThemeOptions,
+  Heading,
+  HeadingProps,
 } from "../../index.js";
 
-interface HeadingTextProps extends HeadingProps {
+export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<string>;
 }
 
-const HeadingText = React.forwardRef<HTMLHeadingElement, HeadingTextProps>(
-  ({ text, ...headingProps }, ref) => {
-    const document = useDocument();
+const HeadingTextWrapper = React.forwardRef<
+  HTMLHeadingElement,
+  HeadingTextProps
+>(({ text, ...headingProps }, ref) => {
+  const document = useDocument();
 
-    return (
-      <EntityField
-        displayName={"Heading " + headingProps.level}
-        fieldId={text.field}
-        constantValueEnabled={text.constantValueEnabled}
-      >
-        <Heading ref={ref} {...headingProps}>
-          {resolveYextEntityField(document, text)}
-        </Heading>
-      </EntityField>
-    );
-  }
-);
+  return (
+    <EntityField
+      displayName={"Heading " + headingProps.level}
+      fieldId={text.field}
+      constantValueEnabled={text.constantValueEnabled}
+    >
+      <Heading ref={ref} {...headingProps}>
+        {resolveYextEntityField(document, text)}
+      </Heading>
+    </EntityField>
+  );
+});
 
-HeadingText.displayName = "HeadingText";
+HeadingTextWrapper.displayName = "HeadingText";
 
 const headingTextFields: Fields<HeadingTextProps> = {
   text: YextEntityFieldSelector({
@@ -42,10 +44,10 @@ const headingTextFields: Fields<HeadingTextProps> = {
       types: ["type.string"],
     },
   }),
-  level: BasicSelector("Heading Level", headingLevelOptions),
+  level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
 };
 
-const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
+export const HeadingText: ComponentConfig<HeadingTextProps> = {
   label: "Heading Text",
   fields: headingTextFields,
   defaultProps: {
@@ -57,7 +59,5 @@ const HeadingTextComponent: ComponentConfig<HeadingTextProps> = {
     content: "Heading",
     level: 2,
   },
-  render: (props) => <HeadingText {...props} />,
+  render: (props) => <HeadingTextWrapper {...props} />,
 };
-
-export { HeadingTextComponent as HeadingText, type HeadingTextProps };

@@ -1,15 +1,19 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { Section } from "./atoms/section.js";
 import {
   innerLayoutVariants,
   layoutFields,
   layoutProps,
   layoutVariants,
 } from "./Layout.tsx";
-import { backgroundColors, themeManagerCn } from "../../index.js";
+import {
+  backgroundColors,
+  themeManagerCn,
+  ThemeOptions,
+  Section,
+} from "../../index.js";
 
-interface FlexProps extends layoutProps {
+export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   wrap: "wrap" | "nowrap";
@@ -81,11 +85,7 @@ const flexContainerFields: Fields<FlexProps> = {
   justifyContent: {
     label: "Justify Content",
     type: "radio",
-    options: [
-      { label: "Start", value: "start" },
-      { label: "Center", value: "center" },
-      { label: "End", value: "end" },
-    ],
+    options: ThemeOptions.JUSTIFY_CONTENT,
   },
   wrap: {
     label: "Wrap",
@@ -98,7 +98,7 @@ const flexContainerFields: Fields<FlexProps> = {
   ...layoutFields,
 };
 
-const FlexContainerComponent: ComponentConfig<FlexProps> = {
+export const Flex: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
@@ -126,25 +126,5 @@ const FlexContainerComponent: ComponentConfig<FlexProps> = {
 
     return flexContainerFields;
   },
-  render: ({
-    direction,
-    justifyContent,
-    wrap,
-    gap,
-    verticalPadding,
-    horizontalPadding,
-    backgroundColor,
-  }: FlexProps) => (
-    <FlexContainer
-      direction={direction}
-      justifyContent={justifyContent}
-      wrap={wrap}
-      gap={gap}
-      verticalPadding={verticalPadding}
-      horizontalPadding={horizontalPadding}
-      backgroundColor={backgroundColor}
-    />
-  ),
+  render: (props) => <FlexContainer {...props} />,
 };
-
-export { FlexContainerComponent as Flex, type FlexProps };

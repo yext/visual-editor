@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CTAProps, CTA } from "../../../index.js";
 
-type maybeLinkProps = {
+export type MaybeLinkProps = {
   href?: string;
   children?: React.ReactNode;
   className?: string;
@@ -10,7 +10,7 @@ type maybeLinkProps = {
   alwaysHideCaret?: boolean;
 };
 
-const MaybeLink = (props: maybeLinkProps) => {
+export const MaybeLink = (props: MaybeLinkProps) => {
   const {
     href,
     children,
@@ -36,5 +36,3 @@ const MaybeLink = (props: maybeLinkProps) => {
     return <>{props.children}</>;
   }
 };
-
-export { MaybeLink };

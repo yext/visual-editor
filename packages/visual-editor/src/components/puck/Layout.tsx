@@ -1,10 +1,11 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
-import { SpacingSelector, BasicSelector } from "../../index.js";
 import {
-  backgroundColors,
+  SpacingSelector,
+  BasicSelector,
+  ThemeOptions,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions.js";
+} from "../../index.js";
 
 export const layoutVariants = cva("components w-full", {
   variants: {
@@ -117,13 +118,13 @@ export interface layoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutVariants>,
     VariantProps<typeof innerLayoutVariants> {
-  backgroundColor: BackgroundStyle;
+  backgroundColor?: BackgroundStyle;
 }
 
 export const layoutFields: Fields<layoutProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    Object.values(backgroundColors)
+    ThemeOptions.BACKGROUND_COLOR
   ),
   gap: SpacingSelector("Gap", "gap", false),
   verticalPadding: SpacingSelector("Top/Bottom Padding", "padding", true),

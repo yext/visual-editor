@@ -5,8 +5,7 @@ import {
   ComplexImageType,
 } from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
-import { CTA, EntityField, useDocument } from "../../index.ts";
-import { MaybeLink } from "./atoms/maybeLink.tsx";
+import { CTA, EntityField, useDocument, MaybeLink } from "../../index.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {

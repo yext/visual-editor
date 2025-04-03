@@ -10,6 +10,7 @@ import {
   CTA,
   type BackgroundStyle,
   backgroundColors,
+  ThemeOptions,
   BackgroundProvider,
 } from "../../index.ts";
 import {
@@ -30,27 +31,23 @@ type socialLink = {
 };
 
 type FooterProps = {
-  backgroundColor: BackgroundStyle;
+  backgroundColor?: BackgroundStyle;
 };
 
 const footerFields: Fields<FooterProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
-    Object.values(backgroundColors).map(({ label, value }) => ({
-      label,
-      value,
-      color: value.bgColor,
-    }))
+    ThemeOptions.BACKGROUND_COLOR
   ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
+  label: "Footer",
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
   },
   inline: true,
-  label: "Footer",
   render: (props) => <FooterComponent {...props} />,
 };
 
@@ -58,7 +55,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
   const document = useDocument<any>();
-  const { backgroundColor, puck } = props;
+  const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
   const links = document?._site?.footer?.links ?? [];
   const copyrightMessage = document?._site?.copyrightMessage;
