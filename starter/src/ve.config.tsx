@@ -42,12 +42,16 @@ import {
   DirectoryProps,
   Promo,
   PromoProps,
+  HeroSectionProps,
+  HeroSection,
   MapboxStaticMap,
   MapboxStaticProps,
   Testimonials,
   TestimonialsProps,
   People,
   PeopleProps,
+  CoreInfoSectionProps,
+  CoreInfoSection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -74,6 +78,8 @@ type MainProps = {
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
   People: PeopleProps;
+  HeroSection: HeroSectionProps;
+  CoreInfoSection: CoreInfoSectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -97,9 +103,11 @@ const components: Config<MainProps>["components"] = {
   Footer,
   Directory,
   Breadcrumbs,
+  HeroSection,
   MapboxStaticMap,
   Testimonials,
   People,
+  CoreInfoSection,
 };
 
 const pageSections: (keyof MainProps)[] = [
@@ -107,6 +115,8 @@ const pageSections: (keyof MainProps)[] = [
   "Breadcrumbs",
   "Card",
   "Promo",
+  "HeroSection",
+  "CoreInfoSection",
   "Testimonials",
   "People",
 ];
