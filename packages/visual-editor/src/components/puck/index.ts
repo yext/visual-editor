@@ -18,6 +18,10 @@ export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
+export {
+  ProductsSection,
+  type ProductsSectionProps,
+} from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
-export { TextList, type TextListProps } from "./TextList.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
+export { TextList, type TextListProps } from "./TextList.tsx";
