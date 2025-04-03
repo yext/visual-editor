@@ -20,3 +20,7 @@ export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
+export {
+  TestimonialCard,
+  type TestimonialCardProps,
+} from "./TestimonialCard.tsx";
