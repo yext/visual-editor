@@ -44,6 +44,8 @@ import {
   PromoProps,
   MapboxStaticMap,
   MapboxStaticProps,
+  TestimonialCard,
+  TestimonialCardProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -68,6 +70,7 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
+  TestimonialCard: TestimonialCardProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -92,6 +95,7 @@ const components: Config<MainProps>["components"] = {
   Directory,
   Breadcrumbs,
   MapboxStaticMap,
+  TestimonialCard,
 };
 
 const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
@@ -111,6 +115,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "MapboxStaticMap",
   "Phone",
   "TextList",
+  "TestimonialCard",
 ];
 
 // All the available components for locations
