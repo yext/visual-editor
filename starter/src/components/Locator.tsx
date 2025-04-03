@@ -18,11 +18,18 @@ import {
 } from "@yext/search-headless-react";
 import * as React from "react";
 import { cva, VariantProps } from "class-variance-authority";
-import { BasicSelector, Button, themeManagerCn } from "@yext/visual-editor";
+import {
+  BasicSelector,
+  Body,
+  Button,
+  CTA,
+  Heading,
+  themeManagerCn,
+} from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 import { normalizeSlug } from "@yext/visual-editor";
 import { useEffect, useState } from "react";
-import { HoursStatus, Link } from "@yext/pages-components";
+import { HoursStatus } from "@yext/pages-components";
 import { Address, Hours } from "../types/autogen.ts";
 
 const DEFAULT_FIELD = "builtin.location";
@@ -239,12 +246,12 @@ const Locator: React.FC<LocatorProps> = (props) => {
             <Map {...mapProps} />
             {showSearchAreaButton && (
               <div className="absolute bottom-10 left-0 right-0 flex justify-center">
-                <button
+                <Button
                   onClick={handleSearchAreaClick}
-                  className="rounded-2xl border bg-white py-2 px-4 shadow-xl"
+                  className="rounded-2xl border bg-white py-2 px-4 shadow-xl text-black"
                 >
                   <p>Search This Area</p>
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -305,68 +312,59 @@ const LocationCard: CardComponent<Location> = ({
     : undefined;
 
   return (
-    <div className="flex justify left border-y p-50">
-      <div className="flex p-2.5">
-        <div>
-          <p className="text-lg py-2 text-rose-500">{location.name}</p>
-          <p className="text-sm">{location.address.line1}</p>
-          <p className="text-sm">{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</p>
-          {location.mainPhone && (
-            <Link
-              target={"_blank"}
-              href={`tel:${location.mainPhone}`}
-              className="text-sm py-5"
-              rel="noreferrer"
-            >
-              {formatPhoneNumber(location.mainPhone)}
-            </Link>
-          )}
-          {location.hours && (
-            <HoursStatus
-              hours={location.hours}
-              timezone={location.timezone}
-              className="text-sm"
-            />
-          )}
-          <div>
-            <Link
-              target={"_blank"}
-              href={getPath(location)}
-              className="text-sm py-1000 text-blue-700 cursor-pointer"
-              rel="noreferrer"
-            >
-              <input type="submit" value="View More Information" />
-            </Link>
-          </div>
-          <div>
-            {location.yextDisplayCoordinate && (
-              <Button
-                onClick={() =>
-                  window.open(
-                    getGoogleMapsLink(
-                      location.yextDisplayCoordinate
-                        ? location.yextDisplayCoordinate
-                        : {
-                            latitude: 0,
-                            longitude: 0,
-                          },
-                    ),
-                    "_blank",
-                  )
-                }
-                className="flex flex-col text-sm py-3 bg-rose-500 text-stone-50 rounded-lg drop-shadow-md"
-              >
-                Get Directions
-              </Button>
+    <div className="flex flex-wrap border-y px-4 py-4">
+      <div className="basis-3/4 pb-4">
+        <Heading className="py-2 text-palette-primary-dark" level={1}>
+          {location.name}
+        </Heading>
+        {location.hours && (
+          <HoursStatus
+            hours={location.hours}
+            timezone={location.timezone}
+            className="text-body-sm-fontSize"
+          />
+        )}
+        {location.mainPhone && (
+          <CTA
+            label={formatPhoneNumber(location.mainPhone)}
+            link={location.mainPhone}
+            linkType={"PHONE"}
+            className="py-3"
+            variant="link"
+          />
+        )}
+        <Body>{location.address.line1}</Body>
+        <Body>{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</Body>
+        {location.yextDisplayCoordinate && (
+          <CTA
+            label={"Get Directions"}
+            link={getGoogleMapsLink(
+              location.yextDisplayCoordinate
+                ? location.yextDisplayCoordinate
+                : {
+                    latitude: 0,
+                    longitude: 0,
+                  },
             )}
-          </div>
-        </div>
+            linkType={"DRIVING_DIRECTIONS"}
+            target={"_blank"}
+            variant="link"
+          />
+        )}
       </div>
       {distanceInMiles && (
-        <div className="flex items-start p-5 italic">
+        <div className="basis-1/4 text-right py-2">
           {distanceInMiles + " mi"}
         </div>
       )}
+      <CTA
+        label={"View More Information"}
+        link={getPath(location)}
+        linkType={"URL"}
+        className="text-center basis-full py-3"
+        target={"_blank"}
+        variant="primary"
+      />
     </div>
   );
 };
