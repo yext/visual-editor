@@ -15,7 +15,7 @@ import {
   BackgroundStyle,
 } from "../../index.js";
 
-export interface TestimonialCardProps {
+export interface TestimonialProps {
   backgroundColor?: BackgroundStyle;
   cardBackgroundColor?: BackgroundStyle;
   sectionHeading: {
@@ -29,7 +29,7 @@ export interface TestimonialCardProps {
   }>;
 }
 
-const testimonialCardFields: Fields<TestimonialCardProps> = {
+const testimonialFields: Fields<TestimonialProps> = {
   backgroundColor: BasicSelector(
     "Background Color",
     Object.values(backgroundColors)
@@ -77,7 +77,7 @@ const testimonialCardFields: Fields<TestimonialCardProps> = {
   },
 };
 
-const TestimonialCardWrapper: React.FC<TestimonialCardProps> = (props) => {
+const TestimonialWrapper: React.FC<TestimonialProps> = (props) => {
   const { backgroundColor, cardBackgroundColor, sectionHeading, testimonials } =
     props;
   const document = useDocument();
@@ -91,12 +91,7 @@ const TestimonialCardWrapper: React.FC<TestimonialCardProps> = (props) => {
       <div className="flex flex-col gap-12 p-8">
         {resolvedHeading && (
           <div className="text-center">
-            <Heading
-              level={sectionHeading.level}
-              className="text-palette-background"
-            >
-              {resolvedHeading}
-            </Heading>
+            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
           </div>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -117,26 +112,18 @@ const TestimonialCardWrapper: React.FC<TestimonialCardProps> = (props) => {
             return (
               <div
                 key={index}
-                className={`flex flex-col rounded-lg overflow-hidden`}
+                className={`flex flex-col rounded-lg overflow-hidden border border-palette-border`}
               >
-                <Section className="flex-grow p-6 bg-white">
+                <Section background={backgroundColors.background1.value}>
                   {resolvedTestimonial && (
-                    <Body variant="base" className="text-black">
-                      {resolvedTestimonial}
-                    </Body>
+                    <Body className="line-clamp-5">{resolvedTestimonial}</Body>
                   )}
                 </Section>
                 <Section background={cardBackgroundColor} className="p-4">
                   {resolvedAuthor && (
-                    <Heading level={3} className="text-palette-foreground">
-                      {resolvedAuthor}
-                    </Heading>
+                    <Heading level={3}>{resolvedAuthor}</Heading>
                   )}
-                  {resolvedDate && (
-                    <Body variant="sm" className="text-palette-foreground">
-                      {resolvedDate}
-                    </Body>
-                  )}
+                  {resolvedDate && <Body variant="sm">{resolvedDate}</Body>}
                 </Section>
               </div>
             );
@@ -147,9 +134,9 @@ const TestimonialCardWrapper: React.FC<TestimonialCardProps> = (props) => {
   );
 };
 
-export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
+export const Testimonials: ComponentConfig<TestimonialProps> = {
   label: "Testimonials",
-  fields: testimonialCardFields,
+  fields: testimonialFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
     cardBackgroundColor: backgroundColors.background2.value,
@@ -218,5 +205,5 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
       },
     ],
   },
-  render: (props) => <TestimonialCardWrapper {...props} />,
+  render: (props) => <TestimonialWrapper {...props} />,
 };
