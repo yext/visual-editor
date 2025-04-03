@@ -20,6 +20,7 @@ import * as React from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import {
   BasicSelector,
+  Body,
   Button,
   CTA,
   Heading,
@@ -313,28 +314,27 @@ const LocationCard: CardComponent<Location> = ({
   return (
     <div className="flex flex-wrap border-y px-4 py-4">
       <div className="basis-3/4 pb-4">
-        <Heading className="text-lg py-2 text-palette-primary-dark" level={1}>
+        <Heading className="py-2 text-palette-primary-dark" level={1}>
           {location.name}
         </Heading>
         {location.hours && (
           <HoursStatus
             hours={location.hours}
             timezone={location.timezone}
-            className="text-sm"
+            className="text-body-sm-fontSize"
           />
         )}
         {location.mainPhone && (
           <CTA
             label={formatPhoneNumber(location.mainPhone)}
-            link={`tel:${location.mainPhone}`}
+            link={location.mainPhone}
             linkType={"PHONE"}
-            className="text-sm py-3"
-            target={"_blank"}
+            className="py-3"
             variant="link"
           />
         )}
-        <p className="text-sm">{location.address.line1}</p>
-        <p className="text-sm">{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</p>
+        <Body>{location.address.line1}</Body>
+        <Body>{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</Body>
         {location.yextDisplayCoordinate && (
           <CTA
             label={"Get Directions"}
@@ -347,7 +347,6 @@ const LocationCard: CardComponent<Location> = ({
                   },
             )}
             linkType={"DRIVING_DIRECTIONS"}
-            className="text-sm"
             target={"_blank"}
             variant="link"
           />
@@ -362,7 +361,7 @@ const LocationCard: CardComponent<Location> = ({
         label={"View More Information"}
         link={getPath(location)}
         linkType={"URL"}
-        className="text-sm text-center basis-full py-3"
+        className="text-center basis-full py-3"
         target={"_blank"}
         variant="primary"
       />
