@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Link, CTA as CTAType } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { CTA as CTAType } from "@yext/pages-components";
+import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
   Body,
   EntityField,
@@ -11,6 +11,7 @@ import {
   type BackgroundStyle,
   backgroundColors,
   ThemeOptions,
+  BackgroundProvider,
 } from "../../index.ts";
 import {
   FaFacebook,
@@ -46,12 +47,15 @@ const Footer: ComponentConfig<FooterProps> = {
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
   },
+  inline: true,
   render: (props) => <FooterComponent {...props} />,
 };
 
-const FooterComponent: React.FC<FooterProps> = (props) => {
+const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
+  props
+) => {
   const document = useDocument<any>();
-  const { backgroundColor } = props;
+  const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
   const links = document?._site?.footer?.links ?? [];
   const copyrightMessage = document?._site?.copyrightMessage;
@@ -96,45 +100,49 @@ const FooterComponent: React.FC<FooterProps> = (props) => {
   ].filter((link) => link.link);
 
   return (
-    <footer
-      className={themeManagerCn(
-        "w-full bg-white components",
-        backgroundColor?.bgColor
-      )}
-    >
-      <div className="container mx-auto flex flex-col px-4 pt-4 pb-3">
-        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
-          {links && (
-            <EntityField
-              displayName="Footer Links"
-              fieldId={"site.footer.links"}
+    <BackgroundProvider value={backgroundColor}>
+      <footer
+        className={themeManagerCn(
+          "w-full bg-white components",
+          backgroundColor.bgColor,
+          "mt-auto"
+        )}
+        ref={puck.dragRef}
+      >
+        <div className="container mx-auto flex flex-col py-8 sm:py-20 mx-auto max-w-pageSection-contentWidth">
+          <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
+            {links && (
+              <EntityField
+                displayName="Footer Links"
+                fieldId={"site.footer.links"}
+              >
+                <FooterLinks links={links} />
+              </EntityField>
+            )}
+            {socialLinks && (
+              <EntityField
+                displayName="Footer Social Icons"
+                fieldId={"site.footer"}
+              >
+                <FooterSocialIcons socialLinks={socialLinks} />
+              </EntityField>
+            )}
+          </div>
+          {copyrightMessage && (
+            <div
+              className={`text-body-sm-fontSize text-center sm:text-left ${backgroundColor.textColor}`}
             >
-              <FooterLinks links={links} />
-            </EntityField>
-          )}
-          {socialLinks && (
-            <EntityField
-              displayName="Footer Social Icons"
-              fieldId={"site.footer"}
-            >
-              <FooterSocialIcons socialLinks={socialLinks} />
-            </EntityField>
+              <EntityField
+                displayName="Copyright Text"
+                fieldId="site.copyrightMessage"
+              >
+                <Body>{copyrightMessage}</Body>
+              </EntityField>
+            </div>
           )}
         </div>
-        {copyrightMessage && (
-          <div
-            className={`text-body-sm-fontSize text-center sm:text-left ${backgroundColor?.textColor}`}
-          >
-            <EntityField
-              displayName="Copyright Text"
-              fieldId="site.copyrightMessage"
-            >
-              <Body>{copyrightMessage}</Body>
-            </EntityField>
-          </div>
-        )}
-      </div>
-    </footer>
+      </footer>
+    </BackgroundProvider>
   );
 };
 
@@ -163,13 +171,14 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
       {socialLinks.map((socialLink: socialLink, idx: number) =>
         socialLink.link ? (
-          <Link
+          <CTA
             key={idx}
-            href={`${socialLink.prefix ?? ""}${socialLink.link}`}
+            label={socialLink.label}
+            link={`${socialLink.prefix ?? ""}${socialLink.link}`}
+            variant={"link"}
             eventName={socialLink.name}
-          >
-            {socialLink.label}
-          </Link>
+            alwaysHideCaret={true}
+          />
         ) : null
       )}
     </div>
