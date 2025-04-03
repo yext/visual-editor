@@ -208,12 +208,15 @@ const PeopleWrapper: React.FC<PeopleProps> = (props) => {
                         constantValueEnabled={person.phone.constantValueEnabled}
                       >
                         <div className="flex items-center gap-2">
-                          <PhoneIcon className="w-4 h-4" />
+                          <div className="w-8 h-8 rounded-full bg-palette-primary-light flex items-center justify-center">
+                            <PhoneIcon className="w-4 h-4" />
+                          </div>
                           <CTA
                             link={resolvedPhone}
                             label={resolvedPhone}
                             linkType="PHONE"
                             variant="link"
+                            className="line-clamp-5"
                           />
                         </div>
                       </EntityField>
@@ -225,12 +228,19 @@ const PeopleWrapper: React.FC<PeopleProps> = (props) => {
                         constantValueEnabled={person.email.constantValueEnabled}
                       >
                         <div className="flex items-center gap-2">
-                          <img src={mailIcon} alt="Email" className="w-4 h-4" />
+                          <div className="w-8 h-8 rounded-full bg-palette-primary-light flex items-center justify-center">
+                            <img
+                              src={mailIcon}
+                              alt="Email"
+                              className="w-4 h-4"
+                            />
+                          </div>
                           <CTA
                             link={resolvedEmail}
                             label={resolvedEmail}
                             linkType="EMAIL"
                             variant="link"
+                            className="line-clamp-5"
                           />
                         </div>
                       </EntityField>
@@ -241,7 +251,7 @@ const PeopleWrapper: React.FC<PeopleProps> = (props) => {
                         fieldId={person.cta.field}
                         constantValueEnabled={person.cta.constantValueEnabled}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 line-clamp-5">
                           <CTA
                             label={resolvedCTA?.label}
                             link={resolvedCTA?.link || "#"}
