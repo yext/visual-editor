@@ -21,3 +21,7 @@ export { Phone, type PhoneProps } from "./Phone.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { HeroSection, type HeroSectionProps } from "./HeroSection.tsx";
+export {
+  CoreInfoSection,
+  type CoreInfoSectionProps,
+} from "./CoreInfoSection.tsx";

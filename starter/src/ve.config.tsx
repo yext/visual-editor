@@ -46,6 +46,8 @@ import {
   HeroSection,
   MapboxStaticMap,
   MapboxStaticProps,
+  CoreInfoSectionProps,
+  CoreInfoSection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -71,6 +73,7 @@ type MainProps = {
   Promo: PromoProps;
   TextList: TextListProps;
   HeroSection: HeroSectionProps;
+  CoreInfoSection: CoreInfoSectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -96,6 +99,7 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   HeroSection,
   MapboxStaticMap,
+  CoreInfoSection,
 };
 
 const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
