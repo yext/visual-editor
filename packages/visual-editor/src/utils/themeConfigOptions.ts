@@ -141,6 +141,8 @@ export const defaultThemeTailwindExtensions = {
   fontSize: {
     "body-sm-fontSize": "calc(var(--fontSize-body-fontSize) - 2px)",
     "body-lg-fontSize": "calc(var(--fontSize-body-fontSize) + 2px)",
+    "3xl": "32px",
+    "4xl": "40px",
   },
 };
 

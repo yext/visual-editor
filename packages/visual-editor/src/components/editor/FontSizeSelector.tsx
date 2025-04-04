@@ -13,8 +13,8 @@ export const fontSizeOptions = (includeLargeSizes = true) => {
     { label: "LG", value: "lg", px: "18" },
     { label: "XL", value: "xl", px: "20" },
     { label: "2XL", value: "2xl", px: "24" },
-    { label: "3XL", value: "3xl", px: "30" },
-    { label: "4XL", value: "4xl", px: "36" },
+    { label: "3XL", value: "3xl", px: "32" },
+    { label: "4XL", value: "4xl", px: "40" },
   ];
   const largeFontSizeOptions = [
     { label: "5XL", value: "5xl", px: "48" },
