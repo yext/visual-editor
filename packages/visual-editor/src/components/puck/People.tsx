@@ -195,7 +195,6 @@ const PersonCard: React.FC<PersonCardProps> = ({
                   label={resolvedPhone}
                   linkType="PHONE"
                   variant="link"
-                  className="text-sm"
                 />
               </div>
             </EntityField>
@@ -219,7 +218,6 @@ const PersonCard: React.FC<PersonCardProps> = ({
                   label={resolvedEmail}
                   linkType="EMAIL"
                   variant="link"
-                  className="text-sm"
                 />
               </div>
             </EntityField>
@@ -236,7 +234,6 @@ const PersonCard: React.FC<PersonCardProps> = ({
                   link={resolvedCTA?.link || "#"}
                   linkType={resolvedCTA?.linkType}
                   variant="link"
-                  className="text-sm"
                 />
               </div>
             </EntityField>
@@ -424,14 +421,7 @@ export const People: ComponentConfig<PeopleProps> = {
   resolveFields() {
     const fields = { ...peopleFields };
     const peopleField = fields.people as ArrayField<
-      {
-        headshot: ImageWrapperProps;
-        name: YextEntityField<string>;
-        title: YextEntityField<string>;
-        phone: YextEntityField<string>;
-        email: YextEntityField<string>;
-        cta: YextEntityField<CTAProps>;
-      }[]
+      Omit<PersonCardProps, "index">[]
     >;
 
     // Always include the headshot fields with default layout
