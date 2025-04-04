@@ -15,7 +15,7 @@ import {
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
-  direction: "row" | "column";
+  direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
   insideDropZone?: boolean;
 }
@@ -56,11 +56,14 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
           )}
         >
           <DropZone
-            className={themeManagerCn(layoutVariants({ gap }), "flex")}
+            className={themeManagerCn(
+              layoutVariants({ gap }),
+              "flex",
+              insideDropZone ? direction : `flex-col md:${direction}`
+            )}
             zone="flex-container"
             style={{
               justifyContent,
-              flexDirection: direction,
               flexWrap: wrap,
             }}
             disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
@@ -78,8 +81,8 @@ const flexContainerFields: Fields<FlexProps> = {
     label: "Direction",
     type: "radio",
     options: [
-      { label: "Horizontal", value: "row" },
-      { label: "Vertical", value: "column" },
+      { label: "Horizontal", value: "flex-row" },
+      { label: "Vertical", value: "flex-col" },
     ],
   },
   justifyContent: {
@@ -102,7 +105,7 @@ export const Flex: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
-    direction: "row",
+    direction: "flex-row",
     justifyContent: "start",
     wrap: "nowrap",
     gap: "8",

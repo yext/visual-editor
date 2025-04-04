@@ -28,3 +28,4 @@ export {
   ExampleRepeatableItemComponent,
   type ExampleRepeatableItemProps,
 } from "./ExampleRepeatableItem.tsx";
+export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";

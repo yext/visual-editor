@@ -48,6 +48,8 @@ import {
   CollectionSectionProps,
   ExampleRepeatableItemComponent,
   ExampleRepeatableItemProps,
+  Testimonials,
+  TestimonialsProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -74,6 +76,7 @@ type MainProps = {
   TextList: TextListProps;
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
   CollectionSection: CollectionSectionProps;
+  Testimonials: TestimonialsProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -100,6 +103,7 @@ const components: Config<MainProps>["components"] = {
   MapboxStaticMap,
   ExampleRepeatableItemComponent,
   CollectionSection,
+  Testimonials,
 };
 
 const pageSections: (keyof MainProps)[] = [
@@ -107,6 +111,7 @@ const pageSections: (keyof MainProps)[] = [
   "Breadcrumbs",
   "Card",
   "Promo",
+  "Testimonials",
 ];
 
 const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
