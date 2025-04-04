@@ -44,6 +44,10 @@ import {
   PromoProps,
   MapboxStaticMap,
   MapboxStaticProps,
+  CollectionSection,
+  CollectionSectionProps,
+  ExampleRepeatableItemComponent,
+  ExampleRepeatableItemProps,
   Testimonials,
   TestimonialsProps,
   People,
@@ -72,6 +76,8 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
+  ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
+  CollectionSection: CollectionSectionProps;
   Testimonials: TestimonialsProps;
   People: PeopleProps;
 };
@@ -98,6 +104,8 @@ const components: Config<MainProps>["components"] = {
   Directory,
   Breadcrumbs,
   MapboxStaticMap,
+  ExampleRepeatableItemComponent,
+  CollectionSection,
   Testimonials,
   People,
 };
