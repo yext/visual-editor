@@ -125,7 +125,7 @@ export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
   fields: ImageWrapperFields,
   defaultProps: {
     image: {
-      field: "primaryPhoto",
+      field: "",
       constantValue: {
         url: PLACEHOLDER_IMAGE_URL,
         height: 360,
