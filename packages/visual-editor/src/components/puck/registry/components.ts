@@ -184,6 +184,12 @@ export const ui: Registry["items"] = [
     files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
   },
   {
+    name: "People",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body", "cta", "image"],
+    files: [{ path: "People.tsx", type: "registry:ui" }],
+  },
+  {
     name: "Hero Section",
     type: "registry:ui",
     files: [{ path: "HeroSection.tsx", type: "registry:ui" }],
