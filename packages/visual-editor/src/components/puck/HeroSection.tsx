@@ -345,7 +345,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           width: 640,
           url: PLACEHOLDER_IMAGE_URL,
         },
-        constantValueEnabled: true,
       },
       layout: "auto",
       aspectRatio: 1.78,
@@ -354,7 +353,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "name",
         constantValue: "Business Name",
-        constantValueEnabled: false,
       },
       level: 3,
     },
@@ -362,7 +360,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "address.city",
         constantValue: "Geomodifier Name",
-        constantValueEnabled: false,
       },
       level: 1,
     },
@@ -370,7 +367,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       entityField: {
         field: "hours",
         constantValue: {},
-        constantValueEnabled: false,
       },
       showHours: true,
     },
