@@ -8,6 +8,7 @@ import {
   MapboxMap,
   OnDragHandler,
   OnSelectParams,
+  ResultsCount,
   VerticalResults,
 } from "@yext/search-ui-react";
 import {
@@ -17,15 +18,7 @@ import {
   useSearchState,
 } from "@yext/search-headless-react";
 import * as React from "react";
-import { cva, VariantProps } from "class-variance-authority";
-import {
-  BasicSelector,
-  Body,
-  Button,
-  CTA,
-  Heading,
-  themeManagerCn,
-} from "@yext/visual-editor";
+import { BasicSelector, Body, Button, CTA, Heading } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 import { normalizeSlug } from "@yext/visual-editor";
 import { useEffect, useState } from "react";
@@ -37,35 +30,11 @@ const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 
-const locatorVariants = cva("", {
-  variants: {
-    backgroundColor: {
-      default: "bg-locator-backgroundColor",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-    },
-  },
-  defaultVariants: {
-    backgroundColor: "default",
-  },
-});
-
-interface LocatorProps extends VariantProps<typeof locatorVariants> {
+type LocatorProps = {
   mapStyle?: string;
-}
+};
 
 const locatorFields: Fields<LocatorProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
   mapStyle: BasicSelector("Map Style", [
     { label: "Default", value: "mapbox://styles/mapbox/streets-v12" },
     {
@@ -94,7 +63,7 @@ const LocatorComponent: ComponentConfig<LocatorProps> = {
 type SearchState = "not started" | "loading" | "complete";
 
 const Locator: React.FC<LocatorProps> = (props) => {
-  const { backgroundColor, mapStyle } = props;
+  const { mapStyle } = props;
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0,
   );
@@ -225,17 +194,22 @@ const Locator: React.FC<LocatorProps> = (props) => {
           />
           <div id="innerDiv" className="flex-grow overflow-y-auto">
             {resultCount > 0 && (
-              <VerticalResults CardComponent={LocationCard} />
+              <div>
+                <ResultsCount
+                  customCssClasses={{ resultsCountContainer: "py-1 text-lg" }}
+                />
+                <VerticalResults CardComponent={LocationCard} />
+              </div>
+            )}
+            {resultCount === 0 && searchState === "not started" && (
+              <Body className="py-2 border-y">
+                Use our locator to find a location near you
+              </Body>
             )}
             {resultCount === 0 && searchState === "complete" && (
-              <div
-                className={themeManagerCn(
-                  "flex items-center justify-center",
-                  locatorVariants({ backgroundColor }),
-                )}
-              >
-                <p className="pt-4 text-2xl">No results found for this area</p>
-              </div>
+              <Body className="py-2 border-y">
+                No results found for this area
+              </Body>
             )}
           </div>
         </div>
@@ -248,7 +222,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
               <div className="absolute bottom-10 left-0 right-0 flex justify-center">
                 <Button
                   onClick={handleSearchAreaClick}
-                  className="rounded-2xl border bg-white py-2 px-4 shadow-xl text-black"
+                  className="py-2 px-4 shadow-xl"
                 >
                   <p>Search This Area</p>
                 </Button>
