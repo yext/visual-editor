@@ -28,10 +28,6 @@ import {
   Body,
 } from "../../index.js";
 
-interface phoneNumberSectionProps {
-  number: YextEntityField<string>;
-  label: string;
-}
 export interface CoreInfoSectionProps {
   styles: {
     headingLevel: HeadingLevel;
@@ -43,7 +39,7 @@ export interface CoreInfoSectionProps {
     showGetDirectionsLink: boolean;
   };
   infoColumnPhoneNumbers: {
-    phoneNumber: phoneNumberSectionProps[];
+    phoneNumber: Array<{ number: YextEntityField<string>; label: string }>;
     phoneFormat: string;
     includePhoneHyperlink: boolean;
   };
