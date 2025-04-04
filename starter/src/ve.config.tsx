@@ -48,6 +48,8 @@ import {
   TestimonialsProps,
   ProductsSection,
   ProductsSectionProps,
+  People,
+  PeopleProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -74,6 +76,7 @@ type MainProps = {
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
+  People: PeopleProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -100,6 +103,7 @@ const components: Config<MainProps>["components"] = {
   MapboxStaticMap,
   Testimonials,
   ProductsSection,
+  People,
 };
 
 const pageSections: (keyof MainProps)[] = [
@@ -109,6 +113,7 @@ const pageSections: (keyof MainProps)[] = [
   "ProductsSection",
   "Promo",
   "Testimonials",
+  "People",
 ];
 
 const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];

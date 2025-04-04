@@ -24,4 +24,5 @@ export {
 } from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
+export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
