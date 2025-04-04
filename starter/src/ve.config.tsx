@@ -49,6 +49,10 @@ import {
   People,
   PeopleProps,
 } from "@yext/visual-editor";
+import {
+  PhotoGallerySection,
+  PhotoGallerySectionProps,
+} from "./components/PhotoGallerySection.js";
 
 type MainProps = {
   Address: AddressProps;
@@ -74,6 +78,7 @@ type MainProps = {
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
   People: PeopleProps;
+  PhotoGallerySection: PhotoGallerySectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -100,6 +105,7 @@ const components: Config<MainProps>["components"] = {
   MapboxStaticMap,
   Testimonials,
   People,
+  PhotoGallerySection,
 };
 
 const pageSections: (keyof MainProps)[] = [
