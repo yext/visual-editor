@@ -32,13 +32,11 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
             horizontalPadding,
           })
         )}
-        maxWidth="full"
-        padding="none"
       >
         <div
           className={themeManagerCn(
             layoutVariants({ gap, columnFormatting }),
-            `flex flex-col min-h-0 min-w-0 mx-auto ${insideDropZone ? "" : "max-w-pageSection-contentWidth"}`,
+            `flex flex-col min-h-0 min-w-0 max-w-pageSection-contentWidth ${insideDropZone ? "" : " mx-auto "}`,
             className
           )}
           ref={ref}
@@ -79,7 +77,7 @@ export const Grid: ComponentConfig<GridProps> = {
   fields: gridSectionFields,
   defaultProps: {
     columns: 2,
-    gap: "0",
+    gap: "8",
     verticalPadding: "default",
     horizontalPadding: "4",
     backgroundColor: backgroundColors.background1.value,

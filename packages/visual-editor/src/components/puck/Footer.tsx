@@ -4,14 +4,13 @@ import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
   Body,
   EntityField,
-  themeManagerCn,
   useDocument,
   BasicSelector,
   CTA,
   type BackgroundStyle,
   backgroundColors,
   ThemeOptions,
-  BackgroundProvider,
+  Section,
 } from "../../index.ts";
 import {
   FaFacebook,
@@ -100,49 +99,42 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   ].filter((link) => link.link);
 
   return (
-    <BackgroundProvider value={backgroundColor}>
-      <footer
-        className={themeManagerCn(
-          "w-full bg-white components",
-          backgroundColor.bgColor,
-          "mt-auto"
-        )}
-        ref={puck.dragRef}
+    <footer ref={puck.dragRef} className={"mt-auto"}>
+      <Section
+        applyPageLevelStyles
+        background={backgroundColor}
+        className="flex flex-col"
       >
-        <div className="container mx-auto flex flex-col py-8 sm:py-20 mx-auto max-w-pageSection-contentWidth">
-          <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
-            {links && (
-              <EntityField
-                displayName="Footer Links"
-                fieldId={"site.footer.links"}
-              >
-                <FooterLinks links={links} />
-              </EntityField>
-            )}
-            {socialLinks && (
-              <EntityField
-                displayName="Footer Social Icons"
-                fieldId={"site.footer"}
-              >
-                <FooterSocialIcons socialLinks={socialLinks} />
-              </EntityField>
-            )}
-          </div>
-          {copyrightMessage && (
-            <div
-              className={`text-body-sm-fontSize text-center sm:text-left ${backgroundColor.textColor}`}
+        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
+          {links && (
+            <EntityField
+              displayName="Footer Links"
+              fieldId={"site.footer.links"}
             >
-              <EntityField
-                displayName="Copyright Text"
-                fieldId="site.copyrightMessage"
-              >
-                <Body>{copyrightMessage}</Body>
-              </EntityField>
-            </div>
+              <FooterLinks links={links} />
+            </EntityField>
+          )}
+          {socialLinks && (
+            <EntityField
+              displayName="Footer Social Icons"
+              fieldId={"site.footer"}
+            >
+              <FooterSocialIcons socialLinks={socialLinks} />
+            </EntityField>
           )}
         </div>
-      </footer>
-    </BackgroundProvider>
+        {copyrightMessage && (
+          <div className={`text-body-sm-fontSize text-center sm:text-left `}>
+            <EntityField
+              displayName="Copyright Text"
+              fieldId="site.copyrightMessage"
+            >
+              <Body>{copyrightMessage}</Body>
+            </EntityField>
+          </div>
+        )}
+      </Section>
+    </footer>
   );
 };
 

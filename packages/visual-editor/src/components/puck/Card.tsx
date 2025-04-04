@@ -158,71 +158,71 @@ const CardWrapper = ({
   const resolvedCTA = resolveYextEntityField(document, cta.entityField);
 
   return (
-    <Section background={backgroundColor} className={`components`}>
-      <div
-        className={themeManagerCn(
-          "flex flex-col md:flex-row overflow-hidden md:gap-8",
-          orientation === "right" && "md:flex-row-reverse"
-        )}
-      >
-        {resolvedImage && (
-          <div className="w-full">
-            <EntityField
-              displayName="Image"
-              fieldId={image.image.field}
-              constantValueEnabled={image.image.constantValueEnabled}
-            >
-              <Image
-                image={resolvedImage}
-                layout={image.layout}
-                width={image.width}
-                height={image.height}
-                aspectRatio={image.aspectRatio}
-              />
-            </EntityField>
-          </div>
-        )}
-        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
-          {heading?.text && (
-            <EntityField displayName="Heading" fieldId={heading.text.field}>
-              <Heading
-                fontSize={heading.fontSize}
-                transform={heading.transform}
-                level={heading.level}
-                weight={heading.weight}
-              >
-                {resolveYextEntityField(document, heading.text)}
-              </Heading>
-            </EntityField>
-          )}
-          {subheading?.text && (
-            <EntityField displayName="Subtitle" fieldId={subheading.text.field}>
-              <Heading
-                fontSize={subheading.fontSize}
-                transform={subheading.transform}
-                level={subheading.level}
-                weight={subheading.weight}
-              >
-                {resolveYextEntityField(document, subheading.text)}
-              </Heading>
-            </EntityField>
-          )}
-          {body?.text && (
-            <EntityField displayName="Description" fieldId={body.text.field}>
-              <Body variant={body.variant}>
-                {resolveYextEntityField(document, body.text)}
-              </Body>
-            </EntityField>
-          )}
-          {resolvedCTA && (
-            <CTA
-              variant={cta.variant}
-              label={resolvedCTA.label ?? ""}
-              link={resolvedCTA.link || "#"}
-              linkType={resolvedCTA.linkType}
+    <Section
+      background={backgroundColor}
+      className={themeManagerCn(
+        "flex flex-col md:flex-row overflow-hidden md:gap-8",
+        orientation === "right" && "md:flex-row-reverse"
+      )}
+      applyPageLevelStyles
+    >
+      {resolvedImage && (
+        <div className="w-full">
+          <EntityField
+            displayName="Image"
+            fieldId={image.image.field}
+            constantValueEnabled={image.image.constantValueEnabled}
+          >
+            <Image
+              image={resolvedImage}
+              layout={image.layout}
+              width={image.width}
+              height={image.height}
+              aspectRatio={image.aspectRatio}
             />
-          )}
+          </EntityField>
         </div>
+      )}
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
+        {heading?.text && (
+          <EntityField displayName="Heading" fieldId={heading.text.field}>
+            <Heading
+              fontSize={heading.fontSize}
+              transform={heading.transform}
+              level={heading.level}
+              weight={heading.weight}
+            >
+              {resolveYextEntityField(document, heading.text)}
+            </Heading>
+          </EntityField>
+        )}
+        {subheading?.text && (
+          <EntityField displayName="Subtitle" fieldId={subheading.text.field}>
+            <Heading
+              fontSize={subheading.fontSize}
+              transform={subheading.transform}
+              level={subheading.level}
+              weight={subheading.weight}
+            >
+              {resolveYextEntityField(document, subheading.text)}
+            </Heading>
+          </EntityField>
+        )}
+        {body?.text && (
+          <EntityField displayName="Description" fieldId={body.text.field}>
+            <Body variant={body.variant}>
+              {resolveYextEntityField(document, body.text)}
+            </Body>
+          </EntityField>
+        )}
+        {resolvedCTA && (
+          <CTA
+            variant={cta.variant}
+            label={resolvedCTA.label ?? ""}
+            link={resolvedCTA.link || "#"}
+            linkType={resolvedCTA.linkType}
+          />
+        )}
       </div>
     </Section>
   );

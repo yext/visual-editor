@@ -72,6 +72,7 @@ export const Combobox = ({
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
+                  className="cursor-pointer"
                   key={option.label}
                   value={option.value.toString()}
                   onSelect={(currentValue) => {

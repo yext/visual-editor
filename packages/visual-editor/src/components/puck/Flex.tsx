@@ -1,11 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import {
-  innerLayoutVariants,
-  layoutFields,
-  layoutProps,
-  layoutVariants,
-} from "./Layout.tsx";
+import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 import {
   backgroundColors,
   themeManagerCn,
@@ -41,34 +36,23 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
           layoutVariants({
             verticalPadding,
             horizontalPadding,
-            gap,
           })
         )}
         ref={ref}
-        maxWidth="full"
-        padding="none"
       >
-        <div
+        <DropZone
           className={themeManagerCn(
-            innerLayoutVariants({
-              maxContentWidth: insideDropZone ? "none" : "default",
-            })
+            layoutVariants({ gap }),
+            "flex max-w-pageSection-contentWidth w-full",
+            insideDropZone ? direction : `mx-auto flex-col md:${direction}`
           )}
-        >
-          <DropZone
-            className={themeManagerCn(
-              layoutVariants({ gap }),
-              "flex",
-              insideDropZone ? direction : `flex-col md:${direction}`
-            )}
-            zone="flex-container"
-            style={{
-              justifyContent,
-              flexWrap: wrap,
-            }}
-            disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
-          />
-        </div>
+          zone="flex-container"
+          style={{
+            justifyContent,
+            flexWrap: wrap,
+          }}
+          disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
+        />
       </Section>
     );
   }
