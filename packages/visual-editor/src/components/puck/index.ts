@@ -26,3 +26,7 @@ export {
   type CoreInfoSectionProps,
 } from "./CoreInfoSection.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
+export {
+  NearbyLocations,
+  type NearbyLocationsProps,
+} from "./NearbyLocations.tsx";
