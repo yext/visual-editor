@@ -31,15 +31,15 @@ export const Section = React.forwardRef<HTMLDivElement, SectionProps>(
     { className, background, verticalPadding, applyPageLevelStyles, ...props },
     ref
   ) => {
-    // If this is being used as a Page Section, create an outer and inner div, and
-    // apply the ref/props to the inner div.
-    // If not a Page Section, only create one div
+    // If this is being used as a Page Section, create an outer and inner div,
+    // apply the maxWidth, margin, and padding, and attach the ref/HTMLDivElement props to the inner div.
+    // If not a Page Section, only create one div and do not apply the layout styling.
     const SectionContainer = (
       <div
         className={themeManagerCn(
           "components",
           applyPageLevelStyles
-            ? `w-full px-4 lg:px-0 ${sectionVariants({ verticalPadding })}`
+            ? `w-full px-4 ${sectionVariants({ verticalPadding })}`
             : className,
           background?.bgColor,
           background?.textColor
