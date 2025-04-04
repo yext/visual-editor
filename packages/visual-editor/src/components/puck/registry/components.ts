@@ -189,4 +189,10 @@ export const ui: Registry["items"] = [
     registryDependencies: ["section", "heading", "body", "cta", "image"],
     files: [{ path: "People.tsx", type: "registry:ui" }],
   },
+  {
+    name: "Events",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body", "cta", "image"],
+    files: [{ path: "Events.tsx", type: "registry:ui" }],
+  },
 ];
