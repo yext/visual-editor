@@ -178,9 +178,6 @@ importers:
       react-error-boundary:
         specifier: ^5.0.0
         version: 5.0.0(react@18.3.1)
-      root:
-        specifier: github:tanstack/react-query
-        version: git+https://git@github.com:tanstack/react-query.git#477faeac7ab201043b5da72ff92818191f74fe71
       sonner:
         specifier: ^1.5.0
         version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -8820,15 +8817,6 @@ packages:
     engines: { node: ">=18.0.0", npm: ">=8.0.0" }
     hasBin: true
 
-  root@git+https://git@github.com:tanstack/react-query.git#477faeac7ab201043b5da72ff92818191f74fe71:
-    resolution:
-      {
-        commit: 477faeac7ab201043b5da72ff92818191f74fe71,
-        repo: git@github.com:tanstack/react-query.git,
-        type: git,
-      }
-    version: 0.0.0
-
   rrweb-cssom@0.7.1:
     resolution:
       {
@@ -9918,7 +9906,7 @@ packages:
     engines: { node: ">=10" }
     peerDependencies:
       "@types/react": "*"
-      react: 18.2.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       "@types/react":
         optional: true
@@ -9976,7 +9964,7 @@ packages:
     engines: { node: ">=10" }
     peerDependencies:
       "@types/react": "*"
-      react: 18.2.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
     peerDependenciesMeta:
       "@types/react":
         optional: true
@@ -16123,9 +16111,6 @@ snapshots:
       "@rollup/rollup-win32-ia32-msvc": 4.34.9
       "@rollup/rollup-win32-x64-msvc": 4.34.9
       fsevents: 2.3.3
-
-  root@git+https://git@github.com:tanstack/react-query.git#477faeac7ab201043b5da72ff92818191f74fe71:
-    {}
 
   rrweb-cssom@0.7.1: {}
 
