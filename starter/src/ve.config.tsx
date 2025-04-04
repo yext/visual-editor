@@ -46,6 +46,8 @@ import {
   MapboxStaticProps,
   Testimonials,
   TestimonialsProps,
+  NearbyLocations,
+  NearbyLocationsProps,
   People,
   PeopleProps,
 } from "@yext/visual-editor";
@@ -73,6 +75,7 @@ type MainProps = {
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
+  NearbyLocations: NearbyLocationsProps;
   People: PeopleProps;
 };
 
@@ -99,6 +102,7 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   Testimonials,
+  NearbyLocations,
   People,
 };
 
