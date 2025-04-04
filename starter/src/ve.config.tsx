@@ -44,6 +44,10 @@ import {
   PromoProps,
   MapboxStaticMap,
   MapboxStaticProps,
+  CollectionSection,
+  CollectionSectionProps,
+  ExampleRepeatableItemComponent,
+  ExampleRepeatableItemProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -68,6 +72,8 @@ type MainProps = {
   Phone: PhoneProps;
   Promo: PromoProps;
   TextList: TextListProps;
+  ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
+  CollectionSection: CollectionSectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -92,6 +98,8 @@ const components: Config<MainProps>["components"] = {
   Directory,
   Breadcrumbs,
   MapboxStaticMap,
+  ExampleRepeatableItemComponent,
+  CollectionSection,
 };
 
 const pageSections: (keyof MainProps)[] = [
