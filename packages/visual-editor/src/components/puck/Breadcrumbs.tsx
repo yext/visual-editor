@@ -1,4 +1,4 @@
-import { Body, useTemplateProps, MaybeLink } from "../../index.js";
+import { Body, useTemplateProps, MaybeLink, Section } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
 
 export type BreadcrumbsProps = {
@@ -52,9 +52,9 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   }
 
   return (
-    <div className="components px-4 sm:px-0 sm:mx-auto max-w-pageSection-contentWidth w-full py-4">
+    <Section applyPageLevelStyles verticalPadding="sm">
       {breadcrumbs?.length > 0 && (
-        <nav className="my-4" aria-label="Breadcrumb">
+        <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap">
             {breadcrumbs.map(({ name, slug }, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
@@ -78,7 +78,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
           </ol>
         </nav>
       )}
-    </div>
+    </Section>
   );
 };
 

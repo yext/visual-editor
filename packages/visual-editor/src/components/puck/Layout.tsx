@@ -96,28 +96,9 @@ export const layoutVariants = cva("components w-full", {
   },
 });
 
-export const innerLayoutVariants = cva(
-  "components flex min-h-0 min-w-0 mx-auto",
-  {
-    variants: {
-      maxContentWidth: {
-        none: "",
-        default: "max-w-pageSection-contentWidth",
-        lg: "max-w-[1024px]",
-        xl: "max-w-[1280px]",
-        xxl: "max-w-[1536px]",
-      },
-    },
-    defaultVariants: {
-      maxContentWidth: "none",
-    },
-  }
-);
-
 export interface layoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {
+    VariantProps<typeof layoutVariants> {
   backgroundColor?: BackgroundStyle;
 }
 

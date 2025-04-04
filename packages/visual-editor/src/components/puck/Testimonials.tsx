@@ -87,48 +87,53 @@ const TestimonialsWrapper: React.FC<TestimonialsProps> = (props) => {
   );
 
   return (
-    <Section background={backgroundColor} className="components">
-      <div className="flex flex-col gap-12 p-8">
-        {resolvedHeading && (
-          <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-          </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => {
-            const resolvedTestimonial = resolveYextEntityField<string>(
-              document,
-              testimonial.testimonial
-            );
-            const resolvedAuthor = resolveYextEntityField<string>(
-              document,
-              testimonial.authorName
-            );
-            const resolvedDate = resolveYextEntityField<string>(
-              document,
-              testimonial.date
-            );
-
-            return (
-              <div
-                key={index}
-                className={`flex flex-col rounded-lg overflow-hidden border`}
-              >
-                <Section background={backgroundColors.background1.value}>
-                  {resolvedTestimonial && (
-                    <Body className="line-clamp-5">{resolvedTestimonial}</Body>
-                  )}
-                </Section>
-                <Section background={cardBackgroundColor} className="p-4">
-                  {resolvedAuthor && (
-                    <Heading level={3}>{resolvedAuthor}</Heading>
-                  )}
-                  {resolvedDate && <Body variant="sm">{resolvedDate}</Body>}
-                </Section>
-              </div>
-            );
-          })}
+    <Section
+      background={backgroundColor}
+      applyPageLevelStyles
+      className="flex flex-col gap-12"
+    >
+      {resolvedHeading && (
+        <div className="text-center">
+          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
         </div>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {testimonials.map((testimonial, index) => {
+          const resolvedTestimonial = resolveYextEntityField<string>(
+            document,
+            testimonial.testimonial
+          );
+          const resolvedAuthor = resolveYextEntityField<string>(
+            document,
+            testimonial.authorName
+          );
+          const resolvedDate = resolveYextEntityField<string>(
+            document,
+            testimonial.date
+          );
+
+          return (
+            <div
+              key={index}
+              className={`flex flex-col rounded-lg overflow-hidden border`}
+            >
+              <Section
+                background={backgroundColors.background1.value}
+                className="p-8"
+              >
+                {resolvedTestimonial && (
+                  <Body className="line-clamp-5">{resolvedTestimonial}</Body>
+                )}
+              </Section>
+              <Section background={cardBackgroundColor} className="p-8">
+                {resolvedAuthor && (
+                  <Heading level={3}>{resolvedAuthor}</Heading>
+                )}
+                {resolvedDate && <Body variant="sm">{resolvedDate}</Body>}
+              </Section>
+            </div>
+          );
+        })}
       </div>
     </Section>
   );
