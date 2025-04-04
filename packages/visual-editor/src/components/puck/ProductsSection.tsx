@@ -95,6 +95,65 @@ const productsSectionFields: Fields<ProductsSectionProps> = {
   },
 };
 
+const ProductCards = ({
+  cards,
+  cardBackgroundColor,
+}: {
+  cards: ProductsSectionProps["cards"];
+  cardBackgroundColor?: BackgroundStyle;
+}) => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {cards.map((card, index) => {
+        return (
+          <div
+            key={index}
+            className={`flex flex-col rounded-lg overflow-hidden border`}
+          >
+            {card.imageUrl && (
+              <img
+                src={card.imageUrl}
+                width={640}
+                height={360}
+                className="w-full object-cover"
+              />
+            )}
+            <Section
+              background={cardBackgroundColor}
+              className="p-8 gap-8 flex flex-col"
+            >
+              <div className="gap-4 flex flex-col">
+                {card.heading && (
+                  <Heading level={3} className="mb-2">
+                    {card.heading}
+                  </Heading>
+                )}
+                {card.category && (
+                  <div
+                    className={themeManagerCn(
+                      "components py-2 px-4 rounded-sm w-fit",
+                      backgroundColors.background5.value.bgColor,
+                      backgroundColors.background5.value.textColor
+                    )}
+                  >
+                    <Body>{card.category}</Body>
+                  </div>
+                )}
+                {card.description && (
+                  <Body className="line-clamp-5">{card.description}</Body>
+                )}
+              </div>
+              {card.cta && (
+                <CTA variant="secondary" label="Learn More" link={card.cta} />
+              )}
+            </Section>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const ProductsSectionWrapper: React.FC<ProductsSectionProps> = ({
   styles,
   sectionHeading,
@@ -107,63 +166,15 @@ const ProductsSectionWrapper: React.FC<ProductsSectionProps> = ({
   );
 
   return (
-    <Section background={styles.backgroundColor} className="components">
+    <Section background={styles.backgroundColor}>
       <div className="flex flex-col gap-12">
         {resolvedHeading && (
           <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cards.map((card, index) => {
-            return (
-              <div
-                key={index}
-                className={`flex flex-col rounded-lg overflow-hidden border`}
-              >
-                {card.imageUrl && (
-                  <img
-                    src={card.imageUrl}
-                    width={640}
-                    height={360}
-                    className="w-full object-cover"
-                  />
-                )}
-                <Section
-                  background={styles.cardBackgroundColor}
-                  className="p-8 gap-8 flex flex-col"
-                >
-                  <div className="gap-4 flex flex-col">
-                    {card.heading && (
-                      <Heading level={3} className="mb-2">
-                        {card.heading}
-                      </Heading>
-                    )}
-                    {card.category && (
-                      <div
-                        className={themeManagerCn(
-                          "components py-2 px-4 rounded-sm w-fit",
-                          backgroundColors.background5.value.bgColor,
-                          backgroundColors.background5.value.textColor
-                        )}
-                      >
-                        <Body>{card.category}</Body>
-                      </div>
-                    )}
-                    {card.description && (
-                      <Body className="line-clamp-5">{card.description}</Body>
-                    )}
-                  </div>
-                  {card.cta && (
-                    <CTA
-                      variant="secondary"
-                      label="Learn More"
-                      link={card.cta}
-                    />
-                  )}
-                </Section>
-              </div>
-            );
-          })}
-        </div>
+        <ProductCards
+          cards={cards}
+          cardBackgroundColor={styles.cardBackgroundColor}
+        />
       </div>
     </Section>
   );
