@@ -163,7 +163,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           allowList: ["emails"],
         },
       }),
-      listLength: { type: "number", label: "List Length", min: 1, max: 3 },
+      listLength: { type: "number", label: "List Length", min: 0, max: 3 },
     },
   },
   infoColumnHours: {
