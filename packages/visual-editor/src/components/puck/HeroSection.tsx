@@ -15,15 +15,16 @@ import {
   BackgroundStyle,
   HeadingLevel,
   ThemeOptions,
+  CTA,
+  CTAProps,
+  Heading,
+  Section,
 } from "../../index.js";
-import { CTA, CTAProps } from "./atoms/cta.js";
-import { Heading } from "./atoms/heading.js";
-import { Section } from "./atoms/section.js";
 import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-interface HeroSectionProps {
+export interface HeroSectionProps {
   image: ImageWrapperProps;
   businessName: {
     entityField: YextEntityField<string>;
@@ -332,7 +333,7 @@ const HeroSectionWrapper = ({
   );
 };
 
-const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
+export const HeroSection: ComponentConfig<HeroSectionProps> = {
   label: "Hero Section",
   fields: heroSectionFields,
   defaultProps: {
@@ -415,5 +416,3 @@ const HeroSectionComponent: ComponentConfig<HeroSectionProps> = {
   },
   render: (props) => <HeroSectionWrapper {...props} />,
 };
-
-export { HeroSectionComponent as HeroSection, type HeroSectionProps };

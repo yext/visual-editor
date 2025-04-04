@@ -106,9 +106,9 @@ const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "HeroSection",
   "Promo",
   "Testimonials",
-  "HeroSection",
 ];
 
 const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
