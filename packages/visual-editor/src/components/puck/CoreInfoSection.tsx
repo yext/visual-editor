@@ -33,28 +33,28 @@ export interface CoreInfoSectionProps {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
   };
-  infoColumnAddress: {
+  address: {
     headingText: YextEntityField<string>;
     address: YextEntityField<AddressType>;
     showGetDirectionsLink: boolean;
   };
-  infoColumnPhoneNumbers: {
+  phoneNumbers: {
     phoneNumber: Array<{ number: YextEntityField<string>; label: string }>;
     phoneFormat: string;
     includePhoneHyperlink: boolean;
   };
-  infoColumnEmails: {
+  emails: {
     emails: YextEntityField<string[]>;
     listLength: number;
   };
-  infoColumnHours: {
+  hours: {
     headingText: YextEntityField<string>;
     hours: YextEntityField<HoursType>;
     startOfWeek: keyof DayOfWeekNames | "today";
     collapseDays: boolean;
     showAdditionalHoursText: boolean;
   };
-  infoColumnServices: {
+  services: {
     headingText: YextEntityField<string>;
     servicesList: YextEntityField<string[]>;
   };
@@ -86,7 +86,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       ),
     },
   },
-  infoColumnAddress: {
+  address: {
     label: "Info Column - Address",
     type: "object",
     objectFields: {
@@ -112,7 +112,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       },
     },
   },
-  infoColumnPhoneNumbers: {
+  phoneNumbers: {
     label: "Info Column - Phone",
     type: "object",
     objectFields: {
@@ -151,7 +151,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       },
     },
   },
-  infoColumnEmails: {
+  emails: {
     label: "Info Column - Emails",
     type: "object",
     objectFields: {
@@ -166,7 +166,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       listLength: { type: "number", label: "List Length", min: 0, max: 3 },
     },
   },
-  infoColumnHours: {
+  hours: {
     label: "Info Column - Hours",
     type: "object",
     objectFields: {
@@ -214,7 +214,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       },
     },
   },
-  infoColumnServices: {
+  services: {
     label: "Info Column - Services",
     type: "object",
     objectFields: {
@@ -238,11 +238,11 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 
 const CoreInfoSectionWrapper = ({
   styles,
-  infoColumnAddress: addressField,
-  infoColumnPhoneNumbers: phoneNumbersField,
-  infoColumnEmails: emailsField,
-  infoColumnHours: hoursField,
-  infoColumnServices: servicesField,
+  address: addressField,
+  phoneNumbers: phoneNumbersField,
+  emails: emailsField,
+  hours: hoursField,
+  services: servicesField,
 }: CoreInfoSectionProps) => {
   const document = useDocument();
   const addressHeadingText = resolveYextEntityField<string>(
@@ -329,7 +329,7 @@ const CoreInfoSectionWrapper = ({
             )}
             {coordinates && addressField.showGetDirectionsLink && (
               <CTA
-                className="text-base font-bold"
+                className="font-bold"
                 link={coordinates}
                 label="Get Directions"
                 linkType="DRIVING_DIRECTIONS"
@@ -370,7 +370,6 @@ const CoreInfoSectionWrapper = ({
                           <Body className="font-bold">{item.label}</Body>
                           {phoneNumbersField.includePhoneHyperlink ? (
                             <CTA
-                              className="text-base"
                               link={resolvedNumber}
                               label={formattedPhoneNumber || ""}
                               linkType="PHONE"
@@ -407,7 +406,6 @@ const CoreInfoSectionWrapper = ({
                         <GoMail className="w-4 h-4" />
                       </div>
                       <CTA
-                        className="text-base font-bold"
                         link={email}
                         label={email}
                         linkType="EMAIL"
@@ -501,7 +499,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       headingLevel: 3,
       backgroundColor: backgroundColors.background1.value,
     },
-    infoColumnAddress: {
+    address: {
       headingText: {
         field: "",
         constantValue: "Information",
@@ -515,17 +513,15 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
           postalCode: "",
           countryCode: "",
         },
-        constantValueEnabled: false,
       },
       showGetDirectionsLink: true,
     },
-    infoColumnPhoneNumbers: {
+    phoneNumbers: {
       phoneNumber: [
         {
           number: {
             field: "mainPhone",
             constantValue: "",
-            constantValueEnabled: false,
           },
           label: "Phone",
         },
@@ -533,15 +529,14 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       phoneFormat: "domestic",
       includePhoneHyperlink: true,
     },
-    infoColumnEmails: {
+    emails: {
       emails: {
         field: "emails",
         constantValue: [],
-        constantValueEnabled: false,
       },
       listLength: 1,
     },
-    infoColumnHours: {
+    hours: {
       headingText: {
         field: "",
         constantValue: "Hours",
@@ -550,13 +545,12 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       hours: {
         field: "hours",
         constantValue: {},
-        constantValueEnabled: false,
       },
       startOfWeek: "today",
       collapseDays: false,
       showAdditionalHoursText: true,
     },
-    infoColumnServices: {
+    services: {
       headingText: {
         field: "",
         constantValue: "Services",
@@ -565,7 +559,6 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       servicesList: {
         field: "services",
         constantValue: [],
-        constantValueEnabled: false,
       },
     },
   },
