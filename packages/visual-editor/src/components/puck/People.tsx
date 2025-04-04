@@ -93,17 +93,158 @@ const peopleFields: Fields<PeopleProps> = {
         label: "Email",
         filter: {
           types: ["type.string"],
+          allowList: ["emails"],
         },
       }),
       cta: YextEntityFieldSelector<any, CTAProps>({
         label: "CTA",
         filter: {
           types: ["type.cta"],
-          allowList: ["linkType.URL"],
         },
       }),
     },
   },
+};
+
+interface PersonCardProps {
+  headshot: ImageWrapperProps;
+  name: YextEntityField<string>;
+  title: YextEntityField<string>;
+  phone: YextEntityField<string>;
+  email: YextEntityField<string>;
+  cta: YextEntityField<CTAProps>;
+  index: number;
+}
+
+const PersonCard: React.FC<PersonCardProps> = ({
+  headshot,
+  name,
+  title,
+  phone,
+  email,
+  cta,
+  index,
+}) => {
+  const document = useDocument();
+  const resolvedHeadshot = resolveYextEntityField<ImageProps["image"]>(
+    document,
+    headshot?.image
+  );
+  const resolvedName = resolveYextEntityField<string>(document, name);
+  const resolvedTitle = resolveYextEntityField<string>(document, title);
+  const resolvedPhone = resolveYextEntityField<string>(document, phone);
+  const resolvedEmail = resolveYextEntityField<string>(document, email);
+  const resolvedCTA = resolveYextEntityField<CTAProps>(document, cta);
+
+  return (
+    <div
+      key={index}
+      className="flex flex-col rounded-lg overflow-hidden border bg-white"
+    >
+      <Section
+        background={backgroundColors.background1.value}
+        className="flex p-8 gap-6"
+      >
+        <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
+          {resolvedHeadshot && (
+            <EntityField
+              displayName="Headshot"
+              fieldId={headshot?.image?.field}
+              constantValueEnabled={headshot?.image?.constantValueEnabled}
+            >
+              <Image image={resolvedHeadshot} layout="auto" aspectRatio={1} />
+            </EntityField>
+          )}
+        </div>
+        <div className="flex flex-col justify-center gap-1">
+          {resolvedName && (
+            <EntityField
+              displayName="Name"
+              fieldId={name.field}
+              constantValueEnabled={name.constantValueEnabled}
+            >
+              <Heading level={3}>{resolvedName}</Heading>
+            </EntityField>
+          )}
+          {resolvedTitle && (
+            <EntityField
+              displayName="Title"
+              fieldId={title.field}
+              constantValueEnabled={title.constantValueEnabled}
+            >
+              <Body variant="base">{resolvedTitle}</Body>
+            </EntityField>
+          )}
+        </div>
+      </Section>
+      <hr className="border" />
+      <Section background={backgroundColors.background1.value} className="p-8">
+        <div className="flex flex-col gap-4">
+          {resolvedPhone && (
+            <EntityField
+              displayName="Phone"
+              fieldId={phone.field}
+              constantValueEnabled={phone.constantValueEnabled}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
+                  <PhoneIcon className="w-3 h-3 text-black" />
+                </div>
+                <CTA
+                  link={resolvedPhone}
+                  label={resolvedPhone}
+                  linkType="PHONE"
+                  variant="link"
+                  className="text-sm"
+                />
+              </div>
+            </EntityField>
+          )}
+          {resolvedEmail && (
+            <EntityField
+              displayName="Email"
+              fieldId={email.field}
+              constantValueEnabled={email.constantValueEnabled}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
+                  <img
+                    src={mailIcon}
+                    alt="Email"
+                    className="w-3 h-3 [filter:brightness(0)]"
+                  />
+                </div>
+                <CTA
+                  link={resolvedEmail}
+                  label={resolvedEmail}
+                  linkType="EMAIL"
+                  variant="link"
+                  className="text-sm"
+                />
+              </div>
+            </EntityField>
+          )}
+          {resolvedCTA && (
+            <EntityField
+              displayName="CTA"
+              fieldId={cta.field}
+              constantValueEnabled={cta.constantValueEnabled}
+            >
+              <div className="flex justify-start gap-2">
+                <CTA
+                  label={resolvedCTA?.label}
+                  link={resolvedCTA?.link || "#"}
+                  linkType={resolvedCTA?.linkType}
+                  variant="link"
+                  className="text-sm"
+                />
+              </div>
+            </EntityField>
+          )}
+        </div>
+      </Section>
+    </div>
+  );
 };
 
 const PeopleWrapper: React.FC<PeopleProps> = (props) => {
@@ -123,149 +264,9 @@ const PeopleWrapper: React.FC<PeopleProps> = (props) => {
           </div>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {people.map((person, index) => {
-            const resolvedHeadshot = resolveYextEntityField<
-              ImageProps["image"]
-            >(document, person.headshot.image);
-            const resolvedName = resolveYextEntityField<string>(
-              document,
-              person.name
-            );
-            const resolvedTitle = resolveYextEntityField<string>(
-              document,
-              person.title
-            );
-            const resolvedPhone = resolveYextEntityField<string>(
-              document,
-              person.phone
-            );
-            const resolvedEmail = resolveYextEntityField<string>(
-              document,
-              person.email
-            );
-            const resolvedCTA = resolveYextEntityField<CTAProps>(
-              document,
-              person.cta
-            );
-
-            return (
-              <div
-                key={index}
-                className="flex flex-col rounded-lg overflow-hidden border bg-white"
-              >
-                <Section
-                  background={backgroundColors.background1.value}
-                  className="flex p-4 gap-4"
-                >
-                  <div className="w-24 h-24 flex-shrink-0 rounded-full overflow-hidden">
-                    {resolvedHeadshot && (
-                      <EntityField
-                        displayName="Headshot"
-                        fieldId={person.headshot.image.field}
-                        constantValueEnabled={
-                          person.headshot.image.constantValueEnabled
-                        }
-                      >
-                        <Image
-                          image={resolvedHeadshot}
-                          layout="auto"
-                          aspectRatio={1}
-                        />
-                      </EntityField>
-                    )}
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    {resolvedName && (
-                      <EntityField
-                        displayName="Name"
-                        fieldId={person.name.field}
-                        constantValueEnabled={person.name.constantValueEnabled}
-                      >
-                        <Heading level={3}>{resolvedName}</Heading>
-                      </EntityField>
-                    )}
-                    {resolvedTitle && (
-                      <EntityField
-                        displayName="Title"
-                        fieldId={person.title.field}
-                        constantValueEnabled={person.title.constantValueEnabled}
-                      >
-                        <Body variant="base">{resolvedTitle}</Body>
-                      </EntityField>
-                    )}
-                  </div>
-                </Section>
-                <hr className="border" />
-                <Section
-                  background={backgroundColors.background1.value}
-                  className="p-4"
-                >
-                  <div className="flex flex-col gap-2">
-                    {resolvedPhone && (
-                      <EntityField
-                        displayName="Phone"
-                        fieldId={person.phone.field}
-                        constantValueEnabled={person.phone.constantValueEnabled}
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-palette-primary-light flex items-center justify-center">
-                            <PhoneIcon className="w-4 h-4" />
-                          </div>
-                          <CTA
-                            link={resolvedPhone}
-                            label={resolvedPhone}
-                            linkType="PHONE"
-                            variant="link"
-                            className="line-clamp-5"
-                          />
-                        </div>
-                      </EntityField>
-                    )}
-                    {resolvedEmail && (
-                      <EntityField
-                        displayName="Email"
-                        fieldId={person.email.field}
-                        constantValueEnabled={person.email.constantValueEnabled}
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-palette-primary-light flex items-center justify-center">
-                            <img
-                              src={mailIcon}
-                              alt="Email"
-                              className="w-4 h-4"
-                            />
-                          </div>
-                          <CTA
-                            link={resolvedEmail}
-                            label={resolvedEmail}
-                            linkType="EMAIL"
-                            variant="link"
-                            className="line-clamp-5"
-                          />
-                        </div>
-                      </EntityField>
-                    )}
-                    {resolvedCTA && (
-                      <EntityField
-                        displayName="CTA"
-                        fieldId={person.cta.field}
-                        constantValueEnabled={person.cta.constantValueEnabled}
-                      >
-                        <div className="flex items-center gap-2 line-clamp-5">
-                          <CTA
-                            label={resolvedCTA?.label}
-                            link={resolvedCTA?.link || "#"}
-                            linkType={resolvedCTA?.linkType}
-                            variant="link"
-                          />
-                        </div>
-                      </EntityField>
-                    )}
-                  </div>
-                </Section>
-              </div>
-            );
-          })}
+          {people.map((person, index) => (
+            <PersonCard key={index} {...person} index={index} />
+          ))}
         </div>
       </div>
     </Section>
@@ -324,7 +325,95 @@ export const People: ComponentConfig<PeopleProps> = {
           field: "",
           constantValue: {
             label: "Visit Profile",
-            link: "",
+            link: "#",
+            linkType: "URL",
+          },
+          constantValueEnabled: true,
+        },
+      },
+      {
+        headshot: {
+          image: {
+            field: "",
+            constantValue: {
+              url: PLACEHOLDER_IMAGE_URL,
+              height: 360,
+              width: 360,
+            },
+            constantValueEnabled: true,
+          },
+          layout: "auto",
+          aspectRatio: 1,
+        },
+        name: {
+          field: "",
+          constantValue: "First Last",
+          constantValueEnabled: true,
+        },
+        title: {
+          field: "",
+          constantValue: "Associate Agent",
+          constantValueEnabled: true,
+        },
+        phone: {
+          field: "",
+          constantValue: "(202) 770-6619",
+          constantValueEnabled: true,
+        },
+        email: {
+          field: "",
+          constantValue: "jkelley@[company].com",
+          constantValueEnabled: true,
+        },
+        cta: {
+          field: "",
+          constantValue: {
+            label: "Visit Profile",
+            link: "#",
+            linkType: "URL",
+          },
+          constantValueEnabled: true,
+        },
+      },
+      {
+        headshot: {
+          image: {
+            field: "",
+            constantValue: {
+              url: PLACEHOLDER_IMAGE_URL,
+              height: 360,
+              width: 360,
+            },
+            constantValueEnabled: true,
+          },
+          layout: "auto",
+          aspectRatio: 1,
+        },
+        name: {
+          field: "",
+          constantValue: "First Last",
+          constantValueEnabled: true,
+        },
+        title: {
+          field: "",
+          constantValue: "Associate Agent",
+          constantValueEnabled: true,
+        },
+        phone: {
+          field: "",
+          constantValue: "(202) 770-6619",
+          constantValueEnabled: true,
+        },
+        email: {
+          field: "",
+          constantValue: "jkelley@[company].com",
+          constantValueEnabled: true,
+        },
+        cta: {
+          field: "",
+          constantValue: {
+            label: "Visit Profile",
+            link: "#",
             linkType: "URL",
           },
           constantValueEnabled: true,
@@ -332,32 +421,31 @@ export const People: ComponentConfig<PeopleProps> = {
       },
     ],
   },
-  resolveFields(data) {
+  resolveFields() {
     const fields = { ...peopleFields };
-    if (data.props.people[0]?.headshot?.layout) {
-      const peopleField = fields.people as ArrayField<
-        {
-          headshot: ImageWrapperProps;
-          name: YextEntityField<string>;
-          title: YextEntityField<string>;
-          phone: YextEntityField<string>;
-          email: YextEntityField<string>;
-          cta: YextEntityField<CTAProps>;
-        }[]
-      >;
-      const existingArrayFields = peopleField.arrayFields;
-      peopleField.arrayFields = {
-        ...existingArrayFields,
-        headshot: {
-          type: "object",
-          label: "Headshot",
-          objectFields: resolvedImageFields(
-            data.props.people[0].headshot.layout
-          ),
-        },
-      };
-      fields.people = peopleField;
-    }
+    const peopleField = fields.people as ArrayField<
+      {
+        headshot: ImageWrapperProps;
+        name: YextEntityField<string>;
+        title: YextEntityField<string>;
+        phone: YextEntityField<string>;
+        email: YextEntityField<string>;
+        cta: YextEntityField<CTAProps>;
+      }[]
+    >;
+
+    // Always include the headshot fields with default layout
+    const existingArrayFields = peopleField.arrayFields;
+    peopleField.arrayFields = {
+      ...existingArrayFields,
+      headshot: {
+        type: "object",
+        label: "Headshot",
+        objectFields: resolvedImageFields("auto"),
+      },
+    };
+    fields.people = peopleField;
+
     return fields;
   },
   render: (props) => <PeopleWrapper {...props} />,
