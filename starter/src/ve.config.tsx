@@ -46,6 +46,8 @@ import {
   MapboxStaticProps,
   Testimonials,
   TestimonialsProps,
+  CoreInfoSectionProps,
+  CoreInfoSection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -71,6 +73,7 @@ type MainProps = {
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
+  CoreInfoSection: CoreInfoSectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -96,12 +99,14 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   Testimonials,
+  CoreInfoSection,
 };
 
 const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "CoreInfoSection",
   "Promo",
   "Testimonials",
 ];

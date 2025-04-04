@@ -1,3 +1,4 @@
+import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
@@ -25,13 +26,13 @@ import {
   CTA,
   backgroundColors,
   Body,
-} from "@yext/visual-editor";
+} from "../../index.js";
 
 interface phoneNumberSectionProps {
   number: YextEntityField<string>;
   label: string;
 }
-interface CoreInfoSectionProps {
+export interface CoreInfoSectionProps {
   styles: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
@@ -65,7 +66,7 @@ interface CoreInfoSectionProps {
 
 const formatPhoneNumber = (
   phoneNumberString: string,
-  format: string = "domestic",
+  format: string = "domestic"
 ): string => {
   const parsedPhoneNumber = parsePhoneNumber(phoneNumberString);
   if (!parsedPhoneNumber) {
@@ -85,7 +86,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       headingLevel: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
       backgroundColor: BasicSelector(
         "Background Color",
-        ThemeOptions.BACKGROUND_COLOR,
+        ThemeOptions.BACKGROUND_COLOR
       ),
     },
   },
@@ -134,6 +135,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             type: "text",
           },
         },
+        getItemSummary: (item) => item.label || "Item",
       },
       phoneFormat: {
         label: "Phone Format",
@@ -249,37 +251,37 @@ const CoreInfoSectionWrapper = ({
   const document = useDocument();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
-    addressField.headingText,
+    addressField.headingText
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
     document,
-    addressField.address,
+    addressField.address
   );
   const resolvedEmails = resolveYextEntityField<string[]>(
     document,
-    emailsField.emails,
+    emailsField.emails
   );
   const hoursHeadingText = resolveYextEntityField<string>(
     document,
-    hoursField.headingText,
+    hoursField.headingText
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
-    hoursField.hours,
+    hoursField.hours
   );
   const servicesHeadingText = resolveYextEntityField<string>(
     document,
-    servicesField.headingText,
+    servicesField.headingText
   );
   const servicesList = resolveYextEntityField<string[]>(
     document,
-    servicesField.servicesList,
+    servicesField.servicesList
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
     undefined,
     undefined,
-    { provider: "google" },
+    { provider: "google" }
   );
   const { additionalHoursText } = document as {
     additionalHoursText: string;
@@ -297,7 +299,7 @@ const CoreInfoSectionWrapper = ({
       >
         <section
           aria-label="Information Section"
-          className="flex flex-col gap-4 lg:w-1/3"
+          className="flex flex-col gap-4 md:w-1/3"
         >
           {addressHeadingText && (
             <EntityField
@@ -345,14 +347,14 @@ const CoreInfoSectionWrapper = ({
               {phoneNumbersField.phoneNumber.map((item) => {
                 const resolvedNumber = resolveYextEntityField<string>(
                   document,
-                  item.number,
+                  item.number
                 );
                 if (!resolvedNumber) {
                   return;
                 }
                 const formattedPhoneNumber: string = formatPhoneNumber(
                   resolvedNumber,
-                  phoneNumbersField.phoneFormat,
+                  phoneNumbersField.phoneFormat
                 );
 
                 return (
@@ -399,7 +401,7 @@ const CoreInfoSectionWrapper = ({
                 {resolvedEmails
                   .slice(
                     0,
-                    Math.min(resolvedEmails.length, emailsField.listLength),
+                    Math.min(resolvedEmails.length, emailsField.listLength)
                   )
                   .map((email, index) => (
                     <li key={index} className={`flex items-center gap-3`}>
@@ -423,7 +425,7 @@ const CoreInfoSectionWrapper = ({
         </section>
         <section
           aria-label="Hours Section"
-          className="flex flex-col gap-4 lg:w-1/3"
+          className="flex flex-col gap-4 md:w-1/3"
         >
           {hoursHeadingText && (
             <EntityField
@@ -457,7 +459,7 @@ const CoreInfoSectionWrapper = ({
         </section>
         <section
           aria-label="Services Section"
-          className="flex flex-col gap-4 lg:w-1/3"
+          className="flex flex-col gap-4 md:w-1/3"
         >
           {servicesHeadingText && (
             <EntityField
@@ -495,7 +497,7 @@ const CoreInfoSectionWrapper = ({
   );
 };
 
-const CoreInfoSectionComponent: ComponentConfig<CoreInfoSectionProps> = {
+export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
   label: "Core Info Section",
   fields: coreInfoSectionFields,
   defaultProps: {
@@ -572,9 +574,4 @@ const CoreInfoSectionComponent: ComponentConfig<CoreInfoSectionProps> = {
     },
   },
   render: (props) => <CoreInfoSectionWrapper {...props} />,
-};
-
-export {
-  CoreInfoSectionComponent as CoreInfoSection,
-  type CoreInfoSectionProps,
 };
