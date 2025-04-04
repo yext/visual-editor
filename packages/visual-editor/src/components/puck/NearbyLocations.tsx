@@ -39,6 +39,17 @@ export interface NearbyLocationsProps {
   };
   coordinate: YextEntityField<Coordinate>;
   radius: number;
+  entityType:
+    | "any"
+    | "location"
+    | "healthcareProfessional"
+    | "healthcareFacility"
+    | "event"
+    | "atm"
+    | "restaraunt"
+    | "hotel"
+    | "providerFacility"
+    | "financialProfessional";
 }
 
 const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
@@ -126,10 +137,33 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
     label: "Radius (Miles)",
     type: "number",
   },
+  entityType: {
+    label: "Entity Type",
+    type: "select",
+    options: [
+      { label: "Any", value: "" },
+      { label: "Location", value: "location" },
+      { label: "Healthcare Professional", value: "healthcareProfessional" },
+      { label: "Healthcare Facility", value: "healthcareFacility" },
+      { label: "Event", value: "event" },
+      { label: "ATM", value: "atm" },
+      { label: "Restaurant", value: "restaraunt" },
+      { label: "Hotel", value: "hotel" },
+      { label: "Provider Facility", value: "providerFacility" },
+      { label: "Financial Professional", value: "financialProfessional" },
+    ],
+  },
 };
 
 const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
-  const { heading, cards, coordinate: coordinateField, radius, styles } = props;
+  const {
+    heading,
+    cards,
+    coordinate: coordinateField,
+    radius,
+    styles,
+    entityType,
+  } = props;
   const document = useDocument<any>();
 
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -148,6 +182,7 @@ const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
         coordinate?.latitude,
         coordinate?.longitude,
         radius,
+        entityType,
       ],
       queryFn: async () => {
         return await fetchNearbyLocations({
@@ -156,7 +191,7 @@ const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
-          entityType: "location",
+          entityType: entityType,
         });
       },
       enabled:
@@ -280,7 +315,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
       },
       phoneNumberFormat: "domestic",
     },
-    radius: 5,
+    radius: 10,
     coordinate: {
       field: "yextDisplayCoordinate",
       constantValue: {
@@ -288,6 +323,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
         longitude: 0,
       },
     },
+    entityType: "location",
   },
   render: (props) => <NearbyLocationsWrapper {...props} />,
 };
