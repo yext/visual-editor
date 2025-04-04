@@ -81,7 +81,7 @@ export const Grid: ComponentConfig<GridProps> = {
     columns: 2,
     gap: "0",
     verticalPadding: "default",
-    horizontalPadding: "0",
+    horizontalPadding: "4",
     backgroundColor: backgroundColors.background1.value,
     columnFormatting: "default",
   },
