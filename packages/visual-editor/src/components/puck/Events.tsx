@@ -185,7 +185,7 @@ const EventCard: React.FC<EventCardProps> = ({
               link={resolvedCTA?.link || "#"}
               linkType={resolvedCTA?.linkType}
               variant="link"
-              className="text-palette-primary"
+              className="text-palette-primary-dark"
             />
           </EntityField>
         )}
