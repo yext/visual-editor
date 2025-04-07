@@ -44,12 +44,15 @@ export interface PhotoGallerySectionProps {
   images: Array<ImageWrapperProps>;
 }
 
-interface IconColorsProps {
+interface DynamicChildColorsProps {
   children: React.ReactElement;
   category: "arrow" | "slide";
 }
 
-const IconColors = ({ children, category }: IconColorsProps) => {
+const DynamicChildColors = ({
+  children,
+  category,
+}: DynamicChildColorsProps) => {
   const background = useBackground();
   const hasDarkBackground = background?.textColor === "text-white";
 
@@ -134,11 +137,11 @@ const PhotoGallerySectionWrapper = ({
             totalSlides={images.length}
             isIntrinsicHeight={true}
           >
-            <IconColors category="arrow">
+            <DynamicChildColors category="arrow">
               <ButtonBack className="hidden md:block my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
                 <ArrowLeft className="h-10 w-20" />
               </ButtonBack>
-            </IconColors>
+            </DynamicChildColors>
             <div className="flex flex-col gap-8">
               <Slider className="md:px-8">
                 {images.map((item, idx) => {
@@ -160,26 +163,26 @@ const PhotoGallerySectionWrapper = ({
                 })}
               </Slider>
               <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
-                <IconColors category="arrow">
+                <DynamicChildColors category="arrow">
                   <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
                     <ArrowLeft className="h-6 w-6" />
                   </ButtonBack>
-                </IconColors>
+                </DynamicChildColors>
                 <div className="flex gap-2 justify-center flex-grow w-full">
                   {images.map((_, idx) => (
-                    <IconColors category="slide" key={idx}>
+                    <DynamicChildColors category="slide" key={idx}>
                       <Dot
                         slide={idx}
                         className=" h-1.5 w-full rounded-full bg-red-300  disabled:cursor-default"
                       />
-                    </IconColors>
+                    </DynamicChildColors>
                   ))}
                 </div>
-                <IconColors category="arrow">
+                <DynamicChildColors category="arrow">
                   <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
                     <ArrowRight className="h-6 w-6" />
                   </ButtonNext>
-                </IconColors>
+                </DynamicChildColors>
               </div>
               <div className="hidden md:flex justify-center">
                 {images.map((_, idx) => {
@@ -187,22 +190,22 @@ const PhotoGallerySectionWrapper = ({
                     "after:content-[' '] after:py-2 after:block";
                   return (
                     <div key={idx} className="w-16 flex justify-center">
-                      <IconColors category="slide">
+                      <DynamicChildColors category="slide">
                         <Dot
                           slide={idx}
                           className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
                         ></Dot>
-                      </IconColors>
+                      </DynamicChildColors>
                     </div>
                   );
                 })}
               </div>
             </div>
-            <IconColors category="arrow">
+            <DynamicChildColors category="arrow">
               <ButtonNext className="hidden md:block pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
                 <ArrowRight className="h-10 w-20" />
               </ButtonNext>
-            </IconColors>
+            </DynamicChildColors>
           </CarouselProvider>
         )}
       </section>
