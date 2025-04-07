@@ -99,42 +99,40 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   ].filter((link) => link.link);
 
   return (
-    <footer ref={puck.dragRef} className={"mt-auto"}>
-      <Section
-        applyPageLevelStyles
-        background={backgroundColor}
-        className="flex flex-col"
-      >
-        <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
-          {links && (
-            <EntityField
-              displayName="Footer Links"
-              fieldId={"site.footer.links"}
-            >
-              <FooterLinks links={links} />
-            </EntityField>
-          )}
-          {socialLinks && (
-            <EntityField
-              displayName="Footer Social Icons"
-              fieldId={"site.footer"}
-            >
-              <FooterSocialIcons socialLinks={socialLinks} />
-            </EntityField>
-          )}
-        </div>
-        {copyrightMessage && (
-          <div className={`text-body-sm-fontSize text-center sm:text-left `}>
-            <EntityField
-              displayName="Copyright Text"
-              fieldId="site.copyrightMessage"
-            >
-              <Body>{copyrightMessage}</Body>
-            </EntityField>
-          </div>
+    <Section
+      applyPageLevelStyles
+      background={backgroundColor}
+      className="flex flex-col"
+      outerClassName="mt-auto"
+      as="footer"
+      ref={puck.dragRef}
+    >
+      <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
+        {links && (
+          <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
+            <FooterLinks links={links} />
+          </EntityField>
         )}
-      </Section>
-    </footer>
+        {socialLinks && (
+          <EntityField
+            displayName="Footer Social Icons"
+            fieldId={"site.footer"}
+          >
+            <FooterSocialIcons socialLinks={socialLinks} />
+          </EntityField>
+        )}
+      </div>
+      {copyrightMessage && (
+        <div className={`text-body-sm-fontSize text-center sm:text-left `}>
+          <EntityField
+            displayName="Copyright Text"
+            fieldId="site.copyrightMessage"
+          >
+            <Body>{copyrightMessage}</Body>
+          </EntityField>
+        </div>
+      )}
+    </Section>
   );
 };
 

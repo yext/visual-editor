@@ -22,46 +22,73 @@ const sectionVariants = cva("", {
 
 export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;
-  applyPageLevelStyles?: boolean;
   verticalPadding?: VariantProps<typeof sectionVariants>["verticalPadding"];
+  /**
+   * Applies the background to the full page width and wraps the content in
+   * an element that respects the max content width
+   */
+  applyPageLevelStyles?: boolean;
+  /**
+   * The wrapping element. If applyPageLevelStyles=true, defaults to section and
+   * applies to the inner element. If applyPageLevelStyles=false, defaults to
+   * div and applies to the only returned element.
+   */
+  as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
+  /** If applyPageLevelStyles=true, applies to the outer element. */
+  outerClassName?: string;
 }
 
 export const Section = React.forwardRef<HTMLDivElement, SectionProps>(
   (
-    { className, background, verticalPadding, applyPageLevelStyles, ...props },
+    {
+      className,
+      background,
+      verticalPadding,
+      applyPageLevelStyles,
+      outerClassName,
+      as,
+      ...props
+    },
     ref
   ) => {
-    // If this is being used as a Page Section, create an outer and inner div,
-    // apply the maxWidth, margin, and padding, and attach the ref/HTMLDivElement props to the inner div.
-    // If not a Page Section, only create one div and do not apply the layout styling.
+    // If being used as a Page Section, the outer container is a styling div and the inner container
+    // should be the semantic element. If not a Page Section, the outer container is semantic
+    // and there should not be an inner container.
+    const OuterComponent = applyPageLevelStyles ? "div" : (as ?? "div");
+    const InnerComponent = applyPageLevelStyles
+      ? (as ?? "section")
+      : React.Fragment;
+
+    // If this is being used as a Page Section, apply the maxWidth, margin, and padding,
+    // and attach the ref/HTMLDivElement props to the inner element.
+    // If not a Page Section, only create one element and do not apply the layout styling.
     const SectionContainer = (
-      <div
+      <OuterComponent
         className={themeManagerCn(
           "components",
           applyPageLevelStyles
-            ? `w-full px-4 ${sectionVariants({ verticalPadding })}`
+            ? `w-full px-4 ${sectionVariants({ verticalPadding })} ${outerClassName}`
             : className,
           background?.bgColor,
           background?.textColor
         )}
         {...(!applyPageLevelStyles && props)}
-        ref={applyPageLevelStyles ? undefined : ref}
+        ref={ref}
       >
         {applyPageLevelStyles ? (
-          <div
+          <InnerComponent
             className={themeManagerCn(
               "max-w-pageSection-contentWidth mx-auto",
               className
             )}
-            ref={ref}
             {...props}
           >
             {props.children}
-          </div>
+          </InnerComponent>
         ) : (
           <>{props.children}</>
         )}
-      </div>
+      </OuterComponent>
     );
 
     // If background is set, create a new background context scope

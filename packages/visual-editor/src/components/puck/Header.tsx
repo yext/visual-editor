@@ -57,13 +57,13 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
   const { logo, logoLink, links } = props;
 
   return (
-    <header>
-      <Section
-        applyPageLevelStyles
-        verticalPadding="header"
-        background={backgroundColors.background1.value}
-        className="flex justify-start md:justify-between items-center"
-      >
+    <Section
+      as="header"
+      applyPageLevelStyles
+      verticalPadding="header"
+      background={backgroundColors.background1.value}
+    >
+      <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
             displayName="Business Logo"
@@ -94,11 +94,11 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             </button>
           </>
         )}
-      </Section>
+      </div>
       {links?.length > 0 && (
         <HeaderMobileMenu isOpen={menuOpen} links={links} />
       )}
-    </header>
+    </Section>
   );
 };
 
