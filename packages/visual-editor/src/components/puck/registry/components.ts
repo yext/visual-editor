@@ -5,6 +5,11 @@ import { Registry } from "./schema.ts";
 
 export const ui: Registry["items"] = [
   {
+    name: "accordion",
+    type: "registry:component",
+    files: [{ path: "atoms/accordion.tsx", type: "registry:component" }],
+  },
+  {
     name: "body",
     type: "registry:component",
     files: [{ path: "atoms/body.tsx", type: "registry:component" }],
@@ -106,6 +111,12 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     registryDependencies: ["body", "cta", "mail_outline"],
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "FAQsSection",
+    type: "registry:ui",
+    registryDependencies: ["body", "heading", "section", "accordion"],
+    files: [{ path: "FAQs.tsx", type: "registry:ui" }],
   },
   {
     name: "Flex",
