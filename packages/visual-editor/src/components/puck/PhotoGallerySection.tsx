@@ -9,7 +9,6 @@ import {
   Dot,
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import { ArrowRight, ArrowLeft } from "lucide-react";
 import {
   backgroundColors,
   BackgroundStyle,
@@ -30,6 +29,7 @@ import {
   YextEntityFieldSelector,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 
@@ -139,7 +139,7 @@ const PhotoGallerySectionWrapper = ({
           >
             <DynamicChildColors category="arrow">
               <ButtonBack className="hidden md:block my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
-                <ArrowLeft className="h-10 w-20" />
+                <FaArrowLeft className="h-10 w-20" />
               </ButtonBack>
             </DynamicChildColors>
             <div className="flex flex-col gap-8">
@@ -165,7 +165,7 @@ const PhotoGallerySectionWrapper = ({
               <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
                 <DynamicChildColors category="arrow">
                   <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                    <ArrowLeft className="h-6 w-6" />
+                    <FaArrowLeft className="h-6 w-6" />
                   </ButtonBack>
                 </DynamicChildColors>
                 <div className="flex gap-2 justify-center flex-grow w-full">
@@ -173,14 +173,14 @@ const PhotoGallerySectionWrapper = ({
                     <DynamicChildColors category="slide" key={idx}>
                       <Dot
                         slide={idx}
-                        className=" h-1.5 w-full rounded-full bg-red-300  disabled:cursor-default"
+                        className=" h-1.5 w-full rounded-full disabled:cursor-default"
                       />
                     </DynamicChildColors>
                   ))}
                 </div>
                 <DynamicChildColors category="arrow">
                   <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                    <ArrowRight className="h-6 w-6" />
+                    <FaArrowRight className="h-6 w-6" />
                   </ButtonNext>
                 </DynamicChildColors>
               </div>
@@ -203,7 +203,7 @@ const PhotoGallerySectionWrapper = ({
             </div>
             <DynamicChildColors category="arrow">
               <ButtonNext className="hidden md:block pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
-                <ArrowRight className="h-10 w-20" />
+                <FaArrowRight className="h-10 w-20" />
               </ButtonNext>
             </DynamicChildColors>
           </CarouselProvider>
@@ -226,7 +226,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
         constantValue: "Gallery",
         constantValueEnabled: true,
       },
-      level: 1,
+      level: 3,
     },
     images: [
       {
@@ -234,8 +234,8 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
           field: "",
           constantValue: {
             alternateText: "Image 1",
-            height: 582,
-            width: 996,
+            height: 570,
+            width: 1000,
             url: PLACEHOLDER_IMAGE_URL,
           },
           constantValueEnabled: true,
@@ -248,8 +248,8 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
           field: "",
           constantValue: {
             alternateText: "Image 2",
-            height: 582,
-            width: 996,
+            height: 570,
+            width: 1000,
             url: PLACEHOLDER_IMAGE_URL,
           },
           constantValueEnabled: true,
