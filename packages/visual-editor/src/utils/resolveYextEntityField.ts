@@ -84,18 +84,25 @@ export const resolveYextSubfield = <T>(
   return parent[subfieldName] as T;
 };
 
+/**
+ * handleResolveFieldsForCollections determines if lastFields
+ * should be returned, sets the isCollection prop,
+ * and resets prop data when isCollection changes.
+ * @param data the data object from Puck's resolveFields
+ * @param params the params object from Puck's resolveFields
+ * @returns boolean. whether to lastFields should be returned or
+ * the YextCollectionSubfieldSelector fields should be reconstructed.
+ */
 export const handleResolveFieldsForCollections = (
   data: { props: Record<string, any> },
-  {
-    fields,
-    parent,
-    lastData,
-  }: {
+  params: {
     fields: Fields<any>;
     lastData: { props: Record<string, any> } | null;
     parent: { props: Record<string, any> } | null;
   }
 ) => {
+  const { fields, parent, lastData } = params;
+
   // It is a collection if there is a parent with
   // constantValue disabled and a field name selected
   const isCollection =
@@ -107,7 +114,7 @@ export const handleResolveFieldsForCollections = (
   if (Object.keys(fields).every((fieldName) => data.props[fieldName])) {
     Object.keys(fields).forEach((fieldName) => {
       if (
-        (lastData && lastData.props.isCollection != isCollection) ||
+        (lastData && !!lastData.props.isCollection != isCollection) ||
         (parent &&
           !parent.props.collection.items.constantValueEnabled &&
           !data.props[fieldName].field.includes(
@@ -121,4 +128,12 @@ export const handleResolveFieldsForCollections = (
 
   // Set the child's isCollection prop
   data.props.isCollection = isCollection;
+
+  // If isCollection has not changed, do not update the fields.
+  // Updating the fields will cause text fields to lose focus.
+  if (lastData?.props.isCollection === data.props.isCollection) {
+    return true;
+  }
+
+  return false;
 };

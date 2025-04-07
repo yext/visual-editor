@@ -113,29 +113,20 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
     label: "Repeatable Card",
     fields: ExampleRepeatableItemFields,
     resolveFields: (data, params) => {
-      const { parent, lastData, lastFields } = params;
-      if (data === lastData) {
-        return lastFields;
-      }
-
       // Sets isCollection and clears fields when needed
-      handleResolveFieldsForCollections(data, params);
-
-      // If isCollection has not changed, do not update the fields.
-      // Updating the fields will cause text fields to lose focus.
-      if (lastData?.props.isCollection === data.props.isCollection) {
-        return lastFields;
+      if (handleResolveFieldsForCollections(data, params)) {
+        return params.lastFields;
       }
 
       // Update each subfield based on isCollection
       return {
-        ...lastFields,
+        ...params.lastFields,
         text: YextCollectionSubfieldSelector<any, string>({
           label: "Text",
           isCollection: data.props.isCollection,
           filter: {
             directChildrenOf: data.props.isCollection
-              ? parent!.props.collection.items.field
+              ? params.parent!.props.collection.items.field
               : undefined,
             types: ["type.string"],
           },
@@ -145,7 +136,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
           isCollection: data.props.isCollection,
           filter: {
             directChildrenOf: data.props.isCollection
-              ? parent!.props.collection.items.field
+              ? params.parent!.props.collection.items.field
               : undefined,
             types: ["type.image"],
           },
