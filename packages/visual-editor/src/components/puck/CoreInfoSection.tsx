@@ -417,20 +417,24 @@ const CoreInfoSectionWrapper = ({
             </EntityField>
           )}
         </section>
-        <section
-          aria-label="Hours Section"
-          className="flex flex-col gap-4 md:w-1/3"
-        >
-          {hoursHeadingText && (
-            <EntityField
-              displayName="Address"
-              fieldId={hoursField.headingText.field}
-              constantValueEnabled={hoursField.headingText.constantValueEnabled}
-            >
-              <Heading level={styles.headingLevel}>{hoursHeadingText}</Heading>
-            </EntityField>
-          )}
-          {resolvedHours && (
+        {resolvedHours && (
+          <section
+            aria-label="Hours Section"
+            className="flex flex-col gap-4 md:w-1/3"
+          >
+            {hoursHeadingText && (
+              <EntityField
+                displayName="Address"
+                fieldId={hoursField.headingText.field}
+                constantValueEnabled={
+                  hoursField.headingText.constantValueEnabled
+                }
+              >
+                <Heading level={styles.headingLevel}>
+                  {hoursHeadingText}
+                </Heading>
+              </EntityField>
+            )}
             <EntityField
               displayName="Hours"
               fieldId="hours"
@@ -442,33 +446,36 @@ const CoreInfoSectionWrapper = ({
                 collapseDays={hoursField.collapseDays}
               />
             </EntityField>
-          )}
-          {additionalHoursText && hoursField.showAdditionalHoursText && (
-            <EntityField displayName="Hours Text" fieldId="additionalHoursText">
-              <Body className="mt-4 text-body-sm-fontSize">
-                {additionalHoursText}
-              </Body>
-            </EntityField>
-          )}
-        </section>
-        <section
-          aria-label="Services Section"
-          className="flex flex-col gap-4 md:w-1/3"
-        >
-          {servicesHeadingText && (
-            <EntityField
-              displayName="Address"
-              fieldId={servicesField.headingText.field}
-              constantValueEnabled={
-                servicesField.headingText.constantValueEnabled
-              }
-            >
-              <Heading level={styles.headingLevel}>
-                {servicesHeadingText}
-              </Heading>
-            </EntityField>
-          )}
-          {servicesList && (
+            {additionalHoursText && hoursField.showAdditionalHoursText && (
+              <EntityField
+                displayName="Hours Text"
+                fieldId="additionalHoursText"
+              >
+                <Body className="mt-4 text-body-sm-fontSize">
+                  {additionalHoursText}
+                </Body>
+              </EntityField>
+            )}
+          </section>
+        )}
+        {servicesList && (
+          <section
+            aria-label="Services Section"
+            className="flex flex-col gap-4 md:w-1/3"
+          >
+            {servicesHeadingText && (
+              <EntityField
+                displayName="Address"
+                fieldId={servicesField.headingText.field}
+                constantValueEnabled={
+                  servicesField.headingText.constantValueEnabled
+                }
+              >
+                <Heading level={styles.headingLevel}>
+                  {servicesHeadingText}
+                </Heading>
+              </EntityField>
+            )}
             <EntityField
               displayName="Text List"
               fieldId={servicesField.servicesList.field}
@@ -484,8 +491,8 @@ const CoreInfoSectionWrapper = ({
                 ))}
               </ul>
             </EntityField>
-          )}
-        </section>
+          </section>
+        )}
       </section>
     </Section>
   );
