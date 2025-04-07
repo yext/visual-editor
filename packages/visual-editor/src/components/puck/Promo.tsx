@@ -57,26 +57,23 @@ const promoFields: Fields<PromoProps> = {
   },
   title: {
     type: "object",
-    label: "Business Name Heading Value",
+    label: "Business Name Heading",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector(
-        "Business Name Heading Level",
-        ThemeOptions.HEADING_LEVEL
-      ),
+      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
     },
   },
   description: {
     type: "object",
-    label: "Text",
+    label: "Description",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
@@ -90,10 +87,10 @@ const promoFields: Fields<PromoProps> = {
   },
   cta: {
     type: "object",
-    label: "Primary CTA Value",
+    label: "Primary CTA",
     objectFields: {
       entityField: YextEntityFieldSelector({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.cta"],
         },
