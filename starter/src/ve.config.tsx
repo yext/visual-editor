@@ -48,11 +48,9 @@ import {
   TestimonialsProps,
   People,
   PeopleProps,
-} from "@yext/visual-editor";
-import {
-  PhotoGallerySection,
   PhotoGallerySectionProps,
-} from "./components/PhotoGallerySection.js";
+  PhotoGallerySection,
+} from "@yext/visual-editor";
 
 type MainProps = {
   Address: AddressProps;
@@ -112,6 +110,7 @@ const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "PhotoGallerySection",
   "Promo",
   "Testimonials",
   "People",
