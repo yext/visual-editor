@@ -118,10 +118,10 @@ export type ExampleProps = {
 const exampleFields: Fields<ExampleProps> = {
   myField: {
     type: "object",
-    label: "Example Field", // top-level sidebar label
+    label: "Example Parent Field", // top-level sidebar label
     objectFields: {
       entityField: YextEntityFieldSelector<typeof config>({
-        label: "Entity Field", // sidebar label for the entity field dropdown
+        label: "Example Field", // sidebar label for the sub field
         filter: {
           types: ["type.string"],
           disallowList: ["exampleField"],
