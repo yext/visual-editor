@@ -23,6 +23,7 @@ export { TextList, type TextListProps } from "./TextList.tsx";
 export {
   CollectionSection,
   type CollectionSectionProps,
+  COLLECTION_COMPONENTS,
 } from "./CollectionSection.tsx";
 export {
   ExampleRepeatableItemComponent,

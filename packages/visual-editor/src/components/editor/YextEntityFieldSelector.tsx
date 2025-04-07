@@ -277,7 +277,7 @@ const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
-      className="ve-inline-block w-full"
+      className="ve-inline-block ve-w-full"
     >
       <AutoField
         onChange={(newConstantValue) =>

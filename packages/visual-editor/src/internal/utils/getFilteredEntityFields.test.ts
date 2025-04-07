@@ -157,6 +157,37 @@ describe("getFilteredEntityFields", () => {
     });
     expect(result.length).toBe(0);
   });
+
+  test("handles list fields with no type filter specified", () => {
+    const result = getFilteredEntityFields({
+      includeListsOnly: true,
+    });
+    expect(result.length).toBe(5);
+    expect(result.map((field) => field.name)).toEqual(
+      expect.arrayContaining([
+        "c_visualConfigurations",
+        "c_pages_layouts",
+        "c_productSection.linkedProducts",
+        "c_faqSection.linkedFAQs",
+        "emails",
+      ])
+    );
+  });
+
+  test("handles directChildrenOf correctly", () => {
+    const result = getFilteredEntityFields({
+      directChildrenOf: "c_productSection.linkedProducts",
+    });
+    expect(result.map((field) => field.name)).toEqual(
+      expect.arrayContaining([
+        "c_productSection.linkedProducts.name",
+        "c_productSection.linkedProducts.c_productPromo",
+        "c_productSection.linkedProducts.c_description",
+        "c_productSection.linkedProducts.c_coverPhoto",
+        "c_productSection.linkedProducts.c_productCTA",
+      ])
+    );
+  });
 });
 
 const mockEntityFields: YextSchemaField[] = [

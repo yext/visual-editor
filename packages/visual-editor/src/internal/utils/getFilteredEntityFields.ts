@@ -48,7 +48,7 @@ export type EntityFieldTypes =
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
 
 // Populate this with fields that aren't allowed to have subfields.
-const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = [];
+const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = ["type.hours"];
 
 type EntityFieldNameAndSchema = {
   name: string;
@@ -181,7 +181,7 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   for (const yextSchemaField of filteredEntityFields) {
     const entityFieldNames = getEntityFieldNames(
       yextSchemaField,
-      Boolean(filter?.directChildrenOf?.length)
+      !!filter?.directChildrenOf?.length
     );
 
     for (const entityFieldName of entityFieldNames) {
@@ -209,7 +209,7 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   if (filter?.types) {
     const typeToFieldNames = getEntityTypeToFieldNames(
       filteredEntitySubFields,
-      Boolean(filter?.directChildrenOf?.length)
+      !!filter?.directChildrenOf?.length
     );
 
     const updatedFilteredEntitySubFields: YextSchemaField[] = [];

@@ -8,6 +8,7 @@ import {
   resolveYextSubfield,
   YextCollectionSubfieldSelector,
   handleResolveFieldsForCollections,
+  Body,
 } from "../../index.js";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { useCollectionContext } from "./contexts/collectionContext.js";
@@ -47,9 +48,7 @@ const ExampleRepeatableItem = (props: ExampleRepeatableItemProps) => {
     const resolvedImage = resolveYextEntityField(document, image);
 
     return (
-      <div>
-        <ExampleRepeatableItemCard image={resolvedImage} text={resolvedText} />
-      </div>
+      <ExampleRepeatableItemCard image={resolvedImage} text={resolvedText} />
     );
   }
 
@@ -79,6 +78,7 @@ type ExampleRepeatableItemCardProps = {
   image?: ImageType | ComplexImageType;
   text?: string;
 };
+
 // Example Card -- would replace with a nice React component
 const ExampleRepeatableItemCard = (props: ExampleRepeatableItemCardProps) => {
   const { text } = props;
@@ -103,7 +103,7 @@ const ExampleRepeatableItemCard = (props: ExampleRepeatableItemCardProps) => {
           <Image image={image} layout="fixed" width={100} aspectRatio={1} />
         </div>
       )}
-      {text && <p>{text}</p>}
+      {text && <Body>{text}</Body>}
     </div>
   );
 };

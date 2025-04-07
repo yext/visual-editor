@@ -16,6 +16,8 @@ import {
 } from "../../index.js";
 import { CollectionContext } from "./contexts/collectionContext.js";
 
+export const COLLECTION_COMPONENTS = ["ExampleRepeatableItemComponent"];
+
 export interface CollectionSectionProps {
   styles: {
     background: SectionProps["background"];
@@ -35,14 +37,7 @@ const collectionSectionFields: Fields<CollectionSectionProps> = {
     type: "object",
     label: "Styles",
     objectFields: {
-      background: BasicSelector(
-        "Background",
-        Object.values(backgroundColors).map(({ label, value }) => ({
-          label,
-          value,
-          color: value.bgColor,
-        }))
-      ),
+      background: BasicSelector("Background", ThemeOptions.BACKGROUND_COLOR),
     },
   },
   sectionHeading: {
@@ -65,21 +60,6 @@ const collectionSectionFields: Fields<CollectionSectionProps> = {
         isCollection: true,
         filter: {
           includeListsOnly: true,
-          // Filter hours fields because they have a lot of unused children
-          disallowList: [
-            "hours",
-            "accessHours",
-            "brunchHours",
-            "deliveryHours",
-            "dineInHours",
-            "driveThroughHours",
-            "happyHours",
-            "kitchenHours",
-            "onlineServiceHours",
-            "pickupHours",
-            "seniorHours",
-            "takeoutHours",
-          ],
         },
       }),
       limit: OptionalNumberField({
@@ -116,8 +96,8 @@ const CollectionSectionWrapper: React.FC<CollectionSectionProps> = (props) => {
       >
         <DropZone
           zone="collection-dropzone"
-          allow={["ExampleRepeatableItemComponent"]}
-          className="flex gap-4 max-w-pageSection-maxWidth flex-wrap"
+          allow={COLLECTION_COMPONENTS}
+          className="flex gap-4 flex-wrap"
         />
       </CollectionContext.Provider>
     </Section>
