@@ -40,7 +40,7 @@ const formatPhoneNumber = (
 
 const PhoneFields: Fields<PhoneProps> = {
   phone: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "Phone Number",
     filter: {
       types: ["type.phone"],
     },
