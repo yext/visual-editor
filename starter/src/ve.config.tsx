@@ -52,6 +52,8 @@ import {
   ProductsSectionProps,
   People,
   PeopleProps,
+  FAQsSection,
+  FAQsSectionProps,
   Events,
   EventsProps,
   HeroSectionProps,
@@ -69,6 +71,7 @@ type MainProps = {
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
   Emails: EmailsProps;
+  FAQsSection: FAQsSectionProps;
   Flex: FlexProps;
   Footer: FooterProps;
   GetDirections: GetDirectionsProps;
@@ -101,6 +104,7 @@ const components: Config<MainProps>["components"] = {
   BodyText,
   CTA,
   Emails,
+  FAQsSection,
   GetDirections,
   HeadingText,
   HoursStatus,
@@ -126,6 +130,7 @@ const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "FAQsSection",
   "HeroSection",
   "PhotoGallerySection",
   "ProductsSection",
