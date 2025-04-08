@@ -7,8 +7,10 @@ import {
 } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
+  BasicSelector,
   EntityField,
   resolveYextEntityField,
+  ThemeOptions,
   useDocument,
   YextEntityField,
   YextEntityFieldSelector,
@@ -29,20 +31,7 @@ const hoursTableFields: Fields<HoursTableProps> = {
       types: ["type.hours"],
     },
   }),
-  startOfWeek: {
-    label: "Start of the week",
-    type: "radio",
-    options: [
-      { label: "Monday", value: "monday" },
-      { label: "Tuesday", value: "tuesday" },
-      { label: "Wednesday", value: "wednesday" },
-      { label: "Thursday", value: "thursday" },
-      { label: "Friday", value: "friday" },
-      { label: "Saturday", value: "saturday" },
-      { label: "Sunday", value: "sunday" },
-      { label: "Today", value: "today" },
-    ],
-  },
+  startOfWeek: BasicSelector("Start of the Week", ThemeOptions.HOURS_OPTIONS),
   collapseDays: {
     label: "Collapse days",
     type: "radio",

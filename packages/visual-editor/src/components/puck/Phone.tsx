@@ -8,6 +8,7 @@ import {
   YextEntityFieldSelector,
   CTA,
   Body,
+  ThemeOptions,
 } from "../../index.js";
 import { Phone as PhoneIcon } from "lucide-react";
 import parsePhoneNumber from "libphonenumber-js";
@@ -48,10 +49,7 @@ const PhoneFields: Fields<PhoneProps> = {
   format: {
     label: "Format",
     type: "radio",
-    options: [
-      { label: "Domestic", value: "domestic" },
-      { label: "International", value: "international" },
-    ],
+    options: ThemeOptions.PHONE_OPTIONS,
   },
   includeHyperlink: {
     label: "Include Hyperlink",

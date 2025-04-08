@@ -8,7 +8,7 @@ import {
   HoursTable,
   HoursType,
 } from "@yext/pages-components";
-import { GoMail } from "react-icons/go";
+import { FaRegEnvelope } from "react-icons/fa";
 import { AiOutlinePhone } from "react-icons/ai";
 import {
   YextEntityField,
@@ -376,7 +376,7 @@ const CoreInfoSectionWrapper = ({
                       <div
                         className={`h-10 w-10 flex justify-center rounded-full items-center ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`}
                       >
-                        <GoMail className="w-4 h-4" />
+                        <FaRegEnvelope className="w-4 h-4" />
                       </div>
                       <CTA
                         link={email}
