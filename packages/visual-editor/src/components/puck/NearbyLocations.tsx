@@ -12,6 +12,7 @@ import {
   HeadingLevel,
   Section,
   Phone,
+  themeManagerCn,
 } from "../../index.js";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
@@ -40,6 +41,7 @@ export interface NearbyLocationsProps {
   };
   coordinate: YextEntityField<Coordinate>;
   radius: number;
+  limit: number;
 }
 
 const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
@@ -135,10 +137,22 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
     label: "Radius (Miles)",
     type: "number",
   },
+  limit: {
+    label: "Limit",
+    type: "number",
+    max: 50,
+  },
 };
 
 const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
-  const { heading, cards, coordinate: coordinateField, radius, styles } = props;
+  const {
+    heading,
+    cards,
+    coordinate: coordinateField,
+    radius,
+    limit,
+    styles,
+  } = props;
   const document = useDocument<any>();
 
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -147,9 +161,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentEndpoint: string =
-    document?._env?.YEXT_CONTENT_API_KEY ||
-    "https://streams-dev.yext.com/v2/accounts/1000146856/content/visualEditorLocations?api_key=8cd8e7f4a761bc13f2da4cd980fbc1ec";
+  const contentEndpoint: string = document?._env?.YEXT_CONTENT_API_KEY;
   if (!contentEndpoint) {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
@@ -165,6 +177,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
         coordinate?.longitude,
         radius,
         entityType,
+        limit,
       ],
       queryFn: async () => {
         return await fetchNearbyLocations({
@@ -172,6 +185,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
+          limit: limit,
           entityType: entityType,
         });
       },
@@ -204,9 +218,12 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
                     key={index}
                     className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
                   >
-                    <Section
-                      background={styles.cardBackgroundColor}
-                      className="h-full flex-grow"
+                    <section
+                      className={themeManagerCn(
+                        "components h-full flex-grow",
+                        styles.cardBackgroundColor?.bgColor || "",
+                        styles.cardBackgroundColor?.textColor || ""
+                      )}
                     >
                       <Heading level={4} className="text-lg font-bold">
                         {location.name}
@@ -254,7 +271,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
                           />
                         </div>
                       )}
-                    </Section>
+                    </section>
                   </div>
                 )
               )}
@@ -293,6 +310,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
       phoneNumberLink: false,
     },
     radius: 10,
+    limit: 3,
     coordinate: {
       field: "yextDisplayCoordinate",
       constantValue: {

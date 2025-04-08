@@ -5,13 +5,15 @@ export const fetchNearbyLocations = async ({
   latitude,
   longitude,
   radiusMi,
+  limit,
   entityType,
 }: {
   contentEndpoint: string;
   longitude: number;
   latitude: number;
   radiusMi: number;
-  entityType?: string;
+  limit: number;
+  entityType: string;
 }): Promise<any> => {
   const url = new URL(contentEndpoint);
   url.searchParams.append("v", V_PARAM);
@@ -19,6 +21,9 @@ export const fetchNearbyLocations = async ({
     "geocodedCoordinate__geo",
     `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
   );
+  if (limit) {
+    url.searchParams.append("limit", limit.toString());
+  }
   if (entityType) {
     url.searchParams.append("meta.entityType.id", entityType);
   }
