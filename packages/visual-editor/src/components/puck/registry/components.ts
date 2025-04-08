@@ -5,6 +5,11 @@ import { Registry } from "./schema.ts";
 
 export const ui: Registry["items"] = [
   {
+    name: "accordion",
+    type: "registry:component",
+    files: [{ path: "atoms/accordion.tsx", type: "registry:component" }],
+  },
+  {
     name: "body",
     type: "registry:component",
     files: [{ path: "atoms/body.tsx", type: "registry:component" }],
@@ -108,6 +113,12 @@ export const ui: Registry["items"] = [
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
   },
   {
+    name: "FAQsSection",
+    type: "registry:ui",
+    registryDependencies: ["body", "heading", "section", "accordion"],
+    files: [{ path: "FAQs.tsx", type: "registry:ui" }],
+  },
+  {
     name: "Flex",
     type: "registry:ui",
     registryDependencies: ["layout", "section"],
@@ -161,10 +172,22 @@ export const ui: Registry["items"] = [
     files: [{ path: "Image.tsx", type: "registry:ui" }],
   },
   {
+    name: "People",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body", "cta", "image"],
+    files: [{ path: "People.tsx", type: "registry:ui" }],
+  },
+  {
     name: "Phone",
     type: "registry:ui",
     registryDependencies: ["cta", "body"],
     files: [{ path: "Phone.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Products Section",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "cta", "body"],
+    files: [{ path: "Promo.tsx", type: "registry:ui" }],
   },
   {
     name: "Promo",
@@ -173,14 +196,32 @@ export const ui: Registry["items"] = [
     files: [{ path: "Promo.tsx", type: "registry:ui" }],
   },
   {
+    name: "Testimonials",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body"],
+    files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
+  },
+  {
     name: "TextList",
     type: "registry:ui",
     files: [{ path: "TextList.tsx", type: "registry:ui" }],
   },
   {
-    name: "Testimonials",
+    name: "Events",
     type: "registry:ui",
-    registryDependencies: ["section", "heading", "body"],
-    files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
+    registryDependencies: ["section", "heading", "body", "cta", "image"],
+    files: [{ path: "Events.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Hero Section",
+    type: "registry:ui",
+    files: [{ path: "HeroSection.tsx", type: "registry:ui" }],
+    registryDependencies: ["section", "heading", "cta", "image"],
+  },
+  {
+    name: "PhotoGallerySection",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "image"],
+    files: [{ path: "PhotoGallerySection.tsx", type: "registry:ui" }],
   },
 ];

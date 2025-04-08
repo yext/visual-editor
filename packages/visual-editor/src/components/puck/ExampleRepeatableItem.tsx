@@ -15,16 +15,12 @@ import { ComplexImageType, ImageType } from "@yext/pages-components";
 
 export type ExampleRepeatableItemProps = {
   text?: YextEntityField<string>;
-  info: string;
   image?: YextEntityField<ImageType>;
   collection?: YextCollection;
 };
 
 const ExampleRepeatableItemFields: Fields<ExampleRepeatableItemProps> = {
   // non-collection fields here
-  info: {
-    type: "text",
-  },
   // collection fields are defined in resolveFields
 };
 
@@ -141,7 +137,6 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
       } as Fields<ExampleRepeatableItemProps>;
     },
     defaultProps: {
-      info: "Info",
       text: {
         field: "",
         constantValue: "",

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { FieldLabel } from "@measured/puck";
-import { RenderProps } from "../../utils/renderEntityFields.ts";
+import { CustomField, FieldLabel } from "@measured/puck";
 import { Color, ColorResult, SketchPicker } from "react-color";
+
+type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
   const [isOpen, setIsOpen] = useState(false);

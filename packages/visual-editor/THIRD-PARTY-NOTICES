@@ -4401,7 +4401,7 @@ Apache-2.0
 
 The following npm package may be included in this product:
 
- - eslint@9.21.0
+ - eslint@9.18.0
 
 This package contains the following license:
 
@@ -4429,12 +4429,12 @@ THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - dompurify@3.2.4
+ - dompurify@3.2.3
 
 This package contains the following license:
 
 DOMPurify
-Copyright 2025 Dr.-Ing. Mario Heiderich, Cure53
+Copyright 2024 Dr.-Ing. Mario Heiderich, Cure53
 
 DOMPurify is free software; you can redistribute it and/or modify it under the
 terms of either:
@@ -5054,6 +5054,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 The following npm packages may be included in this product:
 
  - @measured/puck@0.18.2
+ - @radix-ui/react-accordion@1.2.3
  - @radix-ui/react-alert-dialog@1.1.2
  - @radix-ui/react-label@2.1.0
  - @radix-ui/react-popover@1.1.6
@@ -5109,6 +5110,36 @@ This package contains the following license:
 MIT License
 
 Copyright (c) 2018 Terkel Gjervig Nielsen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-----------
+
+The following npm package may be included in this product:
+
+ - pure-react-carousel@1.32.0
+
+This package contains the following license:
+
+MIT License
+
+Copyright (c) 2019 Express
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
