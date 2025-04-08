@@ -10,7 +10,6 @@ import {
 } from "@yext/pages-components";
 import { GoMail } from "react-icons/go";
 import { AiOutlinePhone } from "react-icons/ai";
-import parsePhoneNumber from "libphonenumber-js";
 import {
   YextEntityField,
   HeadingLevel,
@@ -27,6 +26,7 @@ import {
   backgroundColors,
   Body,
 } from "../../index.js";
+import { formatPhoneNumber } from "./Phone.js";
 
 export interface CoreInfoSectionProps {
   styles: {
@@ -59,20 +59,6 @@ export interface CoreInfoSectionProps {
     servicesList: YextEntityField<string[]>;
   };
 }
-
-const formatPhoneNumber = (
-  phoneNumberString: string,
-  format: string = "domestic"
-): string => {
-  const parsedPhoneNumber = parsePhoneNumber(phoneNumberString);
-  if (!parsedPhoneNumber) {
-    return phoneNumberString;
-  }
-
-  return format === "international"
-    ? parsedPhoneNumber.formatInternational()
-    : parsedPhoneNumber.formatNational();
-};
 
 const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   styles: {
@@ -136,10 +122,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       phoneFormat: {
         label: "Phone Format",
         type: "radio",
-        options: [
-          { label: "Domestic", value: "domestic" },
-          { label: "International", value: "international" },
-        ],
+        options: ThemeOptions.PHONE_OPTIONS,
       },
       includePhoneHyperlink: {
         label: "Include Phone Hyperlink",
@@ -182,20 +165,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      startOfWeek: {
-        label: "Start of the Week",
-        type: "select",
-        options: [
-          { label: "Monday", value: "monday" },
-          { label: "Tuesday", value: "tuesday" },
-          { label: "Wednesday", value: "wednesday" },
-          { label: "Thursday", value: "thursday" },
-          { label: "Friday", value: "friday" },
-          { label: "Saturday", value: "saturday" },
-          { label: "Sunday", value: "sunday" },
-          { label: "Today", value: "today" },
-        ],
-      },
+      startOfWeek: BasicSelector(
+        "Start of the Week",
+        ThemeOptions.HOURS_OPTIONS
+      ),
       collapseDays: {
         label: "Collapse Days",
         type: "radio",
@@ -366,7 +339,7 @@ const CoreInfoSectionWrapper = ({
                         >
                           <AiOutlinePhone className="w-4 h-4" />
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center">
                           <Body className="font-bold">{item.label}</Body>
                           {phoneNumbersField.includePhoneHyperlink ? (
                             <CTA

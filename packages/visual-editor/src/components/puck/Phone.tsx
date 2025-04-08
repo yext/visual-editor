@@ -24,7 +24,7 @@ export interface PhoneProps {
  * (123) 456-7890 or +1 (123) 456-7890. A variety of 1-3 digit international
  * codes are accepted. If formatting fails, the original string is returned.
  */
-const formatPhoneNumber = (
+export const formatPhoneNumber = (
   phoneNumberString: string,
   format: string = "domestic"
 ): string => {
