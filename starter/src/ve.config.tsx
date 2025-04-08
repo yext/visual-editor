@@ -28,8 +28,8 @@ import {
   HoursStatusProps,
   ImageWrapper,
   ImageWrapperProps,
-  Phone,
-  PhoneProps,
+  PhoneWrapper,
+  PhoneWrapperProps,
   TextList,
   TextListProps,
   Header,
@@ -71,7 +71,7 @@ type MainProps = {
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
-  Phone: PhoneProps;
+  PhoneWrapper: PhoneWrapperProps;
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
@@ -94,7 +94,7 @@ const components: Config<MainProps>["components"] = {
   HoursStatus,
   HoursTable,
   ImageWrapper,
-  Phone,
+  PhoneWrapper,
   TextList,
   Header,
   Footer,
@@ -128,7 +128,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "HoursTable",
   "ImageWrapper",
   "MapboxStaticMap",
-  "Phone",
+  "PhoneWrapper",
   "TextList",
 ];
 

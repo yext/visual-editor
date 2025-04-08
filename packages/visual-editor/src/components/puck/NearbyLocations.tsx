@@ -10,13 +10,13 @@ import {
   backgroundColors,
   ThemeOptions,
   HeadingLevel,
+  Section,
+  Phone,
 } from "../../index.js";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
 import { fetchNearbyLocations } from "../../api/nearbyLocations.tsx";
 import * as React from "react";
-import { formatPhoneNumber } from "./Phone.tsx";
-import { Section } from "./atoms/section.js";
 
 export interface NearbyLocationsProps {
   styles: {
@@ -30,6 +30,7 @@ export interface NearbyLocationsProps {
   cards: {
     headingLevel: HeadingLevel;
     phoneNumberFormat?: "domestic" | "international";
+    phoneNumberLink: boolean;
     hours: {
       showCurrentStatus: boolean;
       timeFormat?: "12h" | "24h";
@@ -39,17 +40,6 @@ export interface NearbyLocationsProps {
   };
   coordinate: YextEntityField<Coordinate>;
   radius: number;
-  entityType:
-    | "any"
-    | "location"
-    | "healthcareProfessional"
-    | "healthcareFacility"
-    | "event"
-    | "atm"
-    | "restaraunt"
-    | "hotel"
-    | "providerFacility"
-    | "financialProfessional";
 }
 
 const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
@@ -127,6 +117,14 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
           { label: "International", value: "international" },
         ],
       },
+      phoneNumberLink: {
+        label: "Include Phone Number Hyperlink",
+        type: "radio",
+        options: [
+          { label: "Yes", value: true },
+          { label: "No", value: false },
+        ],
+      },
     },
   },
   coordinate: YextEntityFieldSelector<any, Coordinate>({
@@ -137,33 +135,10 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
     label: "Radius (Miles)",
     type: "number",
   },
-  entityType: {
-    label: "Entity Type",
-    type: "select",
-    options: [
-      { label: "Any", value: "" },
-      { label: "Location", value: "location" },
-      { label: "Healthcare Professional", value: "healthcareProfessional" },
-      { label: "Healthcare Facility", value: "healthcareFacility" },
-      { label: "Event", value: "event" },
-      { label: "ATM", value: "atm" },
-      { label: "Restaurant", value: "restaraunt" },
-      { label: "Hotel", value: "hotel" },
-      { label: "Provider Facility", value: "providerFacility" },
-      { label: "Financial Professional", value: "financialProfessional" },
-    ],
-  },
 };
 
-const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
-  const {
-    heading,
-    cards,
-    coordinate: coordinateField,
-    radius,
-    styles,
-    entityType,
-  } = props;
+const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
+  const { heading, cards, coordinate: coordinateField, radius, styles } = props;
   const document = useDocument<any>();
 
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -172,9 +147,16 @@ const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentApiKey: string = document?._env?.YEXT_CONTENT_API_KEY;
-  const businessId: number = document?.businessId;
+  const contentEndpoint: string =
+    document?._env?.YEXT_CONTENT_API_KEY ||
+    "https://streams-dev.yext.com/v2/accounts/1000146856/content/visualEditorLocations?api_key=8cd8e7f4a761bc13f2da4cd980fbc1ec";
+  if (!contentEndpoint) {
+    console.warn(
+      "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
+    );
+  }
 
+  const entityType: string = document?.meta?.entityType?.id || "locations";
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
       queryKey: [
@@ -186,8 +168,7 @@ const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
       ],
       queryFn: async () => {
         return await fetchNearbyLocations({
-          businessId: businessId,
-          apiKey: contentApiKey,
+          contentEndpoint: contentEndpoint,
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
@@ -198,21 +179,17 @@ const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
         !!coordinate?.latitude &&
         !!coordinate.longitude &&
         !!radius &&
-        !!businessId &&
-        !!contentApiKey,
+        !!contentEndpoint &&
+        !!entityType,
     }
   );
 
   return (
     <Section background={styles.backgroundColor} className={`components`}>
       <div className="space-y-6">
-        {/* Title & CTA Section */}
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
-            <Heading
-              level={heading.level}
-              className="text-2xl font-bold text-center md:text-left"
-            >
+            <Heading level={heading.level} className="text-center md:text-left">
               {headingText}
             </Heading>
           </div>
@@ -263,12 +240,11 @@ const NearbyLocationsWrapper: React.FC<NearbyLocationsProps> = (props) => {
                         </div>
                       )}
                       {location.mainPhone && (
-                        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-                          {formatPhoneNumber(
-                            location.mainPhone,
-                            cards.phoneNumberFormat
-                          )}
-                        </div>
+                        <Phone
+                          phoneNumber={location.mainPhone}
+                          format={cards.phoneNumberFormat}
+                          includeHyperlink={cards.phoneNumberLink}
+                        />
                       )}
                       {location.address && (
                         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
@@ -314,6 +290,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
         dayOfWeekFormat: "long",
       },
       phoneNumberFormat: "domestic",
+      phoneNumberLink: false,
     },
     radius: 10,
     coordinate: {
@@ -323,7 +300,6 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
         longitude: 0,
       },
     },
-    entityType: "location",
   },
-  render: (props) => <NearbyLocationsWrapper {...props} />,
+  render: (props) => <NearbyLocationsComponent {...props} />,
 };

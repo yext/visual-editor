@@ -1,57 +1,33 @@
-import { getCurrentDateYYYYMMDD } from "../utils/dateUtils.ts";
+const V_PARAM = "20250407";
 
 export const fetchNearbyLocations = async ({
-  businessId,
-  apiKey,
+  contentEndpoint,
   latitude,
   longitude,
   radiusMi,
   entityType,
 }: {
-  businessId: number;
-  apiKey: string;
+  contentEndpoint: string;
   longitude: number;
   latitude: number;
   radiusMi: number;
   entityType?: string;
 }): Promise<any> => {
-  const base = `https://streams-dev.yext.com/v2/accounts/${businessId}/content/visualEditorLocations`;
-  const queryParams: any = {
-    api_key: apiKey,
-    v: getCurrentDateYYYYMMDD(),
-    geocodedCoordinate__geo: `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`,
-  };
+  const url = new URL(contentEndpoint);
+  url.searchParams.append("v", V_PARAM);
+  url.searchParams.append(
+    "geocodedCoordinate__geo",
+    `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
+  );
   if (entityType) {
-    queryParams["meta.entityType.id"] = entityType;
+    url.searchParams.append("meta.entityType.id", entityType);
   }
 
-  const route = addQueryParams(base, queryParams, false);
-
-  const response = await fetch(route);
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error(response.statusText);
   }
 
   return await response.json();
-};
-
-export const addQueryParams = (
-  route: string,
-  queryParams: any,
-  isJsonEncoded: boolean
-) => {
-  if (queryParams && Object.keys(queryParams).length) {
-    const queryString = Object.keys(queryParams)
-      .filter((key) => !!queryParams[key])
-      .map((key) => {
-        const paramsStr = isJsonEncoded
-          ? JSON.stringify(queryParams[key])
-          : queryParams[key];
-        return encodeURIComponent(key) + "=" + encodeURIComponent(paramsStr);
-      })
-      .join("&");
-    return route + "?" + queryString;
-  }
-  return route;
 };

@@ -20,4 +20,3 @@ export {
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
-export { getCurrentDateYYYYMMDD } from "./dateUtils.ts";
