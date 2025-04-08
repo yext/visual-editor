@@ -14,6 +14,7 @@ import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fiel
 import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Phone.tsx";
+import { BasicSelector } from "./BasicSelector.tsx";
 
 const devLogger = new DevLogger();
 
@@ -240,33 +241,27 @@ const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const filteredEntityFields = getFilteredEntityFields(filter);
 
+  const basicSelectorField = BasicSelector("Entity Field", [
+    { value: "", label: "Select a Content field" },
+    ...filteredEntityFields.map((entityFieldNameToSchema) => {
+      return {
+        label: entityFieldNameToSchema.name,
+        value: entityFieldNameToSchema.name,
+      };
+    }),
+  ]);
+
   return (
-    <FieldLabel
-      label={"Entity Field"}
-      className="ve-inline-block ve-w-full ve-pt-4"
-    >
-      <AutoField
-        field={{
-          type: "select",
-          options: [
-            { value: "", label: "Select a Content field" },
-            ...filteredEntityFields.map((entityFieldNameToSchema) => {
-              return {
-                label: entityFieldNameToSchema.name,
-                value: entityFieldNameToSchema.name,
-              };
-            }),
-          ],
-        }}
-        onChange={(selectedEntityField) => {
-          onChange({
-            field: selectedEntityField,
-            constantValue: value?.constantValue ?? "",
-            constantValueEnabled: false,
-          });
-        }}
-        value={value?.field}
-      />
-    </FieldLabel>
+    <AutoField
+      field={basicSelectorField}
+      onChange={(selectedEntityField) => {
+        onChange({
+          field: selectedEntityField,
+          constantValue: value?.constantValue ?? "",
+          constantValueEnabled: false,
+        });
+      }}
+      value={value?.field}
+    />
   );
 };
