@@ -146,31 +146,24 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
 };
 
 const LocationCard = ({
-  key,
+  cards,
   name,
   address,
   hours,
   timezone,
   mainPhone,
-  phoneNumberFormat,
-  phoneNumberLink,
   backgroundColor,
 }: {
-  key: number;
+  cards: NearbyLocationsProps["cards"];
   name: string;
   address: any;
   hours: any;
   timezone: string;
   mainPhone: string;
-  phoneNumberFormat: "domestic" | "international";
-  phoneNumberLink: boolean;
   backgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <div
-      key={key}
-      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
-    >
+    <div className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border">
       <Section background={backgroundColor} className={`components`}>
         <Heading level={4}>{name}</Heading>
         {hours && (
@@ -179,18 +172,20 @@ const LocationCard = ({
               hours={hours}
               timezone={timezone}
               currentTemplate={
-                hours.showCurrentStatus ? undefined : () => <></>
+                cards.hours.showCurrentStatus ? undefined : () => <></>
               }
               separatorTemplate={
-                hours.showCurrentStatus ? undefined : () => <></>
+                cards.hours.showCurrentStatus ? undefined : () => <></>
               }
               timeOptions={{
-                hour12: hours.timeFormat === "12h",
+                hour12: cards.hours.timeFormat === "12h",
               }}
               dayOptions={{
-                weekday: hours.dayOfWeekFormat,
+                weekday: cards.hours.dayOfWeekFormat,
               }}
-              dayOfWeekTemplate={hours.showDayNames ? undefined : () => <></>}
+              dayOfWeekTemplate={
+                cards.hours.showDayNames ? undefined : () => <></>
+              }
               className="h-full"
             />
           </div>
@@ -198,8 +193,8 @@ const LocationCard = ({
         {mainPhone && (
           <Phone
             phoneNumber={mainPhone}
-            format={phoneNumberFormat}
-            includeHyperlink={phoneNumberLink}
+            format={cards.phoneNumberFormat}
+            includeHyperlink={cards.phoneNumberLink}
           />
         )}
         {address && (
@@ -286,13 +281,12 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
                 (location: any, index: number) => (
                   <LocationCard
                     key={index}
+                    cards={cards}
                     name={location.name}
                     address={location.address}
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
-                    phoneNumberFormat={cards.phoneNumberFormat}
-                    phoneNumberLink={cards.phoneNumberLink}
                     backgroundColor={styles.cardBackgroundColor}
                   />
                 )
