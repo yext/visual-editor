@@ -20,6 +20,10 @@ export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
 export {
+  PhotoGallerySection,
+  type PhotoGallerySectionProps,
+} from "./PhotoGallerySection.tsx";
+export {
   ProductsSection,
   type ProductsSectionProps,
 } from "./ProductsSection.tsx";
