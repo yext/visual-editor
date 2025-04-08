@@ -48,6 +48,8 @@ import {
   TestimonialsProps,
   NearbyLocations,
   NearbyLocationsProps,
+  ProductsSection,
+  ProductsSectionProps,
   People,
   PeopleProps,
   Events,
@@ -78,6 +80,7 @@ type MainProps = {
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
   PhoneWrapper: PhoneWrapperProps;
+  ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
@@ -112,6 +115,7 @@ const components: Config<MainProps>["components"] = {
   MapboxStaticMap,
   Testimonials,
   NearbyLocations,
+  ProductsSection,
   People,
   Events,
   HeroSection,
@@ -124,6 +128,7 @@ const pageSections: (keyof MainProps)[] = [
   "Card",
   "HeroSection",
   "PhotoGallerySection",
+  "ProductsSection",
   "Promo",
   "Testimonials",
   "People",

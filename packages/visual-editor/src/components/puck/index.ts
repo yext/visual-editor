@@ -23,12 +23,16 @@ export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
+export {
+  ProductsSection,
+  type ProductsSectionProps,
+} from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
-export { TextList, type TextListProps } from "./TextList.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
   NearbyLocations,
   type NearbyLocationsProps,
 } from "./NearbyLocations.tsx";
 export { People, type PeopleProps } from "./People.tsx";
+export { TextList, type TextListProps } from "./TextList.tsx";
 export { Events, type EventsProps } from "./Events.tsx";
