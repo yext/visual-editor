@@ -104,10 +104,14 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
               { label: "No", value: false },
             ],
           },
-          dayOfWeekFormat: BasicSelector("Day of Week Format", [
-            { label: "Short", value: "short" },
-            { label: "Long", value: "long" },
-          ]),
+          dayOfWeekFormat: {
+            type: "radio",
+            label: "Day of Week Format",
+            options: [
+              { label: "Short", value: "short" },
+              { label: "Long", value: "long" },
+            ],
+          },
         },
       },
       phoneNumberFormat: {
@@ -165,7 +169,7 @@ const LocationCard = ({
   return (
     <div className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border">
       <Section background={backgroundColor} className={`components`}>
-        <Heading level={4}>{name}</Heading>
+        <Heading level={cards.headingLevel}>{name}</Heading>
         {hours && (
           <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
             <HoursStatus
@@ -224,7 +228,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentEndpoint: string = document?._env?.YEXT_CONTENT_API_KEY;
+  const contentEndpoint: string = document?._env?.YEXT_CONTENT_ENDPOINT;
   if (!contentEndpoint) {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
