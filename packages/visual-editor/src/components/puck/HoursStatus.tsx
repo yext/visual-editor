@@ -11,7 +11,6 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  BasicSelector,
 } from "../../index.js";
 
 export interface HoursStatusProps {
@@ -54,10 +53,14 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
       { label: "No", value: false },
     ],
   },
-  dayOfWeekFormat: BasicSelector("Day of Week Format", [
-    { label: "Short", value: "short" },
-    { label: "Long", value: "long" },
-  ]),
+  dayOfWeekFormat: {
+    type: "radio",
+    label: "Day of Week Format",
+    options: [
+      { label: "Short", value: "short" },
+      { label: "Long", value: "long" },
+    ],
+  },
 };
 
 const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
