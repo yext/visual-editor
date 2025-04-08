@@ -12,11 +12,10 @@ import {
   HeadingLevel,
   Section,
   Phone,
-  themeManagerCn,
+  fetchNearbyLocations,
 } from "../../index.js";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
-import { fetchNearbyLocations } from "../../api/nearbyLocations.tsx";
 import * as React from "react";
 
 export interface NearbyLocationsProps {
@@ -30,7 +29,7 @@ export interface NearbyLocationsProps {
   };
   cards: {
     headingLevel: HeadingLevel;
-    phoneNumberFormat?: "domestic" | "international";
+    phoneNumberFormat: "domestic" | "international";
     phoneNumberLink: boolean;
     hours: {
       showCurrentStatus: boolean;
@@ -146,6 +145,73 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
   },
 };
 
+const LocationCard = ({
+  key,
+  name,
+  address,
+  hours,
+  timezone,
+  mainPhone,
+  phoneNumberFormat,
+  phoneNumberLink,
+  backgroundColor,
+}: {
+  key: number;
+  name: string;
+  address: any;
+  hours: any;
+  timezone: string;
+  mainPhone: string;
+  phoneNumberFormat: "domestic" | "international";
+  phoneNumberLink: boolean;
+  backgroundColor?: BackgroundStyle;
+}) => {
+  return (
+    <div
+      key={key}
+      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
+    >
+      <Section background={backgroundColor} className={`components`}>
+        <Heading level={4}>{name}</Heading>
+        {hours && (
+          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+            <HoursStatus
+              hours={hours}
+              timezone={timezone}
+              currentTemplate={
+                hours.showCurrentStatus ? undefined : () => <></>
+              }
+              separatorTemplate={
+                hours.showCurrentStatus ? undefined : () => <></>
+              }
+              timeOptions={{
+                hour12: hours.timeFormat === "12h",
+              }}
+              dayOptions={{
+                weekday: hours.dayOfWeekFormat,
+              }}
+              dayOfWeekTemplate={hours.showDayNames ? undefined : () => <></>}
+              className="h-full"
+            />
+          </div>
+        )}
+        {mainPhone && (
+          <Phone
+            phoneNumber={mainPhone}
+            format={phoneNumberFormat}
+            includeHyperlink={phoneNumberLink}
+          />
+        )}
+        {address && (
+          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+            <Address address={address} lines={[["line1"]]} />
+          </div>
+        )}
+      </Section>
+    </div>
+  );
+};
+
 const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   const {
     heading,
@@ -216,63 +282,17 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
               {nearbyLocationsData.response.docs.map(
                 (location: any, index: number) => (
-                  <div
+                  <LocationCard
                     key={index}
-                    className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
-                  >
-                    <section
-                      className={themeManagerCn(
-                        "components h-full flex-grow",
-                        styles.cardBackgroundColor?.bgColor || "",
-                        styles.cardBackgroundColor?.textColor || ""
-                      )}
-                    >
-                      <Heading level={4}>{location.name}</Heading>
-                      {location.hours && (
-                        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-                          <HoursStatus
-                            hours={location.hours}
-                            timezone={location.timezone}
-                            currentTemplate={
-                              cards.hours.showCurrentStatus
-                                ? undefined
-                                : () => <></>
-                            }
-                            separatorTemplate={
-                              cards.hours.showCurrentStatus
-                                ? undefined
-                                : () => <></>
-                            }
-                            timeOptions={{
-                              hour12: cards.hours.timeFormat === "12h",
-                            }}
-                            dayOptions={{
-                              weekday: cards.hours.dayOfWeekFormat,
-                            }}
-                            dayOfWeekTemplate={
-                              cards.hours.showDayNames ? undefined : () => <></>
-                            }
-                            className="h-full"
-                          />
-                        </div>
-                      )}
-                      {location.mainPhone && (
-                        <Phone
-                          phoneNumber={location.mainPhone}
-                          format={cards.phoneNumberFormat}
-                          includeHyperlink={cards.phoneNumberLink}
-                        />
-                      )}
-                      {location.address && (
-                        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-                          <Address
-                            address={location.address}
-                            lines={[["line1"]]}
-                          />
-                        </div>
-                      )}
-                    </section>
-                  </div>
+                    name={location.name}
+                    address={location.address}
+                    hours={location.hours}
+                    timezone={location.timezone}
+                    mainPhone={location.mainPhone}
+                    phoneNumberFormat={cards.phoneNumberFormat}
+                    phoneNumberLink={cards.phoneNumberLink}
+                    backgroundColor={styles.cardBackgroundColor}
+                  />
                 )
               )}
             </div>

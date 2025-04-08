@@ -14,7 +14,7 @@ export const fetchNearbyLocations = async ({
   radiusMi: number;
   limit: number;
   entityType: string;
-}): Promise<any> => {
+}): Promise<Record<string, any>> => {
   const url = new URL(contentEndpoint);
   url.searchParams.append("v", V_PARAM);
   url.searchParams.append(
