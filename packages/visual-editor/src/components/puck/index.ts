@@ -23,6 +23,10 @@ export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
+export {
+  PhotoGallerySection,
+  type PhotoGallerySectionProps,
+} from "./PhotoGallerySection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
