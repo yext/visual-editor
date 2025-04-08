@@ -136,10 +136,12 @@ const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
   radius: {
     label: "Radius (Miles)",
     type: "number",
+    min: 0,
   },
   limit: {
     label: "Limit",
     type: "number",
+    min: 0,
     max: 50,
   },
 };
@@ -168,7 +170,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
     );
   }
 
-  const entityType: string = document?.meta?.entityType?.id || "locations";
+  const entityType: string = document?.meta?.entityType?.id || "location";
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
       queryKey: [
@@ -225,9 +227,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
                         styles.cardBackgroundColor?.textColor || ""
                       )}
                     >
-                      <Heading level={4} className="text-lg font-bold">
-                        {location.name}
-                      </Heading>
+                      <Heading level={4}>{location.name}</Heading>
                       {location.hours && (
                         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
                           <HoursStatus
