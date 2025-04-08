@@ -23,7 +23,8 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
       onChange(updatedItems);
     };
 
-    const addItem = () => {
+    const addItem = (e?: MouseEvent) => {
+      e?.preventDefault();
       setLocalItems([...localItems, ""]);
     };
 
