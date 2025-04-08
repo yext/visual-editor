@@ -13,6 +13,7 @@ export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";
 export { Grid, type GridProps } from "./Grid.tsx";
 export { Header, type HeaderProps } from "./Header.tsx";
 export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
+export { HeroSection, type HeroSectionProps } from "./HeroSection.tsx";
 export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
@@ -26,3 +27,4 @@ export {
   type NearbyLocationsProps,
 } from "./NearbyLocations.tsx";
 export { People, type PeopleProps } from "./People.tsx";
+export { Events, type EventsProps } from "./Events.tsx";

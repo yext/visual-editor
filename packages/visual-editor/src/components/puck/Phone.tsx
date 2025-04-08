@@ -17,7 +17,7 @@ export interface PhoneWrapperProps {
 
 const PhoneFields: Fields<PhoneWrapperProps> = {
   phone: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "Phone Number",
     filter: {
       types: ["type.phone"],
     },
