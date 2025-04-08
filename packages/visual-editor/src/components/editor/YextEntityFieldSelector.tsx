@@ -239,17 +239,17 @@ const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
 }: InputProps<T>) => {
-  const filteredEntityFields = getFilteredEntityFields(filter);
-
-  const basicSelectorField = BasicSelector("Entity Field", [
-    { value: "", label: "Select a Content field" },
-    ...filteredEntityFields.map((entityFieldNameToSchema) => {
-      return {
-        label: entityFieldNameToSchema.name,
-        value: entityFieldNameToSchema.name,
-      };
-    }),
-  ]);
+  const basicSelectorField = React.useMemo(() => {
+    return BasicSelector("Entity Field", [
+      { value: "", label: "Select a Content field" },
+      ...getFilteredEntityFields(filter).map((entityFieldNameToSchema) => {
+        return {
+          label: entityFieldNameToSchema.name,
+          value: entityFieldNameToSchema.name,
+        };
+      }),
+    ]);
+  }, [filter]);
 
   return (
     <AutoField
