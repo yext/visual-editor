@@ -49,6 +49,7 @@ export const ui: Registry["items"] = [
     name: "phone",
     type: "registry:component",
     files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
+    registryDependencies: ["body", "cta"],
   },
   {
     name: "mail_outline",
