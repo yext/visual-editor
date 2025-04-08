@@ -37,9 +37,7 @@ const AccordionTrigger = React.forwardRef<
         <FaChevronDown
           className={themeManagerCn(
             "h-4 w-4 shrink-0 transition-transform duration-200",
-            hasDarkBackground
-              ? "text-palette-primary"
-              : "text-palette-primary-dark"
+            hasDarkBackground ? "text-white" : "text-palette-primary-dark"
           )}
         />
       </AccordionPrimitive.Trigger>
