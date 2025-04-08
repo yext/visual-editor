@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Fields, ComponentConfig, DropZone } from "@measured/puck";
+import {
+  Fields,
+  ComponentConfig,
+  DropZone,
+  usePuck,
+  resolveAllData,
+  WithPuckProps,
+  WithId,
+} from "@measured/puck";
 import {
   useDocument,
   Heading,
@@ -27,6 +35,7 @@ export interface CollectionSectionProps {
     level: HeadingProps["level"];
   };
   collection: YextCollection;
+  shouldClearDropZone?: boolean;
 }
 
 const collectionSectionFields: Fields<CollectionSectionProps> = {
@@ -70,9 +79,39 @@ const collectionSectionFields: Fields<CollectionSectionProps> = {
   },
 };
 
-const CollectionSectionWrapper: React.FC<CollectionSectionProps> = (props) => {
-  const { styles, sectionHeading } = props;
+const CollectionSectionWrapper: React.FC<
+  WithId<WithPuckProps<CollectionSectionProps>>
+> = (props) => {
+  const { styles, sectionHeading, shouldClearDropZone, id } = props;
   const document = useDocument();
+
+  try {
+    const puck = usePuck();
+
+    if (puck && shouldClearDropZone) {
+      delete puck.appState.data.zones?.[id + ":collection-dropzone"];
+      resolveAllData(puck.appState.data, puck.config).then((newData) => {
+        puck.history.setHistories([
+          ...puck.history.histories,
+          {
+            id: puck.history.histories[puck.history.index].id + "-cleared",
+            state: { ...puck.appState, data: newData },
+          },
+        ]);
+        puck.history.setHistoryIndex(puck.history.histories.length);
+      });
+    }
+  } catch (e) {
+    // usePuck will throw an error outside of the editor
+    if (
+      !(
+        e instanceof Error &&
+        e.message.includes("usePuck was used outside of the <Puck> component")
+      )
+    ) {
+      console.warn(e);
+    }
+  }
 
   const resolvedHeadingText = resolveYextEntityField<string>(
     document,
@@ -121,6 +160,19 @@ export const CollectionSection: ComponentConfig<CollectionSectionProps> = {
         },
       },
     };
+  },
+  resolveData: (data, { lastData }) => {
+    if (
+      lastData &&
+      data.props.collection.items.constantValueEnabled !==
+        lastData?.props.collection.items.constantValueEnabled
+    ) {
+      data.props.shouldClearDropZone = true;
+    } else {
+      data.props.shouldClearDropZone = false;
+    }
+
+    return data;
   },
   defaultProps: {
     styles: {
