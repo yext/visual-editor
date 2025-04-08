@@ -252,16 +252,18 @@ const EntityFieldInput = <T extends Record<string, any>>({
   }, [filter]);
 
   return (
-    <AutoField
-      field={basicSelectorField}
-      onChange={(selectedEntityField) => {
-        onChange({
-          field: selectedEntityField,
-          constantValue: value?.constantValue ?? "",
-          constantValueEnabled: false,
-        });
-      }}
-      value={value?.field}
-    />
+    <div className={"ve-inline-block ve-w-full ve-pt-4"}>
+      <AutoField
+        field={basicSelectorField}
+        onChange={(selectedEntityField) => {
+          onChange({
+            field: selectedEntityField,
+            constantValue: value?.constantValue ?? "",
+            constantValueEnabled: false,
+          });
+        }}
+        value={value?.field}
+      />
+    </div>
   );
 };
