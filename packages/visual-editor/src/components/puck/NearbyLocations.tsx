@@ -244,6 +244,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
         coordinate?.latitude,
         coordinate?.longitude,
         radius,
+        coordinateField.field,
         entityType,
         limit,
       ],
@@ -253,6 +254,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
+          coordinateField: coordinateField.field,
           limit: limit,
           entityType: entityType,
         });
