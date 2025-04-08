@@ -11,6 +11,7 @@ export {
 export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Directory, type DirectoryProps } from "./Directory.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
+export { FAQsSection, type FAQsSectionProps } from "./FAQs.tsx";
 export { Flex, type FlexProps } from "./Flex.tsx";
 export { Footer, type FooterProps } from "./Footer.tsx";
 export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";
@@ -27,8 +28,12 @@ export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
+export {
+  ProductsSection,
+  type ProductsSectionProps,
+} from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
-export { TextList, type TextListProps } from "./TextList.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export { People, type PeopleProps } from "./People.tsx";
+export { TextList, type TextListProps } from "./TextList.tsx";
 export { Events, type EventsProps } from "./Events.tsx";

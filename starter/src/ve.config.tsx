@@ -46,8 +46,12 @@ import {
   MapboxStaticProps,
   Testimonials,
   TestimonialsProps,
+  ProductsSection,
+  ProductsSectionProps,
   People,
   PeopleProps,
+  FAQsSection,
+  FAQsSectionProps,
   Events,
   EventsProps,
   HeroSectionProps,
@@ -67,6 +71,7 @@ type MainProps = {
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
   Emails: EmailsProps;
+  FAQsSection: FAQsSectionProps;
   Flex: FlexProps;
   Footer: FooterProps;
   GetDirections: GetDirectionsProps;
@@ -78,6 +83,7 @@ type MainProps = {
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
+  ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
@@ -98,6 +104,7 @@ const components: Config<MainProps>["components"] = {
   BodyText,
   CTA,
   Emails,
+  FAQsSection,
   GetDirections,
   HeadingText,
   HoursStatus,
@@ -111,6 +118,7 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   Testimonials,
+  ProductsSection,
   People,
   Events,
   HeroSection,
@@ -122,8 +130,10 @@ const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "FAQsSection",
   "HeroSection",
   "PhotoGallerySection",
+  "ProductsSection",
   "CoreInfoSection",
   "Promo",
   "Testimonials",
