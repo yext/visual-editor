@@ -86,54 +86,91 @@ export const resolveYextSubfield = <T>(
 
 /**
  * handleResolveFieldsForCollections determines if lastFields
- * should be returned, sets the isCollection prop,
+ * should be returned, returns filters for YextCollectionSubfieldSelector,
  * and resets prop data when isCollection changes.
  * @param data the data object from Puck's resolveFields
  * @param params the params object from Puck's resolveFields
- * @returns boolean. whether to lastFields should be returned or
- * the YextCollectionSubfieldSelector fields should be reconstructed.
  */
 export const handleResolveFieldsForCollections = (
   data: { props: Record<string, any> },
   params: {
-    fields: Fields<any>;
-    lastData: { props: Record<string, any> } | null;
+    lastFields: Fields<any>;
     parent: { props: Record<string, any> } | null;
   }
-) => {
-  const { fields, parent, lastData } = params;
+): {
+  /** No field updates need. Return params.lastFields */
+  shouldReturnLastFields: boolean;
+  /**
+   * Whether the component is currently in a CollectionSection
+   * with a field set. Use in YextCollectionSubfieldSelector.
+   */
+  isCollection: boolean;
+  /** The parent's field selected field if applicable. Use in YextCollectionSubfieldSelector. */
+  directChildrenFilter: string | undefined;
+} => {
+  const { parent, lastFields } = params;
 
-  // It is a collection if there is a parent with
-  // constantValue disabled and a field name selected
+  // It isCollection if in a parent and the parent does not have constantValueEnabled
   const isCollection =
-    !!parent &&
-    !parent.props.collection.items.constantValueEnabled &&
-    parent.props.collection.items.field !== "";
+    parent?.props.collection &&
+    !parent.props.collection.items.constantValueEnabled;
+
+  const collectionField = isCollection
+    ? params.parent!.props.collection.items.field
+    : undefined;
+
+  // Sometimes puck returns only the originally defined fields
+  // in lastFields so we should regenerate the fields in that case.
+  // Determined by comparing the fields length to the props length
+  // (minus the non-field-based props of id and collection)
+  const lastFieldsIsComplete =
+    Object.keys(data.props).filter(
+      (propName) => propName !== "id" && propName !== "collection"
+    ).length === Object.keys(lastFields).length;
+
+  // If isCollection has not changed, do not update the fields.
+  // Updating the fields will cause text fields to lose focus.
+  if (
+    lastFieldsIsComplete &&
+    parent?.props.collection?.items.field ===
+      data.props.collection?.items.field &&
+    parent?.props.collection?.items.constantValueEnabled ===
+      data.props.collection?.items.constantValueEnabled
+  ) {
+    // Update the collection prop before returning
+    data.props.collection = parent?.props.collection;
+
+    return {
+      shouldReturnLastFields: true,
+      isCollection,
+      directChildrenFilter: collectionField,
+    };
+  }
 
   // Clear out the props when the parent or selected collection changes
-  if (Object.keys(fields).every((fieldName) => data.props[fieldName])) {
-    Object.keys(fields).forEach((fieldName) => {
+  if (
+    parent?.props.collection?.items.field !==
+      data.props.collection?.items.field ||
+    parent?.props.collection?.items.constantValueEnabled !==
+      data.props.collection?.items.constantValueEnabled
+  ) {
+    Object.keys(data.props).forEach((fieldName) => {
       if (
-        (lastData && !!lastData.props.isCollection != isCollection) ||
-        (parent &&
-          !parent.props.collection.items.constantValueEnabled &&
-          !data.props[fieldName].field.includes(
-            parent.props.collection.items.field
-          ))
+        // type check for YextEntityField
+        typeof data.props[fieldName] === "object" &&
+        "field" in data.props[fieldName]
       ) {
         data.props[fieldName].field = "";
       }
     });
   }
 
-  // Set the child's isCollection prop
-  data.props.isCollection = isCollection;
+  // Update the collection prop before returning
+  data.props.collection = parent?.props.collection;
 
-  // If isCollection has not changed, do not update the fields.
-  // Updating the fields will cause text fields to lose focus.
-  if (lastData?.props.isCollection === data.props.isCollection) {
-    return true;
-  }
-
-  return false;
+  return {
+    shouldReturnLastFields: false,
+    isCollection,
+    directChildrenFilter: collectionField,
+  };
 };

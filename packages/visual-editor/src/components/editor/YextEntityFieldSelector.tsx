@@ -24,6 +24,11 @@ export type YextEntityField<T> = {
   constantValueEnabled?: boolean;
 };
 
+export type YextCollection = {
+  items: YextEntityField<Array<any>>;
+  limit: string | number;
+};
+
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;

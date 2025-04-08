@@ -9,67 +9,64 @@ import {
   YextCollectionSubfieldSelector,
   handleResolveFieldsForCollections,
   Body,
+  YextCollection,
 } from "../../index.js";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { useCollectionContext } from "./contexts/collectionContext.js";
 
 export type ExampleRepeatableItemProps = {
-  text: YextEntityField<string>;
-  isCollection?: boolean;
-  image: YextEntityField<ImageType>;
+  text?: YextEntityField<string>;
+  info: string;
+  image?: YextEntityField<ImageType>;
+  collection?: YextCollection;
 };
 
 const ExampleRepeatableItemFields: Fields<ExampleRepeatableItemProps> = {
-  text: YextCollectionSubfieldSelector<any, string>({
-    label: "Text",
-    isCollection: false,
-    filter: {
-      types: ["type.string"],
-    },
-  }),
-  image: YextCollectionSubfieldSelector<any, ImageType>({
-    label: "Image",
-    isCollection: false,
-    filter: {
-      types: ["type.image"],
-    },
-  }),
+  // non-collection fields here
+  info: {
+    type: "text",
+  },
+  // collection fields are defined in resolveFields
 };
 
 const ExampleRepeatableItem = (props: ExampleRepeatableItemProps) => {
-  const { text, image, isCollection } = props;
+  const { text, image, collection } = props;
   const document = useDocument();
 
-  const collectionContext = useCollectionContext();
-
   // If not in a collection, render a single card with normal entity fields
-  if (!isCollection || !collectionContext) {
-    const resolvedText = resolveYextEntityField(document, text);
-    const resolvedImage = resolveYextEntityField(document, image);
+  if (!collection || collection.items.constantValueEnabled) {
+    const resolvedText = text
+      ? resolveYextEntityField(document, text)
+      : undefined;
+    const resolvedImage = image
+      ? resolveYextEntityField(document, image)
+      : undefined;
 
     return (
       <ExampleRepeatableItemCard image={resolvedImage} text={resolvedText} />
     );
   }
 
-  const { parentEntityField, limit } = collectionContext;
+  const { items, limit } = collection;
+
   // If in a collection, get and resolve the parent
-  const resolvedParent = resolveYextEntityField(document, parentEntityField);
+  const resolvedParent = resolveYextEntityField(document, items);
 
   // Return one card with resolved subfields for each item in the parent
   return (
     <div className="flex gap-4 max-w-pageSection-maxWidth">
-      {resolvedParent?.slice(0, limit).map((item, i) => {
-        const resolvedImage = resolveYextSubfield(item, image);
-        const resolvedText = resolveYextSubfield(item, text);
-        return (
-          <ExampleRepeatableItemCard
-            key={i}
-            image={resolvedImage}
-            text={resolvedText}
-          />
-        );
-      })}
+      {resolvedParent
+        ?.slice(0, typeof limit !== "number" ? undefined : limit)
+        .map((item, i) => {
+          const resolvedImage = resolveYextSubfield(item, image);
+          const resolvedText = resolveYextSubfield(item, text);
+          return (
+            <ExampleRepeatableItemCard
+              key={i}
+              image={resolvedImage}
+              text={resolvedText}
+            />
+          );
+        })}
     </div>
   );
 };
@@ -113,8 +110,12 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
     label: "Repeatable Card",
     fields: ExampleRepeatableItemFields,
     resolveFields: (data, params) => {
-      // Sets isCollection and clears fields when needed
-      if (handleResolveFieldsForCollections(data, params)) {
+      // Set the collection prop and determine how to update fields
+      const { shouldReturnLastFields, isCollection, directChildrenFilter } =
+        handleResolveFieldsForCollections(data, params);
+
+      // Unnecessary field updates can lead to the fields losing focus
+      if (shouldReturnLastFields) {
         return params.lastFields;
       }
 
@@ -123,27 +124,24 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
         ...params.lastFields,
         text: YextCollectionSubfieldSelector<any, string>({
           label: "Text",
-          isCollection: data.props.isCollection,
+          isCollection: isCollection,
           filter: {
-            directChildrenOf: data.props.isCollection
-              ? params.parent!.props.collection.items.field
-              : undefined,
+            directChildrenOf: directChildrenFilter,
             types: ["type.string"],
           },
         }),
         image: YextCollectionSubfieldSelector<any, ImageType>({
           label: "Image",
-          isCollection: data.props.isCollection,
+          isCollection: isCollection,
           filter: {
-            directChildrenOf: data.props.isCollection
-              ? params.parent!.props.collection.items.field
-              : undefined,
+            directChildrenOf: directChildrenFilter,
             types: ["type.image"],
           },
         }),
-      };
+      } as Fields<ExampleRepeatableItemProps>;
     },
     defaultProps: {
+      info: "Info",
       text: {
         field: "",
         constantValue: "",

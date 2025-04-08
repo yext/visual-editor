@@ -1,5 +1,6 @@
-import { assert, describe, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 import {
+  handleResolveFieldsForCollections,
   resolveYextEntityField,
   resolveYextSubfield,
 } from "./resolveYextEntityField.ts";
@@ -141,5 +142,153 @@ describe("resolveYextSubfield", () => {
       ),
       undefined
     );
+  });
+});
+
+describe("handleResolveFieldsForCollections", () => {
+  it("returns shouldReturnLastFields=true correctly", () => {
+    const res = handleResolveFieldsForCollections(
+      {
+        props: {
+          collection: {
+            items: {
+              field: "c_collection",
+              constantValueEnabled: true,
+            },
+          },
+          mySubField: "ABC",
+        },
+      },
+      {
+        lastFields: {
+          mySubField: {
+            type: "text",
+          },
+        },
+        parent: {
+          props: {
+            collection: {
+              items: {
+                field: "c_collection",
+                constantValueEnabled: true,
+              },
+            },
+          },
+        },
+      }
+    );
+
+    expect(res.shouldReturnLastFields).toBe(true);
+    expect(res.isCollection).toBe(false);
+    expect(res.directChildrenFilter).toBeUndefined();
+  });
+
+  it("handles incomplete lastFields correctly", () => {
+    const res = handleResolveFieldsForCollections(
+      {
+        props: {
+          collection: {
+            items: {
+              field: "c_collection",
+              constantValueEnabled: false,
+            },
+          },
+          mySubField: "ABC",
+        },
+      },
+      {
+        lastFields: {},
+        parent: {
+          props: {
+            collection: {
+              items: {
+                field: "c_collection",
+                constantValueEnabled: false,
+              },
+            },
+          },
+        },
+      }
+    );
+
+    expect(res.shouldReturnLastFields).toBe(false);
+    expect(res.isCollection).toBe(true);
+    expect(res.directChildrenFilter).toBe("c_collection");
+  });
+
+  it("returns shouldReturnLastFields=false with data updates correctly", () => {
+    const data = {
+      props: {
+        collection: {
+          items: {
+            field: "c_collection_1",
+            constantValueEnabled: false,
+          },
+        },
+        mySubField: {
+          field: "c_collection_1.title",
+          constantValue: "ABC",
+        },
+      },
+    };
+    const res = handleResolveFieldsForCollections(data, {
+      lastFields: {
+        mySubField: {
+          type: "text",
+        },
+      },
+      parent: {
+        props: {
+          collection: {
+            items: {
+              field: "c_collection_2",
+              constantValueEnabled: false,
+            },
+          },
+        },
+      },
+    });
+
+    expect(res.shouldReturnLastFields).toBe(false);
+    expect(res.isCollection).toBe(true);
+    expect(res.directChildrenFilter).toBe("c_collection_2");
+    expect(data.props.mySubField.field).toBe("");
+  });
+
+  it("returns shouldReturnLastFields=false with no data updates correctly", () => {
+    const data = {
+      props: {
+        collection: {
+          items: {
+            field: "c_collection",
+            constantValueEnabled: false,
+          },
+        },
+        myRegularField: "ABC",
+      },
+    };
+
+    const res = handleResolveFieldsForCollections(data, {
+      lastFields: {
+        mySubField: {
+          type: "text",
+        },
+      },
+      parent: {
+        props: {
+          collection: {
+            items: {
+              field: "c_collection",
+              constantValueEnabled: true,
+            },
+          },
+        },
+      },
+    });
+
+    expect(res.shouldReturnLastFields).toBe(false);
+    expect(res.isCollection).toBe(false);
+    expect(res.directChildrenFilter).toBeUndefined();
+    expect(data.props.myRegularField).toBe("ABC");
   });
 });

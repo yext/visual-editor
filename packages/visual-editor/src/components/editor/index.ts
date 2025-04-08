@@ -5,6 +5,7 @@ export {
   YextCollectionSubfieldSelector,
   type RenderYextEntityFieldSelectorProps,
   type YextEntityField,
+  type YextCollection,
 } from "./YextEntityFieldSelector.tsx";
 export {
   OptionalNumberField,

@@ -13,8 +13,8 @@ import {
   SectionProps,
   resolveYextEntityField,
   OptionalNumberField,
+  YextCollection,
 } from "../../index.js";
-import { CollectionContext } from "./contexts/collectionContext.js";
 
 export const COLLECTION_COMPONENTS = ["ExampleRepeatableItemComponent"];
 
@@ -26,10 +26,7 @@ export interface CollectionSectionProps {
     text: YextEntityField<string>;
     level: HeadingProps["level"];
   };
-  collection: {
-    items: YextEntityField<Array<any>>;
-    limit: string | number;
-  };
+  collection: YextCollection;
 }
 
 const collectionSectionFields: Fields<CollectionSectionProps> = {
@@ -74,7 +71,7 @@ const collectionSectionFields: Fields<CollectionSectionProps> = {
 };
 
 const CollectionSectionWrapper: React.FC<CollectionSectionProps> = (props) => {
-  const { styles, sectionHeading, collection } = props;
+  const { styles, sectionHeading } = props;
   const document = useDocument();
 
   const resolvedHeadingText = resolveYextEntityField<string>(
@@ -87,19 +84,11 @@ const CollectionSectionWrapper: React.FC<CollectionSectionProps> = (props) => {
       {resolvedHeadingText && (
         <Heading level={sectionHeading.level}>{resolvedHeadingText}</Heading>
       )}
-      <CollectionContext.Provider
-        value={{
-          parentEntityField: collection.items,
-          limit:
-            typeof collection.limit === "number" ? collection.limit : undefined,
-        }}
-      >
-        <DropZone
-          zone="collection-dropzone"
-          allow={COLLECTION_COMPONENTS}
-          className="flex gap-4 flex-wrap"
-        />
-      </CollectionContext.Provider>
+      <DropZone
+        zone="collection-dropzone"
+        allow={COLLECTION_COMPONENTS}
+        className="flex gap-4 flex-wrap"
+      />
     </Section>
   );
 };
