@@ -4401,7 +4401,7 @@ Apache-2.0
 
 The following npm package may be included in this product:
 
- - eslint@9.21.0
+ - eslint@9.18.0
 
 This package contains the following license:
 
@@ -4429,12 +4429,12 @@ THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - dompurify@3.2.4
+ - dompurify@3.2.3
 
 This package contains the following license:
 
 DOMPurify
-Copyright 2025 Dr.-Ing. Mario Heiderich, Cure53
+Copyright 2024 Dr.-Ing. Mario Heiderich, Cure53
 
 DOMPurify is free software; you can redistribute it and/or modify it under the
 terms of either:
@@ -5054,6 +5054,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 The following npm packages may be included in this product:
 
  - @measured/puck@0.18.2
+ - @radix-ui/react-accordion@1.2.3
  - @radix-ui/react-alert-dialog@1.1.2
  - @radix-ui/react-label@2.1.0
  - @radix-ui/react-popover@1.1.6
