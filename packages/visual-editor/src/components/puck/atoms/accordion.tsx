@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { themeManagerCn } from "../../../index.ts";
+import { themeManagerCn, useBackground } from "../../../index.ts";
 import { FaChevronDown } from "react-icons/fa";
 
 const Accordion = AccordionPrimitive.Root;
@@ -20,21 +20,32 @@ AccordionItem.displayName = "AccordionItem";
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      className={themeManagerCn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
-        className
-      )}
-      {...props}
-    >
-      {children}
-      <FaChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 text-palette-primary-dark" />
-    </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
-));
+>(({ className, children, ...props }, ref) => {
+  const background = useBackground();
+  const hasDarkBackground = background?.textColor === "text-white";
+  return (
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        ref={ref}
+        className={themeManagerCn(
+          "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        <FaChevronDown
+          className={themeManagerCn(
+            "h-4 w-4 shrink-0 transition-transform duration-200",
+            hasDarkBackground
+              ? "text-palette-primary"
+              : "text-palette-primary-dark"
+          )}
+        />
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  );
+});
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
 const AccordionContent = React.forwardRef<
