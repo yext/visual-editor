@@ -8,8 +8,9 @@ import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
-import { RenderProps } from "./renderEntityFields.tsx";
 import { useCallback } from "react";
+
+type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 // Converts a ThemeConfigSection into a Puck fields object
 export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
