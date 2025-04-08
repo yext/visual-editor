@@ -228,7 +228,9 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentEndpoint: string = document?._env?.YEXT_CONTENT_ENDPOINT;
+  const contentEndpoint: string =
+    document?._env?.YEXT_CONTENT_ENDPOINT ||
+    "https://streams-dev.yext.com/v2/accounts/1000146856/content/visualEditorLocations?api_key=8cd8e7f4a761bc13f2da4cd980fbc1ec";
   if (!contentEndpoint) {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
@@ -243,7 +245,6 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
         coordinate?.latitude,
         coordinate?.longitude,
         radius,
-        coordinateField.field,
         entityType,
         limit,
       ],
@@ -253,7 +254,6 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
-          coordinateField: coordinateField.field,
           limit: limit,
           entityType: entityType,
         });
