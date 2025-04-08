@@ -8,8 +8,7 @@ import {
   HoursTable,
   HoursType,
 } from "@yext/pages-components";
-import { FaRegEnvelope } from "react-icons/fa";
-import { AiOutlinePhone } from "react-icons/ai";
+import { FaRegEnvelope, FaPhone } from "react-icons/fa";
 import {
   YextEntityField,
   HeadingLevel,
@@ -337,7 +336,7 @@ const CoreInfoSectionWrapper = ({
                         <div
                           className={`h-10 w-10 flex justify-center rounded-full items-center ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`}
                         >
-                          <AiOutlinePhone className="w-4 h-4" />
+                          <FaPhone className="w-4 h-4" />
                         </div>
                         <div className="flex gap-2 items-center">
                           <Body className="font-bold">{item.label}</Body>
