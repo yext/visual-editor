@@ -19,7 +19,7 @@ export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
-export { PhoneWrapper, type PhoneWrapperProps } from "./Phone.tsx";
+export { Phone, type PhoneProps } from "./Phone.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
