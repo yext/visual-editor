@@ -46,12 +46,18 @@ import {
   MapboxStaticProps,
   Testimonials,
   TestimonialsProps,
+  ProductsSection,
+  ProductsSectionProps,
   People,
   PeopleProps,
+  FAQsSection,
+  FAQsSectionProps,
   Events,
   EventsProps,
   HeroSectionProps,
   HeroSection,
+  PhotoGallerySectionProps,
+  PhotoGallerySection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -63,6 +69,7 @@ type MainProps = {
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
   Emails: EmailsProps;
+  FAQsSection: FAQsSectionProps;
   Flex: FlexProps;
   Footer: FooterProps;
   GetDirections: GetDirectionsProps;
@@ -74,12 +81,14 @@ type MainProps = {
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
+  ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
   People: PeopleProps;
   Events: EventsProps;
   HeroSection: HeroSectionProps;
+  PhotoGallerySection: PhotoGallerySectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -92,6 +101,7 @@ const components: Config<MainProps>["components"] = {
   BodyText,
   CTA,
   Emails,
+  FAQsSection,
   GetDirections,
   HeadingText,
   HoursStatus,
@@ -105,16 +115,21 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   Testimonials,
+  ProductsSection,
   People,
   Events,
   HeroSection,
+  PhotoGallerySection,
 };
 
 const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "FAQsSection",
   "HeroSection",
+  "PhotoGallerySection",
+  "ProductsSection",
   "Promo",
   "Testimonials",
   "People",
