@@ -212,123 +212,118 @@ const HeroSectionWrapper = ({
   return (
     <Section
       background={styles.backgroundColor}
-      aria-label="Hero Banner Section"
+      aria-label="Hero Banner"
+      applyPageLevelStyles
+      className={`flex flex-col gap-6 md:gap-10 ${
+        styles.imageOrientation === "right"
+          ? "md:flex-row"
+          : "md:flex-row-reverse"
+      }`}
     >
-      <section
-        className={`flex flex-col gap-6 md:gap-10 ${
-          styles.imageOrientation === "right"
-            ? "md:flex-row"
-            : "md:flex-row-reverse"
-        }`}
-        aria-label="Hero Content Wrapper"
+      <div
+        className="flex flex-col justify-center gap-y-6 w-full break-words md:gap-y-8"
+        aria-labelledby="hero-heading"
       >
-        <div
-          className="flex flex-col justify-center gap-y-6 w-full break-words md:gap-y-8"
-          aria-labelledby="hero-heading"
-        >
-          <header className="flex flex-col gap-y-4" aria-label="Hero Header">
-            <section
-              className="flex flex-col gap-y-0"
-              aria-label="Business Information"
-            >
-              {businessName && (
-                <EntityField
-                  displayName="Business Name"
-                  fieldId={businessNameField.entityField.field}
-                  constantValueEnabled={
-                    businessNameField.entityField.constantValueEnabled
-                  }
-                >
-                  <Heading level={businessNameField.level}>
-                    {businessName}
-                  </Heading>
-                </EntityField>
-              )}
-              {localGeoModifier && (
-                <EntityField
-                  displayName="Local GeoModifier"
-                  fieldId={localGeoModifierField.entityField.field}
-                  constantValueEnabled={
-                    localGeoModifierField.entityField.constantValueEnabled
-                  }
-                >
-                  <Heading level={localGeoModifierField.level}>
-                    {localGeoModifier}
-                  </Heading>
-                </EntityField>
-              )}
-            </section>
-            {hours && hoursField.showHours && (
+        <header className="flex flex-col gap-y-4" aria-label="Hero Header">
+          <section
+            className="flex flex-col gap-y-0"
+            aria-label="Business Information"
+          >
+            {businessName && (
               <EntityField
-                displayName="Hours"
-                fieldId={hoursField.entityField.field}
+                displayName="Business Name"
+                fieldId={businessNameField.entityField.field}
                 constantValueEnabled={
-                  hoursField.entityField.constantValueEnabled
+                  businessNameField.entityField.constantValueEnabled
                 }
               >
-                <HoursStatus hours={hours} timezone={timezone} />
+                <Heading level={businessNameField.level}>
+                  {businessName}
+                </Heading>
               </EntityField>
             )}
-          </header>
-          {((primaryCta && primaryCtaField.showCTA) ||
-            (secondaryCta && secondaryCtaField.showCTA)) && (
-            <div
-              className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-              aria-label="Call to Actions"
-            >
-              {primaryCta && primaryCtaField.showCTA && (
-                <EntityField
-                  displayName="Primary CTA"
-                  fieldId={primaryCtaField.entityField.field}
-                  constantValueEnabled={
-                    primaryCtaField.entityField.constantValueEnabled
-                  }
-                >
-                  <CTA
-                    variant={primaryCtaField.variant}
-                    label={primaryCta?.label ?? ""}
-                    link={primaryCta?.link || "#"}
-                    linkType={primaryCta?.linkType}
-                  />
-                </EntityField>
-              )}
-              {secondaryCta && secondaryCtaField.showCTA && (
-                <EntityField
-                  displayName="Secondary CTA"
-                  fieldId={secondaryCtaField.entityField.field}
-                  constantValueEnabled={
-                    secondaryCtaField.entityField.constantValueEnabled
-                  }
-                >
-                  <CTA
-                    variant={secondaryCtaField.variant}
-                    label={secondaryCta?.label ?? ""}
-                    link={secondaryCta?.link || "#"}
-                    linkType={secondaryCta?.linkType}
-                  />
-                </EntityField>
-              )}
-            </div>
-          )}
-        </div>
-        {image && (
-          <div className="w-full" role="region" aria-label="Hero Image">
+            {localGeoModifier && (
+              <EntityField
+                displayName="Local GeoModifier"
+                fieldId={localGeoModifierField.entityField.field}
+                constantValueEnabled={
+                  localGeoModifierField.entityField.constantValueEnabled
+                }
+              >
+                <Heading level={localGeoModifierField.level}>
+                  {localGeoModifier}
+                </Heading>
+              </EntityField>
+            )}
+          </section>
+          {hours && hoursField.showHours && (
             <EntityField
-              displayName="Image"
-              fieldId={imageField.image.field}
-              constantValueEnabled={imageField.image.constantValueEnabled}
+              displayName="Hours"
+              fieldId={hoursField.entityField.field}
+              constantValueEnabled={hoursField.entityField.constantValueEnabled}
             >
-              <Image
-                image={image}
-                layout={imageField.layout}
-                width={imageField.width}
-                height={imageField.height}
-                aspectRatio={imageField.aspectRatio}
-              />
+              <HoursStatus hours={hours} timezone={timezone} />
             </EntityField>
+          )}
+        </header>
+        {((primaryCta && primaryCtaField.showCTA) ||
+          (secondaryCta && secondaryCtaField.showCTA)) && (
+          <div
+            className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
+            aria-label="Call to Actions"
+          >
+            {primaryCta && primaryCtaField.showCTA && (
+              <EntityField
+                displayName="Primary CTA"
+                fieldId={primaryCtaField.entityField.field}
+                constantValueEnabled={
+                  primaryCtaField.entityField.constantValueEnabled
+                }
+              >
+                <CTA
+                  variant={primaryCtaField.variant}
+                  label={primaryCta?.label ?? ""}
+                  link={primaryCta?.link || "#"}
+                  linkType={primaryCta?.linkType}
+                />
+              </EntityField>
+            )}
+            {secondaryCta && secondaryCtaField.showCTA && (
+              <EntityField
+                displayName="Secondary CTA"
+                fieldId={secondaryCtaField.entityField.field}
+                constantValueEnabled={
+                  secondaryCtaField.entityField.constantValueEnabled
+                }
+              >
+                <CTA
+                  variant={secondaryCtaField.variant}
+                  label={secondaryCta?.label ?? ""}
+                  link={secondaryCta?.link || "#"}
+                  linkType={secondaryCta?.linkType}
+                />
+              </EntityField>
+            )}
           </div>
         )}
-      </section>
+      </div>
+      {image && (
+        <div className="w-full" role="region" aria-label="Hero Image">
+          <EntityField
+            displayName="Image"
+            fieldId={imageField.image.field}
+            constantValueEnabled={imageField.image.constantValueEnabled}
+          >
+            <Image
+              image={image}
+              layout={imageField.layout}
+              width={imageField.width}
+              height={imageField.height}
+              aspectRatio={imageField.aspectRatio}
+            />
+          </EntityField>
+        </div>
+      )}
     </Section>
   );
 };

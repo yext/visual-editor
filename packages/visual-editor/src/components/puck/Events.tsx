@@ -129,7 +129,7 @@ const EventCard: React.FC<EventCardProps> = ({
   return (
     <div
       key={index}
-      className="flex flex-col md:flex-row rounded-lg overflow-hidden bg-white text-black h-64"
+      className="flex flex-col md:flex-row rounded-lg overflow-hidden bg-white text-black h-fit md:h-64"
     >
       <div className="w-full md:w-[45%] h-full">
         {resolvedImage && (
@@ -203,18 +203,20 @@ const EventsWrapper: React.FC<EventsProps> = (props) => {
   );
 
   return (
-    <Section background={backgroundColor} className="components">
-      <div className="flex flex-col gap-12 p-8">
-        {resolvedHeading && (
-          <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-          </div>
-        )}
-        <div className="flex flex-col gap-8">
-          {events.map((event, index) => (
-            <EventCard key={index} {...event} index={index} />
-          ))}
+    <Section
+      background={backgroundColor}
+      applyPageLevelStyles
+      className="flex flex-col gap-8"
+    >
+      {resolvedHeading && (
+        <div className="text-center">
+          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
         </div>
+      )}
+      <div className="flex flex-col gap-8">
+        {events.map((event, index) => (
+          <EventCard key={index} {...event} index={index} />
+        ))}
       </div>
     </Section>
   );

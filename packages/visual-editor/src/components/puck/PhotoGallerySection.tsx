@@ -115,100 +115,98 @@ const PhotoGallerySectionWrapper = ({
   return (
     <Section
       aria-label="Photo Gallery Section"
+      applyPageLevelStyles
       background={styles.backgroundColor}
+      className="flex flex-col gap-8 justify-center text-center"
     >
-      <section className="flex flex-col gap-8 justify-center text-center">
-        {sectionHeading && (
-          <EntityField
-            displayName="Heading Text"
-            fieldId={sectionHeadingField.text.field}
-            constantValueEnabled={sectionHeadingField.text.constantValueEnabled}
-          >
-            <Heading level={sectionHeadingField.level}>
-              {sectionHeading}
-            </Heading>
-          </EntityField>
-        )}
-        {images && (
-          <CarouselProvider
-            className="flex flex-col md:flex-row gap-8"
-            naturalSlideWidth={100}
-            naturalSlideHeight={100}
-            totalSlides={images.length}
-            isIntrinsicHeight={true}
-          >
-            <DynamicChildColors category="arrow">
-              <ButtonBack className="hidden md:block my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
-                <FaArrowLeft className="h-10 w-20" />
-              </ButtonBack>
-            </DynamicChildColors>
-            <div className="flex flex-col gap-8">
-              <Slider className="md:px-8">
-                {images.map((item, idx) => {
-                  const resolvedImage = resolveYextEntityField<
-                    ImageProps["image"]
-                  >(document, item.image);
-                  if (!resolvedImage) return;
-                  return (
-                    <Slide index={idx} key={idx}>
-                      <Image
-                        image={resolvedImage}
-                        layout={item.layout}
-                        width={item.width}
-                        height={item.height}
-                        aspectRatio={item.aspectRatio}
-                      />
-                    </Slide>
-                  );
-                })}
-              </Slider>
-              <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
-                <DynamicChildColors category="arrow">
-                  <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                    <FaArrowLeft className="h-6 w-6" />
-                  </ButtonBack>
-                </DynamicChildColors>
-                <div className="flex gap-2 justify-center flex-grow w-full">
-                  {images.map((_, idx) => (
-                    <DynamicChildColors category="slide" key={idx}>
+      {sectionHeading && (
+        <EntityField
+          displayName="Heading Text"
+          fieldId={sectionHeadingField.text.field}
+          constantValueEnabled={sectionHeadingField.text.constantValueEnabled}
+        >
+          <Heading level={sectionHeadingField.level}>{sectionHeading}</Heading>
+        </EntityField>
+      )}
+      {images && (
+        <CarouselProvider
+          className="flex flex-col md:flex-row gap-8"
+          naturalSlideWidth={100}
+          naturalSlideHeight={100}
+          totalSlides={images.length}
+          isIntrinsicHeight={true}
+        >
+          <DynamicChildColors category="arrow">
+            <ButtonBack className="hidden md:block my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
+              <FaArrowLeft className="h-10 w-20" />
+            </ButtonBack>
+          </DynamicChildColors>
+          <div className="flex flex-col gap-8">
+            <Slider className="md:px-8">
+              {images.map((item, idx) => {
+                const resolvedImage = resolveYextEntityField<
+                  ImageProps["image"]
+                >(document, item.image);
+                if (!resolvedImage) return;
+                return (
+                  <Slide index={idx} key={idx}>
+                    <Image
+                      image={resolvedImage}
+                      layout={item.layout}
+                      width={item.width}
+                      height={item.height}
+                      aspectRatio={item.aspectRatio}
+                    />
+                  </Slide>
+                );
+              })}
+            </Slider>
+            <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
+              <DynamicChildColors category="arrow">
+                <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
+                  <FaArrowLeft className="h-6 w-6" />
+                </ButtonBack>
+              </DynamicChildColors>
+              <div className="flex gap-2 justify-center flex-grow w-full">
+                {images.map((_, idx) => (
+                  <DynamicChildColors category="slide" key={idx}>
+                    <Dot
+                      slide={idx}
+                      className=" h-1.5 w-full rounded-full disabled:cursor-default"
+                    />
+                  </DynamicChildColors>
+                ))}
+              </div>
+              <DynamicChildColors category="arrow">
+                <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
+                  <FaArrowRight className="h-6 w-6" />
+                </ButtonNext>
+              </DynamicChildColors>
+            </div>
+            <div className="hidden md:flex justify-center">
+              {images.map((_, idx) => {
+                const afterStyles =
+                  "after:content-[' '] after:py-2 after:block";
+                return (
+                  <div key={idx} className="w-16 flex justify-center">
+                    <DynamicChildColors category="slide">
                       <Dot
                         slide={idx}
-                        className=" h-1.5 w-full rounded-full disabled:cursor-default"
-                      />
+                        className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
+                      ></Dot>
                     </DynamicChildColors>
-                  ))}
-                </div>
-                <DynamicChildColors category="arrow">
-                  <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                    <FaArrowRight className="h-6 w-6" />
-                  </ButtonNext>
-                </DynamicChildColors>
-              </div>
-              <div className="hidden md:flex justify-center">
-                {images.map((_, idx) => {
-                  const afterStyles =
-                    "after:content-[' '] after:py-2 after:block";
-                  return (
-                    <div key={idx} className="w-16 flex justify-center">
-                      <DynamicChildColors category="slide">
-                        <Dot
-                          slide={idx}
-                          className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
-                        ></Dot>
-                      </DynamicChildColors>
-                    </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
-            <DynamicChildColors category="arrow">
-              <ButtonNext className="hidden md:block pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
-                <FaArrowRight className="h-10 w-20" />
-              </ButtonNext>
-            </DynamicChildColors>
-          </CarouselProvider>
-        )}
-      </section>
+          </div>
+          <DynamicChildColors category="arrow">
+            <ButtonNext className="hidden md:block pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
+              <FaArrowRight className="h-10 w-20" />
+            </ButtonNext>
+          </DynamicChildColors>
+        </CarouselProvider>
+      )}
     </Section>
   );
 };

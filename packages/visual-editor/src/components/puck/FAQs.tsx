@@ -93,26 +93,28 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
   );
 
   return (
-    <Section background={styles.backgroundColor}>
-      <div className="flex flex-col gap-12">
-        {resolvedHeading && (
-          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-        )}
-        <Accordion type="single" collapsible>
-          {cards.map((faqItem, index) => (
-            <AccordionItem value={index.toString()} key={index}>
-              <AccordionTrigger>
-                <Body variant="lg" className="font-bold">
-                  {faqItem.question}
-                </Body>
-              </AccordionTrigger>
-              <AccordionContent>
-                <Body variant="base">{faqItem.answer}</Body>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
+    <Section
+      applyPageLevelStyles
+      background={styles.backgroundColor}
+      className="flex flex-col gap-8 md:gap-12"
+    >
+      {resolvedHeading && (
+        <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+      )}
+      <Accordion type="single" collapsible>
+        {cards.map((faqItem, index) => (
+          <AccordionItem value={index.toString()} key={index}>
+            <AccordionTrigger>
+              <Body variant="lg" className="font-bold text-left">
+                {faqItem.question}
+              </Body>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Body variant="base">{faqItem.answer}</Body>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </Section>
   );
 };
