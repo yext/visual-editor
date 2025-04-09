@@ -20,7 +20,7 @@ describe("resolveYextEntityField", () => {
     );
   });
 
-  it("returns empty value when field found in document", async () => {
+  it("handles the document holding an empty value for the field", async () => {
     assert.equal(
       resolveYextEntityField(
         {

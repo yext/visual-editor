@@ -4,7 +4,6 @@ import { CustomField, FieldLabel, AutoField } from "@measured/puck";
 export type OptionalNumberFieldProps = {
   fieldLabel: string;
   hideNumberFieldRadioLabel: string;
-  hideNumberFieldRadioValue: string;
   showNumberFieldRadioLabel: string;
   defaultCustomValue: number;
 };
@@ -17,7 +16,6 @@ type OptionalNumberFieldRenderProps = {
 export const OptionalNumberField = ({
   fieldLabel,
   hideNumberFieldRadioLabel,
-  hideNumberFieldRadioValue,
   showNumberFieldRadioLabel,
   defaultCustomValue,
 }: OptionalNumberFieldProps): CustomField<number | string> => {
@@ -33,7 +31,7 @@ export const OptionalNumberField = ({
               type: "radio",
               options: [
                 {
-                  value: hideNumberFieldRadioValue,
+                  value: hideNumberFieldRadioLabel,
                   label: hideNumberFieldRadioLabel,
                 },
                 { value: showNumberField, label: showNumberFieldRadioLabel },
@@ -41,18 +39,18 @@ export const OptionalNumberField = ({
             }}
             onChange={(e) =>
               onChange(
-                e === hideNumberFieldRadioValue
-                  ? hideNumberFieldRadioValue
+                e === hideNumberFieldRadioLabel
+                  ? hideNumberFieldRadioLabel
                   : defaultCustomValue
               )
             }
             value={
-              value === hideNumberFieldRadioValue
-                ? hideNumberFieldRadioValue
+              value === hideNumberFieldRadioLabel
+                ? hideNumberFieldRadioLabel
                 : showNumberField
             }
           />
-          {value !== hideNumberFieldRadioValue && (
+          {value !== hideNumberFieldRadioLabel && (
             <AutoField
               field={{ type: "number" }}
               value={value}

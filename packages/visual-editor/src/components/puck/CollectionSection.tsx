@@ -71,7 +71,6 @@ const collectionSectionFields: Fields<CollectionSectionProps> = {
       limit: OptionalNumberField({
         fieldLabel: "Items Limit",
         hideNumberFieldRadioLabel: "All",
-        hideNumberFieldRadioValue: "all",
         showNumberFieldRadioLabel: "Limit",
         defaultCustomValue: 3,
       }),
@@ -153,7 +152,6 @@ export const CollectionSection: ComponentConfig<CollectionSectionProps> = {
           limit: OptionalNumberField({
             fieldLabel: "Items Limit",
             hideNumberFieldRadioLabel: "All",
-            hideNumberFieldRadioValue: "all",
             showNumberFieldRadioLabel: "Limit",
             defaultCustomValue: 3,
           }),

@@ -225,3 +225,35 @@ const myComponentFields: Fields<MyComponentProps> = {
     },
   },
 ```
+
+## OptionalNumberField
+
+This field displays a radio group with two options. When one option is selected, a number input is also
+rendered. When the other option is selected, the number input is hidden. This could be used
+for a number field with an "all" or "default" option.
+
+### Props
+
+| Name                      | Type     | Description                                                               |
+| ------------------------- | -------- | ------------------------------------------------------------------------- |
+| fieldLabel                | `string` | The label for the field.                                                  |
+| hideNumberFieldRadioLabel | `string` | The label for the radio option corresponding to hiding the number field.  |
+| showNumberFieldRadioLabel | `string` | The label for the radio option corresponding to showing the number field. |
+| defaultCustomValue        | `number` | The default number if the number field is shown.                          |
+
+#### Usage
+
+```tsx
+type MyComponentProps = {
+  limit: number | string;
+};
+
+const myComponentFields: Fields<MyComponentProps> = {
+  limit: OptionalNumberField({
+    fieldLabel: "Number of Items",
+    hideNumberFieldRadioLabel: "Show All",
+    showNumberFieldRadioLabel: "Limit Items",
+    defaultCustomValue: 3,
+  }),
+};
+```
