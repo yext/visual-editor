@@ -1,5 +1,6 @@
 export * from "./atoms/index.ts";
 export { Address, type AddressProps } from "./Address.tsx";
+export { ArticleSection, type ArticleSectionProps } from "./ArticleSection.tsx";
 export { Banner, type BannerProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";

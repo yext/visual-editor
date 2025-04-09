@@ -1,13 +1,13 @@
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, ArrayField, Field } from "@measured/puck";
 import {
   backgroundColors,
   BackgroundStyle,
   BasicSelector,
-  Body,
-  CTA,
   CTAProps,
+  EntityField,
   Heading,
   HeadingLevel,
+  ImageProps,
   ImageWrapperProps,
   resolveYextEntityField,
   Section,
@@ -16,14 +16,15 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   Image,
-  ImageProps,
-} from "@yext/visual-editor";
-import { ImageWrapperFields, resolvedImageFields } from "@yext/visual-editor";
+  Body,
+  CTA,
+} from "../../index.js";
+import React from "react";
+import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x210";
 
-// Define Props
-export interface ArticlesProps {
+export interface ArticleSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
   };
@@ -39,17 +40,16 @@ export interface ArticlesProps {
     description: YextEntityField<string>;
     cta: YextEntityField<CTAProps>;
   }>;
-  seeAllCTA: YextEntityField<CTAProps>;
 }
-//Define fields Should be of fields<props in step1>
-const articleFields: Fields<ArticlesProps> = {
+
+const articleFields: Fields<ArticleSectionProps> = {
   styles: {
     label: "Styles",
     type: "object",
     objectFields: {
       backgroundColor: BasicSelector(
         "Background Color",
-        ThemeOptions.BACKGROUND_COLOR,
+        ThemeOptions.BACKGROUND_COLOR
       ),
     },
   },
@@ -90,7 +90,7 @@ const articleFields: Fields<ArticlesProps> = {
         },
       }),
       date: YextEntityFieldSelector({
-        label: "Category",
+        label: "Publish Time",
         filter: {
           types: ["type.string"],
         },
@@ -108,124 +108,163 @@ const articleFields: Fields<ArticlesProps> = {
         },
       }),
     },
-    // getItemSummary(item, index: any) {
-    //   return `Article ${index + 1}`;
-    // },
   },
-  seeAllCTA: YextEntityFieldSelector({
-    label: "See All CTA",
-    filter: {
-      types: ["type.cta"],
-    },
-  }),
 };
-//Define the Component Wrapper with props
+
 const ArticleSectionWrapper = ({
   styles,
   sectionHeading,
   article: articleFields,
-  seeAllCTA: seeAllCTAField,
-}: ArticlesProps) => {
+}: ArticleSectionProps) => {
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
     document,
-    sectionHeading.text,
-  );
-  const resolvedSeeAllCTA = resolveYextEntityField<CTAProps>(
-    document,
-    seeAllCTAField,
+    sectionHeading.text
   );
   return (
     <Section background={styles.backgroundColor}>
       <div className="flex flex-col gap-8">
         {resolvedHeading && (
           <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            <EntityField
+              displayName="Heading Text"
+              fieldId={sectionHeading.text.field}
+              constantValueEnabled={sectionHeading.text.constantValueEnabled}
+            >
+              <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            </EntityField>
           </div>
         )}
-        <div className="flex flex-col md:flex-row gap-8">
-          {articleFields.map((article, index) => {
-            const resolvedTitle = resolveYextEntityField<string>(
-              document,
-              article.title,
-            );
-            const resolvedCategory = resolveYextEntityField<string>(
-              document,
-              article.category,
-            );
-            const resolvedDate = resolveYextEntityField<string>(
-              document,
-              article.date,
-            );
-            const resolvedDescription = resolveYextEntityField<string>(
-              document,
-              article.description,
-            );
-            const resolvedCTA = resolveYextEntityField<CTAProps>(
-              document,
-              article.cta,
-            );
-            const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
-              document,
-              article.image?.image,
-            );
 
-            return (
-              <div
-                className={`md:w-1/3 ${backgroundColors.background1}`}
-                key={index}
-              >
-                {resolvedImage && (
-                  <Image
-                    image={resolvedImage}
-                    layout={article.image.layout}
-                    width={article.image.width}
-                    height={article.image.height}
-                    aspectRatio={article.image.aspectRatio}
-                  />
-                )}
-                <div className="border flex flex-col gap-8 p-8 ">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex gap-4">
-                      <Body>{resolvedCategory}</Body>
-                      <Body>|</Body>
-                      <Body>{resolvedDate}</Body>
-                    </div>
-                    {resolvedTitle && (
-                      <Heading level={4}>{resolvedTitle}</Heading>
-                    )}
-                    {resolvedDescription && <Body>{resolvedDescription}</Body>}
-                  </div>
-                  {resolvedCTA && (
-                    <CTA
-                      variant={"link"}
-                      label={resolvedCTA.label ?? ""}
-                      link={resolvedCTA.link || "#"}
-                      linkType={"URL"}
-                    />
+        {articleFields && (
+          <div className="flex flex-col md:flex-row gap-8">
+            {articleFields.map((article, index) => {
+              const resolvedTitle = resolveYextEntityField<string>(
+                document,
+                article.title
+              );
+              const resolvedCategory = resolveYextEntityField<string>(
+                document,
+                article.category
+              );
+              const resolvedDate = resolveYextEntityField<string>(
+                document,
+                article.date
+              );
+              const resolvedDescription = resolveYextEntityField<string>(
+                document,
+                article.description
+              );
+              const resolvedCTA = resolveYextEntityField<CTAProps>(
+                document,
+                article.cta
+              );
+              const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
+                document,
+                article.image?.image
+              );
+
+              return (
+                <Section
+                  className="!p-0"
+                  key={index}
+                  background={backgroundColors.background1.value}
+                >
+                  {resolvedImage && (
+                    <EntityField
+                      displayName="Image"
+                      fieldId={article.image.image.field}
+                      constantValueEnabled={
+                        article.image.image.constantValueEnabled
+                      }
+                    >
+                      <Image
+                        image={resolvedImage}
+                        layout={article.image.layout}
+                        width={article.image.width}
+                        height={article.image.height}
+                        aspectRatio={article.image.aspectRatio}
+                      />
+                    </EntityField>
                   )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {resolvedSeeAllCTA && (
-          <div className="mx-auto">
-            <CTA
-              variant={"secondary"}
-              label={resolvedSeeAllCTA.label ?? ""}
-              link={resolvedSeeAllCTA.link || "#"}
-              linkType={"URL"}
-            />
+                  <div className="border flex flex-col gap-8 p-8">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex gap-4">
+                        <EntityField
+                          displayName="Category"
+                          fieldId={article.category.field}
+                          constantValueEnabled={
+                            article.category.constantValueEnabled
+                          }
+                        >
+                          <Body>{resolvedCategory}</Body>
+                        </EntityField>
+                        <Body>|</Body>
+                        <EntityField
+                          displayName="Date"
+                          fieldId={article.date.field}
+                          constantValueEnabled={
+                            article.date.constantValueEnabled
+                          }
+                        >
+                          <Body>{resolvedDate}</Body>
+                        </EntityField>
+                      </div>
+                      {resolvedTitle && (
+                        <EntityField
+                          displayName="Article Title"
+                          fieldId={article.title.field}
+                          constantValueEnabled={
+                            article.title.constantValueEnabled
+                          }
+                        >
+                          <Heading
+                            level={4}
+                            className="text-palette-primary-dark"
+                          >
+                            {resolvedTitle}
+                          </Heading>
+                        </EntityField>
+                      )}
+                      {resolvedDescription && (
+                        <EntityField
+                          displayName="Description"
+                          fieldId={article.description.field}
+                          constantValueEnabled={
+                            article.description.constantValueEnabled
+                          }
+                        >
+                          <Body>{resolvedDescription}</Body>
+                        </EntityField>
+                      )}
+                    </div>
+                    {resolvedCTA && (
+                      <EntityField
+                        displayName="CTA"
+                        fieldId={article.cta.field}
+                        constantValueEnabled={article.cta.constantValueEnabled}
+                      >
+                        <CTA
+                          variant={"link"}
+                          label={resolvedCTA.label ?? ""}
+                          link={resolvedCTA.link ?? "#"}
+                          linkType={"URL"}
+                        />
+                      </EntityField>
+                    )}
+                  </div>
+                </Section>
+              );
+            })}
           </div>
         )}
       </div>
     </Section>
   );
 };
-// Create the component of type ComponentConfig<props>
-export const ArticlesSection: ComponentConfig<ArticlesProps> = {
+
+export const ArticleSection: ComponentConfig<ArticleSectionProps> = {
+  label: "Articles Section",
   fields: articleFields,
   defaultProps: {
     styles: {
@@ -233,8 +272,9 @@ export const ArticlesSection: ComponentConfig<ArticlesProps> = {
     },
     sectionHeading: {
       text: {
-        field: "name",
-        constantValue: "",
+        field: "",
+        constantValue: "Insights",
+        constantValueEnabled: true,
       },
       level: 3,
     },
@@ -375,30 +415,26 @@ export const ArticlesSection: ComponentConfig<ArticlesProps> = {
         },
       },
     ],
-    seeAllCTA: {
-      field: "",
-      constantValue: {
-        label: "See All Articles",
-        link: "#",
-        linkType: "URL",
-      },
-      constantValueEnabled: true,
-    },
   },
   resolveFields() {
     const fields = { ...articleFields };
-    const articleField = fields.article as any;
+    const articleField = fields.article;
 
-    const existingArrayFields = articleField.arrayFields;
-    articleField.arrayFields = {
-      ...existingArrayFields,
-      image: {
-        type: "object",
-        label: "Image",
-        objectFields: resolvedImageFields("auto"),
-      },
-    };
-    fields.article = articleField;
+    if (articleField.type === "array") {
+      const resolvedImage = resolvedImageFields("auto");
+      const cleanedResolvedImage = Object.fromEntries(
+        Object.entries(resolvedImage).filter(([, value]) => value !== undefined)
+      ) as { [key: string]: Field<any> };
+
+      (articleField as ArrayField).arrayFields = {
+        ...articleField.arrayFields,
+        image: {
+          type: "object",
+          label: "Image",
+          objectFields: cleanedResolvedImage,
+        },
+      };
+    }
     return fields;
   },
   render: (props) => <ArticleSectionWrapper {...props} />,

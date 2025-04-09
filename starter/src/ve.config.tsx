@@ -58,6 +58,8 @@ import {
   HeroSection,
   PhotoGallerySectionProps,
   PhotoGallerySection,
+  ArticleSection,
+  ArticleSectionProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -89,6 +91,7 @@ type MainProps = {
   Events: EventsProps;
   HeroSection: HeroSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
+  ArticleSection: ArticleSectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -120,9 +123,11 @@ const components: Config<MainProps>["components"] = {
   Events,
   HeroSection,
   PhotoGallerySection,
+  ArticleSection,
 };
 
 const pageSections: (keyof MainProps)[] = [
+  "ArticleSection",
   "Banner",
   "Breadcrumbs",
   "Card",
