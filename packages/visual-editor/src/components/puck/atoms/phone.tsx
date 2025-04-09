@@ -4,7 +4,7 @@ import * as React from "react";
 import parsePhoneNumber from "libphonenumber-js";
 import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
-export type PhoneProps = {
+export type PhoneAtomProps = {
   phoneNumber: string;
   label?: string;
   backgroundColor?: BackgroundStyle;
@@ -12,7 +12,7 @@ export type PhoneProps = {
   includeHyperlink: boolean;
 };
 
-export const Phone = (props: PhoneProps) => {
+export const PhoneAtom = (props: PhoneAtomProps) => {
   const formattedPhoneNumber = formatPhoneNumber(
     props.phoneNumber,
     props.format
