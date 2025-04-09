@@ -2,9 +2,12 @@ import { Phone as PhoneIcon } from "lucide-react";
 import { CTA, Body } from "../index.ts";
 import * as React from "react";
 import parsePhoneNumber from "libphonenumber-js";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 export type PhoneProps = {
   phoneNumber: string;
+  label?: string;
+  backgroundColor?: BackgroundStyle;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
 };
@@ -17,7 +20,16 @@ export const Phone = (props: PhoneProps) => {
 
   return (
     <div className={"components flex gap-2 items-center"}>
-      <PhoneIcon className="w-4 h-4" />
+      {props.backgroundColor ? (
+        <div
+          className={`h-10 w-10 flex justify-center rounded-full items-center ${props.backgroundColor.bgColor} ${props.backgroundColor.textColor}`}
+        >
+          <PhoneIcon className="w-4 h-4" />
+        </div>
+      ) : (
+        <PhoneIcon className="w-4 h-4" />
+      )}
+      {props.label && <Body className="font-bold">{props.label}</Body>}
       {props.includeHyperlink ? (
         <CTA
           link={props.phoneNumber}

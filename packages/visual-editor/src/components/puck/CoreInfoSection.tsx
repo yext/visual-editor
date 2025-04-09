@@ -8,7 +8,7 @@ import {
   HoursTable,
   HoursType,
 } from "@yext/pages-components";
-import { FaRegEnvelope, FaPhone } from "react-icons/fa";
+import { FaRegEnvelope } from "react-icons/fa";
 import {
   YextEntityField,
   HeadingLevel,
@@ -24,8 +24,8 @@ import {
   CTA,
   backgroundColors,
   Body,
+  Phone,
 } from "../../index.js";
-import { formatPhoneNumber } from "./Phone.js";
 
 export interface CoreInfoSectionProps {
   styles: {
@@ -39,7 +39,7 @@ export interface CoreInfoSectionProps {
   };
   phoneNumbers: {
     phoneNumber: Array<{ number: YextEntityField<string>; label: string }>;
-    phoneFormat: string;
+    phoneFormat: "domestic" | "international";
     includePhoneHyperlink: boolean;
   };
   emails: {
@@ -320,10 +320,6 @@ const CoreInfoSectionWrapper = ({
                 if (!resolvedNumber) {
                   return;
                 }
-                const formattedPhoneNumber: string = formatPhoneNumber(
-                  resolvedNumber,
-                  phoneNumbersField.phoneFormat
-                );
 
                 return (
                   <li key={item.label} className="flex gap-2 items-center">
@@ -333,23 +329,16 @@ const CoreInfoSectionWrapper = ({
                       constantValueEnabled={item.number.constantValueEnabled}
                     >
                       <div className={"flex items-center gap-3"}>
-                        <div
-                          className={`h-10 w-10 flex justify-center rounded-full items-center ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`}
-                        >
-                          <FaPhone className="w-4 h-4" />
-                        </div>
                         <div className="flex gap-2 items-center">
-                          <Body className="font-bold">{item.label}</Body>
-                          {phoneNumbersField.includePhoneHyperlink ? (
-                            <CTA
-                              link={resolvedNumber}
-                              label={formattedPhoneNumber || ""}
-                              linkType="PHONE"
-                              variant="link"
-                            />
-                          ) : (
-                            <Body>{formattedPhoneNumber}</Body>
-                          )}
+                          <Phone
+                            backgroundColor={backgroundColors.background2.value}
+                            label={item.label}
+                            phoneNumber={resolvedNumber}
+                            format={phoneNumbersField.phoneFormat}
+                            includeHyperlink={
+                              phoneNumbersField.includePhoneHyperlink
+                            }
+                          />
                         </div>
                       </div>
                     </EntityField>
