@@ -1,6 +1,5 @@
 import React from "react";
-import { AutoField, FieldLabel, Field } from "@measured/puck";
-import { RenderProps } from "../../internal/utils/renderEntityFields.tsx";
+import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
   EntityFieldTypes,
   getFilteredEntityFields,
@@ -15,8 +14,11 @@ import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fiel
 import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Phone.tsx";
+import { BasicSelector } from "./BasicSelector.tsx";
 
 const devLogger = new DevLogger();
+
+type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 export type YextEntityField<T> = {
   field: string;
@@ -95,7 +97,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   return {
     type: "custom",
     label: props.label,
-    render: ({ field, value, onChange }: RenderProps) => {
+    render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
@@ -105,7 +107,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       };
 
       return (
-        <>
+        <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types}
             constantValueEnabled={value?.constantValueEnabled}
@@ -122,10 +124,9 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               onChange={onChange}
               value={value}
               filter={props.filter}
-              label={field.label}
             />
           )}
-        </>
+        </FieldLabel>
       );
     },
   };
@@ -152,23 +153,28 @@ const ConstantValueModeToggler = ({
 
   return (
     <div className="ve-w-full">
-      <RadioGroup defaultValue={constantValueEnabled?.toString() ?? "false"}>
+      <RadioGroup
+        value={constantValueEnabled?.toString() ?? "false"}
+        onValueChange={(value) => toggleConstantValueEnabled(value === "true")}
+      >
         <div className="ve-flex ve-items-center ve-space-x-2">
-          <RadioGroupItem
-            value="false"
-            id={entityButtonId}
+          <RadioGroupItem value="false" id={entityButtonId} />
+          <Label
+            htmlFor={entityButtonId}
             onClick={() => toggleConstantValueEnabled(false)}
-          />
-          <Label htmlFor={entityButtonId}>Use Entity Value</Label>
+          >
+            Use Entity Value
+          </Label>
         </div>
         {constantValueInputSupported && (
           <div className="ve-flex ve-items-center ve-space-x-2">
-            <RadioGroupItem
-              value="true"
-              id={constantButtonId}
+            <RadioGroupItem value="true" id={constantButtonId} />
+            <Label
               onClick={() => toggleConstantValueEnabled(true)}
-            />
-            <Label htmlFor={constantButtonId}>Use Constant Value</Label>
+              htmlFor={constantButtonId}
+            >
+              Use Constant Value
+            </Label>
           </div>
         )}
       </RadioGroup>
@@ -180,7 +186,6 @@ type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
   onChange: (value: any) => void;
   value: any;
-  label?: string;
 };
 
 const ConstantValueInput = <T extends Record<string, any>>({
@@ -212,7 +217,7 @@ const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
-      className="ve-inline-block ve-pt-4 w-full"
+      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-4" : ""}`}
     >
       <AutoField
         onChange={(newConstantValue) =>
@@ -233,28 +238,23 @@ const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
-  label,
 }: InputProps<T>) => {
-  const filteredEntityFields = getFilteredEntityFields(filter);
+  const basicSelectorField = React.useMemo(() => {
+    return BasicSelector("Entity Field", [
+      { value: "", label: "Select a Content field" },
+      ...getFilteredEntityFields(filter).map((entityFieldNameToSchema) => {
+        return {
+          label: entityFieldNameToSchema.name,
+          value: entityFieldNameToSchema.name,
+        };
+      }),
+    ]);
+  }, [filter]);
 
   return (
-    <FieldLabel
-      label={label ?? "Entity Field"}
-      className="ve-inline-block ve-w-full ve-pt-4"
-    >
+    <div className={"ve-inline-block ve-w-full ve-pt-4"}>
       <AutoField
-        field={{
-          type: "select",
-          options: [
-            { value: "", label: "Select a Content field" },
-            ...filteredEntityFields.map((entityFieldNameToSchema) => {
-              return {
-                label: entityFieldNameToSchema.name,
-                value: entityFieldNameToSchema.name,
-              };
-            }),
-          ],
-        }}
+        field={basicSelectorField}
         onChange={(selectedEntityField) => {
           onChange({
             field: selectedEntityField,
@@ -264,6 +264,6 @@ const EntityFieldInput = <T extends Record<string, any>>({
         }}
         value={value?.field}
       />
-    </FieldLabel>
+    </div>
   );
 };

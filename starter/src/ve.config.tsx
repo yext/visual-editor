@@ -28,8 +28,8 @@ import {
   HoursStatusProps,
   ImageWrapper,
   ImageWrapperProps,
-  Phone,
-  PhoneProps,
+  PhoneWrapper,
+  PhoneWrapperProps,
   TextList,
   TextListProps,
   Header,
@@ -46,8 +46,20 @@ import {
   MapboxStaticProps,
   Testimonials,
   TestimonialsProps,
+  NearbyLocations,
+  NearbyLocationsProps,
+  ProductsSection,
+  ProductsSectionProps,
   People,
   PeopleProps,
+  FAQsSection,
+  FAQsSectionProps,
+  Events,
+  EventsProps,
+  HeroSectionProps,
+  HeroSection,
+  PhotoGallerySectionProps,
+  PhotoGallerySection,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -59,6 +71,7 @@ type MainProps = {
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
   Emails: EmailsProps;
+  FAQsSection: FAQsSectionProps;
   Flex: FlexProps;
   Footer: FooterProps;
   GetDirections: GetDirectionsProps;
@@ -69,11 +82,16 @@ type MainProps = {
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
-  Phone: PhoneProps;
+  PhoneWrapper: PhoneWrapperProps;
+  ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
   Testimonials: TestimonialsProps;
+  NearbyLocations: NearbyLocationsProps;
   People: PeopleProps;
+  Events: EventsProps;
+  HeroSection: HeroSectionProps;
+  PhotoGallerySection: PhotoGallerySectionProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -86,12 +104,13 @@ const components: Config<MainProps>["components"] = {
   BodyText,
   CTA,
   Emails,
+  FAQsSection,
   GetDirections,
   HeadingText,
   HoursStatus,
   HoursTable,
   ImageWrapper,
-  Phone,
+  PhoneWrapper,
   TextList,
   Header,
   Footer,
@@ -99,16 +118,26 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   Testimonials,
+  NearbyLocations,
+  ProductsSection,
   People,
+  Events,
+  HeroSection,
+  PhotoGallerySection,
 };
 
 const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "FAQsSection",
+  "HeroSection",
+  "PhotoGallerySection",
+  "ProductsSection",
   "Promo",
   "Testimonials",
   "People",
+  "Events",
 ];
 
 const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
@@ -124,7 +153,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "HoursTable",
   "ImageWrapper",
   "MapboxStaticMap",
-  "Phone",
+  "PhoneWrapper",
   "TextList",
 ];
 

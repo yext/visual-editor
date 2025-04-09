@@ -67,7 +67,7 @@ const cardFields: Fields<CardProps> = {
     label: "Title",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
@@ -83,7 +83,7 @@ const cardFields: Fields<CardProps> = {
     label: "Subtitle",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
@@ -99,7 +99,7 @@ const cardFields: Fields<CardProps> = {
     label: "Description",
     objectFields: {
       text: YextEntityFieldSelector<any, string>({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.string"],
         },
@@ -123,7 +123,7 @@ const cardFields: Fields<CardProps> = {
     label: "Call to Action",
     objectFields: {
       entityField: YextEntityFieldSelector({
-        label: "Entity Field",
+        label: "Value",
         filter: {
           types: ["type.cta"],
         },
