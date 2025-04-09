@@ -7,6 +7,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   PhoneAtom,
+  ThemeOptions,
 } from "../../index.js";
 
 export interface PhoneProps {
@@ -25,10 +26,7 @@ const PhoneFields: Fields<PhoneProps> = {
   format: {
     label: "Format",
     type: "radio",
-    options: [
-      { label: "Domestic", value: "domestic" },
-      { label: "International", value: "international" },
-    ],
+    options: ThemeOptions.PHONE_OPTIONS,
   },
   includeHyperlink: {
     label: "Include Hyperlink",

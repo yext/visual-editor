@@ -386,10 +386,13 @@
     },
     "locale": "en"
   },
+  "emails": ["test@test.com", "test1@test.com"],
   "name": "Galaxy Grill",
   "services": ["Delivery", "Catering", "Carry Out", "Dine In"],
   "siteDomain": "",
   "siteId": 0,
+  "mainPhone": "+12222222222",
+  "mobilePhone": "+13333333333",
   "siteInternalHostName": "",
   "slug": "locations/288-grand-st",
   "uid": 8694639,

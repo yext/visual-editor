@@ -526,6 +526,8 @@ Contains preset options to be used when defining a component's fields.
 | BORDER_RADIUS    | [`borderRadiusOptions`](#borderRadiusOptions)       |
 | SPACING          | [`spacingOptions`](#spacingOptions)                 |
 | FONT_SIZE        | [`fontSizeOptions`](#fontSizeOptions)               |
+| HOURS_OPTIONS    | [`hoursOptions`](#hoursOptions)                     |
+| PHONE_OPTIONS    | [`phoneOptions`](#phoneOptions)                     |
 
 ### Available Options
 
@@ -621,6 +623,26 @@ Contains preset options to be used when defining a component's fields.
 | 7XL (72px)  | "72px"  |
 | 8XL (96px)  | "96px"  |
 | 9XL (128px) | "128px" |
+
+#### hoursOptions
+
+| Label     | Value       |
+| --------- | ----------- |
+| Monday    | "monday"    |
+| Tuesday   | "tuesday"   |
+| Wednesday | "wednesday" |
+| Thursday  | "thursday"  |
+| Friday    | "friday"    |
+| Saturday  | "saturday"  |
+| Sunday    | "sunday"    |
+| Today     | "today"     |
+
+#### phoneOptions
+
+| Label         | Value           |
+| ------------- | --------------- |
+| Domestic      | "domestic"      |
+| International | "international" |
 
 ### Usage
 
