@@ -1,6 +1,6 @@
-import { borderRadiusOptions } from "../components/editor/BorderRadiusSelector.tsx";
-import { fontSizeOptions } from "../components/editor/FontSizeSelector.tsx";
-import { spacingOptions } from "../components/editor/SpacingSelector.tsx";
+import { borderRadiusOptions } from "../editor/BorderRadiusSelector.tsx";
+import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
+import { spacingOptions } from "../editor/SpacingSelector.tsx";
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {

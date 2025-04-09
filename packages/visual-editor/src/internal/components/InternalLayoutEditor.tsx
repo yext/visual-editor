@@ -9,11 +9,11 @@ import {
 import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityTooltipsProvider } from "../../components/editor/EntityField.tsx";
+import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { YextEntityFieldSelector } from "../../components/editor/YextEntityFieldSelector.tsx";
+import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
