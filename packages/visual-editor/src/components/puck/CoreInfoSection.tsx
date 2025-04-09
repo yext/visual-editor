@@ -24,7 +24,7 @@ import {
   CTA,
   backgroundColors,
   Body,
-  Phone,
+  PhoneAtom,
 } from "../../index.js";
 
 export interface CoreInfoSectionProps {
@@ -330,7 +330,7 @@ const CoreInfoSectionWrapper = ({
                     >
                       <div className={"flex items-center gap-3"}>
                         <div className="flex gap-2 items-center">
-                          <Phone
+                          <PhoneAtom
                             backgroundColor={backgroundColors.background2.value}
                             label={item.label}
                             phoneNumber={resolvedNumber}
