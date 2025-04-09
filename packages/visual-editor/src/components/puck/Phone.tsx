@@ -6,16 +6,16 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  Phone,
+  PhoneAtom,
 } from "../../index.js";
 
-export interface PhoneWrapperProps {
+export interface PhoneProps {
   phone: YextEntityField<string>;
   format?: "domestic" | "international";
   includeHyperlink: boolean;
 }
 
-const PhoneFields: Fields<PhoneWrapperProps> = {
+const PhoneFields: Fields<PhoneProps> = {
   phone: YextEntityFieldSelector({
     label: "Phone Number",
     filter: {
@@ -40,7 +40,7 @@ const PhoneFields: Fields<PhoneWrapperProps> = {
   },
 };
 
-const PhoneComponent: React.FC<PhoneWrapperProps> = ({
+const PhoneComponent: React.FC<PhoneProps> = ({
   phone,
   format,
   includeHyperlink,
@@ -58,7 +58,7 @@ const PhoneComponent: React.FC<PhoneWrapperProps> = ({
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >
-      <Phone
+      <PhoneAtom
         phoneNumber={resolvedPhone}
         format={format}
         includeHyperlink={includeHyperlink}
@@ -67,7 +67,7 @@ const PhoneComponent: React.FC<PhoneWrapperProps> = ({
   );
 };
 
-export const PhoneWrapper: ComponentConfig<PhoneWrapperProps> = {
+export const Phone: ComponentConfig<PhoneProps> = {
   label: "Phone",
   fields: PhoneFields,
   defaultProps: {
