@@ -3,13 +3,13 @@ import { CTA, Body } from "../index.ts";
 import * as React from "react";
 import parsePhoneNumber from "libphonenumber-js";
 
-export type PhoneProps = {
+export type PhoneAtomProps = {
   phoneNumber: string;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
 };
 
-export const Phone = (props: PhoneProps) => {
+export const PhoneAtom = (props: PhoneAtomProps) => {
   const formattedPhoneNumber = formatPhoneNumber(
     props.phoneNumber,
     props.format
