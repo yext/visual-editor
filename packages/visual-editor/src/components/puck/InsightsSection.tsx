@@ -223,7 +223,7 @@ const InsightsSectionWrapper = ({
                           }
                         >
                           <Heading
-                            level={4}
+                            level={3}
                             className="text-palette-primary-dark"
                           >
                             {resolvedTitle}
@@ -280,7 +280,7 @@ export const InsightsSection: ComponentConfig<InsightsSectionProps> = {
         constantValue: "Insights",
         constantValueEnabled: true,
       },
-      level: 3,
+      level: 2,
     },
     insights: [
       {
