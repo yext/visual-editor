@@ -5,3 +5,4 @@ export { Heading, type HeadingProps, headingVariants } from "./heading.tsx";
 export { Image, type ImageProps } from "./image.tsx";
 export { MaybeLink, type MaybeLinkProps } from "./maybeLink.tsx";
 export { Section, type SectionProps, sectionVariants } from "./section.tsx";
+export { Phone, type PhoneProps } from "./phone.tsx";

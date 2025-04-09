@@ -46,6 +46,12 @@ export const ui: Registry["items"] = [
     files: [{ path: "atoms/section.tsx", type: "registry:component" }],
   },
   {
+    name: "phone",
+    type: "registry:component",
+    files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
+    registryDependencies: ["body", "cta"],
+  },
+  {
     name: "mail_outline",
     type: "registry:component",
     files: [
@@ -180,7 +186,7 @@ export const ui: Registry["items"] = [
   {
     name: "Phone",
     type: "registry:ui",
-    registryDependencies: ["cta", "body"],
+    registryDependencies: ["cta", "body", "phone"],
     files: [{ path: "Phone.tsx", type: "registry:ui" }],
   },
   {
@@ -223,5 +229,10 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     registryDependencies: ["section", "heading", "image"],
     files: [{ path: "PhotoGallerySection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Nearby Components",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body", "cta", "phone"],
   },
 ];

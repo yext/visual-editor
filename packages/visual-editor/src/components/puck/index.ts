@@ -19,7 +19,7 @@ export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
-export { Phone, type PhoneProps } from "./Phone.tsx";
+export { PhoneWrapper, type PhoneWrapperProps } from "./Phone.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
@@ -30,6 +30,10 @@ export {
 } from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
+export {
+  NearbyLocations,
+  type NearbyLocationsProps,
+} from "./NearbyLocations.tsx";
 export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Events, type EventsProps } from "./Events.tsx";
