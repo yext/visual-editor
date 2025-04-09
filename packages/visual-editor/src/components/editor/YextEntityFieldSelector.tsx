@@ -14,6 +14,7 @@ import { ADDRESS_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fiel
 import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Phone.tsx";
+import { BasicSelector } from "./BasicSelector.tsx";
 
 const devLogger = new DevLogger();
 
@@ -307,35 +308,33 @@ const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
 }: InputProps<T>) => {
-  let filteredEntityFields = getFilteredEntityFields(filter);
+  const basicSelectorField = React.useMemo(() => {
+    let filteredEntityFields = getFilteredEntityFields(filter);
 
-  // If there are no direct children, return the parent field if it is a list
-  if (filter.directChildrenOf && filteredEntityFields.length === 0) {
-    filteredEntityFields = getFilteredEntityFields({
-      allowList: [filter.directChildrenOf],
-      types: filter.types,
-      includeListsOnly: true,
-    });
-  }
+    // If there are no direct children, return the parent field if it is a list
+    if (filter.directChildrenOf && filteredEntityFields.length === 0) {
+      filteredEntityFields = getFilteredEntityFields({
+        allowList: [filter.directChildrenOf],
+        types: filter.types,
+        includeListsOnly: true,
+      });
+    }
+
+    return BasicSelector("Entity Field", [
+      { value: "", label: "Select a Content field" },
+      ...filteredEntityFields.map((entityFieldNameToSchema) => {
+        return {
+          label: entityFieldNameToSchema.name,
+          value: entityFieldNameToSchema.name,
+        };
+      }),
+    ]);
+  }, [filter]);
 
   return (
-    <FieldLabel
-      label={"Entity Field"}
-      className="ve-inline-block ve-w-full ve-pt-4"
-    >
+    <div className={"ve-inline-block ve-w-full ve-pt-4"}>
       <AutoField
-        field={{
-          type: "select",
-          options: [
-            { value: "", label: "Select a Content field" },
-            ...filteredEntityFields.map((entityFieldNameToSchema) => {
-              return {
-                label: entityFieldNameToSchema.name,
-                value: entityFieldNameToSchema.name,
-              };
-            }),
-          ],
-        }}
+        field={basicSelectorField}
         onChange={(selectedEntityField) => {
           onChange({
             field: selectedEntityField,
@@ -345,6 +344,6 @@ const EntityFieldInput = <T extends Record<string, any>>({
         }}
         value={value?.field}
       />
-    </FieldLabel>
+    </div>
   );
 };

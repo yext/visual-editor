@@ -28,8 +28,8 @@ import {
   HoursStatusProps,
   ImageWrapper,
   ImageWrapperProps,
-  Phone,
-  PhoneProps,
+  PhoneWrapper,
+  PhoneWrapperProps,
   TextList,
   TextListProps,
   Header,
@@ -50,6 +50,8 @@ import {
   ExampleRepeatableItemProps,
   Testimonials,
   TestimonialsProps,
+  NearbyLocations,
+  NearbyLocationsProps,
   ProductsSection,
   ProductsSectionProps,
   People,
@@ -84,13 +86,14 @@ type MainProps = {
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
-  Phone: PhoneProps;
+  PhoneWrapper: PhoneWrapperProps;
   ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
   CollectionSection: CollectionSectionProps;
   Testimonials: TestimonialsProps;
+  NearbyLocations: NearbyLocationsProps;
   People: PeopleProps;
   Events: EventsProps;
   HeroSection: HeroSectionProps;
@@ -113,7 +116,7 @@ const components: Config<MainProps>["components"] = {
   HoursStatus,
   HoursTable,
   ImageWrapper,
-  Phone,
+  PhoneWrapper,
   TextList,
   Header,
   Footer,
@@ -123,6 +126,7 @@ const components: Config<MainProps>["components"] = {
   ExampleRepeatableItemComponent,
   CollectionSection,
   Testimonials,
+  NearbyLocations,
   ProductsSection,
   People,
   Events,
@@ -157,7 +161,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "HoursTable",
   "ImageWrapper",
   "MapboxStaticMap",
-  "Phone",
+  "PhoneWrapper",
   "TextList",
 ];
 
