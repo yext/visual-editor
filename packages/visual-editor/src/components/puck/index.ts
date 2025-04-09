@@ -8,6 +8,10 @@ export { Banner, type BannerProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";
 export { Card, type CardProps } from "./Card.tsx";
+export {
+  CoreInfoSection,
+  type CoreInfoSectionProps,
+} from "./CoreInfoSection.tsx";
 export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Directory, type DirectoryProps } from "./Directory.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
@@ -23,7 +27,7 @@ export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
-export { PhoneWrapper, type PhoneWrapperProps } from "./Phone.tsx";
+export { Phone, type PhoneProps } from "./Phone.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,

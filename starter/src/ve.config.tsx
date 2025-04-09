@@ -28,8 +28,8 @@ import {
   HoursStatusProps,
   ImageWrapper,
   ImageWrapperProps,
-  PhoneWrapper,
-  PhoneWrapperProps,
+  Phone,
+  PhoneProps,
   TextList,
   TextListProps,
   Header,
@@ -60,6 +60,8 @@ import {
   HeroSection,
   PhotoGallerySectionProps,
   PhotoGallerySection,
+  CoreInfoSectionProps,
+  CoreInfoSection,
   InsightsSection,
   InsightsSectionProps,
 } from "@yext/visual-editor";
@@ -84,7 +86,7 @@ type MainProps = {
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
-  PhoneWrapper: PhoneWrapperProps;
+  Phone: PhoneProps;
   ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
@@ -94,6 +96,7 @@ type MainProps = {
   Events: EventsProps;
   HeroSection: HeroSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
+  CoreInfoSection: CoreInfoSectionProps;
   InsightsSection: InsightsSectionProps;
 };
 
@@ -113,7 +116,7 @@ const components: Config<MainProps>["components"] = {
   HoursStatus,
   HoursTable,
   ImageWrapper,
-  PhoneWrapper,
+  Phone,
   TextList,
   Header,
   Footer,
@@ -127,6 +130,7 @@ const components: Config<MainProps>["components"] = {
   Events,
   HeroSection,
   PhotoGallerySection,
+  CoreInfoSection,
   InsightsSection,
 };
 
@@ -134,6 +138,7 @@ const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
   "Card",
+  "CoreInfoSection",
   "FAQsSection",
   "HeroSection",
   "InsightsSection",
@@ -158,7 +163,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "HoursTable",
   "ImageWrapper",
   "MapboxStaticMap",
-  "PhoneWrapper",
+  "Phone",
   "TextList",
 ];
 

@@ -11,7 +11,7 @@ import {
   ThemeOptions,
   HeadingLevel,
   Section,
-  Phone,
+  PhoneAtom,
   fetchNearbyLocations,
 } from "../../index.js";
 import { useQuery } from "@tanstack/react-query";
@@ -195,7 +195,7 @@ const LocationCard = ({
           </div>
         )}
         {mainPhone && (
-          <Phone
+          <PhoneAtom
             phoneNumber={mainPhone}
             format={cards.phoneNumberFormat}
             includeHyperlink={cards.phoneNumberLink}
