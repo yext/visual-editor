@@ -190,7 +190,9 @@ const InsightsSectionWrapper = ({
                   <div className="border flex flex-col gap-8 p-8">
                     <div className="flex flex-col gap-4">
                       {(resolvedCategory || resolvedDate) && (
-                        <div className="flex gap-4">
+                        <div
+                          className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
+                        >
                           <EntityField
                             displayName="Category"
                             fieldId={insight.category.field}
