@@ -35,7 +35,6 @@ export {
   type CollectionProps,
   COLLECTION_COMPONENTS,
 } from "./Collection.tsx";
-export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
   NearbyLocations,
   type NearbyLocationsProps,
