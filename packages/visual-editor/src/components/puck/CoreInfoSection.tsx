@@ -268,7 +268,7 @@ const CoreInfoSectionWrapper = ({
       >
         {addressHeadingText && (
           <EntityField
-            displayName="Headig Text"
+            displayName="Heading Text"
             fieldId={addressField.headingText.field}
             constantValueEnabled={addressField.headingText.constantValueEnabled}
           >
