@@ -10,8 +10,9 @@ import {
   EntityField,
   useDocument,
   MaybeLink,
-  Section,
+  PageSection,
   backgroundColors,
+  Background,
 } from "../../index.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -57,9 +58,8 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
   const { logo, logoLink, links } = props;
 
   return (
-    <Section
+    <PageSection
       as="header"
-      applyPageLevelStyles
       verticalPadding="header"
       background={backgroundColors.background1.value}
     >
@@ -98,7 +98,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       {links?.length > 0 && (
         <HeaderMobileMenu isOpen={menuOpen} links={links} />
       )}
-    </Section>
+    </PageSection>
   );
 };
 
@@ -151,7 +151,10 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
         "components absolute left-0 right-0 h-screen z-50"
       }
     >
-      <div className={`container bg-white text-black`}>
+      <Background
+        background={backgroundColors.background1.value}
+        className="container"
+      >
         <ul className="flex flex-col p-4 gap-4">
           {links.map((item: CTAType, idx) => (
             <li key={item.link}>
@@ -165,7 +168,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
             </li>
           ))}
         </ul>
-      </div>
+      </Background>
     </div>
   );
 };

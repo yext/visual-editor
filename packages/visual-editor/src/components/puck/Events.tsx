@@ -10,7 +10,7 @@ import {
   Heading,
   HeadingLevel,
   Body,
-  Section,
+  PageSection,
   backgroundColors,
   BackgroundStyle,
   EntityField,
@@ -203,11 +203,7 @@ const EventsWrapper: React.FC<EventsProps> = (props) => {
   );
 
   return (
-    <Section
-      background={backgroundColor}
-      applyPageLevelStyles
-      className="flex flex-col gap-8"
-    >
+    <PageSection background={backgroundColor} className="flex flex-col gap-8">
       {resolvedHeading && (
         <div className="text-center">
           <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
@@ -218,7 +214,7 @@ const EventsWrapper: React.FC<EventsProps> = (props) => {
           <EventCard key={index} {...event} index={index} />
         ))}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 

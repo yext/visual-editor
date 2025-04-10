@@ -9,17 +9,7 @@ import {
   WithId,
 } from "@measured/puck";
 import {
-  useDocument,
-  Heading,
-  HeadingProps,
-  Section,
   YextEntityFieldSelector,
-  YextEntityField,
-  BasicSelector,
-  ThemeOptions,
-  backgroundColors,
-  SectionProps,
-  resolveYextEntityField,
   OptionalNumberField,
   YextCollection,
 } from "../../index.js";
@@ -29,37 +19,15 @@ export const COLLECTION_COMPONENTS = [
   "ProductCard",
 ];
 
-export interface CollectionSectionProps {
-  styles: {
-    background: SectionProps["background"];
-  };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingProps["level"];
-  };
+export const collectionWrapperClassName =
+  "flex flex-wrap gap-4 flex-col sm:flex-row items-center";
+
+export interface CollectionProps {
   collection: YextCollection;
   shouldClearDropZone?: boolean;
 }
 
-const collectionSectionFields: Fields<CollectionSectionProps> = {
-  styles: {
-    type: "object",
-    label: "Styles",
-    objectFields: {
-      background: BasicSelector("Background", ThemeOptions.BACKGROUND_COLOR),
-    },
-  },
-  sectionHeading: {
-    type: "object",
-    label: "Section Heading",
-    objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Section Heading Text",
-        filter: { types: ["type.string"] },
-      }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
-    },
-  },
+const collectionFields: Fields<CollectionProps> = {
   collection: {
     type: "object",
     label: "Collection",
@@ -82,10 +50,9 @@ const collectionSectionFields: Fields<CollectionSectionProps> = {
 };
 
 const CollectionSectionWrapper: React.FC<
-  WithId<WithPuckProps<CollectionSectionProps>>
+  WithId<WithPuckProps<CollectionProps>>
 > = (props) => {
-  const { styles, sectionHeading, shouldClearDropZone, id } = props;
-  const document = useDocument();
+  const { shouldClearDropZone, id } = props;
 
   try {
     const puck = usePuck();
@@ -115,28 +82,18 @@ const CollectionSectionWrapper: React.FC<
     }
   }
 
-  const resolvedHeadingText = resolveYextEntityField<string>(
-    document,
-    sectionHeading.text
-  );
-
   return (
-    <Section background={styles.background}>
-      {resolvedHeadingText && (
-        <Heading level={sectionHeading.level}>{resolvedHeadingText}</Heading>
-      )}
-      <DropZone
-        zone="collection-dropzone"
-        allow={COLLECTION_COMPONENTS}
-        className="flex gap-4 flex-wrap"
-      />
-    </Section>
+    <DropZone
+      zone="collection-dropzone"
+      className={collectionWrapperClassName}
+      allow={COLLECTION_COMPONENTS}
+    />
   );
 };
 
-export const CollectionSection: ComponentConfig<CollectionSectionProps> = {
-  label: "Collection Section",
-  fields: collectionSectionFields,
+export const Collection: ComponentConfig<CollectionProps> = {
+  label: "Collection",
+  fields: collectionFields,
   resolveFields: (data, { fields }) => {
     // Add or remove the Items limit field based on whether
     // the constant value is enabled
@@ -176,17 +133,6 @@ export const CollectionSection: ComponentConfig<CollectionSectionProps> = {
     return data;
   },
   defaultProps: {
-    styles: {
-      background: backgroundColors.background1.value,
-    },
-    sectionHeading: {
-      level: 3,
-      text: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: "New Section",
-      },
-    },
     collection: {
       items: {
         field: "",

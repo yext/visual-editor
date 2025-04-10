@@ -5,7 +5,7 @@ import {
   backgroundColors,
   Body,
   MaybeLink,
-  Section,
+  PageSection,
 } from "../../index.js";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -87,28 +87,24 @@ const DirectoryGrid = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       verticalPadding="sm"
       background={backgroundColors.background1.value}
+      className={themeManagerCn(
+        "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
+      )}
+      style={{
+        gridTemplateColumns: `repeat(3, 1fr)`,
+      }}
     >
-      <div
-        className={themeManagerCn(
-          "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
-        )}
-        style={{
-          gridTemplateColumns: `repeat(3, 1fr)`,
-        }}
-      >
-        {sortedDirectoryChildren.map((child, idx) => (
-          <DirectoryCard
-            key={idx}
-            profile={child}
-            relativePrefixToRoot={relativePrefixToRoot}
-          />
-        ))}
-      </div>
-    </Section>
+      {sortedDirectoryChildren.map((child, idx) => (
+        <DirectoryCard
+          key={idx}
+          profile={child}
+          relativePrefixToRoot={relativePrefixToRoot}
+        />
+      ))}
+    </PageSection>
   );
 };
 
@@ -122,8 +118,7 @@ const DirectoryList = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       verticalPadding="sm"
       background={backgroundColors.background1.value}
     >
@@ -143,7 +138,7 @@ const DirectoryList = ({
           </li>
         ))}
       </ul>
-    </Section>
+    </PageSection>
   );
 };
 

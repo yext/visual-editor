@@ -10,7 +10,7 @@ import {
   ImageProps,
   ImageWrapperProps,
   resolveYextEntityField,
-  Section,
+  PageSection,
   ThemeOptions,
   useDocument,
   YextEntityField,
@@ -18,6 +18,7 @@ import {
   Image,
   Body,
   CTA,
+  Background,
 } from "../../index.js";
 import React from "react";
 import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
@@ -122,8 +123,7 @@ const InsightsSectionWrapper = ({
     sectionHeading.text
   );
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       background={styles.backgroundColor}
       className="flex flex-col gap-8"
     >
@@ -168,8 +168,9 @@ const InsightsSectionWrapper = ({
             );
 
             return (
-              <Section
+              <Background
                 className="rounded"
+                as="section"
                 key={index}
                 background={backgroundColors.background1.value}
               >
@@ -261,12 +262,12 @@ const InsightsSectionWrapper = ({
                     </EntityField>
                   )}
                 </div>
-              </Section>
+              </Background>
             );
           })}
         </div>
       )}
-    </Section>
+    </PageSection>
   );
 };
 
