@@ -257,204 +257,189 @@ const CoreInfoSectionWrapper = ({
 
   return (
     <Section
-      className="flex flex-col gap-0 md:gap-8"
+      applyPageLevelStyles
+      className="flex flex-col md:flex-row justify-between w-full gap-8"
       background={styles.backgroundColor}
       aria-label="Core Info Section"
     >
       <section
-        className={`flex flex-col gap-8 md:flex-row justify-between w-full`}
-        aria-label="Core Info Section Wrapper"
+        aria-label="Information Section"
+        className="flex flex-col gap-4 md:w-1/3"
       >
-        <section
-          aria-label="Information Section"
-          className="flex flex-col gap-4 md:w-1/3"
-        >
-          {addressHeadingText && (
+        {addressHeadingText && (
+          <EntityField
+            displayName="Headig Text"
+            fieldId={addressField.headingText.field}
+            constantValueEnabled={addressField.headingText.constantValueEnabled}
+          >
+            <Heading level={styles.headingLevel}>{addressHeadingText}</Heading>
+          </EntityField>
+        )}
+        <div className="flex flex-col gap-2 text">
+          {resolvedAddress && (
             <EntityField
-              displayName="Headig Text"
-              fieldId={addressField.headingText.field}
-              constantValueEnabled={
-                addressField.headingText.constantValueEnabled
-              }
+              displayName="Address"
+              fieldId={addressField.address.field}
+              constantValueEnabled={addressField.address.constantValueEnabled}
             >
-              <Heading level={styles.headingLevel}>
-                {addressHeadingText}
-              </Heading>
+              <Address
+                address={resolvedAddress}
+                lines={[
+                  ["line1"],
+                  ["line2"],
+                  ["city", ",", "region", "postalCode"],
+                ]}
+              />
             </EntityField>
           )}
-          <div className="flex flex-col gap-2 text">
-            {resolvedAddress && (
-              <EntityField
-                displayName="Address"
-                fieldId={addressField.address.field}
-                constantValueEnabled={addressField.address.constantValueEnabled}
-              >
-                <Address
-                  address={resolvedAddress}
-                  lines={[
-                    ["line1"],
-                    ["line2"],
-                    ["city", ",", "region", "postalCode"],
-                  ]}
-                />
-              </EntityField>
-            )}
-            {coordinates && addressField.showGetDirectionsLink && (
-              <CTA
-                className="font-bold"
-                link={coordinates}
-                label="Get Directions"
-                linkType="DRIVING_DIRECTIONS"
-                target="_blank"
-                variant="link"
-              />
-            )}
-          </div>
-          {phoneNumbersField.phoneNumber && (
-            <ul className="flex flex-col gap-4">
-              {phoneNumbersField.phoneNumber.map((item) => {
-                const resolvedNumber = resolveYextEntityField<string>(
-                  document,
-                  item.number
-                );
-                if (!resolvedNumber) {
-                  return;
-                }
-
-                return (
-                  <li key={item.label} className="flex gap-2 items-center">
-                    <EntityField
-                      displayName="Phone Number"
-                      fieldId={item.number.field}
-                      constantValueEnabled={item.number.constantValueEnabled}
-                    >
-                      <div className={"flex items-center gap-3"}>
-                        <div className="flex gap-2 items-center">
-                          <PhoneAtom
-                            backgroundColor={backgroundColors.background2.value}
-                            label={item.label}
-                            phoneNumber={resolvedNumber}
-                            format={phoneNumbersField.phoneFormat}
-                            includeHyperlink={
-                              phoneNumbersField.includePhoneHyperlink
-                            }
-                          />
-                        </div>
-                      </div>
-                    </EntityField>
-                  </li>
-                );
-              })}
-            </ul>
+          {coordinates && addressField.showGetDirectionsLink && (
+            <CTA
+              className="font-bold"
+              link={coordinates}
+              label="Get Directions"
+              linkType="DRIVING_DIRECTIONS"
+              target="_blank"
+              variant="link"
+            />
           )}
-          {resolvedEmails && (
-            <EntityField
-              displayName="Email List"
-              fieldId={emailsField.emails.field}
-              constantValueEnabled={emailsField.emails.constantValueEnabled}
-            >
-              <ul className="list-inside flex flex-col gap-4">
-                {resolvedEmails
-                  .slice(
-                    0,
-                    Math.min(resolvedEmails.length, emailsField.listLength)
-                  )
-                  .map((email, index) => (
-                    <li key={index} className={`flex items-center gap-3`}>
-                      <div
-                        className={`h-10 w-10 flex justify-center rounded-full items-center ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`}
-                      >
-                        <FaRegEnvelope className="w-4 h-4" />
+        </div>
+        {phoneNumbersField.phoneNumber && (
+          <ul className="flex flex-col gap-4">
+            {phoneNumbersField.phoneNumber.map((item) => {
+              const resolvedNumber = resolveYextEntityField<string>(
+                document,
+                item.number
+              );
+              if (!resolvedNumber) {
+                return;
+              }
+
+              return (
+                <li key={item.label} className="flex gap-2 items-center">
+                  <EntityField
+                    displayName="Phone Number"
+                    fieldId={item.number.field}
+                    constantValueEnabled={item.number.constantValueEnabled}
+                  >
+                    <div className={"flex items-center gap-3"}>
+                      <div className="flex gap-2 items-center">
+                        <PhoneAtom
+                          backgroundColor={backgroundColors.background2.value}
+                          label={item.label}
+                          phoneNumber={resolvedNumber}
+                          format={phoneNumbersField.phoneFormat}
+                          includeHyperlink={
+                            phoneNumbersField.includePhoneHyperlink
+                          }
+                        />
                       </div>
-                      <CTA
-                        link={email}
-                        label={email}
-                        linkType="EMAIL"
-                        variant="link"
-                      />
-                    </li>
-                  ))}
-              </ul>
+                    </div>
+                  </EntityField>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {resolvedEmails && (
+          <EntityField
+            displayName="Email List"
+            fieldId={emailsField.emails.field}
+            constantValueEnabled={emailsField.emails.constantValueEnabled}
+          >
+            <ul className="list-inside flex flex-col gap-4">
+              {resolvedEmails
+                .slice(
+                  0,
+                  Math.min(resolvedEmails.length, emailsField.listLength)
+                )
+                .map((email, index) => (
+                  <li key={index} className={`flex items-center gap-3`}>
+                    <div
+                      className={`h-10 w-10 flex justify-center rounded-full items-center ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`}
+                    >
+                      <FaRegEnvelope className="w-4 h-4" />
+                    </div>
+                    <CTA
+                      link={email}
+                      label={email}
+                      linkType="EMAIL"
+                      variant="link"
+                    />
+                  </li>
+                ))}
+            </ul>
+          </EntityField>
+        )}
+      </section>
+      {resolvedHours && (
+        <section
+          aria-label="Hours Section"
+          className="flex flex-col gap-4 md:w-1/3"
+        >
+          {hoursHeadingText && (
+            <EntityField
+              displayName="Address"
+              fieldId={hoursField.headingText.field}
+              constantValueEnabled={hoursField.headingText.constantValueEnabled}
+            >
+              <Heading level={styles.headingLevel}>{hoursHeadingText}</Heading>
+            </EntityField>
+          )}
+          <EntityField
+            displayName="Hours"
+            fieldId="hours"
+            constantValueEnabled={hoursField.hours.constantValueEnabled}
+          >
+            <HoursTable
+              hours={resolvedHours}
+              startOfWeek={hoursField.startOfWeek}
+              collapseDays={hoursField.collapseDays}
+            />
+          </EntityField>
+          {additionalHoursText && hoursField.showAdditionalHoursText && (
+            <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+              <Body className="mt-4 text-body-sm-fontSize">
+                {additionalHoursText}
+              </Body>
             </EntityField>
           )}
         </section>
-        {resolvedHours && (
-          <section
-            aria-label="Hours Section"
-            className="flex flex-col gap-4 md:w-1/3"
-          >
-            {hoursHeadingText && (
-              <EntityField
-                displayName="Address"
-                fieldId={hoursField.headingText.field}
-                constantValueEnabled={
-                  hoursField.headingText.constantValueEnabled
-                }
-              >
-                <Heading level={styles.headingLevel}>
-                  {hoursHeadingText}
-                </Heading>
-              </EntityField>
-            )}
+      )}
+      {servicesList && (
+        <section
+          aria-label="Services Section"
+          className="flex flex-col gap-4 md:w-1/3"
+        >
+          {servicesHeadingText && (
             <EntityField
-              displayName="Hours"
-              fieldId="hours"
-              constantValueEnabled={hoursField.hours.constantValueEnabled}
-            >
-              <HoursTable
-                hours={resolvedHours}
-                startOfWeek={hoursField.startOfWeek}
-                collapseDays={hoursField.collapseDays}
-              />
-            </EntityField>
-            {additionalHoursText && hoursField.showAdditionalHoursText && (
-              <EntityField
-                displayName="Hours Text"
-                fieldId="additionalHoursText"
-              >
-                <Body className="mt-4 text-body-sm-fontSize">
-                  {additionalHoursText}
-                </Body>
-              </EntityField>
-            )}
-          </section>
-        )}
-        {servicesList && (
-          <section
-            aria-label="Services Section"
-            className="flex flex-col gap-4 md:w-1/3"
-          >
-            {servicesHeadingText && (
-              <EntityField
-                displayName="Address"
-                fieldId={servicesField.headingText.field}
-                constantValueEnabled={
-                  servicesField.headingText.constantValueEnabled
-                }
-              >
-                <Heading level={styles.headingLevel}>
-                  {servicesHeadingText}
-                </Heading>
-              </EntityField>
-            )}
-            <EntityField
-              displayName="Text List"
-              fieldId={servicesField.servicesList.field}
+              displayName="Address"
+              fieldId={servicesField.headingText.field}
               constantValueEnabled={
-                servicesField.servicesList.constantValueEnabled
+                servicesField.headingText.constantValueEnabled
               }
             >
-              <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
-                {servicesList.map((text: any, index: any) => (
-                  <li key={index} className="mb-2">
-                    {text}
-                  </li>
-                ))}
-              </ul>
+              <Heading level={styles.headingLevel}>
+                {servicesHeadingText}
+              </Heading>
             </EntityField>
-          </section>
-        )}
-      </section>
+          )}
+          <EntityField
+            displayName="Text List"
+            fieldId={servicesField.servicesList.field}
+            constantValueEnabled={
+              servicesField.servicesList.constantValueEnabled
+            }
+          >
+            <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
+              {servicesList.map((text: any, index: any) => (
+                <li key={index} className="mb-2">
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </EntityField>
+        </section>
+      )}
     </Section>
   );
 };
