@@ -24,7 +24,10 @@ import {
   YextCollection,
 } from "../../index.js";
 
-export const COLLECTION_COMPONENTS = ["ExampleRepeatableItemComponent"];
+export const COLLECTION_COMPONENTS = [
+  "ExampleRepeatableItemComponent",
+  "ProductCard",
+];
 
 export interface CollectionSectionProps {
   styles: {
