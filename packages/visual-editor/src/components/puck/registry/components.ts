@@ -268,7 +268,7 @@ export const ui: Registry["items"] = [
     files: [{ path: "CoreInfoSection.tsx", type: "registry:ui" }],
   },
   {
-    name: "InsightsSection",
+    name: "InsightCard",
     type: "registry:ui",
     registryDependencies: [
       "pageSection",
@@ -278,6 +278,6 @@ export const ui: Registry["items"] = [
       "cta",
       "image",
     ],
-    files: [{ path: "InsightsSection.tsx", type: "registry:ui" }],
+    files: [{ path: "cards/InsightCard.tsx", type: "registry:ui" }],
   },
 ];
