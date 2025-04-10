@@ -17,6 +17,7 @@ import {
 
 export const COLLECTION_COMPONENTS = [
   "ExampleRepeatableItemComponent",
+  "InsightCard",
   "ProductCard",
   "TestimonialCard",
 ];
