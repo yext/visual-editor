@@ -38,10 +38,11 @@ export {
 } from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export {
-  CollectionSection,
-  type CollectionSectionProps,
+  Collection,
+  collectionWrapperClassName,
+  type CollectionProps,
   COLLECTION_COMPONENTS,
-} from "./CollectionSection.tsx";
+} from "./Collection.tsx";
 export {
   ExampleRepeatableItemComponent,
   type ExampleRepeatableItemProps,
@@ -54,3 +55,7 @@ export {
 export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Events, type EventsProps } from "./Events.tsx";
+export {
+  SectionContainer,
+  type SectionContainerProps,
+} from "./SectionContainer.tsx";

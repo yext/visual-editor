@@ -20,7 +20,7 @@ import {
   ImageProps,
   ImageWrapperProps,
   resolveYextEntityField,
-  Section,
+  PageSection,
   themeManagerCn,
   ThemeOptions,
   useBackground,
@@ -113,9 +113,8 @@ const PhotoGallerySectionWrapper = ({
   );
 
   return (
-    <Section
+    <PageSection
       aria-label="Photo Gallery Section"
-      applyPageLevelStyles
       background={styles.backgroundColor}
       className="flex flex-col gap-8 justify-center text-center"
     >
@@ -207,7 +206,7 @@ const PhotoGallerySectionWrapper = ({
           </DynamicChildColors>
         </CarouselProvider>
       )}
-    </Section>
+    </PageSection>
   );
 };
 

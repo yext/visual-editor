@@ -44,8 +44,8 @@ import {
   PromoProps,
   MapboxStaticMap,
   MapboxStaticProps,
-  CollectionSection,
-  CollectionSectionProps,
+  Collection,
+  CollectionProps,
   ExampleRepeatableItemComponent,
   ExampleRepeatableItemProps,
   Testimonials,
@@ -56,6 +56,8 @@ import {
   ProductsSectionProps,
   People,
   PeopleProps,
+  SectionContainer,
+  SectionContainerProps,
   FAQsSection,
   FAQsSectionProps,
   Events,
@@ -76,6 +78,7 @@ type MainProps = {
   BodyText: BodyTextProps;
   Breadcrumbs: BreadcrumbsProps;
   Card: CardProps;
+  Collection: CollectionProps;
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
   Emails: EmailsProps;
@@ -93,9 +96,9 @@ type MainProps = {
   Phone: PhoneProps;
   ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
+  SectionContainer: SectionContainerProps;
   TextList: TextListProps;
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
-  CollectionSection: CollectionSectionProps;
   Testimonials: TestimonialsProps;
   NearbyLocations: NearbyLocationsProps;
   People: PeopleProps;
@@ -114,6 +117,7 @@ const components: Config<MainProps>["components"] = {
   Grid,
   Address,
   BodyText,
+  Collection,
   CTA,
   Emails,
   FAQsSection,
@@ -130,7 +134,7 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   ExampleRepeatableItemComponent,
-  CollectionSection,
+  SectionContainer,
   Testimonials,
   NearbyLocations,
   ProductsSection,
@@ -156,9 +160,10 @@ const pageSections: (keyof MainProps)[] = [
   "Testimonials",
   "People",
   "Events",
+  "SectionContainer",
 ];
 
-const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
+const layoutBlocks: (keyof MainProps)[] = ["Collection", "Flex", "Grid"];
 
 const contentBlocks: (keyof MainProps)[] = [
   "Address",

@@ -18,7 +18,7 @@ import {
   CTA,
   CTAProps,
   Heading,
-  Section,
+  PageSection,
 } from "../../index.js";
 import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
 
@@ -210,10 +210,9 @@ const HeroSectionWrapper = ({
   };
 
   return (
-    <Section
+    <PageSection
       background={styles.backgroundColor}
       aria-label="Hero Banner"
-      applyPageLevelStyles
       className={`flex flex-col gap-6 md:gap-10 ${
         styles.imageOrientation === "right"
           ? "md:flex-row"
@@ -324,7 +323,7 @@ const HeroSectionWrapper = ({
           </EntityField>
         </div>
       )}
-    </Section>
+    </PageSection>
   );
 };
 

@@ -9,12 +9,13 @@ import {
   Heading,
   HeadingProps,
   resolveYextEntityField,
-  Section,
+  PageSection,
   themeManagerCn,
   ThemeOptions,
   useDocument,
   YextEntityField,
   YextEntityFieldSelector,
+  Background,
 } from "../../index.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -103,7 +104,7 @@ const ProductCard = ({
   cardBackgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <Section
+    <Background
       className="flex flex-col rounded-lg overflow-hidden border"
       background={cardBackgroundColor}
     >
@@ -141,7 +142,7 @@ const ProductCard = ({
           <CTA variant="secondary" label="Learn More" link={card.cta} />
         )}
       </div>
-    </Section>
+    </Background>
   );
 };
 
@@ -157,9 +158,8 @@ const ProductsSectionWrapper: React.FC<ProductsSectionProps> = ({
   );
 
   return (
-    <Section
+    <PageSection
       background={styles.backgroundColor}
-      applyPageLevelStyles
       className="flex flex-col gap-8 md:gap-12"
     >
       {resolvedHeading && (
@@ -174,7 +174,7 @@ const ProductsSectionWrapper: React.FC<ProductsSectionProps> = ({
           />
         ))}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 

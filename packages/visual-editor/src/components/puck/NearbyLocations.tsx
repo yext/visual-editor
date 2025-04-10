@@ -10,9 +10,10 @@ import {
   backgroundColors,
   ThemeOptions,
   HeadingLevel,
-  Section,
+  PageSection,
   PhoneAtom,
   fetchNearbyLocations,
+  Background,
 } from "../../index.js";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
@@ -167,47 +168,48 @@ const LocationCard = ({
   backgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <div className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border">
-      <Section background={backgroundColor} className={`components`}>
-        <Heading level={cards.headingLevel}>{name}</Heading>
-        {hours && (
-          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatus
-              hours={hours}
-              timezone={timezone}
-              currentTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              separatorTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              timeOptions={{
-                hour12: cards.hours.timeFormat === "12h",
-              }}
-              dayOptions={{
-                weekday: cards.hours.dayOfWeekFormat,
-              }}
-              dayOfWeekTemplate={
-                cards.hours.showDayNames ? undefined : () => <></>
-              }
-              className="h-full"
-            />
-          </div>
-        )}
-        {mainPhone && (
-          <PhoneAtom
-            phoneNumber={mainPhone}
-            format={cards.phoneNumberFormat}
-            includeHyperlink={cards.phoneNumberLink}
+    <Background
+      background={backgroundColor}
+      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
+    >
+      <Heading level={cards.headingLevel}>{name}</Heading>
+      {hours && (
+        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+          <HoursStatus
+            hours={hours}
+            timezone={timezone}
+            currentTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            separatorTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            timeOptions={{
+              hour12: cards.hours.timeFormat === "12h",
+            }}
+            dayOptions={{
+              weekday: cards.hours.dayOfWeekFormat,
+            }}
+            dayOfWeekTemplate={
+              cards.hours.showDayNames ? undefined : () => <></>
+            }
+            className="h-full"
           />
-        )}
-        {address && (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-            <Address address={address} lines={[["line1"]]} />
-          </div>
-        )}
-      </Section>
-    </div>
+        </div>
+      )}
+      {mainPhone && (
+        <PhoneAtom
+          phoneNumber={mainPhone}
+          format={cards.phoneNumberFormat}
+          includeHyperlink={cards.phoneNumberLink}
+        />
+      )}
+      {address && (
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+          <Address address={address} lines={[["line1"]]} />
+        </div>
+      )}
+    </Background>
   );
 };
 
@@ -266,7 +268,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 
   return (
-    <Section background={styles.backgroundColor} className={`components`}>
+    <PageSection background={styles.backgroundColor} className={`components`}>
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
@@ -296,7 +298,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
             </div>
           )}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 

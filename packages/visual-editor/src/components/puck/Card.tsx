@@ -23,7 +23,7 @@ import {
   CTAProps,
   Heading,
   HeadingProps,
-  Section,
+  PageSection,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
@@ -158,13 +158,12 @@ const CardWrapper = ({
   const resolvedCTA = resolveYextEntityField(document, cta.entityField);
 
   return (
-    <Section
+    <PageSection
       background={backgroundColor}
       className={themeManagerCn(
         "flex flex-col md:flex-row overflow-hidden md:gap-8",
         orientation === "right" && "md:flex-row-reverse"
       )}
-      applyPageLevelStyles
     >
       {resolvedImage && (
         <div className="w-full">
@@ -224,7 +223,7 @@ const CardWrapper = ({
           />
         )}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 

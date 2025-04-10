@@ -7,7 +7,7 @@ import {
   BasicSelector,
   ThemeOptions,
   Body,
-  Section,
+  PageSection,
 } from "../../index.js";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -58,14 +58,13 @@ const BannerComponent = ({
   }[textAlignment];
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       background={backgroundColor}
       verticalPadding="sm"
       className={`flex ${justifyClass} items-center`}
     >
       <Body>{resolvedText}</Body>
-    </Section>
+    </PageSection>
   );
 };
 

@@ -10,9 +10,10 @@ import {
   Heading,
   HeadingLevel,
   Body,
-  Section,
+  PageSection,
   backgroundColors,
   BackgroundStyle,
+  Background,
 } from "../../index.js";
 
 export interface TestimonialsProps {
@@ -87,11 +88,7 @@ const TestimonialsWrapper: React.FC<TestimonialsProps> = (props) => {
   );
 
   return (
-    <Section
-      background={backgroundColor}
-      applyPageLevelStyles
-      className="flex flex-col gap-12"
-    >
+    <PageSection background={backgroundColor} className="flex flex-col gap-12">
       {resolvedHeading && (
         <div className="text-center">
           <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
@@ -117,25 +114,25 @@ const TestimonialsWrapper: React.FC<TestimonialsProps> = (props) => {
               key={index}
               className={`flex flex-col rounded-lg overflow-hidden border`}
             >
-              <Section
+              <Background
                 background={backgroundColors.background1.value}
                 className="p-8"
               >
                 {resolvedTestimonial && (
                   <Body className="line-clamp-5">{resolvedTestimonial}</Body>
                 )}
-              </Section>
-              <Section background={cardBackgroundColor} className="p-8">
+              </Background>
+              <Background background={cardBackgroundColor} className="p-8">
                 {resolvedAuthor && (
                   <Heading level={3}>{resolvedAuthor}</Heading>
                 )}
                 {resolvedDate && <Body variant="sm">{resolvedDate}</Body>}
-              </Section>
+              </Background>
             </div>
           );
         })}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 
