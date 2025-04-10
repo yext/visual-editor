@@ -167,47 +167,52 @@ const LocationCard = ({
   backgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <div className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border">
-      <Section background={backgroundColor} className={`components`}>
-        <Heading level={cards.headingLevel}>{name}</Heading>
-        {hours && (
-          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatus
-              hours={hours}
-              timezone={timezone}
-              currentTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              separatorTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              timeOptions={{
-                hour12: cards.hours.timeFormat === "12h",
-              }}
-              dayOptions={{
-                weekday: cards.hours.dayOfWeekFormat,
-              }}
-              dayOfWeekTemplate={
-                cards.hours.showDayNames ? undefined : () => <></>
-              }
-              className="h-full"
-            />
-          </div>
-        )}
-        {mainPhone && (
-          <PhoneAtom
-            phoneNumber={mainPhone}
-            format={cards.phoneNumberFormat}
-            includeHyperlink={cards.phoneNumberLink}
+    <Section
+      background={backgroundColor}
+      className={
+        "flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-8"
+      }
+      verticalPadding={"default"}
+      as={"section"}
+    >
+      <Heading level={cards.headingLevel}>{name}</Heading>
+      {hours && (
+        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+          <HoursStatus
+            hours={hours}
+            timezone={timezone}
+            currentTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            separatorTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            timeOptions={{
+              hour12: cards.hours.timeFormat === "12h",
+            }}
+            dayOptions={{
+              weekday: cards.hours.dayOfWeekFormat,
+            }}
+            dayOfWeekTemplate={
+              cards.hours.showDayNames ? undefined : () => <></>
+            }
+            className="h-full"
           />
-        )}
-        {address && (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-            <Address address={address} lines={[["line1"]]} />
-          </div>
-        )}
-      </Section>
-    </div>
+        </div>
+      )}
+      {mainPhone && (
+        <PhoneAtom
+          phoneNumber={mainPhone}
+          format={cards.phoneNumberFormat}
+          includeHyperlink={cards.phoneNumberLink}
+        />
+      )}
+      {address && (
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+          <Address address={address} lines={[["line1"]]} />
+        </div>
+      )}
+    </Section>
   );
 };
 
@@ -233,6 +238,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
     );
+    return <></>;
   }
 
   const entityType: string = document?.meta?.entityType?.id || "location";
@@ -266,7 +272,11 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 
   return (
-    <Section background={styles.backgroundColor} className={`components`}>
+    <Section
+      background={styles.backgroundColor}
+      className={`components`}
+      applyPageLevelStyles={true}
+    >
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
@@ -305,7 +315,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
   fields: nearbyLocationsFields,
   defaultProps: {
     styles: {
-      backgroundColor: backgroundColors.background2.value,
+      backgroundColor: backgroundColors.background1.value,
       cardBackgroundColor: backgroundColors.background1.value,
     },
     heading: {
