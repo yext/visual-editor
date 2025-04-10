@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Phone as PhoneIcon } from "lucide-react";
-import mailIcon from "../assets/mail_outline.svg";
+import { FaEnvelope } from "react-icons/fa";
 import {
   YextEntityField,
   useDocument,
@@ -11,7 +11,7 @@ import {
   Heading,
   handleResolveFieldsForCollections,
   Body,
-  PageSection,
+  Background,
   backgroundColors,
   BackgroundStyle,
   EntityField,
@@ -73,7 +73,7 @@ const PersonCardItem = ({
 
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white">
-      <PageSection background={cardBackgroundColor} className="flex p-8 gap-6">
+      <Background background={cardBackgroundColor} className="flex p-8 gap-6">
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedImage && (
             <EntityField
@@ -107,9 +107,9 @@ const PersonCardItem = ({
             </EntityField>
           )}
         </div>
-      </PageSection>
+      </Background>
       <hr className="border" />
-      <PageSection
+      <Background
         background={backgroundColors.background1.value}
         className="p-8"
       >
@@ -141,11 +141,7 @@ const PersonCardItem = ({
             >
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
-                  <img
-                    src={mailIcon}
-                    alt="Email"
-                    className="w-3 h-3 [filter:brightness(0)]"
-                  />
+                  <FaEnvelope />
                 </div>
                 <CTA
                   link={resolvedEmail}
@@ -173,7 +169,7 @@ const PersonCardItem = ({
             </EntityField>
           )}
         </div>
-      </PageSection>
+      </Background>
     </div>
   );
 };
