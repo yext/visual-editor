@@ -123,6 +123,12 @@ export const ui: Registry["items"] = [
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
   },
   {
+    name: "EventCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/EventCard.tsx", type: "registry:ui" }],
+  },
+  {
     name: "FAQsSection",
     type: "registry:ui",
     registryDependencies: ["body", "heading", "pageSection", "accordion"],
@@ -222,12 +228,6 @@ export const ui: Registry["items"] = [
     name: "TextList",
     type: "registry:ui",
     files: [{ path: "TextList.tsx", type: "registry:ui" }],
-  },
-  {
-    name: "Events",
-    type: "registry:ui",
-    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
-    files: [{ path: "Events.tsx", type: "registry:ui" }],
   },
   {
     name: "Hero Section",

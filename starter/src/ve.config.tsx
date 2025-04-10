@@ -56,8 +56,8 @@ import {
   SectionContainerProps,
   FAQsSection,
   FAQsSectionProps,
-  Events,
-  EventsProps,
+  EventCard,
+  EventCardProps,
   HeroSectionProps,
   HeroSection,
   PhotoGallerySectionProps,
@@ -98,7 +98,7 @@ type MainProps = {
   TestimonialCard: TestimonialCardProps;
   NearbyLocations: NearbyLocationsProps;
   People: PeopleProps;
-  Events: EventsProps;
+  EventCard: EventCardProps;
   HeroSection: HeroSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -135,7 +135,7 @@ const components: Config<MainProps>["components"] = {
   TestimonialCard,
   NearbyLocations,
   People,
-  Events,
+  EventCard,
   HeroSection,
   PhotoGallerySection,
   CoreInfoSection,
@@ -151,7 +151,6 @@ const pageSections: (keyof MainProps)[] = [
   "PhotoGallerySection",
   "Promo",
   "People",
-  "Events",
   "SectionContainer",
 ];
 
@@ -172,7 +171,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
-const cardBlocks: (keyof MainProps)[] = ["InsightCard", "ProductCard", "TestimonialCard"];
+const cardBlocks: (keyof MainProps)[] = ["EventCard", "InsightCard", "ProductCard", "TestimonialCard"];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {

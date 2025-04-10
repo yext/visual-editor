@@ -41,7 +41,6 @@ export {
 } from "./NearbyLocations.tsx";
 export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
-export { Events, type EventsProps } from "./Events.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,
