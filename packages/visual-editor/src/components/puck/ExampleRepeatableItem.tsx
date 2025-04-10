@@ -12,6 +12,7 @@ import {
   YextCollection,
 } from "../../index.js";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { handleComplexImages } from "./atoms/image.js";
 
 export type ExampleRepeatableItemProps = {
   text?: YextEntityField<string>;
@@ -65,24 +66,6 @@ const ExampleRepeatableItem = (props: ExampleRepeatableItemProps) => {
         })}
     </div>
   );
-};
-
-// Handle ImageType or ComplexImageType
-// TODO move or cleanup
-export const handleComplexImages = (resolvedImage: any) => {
-  let image: ImageType;
-  if (
-    resolvedImage &&
-    typeof resolvedImage === "object" &&
-    "image" in resolvedImage
-  ) {
-    image = resolvedImage.image as ImageType;
-  } else if (resolvedImage) {
-    image = resolvedImage;
-  } else {
-    image = { height: 150, width: 150, url: "" };
-  }
-  return image;
 };
 
 type ExampleRepeatableItemCardProps = {

@@ -40,3 +40,21 @@ export const Image: React.FC<ImageProps> = ({
     </div>
   );
 };
+
+// Handle ImageType or ComplexImageType
+// TODO move or cleanup
+export const handleComplexImages = (resolvedImage: any) => {
+  let image: ImageType;
+  if (
+    resolvedImage &&
+    typeof resolvedImage === "object" &&
+    "image" in resolvedImage
+  ) {
+    image = resolvedImage.image as ImageType;
+  } else if (resolvedImage) {
+    image = resolvedImage;
+  } else {
+    image = { height: 150, width: 150, url: "" };
+  }
+  return image;
+};

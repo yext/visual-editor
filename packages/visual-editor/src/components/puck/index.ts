@@ -32,11 +32,7 @@ export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
-export { ProductCardComponent, type ProductCardProps } from "./ProductCard.tsx";
-export {
-  ProductsSection,
-  type ProductsSectionProps,
-} from "./ProductsSection.tsx";
+export { ProductCard, type ProductCardProps } from "./ProductCard.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export {
   CollectionSection,

@@ -52,8 +52,6 @@ import {
   TestimonialsProps,
   NearbyLocations,
   NearbyLocationsProps,
-  ProductsSection,
-  ProductsSectionProps,
   People,
   PeopleProps,
   FAQsSection,
@@ -68,7 +66,7 @@ import {
   CoreInfoSection,
   InsightsSection,
   InsightsSectionProps,
-  ProductCardComponent,
+  ProductCard,
   ProductCardProps,
 } from "@yext/visual-editor";
 
@@ -93,7 +91,6 @@ type MainProps = {
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
-  ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   TextList: TextListProps;
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
@@ -106,7 +103,7 @@ type MainProps = {
   PhotoGallerySection: PhotoGallerySectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   InsightsSection: InsightsSectionProps;
-  ProductCardComponent: ProductCardProps;
+  ProductCard: ProductCardProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -125,7 +122,7 @@ const components: Config<MainProps>["components"] = {
   HoursStatus,
   HoursTable,
   ImageWrapper,
-  ProductCardComponent,
+  ProductCard,
   Phone,
   TextList,
   Header,
@@ -137,7 +134,6 @@ const components: Config<MainProps>["components"] = {
   CollectionSection,
   Testimonials,
   NearbyLocations,
-  ProductsSection,
   People,
   Events,
   HeroSection,
@@ -155,7 +151,6 @@ const pageSections: (keyof MainProps)[] = [
   "HeroSection",
   "InsightsSection",
   "PhotoGallerySection",
-  "ProductsSection",
   "Promo",
   "Testimonials",
   "People",
@@ -179,6 +174,8 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
+const cardBlocks: (keyof MainProps)[] = ["ProductCard"];
+
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
   components,
@@ -190,6 +187,10 @@ export const mainConfig: Config<MainProps> = {
     layoutBlocks: {
       title: "Layout Blocks",
       components: layoutBlocks,
+    },
+    cardBlocks: {
+      title: "Cards",
+      components: cardBlocks,
     },
     contentBlocks: {
       title: "Content Blocks",

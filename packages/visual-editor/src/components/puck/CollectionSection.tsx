@@ -26,7 +26,7 @@ import {
 
 export const COLLECTION_COMPONENTS = [
   "ExampleRepeatableItemComponent",
-  "ProductCardComponent",
+  "ProductCard",
 ];
 
 export interface CollectionSectionProps {
