@@ -152,7 +152,6 @@ const pageSections: (keyof MainProps)[] = [
   "PhotoGallerySection",
   "Promo",
   "Testimonials",
-  "PersonCard",
   "Events",
   "SectionContainer",
 ];
@@ -174,7 +173,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
-const cardBlocks: (keyof MainProps)[] = ["ProductCard"];
+const cardBlocks: (keyof MainProps)[] = ["ProductCard", "PersonCard"];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {

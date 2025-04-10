@@ -202,7 +202,7 @@ const PersonCardComponent = (props: PersonCardProps) => {
 
   // Return one card with resolved subfields for each item in the parent
   return (
-    <div className="flex justify-between max-w-pageSection-maxWidth">
+    <div className="max-w-pageSection-contentWidth mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {
