@@ -12,17 +12,9 @@ import {
   YextEntityFieldSelector,
   OptionalNumberField,
   YextCollection,
+  CardCategory,
   themeManagerCn,
 } from "../../index.js";
-
-export const COLLECTION_COMPONENTS = [
-  "EventCard",
-  "ExampleRepeatableItemComponent",
-  "InsightCard",
-  "ProductCard",
-  "PersonCard",
-  "TestimonialCard",
-];
 
 export interface CollectionProps {
   collection: YextCollection;
@@ -93,7 +85,7 @@ const CollectionSectionWrapper: React.FC<
       className={themeManagerCn(
         "max-w-pageSection-contentWidth mx-auto flex flex-wrap justify-center sm:flex-row items-center"
       )}
-      allow={COLLECTION_COMPONENTS}
+      allow={CardCategory}
     />
   );
 };

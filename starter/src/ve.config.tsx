@@ -2,181 +2,41 @@ import { DropZone, type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
-  Address,
-  AddressProps,
-  Banner,
-  BannerProps,
-  BodyText,
-  BodyTextProps,
-  CTAWrapper as CTA,
-  CTAWrapperProps,
-  Emails,
-  EmailsProps,
-  Flex,
-  FlexProps,
-  GetDirections,
-  GetDirectionsProps,
-  Grid,
-  GridProps,
-  HeadingText,
-  HeadingTextProps,
-  HoursTable,
-  HoursTableProps,
-  HoursStatus,
-  HoursStatusProps,
-  ImageWrapper,
-  ImageWrapperProps,
-  Phone,
-  PhoneProps,
-  TextList,
-  TextListProps,
-  Header,
-  HeaderProps,
-  Footer,
-  FooterProps,
-  Breadcrumbs,
-  BreadcrumbsProps,
-  Directory,
-  DirectoryProps,
-  Promo,
-  PromoProps,
-  MapboxStaticMap,
-  MapboxStaticProps,
-  Collection,
-  CollectionProps,
-  ExampleRepeatableItemComponent,
-  ExampleRepeatableItemProps,
-  TestimonialCard,
-  TestimonialCardProps,
-  NearbyLocations,
-  NearbyLocationsProps,
-  PersonCard,
-  PersonCardProps,
-  SectionContainer,
-  SectionContainerProps,
-  FAQsSection,
-  FAQsSectionProps,
-  EventCard,
-  EventCardProps,
-  HeroSectionProps,
-  HeroSection,
-  PhotoGallerySectionProps,
-  PhotoGallerySection,
-  CoreInfoSectionProps,
-  CoreInfoSection,
-  InsightCard,
-  InsightCardProps,
-  ProductCard,
-  ProductCardProps,
+  PageSectionCategory,
+  PageSectionCategoryComponents,
+  PageSectionCategoryProps,
+  LayoutBlockCategory,
+  CardCategory,
+  ContentBlockCategory,
+  LayoutBlockCategoryComponents,
+  CardCategoryComponents,
+  ContentBlockCategoryComponents,
+  OtherCategoryComponents,
+  LayoutBlockCategoryProps,
+  CardCategoryProps,
+  ContentBlockCategoryProps,
+  OtherCategoryProps,
+  DirectoryCategory,
+  DirectoryCategoryComponents,
+  DirectoryCategoryProps,
 } from "@yext/visual-editor";
 
-type MainProps = {
-  Address: AddressProps;
-  Banner: BannerProps;
-  BodyText: BodyTextProps;
-  Breadcrumbs: BreadcrumbsProps;
-  Collection: CollectionProps;
-  CTA: CTAWrapperProps;
-  Directory: DirectoryProps;
-  Emails: EmailsProps;
-  FAQsSection: FAQsSectionProps;
-  Flex: FlexProps;
-  Footer: FooterProps;
-  GetDirections: GetDirectionsProps;
-  Grid: GridProps;
-  Header: HeaderProps;
-  HeadingText: HeadingTextProps;
-  HoursTable: HoursTableProps;
-  HoursStatus: HoursStatusProps;
-  ImageWrapper: ImageWrapperProps;
-  MapboxStaticMap: MapboxStaticProps;
-  Phone: PhoneProps;
-  Promo: PromoProps;
-  SectionContainer: SectionContainerProps;
-  TextList: TextListProps;
-  ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
-  TestimonialCard: TestimonialCardProps;
-  NearbyLocations: NearbyLocationsProps;
-  PersonCard: PersonCardProps;
-  EventCard: EventCardProps;
-  HeroSection: HeroSectionProps;
-  PhotoGallerySection: PhotoGallerySectionProps;
-  CoreInfoSection: CoreInfoSectionProps;
-  InsightCard: InsightCardProps;
-  ProductCard: ProductCardProps;
-};
+interface MainProps
+  extends PageSectionCategoryProps,
+    LayoutBlockCategoryProps,
+    CardCategoryProps,
+    ContentBlockCategoryProps,
+    DirectoryCategoryProps,
+    OtherCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
-  Banner,
-  Promo,
-  Flex,
-  Grid,
-  Address,
-  BodyText,
-  Collection,
-  CTA,
-  Emails,
-  FAQsSection,
-  GetDirections,
-  HeadingText,
-  HoursStatus,
-  HoursTable,
-  ImageWrapper,
-  ProductCard,
-  Phone,
-  TextList,
-  Header,
-  Footer,
-  Directory,
-  Breadcrumbs,
-  MapboxStaticMap,
-  ExampleRepeatableItemComponent,
-  SectionContainer,
-  TestimonialCard,
-  NearbyLocations,
-  PersonCard,
-  EventCard,
-  HeroSection,
-  PhotoGallerySection,
-  CoreInfoSection,
-  InsightCard,
+  ...PageSectionCategoryComponents,
+  ...LayoutBlockCategoryComponents,
+  ...CardCategoryComponents,
+  ...ContentBlockCategoryComponents,
+  ...DirectoryCategoryComponents,
+  ...OtherCategoryComponents,
 };
-
-const pageSections: (keyof MainProps)[] = [
-  "Banner",
-  "Breadcrumbs",
-  "CoreInfoSection",
-  "FAQsSection",
-  "HeroSection",
-  "PhotoGallerySection",
-  "Promo",
-  "SectionContainer",
-];
-
-const layoutBlocks: (keyof MainProps)[] = ["Collection", "Flex", "Grid"];
-
-const contentBlocks: (keyof MainProps)[] = [
-  "Address",
-  "BodyText",
-  "CTA",
-  "Emails",
-  "GetDirections",
-  "HeadingText",
-  "HoursStatus",
-  "HoursTable",
-  "ImageWrapper",
-  "MapboxStaticMap",
-  "Phone",
-  "TextList",
-];
-
-const cardBlocks: (keyof MainProps)[] = [
-  "EventCard",
-  "InsightCard",
-  "ProductCard",
-  "PersonCard",
-  "TestimonialCard",
-];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
@@ -184,19 +44,23 @@ export const mainConfig: Config<MainProps> = {
   categories: {
     pageSections: {
       title: "Page Sections",
-      components: pageSections,
+      components: PageSectionCategory,
     },
     layoutBlocks: {
       title: "Layout Blocks",
-      components: layoutBlocks,
+      components: LayoutBlockCategory,
     },
     cardBlocks: {
       title: "Cards",
-      components: cardBlocks,
+      components: CardCategory,
     },
     contentBlocks: {
       title: "Content Blocks",
-      components: contentBlocks,
+      components: ContentBlockCategory,
+    },
+    directory: {
+      title: "Directory",
+      components: DirectoryCategory,
     },
   },
   root: {
@@ -204,7 +68,11 @@ export const mainConfig: Config<MainProps> = {
       return (
         <DropZone
           zone="default-zone"
-          disallow={contentBlocks}
+          disallow={[
+            ...ContentBlockCategory,
+            ...CardCategory,
+            ...LayoutBlockCategory,
+          ]}
           style={{ display: "flex", flexDirection: "column", height: "100vh" }}
         />
       );
