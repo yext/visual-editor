@@ -42,52 +42,46 @@ const TestimonialCardItemFields: Fields<TestimonialCardProps> = {
   },
 };
 
-const TestimonialCardWrapper = ({
+const TestimonialCardItem = ({
+  document,
   card,
   cardBackgroundColor,
 }: {
-  card: {
-    testimonial: string;
-    authorName: string;
-    date: string;
-  };
+  document: any;
+  card: TestimonialCardProps["card"];
   cardBackgroundColor?: BackgroundStyle;
 }) => {
+  const resolvedTestimonial = resolveYextSubfield(document, card?.testimonial);
+  const resolvedAuthorName = resolveYextSubfield(document, card?.authorName);
+  const resolvedDate = resolveYextSubfield(document, card?.date);
+
   return (
     <div className={`flex flex-col rounded-lg overflow-hidden border`}>
       <Section background={backgroundColors.background1.value} className="p-8">
-        {card.testimonial && (
-          <Body className="line-clamp-5">{card.testimonial}</Body>
+        {resolvedTestimonial && (
+          <Body className="line-clamp-5">{resolvedTestimonial}</Body>
         )}
       </Section>
       <Section background={cardBackgroundColor} className="p-8">
-        {card.authorName && <Heading level={3}>{card.authorName}</Heading>}
-        {card.date && <Body variant="sm">{card.date}</Body>}
+        {resolvedAuthorName && (
+          <Heading level={3}>{resolvedAuthorName}</Heading>
+        )}
+        {resolvedDate && <Body variant="sm">{resolvedDate}</Body>}
       </Section>
     </div>
   );
 };
 
-const TestimonialCardItem = (props: TestimonialCardProps) => {
+const TestimonialCardComponent = (props: TestimonialCardProps) => {
   const { card, styles, collection } = props;
   const document = useDocument();
 
   // If not in a collection, return single card
   if (!collection || collection.items.constantValueEnabled) {
-    const resolvedTestimonial = resolveYextSubfield(
-      document,
-      card?.testimonial
-    );
-    const resolvedAuthorName = resolveYextSubfield(document, card?.authorName);
-    const resolvedDate = resolveYextSubfield(document, card?.date);
-
     return (
-      <TestimonialCardWrapper
-        card={{
-          testimonial: resolvedTestimonial ?? "",
-          authorName: resolvedAuthorName ?? "",
-          date: resolvedDate ?? "",
-        }}
+      <TestimonialCardItem
+        document={document}
+        card={card}
         cardBackgroundColor={styles.cardBackgroundColor}
       />
     );
@@ -104,24 +98,11 @@ const TestimonialCardItem = (props: TestimonialCardProps) => {
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {
-          const resolvedTestimonial = resolveYextSubfield(
-            item,
-            card?.testimonial
-          );
-          const resolvedAuthorName = resolveYextSubfield(
-            item,
-            card?.authorName
-          );
-          const resolvedDate = resolveYextSubfield(item, card?.date);
-
           return (
-            <TestimonialCardWrapper
+            <TestimonialCardItem
               key={i}
-              card={{
-                testimonial: resolvedTestimonial ?? "",
-                authorName: resolvedAuthorName ?? "",
-                date: resolvedDate ?? "",
-              }}
+              document={item}
+              card={card}
               cardBackgroundColor={styles.cardBackgroundColor}
             />
           );
@@ -201,5 +182,5 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
       cardBackgroundColor: backgroundColors.background2.value,
     },
   },
-  render: (props) => <TestimonialCardItem {...props} />,
+  render: (props) => <TestimonialCardComponent {...props} />,
 };
