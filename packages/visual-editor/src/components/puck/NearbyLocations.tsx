@@ -167,47 +167,51 @@ const LocationCard = ({
   backgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <div className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border">
-      <Section background={backgroundColor} className={`components`}>
-        <Heading level={cards.headingLevel}>{name}</Heading>
-        {hours && (
-          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatus
-              hours={hours}
-              timezone={timezone}
-              currentTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              separatorTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              timeOptions={{
-                hour12: cards.hours.timeFormat === "12h",
-              }}
-              dayOptions={{
-                weekday: cards.hours.dayOfWeekFormat,
-              }}
-              dayOfWeekTemplate={
-                cards.hours.showDayNames ? undefined : () => <></>
-              }
-              className="h-full"
-            />
-          </div>
-        )}
-        {mainPhone && (
-          <PhoneAtom
-            phoneNumber={mainPhone}
-            format={cards.phoneNumberFormat}
-            includeHyperlink={cards.phoneNumberLink}
+    <Section
+      background={backgroundColor}
+      outerClassName={
+        "flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
+      }
+      applyPageLevelStyles={true}
+    >
+      <Heading level={cards.headingLevel}>{name}</Heading>
+      {hours && (
+        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+          <HoursStatus
+            hours={hours}
+            timezone={timezone}
+            currentTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            separatorTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            timeOptions={{
+              hour12: cards.hours.timeFormat === "12h",
+            }}
+            dayOptions={{
+              weekday: cards.hours.dayOfWeekFormat,
+            }}
+            dayOfWeekTemplate={
+              cards.hours.showDayNames ? undefined : () => <></>
+            }
+            className="h-full"
           />
-        )}
-        {address && (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-            <Address address={address} lines={[["line1"]]} />
-          </div>
-        )}
-      </Section>
-    </div>
+        </div>
+      )}
+      {mainPhone && (
+        <PhoneAtom
+          phoneNumber={mainPhone}
+          format={cards.phoneNumberFormat}
+          includeHyperlink={cards.phoneNumberLink}
+        />
+      )}
+      {address && (
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+          <Address address={address} lines={[["line1"]]} />
+        </div>
+      )}
+    </Section>
   );
 };
 
