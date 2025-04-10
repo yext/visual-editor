@@ -12,7 +12,7 @@ import {
   Heading,
   HeadingLevel,
   Body,
-  Section,
+  PageSection,
   backgroundColors,
   BackgroundStyle,
   EntityField,
@@ -21,6 +21,7 @@ import {
   Image,
   ImageProps,
   ImageWrapperProps,
+  Background,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
@@ -137,14 +138,12 @@ const PersonCard: React.FC<PersonCardProps> = ({
   const resolvedCTA = resolveYextEntityField<CTAProps>(document, cta);
 
   return (
-    <div
+    <Background
       key={index}
-      className="flex flex-col rounded-lg overflow-hidden border bg-white"
+      background={backgroundColors.background1.value}
+      className="flex flex-col rounded-lg overflow-hidden border"
     >
-      <Section
-        background={backgroundColors.background1.value}
-        className="flex p-8 gap-6"
-      >
+      <div className="flex p-8 gap-6">
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedHeadshot && (
             <EntityField
@@ -176,9 +175,9 @@ const PersonCard: React.FC<PersonCardProps> = ({
             </EntityField>
           )}
         </div>
-      </Section>
+      </div>
       <hr className="border" />
-      <Section background={backgroundColors.background1.value} className="p-8">
+      <div className="p-8">
         <div className="flex flex-col gap-4">
           {resolvedPhone && (
             <EntityField
@@ -239,8 +238,8 @@ const PersonCard: React.FC<PersonCardProps> = ({
             </EntityField>
           )}
         </div>
-      </Section>
-    </div>
+      </div>
+    </Background>
   );
 };
 
@@ -253,20 +252,21 @@ const PeopleWrapper: React.FC<PeopleProps> = (props) => {
   );
 
   return (
-    <Section background={backgroundColor} className="components">
-      <div className="flex flex-col gap-12 p-8">
-        {resolvedHeading && (
-          <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-          </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {people.map((person, index) => (
-            <PersonCard key={index} {...person} index={index} />
-          ))}
+    <PageSection
+      background={backgroundColor}
+      className="flex flex-col gap-8 md:gap-12"
+    >
+      {resolvedHeading && (
+        <div className="text-center">
+          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
         </div>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {people.map((person, index) => (
+          <PersonCard key={index} {...person} index={index} />
+        ))}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 

@@ -10,9 +10,10 @@ import {
   backgroundColors,
   ThemeOptions,
   HeadingLevel,
-  Section,
+  PageSection,
   PhoneAtom,
   fetchNearbyLocations,
+  Background,
 } from "../../index.js";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
@@ -167,13 +168,10 @@ const LocationCard = ({
   backgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <Section
+    <Background
       background={backgroundColor}
-      className={
-        "flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-8"
-      }
-      verticalPadding={"default"}
-      as={"section"}
+      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
+      as="section"
     >
       <Heading level={cards.headingLevel}>{name}</Heading>
       {hours && (
@@ -212,7 +210,7 @@ const LocationCard = ({
           <Address address={address} lines={[["line1"]]} />
         </div>
       )}
-    </Section>
+    </Background>
   );
 };
 
@@ -272,11 +270,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 
   return (
-    <Section
-      background={styles.backgroundColor}
-      className={`components`}
-      applyPageLevelStyles={true}
-    >
+    <PageSection background={styles.backgroundColor}>
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
@@ -306,7 +300,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
             </div>
           )}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 
