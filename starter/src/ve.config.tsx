@@ -46,8 +46,8 @@ import {
   CollectionProps,
   ExampleRepeatableItemComponent,
   ExampleRepeatableItemProps,
-  Testimonials,
-  TestimonialsProps,
+  TestimonialCard,
+  TestimonialCardProps,
   NearbyLocations,
   NearbyLocationsProps,
   PersonCard,
@@ -95,7 +95,7 @@ type MainProps = {
   SectionContainer: SectionContainerProps;
   TextList: TextListProps;
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
-  Testimonials: TestimonialsProps;
+  TestimonialCard: TestimonialCardProps;
   NearbyLocations: NearbyLocationsProps;
   PersonCard: PersonCardProps;
   Events: EventsProps;
@@ -132,7 +132,7 @@ const components: Config<MainProps>["components"] = {
   MapboxStaticMap,
   ExampleRepeatableItemComponent,
   SectionContainer,
-  Testimonials,
+  TestimonialCard,
   NearbyLocations,
   PersonCard,
   Events,
@@ -151,7 +151,6 @@ const pageSections: (keyof MainProps)[] = [
   "InsightsSection",
   "PhotoGallerySection",
   "Promo",
-  "Testimonials",
   "Events",
   "SectionContainer",
 ];
@@ -173,7 +172,11 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
-const cardBlocks: (keyof MainProps)[] = ["ProductCard", "PersonCard"];
+const cardBlocks: (keyof MainProps)[] = [
+  "ProductCard",
+  "PersonCard",
+  "TestimonialCard",
+];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {

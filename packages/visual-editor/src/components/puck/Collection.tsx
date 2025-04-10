@@ -19,6 +19,7 @@ export const COLLECTION_COMPONENTS = [
   "ExampleRepeatableItemComponent",
   "ProductCard",
   "PersonCard",
+  "TestimonialCard",
 ];
 
 export interface CollectionProps {
