@@ -8,7 +8,7 @@ import {
   ThemeOptions,
   Heading,
   Body,
-  Section,
+  Background,
   backgroundColors,
   BackgroundStyle,
   YextCollection,
@@ -57,17 +57,20 @@ const TestimonialCardItem = ({
 
   return (
     <div className={`flex flex-col rounded-lg overflow-hidden border`}>
-      <Section background={backgroundColors.background1.value} className="p-8">
+      <Background
+        background={backgroundColors.background1.value}
+        className="p-8"
+      >
         {resolvedTestimonial && (
           <Body className="line-clamp-5">{resolvedTestimonial}</Body>
         )}
-      </Section>
-      <Section background={cardBackgroundColor} className="p-8">
+      </Background>
+      <Background background={cardBackgroundColor} className="p-8">
         {resolvedAuthorName && (
           <Heading level={3}>{resolvedAuthorName}</Heading>
         )}
         {resolvedDate && <Body variant="sm">{resolvedDate}</Body>}
-      </Section>
+      </Background>
     </div>
   );
 };
