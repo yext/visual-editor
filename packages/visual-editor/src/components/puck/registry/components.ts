@@ -72,7 +72,7 @@ export const ui: Registry["items"] = [
   {
     name: "Address",
     type: "registry:ui",
-    registryDependencies: ["body", "cta"],
+    registryDependencies: ["cta"],
     files: [{ path: "Address.tsx", type: "registry:ui" }],
   },
   {
@@ -121,6 +121,12 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     registryDependencies: ["body", "cta", "mail_outline"],
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "EventCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/EventCard.tsx", type: "registry:ui" }],
   },
   {
     name: "FAQsSection",
@@ -182,17 +188,10 @@ export const ui: Registry["items"] = [
     files: [{ path: "Image.tsx", type: "registry:ui" }],
   },
   {
-    name: "People",
+    name: "Person Card",
     type: "registry:ui",
-    registryDependencies: [
-      "pageSection",
-      "heading",
-      "background",
-      "body",
-      "cta",
-      "image",
-    ],
-    files: [{ path: "People.tsx", type: "registry:ui" }],
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "PersonCard.tsx", type: "registry:ui" }],
   },
   {
     name: "Phone",
@@ -213,21 +212,15 @@ export const ui: Registry["items"] = [
     files: [{ path: "Promo.tsx", type: "registry:ui" }],
   },
   {
-    name: "Testimonials",
+    name: "TestimonialCard",
     type: "registry:ui",
     registryDependencies: ["pageSection", "background", "heading", "body"],
-    files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
+    files: [{ path: "card/TestimonialCard.tsx", type: "registry:ui" }],
   },
   {
     name: "TextList",
     type: "registry:ui",
     files: [{ path: "TextList.tsx", type: "registry:ui" }],
-  },
-  {
-    name: "Events",
-    type: "registry:ui",
-    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
-    files: [{ path: "Events.tsx", type: "registry:ui" }],
   },
   {
     name: "Hero Section",
@@ -268,7 +261,7 @@ export const ui: Registry["items"] = [
     files: [{ path: "CoreInfoSection.tsx", type: "registry:ui" }],
   },
   {
-    name: "InsightsSection",
+    name: "InsightCard",
     type: "registry:ui",
     registryDependencies: [
       "pageSection",
@@ -278,6 +271,6 @@ export const ui: Registry["items"] = [
       "cta",
       "image",
     ],
-    files: [{ path: "InsightsSection.tsx", type: "registry:ui" }],
+    files: [{ path: "cards/InsightCard.tsx", type: "registry:ui" }],
   },
 ];

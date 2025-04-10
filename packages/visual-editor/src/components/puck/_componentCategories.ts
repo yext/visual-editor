@@ -34,6 +34,13 @@ import { TextList, TextListProps } from "./TextList.tsx";
 import { Header, HeaderProps } from "./Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
+import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
+import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
+import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
+import {
+  TestimonialCardProps,
+  TestimonialCard,
+} from "./cards/TestimonialCard.tsx";
 
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
@@ -80,19 +87,19 @@ export const LayoutBlockCategory = Object.keys(
 ) as (keyof LayoutBlockCategoryProps)[];
 
 export interface CardCategoryProps {
-  // EventCard: EventCardProps;
-  // InsightCard: InsightCardProps;
-  // PersonCard: PersonCardProps;
+  EventCard: EventCardProps;
+  InsightCard: InsightCardProps;
+  PersonCard: PersonCardProps;
   ProductCard: ProductCardProps;
-  // TestimonialCard: TestimonialCardProps
+  TestimonialCard: TestimonialCardProps;
 }
 
 export const CardCategoryComponents = {
-  // EventCard,
-  // InsightCard,
-  // PersonCard,
+  EventCard,
+  InsightCard,
+  PersonCard,
   ProductCard,
-  // TestimonialCard
+  TestimonialCard,
 };
 
 export const CardCategory = Object.keys(

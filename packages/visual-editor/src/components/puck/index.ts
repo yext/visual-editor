@@ -2,10 +2,6 @@ export * from "./atoms/index.ts";
 export * from "./cards/index.ts";
 export * from "./_componentCategories.ts";
 export { Address, type AddressProps } from "./Address.tsx";
-export {
-  InsightsSection,
-  type InsightsSectionProps,
-} from "./InsightsSection.tsx";
 export { BannerSection, type BannerSectionProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
 export {
@@ -42,14 +38,11 @@ export {
   collectionWrapperClassName,
   type CollectionProps,
 } from "./Collection.tsx";
-export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
 } from "./NearbyLocations.tsx";
-export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
-export { Events, type EventsProps } from "./Events.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,

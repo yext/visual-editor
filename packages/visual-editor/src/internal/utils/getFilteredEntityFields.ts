@@ -1,4 +1,3 @@
-import { useEntityFields } from "../../hooks/useEntityFields.tsx";
 import { YextSchemaField } from "../../types/entityFields.ts";
 
 type Only<T, U> = {
@@ -144,14 +143,14 @@ const getEntityTypeToFieldNames = (
 };
 
 export const getFilteredEntityFields = <T extends Record<string, any>>(
+  allEntityFields: YextSchemaField[] | null,
   filter: RenderEntityFieldFilter<T>
 ) => {
-  const entityFields = useEntityFields();
-  if (!entityFields) {
+  if (!allEntityFields) {
     return [];
   }
 
-  let filteredEntityFields = entityFields.filter(
+  let filteredEntityFields = allEntityFields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
   );
 
