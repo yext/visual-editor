@@ -50,8 +50,8 @@ import {
   TestimonialCardProps,
   NearbyLocations,
   NearbyLocationsProps,
-  People,
-  PeopleProps,
+  PersonCard,
+  PersonCardProps,
   SectionContainer,
   SectionContainerProps,
   FAQsSection,
@@ -97,7 +97,7 @@ type MainProps = {
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
   TestimonialCard: TestimonialCardProps;
   NearbyLocations: NearbyLocationsProps;
-  People: PeopleProps;
+  PersonCard: PersonCardProps;
   EventCard: EventCardProps;
   HeroSection: HeroSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
@@ -134,7 +134,7 @@ const components: Config<MainProps>["components"] = {
   SectionContainer,
   TestimonialCard,
   NearbyLocations,
-  People,
+  PersonCard,
   EventCard,
   HeroSection,
   PhotoGallerySection,
@@ -150,7 +150,6 @@ const pageSections: (keyof MainProps)[] = [
   "HeroSection",
   "PhotoGallerySection",
   "Promo",
-  "People",
   "SectionContainer",
 ];
 
@@ -171,7 +170,13 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
-const cardBlocks: (keyof MainProps)[] = ["EventCard", "InsightCard", "ProductCard", "TestimonialCard"];
+const cardBlocks: (keyof MainProps)[] = [
+  "EventCard",
+  "InsightCard",
+  "ProductCard",
+  "PersonCard",
+  "TestimonialCard",
+];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
