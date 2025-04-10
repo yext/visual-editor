@@ -10,9 +10,9 @@ import {
   handleResolveFieldsForCollections,
   Body,
   YextCollection,
-} from "../../index.js";
+} from "../../../index.js";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { handleComplexImages } from "./atoms/image.js";
+import { handleComplexImages } from "../atoms/image.js";
 
 export type ExampleRepeatableItemProps = {
   text?: YextEntityField<string>;

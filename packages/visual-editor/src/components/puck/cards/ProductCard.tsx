@@ -18,9 +18,9 @@ import {
   Heading,
   Image,
   themeManagerCn,
-} from "../../index.js";
+} from "../../../index.js";
 import { ImageType } from "@yext/pages-components";
-import { handleComplexImages } from "./atoms/image.js";
+import { handleComplexImages } from "../atoms/image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x200";
 
