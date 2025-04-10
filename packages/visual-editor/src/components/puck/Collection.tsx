@@ -20,6 +20,7 @@ export const COLLECTION_COMPONENTS = [
   "ExampleRepeatableItemComponent",
   "InsightCard",
   "ProductCard",
+  "PersonCard",
   "TestimonialCard",
 ];
 
