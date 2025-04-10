@@ -15,7 +15,7 @@ import {
   resolveYextSubfield,
   handleResolveFieldsForCollections,
   YextCollectionSubfieldSelector,
-} from "../../index.js";
+} from "../../../index.js";
 
 export type TestimonialCardProps = {
   card?: {

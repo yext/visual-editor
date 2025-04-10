@@ -40,10 +40,6 @@ export {
   COLLECTION_COMPONENTS,
 } from "./CollectionSection.tsx";
 export {
-  TestimonialCard,
-  type TestimonialCardProps,
-} from "./TestimonialCard.tsx";
-export {
   NearbyLocations,
   type NearbyLocationsProps,
 } from "./NearbyLocations.tsx";

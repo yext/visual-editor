@@ -173,7 +173,7 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
-const cardBlocks: (keyof MainProps)[] = ["ProductCard"];
+const cardBlocks: (keyof MainProps)[] = ["ProductCard", "TestimonialCard"];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
