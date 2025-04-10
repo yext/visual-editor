@@ -15,13 +15,13 @@ import {
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
 
-export type BannerProps = {
+export type BannerSectionProps = {
   text: YextEntityField<string>;
   textAlignment: "left" | "right" | "center";
   backgroundColor?: BackgroundStyle;
 };
 
-const bannerFields: Fields<BannerProps> = {
+const bannerSectionFields: Fields<BannerSectionProps> = {
   text: YextEntityFieldSelector<any, string>({
     label: "Text",
     filter: {
@@ -47,7 +47,7 @@ const BannerComponent = ({
   text,
   textAlignment,
   backgroundColor,
-}: BannerProps) => {
+}: BannerSectionProps) => {
   const document = useDocument();
   const resolvedText = resolveYextEntityField<string>(document, text);
 
@@ -68,9 +68,9 @@ const BannerComponent = ({
   );
 };
 
-export const Banner: ComponentConfig<BannerProps> = {
-  label: "Banner",
-  fields: bannerFields,
+export const BannerSection: ComponentConfig<BannerSectionProps> = {
+  label: "Banner Section",
+  fields: bannerSectionFields,
   defaultProps: {
     text: {
       field: "",

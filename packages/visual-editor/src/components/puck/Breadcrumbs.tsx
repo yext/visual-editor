@@ -1,7 +1,7 @@
 import { Body, useTemplateProps, MaybeLink, PageSection } from "../../index.js";
 import { ComponentConfig } from "@measured/puck";
 
-export type BreadcrumbsProps = {
+export type BreadcrumbsSectionProps = {
   separator?: string;
 };
 
@@ -40,7 +40,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 // then displays nothing. In the case of a root DM page, there are
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
-export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
+export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
@@ -80,7 +80,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   );
 };
 
-export const Breadcrumbs: ComponentConfig<BreadcrumbsProps> = {
+export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: "Breadcrumbs",
   render: (props) => <BreadcrumbsComponent {...props} />,
 };

@@ -6,6 +6,9 @@ import {
   themeManagerCn,
   ThemeOptions,
   Background,
+  CardCategory,
+  ContentBlockCategory,
+  LayoutBlockCategory,
 } from "../../index.js";
 
 export interface FlexProps extends layoutProps {
@@ -49,8 +52,11 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
             justifyContent,
             flexWrap: wrap,
           }}
-          // TODO: Update disallow
-          disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
+          allow={[
+            ...CardCategory,
+            ...ContentBlockCategory,
+            ...LayoutBlockCategory.filter((x) => x !== "Collection"),
+          ]}
         />
       </Background>
     );

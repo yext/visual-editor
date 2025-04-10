@@ -19,7 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
 import * as React from "react";
 
-export interface NearbyLocationsProps {
+export interface NearbyLocationsSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
@@ -44,7 +44,7 @@ export interface NearbyLocationsProps {
   limit: number;
 }
 
-const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
+const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
   styles: {
     label: "Styles",
     type: "object",
@@ -159,7 +159,7 @@ const LocationCard = ({
   mainPhone,
   backgroundColor,
 }: {
-  cards: NearbyLocationsProps["cards"];
+  cards: NearbyLocationsSectionProps["cards"];
   name: string;
   address: any;
   hours: any;
@@ -214,7 +214,9 @@ const LocationCard = ({
   );
 };
 
-const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
+const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
+  props
+) => {
   const {
     heading,
     cards,
@@ -304,42 +306,43 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 };
 
-export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
-  label: "Nearby Locations",
-  fields: nearbyLocationsFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-    },
-    heading: {
-      text: {
-        field: "",
-        constantValue: "Nearby Locations",
-        constantValueEnabled: true,
+export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
+  {
+    label: "Nearby Locations Section",
+    fields: nearbyLocationsSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background1.value,
+        cardBackgroundColor: backgroundColors.background1.value,
       },
-      level: 3,
-    },
-    cards: {
-      headingLevel: 4,
-      hours: {
-        showCurrentStatus: true,
-        timeFormat: "12h",
-        showDayNames: true,
-        dayOfWeekFormat: "long",
+      heading: {
+        text: {
+          field: "",
+          constantValue: "Nearby Locations",
+          constantValueEnabled: true,
+        },
+        level: 3,
       },
-      phoneNumberFormat: "domestic",
-      phoneNumberLink: false,
-    },
-    radius: 10,
-    limit: 3,
-    coordinate: {
-      field: "yextDisplayCoordinate",
-      constantValue: {
-        latitude: 0,
-        longitude: 0,
+      cards: {
+        headingLevel: 4,
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: true,
+          dayOfWeekFormat: "long",
+        },
+        phoneNumberFormat: "domestic",
+        phoneNumberLink: false,
+      },
+      radius: 10,
+      limit: 3,
+      coordinate: {
+        field: "yextDisplayCoordinate",
+        constantValue: {
+          latitude: 0,
+          longitude: 0,
+        },
       },
     },
-  },
-  render: (props) => <NearbyLocationsComponent {...props} />,
-};
+    render: (props) => <NearbyLocationsComponent {...props} />,
+  };

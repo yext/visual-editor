@@ -1,6 +1,13 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { themeManagerCn, backgroundColors, Background } from "../../index.js";
+import {
+  themeManagerCn,
+  backgroundColors,
+  Background,
+  ContentBlockCategory,
+  CardCategory,
+  LayoutBlockCategory,
+} from "../../index.js";
 import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 
 export interface GridProps extends layoutProps {
@@ -48,7 +55,11 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
               <DropZone
                 className="flex flex-col w-full"
                 zone={`column-${idx}`}
-                disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
+                allow={[
+                  ...CardCategory,
+                  ...ContentBlockCategory,
+                  ...LayoutBlockCategory.filter((x) => x !== "Collection"),
+                ]}
               />
             </div>
           ))}

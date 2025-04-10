@@ -26,7 +26,7 @@ import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-export interface PromoProps {
+export interface PromoSectionProps {
   image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
@@ -47,7 +47,7 @@ export interface PromoProps {
   };
 }
 
-const promoFields: Fields<PromoProps> = {
+const promoSectionFields: Fields<PromoSectionProps> = {
   image: {
     type: "object",
     label: "Image",
@@ -126,7 +126,7 @@ const promoFields: Fields<PromoProps> = {
   },
 };
 
-const PromoWrapper: React.FC<PromoProps> = ({
+const PromoWrapper: React.FC<PromoSectionProps> = ({
   image,
   title,
   description,
@@ -191,9 +191,9 @@ const PromoWrapper: React.FC<PromoProps> = ({
   );
 };
 
-export const Promo: ComponentConfig<PromoProps> = {
-  label: "Promo",
-  fields: promoFields,
+export const PromoSection: ComponentConfig<PromoSectionProps> = {
+  label: "Promo Section",
+  fields: promoSectionFields,
   defaultProps: {
     image: {
       image: {
@@ -240,9 +240,9 @@ export const Promo: ComponentConfig<PromoProps> = {
   },
   resolveFields(data) {
     return {
-      ...promoFields,
+      ...promoSectionFields,
       image: {
-        ...promoFields.image,
+        ...promoSectionFields.image,
         objectFields: resolvedImageFields(data.props.image.layout),
       },
     };

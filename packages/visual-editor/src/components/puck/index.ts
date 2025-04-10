@@ -1,13 +1,17 @@
 export * from "./atoms/index.ts";
 export * from "./cards/index.ts";
+export * from "./_componentCategories.ts";
 export { Address, type AddressProps } from "./Address.tsx";
 export {
   InsightsSection,
   type InsightsSectionProps,
 } from "./InsightsSection.tsx";
-export { Banner, type BannerProps } from "./Banner.tsx";
+export { BannerSection, type BannerSectionProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
-export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";
+export {
+  BreadcrumbsSection,
+  type BreadcrumbsSectionProps,
+} from "./Breadcrumbs.tsx";
 export {
   CoreInfoSection,
   type CoreInfoSectionProps,
@@ -32,17 +36,16 @@ export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
-export { Promo, type PromoProps } from "./Promo.tsx";
+export { PromoSection, type PromoSectionProps } from "./Promo.tsx";
 export {
   Collection,
   collectionWrapperClassName,
   type CollectionProps,
-  COLLECTION_COMPONENTS,
 } from "./Collection.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
-  NearbyLocations,
-  type NearbyLocationsProps,
+  NearbyLocationsSection,
+  type NearbyLocationsSectionProps,
 } from "./NearbyLocations.tsx";
 export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";

@@ -211,7 +211,7 @@ const PhotoGallerySectionWrapper = ({
 };
 
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
-  label: "Photo Gallery",
+  label: "Photo Gallery Section",
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {

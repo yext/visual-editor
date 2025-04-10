@@ -10,6 +10,8 @@ import {
   resolveYextEntityField,
   HeadingProps,
   backgroundColors,
+  OtherCategory,
+  PageSectionCategory,
 } from "../../index.ts";
 import {
   ComponentConfig,
@@ -60,9 +62,7 @@ const SectionContainerComponent = (
       )}
       <DropZone
         zone="page-section"
-        // disallow={
-        //   TODO: ADD DISALLOW LIST
-        // }
+        disallow={[...OtherCategory, ...PageSectionCategory]}
       />
     </PageSection>
   );

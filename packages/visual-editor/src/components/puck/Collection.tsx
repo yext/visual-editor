@@ -12,12 +12,8 @@ import {
   YextEntityFieldSelector,
   OptionalNumberField,
   YextCollection,
+  CardCategory,
 } from "../../index.js";
-
-export const COLLECTION_COMPONENTS = [
-  "ExampleRepeatableItemComponent",
-  "ProductCard",
-];
 
 export const collectionWrapperClassName =
   "flex flex-wrap gap-4 flex-col sm:flex-row items-center";
@@ -86,7 +82,7 @@ const CollectionSectionWrapper: React.FC<
     <DropZone
       zone="collection-dropzone"
       className={collectionWrapperClassName}
-      allow={COLLECTION_COMPONENTS}
+      allow={CardCategory}
     />
   );
 };
