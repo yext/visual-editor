@@ -12,6 +12,7 @@ import {
   backgroundColors,
   OtherCategory,
   PageSectionCategory,
+  useDocument,
 } from "../../index.ts";
 import {
   ComponentConfig,
@@ -48,6 +49,8 @@ const SectionContainerComponent = (
   props: WithId<WithPuckProps<SectionContainerProps>>
 ) => {
   const { background, sectionHeading } = props;
+  const document = useDocument();
+
   const resolvedHeadingText = resolveYextEntityField<string>(
     document,
     sectionHeading.text
