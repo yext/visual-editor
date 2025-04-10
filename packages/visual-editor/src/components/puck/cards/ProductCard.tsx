@@ -17,7 +17,6 @@ import {
   Heading,
   Image,
   Background,
-  collectionWrapperClassName,
 } from "../../../index.js";
 import { ImageType } from "@yext/pages-components";
 import { handleComplexImages } from "../atoms/image.js";
@@ -69,7 +68,7 @@ const ProductCardItem = ({
 
   return (
     <Background
-      className="flex flex-col rounded-lg overflow-hidden border lg:max-w-[32%]"
+      className="flex flex-col justify-between rounded-lg overflow-hidden border"
       background={cardBackgroundColor}
     >
       {image && <Image image={image} layout={"auto"} />}
@@ -130,7 +129,7 @@ const ProductCardComponent = (props: ProductCardProps) => {
 
   // Return one card with resolved subfields for each item in the parent
   return (
-    <div className={collectionWrapperClassName}>
+    <div className="max-w-pageSection-contentWidth mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {
