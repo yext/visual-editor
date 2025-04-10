@@ -224,7 +224,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
         constantValue: "Gallery",
         constantValueEnabled: true,
       },
-      level: 3,
+      level: 2,
     },
     images: [
       {
