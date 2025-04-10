@@ -315,7 +315,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
   fields: nearbyLocationsFields,
   defaultProps: {
     styles: {
-      backgroundColor: backgroundColors.background2.value,
+      backgroundColor: backgroundColors.background1.value,
       cardBackgroundColor: backgroundColors.background1.value,
     },
     heading: {
