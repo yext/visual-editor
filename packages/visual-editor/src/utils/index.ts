@@ -1,5 +1,9 @@
 export { applyTheme } from "./applyTheme.ts";
-export { resolveYextEntityField } from "./resolveYextEntityField.ts";
+export {
+  resolveYextEntityField,
+  resolveYextSubfield,
+  handleResolveFieldsForCollections,
+} from "./resolveYextEntityField.ts";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {

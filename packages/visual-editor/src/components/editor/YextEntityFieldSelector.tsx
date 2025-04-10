@@ -26,10 +26,16 @@ export type YextEntityField<T> = {
   constantValueEnabled?: boolean;
 };
 
+export type YextCollection = {
+  items: YextEntityField<Array<any>>;
+  limit: string | number;
+};
+
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
     filter: RenderEntityFieldFilter<T>;
+    isCollection?: boolean;
   };
 
 const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -64,9 +70,13 @@ const getConstantConfigFromType = (
  * @param typeFilter
  */
 const returnConstantFieldConfig = (
-  typeFilter: EntityFieldTypes[],
+  typeFilter: EntityFieldTypes[] | undefined,
   isList: boolean
 ): Field | undefined => {
+  if (!typeFilter) {
+    return undefined;
+  }
+
   let fieldConfiguration: Field | undefined;
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = getConstantConfigFromType(
@@ -109,9 +119,64 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       return (
         <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
           <ConstantValueModeToggler
-            fieldTypeFilter={props.filter.types}
+            fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
+            alwaysShowConstantValueToggle={!!props.isCollection}
+          />
+          {value?.constantValueEnabled && !props.isCollection && (
+            <ConstantValueInput<T>
+              onChange={onChange}
+              value={value}
+              filter={props.filter}
+            />
+          )}
+          {!value?.constantValueEnabled && (
+            <EntityFieldInput<T>
+              onChange={onChange}
+              value={value}
+              filter={props.filter}
+            />
+          )}
+        </FieldLabel>
+      );
+    },
+  };
+};
+
+/**
+ * Allows the user to select an entity subfield from the document and set a constant value.
+ */
+export const YextCollectionSubfieldSelector = <
+  T extends Record<string, any>,
+  U,
+>(
+  props: RenderYextEntityFieldSelectorProps<T>
+): Field<YextEntityField<U>> => {
+  // If the field is not part of a collection, redirect to the normal entity field selector
+  if (!props.isCollection) {
+    return YextEntityFieldSelector({ ...props });
+  }
+
+  return {
+    type: "custom",
+    label: props.label,
+    render: ({ value, onChange }: RenderProps) => {
+      const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
+        onChange({
+          field: value?.field ?? "",
+          constantValue: value?.constantValue ?? "",
+          constantValueEnabled: constantValueEnabled,
+        });
+      };
+
+      return (
+        <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
+          <ConstantValueModeToggler
+            fieldTypeFilter={props.filter.types ?? []}
+            constantValueEnabled={value?.constantValueEnabled}
+            toggleConstantValueEnabled={toggleConstantValueEnabled}
+            alwaysShowConstantValueToggle={!!props.isCollection}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
@@ -136,20 +201,24 @@ const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
+  alwaysShowConstantValueToggle,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
+  alwaysShowConstantValueToggle: boolean;
 }) => {
   const random = Math.floor(Math.random() * 999999);
   const entityButtonId = `ve-use-entity-value-${random}`;
   const constantButtonId = `ve-use-constant-value-${random}`;
 
-  const constantValueInputSupported = fieldTypeFilter.some(
-    (fieldType) =>
-      Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
-      Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-  );
+  const constantValueInputSupported =
+    alwaysShowConstantValueToggle ||
+    fieldTypeFilter.some(
+      (fieldType) =>
+        Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
+        Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
+    );
 
   return (
     <div className="ve-w-full">
@@ -240,9 +309,20 @@ const EntityFieldInput = <T extends Record<string, any>>({
   value,
 }: InputProps<T>) => {
   const basicSelectorField = React.useMemo(() => {
+    let filteredEntityFields = getFilteredEntityFields(filter);
+
+    // If there are no direct children, return the parent field if it is a list
+    if (filter.directChildrenOf && filteredEntityFields.length === 0) {
+      filteredEntityFields = getFilteredEntityFields({
+        allowList: [filter.directChildrenOf],
+        types: filter.types,
+        includeListsOnly: true,
+      });
+    }
+
     return BasicSelector("Entity Field", [
       { value: "", label: "Select a Content field" },
-      ...getFilteredEntityFields(filter).map((entityFieldNameToSchema) => {
+      ...filteredEntityFields.map((entityFieldNameToSchema) => {
         return {
           label: entityFieldNameToSchema.name,
           value: entityFieldNameToSchema.name,

@@ -28,8 +28,9 @@ type DisallowList<T extends Record<string, any>> = {
 };
 
 type EntityFieldTypesFilter = {
-  types: EntityFieldTypes[];
+  types?: EntityFieldTypes[];
   includeListsOnly?: boolean;
+  directChildrenOf?: string;
 };
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
@@ -47,7 +48,7 @@ export type EntityFieldTypes =
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
 
 // Populate this with fields that aren't allowed to have subfields.
-const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = [];
+const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = ["type.hours"];
 
 type EntityFieldNameAndSchema = {
   name: string;
@@ -57,16 +58,19 @@ type EntityFieldNameAndSchema = {
 /**
  * Returns a list of {@link EntityFieldNameAndSchema} given a {@link YextSchemaField}.
  * @param schemaField The schema field for which to get the field names.
+ * @param includeListChildren Whether to include the children of list types
  * @returns Entity field names and their corresponding schema fields.
  */
 const getEntityFieldNames = (
-  schemaField: YextSchemaField
+  schemaField: YextSchemaField,
+  includeListChildren: boolean
 ): EntityFieldNameAndSchema[] => {
-  return walkSubfields(schemaField, "");
+  return walkSubfields(schemaField, includeListChildren, "");
 };
 
 const walkSubfields = (
   schemaField: YextSchemaField,
+  includeListChildren: boolean,
   fieldName: string
 ): EntityFieldNameAndSchema[] => {
   const fieldNameInternal = fieldName
@@ -80,7 +84,7 @@ const walkSubfields = (
     return [{ name: fieldNameInternal, schemaField: schemaField }];
   }
 
-  if (schemaField.definition.isList) {
+  if (!includeListChildren && schemaField.definition.isList) {
     return [{ name: fieldNameInternal, schemaField: schemaField }]; // skip all children of list types
   }
 
@@ -93,7 +97,9 @@ const walkSubfields = (
     schemaField.children?.fields?.length > 0
   ) {
     for (const child of schemaField.children.fields) {
-      fieldNames.push(...walkSubfields(child, fieldNameInternal));
+      fieldNames.push(
+        ...walkSubfields(child, includeListChildren, fieldNameInternal)
+      );
     }
   }
 
@@ -120,10 +126,11 @@ function appendToMapList<K, V>(
 }
 
 const getEntityTypeToFieldNames = (
-  schemaFields: YextSchemaField[]
+  schemaFields: YextSchemaField[],
+  includeListChildren: boolean
 ): Map<string, string[]> => {
   return schemaFields.reduce((prev: Map<string, string[]>, field) => {
-    const fieldNameToSchemas = getEntityFieldNames(field);
+    const fieldNameToSchemas = getEntityFieldNames(field, includeListChildren);
 
     for (const fieldToSchema of fieldNameToSchemas) {
       const typeName = getTypeFromSchemaField(fieldToSchema.schemaField);
@@ -172,7 +179,10 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   // Augment to include subfields
   let filteredEntitySubFields: YextSchemaField[] = [];
   for (const yextSchemaField of filteredEntityFields) {
-    const entityFieldNames = getEntityFieldNames(yextSchemaField);
+    const entityFieldNames = getEntityFieldNames(
+      yextSchemaField,
+      !!filter?.directChildrenOf?.length
+    );
 
     for (const entityFieldName of entityFieldNames) {
       filteredEntitySubFields.push({
@@ -182,8 +192,25 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     }
   }
 
+  if (filter?.directChildrenOf) {
+    filteredEntitySubFields = filteredEntitySubFields.filter((field) => {
+      if (!field.name.startsWith(filter.directChildrenOf!)) {
+        return false;
+      }
+
+      // filter children of children
+      const numberOfChildren =
+        field.name.substring(filter.directChildrenOf!.length).split(".")
+          .length - 1;
+      return numberOfChildren === 1;
+    });
+  }
+
   if (filter?.types) {
-    const typeToFieldNames = getEntityTypeToFieldNames(filteredEntitySubFields);
+    const typeToFieldNames = getEntityTypeToFieldNames(
+      filteredEntitySubFields,
+      !!filter?.directChildrenOf?.length
+    );
 
     const updatedFilteredEntitySubFields: YextSchemaField[] = [];
     filter.types.forEach((type) => {

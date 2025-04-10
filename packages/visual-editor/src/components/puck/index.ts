@@ -37,6 +37,15 @@ export {
   type ProductsSectionProps,
 } from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
+export {
+  CollectionSection,
+  type CollectionSectionProps,
+  COLLECTION_COMPONENTS,
+} from "./CollectionSection.tsx";
+export {
+  ExampleRepeatableItemComponent,
+  type ExampleRepeatableItemProps,
+} from "./ExampleRepeatableItem.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
   NearbyLocations,
