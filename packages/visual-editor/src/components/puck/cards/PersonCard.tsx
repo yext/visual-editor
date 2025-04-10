@@ -338,7 +338,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
       },
       email: {
         field: "",
-        constantValue: "jkelley@[company].com",
+        constantValue: "johndoe@[company].com",
         constantValueEnabled: true,
       },
       cta: {
