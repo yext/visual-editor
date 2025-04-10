@@ -13,7 +13,6 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   CTA,
-  Body,
 } from "../../index.ts";
 
 export type AddressProps = {
@@ -57,12 +56,12 @@ const AddressComponent = ({
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >
-          <Body variant="base">
+          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
             <RenderAddress
               address={address as AddressType}
               lines={[["line1"], ["line2", "city", "region", "postalCode"]]}
             />
-          </Body>
+          </div>
           {coordinates && showGetDirections && (
             <CTA
               link={coordinates}

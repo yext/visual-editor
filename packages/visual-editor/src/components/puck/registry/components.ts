@@ -72,7 +72,7 @@ export const ui: Registry["items"] = [
   {
     name: "Address",
     type: "registry:ui",
-    registryDependencies: ["body", "cta"],
+    registryDependencies: ["cta"],
     files: [{ path: "Address.tsx", type: "registry:ui" }],
   },
   {
