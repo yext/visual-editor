@@ -40,7 +40,6 @@ export {
   type NearbyLocationsProps,
 } from "./NearbyLocations.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
-export { Events, type EventsProps } from "./Events.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,
