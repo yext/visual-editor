@@ -12,6 +12,7 @@ import {
   YextEntityFieldSelector,
   OptionalNumberField,
   YextCollection,
+  themeManagerCn,
 } from "../../index.js";
 
 export const COLLECTION_COMPONENTS = [
@@ -19,13 +20,13 @@ export const COLLECTION_COMPONENTS = [
   "ProductCard",
 ];
 
-export const collectionWrapperClassName =
-  "flex flex-wrap gap-4 flex-col sm:flex-row items-center";
-
 export interface CollectionProps {
   collection: YextCollection;
   shouldClearDropZone?: boolean;
 }
+
+export const collectionWrapperClassName =
+  "flex flex-wrap gap-4 flex-col sm:flex-row items-center";
 
 const collectionFields: Fields<CollectionProps> = {
   collection: {
@@ -85,7 +86,9 @@ const CollectionSectionWrapper: React.FC<
   return (
     <DropZone
       zone="collection-dropzone"
-      className={collectionWrapperClassName}
+      className={themeManagerCn(
+        "max-w-pageSection-contentWidth mx-auto flex flex-wrap justify-center sm:flex-row items-center"
+      )}
       allow={COLLECTION_COMPONENTS}
     />
   );
