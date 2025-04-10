@@ -123,6 +123,12 @@ export const ui: Registry["items"] = [
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
   },
   {
+    name: "EventCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/EventCard.tsx", type: "registry:ui" }],
+  },
+  {
     name: "FAQsSection",
     type: "registry:ui",
     registryDependencies: ["body", "heading", "pageSection", "accordion"],
@@ -224,12 +230,6 @@ export const ui: Registry["items"] = [
     files: [{ path: "TextList.tsx", type: "registry:ui" }],
   },
   {
-    name: "Events",
-    type: "registry:ui",
-    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
-    files: [{ path: "Events.tsx", type: "registry:ui" }],
-  },
-  {
     name: "Hero Section",
     type: "registry:ui",
     files: [{ path: "HeroSection.tsx", type: "registry:ui" }],
@@ -268,7 +268,7 @@ export const ui: Registry["items"] = [
     files: [{ path: "CoreInfoSection.tsx", type: "registry:ui" }],
   },
   {
-    name: "InsightsSection",
+    name: "InsightCard",
     type: "registry:ui",
     registryDependencies: [
       "pageSection",
@@ -278,6 +278,6 @@ export const ui: Registry["items"] = [
       "cta",
       "image",
     ],
-    files: [{ path: "InsightsSection.tsx", type: "registry:ui" }],
+    files: [{ path: "cards/InsightCard.tsx", type: "registry:ui" }],
   },
 ];

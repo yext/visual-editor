@@ -1,10 +1,6 @@
 export * from "./atoms/index.ts";
 export * from "./cards/index.ts";
 export { Address, type AddressProps } from "./Address.tsx";
-export {
-  InsightsSection,
-  type InsightsSectionProps,
-} from "./InsightsSection.tsx";
 export { Banner, type BannerProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";
@@ -45,7 +41,6 @@ export {
 } from "./NearbyLocations.tsx";
 export { People, type PeopleProps } from "./People.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
-export { Events, type EventsProps } from "./Events.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,
