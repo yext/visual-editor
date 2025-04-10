@@ -231,8 +231,8 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
         constantValueEnabled: true,
       },
       category: {
-        field: "Category, Pricing, etc",
-        constantValue: "",
+        field: "",
+        constantValue: "Category, Pricing, etc",
         constantValueEnabled: true,
       },
       description: {
