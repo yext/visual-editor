@@ -8,8 +8,6 @@ import {
   BannerProps,
   BodyText,
   BodyTextProps,
-  Card,
-  CardProps,
   CTAWrapper as CTA,
   CTAWrapperProps,
   Emails,
@@ -77,7 +75,6 @@ type MainProps = {
   Banner: BannerProps;
   BodyText: BodyTextProps;
   Breadcrumbs: BreadcrumbsProps;
-  Card: CardProps;
   Collection: CollectionProps;
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
@@ -111,7 +108,6 @@ type MainProps = {
 
 const components: Config<MainProps>["components"] = {
   Banner,
-  Card,
   Promo,
   Flex,
   Grid,
@@ -149,7 +145,6 @@ const components: Config<MainProps>["components"] = {
 const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
-  "Card",
   "CoreInfoSection",
   "FAQsSection",
   "HeroSection",

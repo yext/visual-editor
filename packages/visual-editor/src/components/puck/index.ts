@@ -7,7 +7,6 @@ export {
 export { Banner, type BannerProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";
-export { Card, type CardProps } from "./Card.tsx";
 export {
   CoreInfoSection,
   type CoreInfoSectionProps,
