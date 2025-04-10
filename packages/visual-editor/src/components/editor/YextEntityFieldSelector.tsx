@@ -15,6 +15,7 @@ import { TEXT_LIST_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fi
 import { CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
+import { useEntityFields } from "../../hooks/useEntityFields.tsx";
 
 const devLogger = new DevLogger();
 
@@ -308,12 +309,14 @@ const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
 }: InputProps<T>) => {
+  const entityFields = useEntityFields();
+
   const basicSelectorField = React.useMemo(() => {
-    let filteredEntityFields = getFilteredEntityFields(filter);
+    let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
 
     // If there are no direct children, return the parent field if it is a list
     if (filter.directChildrenOf && filteredEntityFields.length === 0) {
-      filteredEntityFields = getFilteredEntityFields({
+      filteredEntityFields = getFilteredEntityFields(entityFields, {
         allowList: [filter.directChildrenOf],
         types: filter.types,
         includeListsOnly: true,
@@ -329,7 +332,7 @@ const EntityFieldInput = <T extends Record<string, any>>({
         };
       }),
     ]);
-  }, [filter]);
+  }, [entityFields, filter]);
 
   return (
     <div className={"ve-inline-block ve-w-full ve-pt-4"}>
