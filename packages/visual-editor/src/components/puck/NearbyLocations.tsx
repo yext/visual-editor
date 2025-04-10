@@ -238,6 +238,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
     );
+    return <></>;
   }
 
   const entityType: string = document?.meta?.entityType?.id || "location";
