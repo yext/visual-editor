@@ -68,6 +68,8 @@ import {
   CoreInfoSection,
   InsightsSection,
   InsightsSectionProps,
+  ProductCardComponent,
+  ProductCardProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -104,6 +106,7 @@ type MainProps = {
   PhotoGallerySection: PhotoGallerySectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   InsightsSection: InsightsSectionProps;
+  ProductCardComponent: ProductCardProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -122,6 +125,7 @@ const components: Config<MainProps>["components"] = {
   HoursStatus,
   HoursTable,
   ImageWrapper,
+  ProductCardComponent,
   Phone,
   TextList,
   Header,

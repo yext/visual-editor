@@ -95,7 +95,7 @@ const productsSectionFields: Fields<ProductsSectionProps> = {
   },
 };
 
-const ProductCard = ({
+export const ProductCard = ({
   card,
   cardBackgroundColor,
 }: {

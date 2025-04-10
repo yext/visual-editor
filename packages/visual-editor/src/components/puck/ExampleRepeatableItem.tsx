@@ -67,6 +67,24 @@ const ExampleRepeatableItem = (props: ExampleRepeatableItemProps) => {
   );
 };
 
+// Handle ImageType or ComplexImageType
+// TODO move or cleanup
+export const handleComplexImages = (resolvedImage: any) => {
+  let image: ImageType;
+  if (
+    resolvedImage &&
+    typeof resolvedImage === "object" &&
+    "image" in resolvedImage
+  ) {
+    image = resolvedImage.image as ImageType;
+  } else if (resolvedImage) {
+    image = resolvedImage;
+  } else {
+    image = { height: 150, width: 150, url: "" };
+  }
+  return image;
+};
+
 type ExampleRepeatableItemCardProps = {
   image?: ImageType | ComplexImageType;
   text?: string;
@@ -75,19 +93,7 @@ type ExampleRepeatableItemCardProps = {
 // Example Card -- would replace with a nice React component
 const ExampleRepeatableItemCard = (props: ExampleRepeatableItemCardProps) => {
   const { text } = props;
-
-  // Handle ImageType or ComplexImageType
-  // Should clean up the image handling in a real card
-  let image;
-  if (
-    props.image &&
-    typeof props.image === "object" &&
-    "image" in props.image
-  ) {
-    image = props.image.image;
-  } else if (props.image) {
-    image = props.image;
-  }
+  const image = handleComplexImages(props.image);
 
   return (
     <div className="w-[200px] h-[200px] border-dashed border-black border-4 flex flex-col items-center justify-center">
