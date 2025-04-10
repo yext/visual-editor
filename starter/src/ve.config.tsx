@@ -52,8 +52,8 @@ import {
   TestimonialsProps,
   NearbyLocations,
   NearbyLocationsProps,
-  People,
-  PeopleProps,
+  PersonCard,
+  PersonCardProps,
   FAQsSection,
   FAQsSectionProps,
   Events,
@@ -97,7 +97,7 @@ type MainProps = {
   CollectionSection: CollectionSectionProps;
   Testimonials: TestimonialsProps;
   NearbyLocations: NearbyLocationsProps;
-  People: PeopleProps;
+  PersonCard: PersonCardProps;
   Events: EventsProps;
   HeroSection: HeroSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
@@ -134,7 +134,7 @@ const components: Config<MainProps>["components"] = {
   CollectionSection,
   Testimonials,
   NearbyLocations,
-  People,
+  PersonCard,
   Events,
   HeroSection,
   PhotoGallerySection,
@@ -153,7 +153,7 @@ const pageSections: (keyof MainProps)[] = [
   "PhotoGallerySection",
   "Promo",
   "Testimonials",
-  "People",
+  "PersonCard",
   "Events",
 ];
 

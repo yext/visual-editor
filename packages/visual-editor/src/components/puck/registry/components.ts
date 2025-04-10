@@ -178,10 +178,10 @@ export const ui: Registry["items"] = [
     files: [{ path: "Image.tsx", type: "registry:ui" }],
   },
   {
-    name: "People",
+    name: "Person Card",
     type: "registry:ui",
     registryDependencies: ["section", "heading", "body", "cta", "image"],
-    files: [{ path: "People.tsx", type: "registry:ui" }],
+    files: [{ path: "PersonCard.tsx", type: "registry:ui" }],
   },
   {
     name: "Phone",
