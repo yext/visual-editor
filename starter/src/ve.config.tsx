@@ -8,8 +8,6 @@ import {
   BannerProps,
   BodyText,
   BodyTextProps,
-  Card,
-  CardProps,
   CTAWrapper as CTA,
   CTAWrapperProps,
   Emails,
@@ -44,8 +42,8 @@ import {
   PromoProps,
   MapboxStaticMap,
   MapboxStaticProps,
-  CollectionSection,
-  CollectionSectionProps,
+  Collection,
+  CollectionProps,
   ExampleRepeatableItemComponent,
   ExampleRepeatableItemProps,
   Testimonials,
@@ -54,6 +52,8 @@ import {
   NearbyLocationsProps,
   PersonCard,
   PersonCardProps,
+  SectionContainer,
+  SectionContainerProps,
   FAQsSection,
   FAQsSectionProps,
   Events,
@@ -75,7 +75,7 @@ type MainProps = {
   Banner: BannerProps;
   BodyText: BodyTextProps;
   Breadcrumbs: BreadcrumbsProps;
-  Card: CardProps;
+  Collection: CollectionProps;
   CTA: CTAWrapperProps;
   Directory: DirectoryProps;
   Emails: EmailsProps;
@@ -92,9 +92,9 @@ type MainProps = {
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
   Promo: PromoProps;
+  SectionContainer: SectionContainerProps;
   TextList: TextListProps;
   ExampleRepeatableItemComponent: ExampleRepeatableItemProps;
-  CollectionSection: CollectionSectionProps;
   Testimonials: TestimonialsProps;
   NearbyLocations: NearbyLocationsProps;
   PersonCard: PersonCardProps;
@@ -108,12 +108,12 @@ type MainProps = {
 
 const components: Config<MainProps>["components"] = {
   Banner,
-  Card,
   Promo,
   Flex,
   Grid,
   Address,
   BodyText,
+  Collection,
   CTA,
   Emails,
   FAQsSection,
@@ -131,7 +131,7 @@ const components: Config<MainProps>["components"] = {
   Breadcrumbs,
   MapboxStaticMap,
   ExampleRepeatableItemComponent,
-  CollectionSection,
+  SectionContainer,
   Testimonials,
   NearbyLocations,
   PersonCard,
@@ -145,7 +145,6 @@ const components: Config<MainProps>["components"] = {
 const pageSections: (keyof MainProps)[] = [
   "Banner",
   "Breadcrumbs",
-  "Card",
   "CoreInfoSection",
   "FAQsSection",
   "HeroSection",
@@ -155,9 +154,10 @@ const pageSections: (keyof MainProps)[] = [
   "Testimonials",
   "PersonCard",
   "Events",
+  "SectionContainer",
 ];
 
-const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
+const layoutBlocks: (keyof MainProps)[] = ["Collection", "Flex", "Grid"];
 
 const contentBlocks: (keyof MainProps)[] = [
   "Address",

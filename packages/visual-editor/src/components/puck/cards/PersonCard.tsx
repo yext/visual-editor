@@ -11,7 +11,7 @@ import {
   Heading,
   handleResolveFieldsForCollections,
   Body,
-  Section,
+  PageSection,
   backgroundColors,
   BackgroundStyle,
   EntityField,
@@ -75,7 +75,7 @@ const PersonCardItem = ({
 
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white">
-      <Section background={cardBackgroundColor} className="flex p-8 gap-6">
+      <PageSection background={cardBackgroundColor} className="flex p-8 gap-6">
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedImage && (
             <EntityField
@@ -109,9 +109,12 @@ const PersonCardItem = ({
             </EntityField>
           )}
         </div>
-      </Section>
+      </PageSection>
       <hr className="border" />
-      <Section background={backgroundColors.background1.value} className="p-8">
+      <PageSection
+        background={backgroundColors.background1.value}
+        className="p-8"
+      >
         <div className="flex flex-col gap-4">
           {resolvedPhone && (
             <EntityField
@@ -172,7 +175,7 @@ const PersonCardItem = ({
             </EntityField>
           )}
         </div>
-      </Section>
+      </PageSection>
     </div>
   );
 };

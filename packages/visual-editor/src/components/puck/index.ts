@@ -8,7 +8,6 @@ export {
 export { Banner, type BannerProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs.tsx";
-export { Card, type CardProps } from "./Card.tsx";
 export {
   CoreInfoSection,
   type CoreInfoSectionProps,
@@ -35,10 +34,11 @@ export {
 } from "./PhotoGallerySection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export {
-  CollectionSection,
-  type CollectionSectionProps,
+  Collection,
+  collectionWrapperClassName,
+  type CollectionProps,
   COLLECTION_COMPONENTS,
-} from "./CollectionSection.tsx";
+} from "./Collection.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
   NearbyLocations,
@@ -46,3 +46,7 @@ export {
 } from "./NearbyLocations.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Events, type EventsProps } from "./Events.tsx";
+export {
+  SectionContainer,
+  type SectionContainerProps,
+} from "./SectionContainer.tsx";
