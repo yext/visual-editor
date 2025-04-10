@@ -13,7 +13,7 @@ const COLORS_PATH = `${DIST_DIR}/${SLUG}/colors`;
 const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
 const STYLES_PATH = `${DIST_DIR}/${SLUG}/styles`;
 const YEXT_STYLE_PATH = `${STYLES_PATH}/yext`;
-const COMPONENTS_SRC_PATH = `./packages/visual-editor/src/components/puck`;
+const COMPONENTS_SRC_PATH = `./packages/visual-editor/src/components`;
 
 const styleIndex = {
   name: "yext",
@@ -110,7 +110,8 @@ export const buildRegistry = async () => {
   for (let i = 0; i < registryComponents.length; i++) {
     const component = registryComponents[i];
     const files = component.files;
-    if (!files) throw new Error("No files found for component");
+    if (!files)
+      throw new Error("No files found for component " + component.name);
 
     const filesArray = await getComponentFiles(files);
 

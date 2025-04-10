@@ -234,5 +234,18 @@ export const ui: Registry["items"] = [
     name: "Nearby Components",
     type: "registry:ui",
     registryDependencies: ["section", "heading", "body", "cta", "phone"],
+    files: [{ path: "NearbyLocations.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "CoreInfoSection",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body", "cta", "phone"],
+    files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "InsightsSection",
+    type: "registry:ui",
+    registryDependencies: ["section", "heading", "body", "cta", "image"],
+    files: [{ path: "InsightsSection.tsx", type: "registry:ui" }],
   },
 ];

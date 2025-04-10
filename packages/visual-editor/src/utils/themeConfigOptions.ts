@@ -186,6 +186,22 @@ const bodyVariantOptions = [
   { label: "Large", value: "lg" },
 ];
 
+const hoursOptions = [
+  { label: "Monday", value: "monday" },
+  { label: "Tuesday", value: "tuesday" },
+  { label: "Wednesday", value: "wednesday" },
+  { label: "Thursday", value: "thursday" },
+  { label: "Friday", value: "friday" },
+  { label: "Saturday", value: "saturday" },
+  { label: "Sunday", value: "sunday" },
+  { label: "Today", value: "today" },
+];
+
+const phoneOptions = [
+  { label: "Domestic", value: "domestic" },
+  { label: "International", value: "international" },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
@@ -198,4 +214,6 @@ export const ThemeOptions = {
   BORDER_RADIUS: getBorderRadiusOptions,
   SPACING: getSpacingOptions,
   FONT_SIZE: getFontSizeOptions,
+  HOURS_OPTIONS: hoursOptions,
+  PHONE_OPTIONS: phoneOptions,
 };
