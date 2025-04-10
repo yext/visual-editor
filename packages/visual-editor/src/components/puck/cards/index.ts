@@ -1,3 +1,4 @@
+export { EventCard, type EventCardProps } from "./EventCard.tsx";
 export {
   ExampleRepeatableItemComponent,
   type ExampleRepeatableItemProps,

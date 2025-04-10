@@ -25,6 +25,7 @@ import {
 } from "../../index.js";
 
 export const COLLECTION_COMPONENTS = [
+  "EventCard",
   "ExampleRepeatableItemComponent",
   "ProductCard",
 ];
