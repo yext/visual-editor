@@ -49,7 +49,7 @@ const ProductCardItemFields: Fields<ProductCardProps> = {
   },
 };
 
-const ProductCardWrapper = ({
+const ProductCardItem = ({
   document,
   card,
   cardBackgroundColor,
@@ -101,14 +101,14 @@ const ProductCardWrapper = ({
   );
 };
 
-const ProductCardItem = (props: ProductCardProps) => {
+const ProductCardComponent = (props: ProductCardProps) => {
   const { card, styles, collection } = props;
   const document = useDocument();
 
   // If not in a collection, return single card
   if (!collection || collection.items.constantValueEnabled) {
     return (
-      <ProductCardWrapper
+      <ProductCardItem
         document={document}
         card={{
           image: card?.image,
@@ -134,7 +134,7 @@ const ProductCardItem = (props: ProductCardProps) => {
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {
           return (
-            <ProductCardWrapper
+            <ProductCardItem
               key={i}
               document={item}
               card={{
@@ -248,5 +248,5 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
       cardBackgroundColor: backgroundColors.background1.value,
     },
   },
-  render: (props) => <ProductCardItem {...props} />,
+  render: (props) => <ProductCardComponent {...props} />,
 };
