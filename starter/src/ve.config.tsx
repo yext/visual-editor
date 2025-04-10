@@ -64,8 +64,8 @@ import {
   PhotoGallerySection,
   CoreInfoSectionProps,
   CoreInfoSection,
-  InsightsSection,
-  InsightsSectionProps,
+  InsightCard,
+  InsightCardProps,
   ProductCard,
   ProductCardProps,
 } from "@yext/visual-editor";
@@ -102,7 +102,7 @@ type MainProps = {
   HeroSection: HeroSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   CoreInfoSection: CoreInfoSectionProps;
-  InsightsSection: InsightsSectionProps;
+  InsightCard: InsightCardProps;
   ProductCard: ProductCardProps;
 };
 
@@ -139,7 +139,7 @@ const components: Config<MainProps>["components"] = {
   HeroSection,
   PhotoGallerySection,
   CoreInfoSection,
-  InsightsSection,
+  InsightCard,
 };
 
 const pageSections: (keyof MainProps)[] = [
@@ -148,7 +148,6 @@ const pageSections: (keyof MainProps)[] = [
   "CoreInfoSection",
   "FAQsSection",
   "HeroSection",
-  "InsightsSection",
   "PhotoGallerySection",
   "Promo",
   "Events",
@@ -173,6 +172,7 @@ const contentBlocks: (keyof MainProps)[] = [
 ];
 
 const cardBlocks: (keyof MainProps)[] = [
+  "InsightCard",
   "ProductCard",
   "PersonCard",
   "TestimonialCard",
