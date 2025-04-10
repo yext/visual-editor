@@ -31,10 +31,9 @@ const mapboxFields: Fields<MapboxStaticProps> = {
 const getPrimaryColor = (document: any) => {
   if (document?.__?.theme) {
     return (
-      JSON.parse(document?.__?.theme)?.["--colors-palette-primary"].replace(
-        "#",
-        ""
-      ) ?? "000000"
+      JSON.parse(document?.__?.theme)
+        ?.["--colors-palette-primary"].trim()
+        .replace("#", "") ?? "000000"
     );
   } else {
     const iframe = window.document.querySelector("iframe");
