@@ -169,10 +169,11 @@ const LocationCard = ({
   return (
     <Section
       background={backgroundColor}
-      outerClassName={
-        "flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
+      className={
+        "flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-8"
       }
-      applyPageLevelStyles={true}
+      verticalPadding={"default"}
+      as={"section"}
     >
       <Heading level={cards.headingLevel}>{name}</Heading>
       {hours && (
@@ -232,7 +233,9 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentEndpoint: string = document?._env?.YEXT_CONTENT_ENDPOINT;
+  const contentEndpoint: string =
+    document?._env?.YEXT_CONTENT_ENDPOINT ||
+    "https://streams-dev.yext.com/v2/accounts/1000146856/content/visualEditorLocations?api_key=8cd8e7f4a761bc13f2da4cd980fbc1ec";
   if (!contentEndpoint) {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
@@ -270,7 +273,11 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 
   return (
-    <Section background={styles.backgroundColor} className={`components`}>
+    <Section
+      background={styles.backgroundColor}
+      className={`components`}
+      applyPageLevelStyles={true}
+    >
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
