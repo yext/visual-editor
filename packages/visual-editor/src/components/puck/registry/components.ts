@@ -72,7 +72,7 @@ export const ui: Registry["items"] = [
   {
     name: "Address",
     type: "registry:ui",
-    registryDependencies: ["body", "cta"],
+    registryDependencies: ["cta"],
     files: [{ path: "Address.tsx", type: "registry:ui" }],
   },
   {
@@ -219,10 +219,10 @@ export const ui: Registry["items"] = [
     files: [{ path: "Promo.tsx", type: "registry:ui" }],
   },
   {
-    name: "Testimonials",
+    name: "TestimonialCard",
     type: "registry:ui",
     registryDependencies: ["pageSection", "background", "heading", "body"],
-    files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
+    files: [{ path: "card/TestimonialCard.tsx", type: "registry:ui" }],
   },
   {
     name: "TextList",

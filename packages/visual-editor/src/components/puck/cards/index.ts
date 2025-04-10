@@ -4,3 +4,7 @@ export {
   type ExampleRepeatableItemProps,
 } from "./ExampleRepeatableItem.tsx";
 export { ProductCard, type ProductCardProps } from "./ProductCard.tsx";
+export {
+  TestimonialCard,
+  type TestimonialCardProps,
+} from "./TestimonialCard.tsx";
