@@ -55,7 +55,7 @@ const EventCardItem = ({
 
   return (
     <div className="flex flex-col md:flex-row rounded-lg overflow-hidden bg-white text-black h-fit md:h-64">
-      <div className="w-full md:w-[45%] h-full">
+      <div className="lg:w-[45%] w-full h-full">
         {resolvedImage && (
           <EntityField
             displayName="Image"
@@ -134,7 +134,7 @@ const EventCardComponent = (props: EventCardProps) => {
 
   // Return one card with resolved subfields for each item in the parent
   return (
-    <div className="flex justify-between max-w-pageSection-maxWidth">
+    <div className="flex flex-col justify-between max-w-pageSection-maxWidth mx-auto gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {

@@ -18,13 +18,14 @@ import {
   YextEntityFieldSelector,
   useDocument,
   resolveYextEntityField,
-  Section,
+  PageSection,
   EntityField,
   Heading,
   CTA,
   backgroundColors,
   Body,
   PhoneAtom,
+  Background,
 } from "../../index.js";
 
 export interface CoreInfoSectionProps {
@@ -256,8 +257,7 @@ const CoreInfoSectionWrapper = ({
   };
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       className="flex flex-col md:flex-row justify-between w-full gap-8"
       background={styles.backgroundColor}
       aria-label="Core Info Section"
@@ -354,11 +354,12 @@ const CoreInfoSectionWrapper = ({
                 )
                 .map((email, index) => (
                   <li key={index} className={`flex items-center gap-3`}>
-                    <div
-                      className={`h-10 w-10 flex justify-center rounded-full items-center ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`}
+                    <Background
+                      background={backgroundColors.background2.value}
+                      className={`h-10 w-10 flex justify-center rounded-full items-center`}
                     >
                       <FaRegEnvelope className="w-4 h-4" />
-                    </div>
+                    </Background>
                     <CTA
                       link={email}
                       label={email}
@@ -440,7 +441,7 @@ const CoreInfoSectionWrapper = ({
           </EntityField>
         </section>
       )}
-    </Section>
+    </PageSection>
   );
 };
 

@@ -5,14 +5,13 @@ import {
   backgroundColors,
   themeManagerCn,
   ThemeOptions,
-  Section,
+  Background,
 } from "../../index.js";
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
-  insideDropZone?: boolean;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
@@ -25,12 +24,11 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       verticalPadding,
       horizontalPadding,
       backgroundColor,
-      insideDropZone,
     },
     ref
   ) => {
     return (
-      <Section
+      <Background
         background={backgroundColor}
         className={themeManagerCn(
           layoutVariants({
@@ -43,17 +41,18 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
         <DropZone
           className={themeManagerCn(
             layoutVariants({ gap }),
-            "flex max-w-pageSection-contentWidth w-full",
-            insideDropZone ? direction : `mx-auto flex-col md:${direction}`
+            "flex w-full",
+            direction
           )}
           zone="flex-container"
           style={{
             justifyContent,
             flexWrap: wrap,
           }}
+          // TODO: Update disallow
           disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
         />
-      </Section>
+      </Background>
     );
   }
 );
@@ -92,26 +91,10 @@ export const Flex: ComponentConfig<FlexProps> = {
     direction: "flex-row",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: "8",
-    verticalPadding: "default",
-    horizontalPadding: "4",
+    gap: "4",
+    verticalPadding: "0",
+    horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
-  },
-  resolveFields: (data, params) => {
-    // If the Flex has a parent component, the defaultProps should be adjusted.
-    if (params.parent) {
-      // the props values should only be changed initially
-      if (!data.props.insideDropZone) {
-        data.props.verticalPadding = "0";
-        data.props.horizontalPadding = "0";
-        data.props.gap = "0";
-      }
-      data.props.insideDropZone = true;
-    } else {
-      data.props.insideDropZone = false;
-    }
-
-    return flexContainerFields;
   },
   render: (props) => <FlexContainer {...props} />,
 };

@@ -20,7 +20,7 @@ import {
   HeadingProps,
   CTA,
   CTAProps,
-  Section,
+  PageSection,
 } from "../../index.js";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
@@ -145,8 +145,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
   }
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       background={styles.backgroundColor}
       className={themeManagerCn(
         "flex flex-col md:flex-row overflow-hidden md:gap-8",
@@ -188,7 +187,7 @@ const PromoWrapper: React.FC<PromoProps> = ({
           />
         )}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 

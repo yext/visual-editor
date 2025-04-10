@@ -10,7 +10,7 @@ import {
   ThemeOptions,
   HeadingProps,
   BackgroundStyle,
-  Section,
+  PageSection,
   Heading,
   backgroundColors,
 } from "../../index.js";
@@ -93,8 +93,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
   );
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       background={styles.backgroundColor}
       className="flex flex-col gap-8 md:gap-12"
     >
@@ -115,7 +114,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
           </AccordionItem>
         ))}
       </Accordion>
-    </Section>
+    </PageSection>
   );
 };
 

@@ -10,7 +10,7 @@ import {
   type BackgroundStyle,
   backgroundColors,
   ThemeOptions,
-  Section,
+  PageSection,
 } from "../../index.ts";
 import {
   FaFacebook,
@@ -99,8 +99,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   ].filter((link) => link.link);
 
   return (
-    <Section
-      applyPageLevelStyles
+    <PageSection
       background={backgroundColor}
       className="flex flex-col"
       outerClassName="mt-auto"
@@ -132,7 +131,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
           </EntityField>
         </div>
       )}
-    </Section>
+    </PageSection>
   );
 };
 

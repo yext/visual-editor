@@ -12,12 +12,11 @@ import {
   BasicSelector,
   ThemeOptions,
   backgroundColors,
-  Section,
   CTA,
   Body,
   Heading,
   Image,
-  themeManagerCn,
+  Background,
 } from "../../../index.js";
 import { ImageType } from "@yext/pages-components";
 import { handleComplexImages } from "../atoms/image.js";
@@ -68,8 +67,8 @@ const ProductCardItem = ({
   const resolvedCta = resolveYextSubfield(document, card?.cta);
 
   return (
-    <Section
-      className="flex flex-col rounded-lg overflow-hidden border"
+    <Background
+      className="flex flex-col justify-between rounded-lg overflow-hidden border"
       background={cardBackgroundColor}
     >
       {image && <Image image={image} layout={"auto"} />}
@@ -81,25 +80,24 @@ const ProductCardItem = ({
             </Heading>
           )}
           {resolvedCategory && (
-            <div
-              className={themeManagerCn(
-                "components py-2 px-4 rounded-sm w-fit",
-                backgroundColors.background5.value.bgColor,
-                backgroundColors.background5.value.textColor
-              )}
+            <Background
+              background={backgroundColors.background5.value}
+              className="py-2 px-4 rounded-sm w-fit"
             >
               <Body>{resolvedCategory}</Body>
-            </div>
+            </Background>
           )}
           {resolvedDescription && (
-            <Body className="line-clamp-5">{resolvedDescription}</Body>
+            <Body className="line-clamp-5 max-w-[290px]">
+              {resolvedDescription}
+            </Body>
           )}
         </div>
         {resolvedCta && (
           <CTA variant="secondary" label="Learn More" link={resolvedCta} />
         )}
       </div>
-    </Section>
+    </Background>
   );
 };
 
@@ -131,7 +129,7 @@ const ProductCardComponent = (props: ProductCardProps) => {
 
   // Return one card with resolved subfields for each item in the parent
   return (
-    <div className="flex justify-between max-w-pageSection-maxWidth">
+    <div className="max-w-pageSection-contentWidth mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {
