@@ -145,48 +145,48 @@ const PromoWrapper: React.FC<PromoProps> = ({
   }
 
   return (
-    <Section className="components" background={styles.backgroundColor}>
-      <div
-        className={themeManagerCn(
-          "flex flex-col md:flex-row overflow-hidden md:gap-8",
-          styles.orientation === "right" && "md:flex-row-reverse"
+    <Section
+      applyPageLevelStyles
+      background={styles.backgroundColor}
+      className={themeManagerCn(
+        "flex flex-col md:flex-row overflow-hidden md:gap-8",
+        styles.orientation === "right" && "md:flex-row-reverse"
+      )}
+    >
+      {resolvedImage && (
+        <EntityField
+          displayName="Image"
+          fieldId={image.image.field}
+          constantValueEnabled={image.image.constantValueEnabled}
+        >
+          <Image
+            image={resolvedImage}
+            layout={image.layout}
+            width={image.width}
+            height={image.height}
+            aspectRatio={image.aspectRatio}
+          />
+        </EntityField>
+      )}
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
+        {title?.text && (
+          <Heading level={title.level}>
+            {resolveYextEntityField(document, title.text)}
+          </Heading>
         )}
-      >
-        {resolvedImage && (
-          <EntityField
-            displayName="Image"
-            fieldId={image.image.field}
-            constantValueEnabled={image.image.constantValueEnabled}
-          >
-            <Image
-              image={resolvedImage}
-              layout={image.layout}
-              width={image.width}
-              height={image.height}
-              aspectRatio={image.aspectRatio}
-            />
-          </EntityField>
+        {description?.text && (
+          <Body variant={description.variant}>
+            {resolveYextEntityField(document, description.text)}
+          </Body>
         )}
-        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
-          {title?.text && (
-            <Heading level={title.level}>
-              {resolveYextEntityField(document, title.text)}
-            </Heading>
-          )}
-          {description?.text && (
-            <Body variant={description.variant}>
-              {resolveYextEntityField(document, description.text)}
-            </Body>
-          )}
-          {resolvedCTA && cta.visible && (
-            <CTA
-              variant={cta.variant}
-              label={resolvedCTA.label ?? ""}
-              link={resolvedCTA.link || "#"}
-              linkType={resolvedCTA.linkType}
-            />
-          )}
-        </div>
+        {resolvedCTA && cta.visible && (
+          <CTA
+            variant={cta.variant}
+            label={resolvedCTA.label ?? ""}
+            link={resolvedCTA.link || "#"}
+            linkType={resolvedCTA.linkType}
+          />
+        )}
       </div>
     </Section>
   );

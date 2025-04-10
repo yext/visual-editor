@@ -8,6 +8,7 @@ export interface ImageProps {
   aspectRatio?: number;
   width?: number;
   height?: number;
+  className?: string;
 }
 
 export const Image: React.FC<ImageProps> = ({
@@ -16,9 +17,10 @@ export const Image: React.FC<ImageProps> = ({
   aspectRatio,
   width,
   height,
+  className,
 }) => {
   return (
-    <div className={themeManagerCn("overflow-hidden w-full")}>
+    <div className={themeManagerCn("overflow-hidden w-full", className)}>
       {layout === "auto" && aspectRatio ? (
         <ImageComponent
           image={image}

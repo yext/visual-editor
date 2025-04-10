@@ -4,5 +4,5 @@ export { CTA, type CTAProps } from "./cta.tsx";
 export { Heading, type HeadingProps, headingVariants } from "./heading.tsx";
 export { Image, type ImageProps } from "./image.tsx";
 export { MaybeLink, type MaybeLinkProps } from "./maybeLink.tsx";
-export { Section, type SectionProps, sectionVariants } from "./section.tsx";
+export { Section, type SectionProps } from "./section.tsx";
 export { PhoneAtom, type PhoneAtomProps } from "./phone.tsx";

@@ -103,7 +103,10 @@ const ProductCard = ({
   cardBackgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <div className="flex flex-col rounded-lg overflow-hidden border">
+    <Section
+      className="flex flex-col rounded-lg overflow-hidden border"
+      background={cardBackgroundColor}
+    >
       {card.imageUrl && (
         <img
           src={card.imageUrl}
@@ -112,10 +115,7 @@ const ProductCard = ({
           className="w-full object-cover"
         />
       )}
-      <Section
-        background={cardBackgroundColor}
-        className="p-8 gap-8 flex flex-col"
-      >
+      <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col">
           {card.heading && (
             <Heading level={3} className="mb-2">
@@ -140,8 +140,8 @@ const ProductCard = ({
         {card.cta && (
           <CTA variant="secondary" label="Learn More" link={card.cta} />
         )}
-      </Section>
-    </div>
+      </div>
+    </Section>
   );
 };
 
@@ -157,20 +157,22 @@ const ProductsSectionWrapper: React.FC<ProductsSectionProps> = ({
   );
 
   return (
-    <Section background={styles.backgroundColor}>
-      <div className="flex flex-col gap-12">
-        {resolvedHeading && (
-          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cards.map((card, index) => (
-            <ProductCard
-              key={index}
-              card={card}
-              cardBackgroundColor={styles.cardBackgroundColor}
-            />
-          ))}
-        </div>
+    <Section
+      background={styles.backgroundColor}
+      applyPageLevelStyles
+      className="flex flex-col gap-8 md:gap-12"
+    >
+      {resolvedHeading && (
+        <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {cards.map((card, index) => (
+          <ProductCard
+            key={index}
+            card={card}
+            cardBackgroundColor={styles.cardBackgroundColor}
+          />
+        ))}
       </div>
     </Section>
   );

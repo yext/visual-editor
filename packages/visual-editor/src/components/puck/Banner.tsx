@@ -7,6 +7,7 @@ import {
   BasicSelector,
   ThemeOptions,
   Body,
+  Section,
 } from "../../index.js";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -57,15 +58,14 @@ const BannerComponent = ({
   }[textAlignment];
 
   return (
-    <div
-      className={`Banner ${backgroundColor?.bgColor} components px-4 md:px-20 py-6`}
+    <Section
+      applyPageLevelStyles
+      background={backgroundColor}
+      verticalPadding="sm"
+      className={`flex ${justifyClass} items-center`}
     >
-      <div
-        className={`flex ${justifyClass} items-center ${backgroundColor?.textColor}`}
-      >
-        <Body>{resolvedText}</Body>
-      </div>
-    </div>
+      <Body>{resolvedText}</Body>
+    </Section>
   );
 };
 

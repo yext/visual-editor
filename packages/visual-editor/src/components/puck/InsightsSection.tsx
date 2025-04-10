@@ -122,147 +122,150 @@ const InsightsSectionWrapper = ({
     sectionHeading.text
   );
   return (
-    <Section background={styles.backgroundColor}>
-      <div className="flex flex-col gap-8">
-        {resolvedHeading && (
-          <div className="text-center">
-            <EntityField
-              displayName="Heading Text"
-              fieldId={sectionHeading.text.field}
-              constantValueEnabled={sectionHeading.text.constantValueEnabled}
-            >
-              <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-            </EntityField>
-          </div>
-        )}
+    <Section
+      applyPageLevelStyles
+      background={styles.backgroundColor}
+      className="flex flex-col gap-8"
+    >
+      {resolvedHeading && (
+        <div className="text-center">
+          <EntityField
+            displayName="Heading Text"
+            fieldId={sectionHeading.text.field}
+            constantValueEnabled={sectionHeading.text.constantValueEnabled}
+          >
+            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+          </EntityField>
+        </div>
+      )}
 
-        {insightsFields && (
-          <div className="flex flex-col md:flex-row gap-8">
-            {insightsFields.map((insight, index) => {
-              const resolvedTitle = resolveYextEntityField<string>(
-                document,
-                insight.title
-              );
-              const resolvedCategory = resolveYextEntityField<string>(
-                document,
-                insight.category
-              );
-              const resolvedDate = resolveYextEntityField<string>(
-                document,
-                insight.date
-              );
-              const resolvedDescription = resolveYextEntityField<string>(
-                document,
-                insight.description
-              );
-              const resolvedCTA = resolveYextEntityField<CTAProps>(
-                document,
-                insight.cta
-              );
-              const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
-                document,
-                insight.image?.image
-              );
+      {insightsFields && (
+        <div className="flex flex-col md:flex-row gap-8">
+          {insightsFields.map((insight, index) => {
+            const resolvedTitle = resolveYextEntityField<string>(
+              document,
+              insight.title
+            );
+            const resolvedCategory = resolveYextEntityField<string>(
+              document,
+              insight.category
+            );
+            const resolvedDate = resolveYextEntityField<string>(
+              document,
+              insight.date
+            );
+            const resolvedDescription = resolveYextEntityField<string>(
+              document,
+              insight.description
+            );
+            const resolvedCTA = resolveYextEntityField<CTAProps>(
+              document,
+              insight.cta
+            );
+            const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
+              document,
+              insight.image?.image
+            );
 
-              return (
-                <Section
-                  className="!p-0 rounded"
-                  key={index}
-                  background={backgroundColors.background1.value}
-                >
-                  {resolvedImage && (
-                    <EntityField
-                      displayName="Image"
-                      fieldId={insight.image.image.field}
-                      constantValueEnabled={
-                        insight.image.image.constantValueEnabled
-                      }
-                    >
-                      <Image
-                        image={resolvedImage}
-                        layout={insight.image.layout}
-                        width={insight.image.width}
-                        height={insight.image.height}
-                        aspectRatio={insight.image.aspectRatio}
-                      />
-                    </EntityField>
-                  )}
-                  <div className="border flex flex-col gap-8 p-8">
-                    <div className="flex flex-col gap-4">
-                      {(resolvedCategory || resolvedDate) && (
-                        <div
-                          className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
-                        >
-                          <EntityField
-                            displayName="Category"
-                            fieldId={insight.category.field}
-                            constantValueEnabled={
-                              insight.category.constantValueEnabled
-                            }
-                          >
-                            <Body>{resolvedCategory}</Body>
-                          </EntityField>
-                          {resolvedCategory && resolvedDate && <Body>|</Body>}
-                          <EntityField
-                            displayName="Date"
-                            fieldId={insight.date.field}
-                            constantValueEnabled={
-                              insight.date.constantValueEnabled
-                            }
-                          >
-                            <Body>{resolvedDate}</Body>
-                          </EntityField>
-                        </div>
-                      )}
-                      {resolvedTitle && (
-                        <EntityField
-                          displayName="Insight Title"
-                          fieldId={insight.title.field}
-                          constantValueEnabled={
-                            insight.title.constantValueEnabled
-                          }
-                        >
-                          <Heading
-                            level={3}
-                            className="text-palette-primary-dark"
-                          >
-                            {resolvedTitle}
-                          </Heading>
-                        </EntityField>
-                      )}
-                      {resolvedDescription && (
-                        <EntityField
-                          displayName="Description"
-                          fieldId={insight.description.field}
-                          constantValueEnabled={
-                            insight.description.constantValueEnabled
-                          }
-                        >
-                          <Body>{resolvedDescription}</Body>
-                        </EntityField>
-                      )}
-                    </div>
-                    {resolvedCTA && (
-                      <EntityField
-                        displayName="CTA"
-                        fieldId={insight.cta.field}
-                        constantValueEnabled={insight.cta.constantValueEnabled}
+            return (
+              <Section
+                className="rounded"
+                key={index}
+                background={backgroundColors.background1.value}
+              >
+                {resolvedImage && (
+                  <EntityField
+                    displayName="Image"
+                    fieldId={insight.image.image.field}
+                    constantValueEnabled={
+                      insight.image.image.constantValueEnabled
+                    }
+                  >
+                    <Image
+                      image={resolvedImage}
+                      layout={insight.image.layout}
+                      width={insight.image.width}
+                      height={insight.image.height}
+                      aspectRatio={insight.image.aspectRatio}
+                      className="rounded-[inherit]"
+                    />
+                  </EntityField>
+                )}
+                <div className="flex flex-col gap-8 p-8">
+                  <div className="flex flex-col gap-4">
+                    {(resolvedCategory || resolvedDate) && (
+                      <div
+                        className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
                       >
-                        <CTA
-                          variant={"link"}
-                          label={resolvedCTA.label ?? ""}
-                          link={resolvedCTA.link ?? "#"}
-                          linkType={resolvedCTA.linkType ?? "URL"}
-                        />
+                        <EntityField
+                          displayName="Category"
+                          fieldId={insight.category.field}
+                          constantValueEnabled={
+                            insight.category.constantValueEnabled
+                          }
+                        >
+                          <Body>{resolvedCategory}</Body>
+                        </EntityField>
+                        {resolvedCategory && resolvedDate && <Body>|</Body>}
+                        <EntityField
+                          displayName="Date"
+                          fieldId={insight.date.field}
+                          constantValueEnabled={
+                            insight.date.constantValueEnabled
+                          }
+                        >
+                          <Body>{resolvedDate}</Body>
+                        </EntityField>
+                      </div>
+                    )}
+                    {resolvedTitle && (
+                      <EntityField
+                        displayName="Insight Title"
+                        fieldId={insight.title.field}
+                        constantValueEnabled={
+                          insight.title.constantValueEnabled
+                        }
+                      >
+                        <Heading
+                          level={3}
+                          className="text-palette-primary-dark"
+                        >
+                          {resolvedTitle}
+                        </Heading>
+                      </EntityField>
+                    )}
+                    {resolvedDescription && (
+                      <EntityField
+                        displayName="Description"
+                        fieldId={insight.description.field}
+                        constantValueEnabled={
+                          insight.description.constantValueEnabled
+                        }
+                      >
+                        <Body>{resolvedDescription}</Body>
                       </EntityField>
                     )}
                   </div>
-                </Section>
-              );
-            })}
-          </div>
-        )}
-      </div>
+                  {resolvedCTA && (
+                    <EntityField
+                      displayName="CTA"
+                      fieldId={insight.cta.field}
+                      constantValueEnabled={insight.cta.constantValueEnabled}
+                    >
+                      <CTA
+                        variant={"link"}
+                        label={resolvedCTA.label ?? ""}
+                        link={resolvedCTA.link ?? "#"}
+                        linkType={resolvedCTA.linkType ?? "URL"}
+                      />
+                    </EntityField>
+                  )}
+                </div>
+              </Section>
+            );
+          })}
+        </div>
+      )}
     </Section>
   );
 };

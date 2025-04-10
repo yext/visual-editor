@@ -5,7 +5,14 @@ import {
   ComplexImageType,
 } from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
-import { CTA, EntityField, useDocument, MaybeLink } from "../../index.ts";
+import {
+  CTA,
+  EntityField,
+  useDocument,
+  MaybeLink,
+  Section,
+  backgroundColors,
+} from "../../index.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
@@ -50,15 +57,13 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
   const { logo, logoLink, links } = props;
 
   return (
-    <header
-      className={`components font-body-fontFamily relative bg-white text-black`}
+    <Section
+      as="header"
+      applyPageLevelStyles
+      verticalPadding="header"
+      background={backgroundColors.background1.value}
     >
-      <div
-        className={
-          "w-full px-4 sm:px-0 sm:mx-auto max-w-pageSection-contentWidth py-2 sm:py-6 " +
-          "flex justify-start md:justify-between items-center"
-        }
-      >
+      <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
             displayName="Business Logo"
@@ -77,7 +82,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
               <HeaderLinks links={links} />
             </EntityField>
             <button
-              className="flex md:hidden absolute p-4 right-0 top-1/2 -translate-y-1/2"
+              className="flex md:hidden ml-auto my-auto"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? "Close header menu" : "Open header menu"}
             >
@@ -90,11 +95,10 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
           </>
         )}
       </div>
-
       {links?.length > 0 && (
         <HeaderMobileMenu isOpen={menuOpen} links={links} />
       )}
-    </header>
+    </Section>
   );
 };
 
@@ -144,11 +148,11 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
     <div
       className={
         `${isOpen ? "visible" : "hidden"} bg-white text-black` +
-        "components absolute top-full left-0 right-0 h-screen z-50"
+        "components absolute left-0 right-0 h-screen z-50"
       }
     >
       <div className={`container bg-white text-black`}>
-        <ul className="flex flex-col px-4">
+        <ul className="flex flex-col p-4 gap-4">
           {links.map((item: CTAType, idx) => (
             <li key={item.link}>
               <CTA

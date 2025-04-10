@@ -10,7 +10,6 @@ import {
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { Address, HoursStatus } from "@yext/pages-components";
-import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 
 export interface DirectoryProps {
   separator?: string;
@@ -89,20 +88,13 @@ const DirectoryGrid = ({
 
   return (
     <Section
-      className={themeManagerCn(
-        layoutVariants({
-          verticalPadding: "default",
-          horizontalPadding: "4",
-        })
-      )}
+      applyPageLevelStyles
+      verticalPadding="sm"
       background={backgroundColors.background1.value}
-      maxWidth="full"
-      padding="none"
     >
       <div
         className={themeManagerCn(
-          innerLayoutVariants({ maxContentWidth: "default" }),
-          "flex flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
+          "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
         )}
         style={{
           gridTemplateColumns: `repeat(3, 1fr)`,
@@ -130,7 +122,11 @@ const DirectoryList = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <div className="container components mx-auto px-4 sm:px-8 lg:px-16 xl:px-20">
+    <Section
+      applyPageLevelStyles
+      verticalPadding="sm"
+      background={backgroundColors.background1.value}
+    >
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => (
           <li key={idx}>
@@ -147,7 +143,7 @@ const DirectoryList = ({
           </li>
         ))}
       </ul>
-    </div>
+    </Section>
   );
 };
 
