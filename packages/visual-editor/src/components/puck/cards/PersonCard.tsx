@@ -71,8 +71,6 @@ const PersonCardItem = ({
   const resolvedEmail = resolveYextSubfield(document, card?.email);
   const resolvedCTA = resolveYextSubfield(document, card?.cta);
 
-  console.log(JSON.stringify(resolvedHeadshot));
-
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white">
       <PageSection background={cardBackgroundColor} className="flex p-8 gap-6">
@@ -335,7 +333,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
       },
       phone: {
         field: "",
-        constantValue: "(202) 770-6619",
+        constantValue: "(555) 555-5555",
         constantValueEnabled: true,
       },
       email: {
