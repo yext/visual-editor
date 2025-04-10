@@ -26,7 +26,7 @@ export type ProductCardProps = {
   card?: {
     image?: YextEntityField<ImageType>;
     heading?: YextEntityField<string>;
-    category: YextEntityField<string>;
+    category?: YextEntityField<string>;
     description?: YextEntityField<string>;
     cta?: YextEntityField<string>;
   };
@@ -50,32 +50,35 @@ const ProductCardItemFields: Fields<ProductCardProps> = {
 };
 
 const ProductCardWrapper = ({
+  document,
   card,
   cardBackgroundColor,
 }: {
-  card: {
-    image?: ImageType;
-    heading?: string;
-    category?: string;
-    description?: string;
-    cta?: string;
-  };
+  document: any;
+  card: ProductCardProps["card"];
   cardBackgroundColor?: BackgroundStyle;
 }) => {
+  const resolvedImage = resolveYextSubfield(document, card?.image);
+  const image = handleComplexImages(resolvedImage);
+  const resolvedHeading = resolveYextSubfield(document, card?.heading);
+  const resolvedCategory = resolveYextSubfield(document, card?.category);
+  const resolvedDescription = resolveYextSubfield(document, card?.description);
+  const resolvedCta = resolveYextSubfield(document, card?.cta);
+
   return (
     <Section
       className="flex flex-col rounded-lg overflow-hidden border"
       background={cardBackgroundColor}
     >
-      {card?.image && <Image image={card.image} layout={"auto"} />}
+      {image && <Image image={image} layout={"auto"} />}
       <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col">
-          {card?.heading && (
+          {resolvedHeading && (
             <Heading level={3} className="mb-2">
-              {card.heading}
+              {resolvedHeading}
             </Heading>
           )}
-          {card?.category && (
+          {resolvedCategory && (
             <div
               className={themeManagerCn(
                 "components py-2 px-4 rounded-sm w-fit",
@@ -83,15 +86,15 @@ const ProductCardWrapper = ({
                 backgroundColors.background5.value.textColor
               )}
             >
-              <Body>{card.category}</Body>
+              <Body>{resolvedCategory}</Body>
             </div>
           )}
-          {card?.description && (
-            <Body className="line-clamp-5">{card.description}</Body>
+          {resolvedDescription && (
+            <Body className="line-clamp-5">{resolvedDescription}</Body>
           )}
         </div>
-        {card?.cta && (
-          <CTA variant="secondary" label="Learn More" link={card.cta} />
+        {resolvedCta && (
+          <CTA variant="secondary" label="Learn More" link={resolvedCta} />
         )}
       </div>
     </Section>
@@ -104,24 +107,15 @@ const ProductCardItem = (props: ProductCardProps) => {
 
   // If not in a collection, return single card
   if (!collection || collection.items.constantValueEnabled) {
-    const resolvedImage = resolveYextSubfield(document, card?.image);
-    const image = handleComplexImages(resolvedImage);
-    const resolvedHeading = resolveYextSubfield(document, card?.heading);
-    const resolvedCategory = resolveYextSubfield(document, card?.category);
-    const resolvedDescription = resolveYextSubfield(
-      document,
-      card?.description
-    );
-    const resolvedCta = resolveYextSubfield(document, card?.cta);
-
     return (
       <ProductCardWrapper
+        document={document}
         card={{
-          image: image,
-          heading: resolvedHeading ?? "",
-          category: resolvedCategory ?? "",
-          description: resolvedDescription ?? "",
-          cta: resolvedCta ?? "",
+          image: card?.image,
+          heading: card?.heading,
+          category: card?.category,
+          description: card?.description,
+          cta: card?.cta,
         }}
         cardBackgroundColor={styles.cardBackgroundColor}
       />
@@ -139,25 +133,16 @@ const ProductCardItem = (props: ProductCardProps) => {
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {
-          const resolvedImage = resolveYextSubfield(item, card?.image);
-          const image = handleComplexImages(resolvedImage);
-          const resolvedHeading = resolveYextSubfield(item, card?.heading);
-          const resolvedCategory = resolveYextSubfield(item, card?.category);
-          const resolvedDescription = resolveYextSubfield(
-            item,
-            card?.description
-          );
-          const resolvedCta = resolveYextSubfield(item, card?.cta);
-
           return (
             <ProductCardWrapper
               key={i}
+              document={item}
               card={{
-                image: image,
-                heading: resolvedHeading ?? "",
-                category: resolvedCategory ?? "",
-                description: resolvedDescription ?? "",
-                cta: resolvedCta ?? "",
+                image: card?.image,
+                heading: card?.heading,
+                category: card?.category,
+                description: card?.description,
+                cta: card?.cta,
               }}
               cardBackgroundColor={styles.cardBackgroundColor}
             />
