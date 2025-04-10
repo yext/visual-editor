@@ -1,4 +1,5 @@
 export * from "./atoms/index.ts";
+export * from "./cards/index.ts";
 export { Address, type AddressProps } from "./Address.tsx";
 export {
   InsightsSection,
@@ -31,10 +32,6 @@ export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
-export {
-  ProductsSection,
-  type ProductsSectionProps,
-} from "./ProductsSection.tsx";
 export { Promo, type PromoProps } from "./Promo.tsx";
 export {
   Collection,
@@ -42,10 +39,6 @@ export {
   type CollectionProps,
   COLLECTION_COMPONENTS,
 } from "./Collection.tsx";
-export {
-  ExampleRepeatableItemComponent,
-  type ExampleRepeatableItemProps,
-} from "./ExampleRepeatableItem.tsx";
 export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
 export {
   NearbyLocations,

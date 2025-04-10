@@ -14,7 +14,10 @@ import {
   YextCollection,
 } from "../../index.js";
 
-export const COLLECTION_COMPONENTS = ["ExampleRepeatableItemComponent"];
+export const COLLECTION_COMPONENTS = [
+  "ExampleRepeatableItemComponent",
+  "ProductCard",
+];
 
 export const collectionWrapperClassName =
   "flex flex-wrap gap-4 flex-col sm:flex-row items-center";

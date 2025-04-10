@@ -50,8 +50,6 @@ import {
   TestimonialsProps,
   NearbyLocations,
   NearbyLocationsProps,
-  ProductsSection,
-  ProductsSectionProps,
   People,
   PeopleProps,
   SectionContainer,
@@ -68,6 +66,8 @@ import {
   CoreInfoSection,
   InsightsSection,
   InsightsSectionProps,
+  ProductCard,
+  ProductCardProps,
 } from "@yext/visual-editor";
 
 type MainProps = {
@@ -91,7 +91,6 @@ type MainProps = {
   ImageWrapper: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
-  ProductsSection: ProductsSectionProps;
   Promo: PromoProps;
   SectionContainer: SectionContainerProps;
   TextList: TextListProps;
@@ -104,6 +103,7 @@ type MainProps = {
   PhotoGallerySection: PhotoGallerySectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   InsightsSection: InsightsSectionProps;
+  ProductCard: ProductCardProps;
 };
 
 const components: Config<MainProps>["components"] = {
@@ -122,6 +122,7 @@ const components: Config<MainProps>["components"] = {
   HoursStatus,
   HoursTable,
   ImageWrapper,
+  ProductCard,
   Phone,
   TextList,
   Header,
@@ -133,7 +134,6 @@ const components: Config<MainProps>["components"] = {
   SectionContainer,
   Testimonials,
   NearbyLocations,
-  ProductsSection,
   People,
   Events,
   HeroSection,
@@ -150,7 +150,6 @@ const pageSections: (keyof MainProps)[] = [
   "HeroSection",
   "InsightsSection",
   "PhotoGallerySection",
-  "ProductsSection",
   "Promo",
   "Testimonials",
   "People",
@@ -175,6 +174,8 @@ const contentBlocks: (keyof MainProps)[] = [
   "TextList",
 ];
 
+const cardBlocks: (keyof MainProps)[] = ["ProductCard"];
+
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
   components,
@@ -186,6 +187,10 @@ export const mainConfig: Config<MainProps> = {
     layoutBlocks: {
       title: "Layout Blocks",
       components: layoutBlocks,
+    },
+    cardBlocks: {
+      title: "Cards",
+      components: cardBlocks,
     },
     contentBlocks: {
       title: "Content Blocks",

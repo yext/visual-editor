@@ -11,8 +11,9 @@ import {
   Body,
   YextCollection,
   collectionWrapperClassName,
-} from "../../index.js";
+} from "../../../index.js";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { handleComplexImages } from "../atoms/image.js";
 
 export type ExampleRepeatableItemProps = {
   text?: YextEntityField<string>;
@@ -76,19 +77,7 @@ type ExampleRepeatableItemCardProps = {
 // Example Card -- would replace with a nice React component
 const ExampleRepeatableItemCard = (props: ExampleRepeatableItemCardProps) => {
   const { text } = props;
-
-  // Handle ImageType or ComplexImageType
-  // Should clean up the image handling in a real card
-  let image;
-  if (
-    props.image &&
-    typeof props.image === "object" &&
-    "image" in props.image
-  ) {
-    image = props.image.image;
-  } else if (props.image) {
-    image = props.image;
-  }
+  const image = handleComplexImages(props.image);
 
   return (
     <div className="w-[200px] h-[200px] border-dashed border-black border-4 flex flex-col items-center justify-center">
