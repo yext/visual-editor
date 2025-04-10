@@ -205,7 +205,7 @@ export const ui: Registry["items"] = [
     name: "TestimonialCard",
     type: "registry:ui",
     registryDependencies: ["section", "heading", "body"],
-    files: [{ path: "TestimonialCard.tsx", type: "registry:ui" }],
+    files: [{ path: "card/TestimonialCard.tsx", type: "registry:ui" }],
   },
   {
     name: "TextList",
