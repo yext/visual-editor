@@ -202,10 +202,10 @@ export const ui: Registry["items"] = [
     files: [{ path: "Promo.tsx", type: "registry:ui" }],
   },
   {
-    name: "Testimonials",
+    name: "TestimonialCard",
     type: "registry:ui",
     registryDependencies: ["section", "heading", "body"],
-    files: [{ path: "Testimonials.tsx", type: "registry:ui" }],
+    files: [{ path: "TestimonialCard.tsx", type: "registry:ui" }],
   },
   {
     name: "TextList",

@@ -46,7 +46,10 @@ export {
   ExampleRepeatableItemComponent,
   type ExampleRepeatableItemProps,
 } from "./ExampleRepeatableItem.tsx";
-export { Testimonials, type TestimonialsProps } from "./Testimonials.tsx";
+export {
+  TestimonialCard,
+  type TestimonialCardProps,
+} from "./TestimonialCard.tsx";
 export {
   NearbyLocations,
   type NearbyLocationsProps,
