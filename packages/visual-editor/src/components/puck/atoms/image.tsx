@@ -42,7 +42,7 @@ export const Image: React.FC<ImageProps> = ({
 };
 
 // Handle ImageType or ComplexImageType
-// TODO move or cleanup
+// TODO - Reconsider how this handled / why it isn't autoresolved
 export const handleComplexImages = (resolvedImage: any) => {
   let image: ImageType;
   if (
