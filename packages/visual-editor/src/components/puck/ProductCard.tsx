@@ -22,6 +22,8 @@ import {
 import { ImageType } from "@yext/pages-components";
 import { handleComplexImages } from "./atoms/image.js";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x200";
+
 export type ProductCardProps = {
   card?: {
     image?: YextEntityField<ImageType>;
@@ -220,28 +222,29 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
     card: {
       image: {
         field: "",
-        constantValue: { height: 150, width: 150, url: "" },
-        constantValueEnabled: false,
+        constantValue: { height: 200, width: 360, url: PLACEHOLDER_IMAGE_URL },
+        constantValueEnabled: true,
       },
       heading: {
         field: "",
-        constantValue: "",
-        constantValueEnabled: false,
+        constantValue: "Product Title",
+        constantValueEnabled: true,
       },
       category: {
-        field: "",
+        field: "Category, Pricing, etc",
         constantValue: "",
-        constantValueEnabled: false,
+        constantValueEnabled: true,
       },
       description: {
         field: "",
-        constantValue: "",
-        constantValueEnabled: false,
+        constantValue:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+        constantValueEnabled: true,
       },
       cta: {
         field: "",
-        constantValue: "",
-        constantValueEnabled: false,
+        constantValue: "#",
+        constantValueEnabled: true,
       },
     },
     styles: {
