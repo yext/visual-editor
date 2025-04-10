@@ -170,7 +170,8 @@ const LocationCard = ({
   return (
     <Background
       background={backgroundColor}
-      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border"
+      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
+      as="section"
     >
       <Heading level={cards.headingLevel}>{name}</Heading>
       {hours && (
@@ -235,6 +236,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
     );
+    return <></>;
   }
 
   const entityType: string = document?.meta?.entityType?.id || "location";
@@ -268,7 +270,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 
   return (
-    <PageSection background={styles.backgroundColor} className={`components`}>
+    <PageSection background={styles.backgroundColor}>
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
@@ -307,7 +309,7 @@ export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
   fields: nearbyLocationsFields,
   defaultProps: {
     styles: {
-      backgroundColor: backgroundColors.background2.value,
+      backgroundColor: backgroundColors.background1.value,
       cardBackgroundColor: backgroundColors.background1.value,
     },
     heading: {
