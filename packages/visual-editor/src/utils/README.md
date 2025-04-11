@@ -1,3 +1,8 @@
+---
+title: Utility Functions
+outline: deep
+---
+
 # Utils
 
 ## getPageMetadata

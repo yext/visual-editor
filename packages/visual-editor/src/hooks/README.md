@@ -1,3 +1,8 @@
+---
+title: Hooks
+outline: deep
+---
+
 # Hooks
 
 ## useTemplateProps

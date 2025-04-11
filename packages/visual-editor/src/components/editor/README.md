@@ -1,3 +1,8 @@
+---
+title: Components
+outline: deep
+---
+
 # Components
 
 ## Editor
@@ -6,15 +11,15 @@ Use this component to create an `edit.tsx` page in your Pages repository. This i
 in making your repo compatible with the Visual Editor. See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for more
 information.
 
-### Props:
+### Props
 
-| Name              | Type                                                                                 |
-| ----------------- | ------------------------------------------------------------------------------------ |
-| document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))        |
-| componentRegistry | Map<string, Config<any>> from [@measuredco/puck](https://github.com/measuredco/puck) |
-| themeConfig?      | ThemeConfig                                                                          |
+| Name              | Type                                                                                   |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| document          | any (json data from [our hook](../../hooks/README.md#usePlatformBridgeDocument))          |
+| componentRegistry | `Map<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
+| themeConfig?      | ThemeConfig                                                                            |
 
-### Usage:
+### Usage
 
 ```tsx
 import { themeConfig } from "../../theme.config"

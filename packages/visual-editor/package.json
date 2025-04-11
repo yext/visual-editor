@@ -36,7 +36,10 @@
     "lint": "eslint --cache --fix src/ --ignore-pattern 'src/vite-plugin/templates/*'",
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
-    "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite"
+    "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
+    "docs:dev": "vitepress dev .",
+    "docs:build": "vitepress build .",
+    "docs:preview": "vitepress preview ."
   },
   "dependencies": {
     "@measured/puck": "0.18.2",
@@ -101,6 +104,7 @@
     "execa": "^8.0.1",
     "fs-extra": "^11.2.0",
     "generate-license-file": "^3.5.0",
+    "gray-matter": "^4.0.3",
     "husky": "^9.1.4",
     "jsdom": "^24.1.1",
     "libphonenumber-js": "^1.11.19",
@@ -113,6 +117,7 @@
     "typescript": "^5.5.4",
     "uuid": "11.0.3",
     "vite": "^5.3.5",
+    "vitepress": "^1.6.3",
     "vitest": "^3.0.5",
     "zod": "^3.23.8"
   },

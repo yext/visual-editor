@@ -1,0 +1,8 @@
+buildConfiguration:
+  buildCommand: pnpm docs:build
+  installDependenciesStep:
+    command: pnpm install
+    requiredFiles:
+      - package.json
+      - package-lock.json
+      - .npmrc
