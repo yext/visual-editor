@@ -40,8 +40,8 @@ export const CTA = ({
     >
       <Link
         cta={{
-          link: link ?? "",
-          linkType: linkType,
+          link: link ?? "#",
+          linkType: linkType ?? "URL",
         }}
         eventName={eventName}
         target={target}
