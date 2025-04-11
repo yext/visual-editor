@@ -22,6 +22,18 @@ const mapboxFields: Fields<MapboxStaticProps> = {
     label: "API Key",
     type: "text",
   },
+  width: {
+    label: "Width",
+    type: "number",
+    min: 0,
+    max: 2048,
+  },
+  height: {
+    label: "Height",
+    type: "number",
+    min: 0,
+    max: 2048,
+  },
   coordinate: YextEntityFieldSelector<any, Coordinate>({
     label: "Coordinates",
     filter: { types: ["type.coordinate"] },
@@ -70,6 +82,10 @@ const MapboxStaticMap = ({
     return <></>;
   }
 
+  if (!width || !height) {
+    return <></>;
+  }
+
   const marker = `pin-l+${getPrimaryColor(document)}(${coordinate.longitude},${coordinate.latitude})`;
 
   return (
@@ -92,6 +108,8 @@ const MapboxStaticMapComponent: ComponentConfig<MapboxStaticProps> = {
         longitude: 0,
       },
     },
+    width: 1024,
+    height: 300,
   },
   render: (props: MapboxStaticProps) => <MapboxStaticMap {...props} />,
 };
