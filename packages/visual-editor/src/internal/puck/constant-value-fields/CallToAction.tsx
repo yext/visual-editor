@@ -1,5 +1,5 @@
 import { CustomField } from "@measured/puck";
-import { CTAProps } from "../../../components/puck/atoms/cta.tsx";
+import { CTAProps } from "../../../components/atoms/cta.tsx";
 import { ConstantFields } from "./ConstantField.tsx";
 
 export const CTA_CONSTANT_CONFIG: CustomField<CTAProps> = {
