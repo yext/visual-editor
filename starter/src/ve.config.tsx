@@ -1,99 +1,81 @@
-import { type Config } from "@measured/puck";
+import { DropZone, type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
-  Address,
-  AddressProps,
-  Banner,
-  BannerProps,
-  BodyText,
-  BodyTextProps,
-  Card,
-  CardProps,
-  CTAWrapper as CTA,
-  CTAWrapperProps,
-  Emails,
-  EmailsProps,
-  Flex,
-  FlexProps,
-  GetDirections,
-  GetDirectionsProps,
-  Grid,
-  GridProps,
-  HeadingText,
-  HeadingTextProps,
-  HoursTable,
-  HoursTableProps,
-  HoursStatus,
-  HoursStatusProps,
-  ImageWrapper,
-  ImageWrapperProps,
-  Phone,
-  PhoneProps,
-  TextList,
-  TextListProps,
-  Header,
-  HeaderProps,
-  Footer,
-  FooterProps,
-  Breadcrumbs,
-  BreadcrumbsProps,
-  Directory,
-  DirectoryProps,
-  Promo,
-  PromoProps,
+  PageSectionCategory,
+  PageSectionCategoryComponents,
+  PageSectionCategoryProps,
+  LayoutBlockCategory,
+  CardCategory,
+  ContentBlockCategory,
+  LayoutBlockCategoryComponents,
+  CardCategoryComponents,
+  ContentBlockCategoryComponents,
+  OtherCategoryComponents,
+  LayoutBlockCategoryProps,
+  CardCategoryProps,
+  ContentBlockCategoryProps,
+  OtherCategoryProps,
+  DirectoryCategory,
+  DirectoryCategoryComponents,
+  DirectoryCategoryProps,
 } from "@yext/visual-editor";
 
-type MainProps = {
-  Address: AddressProps;
-  Banner: BannerProps;
-  BodyText: BodyTextProps;
-  Breadcrumbs: BreadcrumbsProps;
-  Card: CardProps;
-  CTA: CTAWrapperProps;
-  Directory: DirectoryProps;
-  Emails: EmailsProps;
-  Flex: FlexProps;
-  Footer: FooterProps;
-  GetDirections: GetDirectionsProps;
-  Grid: GridProps;
-  Header: HeaderProps;
-  HeadingText: HeadingTextProps;
-  HoursTable: HoursTableProps;
-  HoursStatus: HoursStatusProps;
-  ImageWrapper: ImageWrapperProps;
-  Phone: PhoneProps;
-  Promo: PromoProps;
-  TextList: TextListProps;
+interface MainProps
+  extends PageSectionCategoryProps,
+    LayoutBlockCategoryProps,
+    CardCategoryProps,
+    ContentBlockCategoryProps,
+    DirectoryCategoryProps,
+    OtherCategoryProps {}
+
+const components: Config<MainProps>["components"] = {
+  ...PageSectionCategoryComponents,
+  ...LayoutBlockCategoryComponents,
+  ...CardCategoryComponents,
+  ...ContentBlockCategoryComponents,
+  ...DirectoryCategoryComponents,
+  ...OtherCategoryComponents,
 };
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
-  components: {
-    Address,
-    Banner,
-    BodyText,
-    Breadcrumbs,
-    Card,
-    CTA,
-    Directory,
-    Emails,
-    Flex,
-    Footer,
-    GetDirections,
-    Grid,
-    Header,
-    HeadingText,
-    HoursTable,
-    HoursStatus,
-    ImageWrapper,
-    Phone,
-    Promo,
-    TextList,
+  components,
+  categories: {
+    pageSections: {
+      title: "Page Sections",
+      components: PageSectionCategory,
+    },
+    layoutBlocks: {
+      title: "Layout Blocks",
+      components: LayoutBlockCategory,
+    },
+    cardBlocks: {
+      title: "Cards",
+      components: CardCategory,
+    },
+    contentBlocks: {
+      title: "Content Blocks",
+      components: ContentBlockCategory,
+    },
+    directory: {
+      title: "Directory",
+      components: DirectoryCategory,
+    },
   },
   root: {
-    render: ({ children }) => {
-      return <>{children}</>;
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          disallow={[
+            ...ContentBlockCategory,
+            ...CardCategory,
+            ...LayoutBlockCategory,
+          ]}
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
     },
   },
 };

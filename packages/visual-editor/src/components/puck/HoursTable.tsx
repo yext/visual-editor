@@ -1,24 +1,27 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { DayOfWeekNames, HoursTable, HoursType } from "@yext/pages-components";
-import { Section, sectionVariants } from "./atoms/section.js";
-import "@yext/pages-components/style.css";
-import { VariantProps } from "class-variance-authority";
 import {
+  DayOfWeekNames,
+  HoursTable as HoursTableJS,
+  HoursType,
+} from "@yext/pages-components";
+import "@yext/pages-components/style.css";
+import {
+  BasicSelector,
   EntityField,
   resolveYextEntityField,
+  ThemeOptions,
   useDocument,
   YextEntityField,
   YextEntityFieldSelector,
 } from "../../index.js";
 
-type HoursTableProps = {
+export type HoursTableProps = {
   hours: YextEntityField<HoursType>;
   startOfWeek: keyof DayOfWeekNames | "today";
   collapseDays: boolean;
   showAdditionalHoursText: boolean;
   alignment: "items-start" | "items-center";
-  padding: VariantProps<typeof sectionVariants>["padding"];
 };
 
 const hoursTableFields: Fields<HoursTableProps> = {
@@ -28,20 +31,7 @@ const hoursTableFields: Fields<HoursTableProps> = {
       types: ["type.hours"],
     },
   }),
-  startOfWeek: {
-    label: "Start of the week",
-    type: "radio",
-    options: [
-      { label: "Monday", value: "monday" },
-      { label: "Tuesday", value: "tuesday" },
-      { label: "Wednesday", value: "wednesday" },
-      { label: "Thursday", value: "thursday" },
-      { label: "Friday", value: "friday" },
-      { label: "Saturday", value: "saturday" },
-      { label: "Sunday", value: "sunday" },
-      { label: "Today", value: "today" },
-    ],
-  },
+  startOfWeek: BasicSelector("Start of the Week", ThemeOptions.HOURS_OPTIONS),
   collapseDays: {
     label: "Collapse days",
     type: "radio",
@@ -66,16 +56,6 @@ const hoursTableFields: Fields<HoursTableProps> = {
       { label: "Center", value: "items-center" },
     ],
   },
-  padding: {
-    label: "Padding",
-    type: "radio",
-    options: [
-      { label: "None", value: "none" },
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "default" },
-      { label: "Large", value: "large" },
-    ],
-  },
 };
 
 const VisualEditorHoursTable = ({
@@ -84,7 +64,6 @@ const VisualEditorHoursTable = ({
   collapseDays,
   showAdditionalHoursText,
   alignment,
-  padding,
 }: HoursTableProps) => {
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
@@ -94,35 +73,32 @@ const VisualEditorHoursTable = ({
   };
 
   return (
-    <Section
-      className={`flex flex-col justify-center components ${alignment} font-body-fontFamily font-body-fontWeight text-body-fontSize text-body-color`}
-      padding={padding}
-    >
-      <div>
-        {hours && (
-          <EntityField
-            displayName="Hours"
-            fieldId="hours"
-            constantValueEnabled={hoursField.constantValueEnabled}
-          >
-            <HoursTable
-              hours={hours}
-              startOfWeek={startOfWeek}
-              collapseDays={collapseDays}
-            />
-          </EntityField>
-        )}
-        {additionalHoursText && showAdditionalHoursText && (
-          <EntityField displayName="Hours Text" fieldId="additionalHoursText">
-            <div className="mt-4">{additionalHoursText}</div>
-          </EntityField>
-        )}
-      </div>
-    </Section>
+    <div className={`flex flex-col ${alignment}`}>
+      {hours && (
+        <EntityField
+          displayName="Hours"
+          fieldId="hours"
+          constantValueEnabled={hoursField.constantValueEnabled}
+        >
+          <HoursTableJS
+            hours={hours}
+            startOfWeek={startOfWeek}
+            collapseDays={collapseDays}
+          />
+        </EntityField>
+      )}
+      {additionalHoursText && showAdditionalHoursText && (
+        <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+          <div className="mt-4 text-body-sm-fontSize">
+            {additionalHoursText}
+          </div>
+        </EntityField>
+      )}
+    </div>
   );
 };
 
-const HoursTableComponent: ComponentConfig<HoursTableProps> = {
+export const HoursTable: ComponentConfig<HoursTableProps> = {
   fields: hoursTableFields,
   defaultProps: {
     hours: {
@@ -133,10 +109,7 @@ const HoursTableComponent: ComponentConfig<HoursTableProps> = {
     collapseDays: false,
     showAdditionalHoursText: true,
     alignment: "items-center",
-    padding: "none",
   },
   label: "Hours Table",
-  render: (props) => <VisualEditorHoursTable {...props} />,
+  render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };
-
-export { HoursTableComponent as HoursTable, type HoursTableProps };

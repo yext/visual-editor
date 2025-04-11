@@ -1,17 +1,27 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn } from "../../../index.ts";
+import { themeManagerCn, HeadingLevel } from "../../../index.ts";
 
 // Define the variants for the heading component
-const headingVariants = cva("components", {
+export const headingVariants = cva("components", {
   variants: {
     level: {
-      1: "font-heading1-fontWeight text-heading1-fontSize text-heading1-color font-heading1-fontFamily",
-      2: "font-heading2-fontWeight text-heading2-fontSize text-heading2-color font-heading2-fontFamily",
-      3: "font-heading3-fontWeight text-heading3-fontSize text-heading3-color font-heading3-fontFamily",
-      4: "font-heading4-fontWeight text-heading4-fontSize text-heading4-color font-heading4-fontFamily",
-      5: "font-heading5-fontWeight text-heading5-fontSize text-heading5-color font-heading5-fontFamily",
-      6: "font-heading6-fontWeight text-heading6-fontSize text-heading6-color font-heading6-fontFamily",
+      1:
+        "font-h2-fontWeight text-h2-fontSize text-h2-color font-h2-fontFamily " +
+        "sm:font-h1-fontWeight sm:text-h1-fontSize sm:text-h1-color sm:font-h1-fontFamily",
+      2:
+        "font-h3-fontWeight text-h3-fontSize text-h3-color font-h3-fontFamily " +
+        "sm:font-h2-fontWeight sm:text-h2-fontSize sm:text-h2-color sm:font-h2-fontFamily",
+      3:
+        "font-h4-fontWeight text-h4-fontSize text-h4-color font-h4-fontFamily " +
+        "sm:font-h3-fontWeight sm:text-h3-fontSize sm:text-h3-color sm:font-h3-fontFamily",
+      4:
+        "font-h5-fontWeight text-h5-fontSize text-h5-color font-h5-fontFamily " +
+        "sm:font-h4-fontWeight sm:text-h4-fontSize sm:text-h4-color sm:font-h4-fontFamily",
+      5:
+        "font-h6-fontWeight text-h6-fontSize text-h6-color font-h6-fontFamily " +
+        "sm:font-h5-fontWeight sm:text-h5-fontSize sm:text-h5-color sm:font-h5-fontFamily",
+      6: "font-h6-fontWeight text-h6-fontSize text-h6-color font-h6-fontFamily",
     },
     fontSize: {
       default: "",
@@ -41,14 +51,6 @@ const headingVariants = cva("components", {
       "800": "font-extrabold",
       "900": "font-black",
     },
-    color: {
-      default: "",
-      primary: "text-palette-primary",
-      secondary: "text-palette-secondary",
-      accent: "text-palette-accent",
-      text: "text-palette-text",
-      background: "text-palette-background",
-    },
     transform: {
       none: "",
       uppercase: "uppercase",
@@ -58,27 +60,20 @@ const headingVariants = cva("components", {
   },
   defaultVariants: {
     fontSize: "default",
-    color: "primary",
     weight: "default",
     transform: "none",
   },
 });
 
-// Define the valid levels for the heading element
-export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
 // Omit 'color' from HTMLAttributes<HTMLHeadingElement> to avoid conflict
 export interface HeadingProps
   extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
-  level?: HeadingLevel;
+  level: HeadingLevel;
 }
 
-const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-  (
-    { className, level = 1, color, weight, transform, fontSize, ...props },
-    ref
-  ) => {
+export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
+  ({ className, level = 1, weight, transform, fontSize, ...props }, ref) => {
     const Tag = `h${level}` as keyof Pick<
       JSX.IntrinsicElements,
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
@@ -90,7 +85,6 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         className={themeManagerCn(
           headingVariants({
             fontSize,
-            color,
             weight,
             transform,
             level,
@@ -106,32 +100,3 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   }
 );
 Heading.displayName = "Heading";
-
-const headingOptions = [
-  {
-    label: "1",
-    value: 1,
-  },
-  {
-    label: "2",
-    value: 2,
-  },
-  {
-    label: "3",
-    value: 3,
-  },
-  {
-    label: "4",
-    value: 4,
-  },
-  {
-    label: "5",
-    value: 5,
-  },
-  {
-    label: "6",
-    value: 6,
-  },
-];
-
-export { Heading, headingVariants, headingOptions };

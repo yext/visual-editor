@@ -51,7 +51,99 @@ Used in a component's render function to pull in the selected entity field's val
 
 ### Usage
 
-See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
+See [YextEntityFieldSelector](../components/editor/README.md#YextEntityFieldSelector)
+
+## resolveYextSubfield
+
+Used in a component's render function to pull in the selected subfield's value from the document or use the constant value.
+
+### Props
+
+| Name        | Type                |
+| ----------- | ------------------- |
+| document    | Record<string, any> |
+| entityField | YextEntityField     |
+
+### Usage
+
+```tsx
+const { text, image, collection } = props;
+const { items, limit } = collection;
+const resolvedParent = resolveYextEntityField(document, items);
+
+// Return one card with resolved subfields for each item in the parent
+return (
+  <div>
+    {resolvedParent
+      ?.slice(0, typeof limit !== "number" ? undefined : limit)
+      .map((item, i) => {
+        const resolvedImage = resolveYextSubfield(item, image);
+        const resolvedText = resolveYextSubfield(item, text);
+        return (
+          <ExampleRepeatableItemCard
+            key={i}
+            image={resolvedImage}
+            text={resolvedText}
+          />
+        );
+      })}
+  </div>
+);
+```
+
+## handleResolveFieldsForCollections
+
+Use this function in Puck's `resolveFields` to handle collection field update.
+This function updates the `collection` prop, returns information about how to update
+field collection subfields, and resets subfields when the parent or parent field has changed.
+
+### Props
+
+| Name   | Type                                   |
+| ------ | -------------------------------------- |
+| data   | the Puck `resolveFields` data object   |
+| params | the Puck `resolveFields` params object |
+
+### Usage
+
+```tsx
+export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableItemProps> = {
+  fields: fields,
+  resolveFields: (data, params) => {
+    // Set the collection prop and determine how to update fields
+    const { shouldReturnLastFields, isCollection, directChildrenFilter } =
+      handleResolveFieldsForCollections(data, params);
+
+    // Unnecessary field updates can lead to the fields losing focus
+    if (shouldReturnLastFields) {
+      return params.lastFields;
+    }
+
+    // Update each subfield based on isCollection
+    return {
+      ...params.lastFields,
+      text: YextCollectionSubfieldSelector<any, string>({
+        label: "Text",
+        isCollection: isCollection,
+        filter: {
+          directChildrenOf: directChildrenFilter,
+          types: ["type.string"],
+        },
+      }),
+      image: YextCollectionSubfieldSelector<any, ImageType>({
+        label: "Image",
+        isCollection: isCollection,
+        filter: {
+          directChildrenOf: directChildrenFilter,
+          types: ["type.image"],
+        },
+      }),
+      // ... other subfields
+    } as Fields<ExampleRepeatableItemProps>;
+  },
+  defaultProps: ...defaultProps,
+}
+```
 
 ## ThemeConfig
 
@@ -62,7 +154,7 @@ by themeResolver, applyTheme, and Editor.
 
 Each style must specify a label, type, default value, and plugin. The label will be displayed in the
 Theme Manager UI. The type can be "color", "number" or "select". If type "select", an array of options
-must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
+must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://v3.tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
 a plugin can be nested one level deep together under a shared label.
 
 ```ts
@@ -453,83 +545,59 @@ Normalizes the provided content by converting upper case to lower case, replacin
 and stripping all other illegal characters.
 Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`
 
-## getFontSizeOptions
+## defaultThemeTailwindExtensions
 
-### Props
+A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
 
-| Name              | Type     | Description                                               |
-| ----------------- | -------- | --------------------------------------------------------- |
-| includeLargeSizes | boolean? | Defaults to true. If set to false, only returns XS to 4XL |
+#### Usage
 
-### Usage
+```tsx
+// tailwind.config.ts
+theme: {
+  extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
+},
+```
 
-Returns a list of font size options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
+## backgroundColors
 
-| Tailwind Class | Label       | Value |
-| -------------- | ----------- | ----- |
-| text-xs        | XS (12px)   | 12px  |
-| text-sm        | SM (14px)   | 14px  |
-| text-base      | Base (16px) | 16px  |
-| text-lg        | LG (18px)   | 18px  |
-| text-xl        | XL (20px)   | 20px  |
-| text-2xl       | 2XL (24px)  | 24px  |
-| text-3xl       | 3XL (30px)  | 30px  |
-| text-4xl       | 4XL (36px)  | 36px  |
-| text-5xl       | 5XL (48px)  | 48px  |
-| text-6xl       | 6XL (60px)  | 60px  |
-| text-7xl       | 7XL (72px)  | 72px  |
-| text-8xl       | 8XL (96px)  | 96px  |
-| text-9xl       | 9XL (128px) | 128px |
+An object of the following shape containing the seven auto-generated background styles.
 
-## getBorderRadiusOptions
+```js
+{
+  backgroundKey: {
+    label: "Background Label",
+    value: "Background Tailwind Classes"
+  }
+}
+```
 
-Returns a list of border radius options to be optionally used in the theme.config. The labels and values correspond to tailwind's default classes.
+| Key         | Label        | Background Color | Text Color |
+| ----------- | ------------ | ---------------- | ---------- |
+| background1 | Background 1 | white            | black      |
+| background2 | Background 2 | primary-light    | black      |
+| background3 | Background 3 | secondary-light  | black      |
+| background4 | Background 4 | tertiary-light   | black      |
+| background5 | Background 5 | quaternary-light | black      |
+| background6 | Background 6 | primary-dark     | white      |
+| background7 | Background 7 | secondary-dark   | white      |
 
-| Tailwind Class | Label         | Value  |
-| -------------- | ------------- | ------ |
-| rounded-none   | None (0px)    | 0px    |
-| rounded-xs     | XS (2px)      | 2px    |
-| rounded-sm     | SM (4px)      | 4px    |
-| rounded-md     | MD (6px)      | 6px    |
-| rounded-lg     | LG (8px)      | 8px    |
-| rounded-xl     | XL (12px)     | 12px   |
-| rounded-2xl    | 2XL (16px)    | 16px   |
-| rounded-3xl    | 3XL (24px)    | 24px   |
-| rounded-full   | Full (9999px) | 9999px |
+## darkBackgroundColors
 
-## getSpacingOptions
+An object of the following shape containing the two auto-generated dark background styles.
 
-### Props
+```js
+{
+  backgroundKey: {
+    label: "Background Label",
+    value: "Background Tailwind Classes"
+  }
+}
+```
 
-| Name        | Type   | Description              |
-| ----------- | ------ | ------------------------ |
-| spacingType | string | Either "padding" or "gap |
-
-Returns a list of spacing options to be optionally used in the theme.config. It can be used for padding or gap. The labels and values correspond to tailwind's default classes.
-
-| Label      | Value |
-| ---------- | ----- |
-| 0 (0px)    | 0     |
-| 0.5 (2px)  | 0.5   |
-| 1 (4px)    | 1     |
-| 1.5 (6px)  | 1.5   |
-| 2 (8px)    | 2     |
-| 2.5 (10px) | 2.5   |
-| 3 (12px)   | 3     |
-| 3.5 (14px) | 3.5   |
-| 4 (16px)   | 4     |
-| 5 (20px)   | 5     |
-| 6 (24px)   | 6     |
-| 7 (28px)   | 7     |
-| 8 (32px)   | 8     |
-| 9 (36px)   | 9     |
-| 10 (40px)  | 10    |
-| 11 (44px)  | 11    |
-| 12 (48px)  | 12    |
-| 14 (56px)  | 14    |
-| 16 (64px)  | 16    |
-| 20 (80px)  | 20    |
-| 24 (96px)  | 24    |
+| Key         | Label        | Background Color | Text Color |
+| ----------- | ------------ | ---------------- | ---------- |
+| background6 | Background 6 | primary-dark     | white      |
+| background7 | Background 7 | secondary-dark   | white      |
 
 ## applyAnalytics
 
@@ -549,4 +617,163 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     ),
   };
 };
+```
+
+## ThemeOptions
+
+Contains preset options to be used when defining a component's fields.
+
+| Name             | Options                                             |
+| ---------------- | --------------------------------------------------- |
+| HEADING_LEVEL    | [`headingLevelOptions`](#headingLevelOptions)       |
+| TEXT_TRANSFORM   | [`textTransformOptions`](#textTransformOptions)     |
+| LETTER_SPACING   | [`letterSpacingOptions`](#letterSpacingOptions)     |
+| BACKGROUND_COLOR | [`backgroundColorOptions`](#backgroundColorOptions) |
+| CTA_VARIANT      | [`ctaVariantOptions`](#ctaVariantOptions)           |
+| ALIGNMENT        | [`alignmentOptions`](#alignmentOptions)             |
+| JUSTIFY_CONTENT  | [`justifyContentOptions`](#justifyContentOptions)   |
+| BODY_VARIANT     | [`bodyVariantOptions`](#bodyVariantOptions)         |
+| BORDER_RADIUS    | [`borderRadiusOptions`](#borderRadiusOptions)       |
+| SPACING          | [`spacingOptions`](#spacingOptions)                 |
+| FONT_SIZE        | [`fontSizeOptions`](#fontSizeOptions)               |
+| HOURS_OPTIONS    | [`hoursOptions`](#hoursOptions)                     |
+| PHONE_OPTIONS    | [`phoneOptions`](#phoneOptions)                     |
+
+### Available Options
+
+#### headingLevelOptions
+
+| Label | Value |
+| ----- | ----- |
+| H1    | 1     |
+| H2    | 2     |
+| H3    | 3     |
+| H4    | 4     |
+| H5    | 5     |
+| H6    | 6     |
+
+#### letterSpacingOptions
+
+| Label             | Value      |
+| ----------------- | ---------- |
+| Tighter (-0.05em) | "-0.05em"  |
+| Tight (-0.025em)  | "-0.025em" |
+| Normal (0em)      | "0em"      |
+| Wide (0.025em)    | "0.025em"  |
+| Wider (0.05em)    | "0.05em"   |
+| Widest (0.1em)    | "0.1em"    |
+
+#### backgroundColorOptions
+
+| Label        | Value                         |
+| ------------ | ----------------------------- |
+| Background 1 | `bg-white`                    |
+| Background 2 | `bg-palette-primary-light`    |
+| Background 3 | `bg-palette-secondary-light`  |
+| Background 4 | `bg-palette-tertiary-light`   |
+| Background 5 | `bg-palette-quaternary-light` |
+| Background 6 | `bg-palette-primary-dark`     |
+| Background 7 | `bg-palette-secondary-dark`   |
+
+#### textTransformOptions
+
+| Label      | Value        |
+| ---------- | ------------ |
+| Normal     | "none"       |
+| Uppercase  | "uppercase"  |
+| Lowercase  | "lowercase"  |
+| Capitalize | "capitalize" |
+
+#### ctaVariantOptions
+
+| Label     | Value       |
+| --------- | ----------- |
+| Primary   | "primary"   |
+| Secondary | "secondary" |
+| Link      | "link"      |
+
+#### alignmentOptions
+
+| Label  | Value    |
+| ------ | -------- |
+| Left   | "left"   |
+| Center | "center" |
+| Right  | "right"  |
+
+#### justifyContentOptions
+
+| Label  | Value    |
+| ------ | -------- |
+| Start  | "start"  |
+| Center | "center" |
+| End    | "end"    |
+
+#### bodyVariantOptions
+
+| Label | Value  |
+| ----- | ------ |
+| Small | "sm"   |
+| Base  | "base" |
+| Large | "lg"   |
+
+#### fontSizeOptions
+
+| Label       | Value   |
+| ----------- | ------- |
+| XS (12px)   | "12px"  |
+| SM (14px)   | "14px"  |
+| Base (16px) | "16px"  |
+| LG (18px)   | "18px"  |
+| XL (20px)   | "20px"  |
+| 2XL (24px)  | "24px"  |
+| 3XL (30px)  | "30px"  |
+| 4XL (36px)  | "36px"  |
+| 5XL (48px)  | "48px"  |
+| 6XL (60px)  | "60px"  |
+| 7XL (72px)  | "72px"  |
+| 8XL (96px)  | "96px"  |
+| 9XL (128px) | "128px" |
+
+#### hoursOptions
+
+| Label     | Value       |
+| --------- | ----------- |
+| Monday    | "monday"    |
+| Tuesday   | "tuesday"   |
+| Wednesday | "wednesday" |
+| Thursday  | "thursday"  |
+| Friday    | "friday"    |
+| Saturday  | "saturday"  |
+| Sunday    | "sunday"    |
+| Today     | "today"     |
+
+#### phoneOptions
+
+| Label         | Value           |
+| ------------- | --------------- |
+| Domestic      | "domestic"      |
+| International | "international" |
+
+### Usage
+
+```tsx
+const myComponentFields: Fields<MyComponentProps> = {
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
+    },
+  },
+  cta: {
+    type: "object",
+    label: "Call to Action",
+    objectFields: {
+      variant: {
+        label: "Variant",
+        type: "radio",
+        options: ThemeOptions.CTA_VARIANT,
+      },
+    },
+  },
 ```

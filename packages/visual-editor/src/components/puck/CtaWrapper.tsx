@@ -1,58 +1,40 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { CTA, CTAProps, linkTypeFields } from "./atoms/cta.js";
 import {
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  FontSizeSelector,
-  BorderRadiusSelector,
-  BasicSelector,
+  ThemeOptions,
+  CTA,
+  CTAProps,
 } from "../../index.js";
 
-interface CTAWrapperProps {
+export interface CTAWrapperProps {
   entityField: YextEntityField<CTAProps>;
   variant: CTAProps["variant"];
-  size: CTAProps["size"];
-  borderRadius: CTAProps["borderRadius"];
-  fontSize: CTAProps["fontSize"];
-  linkType: CTAProps["linkType"];
   className?: CTAProps["className"];
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
   entityField: YextEntityFieldSelector({
-    label: "Entity Field",
+    label: "CTA",
     filter: {
       types: ["type.cta"],
     },
   }),
-  variant: BasicSelector("Variant", [
-    { label: "Primary", value: "primary" },
-    { label: "Link", value: "link" },
-  ]),
-  size: {
-    label: "Size",
+  variant: {
+    label: "Variant",
     type: "radio",
-    options: [
-      { label: "Small", value: "small" },
-      { label: "Large", value: "large" },
-    ],
+    options: ThemeOptions.CTA_VARIANT,
   },
-  linkType: linkTypeFields,
-  fontSize: FontSizeSelector("Font Size", false),
-  borderRadius: BorderRadiusSelector(),
 };
 
-const CTAWrapper: React.FC<CTAWrapperProps> = ({
+const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   entityField,
   variant,
   className,
-  fontSize,
-  size,
-  borderRadius,
 }) => {
   const document = useDocument();
   const cta = resolveYextEntityField(document, entityField);
@@ -69,31 +51,22 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({
         linkType={cta?.linkType}
         variant={variant}
         className={className}
-        fontSize={fontSize}
-        size={size}
-        borderRadius={borderRadius}
       />
     </EntityField>
   );
 };
 
-const CTAWrapperComponent: ComponentConfig<CTAWrapperProps> = {
+export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
   label: "Call to Action",
   fields: ctaWrapperFields,
   defaultProps: {
     entityField: {
       field: "",
       constantValue: {
-        name: "Call to Action",
+        label: "Call to Action",
       },
     },
     variant: "primary",
-    fontSize: "default",
-    borderRadius: "default",
-    linkType: "URL",
-    size: "small",
   },
-  render: (props) => <CTAWrapper {...props} />,
+  render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
 };
-
-export { CTAWrapperComponent as CTAWrapper, type CTAWrapperProps };

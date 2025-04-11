@@ -1,28 +1,25 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { VariantProps } from "class-variance-authority";
-import { Section } from "./atoms/section.js";
-import { themeManagerCn } from "../../utils/cn.js";
+import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 import {
-  innerLayoutVariants,
-  layoutFields,
-  layoutVariants,
-} from "./Layout.tsx";
-import { BasicSelector } from "../../index.js";
+  backgroundColors,
+  themeManagerCn,
+  ThemeOptions,
+  Background,
+  CardCategory,
+  ContentBlockCategory,
+  LayoutBlockCategory,
+} from "../../index.js";
 
-interface FlexProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants>,
-    VariantProps<typeof innerLayoutVariants> {
+export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
-  direction: "row" | "column";
+  direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
   (
     {
-      className,
       direction,
       justifyContent,
       wrap,
@@ -30,42 +27,38 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       verticalPadding,
       horizontalPadding,
       backgroundColor,
-      maxContentWidth,
     },
     ref
   ) => {
     return (
-      <Section
+      <Background
+        background={backgroundColor}
         className={themeManagerCn(
           layoutVariants({
-            backgroundColor,
             verticalPadding,
             horizontalPadding,
-            gap,
           })
         )}
         ref={ref}
-        maxWidth="full"
-        padding="none"
       >
-        <div
+        <DropZone
           className={themeManagerCn(
-            innerLayoutVariants({ maxContentWidth }),
-            className
+            layoutVariants({ gap }),
+            "flex w-full",
+            direction
           )}
-        >
-          <DropZone
-            className={themeManagerCn(layoutVariants({ gap }), "flex")}
-            zone="flex-container"
-            style={{
-              justifyContent,
-              flexDirection: direction,
-              flexWrap: wrap,
-            }}
-            disallow={["Banner"]}
-          />
-        </div>
-      </Section>
+          zone="flex-container"
+          style={{
+            justifyContent,
+            flexWrap: wrap,
+          }}
+          allow={[
+            ...CardCategory,
+            ...ContentBlockCategory,
+            ...LayoutBlockCategory.filter((x) => x !== "Collection"),
+          ]}
+        />
+      </Background>
     );
   }
 );
@@ -73,85 +66,41 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: BasicSelector("Direction", [
-    { value: "row", label: "Horizontal" },
-    { value: "column", label: "Vertical" },
-  ]),
-  justifyContent: BasicSelector("Justify Content", [
-    { value: "start", label: "Start" },
-    { value: "center", label: "Center" },
-    { value: "end", label: "End" },
-  ]),
-  wrap: BasicSelector("Wrap", [
-    { value: "nowrap", label: "No Wrap" },
-    { value: "wrap", label: "Wrap" },
-  ]),
+  direction: {
+    label: "Direction",
+    type: "radio",
+    options: [
+      { label: "Horizontal", value: "flex-row" },
+      { label: "Vertical", value: "flex-col" },
+    ],
+  },
+  justifyContent: {
+    label: "Justify Content",
+    type: "radio",
+    options: ThemeOptions.JUSTIFY_CONTENT,
+  },
+  wrap: {
+    label: "Wrap",
+    type: "radio",
+    options: [
+      { label: "No Wrap", value: "nowrap" },
+      { label: "Wrap", value: "wrap" },
+    ],
+  },
   ...layoutFields,
 };
 
-const FlexContainerComponent: ComponentConfig<FlexProps> = {
+export const Flex: ComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
-    direction: "column",
+    direction: "flex-row",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: "default",
-    verticalPadding: "default",
-    horizontalPadding: "default",
-    backgroundColor: "default",
+    gap: "4",
+    verticalPadding: "0",
+    horizontalPadding: "0",
+    backgroundColor: backgroundColors.background1.value,
   },
-  resolveFields: (data, params) => {
-    // If the Flex has a parent component, the defaultProps should
-    // be adjusted and maxContentWidth should not be a field.
-    if (params.parent) {
-      // the props values should only be changed initially
-      if (!data.props.maxContentWidth) {
-        data.props.verticalPadding = "0";
-        data.props.horizontalPadding = "0";
-        data.props.gap = "0";
-        data.props.backgroundColor = "inherit";
-        data.props.maxContentWidth = "none";
-      }
-      return flexContainerFields;
-    }
-
-    if (!data.props.maxContentWidth) {
-      data.props.maxContentWidth = "default";
-    }
-    return {
-      ...flexContainerFields,
-      maxContentWidth: BasicSelector("Maximum Content Width", [
-        { value: "default", label: "Default" },
-        { value: "lg", label: "LG (1024px)" },
-        { value: "xl", label: "XL (1280px)" },
-        { value: "xxl", label: "2XL (1536px)" },
-      ]),
-    };
-  },
-  render: ({
-    direction,
-    justifyContent,
-    wrap,
-    gap,
-    verticalPadding,
-    horizontalPadding,
-    className,
-    backgroundColor,
-    maxContentWidth,
-  }) => (
-    <FlexContainer
-      direction={direction}
-      justifyContent={justifyContent}
-      wrap={wrap}
-      gap={gap}
-      verticalPadding={verticalPadding}
-      horizontalPadding={horizontalPadding}
-      className={className}
-      backgroundColor={backgroundColor}
-      maxContentWidth={maxContentWidth}
-    />
-  ),
+  render: (props) => <FlexContainer {...props} />,
 };
-
-export { FlexContainerComponent as Flex, type FlexProps };

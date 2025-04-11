@@ -1,9 +1,19 @@
 import * as React from "react";
-import { Link, CTA, Image, ComplexImageType } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
-import { cva, VariantProps } from "class-variance-authority";
-import { EntityField, useDocument, BasicSelector } from "../../index.ts";
-import { MaybeLink } from "./atoms/maybeLink.tsx";
+import {
+  CTA as CTAType,
+  Image,
+  ComplexImageType,
+} from "@yext/pages-components";
+import { ComponentConfig } from "@measured/puck";
+import {
+  CTA,
+  EntityField,
+  useDocument,
+  MaybeLink,
+  PageSection,
+  backgroundColors,
+  Background,
+} from "../../index.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
@@ -15,74 +25,45 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
   },
 };
 
-const headerVariants = cva("", {
-  variants: {
-    backgroundColor: {
-      default: "bg-header-backgroundColor",
-      primary: "bg-palette-primary",
-      secondary: "bg-palette-secondary",
-      accent: "bg-palette-accent",
-      text: "bg-palette-text",
-      background: "bg-palette-background",
-    },
-  },
-  defaultVariants: {
-    backgroundColor: "default",
-  },
-});
-
-export type HeaderProps = VariantProps<typeof headerVariants>;
-
-const headerFields: Fields<HeaderProps> = {
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
-};
+export type HeaderProps = Record<string, never>;
 
 export const Header: ComponentConfig<HeaderProps> = {
-  fields: headerFields,
   label: "Header",
-  render: (props) => <HeaderComponent {...props} />,
+  render: () => <HeaderComponent />,
 };
 
-const HeaderComponent: React.FC<HeaderProps> = (props) => {
+const HeaderComponent: React.FC<HeaderProps> = () => {
   const document: {
     _site?: {
       header?: {
-        links?: CTA[];
+        links?: CTAType[];
       };
       logo?: ComplexImageType;
     };
   } = useDocument();
-  const { backgroundColor } = props;
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  return (
-    <HeaderLayout links={links} logo={logo} backgroundColor={backgroundColor} />
-  );
+  return <HeaderLayout links={links} logo={logo} />;
 };
 
-interface HeaderLayoutProps extends HeaderProps {
-  links: CTA[];
+interface HeaderLayoutProps {
+  links: CTAType[];
   logoLink?: string;
   logo?: ComplexImageType;
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoLink, links, backgroundColor } = props;
+  const { logo, logoLink, links } = props;
 
   return (
-    <header
-      className={`components font-body-fontFamily relative ${headerVariants({ backgroundColor })}`}
+    <PageSection
+      as="header"
+      verticalPadding="header"
+      background={backgroundColors.background1.value}
     >
-      <div className="container mx-auto py-5 flex justify-start md:justify-between px-4 sm:px-8 lg:px-16 xl:px-20 items-center">
+      <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
             displayName="Business Logo"
@@ -101,7 +82,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
               <HeaderLinks links={links} />
             </EntityField>
             <button
-              className="flex md:hidden absolute p-4 right-0 top-1/2 -translate-y-1/2"
+              className="flex md:hidden ml-auto my-auto"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? "Close header menu" : "Open header menu"}
             >
@@ -114,15 +95,10 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
           </>
         )}
       </div>
-
       {links?.length > 0 && (
-        <HeaderMobileMenu
-          isOpen={menuOpen}
-          links={links}
-          backgroundColor={backgroundColor}
-        />
+        <HeaderMobileMenu isOpen={menuOpen} links={links} />
       )}
-    </header>
+    </PageSection>
   );
 };
 
@@ -140,16 +116,19 @@ const HeaderLogo = (props: { logo: ComplexImageType; logoLink?: string }) => {
   );
 };
 
-const HeaderLinks = (props: { links: CTA[] }) => {
+const HeaderLinks = (props: { links: CTAType[] }) => {
   return (
     <div className="hidden md:flex items-center">
       <ul className="flex gap-4 lg:gap-10">
-        {props.links.map((item: CTA, idx) => (
+        {props.links.map((item, idx) => (
           <li key={item.link}>
-            <Link
-              className="text-header-linkColor text-header-linkFontSize hover:underline"
-              cta={item}
+            <CTA
+              label={item.label}
+              link={item.link}
+              linkType={item.linkType}
+              variant="link"
               eventName={`headerlink${idx}`}
+              alwaysHideCaret={true}
             />
           </li>
         ))}
@@ -160,32 +139,36 @@ const HeaderLinks = (props: { links: CTA[] }) => {
 
 type HeaderMobileMenuProps = {
   isOpen?: boolean;
-  links: CTA[];
-  backgroundColor: VariantProps<typeof headerVariants>["backgroundColor"];
+  links: CTAType[];
 };
 
 const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
-  const { isOpen, backgroundColor, links } = props;
+  const { isOpen, links } = props;
   return (
     <div
       className={
-        `${isOpen ? "visible" : "hidden"} ${headerVariants({ backgroundColor })}` +
-        "components absolute top-full left-0 right-0 h-screen z-50"
+        `${isOpen ? "visible" : "hidden"} bg-white text-black` +
+        "components absolute left-0 right-0 h-screen z-50"
       }
     >
-      <div className={`container ${headerVariants({ backgroundColor })}`}>
-        <ul className="flex flex-col px-4">
-          {links.map((item: CTA, idx) => (
+      <Background
+        background={backgroundColors.background1.value}
+        className="container"
+      >
+        <ul className="flex flex-col p-4 gap-4">
+          {links.map((item: CTAType, idx) => (
             <li key={item.link}>
-              <Link
-                className="py-3 block text-header-linkColor text-header-linkFontSize"
-                cta={item}
+              <CTA
+                link={item.link}
+                label={item.label}
+                linkType={item.linkType}
+                variant="link"
                 eventName={`headermobilelink${idx}`}
               />
             </li>
           ))}
         </ul>
-      </div>
+      </Background>
     </div>
   );
 };

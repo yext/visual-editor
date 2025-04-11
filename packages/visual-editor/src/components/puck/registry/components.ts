@@ -5,9 +5,14 @@ import { Registry } from "./schema.ts";
 
 export const ui: Registry["items"] = [
   {
-    name: "heading",
+    name: "accordion",
     type: "registry:component",
-    files: [{ path: "atoms/heading.tsx", type: "registry:component" }],
+    files: [{ path: "atoms/accordion.tsx", type: "registry:component" }],
+  },
+  {
+    name: "background",
+    type: "registry:component",
+    files: [{ path: "atoms/background.tsx", type: "registry:component" }],
   },
   {
     name: "body",
@@ -26,22 +31,30 @@ export const ui: Registry["items"] = [
     files: [{ path: "atoms/cta.tsx", type: "registry:component" }],
   },
   {
-    name: "section",
+    name: "heading",
     type: "registry:component",
-    files: [{ path: "atoms/section.tsx", type: "registry:component" }],
+    files: [{ path: "atoms/heading.tsx", type: "registry:component" }],
   },
   {
-    name: "mail_outline",
+    name: "image",
     type: "registry:component",
-    files: [
-      { path: "assets/mail_outline.svg", type: "registry:component" },
-      { path: "assets/svg.d.ts", type: "registry:component" },
-    ],
+    files: [{ path: "atoms/image.tsx", type: "registry:component" }],
   },
   {
     name: "maybeLink",
     type: "registry:component",
-    files: [{ path: "assets/maybeLink.tsx", type: "registry:component" }],
+    files: [{ path: "atoms/maybeLink.tsx", type: "registry:component" }],
+  },
+  {
+    name: "pageSection",
+    type: "registry:component",
+    files: [{ path: "atoms/pageSection.tsx", type: "registry:component" }],
+  },
+  {
+    name: "phone",
+    type: "registry:component",
+    files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
+    registryDependencies: ["body", "cta"],
   },
   {
     name: "layout",
@@ -51,13 +64,13 @@ export const ui: Registry["items"] = [
   {
     name: "Address",
     type: "registry:ui",
-    registryDependencies: ["section"],
+    registryDependencies: ["cta"],
     files: [{ path: "Address.tsx", type: "registry:ui" }],
   },
   {
     name: "Banner",
     type: "registry:ui",
-    registryDependencies: ["body"],
+    registryDependencies: ["body", "pageSection"],
     files: [{ path: "Banner.tsx", type: "registry:ui" }],
   },
   {
@@ -69,8 +82,13 @@ export const ui: Registry["items"] = [
   {
     name: "Breadcrumbs",
     type: "registry:ui",
-    registryDependencies: ["maybeLink"],
+    registryDependencies: ["maybeLink", "body", "pageSection"],
     files: [{ path: "Breadcrumbs.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Collection",
+    type: "registry:ui",
+    files: [{ path: "Collection.tsx", type: "registry:ui" }],
   },
   {
     name: "CtaWrapper",
@@ -81,42 +99,61 @@ export const ui: Registry["items"] = [
   {
     name: "Directory",
     type: "registry:ui",
-    registryDependencies: ["maybeLink, Breadcrumbs"],
+    registryDependencies: [
+      "body",
+      "heading",
+      "maybeLink",
+      "pageSection",
+      "Breadcrumbs",
+    ],
     files: [{ path: "Directory.tsx", type: "registry:ui" }],
   },
   {
     name: "Emails",
     type: "registry:ui",
-    registryDependencies: ["mail_outline"],
+    registryDependencies: ["body", "cta"],
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "EventCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/EventCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "FAQsSection",
+    type: "registry:ui",
+    registryDependencies: ["body", "heading", "pageSection", "accordion"],
+    files: [{ path: "FAQs.tsx", type: "registry:ui" }],
   },
   {
     name: "Flex",
     type: "registry:ui",
-    registryDependencies: ["layout"],
+    registryDependencies: ["layout", "background"],
     files: [{ path: "Flex.tsx", type: "registry:ui" }],
   },
   {
     name: "Footer",
     type: "registry:ui",
-    registryDependencies: ["body"],
+    registryDependencies: ["body", "cta", "pageSection"],
     files: [{ path: "Footer.tsx", type: "registry:ui" }],
   },
   {
     name: "GetDirections",
     type: "registry:ui",
-    registryDependencies: ["button"],
+    registryDependencies: ["cta"],
     files: [{ path: "GetDirections.tsx", type: "registry:ui" }],
   },
   {
     name: "Grid",
     type: "registry:ui",
-    registryDependencies: ["section", "layout"],
+    registryDependencies: ["section", "background", "layout"],
     files: [{ path: "Grid.tsx", type: "registry:ui" }],
   },
   {
     name: "Header",
     type: "registry:ui",
+    registryDependencies: ["cta", "background", "maybeLink", "pageSection"],
     files: [{ path: "Header.tsx", type: "registry:ui" }],
   },
   {
@@ -126,25 +163,51 @@ export const ui: Registry["items"] = [
     files: [{ path: "HeadingText.tsx", type: "registry:ui" }],
   },
   {
+    name: "HoursStatus",
+    type: "registry:ui",
+    files: [{ path: "HoursStatus.tsx", type: "registry:ui" }],
+  },
+  {
     name: "HoursTable",
     type: "registry:ui",
     registryDependencies: ["section"],
     files: [{ path: "HoursTable.tsx", type: "registry:ui" }],
   },
   {
-    name: "HoursStatus",
-    type: "registry:ui",
-    files: [{ path: "HoursStatus.tsx", type: "registry:ui" }],
-  },
-  {
     name: "Image",
     type: "registry:ui",
+    registryDependencies: ["image"],
     files: [{ path: "Image.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Person Card",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/PersonCard.tsx", type: "registry:ui" }],
   },
   {
     name: "Phone",
     type: "registry:ui",
+    registryDependencies: ["cta", "body", "phone"],
     files: [{ path: "Phone.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "ProductCard",
+    type: "registry:ui",
+    registryDependencies: ["heading", "cta", "body", "image", "background"],
+    files: [{ path: "cards/ProductCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Promo",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "cta", "body", "image"],
+    files: [{ path: "Promo.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "TestimonialCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "background", "heading", "body"],
+    files: [{ path: "cards/TestimonialCard.tsx", type: "registry:ui" }],
   },
   {
     name: "TextList",
@@ -152,15 +215,54 @@ export const ui: Registry["items"] = [
     files: [{ path: "TextList.tsx", type: "registry:ui" }],
   },
   {
-    name: "Promo",
+    name: "Hero Section",
     type: "registry:ui",
-    files: [{ path: "Promo.tsx", type: "registry:ui" }],
-    registryDependencies: ["section", "heading", "cta", "body", "Image"],
+    files: [{ path: "HeroSection.tsx", type: "registry:ui" }],
+    registryDependencies: ["pageSection", "heading", "cta", "image"],
   },
   {
-    name: "Card",
+    name: "PhotoGallerySection",
     type: "registry:ui",
-    files: [{ path: "Card.tsx", type: "registry:ui" }],
-    registryDependencies: ["section", "heading", "cta", "body", "Image"],
+    registryDependencies: ["pageSection", "heading", "image"],
+    files: [{ path: "PhotoGallerySection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "NearbyLocations",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "background",
+      "body",
+      "cta",
+      "phone",
+    ],
+    files: [{ path: "NearbyLocations.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "CoreInfoSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "background",
+      "heading",
+      "body",
+      "cta",
+      "phone",
+    ],
+    files: [{ path: "CoreInfoSection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "InsightCard",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "background",
+      "body",
+      "cta",
+      "image",
+    ],
+    files: [{ path: "cards/InsightCard.tsx", type: "registry:ui" }],
   },
 ];

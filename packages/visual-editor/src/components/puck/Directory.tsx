@@ -1,10 +1,19 @@
-import { useTemplateProps, themeManagerCn } from "../../index.js";
+import {
+  useTemplateProps,
+  themeManagerCn,
+  Heading,
+  backgroundColors,
+  Body,
+  MaybeLink,
+  PageSection,
+} from "../../index.js";
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
-import { MaybeLink } from "./atoms/maybeLink.tsx";
 import { Address, HoursStatus } from "@yext/pages-components";
-import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
-import { Section } from "./atoms/section.tsx";
+
+export interface DirectoryProps {
+  separator?: string;
+}
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -37,19 +46,20 @@ const DirectoryCard = ({
   relativePrefixToRoot: string;
 }) => {
   return (
-    <div className="bg-card-backgroundColor px-6 py-8 border h-full">
+    <div className="p-8 border border-gray-400 rounded h-full">
       <MaybeLink
-        className="hover:underline text-heading1-fontSize text-link-color mb-4"
+        alwaysHideCaret={true}
+        className="mb-4"
         href={
           relativePrefixToRoot && profile.slug
             ? relativePrefixToRoot + profile.slug
             : profile.slug
         }
       >
-        {profile.name}
+        <Heading level={5}>{profile.name}</Heading>
       </MaybeLink>
       {profile.hours && (
-        <div className="mb-2 font-semibold font-body-fontFamily text-body-color">
+        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
           <HoursStatus
             hours={profile.hours}
             timezone={profile.timezone}
@@ -58,7 +68,7 @@ const DirectoryCard = ({
         </div>
       )}
       {profile.address && (
-        <div className="font-body-fontFamily text-body-color">
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
           <Address address={profile.address} lines={[["line1"]]} />
         </div>
       )}
@@ -77,37 +87,24 @@ const DirectoryGrid = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <Section
+    <PageSection
+      verticalPadding="sm"
+      background={backgroundColors.background1.value}
       className={themeManagerCn(
-        layoutVariants({
-          backgroundColor: "default",
-          verticalPadding: "default",
-          horizontalPadding: "default",
-        })
+        "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
       )}
-      maxWidth="full"
-      padding="none"
+      style={{
+        gridTemplateColumns: `repeat(3, 1fr)`,
+      }}
     >
-      <div
-        className={themeManagerCn(
-          layoutVariants({ gap: "default" }),
-          innerLayoutVariants({ maxContentWidth: "default" }),
-          "flex flex-col md:grid md:grid-cols-12"
-        )}
-        style={{
-          gridTemplateColumns: `repeat(3, 1fr)`,
-        }}
-      >
-        {sortedDirectoryChildren.map((child, idx) => (
-          <div className="w-full" key={idx}>
-            <DirectoryCard
-              profile={child}
-              relativePrefixToRoot={relativePrefixToRoot}
-            />
-          </div>
-        ))}
-      </div>
-    </Section>
+      {sortedDirectoryChildren.map((child, idx) => (
+        <DirectoryCard
+          key={idx}
+          profile={child}
+          relativePrefixToRoot={relativePrefixToRoot}
+        />
+      ))}
+    </PageSection>
   );
 };
 
@@ -121,24 +118,27 @@ const DirectoryList = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <div className="container components mx-auto px-4 sm:px-8 lg:px-16 xl:px-20">
+    <PageSection
+      verticalPadding="sm"
+      background={backgroundColors.background1.value}
+    >
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => (
-          <li className="p-3" key={idx}>
+          <li key={idx}>
             <MaybeLink
-              className="inline-block after:content-[attr(data-count)] after:ml-2 hover:underline text-link-fontSize text-link-color"
+              variant="directoryLink"
               href={
                 relativePrefixToRoot
                   ? relativePrefixToRoot + child.slug
                   : child.slug
               }
             >
-              {child.name}
+              <Body>{child.name}</Body>
             </MaybeLink>
           </li>
         ))}
       </ul>
-    </div>
+    </PageSection>
   );
 };
 
@@ -169,10 +169,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
   );
 };
 
-export interface DirectoryProps {
-  separator?: string;
-}
-
 export const Directory: ComponentConfig<DirectoryProps> = {
+  label: "Directory",
   render: (props) => <DirectoryComponent {...props} />,
 };

@@ -4,30 +4,26 @@ import {
   resolveYextEntityField,
   YextEntityFieldSelector,
   useDocument,
-  FontSizeSelector,
   BasicSelector,
-  getFontWeightOverrideOptions,
+  ThemeOptions,
+  Body,
+  PageSection,
 } from "../../index.js";
-import { Body, BodyProps } from "./atoms/body.js";
 import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions.js";
 
-export type BannerProps = {
+export type BannerSectionProps = {
   text: YextEntityField<string>;
-  textAlignment: "justify-end" | "justify-start" | "justify-center";
-  fontSize: BodyProps["fontSize"];
-  fontWeight?: BodyProps["fontWeight"];
-  textColor: BodyProps["color"];
-  backgroundColor:
-    | "bg-palette-primary"
-    | "bg-palette-secondary"
-    | "bg-palette-accent"
-    | "bg-palette-text"
-    | "bg-palette-background";
+  textAlignment: "left" | "right" | "center";
+  backgroundColor?: BackgroundStyle;
 };
 
-const bannerFields: Fields<BannerProps> = {
+const bannerSectionFields: Fields<BannerSectionProps> = {
   text: YextEntityFieldSelector<any, string>({
-    label: "Entity Field",
+    label: "Text",
     filter: {
       types: ["type.string"],
     },
@@ -35,73 +31,50 @@ const bannerFields: Fields<BannerProps> = {
   textAlignment: {
     label: "Text Alignment",
     type: "radio",
-    options: [
-      { label: "Left", value: "justify-start" },
-      { label: "Center", value: "justify-center" },
-      { label: "Right", value: "justify-end" },
-    ],
+    options: ThemeOptions.ALIGNMENT,
   },
-  fontSize: FontSizeSelector(),
-  textColor: BasicSelector("Text Color", [
-    { label: "Default", value: "default" },
-    { label: "Primary", value: "primary" },
-    { label: "Secondary", value: "secondary" },
-    { label: "Accent", value: "accent" },
-    { label: "Text", value: "text" },
-    { label: "Background", value: "background" },
-  ]),
-  backgroundColor: BasicSelector("Background Color", [
-    { label: "Background", value: "bg-palette-background" },
-    { label: "Primary", value: "bg-palette-primary" },
-    { label: "Secondary", value: "bg-palette-secondary" },
-    { label: "Accent", value: "bg-palette-accent" },
-    { label: "Text", value: "bg-palette-text" },
-  ]),
+  backgroundColor: BasicSelector(
+    "Background Color",
+    ThemeOptions.DARK_BACKGROUND_COLOR
+  ),
 };
 
 const BannerComponent = ({
   text,
   textAlignment,
-  fontSize,
-  fontWeight,
-  textColor,
   backgroundColor,
-}: BannerProps) => {
+}: BannerSectionProps) => {
   const document = useDocument();
   const resolvedText = resolveYextEntityField<string>(document, text);
+
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[textAlignment];
+
   return (
-    <div className={`Banner ${backgroundColor} components px-4 md:px-20 py-6`}>
-      <div className={`flex ${textAlignment} items-center`}>
-        <Body color={textColor} fontWeight={fontWeight} fontSize={fontSize}>
-          {resolvedText}
-        </Body>
-      </div>
-    </div>
+    <PageSection
+      background={backgroundColor}
+      verticalPadding="sm"
+      className={`flex ${justifyClass} items-center`}
+    >
+      <Body>{resolvedText}</Body>
+    </PageSection>
   );
 };
 
-export const Banner: ComponentConfig<BannerProps> = {
-  fields: bannerFields,
+export const BannerSection: ComponentConfig<BannerSectionProps> = {
+  label: "Banner Section",
+  fields: bannerSectionFields,
   defaultProps: {
     text: {
       field: "",
       constantValue: "Banner Text",
       constantValueEnabled: true,
     },
-    textAlignment: "justify-center",
-    fontSize: "default",
-    fontWeight: "default",
-    textColor: "default",
-    backgroundColor: "bg-palette-background",
-  },
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: "--fontFamily-body-fontFamily",
-    });
-    return {
-      ...bannerFields,
-      fontWeight: BasicSelector("Font Weight", fontWeightOptions),
-    };
+    textAlignment: "center",
+    backgroundColor: backgroundColors.background6.value,
   },
   render: (props) => <BannerComponent {...props} />,
 };

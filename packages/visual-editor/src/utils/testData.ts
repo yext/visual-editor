@@ -1,4 +1,4 @@
-import { getSpacingOptions } from "./themeConfigOptions.ts";
+import { ThemeOptions } from "./themeConfigOptions.ts";
 import { TailwindConfig, ThemeConfig } from "./themeResolver.ts";
 
 const getColorOptions = () => {
@@ -282,14 +282,14 @@ export const testThemeConfig: ThemeConfig = {
         label: "Vertical Padding",
         type: "select",
         plugin: "verticalPadding",
-        options: getSpacingOptions(),
+        options: ThemeOptions.SPACING,
         default: "0px",
       },
       horizontalPadding: {
         label: "Horizontal Padding",
         type: "select",
         plugin: "horizontalPadding",
-        options: getSpacingOptions(),
+        options: ThemeOptions.SPACING,
         default: "0px",
       },
       maxWidth: {

@@ -1,6 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { HoursStatus, HoursType } from "@yext/pages-components";
+import {
+  HoursStatus as HoursStatusJS,
+  HoursType,
+} from "@yext/pages-components";
 import {
   themeManagerCn,
   useDocument,
@@ -8,10 +11,9 @@ import {
   EntityField,
   YextEntityField,
   YextEntityFieldSelector,
-  BasicSelector,
 } from "../../index.js";
 
-interface HoursStatusProps {
+export interface HoursStatusProps {
   hours: YextEntityField<HoursType>;
   className?: string;
   showCurrentStatus?: boolean;
@@ -51,10 +53,14 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
       { label: "No", value: false },
     ],
   },
-  dayOfWeekFormat: BasicSelector("Day of Week Format", [
-    { label: "Short", value: "short" },
-    { label: "Long", value: "long" },
-  ]),
+  dayOfWeekFormat: {
+    type: "radio",
+    label: "Day of Week Format",
+    options: [
+      { label: "Short", value: "short" },
+      { label: "Long", value: "long" },
+    ],
+  },
 };
 
 const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
@@ -78,10 +84,10 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >
-      <HoursStatus
+      <HoursStatusJS
         hours={hours}
         className={themeManagerCn(
-          "components font-semibold mb-2 font-body-fontFamily",
+          "components mb-2 font-body-fontWeight text-body-lg-fontSize",
           className
         )}
         currentTemplate={showCurrentStatus ? undefined : () => <></>}
@@ -95,7 +101,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   );
 };
 
-const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
+export const HoursStatus: ComponentConfig<HoursStatusProps> = {
   label: "Hours Status",
   fields: hoursStatusWrapperFields,
   defaultProps: {
@@ -111,5 +117,3 @@ const HoursStatusComponent: ComponentConfig<HoursStatusProps> = {
   },
   render: (props) => <HoursStatusWrapper {...props} />,
 };
-
-export { HoursStatusComponent as HoursStatus, type HoursStatusProps };

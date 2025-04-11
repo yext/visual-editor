@@ -1,54 +1,62 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn } from "../../../index.ts";
+import { themeManagerCn, useBackground } from "../../../index.ts";
 
-const buttonVariants = cva(
-  "py-4 components inline-flex items-center justify-center whitespace-nowrap font-body-fontFamily font-button-fontWeight " +
-    "ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
-    "disabled:pointer-events-none disabled:opacity-50",
+export const buttonVariants = cva(
+  "components h-fit flex items-center justify-center whitespace-nowrap",
   {
     variants: {
       variant: {
         primary:
-          "bg-button-backgroundColor text-button-textColor border-2 border-button-backgroundColor hover:border-button-textColor " +
-          "focus:border-button-textColor active:bg-button-textColor active:text-button-backgroundColor active:border-button-backgroundColor text-button-fontSize",
-        link: "text-link-color text-link-fontSize underline-offset-4 underline hover:no-underline",
+          "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+        secondary: "bg-none",
+        link: "w-fit underline",
+        directoryLink:
+          "border-b-gray-400 border-b sm:border-transparent w-full sm:w-fit sm:underline py-3",
       },
-      size: {
-        small: "h-9 px-3",
-        large: "h-11 px-8",
-        icon: "h-10 w-10",
-      },
-      fontSize: {
-        default: "",
-        xs: "text-xs",
-        sm: "text-sm",
-        base: "text-base",
-        lg: "text-lg",
-        xl: "text-xl",
-        "2xl": "text-2xl",
-        "3xl": "text-3xl",
-        "4xl": "text-4xl",
-      },
-      borderRadius: {
-        default: "rounded-button-borderRadius",
-        none: "rounded-none",
-        xs: "rounded-xs",
-        sm: "rounded-sm",
-        md: "rounded-md",
-        lg: "rounded-lg",
-        xl: "rounded-xl",
-        "2xl": "rounded-2xl",
-        "3xl": "rounded-3xl",
-        full: "rounded-full",
+      hasDarkBackground: {
+        true: "",
+        false: "",
       },
     },
+    compoundVariants: [
+      {
+        variant: ["primary", "secondary"],
+        className:
+          "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing " +
+          "hover:underline focus:underline active:underline sm:w-fit w-full px-6 py-3 border-2 border-solid rounded",
+      },
+      {
+        variant: ["link", "directoryLink"],
+        className:
+          "bg-none justify-between gap-2 decoration-0 hover:no-underline " +
+          "font-link-fontFamily text-link-fontSize font-link-fontWeight tracking-link-letterSpacing ",
+      },
+      {
+        hasDarkBackground: false,
+        variant: "secondary",
+        className: "text-palette-primary-dark border-palette-primary-dark",
+      },
+      {
+        hasDarkBackground: true,
+        variant: "secondary",
+        className: "text-white border-white",
+      },
+      {
+        hasDarkBackground: false,
+        variant: ["link", "directoryLink"],
+        className: "text-palette-primary-dark",
+      },
+      {
+        hasDarkBackground: true,
+        variant: ["link", "directoryLink"],
+        className: "text-white",
+      },
+    ],
     defaultVariants: {
       variant: "primary",
-      size: "small",
-      fontSize: "default",
-      borderRadius: "default",
+      hasDarkBackground: false,
     },
   }
 );
@@ -59,26 +67,27 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      borderRadius,
-      asChild = false,
-      fontSize,
-      ...props
-    },
-    ref
-  ) => {
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+    const background = useBackground();
+    const hasDarkBackground =
+      background && background.textColor === "text-white";
+
     return (
       <Comp
         className={themeManagerCn(
-          buttonVariants({ variant, size, borderRadius, fontSize }),
+          buttonVariants({ variant, hasDarkBackground }),
           className
         )}
+        // textTransform has to be applied via styles because there is no custom tailwind utility
+        style={{
+          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+          textTransform:
+            variant === "link"
+              ? "var(--textTransform-link-textTransform)"
+              : "var(--textTransform-button-textTransform)",
+        }}
         ref={ref}
         {...props}
       />
@@ -86,5 +95,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 Button.displayName = "Button";
-
-export { Button, buttonVariants };

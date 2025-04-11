@@ -3,7 +3,6 @@ import { DevLogger } from "../../../utils/devLogger.ts";
 import { LayoutSaveState } from "../../types/saveState.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
-import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString.ts";
 
 const devLogger = new DevLogger();
 
@@ -25,7 +24,7 @@ export const useLayoutMessageReceivers = (localDev: boolean) => {
     if (payload?.history) {
       receivedLayoutSaveState = {
         hash: payload.hash,
-        history: jsonFromEscapedJsonString(payload.history),
+        history: JSON.parse(payload.history),
       } as LayoutSaveState;
     }
     devLogger.logData("LAYOUT_SAVE_STATE", receivedLayoutSaveState);

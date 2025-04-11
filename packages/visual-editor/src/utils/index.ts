@@ -1,5 +1,9 @@
 export { applyTheme } from "./applyTheme.ts";
-export { resolveYextEntityField } from "./resolveYextEntityField.ts";
+export {
+  resolveYextEntityField,
+  resolveYextSubfield,
+  handleResolveFieldsForCollections,
+} from "./resolveYextEntityField.ts";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {
@@ -12,9 +16,12 @@ export {
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export { normalizeSlug, validateSlug } from "./slugifier.ts";
 export {
-  getFontSizeOptions,
-  getBorderRadiusOptions,
-  getSpacingOptions,
+  backgroundColors,
+  ThemeOptions,
+  defaultThemeTailwindExtensions,
+  type BackgroundStyle,
+  type HeadingLevel,
 } from "./themeConfigOptions.ts";
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
+export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
