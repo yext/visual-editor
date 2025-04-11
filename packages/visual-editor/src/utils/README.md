@@ -581,6 +581,24 @@ An object of the following shape containing the seven auto-generated background 
 | background6 | Background 6 | primary-dark     | white      |
 | background7 | Background 7 | secondary-dark   | white      |
 
+## darkBackgroundColors
+
+An object of the following shape containing the two auto-generated dark background styles.
+
+```js
+{
+  backgroundKey: {
+    label: "Background Label",
+    value: "Background Tailwind Classes"
+  }
+}
+```
+
+| Key         | Label        | Background Color | Text Color |
+| ----------- | ------------ | ---------------- | ---------- |
+| background6 | Background 6 | primary-dark     | white      |
+| background7 | Background 7 | secondary-dark   | white      |
+
 ## applyAnalytics
 
 Returns a Google Tag Manager script that uses the Google Tag Manager ID
