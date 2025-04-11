@@ -92,14 +92,21 @@ export const updateThemeInEditor = async (
 ) => {
   devLogger.logFunc("updateThemeInEditor");
 
+  const newThemeTag = internalApplyTheme(newTheme, themeConfig);
+  const editorStyleTag = window.document.getElementById(THEME_STYLE_TAG_ID);
+  if (editorStyleTag) {
+    editorStyleTag.innerText = newThemeTag;
+  }
+
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
       PUCK_PREVIEW_IFRAME_ID
     ) as HTMLIFrameElement;
-    const styleTag = iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
-    if (styleTag) {
+    const pagePreviewStyleTag =
+      iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
+    if (pagePreviewStyleTag) {
       observer.disconnect();
-      styleTag.innerText = internalApplyTheme(newTheme, themeConfig);
+      pagePreviewStyleTag.innerText = newThemeTag;
     }
   });
 
