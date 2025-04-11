@@ -10,7 +10,6 @@ import {
   handleResolveFieldsForCollections,
   Body,
   YextCollection,
-  collectionWrapperClassName,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { handleComplexImages } from "../atoms/image.js";
@@ -51,7 +50,7 @@ const ExampleRepeatableItem = (props: ExampleRepeatableItemProps) => {
 
   // Return one card with resolved subfields for each item in the parent
   return (
-    <div className={collectionWrapperClassName}>
+    <div className="flex flex-col justify-between max-w-pageSection-maxWidth mx-auto gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
         .map((item, i) => {

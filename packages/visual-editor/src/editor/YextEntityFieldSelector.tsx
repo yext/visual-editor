@@ -15,7 +15,7 @@ import { TEXT_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-field
 import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
-import { useEntityFields } from "../../hooks/useEntityFields.tsx";
+import { useEntityFields } from "../hooks/useEntityFields.tsx";
 
 const devLogger = new DevLogger();
 
