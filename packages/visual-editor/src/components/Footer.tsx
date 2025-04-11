@@ -12,7 +12,6 @@ import {
   ThemeOptions,
   PageSection,
 } from "@yext/visual-editor";
-
 import {
   FaFacebook,
   FaInstagram,

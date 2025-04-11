@@ -21,9 +21,6 @@ export interface CollectionProps {
   shouldClearDropZone?: boolean;
 }
 
-export const collectionWrapperClassName =
-  "flex flex-wrap gap-4 flex-col sm:flex-row items-center";
-
 const collectionFields: Fields<CollectionProps> = {
   collection: {
     type: "object",
