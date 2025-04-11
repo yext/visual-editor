@@ -1,5 +1,6 @@
 export * from "./atoms/index.ts";
 export * from "./_componentCategories.ts";
+export * from "./cards/index.ts";
 export { Address, type AddressProps } from "./Address.tsx";
 export { BannerSection, type BannerSectionProps } from "./Banner.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
@@ -7,6 +8,10 @@ export {
   BreadcrumbsSection,
   type BreadcrumbsSectionProps,
 } from "./Breadcrumbs.tsx";
+export {
+  CoreInfoSection,
+  type CoreInfoSectionProps,
+} from "./CoreInfoSection.tsx";
 export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Directory, type DirectoryProps } from "./Directory.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
@@ -28,4 +33,5 @@ export {
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
 export { People, type PeopleProps } from "./People.tsx";
+export { PromoSection, type PromoSectionProps } from "./Promo.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
