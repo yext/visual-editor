@@ -57,14 +57,6 @@ export const ui: Registry["items"] = [
     registryDependencies: ["body", "cta"],
   },
   {
-    name: "mail_outline",
-    type: "registry:component",
-    files: [
-      { path: "assets/mail_outline.svg", type: "registry:component" },
-      { path: "assets/svg.d.ts", type: "registry:component" },
-    ],
-  },
-  {
     name: "layout",
     type: "registry:component",
     files: [{ path: "Layout.tsx", type: "registry:component" }],
@@ -119,7 +111,7 @@ export const ui: Registry["items"] = [
   {
     name: "Emails",
     type: "registry:ui",
-    registryDependencies: ["body", "cta", "mail_outline"],
+    registryDependencies: ["body", "cta"],
     files: [{ path: "Emails.tsx", type: "registry:ui" }],
   },
   {
