@@ -19,6 +19,8 @@ import {
 export interface CollectionProps {
   collection: YextCollection;
   shouldClearDropZone?: boolean;
+  layout?: "grid" | "flex";
+  direction?: "flex-row" | "flex-col";
 }
 
 export const collectionWrapperClassName =
@@ -49,7 +51,7 @@ const collectionFields: Fields<CollectionProps> = {
 const CollectionSectionWrapper: React.FC<
   WithId<WithPuckProps<CollectionProps>>
 > = (props) => {
-  const { shouldClearDropZone, id } = props;
+  const { shouldClearDropZone, id, layout, direction } = props;
 
   try {
     const puck = usePuck();
@@ -83,7 +85,11 @@ const CollectionSectionWrapper: React.FC<
     <DropZone
       zone="collection-dropzone"
       className={themeManagerCn(
-        "max-w-pageSection-contentWidth mx-auto flex flex-wrap justify-center sm:flex-row items-center"
+        "max-w-pageSection-contentWidth mx-auto gap-8 items-center",
+        layout === "grid"
+          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          : "flex flex-wrap justify-center",
+        direction
       )}
       allow={CardCategory}
     />
@@ -99,7 +105,29 @@ export const Collection: ComponentConfig<CollectionProps> = {
     if (data.props.collection.items.constantValueEnabled) {
       // @ts-expect-error ts(2339)
       delete fields.collection.objectFields.limit;
-      return fields;
+      return {
+        ...fields,
+        layout: {
+          label: "Layout",
+          type: "radio",
+          options: [
+            { label: "Flex", value: "flex" },
+            { label: "Grid", value: "grid" },
+          ],
+        },
+        ...(data.props.layout === "flex"
+          ? {
+              direction: {
+                label: "Direction",
+                type: "radio",
+                options: [
+                  { label: "Horizontal", value: "flex-row" },
+                  { label: "Vertical", value: "flex-col" },
+                ],
+              },
+            }
+          : {}),
+      };
     }
     return {
       ...fields,
