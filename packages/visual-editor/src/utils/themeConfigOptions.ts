@@ -97,6 +97,15 @@ const backgroundColorOptions = Object.values(backgroundColors).map(
   })
 );
 
+const darkBackgroundColorOptions = Object.values({
+  background6: backgroundColors.background6,
+  background7: backgroundColors.background7,
+}).map(({ label, value }) => ({
+  label,
+  value,
+  color: value.bgColor,
+}));
+
 // Defines the valid levels for the heading element
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -207,6 +216,7 @@ export const ThemeOptions = {
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
+  DARK_BACKGROUND_COLOR: darkBackgroundColorOptions,
   CTA_VARIANT: ctaVariantOptions,
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,

@@ -35,11 +35,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   },
   backgroundColor: BasicSelector(
     "Background Color",
-    // only allow the dark backgrounds
-    Object.values({
-      dark1: backgroundColors.background6,
-      dark2: backgroundColors.background7,
-    })
+    ThemeOptions.DARK_BACKGROUND_COLOR
   ),
 };
 
