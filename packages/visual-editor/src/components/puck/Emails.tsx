@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import mailIcon from "./assets/mail_outline.svg";
+import { FaEnvelope } from "react-icons/fa";
 import {
   useDocument,
   resolveYextEntityField,
@@ -66,7 +66,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
           .slice(0, Math.min(resolvedEmailList.length, listLength))
           .map((email, index) => (
             <li key={index} className={`mb-2 flex items-center`}>
-              <img className={"mr-2 my-auto"} src={mailIcon} />
+              <FaEnvelope className={"mr-2 my-auto"} />
               {includeHyperlink && !!email ? (
                 <CTA
                   link={email}
