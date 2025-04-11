@@ -7,20 +7,22 @@ import {
   BasicSelector,
   ThemeOptions,
   Body,
+  PageSection,
 } from "@yext/visual-editor";
+
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   backgroundColors,
   BackgroundStyle,
 } from "../utils/themeConfigOptions.js";
 
-export type BannerProps = {
+export type BannerSectionProps = {
   text: YextEntityField<string>;
   textAlignment: "left" | "right" | "center";
   backgroundColor?: BackgroundStyle;
 };
 
-const bannerFields: Fields<BannerProps> = {
+const bannerSectionFields: Fields<BannerSectionProps> = {
   text: YextEntityFieldSelector<any, string>({
     label: "Text",
     filter: {
@@ -46,7 +48,7 @@ const BannerComponent = ({
   text,
   textAlignment,
   backgroundColor,
-}: BannerProps) => {
+}: BannerSectionProps) => {
   const document = useDocument();
   const resolvedText = resolveYextEntityField<string>(document, text);
 
@@ -57,21 +59,19 @@ const BannerComponent = ({
   }[textAlignment];
 
   return (
-    <div
-      className={`Banner ${backgroundColor?.bgColor} components px-4 md:px-20 py-6`}
+    <PageSection
+      background={backgroundColor}
+      verticalPadding="sm"
+      className={`flex ${justifyClass} items-center`}
     >
-      <div
-        className={`flex ${justifyClass} items-center ${backgroundColor?.textColor}`}
-      >
-        <Body>{resolvedText}</Body>
-      </div>
-    </div>
+      <Body>{resolvedText}</Body>
+    </PageSection>
   );
 };
 
-export const Banner: ComponentConfig<BannerProps> = {
-  label: "Banner",
-  fields: bannerFields,
+export const BannerSection: ComponentConfig<BannerSectionProps> = {
+  label: "Banner Section",
+  fields: bannerSectionFields,
   defaultProps: {
     text: {
       field: "",

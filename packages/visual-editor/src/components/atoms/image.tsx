@@ -8,6 +8,7 @@ export interface ImageProps {
   aspectRatio?: number;
   width?: number;
   height?: number;
+  className?: string;
 }
 
 export const Image: React.FC<ImageProps> = ({
@@ -16,9 +17,10 @@ export const Image: React.FC<ImageProps> = ({
   aspectRatio,
   width,
   height,
+  className,
 }) => {
   return (
-    <div className={themeManagerCn("overflow-hidden w-full")}>
+    <div className={themeManagerCn("overflow-hidden w-full", className)}>
       {layout === "auto" && aspectRatio ? (
         <ImageComponent
           image={image}
@@ -37,4 +39,22 @@ export const Image: React.FC<ImageProps> = ({
       )}
     </div>
   );
+};
+
+// Handle ImageType or ComplexImageType
+// TODO - Reconsider how this handled / why it isn't autoresolved
+export const handleComplexImages = (resolvedImage: any) => {
+  let image: ImageType;
+  if (
+    resolvedImage &&
+    typeof resolvedImage === "object" &&
+    "image" in resolvedImage
+  ) {
+    image = resolvedImage.image as ImageType;
+  } else if (resolvedImage) {
+    image = resolvedImage;
+  } else {
+    image = { height: 150, width: 150, url: "" };
+  }
+  return image;
 };

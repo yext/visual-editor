@@ -1,23 +1,20 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import {
-  innerLayoutVariants,
-  layoutFields,
-  layoutProps,
-  layoutVariants,
-} from "./Layout.tsx";
+import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 import {
   backgroundColors,
   themeManagerCn,
   ThemeOptions,
-  Section,
+  Background,
+  CardCategory,
+  ContentBlockCategory,
+  LayoutBlockCategory,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
-  insideDropZone?: boolean;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
@@ -30,46 +27,38 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       verticalPadding,
       horizontalPadding,
       backgroundColor,
-      insideDropZone,
     },
     ref
   ) => {
     return (
-      <Section
+      <Background
         background={backgroundColor}
         className={themeManagerCn(
           layoutVariants({
             verticalPadding,
             horizontalPadding,
-            gap,
           })
         )}
         ref={ref}
-        maxWidth="full"
-        padding="none"
       >
-        <div
+        <DropZone
           className={themeManagerCn(
-            innerLayoutVariants({
-              maxContentWidth: insideDropZone ? "none" : "default",
-            })
+            layoutVariants({ gap }),
+            "flex w-full",
+            direction
           )}
-        >
-          <DropZone
-            className={themeManagerCn(
-              layoutVariants({ gap }),
-              "flex",
-              insideDropZone ? direction : `flex-col md:${direction}`
-            )}
-            zone="flex-container"
-            style={{
-              justifyContent,
-              flexWrap: wrap,
-            }}
-            disallow={["Banner", "Promo", "Card", "Breadcrumbs"]}
-          />
-        </div>
-      </Section>
+          zone="flex-container"
+          style={{
+            justifyContent,
+            flexWrap: wrap,
+          }}
+          allow={[
+            ...CardCategory,
+            ...ContentBlockCategory,
+            ...LayoutBlockCategory.filter((x) => x !== "Collection"),
+          ]}
+        />
+      </Background>
     );
   }
 );
@@ -108,26 +97,10 @@ export const Flex: ComponentConfig<FlexProps> = {
     direction: "flex-row",
     justifyContent: "start",
     wrap: "nowrap",
-    gap: "8",
-    verticalPadding: "default",
-    horizontalPadding: "4",
+    gap: "4",
+    verticalPadding: "0",
+    horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
-  },
-  resolveFields: (data, params) => {
-    // If the Flex has a parent component, the defaultProps should be adjusted.
-    if (params.parent) {
-      // the props values should only be changed initially
-      if (!data.props.insideDropZone) {
-        data.props.verticalPadding = "0";
-        data.props.horizontalPadding = "0";
-        data.props.gap = "0";
-      }
-      data.props.insideDropZone = true;
-    } else {
-      data.props.insideDropZone = false;
-    }
-
-    return flexContainerFields;
   },
   render: (props) => <FlexContainer {...props} />,
 };

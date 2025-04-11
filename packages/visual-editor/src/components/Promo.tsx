@@ -20,13 +20,13 @@ import {
   HeadingProps,
   CTA,
   CTAProps,
-  Section,
+  PageSection,
 } from "@yext/visual-editor";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-export interface PromoProps {
+export interface PromoSectionProps {
   image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
@@ -47,7 +47,7 @@ export interface PromoProps {
   };
 }
 
-const promoFields: Fields<PromoProps> = {
+const promoSectionFields: Fields<PromoSectionProps> = {
   image: {
     type: "object",
     label: "Image",
@@ -126,7 +126,7 @@ const promoFields: Fields<PromoProps> = {
   },
 };
 
-const PromoWrapper: React.FC<PromoProps> = ({
+const PromoWrapper: React.FC<PromoSectionProps> = ({
   image,
   title,
   description,
@@ -145,56 +145,55 @@ const PromoWrapper: React.FC<PromoProps> = ({
   }
 
   return (
-    <Section className="components" background={styles.backgroundColor}>
-      <div
-        className={themeManagerCn(
-          "flex flex-col md:flex-row overflow-hidden md:gap-8",
-          styles.orientation === "right" && "md:flex-row-reverse"
+    <PageSection
+      background={styles.backgroundColor}
+      className={themeManagerCn(
+        "flex flex-col md:flex-row overflow-hidden md:gap-8",
+        styles.orientation === "right" && "md:flex-row-reverse"
+      )}
+    >
+      {resolvedImage && (
+        <EntityField
+          displayName="Image"
+          fieldId={image.image.field}
+          constantValueEnabled={image.image.constantValueEnabled}
+        >
+          <Image
+            image={resolvedImage}
+            layout={image.layout}
+            width={image.width}
+            height={image.height}
+            aspectRatio={image.aspectRatio}
+          />
+        </EntityField>
+      )}
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
+        {title?.text && (
+          <Heading level={title.level}>
+            {resolveYextEntityField(document, title.text)}
+          </Heading>
         )}
-      >
-        {resolvedImage && (
-          <EntityField
-            displayName="Image"
-            fieldId={image.image.field}
-            constantValueEnabled={image.image.constantValueEnabled}
-          >
-            <Image
-              image={resolvedImage}
-              layout={image.layout}
-              width={image.width}
-              height={image.height}
-              aspectRatio={image.aspectRatio}
-            />
-          </EntityField>
+        {description?.text && (
+          <Body variant={description.variant}>
+            {resolveYextEntityField(document, description.text)}
+          </Body>
         )}
-        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 p-4 md:px-16 md:py-0 w-full break-all">
-          {title?.text && (
-            <Heading level={title.level}>
-              {resolveYextEntityField(document, title.text)}
-            </Heading>
-          )}
-          {description?.text && (
-            <Body variant={description.variant}>
-              {resolveYextEntityField(document, description.text)}
-            </Body>
-          )}
-          {resolvedCTA && cta.visible && (
-            <CTA
-              variant={cta.variant}
-              label={resolvedCTA.label ?? ""}
-              link={resolvedCTA.link || "#"}
-              linkType={resolvedCTA.linkType}
-            />
-          )}
-        </div>
+        {resolvedCTA && cta.visible && (
+          <CTA
+            variant={cta.variant}
+            label={resolvedCTA.label ?? ""}
+            link={resolvedCTA.link || "#"}
+            linkType={resolvedCTA.linkType}
+          />
+        )}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 
-export const Promo: ComponentConfig<PromoProps> = {
-  label: "Promo",
-  fields: promoFields,
+export const PromoSection: ComponentConfig<PromoSectionProps> = {
+  label: "Promo Section",
+  fields: promoSectionFields,
   defaultProps: {
     image: {
       image: {
@@ -241,9 +240,9 @@ export const Promo: ComponentConfig<PromoProps> = {
   },
   resolveFields(data) {
     return {
-      ...promoFields,
+      ...promoSectionFields,
       image: {
-        ...promoFields.image,
+        ...promoSectionFields.image,
         objectFields: resolvedImageFields(data.props.image.layout),
       },
     };

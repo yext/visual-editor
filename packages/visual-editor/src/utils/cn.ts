@@ -46,6 +46,8 @@ export const themeManagerTwMergeConfiguration = {
           rounded: [(value: string) => value.endsWith("-borderRadius")],
         },
       ],
+      "text-transform": [(value: string) => value.endsWith("-textTransform")],
+      tracking: [(value: string) => value.endsWith("-letterSpacing")],
     },
   },
 };

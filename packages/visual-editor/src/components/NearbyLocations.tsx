@@ -10,15 +10,16 @@ import {
   backgroundColors,
   ThemeOptions,
   HeadingLevel,
-  Section,
+  PageSection,
   PhoneAtom,
   fetchNearbyLocations,
+  Background,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
 import * as React from "react";
 
-export interface NearbyLocationsProps {
+export interface NearbyLocationsSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
@@ -43,7 +44,7 @@ export interface NearbyLocationsProps {
   limit: number;
 }
 
-const nearbyLocationsFields: Fields<NearbyLocationsProps> = {
+const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
   styles: {
     label: "Styles",
     type: "object",
@@ -158,7 +159,7 @@ const LocationCard = ({
   mainPhone,
   backgroundColor,
 }: {
-  cards: NearbyLocationsProps["cards"];
+  cards: NearbyLocationsSectionProps["cards"];
   name: string;
   address: any;
   hours: any;
@@ -167,51 +168,55 @@ const LocationCard = ({
   backgroundColor?: BackgroundStyle;
 }) => {
   return (
-    <div className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border">
-      <Section background={backgroundColor} className={`components`}>
-        <Heading level={cards.headingLevel}>{name}</Heading>
-        {hours && (
-          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatus
-              hours={hours}
-              timezone={timezone}
-              currentTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              separatorTemplate={
-                cards.hours.showCurrentStatus ? undefined : () => <></>
-              }
-              timeOptions={{
-                hour12: cards.hours.timeFormat === "12h",
-              }}
-              dayOptions={{
-                weekday: cards.hours.dayOfWeekFormat,
-              }}
-              dayOfWeekTemplate={
-                cards.hours.showDayNames ? undefined : () => <></>
-              }
-              className="h-full"
-            />
-          </div>
-        )}
-        {mainPhone && (
-          <PhoneAtom
-            phoneNumber={mainPhone}
-            format={cards.phoneNumberFormat}
-            includeHyperlink={cards.phoneNumberLink}
+    <Background
+      background={backgroundColor}
+      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
+      as="section"
+    >
+      <Heading level={cards.headingLevel}>{name}</Heading>
+      {hours && (
+        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+          <HoursStatus
+            hours={hours}
+            timezone={timezone}
+            currentTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            separatorTemplate={
+              cards.hours.showCurrentStatus ? undefined : () => <></>
+            }
+            timeOptions={{
+              hour12: cards.hours.timeFormat === "12h",
+            }}
+            dayOptions={{
+              weekday: cards.hours.dayOfWeekFormat,
+            }}
+            dayOfWeekTemplate={
+              cards.hours.showDayNames ? undefined : () => <></>
+            }
+            className="h-full"
           />
-        )}
-        {address && (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-            <Address address={address} lines={[["line1"]]} />
-          </div>
-        )}
-      </Section>
-    </div>
+        </div>
+      )}
+      {mainPhone && (
+        <PhoneAtom
+          phoneNumber={mainPhone}
+          format={cards.phoneNumberFormat}
+          includeHyperlink={cards.phoneNumberLink}
+        />
+      )}
+      {address && (
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+          <Address address={address} lines={[["line1"]]} />
+        </div>
+      )}
+    </Background>
   );
 };
 
-const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
+const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
+  props
+) => {
   const {
     heading,
     cards,
@@ -233,6 +238,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
     console.warn(
       "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
     );
+    return <></>;
   }
 
   const entityType: string = document?.meta?.entityType?.id || "location";
@@ -266,7 +272,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
   );
 
   return (
-    <Section background={styles.backgroundColor} className={`components`}>
+    <PageSection background={styles.backgroundColor}>
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
@@ -296,46 +302,47 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsProps> = (props) => {
             </div>
           )}
       </div>
-    </Section>
+    </PageSection>
   );
 };
 
-export const NearbyLocations: ComponentConfig<NearbyLocationsProps> = {
-  label: "Nearby Locations",
-  fields: nearbyLocationsFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-    },
-    heading: {
-      text: {
-        field: "",
-        constantValue: "Nearby Locations",
-        constantValueEnabled: true,
+export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
+  {
+    label: "Nearby Locations Section",
+    fields: nearbyLocationsSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background1.value,
+        cardBackgroundColor: backgroundColors.background1.value,
       },
-      level: 3,
-    },
-    cards: {
-      headingLevel: 4,
-      hours: {
-        showCurrentStatus: true,
-        timeFormat: "12h",
-        showDayNames: true,
-        dayOfWeekFormat: "long",
+      heading: {
+        text: {
+          field: "",
+          constantValue: "Nearby Locations",
+          constantValueEnabled: true,
+        },
+        level: 3,
       },
-      phoneNumberFormat: "domestic",
-      phoneNumberLink: false,
-    },
-    radius: 10,
-    limit: 3,
-    coordinate: {
-      field: "yextDisplayCoordinate",
-      constantValue: {
-        latitude: 0,
-        longitude: 0,
+      cards: {
+        headingLevel: 4,
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: true,
+          dayOfWeekFormat: "long",
+        },
+        phoneNumberFormat: "domestic",
+        phoneNumberLink: false,
+      },
+      radius: 10,
+      limit: 3,
+      coordinate: {
+        field: "yextDisplayCoordinate",
+        constantValue: {
+          latitude: 0,
+          longitude: 0,
+        },
       },
     },
-  },
-  render: (props) => <NearbyLocationsComponent {...props} />,
-};
+    render: (props) => <NearbyLocationsComponent {...props} />,
+  };

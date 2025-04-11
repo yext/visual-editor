@@ -5,12 +5,12 @@ import {
   backgroundColors,
   Body,
   MaybeLink,
-  Section,
+  PageSection,
 } from "@yext/visual-editor";
+
 import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { Address, HoursStatus } from "@yext/pages-components";
-import { innerLayoutVariants, layoutVariants } from "./Layout.tsx";
 
 export interface DirectoryProps {
   separator?: string;
@@ -88,35 +88,24 @@ const DirectoryGrid = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <Section
-      className={themeManagerCn(
-        layoutVariants({
-          verticalPadding: "default",
-          horizontalPadding: "4",
-        })
-      )}
+    <PageSection
+      verticalPadding="sm"
       background={backgroundColors.background1.value}
-      maxWidth="full"
-      padding="none"
+      className={themeManagerCn(
+        "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
+      )}
+      style={{
+        gridTemplateColumns: `repeat(3, 1fr)`,
+      }}
     >
-      <div
-        className={themeManagerCn(
-          innerLayoutVariants({ maxContentWidth: "default" }),
-          "flex flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
-        )}
-        style={{
-          gridTemplateColumns: `repeat(3, 1fr)`,
-        }}
-      >
-        {sortedDirectoryChildren.map((child, idx) => (
-          <DirectoryCard
-            key={idx}
-            profile={child}
-            relativePrefixToRoot={relativePrefixToRoot}
-          />
-        ))}
-      </div>
-    </Section>
+      {sortedDirectoryChildren.map((child, idx) => (
+        <DirectoryCard
+          key={idx}
+          profile={child}
+          relativePrefixToRoot={relativePrefixToRoot}
+        />
+      ))}
+    </PageSection>
   );
 };
 
@@ -130,7 +119,10 @@ const DirectoryList = ({
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
   return (
-    <div className="container components mx-auto px-4 sm:px-8 lg:px-16 xl:px-20">
+    <PageSection
+      verticalPadding="sm"
+      background={backgroundColors.background1.value}
+    >
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => (
           <li key={idx}>
@@ -147,7 +139,7 @@ const DirectoryList = ({
           </li>
         ))}
       </ul>
-    </div>
+    </PageSection>
   );
 };
 

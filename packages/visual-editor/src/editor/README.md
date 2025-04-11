@@ -85,7 +85,7 @@ Use this to allow Visual Editor users to choose an entity field or constant valu
 The user can choose an entity field from a dropdown or use a constant value. Regardless, the user should always
 enter a constant value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
 
-The constant value field currently has no functionality with complex object entity types (ex. image, c_cta). When using complex
+The constant value field currently has limited functionality with complex object entity types. When using complex
 object types, ensure your render function handles undefined fields.
 
 ### Props
@@ -156,6 +156,37 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
+## YextCollectionSubfieldSelector
+
+Use this to allow Visual Editor users to choose an entity field or constant value based on a subfield of a Collection.
+
+### Props
+
+| Name                     | Type            | Description                                                    |
+| ------------------------ | --------------- | -------------------------------------------------------------- |
+| label?                   | string          | The user-facing label for the field.                           |
+| isCollection             | boolean         | If false, will behave like YextEntityFieldSelector.            |
+| filter.types             | string[]        | Determines which fields will be available based on field type. |
+| filter.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.  |
+| filter.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
+| filter.directChildrenOf? | string          | Return only the fields that are direct children of this field. |
+
+### Usage
+
+```tsx
+{
+  // Will return the direct children of c_myCollection that are type string.
+  text: YextCollectionSubfieldSelector<any, string>({
+    label: "Text",
+    isCollection: true,
+    filter: {
+      directChildrenOf: "c_myCollection",
+      types: ["type.string"],
+    },
+  }),
+}
+```
+
 ## BasicSelector
 
 `BasicSelector` creates a labeled field and searchable dropdown with the provided options. Each option consists of a label, value, and an optional color. This can be used when creating the Fields for a new component.
@@ -193,4 +224,36 @@ const myComponentFields: Fields<MyComponentProps> = {
       ]),
     },
   },
+```
+
+## OptionalNumberField
+
+This field displays a radio group with two options. When one option is selected, a number input is also
+rendered. When the other option is selected, the number input is hidden. This could be used
+for a number field with an "all" or "default" option.
+
+### Props
+
+| Name                      | Type     | Description                                                               |
+| ------------------------- | -------- | ------------------------------------------------------------------------- |
+| fieldLabel                | `string` | The label for the field.                                                  |
+| hideNumberFieldRadioLabel | `string` | The label for the radio option corresponding to hiding the number field.  |
+| showNumberFieldRadioLabel | `string` | The label for the radio option corresponding to showing the number field. |
+| defaultCustomValue        | `number` | The default number if the number field is shown.                          |
+
+#### Usage
+
+```tsx
+type MyComponentProps = {
+  limit: number | string;
+};
+
+const myComponentFields: Fields<MyComponentProps> = {
+  limit: OptionalNumberField({
+    fieldLabel: "Number of Items",
+    hideNumberFieldRadioLabel: "Show All",
+    showNumberFieldRadioLabel: "Limit Items",
+    defaultCustomValue: 3,
+  }),
+};
 ```

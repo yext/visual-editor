@@ -7745,6 +7745,480 @@ export const devTemplateStream = {
           },
         },
         {
+          name: "c_featuredMenuItems",
+          definition: {
+            name: "c_featuredMenuItems",
+            registryId: "location.custom.1000152098.featuredmenuitems.0",
+            typeName: "c_featuredProductSection",
+            typeRegistryId: "type.c1000152098.featuredproductsection",
+            type: {
+              objectType: "OBJECT_TYPE_DEFAULT",
+            },
+          },
+          children: {
+            fields: [
+              {
+                name: "title",
+                definition: {
+                  name: "title",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "products",
+                definition: {
+                  name: "products",
+                  typeRegistryId: "type.struct",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                  isList: true,
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "image",
+                      definition: {
+                        name: "image",
+                        typeRegistryId: "type.image",
+                        type: {
+                          objectType: "OBJECT_TYPE_COMPLEX_IMAGE",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "image",
+                            definition: {
+                              name: "image",
+                              type: {
+                                objectType: "OBJECT_TYPE_IMAGE",
+                              },
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "url",
+                                  definition: {
+                                    name: "url",
+                                    type: {
+                                      stringType: "STRING_TYPE_URL",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "alternateText",
+                                  definition: {
+                                    name: "alternateText",
+                                    type: {
+                                      stringType: "STRING_TYPE_MULTILINE",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "width",
+                                  definition: {
+                                    name: "width",
+                                    type: {
+                                      numberType: "NUMBER_TYPE_INT",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "height",
+                                  definition: {
+                                    name: "height",
+                                    type: {
+                                      numberType: "NUMBER_TYPE_INT",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "description",
+                            definition: {
+                              name: "description",
+                              type: {
+                                stringType: "STRING_TYPE_MULTILINE",
+                              },
+                            },
+                          },
+                          {
+                            name: "details",
+                            definition: {
+                              name: "details",
+                              type: {
+                                stringType: "STRING_TYPE_MULTILINE",
+                              },
+                            },
+                          },
+                          {
+                            name: "clickthroughUrl",
+                            definition: {
+                              name: "clickthroughUrl",
+                              type: {
+                                stringType: "STRING_TYPE_URL",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "name",
+                      definition: {
+                        name: "name",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "description",
+                      definition: {
+                        name: "description",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_MULTILINE",
+                        },
+                      },
+                    },
+                    {
+                      name: "cta",
+                      definition: {
+                        name: "cta",
+                        typeRegistryId: "type.cta",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "label",
+                            definition: {
+                              name: "label",
+                              typeRegistryId: "type.string",
+                              type: {
+                                stringType: "STRING_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                          {
+                            name: "linkType",
+                            definition: {
+                              name: "linkType",
+                              typeRegistryId: "type.option",
+                              type: {
+                                stringType: "STRING_TYPE_OPTION",
+                              },
+                              options: [
+                                {
+                                  textValue: "OTHER",
+                                  displayName: "Other",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "Otro",
+                                    },
+                                  ],
+                                },
+                                {
+                                  textValue: "URL",
+                                  displayName: "URL",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "URL",
+                                    },
+                                  ],
+                                },
+                                {
+                                  textValue: "PHONE",
+                                  displayName: "Phone",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "teléfono",
+                                    },
+                                  ],
+                                },
+                                {
+                                  textValue: "EMAIL",
+                                  displayName: "Email",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "Correo electrónico",
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "link",
+                            definition: {
+                              name: "link",
+                              typeRegistryId: "type.string",
+                              type: {
+                                stringType: "STRING_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_featuredDesserts",
+          definition: {
+            name: "c_featuredDesserts",
+            registryId: "location.custom.1000152098.featured_desserts.0",
+            typeName: "c_featuredProductSection",
+            typeRegistryId: "type.c1000152098.featuredproductsection",
+            type: {
+              objectType: "OBJECT_TYPE_DEFAULT",
+            },
+          },
+          children: {
+            fields: [
+              {
+                name: "title",
+                definition: {
+                  name: "title",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "products",
+                definition: {
+                  name: "products",
+                  typeRegistryId: "type.struct",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                  isList: true,
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "image",
+                      definition: {
+                        name: "image",
+                        typeRegistryId: "type.image",
+                        type: {
+                          objectType: "OBJECT_TYPE_COMPLEX_IMAGE",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "image",
+                            definition: {
+                              name: "image",
+                              type: {
+                                objectType: "OBJECT_TYPE_IMAGE",
+                              },
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "url",
+                                  definition: {
+                                    name: "url",
+                                    type: {
+                                      stringType: "STRING_TYPE_URL",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "alternateText",
+                                  definition: {
+                                    name: "alternateText",
+                                    type: {
+                                      stringType: "STRING_TYPE_MULTILINE",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "width",
+                                  definition: {
+                                    name: "width",
+                                    type: {
+                                      numberType: "NUMBER_TYPE_INT",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "height",
+                                  definition: {
+                                    name: "height",
+                                    type: {
+                                      numberType: "NUMBER_TYPE_INT",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "description",
+                            definition: {
+                              name: "description",
+                              type: {
+                                stringType: "STRING_TYPE_MULTILINE",
+                              },
+                            },
+                          },
+                          {
+                            name: "details",
+                            definition: {
+                              name: "details",
+                              type: {
+                                stringType: "STRING_TYPE_MULTILINE",
+                              },
+                            },
+                          },
+                          {
+                            name: "clickthroughUrl",
+                            definition: {
+                              name: "clickthroughUrl",
+                              type: {
+                                stringType: "STRING_TYPE_URL",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "name",
+                      definition: {
+                        name: "name",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "description",
+                      definition: {
+                        name: "description",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_MULTILINE",
+                        },
+                      },
+                    },
+                    {
+                      name: "cta",
+                      definition: {
+                        name: "cta",
+                        typeRegistryId: "type.cta",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "label",
+                            definition: {
+                              name: "label",
+                              typeRegistryId: "type.string",
+                              type: {
+                                stringType: "STRING_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                          {
+                            name: "linkType",
+                            definition: {
+                              name: "linkType",
+                              typeRegistryId: "type.option",
+                              type: {
+                                stringType: "STRING_TYPE_OPTION",
+                              },
+                              options: [
+                                {
+                                  textValue: "OTHER",
+                                  displayName: "Other",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "Otro",
+                                    },
+                                  ],
+                                },
+                                {
+                                  textValue: "URL",
+                                  displayName: "URL",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "URL",
+                                    },
+                                  ],
+                                },
+                                {
+                                  textValue: "PHONE",
+                                  displayName: "Phone",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "teléfono",
+                                    },
+                                  ],
+                                },
+                                {
+                                  textValue: "EMAIL",
+                                  displayName: "Email",
+                                  localizedDisplayNames: [
+                                    {
+                                      locale: "es",
+                                      value: "Correo electrónico",
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "link",
+                            definition: {
+                              name: "link",
+                              typeRegistryId: "type.string",
+                              type: {
+                                stringType: "STRING_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
           name: "c_deliveryPromo",
           definition: {
             name: "c_deliveryPromo",
