@@ -27,6 +27,7 @@ export type SectionContainerProps = {
   sectionHeading: {
     text: YextEntityField<string>;
     level: HeadingProps["level"];
+    alignment: "left" | "right" | "center";
   };
 };
 
@@ -41,6 +42,11 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
         filter: { types: ["type.string"] },
       }),
       level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      alignment: {
+        label: "Alignment",
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
+      },
     },
   },
 };
@@ -56,10 +62,19 @@ const SectionContainerComponent = (
     sectionHeading.text
   );
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[sectionHeading.alignment];
+
   return (
     <PageSection background={background}>
       {resolvedHeadingText && (
-        <Heading level={sectionHeading.level} className="pb-8">
+        <Heading
+          level={sectionHeading.level}
+          className={`flex pb-8 ${justifyClass}`}
+        >
           {resolvedHeadingText}
         </Heading>
       )}
@@ -84,6 +99,7 @@ export const SectionContainer: ComponentConfig<SectionContainerProps> = {
         constantValueEnabled: true,
       },
       level: 2,
+      alignment: "left",
     },
   },
 };
