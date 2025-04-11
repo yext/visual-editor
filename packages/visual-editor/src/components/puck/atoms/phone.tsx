@@ -1,4 +1,4 @@
-import { Phone as PhoneIcon } from "lucide-react";
+import { FaPhone } from "react-icons/fa";
 import { CTA, Body } from "../index.ts";
 import * as React from "react";
 import parsePhoneNumber from "libphonenumber-js";
@@ -24,10 +24,10 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
         <div
           className={`h-10 w-10 flex justify-center rounded-full items-center ${props.backgroundColor.bgColor} ${props.backgroundColor.textColor}`}
         >
-          <PhoneIcon className="w-4 h-4" />
+          <FaPhone className="w-4 h-4" />
         </div>
       ) : (
-        <PhoneIcon className="w-4 h-4" />
+        <FaPhone className="w-4 h-4" />
       )}
       {props.label && <Body className="font-bold">{props.label}</Body>}
       {props.includeHyperlink ? (

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields, ArrayField } from "@measured/puck";
-import { Phone as PhoneIcon } from "lucide-react";
-import mailIcon from "./assets/mail_outline.svg";
+import { FaEnvelope, FaPhone } from "react-icons/fa";
 import {
   YextEntityField,
   YextEntityFieldSelector,
@@ -187,7 +186,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
             >
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
-                  <PhoneIcon className="w-3 h-3 text-black" />
+                  <FaPhone className="w-3 h-3 text-black" />
                 </div>
                 <CTA
                   link={resolvedPhone}
@@ -206,11 +205,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
             >
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
-                  <img
-                    src={mailIcon}
-                    alt="Email"
-                    className="w-3 h-3 [filter:brightness(0)]"
-                  />
+                  <FaEnvelope className="w-3 h-3 [filter:brightness(0)]" />
                 </div>
                 <CTA
                   link={resolvedEmail}

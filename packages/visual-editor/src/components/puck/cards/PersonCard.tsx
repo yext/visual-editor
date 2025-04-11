@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Phone as PhoneIcon } from "lucide-react";
-import { FaEnvelope } from "react-icons/fa";
+import { FaEnvelope, FaPhone } from "react-icons/fa";
 import {
   YextEntityField,
   useDocument,
@@ -122,7 +121,7 @@ const PersonCardItem = ({
             >
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
-                  <PhoneIcon className="w-3 h-3 text-black" />
+                  <FaPhone className="w-3 h-3 text-black" />
                 </div>
                 <CTA
                   link={resolvedPhone}
