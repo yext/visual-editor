@@ -32,18 +32,18 @@ const getPrimaryColor = (document: any) => {
   if (document?.__?.theme) {
     return (
       JSON.parse(document?.__?.theme)
-        ?.["--colors-palette-primary"].trim()
-        .replace("#", "") ?? "000000"
+        ?.["--colors-palette-primary"]?.trim()
+        ?.replace("#", "") ?? "000000"
     );
   } else {
-    const iframe = window.document.querySelector("iframe");
+    const iframe = window.document?.querySelector("iframe");
     const componentElement =
       iframe?.contentDocument?.querySelector(".components");
     return componentElement
       ? getComputedStyle(componentElement)
-          .getPropertyValue("--colors-palette-primary")
-          .trim()
-          .replace("#", "")
+          ?.getPropertyValue("--colors-palette-primary")
+          ?.trim()
+          ?.replace("#", "")
       : "000000";
   }
 };
