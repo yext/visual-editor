@@ -64,7 +64,7 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
     height: DEFAULT_HEIGHT,
   });
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     let node: HTMLElement | null = selfRef.current;
     if (!node) return;
 
