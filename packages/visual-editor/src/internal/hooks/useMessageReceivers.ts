@@ -6,7 +6,6 @@ import {
 } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@measured/puck";
-import { jsonFromEscapedJsonString } from "../utils/jsonFromEscapedJsonString.ts";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 
@@ -86,7 +85,7 @@ export const useCommonMessageReceivers = (
   });
 
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
-    const data = jsonFromEscapedJsonString(payload.layoutData) as Data;
+    const data = JSON.parse(payload.layoutData) as Data;
     devLogger.logData("LAYOUT_DATA", data);
     setLayoutData(data);
     setLayoutDataFetched(true);
@@ -98,9 +97,7 @@ export const useCommonMessageReceivers = (
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
     const payloadString = payload as unknown as string;
-    const themeData = payloadString
-      ? jsonFromEscapedJsonString(payloadString)
-      : {};
+    const themeData = payloadString ? JSON.parse(payloadString) : {};
     devLogger.logData("THEME_DATA", themeData);
     setThemeData(themeData as ThemeData);
     setThemeDataFetched(true);

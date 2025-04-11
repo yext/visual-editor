@@ -3,7 +3,6 @@ import { DevLogger } from "../../../utils/devLogger.ts";
 import { ThemeSaveState } from "../../types/themeData.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
-import { jsonFromEscapedJsonString } from "../../utils/jsonFromEscapedJsonString.ts";
 
 const devLogger = new DevLogger();
 
@@ -27,7 +26,7 @@ export const useThemeMessageReceivers = (localDev: boolean) => {
     if (payload?.history) {
       receivedThemeSaveState = {
         hash: payload.hash,
-        history: { data: jsonFromEscapedJsonString(payload.history) },
+        history: { data: JSON.parse(payload.history) },
       } as ThemeSaveState;
     }
     devLogger.logData("THEME_SAVE_STATE", receivedThemeSaveState);
