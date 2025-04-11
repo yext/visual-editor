@@ -90,6 +90,8 @@ export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig
 ) => {
+  devLogger.logFunc("updateThemeInEditor");
+
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
   const editorStyleTag = window.document.getElementById(THEME_STYLE_TAG_ID);
   if (editorStyleTag) {
