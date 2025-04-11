@@ -8,11 +8,11 @@ import {
 } from "../../index.js";
 import { ComponentConfig, Fields } from "@measured/puck";
 
+type Size = { width: number; height: number };
+
 type MapboxStaticProps = {
   apiKey: string;
   coordinate: YextEntityField<Coordinate>;
-  width?: number;
-  height?: number;
   zoom?: number;
   mapStyle?: string;
 };
@@ -27,6 +27,12 @@ const mapboxFields: Fields<MapboxStaticProps> = {
     filter: { types: ["type.coordinate"] },
   }),
 };
+
+const DEFAULT_WIDTH = 1024;
+const DEFAULT_HEIGHT = 300;
+const MIN_HEIGHT = 300;
+const MIN_WIDTH = 100;
+const MAX_SIZE = 2048;
 
 const getPrimaryColor = (document: any) => {
   if (document?.__?.theme) {
@@ -48,15 +54,57 @@ const getPrimaryColor = (document: any) => {
   }
 };
 
+export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
+  React.RefObject<T>,
+  Size,
+] {
+  const selfRef = React.useRef<T>(null);
+  const [size, setSize] = React.useState<Size>({
+    width: DEFAULT_WIDTH,
+    height: DEFAULT_HEIGHT,
+  });
+
+  React.useEffect(() => {
+    let node: HTMLElement | null = selfRef.current;
+    if (!node) return;
+
+    // climb up 2 levels
+    for (let i = 0; i < 2; i++) {
+      node = node?.parentElement;
+      if (!node) return;
+    }
+
+    // if it’s hidden, bail
+    const style = window.getComputedStyle(node);
+    if (style.display === "none") return;
+
+    // measure
+    const rect = node.getBoundingClientRect();
+    setSize({
+      width: Math.max(
+        Math.min(rect.width || node.clientWidth, MAX_SIZE),
+        MIN_WIDTH
+      ),
+      height: Math.max(
+        Math.min(rect.height || node.clientHeight, MAX_SIZE),
+        MIN_HEIGHT
+      ),
+    });
+  }, []);
+
+  return [selfRef, size];
+}
+
 const MapboxStaticMap = ({
   apiKey,
   coordinate: coordinateField,
-  width = 1024,
-  height = 300,
   zoom = 14,
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
   const document = useDocument<any>();
+
+  const [imgRef, grandSize] = useGrandparentSize<HTMLImageElement>();
+
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     coordinateField
@@ -74,8 +122,9 @@ const MapboxStaticMap = ({
 
   return (
     <img
-      className="components w-full"
-      src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${width}x${height}?access_token=${apiKey}`}
+      ref={imgRef}
+      className="components w-full h-full object-cover"
+      src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandSize.width.toFixed(0)}x${grandSize.height.toFixed(0)}?access_token=${apiKey}`}
     />
   );
 };
