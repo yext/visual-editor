@@ -2,7 +2,7 @@
     "artifactStructure": {
         "assets": [
             {
-                "root": "dist",
+                "root": "packages/visual-editor/.vitepress/dist",
                 "pattern": "**/*"
             }
         ]

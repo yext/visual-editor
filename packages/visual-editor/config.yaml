@@ -1,8 +1,8 @@
 buildConfiguration:
-  buildCommand: pnpm docs:build
+  buildCommand: cd packages/visual-editor && pnpm docs:build
   installDependenciesStep:
-    command: pnpm install
+    command: cd packages/visual-editor && pnpm install
     requiredFiles:
-      - package.json
-      - package-lock.json
-      - .npmrc
+      - packages/visual-editor/package.json
+      - packages/visual-editor/package-lock.json
+      - packages/visual-editor/.npmrc

@@ -1,4 +1,11 @@
-import { copyFileSync, readdirSync, readFileSync, statSync } from "node:fs";
+import {
+  copyFileSync,
+  mkdir,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+} from "node:fs";
 import { join, resolve, dirname, basename } from "node:path";
 import { defineConfig } from "vitepress";
 import matter from "gray-matter"; // Add gray-matter to parse frontmatter
@@ -75,8 +82,9 @@ const copyArtifactsPlugin = () => {
     name: "copy-artifacts",
     writeBundle() {
       const source = resolve(__dirname, "../artifacts.json");
-      const dest = resolve(__dirname, "dist/artifacts.json");
+      const dest = resolve(__dirname, "../../../dist/artifacts.json");
       try {
+        // mkdirSync(resolve(__dirname, "../../../dist"));
         copyFileSync(source, dest);
         console.log("Copied artifacts.json to .vitepress/dist/");
       } catch (err) {
