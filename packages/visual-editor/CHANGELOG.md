@@ -1,3 +1,13 @@
+#### 0.0.34 (2025-04-13)
+
+##### New Features
+
+- merge new components (#365) (6a7e2391)
+
+##### Bug Fixes
+
+- remove plugin from /starter (#281) (8c06922c)
+
 #### 0.0.33 (2025-03-21)
 
 ##### Bug Fixes
