@@ -43,3 +43,4 @@ export {
   type SectionContainerProps,
 } from "./SectionContainer.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
+export { defaultThemeConfig } from "./DefaultThemeConfig.ts";
