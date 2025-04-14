@@ -23,8 +23,12 @@
 
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@yext/visual-editor": ["./src/index.ts"]
+    }
   },
-  "include": ["src/index.ts", "index.d.ts", ".eslintrc.json"],
-  "exclude": ["node_modules"]
+  "include": ["src", "index.d.ts", ".eslintrc.json"],
+  "exclude": ["node_modules", "src/vite-plugin/templates/*"]
 }

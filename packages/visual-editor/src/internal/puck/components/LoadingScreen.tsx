@@ -1,7 +1,7 @@
 import { Progress } from "../ui/Progress.tsx";
 import React from "react";
 import "../ui/puck.css";
-import "../../../components/editor/index.css";
+import "../../../editor/index.css";
 
 export type LoadingScreenProps = {
   progress: number;

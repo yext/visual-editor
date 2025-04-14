@@ -1,7 +1,7 @@
 import "../ui/puck.css";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
-import "../../../components/editor/index.css";
+import "../../../editor/index.css";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
