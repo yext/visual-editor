@@ -1,7 +1,7 @@
 import "./puck.css";
 import React from "react";
 import { Switch } from "../ui/switch.tsx";
-import { useEntityTooltips } from "../../../components/editor/EntityField.tsx";
+import { useEntityTooltips } from "../../../editor/EntityField.tsx";
 import {
   Tooltip,
   TooltipArrow,
@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
-import "../../../components/editor/index.css";
+import "../../../editor/index.css";
 
 export const EntityFieldsToggle = () => {
   const tooltipsContext = useEntityTooltips();
