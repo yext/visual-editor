@@ -167,6 +167,7 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
             variant={"link"}
             eventName={socialLink.name}
             alwaysHideCaret={true}
+            ariaLabel={socialLink.label + " link"}
           />
         ) : null
       )}
