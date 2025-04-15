@@ -11,8 +11,8 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
   CTA,
+  YextField,
 } from "@yext/visual-editor";
 
 export type AddressProps = {
@@ -21,18 +21,17 @@ export type AddressProps = {
 };
 
 const addressFields: Fields<AddressProps> = {
-  address: YextEntityFieldSelector<any, AddressType>({
-    label: "Address",
+  address: YextField<AddressType>("Address", {
+    type: "entity",
     filter: { types: ["type.address"] },
   }),
-  showGetDirections: {
-    label: "Show Get Directions Link",
+  showGetDirections: YextField("Show Get Directions Link", {
     type: "radio",
     options: [
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  },
+  }),
 };
 
 const AddressComponent = ({

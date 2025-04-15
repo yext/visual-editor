@@ -13,9 +13,6 @@ import {
   YextEntityField,
   HeadingLevel,
   BackgroundStyle,
-  BasicSelector,
-  ThemeOptions,
-  YextEntityFieldSelector,
   useDocument,
   resolveYextEntityField,
   PageSection,
@@ -26,6 +23,7 @@ import {
   Body,
   PhoneAtom,
   Background,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -61,144 +59,134 @@ export interface CoreInfoSectionProps {
 }
 
 const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      headingLevel: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
-      backgroundColor: BasicSelector(
-        "Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
-    },
-  },
-  address: {
-    label: "Info Column - Address",
-    type: "object",
-    objectFields: {
-      headingText: YextEntityFieldSelector({
-        label: "Heading Text",
+      headingLevel: YextField<string>("Heading Level", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      address: YextEntityFieldSelector({
-        label: "Address",
-        filter: {
-          types: ["type.address"],
-        },
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
       }),
-      showGetDirectionsLink: {
-        label: "Show Get Directions Link",
+    },
+  }),
+  address: YextField("Info Column - Address", {
+    type: "object",
+    objectFields: {
+      headingText: YextField("Heading Text", {
+        type: "entity",
+        filter: { types: ["type.string"] },
+      }),
+      address: YextField<AddressType>("Address", {
+        type: "entity",
+        filter: { types: ["type.address"] },
+      }),
+      showGetDirectionsLink: YextField("Show Get Directions Link", {
         type: "radio",
         options: [
           { label: "Yes", value: true },
           { label: "No", value: false },
         ],
-      },
+      }),
     },
-  },
-  phoneNumbers: {
-    label: "Info Column - Phone",
+  }),
+  phoneNumbers: YextField("Info Column - Phone", {
     type: "object",
     objectFields: {
-      phoneNumber: {
-        label: "Phone Numbers",
+      phoneNumber: YextField("Phone Numbers", {
         type: "array",
         arrayFields: {
-          number: YextEntityFieldSelector({
-            label: "Phone Number",
+          number: YextField("Phone Number", {
+            type: "entity",
             filter: {
               types: ["type.phone"],
             },
           }),
-          label: {
-            label: "Label",
+          label: YextField("Label", {
             type: "text",
-          },
+          }),
         },
         getItemSummary: (item) => item.label || "Item",
-      },
-      phoneFormat: {
-        label: "Phone Format",
+      }),
+      phoneFormat: YextField("Phone Format", {
         type: "radio",
-        options: ThemeOptions.PHONE_OPTIONS,
-      },
-      includePhoneHyperlink: {
-        label: "Include Phone Hyperlink",
+        options: "PHONE_OPTIONS",
+      }),
+      includePhoneHyperlink: YextField("Include Phone Hyperlink", {
         type: "radio",
         options: [
           { label: "Yes", value: true },
           { label: "No", value: false },
         ],
-      },
+      }),
     },
-  },
-  emails: {
-    label: "Info Column - Emails",
+  }),
+  emails: YextField("Info Column - Emails", {
     type: "object",
     objectFields: {
-      emails: YextEntityFieldSelector({
-        label: "Emails",
+      emails: YextField("Emails", {
+        type: "entity",
         filter: {
           types: ["type.string"],
           includeListsOnly: true,
           allowList: ["emails"],
         },
       }),
-      listLength: { type: "number", label: "List Length", min: 0, max: 3 },
+      listLength: YextField("List Length", { type: "number", min: 0, max: 3 }),
     },
-  },
-  hours: {
-    label: "Info Column - Hours",
+  }),
+  hours: YextField("Info Column - Hours", {
     type: "object",
     objectFields: {
-      headingText: YextEntityFieldSelector({
-        label: "Heading Text",
+      headingText: YextField("Heading Text", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      hours: YextEntityFieldSelector({
-        label: "Hours",
+      hours: YextField("Hours", {
+        type: "entity",
         filter: {
           types: ["type.hours"],
         },
       }),
-      startOfWeek: BasicSelector(
-        "Start of the Week",
-        ThemeOptions.HOURS_OPTIONS
-      ),
-      collapseDays: {
-        label: "Collapse Days",
+      startOfWeek: YextField("Start of the Week", {
+        type: "select",
+        hasSearch: true,
+        options: "HOURS_OPTIONS",
+      }),
+      collapseDays: YextField("Collapse Days", {
         type: "radio",
         options: [
           { label: "Yes", value: true },
           { label: "No", value: false },
         ],
-      },
-      showAdditionalHoursText: {
-        label: "Show additional hours text",
+      }),
+      showAdditionalHoursText: YextField("Show additional hours text", {
         type: "radio",
         options: [
           { label: "Yes", value: true },
           { label: "No", value: false },
         ],
-      },
+      }),
     },
-  },
-  services: {
-    label: "Info Column - Services",
+  }),
+  services: YextField("Info Column - Services", {
     type: "object",
     objectFields: {
-      headingText: YextEntityFieldSelector({
-        label: "Heading Text",
+      headingText: YextField("Heading Text", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      servicesList: YextEntityFieldSelector({
-        label: "Text List",
+      servicesList: YextField("Text List", {
+        type: "entity",
         filter: {
           types: ["type.string"],
           includeListsOnly: true,
@@ -206,7 +194,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
         },
       }),
     },
-  },
+  }),
 };
 
 const CoreInfoSectionWrapper = ({

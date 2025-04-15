@@ -10,7 +10,7 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface HoursStatusProps {
@@ -23,44 +23,40 @@ export interface HoursStatusProps {
 }
 
 const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
-  hours: YextEntityFieldSelector({
-    label: "Hours",
+  hours: YextField("Hours", {
+    type: "entity",
     filter: {
       types: ["type.hours"],
     },
   }),
-  showCurrentStatus: {
+  showCurrentStatus: YextField("Show Current Status", {
     type: "radio",
-    label: "Show Current Status",
     options: [
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  },
-  timeFormat: {
+  }),
+  timeFormat: YextField("Time Format", {
     type: "radio",
-    label: "Time Format",
     options: [
       { label: "12-hour", value: "12h" },
       { label: "24-hour", value: "24h" },
     ],
-  },
-  showDayNames: {
+  }),
+  showDayNames: YextField("Show Day Names", {
     type: "radio",
-    label: "Show Day Names",
     options: [
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  },
-  dayOfWeekFormat: {
+  }),
+  dayOfWeekFormat: YextField("Day of Week Format", {
     type: "radio",
-    label: "Day of Week Format",
     options: [
       { label: "Short", value: "short" },
       { label: "Long", value: "long" },
     ],
-  },
+  }),
 };
 
 const HoursStatusWrapper: React.FC<HoursStatusProps> = ({

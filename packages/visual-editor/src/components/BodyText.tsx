@@ -7,8 +7,7 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
-  ThemeOptions,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
@@ -16,17 +15,16 @@ export interface BodyTextProps extends BodyProps {
 }
 
 const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextEntityFieldSelector({
-    label: "Text",
+  text: YextField<string>("Text", {
+    type: "entity",
     filter: {
       types: ["type.string"],
     },
   }),
-  variant: {
-    label: "Variant",
+  variant: YextField("Variant", {
     type: "radio",
-    options: ThemeOptions.BODY_VARIANT,
-  },
+    options: "BODY_VARIANT",
+  }),
 };
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(

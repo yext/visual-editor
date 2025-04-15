@@ -5,11 +5,9 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
-  BasicSelector,
-  ThemeOptions,
   Heading,
   HeadingProps,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface HeadingTextProps extends HeadingProps {
@@ -38,13 +36,17 @@ const HeadingTextWrapper = React.forwardRef<
 HeadingTextWrapper.displayName = "HeadingText";
 
 const headingTextFields: Fields<HeadingTextProps> = {
-  text: YextEntityFieldSelector({
-    label: "Text",
+  text: YextField<string>("Text", {
+    type: "entity",
     filter: {
       types: ["type.string"],
     },
   }),
-  level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+  level: YextField("Heading Level", {
+    type: "select",
+    hasSearch: true,
+    options: "HEADING_LEVEL",
+  }),
 };
 
 export const HeadingText: ComponentConfig<HeadingTextProps> = {

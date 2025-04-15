@@ -6,8 +6,6 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
-  BasicSelector,
   ImageProps,
   Image,
   Body,
@@ -15,12 +13,12 @@ import {
   backgroundColors,
   BodyProps,
   ImageWrapperProps,
-  ThemeOptions,
   Heading,
   HeadingProps,
   CTA,
   CTAProps,
   PageSection,
+  YextField,
 } from "@yext/visual-editor";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
@@ -48,82 +46,82 @@ export interface PromoSectionProps {
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  image: {
+  image: YextField("Image", {
     type: "object",
-    label: "Image",
     objectFields: {
       ...ImageWrapperFields,
     },
-  },
-  title: {
+  }),
+  title: YextField("Business Name Heading", {
     type: "object",
-    label: "Business Name Heading",
     objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Value",
+      text: YextField<string>("Value", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  description: {
+  }),
+  description: YextField("Description", {
     type: "object",
-    label: "Description",
     objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Value",
+      text: YextField<string>("Value", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      variant: {
-        label: "Variant",
+      variant: YextField("Variant", {
         type: "radio",
-        options: ThemeOptions.BODY_VARIANT,
-      },
+        options: "BODY_VARIANT",
+      }),
     },
-  },
-  cta: {
+  }),
+  cta: YextField("Primary CTA", {
     type: "object",
-    label: "Primary CTA",
     objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Value",
+      entityField: YextField("Value", {
+        type: "entity",
         filter: {
           types: ["type.cta"],
         },
       }),
-      variant: {
-        label: "Variant",
+      variant: YextField("Variant", {
         type: "radio",
-        options: ThemeOptions.CTA_VARIANT,
-      },
-      visible: {
-        label: "Show Primary CTA",
+        options: "CTA_VARIANT",
+      }),
+      visible: YextField("Show Primary CTA", {
         type: "radio",
         options: [
           { label: "Show", value: true },
           { label: "Hide", value: false },
         ],
-      },
+      }),
     },
-  },
-  styles: {
-    label: "Styles",
+  }),
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: BasicSelector(
-        "Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
-      orientation: BasicSelector("Image Orientation", [
-        { label: "Left", value: "left" },
-        { label: "Right", value: "right" },
-      ]),
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
+      imageOrientation: YextField("Image Orientation", {
+        type: "radio",
+        options: [
+          { label: "Left", value: "left" },
+          { label: "Right", value: "right" },
+        ],
+      }),
     },
-  },
+  }),
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({

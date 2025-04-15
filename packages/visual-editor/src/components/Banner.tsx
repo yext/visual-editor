@@ -2,14 +2,11 @@ import * as React from "react";
 import {
   YextEntityField,
   resolveYextEntityField,
-  YextEntityFieldSelector,
   useDocument,
-  BasicSelector,
-  ThemeOptions,
   Body,
   PageSection,
+  YextField,
 } from "@yext/visual-editor";
-
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   backgroundColors,
@@ -23,21 +20,21 @@ export type BannerSectionProps = {
 };
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
-  text: YextEntityFieldSelector<any, string>({
-    label: "Text",
+  text: YextField<string>("Text", {
+    type: "entity",
     filter: {
       types: ["type.string"],
     },
   }),
-  textAlignment: {
-    label: "Text Alignment",
+  textAlignment: YextField("Text Alignment", {
     type: "radio",
-    options: ThemeOptions.ALIGNMENT,
-  },
-  backgroundColor: BasicSelector(
-    "Background Color",
-    ThemeOptions.DARK_BACKGROUND_COLOR
-  ),
+    options: "ALIGNMENT",
+  }),
+  backgroundColor: YextField("Background Color", {
+    type: "select",
+    hasSearch: true,
+    options: "DARK_BACKGROUND_COLOR",
+  }),
 };
 
 const BannerComponent = ({

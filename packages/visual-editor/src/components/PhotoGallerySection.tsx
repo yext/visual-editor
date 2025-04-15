@@ -12,7 +12,6 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
   BackgroundStyle,
-  BasicSelector,
   EntityField,
   Heading,
   HeadingLevel,
@@ -22,11 +21,10 @@ import {
   resolveYextEntityField,
   PageSection,
   themeManagerCn,
-  ThemeOptions,
   useBackground,
   useDocument,
   YextEntityField,
-  YextEntityFieldSelector,
+  YextField,
 } from "@yext/visual-editor";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -71,34 +69,36 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: BasicSelector(
-        "Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
     },
-  },
-  sectionHeading: {
+  }),
+  sectionHeading: YextField("Section Heading", {
     type: "object",
-    label: "Section Heading",
     objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Text",
+      text: YextField<string>("Text", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  images: {
+  }),
+  images: YextField("Images", {
     type: "array",
-    label: "Images",
     arrayFields: { ...ImageWrapperFields },
-  },
+  }),
 };
 
 const PhotoGallerySectionWrapper = ({

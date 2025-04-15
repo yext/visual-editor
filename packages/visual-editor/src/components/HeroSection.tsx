@@ -6,19 +6,17 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
-  BasicSelector,
   Image,
   ImageProps,
   ImageWrapperProps,
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-  ThemeOptions,
   CTA,
   CTAProps,
   Heading,
   PageSection,
+  YextField,
 } from "@yext/visual-editor";
 import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
 
@@ -66,108 +64,110 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       },
     },
   },
-  businessName: {
-    label: "Business Name",
+  businessName: YextField("Business Name", {
     type: "object",
     objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Value",
+      entityField: YextField("Value", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  localGeoModifier: {
-    label: "Local GeoModifier",
+  }),
+  localGeoModifier: YextField("Local GeoModifier", {
     type: "object",
     objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Value",
+      entityField: YextField("Value", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  hours: {
-    label: "Hours",
+  }),
+  hours: YextField("Hours", {
     type: "object",
     objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Hours Field",
+      entityField: YextField("Hours Field", {
+        type: "entity",
         filter: {
           types: ["type.hours"],
         },
       }),
-      showHours: {
-        label: "Show Hours",
+      showHours: YextField("Show Hours", {
         type: "radio",
         options: [
           { label: "Show", value: true },
           { label: "Hide", value: false },
         ],
-      },
+      }),
     },
-  },
-  primaryCta: {
-    label: "Primary CTA",
+  }),
+  primaryCta: YextField("Primary CTA", {
     type: "object",
     objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Value",
+      entityField: YextField("Value", {
+        type: "entity",
         filter: {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Button Variant", ThemeOptions.CTA_VARIANT),
-      showCTA: {
-        label: "CTA",
+      variant: YextField("Button Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+      showCTA: YextField("CTA", {
         type: "radio",
         options: [
           { label: "Show", value: true },
           { label: "Hide", value: false },
         ],
-      },
+      }),
     },
-  },
-  secondaryCta: {
-    label: "Secondary CTA",
+  }),
+  secondaryCta: YextField("Secondary CTA", {
     type: "object",
     objectFields: {
-      entityField: YextEntityFieldSelector({
-        label: "Value",
+      entityField: YextField("Value", {
+        type: "entity",
         filter: {
           types: ["type.cta"],
         },
       }),
-      variant: BasicSelector("Button Variant", ThemeOptions.CTA_VARIANT),
-      showCTA: {
-        label: "CTA",
+      variant: YextField("Button Variant", {
         type: "radio",
-        options: [
-          { label: "Show", value: true },
-          { label: "Hide", value: false },
-        ],
-      },
+        options: "CTA_VARIANT",
+      }),
     },
-  },
-  styles: {
-    label: "Styles",
+  }),
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: BasicSelector(
-        "Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
-      imageOrientation: BasicSelector("Image Orientation", [
-        { label: "Left", value: "left" },
-        { label: "Right", value: "right" },
-      ]),
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
+      imageOrientation: YextField("Image Orientation", {
+        type: "radio",
+        options: [
+          { label: "Left", value: "left" },
+          { label: "Right", value: "right" },
+        ],
+      }),
     },
-  },
+  }),
 };
 
 const HeroSectionWrapper = ({

@@ -6,9 +6,9 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
   CTA,
   Body,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -18,28 +18,26 @@ export interface EmailsProps {
 }
 
 const EmailsFields: Fields<EmailsProps> = {
-  list: YextEntityFieldSelector({
-    label: "Emails",
+  list: YextField("Emails", {
+    type: "entity",
     filter: {
       types: ["type.string"],
       allowList: ["emails"],
       includeListsOnly: true,
     },
   }),
-  includeHyperlink: {
-    label: "Include Hyperlink",
+  includeHyperlink: YextField("Include Hyperlink", {
     type: "radio",
     options: [
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  },
-  listLength: {
+  }),
+  listLength: YextField("List Length", {
     type: "number",
-    label: "List Length",
     min: 1,
     max: 100,
-  },
+  }),
 };
 
 const EmailsComponent: React.FC<EmailsProps> = ({

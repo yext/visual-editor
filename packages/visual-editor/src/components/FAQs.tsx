@@ -4,15 +4,13 @@ import {
   useDocument,
   resolveYextEntityField,
   YextEntityField,
-  YextEntityFieldSelector,
   Body,
-  BasicSelector,
-  ThemeOptions,
   HeadingProps,
   BackgroundStyle,
   PageSection,
   Heading,
   backgroundColors,
+  YextField,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -42,43 +40,44 @@ export interface FAQsSectionProps {
 }
 
 const FAQsSectionFields: Fields<FAQsSectionProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: BasicSelector(
-        "Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
     },
-  },
-  sectionHeading: {
+  }),
+  sectionHeading: YextField("Section Heading", {
     type: "object",
-    label: "Section Heading",
     objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Text",
+      text: YextField<string>("Text", {
+        type: "entity",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  cards: {
+  }),
+  cards: YextField("FAQs", {
     type: "array",
-    label: "FAQs",
     arrayFields: {
-      question: {
-        label: "Question",
+      question: YextField("Question", {
         type: "text",
-      },
-      answer: {
-        label: "Answer",
-        type: "textarea",
-      },
+      }),
+      answer: YextField("Answer", {
+        type: "text",
+        isMultiline: true,
+      }),
     },
-  },
+  }),
 };
 
 const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
