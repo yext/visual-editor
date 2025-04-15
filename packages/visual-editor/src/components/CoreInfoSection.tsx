@@ -258,14 +258,15 @@ const CoreInfoSectionWrapper = ({
 
   return (
     <PageSection
-      className="flex flex-col md:flex-row justify-between w-full gap-8"
+      className={`flex flex-col md:flex-row justify-between w-full gap-8 ${
+        (!resolvedHours && servicesList) || (resolvedHours && !servicesList)
+          ? "md:[&>section]:w-1/2"
+          : "md:[&>section]:w-1/3"
+      }`}
       background={styles.backgroundColor}
       aria-label="Core Info Section"
     >
-      <section
-        aria-label="Information Section"
-        className="flex flex-col gap-4 md:w-1/3"
-      >
+      <section aria-label="Information Section" className="flex flex-col gap-4">
         {addressHeadingText && (
           <EntityField
             displayName="Heading Text"
@@ -373,10 +374,7 @@ const CoreInfoSectionWrapper = ({
         )}
       </section>
       {resolvedHours && (
-        <section
-          aria-label="Hours Section"
-          className="flex flex-col gap-4 md:w-1/3"
-        >
+        <section aria-label="Hours Section" className="flex flex-col gap-4">
           {hoursHeadingText && (
             <EntityField
               displayName="Address"
@@ -407,10 +405,7 @@ const CoreInfoSectionWrapper = ({
         </section>
       )}
       {servicesList && (
-        <section
-          aria-label="Services Section"
-          className="flex flex-col gap-4 md:w-1/3"
-        >
+        <section aria-label="Services Section" className="flex flex-col gap-4">
           {servicesHeadingText && (
             <EntityField
               displayName="Address"
