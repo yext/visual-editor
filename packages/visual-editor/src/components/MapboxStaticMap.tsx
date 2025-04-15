@@ -58,6 +58,7 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   React.RefObject<T>,
   Size,
 ] {
+  const timeoutRef = React.useRef<NodeJS.Timeout | undefined>();
   const [apiCallCount, setApiCallCount] = React.useState(0);
   const [updateTrigger, setUpdateTrigger] = React.useState(0);
   const selfRef = React.useRef<T>(null);
@@ -107,20 +108,27 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
     "resize",
     "load",
     "visibilitychange",
-    "scroll",
+    "focus",
+    "deviceorientation",
   ];
+
+  const handleEvent = React.useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setUpdateTrigger((prev) => prev + 1); // Trigger re-run
+    }, 1000);
+  }, [setUpdateTrigger]);
+
   // Listen for window resize
   React.useEffect(() => {
-    const handleResize = () => {
-      setUpdateTrigger((prev) => prev + 1); // Trigger re-run
-    };
-
     updateEvents.forEach((event: string) => {
-      window.addEventListener(event, handleResize);
+      window.addEventListener(event, handleEvent);
     });
     return () => {
       updateEvents.forEach((event: string) => {
-        window.removeEventListener(event, handleResize);
+        window.removeEventListener(event, handleEvent);
       });
     };
   }, []);
