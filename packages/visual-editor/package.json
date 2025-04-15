@@ -75,7 +75,7 @@
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
     "*": "prettier --write --cache --ignore-unknown",
-    "*.{ts,js,tsx,jsx}": "eslint --cache --fix"
+    "*.{ts,js,tsx,jsx}": "eslint --cache --fix src/ --ignore-pattern 'src/vite-plugin/templates/*'"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",
