@@ -58,6 +58,8 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   React.RefObject<T>,
   Size,
 ] {
+  const [apiCallCount, setApiCallCount] = React.useState(0);
+  const [updateTrigger, setUpdateTrigger] = React.useState(0);
   const selfRef = React.useRef<T>(null);
   const [size, setSize] = React.useState<Size>({
     width: DEFAULT_WIDTH,
@@ -65,6 +67,13 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   });
 
   React.useEffect(() => {
+    let timer: number = 0;
+    if (apiCallCount < 3) {
+      timer = window.setTimeout(() => {
+        setApiCallCount((prev) => prev + 1);
+      }, 1000);
+    }
+
     let node: HTMLElement | null = selfRef.current;
     if (!node) return;
 
@@ -90,6 +99,30 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
         MIN_HEIGHT
       ),
     });
+
+    return () => clearTimeout(timer); // Cleanup timeout on unmount or re-render
+  }, [apiCallCount, updateTrigger]);
+
+  const updateEvents: string[] = [
+    "resize",
+    "load",
+    "visibilitychange",
+    "scroll",
+  ];
+  // Listen for window resize
+  React.useEffect(() => {
+    const handleResize = () => {
+      setUpdateTrigger((prev) => prev + 1); // Trigger re-run
+    };
+
+    updateEvents.forEach((event: string) => {
+      window.addEventListener(event, handleResize);
+    });
+    return () => {
+      updateEvents.forEach((event: string) => {
+        window.removeEventListener(event, handleResize);
+      });
+    };
   }, []);
 
   return [selfRef, size];
