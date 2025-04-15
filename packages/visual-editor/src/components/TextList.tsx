@@ -26,10 +26,16 @@ const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
   const document = useDocument();
-  let resolvedTextList: any = resolveYextEntityField(document, textListField);
-  if (!resolvedTextList) {
+  let resolvedTextList = resolveYextEntityField(document, textListField);
+
+  // When constantValueEnabled is true but no constant values have been set yet, show defaults
+  if (
+    textListField.constantValueEnabled &&
+    !textListField.constantValue?.length
+  ) {
     resolvedTextList = ["Sample text 1", "Sample text 2", "Sample text 3"];
-  } else if (!Array.isArray(resolvedTextList)) {
+  } else if (resolvedTextList && !Array.isArray(resolvedTextList)) {
+    // If there's a value but it's not an array, convert it to array
     resolvedTextList = [resolvedTextList];
   }
 
@@ -39,13 +45,15 @@ const TextListComponent: React.FC<TextListProps> = ({
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >
-      <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
-        {resolvedTextList.map((text: any, index: any) => (
-          <li key={index} className="mb-2">
-            {text}
-          </li>
-        ))}
-      </ul>
+      {resolvedTextList && resolvedTextList.length > 0 ? (
+        <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
+          {resolvedTextList.map((text, index) => (
+            <li key={index} className="mb-2">
+              {text}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </EntityField>
   );
 };
