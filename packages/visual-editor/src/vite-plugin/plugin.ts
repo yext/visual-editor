@@ -19,6 +19,9 @@ export const yextVisualEditorPlugin = (): Plugin => {
       const filePath = path.join(process.cwd(), fileName);
       filesToCleanup.push(filePath);
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      if (fs.existsSync(filePath)) {
+        return;
+      }
       fs.writeFileSync(filePath, content);
     });
   };
