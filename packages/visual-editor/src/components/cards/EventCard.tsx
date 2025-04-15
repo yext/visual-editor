@@ -75,7 +75,7 @@ const EventCardItem = ({
             fieldId={card?.title?.field}
             constantValueEnabled={card?.title?.constantValueEnabled}
           >
-            <Heading level={6}>{resolvedTitle}</Heading>
+            <Heading level={3}>{resolvedTitle}</Heading>
           </EntityField>
         )}
         {resolvedDateTime && (

@@ -139,6 +139,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
     image.image
   );
   const resolvedCTA = resolveYextEntityField(document, cta.entityField);
+  const resolvedTitle = resolveYextEntityField(document, title.text);
 
   if (!resolvedImage) {
     return null;
@@ -168,10 +169,8 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
         </EntityField>
       )}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
-        {title?.text && (
-          <Heading level={title.level}>
-            {resolveYextEntityField(document, title.text)}
-          </Heading>
+        {resolvedTitle && (
+          <Heading level={title.level}>{resolvedTitle}</Heading>
         )}
         {description?.text && (
           <Body variant={description.variant}>
