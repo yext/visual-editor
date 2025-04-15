@@ -13,6 +13,7 @@ export interface CTAProps {
   className?: string;
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
+  ariaLabel?: string;
 }
 
 export const CTA = ({
@@ -24,6 +25,7 @@ export const CTA = ({
   className,
   target,
   alwaysHideCaret,
+  ariaLabel,
 }: CTAProps) => {
   let caretVisibility = "none";
   if (!alwaysHideCaret) {
@@ -45,6 +47,7 @@ export const CTA = ({
         }}
         eventName={eventName}
         target={target}
+        aria-label={ariaLabel}
       >
         {label}
         <FaAngleRight
