@@ -90,7 +90,6 @@ export const Address: ComponentConfig<AddressProps> = {
         postalCode: "",
         countryCode: "",
       },
-      constantValueEnabled: true,
     },
     showGetDirections: true,
   },
