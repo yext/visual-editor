@@ -9,6 +9,8 @@ import {
   YextCollectionSubfieldSelector,
   ThemeOptions,
   BasicSelector,
+  OptionalNumberFieldProps,
+  OptionalNumberField,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
@@ -37,29 +39,44 @@ type YextBaseField = {
   type: string;
 };
 
+// YextArrayField has same functionality as Puck's ArrayField
 type YextArrayField = YextBaseField & Omit<ArrayField, keyof BaseField>;
 
+// YextNumberField has same functionality as Puck's NumberField
 type YextNumberField = YextBaseField & Omit<NumberField, keyof BaseField>;
 
+// YextObjectField has same functionality as Puck's ObjectField
 type YextObjectField = YextBaseField & Omit<ObjectField, keyof BaseField>;
 
+// YextRadioField accepts normal FieldOptions or specific ThemeConfig options.
 type YextRadioField = YextBaseField & {
   type: "radio";
   options: FieldOptions | radioOptions;
 };
 
+// YextSelectField accepts normal FieldOptions or specific ThemeConfig options.
+// If hasSearch is true, uses the BasicSelector rather than Puck's SelectField.
 type YextSelectField = YextBaseField & {
   type: "select";
   hasSearch?: boolean;
   options: FieldOptions | selectOptions;
 };
 
+// YextTextField has same functionality as Puck's TextField
+// If isMultiline is true, uses Puck's TextAreaField
 type YextTextField = YextBaseField & {
   type: "text";
   isMultiline?: boolean;
 };
 
-export type YextEntitySelectorField<
+// YextOptionalNumberField has same functionality as OptionalNumberField
+type YextOptionalNumberField = YextBaseField &
+  Omit<OptionalNumberFieldProps, "fieldLabel"> & {
+    type: "optionalNumber";
+  };
+
+// YextEntitySelectorField has same functionality as YextCollectionSubfieldSelector
+type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
 > = YextBaseField &
   Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
@@ -73,7 +90,8 @@ type YextFieldConfig =
   | YextEntitySelectorField
   | YextSelectField
   | YextRadioField
-  | YextObjectField;
+  | YextObjectField
+  | YextOptionalNumberField;
 
 export function YextField<U>(
   fieldName: string,
@@ -89,6 +107,7 @@ export function YextField<T, U>(
   fieldName: string,
   config: YextFieldConfig
 ): Field<any> {
+  // use YextCollectionSubfieldSelector
   if (config.type === "entity") {
     return YextCollectionSubfieldSelector<any, U>({
       label: fieldName,
@@ -97,6 +116,16 @@ export function YextField<T, U>(
     });
   }
 
+  if (config.type === "optionalNumber") {
+    return OptionalNumberField({
+      fieldLabel: fieldName,
+      hideNumberFieldRadioLabel: config.hideNumberFieldRadioLabel,
+      showNumberFieldRadioLabel: config.showNumberFieldRadioLabel,
+      defaultCustomValue: config.defaultCustomValue,
+    });
+  }
+
+  // use BasicSelector functionality
   if (config.type === "select" && config.hasSearch) {
     const options =
       typeof config.options === "string"

@@ -9,7 +9,6 @@ import {
   WithId,
 } from "@measured/puck";
 import {
-  OptionalNumberField,
   YextCollection,
   CardCategory,
   themeManagerCn,
@@ -34,8 +33,8 @@ const collectionFields: Fields<CollectionProps> = {
           includeListsOnly: true,
         },
       }),
-      limit: OptionalNumberField({
-        fieldLabel: "Items Limit",
+      limit: YextField("Items Limit", {
+        type: "optionalNumber",
         hideNumberFieldRadioLabel: "All",
         showNumberFieldRadioLabel: "Limit",
         defaultCustomValue: 3,
@@ -130,8 +129,8 @@ export const Collection: ComponentConfig<CollectionProps> = {
         objectFields: {
           // @ts-expect-error ts(2339) objectFields exists
           ...fields.collection.objectFields,
-          limit: OptionalNumberField({
-            fieldLabel: "Items Limit",
+          limit: YextField("Items Limit", {
+            type: "optionalNumber",
             hideNumberFieldRadioLabel: "All",
             showNumberFieldRadioLabel: "Limit",
             defaultCustomValue: 3,
