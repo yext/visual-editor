@@ -107,7 +107,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
       // Update each subfield based on isCollection
       return {
         ...params.lastFields,
-        text: YextField<string>("Text", {
+        text: YextField<any, string>("Text", {
           type: "entityField",
           isCollection: isCollection,
           filter: {
@@ -115,7 +115,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
             types: ["type.string"],
           },
         }),
-        image: YextField<ImageType>("Image", {
+        image: YextField<any, ImageType>("Image", {
           type: "entityField",
           isCollection: isCollection,
           filter: {

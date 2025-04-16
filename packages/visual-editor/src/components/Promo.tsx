@@ -55,7 +55,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   title: YextField("Business Name Heading", {
     type: "object",
     objectFields: {
-      text: YextField<string>("Value", {
+      text: YextField<any, string>("Value", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -71,7 +71,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   description: YextField("Description", {
     type: "object",
     objectFields: {
-      text: YextField<string>("Value", {
+      text: YextField<any, string>("Value", {
         type: "entityField",
         filter: {
           types: ["type.string"],

@@ -21,7 +21,7 @@ export type AddressProps = {
 };
 
 const addressFields: Fields<AddressProps> = {
-  address: YextField<AddressType>("Address", {
+  address: YextField<any, AddressType>("Address", {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),

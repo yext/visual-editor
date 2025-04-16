@@ -66,7 +66,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   businessName: YextField("Business Name", {
     type: "object",
     objectFields: {
-      entityField: YextField("Value", {
+      entityField: YextField<any, string>("Value", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -147,6 +147,13 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       variant: YextField("Button Variant", {
         type: "radio",
         options: "CTA_VARIANT",
+      }),
+      showCTA: YextField("CTA", {
+        type: "radio",
+        options: [
+          { label: "Show", value: true },
+          { label: "Hide", value: false },
+        ],
       }),
     },
   }),

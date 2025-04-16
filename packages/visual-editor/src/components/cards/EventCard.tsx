@@ -163,7 +163,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
       card: YextField("Card", {
         type: "object",
         objectFields: {
-          title: YextField<string>("Title", {
+          title: YextField<any, string>("Title", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -171,7 +171,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.string"],
             },
           }),
-          image: YextField<ImageType>("Image", {
+          image: YextField<any, ImageType>("Image", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -179,7 +179,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.image"],
             },
           }),
-          dateTime: YextField<string>("Date Time", {
+          dateTime: YextField<any, string>("Date Time", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -187,7 +187,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.string"],
             },
           }),
-          description: YextField<string>("Description", {
+          description: YextField<any, string>("Description", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -195,7 +195,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.string"],
             },
           }),
-          cta: YextField<CTAProps>("CTA", {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -205,7 +205,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
           }),
         },
       }),
-    } as Fields<EventCardProps>;
+    };
   },
   defaultProps: {
     card: {

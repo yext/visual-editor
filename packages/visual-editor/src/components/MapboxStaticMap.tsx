@@ -21,7 +21,7 @@ const mapboxFields: Fields<MapboxStaticProps> = {
   apiKey: YextField("API Key", {
     type: "text",
   }),
-  coordinate: YextField<Coordinate>("Coordinates", {
+  coordinate: YextField<any, Coordinate>("Coordinates", {
     type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),

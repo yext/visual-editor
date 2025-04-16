@@ -82,7 +82,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   sectionHeading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextField<string>("Text", {
+      text: YextField<any, string>("Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],

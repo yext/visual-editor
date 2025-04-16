@@ -26,7 +26,7 @@ const collectionFields: Fields<CollectionProps> = {
   collection: YextField("Collection", {
     type: "object",
     objectFields: {
-      items: YextField<Array<any>>("Items", {
+      items: YextField<any, Array<any>>("Items", {
         type: "entityField",
         isCollection: true,
         filter: {

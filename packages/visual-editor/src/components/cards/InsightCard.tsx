@@ -178,7 +178,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
       card: YextField("Card", {
         type: "object",
         objectFields: {
-          image: YextField<ImageType>("Image", {
+          image: YextField<any, ImageType>("Image", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -186,7 +186,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.image"],
             },
           }),
-          title: YextField<string>("Title", {
+          title: YextField<any, string>("Title", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -194,7 +194,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          category: YextField<string>("Category", {
+          category: YextField<any, string>("Category", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -202,7 +202,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          date: YextField<string>("Date", {
+          date: YextField<any, string>("Date", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -210,7 +210,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          description: YextField<string>("Description", {
+          description: YextField<any, string>("Description", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -218,7 +218,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          cta: YextField<CTAProps>("CTA", {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -228,7 +228,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
           }),
         },
       }),
-    } as Fields<InsightCardProps>;
+    };
   },
   defaultProps: {
     card: {

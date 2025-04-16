@@ -288,7 +288,7 @@ YextField(label: string, config: YextFieldConfig): Field<any>
 import { YextField } from "@yext/visual-editor";
 
 const myComponentFields: Fields<myComponentProps> = {
-  address: YextField<AddressType>("Address", {
+  address: YextField<any, AddressType>("Address", {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),

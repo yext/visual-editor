@@ -36,7 +36,7 @@ const HeadingTextWrapper = React.forwardRef<
 HeadingTextWrapper.displayName = "HeadingText";
 
 const headingTextFields: Fields<HeadingTextProps> = {
-  text: YextField<string>("Text", {
+  text: YextField<any, string>("Text", {
     type: "entityField",
     filter: {
       types: ["type.string"],

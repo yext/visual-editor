@@ -40,13 +40,17 @@ type YextBaseField = {
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
-type YextArrayField = YextBaseField & Omit<ArrayField, keyof BaseField>;
+type YextArrayField<
+  Props extends { [key: string]: any } = { [key: string]: any },
+> = YextBaseField & Omit<ArrayField<Props>, keyof BaseField>;
 
 // YextNumberField has same functionality as Puck's NumberField
 type YextNumberField = YextBaseField & Omit<NumberField, keyof BaseField>;
 
 // YextObjectField has same functionality as Puck's ObjectField
-type YextObjectField = YextBaseField & Omit<ObjectField, keyof BaseField>;
+type YextObjectField<
+  Props extends { [key: string]: any } = { [key: string]: any },
+> = YextBaseField & Omit<ObjectField<Props>, keyof BaseField>;
 
 // YextRadioField accepts normal FieldOptions or specific ThemeConfig options.
 type YextRadioField = YextBaseField & {
@@ -83,33 +87,36 @@ type YextEntitySelectorField<
     type: "entityField";
   };
 
-type YextFieldConfig =
-  | YextArrayField
+type YextFieldConfig<Props = any> =
+  | YextArrayField<Props extends Record<string, any> ? Props : any>
+  | YextObjectField<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextTextField
-  | YextEntitySelectorField
+  | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextSelectField
   | YextRadioField
-  | YextObjectField
   | YextOptionalNumberField;
-
-export function YextField<U>(
-  fieldName: string,
-  config: { type: "entityField"; filter: any }
-): Field<YextEntityField<U>>;
 
 export function YextField<T = any>(
   fieldName: string,
-  config: YextFieldConfig
+  config: YextFieldConfig<T>
 ): Field<T>;
+
+export function YextField<T extends Record<string, any>, U = any>(
+  fieldName: string,
+  config: YextEntitySelectorField<T>
+): Field<YextEntityField<U>>;
 
 export function YextField<T, U>(
   fieldName: string,
-  config: YextFieldConfig
+  config: YextFieldConfig<T>
 ): Field<any> {
   // use YextCollectionSubfieldSelector
   if (config.type === "entityField") {
-    return YextCollectionSubfieldSelector<any, U>({
+    return YextCollectionSubfieldSelector<
+      T extends Record<string, any> ? T : any,
+      U
+    >({
       label: fieldName,
       filter: config.filter,
       isCollection: config.isCollection,

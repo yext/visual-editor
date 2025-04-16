@@ -131,7 +131,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
       card: YextField("Card", {
         type: "object",
         objectFields: {
-          testimonial: YextField<string>("Testimonial", {
+          testimonial: YextField<any, string>("Testimonial", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -139,7 +139,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
               types: ["type.string"],
             },
           }),
-          authorName: YextField<string>("Author Name", {
+          authorName: YextField<any, string>("Author Name", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -147,7 +147,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
               types: ["type.string"],
             },
           }),
-          date: YextField<string>("Date", {
+          date: YextField<any, string>("Date", {
             type: "entityField",
             isCollection: isCollection,
             filter: {

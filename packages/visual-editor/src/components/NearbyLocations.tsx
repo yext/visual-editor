@@ -61,7 +61,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
   heading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextField<string>("Text", {
+      text: YextField<any, string>("Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -128,7 +128,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
       }),
     },
   }),
-  coordinate: YextField<Coordinate>("Coordinates", {
+  coordinate: YextField<any, Coordinate>("Coordinates", {
     type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),

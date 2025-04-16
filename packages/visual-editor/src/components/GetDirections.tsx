@@ -18,7 +18,7 @@ export type GetDirectionsProps = {
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
-  coordinate: YextField<Coordinate>("Coordinates", {
+  coordinate: YextField<any, Coordinate>("Coordinates", {
     type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),

@@ -49,7 +49,7 @@ const peopleFields: Fields<PeopleProps> = {
   sectionHeading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextField<string>("Text", {
+      text: YextField<any, string>("Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -71,32 +71,32 @@ const peopleFields: Fields<PeopleProps> = {
           ...ImageWrapperFields,
         },
       }),
-      name: YextField<string>("Name", {
+      name: YextField<any, string>("Name", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      title: YextField<string>("Title", {
+      title: YextField<any, string>("Title", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      phone: YextField<string>("Phone", {
+      phone: YextField<any, string>("Phone", {
         type: "entityField",
         filter: {
           types: ["type.phone"],
         },
       }),
-      email: YextField<string>("Email", {
+      email: YextField<any, string>("Email", {
         type: "entityField",
         filter: {
           types: ["type.string"],
           allowList: ["emails"],
         },
       }),
-      cta: YextField<CTAProps>("CTA", {
+      cta: YextField<any, CTAProps>("CTA", {
         type: "entityField",
         filter: {
           types: ["type.cta"],

@@ -77,11 +77,11 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   address: YextField("Info Column - Address", {
     type: "object",
     objectFields: {
-      headingText: YextField("Heading Text", {
+      headingText: YextField<any, string>("Heading Text", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      address: YextField<AddressType>("Address", {
+      address: YextField<any, AddressType>("Address", {
         type: "entityField",
         filter: { types: ["type.address"] },
       }),
@@ -100,7 +100,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       phoneNumber: YextField("Phone Numbers", {
         type: "array",
         arrayFields: {
-          number: YextField("Phone Number", {
+          number: YextField<any, string>("Phone Number", {
             type: "entityField",
             filter: {
               types: ["type.phone"],
@@ -128,7 +128,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   emails: YextField("Info Column - Emails", {
     type: "object",
     objectFields: {
-      emails: YextField("Emails", {
+      emails: YextField<any, string[]>("Emails", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -178,13 +178,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   services: YextField("Info Column - Services", {
     type: "object",
     objectFields: {
-      headingText: YextField("Heading Text", {
+      headingText: YextField<any, string>("Heading Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      servicesList: YextField("Text List", {
+      servicesList: YextField<any, string[]>("Text List", {
         type: "entityField",
         filter: {
           types: ["type.string"],

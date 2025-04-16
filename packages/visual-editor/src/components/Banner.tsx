@@ -20,7 +20,7 @@ export type BannerSectionProps = {
 };
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
-  text: YextField<string>("Text", {
+  text: YextField<any, string>("Text", {
     type: "entityField",
     filter: {
       types: ["type.string"],
