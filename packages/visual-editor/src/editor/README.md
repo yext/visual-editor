@@ -273,7 +273,7 @@ const myComponentFields: Fields<MyComponentProps> = {
 
 #### `YextField`
 
-```ts
+```tsx
 YextField(label: string, config: YextFieldConfig): Field<any>
 ```
 

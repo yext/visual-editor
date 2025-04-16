@@ -62,11 +62,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      headingLevel: YextField<string>("Heading Level", {
-        type: "entity",
-        filter: {
-          types: ["type.string"],
-        },
+      headingLevel: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
       }),
       backgroundColor: YextField("Background Color", {
         type: "select",
