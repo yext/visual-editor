@@ -7,6 +7,7 @@ import {
   ContentBlockCategory,
   CardCategory,
   LayoutBlockCategory,
+  YextField,
 } from "@yext/visual-editor";
 import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 
@@ -72,12 +73,11 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
-  columns: {
+  columns: YextField("Columns", {
     type: "number",
-    label: "Columns",
     min: 1,
     max: 12,
-  },
+  }),
   ...layoutFields,
 };
 

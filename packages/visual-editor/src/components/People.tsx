@@ -3,11 +3,8 @@ import { ComponentConfig, Fields, ArrayField } from "@measured/puck";
 import { FaEnvelope, FaPhone } from "react-icons/fa";
 import {
   YextEntityField,
-  YextEntityFieldSelector,
   useDocument,
   resolveYextEntityField,
-  BasicSelector,
-  ThemeOptions,
   Heading,
   HeadingLevel,
   Body,
@@ -21,6 +18,7 @@ import {
   ImageProps,
   ImageWrapperProps,
   Background,
+  YextField,
 } from "@yext/visual-editor";
 import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
 
@@ -43,67 +41,69 @@ export interface PeopleProps {
 }
 
 const peopleFields: Fields<PeopleProps> = {
-  backgroundColor: BasicSelector(
-    "Background Color",
-    ThemeOptions.BACKGROUND_COLOR
-  ),
-  sectionHeading: {
+  backgroundColor: YextField("Background Color", {
+    type: "select",
+    hasSearch: true,
+    options: "BACKGROUND_COLOR",
+  }),
+  sectionHeading: YextField("Section Heading", {
     type: "object",
-    label: "Section Heading",
     objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Text",
+      text: YextField<any, string>("Text", {
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  people: {
+  }),
+  people: YextField("People", {
     type: "array",
-    label: "People",
     arrayFields: {
-      headshot: {
+      headshot: YextField("Headshot", {
         type: "object",
-        label: "Headshot",
         objectFields: {
           ...ImageWrapperFields,
         },
-      },
-      name: YextEntityFieldSelector<any, string>({
-        label: "Name",
+      }),
+      name: YextField<any, string>("Name", {
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      title: YextEntityFieldSelector<any, string>({
-        label: "Title",
+      title: YextField<any, string>("Title", {
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      phone: YextEntityFieldSelector<any, string>({
-        label: "Phone",
+      phone: YextField<any, string>("Phone", {
+        type: "entityField",
         filter: {
           types: ["type.phone"],
         },
       }),
-      email: YextEntityFieldSelector<any, string>({
-        label: "Email",
+      email: YextField<any, string>("Email", {
+        type: "entityField",
         filter: {
           types: ["type.string"],
           allowList: ["emails"],
         },
       }),
-      cta: YextEntityFieldSelector<any, CTAProps>({
-        label: "CTA",
+      cta: YextField<any, CTAProps>("CTA", {
+        type: "entityField",
         filter: {
           types: ["type.cta"],
         },
       }),
     },
-  },
+  }),
 };
 
 interface PersonCardProps {

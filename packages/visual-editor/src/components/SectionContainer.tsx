@@ -4,8 +4,6 @@ import {
   Heading,
   BackgroundStyle,
   YextEntityField,
-  BasicSelector,
-  YextEntityFieldSelector,
   ThemeOptions,
   resolveYextEntityField,
   HeadingProps,
@@ -13,6 +11,7 @@ import {
   OtherCategory,
   PageSectionCategory,
   useDocument,
+  YextField,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -32,23 +31,31 @@ export type SectionContainerProps = {
 };
 
 const sectionContainerFields: Fields<SectionContainerProps> = {
-  background: BasicSelector("Background Color", ThemeOptions.BACKGROUND_COLOR),
-  sectionHeading: {
+  background: YextField("Background Color", {
+    type: "select",
+    hasSearch: true,
+    options: "BACKGROUND_COLOR",
+  }),
+  sectionHeading: YextField("Section Heading", {
     type: "object",
-    label: "Section Heading",
     objectFields: {
-      text: YextEntityFieldSelector<any, string>({
-        label: "Section Heading Text",
-        filter: { types: ["type.string"] },
+      text: YextField<any, string>("Section Heading Text", {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
-      alignment: {
-        label: "Alignment",
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+      alignment: YextField("Alignment", {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
-      },
+      }),
     },
-  },
+  }),
 };
 
 const SectionContainerComponent = (

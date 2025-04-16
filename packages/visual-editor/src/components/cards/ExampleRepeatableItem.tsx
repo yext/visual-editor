@@ -6,10 +6,10 @@ import {
   YextEntityField,
   Image,
   resolveYextSubfield,
-  YextCollectionSubfieldSelector,
   handleResolveFieldsForCollections,
   Body,
   YextCollection,
+  YextField,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { handleComplexImages } from "../atoms/image.js";
@@ -107,16 +107,16 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
       // Update each subfield based on isCollection
       return {
         ...params.lastFields,
-        text: YextCollectionSubfieldSelector<any, string>({
-          label: "Text",
+        text: YextField<any, string>("Text", {
+          type: "entityField",
           isCollection: isCollection,
           filter: {
             directChildrenOf: directChildrenFilter,
             types: ["type.string"],
           },
         }),
-        image: YextCollectionSubfieldSelector<any, ImageType>({
-          label: "Image",
+        image: YextField<any, ImageType>("Image", {
+          type: "entityField",
           isCollection: isCollection,
           filter: {
             directChildrenOf: directChildrenFilter,

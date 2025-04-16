@@ -5,10 +5,9 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
-  ThemeOptions,
   CTA,
   CTAProps,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
@@ -18,17 +17,16 @@ export interface CTAWrapperProps {
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
-  entityField: YextEntityFieldSelector({
-    label: "CTA",
+  entityField: YextField("CTA", {
+    type: "entityField",
     filter: {
       types: ["type.cta"],
     },
   }),
-  variant: {
-    label: "Variant",
+  variant: YextField("Variant", {
     type: "radio",
-    options: ThemeOptions.CTA_VARIANT,
-  },
+    options: "CTA_VARIANT",
+  }),
 };
 
 const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({

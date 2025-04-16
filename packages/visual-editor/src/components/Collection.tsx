@@ -9,11 +9,10 @@ import {
   WithId,
 } from "@measured/puck";
 import {
-  YextEntityFieldSelector,
-  OptionalNumberField,
   YextCollection,
   CardCategory,
   themeManagerCn,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface CollectionProps {
@@ -24,25 +23,24 @@ export interface CollectionProps {
 }
 
 const collectionFields: Fields<CollectionProps> = {
-  collection: {
+  collection: YextField("Collection", {
     type: "object",
-    label: "Collection",
     objectFields: {
-      items: YextEntityFieldSelector<any, Array<any>>({
-        label: "Items",
+      items: YextField<any, Array<any>>("Items", {
+        type: "entityField",
         isCollection: true,
         filter: {
           includeListsOnly: true,
         },
       }),
-      limit: OptionalNumberField({
-        fieldLabel: "Items Limit",
+      limit: YextField("Items Limit", {
+        type: "optionalNumber",
         hideNumberFieldRadioLabel: "All",
         showNumberFieldRadioLabel: "Limit",
         defaultCustomValue: 3,
       }),
     },
-  },
+  }),
 };
 
 const CollectionSectionWrapper: React.FC<
@@ -104,24 +102,22 @@ export const Collection: ComponentConfig<CollectionProps> = {
       delete fields.collection.objectFields.limit;
       return {
         ...fields,
-        layout: {
-          label: "Layout",
+        layout: YextField("Layout", {
           type: "radio",
           options: [
             { label: "Flex", value: "flex" },
             { label: "Grid", value: "grid" },
           ],
-        },
+        }),
         ...(data.props.layout === "flex"
           ? {
-              direction: {
-                label: "Direction",
+              direction: YextField("Direction", {
                 type: "radio",
                 options: [
                   { label: "Horizontal", value: "flex-row" },
                   { label: "Vertical", value: "flex-col" },
                 ],
-              },
+              }),
             }
           : {}),
       };
@@ -133,8 +129,8 @@ export const Collection: ComponentConfig<CollectionProps> = {
         objectFields: {
           // @ts-expect-error ts(2339) objectFields exists
           ...fields.collection.objectFields,
-          limit: OptionalNumberField({
-            fieldLabel: "Items Limit",
+          limit: YextField("Items Limit", {
+            type: "optionalNumber",
             hideNumberFieldRadioLabel: "All",
             showNumberFieldRadioLabel: "Limit",
             defaultCustomValue: 3,

@@ -3,17 +3,15 @@ import {
   resolveYextEntityField,
   useDocument,
   YextEntityField,
-  YextEntityFieldSelector,
   Heading,
   BackgroundStyle,
-  BasicSelector,
   backgroundColors,
-  ThemeOptions,
   HeadingLevel,
   PageSection,
   PhoneAtom,
   fetchNearbyLocations,
   Background,
+  YextField,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
@@ -45,109 +43,104 @@ export interface NearbyLocationsSectionProps {
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: BasicSelector(
-        "Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
-      cardBackgroundColor: BasicSelector(
-        "Card Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
+      cardBackgroundColor: YextField("Card Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
     },
-  },
-  heading: {
-    label: "Section Heading",
+  }),
+  heading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextEntityFieldSelector({
-        label: "Text",
+      text: YextField<any, string>("Text", {
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
+      level: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
     },
-  },
-  cards: {
-    label: "Cards",
+  }),
+  cards: YextField("Cards", {
     type: "object",
     objectFields: {
-      headingLevel: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
-      hours: {
-        label: "Hours",
+      headingLevel: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+      hours: YextField("Hours", {
         type: "object",
         objectFields: {
-          showCurrentStatus: {
+          showCurrentStatus: YextField("Show Current Status", {
             type: "radio",
-            label: "Show Current Status",
             options: [
               { label: "Yes", value: true },
               { label: "No", value: false },
             ],
-          },
-          timeFormat: {
+          }),
+          timeFormat: YextField("Time Format", {
             type: "radio",
-            label: "Time Format",
             options: [
               { label: "12-hour", value: "12h" },
               { label: "24-hour", value: "24h" },
             ],
-          },
-          showDayNames: {
+          }),
+          showDayNames: YextField("Show Day Names", {
             type: "radio",
-            label: "Show Day Names",
             options: [
               { label: "Yes", value: true },
               { label: "No", value: false },
             ],
-          },
-          dayOfWeekFormat: {
+          }),
+          dayOfWeekFormat: YextField("Day of Week Format", {
             type: "radio",
-            label: "Day of Week Format",
             options: [
               { label: "Short", value: "short" },
               { label: "Long", value: "long" },
             ],
-          },
+          }),
         },
-      },
-      phoneNumberFormat: {
-        label: "Phone Number Format",
+      }),
+      phoneNumberFormat: YextField("Phone Number Format", {
         type: "radio",
-        options: [
-          { label: "Domestic", value: "domestic" },
-          { label: "International", value: "international" },
-        ],
-      },
-      phoneNumberLink: {
-        label: "Include Phone Number Hyperlink",
+        options: "PHONE_OPTIONS",
+      }),
+      phoneNumberLink: YextField("Include Phone Hyperlink", {
         type: "radio",
         options: [
           { label: "Yes", value: true },
           { label: "No", value: false },
         ],
-      },
+      }),
     },
-  },
-  coordinate: YextEntityFieldSelector<any, Coordinate>({
-    label: "Coordinates",
+  }),
+  coordinate: YextField<any, Coordinate>("Coordinates", {
+    type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),
-  radius: {
-    label: "Radius (Miles)",
+  radius: YextField("Radius (Miles)", {
     type: "number",
     min: 0,
-  },
-  limit: {
-    label: "Limit",
+  }),
+  limit: YextField("Limit", {
     type: "number",
     min: 0,
     max: 50,
-  },
+  }),
 };
 
 const LocationCard = ({

@@ -257,3 +257,232 @@ const myComponentFields: Fields<MyComponentProps> = {
   }),
 };
 ```
+
+## YextField
+
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [YextCollectionSubfieldSelector](##YextCollectionSubfieldSelector).
+
+### Features
+
+- Strongly typed helper for defining field configs
+- Support for standard Puck field types (`text`, `radio`, `select`, `array`, etc.)
+- Extended support for Yext-specific entity selectors
+- Intelligent handling of options from `@yext/visual-editor` theme options
+
+### Props
+
+#### `YextField`
+
+```tsx
+YextField(label: string, config: YextFieldConfig): Field<any>
+```
+
+**Parameters:**
+
+- `label`: `string` — The name of the field shown in the visual editor.
+- `config`: `YextFieldConfig` — Configuration object describing the field type and its behavior.
+
+### Usage
+
+```tsx
+import { YextField } from "@yext/visual-editor";
+
+const myComponentFields: Fields<myComponentProps> = {
+  address: YextField<any, AddressType>("Address", {
+    type: "entityField",
+    filter: { types: ["type.address"] },
+  }),
+  showGetDirections: YextField("Show Get Directions Link", {
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  }),
+};
+
+export const MyComponent: ComponentConfig<myComponentProps> = {
+  fields: myComponentFields,
+  render: (props) => <SomeComponent {...props} />,
+};
+```
+
+### Supported Field Types
+
+#### Text Field
+
+Creates a simple string input. Supports multi-line input.
+
+```tsx
+title: YextField("Title", {
+  type: "text",
+}),
+description: YextField("Description", {
+  type: "text",
+  isMultiline: true
+})
+```
+
+**Props:**
+
+- `type`: `"text"`
+- `isMultiline?`: `boolean` — if true, renders a `<textarea>` for the multiline input.
+
+---
+
+#### Select Field
+
+Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the [BasicSelector](##BasicSelector).
+
+```tsx
+variant: YextField("CTA Variant", {
+  type: "select",
+  options: "CTA_VARIANT",
+  hasSearch: true,
+}),
+aspectRatio: YextField("Aspect Ratio", {
+  type: "select",
+  options: [
+    { label: "1:1", value: 1 },
+    { label: "5:4", value: 1.25 },
+    { label: "4:3", value: 1.33 },
+  ],
+}),
+```
+
+**Props:**
+
+- `type`: `"select"`
+- `options`: `FieldOptions | keyof ThemeOptions`
+- `hasSearch?`: `boolean` — enables searchable dropdown
+
+---
+
+#### Radio Field
+
+Creates a radio button group. Options can be passed directly or via a `ThemeOptions` key.
+
+```tsx
+alignment: YextField("Alignment", {
+  type: "radio",
+  options: "ALIGNMENT",
+}),
+includeHyperlink: YextField("Include Hyperlink", {
+  type: "radio",
+  options: [
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+  ],
+}),
+```
+
+**Props:**
+
+- `type`: `"radio"`
+- `options`: `FieldOptions | keyof ThemeOptions`
+
+---
+
+#### Number Field
+
+Creates a numeric input field with optional min and max values. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/number)
+
+```tsx
+spacing: YextField("Spacing", { type: "number" });
+```
+
+**Props:**
+
+- `type`: `"number"`
+- `min?`: `number`
+- `max?`: `number`
+
+---
+
+#### Array Field
+
+Creates a repeatable field group (e.g., a list of items). Define inner fields using `arrayFields`. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/array)
+
+```tsx
+items: YextField("Items", {
+  type: "array",
+  arrayFields: {
+    title: YextField("Title", { type: "text" }),
+    url: YextField("URL", { type: "text" }),
+  },
+});
+```
+
+**Props:**
+
+- `type`: `"array"`
+- `arrayFields`: `object`;
+- `defaultItemProps?`: `string`;
+- `getItemSummary?`: `function`;
+- `max?`: `number`;
+- `min?`: `number`;
+
+---
+
+#### Object Field
+
+Creates a nested object field with multiple subfields. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/object)
+
+```tsx
+card: YextField("Card", {
+  type: "object",
+  objectFields: {
+    title: YextField("Title", { type: "text" }),
+    description: YextField("Description", {
+      type: "text",
+      isMultiline: true,
+    }),
+  },
+});
+```
+
+**Props:**
+
+- `type`: `"object"`
+- `objectFields`: `object`
+
+---
+
+#### Entity Selector Field
+
+Renders a Yext entity selector with filtering capabilities.
+
+```tsx
+linkedEntity: YextField("Linked Entity", {
+  type: "entityField",
+  filter: { entityType: "faq" },
+});
+```
+
+**Props:**
+
+- `type`: `"entityField"`
+- `filter`: `any` — passed to [YextEntityFieldSelector](##YextEntityFieldSelector)
+- `isCollection?`: `boolean` — used when creating collection subfields, specifically in cardComponents.
+
+---
+
+#### Optional Number Selector Field
+
+[Additional documentation](##OptionalNumberField)
+
+```tsx
+limit: YextField("Items Limit", {
+  type: "optionalNumber",
+  hideNumberFieldRadioLabel: "All",
+  showNumberFieldRadioLabel: "Limit",
+  defaultCustomValue: 3,
+}),
+```
+
+**Props:**
+
+- `type`: `"optionalNumber"`
+- `hideNumberFieldRadioLabel`: `boolean`
+- `showNumberFieldRadioLabel`: `boolean`
+- `defaultCustomValue `: `number`

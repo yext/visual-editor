@@ -4,11 +4,11 @@ import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
 import {
   backgroundColors,
   themeManagerCn,
-  ThemeOptions,
   Background,
   CardCategory,
   ContentBlockCategory,
   LayoutBlockCategory,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
@@ -66,27 +66,24 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: {
-    label: "Direction",
+  direction: YextField("Direction", {
     type: "radio",
     options: [
       { label: "Horizontal", value: "flex-row" },
       { label: "Vertical", value: "flex-col" },
     ],
-  },
-  justifyContent: {
-    label: "Justify Content",
+  }),
+  justifyContent: YextField("Justify Content", {
     type: "radio",
-    options: ThemeOptions.JUSTIFY_CONTENT,
-  },
-  wrap: {
-    label: "Wrap",
+    options: "JUSTIFY_CONTENT",
+  }),
+  wrap: YextField("Wrap", {
     type: "radio",
     options: [
       { label: "No Wrap", value: "nowrap" },
       { label: "Wrap", value: "wrap" },
     ],
-  },
+  }),
   ...layoutFields,
 };
 

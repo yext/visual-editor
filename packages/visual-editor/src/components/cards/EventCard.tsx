@@ -10,10 +10,10 @@ import {
   YextCollection,
   resolveYextSubfield,
   handleResolveFieldsForCollections,
-  YextCollectionSubfieldSelector,
   CTAProps,
   EntityField,
   CTA,
+  YextField,
 } from "@yext/visual-editor";
 import { handleComplexImages } from "../atoms/image.js";
 import { ImageType } from "@yext/pages-components";
@@ -160,44 +160,43 @@ export const EventCard: ComponentConfig<EventCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: {
-        label: "Card",
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          title: YextCollectionSubfieldSelector<any, string>({
-            label: "Title",
+          title: YextField<any, string>("Title", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          image: YextCollectionSubfieldSelector<any, ImageType>({
-            label: "Image",
+          image: YextField<any, ImageType>("Image", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.image"],
             },
           }),
-          dateTime: YextCollectionSubfieldSelector<any, string>({
-            label: "Date Time",
+          dateTime: YextField<any, string>("Date Time", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          description: YextCollectionSubfieldSelector<any, string>({
-            label: "Description",
+          description: YextField<any, string>("Description", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          cta: YextCollectionSubfieldSelector<any, CTAProps>({
-            label: "CTA",
+          cta: YextField<any, CTAProps>("CTA", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -205,8 +204,8 @@ export const EventCard: ComponentConfig<EventCardProps> = {
             },
           }),
         },
-      },
-    } as Fields<EventCardProps>;
+      }),
+    };
   },
   defaultProps: {
     card: {
