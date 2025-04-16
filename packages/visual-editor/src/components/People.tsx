@@ -83,7 +83,7 @@ const peopleFields: Fields<PeopleProps> = {
           types: ["type.string"],
         },
       }),
-      number: YextField<string>("Phone Number", {
+      phone: YextField<string>("Phone", {
         type: "entity",
         filter: {
           types: ["type.phone"],

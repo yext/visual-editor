@@ -39,7 +39,7 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
   sectionHeading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextField<string>("Text", {
+      text: YextField<string>("Section Heading Text", {
         type: "entity",
         filter: {
           types: ["type.string"],

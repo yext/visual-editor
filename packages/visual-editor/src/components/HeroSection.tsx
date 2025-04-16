@@ -53,9 +53,8 @@ export interface HeroSectionProps {
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
-  image: {
+  image: YextField("Image", {
     type: "object",
-    label: "Image",
     objectFields: {
       ...ImageWrapperFields,
       image: {
@@ -63,7 +62,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         label: "Value",
       },
     },
-  },
+  }),
   businessName: YextField("Business Name", {
     type: "object",
     objectFields: {
