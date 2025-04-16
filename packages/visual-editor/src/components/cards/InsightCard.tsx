@@ -179,7 +179,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
         type: "object",
         objectFields: {
           image: YextField<ImageType>("Image", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -187,7 +187,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
             },
           }),
           title: YextField<string>("Title", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -195,7 +195,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
             },
           }),
           category: YextField<string>("Category", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -203,7 +203,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
             },
           }),
           date: YextField<string>("Date", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -211,7 +211,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
             },
           }),
           description: YextField<string>("Description", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -219,7 +219,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
             },
           }),
           cta: YextField<CTAProps>("CTA", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,

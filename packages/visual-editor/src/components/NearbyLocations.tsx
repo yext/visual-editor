@@ -62,7 +62,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
     type: "object",
     objectFields: {
       text: YextField<string>("Text", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
@@ -129,7 +129,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
     },
   }),
   coordinate: YextField<Coordinate>("Coordinates", {
-    type: "entity",
+    type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),
   radius: YextField("Radius (Miles)", {

@@ -17,7 +17,7 @@ export interface PhoneProps {
 
 const PhoneFields: Fields<PhoneProps> = {
   phone: YextField("Phone Number", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.phone"],
     },

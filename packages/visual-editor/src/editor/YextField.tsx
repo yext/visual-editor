@@ -80,7 +80,7 @@ type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
 > = YextBaseField &
   Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
-    type: "entity";
+    type: "entityField";
   };
 
 type YextFieldConfig =
@@ -95,7 +95,7 @@ type YextFieldConfig =
 
 export function YextField<U>(
   fieldName: string,
-  config: { type: "entity"; filter: any }
+  config: { type: "entityField"; filter: any }
 ): Field<YextEntityField<U>>;
 
 export function YextField<T = any>(
@@ -108,7 +108,7 @@ export function YextField<T, U>(
   config: YextFieldConfig
 ): Field<any> {
   // use YextCollectionSubfieldSelector
-  if (config.type === "entity") {
+  if (config.type === "entityField") {
     return YextCollectionSubfieldSelector<any, U>({
       label: fieldName,
       filter: config.filter,

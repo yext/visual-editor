@@ -78,11 +78,11 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     type: "object",
     objectFields: {
       headingText: YextField("Heading Text", {
-        type: "entity",
+        type: "entityField",
         filter: { types: ["type.string"] },
       }),
       address: YextField<AddressType>("Address", {
-        type: "entity",
+        type: "entityField",
         filter: { types: ["type.address"] },
       }),
       showGetDirectionsLink: YextField("Show Get Directions Link", {
@@ -101,7 +101,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
         type: "array",
         arrayFields: {
           number: YextField("Phone Number", {
-            type: "entity",
+            type: "entityField",
             filter: {
               types: ["type.phone"],
             },
@@ -129,7 +129,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     type: "object",
     objectFields: {
       emails: YextField("Emails", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
           includeListsOnly: true,
@@ -143,13 +143,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     type: "object",
     objectFields: {
       headingText: YextField("Heading Text", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
       hours: YextField("Hours", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.hours"],
         },
@@ -179,13 +179,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     type: "object",
     objectFields: {
       headingText: YextField("Heading Text", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
       servicesList: YextField("Text List", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
           includeListsOnly: true,

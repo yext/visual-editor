@@ -243,7 +243,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
         type: "object",
         objectFields: {
           headshot: YextField<ImageWrapperProps>("Headshot", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -251,7 +251,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
             },
           }),
           name: YextField<string>("Name", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -259,7 +259,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
             },
           }),
           title: YextField<string>("Title", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -267,7 +267,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
             },
           }),
           email: YextField<string>("Email", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -276,7 +276,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
             },
           }),
           phone: YextField<string>("Phone", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -284,7 +284,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
             },
           }),
           cta: YextField<CTAProps>("CTA", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,

@@ -24,7 +24,7 @@ export type HoursTableProps = {
 
 const hoursTableFields: Fields<HoursTableProps> = {
   hours: YextField("Hours", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.hours"],
     },

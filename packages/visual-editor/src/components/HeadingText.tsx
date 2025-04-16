@@ -37,7 +37,7 @@ HeadingTextWrapper.displayName = "HeadingText";
 
 const headingTextFields: Fields<HeadingTextProps> = {
   text: YextField<string>("Text", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.string"],
     },

@@ -50,7 +50,7 @@ const peopleFields: Fields<PeopleProps> = {
     type: "object",
     objectFields: {
       text: YextField<string>("Text", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
@@ -72,32 +72,32 @@ const peopleFields: Fields<PeopleProps> = {
         },
       }),
       name: YextField<string>("Name", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
       title: YextField<string>("Title", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
       phone: YextField<string>("Phone", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.phone"],
         },
       }),
       email: YextField<string>("Email", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
           allowList: ["emails"],
         },
       }),
       cta: YextField<CTAProps>("CTA", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.cta"],
         },

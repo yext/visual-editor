@@ -24,7 +24,7 @@ export interface HoursStatusProps {
 
 const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   hours: YextField("Hours", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.hours"],
     },

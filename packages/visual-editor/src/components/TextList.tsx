@@ -14,7 +14,7 @@ export interface TextListProps {
 
 const textListFields: Fields<TextListProps> = {
   list: YextField("Values", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.string"],
       includeListsOnly: true,

@@ -22,7 +22,7 @@ export type AddressProps = {
 
 const addressFields: Fields<AddressProps> = {
   address: YextField<AddressType>("Address", {
-    type: "entity",
+    type: "entityField",
     filter: { types: ["type.address"] },
   }),
   showGetDirections: YextField("Show Get Directions Link", {

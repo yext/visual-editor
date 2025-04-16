@@ -54,7 +54,7 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
     type: "object",
     objectFields: {
       text: YextField<string>("Text", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },

@@ -22,7 +22,7 @@ const mapboxFields: Fields<MapboxStaticProps> = {
     type: "text",
   }),
   coordinate: YextField<Coordinate>("Coordinates", {
-    type: "entity",
+    type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),
 };

@@ -108,7 +108,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
       return {
         ...params.lastFields,
         text: YextField<string>("Text", {
-          type: "entity",
+          type: "entityField",
           isCollection: isCollection,
           filter: {
             directChildrenOf: directChildrenFilter,
@@ -116,7 +116,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
           },
         }),
         image: YextField<ImageType>("Image", {
-          type: "entity",
+          type: "entityField",
           isCollection: isCollection,
           filter: {
             directChildrenOf: directChildrenFilter,

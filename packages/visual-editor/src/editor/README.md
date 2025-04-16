@@ -289,7 +289,7 @@ import { YextField } from "@yext/visual-editor";
 
 const myComponentFields: Fields<myComponentProps> = {
   address: YextField<AddressType>("Address", {
-    type: "entity",
+    type: "entityField",
     filter: { types: ["type.address"] },
   }),
   showGetDirections: YextField("Show Get Directions Link", {
@@ -454,14 +454,14 @@ Renders a Yext entity selector with filtering capabilities.
 
 ```tsx
 linkedEntity: YextField("Linked Entity", {
-  type: "entity",
+  type: "entityField",
   filter: { entityType: "faq" },
 });
 ```
 
 **Props:**
 
-- `type`: `"entity"`
+- `type`: `"entityField"`
 - `filter`: `any` — passed to [YextEntityFieldSelector](##YextEntityFieldSelector)
 - `isCollection?`: `boolean` — used when creating collection subfields, specifically in cardComponents.
 

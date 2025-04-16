@@ -16,7 +16,7 @@ export interface BodyTextProps extends BodyProps {
 
 const bodyTextFields: Fields<BodyTextProps> = {
   text: YextField<string>("Text", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.string"],
     },

@@ -23,7 +23,7 @@ export interface ImageWrapperProps {
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   image: YextField<ImageType>("Image", {
-    type: "entity",
+    type: "entityField",
     filter: {
       types: ["type.image"],
     },

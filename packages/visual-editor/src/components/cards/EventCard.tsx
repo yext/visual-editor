@@ -164,7 +164,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
         type: "object",
         objectFields: {
           title: YextField<string>("Title", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -172,7 +172,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
             },
           }),
           image: YextField<ImageType>("Image", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -180,7 +180,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
             },
           }),
           dateTime: YextField<string>("Date Time", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -188,7 +188,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
             },
           }),
           description: YextField<string>("Description", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -196,7 +196,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
             },
           }),
           cta: YextField<CTAProps>("CTA", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,

@@ -132,7 +132,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
         type: "object",
         objectFields: {
           testimonial: YextField<string>("Testimonial", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -140,7 +140,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
             },
           }),
           authorName: YextField<string>("Author Name", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -148,7 +148,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
             },
           }),
           date: YextField<string>("Date", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,

@@ -170,7 +170,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
         type: "object",
         objectFields: {
           image: YextField<ImageType>("Image", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -178,7 +178,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
             },
           }),
           heading: YextField<string>("Heading", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -186,7 +186,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
             },
           }),
           category: YextField<string>("Category", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -194,7 +194,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
             },
           }),
           description: YextField<string>("Description", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -202,7 +202,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
             },
           }),
           cta: YextField<string>("CTA", {
-            type: "entity",
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,

@@ -67,7 +67,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     type: "object",
     objectFields: {
       entityField: YextField("Value", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
@@ -83,7 +83,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     type: "object",
     objectFields: {
       entityField: YextField("Value", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.string"],
         },
@@ -99,7 +99,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     type: "object",
     objectFields: {
       entityField: YextField("Hours Field", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.hours"],
         },
@@ -117,7 +117,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     type: "object",
     objectFields: {
       entityField: YextField("Value", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.cta"],
         },
@@ -139,7 +139,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     type: "object",
     objectFields: {
       entityField: YextField("Value", {
-        type: "entity",
+        type: "entityField",
         filter: {
           types: ["type.cta"],
         },
