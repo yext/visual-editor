@@ -86,7 +86,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   cta: YextField("Primary CTA", {
     type: "object",
     objectFields: {
-      entityField: YextField("Value", {
+      entityField: YextField<any, CTAProps>("Value", {
         type: "entityField",
         filter: {
           types: ["type.cta"],
@@ -113,7 +113,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      imageOrientation: YextField("Image Orientation", {
+      orientation: YextField("Image Orientation", {
         type: "radio",
         options: [
           { label: "Left", value: "left" },
