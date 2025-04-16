@@ -4,13 +4,12 @@ import { getDirections, Coordinate } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
   YextEntityField,
-  YextEntityFieldSelector,
   useDocument,
   resolveYextEntityField,
   EntityField,
   CTA,
   CTAProps,
-  ThemeOptions,
+  YextField,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -19,15 +18,14 @@ export type GetDirectionsProps = {
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
-  coordinate: YextEntityFieldSelector<any, Coordinate>({
-    label: "Coordinates",
+  coordinate: YextField<any, Coordinate>("Coordinates", {
+    type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),
-  variant: {
-    label: "Variant",
+  variant: YextField("Variant", {
     type: "radio",
-    options: ThemeOptions.CTA_VARIANT,
-  },
+    options: "CTA_VARIANT",
+  }),
 };
 
 const GetDirectionsComponent = ({

@@ -7,13 +7,11 @@ import {
 } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
-  BasicSelector,
   EntityField,
   resolveYextEntityField,
-  ThemeOptions,
   useDocument,
   YextEntityField,
-  YextEntityFieldSelector,
+  YextField,
 } from "@yext/visual-editor";
 
 export type HoursTableProps = {
@@ -25,37 +23,38 @@ export type HoursTableProps = {
 };
 
 const hoursTableFields: Fields<HoursTableProps> = {
-  hours: YextEntityFieldSelector({
-    label: "Hours",
+  hours: YextField("Hours", {
+    type: "entityField",
     filter: {
       types: ["type.hours"],
     },
   }),
-  startOfWeek: BasicSelector("Start of the Week", ThemeOptions.HOURS_OPTIONS),
-  collapseDays: {
-    label: "Collapse days",
+  startOfWeek: YextField("Start of the Week", {
+    type: "select",
+    hasSearch: true,
+    options: "HOURS_OPTIONS",
+  }),
+  collapseDays: YextField("Collapse days", {
     type: "radio",
     options: [
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  },
-  showAdditionalHoursText: {
-    label: "Show additional hours text",
+  }),
+  showAdditionalHoursText: YextField("Show additional hours text", {
     type: "radio",
     options: [
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  },
-  alignment: {
-    label: "Align card",
+  }),
+  alignment: YextField("Align card", {
     type: "radio",
     options: [
       { label: "Left", value: "items-start" },
       { label: "Center", value: "items-center" },
     ],
-  },
+  }),
 };
 
 const VisualEditorHoursTable = ({

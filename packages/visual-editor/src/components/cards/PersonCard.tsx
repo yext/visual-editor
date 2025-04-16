@@ -5,8 +5,6 @@ import {
   YextEntityField,
   useDocument,
   resolveYextEntityField,
-  BasicSelector,
-  ThemeOptions,
   Heading,
   handleResolveFieldsForCollections,
   Body,
@@ -20,7 +18,7 @@ import {
   ImageWrapperProps,
   YextCollection,
   resolveYextSubfield,
-  YextCollectionSubfieldSelector,
+  YextField,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -41,16 +39,16 @@ export interface PersonCardProps {
 }
 
 const PersonCardItemFields: Fields<PersonCardProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      cardBackgroundColor: BasicSelector(
-        "Card Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
+      cardBackgroundColor: YextField("Card Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
     },
-  },
+  }),
 };
 
 const PersonCardItem = ({
@@ -241,36 +239,35 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: {
-        label: "Card",
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          headshot: YextCollectionSubfieldSelector<any, ImageWrapperProps>({
-            label: "Headshot",
+          headshot: YextField<any, ImageWrapperProps>("Headshot", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.image"],
             },
           }),
-          name: YextCollectionSubfieldSelector<any, string>({
-            label: "Name",
+          name: YextField<any, string>("Name", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          title: YextCollectionSubfieldSelector<any, string>({
-            label: "Title",
+          title: YextField<any, string>("Title", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          email: YextCollectionSubfieldSelector<any, string>({
-            label: "Email",
+          email: YextField<any, string>("Email", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -278,16 +275,16 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
               allowList: ["emails"],
             },
           }),
-          phone: YextCollectionSubfieldSelector<any, string>({
-            label: "Phone",
+          phone: YextField<any, string>("Phone", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.phone"],
             },
           }),
-          cta: YextCollectionSubfieldSelector<any, CTAProps>({
-            label: "CTA",
+          cta: YextField<any, CTAProps>("CTA", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -295,7 +292,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
             },
           }),
         },
-      },
+      }),
     } as Fields<PersonCardProps>;
   },
   defaultProps: {

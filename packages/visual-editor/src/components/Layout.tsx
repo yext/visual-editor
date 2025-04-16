@@ -2,9 +2,8 @@ import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@measured/puck";
 import {
   SpacingSelector,
-  BasicSelector,
-  ThemeOptions,
   BackgroundStyle,
+  YextField,
 } from "@yext/visual-editor";
 
 export const layoutVariants = cva("components w-full", {
@@ -103,10 +102,11 @@ export interface layoutProps
 }
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: BasicSelector(
-    "Background Color",
-    ThemeOptions.BACKGROUND_COLOR
-  ),
+  backgroundColor: YextField("Background Color", {
+    type: "select",
+    hasSearch: true,
+    options: "BACKGROUND_COLOR",
+  }),
   gap: SpacingSelector("Gap", "gap", false),
   verticalPadding: SpacingSelector("Top/Bottom Padding", "padding", true),
   horizontalPadding: SpacingSelector("Left/Right Padding", "padding", false),

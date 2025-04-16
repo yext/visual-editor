@@ -5,7 +5,7 @@ import {
   resolveYextEntityField,
   EntityField,
   YextEntityField,
-  YextEntityFieldSelector,
+  YextField,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
@@ -13,8 +13,8 @@ export interface TextListProps {
 }
 
 const textListFields: Fields<TextListProps> = {
-  list: YextEntityFieldSelector({
-    label: "Values",
+  list: YextField("Values", {
+    type: "entityField",
     filter: {
       types: ["type.string"],
       includeListsOnly: true,

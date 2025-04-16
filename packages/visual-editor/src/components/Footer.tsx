@@ -5,12 +5,11 @@ import {
   Body,
   EntityField,
   useDocument,
-  BasicSelector,
   CTA,
   type BackgroundStyle,
   backgroundColors,
-  ThemeOptions,
   PageSection,
+  YextField,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -34,10 +33,11 @@ type FooterProps = {
 };
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: BasicSelector(
-    "Background Color",
-    ThemeOptions.BACKGROUND_COLOR
-  ),
+  backgroundColor: YextField("Background Color", {
+    type: "select",
+    hasSearch: true,
+    options: "BACKGROUND_COLOR",
+  }),
 };
 
 const Footer: ComponentConfig<FooterProps> = {

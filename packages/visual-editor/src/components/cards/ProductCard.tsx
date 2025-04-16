@@ -5,18 +5,16 @@ import {
   useDocument,
   YextEntityField,
   resolveYextSubfield,
-  YextCollectionSubfieldSelector,
   handleResolveFieldsForCollections,
   YextCollection,
   BackgroundStyle,
-  BasicSelector,
-  ThemeOptions,
   backgroundColors,
   CTA,
   Body,
   Heading,
   Image,
   Background,
+  YextField,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 import { handleComplexImages } from "../atoms/image.js";
@@ -38,16 +36,16 @@ export type ProductCardProps = {
 };
 
 const ProductCardItemFields: Fields<ProductCardProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      cardBackgroundColor: BasicSelector(
-        "Card Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
+      cardBackgroundColor: YextField("Card Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
     },
-  },
+  }),
 };
 
 const ProductCardItem = ({
@@ -168,44 +166,43 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: {
-        label: "Card",
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          image: YextCollectionSubfieldSelector<any, ImageType>({
-            label: "Image",
+          image: YextField<any, ImageType>("Image", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.image"],
             },
           }),
-          heading: YextCollectionSubfieldSelector<any, string>({
-            label: "Heading",
+          heading: YextField<any, string>("Heading", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          category: YextCollectionSubfieldSelector<any, string>({
-            label: "Category",
+          category: YextField<any, string>("Category", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          description: YextCollectionSubfieldSelector<any, string>({
-            label: "Description",
+          description: YextField<any, string>("Description", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          cta: YextCollectionSubfieldSelector<any, string>({
-            label: "CTA",
+          cta: YextField<any, string>("CTA", {
+            type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -213,7 +210,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
             },
           }),
         },
-      },
+      }),
     } as Fields<ProductCardProps>;
   },
   defaultProps: {
