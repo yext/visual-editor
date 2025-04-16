@@ -13,6 +13,8 @@ import {
   PageSection,
   Heading,
   backgroundColors,
+  YextCollection,
+  EntityField,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -35,11 +37,25 @@ export interface FAQsSectionProps {
     text: YextEntityField<string>;
     level: HeadingProps["level"];
   };
-  cards: Array<{
-    question: string;
-    answer: string;
-  }>;
+  faqs: YextCollection;
+  questionField: string;
+  answerField: string;
 }
+
+const getSubfieldOptions = (data: any) => {
+  const document = (data as any).document;
+  const items = data?.faqs?.items;
+  if (!items || items.constantValueEnabled) return [];
+
+  const resolvedList = resolveYextEntityField(document, items);
+  const first =
+    Array.isArray(resolvedList) && resolvedList.length > 0
+      ? resolvedList[0]
+      : undefined;
+
+  if (!first) return [];
+  return Object.keys(first).map((key) => ({ label: key, value: key }));
+};
 
 const FAQsSectionFields: Fields<FAQsSectionProps> = {
   styles: {
@@ -65,18 +81,85 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
       level: BasicSelector("Heading Level", ThemeOptions.HEADING_LEVEL),
     },
   },
-  cards: {
-    type: "array",
+  faqs: {
+    type: "object",
     label: "FAQs",
-    arrayFields: {
-      question: {
-        label: "Question",
-        type: "text",
+    objectFields: {
+      items: YextEntityFieldSelector<any, Array<any>>({
+        label: "FAQs List",
+        isCollection: true,
+        filter: {
+          includeListsOnly: true,
+        },
+      }),
+      limit: {
+        type: "number",
+        label: "Items Limit",
       },
-      answer: {
-        label: "Answer",
-        type: "textarea",
-      },
+    },
+  },
+  questionField: {
+    type: "custom",
+    label: "Question Field",
+    render: (props) => {
+      console.log(props);
+      const data = (props as any)._root?.data?.props || {};
+      console.log(data);
+      const options = getSubfieldOptions(data);
+
+      if (options.length === 0) {
+        return <div className="text-gray-500">Select a FAQs list first</div>;
+      }
+
+      return (
+        <select
+          value={props.value || ""}
+          onChange={(e) => props.onChange(e.target.value)}
+          id={props.id}
+          name={props.name}
+          disabled={props.readOnly}
+          className="p-2 border border-gray-300 rounded"
+        >
+          <option value="">Select field</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      );
+    },
+  },
+  // Custom field for answerField to show subfields of selected FAQs list
+  answerField: {
+    type: "custom",
+    label: "Answer Field",
+    render: (props) => {
+      // Get the parent data - the document and data context
+      const data = (props as any)._root?.data?.props || {};
+      const options = getSubfieldOptions(data);
+
+      if (options.length === 0) {
+        return <div className="text-gray-500">Select a FAQs list first</div>;
+      }
+
+      return (
+        <select
+          value={props.value || ""}
+          onChange={(e) => props.onChange(e.target.value)}
+          id={props.id}
+          name={props.name}
+          disabled={props.readOnly}
+          className="p-2 border border-gray-300 rounded"
+        >
+          <option value="">Select field</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      );
     },
   },
 };
@@ -84,13 +167,23 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
 const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
   styles,
   sectionHeading,
-  cards,
+  faqs,
+  questionField,
+  answerField,
 }) => {
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
     document,
     sectionHeading.text
   );
+  const resolvedFAQs = resolveYextEntityField<Array<any>>(document, faqs.items);
+  const limitedFAQs = resolvedFAQs?.slice(
+    0,
+    typeof faqs.limit === "number" ? faqs.limit : undefined
+  );
+  const faqItems = faqs.items.constantValueEnabled
+    ? faqs.items.constantValue
+    : limitedFAQs;
 
   return (
     <PageSection
@@ -100,26 +193,57 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
       {resolvedHeading && (
         <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
       )}
-      <Accordion type="single" collapsible>
-        {cards.map((faqItem, index) => (
-          <AccordionItem value={index.toString()} key={index}>
-            <AccordionTrigger>
-              <Body variant="lg" className="font-bold text-left">
-                {faqItem.question}
-              </Body>
-            </AccordionTrigger>
-            <AccordionContent>
-              <Body variant="base">{faqItem.answer}</Body>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <EntityField
+        displayName="FAQs"
+        fieldId={faqs.items.field}
+        constantValueEnabled={faqs.items.constantValueEnabled}
+      >
+        <Accordion type="single" collapsible>
+          {faqItems?.map((faqItem, index) => (
+            <AccordionItem value={index.toString()} key={index}>
+              <AccordionTrigger>
+                <Body variant="lg" className="font-bold text-left">
+                  {faqs.items.constantValueEnabled
+                    ? faqItem.question
+                    : faqItem[questionField]}
+                </Body>
+              </AccordionTrigger>
+              <AccordionContent>
+                <Body variant="base">
+                  {faqs.items.constantValueEnabled
+                    ? faqItem.answer
+                    : faqItem[answerField]}
+                </Body>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </EntityField>
     </PageSection>
   );
 };
 
 export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
   label: "FAQs Section",
+  resolveFields: (data, { fields }) => {
+    if (data.props.faqs.items.constantValueEnabled) {
+      return {
+        ...fields,
+        questionField: {
+          ...fields.questionField,
+          type: "custom",
+          render: () => <></>,
+        },
+        answerField: {
+          ...fields.answerField,
+          type: "custom",
+          render: () => <></>,
+        },
+      };
+    } else {
+      return fields;
+    }
+  },
   fields: FAQsSectionFields,
   defaultProps: {
     styles: {
@@ -133,7 +257,16 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
       },
       level: 2,
     },
-    cards: [DEFAULT_FAQ, DEFAULT_FAQ, DEFAULT_FAQ],
+    faqs: {
+      items: {
+        field: "",
+        constantValue: [DEFAULT_FAQ, DEFAULT_FAQ, DEFAULT_FAQ],
+        constantValueEnabled: true,
+      },
+      limit: 3,
+    },
+    questionField: "question",
+    answerField: "answer",
   },
   render: (props) => <FAQsSectionWrapper {...props} />,
 };
