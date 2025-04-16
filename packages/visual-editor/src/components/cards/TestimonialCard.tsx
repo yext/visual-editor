@@ -4,8 +4,6 @@ import {
   YextEntityField,
   useDocument,
   resolveYextEntityField,
-  BasicSelector,
-  ThemeOptions,
   Heading,
   Body,
   Background,
@@ -14,7 +12,7 @@ import {
   YextCollection,
   resolveYextSubfield,
   handleResolveFieldsForCollections,
-  YextCollectionSubfieldSelector,
+  YextField,
 } from "@yext/visual-editor";
 
 export type TestimonialCardProps = {
@@ -30,16 +28,16 @@ export type TestimonialCardProps = {
 };
 
 const TestimonialCardItemFields: Fields<TestimonialCardProps> = {
-  styles: {
-    label: "Styles",
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      cardBackgroundColor: BasicSelector(
-        "Card Background Color",
-        ThemeOptions.BACKGROUND_COLOR
-      ),
+      cardBackgroundColor: YextField("Card Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
     },
-  },
+  }),
 };
 
 const TestimonialCardItem = ({
@@ -130,28 +128,27 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: {
-        label: "Card",
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          testimonial: YextCollectionSubfieldSelector<any, string>({
-            label: "Testimonial",
+          testimonial: YextField<string>("Testimonial", {
+            type: "entity",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          authorName: YextCollectionSubfieldSelector<any, string>({
-            label: "Author Name",
+          authorName: YextField<string>("Author Name", {
+            type: "entity",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
               types: ["type.string"],
             },
           }),
-          date: YextCollectionSubfieldSelector<any, string>({
-            label: "Date",
+          date: YextField<string>("Date", {
+            type: "entity",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
@@ -159,7 +156,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
             },
           }),
         },
-      },
+      }),
     } as Fields<TestimonialCardProps>;
   },
   defaultProps: {

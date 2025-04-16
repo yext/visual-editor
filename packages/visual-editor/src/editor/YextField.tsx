@@ -6,11 +6,14 @@ import {
   ObjectField,
 } from "@measured/puck";
 import {
-  YextEntityFieldSelector,
+  YextCollectionSubfieldSelector,
   ThemeOptions,
   BasicSelector,
 } from "@yext/visual-editor";
-import { YextEntityField } from "./YextEntityFieldSelector.tsx";
+import {
+  RenderYextEntityFieldSelectorProps,
+  YextEntityField,
+} from "./YextEntityFieldSelector.tsx";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -56,10 +59,12 @@ type YextTextField = YextBaseField & {
   isMultiline?: boolean;
 };
 
-type YextEntitySelectorField = YextBaseField & {
-  type: "entity";
-  filter: any;
-};
+export type YextEntitySelectorField<
+  T extends Record<string, any> = Record<string, any>,
+> = YextBaseField &
+  Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
+    type: "entity";
+  };
 
 type YextFieldConfig =
   | YextArrayField
@@ -74,6 +79,7 @@ export function YextField<U>(
   fieldName: string,
   config: { type: "entity"; filter: any }
 ): Field<YextEntityField<U>>;
+
 export function YextField<T = any>(
   fieldName: string,
   config: YextFieldConfig
@@ -84,9 +90,10 @@ export function YextField<T, U>(
   config: YextFieldConfig
 ): Field<any> {
   if (config.type === "entity") {
-    return YextEntityFieldSelector<any, U>({
+    return YextCollectionSubfieldSelector<any, U>({
       label: fieldName,
       filter: config.filter,
+      isCollection: config.isCollection,
     });
   }
 
