@@ -142,7 +142,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   hours: YextField("Info Column - Hours", {
     type: "object",
     objectFields: {
-      headingText: YextField("Heading Text", {
+      headingText: YextField<any, string>("Heading Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],

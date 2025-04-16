@@ -18,7 +18,7 @@ export interface EmailsProps {
 }
 
 const EmailsFields: Fields<EmailsProps> = {
-  list: YextField("Emails", {
+  list: YextField<any, string[]>("Emails", {
     type: "entityField",
     filter: {
       types: ["type.string"],

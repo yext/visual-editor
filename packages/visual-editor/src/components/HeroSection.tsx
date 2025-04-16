@@ -82,7 +82,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   localGeoModifier: YextField("Local GeoModifier", {
     type: "object",
     objectFields: {
-      entityField: YextField("Value", {
+      entityField: YextField<any, string>("Value", {
         type: "entityField",
         filter: {
           types: ["type.string"],
