@@ -71,6 +71,20 @@
     { "name": "US", "slug": "en/us" },
     { "name": "VA", "slug": "us/va" }
   ],
+  "c_faqs": [
+    {
+      "question": "brand?",
+      "answer": "answer1"
+    },
+    {
+      "question": "brand?",
+      "answer": "answer2"
+    },
+    {
+      "question": "brand?",
+      "answer": "answer3"
+    }
+  ],
   "id": "dm-city-arlington",
   "locale": "en",
   "meta": { "entityType": { "id": "dm_city", "uid": 60737 }, "locale": "en" },
