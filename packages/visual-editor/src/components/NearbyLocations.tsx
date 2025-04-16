@@ -119,7 +119,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         type: "radio",
         options: "PHONE_OPTIONS",
       }),
-      includePhoneHyperlink: YextField("Include Phone Hyperlink", {
+      phoneNumberLink: YextField("Include Phone Hyperlink", {
         type: "radio",
         options: [
           { label: "Yes", value: true },
