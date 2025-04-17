@@ -4,19 +4,20 @@ import {
   TARGET_ORIGINS,
 } from "../internal/hooks/useMessage.ts";
 import { useState } from "react";
-import { YextSchemaField } from "../types/entityFields.ts";
+import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 
 /**
  * Under the hood we receive a Stream for a template, but we expose
  * hooks with a more user-friendly name.
  */
 export const usePlatformBridgeEntityFields = () => {
-  const [entityFields, setEntityFields] = useState<YextSchemaField[] | null>(
-    null
-  );
+  const [entityFields, setEntityFields] = useState<StreamFields | null>(null);
 
   useReceiveMessage("getTemplateStream", TARGET_ORIGINS, (send, payload) => {
-    setEntityFields(payload.stream.schema.fields);
+    setEntityFields({
+      fields: payload.stream.schema.fields,
+      displayNames: payload.apiNamesToDisplayNames,
+    });
     send({
       status: "success",
       payload: { message: "templateStream received" },
@@ -24,7 +25,7 @@ export const usePlatformBridgeEntityFields = () => {
   });
 
   useReceiveMessage("getDevEntityFields", TARGET_ORIGINS, (send, payload) => {
-    setEntityFields(assignDefinitions(payload));
+    setEntityFields({ fields: assignDefinitions(payload) });
     send({
       status: "success",
       payload: { message: "getDevEntityFields received" },
@@ -54,7 +55,7 @@ const assignDefinitions = (entityFields: any): YextSchemaField[] => {
 };
 
 const EntityFieldsContext = React.createContext<
-  YextSchemaField[] | null | undefined
+  StreamFields | null | undefined
 >(undefined);
 
 const useEntityFields = () => {
