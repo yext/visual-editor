@@ -8,9 +8,8 @@ import "jest-axe/extend-expect";
 // Applies the theme variables
 beforeEach(() => {
   const tag = document.createElement("style");
-  const style = applyTheme({}, defaultThemeConfig);
+  tag.textContent = applyTheme({}, defaultThemeConfig);
   document.head.appendChild(tag);
-  tag.outerHTML = style;
 });
 
 // jest-axe disabled color contrast checks by default because they are
