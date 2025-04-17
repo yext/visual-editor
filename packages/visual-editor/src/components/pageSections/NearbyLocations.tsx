@@ -200,7 +200,14 @@ const LocationCard = ({
       )}
       {address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-          <Address address={address} lines={[["line1"]]} />
+          <Address
+            address={address}
+            lines={[
+              ["line1"],
+              ["line2"],
+              ["city", ",", "region", "postalCode"],
+            ]}
+          />
         </div>
       )}
     </Background>
