@@ -10,6 +10,8 @@
       "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
       "width": 1152
     },
+    "name": "Example Business",
+    "siteName": "Example Business Pages",
     "footer": {
       "links": [
         {
@@ -43,16 +45,29 @@
   },
   "businessId": 1000152098,
   "dm_childEntityIds": ["8932945"],
-  "dm_directoryChildren": [{ "name": "Arlington", "slug": "us/va/arlington" }],
+  "dm_directoryChildren": [
+    {
+      "name": "Arlington",
+      "slug": "us/va/arlington",
+      "c_addressCountryDisplayName": "United States",
+      "c_addressRegionDisplayName": "Virginia"
+    }
+  ],
   "dm_directoryManagerId": "63590-locations",
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    { "name": "US", "slug": "en/us" }
+    {
+      "name": "US",
+      "slug": "en/us",
+      "c_addressCountryDisplayName": "United States"
+    }
   ],
+  "c_addressRegionDisplayName": "Virginia",
+  "c_addressCountryDisplayName": "United States",
   "id": "dm-region-va",
   "locale": "en",
   "meta": { "entityType": { "id": "dm_region", "uid": 60736 }, "locale": "en" },
-  "name": "DM Region VA",
+  "name": "VA",
   "siteDomain": "",
   "siteId": 63590,
   "siteInternalHostName": "",

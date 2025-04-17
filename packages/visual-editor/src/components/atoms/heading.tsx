@@ -70,18 +70,31 @@ export interface HeadingProps
   extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
   level: HeadingLevel;
+  semanticLevelOverride?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span";
 }
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ className, level = 1, weight, transform, fontSize, ...props }, ref) => {
-    const Tag = `h${level}` as keyof Pick<
-      JSX.IntrinsicElements,
-      "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-    >;
+  (
+    {
+      className,
+      level = 1,
+      weight,
+      transform,
+      fontSize,
+      semanticLevelOverride,
+      ...props
+    },
+    ref
+  ) => {
+    const Tag =
+      semanticLevelOverride ??
+      (`h${level}` as keyof Pick<
+        JSX.IntrinsicElements,
+        "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+      >);
 
     return (
       <Tag
-        id="tag"
         className={themeManagerCn(
           headingVariants({
             fontSize,
