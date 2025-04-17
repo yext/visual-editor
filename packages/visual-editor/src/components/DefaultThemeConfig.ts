@@ -20,7 +20,7 @@ const fontWeightOptions = (fontVariable?: string) => {
     });
 };
 
-export const themeConfig: ThemeConfig = {
+export const defaultThemeConfig: ThemeConfig = {
   palette: {
     label: "Colors",
     styles: {

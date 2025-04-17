@@ -36,6 +36,13 @@ export default defineConfig(() => ({
   test: {
     globals: true,
     environment: "jsdom",
+    css: true,
+    browser: {
+      enabled: true,
+      instances: [{ browser: "chromium" }],
+      provider: "playwright",
+      headless: true,
+    },
   },
 }));
 

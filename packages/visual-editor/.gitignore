@@ -83,3 +83,6 @@ out
 dist/
 
 .DS_Store
+
+# Vitest browser screenshots 
+**/__screenshots__
