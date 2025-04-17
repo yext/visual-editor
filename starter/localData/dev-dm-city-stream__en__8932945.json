@@ -73,15 +73,15 @@
   ],
   "c_faqs": [
     {
-      "question": "brand?",
+      "question": "question1?",
       "answer": "answer1"
     },
     {
-      "question": "brand?",
+      "question": "question2?",
       "answer": "answer2"
     },
     {
-      "question": "brand?",
+      "question": "question3?",
       "answer": "answer3"
     }
   ],

@@ -220,6 +220,10 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
+          name: "c_faqs",
+          fullObject: true,
+        },
+        {
           name: "description",
           fullObject: true,
         },
@@ -7002,6 +7006,42 @@ export const devTemplateStream = {
               stringType: "STRING_TYPE_DEFAULT",
             },
             isList: true,
+          },
+        },
+        {
+          name: "c_faqs",
+          definition: {
+            name: "c_faqs",
+            registryId: "location.c_faqs",
+            typeRegistryId: "type.struct",
+            type: {
+              objectType: "OBJECT_TYPE_DEFAULT",
+            },
+            isList: true,
+          },
+          children: {
+            fields: [
+              {
+                name: "question",
+                definition: {
+                  name: "question",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "answer",
+                definition: {
+                  name: "answer",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+            ],
           },
         },
         {
