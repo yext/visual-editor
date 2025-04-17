@@ -1,20 +1,21 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { HeroSection, VisualEditorProvider } from "@yext/visual-editor";
+import { BannerSection, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("HeroSection $name", ({ width, height }) => {
+describe.each(viewports)("BannerSection $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { HeroSection },
+    components: { BannerSection },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
       },
     },
   };
+
   it("should pass wcag with default props", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: {} }}>
@@ -23,8 +24,8 @@ describe.each(viewports)("HeroSection $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "HeroSection",
-                props: { id: "abc", ...HeroSection.defaultProps },
+                type: "BannerSection",
+                props: { id: "abc", ...BannerSection.defaultProps },
               },
             ],
           }}

@@ -11,7 +11,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   backgroundColors,
   BackgroundStyle,
-} from "../utils/themeConfigOptions.js";
+} from "../../utils/themeConfigOptions.js";
 
 export type BannerSectionProps = {
   text: YextEntityField<string>;

@@ -17,7 +17,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./atoms/accordion.js";
+} from "../atoms/accordion.js";
 
 const DEFAULT_FAQ = {
   question: "Question Lorem ipsum dolor sit amet?",

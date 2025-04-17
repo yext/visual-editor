@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, DropZone, Fields } from "@measured/puck";
-import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
+import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 import {
   backgroundColors,
   themeManagerCn,

@@ -7,7 +7,7 @@ import {
   MaybeLink,
   PageSection,
 } from "@yext/visual-editor";
-import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
+import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { Address, HoursStatus } from "@yext/pages-components";
 

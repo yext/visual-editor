@@ -9,7 +9,7 @@ import {
   LayoutBlockCategory,
   YextField,
 } from "@yext/visual-editor";
-import { layoutFields, layoutProps, layoutVariants } from "./Layout.tsx";
+import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
 export interface GridProps extends layoutProps {
   columns: number;

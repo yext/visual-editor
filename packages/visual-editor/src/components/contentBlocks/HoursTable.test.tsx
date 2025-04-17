@@ -1,14 +1,14 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, testHours, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { TextList, VisualEditorProvider } from "@yext/visual-editor";
+import { HoursTable, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("TextList $name", ({ width, height }) => {
+describe.each(viewports)("HoursTable $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { TextList },
+    components: { HoursTable },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -18,14 +18,21 @@ describe.each(viewports)("TextList $name", ({ width, height }) => {
 
   it("should pass wcag with default props", async () => {
     const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
+      <VisualEditorProvider
+        templateProps={{
+          document: {
+            hours: testHours,
+            additionalHoursText: "Hours Text",
+          },
+        }}
+      >
         <Render
           config={puckConfig}
           data={{
             content: [
               {
-                type: "TextList",
-                props: { id: "abc", ...TextList.defaultProps },
+                type: "HoursTable",
+                props: { id: "abc", ...HoursTable.defaultProps },
               },
             ],
           }}
@@ -39,23 +46,20 @@ describe.each(viewports)("TextList $name", ({ width, height }) => {
     expect(results).toHaveNoViolations();
   });
 
-  it("should pass wcag with data", async () => {
+  it("should pass wcag with empty document", async () => {
     const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
+      <VisualEditorProvider
+        templateProps={{
+          document: {},
+        }}
+      >
         <Render
           config={puckConfig}
           data={{
             content: [
               {
-                type: "TextList",
-                props: {
-                  id: "abc",
-                  list: {
-                    field: "",
-                    constantValue: ["abc", "def"],
-                    constantValueEnabled: true,
-                  },
-                },
+                type: "HoursTable",
+                props: { id: "abc", ...HoursTable.defaultProps },
               },
             ],
           }}
