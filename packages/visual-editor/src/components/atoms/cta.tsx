@@ -49,7 +49,7 @@ export const CTA = ({
         target={target}
         aria-label={ariaLabel}
       >
-        {label}
+        {label ?? ""}
         <FaAngleRight
           size={"12px"}
           // For directoryLink, the theme value for caret is ignored

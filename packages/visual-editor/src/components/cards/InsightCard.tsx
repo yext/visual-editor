@@ -114,7 +114,7 @@ const InsightCardItem = ({
             </EntityField>
           )}
         </div>
-        {resolvedCTA && (
+        {resolvedCTA?.link && (
           <EntityField
             displayName="CTA"
             fieldId={card?.cta.field}
@@ -122,8 +122,8 @@ const InsightCardItem = ({
           >
             <CTA
               variant={"link"}
-              label={resolvedCTA.label ?? ""}
-              link={resolvedCTA.link ?? "#"}
+              label={resolvedCTA.label}
+              link={resolvedCTA.link}
               linkType={resolvedCTA.linkType ?? "URL"}
             />
           </EntityField>

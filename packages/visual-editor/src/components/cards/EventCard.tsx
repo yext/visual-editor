@@ -98,16 +98,16 @@ const EventCardItem = ({
             </Body>
           </EntityField>
         )}
-        {resolvedCTA && (
+        {resolvedCTA?.link && (
           <EntityField
             displayName="CTA"
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >
             <CTA
-              label={resolvedCTA?.label}
-              link={resolvedCTA?.link || "#"}
-              linkType={resolvedCTA?.linkType}
+              label={resolvedCTA.label}
+              link={resolvedCTA.link}
+              linkType={resolvedCTA.linkType}
               variant="link"
               className="text-palette-primary-dark"
             />
