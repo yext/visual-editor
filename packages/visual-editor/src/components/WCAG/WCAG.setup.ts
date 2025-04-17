@@ -7,9 +7,16 @@ import "jest-axe/extend-expect";
 
 // Applies the theme variables
 beforeEach(() => {
-  const tag = document.createElement("style");
-  tag.textContent = applyTheme({}, defaultThemeConfig);
-  document.head.appendChild(tag);
+  const style = applyTheme({}, defaultThemeConfig);
+
+  // Create a temporary container to hold the parsed HTML
+  const div = document.createElement("div");
+  div.innerHTML = style; // This will safely parse the HTML string into elements
+
+  // Append each child element (e.g., <link>, <style>) to the head
+  Array.from(div.childNodes).forEach((child) => {
+    document.head.appendChild(child); // This safely adds the individual nodes to the DOM
+  });
 });
 
 // jest-axe disabled color contrast checks by default because they are
