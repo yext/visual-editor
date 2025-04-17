@@ -26,7 +26,10 @@ import {
   YextEntityField,
   YextField,
 } from "@yext/visual-editor";
-import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
+import {
+  resolvedImageFields,
+  ImageWrapperFields,
+} from "../contentBlocks/Image.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";

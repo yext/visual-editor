@@ -7,7 +7,7 @@ import {
   VisualEditorProvider,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
-import { axe, testHours, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, testHours, viewports } from "../WCAG/WCAG.setup.ts";
 import { page } from "@vitest/browser/context";
 
 describe.each(viewports)("CoreInfoSection $name", ({ width, height }) => {

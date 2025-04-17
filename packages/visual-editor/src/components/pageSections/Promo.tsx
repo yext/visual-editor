@@ -20,7 +20,10 @@ import {
   PageSection,
   YextField,
 } from "@yext/visual-editor";
-import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
+import {
+  resolvedImageFields,
+  ImageWrapperFields,
+} from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 

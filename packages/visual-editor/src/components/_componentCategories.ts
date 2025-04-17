@@ -1,36 +1,49 @@
-import { BannerSection, BannerSectionProps } from "./Banner.tsx";
-import { BreadcrumbsSection, BreadcrumbsSectionProps } from "./Breadcrumbs.tsx";
-import { CoreInfoSection, CoreInfoSectionProps } from "./CoreInfoSection.tsx";
-import { HeroSection, HeroSectionProps } from "./HeroSection.tsx";
+import { BannerSection, BannerSectionProps } from "./pageSections/Banner.tsx";
+import {
+  BreadcrumbsSection,
+  BreadcrumbsSectionProps,
+} from "./pageSections/Breadcrumbs.tsx";
+import {
+  CoreInfoSection,
+  CoreInfoSectionProps,
+} from "./pageSections/CoreInfoSection.tsx";
+import { HeroSection, HeroSectionProps } from "./pageSections/HeroSection.tsx";
 import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
-} from "./NearbyLocations.tsx";
-import { PromoSection, PromoSectionProps } from "./Promo.tsx";
+} from "./pageSections/NearbyLocations.tsx";
+import { PromoSection, PromoSectionProps } from "./pageSections/Promo.tsx";
 import {
   PhotoGallerySection,
   PhotoGallerySectionProps,
-} from "./PhotoGallerySection.tsx";
-import { FAQsSection, FAQsSectionProps } from "./FAQs.tsx";
+} from "./pageSections/PhotoGallerySection.tsx";
+import { FAQsSection, FAQsSectionProps } from "./pageSections/FAQs.tsx";
 import {
   SectionContainer,
   SectionContainerProps,
-} from "./SectionContainer.tsx";
-import { Collection, CollectionProps } from "./Collection.tsx";
-import { Flex, FlexProps } from "./Flex.tsx";
-import { Grid, GridProps } from "./Grid.tsx";
+} from "./pageSections/SectionContainer.tsx";
+import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
+import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
+import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
 import { ProductCard, ProductCardProps } from "./cards/ProductCard.tsx";
-import { Address, AddressProps } from "./Address.tsx";
-import { BodyText, BodyTextProps } from "./BodyText.tsx";
-import { CTAWrapper, CTAWrapperProps } from "./CtaWrapper.tsx";
-import { Emails, EmailsProps } from "./Emails.tsx";
-import { GetDirections, GetDirectionsProps } from "./GetDirections.tsx";
-import { HoursTable, HoursTableProps } from "./HoursTable.tsx";
-import { HoursStatus, HoursStatusProps } from "./HoursStatus.tsx";
-import { ImageWrapper, ImageWrapperProps } from "./Image.tsx";
-import { MapboxStaticMap, MapboxStaticProps } from "./MapboxStaticMap.tsx";
-import { Phone, PhoneProps } from "./Phone.tsx";
-import { TextList, TextListProps } from "./TextList.tsx";
+import { Address, AddressProps } from "./contentBlocks/Address.tsx";
+import { BodyText, BodyTextProps } from "./contentBlocks/BodyText.tsx";
+import { CTAWrapper, CTAWrapperProps } from "./contentBlocks/CtaWrapper.tsx";
+import { Emails, EmailsProps } from "./contentBlocks/Emails.tsx";
+import {
+  GetDirections,
+  GetDirectionsProps,
+} from "./contentBlocks/GetDirections.tsx";
+import { HeadingText, HeadingTextProps } from "./contentBlocks/HeadingText.tsx";
+import { HoursTable, HoursTableProps } from "./contentBlocks/HoursTable.tsx";
+import { HoursStatus, HoursStatusProps } from "./contentBlocks/HoursStatus.tsx";
+import { ImageWrapper, ImageWrapperProps } from "./contentBlocks/Image.tsx";
+import {
+  MapboxStaticMap,
+  MapboxStaticProps,
+} from "./contentBlocks/MapboxStaticMap.tsx";
+import { Phone, PhoneProps } from "./contentBlocks/Phone.tsx";
+import { TextList, TextListProps } from "./contentBlocks/TextList.tsx";
 import { Header, HeaderProps } from "./Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
@@ -112,6 +125,7 @@ export interface ContentBlockCategoryProps {
   CTAWrapper: CTAWrapperProps;
   Emails: EmailsProps;
   GetDirections: GetDirectionsProps;
+  HeadingText: HeadingTextProps;
   HoursTable: HoursTableProps;
   HoursStatus: HoursStatusProps;
   ImageWrapper: ImageWrapperProps;
@@ -126,8 +140,9 @@ export const ContentBlockCategoryComponents = {
   CTAWrapper,
   Emails,
   GetDirections,
-  HoursTable,
+  HeadingText,
   HoursStatus,
+  HoursTable,
   ImageWrapper,
   MapboxStaticMap,
   Phone,

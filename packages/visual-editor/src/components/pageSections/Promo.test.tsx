@@ -1,14 +1,14 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { People, VisualEditorProvider } from "@yext/visual-editor";
+import { PromoSection, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("PeopleSection $name", ({ width, height }) => {
+describe.each(viewports)("PromoSection $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { People },
+    components: { PromoSection },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -23,8 +23,8 @@ describe.each(viewports)("PeopleSection $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "People",
-                props: { id: "abc", ...People.defaultProps },
+                type: "PromoSection",
+                props: { id: "abc", ...PromoSection.defaultProps },
               },
             ],
           }}

@@ -1,14 +1,18 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { BreadcrumbsSection, VisualEditorProvider } from "@yext/visual-editor";
+import {
+  Address,
+  AddressProps,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("BreadcrumbsSection $name", ({ width, height }) => {
-  const puckConfig: Config = {
-    components: { BreadcrumbsSection },
+describe.each(viewports)("Address $name", ({ width, height }) => {
+  const puckConfig: Config<{ Address: AddressProps }> = {
+    components: { Address },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -24,8 +28,11 @@ describe.each(viewports)("BreadcrumbsSection $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "BreadcrumbsSection",
-                props: { id: "abc", ...BreadcrumbsSection.defaultProps },
+                type: "Address",
+                props: {
+                  id: "abc",
+                  ...Address.defaultProps,
+                },
               },
             ],
           }}
@@ -39,25 +46,31 @@ describe.each(viewports)("BreadcrumbsSection $name", ({ width, height }) => {
     expect(results).toHaveNoViolations();
   });
 
-  it("should pass wcag with data", async () => {
+  it("should pass wcag with data present", async () => {
     const { container } = reactRender(
-      <VisualEditorProvider
-        templateProps={{
-          document: {
-            dm_directoryParents_abd123: [
-              { name: "United States", slug: "ud" },
-              { name: "Virginia", slug: "va" },
-            ],
-          },
-        }}
-      >
+      <VisualEditorProvider templateProps={{ document: {} }}>
         <Render
           config={puckConfig}
           data={{
             content: [
               {
-                type: "BreadcrumbsSection",
-                props: { id: "abc", ...BreadcrumbsSection.defaultProps },
+                type: "Address",
+                props: {
+                  id: "abc",
+                  showGetDirections: true,
+                  address: {
+                    field: "",
+                    constantValue: {
+                      line1: "123 Sesame St",
+                      line2: "Apt 101",
+                      city: "New York",
+                      region: "NY",
+                      postalCode: "10001",
+                      countryCode: "US",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
               },
             ],
           }}

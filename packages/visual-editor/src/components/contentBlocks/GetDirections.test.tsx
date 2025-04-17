@@ -1,21 +1,20 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { BodyText, VisualEditorProvider } from "@yext/visual-editor";
+import { GetDirections, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("BodyText $name", ({ width, height }) => {
+describe.each(viewports)("GetDirections $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { BodyText },
+    components: { GetDirections },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
       },
     },
   };
-
   it("should pass wcag with default props", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: {} }}>
@@ -24,8 +23,8 @@ describe.each(viewports)("BodyText $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "BodyText",
-                props: { id: "abc", ...BodyText.defaultProps },
+                type: "GetDirections",
+                props: { id: "abc", ...GetDirections.defaultProps },
               },
             ],
           }}
