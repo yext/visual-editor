@@ -290,9 +290,9 @@ const HeroSectionWrapper = ({
               >
                 <CTA
                   variant={primaryCtaField.variant}
-                  label={primaryCta?.label ?? ""}
-                  link={primaryCta?.link || "#"}
-                  linkType={primaryCta?.linkType}
+                  label={primaryCta.label}
+                  link={primaryCta.link}
+                  linkType={primaryCta.linkType}
                 />
               </EntityField>
             )}
@@ -306,9 +306,9 @@ const HeroSectionWrapper = ({
               >
                 <CTA
                   variant={secondaryCtaField.variant}
-                  label={secondaryCta?.label ?? ""}
-                  link={secondaryCta?.link || "#"}
-                  linkType={secondaryCta?.linkType}
+                  label={secondaryCta.label}
+                  link={secondaryCta.link}
+                  linkType={secondaryCta.linkType}
                 />
               </EntityField>
             )}

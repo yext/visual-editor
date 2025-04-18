@@ -181,8 +181,8 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
         {resolvedCTA && cta.visible && (
           <CTA
             variant={cta.variant}
-            label={resolvedCTA.label ?? ""}
-            link={resolvedCTA.link || "#"}
+            label={resolvedCTA.label}
+            link={resolvedCTA.link}
             linkType={resolvedCTA.linkType}
           />
         )}

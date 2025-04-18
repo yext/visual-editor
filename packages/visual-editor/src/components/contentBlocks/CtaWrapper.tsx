@@ -45,7 +45,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
     >
       <CTA
         label={cta?.label}
-        link={cta?.link || "#"}
+        link={cta?.link}
         linkType={cta?.linkType}
         variant={variant}
         className={className}

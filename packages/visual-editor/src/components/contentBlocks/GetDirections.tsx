@@ -57,7 +57,7 @@ const GetDirectionsComponent = ({
     >
       <CTA
         label={"Get Directions"}
-        link={searchQuery || "#"}
+        link={searchQuery}
         linkType={"DRIVING_DIRECTIONS"}
         variant={variant}
       />
