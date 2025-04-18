@@ -6,6 +6,7 @@ import {
   Body,
   PageSection,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -17,6 +18,7 @@ export type BannerSectionProps = {
   text: YextEntityField<string>;
   textAlignment: "left" | "right" | "center";
   backgroundColor?: BackgroundStyle;
+  liveVisibility: boolean;
 };
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
@@ -34,6 +36,13 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
     type: "select",
     hasSearch: true,
     options: "DARK_BACKGROUND_COLOR",
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -73,6 +82,15 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
     },
     textAlignment: "center",
     backgroundColor: backgroundColors.background6.value,
+    liveVisibility: true,
   },
-  render: (props) => <BannerComponent {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+      iconSize="sm"
+    >
+      <BannerComponent {...props} />
+    </VisibilityWrapper>
+  ),
 };

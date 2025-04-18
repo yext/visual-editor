@@ -25,6 +25,7 @@ import {
   useDocument,
   YextEntityField,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -43,6 +44,7 @@ export interface PhotoGallerySectionProps {
     level: HeadingLevel;
   };
   images: Array<ImageWrapperProps>;
+  liveVisibility: boolean;
 }
 
 interface DynamicChildColorsProps {
@@ -101,6 +103,13 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   images: YextField("Images", {
     type: "array",
     arrayFields: { ...ImageWrapperFields },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -258,6 +267,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
         aspectRatio: 1.78,
       },
     ],
+    liveVisibility: true,
   },
   resolveFields(data) {
     const layout = data.props.images?.[0]?.layout ?? "auto";
@@ -269,5 +279,12 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
       },
     };
   },
-  render: (props) => <PhotoGallerySectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <PhotoGallerySectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

@@ -17,6 +17,7 @@ import {
   Heading,
   PageSection,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   ImageWrapperFields,
@@ -53,6 +54,7 @@ export interface HeroSectionProps {
     backgroundColor?: BackgroundStyle;
     imageOrientation: "left" | "right";
   };
+  liveVisibility: boolean;
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
@@ -176,6 +178,13 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         ],
       }),
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -403,6 +412,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       backgroundColor: backgroundColors.background1.value,
       imageOrientation: "right",
     },
+    liveVisibility: true,
   },
   resolveFields(data) {
     return {
@@ -413,5 +423,12 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
     };
   },
-  render: (props) => <HeroSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <HeroSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

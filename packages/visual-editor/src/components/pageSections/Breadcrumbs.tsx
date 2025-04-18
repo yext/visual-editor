@@ -3,13 +3,25 @@ import {
   useTemplateProps,
   MaybeLink,
   PageSection,
+  YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, Fields } from "@measured/puck";
 
 export type BreadcrumbsSectionProps = {
   separator?: string;
+  liveVisibility: boolean;
 };
 
+const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
+};
 // getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
 // the directory parent are not the expected objects, returns an empty array.
 const getDirectoryParents = (
@@ -87,5 +99,17 @@ export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
 
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: "Breadcrumbs",
-  render: (props) => <BreadcrumbsComponent {...props} />,
+  fields: breadcrumbsSectionFields,
+  defaultProps: {
+    liveVisibility: true,
+  },
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+      iconSize="sm"
+    >
+      <BreadcrumbsComponent {...props} />
+    </VisibilityWrapper>
+  ),
 };

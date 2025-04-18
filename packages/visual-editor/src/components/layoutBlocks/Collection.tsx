@@ -13,6 +13,7 @@ import {
   CardCategory,
   themeManagerCn,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 
 export interface CollectionProps {
@@ -20,6 +21,7 @@ export interface CollectionProps {
   shouldClearDropZone?: boolean;
   layout?: "grid" | "flex";
   direction?: "flex-row" | "flex-col";
+  liveVisibility: boolean;
 }
 
 const collectionFields: Fields<CollectionProps> = {
@@ -40,6 +42,13 @@ const collectionFields: Fields<CollectionProps> = {
         defaultCustomValue: 3,
       }),
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -161,6 +170,15 @@ export const Collection: ComponentConfig<CollectionProps> = {
       },
       limit: 3,
     },
+    liveVisibility: true,
   },
-  render: (props) => <CollectionSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+      iconSize="base"
+    >
+      <CollectionSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

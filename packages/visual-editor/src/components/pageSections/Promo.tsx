@@ -19,6 +19,7 @@ import {
   CTAProps,
   PageSection,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -28,7 +29,6 @@ import {
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface PromoSectionProps {
-  liveVisibility: boolean;
   image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
@@ -47,16 +47,10 @@ export interface PromoSectionProps {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
   };
+  liveVisibility: boolean;
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
   image: YextField("Image", {
     type: "object",
     objectFields: {
@@ -133,16 +127,21 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       }),
     },
   }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
 };
 
-const PromoWrapper: React.FC<PromoSectionProps & { isEditing: boolean }> = ({
-  liveVisibility,
+const PromoWrapper: React.FC<PromoSectionProps> = ({
   image,
   title,
   description,
   cta,
   styles,
-  isEditing,
 }) => {
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
@@ -156,55 +155,48 @@ const PromoWrapper: React.FC<PromoSectionProps & { isEditing: boolean }> = ({
     return null;
   }
 
-  // on live page or preview page, if liveVisibility is false, return nothing
-  if (!liveVisibility && !isEditing) {
-    return null;
-  }
-
   return (
-    <div className={!liveVisibility && isEditing ? "opacity-50" : ""}>
-      <PageSection
-        background={styles.backgroundColor}
-        className={themeManagerCn(
-          "flex flex-col md:flex-row overflow-hidden md:gap-8",
-          styles.orientation === "right" && "md:flex-row-reverse"
+    <PageSection
+      background={styles.backgroundColor}
+      className={themeManagerCn(
+        "flex flex-col md:flex-row overflow-hidden md:gap-8",
+        styles.orientation === "right" && "md:flex-row-reverse"
+      )}
+    >
+      {resolvedImage && (
+        <EntityField
+          displayName="Image"
+          fieldId={image.image.field}
+          constantValueEnabled={image.image.constantValueEnabled}
+        >
+          <Image
+            image={resolvedImage}
+            layout={image.layout}
+            width={image.width}
+            height={image.height}
+            aspectRatio={image.aspectRatio}
+          />
+        </EntityField>
+      )}
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
+        {resolvedTitle && (
+          <Heading level={title.level}>{resolvedTitle}</Heading>
         )}
-      >
-        {resolvedImage && (
-          <EntityField
-            displayName="Image"
-            fieldId={image.image.field}
-            constantValueEnabled={image.image.constantValueEnabled}
-          >
-            <Image
-              image={resolvedImage}
-              layout={image.layout}
-              width={image.width}
-              height={image.height}
-              aspectRatio={image.aspectRatio}
-            />
-          </EntityField>
+        {description?.text && (
+          <Body variant={description.variant}>
+            {resolveYextEntityField(document, description.text)}
+          </Body>
         )}
-        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
-          {resolvedTitle && (
-            <Heading level={title.level}>{resolvedTitle}</Heading>
-          )}
-          {description?.text && (
-            <Body variant={description.variant}>
-              {resolveYextEntityField(document, description.text)}
-            </Body>
-          )}
-          {resolvedCTA && cta.visible && (
-            <CTA
-              variant={cta.variant}
-              label={resolvedCTA.label}
-              link={resolvedCTA.link}
-              linkType={resolvedCTA.linkType}
-            />
-          )}
-        </div>
-      </PageSection>
-    </div>
+        {resolvedCTA && cta.visible && (
+          <CTA
+            variant={cta.variant}
+            label={resolvedCTA.label}
+            link={resolvedCTA.link}
+            linkType={resolvedCTA.linkType}
+          />
+        )}
+      </div>
+    </PageSection>
   );
 };
 
@@ -266,6 +258,11 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     };
   },
   render: (props) => (
-    <PromoWrapper {...props} isEditing={props.puck.isEditing} />
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <PromoWrapper {...props} />
+    </VisibilityWrapper>
   ),
 };

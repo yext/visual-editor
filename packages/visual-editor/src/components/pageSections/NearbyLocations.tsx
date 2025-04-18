@@ -12,6 +12,7 @@ import {
   fetchNearbyLocations,
   Background,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
@@ -40,6 +41,7 @@ export interface NearbyLocationsSectionProps {
   coordinate: YextEntityField<Coordinate>;
   radius: number;
   limit: number;
+  liveVisibility: boolean;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -140,6 +142,13 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
     type: "number",
     min: 0,
     max: 50,
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -343,6 +352,14 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
           longitude: 0,
         },
       },
+      liveVisibility: true,
     },
-    render: (props) => <NearbyLocationsComponent {...props} />,
+    render: (props) => (
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <NearbyLocationsComponent {...props} />
+      </VisibilityWrapper>
+    ),
   };

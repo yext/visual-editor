@@ -12,6 +12,7 @@ import {
   PageSectionCategory,
   useDocument,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -28,6 +29,7 @@ export type SectionContainerProps = {
     level: HeadingProps["level"];
     alignment: "left" | "right" | "center";
   };
+  liveVisibility: boolean;
 };
 
 const sectionContainerFields: Fields<SectionContainerProps> = {
@@ -55,6 +57,13 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
         options: ThemeOptions.ALIGNMENT,
       }),
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -96,7 +105,6 @@ const SectionContainerComponent = (
 export const SectionContainer: ComponentConfig<SectionContainerProps> = {
   label: "Section Container",
   fields: sectionContainerFields,
-  render: (props) => <SectionContainerComponent {...props} />,
   defaultProps: {
     background: backgroundColors.background1.value,
     sectionHeading: {
@@ -108,5 +116,14 @@ export const SectionContainer: ComponentConfig<SectionContainerProps> = {
       level: 2,
       alignment: "left",
     },
+    liveVisibility: true,
   },
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <SectionContainerComponent {...props} />
+    </VisibilityWrapper>
+  ),
 };
