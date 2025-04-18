@@ -41,7 +41,7 @@ export const VisibilityWrapper: React.FC<VisibilityWrapperProps> = ({
           <FaEyeSlash
             className={themeManagerCn(
               wrapperVariants({ size: iconSize }),
-              "fill-gray-600"
+              "fill-gray-500"
             )}
           />
         </div>
