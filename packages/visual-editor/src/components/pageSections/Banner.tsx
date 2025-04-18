@@ -88,7 +88,7 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
     <VisibilityWrapper
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      iconSize="sm"
+      iconSize="md"
     >
       <BannerComponent {...props} />
     </VisibilityWrapper>

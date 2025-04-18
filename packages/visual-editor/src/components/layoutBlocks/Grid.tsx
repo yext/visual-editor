@@ -106,7 +106,7 @@ export const Grid: ComponentConfig<GridProps> = {
     <VisibilityWrapper
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      iconSize="base"
+      iconSize="md"
     >
       <GridSection {...props} />
     </VisibilityWrapper>

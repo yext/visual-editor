@@ -13,8 +13,7 @@ interface VisibilityWrapperProps {
 export const wrapperVariants = cva("components", {
   variants: {
     size: {
-      sm: "text-xl",
-      base: "text-3xl",
+      md: "text-3xl",
       lg: "text-7xl",
     },
   },

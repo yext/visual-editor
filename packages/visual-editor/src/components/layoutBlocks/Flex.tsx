@@ -113,7 +113,7 @@ export const Flex: ComponentConfig<FlexProps> = {
     <VisibilityWrapper
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      iconSize="base"
+      iconSize="md"
     >
       <FlexContainer {...props} />
     </VisibilityWrapper>

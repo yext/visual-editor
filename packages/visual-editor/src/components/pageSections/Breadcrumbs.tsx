@@ -107,7 +107,7 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
     <VisibilityWrapper
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      iconSize="sm"
+      iconSize="md"
     >
       <BreadcrumbsComponent {...props} />
     </VisibilityWrapper>

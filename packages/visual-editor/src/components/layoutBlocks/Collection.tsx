@@ -176,7 +176,7 @@ export const Collection: ComponentConfig<CollectionProps> = {
     <VisibilityWrapper
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      iconSize="base"
+      iconSize="md"
     >
       <CollectionSectionWrapper {...props} />
     </VisibilityWrapper>
