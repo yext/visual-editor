@@ -28,6 +28,7 @@ import {
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface PromoSectionProps {
+  liveVisibility: boolean;
   image: ImageWrapperProps;
   title: {
     text: YextEntityField<string>;
@@ -49,6 +50,13 @@ export interface PromoSectionProps {
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
   image: YextField("Image", {
     type: "object",
     objectFields: {
@@ -127,12 +135,14 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoWrapper: React.FC<PromoSectionProps> = ({
+const PromoWrapper: React.FC<PromoSectionProps & { isEditing: boolean }> = ({
+  liveVisibility,
   image,
   title,
   description,
   cta,
   styles,
+  isEditing,
 }) => {
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
@@ -146,48 +156,55 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
     return null;
   }
 
+  // on live page or preview page, if liveVisibility is false, return nothing
+  if (!liveVisibility && !isEditing) {
+    return null;
+  }
+
   return (
-    <PageSection
-      background={styles.backgroundColor}
-      className={themeManagerCn(
-        "flex flex-col md:flex-row overflow-hidden md:gap-8",
-        styles.orientation === "right" && "md:flex-row-reverse"
-      )}
-    >
-      {resolvedImage && (
-        <EntityField
-          displayName="Image"
-          fieldId={image.image.field}
-          constantValueEnabled={image.image.constantValueEnabled}
-        >
-          <Image
-            image={resolvedImage}
-            layout={image.layout}
-            width={image.width}
-            height={image.height}
-            aspectRatio={image.aspectRatio}
-          />
-        </EntityField>
-      )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
-        {resolvedTitle && (
-          <Heading level={title.level}>{resolvedTitle}</Heading>
+    <div className={!liveVisibility && isEditing ? "opacity-50" : ""}>
+      <PageSection
+        background={styles.backgroundColor}
+        className={themeManagerCn(
+          "flex flex-col md:flex-row overflow-hidden md:gap-8",
+          styles.orientation === "right" && "md:flex-row-reverse"
         )}
-        {description?.text && (
-          <Body variant={description.variant}>
-            {resolveYextEntityField(document, description.text)}
-          </Body>
+      >
+        {resolvedImage && (
+          <EntityField
+            displayName="Image"
+            fieldId={image.image.field}
+            constantValueEnabled={image.image.constantValueEnabled}
+          >
+            <Image
+              image={resolvedImage}
+              layout={image.layout}
+              width={image.width}
+              height={image.height}
+              aspectRatio={image.aspectRatio}
+            />
+          </EntityField>
         )}
-        {resolvedCTA && cta.visible && (
-          <CTA
-            variant={cta.variant}
-            label={resolvedCTA.label}
-            link={resolvedCTA.link}
-            linkType={resolvedCTA.linkType}
-          />
-        )}
-      </div>
-    </PageSection>
+        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
+          {resolvedTitle && (
+            <Heading level={title.level}>{resolvedTitle}</Heading>
+          )}
+          {description?.text && (
+            <Body variant={description.variant}>
+              {resolveYextEntityField(document, description.text)}
+            </Body>
+          )}
+          {resolvedCTA && cta.visible && (
+            <CTA
+              variant={cta.variant}
+              label={resolvedCTA.label}
+              link={resolvedCTA.link}
+              linkType={resolvedCTA.linkType}
+            />
+          )}
+        </div>
+      </PageSection>
+    </div>
   );
 };
 
@@ -195,6 +212,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   label: "Promo Section",
   fields: promoSectionFields,
   defaultProps: {
+    liveVisibility: true,
     image: {
       image: {
         field: "primaryPhoto",
@@ -247,5 +265,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
       },
     };
   },
-  render: (props) => <PromoWrapper {...props} />,
+  render: (props) => (
+    <PromoWrapper {...props} isEditing={props.puck.isEditing} />
+  ),
 };
