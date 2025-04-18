@@ -80,7 +80,7 @@ const CollectionSectionWrapper: React.FC<
     <DropZone
       zone="collection-dropzone"
       className={themeManagerCn(
-        "max-w-pageSection-contentWidth mx-auto gap-8 items-center",
+        "max-w-pageSection-contentWidth mx-auto gap-8",
         layout === "grid"
           ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           : "flex flex-wrap justify-center",
