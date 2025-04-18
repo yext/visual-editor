@@ -149,7 +149,7 @@ const PersonCardItem = ({
               </div>
             </EntityField>
           )}
-          {resolvedCTA && (
+          {resolvedCTA?.link && (
             <EntityField
               displayName="CTA"
               fieldId={card?.cta?.field}
@@ -157,9 +157,9 @@ const PersonCardItem = ({
             >
               <div className="flex justify-start gap-2">
                 <CTA
-                  label={resolvedCTA?.label}
-                  link={resolvedCTA?.link || "#"}
-                  linkType={resolvedCTA?.linkType}
+                  label={resolvedCTA.label}
+                  link={resolvedCTA.link}
+                  linkType={resolvedCTA.linkType}
                   variant="link"
                 />
               </div>

@@ -1,14 +1,14 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { GetDirections, VisualEditorProvider } from "@yext/visual-editor";
+import { ImageWrapper, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("GetDirections $name", ({ width, height }) => {
+describe.each(viewports)("ImageWrapper $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { GetDirections },
+    components: { ImageWrapper },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -23,8 +23,8 @@ describe.each(viewports)("GetDirections $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "GetDirections",
-                props: { id: "abc", ...GetDirections.defaultProps },
+                type: "ImageWrapper",
+                props: { id: "abc", ...ImageWrapper.defaultProps },
               },
             ],
           }}

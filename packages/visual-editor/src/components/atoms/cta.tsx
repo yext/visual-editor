@@ -42,14 +42,14 @@ export const CTA = ({
     >
       <Link
         cta={{
-          link: link ?? "#",
+          link: link || "#",
           linkType: linkType ?? "URL",
         }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel}
       >
-        {label}
+        {label ?? ""}
         <FaAngleRight
           size={"12px"}
           // For directoryLink, the theme value for caret is ignored

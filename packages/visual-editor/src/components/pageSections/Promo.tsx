@@ -20,7 +20,10 @@ import {
   PageSection,
   YextField,
 } from "@yext/visual-editor";
-import { resolvedImageFields, ImageWrapperFields } from "./Image.js";
+import {
+  resolvedImageFields,
+  ImageWrapperFields,
+} from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -178,8 +181,8 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
         {resolvedCTA && cta.visible && (
           <CTA
             variant={cta.variant}
-            label={resolvedCTA.label ?? ""}
-            link={resolvedCTA.link || "#"}
+            label={resolvedCTA.label}
+            link={resolvedCTA.link}
             linkType={resolvedCTA.linkType}
           />
         )}

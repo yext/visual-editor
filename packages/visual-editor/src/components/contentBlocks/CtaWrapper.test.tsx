@@ -1,14 +1,14 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { Emails, VisualEditorProvider } from "@yext/visual-editor";
+import { CTAWrapper, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("Emails $name", ({ width, height }) => {
+describe.each(viewports)("CTAWrapper $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { Emails },
+    components: { CTAWrapper },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -16,7 +16,7 @@ describe.each(viewports)("Emails $name", ({ width, height }) => {
     },
   };
 
-  it("should pass wcag with default props", async () => {
+  it("should pass wcag with primary variant", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: {} }}>
         <Render
@@ -24,8 +24,8 @@ describe.each(viewports)("Emails $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "Emails",
-                props: { id: "abc", ...Emails.defaultProps },
+                type: "CTAWrapper",
+                props: { id: "abc", ...CTAWrapper.defaultProps },
               },
             ],
           }}
@@ -39,7 +39,7 @@ describe.each(viewports)("Emails $name", ({ width, height }) => {
     expect(results).toHaveNoViolations();
   });
 
-  it("should pass wcag with data - includeHyperlink:true", async () => {
+  it("should pass wcag with secondary variant", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: {} }}>
         <Render
@@ -47,16 +47,11 @@ describe.each(viewports)("Emails $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "Emails",
+                type: "CTAWrapper",
                 props: {
                   id: "abc",
-                  list: {
-                    field: "emails",
-                    constantValue: ["sumo@yext.com", "spruce@yext.com"],
-                    constantValueEnabled: true,
-                  },
-                  includeHyperlink: true,
-                  listLength: 5,
+                  ...CTAWrapper.defaultProps,
+                  variant: "secondary",
                 },
               },
             ],
@@ -71,7 +66,7 @@ describe.each(viewports)("Emails $name", ({ width, height }) => {
     expect(results).toHaveNoViolations();
   });
 
-  it("should pass wcag with data - includeHyperlink:false", async () => {
+  it("should pass wcag with link variant", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: {} }}>
         <Render
@@ -79,16 +74,11 @@ describe.each(viewports)("Emails $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "Emails",
+                type: "CTAWrapper",
                 props: {
                   id: "abc",
-                  list: {
-                    field: "emails",
-                    constantValue: ["sumo@yext.com", "spruce@yext.com"],
-                    constantValueEnabled: true,
-                  },
-                  includeHyperlink: false,
-                  listLength: 5,
+                  ...CTAWrapper.defaultProps,
+                  variant: "link",
                 },
               },
             ],

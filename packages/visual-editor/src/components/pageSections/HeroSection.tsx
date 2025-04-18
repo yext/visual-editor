@@ -18,7 +18,10 @@ import {
   PageSection,
   YextField,
 } from "@yext/visual-editor";
-import { ImageWrapperFields, resolvedImageFields } from "./Image.js";
+import {
+  ImageWrapperFields,
+  resolvedImageFields,
+} from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -287,9 +290,9 @@ const HeroSectionWrapper = ({
               >
                 <CTA
                   variant={primaryCtaField.variant}
-                  label={primaryCta?.label ?? ""}
-                  link={primaryCta?.link || "#"}
-                  linkType={primaryCta?.linkType}
+                  label={primaryCta.label}
+                  link={primaryCta.link}
+                  linkType={primaryCta.linkType}
                 />
               </EntityField>
             )}
@@ -303,9 +306,9 @@ const HeroSectionWrapper = ({
               >
                 <CTA
                   variant={secondaryCtaField.variant}
-                  label={secondaryCta?.label ?? ""}
-                  link={secondaryCta?.link || "#"}
-                  linkType={secondaryCta?.linkType}
+                  label={secondaryCta.label}
+                  link={secondaryCta.link}
+                  linkType={secondaryCta.linkType}
                 />
               </EntityField>
             )}

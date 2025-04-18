@@ -29,9 +29,6 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
-
       - name: "test with node ${{ matrix.node-version }}"
         uses: actions/setup-node@v4.0.2
         with:
@@ -40,6 +37,9 @@ jobs:
 
       - name: Install deps
         run: pnpm i
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
 
       - name: Download build artifact
         uses: actions/download-artifact@v4.1.7

@@ -1,18 +1,14 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import {
-  Address,
-  AddressProps,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { Emails, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("Address $name", ({ width, height }) => {
-  const puckConfig: Config<{ Address: AddressProps }> = {
-    components: { Address },
+describe.each(viewports)("Emails $name", ({ width, height }) => {
+  const puckConfig: Config = {
+    components: { Emails },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -28,10 +24,39 @@ describe.each(viewports)("Address $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "Address",
+                type: "Emails",
+                props: { id: "abc", ...Emails.defaultProps },
+              },
+            ],
+          }}
+        />
+      </VisualEditorProvider>
+    );
+
+    await page.viewport(width, height);
+    await page.screenshot();
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it("should pass wcag with data - includeHyperlink:true", async () => {
+    const { container } = reactRender(
+      <VisualEditorProvider templateProps={{ document: {} }}>
+        <Render
+          config={puckConfig}
+          data={{
+            content: [
+              {
+                type: "Emails",
                 props: {
                   id: "abc",
-                  ...Address.defaultProps,
+                  list: {
+                    field: "emails",
+                    constantValue: ["sumo@yext.com", "spruce@yext.com"],
+                    constantValueEnabled: true,
+                  },
+                  includeHyperlink: true,
+                  listLength: 5,
                 },
               },
             ],
@@ -46,7 +71,7 @@ describe.each(viewports)("Address $name", ({ width, height }) => {
     expect(results).toHaveNoViolations();
   });
 
-  it("should pass wcag with data present", async () => {
+  it("should pass wcag with data - includeHyperlink:false", async () => {
     const { container } = reactRender(
       <VisualEditorProvider templateProps={{ document: {} }}>
         <Render
@@ -54,22 +79,16 @@ describe.each(viewports)("Address $name", ({ width, height }) => {
           data={{
             content: [
               {
-                type: "Address",
+                type: "Emails",
                 props: {
                   id: "abc",
-                  showGetDirections: true,
-                  address: {
-                    field: "",
-                    constantValue: {
-                      line1: "123 Sesame St",
-                      line2: "Apt 101",
-                      city: "New York",
-                      region: "NY",
-                      postalCode: "10001",
-                      countryCode: "US",
-                    },
+                  list: {
+                    field: "emails",
+                    constantValue: ["sumo@yext.com", "spruce@yext.com"],
                     constantValueEnabled: true,
                   },
+                  includeHyperlink: false,
+                  listLength: 5,
                 },
               },
             ],
