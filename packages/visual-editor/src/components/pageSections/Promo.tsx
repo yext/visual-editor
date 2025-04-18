@@ -19,6 +19,7 @@ import {
   CTAProps,
   PageSection,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -46,6 +47,7 @@ export interface PromoSectionProps {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
   };
+  liveVisibility: boolean;
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
@@ -125,6 +127,13 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       }),
     },
   }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({
@@ -195,6 +204,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   label: "Promo Section",
   fields: promoSectionFields,
   defaultProps: {
+    liveVisibility: true,
     image: {
       image: {
         field: "primaryPhoto",
@@ -247,5 +257,12 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
       },
     };
   },
-  render: (props) => <PromoWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <PromoWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

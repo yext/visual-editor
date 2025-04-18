@@ -24,6 +24,7 @@ import {
   PhoneAtom,
   Background,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -56,6 +57,7 @@ export interface CoreInfoSectionProps {
     headingText: YextEntityField<string>;
     servicesList: YextEntityField<string[]>;
   };
+  liveVisibility: boolean;
 }
 
 const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
@@ -193,6 +195,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
         },
       }),
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -497,6 +506,14 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         constantValue: [],
       },
     },
+    liveVisibility: true,
   },
-  render: (props) => <CoreInfoSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <CoreInfoSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

@@ -53,8 +53,15 @@ export const ui: Registry["items"] = [
   {
     name: "phone",
     type: "registry:component",
-    files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
     registryDependencies: ["body", "cta"],
+    files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
+  },
+  {
+    name: "visibilityWrapper",
+    type: "registry:component",
+    files: [
+      { path: "atoms/visibilityWrapper.tsx", type: "registry:component" },
+    ],
   },
   {
     name: "layout",
@@ -70,7 +77,7 @@ export const ui: Registry["items"] = [
   {
     name: "Banner",
     type: "registry:ui",
-    registryDependencies: ["body", "pageSection"],
+    registryDependencies: ["body", "pageSection", "visibilityWrapper"],
     files: [{ path: "pageSections/Banner.tsx", type: "registry:ui" }],
   },
   {
@@ -82,12 +89,18 @@ export const ui: Registry["items"] = [
   {
     name: "Breadcrumbs",
     type: "registry:ui",
-    registryDependencies: ["maybeLink", "body", "pageSection"],
+    registryDependencies: [
+      "maybeLink",
+      "body",
+      "pageSection",
+      "visibilityWrapper",
+    ],
     files: [{ path: "pageSections/Breadcrumbs.tsx", type: "registry:ui" }],
   },
   {
     name: "Collection",
     type: "registry:ui",
+    registryDependencies: ["visibilityWrapper"],
     files: [{ path: "layoutBlocks/Collection.tsx", type: "registry:ui" }],
   },
   {
@@ -100,6 +113,7 @@ export const ui: Registry["items"] = [
       "body",
       "cta",
       "phone",
+      "visibilityWrapper",
     ],
     files: [{ path: "pageSections/CoreInfoSection.tsx", type: "registry:ui" }],
   },
@@ -136,13 +150,19 @@ export const ui: Registry["items"] = [
   {
     name: "FAQsSection",
     type: "registry:ui",
-    registryDependencies: ["body", "heading", "pageSection", "accordion"],
+    registryDependencies: [
+      "body",
+      "heading",
+      "pageSection",
+      "accordion",
+      "visibilityWrapper",
+    ],
     files: [{ path: "pageSections/FAQs.tsx", type: "registry:ui" }],
   },
   {
     name: "Flex",
     type: "registry:ui",
-    registryDependencies: ["layout", "background"],
+    registryDependencies: ["layout", "background", "visibilityWrapper"],
     files: [{ path: "layoutBlocks/Flex.tsx", type: "registry:ui" }],
   },
   {
@@ -160,7 +180,12 @@ export const ui: Registry["items"] = [
   {
     name: "Grid",
     type: "registry:ui",
-    registryDependencies: ["section", "background", "layout"],
+    registryDependencies: [
+      "section",
+      "background",
+      "layout",
+      "visibilityWrapper",
+    ],
     files: [{ path: "layoutBlocks/Grid.tsx", type: "registry:ui" }],
   },
   {
@@ -178,7 +203,13 @@ export const ui: Registry["items"] = [
   {
     name: "HeroSection",
     type: "registry:ui",
-    registryDependencies: ["pageSection", "heading", "cta", "image"],
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "cta",
+      "image",
+      "visibilityWrapper",
+    ],
     files: [{ path: "pageSections/HeroSection.tsx", type: "registry:ui" }],
   },
   {
@@ -221,6 +252,7 @@ export const ui: Registry["items"] = [
       "body",
       "cta",
       "phone",
+      "visibilityWrapper",
     ],
     files: [{ path: "pageSections/NearbyLocations.tsx", type: "registry:ui" }],
   },
@@ -244,7 +276,12 @@ export const ui: Registry["items"] = [
   {
     name: "PhotoGallerySection",
     type: "registry:ui",
-    registryDependencies: ["pageSection", "heading", "image"],
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "image",
+      "visibilityWrapper",
+    ],
     files: [
       { path: "pageSections/PhotoGallerySection.tsx", type: "registry:ui" },
     ],
@@ -264,7 +301,7 @@ export const ui: Registry["items"] = [
   {
     name: "SectionContainer",
     type: "registry:ui",
-    registryDependencies: ["pageSection", "heading"],
+    registryDependencies: ["pageSection", "heading", "visibilityWrapper"],
     files: [{ path: "pageSections/SectionContainer.tsx", type: "registry:ui" }],
   },
   {

@@ -11,6 +11,7 @@ import {
   Heading,
   backgroundColors,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -37,6 +38,7 @@ export interface FAQsSectionProps {
     question: string;
     answer: string;
   }>;
+  liveVisibility: boolean;
 }
 
 const FAQsSectionFields: Fields<FAQsSectionProps> = {
@@ -77,6 +79,13 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
         isMultiline: true,
       }),
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -133,6 +142,14 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
       level: 2,
     },
     cards: [DEFAULT_FAQ, DEFAULT_FAQ, DEFAULT_FAQ],
+    liveVisibility: true,
   },
-  render: (props) => <FAQsSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <FAQsSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

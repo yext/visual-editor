@@ -8,11 +8,13 @@ import {
   CardCategory,
   LayoutBlockCategory,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
 export interface GridProps extends layoutProps {
   columns: number;
+  liveVisibility: boolean;
 }
 
 const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
@@ -79,6 +81,13 @@ const gridSectionFields: Fields<GridProps> = {
     max: 12,
   }),
   ...layoutFields,
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
 };
 
 export const Grid: ComponentConfig<GridProps> = {
@@ -91,6 +100,15 @@ export const Grid: ComponentConfig<GridProps> = {
     horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
     columnFormatting: "default",
+    liveVisibility: true,
   },
-  render: (props) => <GridSection {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+      iconSize="md"
+    >
+      <GridSection {...props} />
+    </VisibilityWrapper>
+  ),
 };

@@ -9,12 +9,14 @@ import {
   ContentBlockCategory,
   LayoutBlockCategory,
   YextField,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
   direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
+  liveVisibility: boolean;
 }
 
 const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
@@ -85,6 +87,13 @@ const flexContainerFields: Fields<FlexProps> = {
     ],
   }),
   ...layoutFields,
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
 };
 
 export const Flex: ComponentConfig<FlexProps> = {
@@ -98,6 +107,15 @@ export const Flex: ComponentConfig<FlexProps> = {
     verticalPadding: "0",
     horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
+    liveVisibility: true,
   },
-  render: (props) => <FlexContainer {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+      iconSize="md"
+    >
+      <FlexContainer {...props} />
+    </VisibilityWrapper>
+  ),
 };

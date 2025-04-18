@@ -149,7 +149,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
   return (
     <>
       <div className="flex justify-center">
-        <BreadcrumbsComponent separator={separator} />
+        <BreadcrumbsComponent separator={separator} liveVisibility={true} />
       </div>
       {document.dm_directoryChildren &&
         isDirectoryGrid(document.dm_directoryChildren) && (
