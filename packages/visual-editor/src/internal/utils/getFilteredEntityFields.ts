@@ -1,4 +1,4 @@
-import { YextSchemaField } from "../../types/entityFields.ts";
+import { StreamFields, YextSchemaField } from "../../types/entityFields.ts";
 
 type Only<T, U> = {
   [P in keyof T]: T[P];
@@ -143,14 +143,14 @@ const getEntityTypeToFieldNames = (
 };
 
 export const getFilteredEntityFields = <T extends Record<string, any>>(
-  allEntityFields: YextSchemaField[] | null,
+  streamFields: StreamFields | null,
   filter: RenderEntityFieldFilter<T>
-) => {
-  if (!allEntityFields) {
+): YextSchemaField[] => {
+  if (!streamFields?.fields) {
     return [];
   }
 
-  let filteredEntityFields = allEntityFields.filter(
+  let filteredEntityFields = streamFields.fields.filter(
     (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
   );
 
@@ -225,6 +225,12 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   filteredEntitySubFields = filteredEntitySubFields.filter(
     (field) => !!field.definition.isList === !!filter?.includeListsOnly
   );
+
+  if (streamFields.displayNames) {
+    filteredEntitySubFields.forEach((field) => {
+      field.displayName = streamFields.displayNames![field.name];
+    });
+  }
 
   return filteredEntitySubFields;
 };

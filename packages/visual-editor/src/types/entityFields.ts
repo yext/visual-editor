@@ -1,5 +1,6 @@
 export type YextSchemaField = {
   name: string;
+  displayName?: string;
   definition: YextFieldDefinition;
   children?: {
     fields: YextSchemaField[];
@@ -13,4 +14,9 @@ export type YextFieldDefinition = {
   typeName?: string;
   typeRegistryId?: string;
   type: Record<string, string>;
+};
+
+export type StreamFields = {
+  fields: YextSchemaField[];
+  displayNames?: Record<string, string>;
 };

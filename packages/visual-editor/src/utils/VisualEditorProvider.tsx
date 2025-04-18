@@ -2,7 +2,7 @@ import React from "react";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TailwindConfig } from "./themeResolver.ts";
-import { YextSchemaField } from "../types/entityFields.ts";
+import { StreamFields } from "../types/entityFields.ts";
 import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -16,7 +16,7 @@ type UniversalProps<T> = {
 };
 
 type EditorProps = {
-  entityFields: YextSchemaField[] | null;
+  entityFields: StreamFields | null;
   tailwindConfig: TailwindConfig;
 };
 
