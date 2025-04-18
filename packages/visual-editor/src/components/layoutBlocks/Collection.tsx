@@ -83,7 +83,7 @@ const CollectionSectionWrapper: React.FC<
         "max-w-pageSection-contentWidth mx-auto gap-8",
         layout === "grid"
           ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          : "flex flex-wrap justify-center items-center",
+          : "flex flex-wrap justify-center",
         direction
       )}
       allow={CardCategory}

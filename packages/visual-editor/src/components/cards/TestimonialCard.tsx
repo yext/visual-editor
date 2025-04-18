@@ -59,9 +59,7 @@ const TestimonialCardItem = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {resolvedTestimonial && (
-          <Body className="line-clamp-5">{resolvedTestimonial}</Body>
-        )}
+        {resolvedTestimonial && <Body>{resolvedTestimonial}</Body>}
       </Background>
       <Background background={cardBackgroundColor} className="p-8">
         {resolvedAuthorName && (

@@ -86,9 +86,7 @@ const ProductCardItem = ({
             </Background>
           )}
           {resolvedDescription && (
-            <Body className="line-clamp-5 max-w-[290px]">
-              {resolvedDescription}
-            </Body>
+            <Body className="max-w-[290px]">{resolvedDescription}</Body>
           )}
         </div>
         {resolvedCta && (

@@ -69,7 +69,7 @@ const PersonCardItem = ({
   const resolvedCTA = resolveYextSubfield(document, card?.cta);
 
   return (
-    <div className="flex flex-col rounded-lg overflow-hidden border bg-white">
+    <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
       <Background background={cardBackgroundColor} className="flex p-8 gap-6">
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedImage && (
