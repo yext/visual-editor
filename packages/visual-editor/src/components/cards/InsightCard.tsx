@@ -58,7 +58,7 @@ const InsightCardItem = ({
   const resolvedCTA = resolveYextSubfield<CTAProps>(document, card?.cta);
   return (
     <Background
-      className="rounded-lg"
+      className="rounded-lg h-full"
       background={backgroundColors.background1.value}
     >
       {image && (

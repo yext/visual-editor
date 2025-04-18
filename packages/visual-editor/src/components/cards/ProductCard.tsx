@@ -66,7 +66,7 @@ const ProductCardItem = ({
 
   return (
     <Background
-      className="flex flex-col justify-between rounded-lg overflow-hidden border"
+      className="flex flex-col justify-between rounded-lg overflow-hidden border h-full"
       background={cardBackgroundColor}
     >
       {image && <Image image={image} layout={"auto"} />}
