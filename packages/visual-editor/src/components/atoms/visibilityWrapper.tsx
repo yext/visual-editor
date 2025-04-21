@@ -28,6 +28,10 @@ export const VisibilityWrapper: React.FC<VisibilityWrapperProps> = ({
   iconSize,
   children,
 }) => {
+  if (liveVisibility === undefined) {
+    return <>{children}</>;
+  }
+
   if (!liveVisibility && !isEditing) {
     return null;
   }
