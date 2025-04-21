@@ -8,7 +8,7 @@ import {
   PageSection,
   formatPhoneNumber,
 } from "@yext/visual-editor";
-import { BreadcrumbsComponent } from "./Breadcrumbs.tsx";
+import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { Address, HoursStatus } from "@yext/pages-components";
 
@@ -189,7 +189,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
   return (
     <>
-      <BreadcrumbsComponent separator={separator} />
+      <BreadcrumbsComponent separator={separator} liveVisibility={true} />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
           <Heading level={4}>{document._site.name}</Heading>

@@ -66,7 +66,7 @@ const ProductCardItem = ({
 
   return (
     <Background
-      className="flex flex-col justify-between rounded-lg overflow-hidden border"
+      className="flex flex-col justify-between rounded-lg overflow-hidden border h-full"
       background={cardBackgroundColor}
     >
       {image && <Image image={image} layout={"auto"} />}
@@ -86,9 +86,7 @@ const ProductCardItem = ({
             </Background>
           )}
           {resolvedDescription && (
-            <Body className="line-clamp-5 max-w-[290px]">
-              {resolvedDescription}
-            </Body>
+            <Body className="max-w-[290px]">{resolvedDescription}</Body>
           )}
         </div>
         {resolvedCta && (

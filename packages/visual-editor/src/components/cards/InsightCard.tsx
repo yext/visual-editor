@@ -58,7 +58,7 @@ const InsightCardItem = ({
   const resolvedCTA = resolveYextSubfield<CTAProps>(document, card?.cta);
   return (
     <Background
-      className="rounded-lg"
+      className="rounded-lg h-full"
       background={backgroundColors.background1.value}
     >
       {image && (
@@ -114,7 +114,7 @@ const InsightCardItem = ({
             </EntityField>
           )}
         </div>
-        {resolvedCTA && (
+        {resolvedCTA?.link && (
           <EntityField
             displayName="CTA"
             fieldId={card?.cta.field}
@@ -122,8 +122,8 @@ const InsightCardItem = ({
           >
             <CTA
               variant={"link"}
-              label={resolvedCTA.label ?? ""}
-              link={resolvedCTA.link ?? "#"}
+              label={resolvedCTA.label}
+              link={resolvedCTA.link}
               linkType={resolvedCTA.linkType ?? "URL"}
             />
           </EntityField>
