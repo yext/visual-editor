@@ -1,10 +1,10 @@
 {
-    "artifactStructure": {
-        "assets": [
-            {
-                "root": "dist",
-                "pattern": "**/*"
-            }
-        ]
-    }
+  "artifactStructure": {
+    "assets": [
+      {
+        "root": "dist",
+        "pattern": "**/*"
+      }
+    ]
+  }
 }
