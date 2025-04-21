@@ -14,6 +14,7 @@ import {
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
+  alignItems: "start" | "center" | "end";
   direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
   liveVisibility: boolean;
@@ -24,6 +25,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
     {
       direction,
       justifyContent,
+      alignItems,
       wrap,
       gap,
       verticalPadding,
@@ -52,6 +54,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
           zone="flex-container"
           style={{
             justifyContent,
+            alignItems,
             flexWrap: wrap,
           }}
           allow={[
@@ -79,6 +82,10 @@ const flexContainerFields: Fields<FlexProps> = {
     type: "radio",
     options: "JUSTIFY_CONTENT",
   }),
+  alignItems: YextField("Align Items", {
+    type: "radio",
+    options: "JUSTIFY_CONTENT",
+  }),
   wrap: YextField("Wrap", {
     type: "radio",
     options: [
@@ -102,6 +109,7 @@ export const Flex: ComponentConfig<FlexProps> = {
   defaultProps: {
     direction: "flex-row",
     justifyContent: "start",
+    alignItems: "start",
     wrap: "nowrap",
     gap: "4",
     verticalPadding: "0",
