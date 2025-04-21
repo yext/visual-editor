@@ -83,6 +83,9 @@ const copyArtifactsPlugin = () => {
     writeBundle() {
       const source = resolve(__dirname, "../artifacts.json");
       const dest = resolve(__dirname, "../../../dist/artifacts.json");
+      const destDir = dirname(dest);
+      // Create destination directory if it doesn't exist
+      mkdirSync(destDir, { recursive: true });
       try {
         // mkdirSync(resolve(__dirname, "../../../dist"));
         copyFileSync(source, dest);

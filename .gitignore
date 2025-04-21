@@ -15,6 +15,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 dist
+.artifact-output
 *.local
 
 # Editor directories and files
