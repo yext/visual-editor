@@ -120,18 +120,20 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
   return (
     <div className="hidden md:flex items-center">
       <ul className="flex gap-4 lg:gap-10">
-        {props.links.map((item, idx) => (
-          <li key={item.link}>
-            <CTA
-              label={item.label}
-              link={item.link}
-              linkType={item.linkType}
-              variant="link"
-              eventName={`headerlink${idx}`}
-              alwaysHideCaret={true}
-            />
-          </li>
-        ))}
+        {props.links
+          .filter((item) => !!item?.link)
+          .map((item, idx) => (
+            <li key={item.link}>
+              <CTA
+                label={item.label}
+                link={item.link}
+                linkType={item.linkType}
+                variant="link"
+                eventName={`headerlink${idx}`}
+                alwaysHideCaret={true}
+              />
+            </li>
+          ))}
       </ul>
     </div>
   );

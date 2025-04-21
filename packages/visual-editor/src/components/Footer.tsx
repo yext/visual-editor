@@ -138,19 +138,21 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
 const FooterLinks = (props: { links: CTAType[] }) => {
   return (
     <ul className="flex flex-col sm:flex-row items-center pb-4">
-      {props.links.map((item, idx) => (
-        <li key={item.link}>
-          <CTA
-            link={item.link}
-            label={item.label}
-            linkType={item.linkType}
-            eventName={`footerlink${idx}`}
-            variant="link"
-            alwaysHideCaret={true}
-            className="sm:pr-8"
-          />
-        </li>
-      ))}
+      {props.links
+        .filter((item) => !!item?.link)
+        .map((item, idx) => (
+          <li key={item.link}>
+            <CTA
+              link={item.link}
+              label={item.label}
+              linkType={item.linkType}
+              eventName={`footerlink${idx}`}
+              variant="link"
+              alwaysHideCaret={true}
+              className="sm:pr-8"
+            />
+          </li>
+        ))}
     </ul>
   );
 };
