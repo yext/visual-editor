@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { renderHook } from "@testing-library/react-hooks";
 import { useProgress } from "./useProgress.ts";
+import { renderHook } from "@testing-library/react";
 
 describe("useProgress", () => {
   it("should return 100% progress when all criteria are true", () => {
