@@ -1,8 +1,9 @@
 buildConfiguration:
-  buildCommand: cd packages/visual-editor && pnpm run docs:build
+  buildCommand: cd packages/visual-editor && pnpm run build-registry-docs
   installDependenciesStep:
     command: npm install -g pnpm && cd packages/visual-editor && pnpm install --ignore-scripts
     requiredFiles:
       - packages/visual-editor/package.json
-      - packages/visual-editor/package-lock.json
-      - packages/visual-editor/.npmrc
+      - pnpm-lock.yaml
+      - .npmrc
+      - tsconfig.json

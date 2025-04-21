@@ -39,7 +39,9 @@
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
-    "docs:preview": "vitepress preview ."
+    "docs:preview": "vitepress preview .",
+    "generate-registry": "tsx src/components/puck/registry/build-registry.ts",
+    "build-registry-docs": "pnpm run docs:build && pnpm run generate-registry"
   },
   "dependencies": {
     "@measured/puck": "0.18.2",

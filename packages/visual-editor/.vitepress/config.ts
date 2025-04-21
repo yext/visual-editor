@@ -1,11 +1,4 @@
-import {
-  copyFileSync,
-  mkdir,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from "node:fs";
+import { copyFileSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve, dirname, basename } from "node:path";
 import { defineConfig } from "vitepress";
 import matter from "gray-matter"; // Add gray-matter to parse frontmatter
@@ -60,7 +53,7 @@ const getTitleFromFile = (filePath: string): string => {
   return data.title || filePath.split("/").pop()!.replace(".md", "");
 };
 
-// Define the base directory (moved to global scope for reuse)
+// Define the base directory
 const baseDir = resolve(__dirname, "..", "src"); // packages/visual-editor
 
 // Generate sidebar items for a given folder
@@ -77,17 +70,23 @@ const generateSidebarItems = (folder?: specialFoldersType): SidebarItem[] => {
     .sort((a, b) => a.text.localeCompare(b.text));
 };
 
+const DIST_DIR = `dist`;
+
 const copyArtifactsPlugin = () => {
   return {
     name: "copy-artifacts",
     writeBundle() {
       const source = resolve(__dirname, "../artifacts.json");
-      const dest = resolve(__dirname, "../../../dist/artifacts.json");
-      const destDir = dirname(dest);
-      // Create destination directory if it doesn't exist
-      mkdirSync(destDir, { recursive: true });
+      const dest = resolve(
+        __dirname,
+        "..",
+        "..",
+        "..",
+        DIST_DIR,
+        "artifacts.json"
+      );
+
       try {
-        // mkdirSync(resolve(__dirname, "../../../dist"));
         copyFileSync(source, dest);
         console.log("Copied artifacts.json to .vitepress/dist/");
       } catch (err) {
@@ -101,6 +100,7 @@ const copyArtifactsPlugin = () => {
 export default defineConfig({
   srcDir: "src",
   srcExclude: ["CHANGELOG.md", "DEVELOPMENT.md"],
+  outDir: "../../dist",
   cleanUrls: true,
   title: "Visual Editor",
   description: "Visually edit your layouts for Yext Pages",
