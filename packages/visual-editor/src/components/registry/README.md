@@ -1,4 +1,9 @@
-# Component Shadcn Registry
+---
+title: Shadcn Component Registry
+outline: deep
+---
+
+# Shadcn Component Registry
 
 ## Generate registry locally
 

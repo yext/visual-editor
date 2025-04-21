@@ -1,3 +1,8 @@
+---
+title: Internal Hooks
+outline: deep
+---
+
 # Hooks
 
 ## useReceiveMessage
@@ -41,11 +46,11 @@ it listens for a response from the iframe (two way communication) to update its 
 
 #### Props
 
-| Name          | Type                         | Usage                                                          |
-| ------------- | ---------------------------- | -------------------------------------------------------------- |
-| messageName   | string                       | The message name to listen on                                  |
-| targetOrigins | string[]                     | The origin urls the message can be posted to and received from |
-| iframeRef     | RefObject<HTMLIFrameElement> | A MutableRefObject to send postMessages to - usually an iFrame |
+| Name          | Type                           | Usage                                                          |
+| ------------- | ------------------------------ | -------------------------------------------------------------- |
+| messageName   | string                         | The message name to listen on                                  |
+| targetOrigins | string[]                       | The origin urls the message can be posted to and received from |
+| iframeRef     | `RefObject<HTMLIFrameElement>` | A MutableRefObject to send postMessages to - usually an iFrame |
 
 #### Usage
 

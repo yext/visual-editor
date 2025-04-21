@@ -1,19 +1,23 @@
 // Based on https://github.com/bwestwood11/ui-cart/blob/main/scripts/build-registry.ts
 // which is a simplified version of https://github.com/shadcn-ui/ui/blob/main/apps/www/scripts/build-registry.mts
-import { writeFile, copyFile, mkdir, readFile } from "node:fs/promises";
-import { existsSync, rmSync } from "fs";
+import { writeFile, mkdir, readFile } from "node:fs/promises";
 import z from "zod";
-import path from "path";
+import { fileURLToPath } from "node:url";
+import { resolve, dirname } from "node:path";
 import { registryComponents } from "./registry.ts";
 import { registryItemFileSchema } from "./schema.ts";
 
-const DIST_DIR = `./dist`;
-const SLUG = `components`;
-const COLORS_PATH = `${DIST_DIR}/${SLUG}/colors`;
-const ICONS_PATH = `${DIST_DIR}/${SLUG}/icons`;
-const STYLES_PATH = `${DIST_DIR}/${SLUG}/styles`;
-const YEXT_STYLE_PATH = `${STYLES_PATH}/yext`;
-const COMPONENTS_SRC_PATH = `./packages/visual-editor/src/components`;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const ROOT_DIR = resolve(__dirname, "..", "..", "..", "..", ".."); // root of the project
+const DIST_DIR = resolve(ROOT_DIR, "dist");
+const SLUG = "components";
+const COLORS_PATH = resolve(DIST_DIR, SLUG, "colors");
+const ICONS_PATH = resolve(DIST_DIR, SLUG, "icons");
+const STYLES_PATH = resolve(DIST_DIR, SLUG, "styles");
+const YEXT_STYLE_PATH = resolve(DIST_DIR, SLUG, "yext");
+const COMPONENTS_SRC_PATH = resolve(__dirname, "..");
 
 const styleIndex = {
   name: "yext",
@@ -40,7 +44,7 @@ const iconsIndex = {};
 const stylesIndex = [{ name: "yext", label: "Yext" }];
 
 async function writeFileRecursive(filePath: string, data: string) {
-  const dir = path.dirname(filePath); // Extract the directory path
+  const dir = dirname(filePath); // Extract the directory path
 
   try {
     // Ensure the directory exists, recursively creating directories as needed
@@ -55,7 +59,7 @@ type File = z.infer<typeof registryItemFileSchema>;
 // Read the files specified in registry.ts, insert the @yext/visual-editor import and output JSON
 const getComponentFiles = async (files: File[]) => {
   const filesArrayPromises = (files ?? []).map(async (file) => {
-    const filePath = `${COMPONENTS_SRC_PATH}/${file.path}`;
+    const filePath = resolve(COMPONENTS_SRC_PATH, file.path);
     const fileContent = await readFile(filePath, "utf-8");
     return {
       type: "registry:component",
@@ -70,41 +74,33 @@ const getComponentFiles = async (files: File[]) => {
 };
 
 export const buildRegistry = async () => {
-  // Delete dist folder if it exists
-  if (existsSync(DIST_DIR)) {
-    rmSync(DIST_DIR, { recursive: true });
-  }
-
   // Write all index files
   await Promise.all([
     writeFileRecursive(
-      `${YEXT_STYLE_PATH}/index.json`,
+      resolve(YEXT_STYLE_PATH, "index.json"),
       JSON.stringify(styleIndex)
     ),
     writeFileRecursive(
-      `${COLORS_PATH}/neutral.json`,
+      resolve(COLORS_PATH, "neutral.json"),
       JSON.stringify(colorsIndex)
     ),
-    writeFileRecursive(`${ICONS_PATH}/index.json`, JSON.stringify(iconsIndex)),
     writeFileRecursive(
-      `${STYLES_PATH}/index.json`,
+      resolve(ICONS_PATH, "index.json"),
+      JSON.stringify(iconsIndex)
+    ),
+    writeFileRecursive(
+      resolve(STYLES_PATH, "index.json"),
       JSON.stringify(stylesIndex)
     ),
     writeFileRecursive(
-      `${DIST_DIR}/${SLUG}/index.json`,
+      resolve(DIST_DIR, SLUG, "index.json"),
       JSON.stringify(registryComponents)
     ),
     writeFileRecursive(
-      `${DIST_DIR}/${SLUG}/registry/index.json`,
+      resolve(DIST_DIR, SLUG, "registry", "index.json"),
       JSON.stringify(registryComponents)
     ),
   ]);
-
-  // copy artifacts.json after to ensure that the `dist` dir exists
-  await copyFile(
-    `${COMPONENTS_SRC_PATH}/registry/artifacts.json`,
-    `${DIST_DIR}/artifacts.json`
-  );
 
   // generate JSON files for each component
   for (let i = 0; i < registryComponents.length; i++) {
