@@ -178,7 +178,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
           />
         </EntityField>
       )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-all">
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedTitle && (
           <Heading level={title.level}>{resolvedTitle}</Heading>
         )}
