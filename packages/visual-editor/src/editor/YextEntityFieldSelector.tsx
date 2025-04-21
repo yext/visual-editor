@@ -325,12 +325,20 @@ const EntityFieldInput = <T extends Record<string, any>>({
 
     return BasicSelector("Entity Field", [
       { value: "", label: "Select a Content field" },
-      ...filteredEntityFields.map((entityFieldNameToSchema) => {
-        return {
-          label: entityFieldNameToSchema.name,
-          value: entityFieldNameToSchema.name,
-        };
-      }),
+      ...filteredEntityFields
+        .map((entityFieldNameToSchema) => {
+          return {
+            label:
+              entityFieldNameToSchema.displayName ??
+              entityFieldNameToSchema.name,
+            value: entityFieldNameToSchema.name,
+          };
+        })
+        .sort((entityFieldA, entityFieldB) => {
+          const nameA = entityFieldA.label.toUpperCase();
+          const nameB = entityFieldB.label.toUpperCase();
+          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        }),
     ]);
   }, [entityFields, filter]);
 
