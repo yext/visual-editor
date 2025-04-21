@@ -205,6 +205,7 @@ const LocationCard = ({
           phoneNumber={mainPhone}
           format={cards.phoneNumberFormat}
           includeHyperlink={cards.phoneNumberLink}
+          includeIcon={false}
         />
       )}
       {address && (

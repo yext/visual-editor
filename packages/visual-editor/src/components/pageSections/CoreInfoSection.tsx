@@ -328,6 +328,7 @@ const CoreInfoSectionWrapper = ({
                           includeHyperlink={
                             phoneNumbersField.includePhoneHyperlink
                           }
+                          includeIcon={true}
                         />
                       </div>
                     </div>

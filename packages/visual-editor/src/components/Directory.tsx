@@ -6,7 +6,7 @@ import {
   Body,
   MaybeLink,
   PageSection,
-  formatPhoneNumber,
+  PhoneAtom,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -73,7 +73,18 @@ const DirectoryCard = ({
           </div>
         )}
       </div>
-      {profile.mainPhone && <Body>{formatPhoneNumber(profile.mainPhone)}</Body>}
+      {profile.mainPhone && (
+        <PhoneAtom
+          phoneNumber={profile.mainPhone}
+          includeHyperlink={false}
+          includeIcon={false}
+          format={
+            profile.mainPhone.slice(0, 2) === "+1"
+              ? "domestic"
+              : "international"
+          }
+        />
+      )}
       {profile.address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
           <Address

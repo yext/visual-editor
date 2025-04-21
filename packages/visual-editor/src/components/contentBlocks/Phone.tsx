@@ -57,6 +57,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
         phoneNumber={resolvedPhone}
         format={format}
         includeHyperlink={includeHyperlink}
+        includeIcon={true}
       />
     </EntityField>
   );
