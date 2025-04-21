@@ -10,6 +10,7 @@ export type PhoneAtomProps = {
   backgroundColor?: BackgroundStyle;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
+  includeIcon: boolean;
 };
 
 export const PhoneAtom = (props: PhoneAtomProps) => {
@@ -20,15 +21,16 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
 
   return (
     <div className={"components flex gap-2 items-center"}>
-      {props.backgroundColor ? (
-        <div
-          className={`h-10 w-10 flex justify-center rounded-full items-center ${props.backgroundColor.bgColor} ${props.backgroundColor.textColor}`}
-        >
+      {props.includeIcon &&
+        (props.backgroundColor ? (
+          <div
+            className={`h-10 w-10 flex justify-center rounded-full items-center ${props.backgroundColor.bgColor} ${props.backgroundColor.textColor}`}
+          >
+            <FaPhone className="w-4 h-4" />
+          </div>
+        ) : (
           <FaPhone className="w-4 h-4" />
-        </div>
-      ) : (
-        <FaPhone className="w-4 h-4" />
-      )}
+        ))}
       {props.label && <Body className="font-bold">{props.label}</Body>}
       {props.includeHyperlink ? (
         <CTA

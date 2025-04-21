@@ -6,6 +6,7 @@ import {
   Body,
   MaybeLink,
   PageSection,
+  PhoneAtom,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -46,30 +47,50 @@ const DirectoryCard = ({
   relativePrefixToRoot: string;
 }) => {
   return (
-    <div className="p-8 border border-gray-400 rounded h-full">
-      <MaybeLink
-        alwaysHideCaret={true}
-        className="mb-4"
-        href={
-          relativePrefixToRoot && profile.slug
-            ? relativePrefixToRoot + profile.slug
-            : profile.slug
-        }
-      >
-        <Heading level={5}>{profile.name}</Heading>
-      </MaybeLink>
-      {profile.hours && (
-        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-          <HoursStatus
-            hours={profile.hours}
-            timezone={profile.timezone}
-            className="h-full"
-          />
-        </div>
+    <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
+      <div>
+        <MaybeLink
+          alwaysHideCaret={true}
+          className="mb-2"
+          href={
+            relativePrefixToRoot && profile.slug
+              ? relativePrefixToRoot + profile.slug
+              : profile.slug
+          }
+        >
+          <Heading level={4} semanticLevelOverride="h3">
+            {profile.name}
+          </Heading>
+        </MaybeLink>
+        {profile.hours && (
+          <div className="font-semibold font-body-fontFamily text-body-fontSize">
+            <HoursStatus
+              hours={profile.hours}
+              timezone={profile.timezone}
+              className="h-full"
+              dayOfWeekTemplate={() => <></>}
+            />
+          </div>
+        )}
+      </div>
+      {profile.mainPhone && (
+        <PhoneAtom
+          phoneNumber={profile.mainPhone}
+          includeHyperlink={false}
+          includeIcon={false}
+          format={
+            profile.mainPhone.slice(0, 2) === "+1"
+              ? "domestic"
+              : "international"
+          }
+        />
       )}
       {profile.address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
-          <Address address={profile.address} lines={[["line1"]]} />
+          <Address
+            address={profile.address}
+            lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
+          />
         </div>
       )}
     </div>
@@ -111,9 +132,11 @@ const DirectoryGrid = ({
 const DirectoryList = ({
   directoryChildren,
   relativePrefixToRoot,
+  level,
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
+  level: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -123,20 +146,34 @@ const DirectoryList = ({
       background={backgroundColors.background1.value}
     >
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
-        {sortedDirectoryChildren.map((child, idx) => (
-          <li key={idx}>
-            <MaybeLink
-              variant="directoryLink"
-              href={
-                relativePrefixToRoot
-                  ? relativePrefixToRoot + child.slug
-                  : child.slug
-              }
-            >
-              <Body>{child.name}</Body>
-            </MaybeLink>
-          </li>
-        ))}
+        {sortedDirectoryChildren.map((child, idx) => {
+          let label;
+          switch (level) {
+            case "dm_root":
+              label = child.c_addressCountryDisplayName ?? child.name;
+              break;
+            case "dm_country":
+              label = child.c_addressRegionDisplayName ?? child.name;
+              break;
+            default:
+              label = child.name;
+          }
+
+          return (
+            <li key={idx}>
+              <MaybeLink
+                variant="directoryLink"
+                href={
+                  relativePrefixToRoot
+                    ? relativePrefixToRoot + child.slug
+                    : child.slug
+                }
+              >
+                <Body>{label}</Body>
+              </MaybeLink>
+            </li>
+          );
+        })}
       </ul>
     </PageSection>
   );
@@ -146,11 +183,30 @@ const DirectoryComponent = (props: DirectoryProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
+  let headingText;
+  switch (document?.meta?.entityType?.id) {
+    case "dm_root":
+      headingText = "All Locations";
+      break;
+    case "dm_country":
+      headingText = document.c_addressCountryDisplayName ?? document.name;
+      break;
+    case "dm_region":
+      headingText = document.c_addressRegionDisplayName ?? document.name;
+      break;
+    case "dm_city":
+      headingText = document.name;
+  }
+
   return (
     <>
-      <div className="flex justify-center">
-        <BreadcrumbsComponent separator={separator} liveVisibility={true} />
-      </div>
+      <BreadcrumbsComponent separator={separator} liveVisibility={true} />
+      <PageSection className="flex flex-col items-center gap-2">
+        {document._site.name && (
+          <Heading level={4}>{document._site.name}</Heading>
+        )}
+        {headingText && <Heading level={2}>{headingText}</Heading>}
+      </PageSection>
       {document.dm_directoryChildren &&
         isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryGrid
@@ -163,6 +219,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
           <DirectoryList
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot}
+            level={document?.meta?.entityType?.id}
           />
         )}
     </>
