@@ -7,7 +7,7 @@ outline: deep
 
 ## Simple React Component
 
-Create a React component as you normally would in [https://github.com/yext/visual-editor/tree/main/packages/visual-editor/src/components/puck](https://github.com/yext/visual-editor/tree/main/packages/visual-editor/src/components/puck).
+Create a React component as you normally would in [https://github.com/yext/visual-editor/tree/main/packages/visual-editor/src/components](https://github.com/yext/visual-editor/tree/main/packages/visual-editor/src/components).
 
 1. Use upper camel case for the component filename.
 2. Name the React component with “Component” as the suffix, ie “FooComponent”
@@ -23,9 +23,9 @@ A Puck component is nothing more than a React component with additional configur
 1. **render** \- a function that returns your React component. This is the bare minimum necessary in order to have the component show up in the Puck left sidebar so the component can be dragged into the edit zone (middle section).
 2. **fields** \- an object that defines the list of props available for the component. These are the user-settable options that show on the Puck right sidebar.
 3. **defaultProps** \- the default values/configuration of the above fields.
-4. **resolveFields** \- a function to dynamically change/set fields based on the value of another field. Right now we’ve mostly only been using this for font-related things.
+4. **resolveFields** \- a function to dynamically change/set fields based on the value of another field. Right now we’ve been using this for array fields and collection items.
 
-Use [Banner](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/puck/Banner.tsx) as an example to get you started.
+Use [Banner](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/pageSections/Banner.tsx) as an example to get you started.
 
 Make sure to export your Puck component with the name you actually want the component to be. Following the example, you would export “Foo”.
 
@@ -43,9 +43,9 @@ YextEntityField allows a user to set either a KG field (one from the document) o
 
 Now that the Puck component is created we need to make it available for users.
 
-1. Update [index.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/puck/index.ts) to include your new component.
-2. Add your component to the component [registry](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/puck/registry/components.ts). This makes your component available to locally download via shadcn. See the [readme](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/puck/registry/README.md) for more information.
-3. Once a new version of visual-editor is released, you want to import the component to the starter’s main [ve.config.tsx](https://github.com/YextSolutions/pages-visual-editor-starter/blob/main/src/ve.config.tsx#L77). **NOTE** \- this step will change in the future as we push more configuration down to visual-editor instead of files living in each starter repo. There will be another way to register the components with the templates in the future, at which point this step will be updated. For all intents and purposes this step can be skipped for now and Sumo will handle registering the component with the template.
+1. Add your component and component props to the appropriate [\_componentCategories](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/_componentCategories.ts).
+2. Update the corresponding index.ts in the components subfolder where your component lives so that it gets exported by the library.
+3. Add your component to the component [registry](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/registry/components.ts). This makes your component available to locally download via shadcn. See [this](/components/registry/README) for more information.
 
 ## Developing and Testing
 
