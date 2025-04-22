@@ -123,7 +123,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
       <div>
         <VisualEditorProvider
           templateProps={props}
-          entityFields={entityFields}
+          entityFields={{ fields: entityFields }}
           tailwindConfig={tailwindConfig}
         >
           <Editor
