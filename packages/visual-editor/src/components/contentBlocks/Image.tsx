@@ -13,7 +13,7 @@ import { ComplexImageType, ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-export interface ImageWrapperProps extends ImageProps {
+export interface ImageWrapperProps extends Omit<ImageProps, "image"> {
   image: YextEntityField<ImageType | ComplexImageType>;
 }
 
