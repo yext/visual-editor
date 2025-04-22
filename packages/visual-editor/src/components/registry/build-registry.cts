@@ -6,9 +6,6 @@ import { resolve, dirname } from "node:path";
 import { registryComponents } from "./registry.ts";
 import { registryItemFileSchema } from "./schema.ts";
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-
 const ROOT_DIR = resolve(__dirname, "..", "..", "..", "..", ".."); // root of the project
 const DIST_DIR = resolve(ROOT_DIR, "dist");
 const SLUG = "components";
