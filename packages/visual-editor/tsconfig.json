@@ -2,8 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "react-jsx",
-    "moduleResolution": "nodenext",
-    "module": "NodeNext",
+    "moduleResolution": "node",
     "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true,
     "allowJs": true,
