@@ -1,3 +1,8 @@
+---
+title: Hooks
+outline: deep
+---
+
 # Hooks
 
 ## useTemplateProps
@@ -71,7 +76,7 @@ const Edit: () => JSX.Element = () => {
 
 Use this hook to capture the entityFields from the Yext platform in your `edit.tsx` file.
 This is a requirement to use mappable entity fields in your component props.
-Meant to be used in conjunction with the [EntityFieldsProvider](#entityfieldsprovider).
+Meant to be used in conjunction with the [VisualEditorProvider](../utils/README.md#visualeditorprovider).
 
 ### Usage
 
@@ -107,7 +112,7 @@ const Edit: () => JSX.Element = () => {
 
 ## useEntityFields
 
-A React hook that returns entityFields available to your TemplateConfig's stream. Must be used within an [EntityFieldsProvider](#entityfieldsprovider).
+A React hook that returns entityFields available to your TemplateConfig's stream. Must be used within an [VisualEditorProvider](../utils/README.md#visualeditorprovider).
 
 ## useBackground and BackgroundProvider
 

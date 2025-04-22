@@ -1,3 +1,8 @@
+---
+title: Utility Functions
+outline: deep
+---
+
 # Utils
 
 ## getPageMetadata
@@ -51,7 +56,7 @@ Used in a component's render function to pull in the selected entity field's val
 
 ### Usage
 
-See [YextEntityFieldSelector](../components/editor/README.md#YextEntityFieldSelector)
+See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
 ## resolveYextSubfield
 

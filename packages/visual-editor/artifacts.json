@@ -3,7 +3,7 @@
     "assets": [
       {
         "root": "dist",
-        "pattern": "components/**/*"
+        "pattern": "**/*"
       }
     ]
   }
