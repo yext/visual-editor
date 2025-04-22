@@ -1,9 +1,13 @@
 import * as React from "react";
-import { Image as ImageComponent, ImageType } from "@yext/pages-components";
+import {
+  ComplexImageType,
+  Image as ImageComponent,
+  ImageType,
+} from "@yext/pages-components";
 import { themeManagerCn } from "@yext/visual-editor";
 
 export interface ImageProps {
-  image: ImageType;
+  image: ImageType | ComplexImageType;
   layout: "auto" | "fixed";
   aspectRatio?: number;
   width?: number;
@@ -39,22 +43,4 @@ export const Image: React.FC<ImageProps> = ({
       )}
     </div>
   );
-};
-
-// Handle ImageType or ComplexImageType
-// TODO - Reconsider how this handled / why it isn't autoresolved
-export const handleComplexImages = (resolvedImage: any) => {
-  let image: ImageType;
-  if (
-    resolvedImage &&
-    typeof resolvedImage === "object" &&
-    "image" in resolvedImage
-  ) {
-    image = resolvedImage.image as ImageType;
-  } else if (resolvedImage) {
-    image = resolvedImage;
-  } else {
-    image = { height: 150, width: 150, url: "" };
-  }
-  return image;
 };
