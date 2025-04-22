@@ -86,3 +86,6 @@ dist/
 
 # Vitest browser screenshots 
 **/__screenshots__
+
+.vitepress/cache
+.vitepress/dist

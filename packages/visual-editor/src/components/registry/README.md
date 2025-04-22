@@ -1,4 +1,9 @@
-# Component Shadcn Registry
+---
+title: Shadcn Component Registry
+outline: deep
+---
+
+# Shadcn Component Registry
 
 ## Generate registry locally
 
@@ -12,7 +17,7 @@ Add a new object to `ui` in `components.ts`.
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | name                 | must be unique                                                                                                             |
 | type                 | "registry:ui" if it should be directly pulled by a user. "registry:component" if it's a sub-component of multiple ui files |
-| files                | array of files relative to `src/components/puck`                                                                           |
+| files                | array of files relative to `src/components`                                                                                |
 | registryDependencies | array of component dependencies using the names defined in this file                                                       |
 
 ## Requirements for components
