@@ -17,7 +17,6 @@ import {
   CTA,
   YextField,
 } from "@yext/visual-editor";
-import { handleComplexImages } from "../atoms/image.js";
 import { ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x200";
@@ -44,7 +43,6 @@ const InsightCardItem = ({
   card: InsightCardProps["card"];
 }) => {
   const resolvedImage = resolveYextSubfield(document, card?.image);
-  const image = handleComplexImages(resolvedImage);
   const resolvedTitle = resolveYextSubfield<string>(document, card?.title);
   const resolvedCategory = resolveYextSubfield<string>(
     document,
@@ -61,13 +59,17 @@ const InsightCardItem = ({
       className="rounded-lg h-full"
       background={backgroundColors.background1.value}
     >
-      {image && (
+      {resolvedImage && (
         <EntityField
           displayName="Image"
           fieldId={card?.image?.field}
           constantValueEnabled={card?.image?.constantValueEnabled}
         >
-          <Image image={image} layout="auto" className="rounded-[inherit]" />
+          <Image
+            image={resolvedImage}
+            layout="auto"
+            className="rounded-[inherit]"
+          />
         </EntityField>
       )}
       <div className="flex flex-col gap-8 p-8">

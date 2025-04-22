@@ -12,7 +12,6 @@ import {
   YextField,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { handleComplexImages } from "../atoms/image.js";
 
 export type ExampleRepeatableItemProps = {
   text?: YextEntityField<string>;
@@ -75,12 +74,11 @@ type ExampleRepeatableItemCardProps = {
 
 // Example Card -- would replace with a nice React component
 const ExampleRepeatableItemCard = (props: ExampleRepeatableItemCardProps) => {
-  const { text } = props;
-  const image = handleComplexImages(props.image);
+  const { image, text } = props;
 
   return (
     <div className="w-[200px] h-[200px] border-dashed border-black border-4 flex flex-col items-center justify-center">
-      {image?.url && (
+      {image && (
         <div className="mx-8">
           <Image image={image} layout="fixed" width={100} aspectRatio={1} />
         </div>

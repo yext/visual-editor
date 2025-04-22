@@ -18,7 +18,6 @@ import {
   CTAProps,
   ImageWrapperProps,
 } from "@yext/visual-editor";
-import { handleComplexImages } from "../atoms/image.js";
 import { ImageWrapperFields } from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x200";
@@ -60,7 +59,6 @@ const ProductCardItem = ({
   cardBackgroundColor?: BackgroundStyle;
 }) => {
   const resolvedImage = resolveYextSubfield(document, card?.image?.image);
-  const image = handleComplexImages(resolvedImage);
   const resolvedHeading = resolveYextSubfield(document, card?.heading);
   const resolvedCategory = resolveYextSubfield(document, card?.category);
   const resolvedDescription = resolveYextSubfield(document, card?.description);
@@ -71,9 +69,9 @@ const ProductCardItem = ({
       className="flex flex-col justify-between rounded-lg overflow-hidden border h-full"
       background={cardBackgroundColor}
     >
-      {image && card?.image && (
+      {resolvedImage && card?.image && (
         <Image
-          image={image}
+          image={resolvedImage}
           layout={card.image.layout}
           width={card.image.width}
           height={card.image.height}
