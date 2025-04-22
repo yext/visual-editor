@@ -1,9 +1,21 @@
 import * as React from "react";
-import { Image as ImageComponent, ImageType } from "@yext/pages-components";
-import { themeManagerCn } from "@yext/visual-editor";
+import {
+  ComplexImageType,
+  Image as ImageComponent,
+  ImageType,
+} from "@yext/pages-components";
+import {
+  resolveYextEntityField,
+  themeManagerCn,
+  useDocument,
+  YextEntityField,
+} from "@yext/visual-editor";
 
 export interface ImageProps {
-  image: ImageType;
+  image:
+    | ImageType
+    | ComplexImageType
+    | YextEntityField<ImageType | ComplexImageType>;
   layout: "auto" | "fixed";
   aspectRatio?: number;
   width?: number;
@@ -19,18 +31,23 @@ export const Image: React.FC<ImageProps> = ({
   height,
   className,
 }) => {
+  const resolvedImage = handleUnresolvedImage(image);
+  if (!resolvedImage) {
+    return;
+  }
+
   return (
     <div className={themeManagerCn("overflow-hidden w-full", className)}>
       {layout === "auto" && aspectRatio ? (
         <ImageComponent
-          image={image}
+          image={resolvedImage}
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full"
         />
       ) : (
         <ImageComponent
-          image={image}
+          image={resolvedImage}
           layout={"fixed"}
           width={width}
           height={height}
@@ -41,20 +58,14 @@ export const Image: React.FC<ImageProps> = ({
   );
 };
 
-// Handle ImageType or ComplexImageType
-// TODO - Reconsider how this handled / why it isn't autoresolved
-export const handleComplexImages = (resolvedImage: any) => {
-  let image: ImageType;
-  if (
-    resolvedImage &&
-    typeof resolvedImage === "object" &&
-    "image" in resolvedImage
-  ) {
-    image = resolvedImage.image as ImageType;
-  } else if (resolvedImage) {
-    image = resolvedImage;
-  } else {
-    image = { height: 150, width: 150, url: "" };
+// if image is type YextEntityField<ImageType> | YextEntityField<ComplexImageType>, return the resolvedImage
+const handleUnresolvedImage = (
+  image: any
+): ImageType | ComplexImageType | undefined => {
+  if (image && "field" in image) {
+    const document = useDocument();
+    return resolveYextEntityField(document, image);
   }
+
   return image;
 };

@@ -9,20 +9,16 @@ import {
   ImageProps,
   YextField,
 } from "@yext/visual-editor";
-import { ImageType } from "@yext/pages-components";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-export interface ImageWrapperProps {
-  image: YextEntityField<ImageType>;
-  layout: ImageProps["layout"];
-  aspectRatio?: ImageProps["aspectRatio"];
-  width?: ImageProps["width"];
-  height?: ImageProps["height"];
+export interface ImageWrapperProps extends ImageProps {
+  image: YextEntityField<ImageType | ComplexImageType>;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
-  image: YextField<any, ImageType>("Image", {
+  image: YextField<any, ImageType | ComplexImageType>("Image", {
     type: "entityField",
     filter: {
       types: ["type.image"],
