@@ -170,6 +170,8 @@ export const Collection: ComponentConfig<CollectionProps> = {
       },
       limit: 3,
     },
+    layout: "flex",
+    direction: "flex-row",
     liveVisibility: true,
   },
   render: (props) => (
