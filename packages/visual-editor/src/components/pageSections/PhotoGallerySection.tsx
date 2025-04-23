@@ -170,7 +170,7 @@ const PhotoGallerySectionComponent = ({
           <Heading level={sectionHeading.level}>{sectionHeading.text}</Heading>
         </EntityField>
       )}
-      {images && images?.length > 0 && (
+      {images?.length && (
         <CarouselProvider
           className="flex flex-col md:flex-row justify-center gap-8"
           naturalSlideWidth={100}
