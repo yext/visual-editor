@@ -21,6 +21,9 @@ describe.each(viewports)("Directory $name", ({ width, height }) => {
       <VisualEditorProvider
         templateProps={{
           document: {
+            _site: {
+              name: "Example Business",
+            },
             dm_childEntityIds: ["8725530"],
             dm_directoryChildren: [
               {
@@ -31,16 +34,30 @@ describe.each(viewports)("Directory $name", ({ width, height }) => {
                   postalCode: "22209",
                   region: "VA",
                 },
+                mainPhone: "+12025551010",
                 hours: testHours,
                 name: "Galaxy Grill",
                 timezone: "America/New_York",
               },
             ],
+            name: "Arlington",
+            meta: { entityType: { id: "dm_city", uid: 456 }, locale: "en" },
+            c_addressCountryDisplayName: "United States",
+            c_addressRegionDisplayName: "Virginia",
             dm_directoryManagerId: "63590-locations",
             dm_directoryParents_63590_locations: [
               { name: "Locations Directory", slug: "en/index.html" },
-              { name: "US", slug: "en/us" },
-              { name: "VA", slug: "us/va" },
+              {
+                name: "US",
+                slug: "en/us",
+                c_addressCountryDisplayName: "United States",
+              },
+              {
+                name: "VA",
+                slug: "us/va",
+                c_addressCountryDisplayName: "United States",
+                c_addressRegionDisplayName: "Virginia",
+              },
             ],
           },
         }}
@@ -70,14 +87,34 @@ describe.each(viewports)("Directory $name", ({ width, height }) => {
       <VisualEditorProvider
         templateProps={{
           document: {
+            _site: {
+              name: "Example Business",
+            },
+            meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
+            c_addressCountryDisplayName: "United States",
+            c_addressRegionDisplayName: "Virginia",
             dm_childEntityIds: ["8932945"],
             dm_directoryChildren: [
-              { name: "Arlington", slug: "us/va/arlington" },
+              {
+                name: "Arlington",
+                slug: "us/va/arlington",
+                c_addressCountryDisplayName: "United States",
+                c_addressRegionDisplayName: "Virginia",
+              },
             ],
             dm_directoryManagerId: "63590-locations",
             dm_directoryParents_63590_locations: [
-              { name: "Locations Directory", slug: "en/index.html" },
-              { name: "US", slug: "en/us" },
+              {
+                name: "Locations Directory",
+                slug: "en/index.html",
+                c_addressCountryDisplayName: "United States",
+                c_addressRegionDisplayName: "Virginia",
+              },
+              {
+                name: "US",
+                slug: "en/us",
+                c_addressCountryDisplayName: "United States",
+              },
             ],
           },
         }}

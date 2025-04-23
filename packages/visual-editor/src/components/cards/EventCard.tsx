@@ -15,7 +15,6 @@ import {
   CTA,
   YextField,
 } from "@yext/visual-editor";
-import { handleComplexImages } from "../atoms/image.js";
 import { ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x200";
@@ -41,7 +40,6 @@ const EventCardItem = ({
   card: EventCardProps["card"];
 }) => {
   const resolvedImage = resolveYextSubfield(document, card?.image);
-  const image = handleComplexImages(resolvedImage);
   const resolvedTitle = resolveYextSubfield<string>(document, card?.title);
   const resolvedDateTime = resolveYextSubfield<string>(
     document,
@@ -63,7 +61,7 @@ const EventCardItem = ({
             constantValueEnabled={card?.image?.constantValueEnabled}
           >
             <div className="h-full">
-              <Image image={image} layout="auto" aspectRatio={1.77} />
+              <Image image={resolvedImage} layout="auto" aspectRatio={1.77} />
             </div>
           </EntityField>
         )}
@@ -98,16 +96,16 @@ const EventCardItem = ({
             </Body>
           </EntityField>
         )}
-        {resolvedCTA && (
+        {resolvedCTA?.link && (
           <EntityField
             displayName="CTA"
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >
             <CTA
-              label={resolvedCTA?.label}
-              link={resolvedCTA?.link || "#"}
-              linkType={resolvedCTA?.linkType}
+              label={resolvedCTA.label}
+              link={resolvedCTA.link}
+              linkType={resolvedCTA.linkType}
               variant="link"
               className="text-palette-primary-dark"
             />

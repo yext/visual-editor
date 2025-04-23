@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Field, Fields } from "@measured/puck";
 import {
   resolveYextEntityField,
   useDocument,
@@ -15,19 +15,20 @@ import {
   Image,
   Background,
   YextField,
+  CTAProps,
+  ImageWrapperProps,
 } from "@yext/visual-editor";
-import { ImageType } from "@yext/pages-components";
-import { handleComplexImages } from "../atoms/image.js";
+import { ImageWrapperFields } from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/360x200";
 
 export type ProductCardProps = {
   card?: {
-    image?: YextEntityField<ImageType>;
+    image?: ImageWrapperProps;
     heading?: YextEntityField<string>;
     category?: YextEntityField<string>;
     description?: YextEntityField<string>;
-    cta?: YextEntityField<string>;
+    cta?: YextEntityField<CTAProps>;
   };
   styles: {
     cardBackgroundColor?: BackgroundStyle;
@@ -57,8 +58,7 @@ const ProductCardItem = ({
   card: ProductCardProps["card"];
   cardBackgroundColor?: BackgroundStyle;
 }) => {
-  const resolvedImage = resolveYextSubfield(document, card?.image);
-  const image = handleComplexImages(resolvedImage);
+  const resolvedImage = resolveYextSubfield(document, card?.image?.image);
   const resolvedHeading = resolveYextSubfield(document, card?.heading);
   const resolvedCategory = resolveYextSubfield(document, card?.category);
   const resolvedDescription = resolveYextSubfield(document, card?.description);
@@ -66,10 +66,18 @@ const ProductCardItem = ({
 
   return (
     <Background
-      className="flex flex-col justify-between rounded-lg overflow-hidden border"
+      className="flex flex-col justify-between rounded-lg overflow-hidden border h-full"
       background={cardBackgroundColor}
     >
-      {image && <Image image={image} layout={"auto"} />}
+      {resolvedImage && card?.image && (
+        <Image
+          image={resolvedImage}
+          layout={card.image.layout}
+          width={card.image.width}
+          height={card.image.height}
+          aspectRatio={card.image.aspectRatio}
+        />
+      )}
       <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col">
           {resolvedHeading && (
@@ -86,13 +94,16 @@ const ProductCardItem = ({
             </Background>
           )}
           {resolvedDescription && (
-            <Body className="line-clamp-5 max-w-[290px]">
-              {resolvedDescription}
-            </Body>
+            <Body className="max-w-[290px]">{resolvedDescription}</Body>
           )}
         </div>
-        {resolvedCta && (
-          <CTA variant="secondary" label="Learn More" link={resolvedCta} />
+        {resolvedCta?.link && (
+          <CTA
+            variant="secondary"
+            label={resolvedCta.label}
+            link={resolvedCta.link}
+            linkType={resolvedCta.linkType}
+          />
         )}
       </div>
     </Background>
@@ -158,8 +169,12 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
     const { shouldReturnLastFields, isCollection, directChildrenFilter } =
       handleResolveFieldsForCollections(data, params);
 
-    // Unnecessary field updates can lead to the fields losing focus
-    if (shouldReturnLastFields) {
+    // Unnecessary field updates can lead to the fields losing focus, but it should update if image layout changes
+    if (
+      shouldReturnLastFields &&
+      data.props.card?.image?.layout ===
+        params.lastData?.props?.card?.image?.layout
+    ) {
       return params.lastFields;
     }
 
@@ -169,12 +184,28 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
       card: YextField("Card", {
         type: "object",
         objectFields: {
-          image: YextField<any, ImageType>("Image", {
-            type: "entityField",
-            isCollection: isCollection,
-            filter: {
-              directChildrenOf: directChildrenFilter,
-              types: ["type.image"],
+          image: YextField("Image", {
+            type: "object",
+            objectFields: {
+              image: YextField<any, ImageWrapperProps>("Image", {
+                type: "entityField",
+                isCollection: isCollection,
+                filter: {
+                  directChildrenOf: directChildrenFilter,
+                  types: ["type.image"],
+                },
+              }),
+              layout: ImageWrapperFields["layout"],
+              ...(data.props.card?.image?.layout === "auto"
+                ? {
+                    aspectRatio: ImageWrapperFields[
+                      "aspectRatio"
+                    ] as Field<number>,
+                  }
+                : {
+                    height: ImageWrapperFields["height"] as Field<number>,
+                    width: ImageWrapperFields["width"] as Field<number>,
+                  }),
             },
           }),
           heading: YextField<any, string>("Heading", {
@@ -201,12 +232,12 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
               types: ["type.string"],
             },
           }),
-          cta: YextField<any, string>("CTA", {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
               directChildrenOf: directChildrenFilter,
-              types: ["type.string"],
+              types: ["type.cta"],
             },
           }),
         },
@@ -216,9 +247,17 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
   defaultProps: {
     card: {
       image: {
-        field: "",
-        constantValue: { height: 200, width: 360, url: PLACEHOLDER_IMAGE_URL },
-        constantValueEnabled: true,
+        image: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            url: PLACEHOLDER_IMAGE_URL,
+            width: 360,
+            height: 200,
+          },
+        },
+        layout: "auto",
+        aspectRatio: 2,
       },
       heading: {
         field: "",
@@ -238,7 +277,11 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
       },
       cta: {
         field: "",
-        constantValue: "#",
+        constantValue: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
         constantValueEnabled: true,
       },
     },

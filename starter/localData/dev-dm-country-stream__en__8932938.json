@@ -10,6 +10,8 @@
       "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
       "width": 1152
     },
+    "name": "Example Business",
+    "siteName": "Example Business Pages",
     "footer": {
       "links": [
         {
@@ -44,10 +46,30 @@
   "businessId": 1000152098,
   "dm_childEntityIds": ["8932939", "8932941", "8932944", "8932946"],
   "dm_directoryChildren": [
-    { "name": "NY", "slug": "us/ny" },
-    { "name": "FL", "slug": "us/fl" },
-    { "name": "VA", "slug": "us/va" },
-    { "name": "DC", "slug": "en/us/dc" }
+    {
+      "name": "NY",
+      "slug": "us/ny",
+      "c_addressCountryDisplayName": "United States",
+      "c_addressRegionDisplayName": "New York"
+    },
+    {
+      "name": "FL",
+      "slug": "us/fl",
+      "c_addressCountryDisplayName": "United States",
+      "c_addressRegionDisplayName": "Florida"
+    },
+    {
+      "name": "VA",
+      "slug": "us/va",
+      "c_addressCountryDisplayName": "United States",
+      "c_addressRegionDisplayName": "Virginia"
+    },
+    {
+      "name": "DC",
+      "slug": "en/us/dc",
+      "c_addressCountryDisplayName": "United States",
+      "c_addressRegionDisplayName": "Washington DC"
+    }
   ],
   "dm_directoryManagerId": "63590-locations",
   "dm_directoryParents_63590_locations": [
@@ -59,7 +81,8 @@
     "entityType": { "id": "dm_country", "uid": 60735 },
     "locale": "en"
   },
-  "name": "DM Country US",
+  "c_addressCountryDisplayName": "United States",
+  "name": "US",
   "siteDomain": "",
   "siteId": 63590,
   "siteInternalHostName": "",

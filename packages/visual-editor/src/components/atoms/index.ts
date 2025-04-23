@@ -7,3 +7,4 @@ export { MaybeLink, type MaybeLinkProps } from "./maybeLink.tsx";
 export { PageSection, type PageSectionProps } from "./pageSection.tsx";
 export { PhoneAtom, type PhoneAtomProps } from "./phone.tsx";
 export { Background, type BackgroundProps } from "./background.tsx";
+export { VisibilityWrapper } from "./visibilityWrapper.tsx";

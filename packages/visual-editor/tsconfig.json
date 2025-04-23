@@ -2,25 +2,19 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "react-jsx",
-
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true,
-
     "allowJs": true,
     "checkJs": true,
-
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
-
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-
     "strict": true,
-
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,

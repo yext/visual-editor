@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  CTA as CTAType,
-  Image,
-  ComplexImageType,
-} from "@yext/pages-components";
+import { CTA as CTAType, ComplexImageType } from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
 import {
   CTA,
@@ -13,6 +9,8 @@ import {
   PageSection,
   backgroundColors,
   Background,
+  YextField,
+  Image,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -25,14 +23,25 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
   },
 };
 
-export type HeaderProps = Record<string, never>;
+export type HeaderProps = {
+  logoWidth?: number;
+};
 
 export const Header: ComponentConfig<HeaderProps> = {
   label: "Header",
-  render: () => <HeaderComponent />,
+  fields: {
+    logoWidth: YextField("Logo Width", {
+      type: "number",
+      min: 0,
+    }),
+  },
+  defaultProps: {
+    logoWidth: 80,
+  },
+  render: (props) => <HeaderComponent {...props} />,
 };
 
-const HeaderComponent: React.FC<HeaderProps> = () => {
+const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
   const document: {
     _site?: {
       header?: {
@@ -44,18 +53,19 @@ const HeaderComponent: React.FC<HeaderProps> = () => {
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  return <HeaderLayout links={links} logo={logo} />;
+  return <HeaderLayout links={links} logo={logo} logoWidth={logoWidth} />;
 };
 
 interface HeaderLayoutProps {
   links: CTAType[];
   logoLink?: string;
   logo?: ComplexImageType;
+  logoWidth?: number;
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoLink, links } = props;
+  const { logo, logoWidth, logoLink, links } = props;
 
   return (
     <PageSection
@@ -69,7 +79,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             displayName="Business Logo"
             fieldId={"site.businessLogo"}
           >
-            <HeaderLogo logo={logo} logoLink={logoLink} />
+            <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
           </EntityField>
         )}
 
@@ -102,13 +112,17 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
   );
 };
 
-const HeaderLogo = (props: { logo: ComplexImageType; logoLink?: string }) => {
+const HeaderLogo = (props: {
+  logo: ComplexImageType;
+  logoLink?: string;
+  logoWidth?: number;
+}) => {
   return (
     <MaybeLink href={props.logoLink}>
-      <div className="flex mr-2 h-[50px]">
+      <div className="flex mr-2" style={{ width: `${props.logoWidth}px` }}>
         <Image
-          image={props.logo}
-          layout="aspect"
+          image={props.logo.image}
+          layout="auto"
           aspectRatio={props.logo.image.width / props.logo.image.height}
         />
       </div>
@@ -120,18 +134,20 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
   return (
     <div className="hidden md:flex items-center">
       <ul className="flex gap-4 lg:gap-10">
-        {props.links.map((item, idx) => (
-          <li key={item.link}>
-            <CTA
-              label={item.label}
-              link={item.link}
-              linkType={item.linkType}
-              variant="link"
-              eventName={`headerlink${idx}`}
-              alwaysHideCaret={true}
-            />
-          </li>
-        ))}
+        {props.links
+          .filter((item) => !!item?.link)
+          .map((item, idx) => (
+            <li key={item.link}>
+              <CTA
+                label={item.label}
+                link={item.link}
+                linkType={item.linkType}
+                variant="link"
+                eventName={`headerlink${idx}`}
+                alwaysHideCaret={true}
+              />
+            </li>
+          ))}
       </ul>
     </div>
   );
