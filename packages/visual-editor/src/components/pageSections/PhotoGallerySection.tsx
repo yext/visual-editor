@@ -32,8 +32,15 @@ import {
   ImageWrapperFields,
 } from "../contentBlocks/Image.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
+
+const DEFAULT_IMAGE = {
+  height: 570,
+  width: 1000,
+  url: PLACEHOLDER_IMAGE_URL,
+};
 
 export interface PhotoGallerySectionProps {
   styles: {
@@ -43,7 +50,10 @@ export interface PhotoGallerySectionProps {
     text: YextEntityField<string>;
     level: HeadingLevel;
   };
-  images: Array<ImageWrapperProps>;
+  images: {
+    images: YextEntityField<ImageType[] | ComplexImageType[]>;
+    imageStyle: Omit<ImageWrapperProps, "image">;
+  };
   liveVisibility: boolean;
 }
 
@@ -101,8 +111,25 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
     },
   }),
   images: YextField("Images", {
-    type: "array",
-    arrayFields: { ...ImageWrapperFields },
+    type: "object",
+    objectFields: {
+      images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+          includeListsOnly: true,
+        },
+      }),
+      imageStyle: YextField("Style", {
+        type: "object",
+        objectFields: {
+          layout: ImageWrapperFields.layout,
+          aspectRatio: ImageWrapperFields.aspectRatio,
+          height: ImageWrapperFields.height,
+          width: ImageWrapperFields.width,
+        },
+      }),
+    },
   }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
@@ -113,35 +140,39 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   }),
 };
 
-const PhotoGallerySectionWrapper = ({
-  styles,
-  sectionHeading: sectionHeadingField,
-  images,
-}: PhotoGallerySectionProps) => {
-  const document = useDocument();
-  const sectionHeading = resolveYextEntityField(
-    document,
-    sectionHeadingField.text
-  );
+type PhotoGallerySectionComponentProps = {
+  backgroundColor: PhotoGallerySectionProps["styles"]["backgroundColor"];
+  sectionHeading: {
+    text?: string;
+    level: HeadingLevel;
+    field: PhotoGallerySectionProps["sectionHeading"]["text"];
+  };
+  images?: ImageProps[];
+};
 
+const PhotoGallerySectionComponent = ({
+  backgroundColor,
+  sectionHeading,
+  images,
+}: PhotoGallerySectionComponentProps) => {
   return (
     <PageSection
       aria-label="Photo Gallery Section"
-      background={styles.backgroundColor}
+      background={backgroundColor}
       className="flex flex-col gap-8 justify-center text-center"
     >
-      {sectionHeading && (
+      {sectionHeading.text && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeadingField.text.field}
-          constantValueEnabled={sectionHeadingField.text.constantValueEnabled}
+          fieldId={sectionHeading.field.field}
+          constantValueEnabled={sectionHeading.field.constantValueEnabled}
         >
-          <Heading level={sectionHeadingField.level}>{sectionHeading}</Heading>
+          <Heading level={sectionHeading.level}>{sectionHeading.text}</Heading>
         </EntityField>
       )}
-      {images && (
+      {images?.length && (
         <CarouselProvider
-          className="flex flex-col md:flex-row gap-8"
+          className="flex flex-col md:flex-row justify-center gap-8"
           naturalSlideWidth={100}
           naturalSlideHeight={100}
           totalSlides={images.length}
@@ -149,24 +180,20 @@ const PhotoGallerySectionWrapper = ({
         >
           <DynamicChildColors category="arrow">
             <ButtonBack className="hidden md:block my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
-              <FaArrowLeft className="h-10 w-20" />
+              <FaArrowLeft className="h-10 w-fit" />
             </ButtonBack>
           </DynamicChildColors>
-          <div className="flex flex-col gap-8">
-            <Slider className="md:px-8">
-              {images.map((item, idx) => {
-                const resolvedImage = resolveYextEntityField<
-                  ImageProps["image"]
-                >(document, item.image);
-                if (!resolvedImage) return;
+          <div className="flex flex-col gap-y-8">
+            <Slider>
+              {images.map((image, idx) => {
                 return (
                   <Slide index={idx} key={idx}>
                     <Image
-                      image={resolvedImage}
-                      layout={item.layout}
-                      width={item.width}
-                      height={item.height}
-                      aspectRatio={item.aspectRatio}
+                      image={image.image}
+                      layout={image.layout}
+                      aspectRatio={image.aspectRatio}
+                      height={image.height}
+                      width={image.width}
                     />
                   </Slide>
                 );
@@ -175,7 +202,7 @@ const PhotoGallerySectionWrapper = ({
             <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
               <DynamicChildColors category="arrow">
                 <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                  <FaArrowLeft className="h-6 w-6" />
+                  <FaArrowLeft className="h-6 w-fit" />
                 </ButtonBack>
               </DynamicChildColors>
               <div className="flex gap-2 justify-center flex-grow w-full">
@@ -190,7 +217,7 @@ const PhotoGallerySectionWrapper = ({
               </div>
               <DynamicChildColors category="arrow">
                 <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                  <FaArrowRight className="h-6 w-6" />
+                  <FaArrowRight className="h-6 w-fit" />
                 </ButtonNext>
               </DynamicChildColors>
             </div>
@@ -213,12 +240,48 @@ const PhotoGallerySectionWrapper = ({
           </div>
           <DynamicChildColors category="arrow">
             <ButtonNext className="hidden md:block pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
-              <FaArrowRight className="h-10 w-20" />
+              <FaArrowRight className="h-10 w-fit" />
             </ButtonNext>
           </DynamicChildColors>
         </CarouselProvider>
       )}
     </PageSection>
+  );
+};
+
+const PhotoGallerySectionWrapper = ({
+  styles,
+  sectionHeading: sectionHeadingField,
+  images,
+}: PhotoGallerySectionProps) => {
+  const document = useDocument();
+  const sectionHeading = resolveYextEntityField(
+    document,
+    sectionHeadingField.text
+  );
+
+  const resolvedImages = resolveYextEntityField(document, images.images);
+
+  const filteredImages: ImageProps[] = (resolvedImages || [])
+    .filter((image): image is ImageType | ComplexImageType => !!image)
+    .map((image) => ({
+      image,
+      layout: images.imageStyle.layout,
+      aspectRatio: images.imageStyle.aspectRatio,
+      width: images.imageStyle.width,
+      height: images.imageStyle.height,
+    }));
+
+  return (
+    <PhotoGallerySectionComponent
+      backgroundColor={styles.backgroundColor}
+      images={filteredImages}
+      sectionHeading={{
+        text: sectionHeading,
+        level: sectionHeadingField.level,
+        field: sectionHeadingField.text,
+      }}
+    />
   );
 };
 
@@ -237,45 +300,38 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
       },
       level: 2,
     },
-    images: [
-      {
-        image: {
-          field: "",
-          constantValue: {
-            alternateText: "Image 1",
-            height: 570,
-            width: 1000,
-            url: PLACEHOLDER_IMAGE_URL,
-          },
-          constantValueEnabled: true,
-        },
-        layout: "auto",
+    images: {
+      images: {
+        field: "",
+        constantValue: [DEFAULT_IMAGE, DEFAULT_IMAGE, DEFAULT_IMAGE],
+        constantValueEnabled: true,
+      },
+      imageStyle: {
+        layout: "fixed",
+        height: 570,
+        width: 1000,
         aspectRatio: 1.78,
       },
-      {
-        image: {
-          field: "",
-          constantValue: {
-            alternateText: "Image 2",
-            height: 570,
-            width: 1000,
-            url: PLACEHOLDER_IMAGE_URL,
-          },
-          constantValueEnabled: true,
-        },
-        layout: "auto",
-        aspectRatio: 1.78,
-      },
-    ],
+    },
     liveVisibility: true,
   },
-  resolveFields(data) {
-    const layout = data.props.images?.[0]?.layout ?? "auto";
+  resolveFields(data, { fields }) {
+    const layout = data.props.images?.imageStyle?.layout ?? "auto";
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { image, ...rest } = resolvedImageFields(layout);
     return {
-      ...photoGallerySectionFields,
+      ...fields,
       images: {
-        ...photoGallerySectionFields.images,
-        arrayFields: resolvedImageFields(layout),
+        ...fields.images,
+        objectFields: {
+          // @ts-expect-error ts(2339) objectFields exists
+          ...fields.images.objectFields,
+          imageStyle: {
+            // @ts-expect-error ts(2339) objectFields exists
+            ...fields.images.objectFields.imageStyle,
+            objectFields: rest,
+          },
+        },
       },
     };
   },
