@@ -42,7 +42,7 @@
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
-    "generate-registry": "tsx src/components/registry/build-registry.ts",
+    "generate-registry": "tsx src/components/registry/build-registry.cts",
     "build-registry-docs": "pnpm run docs:build && pnpm run generate-registry"
   },
   "dependencies": {
