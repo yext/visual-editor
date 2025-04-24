@@ -58,7 +58,6 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   Size,
 ] {
   const timeoutRef = React.useRef<NodeJS.Timeout | undefined>();
-  const [apiCallCount, setApiCallCount] = React.useState(0);
   const [updateTrigger, setUpdateTrigger] = React.useState(0);
   const selfRef = React.useRef<T>(null);
   const [size, setSize] = React.useState<Size>({
@@ -67,13 +66,6 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   });
 
   React.useEffect(() => {
-    let timer: number = 0;
-    if (apiCallCount < 3) {
-      timer = window.setTimeout(() => {
-        setApiCallCount((prev) => prev + 1);
-      }, 1000);
-    }
-
     let node: HTMLElement | null = selfRef.current;
     if (!node) return;
 
@@ -99,9 +91,7 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
         MIN_HEIGHT
       ),
     });
-
-    return () => clearTimeout(timer); // Cleanup timeout on unmount or re-render
-  }, [apiCallCount, updateTrigger]);
+  }, [updateTrigger]);
 
   const updateEvents: string[] = [
     "resize",
