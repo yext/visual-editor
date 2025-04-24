@@ -163,7 +163,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
       <FAQsSectionComponent
         styles={styles}
         sectionHeading={sectionHeading}
-        resolvedFAQs={collection.FAQs ?? []}
+        resolvedFAQs={collection?.FAQs ?? []}
       />
     );
   }
@@ -178,16 +178,16 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
   const resolvedFAQs: FAQs = (resolvedCollection || [])
     ?.slice(
       0,
-      typeof collection.limit !== "number" ? undefined : collection.limit
+      typeof collection?.limit !== "number" ? undefined : collection?.limit
     )
     .map((item) => ({
       question:
         resolveYextSubfield<string>(
           item,
-          collection.subfields?.questionField
+          collection?.subfields?.questionField
         ) ?? "",
       answer:
-        resolveYextSubfield<string>(item, collection.subfields?.answerField) ??
+        resolveYextSubfield<string>(item, collection?.subfields?.answerField) ??
         "",
     }))
     .filter(({ question, answer }) => question !== "" && answer !== "");
