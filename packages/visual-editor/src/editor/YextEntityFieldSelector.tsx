@@ -38,6 +38,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     label: string;
     filter: RenderEntityFieldFilter<T>;
     isCollection?: boolean;
+    disableConstantValueToggle?: boolean;
   };
 
 const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -125,7 +126,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
-            alwaysShowConstantValueToggle={!!props.isCollection}
+            isCollection={!!props.isCollection}
+            disableConstantValue={props.disableConstantValueToggle}
           />
           {value?.constantValueEnabled && !props.isCollection && (
             <ConstantValueInput<T>
@@ -179,7 +181,8 @@ export const YextCollectionSubfieldSelector = <
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
-            alwaysShowConstantValueToggle={!!props.isCollection}
+            isCollection={!!props.isCollection}
+            disableConstantValue={props.disableConstantValueToggle}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
@@ -204,24 +207,29 @@ const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
-  alwaysShowConstantValueToggle,
+  isCollection,
+  disableConstantValue,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
-  alwaysShowConstantValueToggle: boolean;
+  isCollection?: boolean;
+  disableConstantValue?: boolean;
 }) => {
   const random = Math.floor(Math.random() * 999999);
   const entityButtonId = `ve-use-entity-value-${random}`;
   const constantButtonId = `ve-use-constant-value-${random}`;
 
+  // If disableConstantValue is true, constantValueInputSupported is always false.
+  // Else if isCollection or a supported field type, constantValueInputSupported is true
   const constantValueInputSupported =
-    alwaysShowConstantValueToggle ||
-    fieldTypeFilter.some(
-      (fieldType) =>
-        Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
-        Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-    );
+    !disableConstantValue &&
+    (isCollection ||
+      fieldTypeFilter.some(
+        (fieldType) =>
+          Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
+          Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
+      ));
 
   return (
     <div className="ve-w-full">
