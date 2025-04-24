@@ -274,8 +274,6 @@ const ConstantValueInput = <T extends Record<string, any>>({
     return;
   }
 
-  console.log("onChange", onChange);
-
   return constantFieldConfig.type === "custom" ? (
     <AutoField
       onChange={(newConstantValue, uiState) =>
