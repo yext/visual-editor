@@ -16,6 +16,7 @@ import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Call
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 
 const devLogger = new DevLogger();
 
@@ -49,6 +50,7 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_LIST_CONSTANT_CONFIG,
+  "type.image": IMAGE_LIST_CONSTANT_CONFIG,
 };
 
 const getConstantConfigFromType = (
