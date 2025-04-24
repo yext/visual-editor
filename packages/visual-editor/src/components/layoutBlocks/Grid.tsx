@@ -56,7 +56,11 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
           {Array.from({ length: columns }).map((_, idx) => (
             <div className="w-full" key={idx}>
               <DropZone
-                className="flex flex-col w-full"
+                className={themeManagerCn(
+                  layoutVariants({ gap }),
+                  `flex flex-col w-full`,
+                  className
+                )}
                 zone={`column-${idx}`}
                 allow={[
                   ...CardCategory,
