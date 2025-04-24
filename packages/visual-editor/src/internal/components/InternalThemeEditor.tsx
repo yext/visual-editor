@@ -163,7 +163,6 @@ export const InternalThemeEditor = ({
           duplicate: false,
           delete: false,
           insert: false,
-          edit: false,
         }}
         overrides={{
           header: () => (

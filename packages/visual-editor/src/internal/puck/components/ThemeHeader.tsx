@@ -42,12 +42,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   useEffect(() => {
     setHistories(puckInitialHistory?.histories || []);
-    dispatch({
-      type: "setUi",
-      ui: {
-        previewMode: "interactive",
-      },
-    });
   }, [puckInitialHistory]);
 
   useEffect(() => {
