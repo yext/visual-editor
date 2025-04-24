@@ -1,3 +1,10 @@
+#### 0.0.36 (2025-04-24)
+
+##### Bug Fixes
+
+- handle undefined in FAQsSection (#403) (8167d831)
+- handle older FAQs components w/o collection values (#402) (ea4fb08d)
+
 #### 0.0.35 (2025-04-24)
 
 ##### Chores
