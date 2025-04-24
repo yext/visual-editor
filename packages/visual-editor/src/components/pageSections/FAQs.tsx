@@ -158,7 +158,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
 }) => {
   const document = useDocument();
 
-  if (collection.items.constantValueEnabled) {
+  if (collection?.items.constantValueEnabled) {
     return (
       <FAQsSectionComponent
         styles={styles}
@@ -168,7 +168,10 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
     );
   }
 
-  const resolvedCollection = resolveYextEntityField(document, collection.items);
+  const resolvedCollection = resolveYextEntityField(
+    document,
+    collection?.items
+  );
 
   // resolve the subfields and add to resolvedFAQs
   // if a question or answer is "", then don't include in resolvedFAQs
@@ -225,7 +228,7 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
     liveVisibility: true,
   },
   resolveFields(data, { fields }) {
-    if (data.props.collection.items.constantValueEnabled) {
+    if (data.props.collection?.items.constantValueEnabled) {
       // @ts-expect-error ts(2339)
       delete fields.collection.objectFields.limit;
       return {
@@ -267,7 +270,7 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
                 isCollection: true,
                 disableConstantValueToggle: true,
                 filter: {
-                  directChildrenOf: data.props.collection.items.field,
+                  directChildrenOf: data.props.collection?.items.field,
                   types: ["type.string"],
                 },
               }),
@@ -276,7 +279,7 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
                 isCollection: true,
                 disableConstantValueToggle: true,
                 filter: {
-                  directChildrenOf: data.props.collection.items.field,
+                  directChildrenOf: data.props.collection?.items.field,
                   types: ["type.string"],
                 },
               }),
