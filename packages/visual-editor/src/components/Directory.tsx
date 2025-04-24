@@ -150,10 +150,10 @@ const DirectoryList = ({
           let label;
           switch (level) {
             case "dm_root":
-              label = child.c_addressCountryDisplayName ?? child.name;
+              label = child.dm_addressCountryDisplayName ?? child.name;
               break;
             case "dm_country":
-              label = child.c_addressRegionDisplayName ?? child.name;
+              label = child.dm_addressRegionDisplayName ?? child.name;
               break;
             default:
               label = child.name;
@@ -189,10 +189,10 @@ const DirectoryComponent = (props: DirectoryProps) => {
       headingText = "All Locations";
       break;
     case "dm_country":
-      headingText = document.c_addressCountryDisplayName ?? document.name;
+      headingText = document.dm_addressCountryDisplayName ?? document.name;
       break;
     case "dm_region":
-      headingText = document.c_addressRegionDisplayName ?? document.name;
+      headingText = document.dm_addressRegionDisplayName ?? document.name;
       break;
     case "dm_city":
       headingText = document.name;
