@@ -49,26 +49,26 @@
     {
       "name": "NY",
       "slug": "us/ny",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "New York"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "New York"
     },
     {
       "name": "FL",
       "slug": "us/fl",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "Florida"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Florida"
     },
     {
       "name": "VA",
       "slug": "us/va",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "Virginia"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Virginia"
     },
     {
       "name": "DC",
       "slug": "en/us/dc",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "Washington DC"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Washington DC"
     }
   ],
   "dm_directoryManagerId": "63590-locations",
@@ -81,7 +81,7 @@
     "entityType": { "id": "dm_country", "uid": 60735 },
     "locale": "en"
   },
-  "c_addressCountryDisplayName": "United States",
+  "dm_addressCountryDisplayName": "United States",
   "name": "US",
   "siteDomain": "",
   "siteId": 63590,
