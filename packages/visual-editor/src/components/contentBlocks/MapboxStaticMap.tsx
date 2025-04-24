@@ -57,6 +57,8 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   React.RefObject<T>,
   Size,
 ] {
+  const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [updateTrigger, setUpdateTrigger] = React.useState(0);
   const selfRef = React.useRef<T>(null);
   const [size, setSize] = React.useState<Size>({
     width: DEFAULT_WIDTH,
@@ -89,6 +91,35 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
         MIN_HEIGHT
       ),
     });
+  }, [updateTrigger]);
+
+  const updateEvents: string[] = [
+    "resize",
+    "load",
+    "visibilitychange",
+    "focus",
+    "deviceorientation",
+  ];
+
+  const handleEvent = React.useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setUpdateTrigger((prev) => prev + 1); // Trigger re-run
+    }, 1000);
+  }, [setUpdateTrigger]);
+
+  // Listen for window resize
+  React.useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    updateEvents.forEach((event: string) => {
+      window.addEventListener(event, handleEvent, { signal });
+    });
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return [selfRef, size];

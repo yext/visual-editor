@@ -1,3 +1,51 @@
+#### 0.0.35 (2025-04-24)
+
+##### Chores
+
+- add wcag testing (#367) (300e6e11)
+
+##### New Features
+
+- update mapbox size on various events (#366) (d294da17)
+- adjust FAQsSection into Collection (#397) (9f0dcc28)
+- add docs build (#389) (78405347)
+- add alignItems to flex (#385) (8a9a9724)
+- use field display names in Entity Field selector (#380) (655319ad)
+- add liveVisibility prop to Promo (#381) (78e355b4)
+- add YextField (#373) (d9dc7574)
+
+##### Bug Fixes
+
+- hero link misalignment (#401) (69559e49)
+- adjust YextEntityFieldSelector (#400) (247fcd1e)
+- adjust PhotoGallery to supports constant (#398) (e3d249f5)
+- fix Collection "grid" mode applying in entity mode (#394) (6c8162ed)
+- photoGallery bugs and update for list (#393) (3c0a9822)
+- swap to commonjs for postcss and registry build (#392) (383e3441)
+- handle ComplexImageType in image atom (#391) (2c4d80e4)
+- entity fields missing in local dev (#390) (60165b49)
+- replace break-all in Promo (#388) (2acb8a53)
+- header image size on mobile (#387) (3e9ed2cd)
+- handle visibilityWrapper on older props (#386) (da3c5cdf)
+- hide header/footer links if Link is not set (#384) (9170f3d4)
+- adjust Product Card props (#383) (69541a50)
+- card heights adjust (#382) (17d26ae0)
+- cta undefined (#378) (c09b5db8)
+- switch unit test dependency install order (#379) (25353bad)
+- adjust address in NearbyLocations (#375) (b3b2eee4)
+- default address to entity value (#372) (a110ba29)
+- don't render sample text if field is mapped (#371) (d7dfda74)
+- correct column spacing for core info section (#370) (35f5a853)
+- update yextVisualEditorPlugin (#369) (33ed059b)
+- wcag issues (#368) (15cc4c4b)
+
+##### Refactors
+
+- move dm display name fields to dm namespace (#396) (015aaa1b)
+- directory improvements (#374) (79c87c8b)
+- move components into folders (#376) (d47766f0)
+- separate component directories and alias imports (#343) (52f9b177)
+
 #### 0.0.34 (2025-04-13)
 
 ##### New Features
