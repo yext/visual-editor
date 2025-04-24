@@ -120,6 +120,7 @@ export function YextField<T, U>(
       label: fieldName,
       filter: config.filter,
       isCollection: config.isCollection,
+      disableConstantValueToggle: config.disableConstantValueToggle,
     });
   }
 

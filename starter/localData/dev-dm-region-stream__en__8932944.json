@@ -49,8 +49,8 @@
     {
       "name": "Arlington",
       "slug": "us/va/arlington",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "Virginia"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Virginia"
     }
   ],
   "dm_directoryManagerId": "63590-locations",
@@ -59,11 +59,11 @@
     {
       "name": "US",
       "slug": "en/us",
-      "c_addressCountryDisplayName": "United States"
+      "dm_addressCountryDisplayName": "United States"
     }
   ],
-  "c_addressRegionDisplayName": "Virginia",
-  "c_addressCountryDisplayName": "United States",
+  "dm_addressRegionDisplayName": "Virginia",
+  "dm_addressCountryDisplayName": "United States",
   "id": "dm-region-va",
   "locale": "en",
   "meta": { "entityType": { "id": "dm_region", "uid": 60736 }, "locale": "en" },

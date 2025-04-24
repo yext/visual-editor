@@ -56,19 +56,19 @@
     {
       "name": "US",
       "slug": "en/us",
-      "c_addressCountryDisplayName": "United States"
+      "dm_addressCountryDisplayName": "United States"
     },
     {
       "name": "NY",
       "slug": "en/us/ny",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "New York"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "New York"
     },
     {
       "name": "New York",
       "slug": "en/us/ny/new-york",
-      "c_addressCountryDisplayName": "United States",
-      "c_addressRegionDisplayName": "New York"
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "New York"
     }
   ],
   "additionalHoursText": "tacos",

@@ -12,6 +12,8 @@ import {
   backgroundColors,
   YextField,
   VisibilityWrapper,
+  YextCollection,
+  resolveYextSubfield,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -34,12 +36,25 @@ export interface FAQsSectionProps {
     text: YextEntityField<string>;
     level: HeadingProps["level"];
   };
-  cards: Array<{
-    question: string;
-    answer: string;
-  }>;
+  collection: FAQsCollection;
   liveVisibility: boolean;
 }
+
+type FAQs = Array<{
+  question: string;
+  answer: string;
+}>;
+
+// Custom extension of YextCollection for FAQsSection
+// subfields are only set when constantValueEnabled is false
+// FAQS is only set when constantValueEnabled is true
+type FAQsCollection = YextCollection & {
+  subfields?: {
+    questionField: YextEntityField<string>;
+    answerField: YextEntityField<string>;
+  };
+  FAQs?: FAQs;
+};
 
 const FAQsSectionFields: Fields<FAQsSectionProps> = {
   styles: YextField("Styles", {
@@ -68,15 +83,21 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
       }),
     },
   }),
-  cards: YextField("FAQs", {
-    type: "array",
-    arrayFields: {
-      question: YextField("Question", {
-        type: "text",
+  collection: YextField("FAQs", {
+    type: "object",
+    objectFields: {
+      items: YextField<any, Array<any>>("FAQs Items", {
+        type: "entityField",
+        isCollection: true,
+        filter: {
+          includeListsOnly: true,
+        },
       }),
-      answer: YextField("Answer", {
-        type: "text",
-        isMultiline: true,
+      limit: YextField("Items Limit", {
+        type: "optionalNumber",
+        hideNumberFieldRadioLabel: "All",
+        showNumberFieldRadioLabel: "Limit",
+        defaultCustomValue: 3,
       }),
     },
   }),
@@ -89,10 +110,14 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
   }),
 };
 
-const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
+const FAQsSectionComponent = ({
   styles,
   sectionHeading,
-  cards,
+  resolvedFAQs,
+}: {
+  styles: FAQsSectionProps["styles"];
+  sectionHeading: FAQsSectionProps["sectionHeading"];
+  resolvedFAQs: FAQs;
 }) => {
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
@@ -109,7 +134,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
         <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
       )}
       <Accordion type="single" collapsible>
-        {cards.map((faqItem, index) => (
+        {resolvedFAQs.map((faqItem, index) => (
           <AccordionItem value={index.toString()} key={index}>
             <AccordionTrigger>
               <Body variant="lg" className="font-bold text-left">
@@ -123,6 +148,53 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
         ))}
       </Accordion>
     </PageSection>
+  );
+};
+
+const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
+  styles,
+  sectionHeading,
+  collection,
+}) => {
+  const document = useDocument();
+
+  if (collection.items.constantValueEnabled) {
+    return (
+      <FAQsSectionComponent
+        styles={styles}
+        sectionHeading={sectionHeading}
+        resolvedFAQs={collection.FAQs ?? []}
+      />
+    );
+  }
+
+  const resolvedCollection = resolveYextEntityField(document, collection.items);
+
+  // resolve the subfields and add to resolvedFAQs
+  // if a question or answer is "", then don't include in resolvedFAQs
+  const resolvedFAQs: FAQs = (resolvedCollection || [])
+    ?.slice(
+      0,
+      typeof collection.limit !== "number" ? undefined : collection.limit
+    )
+    .map((item) => ({
+      question:
+        resolveYextSubfield<string>(
+          item,
+          collection.subfields?.questionField
+        ) ?? "",
+      answer:
+        resolveYextSubfield<string>(item, collection.subfields?.answerField) ??
+        "",
+    }))
+    .filter(({ question, answer }) => question !== "" && answer !== "");
+
+  return (
+    <FAQsSectionComponent
+      styles={styles}
+      sectionHeading={sectionHeading}
+      resolvedFAQs={resolvedFAQs}
+    />
   );
 };
 
@@ -141,8 +213,84 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
       },
       level: 2,
     },
-    cards: [DEFAULT_FAQ, DEFAULT_FAQ, DEFAULT_FAQ],
+    collection: {
+      items: {
+        field: "",
+        constantValue: [],
+        constantValueEnabled: true,
+      },
+      limit: 3,
+      FAQs: [DEFAULT_FAQ, DEFAULT_FAQ, DEFAULT_FAQ],
+    },
     liveVisibility: true,
+  },
+  resolveFields(data, { fields }) {
+    if (data.props.collection.items.constantValueEnabled) {
+      // @ts-expect-error ts(2339)
+      delete fields.collection.objectFields.limit;
+      return {
+        ...fields,
+        collection: {
+          ...fields.collection,
+          objectFields: {
+            // @ts-expect-error ts(2339) objectFields exists
+            ...fields.collection.objectFields,
+            FAQs: YextField("FAQs", {
+              type: "array",
+              arrayFields: {
+                question: YextField("Question", {
+                  type: "text",
+                }),
+                answer: YextField("Answer", {
+                  type: "text",
+                  isMultiline: true,
+                }),
+              },
+            }),
+          },
+        },
+      };
+    }
+
+    return {
+      ...fields,
+      collection: {
+        ...fields.collection,
+        objectFields: {
+          // @ts-expect-error ts(2339) objectFields exists
+          ...fields.collection.objectFields,
+          subfields: YextField("Subfields", {
+            type: "object",
+            objectFields: {
+              questionField: YextField<any, string>("Question Subfield", {
+                type: "entityField",
+                isCollection: true,
+                disableConstantValueToggle: true,
+                filter: {
+                  directChildrenOf: data.props.collection.items.field,
+                  types: ["type.string"],
+                },
+              }),
+              answerField: YextField<any, string>("Answer Subfield", {
+                type: "entityField",
+                isCollection: true,
+                disableConstantValueToggle: true,
+                filter: {
+                  directChildrenOf: data.props.collection.items.field,
+                  types: ["type.string"],
+                },
+              }),
+            },
+          }),
+          limit: YextField("Items Limit", {
+            type: "optionalNumber",
+            hideNumberFieldRadioLabel: "All",
+            showNumberFieldRadioLabel: "Limit",
+            defaultCustomValue: 3,
+          }),
+        },
+      },
+    };
   },
   render: (props) => (
     <VisibilityWrapper
