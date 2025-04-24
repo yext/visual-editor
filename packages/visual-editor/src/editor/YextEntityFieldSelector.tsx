@@ -256,7 +256,7 @@ const ConstantValueModeToggler = ({
 
 type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
-  onChange: (value: any) => void;
+  onChange: (value: any, uiState: any) => void;
   value: any;
 };
 
@@ -276,12 +276,15 @@ const ConstantValueInput = <T extends Record<string, any>>({
 
   return constantFieldConfig.type === "custom" ? (
     <AutoField
-      onChange={(newConstantValue) =>
-        onChange({
-          field: value?.field ?? "",
-          constantValue: newConstantValue,
-          constantValueEnabled: true,
-        })
+      onChange={(newConstantValue, uiState) =>
+        onChange(
+          {
+            field: value?.field ?? "",
+            constantValue: newConstantValue,
+            constantValueEnabled: true,
+          },
+          uiState
+        )
       }
       value={value?.constantValue}
       field={constantFieldConfig}
@@ -292,12 +295,15 @@ const ConstantValueInput = <T extends Record<string, any>>({
       className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-4" : ""}`}
     >
       <AutoField
-        onChange={(newConstantValue) =>
-          onChange({
-            field: value?.field ?? "",
-            constantValue: newConstantValue,
-            constantValueEnabled: true,
-          })
+        onChange={(newConstantValue, uiState) =>
+          onChange(
+            {
+              field: value?.field ?? "",
+              constantValue: newConstantValue,
+              constantValueEnabled: true,
+            },
+            uiState
+          )
         }
         value={value?.constantValue}
         field={constantFieldConfig}
@@ -348,12 +354,15 @@ const EntityFieldInput = <T extends Record<string, any>>({
     <div className={"ve-inline-block ve-w-full ve-pt-4"}>
       <AutoField
         field={basicSelectorField}
-        onChange={(selectedEntityField) => {
-          onChange({
-            field: selectedEntityField,
-            constantValue: value?.constantValue ?? "",
-            constantValueEnabled: false,
-          });
+        onChange={(selectedEntityField, uiState) => {
+          onChange(
+            {
+              field: selectedEntityField,
+              constantValue: value?.constantValue ?? "",
+              constantValueEnabled: false,
+            },
+            uiState
+          );
         }}
         value={value?.field}
       />
