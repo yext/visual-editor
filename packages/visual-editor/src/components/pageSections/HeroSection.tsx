@@ -302,6 +302,7 @@ const HeroSectionWrapper = ({
                   label={primaryCta.label}
                   link={primaryCta.link}
                   linkType={primaryCta.linkType}
+                  className={"py-3"}
                 />
               </EntityField>
             )}
@@ -318,6 +319,7 @@ const HeroSectionWrapper = ({
                   label={secondaryCta.label}
                   link={secondaryCta.link}
                   linkType={secondaryCta.linkType}
+                  className={"py-3"}
                 />
               </EntityField>
             )}
