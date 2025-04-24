@@ -90,7 +90,7 @@ const CollectionSectionWrapper: React.FC<
       zone="collection-dropzone"
       className={themeManagerCn(
         "max-w-pageSection-contentWidth mx-auto gap-8",
-        layout === "grid"
+        layout === "grid" && props.collection.items.constantValueEnabled
           ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           : "flex flex-wrap justify-center",
         direction
@@ -170,6 +170,8 @@ export const Collection: ComponentConfig<CollectionProps> = {
       },
       limit: 3,
     },
+    layout: "flex",
+    direction: "flex-row",
     liveVisibility: true,
   },
   render: (props) => (
