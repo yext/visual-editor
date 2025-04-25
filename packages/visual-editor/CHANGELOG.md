@@ -1,3 +1,9 @@
+#### 0.0.37 (2025-04-25)
+
+##### Bug Fixes
+
+- issue calling .map on undefined (#404) (cae399fa)
+
 #### 0.0.36 (2025-04-24)
 
 ##### Bug Fixes
