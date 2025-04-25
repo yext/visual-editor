@@ -79,12 +79,12 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
-  columns: YextField("Columns", {
+  rows: YextField("Rows", {
     type: "number",
     min: 1,
     max: 12,
   }),
-  rows: YextField("Rows", {
+  columns: YextField("Columns", {
     type: "number",
     min: 1,
     max: 12,
