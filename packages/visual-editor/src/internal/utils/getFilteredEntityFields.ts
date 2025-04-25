@@ -42,7 +42,7 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
-  | "type.rtf"
+  | "type.rich_text_v2"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
