@@ -25,4 +25,3 @@ export {
 export { applyAnalytics } from "./applyAnalytics.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
-export { useIsSmallScreen } from "./windowUtils.ts";

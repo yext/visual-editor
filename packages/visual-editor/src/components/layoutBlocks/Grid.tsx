@@ -9,7 +9,6 @@ import {
   LayoutBlockCategory,
   YextField,
   VisibilityWrapper,
-  useIsSmallScreen,
 } from "@yext/visual-editor";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
@@ -34,8 +33,6 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
     },
     ref
   ) => {
-    const isSmallScreen = useIsSmallScreen();
-
     return (
       <Background
         background={backgroundColor}
@@ -53,17 +50,10 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
             className
           )}
           ref={ref}
-          style={
-            isSmallScreen
-              ? {
-                  gridTemplateColumns: "1fr",
-                  gridTemplateRows: `repeat(${columns * rows}, 1fr)`,
-                }
-              : {
-                  gridTemplateColumns: `repeat(${columns}, 1fr)`,
-                  gridTemplateRows: `repeat(${rows}, 1fr)`,
-                }
-          }
+          style={{
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`,
+          }}
           {...props}
         >
           {Array.from({ length: columns * (rows || 1) })?.map((_, idx) => (
