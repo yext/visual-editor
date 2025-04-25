@@ -42,6 +42,12 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   useEffect(() => {
     setHistories(puckInitialHistory?.histories || []);
+    dispatch({
+      type: "setUi",
+      ui: {
+        previewMode: "interactive",
+      },
+    });
   }, [puckInitialHistory]);
 
   useEffect(() => {
@@ -66,6 +72,20 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
         },
         { signal }
       );
+
+      // This second eventListener for <a/> is necessary to block mailto: and tel: clicks.
+      // Normal stopPropagation() and preventDefault() on the document doesn't block mailto: and tel:
+      const links = puckPreview.contentDocument.querySelectorAll("a");
+      links?.forEach((link) => {
+        link.addEventListener(
+          "click",
+          (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+          },
+          { signal }
+        );
+      });
     }
     return () => {
       abortController.abort();

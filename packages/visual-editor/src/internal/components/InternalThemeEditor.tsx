@@ -163,6 +163,7 @@ export const InternalThemeEditor = ({
           duplicate: false,
           delete: false,
           insert: false,
+          edit: false,
         }}
         overrides={{
           header: () => (
@@ -178,6 +179,15 @@ export const InternalThemeEditor = ({
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
             />
           ),
+          // preview: ({children}) => (
+          //   <div
+          //     className="relative w-full h-full overflow-auto"
+          //     onClick={(e) => e.preventDefault()}
+          //     onPointerDown={(e) => e.preventDefault()}
+          //   >
+          //     {children}
+          //   </div>
+          // ),
           actionBar: () => <></>,
           components: () => <></>,
           fields: fieldsOverride,
