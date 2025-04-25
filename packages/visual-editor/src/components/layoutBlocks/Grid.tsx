@@ -22,8 +22,8 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
   (
     {
       className,
-      rows,
-      columns,
+      rows = 1,
+      columns = 2,
       gap,
       verticalPadding,
       horizontalPadding,
@@ -57,7 +57,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
           }}
           {...props}
         >
-          {Array.from({ length: columns * rows })?.map((_, idx) => (
+          {Array.from({ length: columns * (rows || 1) })?.map((_, idx) => (
             <div className="w-full" key={idx}>
               <DropZone
                 className="flex flex-col w-full"
