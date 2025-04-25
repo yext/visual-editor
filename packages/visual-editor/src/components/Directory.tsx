@@ -118,7 +118,7 @@ const DirectoryGrid = ({
         gridTemplateColumns: `repeat(3, 1fr)`,
       }}
     >
-      {sortedDirectoryChildren.map((child, idx) => (
+      {sortedDirectoryChildren?.map((child, idx) => (
         <DirectoryCard
           key={idx}
           profile={child}

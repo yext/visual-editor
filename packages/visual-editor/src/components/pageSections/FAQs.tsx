@@ -134,7 +134,7 @@ const FAQsSectionComponent = ({
         <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
       )}
       <Accordion type="single" collapsible>
-        {resolvedFAQs.map((faqItem, index) => (
+        {resolvedFAQs?.map((faqItem, index) => (
           <AccordionItem value={index.toString()} key={index}>
             <AccordionTrigger>
               <Body variant="lg" className="font-bold text-left">
@@ -180,7 +180,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
       0,
       typeof collection?.limit !== "number" ? undefined : collection?.limit
     )
-    .map((item) => ({
+    ?.map((item) => ({
       question:
         resolveYextSubfield<string>(
           item,
@@ -190,7 +190,7 @@ const FAQsSectionWrapper: React.FC<FAQsSectionProps> = ({
         resolveYextSubfield<string>(item, collection?.subfields?.answerField) ??
         "",
     }))
-    .filter(({ question, answer }) => question !== "" && answer !== "");
+    ?.filter(({ question, answer }) => question !== "" && answer !== "");
 
   return (
     <FAQsSectionComponent
