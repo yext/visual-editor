@@ -52,7 +52,7 @@ const ExampleRepeatableItem = (props: ExampleRepeatableItemProps) => {
     <div className="flex flex-col justify-between max-w-pageSection-maxWidth mx-auto gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
-        .map((item, i) => {
+        ?.map((item, i) => {
           const resolvedImage = resolveYextSubfield(item, image);
           const resolvedText = resolveYextSubfield(item, text);
           return (

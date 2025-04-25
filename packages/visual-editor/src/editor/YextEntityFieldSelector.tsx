@@ -16,6 +16,7 @@ import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Call
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 
 const devLogger = new DevLogger();
 
@@ -37,6 +38,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     label: string;
     filter: RenderEntityFieldFilter<T>;
     isCollection?: boolean;
+    disableConstantValueToggle?: boolean;
   };
 
 const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -49,6 +51,7 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_LIST_CONSTANT_CONFIG,
+  "type.image": IMAGE_LIST_CONSTANT_CONFIG,
 };
 
 const getConstantConfigFromType = (
@@ -123,7 +126,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
-            alwaysShowConstantValueToggle={!!props.isCollection}
+            isCollection={!!props.isCollection}
+            disableConstantValue={props.disableConstantValueToggle}
           />
           {value?.constantValueEnabled && !props.isCollection && (
             <ConstantValueInput<T>
@@ -177,7 +181,8 @@ export const YextCollectionSubfieldSelector = <
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
-            alwaysShowConstantValueToggle={!!props.isCollection}
+            isCollection={!!props.isCollection}
+            disableConstantValue={props.disableConstantValueToggle}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
@@ -202,24 +207,29 @@ const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
-  alwaysShowConstantValueToggle,
+  isCollection,
+  disableConstantValue,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
-  alwaysShowConstantValueToggle: boolean;
+  isCollection?: boolean;
+  disableConstantValue?: boolean;
 }) => {
   const random = Math.floor(Math.random() * 999999);
   const entityButtonId = `ve-use-entity-value-${random}`;
   const constantButtonId = `ve-use-constant-value-${random}`;
 
+  // If disableConstantValue is true, constantValueInputSupported is always false.
+  // Else if isCollection or a supported field type, constantValueInputSupported is true
   const constantValueInputSupported =
-    alwaysShowConstantValueToggle ||
-    fieldTypeFilter.some(
-      (fieldType) =>
-        Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
-        Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-    );
+    !disableConstantValue &&
+    (isCollection ||
+      fieldTypeFilter.some(
+        (fieldType) =>
+          Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
+          Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
+      ));
 
   return (
     <div className="ve-w-full">
@@ -254,7 +264,7 @@ const ConstantValueModeToggler = ({
 
 type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
-  onChange: (value: any) => void;
+  onChange: (value: any, uiState: any) => void;
   value: any;
 };
 
@@ -274,12 +284,15 @@ const ConstantValueInput = <T extends Record<string, any>>({
 
   return constantFieldConfig.type === "custom" ? (
     <AutoField
-      onChange={(newConstantValue) =>
-        onChange({
-          field: value?.field ?? "",
-          constantValue: newConstantValue,
-          constantValueEnabled: true,
-        })
+      onChange={(newConstantValue, uiState) =>
+        onChange(
+          {
+            field: value?.field ?? "",
+            constantValue: newConstantValue,
+            constantValueEnabled: true,
+          },
+          uiState
+        )
       }
       value={value?.constantValue}
       field={constantFieldConfig}
@@ -290,12 +303,15 @@ const ConstantValueInput = <T extends Record<string, any>>({
       className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-4" : ""}`}
     >
       <AutoField
-        onChange={(newConstantValue) =>
-          onChange({
-            field: value?.field ?? "",
-            constantValue: newConstantValue,
-            constantValueEnabled: true,
-          })
+        onChange={(newConstantValue, uiState) =>
+          onChange(
+            {
+              field: value?.field ?? "",
+              constantValue: newConstantValue,
+              constantValueEnabled: true,
+            },
+            uiState
+          )
         }
         value={value?.constantValue}
         field={constantFieldConfig}
@@ -346,12 +362,15 @@ const EntityFieldInput = <T extends Record<string, any>>({
     <div className={"ve-inline-block ve-w-full ve-pt-4"}>
       <AutoField
         field={basicSelectorField}
-        onChange={(selectedEntityField) => {
-          onChange({
-            field: selectedEntityField,
-            constantValue: value?.constantValue ?? "",
-            constantValueEnabled: false,
-          });
+        onChange={(selectedEntityField, uiState) => {
+          onChange(
+            {
+              field: selectedEntityField,
+              constantValue: value?.constantValue ?? "",
+              constantValueEnabled: false,
+            },
+            uiState
+          );
         }}
         value={value?.field}
       />

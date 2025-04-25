@@ -135,7 +135,7 @@ const EventCardComponent = (props: EventCardProps) => {
     <div className="flex flex-col justify-between max-w-pageSection-maxWidth mx-auto gap-8 items-center">
       {resolvedParent
         ?.slice(0, typeof limit !== "number" ? undefined : limit)
-        .map((item, i) => {
+        ?.map((item, i) => {
           return <EventCardItem key={i} document={item} card={card} />;
         })}
     </div>
