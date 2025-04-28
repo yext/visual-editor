@@ -13,6 +13,7 @@ import {
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
 export interface GridProps extends layoutProps {
+  rows: number;
   columns: number;
   liveVisibility: boolean;
 }
@@ -21,7 +22,8 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
   (
     {
       className,
-      columns,
+      rows = 1,
+      columns = 2,
       gap,
       verticalPadding,
       horizontalPadding,
@@ -50,10 +52,11 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
           ref={ref}
           style={{
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`,
           }}
           {...props}
         >
-          {Array.from({ length: columns })?.map((_, idx) => (
+          {Array.from({ length: columns * rows })?.map((_, idx) => (
             <div className="w-full" key={idx}>
               <DropZone
                 className="flex flex-col w-full"
@@ -75,6 +78,11 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
+  rows: YextField("Rows", {
+    type: "number",
+    min: 1,
+    max: 12,
+  }),
   columns: YextField("Columns", {
     type: "number",
     min: 1,
@@ -94,6 +102,7 @@ export const Grid: ComponentConfig<GridProps> = {
   label: "Grid",
   fields: gridSectionFields,
   defaultProps: {
+    rows: 1,
     columns: 2,
     gap: "4",
     verticalPadding: "0",
