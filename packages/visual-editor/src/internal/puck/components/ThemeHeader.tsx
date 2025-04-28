@@ -58,38 +58,25 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     if (fieldListTitle) {
       fieldListTitle.style.display = "none";
     }
-    // Disable component selection in the preview
-    const abortController = new AbortController();
-    const signal = abortController.signal;
     const puckPreview =
       document.querySelector<HTMLIFrameElement>("#preview-frame");
-    if (puckPreview?.contentDocument) {
-      puckPreview.contentDocument.addEventListener(
-        "click",
-        (event: MouseEvent) => {
-          event.stopPropagation();
-          event.preventDefault();
-        },
-        { signal }
-      );
-
-      // This second eventListener for <a/> is necessary to block mailto: and tel: clicks.
-      // Normal stopPropagation() and preventDefault() on the document doesn't block mailto: and tel:
-      const links = puckPreview.contentDocument.querySelectorAll("a");
-      links?.forEach((link) => {
-        link.addEventListener(
-          "click",
-          (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-          },
-          { signal }
-        );
-      });
+    if (
+      puckPreview?.contentDocument &&
+      !puckPreview?.contentDocument.getElementById(
+        "yext-preview-disable-pointer-events"
+      )
+    ) {
+      // add this style to preview iFrame to prevent clicking or hover effects.
+      const style = puckPreview.contentDocument.createElement("style");
+      style.id = "yext-preview-disable-pointer-events";
+      style.innerHTML = `
+        * {
+          cursor: default !important;
+          pointer-events: none !important;
+        }
+      `;
+      puckPreview.contentDocument.head.appendChild(style);
     }
-    return () => {
-      abortController.abort();
-    };
   }, []);
 
   const canUndo = (): boolean => {
