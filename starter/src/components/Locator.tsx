@@ -218,20 +218,18 @@ const Locator: React.FC<LocatorProps> = (props) => {
         </div>
 
         {/* Right Section: Map. Hidden for small screens */}
-        <div className="md:w-3/5 lg:w-2/3 md:flex hidden">
-          <div className="w-full">
-            <Map {...mapProps} />
-            {showSearchAreaButton && (
-              <div className="absolute bottom-10 left-0 right-0 flex justify-center">
-                <Button
-                  onClick={handleSearchAreaClick}
-                  className="py-2 px-4 shadow-xl"
-                >
-                  <p>Search This Area</p>
-                </Button>
-              </div>
-            )}
-          </div>
+        <div className="md:w-3/5 lg:w-2/3 md:flex hidden relative">
+          <Map {...mapProps} />
+          {showSearchAreaButton && (
+            <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+              <Button
+                onClick={handleSearchAreaClick}
+                className="py-2 px-4 shadow-xl"
+              >
+                <p>Search This Area</p>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -246,8 +244,7 @@ interface MapProps {
 
 const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
   const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
-  const mapboxApiKey =
-    "pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw";
+  const mapboxApiKey = "";
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
     return (
