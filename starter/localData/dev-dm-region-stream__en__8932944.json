@@ -3,6 +3,79 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
+  "_schema": {
+    "@graph": [
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "description": "Directory of locations",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@type": "Place",
+              "name": "Arlington"
+            },
+            "position": 1
+          }
+        ],
+        "name": "VA",
+        "numberOfItems": 1
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "All Locations",
+            "position": 1
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "Location Pages Directory",
+            "position": 2
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us",
+              "@type": "Thing"
+            },
+            "name": "US",
+            "position": 3
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/va",
+              "@type": "Thing"
+            },
+            "name": "VA",
+            "position": 4
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "description": "Browse locations in VA",
+        "isPartOf": {
+          "@type": "WebSite"
+        },
+        "name": "VA",
+        "url": "yawningly-long-trout.pgsdemo.com/us/va"
+      }
+    ]
+  },
   "_site": {
     "copyrightMessage": "© 2025 Yext",
     "favicon": {

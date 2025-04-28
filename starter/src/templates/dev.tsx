@@ -16,10 +16,10 @@ import {
   YextSchemaField,
   defaultThemeConfig,
 } from "@yext/visual-editor";
-import { buildSchema } from "../utils/buildSchema.ts";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
+import { SchemaWrapper } from "@yext/pages-components";
 
 export const config = {
   name: "dev-location",
@@ -88,7 +88,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     ],
     other: [
       applyTheme(document, defaultThemeConfig),
-      buildSchema(document),
+      SchemaWrapper(document._schema),
     ].join("\n"),
   };
 };
