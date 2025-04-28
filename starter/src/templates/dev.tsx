@@ -115,7 +115,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
   const config = {
-    apiKey: "",
+    apiKey: "722d20ad53157666ea2df0d3831433c2",
     experienceKey: "jacob-test",
     locale: "en",
     experienceVersion: "STAGING",
@@ -140,21 +140,21 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         </button>
       </div>
       <div>
-      <SearchHeadlessProvider searcher={searcher}>
-        <VisualEditorProvider
-          templateProps={props}
-          entityFields={{ fields: entityFields }}
-          tailwindConfig={tailwindConfig}
-        >
-          <Editor
-            document={document}
-            componentRegistry={componentRegistry}
-            themeConfig={defaultThemeConfig}
-            localDev={true}
-            forceThemeMode={themeMode}
-          />
-        </VisualEditorProvider>
-      </SearchHeadlessProvider>
+        <SearchHeadlessProvider searcher={searcher}>
+          <VisualEditorProvider
+            templateProps={props}
+            entityFields={{ fields: entityFields }}
+            tailwindConfig={tailwindConfig}
+          >
+            <Editor
+              document={document}
+              componentRegistry={componentRegistry}
+              themeConfig={defaultThemeConfig}
+              localDev={true}
+              forceThemeMode={themeMode}
+            />
+          </VisualEditorProvider>
+        </SearchHeadlessProvider>
       </div>
     </div>
   );

@@ -21,13 +21,27 @@ import {
   DirectoryCategoryProps,
 } from "@yext/visual-editor";
 
+import { Locator, LocatorProps } from "./components/Locator.js"; // only for hot reloading; final code should be imported above
+
+interface LocatorCategoryProps {
+  Locator: LocatorProps;
+}
+const LocatorCategoryComponents = {
+  Locator,
+};
+
+const LocatorCategory = Object.keys(
+  LocatorCategoryComponents,
+) as (keyof LocatorCategoryProps)[];
+
 interface MainProps
   extends PageSectionCategoryProps,
     LayoutBlockCategoryProps,
     CardCategoryProps,
     ContentBlockCategoryProps,
     DirectoryCategoryProps,
-    OtherCategoryProps {}
+    OtherCategoryProps,
+    LocatorCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
@@ -36,49 +50,8 @@ const components: Config<MainProps>["components"] = {
   ...ContentBlockCategoryComponents,
   ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
+  ...LocatorCategoryComponents,
 };
-
-const components: Config<MainProps>["components"] = {
-  Banner,
-  Card,
-  Promo,
-  Flex,
-  Grid,
-  Address,
-  BodyText,
-  CTA,
-  Emails,
-  GetDirections,
-  HeadingText,
-  HoursStatus,
-  HoursTable,
-  ImageWrapper,
-  Phone,
-  TextList,
-  Header,
-  Footer,
-  Directory,
-  Breadcrumbs,
-  Locator,
-};
-
-const pageSections: (keyof MainProps)[] = ["Banner", "Card", "Promo"];
-
-const layoutBlocks: (keyof MainProps)[] = ["Flex", "Grid"];
-
-const contentBlocks: (keyof MainProps)[] = [
-  "Address",
-  "BodyText",
-  "CTA",
-  "Emails",
-  "GetDirections",
-  "HeadingText",
-  "HoursStatus",
-  "HoursTable",
-  "ImageWrapper",
-  "Phone",
-  "TextList",
-];
 
 // All the available components for locations
 export const mainConfig: Config<MainProps> = {
@@ -103,6 +76,10 @@ export const mainConfig: Config<MainProps> = {
     directory: {
       title: "Directory",
       components: DirectoryCategory,
+    },
+    locator: {
+      title: "Locator",
+      components: LocatorCategory,
     },
   },
   root: {
