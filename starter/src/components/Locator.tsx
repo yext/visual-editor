@@ -195,11 +195,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
             ]}
             onSelect={(params) => handleFilterSelect(params)}
           />
-          <div
-            id="innerDiv"
-            className="overflow-y-auto"
-            style={{ flexGrow: 1 }}
-          >
+          <div id="innerDiv" className="overflow-y-auto">
             {resultCount > 0 && (
               <div>
                 <ResultsCount
@@ -223,7 +219,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
 
         {/* Right Section: Map. Hidden for small screens */}
         <div className="md:w-3/5 lg:w-2/3 md:flex hidden">
-          <div className="relative w-full">
+          <div className="w-full">
             <Map {...mapProps} />
             {showSearchAreaButton && (
               <div className="absolute bottom-10 left-0 right-0 flex justify-center">
