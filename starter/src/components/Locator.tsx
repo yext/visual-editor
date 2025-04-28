@@ -27,7 +27,7 @@ import { Address, Hours } from "../types/autogen.ts";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
-const DEFAULT_MAP_CENTER = [-74.005371, 40.741611]; // New York City
+const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 
 type LocatorProps = {
@@ -119,7 +119,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
   };
 
   const [userLocation, setUserLocation] =
-    React.useState<number[]>(DEFAULT_MAP_CENTER);
+    React.useState<[number, number]>(DEFAULT_MAP_CENTER);
   React.useEffect(() => {
     getUserLocation()
       .then((location) => {
@@ -183,16 +183,23 @@ const Locator: React.FC<LocatorProps> = (props) => {
 
   return (
     <>
-      <div className="flex w-full h-full aspect-[1/2] md:aspect-[3/2]">
+      <div
+        className="flex w-full aspect-[1/2] md:aspect-[3/2]"
+        style={{ height: "fit-content" }}
+      >
         {/* Left Section: FilterSearch + Results. Full width for small screens */}
-        <div className="w-full md:w-1/3 p-4 h-full flex flex-col">
+        <div className="w-full h-full md:w-2/5 lg:w-1/3 p-4 flex flex-col">
           <FilterSearch
             searchFields={[
               { fieldApiName: DEFAULT_FIELD, entityType: DEFAULT_ENTITY_TYPE },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
           />
-          <div id="innerDiv" className="flex-grow overflow-y-auto">
+          <div
+            id="innerDiv"
+            className="overflow-y-auto"
+            style={{ flexGrow: 1 }}
+          >
             {resultCount > 0 && (
               <div>
                 <ResultsCount
@@ -215,8 +222,8 @@ const Locator: React.FC<LocatorProps> = (props) => {
         </div>
 
         {/* Right Section: Map. Hidden for small screens */}
-        <div className="w-2/3 md:flex hidden">
-          <div className="relative w-full h-full">
+        <div className="md:w-3/5 lg:w-2/3 md:flex hidden">
+          <div className="relative w-full">
             <Map {...mapProps} />
             {showSearchAreaButton && (
               <div className="absolute bottom-10 left-0 right-0 flex justify-center">
@@ -237,13 +244,14 @@ const Locator: React.FC<LocatorProps> = (props) => {
 
 interface MapProps {
   mapStyle?: string;
-  centerCoords?: number[];
+  centerCoords?: [number, number];
   onDragHandler?: OnDragHandler;
 }
 
 const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
   const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
-  const mapboxApiKey = "";
+  const mapboxApiKey =
+    "pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw";
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
     return (
