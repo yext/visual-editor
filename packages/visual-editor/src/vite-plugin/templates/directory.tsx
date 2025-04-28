@@ -18,8 +18,7 @@ import {
   applyAnalytics,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
-import { buildSchema } from "../utils/buildSchema";
-import { AnalyticsProvider } from "@yext/pages-components";
+import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
@@ -66,7 +65,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     other: [
       applyAnalytics(document),
       applyTheme(document, themeConfig),
-      buildSchema(document),
+      SchemaWrapper(document._schema),
     ].join("\n"),
   };
 };
