@@ -1,20 +1,10 @@
-import { describe, test, expect, beforeEach, vi } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import { getFilteredEntityFields } from "./getFilteredEntityFields.ts";
-import { useEntityFields } from "../../hooks/useEntityFields.tsx";
-import { YextSchemaField } from "../../types/entityFields.ts";
-
-// Mock the useEntityFields hook
-vi.mock("../../hooks/useEntityFields.tsx", () => ({
-  useEntityFields: vi.fn(),
-}));
+import { StreamFields, YextSchemaField } from "../../types/entityFields.ts";
 
 describe("getFilteredEntityFields", () => {
-  beforeEach(() => {
-    vi.mocked(useEntityFields).mockReturnValue(mockEntityFields);
-  });
-
   test("filters out default disallowed fields", () => {
-    const result = getFilteredEntityFields({ types: [] });
+    const result = getFilteredEntityFields(mockStreamFields, { types: [] });
     expect(result.find((field) => field.name === "uid")).toBeUndefined();
     expect(result.find((field) => field.name === "meta")).toBeUndefined();
     expect(result.find((field) => field.name === "slug")).toBeUndefined();
@@ -27,7 +17,7 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("applies allowList filter", () => {
-    const result = getFilteredEntityFields({
+    const result = getFilteredEntityFields(mockStreamFields, {
       allowList: ["name"],
       types: ["type.string"],
     });
@@ -36,7 +26,7 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("applies disallowList filter", () => {
-    const result = getFilteredEntityFields({
+    const result = getFilteredEntityFields(mockStreamFields, {
       disallowList: ["address"],
       types: ["type.address", "type.string"],
     });
@@ -44,7 +34,9 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("applies types filter", () => {
-    const result = getFilteredEntityFields({ types: ["type.string"] });
+    const result = getFilteredEntityFields(mockStreamFields, {
+      types: ["type.string"],
+    });
     expect(result.map((field) => field.name)).toEqual(
       expect.arrayContaining([
         "id",
@@ -73,7 +65,7 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("handles nested fields correctly", () => {
-    const result = getFilteredEntityFields({
+    const result = getFilteredEntityFields(mockStreamFields, {
       allowList: ["address"],
       types: ["type.string"],
     });
@@ -93,7 +85,7 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("correctly handles top level fields and subfields", () => {
-    const result = getFilteredEntityFields({
+    const result = getFilteredEntityFields(mockStreamFields, {
       types: ["type.image", "type.hours", "type.address"],
     });
 
@@ -114,7 +106,7 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("combines multiple filters", () => {
-    const result = getFilteredEntityFields({
+    const result = getFilteredEntityFields(mockStreamFields, {
       allowList: ["name", "address"],
       types: ["type.string"],
     });
@@ -133,7 +125,7 @@ describe("getFilteredEntityFields", () => {
 
   test("warns about non-existent fields in allowList", () => {
     const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    getFilteredEntityFields({
+    getFilteredEntityFields(mockStreamFields, {
       allowList: ["nonexistent"],
       types: ["type.string"],
     });
@@ -144,18 +136,81 @@ describe("getFilteredEntityFields", () => {
   });
 
   test("handles custom fields correctly", () => {
-    const result = getFilteredEntityFields({ types: ["c_productSection"] });
+    const result = getFilteredEntityFields(mockStreamFields, {
+      types: ["c_productSection"],
+    });
     expect(result.map((field) => field.name)).toEqual(
       expect.arrayContaining(["c_productSection"])
     );
   });
 
   test("handles list fields correctly", () => {
-    const result = getFilteredEntityFields({
+    const result = getFilteredEntityFields(mockStreamFields, {
       allowList: ["emails"],
       types: ["type.string"],
     });
     expect(result.length).toBe(0);
+  });
+
+  test("handles list fields with no type filter specified", () => {
+    const result = getFilteredEntityFields(mockStreamFields, {
+      includeListsOnly: true,
+    });
+    expect(result.length).toBe(5);
+    expect(result.map((field) => field.name)).toEqual(
+      expect.arrayContaining([
+        "c_visualConfigurations",
+        "c_pages_layouts",
+        "c_productSection.linkedProducts",
+        "c_faqSection.linkedFAQs",
+        "emails",
+      ])
+    );
+  });
+
+  test("handles directChildrenOf correctly", () => {
+    const result = getFilteredEntityFields(mockStreamFields, {
+      directChildrenOf: "c_productSection.linkedProducts",
+    });
+    expect(result.map((field) => field.name)).toEqual(
+      expect.arrayContaining([
+        "c_productSection.linkedProducts.name",
+        "c_productSection.linkedProducts.c_productPromo",
+        "c_productSection.linkedProducts.c_description",
+        "c_productSection.linkedProducts.c_coverPhoto",
+        "c_productSection.linkedProducts.c_productCTA",
+      ])
+    );
+  });
+
+  test("adds display names", () => {
+    const displayNames = {
+      "c_productSection.linkedProducts.name":
+        "Product Section > Linked Products > Name",
+      "c_productSection.linkedProducts.c_productPromo":
+        "Product Section > Linked Products > Product Promo",
+      "c_productSection.linkedProducts.c_description":
+        "Product Section > Linked Products > Description",
+      "c_productSection.linkedProducts.c_coverPhoto":
+        "Product Section > Linked Products > Cover Photo",
+      "c_productSection.linkedProducts.c_productCTA":
+        "Product Section > Linked Products > Product CTA",
+    };
+    const result = getFilteredEntityFields(
+      { fields: mockEntityFields, displayNames: displayNames },
+      {
+        directChildrenOf: "c_productSection.linkedProducts",
+      }
+    );
+    expect(result.map((field) => field.displayName)).toEqual(
+      expect.arrayContaining([
+        "Product Section > Linked Products > Name",
+        "Product Section > Linked Products > Product Promo",
+        "Product Section > Linked Products > Description",
+        "Product Section > Linked Products > Cover Photo",
+        "Product Section > Linked Products > Product CTA",
+      ])
+    );
   });
 });
 
@@ -1606,3 +1661,7 @@ const mockEntityFields: YextSchemaField[] = [
     },
   },
 ];
+
+const mockStreamFields: StreamFields = {
+  fields: mockEntityFields,
+};

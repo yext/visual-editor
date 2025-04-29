@@ -14,8 +14,8 @@ import {
   Editor,
   VisualEditorProvider,
   YextSchemaField,
+  defaultThemeConfig,
 } from "@yext/visual-editor";
-import { themeConfig } from "../../theme.config";
 import { buildSchema } from "../utils/buildSchema.ts";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
@@ -93,9 +93,10 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
         },
       },
     ],
-    other: [applyTheme(document, themeConfig), buildSchema(document)].join(
-      "\n",
-    ),
+    other: [
+      applyTheme(document, defaultThemeConfig),
+      buildSchema(document),
+    ].join("\n"),
   };
 };
 
@@ -142,13 +143,13 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         <SearchHeadlessProvider searcher={searcher}>
           <VisualEditorProvider
             templateProps={props}
-            entityFields={entityFields}
+            entityFields={{ fields: entityFields }}
             tailwindConfig={tailwindConfig}
           >
             <Editor
               document={document}
               componentRegistry={componentRegistry}
-              themeConfig={themeConfig}
+              themeConfig={defaultThemeConfig}
               localDev={true}
               forceThemeMode={themeMode}
             />

@@ -17,15 +17,14 @@
     "lint": "pnpm -r run lint",
     "docs": "pnpm -r run api-extractor && pnpm -r run generate-docs && pnpm run fmt",
     "ci-publish": "tsx scripts/publishCI.ts",
-    "prepare": "husky install",
-    "generate-registry": "tsx packages/visual-editor/src/components/puck/registry/build-registry.ts"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*": "prettier --write --cache --ignore-unknown",
     "*.{ts,js,tsx,jsx}": "eslint --cache --fix"
   },
   "engines": {
-    "node": ">=17"
+    "node": "^18 || ^20.2.0 || ^22"
   },
   "repository": {
     "type": "git",

@@ -83,3 +83,9 @@ out
 dist/
 
 .DS_Store
+
+# Vitest browser screenshots 
+**/__screenshots__
+
+.vitepress/cache
+.vitepress/dist

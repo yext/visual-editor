@@ -2,7 +2,7 @@ import { Puck, Config, InitialHistory } from "@measured/puck";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityFieldProvider } from "../../components/editor/EntityField.tsx";
+import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebars/ThemeEditorRightSidebar.tsx";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
@@ -153,7 +153,7 @@ export const InternalThemeEditor = ({
   }, []);
 
   return (
-    <EntityFieldProvider>
+    <EntityTooltipsProvider>
       <Puck
         config={puckConfig}
         data={{}} // we use puckInitialHistory instead
@@ -186,6 +186,6 @@ export const InternalThemeEditor = ({
           iframe: loadMapboxIntoIframe,
         }}
       />
-    </EntityFieldProvider>
+    </EntityTooltipsProvider>
   );
 };

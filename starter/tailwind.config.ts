@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
-import { themeConfig } from "./theme.config";
 import {
   themeResolver,
   defaultThemeTailwindExtensions,
+  defaultThemeConfig,
 } from "@yext/visual-editor";
 
 export default {
@@ -11,7 +11,7 @@ export default {
     "./node_modules/@yext/visual-editor/dist/**/*.js",
   ],
   theme: {
-    extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
+    extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
   },
   plugins: [],
 } satisfies Config;

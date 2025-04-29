@@ -6,6 +6,11 @@ import { exec } from "node:child_process";
 
 export default defineConfig(() => ({
   plugins: [react(), dts()],
+  resolve: {
+    alias: {
+      "@yext/visual-editor": path.resolve(__dirname, "src"),
+    },
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
@@ -31,6 +36,13 @@ export default defineConfig(() => ({
   test: {
     globals: true,
     environment: "jsdom",
+    css: true,
+    browser: {
+      enabled: true,
+      instances: [{ browser: "chromium" }],
+      provider: "playwright",
+      headless: true,
+    },
   },
 }));
 

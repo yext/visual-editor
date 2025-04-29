@@ -1,0 +1,318 @@
+import { Registry } from "./schema.ts";
+
+// type: registry:ui => appears in the `npx shadcn add` list
+// type: registry:component => building blocks that shouldn't be used on their own
+
+export const ui: Registry["items"] = [
+  {
+    name: "accordion",
+    type: "registry:component",
+    files: [{ path: "atoms/accordion.tsx", type: "registry:component" }],
+  },
+  {
+    name: "background",
+    type: "registry:component",
+    files: [{ path: "atoms/background.tsx", type: "registry:component" }],
+  },
+  {
+    name: "body",
+    type: "registry:component",
+    files: [{ path: "atoms/body.tsx", type: "registry:component" }],
+  },
+  {
+    name: "button",
+    type: "registry:component",
+    files: [{ path: "atoms/button.tsx", type: "registry:component" }],
+  },
+  {
+    name: "cta",
+    type: "registry:component",
+    registryDependencies: ["button"],
+    files: [{ path: "atoms/cta.tsx", type: "registry:component" }],
+  },
+  {
+    name: "heading",
+    type: "registry:component",
+    files: [{ path: "atoms/heading.tsx", type: "registry:component" }],
+  },
+  {
+    name: "image",
+    type: "registry:component",
+    files: [{ path: "atoms/image.tsx", type: "registry:component" }],
+  },
+  {
+    name: "maybeLink",
+    type: "registry:component",
+    files: [{ path: "atoms/maybeLink.tsx", type: "registry:component" }],
+  },
+  {
+    name: "pageSection",
+    type: "registry:component",
+    files: [{ path: "atoms/pageSection.tsx", type: "registry:component" }],
+  },
+  {
+    name: "phone",
+    type: "registry:component",
+    registryDependencies: ["body", "cta"],
+    files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
+  },
+  {
+    name: "visibilityWrapper",
+    type: "registry:component",
+    files: [
+      { path: "atoms/visibilityWrapper.tsx", type: "registry:component" },
+    ],
+  },
+  {
+    name: "layout",
+    type: "registry:component",
+    files: [{ path: "Layout.tsx", type: "registry:component" }],
+  },
+  {
+    name: "Address",
+    type: "registry:ui",
+    registryDependencies: ["cta"],
+    files: [{ path: "contentBlocks/Address.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Banner",
+    type: "registry:ui",
+    registryDependencies: ["body", "pageSection", "visibilityWrapper"],
+    files: [{ path: "pageSections/Banner.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "BodyText",
+    type: "registry:ui",
+    registryDependencies: ["body"],
+    files: [{ path: "contentBlocks/BodyText.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Breadcrumbs",
+    type: "registry:ui",
+    registryDependencies: [
+      "maybeLink",
+      "body",
+      "pageSection",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/Breadcrumbs.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Collection",
+    type: "registry:ui",
+    registryDependencies: ["visibilityWrapper"],
+    files: [{ path: "layoutBlocks/Collection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "CoreInfoSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "background",
+      "heading",
+      "body",
+      "cta",
+      "phone",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/CoreInfoSection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "CtaWrapper",
+    type: "registry:ui",
+    registryDependencies: ["cta"],
+    files: [{ path: "contentBlocks/CtaWrapper.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Directory",
+    type: "registry:ui",
+    registryDependencies: [
+      "body",
+      "heading",
+      "maybeLink",
+      "pageSection",
+      "Breadcrumbs",
+    ],
+    files: [{ path: "Directory.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Emails",
+    type: "registry:ui",
+    registryDependencies: ["body", "cta"],
+    files: [{ path: "contentBlocks/Emails.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "EventCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/EventCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "FAQsSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "body",
+      "heading",
+      "pageSection",
+      "accordion",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/FAQs.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Flex",
+    type: "registry:ui",
+    registryDependencies: ["layout", "background", "visibilityWrapper"],
+    files: [{ path: "layoutBlocks/Flex.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Footer",
+    type: "registry:ui",
+    registryDependencies: ["body", "cta", "pageSection"],
+    files: [{ path: "Footer.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "GetDirections",
+    type: "registry:ui",
+    registryDependencies: ["cta"],
+    files: [{ path: "contentBlocks/GetDirections.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Grid",
+    type: "registry:ui",
+    registryDependencies: [
+      "section",
+      "background",
+      "layout",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "layoutBlocks/Grid.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Header",
+    type: "registry:ui",
+    registryDependencies: ["cta", "background", "maybeLink", "pageSection"],
+    files: [{ path: "Header.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "HeadingText",
+    type: "registry:ui",
+    registryDependencies: ["heading"],
+    files: [{ path: "contentBlocks/HeadingText.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "HeroSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "cta",
+      "image",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/HeroSection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "HoursStatus",
+    type: "registry:ui",
+    files: [{ path: "contentBlocks/HoursStatus.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "HoursTable",
+    type: "registry:ui",
+    registryDependencies: ["section"],
+    files: [{ path: "contentBlocks/HoursTable.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "InsightCard",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "background",
+      "body",
+      "cta",
+      "image",
+    ],
+    files: [{ path: "cards/InsightCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Image",
+    type: "registry:ui",
+    registryDependencies: ["image"],
+    files: [{ path: "contentBlocks/Image.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "NearbyLocations",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "background",
+      "body",
+      "cta",
+      "phone",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/NearbyLocations.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "MapboxStaticMap",
+    type: "registry:ui",
+    files: [{ path: "contentBlocks/MapboxStaticMap.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Person Card",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "body", "cta", "image"],
+    files: [{ path: "cards/PersonCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Phone",
+    type: "registry:ui",
+    registryDependencies: ["cta", "body", "phone"],
+    files: [{ path: "contentBlocks/Phone.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "PhotoGallerySection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "image",
+      "visibilityWrapper",
+    ],
+    files: [
+      { path: "pageSections/PhotoGallerySection.tsx", type: "registry:ui" },
+    ],
+  },
+  {
+    name: "ProductCard",
+    type: "registry:ui",
+    registryDependencies: ["heading", "cta", "body", "image", "background"],
+    files: [{ path: "cards/ProductCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "Promo",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "cta", "body", "image"],
+    files: [{ path: "pageSections/Promo.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "SectionContainer",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "visibilityWrapper"],
+    files: [{ path: "pageSections/SectionContainer.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "TestimonialCard",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "background", "heading", "body"],
+    files: [{ path: "cards/TestimonialCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "TextList",
+    type: "registry:ui",
+    files: [{ path: "contentBlocks/TextList.tsx", type: "registry:ui" }],
+  },
+];

@@ -1,3 +1,113 @@
+#### 0.0.37 (2025-04-25)
+
+##### Bug Fixes
+
+- issue calling .map on undefined (#404) (cae399fa)
+
+#### 0.0.36 (2025-04-24)
+
+##### Bug Fixes
+
+- handle undefined in FAQsSection (#403) (8167d831)
+- handle older FAQs components w/o collection values (#402) (ea4fb08d)
+
+#### 0.0.35 (2025-04-24)
+
+##### Chores
+
+- add wcag testing (#367) (300e6e11)
+
+##### New Features
+
+- update mapbox size on various events (#366) (d294da17)
+- adjust FAQsSection into Collection (#397) (9f0dcc28)
+- add docs build (#389) (78405347)
+- add alignItems to flex (#385) (8a9a9724)
+- use field display names in Entity Field selector (#380) (655319ad)
+- add liveVisibility prop to Promo (#381) (78e355b4)
+- add YextField (#373) (d9dc7574)
+
+##### Bug Fixes
+
+- hero link misalignment (#401) (69559e49)
+- adjust YextEntityFieldSelector (#400) (247fcd1e)
+- adjust PhotoGallery to supports constant (#398) (e3d249f5)
+- fix Collection "grid" mode applying in entity mode (#394) (6c8162ed)
+- photoGallery bugs and update for list (#393) (3c0a9822)
+- swap to commonjs for postcss and registry build (#392) (383e3441)
+- handle ComplexImageType in image atom (#391) (2c4d80e4)
+- entity fields missing in local dev (#390) (60165b49)
+- replace break-all in Promo (#388) (2acb8a53)
+- header image size on mobile (#387) (3e9ed2cd)
+- handle visibilityWrapper on older props (#386) (da3c5cdf)
+- hide header/footer links if Link is not set (#384) (9170f3d4)
+- adjust Product Card props (#383) (69541a50)
+- card heights adjust (#382) (17d26ae0)
+- cta undefined (#378) (c09b5db8)
+- switch unit test dependency install order (#379) (25353bad)
+- adjust address in NearbyLocations (#375) (b3b2eee4)
+- default address to entity value (#372) (a110ba29)
+- don't render sample text if field is mapped (#371) (d7dfda74)
+- correct column spacing for core info section (#370) (35f5a853)
+- update yextVisualEditorPlugin (#369) (33ed059b)
+- wcag issues (#368) (15cc4c4b)
+
+##### Refactors
+
+- move dm display name fields to dm namespace (#396) (015aaa1b)
+- directory improvements (#374) (79c87c8b)
+- move components into folders (#376) (d47766f0)
+- separate component directories and alias imports (#343) (52f9b177)
+
+#### 0.0.34 (2025-04-13)
+
+##### New Features
+
+- merge new components (#365) (6a7e2391)
+
+##### Bug Fixes
+
+- remove plugin from /starter (#281) (8c06922c)
+
+#### 0.0.33 (2025-03-21)
+
+##### Bug Fixes
+
+- adjust breadcrumbs (#278) (1f0db194)
+
+#### 0.0.32 (2025-03-20)
+
+##### Chores
+
+- update pages components to 1.1.4 (#267) (9b1209c8)
+- include local data in starter (#261) (f8433966)
+
+##### New Features
+
+- add yextVisualEditorPlugin() (#252) (b8f55213)
+- get googleTagManagerId from visualEditorConfig instead of theme (#259) (20894caf)
+- convert select fields to autocomplete combobox (#258) (e1d93afc)
+- disable component selection in theme mode (#249) (9c4b7214)
+- remove theme left panel, not needed after removing GTM (#255) (8727bdde)
+- remove left toggle for theme manager (#254) (00a7e95b)
+
+##### Bug Fixes
+
+- google tag manager id path (#268) (54286cdc)
+- add checks for breadcrumbs (#266) (8c4add71)
+- adjust plugin on server start (#265) (dbccc919)
+- read relativePrefixToRoot from templateProps (#262) (3787d8e6)
+- editor returns error 404 when in reseller account (#260) (3ceb9167)
+- visual editor fails to build (#257) (e395589d)
+- write to localstorage in dev mode (#248) (d3861d8d)
+- undefined footer links (#250) (307db820)
+- prevent loading bar from going backwards (#247) (1d06d28b)
+
+##### Refactors
+
+- localstorage updates (#251) (f6f28b2b)
+- remove entity fields toggle from theme editor (#253) (2f499827)
+
 #### 0.0.31 (2025-02-27)
 
 ##### New Features
