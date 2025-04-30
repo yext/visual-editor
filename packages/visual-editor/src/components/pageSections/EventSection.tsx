@@ -115,7 +115,7 @@ const EventCard = ({
         {event.title && <Heading level={6}>{event.title}</Heading>}
         {event.dateTime && <Body variant="base">{event.dateTime}</Body>}
         {event.description && (
-          <Body variant="base" className="line-clamp-5">
+          <Body variant="base">
             <LexicalRichText
               serializedAST={JSON.stringify(event.description.json) ?? ""}
             />
