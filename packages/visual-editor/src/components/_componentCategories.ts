@@ -22,6 +22,7 @@ import {
   SectionContainer,
   SectionContainerProps,
 } from "./pageSections/SectionContainer.tsx";
+import { TeamSection, TeamSectionProps } from "./pageSections/TeamSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
 import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
@@ -49,7 +50,6 @@ import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
 import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
-import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
 import {
   TestimonialCardProps,
   TestimonialCard,
@@ -63,6 +63,7 @@ export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
   PromoSection: PromoSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
+  TeamSection: TeamSectionProps;
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
 }
@@ -75,6 +76,7 @@ export const PageSectionCategoryComponents = {
   BannerSection,
   PromoSection,
   PhotoGallerySection,
+  TeamSection,
   FAQsSection,
   SectionContainer,
 };
@@ -102,7 +104,6 @@ export const LayoutBlockCategory = Object.keys(
 export interface CardCategoryProps {
   EventCard: EventCardProps;
   InsightCard: InsightCardProps;
-  PersonCard: PersonCardProps;
   ProductCard: ProductCardProps;
   TestimonialCard: TestimonialCardProps;
 }
@@ -110,7 +111,6 @@ export interface CardCategoryProps {
 export const CardCategoryComponents = {
   EventCard,
   InsightCard,
-  PersonCard,
   ProductCard,
   TestimonialCard,
 };

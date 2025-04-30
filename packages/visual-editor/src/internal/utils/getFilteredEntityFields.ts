@@ -43,6 +43,7 @@ export type EntityFieldTypes =
   | "type.coordinate"
   | "type.cta"
   | "type.rich_text_v2"
+  | "type.people"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];

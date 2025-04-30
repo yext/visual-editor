@@ -13,6 +13,7 @@ export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
 } from "./NearbyLocations.tsx";
+export { TeamSection, type TeamSectionProps } from "./TeamSection.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
