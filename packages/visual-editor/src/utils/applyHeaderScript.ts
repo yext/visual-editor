@@ -3,11 +3,5 @@ export const applyHeaderScript = (document: Record<string, any>) => {
     return;
   }
 
-  const headerScript: string = JSON.parse(
-    document.__.visualEditorConfig
-  )?.headerScript;
-
-  if (headerScript) {
-    return `<script>${headerScript}</script>`;
-  }
+  return JSON.parse(document.__.visualEditorConfig)?.headerScript;
 };
