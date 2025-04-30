@@ -17,6 +17,7 @@ import {
   normalizeSlug,
   getPageMetadata,
   applyAnalytics,
+  applyHeaderScript,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -65,6 +66,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     ],
     other: [
       applyAnalytics(document),
+      applyHeaderScript(document),
       applyTheme(document, themeConfig),
       SchemaWrapper(document._schema),
     ].join("\n"),
