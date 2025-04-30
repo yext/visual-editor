@@ -42,6 +42,7 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
+  | "type.insight"
   | "type.rich_text_v2"
   | `c_${string}`;
 
