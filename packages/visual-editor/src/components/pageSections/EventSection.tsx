@@ -103,7 +103,11 @@ const EventCard = ({
       <div className="lg:w-[45%] w-full h-full">
         {event.image && (
           <div className="h-full">
-            <Image image={event.image} layout="auto" aspectRatio={1.77} />
+            <Image
+              image={event.image}
+              layout="auto"
+              aspectRatio={event.image.image.width / event.image.image.height}
+            />
           </div>
         )}
       </div>
@@ -172,8 +176,8 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
   fields: eventSectionFields,
   defaultProps: {
     styles: {
-      backgroundColor: backgroundColors.background1.value,
-      cardBackgroundColor: backgroundColors.background2.value,
+      backgroundColor: backgroundColors.background3.value,
+      cardBackgroundColor: backgroundColors.background1.value,
     },
     sectionHeading: {
       text: {
@@ -181,7 +185,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
         constantValue: "Upcoming Events",
         constantValueEnabled: true,
       },
-      level: 3,
+      level: 2,
     },
     events: {
       field: "",
