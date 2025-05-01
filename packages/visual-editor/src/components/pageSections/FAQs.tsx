@@ -12,6 +12,7 @@ import {
   backgroundColors,
   YextField,
   VisibilityWrapper,
+  EntityField,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -73,7 +74,7 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
       }),
     },
   }),
-  FAQs: YextField("FAQs Section", {
+  FAQs: YextField("FAQs", {
     type: "entityField",
     filter: {
       types: ["type.faqs"],
@@ -106,26 +107,40 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({
       className="flex flex-col gap-8 md:gap-12"
     >
       {resolvedHeading && (
-        <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+        <EntityField
+          displayName="Heading Text"
+          fieldId={sectionHeading.text.field}
+          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+        >
+          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+        </EntityField>
       )}
-      <Accordion type="single" collapsible>
-        {resolvedFAQs?.map((faqItem, index) => (
-          <AccordionItem value={index.toString()} key={index}>
-            <AccordionTrigger>
-              <Body variant="lg" className="font-bold text-left">
-                {faqItem.question}
-              </Body>
-            </AccordionTrigger>
-            <AccordionContent>
-              <Body variant="base">
-                <LexicalRichText
-                  serializedAST={JSON.stringify(faqItem.answer.json) ?? ""}
-                />
-              </Body>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      {resolvedFAQs && resolvedFAQs.length > 0 && (
+        <EntityField
+          displayName="FAQs"
+          fieldId={FAQs.field}
+          constantValueEnabled={FAQs.constantValueEnabled}
+        >
+          <Accordion type="single" collapsible>
+            {resolvedFAQs?.map((faqItem, index) => (
+              <AccordionItem value={index.toString()} key={index}>
+                <AccordionTrigger>
+                  <Body variant="lg" className="font-bold text-left">
+                    {faqItem.question}
+                  </Body>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Body variant="base">
+                    <LexicalRichText
+                      serializedAST={JSON.stringify(faqItem.answer.json) ?? ""}
+                    />
+                  </Body>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </EntityField>
+      )}
     </PageSection>
   );
 };
