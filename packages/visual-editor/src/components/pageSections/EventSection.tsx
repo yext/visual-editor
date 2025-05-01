@@ -15,6 +15,7 @@ import {
   Background,
   CTA,
   backgroundColors,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   ComplexImageType,
@@ -48,6 +49,7 @@ export interface EventSectionProps {
     level: HeadingLevel;
   };
   events: YextEntityField<Events>;
+  liveVisibility: boolean;
 }
 
 const eventSectionFields: Fields<EventSectionProps> = {
@@ -85,6 +87,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
     filter: {
       types: ["type.events"],
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -198,6 +207,14 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       constantValue: [],
       constantValueEnabled: false,
     },
+    liveVisibility: true,
   },
-  render: (props) => <EventSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <EventSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };
