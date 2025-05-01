@@ -22,3 +22,7 @@ export {
   SectionContainer,
   type SectionContainerProps,
 } from "./SectionContainer.tsx";
+export {
+  TestimonialSection,
+  type TestimonialSectionProps,
+} from "./TestimonialSection.tsx";

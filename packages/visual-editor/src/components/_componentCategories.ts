@@ -22,6 +22,10 @@ import {
   SectionContainer,
   SectionContainerProps,
 } from "./pageSections/SectionContainer.tsx";
+import {
+  TestimonialSection,
+  TestimonialSectionProps,
+} from "./pageSections/TestimonialSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
 import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
@@ -50,10 +54,6 @@ import { Directory, DirectoryProps } from "./Directory.tsx";
 import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
 import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
 import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
-import {
-  TestimonialCardProps,
-  TestimonialCard,
-} from "./cards/TestimonialCard.tsx";
 
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
@@ -65,6 +65,7 @@ export interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
+  TestimonialSection: TestimonialSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -77,6 +78,7 @@ export const PageSectionCategoryComponents = {
   PhotoGallerySection,
   FAQsSection,
   SectionContainer,
+  TestimonialSection,
 };
 
 export const PageSectionCategory = Object.keys(
@@ -104,7 +106,6 @@ export interface CardCategoryProps {
   InsightCard: InsightCardProps;
   PersonCard: PersonCardProps;
   ProductCard: ProductCardProps;
-  TestimonialCard: TestimonialCardProps;
 }
 
 export const CardCategoryComponents = {
@@ -112,7 +113,6 @@ export const CardCategoryComponents = {
   InsightCard,
   PersonCard,
   ProductCard,
-  TestimonialCard,
 };
 
 export const CardCategory = Object.keys(
