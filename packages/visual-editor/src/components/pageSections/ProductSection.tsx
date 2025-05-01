@@ -13,6 +13,7 @@ import {
   Background,
   CTA,
   backgroundColors,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   ComplexImageType,
@@ -47,6 +48,7 @@ export interface ProductSectionProps {
     level: HeadingLevel;
   };
   products: YextEntityField<Products>;
+  liveVisibility: boolean;
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
@@ -84,6 +86,13 @@ const productSectionFields: Fields<ProductSectionProps> = {
     filter: {
       types: ["type.product"],
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -157,26 +166,32 @@ const ProductSectionWrapper = ({
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
-        <div className="text-center">
-          <EntityField
-            displayName="Heading Text"
-            fieldId={sectionHeading.text.field}
-            constantValueEnabled={sectionHeading.text.constantValueEnabled}
-          >
+        <EntityField
+          displayName="Heading Text"
+          fieldId={sectionHeading.text.field}
+          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+        >
+          <div className="text-center">
             <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-          </EntityField>
-        </div>
+          </div>
+        </EntityField>
       )}
       {resolvedProducts && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {resolvedProducts.map((product, index) => (
-            <ProductCard
-              key={index}
-              product={product}
-              backgroundColor={styles.cardBackgroundColor}
-            />
-          ))}
-        </div>
+        <EntityField
+          displayName="Products"
+          fieldId={products.field}
+          constantValueEnabled={products.constantValueEnabled}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {resolvedProducts.map((product, index) => (
+              <ProductCard
+                key={index}
+                product={product}
+                backgroundColor={styles.cardBackgroundColor}
+              />
+            ))}
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );
@@ -203,6 +218,14 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       constantValue: [],
       constantValueEnabled: false,
     },
+    liveVisibility: true,
   },
-  render: (props) => <ProductSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <ProductSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };

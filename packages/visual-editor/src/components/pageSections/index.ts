@@ -18,6 +18,7 @@ export {
   type PhotoGallerySectionProps,
 } from "./PhotoGallerySection.tsx";
 export { PromoSection, type PromoSectionProps } from "./Promo.tsx";
+export { ProductSection, type ProductSectionProps } from "./ProductSection.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,
