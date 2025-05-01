@@ -13,6 +13,7 @@ import {
   Background,
   CTA,
   backgroundColors,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import {
   ComplexImageType,
@@ -48,6 +49,7 @@ export interface InsightSectionProps {
     level: HeadingLevel;
   };
   insights: YextEntityField<Insights>;
+  liveVisibility: boolean;
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
@@ -85,6 +87,13 @@ const insightSectionFields: Fields<InsightSectionProps> = {
     filter: {
       types: ["type.insight"],
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -167,15 +176,21 @@ const InsightSectionWrapper = ({
         </div>
       )}
       {resolvedInsights && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {resolvedInsights.map((insight, index) => (
-            <InsightCard
-              key={index}
-              insight={insight}
-              backgroundColor={styles.cardBackgroundColor}
-            />
-          ))}
-        </div>
+        <EntityField
+          displayName="Insights"
+          fieldId={insights.field}
+          constantValueEnabled={insights.constantValueEnabled}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {resolvedInsights.map((insight, index) => (
+              <InsightCard
+                key={index}
+                insight={insight}
+                backgroundColor={styles.cardBackgroundColor}
+              />
+            ))}
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );
@@ -202,6 +217,14 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       constantValue: [],
       constantValueEnabled: false,
     },
+    liveVisibility: true,
   },
-  render: (props) => <InsightSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <InsightSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };
