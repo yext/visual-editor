@@ -80,7 +80,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
-  events: YextField("Event Section", {
+  events: YextField("Events", {
     type: "entityField",
     filter: {
       types: ["type.events"],
@@ -157,15 +157,21 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
         </EntityField>
       )}
       {resolvedEvents && (
-        <div className="flex flex-col gap-8">
-          {resolvedEvents.map((event, index) => (
-            <EventCard
-              key={index}
-              event={event}
-              backgroundColor={styles.cardBackgroundColor}
-            />
-          ))}
-        </div>
+        <EntityField
+          displayName="Events"
+          fieldId={events.field}
+          constantValueEnabled={events.constantValueEnabled}
+        >
+          <div className="flex flex-col gap-8">
+            {resolvedEvents.map((event, index) => (
+              <EventCard
+                key={index}
+                event={event}
+                backgroundColor={styles.cardBackgroundColor}
+              />
+            ))}
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );
