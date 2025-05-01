@@ -13,6 +13,7 @@ import {
   Background,
   CTA,
   backgroundColors,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import { ComplexImageType, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -41,6 +42,7 @@ export interface TeamSectionProps {
     level: HeadingLevel;
   };
   people: YextEntityField<People>;
+  liveVisibility: boolean;
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
@@ -78,6 +80,13 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
     filter: {
       types: ["type.people"],
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -170,26 +179,32 @@ const TeamSectionWrapper = ({
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
-        <div className="text-center">
-          <EntityField
-            displayName="Heading Text"
-            fieldId={sectionHeading.text.field}
-            constantValueEnabled={sectionHeading.text.constantValueEnabled}
-          >
+        <EntityField
+          displayName="Heading Text"
+          fieldId={sectionHeading.text.field}
+          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+        >
+          <div className="text-center">
             <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-          </EntityField>
-        </div>
+          </div>
+        </EntityField>
       )}
       {resolvedPeople && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-          {resolvedPeople.map((person, index) => (
-            <PersonCard
-              key={index}
-              person={person}
-              backgroundColor={styles.cardBackgroundColor}
-            />
-          ))}
-        </div>
+        <EntityField
+          displayName="Team"
+          fieldId={people.field}
+          constantValueEnabled={people.constantValueEnabled}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+            {resolvedPeople.map((person, index) => (
+              <PersonCard
+                key={index}
+                person={person}
+                backgroundColor={styles.cardBackgroundColor}
+              />
+            ))}
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );
@@ -216,6 +231,14 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       constantValue: [],
       constantValueEnabled: false,
     },
+    liveVisibility: true,
   },
-  render: (props) => <TeamSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <TeamSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };
