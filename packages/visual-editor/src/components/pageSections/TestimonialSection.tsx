@@ -11,6 +11,7 @@ import {
   EntityField,
   Background,
   backgroundColors,
+  VisibilityWrapper,
 } from "@yext/visual-editor";
 import { LexicalRichText } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -39,6 +40,7 @@ export interface TestimonialSectionProps {
     level: HeadingLevel;
   };
   testimonials: YextEntityField<Testimonials>;
+  liveVisibility: boolean;
 }
 
 const testimonialSectionFields: Fields<TestimonialSectionProps> = {
@@ -76,6 +78,13 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
     filter: {
       types: ["type.testimonial"],
     },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
   }),
 };
 
@@ -127,26 +136,32 @@ const TestimonialSectionWrapper = ({
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
-        <div className="text-center">
-          <EntityField
-            displayName="Heading Text"
-            fieldId={sectionHeading.text.field}
-            constantValueEnabled={sectionHeading.text.constantValueEnabled}
-          >
+        <EntityField
+          displayName="Heading Text"
+          fieldId={sectionHeading.text.field}
+          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+        >
+          <div className="text-center">
             <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
-          </EntityField>
-        </div>
+          </div>
+        </EntityField>
       )}
       {resolvedTestimonials && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-          {resolvedTestimonials.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              testimonial={testimonial}
-              backgroundColor={styles.cardBackgroundColor}
-            />
-          ))}
-        </div>
+        <EntityField
+          displayName="Testimonials"
+          fieldId={testimonials.field}
+          constantValueEnabled={testimonials.constantValueEnabled}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+            {resolvedTestimonials.map((testimonial, index) => (
+              <TestimonialCard
+                key={index}
+                testimonial={testimonial}
+                backgroundColor={styles.cardBackgroundColor}
+              />
+            ))}
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );
@@ -173,6 +188,14 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
       constantValue: [],
       constantValueEnabled: false,
     },
+    liveVisibility: true,
   },
-  render: (props) => <TestimonialSectionWrapper {...props} />,
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <TestimonialSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
 };
