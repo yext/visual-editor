@@ -7,6 +7,10 @@ import {
   CoreInfoSection,
   CoreInfoSectionProps,
 } from "./pageSections/CoreInfoSection.tsx";
+import {
+  EventSection,
+  EventSectionProps,
+} from "./pageSections/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "./pageSections/HeroSection.tsx";
 import {
   NearbyLocationsSection,
@@ -22,10 +26,6 @@ import {
   SectionContainer,
   SectionContainerProps,
 } from "./pageSections/SectionContainer.tsx";
-import {
-  EventSection,
-  EventSectionProps,
-} from "./pageSections/EventSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
 import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
@@ -61,13 +61,13 @@ import {
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
   HeroSection: HeroSectionProps;
+  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   BannerSection: BannerSectionProps;
   PromoSection: PromoSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   FAQsSection: FAQsSectionProps;
-  EventSection: EventSectionProps;
   SectionContainer: SectionContainerProps;
 }
 
@@ -75,12 +75,12 @@ export const PageSectionCategoryComponents = {
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
+  EventSection,
   NearbyLocationsSection,
   BannerSection,
   PromoSection,
   PhotoGallerySection,
   FAQsSection,
-  EventSection,
   SectionContainer,
 };
 
