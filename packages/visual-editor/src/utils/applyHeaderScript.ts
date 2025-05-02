@@ -1,5 +1,5 @@
 export const applyHeaderScript = (document: Record<string, any>) => {
-  if (!document?.__?.visualEditorConfig?.headerScript) {
+  if (!document?.__?.visualEditorConfig) {
     return;
   }
 
