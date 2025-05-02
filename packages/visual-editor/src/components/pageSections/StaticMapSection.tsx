@@ -47,7 +47,7 @@ export const StaticMapSectionWrapper = (props: StaticMapSectionProps) => {
 };
 
 export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
-  label: "Mapbox Static Map",
+  label: "Static Map Section",
   fields: staticMapSectionFields,
   defaultProps: {
     apiKey: "",
