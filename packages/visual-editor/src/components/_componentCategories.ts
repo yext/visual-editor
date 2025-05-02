@@ -85,6 +85,34 @@ export const PageSectionCategory = Object.keys(
   PageSectionCategoryComponents
 ) as (keyof PageSectionCategoryProps)[];
 
+export interface OtherCategoryProps {
+  Header: HeaderProps;
+  Footer: FooterProps;
+}
+
+export const OtherCategoryComponents = {
+  Header,
+  Footer,
+};
+
+export const OtherCategory = Object.keys(
+  OtherCategoryComponents
+) as (keyof OtherCategoryProps)[];
+
+export interface DirectoryCategoryProps {
+  Directory: DirectoryProps;
+}
+
+export const DirectoryCategoryComponents = {
+  Directory,
+};
+
+export const DirectoryCategory = Object.keys(
+  DirectoryCategoryComponents
+) as (keyof DirectoryCategoryProps)[];
+
+/** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
+
 export interface LayoutBlockCategoryProps {
   Collection: CollectionProps;
   Flex: FlexProps;
@@ -152,29 +180,3 @@ export const ContentBlockCategoryComponents = {
 export const ContentBlockCategory = Object.keys(
   ContentBlockCategoryComponents
 ) as (keyof ContentBlockCategoryProps)[];
-
-export interface OtherCategoryProps {
-  Header: HeaderProps;
-  Footer: FooterProps;
-}
-
-export const OtherCategoryComponents = {
-  Header,
-  Footer,
-};
-
-export const OtherCategory = Object.keys(
-  OtherCategoryComponents
-) as (keyof OtherCategoryProps)[];
-
-export interface DirectoryCategoryProps {
-  Directory: DirectoryProps;
-}
-
-export const DirectoryCategoryComponents = {
-  Directory,
-};
-
-export const DirectoryCategory = Object.keys(
-  DirectoryCategoryComponents
-) as (keyof DirectoryCategoryProps)[];

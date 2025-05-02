@@ -57,6 +57,11 @@ export const ui: Registry["items"] = [
     files: [{ path: "atoms/phone.tsx", type: "registry:component" }],
   },
   {
+    name: "timestamp",
+    type: "registry:component",
+    files: [{ path: "atoms/timestamp.tsx", type: "registry:component" }],
+  },
+  {
     name: "visibilityWrapper",
     type: "registry:component",
     files: [
