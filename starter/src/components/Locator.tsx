@@ -18,9 +18,15 @@ import {
   useSearchState,
 } from "@yext/search-headless-react";
 import * as React from "react";
-import { BasicSelector, Body, Button, CTA, Heading } from "@yext/visual-editor";
+import {
+  BasicSelector,
+  Body,
+  Button,
+  CTA,
+  Heading,
+  normalizeSlug,
+} from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
-import { normalizeSlug } from "@yext/visual-editor";
 import { useEffect, useState } from "react";
 import { HoursStatus } from "@yext/pages-components";
 import { Address, Hours } from "../types/autogen.ts";
