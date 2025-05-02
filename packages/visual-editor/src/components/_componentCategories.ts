@@ -54,6 +54,10 @@ import {
   TestimonialCardProps,
   TestimonialCard,
 } from "./cards/TestimonialCard.tsx";
+import {
+  StaticMapSection,
+  StaticMapSectionProps,
+} from "./pageSections/StaticMapSection.tsx";
 
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
@@ -65,6 +69,7 @@ export interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
+  StaticMapSection: StaticMapSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -77,6 +82,7 @@ export const PageSectionCategoryComponents = {
   PhotoGallerySection,
   FAQsSection,
   SectionContainer,
+  StaticMapSection,
 };
 
 export const PageSectionCategory = Object.keys(
