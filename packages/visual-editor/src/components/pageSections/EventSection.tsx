@@ -9,7 +9,6 @@ import {
   useDocument,
   resolveYextEntityField,
   PageSection,
-  Body,
   Heading,
   EntityField,
   Background,
@@ -17,11 +16,8 @@ import {
   backgroundColors,
   VisibilityWrapper,
 } from "@yext/visual-editor";
-import {
-  ComplexImageType,
-  CTA as CTAType,
-  LexicalRichText,
-} from "@yext/pages-components";
+import { ComplexImageType, CTA as CTAType } from "@yext/pages-components";
+import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
 
 /** TODO remove types when spruce is ready */
 type Events = Array<EventStruct>;
@@ -29,12 +25,18 @@ type Events = Array<EventStruct>;
 type EventStruct = {
   image?: ComplexImageType;
   title?: string; // single line text
-  dateTime?: string; // lexon's dateTime
+  dateTime?: dateTime; // lexon's dateTime
   description?: RTF2;
   CTA?: CTAType;
 };
 
+type dateTime = {
+  start: string; // ISO 8601
+  end: string; //  ISO 8601
+};
+
 type RTF2 = {
+  html?: string;
   json?: Record<string, any>;
 };
 /** end of hardcoded types */
@@ -122,13 +124,22 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && <Heading level={6}>{event.title}</Heading>}
-        {event.dateTime && <Body variant="base">{event.dateTime}</Body>}
-        {event.description && (
-          <Body variant="base">
-            <LexicalRichText
-              serializedAST={JSON.stringify(event.description.json) ?? ""}
-            />
-          </Body>
+        {event.dateTime?.start && (
+          <Timestamp
+            date={event.dateTime.start}
+            endDate={event.dateTime.end}
+            option={
+              event.dateTime.end
+                ? TimestampOption.DATE_TIME_RANGE
+                : TimestampOption.DATE_TIME
+            }
+            hideTimeZone={true}
+          />
+        )}
+        {event.description?.html && (
+          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+            <div dangerouslySetInnerHTML={{ __html: event.description.html }} />
+          </div>
         )}
         {event.CTA && (
           <CTA
@@ -203,7 +214,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       level: 2,
     },
     events: {
-      field: "",
+      field: "", // TODO set to default
       constantValue: [],
       constantValueEnabled: false,
     },
