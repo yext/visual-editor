@@ -1,3 +1,17 @@
+#### 0.0.38 (2025-04-29)
+
+##### New Features
+
+- add directory template (#409) (3a799774)
+- add rows option to grid (#406) (63972234)
+- support type.rich_text_v2 (#405) (70d310e2)
+
+##### Bug Fixes
+
+- remove buildSchema logic and use document.\_schema (#408) (43567ba9)
+- photoGallery returning zero (#407) (85b68294)
+- disallow all pointer events and hover states in Theme Editor (#395) (93cf75ff)
+
 #### 0.0.37 (2025-04-25)
 
 ##### Bug Fixes
