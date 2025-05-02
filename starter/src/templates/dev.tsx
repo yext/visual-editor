@@ -15,15 +15,17 @@ import {
   VisualEditorProvider,
   YextSchemaField,
   defaultThemeConfig,
+  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { buildSchema } from "../utils/buildSchema.ts";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import {
-  CloudChoice,
-  CloudRegion,
-  Environment,
+  // CloudChoice,
+  // CloudRegion,
+  // Environment,
+  // HeadlessConfig,
   provideHeadless,
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
@@ -114,18 +116,25 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
-  const config = {
-    apiKey: "",
-    experienceKey: "jacob-test",
-    locale: "en",
-    experienceVersion: "STAGING",
-    verticalKey: "locations",
-    businessId: document.businessId,
-    cloudRegion: CloudRegion.US,
-    cloudChoice: CloudChoice.GLOBAL_MULTI,
-    environment: Environment.PROD,
-  };
-  const searcher = provideHeadless(config);
+
+  const searchHeadlessConfig = createSearchHeadlessConfig(document);
+  if (!searchHeadlessConfig) {
+    return <></>;
+  }
+  const searcher = provideHeadless(searchHeadlessConfig);
+
+  // Uncomment this to use the config object directly while we're waiting for other work to be done
+  // const config = {
+  //   apiKey: "",
+  //   experienceKey: "jacob-test",
+  //   locale: "en",
+  //   experienceVersion: "STAGING",
+  //   verticalKey: "locations",
+  //   cloudRegion: CloudRegion.US,
+  //   cloudChoice: CloudChoice.GLOBAL_MULTI,
+  //   environment: Environment.PROD,
+  // };
+  // const searcher = provideHeadless(config);
 
   return (
     <div>

@@ -133,6 +133,9 @@ importers:
       "@yext/pages-components":
         specifier: ^1.1.4
         version: 1.1.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
+      "@yext/search-headless-react":
+        specifier: ^2.5.0
+        version: 2.5.0(encoding@0.1.13)(react@18.3.1)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0

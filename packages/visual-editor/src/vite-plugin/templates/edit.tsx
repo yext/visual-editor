@@ -5,6 +5,7 @@ import {
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
+  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { componentRegistry } from "../ve.config";
 import {
@@ -39,6 +40,13 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
 const Edit: () => JSX.Element = () => {
   const entityDocument = usePlatformBridgeDocument();
   const entityFields = usePlatformBridgeEntityFields();
+
+  // TODO (kgerner): move this to a Locator-specific template once we make one
+  // See this PR for example: https://github.com/yext/visual-editor/pull/409
+  // In the meantime, we can gate wrapping with SearchHeadlessProvider to only when
+  // the entity document has a locator config on it (waiting on Spruce):
+  // https://yexttest.atlassian.net/browse/SPR-6003
+  const searchHeadlessConfig = createSearchHeadlessConfig(entityDocument);
 
   return (
     <VisualEditorProvider
