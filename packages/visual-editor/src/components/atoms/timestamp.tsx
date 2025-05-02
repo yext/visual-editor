@@ -4,7 +4,7 @@ const format1: Intl.DateTimeFormatOptions = {
   year: "numeric",
 };
 
-const format3: Intl.DateTimeFormatOptions = {
+const format2: Intl.DateTimeFormatOptions = {
   timeZoneName: "short",
   year: "numeric",
   month: "short",
@@ -48,11 +48,11 @@ function timestampFormatter({
       case TimestampOption.DATE:
         return format1;
       case TimestampOption.DATE_TIME:
-        return format3;
+        return format2;
       case TimestampOption.DATE_RANGE:
         return format1;
       case TimestampOption.DATE_TIME_RANGE:
-        return format3;
+        return format2;
       default:
         return format1;
     }
