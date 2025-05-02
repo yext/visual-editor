@@ -8,7 +8,7 @@ import {
   TemplateProps,
   TemplateRenderProps,
 } from "@yext/pages";
-import { componentRegistry } from "../ve.config";
+import { componentRegistry, filterComponentsFromRegistry } from "../ve.config";
 import {
   applyTheme,
   Editor,
@@ -102,6 +102,12 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
     : `${localePath}${document.id.toString()}`;
 };
 
+const filteredRegistry = filterComponentsFromRegistry(
+  componentRegistry,
+  "dev",
+  ["BreadcrumbsSection", "HeroSection", "CoreInfoSection"]
+);
+
 const Dev: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
   const { document } = props;
@@ -128,7 +134,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         >
           <Editor
             document={document}
-            componentRegistry={componentRegistry}
+            componentRegistry={filteredRegistry}
             themeConfig={defaultThemeConfig}
             localDev={true}
             forceThemeMode={themeMode}
