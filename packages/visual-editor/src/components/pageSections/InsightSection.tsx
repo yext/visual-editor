@@ -15,12 +15,9 @@ import {
   backgroundColors,
   VisibilityWrapper,
 } from "@yext/visual-editor";
-import {
-  ComplexImageType,
-  CTA as CTAType,
-  LexicalRichText,
-} from "@yext/pages-components";
+import { ComplexImageType, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
 
 /** TODO remove types when spruce is ready */
 type Insights = Array<InsightStruct>;
@@ -29,12 +26,17 @@ type InsightStruct = {
   image?: ComplexImageType;
   name?: string; // single line text
   category?: string; // single line text
-  publishTime?: string; // lexon's dateTime
+  publishTime?: dateTime; // lexon's dateTime
   description?: RTF2;
   CTA?: CTAType;
 };
 
+type dateTime = {
+  start: string; // ISO 8601
+};
+
 type RTF2 = {
+  html?: string;
   json?: Record<string, any>;
 };
 /** end of hardcoded types */
@@ -121,7 +123,13 @@ const InsightCard = ({
             >
               <Body>{insight.category}</Body>
               {insight.category && insight.publishTime && <Body>|</Body>}
-              <Body>{insight.publishTime}</Body>
+              {insight.publishTime && (
+                <Timestamp
+                  date={insight.publishTime.start}
+                  option={TimestampOption.DATE}
+                  hideTimeZone={true}
+                />
+              )}
             </div>
           )}
           {insight.name && (
@@ -129,12 +137,12 @@ const InsightCard = ({
               {insight.name}
             </Heading>
           )}
-          {insight.description && (
-            <Body>
-              <LexicalRichText
-                serializedAST={JSON.stringify(insight.description.json) ?? ""}
+          {insight.description?.html && (
+            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+              <div
+                dangerouslySetInnerHTML={{ __html: insight.description.html }}
               />
-            </Body>
+            </div>
           )}
         </div>
         {insight.CTA && (
