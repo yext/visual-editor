@@ -1,5 +1,16 @@
 import { Fields } from "@measured/puck";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { useEffect, useState } from "react";
+
+// Utility function to detect browser language
+const getBrowserLanguage = (): string => {
+  const browserLocales = navigator.languages || [navigator.language];
+  if (!browserLocales || browserLocales.length === 0) {
+    return "en"; // Fallback to English
+  }
+  // Return primary language code (e.g., "en" from "en-US")
+  return browserLocales[0].split("-")[0];
+};
 
 export const resolveYextEntityField = <T>(
   document: any,
@@ -14,7 +25,26 @@ export const resolveYextEntityField = <T>(
     return undefined;
   }
 
+  // TODO: this breaks entity field mapping
   if (entityField.constantValueEnabled || !entityField.field) {
+    console.log(entityField.constantValue);
+    if (!entityField.constantValue) {
+      return;
+    }
+    if (typeof entityField.constantValue === "object") {
+      const detectedLanguage = getBrowserLanguage();
+      console.log("detectedLanguage", detectedLanguage);
+      if (detectedLanguage in entityField.constantValue) {
+        // TODO: fix this
+        // @ts-expect-error disable-next-line
+        return entityField.constantValue[detectedLanguage];
+      } else {
+        // TODO: fix this
+        // @ts-expect-error disable-next-line
+        return entityField.constantValue["en"];
+      }
+    }
+
     return entityField.constantValue as T;
   }
 

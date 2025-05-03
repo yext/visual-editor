@@ -156,7 +156,18 @@ export function YextField<T, U>(
   if (config.type === "text") {
     return {
       label: fieldName,
-      type: config.isMultiline ? "textarea" : "text",
+      // type: config.isMultiline ? "textarea" : "text",
+      type: "object",
+      objectFields: {
+        en: {
+          type: config.isMultiline ? "textarea" : "text",
+          label: "English",
+        },
+        es: {
+          type: config.isMultiline ? "textarea" : "text",
+          label: "Spanish",
+        },
+      },
     };
   }
 

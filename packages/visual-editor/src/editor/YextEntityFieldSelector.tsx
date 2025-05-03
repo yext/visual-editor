@@ -22,6 +22,8 @@ const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
+export type TranslatableString = Record<string, string>;
+
 export type YextEntityField<T> = {
   field: string;
   constantValue: T;
