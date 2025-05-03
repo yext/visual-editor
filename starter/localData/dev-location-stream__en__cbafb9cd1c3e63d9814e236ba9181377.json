@@ -3,7 +3,104 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
+  "_schema": {
+    "@graph": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "US",
+          "addressLocality": "Arlington",
+          "addressRegion": "VA",
+          "postalCode": "22209",
+          "streetAddress": "1101 Wilson Blvd"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Corporate Catering"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Tailgate Catering"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Birthday Parties"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Delivery"
+              }
+            }
+          ],
+          "name": "Services"
+        },
+        "name": "Galaxy Grill",
+        "openingHours": ["Mo-Su 10:00-22:00"],
+        "telephone": "+17577017560"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "Location Pages Directory",
+            "position": 1
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us",
+              "@type": "Thing"
+            },
+            "name": "US",
+            "position": 2
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/va",
+              "@type": "Thing"
+            },
+            "name": "VA",
+            "position": 3
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/va/arlington",
+              "@type": "Thing"
+            },
+            "name": "Arlington",
+            "position": 4
+          }
+        ]
+      }
+    ]
+  },
   "_site": {
+    "name": "Example Business",
+    "siteName": "Example Business Pages",
     "copyrightMessage": "© 2025 Yext",
     "favicon": {
       "height": 1152,
@@ -51,9 +148,23 @@
   },
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    { "name": "US", "slug": "en/us" },
-    { "name": "VA", "slug": "en/us/va" },
-    { "name": "Arlington", "slug": "en/us/va/arlington" }
+    {
+      "name": "US",
+      "slug": "en/us",
+      "dm_addressCountryDisplayName": "United States"
+    },
+    {
+      "name": "VA",
+      "slug": "en/us/va",
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Virginia"
+    },
+    {
+      "name": "Arlington",
+      "slug": "en/us/va/arlington",
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Virginia"
+    }
   ],
   "additionalHoursText": "Closed on Christmas.",
   "address": {
