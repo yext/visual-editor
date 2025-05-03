@@ -3,6 +3,61 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
+  "_schema": {
+    "@graph": [
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "description": "Directory of locations",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@type": "Place",
+              "name": "US"
+            },
+            "position": 1
+          }
+        ],
+        "name": "Location Pages Directory",
+        "numberOfItems": 1
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "All Locations",
+            "position": 1
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "Location Pages Directory",
+            "position": 2
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "description": "Browse locations in Location Pages Directory",
+        "isPartOf": {
+          "@type": "WebSite"
+        },
+        "name": "Location Pages Directory",
+        "url": "yawningly-long-trout.pgsdemo.com/index.html"
+      }
+    ]
+  },
   "_site": {
     "copyrightMessage": "© 2025 Yext",
     "favicon": {
@@ -10,6 +65,8 @@
       "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
       "width": 1152
     },
+    "name": "Example Business",
+    "siteName": "Example Business Pages",
     "footer": {
       "links": [
         {
@@ -44,8 +101,12 @@
   "businessId": 1000152098,
   "dm_childEntityIds": ["8932938", "8932948"],
   "dm_directoryChildren": [
-    { "name": "US", "slug": "en/us" },
-    { "name": "CA", "slug": "ca" }
+    {
+      "name": "US",
+      "slug": "en/us",
+      "dm_addressCountryDisplayName": "United States"
+    },
+    { "name": "CA", "slug": "ca", "dm_addressCountryDisplayName": "Canada" }
   ],
   "dm_directoryManagerId": "63590-locations",
   "id": "dm-root",

@@ -3,7 +3,103 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
+  "_schema": {
+    "@graph": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "US",
+          "addressLocality": "New York",
+          "addressRegion": "NY",
+          "postalCode": "10014",
+          "streetAddress": "61 9th Avenue"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Corporate Catering"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Tailgate Catering"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Birthday Parties"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Delivery"
+              }
+            }
+          ],
+          "name": "Services"
+        },
+        "name": "Galaxy Grill",
+        "openingHours": ["Mo-Su 10:00-22:00"]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "Location Pages Directory",
+            "position": 1
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us",
+              "@type": "Thing"
+            },
+            "name": "US",
+            "position": 2
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/ny",
+              "@type": "Thing"
+            },
+            "name": "NY",
+            "position": 3
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/ny/new-york",
+              "@type": "Thing"
+            },
+            "name": "New York",
+            "position": 4
+          }
+        ]
+      }
+    ]
+  },
   "_site": {
+    "name": "Example Business",
+    "siteName": "Example Business Pages",
     "copyrightMessage": "© 2025 Yext",
     "favicon": {
       "height": 1152,
@@ -51,9 +147,23 @@
   },
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
-    { "name": "US", "slug": "en/us" },
-    { "name": "NY", "slug": "en/us/ny" },
-    { "name": "New York", "slug": "en/us/ny/new-york" }
+    {
+      "name": "US",
+      "slug": "en/us",
+      "dm_addressCountryDisplayName": "United States"
+    },
+    {
+      "name": "NY",
+      "slug": "en/us/ny",
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "New York"
+    },
+    {
+      "name": "New York",
+      "slug": "en/us/ny/new-york",
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "New York"
+    }
   ],
   "additionalHoursText": "tacos",
   "address": {

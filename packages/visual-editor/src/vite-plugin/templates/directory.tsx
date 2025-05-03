@@ -10,7 +10,7 @@ import {
   TagType,
 } from "@yext/pages";
 import { Render } from "@measured/puck";
-import { mainConfig } from "../ve.config";
+import { directoryConfig } from "../ve.config";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -79,14 +79,12 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
   }
 
   const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  const path = document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${document.address.line1}`
-    : `${localePath}${document.id}`;
+  const path = `${localePath}${document.id}`;
 
   return normalizeSlug(path);
 };
 
-const Location: Template<TemplateRenderProps> = (props) => {
+const Directory: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
 
   return (
@@ -96,10 +94,13 @@ const Location: Template<TemplateRenderProps> = (props) => {
       currency="USD"
     >
       <VisualEditorProvider templateProps={props}>
-        <Render config={mainConfig} data={JSON.parse(document.__.layout)} />
+        <Render
+          config={directoryConfig}
+          data={JSON.parse(document.__.layout)}
+        />
       </VisualEditorProvider>
     </AnalyticsProvider>
   );
 };
 
-export default Location;
+export default Directory;

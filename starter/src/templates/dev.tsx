@@ -15,12 +15,14 @@ import {
   VisualEditorProvider,
   YextSchemaField,
   defaultThemeConfig,
+  applyAnalytics,
+  applyHeaderScript,
   createSearchHeadlessConfig,
 } from "@yext/visual-editor";
-import { buildSchema } from "../utils/buildSchema.ts";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
+import { SchemaWrapper } from "@yext/pages-components";
 import {
   // CloudChoice,
   // CloudRegion,
@@ -96,8 +98,10 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       },
     ],
     other: [
+      applyAnalytics(document),
+      applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
-      buildSchema(document),
+      SchemaWrapper(document._schema),
     ].join("\n"),
   };
 };
