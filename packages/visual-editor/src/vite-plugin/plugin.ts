@@ -63,7 +63,6 @@ export const yextVisualEditorPlugin = (): Plugin => {
         return;
       }
       generateFiles();
-
       server.httpServer?.on("close", () => {
         cleanupFiles();
       });
