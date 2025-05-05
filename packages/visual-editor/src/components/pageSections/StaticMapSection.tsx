@@ -39,7 +39,6 @@ export const StaticMapSectionWrapper = (props: StaticMapSectionProps) => {
             latitude: 0,
             longitude: 0,
           },
-          constantValueEnabled: false,
         }}
       />
     </PageSection>
