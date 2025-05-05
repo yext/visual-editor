@@ -216,7 +216,6 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     events: {
       field: "", // TODO set to default
       constantValue: [],
-      constantValueEnabled: false,
     },
     liveVisibility: true,
   },
