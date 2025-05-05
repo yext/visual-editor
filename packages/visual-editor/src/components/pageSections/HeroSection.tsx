@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
-  HeroSection as HeroSectionType,
+  HeroSectionType,
   useDocument,
   resolveYextEntityField,
   EntityField,

@@ -2,4 +2,4 @@ export {
   type YextSchemaField,
   type YextFieldDefinition,
 } from "./entityFields.ts";
-export { type HeroSection } from "./types.ts";
+export { type HeroSectionType } from "./types.ts";
