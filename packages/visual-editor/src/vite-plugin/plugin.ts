@@ -4,6 +4,7 @@ import { Plugin } from "vite";
 import mainTemplate from "./templates/main.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
+import { execSync } from "node:child_process";
 
 // files to generate
 const virtualFiles: Record<string, string> = {
@@ -17,6 +18,8 @@ export const yextVisualEditorPlugin = (): Plugin => {
   const filesToCleanup: string[] = [];
 
   const generateFiles = () => {
+    let newFilesWritten = false;
+
     Object.entries(virtualFiles).forEach(([fileName, content]) => {
       const filePath = path.join(process.cwd(), fileName);
       filesToCleanup.push(filePath);
@@ -25,7 +28,12 @@ export const yextVisualEditorPlugin = (): Plugin => {
         return;
       }
       fs.writeFileSync(filePath, content);
+      newFilesWritten = true;
     });
+
+    if (newFilesWritten) {
+      execSync("npx pages generate templates");
+    }
   };
 
   const cleanupFiles = () => {
@@ -55,6 +63,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
         return;
       }
       generateFiles();
+
       server.httpServer?.on("close", () => {
         cleanupFiles();
       });

@@ -15,7 +15,7 @@ export default defineConfig(() => ({
     target: "node18",
     tsconfig: path.resolve(__dirname, "tsconfig.plugin.json"),
     rollupOptions: {
-      external: ["node:path", "fs-extra"],
+      external: ["node:path", "node:child_process", "fs-extra"],
     },
   },
 }));
