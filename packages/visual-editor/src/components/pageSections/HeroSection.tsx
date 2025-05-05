@@ -1,11 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  HoursStatus,
-  HoursType,
-  ImageType,
-  CTA as CTAType,
-} from "@yext/pages-components";
+import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
   useDocument,
   resolveYextEntityField,
@@ -21,13 +16,6 @@ import {
   YextField,
   VisibilityWrapper,
 } from "@yext/visual-editor";
-
-/** Hardcoded type */
-type HeroSection = {
-  image?: ImageType;
-  primaryCta?: CTAType;
-  secondaryCta?: CTAType;
-};
 
 export interface HeroSectionProps {
   businessName: {
