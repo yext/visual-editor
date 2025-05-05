@@ -1,5 +1,3 @@
-import { ImageType, CTA as CTAType } from "@yext/pages-components";
-
 export type YextSchemaField = {
   name: string;
   displayName?: string;
@@ -21,10 +19,4 @@ export type YextFieldDefinition = {
 export type StreamFields = {
   fields: YextSchemaField[];
   displayNames?: Record<string, string>;
-};
-
-export type HeroSection = {
-  image?: ImageType;
-  primaryCta?: CTAType;
-  secondaryCta?: CTAType;
 };
