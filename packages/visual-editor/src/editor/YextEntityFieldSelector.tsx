@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "../internal/puck/ui/radio.tsx";
 import { Label } from "../internal/puck/ui/label.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { TEXT_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Text.tsx";
+import { getTranslatableTextConfig } from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import { TEXT_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/CallToAction.tsx";
@@ -22,7 +22,7 @@ const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
-export type TranslatableString = Record<string, string>;
+export type TranslatableString = string | Record<string, string>;
 
 export type YextEntityField<T> = {
   field: string;
@@ -41,10 +41,11 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
     isCollection?: boolean;
     disableConstantValueToggle?: boolean;
+    isMultiline?: boolean;
+    locales?: string[];
   };
 
 const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
@@ -58,10 +59,16 @@ const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 
 const getConstantConfigFromType = (
   type: EntityFieldTypes,
-  isList: boolean
+  isList: boolean,
+  isMultiline?: boolean,
+  locales?: string[]
 ): Field<any> | undefined => {
   if (isList) {
     return LIST_TYPE_TO_CONSTANT_CONFIG[type];
+  }
+
+  if (type === "type.string") {
+    return getTranslatableTextConfig(isMultiline, locales);
   }
   const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
@@ -77,7 +84,9 @@ const getConstantConfigFromType = (
  */
 const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
-  isList: boolean
+  isList: boolean,
+  isMultiline?: boolean,
+  locales?: string[]
 ): Field | undefined => {
   if (!typeFilter) {
     return undefined;
@@ -87,7 +96,9 @@ const returnConstantFieldConfig = (
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = getConstantConfigFromType(
       entityFieldType,
-      isList
+      isList,
+      isMultiline,
+      locales
     );
     if (!mappedConfiguration) {
       devLogger.log(`No mapped configuration for ${entityFieldType}`);
@@ -136,6 +147,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               onChange={onChange}
               value={value}
               filter={props.filter}
+              locales={props.locales}
             />
           )}
           {!value?.constantValueEnabled && (
@@ -191,6 +203,8 @@ export const YextCollectionSubfieldSelector = <
               onChange={onChange}
               value={value}
               filter={props.filter}
+              isMultiline={props.isMultiline}
+              locales={props.locales}
             />
           ) : (
             <EntityFieldInput<T>
@@ -268,16 +282,22 @@ type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
   onChange: (value: any, uiState: any) => void;
   value: any;
+  isMultiline?: boolean;
+  locales?: string[];
 };
 
 const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
+  isMultiline,
+  locales,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
-    !!filter.includeListsOnly
+    !!filter.includeListsOnly,
+    isMultiline,
+    locales
   );
 
   if (!constantFieldConfig) {

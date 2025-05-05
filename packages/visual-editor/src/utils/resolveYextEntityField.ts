@@ -1,6 +1,8 @@
 import { Fields } from "@measured/puck";
-import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { useEffect, useState } from "react";
+import {
+  TranslatableString,
+  YextEntityField,
+} from "../editor/YextEntityFieldSelector.tsx";
 
 // Utility function to detect browser language
 const getBrowserLanguage = (): string => {
@@ -25,26 +27,7 @@ export const resolveYextEntityField = <T>(
     return undefined;
   }
 
-  // TODO: this breaks entity field mapping
   if (entityField.constantValueEnabled || !entityField.field) {
-    console.log(entityField.constantValue);
-    if (!entityField.constantValue) {
-      return;
-    }
-    if (typeof entityField.constantValue === "object") {
-      const detectedLanguage = getBrowserLanguage();
-      console.log("detectedLanguage", detectedLanguage);
-      if (detectedLanguage in entityField.constantValue) {
-        // TODO: fix this
-        // @ts-expect-error disable-next-line
-        return entityField.constantValue[detectedLanguage];
-      } else {
-        // TODO: fix this
-        // @ts-expect-error disable-next-line
-        return entityField.constantValue["en"];
-      }
-    }
-
     return entityField.constantValue as T;
   }
 
@@ -203,4 +186,28 @@ export const handleResolveFieldsForCollections = (
     isCollection,
     directChildrenFilter: collectionField,
   };
+};
+
+export const resolveTranslatableString = (
+  field?: TranslatableString
+): string | undefined => {
+  if (!field) {
+    return;
+  }
+
+  if (typeof field === "object") {
+    const detectedLanguage = getBrowserLanguage();
+    if (detectedLanguage in field) {
+      return field[detectedLanguage];
+    } else if ("en" in field) {
+      // TODO: Have a fallback language that isn't just English
+      return field["en"];
+    } else {
+      // Field does not have locale key for detected language
+      return;
+    }
+  }
+
+  // console.error(`Field is not a TranslatableString: ${field}`);
+  return field;
 };
