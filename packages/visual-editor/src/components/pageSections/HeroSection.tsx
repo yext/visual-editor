@@ -18,6 +18,8 @@ import {
   VisibilityWrapper,
 } from "@yext/visual-editor";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+
 export interface HeroSectionProps {
   businessName: {
     entityField: YextEntityField<string>;
@@ -209,7 +211,7 @@ const HeroSectionWrapper = ({
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
             aria-label="Call to Actions"
           >
-            {resolvedHero?.primaryCta && (
+            {resolvedHero?.primaryCta?.label && (
               <CTA
                 variant="primary"
                 label={resolvedHero.primaryCta.label}
@@ -218,7 +220,7 @@ const HeroSectionWrapper = ({
                 className={"py-3"}
               />
             )}
-            {resolvedHero.secondaryCta && (
+            {resolvedHero?.secondaryCta?.label && (
               <CTA
                 variant="secondary"
                 label={resolvedHero.secondaryCta.label}
@@ -270,7 +272,23 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     },
     hero: {
       field: "",
-      constantValue: {},
+      constantValue: {
+        image: {
+          height: 360,
+          width: 640,
+          url: PLACEHOLDER_IMAGE_URL,
+        },
+        primaryCta: {
+          label: "Call To Action",
+          link: "#",
+          linkType: "URL",
+        },
+        secondaryCta: {
+          label: "Call To Action",
+          link: "#",
+          linkType: "URL",
+        },
+      },
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
