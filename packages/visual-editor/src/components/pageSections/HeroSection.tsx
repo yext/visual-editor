@@ -2,6 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
+  HeroSection as HeroSectionType,
   useDocument,
   resolveYextEntityField,
   EntityField,
@@ -30,7 +31,7 @@ export interface HeroSectionProps {
     entityField: YextEntityField<HoursType>;
     showHours: boolean;
   };
-  hero: YextEntityField<HeroSection>;
+  hero: YextEntityField<HeroSectionType>;
   styles: {
     backgroundColor?: BackgroundStyle;
     imageOrientation: "left" | "right";
