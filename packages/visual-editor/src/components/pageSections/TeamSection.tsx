@@ -14,16 +14,17 @@ import {
   CTA,
   backgroundColors,
   VisibilityWrapper,
+  PhoneAtom,
 } from "@yext/visual-editor";
-import { ComplexImageType, CTA as CTAType } from "@yext/pages-components";
+import { CTA as CTAType, ImageType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { FaEnvelope, FaPhone } from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
 
 /** TODO remove types when spruce is ready */
 type People = Array<PersonStruct>;
 
 type PersonStruct = {
-  headshot?: ComplexImageType;
+  headshot?: ImageType;
   name?: string; // single line text
   title?: string; // single line text
   phoneNumber?: string; // phoneNumber
@@ -105,9 +106,7 @@ const PersonCard = ({
             <Image
               image={person.headshot}
               layout="auto"
-              aspectRatio={
-                person.headshot.image.width / person.headshot.image.height
-              }
+              aspectRatio={person.headshot.width / person.headshot.height}
             />
           )}
         </div>
@@ -123,17 +122,16 @@ const PersonCard = ({
       >
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
-                <FaPhone className="w-3 h-3 text-black" />
-              </div>
-              <CTA
-                link={person.phoneNumber}
-                label={person.phoneNumber}
-                linkType="PHONE"
-                variant="link"
-              />
-            </div>
+            <PhoneAtom
+              phoneNumber={person.phoneNumber}
+              includeHyperlink={true}
+              includeIcon={true}
+              format={
+                person.phoneNumber.slice(0, 2) === "+1"
+                  ? "domestic"
+                  : "international"
+              }
+            />
           )}
           {person.email && (
             <div className="flex items-center gap-2">
