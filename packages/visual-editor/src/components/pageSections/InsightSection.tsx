@@ -15,7 +15,7 @@ import {
   backgroundColors,
   VisibilityWrapper,
 } from "@yext/visual-editor";
-import { ComplexImageType, CTA as CTAType } from "@yext/pages-components";
+import { CTA as CTAType, ImageType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
 
@@ -23,7 +23,7 @@ import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
 type Insights = Array<InsightStruct>;
 
 type InsightStruct = {
-  image?: ComplexImageType;
+  image?: ImageType;
   name?: string; // single line text
   category?: string; // single line text
   publishTime?: dateTime; // lexon's dateTime
@@ -132,11 +132,7 @@ const InsightCard = ({
               )}
             </div>
           )}
-          {insight.name && (
-            <Heading level={3} className="text-palette-primary-dark">
-              {insight.name}
-            </Heading>
-          )}
+          {insight.name && <Heading level={3}>{insight.name}</Heading>}
           {insight.description?.html && (
             <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
               <div
@@ -223,7 +219,6 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
     insights: {
       field: "",
       constantValue: [],
-      constantValueEnabled: false,
     },
     liveVisibility: true,
   },
