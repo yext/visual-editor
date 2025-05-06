@@ -13,26 +13,19 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
-  EntityField,
+  CTAProps,
+  PromoSectionType,
+  Body,
 } from "@yext/visual-editor";
-import { ImageType, CTA as CTAType } from "@yext/pages-components";
 
-/** TODO remove types when spruce is ready */
-type PromoType = {
-  image?: ImageType;
-  title?: string; // single line text
-  description?: RTF2;
-  CTA?: CTAType;
-};
-
-type RTF2 = {
-  html?: string;
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface PromoSectionProps {
-  promo: YextEntityField<PromoType>;
+  promo: YextEntityField<PromoSectionType>;
+  cta: {
+    showCTA: boolean;
+    variant: CTAProps["variant"];
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
@@ -44,7 +37,23 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   promo: YextField("Promo", {
     type: "entityField",
     filter: {
-      types: ["type.promo"],
+      types: ["type.promo_section"],
+    },
+  }),
+  cta: YextField("CTA", {
+    type: "object",
+    objectFields: {
+      showCTA: YextField("Show CTA", {
+        type: "radio",
+        options: [
+          { label: "Show", value: true },
+          { label: "Hide", value: false },
+        ],
+      }),
+      variant: YextField("Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   styles: YextField("Styles", {
@@ -73,7 +82,29 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoWrapper: React.FC<PromoSectionProps> = ({ promo, styles }) => {
+const PromoDescription = ({ description }: PromoSectionType) => {
+  if (!description) {
+    return null;
+  }
+  if (typeof description === "string") {
+    return <Body>{description}</Body>;
+  } else if (
+    typeof description === "object" &&
+    typeof description.html === "string"
+  ) {
+    return (
+      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: description.html,
+          }}
+        />
+      </div>
+    );
+  }
+};
+
+const PromoWrapper: React.FC<PromoSectionProps> = ({ promo, cta, styles }) => {
   const document = useDocument();
   const resolvedPromo = resolveYextEntityField(document, promo);
 
@@ -85,39 +116,27 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ promo, styles }) => {
         styles.orientation === "right" && "md:flex-row-reverse"
       )}
     >
-      <EntityField
-        fieldId={promo.field}
-        constantValueEnabled={promo.constantValueEnabled}
-      >
-        {resolvedPromo?.image && (
-          <Image
-            image={resolvedPromo.image}
-            layout={"auto"}
-            aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+      {resolvedPromo?.image && (
+        <Image
+          image={resolvedPromo.image}
+          layout={"auto"}
+          aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+        />
+      )}
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
+        {resolvedPromo?.title && (
+          <Heading level={3}>{resolvedPromo?.title}</Heading>
+        )}
+        <PromoDescription description={resolvedPromo?.description} />
+        {resolvedPromo?.cta && cta?.showCTA && (
+          <CTA
+            variant={cta.variant}
+            label={resolvedPromo?.cta.label}
+            link={resolvedPromo?.cta.link}
+            linkType={resolvedPromo?.cta.linkType}
           />
         )}
-        <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
-          {resolvedPromo?.title && (
-            <Heading level={3}>{resolvedPromo?.title}</Heading>
-          )}
-          {resolvedPromo?.description?.html && (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: resolvedPromo.description.html,
-                }}
-              />
-            </div>
-          )}
-          {resolvedPromo?.CTA && (
-            <CTA
-              label={resolvedPromo?.CTA.label}
-              link={resolvedPromo?.CTA.link}
-              linkType={resolvedPromo?.CTA.linkType}
-            />
-          )}
-        </div>
-      </EntityField>
+      </div>
     </PageSection>
   );
 };
@@ -128,7 +147,24 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   defaultProps: {
     promo: {
       field: "",
-      constantValue: {},
+      constantValue: {
+        image: {
+          height: 360,
+          width: 640,
+          url: PLACEHOLDER_IMAGE_URL,
+        },
+        title: "Title",
+        description: "Description",
+        cta: {
+          label: "Call To Action",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+    },
+    cta: {
+      showCTA: true,
+      variant: "primary",
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,

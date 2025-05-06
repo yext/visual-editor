@@ -117,7 +117,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           { label: "Hide", value: false },
         ],
       }),
-      variant: YextField("Button Variant", {
+      variant: YextField("Variant", {
         type: "radio",
         options: "CTA_VARIANT",
       }),
@@ -133,7 +133,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           { label: "Hide", value: false },
         ],
       }),
-      variant: YextField("Button Variant", {
+      variant: YextField("Variant", {
         type: "radio",
         options: "CTA_VARIANT",
       }),
