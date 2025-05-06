@@ -43,6 +43,7 @@ export type EntityFieldTypes =
   | "type.coordinate"
   | "type.cta"
   | "type.promo"
+  | "type.hero_section"
   | "type.rich_text_v2"
   | `c_${string}`;
 
