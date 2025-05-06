@@ -17,6 +17,7 @@ import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Ph
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
+import { HERO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/HeroSection.tsx";
 
 const devLogger = new DevLogger();
 
@@ -47,6 +48,7 @@ const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
   "type.cta": CTA_CONSTANT_CONFIG,
+  "type.hero_section": HERO_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
