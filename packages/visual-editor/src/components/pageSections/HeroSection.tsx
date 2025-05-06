@@ -16,6 +16,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
+  CTAProps,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -34,6 +35,14 @@ export interface HeroSectionProps {
     showHours: boolean;
   };
   hero: YextEntityField<HeroSectionType>;
+  primaryCTA: {
+    showCTA: boolean;
+    variant: CTAProps["variant"];
+  };
+  secondaryCTA: {
+    showCTA: boolean;
+    variant: CTAProps["variant"];
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     imageOrientation: "left" | "right";
@@ -98,6 +107,38 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       types: ["type.hero_section"],
     },
   }),
+  primaryCTA: YextField("Primary CTA", {
+    type: "object",
+    objectFields: {
+      showCTA: YextField("Show CTA", {
+        type: "radio",
+        options: [
+          { label: "Show", value: true },
+          { label: "Hide", value: false },
+        ],
+      }),
+      variant: YextField("Button Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+    },
+  }),
+  secondaryCTA: YextField("Secondary CTA", {
+    type: "object",
+    objectFields: {
+      showCTA: YextField("Show CTA", {
+        type: "radio",
+        options: [
+          { label: "Show", value: true },
+          { label: "Hide", value: false },
+        ],
+      }),
+      variant: YextField("Button Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -129,6 +170,8 @@ const HeroSectionWrapper = ({
   localGeoModifier,
   hours,
   hero,
+  primaryCTA,
+  secondaryCTA,
   styles,
 }: HeroSectionProps) => {
   const document = useDocument() as any;
@@ -211,18 +254,18 @@ const HeroSectionWrapper = ({
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
             aria-label="Call to Actions"
           >
-            {resolvedHero?.primaryCta?.label && (
+            {resolvedHero?.primaryCta?.label && primaryCTA.showCTA && (
               <CTA
-                variant="primary"
+                variant={primaryCTA.variant}
                 label={resolvedHero.primaryCta.label}
                 link={resolvedHero.primaryCta.link}
                 linkType={resolvedHero.primaryCta.linkType}
                 className={"py-3"}
               />
             )}
-            {resolvedHero?.secondaryCta?.label && (
+            {resolvedHero?.secondaryCta?.label && secondaryCTA.showCTA && (
               <CTA
-                variant="secondary"
+                variant={secondaryCTA.variant}
                 label={resolvedHero.secondaryCta.label}
                 link={resolvedHero.secondaryCta.link}
                 linkType={resolvedHero.secondaryCta.linkType}
@@ -289,6 +332,14 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           linkType: "URL",
         },
       },
+    },
+    primaryCTA: {
+      showCTA: true,
+      variant: "primary",
+    },
+    secondaryCTA: {
+      showCTA: true,
+      variant: "secondary",
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
