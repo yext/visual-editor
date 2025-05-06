@@ -42,6 +42,7 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
+  | "type.hero_section"
   | "type.rich_text_v2"
   | "type.events"
   | `c_${string}`;
