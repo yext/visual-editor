@@ -21,6 +21,7 @@ import {
   YextField,
   VisibilityWrapper,
   CTAProps,
+  resolveYextEntityFieldV2,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -191,7 +192,7 @@ const HeroSectionWrapper = ({
     document,
     hours.entityField
   );
-  const resolvedHero = resolveYextEntityField(document, hero);
+  const resolvedHero = resolveYextEntityFieldV2(document, hero);
   console.log("resolvedHero", resolvedHero);
 
   const { timezone } = document as {

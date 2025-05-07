@@ -1,5 +1,6 @@
 import { Fields } from "@measured/puck";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { YextEntityFieldV2 } from "../editor/UpdatedYextSelector.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,
@@ -40,6 +41,41 @@ export const resolveYextEntityField = <T>(
 
   console.warn(`The field ${entityField.field} was not found in the document.`);
   return undefined;
+};
+
+export const resolveYextEntityFieldV2 = <T extends Record<string, any>>(
+  document: any,
+  entityField: YextEntityFieldV2<T>
+): T | undefined => {
+  let values: T = entityField.constantValue;
+  try {
+    // check for the entity field in the document
+    const steps: string[] = entityField.field.split(".");
+    let missedStep = false;
+    let current = document;
+    for (let i = 0; i < steps.length; i++) {
+      if (current?.[steps[i]] !== undefined) {
+        current = current[steps[i]];
+      } else {
+        missedStep = true;
+        break;
+      }
+    }
+    if (!missedStep) {
+      console.log("current", current); // TODO fix this being required
+      values = current;
+    }
+  } catch (e) {
+    console.error("Error in resolveYextEntityField:", e);
+  }
+
+  for (const key in entityField.constantValueOverride) {
+    if (!!entityField.constantValueOverride[key] && values[key]) {
+      values[key] = entityField.constantValue[key];
+    }
+  }
+
+  return values;
 };
 
 export const resolveYextSubfield = <T>(

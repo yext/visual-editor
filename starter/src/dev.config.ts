@@ -8505,86 +8505,45 @@ export const devTemplateStream = {
                 name: "image",
                 definition: {
                   name: "image",
-                  typeRegistryId: "type.image",
                   type: {
-                    objectType: "OBJECT_TYPE_COMPLEX_IMAGE",
+                    objectType: "OBJECT_TYPE_IMAGE",
                   },
                 },
                 children: {
                   fields: [
                     {
-                      name: "image",
+                      name: "url",
                       definition: {
-                        name: "image",
-                        type: {
-                          objectType: "OBJECT_TYPE_IMAGE",
-                        },
-                      },
-                      children: {
-                        fields: [
-                          {
-                            name: "url",
-                            definition: {
-                              name: "url",
-                              type: {
-                                stringType: "STRING_TYPE_URL",
-                              },
-                            },
-                          },
-                          {
-                            name: "alternateText",
-                            definition: {
-                              name: "alternateText",
-                              type: {
-                                stringType: "STRING_TYPE_MULTILINE",
-                              },
-                            },
-                          },
-                          {
-                            name: "width",
-                            definition: {
-                              name: "width",
-                              type: {
-                                numberType: "NUMBER_TYPE_INT",
-                              },
-                            },
-                          },
-                          {
-                            name: "height",
-                            definition: {
-                              name: "height",
-                              type: {
-                                numberType: "NUMBER_TYPE_INT",
-                              },
-                            },
-                          },
-                        ],
-                      },
-                    },
-                    {
-                      name: "description",
-                      definition: {
-                        name: "description",
-                        type: {
-                          stringType: "STRING_TYPE_MULTILINE",
-                        },
-                      },
-                    },
-                    {
-                      name: "details",
-                      definition: {
-                        name: "details",
-                        type: {
-                          stringType: "STRING_TYPE_MULTILINE",
-                        },
-                      },
-                    },
-                    {
-                      name: "clickthroughUrl",
-                      definition: {
-                        name: "clickthroughUrl",
+                        name: "url",
                         type: {
                           stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "alternateText",
+                      definition: {
+                        name: "alternateText",
+                        type: {
+                          stringType: "STRING_TYPE_MULTILINE",
+                        },
+                      },
+                    },
+                    {
+                      name: "width",
+                      definition: {
+                        name: "width",
+                        type: {
+                          numberType: "NUMBER_TYPE_INT",
+                        },
+                      },
+                    },
+                    {
+                      name: "height",
+                      definition: {
+                        name: "height",
+                        type: {
+                          numberType: "NUMBER_TYPE_INT",
                         },
                       },
                     },
@@ -8592,9 +8551,36 @@ export const devTemplateStream = {
                 },
               },
               {
-                name: "cta1",
+                name: "description",
                 definition: {
-                  name: "cta1",
+                  name: "description",
+                  type: {
+                    stringType: "STRING_TYPE_MULTILINE",
+                  },
+                },
+              },
+              {
+                name: "details",
+                definition: {
+                  name: "details",
+                  type: {
+                    stringType: "STRING_TYPE_MULTILINE",
+                  },
+                },
+              },
+              {
+                name: "clickthroughUrl",
+                definition: {
+                  name: "clickthroughUrl",
+                  type: {
+                    stringType: "STRING_TYPE_URL",
+                  },
+                },
+              },
+              {
+                name: "primaryCta",
+                definition: {
+                  name: "primaryCta",
                   typeName: "c_cta",
                   typeRegistryId: "type.c1000146856.cta",
                   type: {
@@ -8604,9 +8590,9 @@ export const devTemplateStream = {
                 children: {
                   fields: [
                     {
-                      name: "name",
+                      name: "label",
                       definition: {
-                        name: "name",
+                        name: "label",
                         typeRegistryId: "type.string",
                         type: {
                           stringType: "STRING_TYPE_DEFAULT",
@@ -8623,13 +8609,23 @@ export const devTemplateStream = {
                         },
                       },
                     },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
                   ],
                 },
               },
               {
-                name: "cta2",
+                name: "secondaryCta",
                 definition: {
-                  name: "cta2",
+                  name: "secondaryCta",
                   typeName: "c_cta",
                   typeRegistryId: "type.c1000146856.cta",
                   type: {
@@ -8639,9 +8635,9 @@ export const devTemplateStream = {
                 children: {
                   fields: [
                     {
-                      name: "name",
+                      name: "label",
                       definition: {
-                        name: "name",
+                        name: "label",
                         typeRegistryId: "type.string",
                         type: {
                           stringType: "STRING_TYPE_DEFAULT",
@@ -8655,6 +8651,16 @@ export const devTemplateStream = {
                         typeRegistryId: "type.string",
                         type: {
                           stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
                         },
                       },
                     },

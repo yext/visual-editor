@@ -1,31 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { CustomField, FieldLabel } from "@measured/puck";
-import {
-  EntityFieldInput,
-  YextEntityFieldSelector,
-} from "./YextEntityFieldSelector.tsx";
+import React from "react";
+import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
+import { EntityFieldInput } from "./YextEntityFieldSelector.tsx";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
-type EntityFieldTypesFilter<T> = {
+type EntityFieldTypesFilter = {
   types?: EntityFieldTypes[];
 };
 
 type EntityFieldTypes = "c_hero";
 
-export type YextEntityFieldV2<T> = {
+export type YextEntityFieldV2<T extends Record<string, any> = any> = {
   field: string;
   constantValue: T;
-  constantValueEnabled?: boolean; // really means toggled
+  constantValueOverride?: {
+    [K in keyof T]?: boolean;
+  };
 };
 
-export type SelectorPropsV2<T extends Record<string, any>> = {
+export type SelectorPropsV2 = {
   label: string;
-  filter: EntityFieldTypesFilter<T>;
+  filter: EntityFieldTypesFilter;
 };
 
-export const YextSelectorV2 = <T extends Record<string, any>, U>(
-  props: SelectorPropsV2<T>
+export const YextSelectorV2 = <U extends Record<string, any>>(
+  props: SelectorPropsV2
 ): CustomField<YextEntityFieldV2<U>> => {
   return {
     type: "custom",
@@ -36,18 +37,28 @@ export const YextSelectorV2 = <T extends Record<string, any>, U>(
 
       return (
         <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
-          <EntityFieldInput<T>
+          <EntityFieldInput<U>
             onChange={onChange}
             value={value}
             filter={props.filter}
           />
-          {value?.field && (
-            <Subfields
-              onChange={onChange}
-              value={value}
-              filter={props.filter}
-            />
-          )}
+          <AutoField
+            onChange={(newConstantValue) =>
+              onChange({
+                field: value?.field ?? "",
+                constantValue: {
+                  ...value.constantValue,
+                  image: newConstantValue,
+                },
+                constantValueOverride: {
+                  ...value.constantValueOverride,
+                  ["image"]: true,
+                },
+              })
+            }
+            value={value?.constantValue?.image}
+            field={IMAGE_CONSTANT_CONFIG}
+          />
           {/**  field per subfield which looks like two options 1. entityField or 2. constValue (can use YextEntityFieldSelector i guess)*/}
         </FieldLabel>
       );
@@ -55,27 +66,23 @@ export const YextSelectorV2 = <T extends Record<string, any>, U>(
   };
 };
 
-type InputPropsV2<T extends Record<string, any>> = {
-  filter: EntityFieldTypesFilter<T>;
+type InputPropsV2 = {
+  filter: EntityFieldTypesFilter;
   onChange: (value: any, uiState: any) => void;
   value: any;
 };
 
-const Subfields = <T extends Record<string, any>>({
+const SubfieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
-}: InputPropsV2<T>) => {
+}: InputPropsV2) => {
   // get subfields for field selected
   const hardCodedSubfields = ["image", "primaryCta", "secondaryCta"];
+  // get fieldConfig for each subfield
 
-  return YextEntityFieldSelector({
-    label: "Image",
-    filter: {
-      types: ["type.image"],
-      directChildrenOf: value?.field,
-    },
-  }) as JSX.Element;
+  console.log(value?.field);
+  return <></>;
   // if not list then return YextEntityFieldSelector per subfield (but YextEntityFieldSelector should only have one option for entityValue)
 };
 

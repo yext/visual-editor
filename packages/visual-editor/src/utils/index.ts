@@ -2,6 +2,7 @@ export { applyTheme } from "./applyTheme.ts";
 export {
   resolveYextEntityField,
   resolveYextSubfield,
+  resolveYextEntityFieldV2,
   handleResolveFieldsForCollections,
 } from "./resolveYextEntityField.ts";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";

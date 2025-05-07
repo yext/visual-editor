@@ -138,6 +138,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
           )}
           {!value?.constantValueEnabled && (
             <EntityFieldInput<T>
+              className="ve-pt-4"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -192,6 +193,7 @@ export const YextCollectionSubfieldSelector = <
             />
           ) : (
             <EntityFieldInput<T>
+              className="ve-pt-4"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -203,7 +205,7 @@ export const YextCollectionSubfieldSelector = <
   };
 };
 
-const ConstantValueModeToggler = ({
+export const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
@@ -266,9 +268,10 @@ type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
   onChange: (value: any, uiState: any) => void;
   value: any;
+  className?: string;
 };
 
-const ConstantValueInput = <T extends Record<string, any>>({
+export const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
@@ -324,6 +327,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
+  className, // twmerge
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
 
@@ -359,7 +363,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   }, [entityFields, filter]);
 
   return (
-    <div className={"ve-inline-block ve-w-full ve-pt-4"}>
+    <div className={"ve-inline-block ve-w-full " + className}>
       <AutoField
         field={basicSelectorField}
         onChange={(selectedEntityField, uiState) => {
