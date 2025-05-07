@@ -2,6 +2,10 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
+  YextSelectorV2,
+  YextEntityFieldV2,
+} from "../../editor/UpdatedYextSelector.tsx";
+import {
   HeroSectionType,
   useDocument,
   resolveYextEntityField,
@@ -34,7 +38,7 @@ export interface HeroSectionProps {
     entityField: YextEntityField<HoursType>;
     showHours: boolean;
   };
-  hero: YextEntityField<HeroSectionType>;
+  hero: YextEntityFieldV2<HeroSectionType>;
   primaryCTA: {
     showCTA: boolean;
     variant: CTAProps["variant"];
@@ -101,10 +105,10 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       }),
     },
   }),
-  hero: YextField("Hero", {
-    type: "entityField",
+  hero: YextSelectorV2({
+    label: "Hero",
     filter: {
-      types: ["type.hero_section"],
+      types: ["c_hero"],
     },
   }),
   primaryCTA: YextField("Primary CTA", {
@@ -188,6 +192,7 @@ const HeroSectionWrapper = ({
     hours.entityField
   );
   const resolvedHero = resolveYextEntityField(document, hero);
+  console.log("resolvedHero", resolvedHero);
 
   const { timezone } = document as {
     timezone: string;
