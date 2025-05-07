@@ -243,15 +243,35 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentEndpoint: string = document?._env?.YEXT_CONTENT_ENDPOINT;
-  if (!contentEndpoint) {
+  const apiKey: string = document?._env?.YEXT_VISUAL_EDITOR_APP_API_KEY;
+  if (!apiKey) {
     console.warn(
-      "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
+      "Missing YEXT_VISUAL_EDITOR_APP_API_KEY! Unable to fetch nearby locations."
     );
     return <></>;
   }
+  const businessId = document?.businessId as number;
+  if (!businessId) {
+    console.warn("Missing businessId! Unable to fetch nearby locations.");
+    return <></>;
+  }
+  const contentEndpointId = document?._pageset?.contentEndpointId;
+  if (!apiKey) {
+    console.warn(
+      "Missing contentEndpointId! Unable to fetch nearby locations."
+    );
+    return <></>;
+  }
+  const universe = document?.__meta?.universe;
+  if (!universe) {
+    console.warn('Missing universe! Defaulting to "production"');
+    return <></>;
+  }
+  const partition = document?.__meta?.partition;
+  if (!partition) {
+    console.warn('Missing partition! Defaulting to "US"');
+  }
 
-  const entityType: string = document?.meta?.entityType?.id || "location";
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
       queryKey: [
@@ -259,25 +279,29 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
         coordinate?.latitude,
         coordinate?.longitude,
         radius,
-        entityType,
+        apiKey,
+        contentEndpointId,
         limit,
       ],
       queryFn: async () => {
         return await fetchNearbyLocations({
-          contentEndpoint: contentEndpoint,
+          businessId: businessId,
+          apiKey: apiKey,
+          contentEndpointId: contentEndpointId,
+          universe: universe,
+          partition: partition,
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
           limit: limit,
-          entityType: entityType,
         });
       },
       enabled:
         !!coordinate?.latitude &&
         !!coordinate.longitude &&
         !!radius &&
-        !!contentEndpoint &&
-        !!entityType,
+        !!apiKey &&
+        !!contentEndpointId,
     }
   );
 
