@@ -41,7 +41,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     disableConstantValueToggle?: boolean;
   };
 
-const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
@@ -54,9 +54,9 @@ const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.image": IMAGE_LIST_CONSTANT_CONFIG,
 };
 
-const getConstantConfigFromType = (
+export const getConstantConfigFromType = (
   type: EntityFieldTypes,
-  isList: boolean
+  isList?: boolean
 ): Field<any> | undefined => {
   if (isList) {
     return LIST_TYPE_TO_CONSTANT_CONFIG[type];
@@ -372,6 +372,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
               field: selectedEntityField,
               constantValue: value?.constantValue ?? "",
               constantValueEnabled: false,
+              constantValueOverride: value?.constantValueOverride ?? {},
             },
             uiState
           );

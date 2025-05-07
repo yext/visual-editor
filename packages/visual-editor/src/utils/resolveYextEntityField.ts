@@ -47,35 +47,19 @@ export const resolveYextEntityFieldV2 = <T extends Record<string, any>>(
   document: any,
   entityField: YextEntityFieldV2<T>
 ): T | undefined => {
-  let values: T = entityField.constantValue;
-  try {
-    // check for the entity field in the document
-    const steps: string[] = entityField.field.split(".");
-    let missedStep = false;
-    let current = document;
-    for (let i = 0; i < steps.length; i++) {
-      if (current?.[steps[i]] !== undefined) {
-        current = current[steps[i]];
-      } else {
-        missedStep = true;
-        break;
-      }
-    }
-    if (!missedStep) {
-      console.log("current", current); // TODO fix this being required
-      values = current;
-    }
-  } catch (e) {
-    console.error("Error in resolveYextEntityField:", e);
+  const values = resolveYextEntityField(document, entityField);
+  if (typeof values === "undefined") {
+    return undefined;
   }
 
+  const overridenValues = { ...values }; // shallow copy of values
   for (const key in entityField.constantValueOverride) {
-    if (!!entityField.constantValueOverride[key] && values[key]) {
-      values[key] = entityField.constantValue[key];
+    if (entityField.constantValueOverride[key] && !!overridenValues?.[key]) {
+      overridenValues[key] = entityField.constantValue?.[key];
     }
   }
 
-  return values;
+  return overridenValues;
 };
 
 export const resolveYextSubfield = <T>(

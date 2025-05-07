@@ -193,7 +193,6 @@ const HeroSectionWrapper = ({
     hours.entityField
   );
   const resolvedHero = resolveYextEntityFieldV2(document, hero);
-  console.log("resolvedHero", resolvedHero);
 
   const { timezone } = document as {
     timezone: string;
@@ -337,6 +336,11 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           link: "#",
           linkType: "URL",
         },
+      },
+      constantValueOverride: {
+        image: false,
+        primaryCta: false,
+        secondaryCta: false,
       },
     },
     primaryCTA: {
