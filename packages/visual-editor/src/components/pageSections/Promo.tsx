@@ -99,7 +99,7 @@ const PromoDescription = ({ description }: PromoSectionType) => {
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
-  const resolvedPromo = resolveYextStructField(document, data.promo);
+  const resolvedPromo = resolveYextStructField(document, data?.promo);
 
   return (
     <PageSection
@@ -123,7 +123,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         <PromoDescription description={resolvedPromo?.description} />
         {resolvedPromo?.cta?.label && (
           <CTA
-            variant={styles.ctaVariant}
+            variant={styles?.ctaVariant}
             label={resolvedPromo?.cta.label}
             link={resolvedPromo?.cta.link}
             linkType={resolvedPromo?.cta.linkType}

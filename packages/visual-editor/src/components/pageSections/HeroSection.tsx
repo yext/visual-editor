@@ -120,14 +120,17 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const document = useDocument() as any;
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
-    data.businessName
+    data?.businessName
   );
   const resolvedLocalGeoModifier = resolveYextEntityField<string>(
     document,
-    data.localGeoModifier
+    data?.localGeoModifier
   );
-  const resolvedHours = resolveYextEntityField<HoursType>(document, data.hours);
-  const resolvedHero = resolveYextStructField(document, data.hero);
+  const resolvedHours = resolveYextEntityField<HoursType>(
+    document,
+    data?.hours
+  );
+  const resolvedHero = resolveYextStructField(document, data?.hero);
 
   const { timezone } = document as {
     timezone: string;
@@ -155,10 +158,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             {resolvedBusinessName && (
               <EntityField
                 displayName="Business Name"
-                fieldId={data.businessName.field}
-                constantValueEnabled={data.businessName.constantValueEnabled}
+                fieldId={data?.businessName.field}
+                constantValueEnabled={data?.businessName.constantValueEnabled}
               >
-                <Heading level={styles.businessNameLevel}>
+                <Heading level={styles?.businessNameLevel}>
                   {resolvedBusinessName}
                 </Heading>
               </EntityField>
@@ -166,12 +169,12 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             {resolvedLocalGeoModifier && (
               <EntityField
                 displayName="Local GeoModifier"
-                fieldId={data.localGeoModifier.field}
+                fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
-                  data.localGeoModifier.constantValueEnabled
+                  data?.localGeoModifier.constantValueEnabled
                 }
               >
-                <Heading level={styles.localGeoModifierLevel}>
+                <Heading level={styles?.localGeoModifierLevel}>
                   {resolvedLocalGeoModifier}
                 </Heading>
               </EntityField>
@@ -180,8 +183,8 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           {resolvedHours && (
             <EntityField
               displayName="Hours"
-              fieldId={data.hours.field}
-              constantValueEnabled={data.hours.constantValueEnabled}
+              fieldId={data?.hours.field}
+              constantValueEnabled={data?.hours.constantValueEnabled}
             >
               <HoursStatus hours={resolvedHours} timezone={timezone} />
             </EntityField>
@@ -195,7 +198,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             {resolvedHero?.primaryCta?.label && (
               <CTA
-                variant={styles.primaryCTA}
+                variant={styles?.primaryCTA}
                 label={resolvedHero.primaryCta.label}
                 link={resolvedHero.primaryCta.link}
                 linkType={resolvedHero.primaryCta.linkType}
@@ -204,7 +207,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedHero?.secondaryCta?.label && (
               <CTA
-                variant={styles.secondaryCTA}
+                variant={styles?.secondaryCTA}
                 label={resolvedHero.secondaryCta.label}
                 link={resolvedHero.secondaryCta.link}
                 linkType={resolvedHero.secondaryCta.linkType}
