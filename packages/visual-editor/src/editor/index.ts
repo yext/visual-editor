@@ -18,5 +18,5 @@ export { BasicSelector } from "./BasicSelector.tsx";
 export { YextField } from "./YextField.tsx";
 export {
   YextStructFieldSelector,
-  type YextEntityFieldV2,
+  type YextStructEntityField,
 } from "./YextStructFieldSelector.tsx";

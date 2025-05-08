@@ -1,6 +1,6 @@
 import { Fields } from "@measured/puck";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { YextEntityFieldV2 } from "../editor/YextStructFieldSelector.tsx";
+import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,
@@ -45,7 +45,7 @@ export const resolveYextEntityField = <T>(
 
 export const resolveYextStructField = <T extends Record<string, any>>(
   document: any,
-  entityField: YextEntityFieldV2<T>
+  entityField: YextStructEntityField<T>
 ): T | undefined => {
   const values = resolveYextEntityField(document, entityField);
   if (typeof values === "undefined") {

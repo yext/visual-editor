@@ -19,7 +19,7 @@ import {
   CTAProps,
   resolveYextStructField,
   YextStructFieldSelector,
-  YextEntityFieldV2,
+  YextStructEntityField,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -29,7 +29,7 @@ export interface HeroSectionProps {
     businessName: YextEntityField<string>;
     localGeoModifier: YextEntityField<string>;
     hours: YextEntityField<HoursType>;
-    hero: YextEntityFieldV2<HeroSectionType>;
+    hero: YextStructEntityField<HeroSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;

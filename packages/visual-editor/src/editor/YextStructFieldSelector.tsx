@@ -11,14 +11,14 @@ import "./index.css";
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 type EntityFieldTypesFilter = {
-  type: EntityFieldTypesV2;
+  type: StructEntityFieldTypes;
 };
 
-// EntityFieldTypesV2 contains new struct types that we support overriding individual subfields for
-export type EntityFieldTypesV2 = "type.hero_section";
+// StructEntityFieldTypes contains new struct types that we support overriding individual subfields for
+export type StructEntityFieldTypes = "type.hero_section";
 
-// YextEntityFieldV2 keeps track of which fields we are allowing individual overriding for using constantValueOverride
-export type YextEntityFieldV2<T extends Record<string, any> = any> = {
+// YextStructEntityField keeps track of which fields we are allowing individual overriding for using constantValueOverride
+export type YextStructEntityField<T extends Record<string, any> = any> = {
   field: string;
   constantValue: T;
   constantValueOverride: {
@@ -26,15 +26,15 @@ export type YextEntityFieldV2<T extends Record<string, any> = any> = {
   };
 };
 
-export type SelectorPropsV2 = {
+export type StructSelectorProps = {
   label: string;
   filter: EntityFieldTypesFilter;
 };
 
 // YextStructFieldSelector will be used for new built-in struct and list field types.
 export const YextStructFieldSelector = <U extends Record<string, any>>(
-  props: SelectorPropsV2
-): CustomField<YextEntityFieldV2<U>> => {
+  props: StructSelectorProps
+): CustomField<YextStructEntityField<U>> => {
   const filter = {
     types: [props.filter.type],
   };
@@ -61,7 +61,7 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
   };
 };
 
-type InputPropsV2 = {
+type InputProps = {
   filter: EntityFieldTypesFilter;
   onChange: (value: any, uiState?: any) => void;
   value: any;
@@ -69,7 +69,7 @@ type InputPropsV2 = {
 
 // SubfieldsInput renders the subfields such that users can choose to toggle between the
 // inferred entityValue (from field) being used or use a constantValue.
-const SubfieldsInput = ({ filter, onChange, value }: InputPropsV2) => {
+const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
   const subfields = getSubfieldsFromType(filter.type);
   if (!subfields) {
     return;

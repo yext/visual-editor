@@ -1,4 +1,4 @@
-import { EntityFieldTypesV2 } from "../../editor/YextStructFieldSelector.tsx";
+import { StructEntityFieldTypes } from "../../editor/YextStructFieldSelector.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { EntityFieldTypes } from "../utils/getFilteredEntityFields.ts";
 
@@ -16,12 +16,13 @@ const HERO_SECTION_SUBFIELD: SubFieldProps = [
   { field: "secondaryCta", type: "type.cta", label: "Secondary CTA" },
 ];
 
-const STRUCT_TYPE_TO_SUBFIELDS: Record<EntityFieldTypesV2, SubFieldProps> = {
-  "type.hero_section": HERO_SECTION_SUBFIELD,
-};
+const STRUCT_TYPE_TO_SUBFIELDS: Record<StructEntityFieldTypes, SubFieldProps> =
+  {
+    "type.hero_section": HERO_SECTION_SUBFIELD,
+  };
 
 export const getSubfieldsFromType = (
-  type: EntityFieldTypesV2 | undefined
+  type: StructEntityFieldTypes | undefined
 ): SubFieldProps | undefined => {
   if (!type) {
     return;
