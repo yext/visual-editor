@@ -42,6 +42,7 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
+  | "type.faq_section"
   | "type.testimonials_section"
   | "type.products_section"
   | "type.insights_section"
