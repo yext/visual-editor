@@ -447,11 +447,11 @@ const getPath = (location: Location, locale: string) => {
 };
 
 const getDocumentLocale = () => {
-  let fullLocale = useTemplateProps<any>().document?.meta?.locale || "en";
-  if (!(fullLocale in TRANSLATIONS)) {
-    fullLocale = "en";
+  const fullLocale = useTemplateProps<any>().document?.meta?.locale || "en";
+  let locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
+  if (!(locale in TRANSLATIONS)) {
+    locale = "en";
   }
-  const locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
   return locale;
 };
 
