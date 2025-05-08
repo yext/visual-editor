@@ -10,6 +10,7 @@ export {
 export { EventSection, type EventSectionProps } from "./EventSection.tsx";
 export { FAQsSection, type FAQsSectionProps } from "./FAQs.tsx";
 export { HeroSection, type HeroSectionProps } from "./HeroSection.tsx";
+export { InsightSection, type InsightSectionProps } from "./InsightSection.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
