@@ -3,110 +3,45 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   themeManagerCn,
   useDocument,
-  resolveYextEntityField,
-  EntityField,
-  YextEntityField,
-  ImageProps,
   Image,
-  Body,
   BackgroundStyle,
   backgroundColors,
-  BodyProps,
-  ImageWrapperProps,
   Heading,
-  HeadingProps,
   CTA,
-  CTAProps,
   PageSection,
   YextField,
   VisibilityWrapper,
+  CTAProps,
+  PromoSectionType,
+  Body,
+  YextStructEntityField,
+  YextStructFieldSelector,
+  resolveYextStructField,
 } from "@yext/visual-editor";
-import {
-  resolvedImageFields,
-  ImageWrapperFields,
-} from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface PromoSectionProps {
-  image: ImageWrapperProps;
-  title: {
-    text: YextEntityField<string>;
-    level: HeadingProps["level"];
-  };
-  description: {
-    text: YextEntityField<string>;
-    variant: BodyProps["variant"];
-  };
-  cta: {
-    entityField: YextEntityField<CTAProps>;
-    variant: CTAProps["variant"];
-    visible: boolean;
+  data: {
+    promo: YextStructEntityField<PromoSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
+    ctaVariant: CTAProps["variant"];
   };
   liveVisibility: boolean;
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  image: YextField("Image", {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      ...ImageWrapperFields,
-    },
-  }),
-  title: YextField("Business Name Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Value", {
-        type: "entityField",
+      promo: YextStructFieldSelector({
+        label: "Promo",
         filter: {
-          types: ["type.string"],
+          type: "type.promo_section",
         },
-      }),
-      level: YextField("Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  description: YextField("Description", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Value", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      variant: YextField("Variant", {
-        type: "radio",
-        options: "BODY_VARIANT",
-      }),
-    },
-  }),
-  cta: YextField("Primary CTA", {
-    type: "object",
-    objectFields: {
-      entityField: YextField<any, CTAProps>("Value", {
-        type: "entityField",
-        filter: {
-          types: ["type.cta"],
-        },
-      }),
-      variant: YextField("Variant", {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
-      visible: YextField("Show Primary CTA", {
-        type: "radio",
-        options: [
-          { label: "Show", value: true },
-          { label: "Hide", value: false },
-        ],
       }),
     },
   }),
@@ -125,6 +60,10 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           { label: "Right", value: "right" },
         ],
       }),
+      ctaVariant: YextField("CTA Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -136,24 +75,31 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoWrapper: React.FC<PromoSectionProps> = ({
-  image,
-  title,
-  description,
-  cta,
-  styles,
-}) => {
-  const document = useDocument();
-  const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
-    document,
-    image.image
-  );
-  const resolvedCTA = resolveYextEntityField(document, cta.entityField);
-  const resolvedTitle = resolveYextEntityField(document, title.text);
-
-  if (!resolvedImage) {
+const PromoDescription = ({ description }: PromoSectionType) => {
+  if (!description) {
     return null;
   }
+  if (typeof description === "string") {
+    return <Body>{description}</Body>;
+  } else if (
+    typeof description === "object" &&
+    typeof description.html === "string"
+  ) {
+    return (
+      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: description.html,
+          }}
+        />
+      </div>
+    );
+  }
+};
+
+const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
+  const document = useDocument();
+  const resolvedPromo = resolveYextStructField(document, data.promo);
 
   return (
     <PageSection
@@ -163,36 +109,24 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
         styles.orientation === "right" && "md:flex-row-reverse"
       )}
     >
-      {resolvedImage && (
-        <EntityField
-          displayName="Image"
-          fieldId={image.image.field}
-          constantValueEnabled={image.image.constantValueEnabled}
-        >
-          <Image
-            image={resolvedImage}
-            layout={image.layout}
-            width={image.width}
-            height={image.height}
-            aspectRatio={image.aspectRatio}
-          />
-        </EntityField>
+      {resolvedPromo?.image && (
+        <Image
+          image={resolvedPromo.image}
+          layout={"auto"}
+          aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+        />
       )}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
-        {resolvedTitle && (
-          <Heading level={title.level}>{resolvedTitle}</Heading>
+        {resolvedPromo?.title && (
+          <Heading level={3}>{resolvedPromo?.title}</Heading>
         )}
-        {description?.text && (
-          <Body variant={description.variant}>
-            {resolveYextEntityField(document, description.text)}
-          </Body>
-        )}
-        {resolvedCTA && cta.visible && (
+        <PromoDescription description={resolvedPromo?.description} />
+        {resolvedPromo?.cta?.label && (
           <CTA
-            variant={cta.variant}
-            label={resolvedCTA.label}
-            link={resolvedCTA.link}
-            linkType={resolvedCTA.linkType}
+            variant={styles.ctaVariant}
+            label={resolvedPromo?.cta.label}
+            link={resolvedPromo?.cta.link}
+            linkType={resolvedPromo?.cta.linkType}
           />
         )}
       </div>
@@ -204,58 +138,32 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   label: "Promo Section",
   fields: promoSectionFields,
   defaultProps: {
-    liveVisibility: true,
-    image: {
-      image: {
-        field: "primaryPhoto",
-        constantValue: {
-          height: 360,
-          width: 640,
-          url: PLACEHOLDER_IMAGE_URL,
-        },
-        constantValueEnabled: true,
-      },
-      layout: "auto",
-      aspectRatio: 1.78,
-    },
-    title: {
-      text: {
-        field: "name",
-        constantValue: "Title",
-      },
-      level: 3,
-    },
-    description: {
-      text: {
-        field: "",
-        constantValue: "Description",
-        constantValueEnabled: true,
-      },
-      variant: "base",
-    },
-    cta: {
-      entityField: {
+    data: {
+      promo: {
         field: "",
         constantValue: {
-          label: "Call to Action",
+          image: {
+            height: 360,
+            width: 640,
+            url: PLACEHOLDER_IMAGE_URL,
+          },
+          title: "Title",
+          description: "Description",
+          cta: {
+            label: "Call To Action",
+            link: "#",
+            linkType: "URL",
+          },
         },
+        constantValueOverride: {},
       },
-      variant: "primary",
-      visible: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
       orientation: "left",
+      ctaVariant: "primary",
     },
-  },
-  resolveFields(data) {
-    return {
-      ...promoSectionFields,
-      image: {
-        ...promoSectionFields.image,
-        objectFields: resolvedImageFields(data.props.image.layout),
-      },
-    };
+    liveVisibility: true,
   },
   render: (props) => (
     <VisibilityWrapper

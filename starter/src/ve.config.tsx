@@ -5,16 +5,7 @@ import {
   PageSectionCategory,
   PageSectionCategoryComponents,
   PageSectionCategoryProps,
-  LayoutBlockCategory,
-  CardCategory,
-  ContentBlockCategory,
-  LayoutBlockCategoryComponents,
-  CardCategoryComponents,
-  ContentBlockCategoryComponents,
   OtherCategoryComponents,
-  LayoutBlockCategoryProps,
-  CardCategoryProps,
-  ContentBlockCategoryProps,
   OtherCategoryProps,
   DirectoryCategory,
   DirectoryCategoryComponents,
@@ -23,17 +14,11 @@ import {
 
 interface MainProps
   extends PageSectionCategoryProps,
-    LayoutBlockCategoryProps,
-    CardCategoryProps,
-    ContentBlockCategoryProps,
     DirectoryCategoryProps,
     OtherCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
-  ...LayoutBlockCategoryComponents,
-  ...CardCategoryComponents,
-  ...ContentBlockCategoryComponents,
   ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
 };
@@ -46,18 +31,6 @@ export const mainConfig: Config<MainProps> = {
       title: "Page Sections",
       components: PageSectionCategory,
     },
-    layoutBlocks: {
-      title: "Layout Blocks",
-      components: LayoutBlockCategory,
-    },
-    cardBlocks: {
-      title: "Cards",
-      components: CardCategory,
-    },
-    contentBlocks: {
-      title: "Content Blocks",
-      components: ContentBlockCategory,
-    },
     directory: {
       title: "Directory",
       components: DirectoryCategory,
@@ -68,11 +41,6 @@ export const mainConfig: Config<MainProps> = {
       return (
         <DropZone
           zone="default-zone"
-          disallow={[
-            ...ContentBlockCategory,
-            ...CardCategory,
-            ...LayoutBlockCategory,
-          ]}
           style={{ display: "flex", flexDirection: "column", height: "100vh" }}
         />
       );

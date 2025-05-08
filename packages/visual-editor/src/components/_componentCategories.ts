@@ -7,6 +7,10 @@ import {
   CoreInfoSection,
   CoreInfoSectionProps,
 } from "./pageSections/CoreInfoSection.tsx";
+import {
+  EventSection,
+  EventSectionProps,
+} from "./pageSections/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "./pageSections/HeroSection.tsx";
 import {
   NearbyLocationsSection,
@@ -57,10 +61,15 @@ import {
   TestimonialCardProps,
   TestimonialCard,
 } from "./cards/TestimonialCard.tsx";
+import {
+  StaticMapSection,
+  StaticMapSectionProps,
+} from "./pageSections/StaticMapSection.tsx";
 
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
   HeroSection: HeroSectionProps;
+  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   BannerSection: BannerSectionProps;
@@ -69,12 +78,14 @@ export interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
+  StaticMapSection: StaticMapSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
+  EventSection,
   NearbyLocationsSection,
   BannerSection,
   ProductSection,
@@ -82,11 +93,40 @@ export const PageSectionCategoryComponents = {
   PhotoGallerySection,
   FAQsSection,
   SectionContainer,
+  StaticMapSection,
 };
 
 export const PageSectionCategory = Object.keys(
   PageSectionCategoryComponents
 ) as (keyof PageSectionCategoryProps)[];
+
+export interface OtherCategoryProps {
+  Header: HeaderProps;
+  Footer: FooterProps;
+}
+
+export const OtherCategoryComponents = {
+  Header,
+  Footer,
+};
+
+export const OtherCategory = Object.keys(
+  OtherCategoryComponents
+) as (keyof OtherCategoryProps)[];
+
+export interface DirectoryCategoryProps {
+  Directory: DirectoryProps;
+}
+
+export const DirectoryCategoryComponents = {
+  Directory,
+};
+
+export const DirectoryCategory = Object.keys(
+  DirectoryCategoryComponents
+) as (keyof DirectoryCategoryProps)[];
+
+/** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 
 export interface LayoutBlockCategoryProps {
   Collection: CollectionProps;
@@ -155,29 +195,3 @@ export const ContentBlockCategoryComponents = {
 export const ContentBlockCategory = Object.keys(
   ContentBlockCategoryComponents
 ) as (keyof ContentBlockCategoryProps)[];
-
-export interface OtherCategoryProps {
-  Header: HeaderProps;
-  Footer: FooterProps;
-}
-
-export const OtherCategoryComponents = {
-  Header,
-  Footer,
-};
-
-export const OtherCategory = Object.keys(
-  OtherCategoryComponents
-) as (keyof OtherCategoryProps)[];
-
-export interface DirectoryCategoryProps {
-  Directory: DirectoryProps;
-}
-
-export const DirectoryCategoryComponents = {
-  Directory,
-};
-
-export const DirectoryCategory = Object.keys(
-  DirectoryCategoryComponents
-) as (keyof DirectoryCategoryProps)[];
