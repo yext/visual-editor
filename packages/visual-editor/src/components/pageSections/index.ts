@@ -7,6 +7,7 @@ export {
   CoreInfoSection,
   type CoreInfoSectionProps,
 } from "./CoreInfoSection.tsx";
+export { EventSection, type EventSectionProps } from "./EventSection.tsx";
 export { FAQsSection, type FAQsSectionProps } from "./FAQs.tsx";
 export { HeroSection, type HeroSectionProps } from "./HeroSection.tsx";
 export {
