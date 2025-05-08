@@ -7,6 +7,10 @@ import {
   CoreInfoSection,
   CoreInfoSectionProps,
 } from "./pageSections/CoreInfoSection.tsx";
+import {
+  EventSection,
+  EventSectionProps,
+} from "./pageSections/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "./pageSections/HeroSection.tsx";
 import {
   NearbyLocationsSection,
@@ -62,6 +66,7 @@ import {
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
   HeroSection: HeroSectionProps;
+  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   BannerSection: BannerSectionProps;
@@ -76,6 +81,7 @@ export const PageSectionCategoryComponents = {
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
+  EventSection,
   NearbyLocationsSection,
   BannerSection,
   PromoSection,
