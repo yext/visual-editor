@@ -42,7 +42,7 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
-  | "type.testimonial"
+  | "type.testimonials_section"
   | "type.rich_text_v2"
   | "type.events_section"
   | "type.promo_section"

@@ -31,19 +31,34 @@ type RTF2 = {
 /** end of hardcoded types */
 
 export interface TestimonialSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    testimonials: YextEntityField<Testimonials>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
+    headingLevel: HeadingLevel;
   };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  testimonials: YextEntityField<Testimonials>;
   liveVisibility: boolean;
 }
 
 const testimonialSectionFields: Fields<TestimonialSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading Text", {
+        type: "entityField",
+        filter: { types: ["type.string"] },
+      }),
+      testimonials: YextField("Testimonial Section", {
+        type: "entityField",
+        filter: {
+          types: ["type.testimonials_section"],
+        },
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -57,26 +72,11 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  testimonials: YextField("Testimonial Section", {
-    type: "entityField",
-    filter: {
-      types: ["type.testimonial"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -122,13 +122,15 @@ const TestimonialCard = ({
 };
 
 const TestimonialSectionWrapper = ({
+  data,
   styles,
-  sectionHeading,
-  testimonials,
 }: TestimonialSectionProps) => {
   const document = useDocument();
-  const resolvedTestimonials = resolveYextEntityField(document, testimonials);
-  const resolvedHeading = resolveYextEntityField(document, sectionHeading.text);
+  const resolvedTestimonials = resolveYextEntityField(
+    document,
+    data.testimonials
+  );
+  const resolvedHeading = resolveYextEntityField(document, data.heading);
 
   return (
     <PageSection
@@ -138,19 +140,19 @@ const TestimonialSectionWrapper = ({
       {resolvedHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeading.text.field}
-          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
       {resolvedTestimonials && (
         <EntityField
           displayName="Testimonials"
-          fieldId={testimonials.field}
-          constantValueEnabled={testimonials.constantValueEnabled}
+          fieldId={data.testimonials.field}
+          constantValueEnabled={data.testimonials.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
             {resolvedTestimonials.map((testimonial, index) => (
@@ -174,19 +176,19 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background2.value,
       cardBackgroundColor: backgroundColors.background1.value,
+      headingLevel: 2,
     },
-    sectionHeading: {
-      text: {
+    data: {
+      heading: {
         field: "",
         constantValue: "Featured Testimonials",
         constantValueEnabled: true,
       },
-      level: 2,
-    },
-    testimonials: {
-      field: "",
-      constantValue: [],
-      constantValueEnabled: false,
+      testimonials: {
+        field: "",
+        constantValue: [],
+        constantValueEnabled: false,
+      },
     },
     liveVisibility: true,
   },
