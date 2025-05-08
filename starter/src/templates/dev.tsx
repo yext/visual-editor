@@ -15,6 +15,8 @@ import {
   VisualEditorProvider,
   YextSchemaField,
   defaultThemeConfig,
+  applyAnalytics,
+  applyHeaderScript,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
@@ -87,6 +89,8 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       },
     ],
     other: [
+      applyAnalytics(document),
+      applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
       SchemaWrapper(document._schema),
     ].join("\n"),
