@@ -16,6 +16,7 @@ import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
 } from "./YextEntityFieldSelector.tsx";
+import { getTranslatableTextConfig } from "../internal/puck/constant-value-fields/Text.tsx";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -71,6 +72,7 @@ type YextSelectField = YextBaseField & {
 type YextTextField = YextBaseField & {
   type: "text";
   isMultiline?: boolean;
+  locales?: string[];
 };
 
 // YextOptionalNumberField has same functionality as OptionalNumberField
@@ -85,6 +87,7 @@ type YextEntitySelectorField<
 > = YextBaseField &
   Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
     type: "entityField";
+    locales?: string[];
   };
 
 type YextFieldConfig<Props = any> =
@@ -121,6 +124,8 @@ export function YextField<T, U>(
       filter: config.filter,
       isCollection: config.isCollection,
       disableConstantValueToggle: config.disableConstantValueToggle,
+      isMultiline: config.isMultiline,
+      locales: config.locales,
     });
   }
 
@@ -154,10 +159,7 @@ export function YextField<T, U>(
   }
 
   if (config.type === "text") {
-    return {
-      label: fieldName,
-      type: config.isMultiline ? "textarea" : "text",
-    };
+    return getTranslatableTextConfig(config.isMultiline, config.locales);
   }
 
   return {

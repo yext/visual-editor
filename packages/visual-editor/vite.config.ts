@@ -3,9 +3,27 @@ import { LibraryFormats, defineConfig } from "vite";
 import path from "node:path";
 import type { Plugin } from "vite";
 import { exec } from "node:child_process";
+// import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig(() => ({
-  plugins: [react(), dts()],
+  plugins: [
+    react(),
+    dts(),
+    // copy({
+    //   targets: [
+    //     { src: "src/locales/**/*", dest: "dist/locales" }, // Copy JSON files
+    //   ],
+    //   hook: "writeBundle",
+    // }),
+    // viteStaticCopy({
+    //   targets: [
+    //     {
+    //       src: 'src/locales/**/*',
+    //       dest: 'dist/locales'
+    //     }
+    //   ]
+    // })
+  ],
   resolve: {
     alias: {
       "@yext/visual-editor": path.resolve(__dirname, "src"),
@@ -29,6 +47,9 @@ export default defineConfig(() => ({
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
+          // i18next: "i18next",
+          // "react-i18next": "reactI18next",
+          // "i18next-browser-languagedetector": "i18nextBrowserLanguageDetector",
         },
       },
     },
