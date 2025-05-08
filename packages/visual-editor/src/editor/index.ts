@@ -16,3 +16,4 @@ export { BorderRadiusSelector } from "./BorderRadiusSelector.tsx";
 export { SpacingSelector } from "./SpacingSelector.tsx";
 export { BasicSelector } from "./BasicSelector.tsx";
 export { YextField } from "./YextField.tsx";
+export { YextSelectorV2, type YextEntityFieldV2 } from "./YextSelectorV2.tsx";

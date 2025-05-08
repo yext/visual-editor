@@ -1,6 +1,6 @@
 import { Fields } from "@measured/puck";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { YextEntityFieldV2 } from "../editor/UpdatedYextSelector.tsx";
+import { YextEntityFieldV2 } from "../editor/YextSelectorV2.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,

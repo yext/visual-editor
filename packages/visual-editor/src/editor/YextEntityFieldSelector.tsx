@@ -327,7 +327,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
-  className, // twmerge
+  className,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
 
