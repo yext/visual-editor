@@ -99,9 +99,9 @@ const ProductCard = ({
       )}
       <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col">
-          {product.heading && (
+          {product.name && (
             <Heading level={3} className="mb-2">
-              {product.heading}
+              {product.name}
             </Heading>
           )}
           {product.category && (
