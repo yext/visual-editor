@@ -42,19 +42,34 @@ type RTF2 = {
 /** end of hardcoded types */
 
 export interface EventSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    events: YextEntityField<Events>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
+    headingLevel: HeadingLevel;
   };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  events: YextEntityField<Events>;
   liveVisibility: boolean;
 }
 
 const eventSectionFields: Fields<EventSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading Text", {
+        type: "entityField",
+        filter: { types: ["type.string"] },
+      }),
+      events: YextField("Events", {
+        type: "entityField",
+        filter: {
+          types: ["type.event_section"],
+        },
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -68,26 +83,11 @@ const eventSectionFields: Fields<EventSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  events: YextField("Events", {
-    type: "entityField",
-    filter: {
-      types: ["type.events"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -155,10 +155,10 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
-  const { styles, sectionHeading, events } = props;
+  const { data, styles } = props;
   const document = useDocument();
-  const resolvedEvents = resolveYextEntityField(document, events);
-  const resolvedHeading = resolveYextEntityField(document, sectionHeading.text);
+  const resolvedEvents = resolveYextEntityField(document, data.events);
+  const resolvedHeading = resolveYextEntityField(document, data.heading);
 
   return (
     <PageSection
@@ -168,19 +168,19 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
       {resolvedHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeading.text.field}
-          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
       {resolvedEvents && (
         <EntityField
           displayName="Events"
-          fieldId={events.field}
-          constantValueEnabled={events.constantValueEnabled}
+          fieldId={data.events.field}
+          constantValueEnabled={data.events.constantValueEnabled}
         >
           <div className="flex flex-col gap-8">
             {resolvedEvents.map((event, index) => (
@@ -201,21 +201,21 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
   label: "Events Section",
   fields: eventSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-    },
-    sectionHeading: {
-      text: {
+    data: {
+      heading: {
         field: "",
         constantValue: "Upcoming Events",
         constantValueEnabled: true,
       },
-      level: 2,
+      events: {
+        field: "",
+        constantValue: [],
+      },
     },
-    events: {
-      field: "", // TODO set to default
-      constantValue: [],
+    styles: {
+      backgroundColor: backgroundColors.background3.value,
+      cardBackgroundColor: backgroundColors.background1.value,
+      headingLevel: 2,
     },
     liveVisibility: true,
   },
