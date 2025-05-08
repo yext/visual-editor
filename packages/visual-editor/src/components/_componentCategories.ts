@@ -13,9 +13,17 @@ import {
 } from "./pageSections/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "./pageSections/HeroSection.tsx";
 import {
+  InsightSectionProps,
+  InsightSection,
+} from "./pageSections/InsightSection.tsx";
+import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
 } from "./pageSections/NearbyLocations.tsx";
+import {
+  ProductSection,
+  ProductSectionProps,
+} from "./pageSections/ProductSection.tsx";
 import { PromoSection, PromoSectionProps } from "./pageSections/Promo.tsx";
 import {
   PhotoGallerySection,
@@ -30,10 +38,10 @@ import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
+import { TeamSection, TeamSectionProps } from "./pageSections/TeamSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
 import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
-import { ProductCard, ProductCardProps } from "./cards/ProductCard.tsx";
 import { Address, AddressProps } from "./contentBlocks/Address.tsx";
 import { BodyText, BodyTextProps } from "./contentBlocks/BodyText.tsx";
 import { CTAWrapper, CTAWrapperProps } from "./contentBlocks/CtaWrapper.tsx";
@@ -56,8 +64,8 @@ import { Header, HeaderProps } from "./Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
-import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
 import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
+import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
 import {
   TestimonialCardProps,
   TestimonialCard,
@@ -72,10 +80,13 @@ export interface PageSectionCategoryProps {
   HeroSection: HeroSectionProps;
   EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
+  InsightSection: InsightSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   BannerSection: BannerSectionProps;
+  ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
+  TeamSection: TeamSectionProps;
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
   StaticMapSection: StaticMapSectionProps;
@@ -86,11 +97,14 @@ export const PageSectionCategoryComponents = {
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
+  InsightSection,
   EventSection,
   NearbyLocationsSection,
   BannerSection,
+  ProductSection,
   PromoSection,
   PhotoGallerySection,
+  TeamSection,
   FAQsSection,
   SectionContainer,
   StaticMapSection,
@@ -147,16 +161,16 @@ export const LayoutBlockCategory = Object.keys(
 
 export interface CardCategoryProps {
   EventCard: EventCardProps;
-  InsightCard: InsightCardProps;
   PersonCard: PersonCardProps;
+  InsightCard: InsightCardProps;
   ProductCard: ProductCardProps;
   TestimonialCard: TestimonialCardProps;
 }
 
 export const CardCategoryComponents = {
   EventCard,
-  InsightCard,
   PersonCard,
+  InsightCard,
   ProductCard,
   TestimonialCard,
 };
