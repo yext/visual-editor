@@ -20,6 +20,10 @@ import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
 } from "./pageSections/NearbyLocations.tsx";
+import {
+  ProductSection,
+  ProductSectionProps,
+} from "./pageSections/ProductSection.tsx";
 import { PromoSection, PromoSectionProps } from "./pageSections/Promo.tsx";
 import {
   PhotoGallerySection,
@@ -34,7 +38,6 @@ import { TeamSection, TeamSectionProps } from "./pageSections/TeamSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
 import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
-import { ProductCard, ProductCardProps } from "./cards/ProductCard.tsx";
 import { Address, AddressProps } from "./contentBlocks/Address.tsx";
 import { BodyText, BodyTextProps } from "./contentBlocks/BodyText.tsx";
 import { CTAWrapper, CTAWrapperProps } from "./contentBlocks/CtaWrapper.tsx";
@@ -76,6 +79,7 @@ export interface PageSectionCategoryProps {
   InsightSection: InsightSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   BannerSection: BannerSectionProps;
+  ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   TeamSection: TeamSectionProps;
@@ -92,6 +96,7 @@ export const PageSectionCategoryComponents = {
   EventSection,
   NearbyLocationsSection,
   BannerSection,
+  ProductSection,
   PromoSection,
   PhotoGallerySection,
   TeamSection,
