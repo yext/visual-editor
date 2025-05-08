@@ -60,6 +60,7 @@ import { Header, HeaderProps } from "./Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
+import { ProductCardProps, ProductCard } from "./cards/ProductCard.tsx";
 import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
 import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
 import {
