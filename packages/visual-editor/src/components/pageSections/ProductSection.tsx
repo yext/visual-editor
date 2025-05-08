@@ -39,19 +39,34 @@ type RTF2 = {
 /** end of hardcoded types */
 
 export interface ProductSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    products: YextEntityField<Products>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
+    headingLevel: HeadingLevel;
   };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  products: YextEntityField<Products>;
   liveVisibility: boolean;
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading Text", {
+        type: "entityField",
+        filter: { types: ["type.string"] },
+      }),
+      products: YextField("Product Section", {
+        type: "entityField",
+        filter: {
+          types: ["type.product"],
+        },
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -65,26 +80,11 @@ const productSectionFields: Fields<ProductSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  products: YextField("Product Section", {
-    type: "entityField",
-    filter: {
-      types: ["type.product"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -151,14 +151,10 @@ const ProductCard = ({
   );
 };
 
-const ProductSectionWrapper = ({
-  styles,
-  sectionHeading,
-  products,
-}: ProductSectionProps) => {
+const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const document = useDocument();
-  const resolvedProducts = resolveYextEntityField(document, products);
-  const resolvedHeading = resolveYextEntityField(document, sectionHeading.text);
+  const resolvedProducts = resolveYextEntityField(document, data.products);
+  const resolvedHeading = resolveYextEntityField(document, data.heading);
 
   return (
     <PageSection
@@ -168,19 +164,19 @@ const ProductSectionWrapper = ({
       {resolvedHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeading.text.field}
-          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
       {resolvedProducts && (
         <EntityField
           displayName="Products"
-          fieldId={products.field}
-          constantValueEnabled={products.constantValueEnabled}
+          fieldId={data.products.field}
+          constantValueEnabled={data.products.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {resolvedProducts.map((product, index) => (
@@ -201,22 +197,22 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
   label: "Products Section",
   fields: productSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-    },
-    sectionHeading: {
-      text: {
+    data: {
+      heading: {
         field: "",
         constantValue: "Featured Products",
         constantValueEnabled: true,
       },
-      level: 2,
+      products: {
+        field: "",
+        constantValue: [],
+        constantValueEnabled: false,
+      },
     },
-    products: {
-      field: "",
-      constantValue: [],
-      constantValueEnabled: false,
+    styles: {
+      backgroundColor: backgroundColors.background2.value,
+      cardBackgroundColor: backgroundColors.background1.value,
+      headingLevel: 2,
     },
     liveVisibility: true,
   },
