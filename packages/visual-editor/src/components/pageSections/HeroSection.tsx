@@ -17,8 +17,8 @@ import {
   YextField,
   VisibilityWrapper,
   CTAProps,
-  resolveYextEntityFieldV2,
-  YextSelectorV2,
+  resolveYextStructField,
+  YextStructFieldSelector,
   YextEntityFieldV2,
 } from "@yext/visual-editor";
 
@@ -64,7 +64,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      hero: YextSelectorV2({
+      hero: YextStructFieldSelector({
         label: "Hero",
         filter: {
           type: "type.hero_section",
@@ -127,7 +127,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     data.localGeoModifier
   );
   const resolvedHours = resolveYextEntityField<HoursType>(document, data.hours);
-  const resolvedHero = resolveYextEntityFieldV2(document, data.hero);
+  const resolvedHero = resolveYextStructField(document, data.hero);
 
   const { timezone } = document as {
     timezone: string;

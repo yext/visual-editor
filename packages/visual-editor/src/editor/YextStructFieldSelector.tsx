@@ -31,8 +31,8 @@ export type SelectorPropsV2 = {
   filter: EntityFieldTypesFilter;
 };
 
-// YextSelectorV2 will be used for new built-in struct and list field types.
-export const YextSelectorV2 = <U extends Record<string, any>>(
+// YextStructFieldSelector will be used for new built-in struct and list field types.
+export const YextStructFieldSelector = <U extends Record<string, any>>(
   props: SelectorPropsV2
 ): CustomField<YextEntityFieldV2<U>> => {
   const filter = {
@@ -77,8 +77,8 @@ const SubfieldsInput = ({ filter, onChange, value }: InputPropsV2) => {
 
   return (
     <FieldLabel
-      label="Subfield Assignments"
-      className="ve-inline-block ve-w-full pt-4"
+      label="Content Overrides"
+      className="ve-inline-block ve-w-full ve-pt-4"
     >
       {subfields.map(({ field, type, label }, idx: number) => {
         const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {

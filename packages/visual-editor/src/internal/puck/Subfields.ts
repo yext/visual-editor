@@ -1,4 +1,4 @@
-import { EntityFieldTypesV2 } from "../../editor/YextSelectorV2.tsx";
+import { EntityFieldTypesV2 } from "../../editor/YextStructFieldSelector.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { EntityFieldTypes } from "../utils/getFilteredEntityFields.ts";
 
