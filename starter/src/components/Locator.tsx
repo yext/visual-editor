@@ -135,11 +135,7 @@ const LocatorComponent: ComponentConfig<LocatorProps> = {
 type SearchState = "not started" | "loading" | "complete";
 
 const Locator: React.FC<LocatorProps> = (props) => {
-  const { document } = useTemplateProps<any>();
   const locale = getDocumentLocale();
-  console.log("Locale", locale);
-  console.log("document", document);
-  console.log("Locator props", props);
   const { mapStyle } = props;
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0,
@@ -451,7 +447,10 @@ const getPath = (location: Location, locale: string) => {
 };
 
 const getDocumentLocale = () => {
-  const fullLocale = useTemplateProps<any>().document?.meta?.locale || "en";
+  let fullLocale = useTemplateProps<any>().document?.meta?.locale || "en";
+  if (!(fullLocale in TRANSLATIONS)) {
+    fullLocale = "en";
+  }
   const locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
   return locale;
 };
