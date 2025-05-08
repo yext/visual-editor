@@ -14,34 +14,16 @@ import {
   CTA,
   backgroundColors,
   VisibilityWrapper,
+  ProductSectionType,
+  ProductStruct,
 } from "@yext/visual-editor";
-import {
-  ComplexImageType,
-  CTA as CTAType,
-  LexicalRichText,
-} from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-
-/** TODO remove types when spruce is ready */
-type Products = Array<ProductStruct>;
-
-type ProductStruct = {
-  image?: ComplexImageType;
-  heading?: string; // single line text
-  description?: RTF2;
-  category?: string; // single line text
-  CTA?: CTAType;
-};
-
-type RTF2 = {
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface ProductSectionProps {
   data: {
     heading: YextEntityField<string>;
-    products: YextEntityField<Products>;
+    products: YextEntityField<ProductSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -112,7 +94,7 @@ const ProductCard = ({
         <Image
           image={product.image}
           layout={"auto"}
-          aspectRatio={product.image.image.width / product.image.image.height}
+          aspectRatio={product.image.width / product.image.height}
         />
       )}
       <div className="p-8 gap-8 flex flex-col">
@@ -130,20 +112,26 @@ const ProductCard = ({
               <Body>{product.category}</Body>
             </Background>
           )}
-          {product.description && (
+          {product.description?.html ? (
+            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+              <div
+                dangerouslySetInnerHTML={{ __html: product.description.html }}
+              />
+            </div>
+          ) : (
             <Body className="max-w-[290px]">
               <LexicalRichText
-                serializedAST={JSON.stringify(product.description.json) ?? ""}
+                serializedAST={JSON.stringify(product.description?.json) ?? ""}
               />
             </Body>
           )}
         </div>
-        {product.CTA && (
+        {product.cta && (
           <CTA
             variant="secondary"
-            label={product.CTA.label}
-            link={product.CTA.link}
-            linkType={product.CTA.linkType}
+            label={product.cta.label}
+            link={product.cta.link}
+            linkType={product.cta.linkType}
           />
         )}
       </div>

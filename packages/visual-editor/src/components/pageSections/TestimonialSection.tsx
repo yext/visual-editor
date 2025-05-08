@@ -6,34 +6,23 @@ import {
   useDocument,
   resolveYextEntityField,
   PageSection,
-  Body,
   Heading,
   EntityField,
   Background,
   backgroundColors,
   VisibilityWrapper,
+  TestimonialSectionType,
+  TestimonialStruct,
+  Timestamp,
+  Body,
 } from "@yext/visual-editor";
-import { LexicalRichText } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-
-/** TODO remove types when spruce is ready */
-type Testimonials = Array<TestimonialStruct>;
-
-type TestimonialStruct = {
-  description?: RTF2;
-  contributorName?: string; // single line text
-  contributionDateTime?: string; // dateTime
-};
-
-type RTF2 = {
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface TestimonialSectionProps {
   data: {
     heading: YextEntityField<string>;
-    testimonials: YextEntityField<Testimonials>;
+    testimonials: YextEntityField<TestimonialSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -101,10 +90,18 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {testimonial.description && (
+        {testimonial.description?.html ? (
+          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+            <div
+              dangerouslySetInnerHTML={{ __html: testimonial.description.html }}
+            />
+          </div>
+        ) : (
           <Body>
             <LexicalRichText
-              serializedAST={JSON.stringify(testimonial.description.json) ?? ""}
+              serializedAST={
+                JSON.stringify(testimonial.description?.json) ?? ""
+              }
             />
           </Body>
         )}
@@ -113,8 +110,11 @@ const TestimonialCard = ({
         {testimonial.contributorName && (
           <Heading level={3}>{testimonial.contributorName}</Heading>
         )}
-        {testimonial.contributionDateTime && (
-          <Body variant="sm">{testimonial.contributionDateTime}</Body>
+        {testimonial.contributionDate?.start && (
+          <Timestamp
+            date={testimonial.contributionDate.start}
+            hideTimeZone={true}
+          />
         )}
       </Background>
     </div>

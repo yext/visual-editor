@@ -15,36 +15,17 @@ import {
   CTA,
   backgroundColors,
   VisibilityWrapper,
+  EventSectionType,
+  EventStruct,
+  Body,
 } from "@yext/visual-editor";
-import { ComplexImageType, CTA as CTAType } from "@yext/pages-components";
 import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
-
-/** TODO remove types when spruce is ready */
-type Events = Array<EventStruct>;
-
-type EventStruct = {
-  image?: ComplexImageType;
-  title?: string; // single line text
-  dateTime?: dateTime; // lexon's dateTime
-  description?: RTF2;
-  CTA?: CTAType;
-};
-
-type dateTime = {
-  start: string; // ISO 8601
-  end: string; //  ISO 8601
-};
-
-type RTF2 = {
-  html?: string;
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface EventSectionProps {
   data: {
     heading: YextEntityField<string>;
-    events: YextEntityField<Events>;
+    events: YextEntityField<EventSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -117,7 +98,7 @@ const EventCard = ({
             <Image
               image={event.image}
               layout="auto"
-              aspectRatio={event.image.image.width / event.image.image.height}
+              aspectRatio={event.image.width / event.image.height}
             />
           </div>
         )}
@@ -136,16 +117,22 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {event.description?.html && (
+        {event.description?.html ? (
           <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
             <div dangerouslySetInnerHTML={{ __html: event.description.html }} />
           </div>
+        ) : (
+          <Body>
+            <LexicalRichText
+              serializedAST={JSON.stringify(event.description?.json) ?? ""}
+            />
+          </Body>
         )}
-        {event.CTA && (
+        {event.cta && (
           <CTA
-            label={event.CTA.label}
-            link={event.CTA.link}
-            linkType={event.CTA.linkType}
+            label={event.cta.label}
+            link={event.cta.link}
+            linkType={event.cta.linkType}
             variant="link"
           />
         )}

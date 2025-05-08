@@ -18,6 +18,7 @@ import {
   YextStructFieldSelector,
   resolveYextStructField,
 } from "@yext/visual-editor";
+import { LexicalRichText } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -93,6 +94,17 @@ const PromoDescription = ({ description }: PromoSectionType) => {
           }}
         />
       </div>
+    );
+  } else if (
+    typeof description === "object" &&
+    typeof description.json === "string"
+  ) {
+    return (
+      <Body>
+        <LexicalRichText
+          serializedAST={JSON.stringify(description.json) ?? ""}
+        />
+      </Body>
     );
   }
 };

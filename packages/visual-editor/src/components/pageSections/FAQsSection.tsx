@@ -13,6 +13,7 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
+  FAQSectionType,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -22,23 +23,10 @@ import {
 } from "../atoms/accordion.js";
 import { LexicalRichText } from "@yext/pages-components";
 
-/** TODO remove types when spruce is ready */
-type FAQs = Array<FAQStruct>;
-
-type FAQStruct = {
-  question: string; // single-line text
-  answer: RTF2;
-};
-
-type RTF2 = {
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
-
-export interface FAQsSectionProps {
+export interface FAQSectionProps {
   data: {
     heading: YextEntityField<string>;
-    FAQs: YextEntityField<FAQs>;
+    faqs: YextEntityField<FAQSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -47,7 +35,7 @@ export interface FAQsSectionProps {
   liveVisibility: boolean;
 }
 
-const FAQsSectionFields: Fields<FAQsSectionProps> = {
+const FAQsSectionFields: Fields<FAQSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
@@ -57,7 +45,7 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
           types: ["type.string"],
         },
       }),
-      FAQs: YextField("FAQs", {
+      faqs: YextField("FAQs", {
         type: "entityField",
         filter: {
           types: ["type.faq_section"],
@@ -89,13 +77,13 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
   }),
 };
 
-const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
+const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
     document,
     data?.heading
   );
-  const resolvedFAQs = resolveYextEntityField(document, data?.FAQs);
+  const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 
   return (
     <PageSection
@@ -114,8 +102,8 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
       {resolvedFAQs && resolvedFAQs.length > 0 && (
         <EntityField
           displayName="FAQs"
-          fieldId={data?.FAQs.field}
-          constantValueEnabled={data?.FAQs.constantValueEnabled}
+          fieldId={data?.faqs.field}
+          constantValueEnabled={data?.faqs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
             {resolvedFAQs?.map((faqItem, index) => (
@@ -126,11 +114,23 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <Body variant="base">
-                    <LexicalRichText
-                      serializedAST={JSON.stringify(faqItem.answer.json) ?? ""}
-                    />
-                  </Body>
+                  {faqItem.answer?.html ? (
+                    <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: faqItem.answer.html,
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <Body>
+                      <LexicalRichText
+                        serializedAST={
+                          JSON.stringify(faqItem.answer?.json) ?? ""
+                        }
+                      />
+                    </Body>
+                  )}
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -141,7 +141,7 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
   );
 };
 
-export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
+export const FAQSection: ComponentConfig<FAQSectionProps> = {
   label: "FAQs Section",
   fields: FAQsSectionFields,
   defaultProps: {
@@ -151,7 +151,7 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
         constantValue: "Frequently Asked Questions",
         constantValueEnabled: true,
       },
-      FAQs: {
+      faqs: {
         field: "",
         constantValue: [],
         constantValueEnabled: false,
