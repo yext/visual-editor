@@ -77,7 +77,7 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
   FAQs: YextField("FAQs", {
     type: "entityField",
     filter: {
-      types: ["type.faqs"],
+      types: ["type.faqs_section"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {

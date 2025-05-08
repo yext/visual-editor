@@ -1,5 +1,6 @@
 import { Fields } from "@measured/puck";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,
@@ -40,6 +41,25 @@ export const resolveYextEntityField = <T>(
 
   console.warn(`The field ${entityField.field} was not found in the document.`);
   return undefined;
+};
+
+export const resolveYextStructField = <T extends Record<string, any>>(
+  document: any,
+  entityField: YextStructEntityField<T>
+): T | undefined => {
+  const values = resolveYextEntityField(document, entityField);
+  if (typeof values === "undefined") {
+    return undefined;
+  }
+
+  const overridenValues = { ...values }; // shallow copy of values
+  for (const key in entityField.constantValueOverride) {
+    if (entityField.constantValueOverride[key] && !!overridenValues?.[key]) {
+      overridenValues[key] = entityField.constantValue?.[key];
+    }
+  }
+
+  return overridenValues;
 };
 
 export const resolveYextSubfield = <T>(
