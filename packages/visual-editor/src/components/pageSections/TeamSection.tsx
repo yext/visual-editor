@@ -37,16 +37,32 @@ export interface TeamSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
+    headingLevel: HeadingLevel;
   };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingLevel;
+  data: {
+    heading: YextEntityField<string>;
+    people: YextEntityField<People>;
   };
-  people: YextEntityField<People>;
   liveVisibility: boolean;
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
+  data: YextField("Section Heading", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading Text", {
+        type: "entityField",
+        filter: { types: ["type.string"] },
+      }),
+      people: YextField("Team Section", {
+        type: "entityField",
+        filter: {
+          types: ["type.team_section"],
+        },
+      }),
+    },
+  }),
+
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -60,26 +76,11 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  people: YextField("Team Section", {
-    type: "entityField",
-    filter: {
-      types: ["type.team_section"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -162,14 +163,10 @@ const PersonCard = ({
   );
 };
 
-const TeamSectionWrapper = ({
-  styles,
-  sectionHeading,
-  people,
-}: TeamSectionProps) => {
+const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const document = useDocument();
-  const resolvedPeople = resolveYextEntityField(document, people);
-  const resolvedHeading = resolveYextEntityField(document, sectionHeading.text);
+  const resolvedPeople = resolveYextEntityField(document, data.people);
+  const resolvedHeading = resolveYextEntityField(document, data.heading);
 
   return (
     <PageSection
@@ -179,19 +176,19 @@ const TeamSectionWrapper = ({
       {resolvedHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeading.text.field}
-          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className="text-center">
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
       {resolvedPeople && (
         <EntityField
           displayName="Team"
-          fieldId={people.field}
-          constantValueEnabled={people.constantValueEnabled}
+          fieldId={data.people.field}
+          constantValueEnabled={data.people.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
             {resolvedPeople.map((person, index) => (
@@ -212,22 +209,22 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
   label: "Team Section",
   fields: TeamSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-    },
-    sectionHeading: {
-      text: {
+    data: {
+      heading: {
         field: "",
         constantValue: "Meet Our Team",
         constantValueEnabled: true,
       },
-      level: 2,
+      people: {
+        field: "",
+        constantValue: [],
+        constantValueEnabled: false,
+      },
     },
-    people: {
-      field: "",
-      constantValue: [],
-      constantValueEnabled: false,
+    styles: {
+      backgroundColor: backgroundColors.background3.value,
+      cardBackgroundColor: backgroundColors.background1.value,
+      headingLevel: 2,
     },
     liveVisibility: true,
   },
