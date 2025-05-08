@@ -3,8 +3,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   themeManagerCn,
   useDocument,
-  resolveYextEntityField,
-  YextEntityField,
   Image,
   BackgroundStyle,
   backgroundColors,
@@ -16,43 +14,34 @@ import {
   CTAProps,
   PromoSectionType,
   Body,
+  YextStructEntityField,
+  YextStructFieldSelector,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface PromoSectionProps {
-  promo: YextEntityField<PromoSectionType>;
-  cta: {
-    showCTA: boolean;
-    variant: CTAProps["variant"];
+  data: {
+    promo: YextStructEntityField<PromoSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
+    ctaVariant: CTAProps["variant"];
   };
   liveVisibility: boolean;
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  promo: YextField("Promo", {
-    type: "entityField",
-    filter: {
-      types: ["type.promo_section"],
-    },
-  }),
-  cta: YextField("CTA", {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      showCTA: YextField("Show CTA", {
-        type: "radio",
-        options: [
-          { label: "Show", value: true },
-          { label: "Hide", value: false },
-        ],
-      }),
-      variant: YextField("Variant", {
-        type: "radio",
-        options: "CTA_VARIANT",
+      promo: YextStructFieldSelector({
+        label: "Promo",
+        filter: {
+          type: "type.promo_section",
+        },
       }),
     },
   }),
@@ -70,6 +59,10 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           { label: "Left", value: "left" },
           { label: "Right", value: "right" },
         ],
+      }),
+      ctaVariant: YextField("CTA Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
       }),
     },
   }),
@@ -104,9 +97,9 @@ const PromoDescription = ({ description }: PromoSectionType) => {
   }
 };
 
-const PromoWrapper: React.FC<PromoSectionProps> = ({ promo, cta, styles }) => {
+const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
-  const resolvedPromo = resolveYextEntityField(document, promo);
+  const resolvedPromo = resolveYextStructField(document, data.promo);
 
   return (
     <PageSection
@@ -128,9 +121,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ promo, cta, styles }) => {
           <Heading level={3}>{resolvedPromo?.title}</Heading>
         )}
         <PromoDescription description={resolvedPromo?.description} />
-        {resolvedPromo?.cta && cta?.showCTA && (
+        {resolvedPromo?.cta?.label && (
           <CTA
-            variant={cta.variant}
+            variant={styles.ctaVariant}
             label={resolvedPromo?.cta.label}
             link={resolvedPromo?.cta.link}
             linkType={resolvedPromo?.cta.linkType}
@@ -145,30 +138,30 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   label: "Promo Section",
   fields: promoSectionFields,
   defaultProps: {
-    promo: {
-      field: "",
-      constantValue: {
-        image: {
-          height: 360,
-          width: 640,
-          url: PLACEHOLDER_IMAGE_URL,
+    data: {
+      promo: {
+        field: "",
+        constantValue: {
+          image: {
+            height: 360,
+            width: 640,
+            url: PLACEHOLDER_IMAGE_URL,
+          },
+          title: "Title",
+          description: "Description",
+          cta: {
+            label: "Call To Action",
+            link: "#",
+            linkType: "URL",
+          },
         },
-        title: "Title",
-        description: "Description",
-        cta: {
-          label: "Call To Action",
-          link: "#",
-          linkType: "URL",
-        },
+        constantValueOverride: {},
       },
-    },
-    cta: {
-      showCTA: true,
-      variant: "primary",
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
       orientation: "left",
+      ctaVariant: "primary",
     },
     liveVisibility: true,
   },

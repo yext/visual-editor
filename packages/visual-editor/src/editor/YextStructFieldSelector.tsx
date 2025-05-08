@@ -15,7 +15,7 @@ type EntityFieldTypesFilter = {
 };
 
 // StructEntityFieldTypes contains new struct types that we support overriding individual subfields for
-export type StructEntityFieldTypes = "type.hero_section";
+export type StructEntityFieldTypes = "type.hero_section" | "type.promo_section";
 
 // YextStructEntityField keeps track of which fields we are allowing individual overriding for using constantValueOverride
 export type YextStructEntityField<T extends Record<string, any> = any> = {
