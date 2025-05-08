@@ -14,10 +14,8 @@ import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
-import { useTranslation, initReactI18next } from "react-i18next";
-import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 import { TranslatableString } from "src/editor/YextEntityFieldSelector.js";
-import LanguageDetector from "i18next-browser-languagedetector";
 
 export type BannerSectionProps = {
   text: YextEntityField<TranslatableString>;
@@ -83,40 +81,6 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
     ],
   }),
 };
-
-// TODO: Put this in a separate file
-const translationResources = {
-  en: {
-    translation: {
-      Test: "A hardcoded value in English",
-    },
-  },
-  es: {
-    translation: {
-      Test: "A hardcoded value in Spanish",
-    },
-  },
-};
-
-i18n
-  .use(LanguageDetector) // Add language detector
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .init({
-    // the translations
-    resources: translationResources,
-    fallbackLng: "en",
-    detection: {
-      // This is necessary for the browser language detector to work. Unclear about all of the options.
-      order: ["navigator", "localStorage", "cookie", "querystring", "htmlTag"], // Detection sources
-      lookupLocalStorage: "i18nextLng", // Key for localStorage
-      lookupCookie: "i18next", // Key for cookie
-      caches: ["localStorage", "cookie"], // Cache detected language
-    },
-
-    interpolation: {
-      escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
-    },
-  });
 
 const BannerComponent = ({
   text,
