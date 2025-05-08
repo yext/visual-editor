@@ -34,6 +34,10 @@ import {
   SectionContainer,
   SectionContainerProps,
 } from "./pageSections/SectionContainer.tsx";
+import {
+  TestimonialSection,
+  TestimonialSectionProps,
+} from "./pageSections/TestimonialSection.tsx";
 import { TeamSection, TeamSectionProps } from "./pageSections/TeamSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
@@ -60,6 +64,7 @@ import { Header, HeaderProps } from "./Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
+import { ProductCardProps, ProductCard } from "./cards/ProductCard.tsx";
 import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
 import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
 import {
@@ -86,6 +91,7 @@ export interface PageSectionCategoryProps {
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
   StaticMapSection: StaticMapSectionProps;
+  TestimonialSection: TestimonialSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -103,6 +109,7 @@ export const PageSectionCategoryComponents = {
   FAQsSection,
   SectionContainer,
   StaticMapSection,
+  TestimonialSection,
 };
 
 export const PageSectionCategory = Object.keys(
