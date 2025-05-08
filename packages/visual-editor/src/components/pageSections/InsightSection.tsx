@@ -42,19 +42,34 @@ type RTF2 = {
 /** end of hardcoded types */
 
 export interface InsightSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    insights: YextEntityField<Insights>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
+    headingLevel: HeadingLevel;
   };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  insights: YextEntityField<Insights>;
   liveVisibility: boolean;
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading Text", {
+        type: "entityField",
+        filter: { types: ["type.string"] },
+      }),
+      insights: YextField("Insight Section", {
+        type: "entityField",
+        filter: {
+          types: ["type.insights_section"],
+        },
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -68,26 +83,11 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  insights: YextField("Insight Section", {
-    type: "entityField",
-    filter: {
-      types: ["type.insight"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -154,14 +154,10 @@ const InsightCard = ({
   );
 };
 
-const InsightSectionWrapper = ({
-  styles,
-  sectionHeading,
-  insights,
-}: InsightSectionProps) => {
+const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const document = useDocument();
-  const resolvedInsights = resolveYextEntityField(document, insights);
-  const resolvedHeading = resolveYextEntityField(document, sectionHeading.text);
+  const resolvedInsights = resolveYextEntityField(document, data.insights);
+  const resolvedHeading = resolveYextEntityField(document, data.heading);
 
   return (
     <PageSection
@@ -172,18 +168,18 @@ const InsightSectionWrapper = ({
         <div className="text-center">
           <EntityField
             displayName="Heading Text"
-            fieldId={sectionHeading.text.field}
-            constantValueEnabled={sectionHeading.text.constantValueEnabled}
+            fieldId={data.heading.field}
+            constantValueEnabled={data.heading.constantValueEnabled}
           >
-            <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </EntityField>
         </div>
       )}
       {resolvedInsights && (
         <EntityField
           displayName="Insights"
-          fieldId={insights.field}
-          constantValueEnabled={insights.constantValueEnabled}
+          fieldId={data.insights.field}
+          constantValueEnabled={data.insights.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {resolvedInsights.map((insight, index) => (
@@ -207,18 +203,18 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
+      headingLevel: 2,
     },
-    sectionHeading: {
-      text: {
+    data: {
+      heading: {
         field: "",
         constantValue: "Insights",
         constantValueEnabled: true,
       },
-      level: 2,
-    },
-    insights: {
-      field: "",
-      constantValue: [],
+      insights: {
+        field: "",
+        constantValue: [],
+      },
     },
     liveVisibility: true,
   },
