@@ -15,7 +15,7 @@ type EntityFieldTypesFilter = {
 };
 
 // StructEntityFieldTypes contains new struct types that we support overriding individual subfields for
-export type StructEntityFieldTypes = "type.hero_section";
+export type StructEntityFieldTypes = "type.hero_section" | "type.promo_section";
 
 // YextStructEntityField keeps track of which fields we are allowing individual overriding for using constantValueOverride
 export type YextStructEntityField<T extends Record<string, any> = any> = {
@@ -107,26 +107,32 @@ const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
                 />
                 {value?.constantValueOverride?.[field] && (
-                  <AutoField
-                    onChange={(newConstantValue, uiState) =>
-                      onChange(
-                        {
-                          field: value?.field,
-                          constantValue: {
-                            ...value?.constantValue,
-                            [field]: newConstantValue,
-                          },
-                          constantValueOverride: {
-                            ...value?.constantValueOverride,
-                            [field]: true,
-                          },
-                        },
-                        uiState
-                      )
+                  <div
+                    className={
+                      constantConfig.type !== "custom" ? "ve-pt-4" : ""
                     }
-                    value={value.constantValue?.[field]}
-                    field={constantConfig}
-                  />
+                  >
+                    <AutoField
+                      onChange={(newConstantValue, uiState) =>
+                        onChange(
+                          {
+                            field: value?.field,
+                            constantValue: {
+                              ...value?.constantValue,
+                              [field]: newConstantValue,
+                            },
+                            constantValueOverride: {
+                              ...value?.constantValueOverride,
+                              [field]: true,
+                            },
+                          },
+                          uiState
+                        )
+                      }
+                      value={value.constantValue?.[field]}
+                      field={constantConfig}
+                    />
+                  </div>
                 )}
               </FieldLabel>
             </div>

@@ -16,9 +16,17 @@ const HERO_SECTION_SUBFIELD: SubFieldProps = [
   { field: "secondaryCta", type: "type.cta", label: "Secondary CTA" },
 ];
 
+const PROMO_SECTION_SUBFIELD: SubFieldProps = [
+  { field: "image", type: "type.image", label: "Image" },
+  { field: "title", type: "type.string", label: "Title" },
+  { field: "description", type: "type.string", label: "Description" },
+  { field: "cta", type: "type.cta", label: "CTA" },
+];
+
 const STRUCT_TYPE_TO_SUBFIELDS: Record<StructEntityFieldTypes, SubFieldProps> =
   {
     "type.hero_section": HERO_SECTION_SUBFIELD,
+    "type.promo_section": PROMO_SECTION_SUBFIELD,
   };
 
 export const getSubfieldsFromType = (
