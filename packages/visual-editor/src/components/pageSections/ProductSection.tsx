@@ -14,9 +14,10 @@ import {
   CTA,
   backgroundColors,
   VisibilityWrapper,
+  ProductSectionType,
+  ProductStruct,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { ProductSectionType, ProductStruct } from "src/types/types";
 
 export interface ProductSectionProps {
   data: {

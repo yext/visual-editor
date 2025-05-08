@@ -15,10 +15,11 @@ import {
   backgroundColors,
   VisibilityWrapper,
   PhoneAtom,
+  TeamSectionType,
+  PersonStruct,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
-import { PersonStruct, TeamSectionType } from "../../types/types.ts";
 
 export interface TeamSectionProps {
   styles: {

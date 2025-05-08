@@ -14,10 +14,11 @@ import {
   CTA,
   backgroundColors,
   VisibilityWrapper,
+  InsightSectionType,
+  InsightStruct,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
-import { InsightSectionType, InsightStruct } from "../../types/types.ts";
 
 export interface InsightSectionProps {
   data: {

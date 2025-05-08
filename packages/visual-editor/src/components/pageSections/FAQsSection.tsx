@@ -13,6 +13,7 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
+  FAQSectionType,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -20,7 +21,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
-import { FAQSectionType } from "src/types/types.js";
 
 export interface FAQSectionProps {
   data: {

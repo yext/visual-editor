@@ -15,9 +15,10 @@ import {
   CTA,
   backgroundColors,
   VisibilityWrapper,
+  EventSectionType,
+  EventStruct,
 } from "@yext/visual-editor";
 import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
-import { EventSectionType, EventStruct } from "src/types/types.ts";
 
 export interface EventSectionProps {
   data: {

@@ -12,12 +12,10 @@ import {
   Background,
   backgroundColors,
   VisibilityWrapper,
-} from "@yext/visual-editor";
-import { ComponentConfig, Fields } from "@measured/puck";
-import {
   TestimonialSectionType,
   TestimonialStruct,
-} from "../../types/types.ts";
+} from "@yext/visual-editor";
+import { ComponentConfig, Fields } from "@measured/puck";
 
 export interface TestimonialSectionProps {
   data: {
