@@ -60,7 +60,7 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
       FAQs: YextField("FAQs", {
         type: "entityField",
         filter: {
-          types: ["type.faqs_section"],
+          types: ["type.faq_section"],
         },
       }),
     },
