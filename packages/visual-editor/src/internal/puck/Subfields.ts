@@ -6,7 +6,7 @@ const devLogger = new DevLogger();
 
 export type SubFieldProps = {
   field: string;
-  type: EntityFieldTypesV2 | EntityFieldTypes;
+  type: EntityFieldTypes;
   label: string;
 }[];
 

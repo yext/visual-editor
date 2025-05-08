@@ -372,7 +372,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
               field: selectedEntityField,
               constantValue: value?.constantValue ?? "",
               constantValueEnabled: false,
-              constantValueOverride: value?.constantValueOverride ?? {},
+              constantValueOverride: {},
             },
             uiState
           );
