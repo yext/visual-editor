@@ -42,7 +42,15 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
+  | "type.faq_section"
+  | "type.testimonials_section"
+  | "type.products_section"
+  | "type.insights_section"
   | "type.rich_text_v2"
+  | "type.team_section"
+  | "type.events_section"
+  | "type.promo_section"
+  | "type.hero_section"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
