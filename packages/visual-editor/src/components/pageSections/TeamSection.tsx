@@ -47,7 +47,7 @@ export interface TeamSectionProps {
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
-  data: YextField("Section Heading", {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
       heading: YextField<any, string>("Heading Text", {
