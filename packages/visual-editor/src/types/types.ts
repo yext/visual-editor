@@ -19,7 +19,7 @@ export type ProductSectionType = Array<ProductStruct>;
 
 export type ProductStruct = {
   image?: ImageType;
-  heading?: string;
+  name?: string;
   description?: RTF2;
   category?: string;
   cta?: CTAType;
