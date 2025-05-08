@@ -8493,8 +8493,7 @@ export const devTemplateStream = {
           definition: {
             name: "c_hero",
             registryId: "location.custom.1000146856.hero.0",
-            typeName: "c_hero",
-            typeRegistryId: "type.c1000146856.hero",
+            typeRegistryId: "type.hero_section",
             type: {
               objectType: "OBJECT_TYPE_DEFAULT",
             },
