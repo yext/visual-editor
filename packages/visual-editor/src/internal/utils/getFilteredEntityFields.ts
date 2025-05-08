@@ -44,6 +44,7 @@ export type EntityFieldTypes =
   | "type.cta"
   | "type.insights_section"
   | "type.rich_text_v2"
+  | "type.team_section"
   | "type.events_section"
   | "type.promo_section"
   | "type.hero_section"
