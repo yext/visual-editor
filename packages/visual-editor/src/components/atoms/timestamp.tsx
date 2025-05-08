@@ -36,43 +36,56 @@ type TimestampFormatterPropsType = {
   hideTimeZone?: boolean;
 };
 
-function timestampFormatter({
+export function timestampFormatter({
   date,
   option = TimestampOption.DATE,
   endDate,
   timeZone,
   hideTimeZone,
 }: TimestampFormatterPropsType): string {
-  let format: Intl.DateTimeFormatOptions = (() => {
-    switch (option) {
-      case TimestampOption.DATE:
-        return format1;
-      case TimestampOption.DATE_TIME:
-        return format2;
-      case TimestampOption.DATE_RANGE:
-        return format1;
-      case TimestampOption.DATE_TIME_RANGE:
-        return format2;
-      default:
-        return format1;
-    }
-  })();
+  let dateFormat = format1;
+  let dateTimeFormat = format2;
 
   if (timeZone) {
-    format = { ...format, timeZone };
+    dateFormat = { ...dateFormat, timeZone };
+    dateTimeFormat = { ...dateTimeFormat, timeZone };
   }
 
   if (hideTimeZone) {
-    format = { ...format, timeZoneName: undefined };
+    dateTimeFormat = { ...dateTimeFormat, timeZoneName: undefined };
   }
 
-  if (
-    option === TimestampOption.DATE_TIME_RANGE ||
-    option === TimestampOption.DATE_RANGE
-  ) {
-    return new Intl.DateTimeFormat("en-US", format).formatRange(date, endDate!);
-  } else {
-    return new Intl.DateTimeFormat("en-US", format).format(date);
+  const dateFormatter = new Intl.DateTimeFormat("en-US", dateFormat);
+  const timeFormatter = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    ...(timeZone && { timeZone }),
+    ...(hideTimeZone && { timeZoneName: undefined }),
+  });
+
+  switch (option) {
+    case TimestampOption.DATE:
+      return dateFormatter.format(date);
+    case TimestampOption.DATE_TIME:
+      return new Intl.DateTimeFormat("en-US", dateTimeFormat).format(date);
+    case TimestampOption.DATE_RANGE:
+      return new Intl.DateTimeFormat("en-US", dateFormat).formatRange(
+        date,
+        endDate!
+      );
+    case TimestampOption.DATE_TIME_RANGE: {
+      const isSameDay = date.toDateString() === endDate!.toDateString();
+
+      const dateStr = isSameDay
+        ? dateFormatter.format(date)
+        : `${dateFormatter.format(date)} - ${dateFormatter.format(endDate!)}`;
+
+      const timeStr = `${timeFormatter.format(date)} - ${timeFormatter.format(endDate!)}`;
+
+      return `${dateStr} | ${timeStr}`;
+    }
+    default:
+      return dateFormatter.format(date);
   }
 }
 
