@@ -16,22 +16,9 @@ import {
   VisibilityWrapper,
   PhoneAtom,
 } from "@yext/visual-editor";
-import { CTA as CTAType, ImageType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
-
-/** TODO remove types when spruce is ready */
-type People = Array<PersonStruct>;
-
-type PersonStruct = {
-  headshot?: ImageType;
-  name?: string; // single line text
-  title?: string; // single line text
-  phoneNumber?: string; // phoneNumber
-  email?: string; // email
-  CTA?: CTAType;
-};
-/** end of hardcoded types */
+import { PersonStruct, TeamSectionType } from "../../types/types.ts";
 
 export interface TeamSectionProps {
   styles: {
@@ -41,7 +28,7 @@ export interface TeamSectionProps {
   };
   data: {
     heading: YextEntityField<string>;
-    people: YextEntityField<People>;
+    people: YextEntityField<TeamSectionType>;
   };
   liveVisibility: boolean;
 }
@@ -147,12 +134,12 @@ const PersonCard = ({
               />
             </div>
           )}
-          {person.CTA && (
+          {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
-                label={person.CTA.label}
-                link={person.CTA.link}
-                linkType={person.CTA.linkType}
+                label={person.cta.label}
+                link={person.cta.link}
+                linkType={person.cta.linkType}
                 variant="link"
               />
             </div>

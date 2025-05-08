@@ -13,27 +13,16 @@ import {
   backgroundColors,
   VisibilityWrapper,
 } from "@yext/visual-editor";
-import { LexicalRichText } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
-
-/** TODO remove types when spruce is ready */
-type Testimonials = Array<TestimonialStruct>;
-
-type TestimonialStruct = {
-  description?: RTF2;
-  contributorName?: string; // single line text
-  contributionDateTime?: string; // dateTime
-};
-
-type RTF2 = {
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
+import {
+  TestimonialSectionType,
+  TestimonialStruct,
+} from "../../types/types.ts";
 
 export interface TestimonialSectionProps {
   data: {
     heading: YextEntityField<string>;
-    testimonials: YextEntityField<Testimonials>;
+    testimonials: YextEntityField<TestimonialSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -101,12 +90,12 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {testimonial.description && (
-          <Body>
-            <LexicalRichText
-              serializedAST={JSON.stringify(testimonial.description.json) ?? ""}
+        {testimonial.description?.html && (
+          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+            <div
+              dangerouslySetInnerHTML={{ __html: testimonial.description.html }}
             />
-          </Body>
+          </div>
         )}
       </Background>
       <Background background={backgroundColor} className="p-8">

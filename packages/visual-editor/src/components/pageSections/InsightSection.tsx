@@ -15,36 +15,14 @@ import {
   backgroundColors,
   VisibilityWrapper,
 } from "@yext/visual-editor";
-import { CTA as CTAType, ImageType } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
-
-/** TODO remove types when spruce is ready */
-type Insights = Array<InsightStruct>;
-
-type InsightStruct = {
-  image?: ImageType;
-  name?: string; // single line text
-  category?: string; // single line text
-  publishTime?: dateTime; // lexon's dateTime
-  description?: RTF2;
-  CTA?: CTAType;
-};
-
-type dateTime = {
-  start: string; // ISO 8601
-};
-
-type RTF2 = {
-  html?: string;
-  json?: Record<string, any>;
-};
-/** end of hardcoded types */
+import { InsightSectionType, InsightStruct } from "../../types/types.ts";
 
 export interface InsightSectionProps {
   data: {
     heading: YextEntityField<string>;
-    insights: YextEntityField<Insights>;
+    insights: YextEntityField<InsightSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -123,7 +101,7 @@ const InsightCard = ({
             >
               <Body>{insight.category}</Body>
               {insight.category && insight.publishTime && <Body>|</Body>}
-              {insight.publishTime && (
+              {insight.publishTime?.start && (
                 <Timestamp
                   date={insight.publishTime.start}
                   option={TimestampOption.DATE}
@@ -141,12 +119,12 @@ const InsightCard = ({
             </div>
           )}
         </div>
-        {insight.CTA && (
+        {insight.cta && (
           <CTA
             variant={"link"}
-            label={insight.CTA.label}
-            link={insight.CTA.link}
-            linkType={insight.CTA.linkType ?? "URL"}
+            label={insight.cta.label}
+            link={insight.cta.link}
+            linkType={insight.cta.linkType ?? "URL"}
           />
         )}
       </div>
