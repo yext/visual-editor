@@ -36,18 +36,35 @@ type RTF2 = {
 /** end of hardcoded types */
 
 export interface FAQsSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    FAQs: YextEntityField<FAQs>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
+    headingLevel: HeadingProps["level"];
   };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingProps["level"];
-  };
-  FAQs: YextEntityField<FAQs>;
   liveVisibility: boolean;
 }
 
 const FAQsSectionFields: Fields<FAQsSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Section Heading", {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      FAQs: YextField("FAQs", {
+        type: "entityField",
+        filter: {
+          types: ["type.faqs_section"],
+        },
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -56,28 +73,11 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Text", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  FAQs: YextField("FAQs", {
-    type: "entityField",
-    filter: {
-      types: ["type.faqs_section"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -89,17 +89,13 @@ const FAQsSectionFields: Fields<FAQsSectionProps> = {
   }),
 };
 
-const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({
-  styles,
-  sectionHeading,
-  FAQs,
-}) => {
+const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
     document,
-    sectionHeading.text
+    data.heading
   );
-  const resolvedFAQs = resolveYextEntityField(document, FAQs);
+  const resolvedFAQs = resolveYextEntityField(document, data.FAQs);
 
   return (
     <PageSection
@@ -109,17 +105,17 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({
       {resolvedHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeading.text.field}
-          constantValueEnabled={sectionHeading.text.constantValueEnabled}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <Heading level={sectionHeading.level}>{resolvedHeading}</Heading>
+          <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
         </EntityField>
       )}
       {resolvedFAQs && resolvedFAQs.length > 0 && (
         <EntityField
           displayName="FAQs"
-          fieldId={FAQs.field}
-          constantValueEnabled={FAQs.constantValueEnabled}
+          fieldId={data.FAQs.field}
+          constantValueEnabled={data.FAQs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
             {resolvedFAQs?.map((faqItem, index) => (
@@ -149,21 +145,21 @@ export const FAQsSection: ComponentConfig<FAQsSectionProps> = {
   label: "FAQs Section",
   fields: FAQsSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background2.value,
-    },
-    sectionHeading: {
-      text: {
+    data: {
+      heading: {
         field: "",
         constantValue: "Frequently Asked Questions",
         constantValueEnabled: true,
       },
-      level: 2,
+      FAQs: {
+        field: "",
+        constantValue: [],
+        constantValueEnabled: false,
+      },
     },
-    FAQs: {
-      field: "",
-      constantValue: [],
-      constantValueEnabled: false,
+    styles: {
+      backgroundColor: backgroundColors.background2.value,
+      headingLevel: 2,
     },
     liveVisibility: true,
   },
