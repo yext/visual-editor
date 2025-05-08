@@ -34,6 +34,10 @@ import {
   SectionContainer,
   SectionContainerProps,
 } from "./pageSections/SectionContainer.tsx";
+import {
+  TestimonialSection,
+  TestimonialSectionProps,
+} from "./pageSections/TestimonialSection.tsx";
 import { TeamSection, TeamSectionProps } from "./pageSections/TeamSection.tsx";
 import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
@@ -87,6 +91,7 @@ export interface PageSectionCategoryProps {
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
   StaticMapSection: StaticMapSectionProps;
+  TestimonialSection: TestimonialSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -104,6 +109,7 @@ export const PageSectionCategoryComponents = {
   FAQsSection,
   SectionContainer,
   StaticMapSection,
+  TestimonialSection,
 };
 
 export const PageSectionCategory = Object.keys(
