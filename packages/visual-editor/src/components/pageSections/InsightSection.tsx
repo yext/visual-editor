@@ -19,6 +19,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface InsightSectionProps {
   data: {
@@ -112,12 +113,18 @@ const InsightCard = ({
             </div>
           )}
           {insight.name && <Heading level={3}>{insight.name}</Heading>}
-          {insight.description?.html && (
+          {insight.description?.html ? (
             <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
               <div
                 dangerouslySetInnerHTML={{ __html: insight.description.html }}
               />
             </div>
+          ) : (
+            <Body>
+              <LexicalRichText
+                serializedAST={JSON.stringify(insight.description?.json) ?? ""}
+              />
+            </Body>
           )}
         </div>
         {insight.cta && (

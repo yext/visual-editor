@@ -21,11 +21,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface FAQSectionProps {
   data: {
     heading: YextEntityField<string>;
-    FAQs: YextEntityField<FAQSectionType>;
+    faqs: YextEntityField<FAQSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -44,7 +45,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
           types: ["type.string"],
         },
       }),
-      FAQs: YextField("FAQs", {
+      faqs: YextField("FAQs", {
         type: "entityField",
         filter: {
           types: ["type.faq_section"],
@@ -82,7 +83,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     document,
     data?.heading
   );
-  const resolvedFAQs = resolveYextEntityField(document, data?.FAQs);
+  const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 
   return (
     <PageSection
@@ -101,8 +102,8 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       {resolvedFAQs && resolvedFAQs.length > 0 && (
         <EntityField
           displayName="FAQs"
-          fieldId={data?.FAQs.field}
-          constantValueEnabled={data?.FAQs.constantValueEnabled}
+          fieldId={data?.faqs.field}
+          constantValueEnabled={data?.faqs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
             {resolvedFAQs?.map((faqItem, index) => (
@@ -113,7 +114,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  {faqItem.answer?.html && (
+                  {faqItem.answer?.html ? (
                     <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
                       <div
                         dangerouslySetInnerHTML={{
@@ -121,6 +122,14 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                         }}
                       />
                     </div>
+                  ) : (
+                    <Body>
+                      <LexicalRichText
+                        serializedAST={
+                          JSON.stringify(faqItem.answer?.json) ?? ""
+                        }
+                      />
+                    </Body>
                   )}
                 </AccordionContent>
               </AccordionItem>
@@ -142,7 +151,7 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
         constantValue: "Frequently Asked Questions",
         constantValueEnabled: true,
       },
-      FAQs: {
+      faqs: {
         field: "",
         constantValue: [],
         constantValueEnabled: false,

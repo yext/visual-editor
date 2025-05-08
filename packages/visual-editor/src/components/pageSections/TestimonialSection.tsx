@@ -6,7 +6,6 @@ import {
   useDocument,
   resolveYextEntityField,
   PageSection,
-  Body,
   Heading,
   EntityField,
   Background,
@@ -14,8 +13,11 @@ import {
   VisibilityWrapper,
   TestimonialSectionType,
   TestimonialStruct,
+  Timestamp,
+  Body,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface TestimonialSectionProps {
   data: {
@@ -88,20 +90,31 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {testimonial.description?.html && (
+        {testimonial.description?.html ? (
           <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
             <div
               dangerouslySetInnerHTML={{ __html: testimonial.description.html }}
             />
           </div>
+        ) : (
+          <Body>
+            <LexicalRichText
+              serializedAST={
+                JSON.stringify(testimonial.description?.json) ?? ""
+              }
+            />
+          </Body>
         )}
       </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (
           <Heading level={3}>{testimonial.contributorName}</Heading>
         )}
-        {testimonial.contributionDateTime && (
-          <Body variant="sm">{testimonial.contributionDateTime}</Body>
+        {testimonial.contributionDate?.start && (
+          <Timestamp
+            date={testimonial.contributionDate.start}
+            hideTimeZone={true}
+          />
         )}
       </Background>
     </div>

@@ -18,6 +18,7 @@ import {
   ProductStruct,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { LexicalRichText } from "@yext/pages-components";
 
 export interface ProductSectionProps {
   data: {
@@ -111,12 +112,18 @@ const ProductCard = ({
               <Body>{product.category}</Body>
             </Background>
           )}
-          {product.description?.html && (
+          {product.description?.html ? (
             <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
               <div
                 dangerouslySetInnerHTML={{ __html: product.description.html }}
               />
             </div>
+          ) : (
+            <Body className="max-w-[290px]">
+              <LexicalRichText
+                serializedAST={JSON.stringify(product.description?.json) ?? ""}
+              />
+            </Body>
           )}
         </div>
         {product.cta && (

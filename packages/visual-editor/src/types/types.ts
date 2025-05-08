@@ -47,7 +47,7 @@ export type TestimonialSectionType = Array<TestimonialStruct>;
 export type TestimonialStruct = {
   description?: RTF2;
   contributorName?: string;
-  contributionDateTime?: string;
+  contributionDate?: dateTime;
 };
 
 export type InsightSectionType = Array<InsightStruct>;
@@ -79,4 +79,5 @@ type dateTime = {
 
 type RTF2 = {
   html?: string;
+  json?: string;
 };
