@@ -93,9 +93,9 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
     document,
-    data.heading
+    data?.heading
   );
-  const resolvedFAQs = resolveYextEntityField(document, data.FAQs);
+  const resolvedFAQs = resolveYextEntityField(document, data?.FAQs);
 
   return (
     <PageSection
@@ -105,17 +105,17 @@ const FAQsSectionComponent: React.FC<FAQsSectionProps> = ({ data, styles }) => {
       {resolvedHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={data.heading.field}
-          constantValueEnabled={data.heading.constantValueEnabled}
+          fieldId={data?.heading.field}
+          constantValueEnabled={data?.heading.constantValueEnabled}
         >
-          <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
         </EntityField>
       )}
       {resolvedFAQs && resolvedFAQs.length > 0 && (
         <EntityField
           displayName="FAQs"
-          fieldId={data.FAQs.field}
-          constantValueEnabled={data.FAQs.constantValueEnabled}
+          fieldId={data?.FAQs.field}
+          constantValueEnabled={data?.FAQs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
             {resolvedFAQs?.map((faqItem, index) => (

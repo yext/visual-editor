@@ -31,10 +31,6 @@ import {
 } from "./pageSections/PhotoGallerySection.tsx";
 import { FAQsSection, FAQsSectionProps } from "./pageSections/FAQs.tsx";
 import {
-  SectionContainer,
-  SectionContainerProps,
-} from "./pageSections/SectionContainer.tsx";
-import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
@@ -89,7 +85,6 @@ export interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   TeamSection: TeamSectionProps;
   FAQsSection: FAQsSectionProps;
-  SectionContainer: SectionContainerProps;
   StaticMapSection: StaticMapSectionProps;
   TestimonialSection: TestimonialSectionProps;
 }
@@ -98,17 +93,16 @@ export const PageSectionCategoryComponents = {
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
-  InsightSection,
-  EventSection,
   NearbyLocationsSection,
   BannerSection,
+  PhotoGallerySection,
+  StaticMapSection,
+  EventSection,
+  FAQsSection,
+  InsightSection,
   ProductSection,
   PromoSection,
-  PhotoGallerySection,
   TeamSection,
-  FAQsSection,
-  SectionContainer,
-  StaticMapSection,
   TestimonialSection,
 };
 
