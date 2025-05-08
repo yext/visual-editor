@@ -7,6 +7,10 @@ import {
   CoreInfoSection,
   CoreInfoSectionProps,
 } from "./pageSections/CoreInfoSection.tsx";
+import {
+  EventSection,
+  EventSectionProps,
+} from "./pageSections/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "./pageSections/HeroSection.tsx";
 import {
   NearbyLocationsSection,
@@ -54,10 +58,15 @@ import {
   TestimonialCardProps,
   TestimonialCard,
 } from "./cards/TestimonialCard.tsx";
+import {
+  StaticMapSection,
+  StaticMapSectionProps,
+} from "./pageSections/StaticMapSection.tsx";
 
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
   HeroSection: HeroSectionProps;
+  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   BannerSection: BannerSectionProps;
@@ -66,12 +75,14 @@ export interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   FAQsSection: FAQsSectionProps;
   SectionContainer: SectionContainerProps;
+  StaticMapSection: StaticMapSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
+  EventSection,
   NearbyLocationsSection,
   BannerSection,
   PromoSection,
@@ -79,6 +90,7 @@ export const PageSectionCategoryComponents = {
   TeamSection,
   FAQsSection,
   SectionContainer,
+  StaticMapSection,
 };
 
 export const PageSectionCategory = Object.keys(

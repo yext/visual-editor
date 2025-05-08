@@ -79,7 +79,7 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
   people: YextField("Team Section", {
     type: "entityField",
     filter: {
-      types: ["type.people"],
+      types: ["type.team_section"],
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {

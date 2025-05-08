@@ -10,7 +10,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 
 type Size = { width: number; height: number };
 
-type MapboxStaticProps = {
+export type MapboxStaticProps = {
   apiKey: string;
   coordinate: YextEntityField<Coordinate>;
   zoom?: number;
@@ -125,7 +125,7 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   return [selfRef, size];
 }
 
-const MapboxStaticMap = ({
+export const MapboxStaticMapComponent = ({
   apiKey,
   coordinate: coordinateField,
   zoom = 14,
@@ -133,7 +133,7 @@ const MapboxStaticMap = ({
 }: MapboxStaticProps) => {
   const document = useDocument<any>();
 
-  const [imgRef, grandSize] = useGrandparentSize<HTMLImageElement>();
+  const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
@@ -154,12 +154,12 @@ const MapboxStaticMap = ({
     <img
       ref={imgRef}
       className="components w-full h-full object-cover"
-      src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandSize.width.toFixed(0)}x${grandSize.height.toFixed(0)}?access_token=${apiKey}`}
+      src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=${apiKey}`}
     />
   );
 };
 
-const MapboxStaticMapComponent: ComponentConfig<MapboxStaticProps> = {
+export const MapboxStaticMap: ComponentConfig<MapboxStaticProps> = {
   label: "Mapbox Static Map",
   fields: mapboxFields,
   defaultProps: {
@@ -172,7 +172,5 @@ const MapboxStaticMapComponent: ComponentConfig<MapboxStaticProps> = {
       },
     },
   },
-  render: (props: MapboxStaticProps) => <MapboxStaticMap {...props} />,
+  render: (props: MapboxStaticProps) => <MapboxStaticMapComponent {...props} />,
 };
-
-export { MapboxStaticMapComponent as MapboxStaticMap, type MapboxStaticProps };
