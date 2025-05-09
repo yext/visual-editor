@@ -153,6 +153,21 @@ export const ui: Registry["items"] = [
     files: [{ path: "cards/EventCard.tsx", type: "registry:ui" }],
   },
   {
+    name: "EventSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "body",
+      "cta",
+      "image",
+      "timestamp",
+      "background",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/EventSection.tsx", type: "registry:ui" }],
+  },
+  {
     name: "FAQsSection",
     type: "registry:ui",
     registryDependencies: [
@@ -242,6 +257,20 @@ export const ui: Registry["items"] = [
     files: [{ path: "cards/InsightCard.tsx", type: "registry:ui" }],
   },
   {
+    name: "InsightSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "background",
+      "body",
+      "cta",
+      "image",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSection/InsightSection.tsx", type: "registry:ui" }],
+  },
+  {
     name: "Image",
     type: "registry:ui",
     registryDependencies: ["image"],
@@ -298,9 +327,29 @@ export const ui: Registry["items"] = [
     files: [{ path: "cards/ProductCard.tsx", type: "registry:ui" }],
   },
   {
-    name: "Promo",
+    name: "ProductSection",
     type: "registry:ui",
-    registryDependencies: ["pageSection", "heading", "cta", "body", "image"],
+    registryDependencies: [
+      "heading",
+      "cta",
+      "body",
+      "image",
+      "background",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/ProductSection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "PromoSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "cta",
+      "body",
+      "image",
+      "visibilityWrapper",
+    ],
     files: [{ path: "pageSections/Promo.tsx", type: "registry:ui" }],
   },
   {
@@ -314,6 +363,40 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     registryDependencies: ["pageSection", "background", "heading", "body"],
     files: [{ path: "cards/TestimonialCard.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "StaticMapSection",
+    type: "registry:ui",
+    registryDependencies: ["pageSection", "heading", "visibilityWrapper"],
+    files: [{ path: "pageSections/StaticMapSection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "TeamSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "cta",
+      "body",
+      "image",
+      "phone",
+      "visibilityWrapper",
+    ],
+    files: [{ path: "pageSections/TeamSection.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "TestimonialSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "body",
+      "timestamp",
+      "visibilityWrapper",
+    ],
+    files: [
+      { path: "pageSections/TestimonialSection.tsx", type: "registry:ui" },
+    ],
   },
   {
     name: "TextList",

@@ -50,7 +50,6 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
-
   styles: YextField("Styles", {
     type: "object",
     objectFields: {

@@ -11,5 +11,5 @@ export { VisibilityWrapper } from "./visibilityWrapper.tsx";
 export {
   Timestamp,
   type TimestampProps,
-  type TimestampOption,
+  TimestampOption,
 } from "./timestamp.tsx";
