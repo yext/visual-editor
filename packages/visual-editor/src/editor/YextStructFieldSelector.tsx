@@ -75,6 +75,10 @@ const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
     return;
   }
 
+  if (!value.constantValueOverride) {
+    return;
+  }
+
   return (
     <FieldLabel
       label="Content Overrides"

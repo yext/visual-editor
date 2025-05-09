@@ -16,9 +16,9 @@ import {
   VisibilityWrapper,
   InsightSectionType,
   InsightStruct,
+  Timestamp,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Timestamp } from "../atoms/timestamp.tsx";
 import { LexicalRichText } from "@yext/pages-components";
 
 export interface InsightSectionProps {
@@ -38,7 +38,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
+      heading: YextField<any, string>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),

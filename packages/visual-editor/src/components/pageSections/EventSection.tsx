@@ -18,8 +18,9 @@ import {
   EventSectionType,
   EventStruct,
   Body,
+  Timestamp,
+  TimestampOption,
 } from "@yext/visual-editor";
-import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
 import { LexicalRichText } from "@yext/pages-components";
 
 export interface EventSectionProps {
@@ -39,7 +40,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
+      heading: YextField<any, string>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
