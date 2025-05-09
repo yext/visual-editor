@@ -1,3 +1,18 @@
+#### 0.0.39 (2025-05-09)
+
+##### New Features
+
+- built-in fields component updates (#434) (6243f6f2)
+- support fullstory in editor iframe (#423) (0b30929a)
+- apply headerScript from document (#413) (9542a127)
+
+##### Bug Fixes
+
+- adjust list types (#438) (b22c3a92)
+- heading -> name (#437) (a86c629f)
+- adjust types (#436) (1cee828d)
+- upgrading doesn't break page generation (#435) (a315bc08)
+
 #### 0.0.38 (2025-04-29)
 
 ##### New Features

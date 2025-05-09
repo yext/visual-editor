@@ -364,18 +364,18 @@
     ]
   },
   "c_hero": {
-    "cta1": {
-      "name": "Get Directions"
+    "primaryCta": {
+      "label": "Get Directions",
+      "link": "#"
     },
-    "cta2": {
-      "name": "Order Online"
+    "secondaryCta": {
+      "label": "Order Online",
+      "link": "#"
     },
     "image": {
-      "image": {
-        "height": 2592,
-        "url": "http://a.mktgcdn.com/p-dev/ETWoS5bg4iVNVcSQA4yvzm7w1uMtr37ub1GG5oeNWKc/3834x2592.jpg",
-        "width": 3834
-      }
+      "height": 2592,
+      "url": "http://a.mktgcdn.com/p-dev/ETWoS5bg4iVNVcSQA4yvzm7w1uMtr37ub1GG5oeNWKc/3834x2592.jpg",
+      "width": 3834
     }
   },
   "c_productSection": {
