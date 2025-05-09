@@ -34,7 +34,7 @@ export type EventSectionType = {
 export type EventStruct = {
   image?: ImageType;
   title?: string;
-  dateTime?: dateTime;
+  dateTime?: string;
   description?: RTF2;
   cta?: CTAType;
 };
@@ -55,7 +55,7 @@ export type TestimonialSectionType = {
 export type TestimonialStruct = {
   description?: RTF2;
   contributorName?: string;
-  contributionDate?: dateTime;
+  contributionDate?: string;
 };
 
 export type InsightSectionType = {
@@ -66,7 +66,7 @@ export type InsightStruct = {
   image?: ImageType;
   name?: string;
   category?: string;
-  publishTime?: dateTime;
+  publishTime?: string;
   description?: RTF2;
   cta?: CTAType;
 };
@@ -82,11 +82,6 @@ export type PersonStruct = {
   phoneNumber?: string;
   email?: string;
   cta?: CTAType;
-};
-
-type dateTime = {
-  start?: string; // ISO 8601
-  end?: string; //  ISO 8601
 };
 
 type RTF2 = {

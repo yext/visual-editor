@@ -18,7 +18,7 @@ import {
   InsightStruct,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
+import { Timestamp } from "../atoms/timestamp.tsx";
 import { LexicalRichText } from "@yext/pages-components";
 
 export interface InsightSectionProps {
@@ -103,12 +103,8 @@ const InsightCard = ({
             >
               <Body>{insight.category}</Body>
               {insight.category && insight.publishTime && <Body>|</Body>}
-              {insight.publishTime?.start && (
-                <Timestamp
-                  date={insight.publishTime.start}
-                  option={TimestampOption.DATE}
-                  hideTimeZone={true}
-                />
+              {insight.publishTime && (
+                <Timestamp date={insight.publishTime} hideTimeZone={true} />
               )}
             </div>
           )}

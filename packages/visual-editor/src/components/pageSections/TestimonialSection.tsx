@@ -104,11 +104,8 @@ const TestimonialCard = ({
         {testimonial.contributorName && (
           <Heading level={3}>{testimonial.contributorName}</Heading>
         )}
-        {testimonial.contributionDate?.start && (
-          <Timestamp
-            date={testimonial.contributionDate.start}
-            hideTimeZone={true}
-          />
+        {testimonial.contributionDate && (
+          <Timestamp date={testimonial.contributionDate} hideTimeZone={true} />
         )}
       </Background>
     </div>

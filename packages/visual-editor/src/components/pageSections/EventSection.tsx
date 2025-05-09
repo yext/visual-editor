@@ -105,15 +105,10 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && <Heading level={6}>{event.title}</Heading>}
-        {event.dateTime?.start && (
+        {event.dateTime && (
           <Timestamp
-            date={event.dateTime.start}
-            endDate={event.dateTime.end}
-            option={
-              event.dateTime.end
-                ? TimestampOption.DATE_TIME_RANGE
-                : TimestampOption.DATE_TIME
-            }
+            date={event.dateTime}
+            option={TimestampOption.DATE_TIME}
             hideTimeZone={true}
           />
         )}
