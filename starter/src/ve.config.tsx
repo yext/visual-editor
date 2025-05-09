@@ -16,41 +16,25 @@ import {
   CardCategoryProps,
   ContentBlockCategoryProps,
   OtherCategoryProps,
-  DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
-} from "@yext/visual-editor";
-
-import { LocatorComponent, LocatorProps } from "./components/Locator.js"; // only for hot reloading; final code should be imported above
-
-interface LocatorCategoryProps {
-  Locator: LocatorProps;
-}
-const LocatorCategoryComponents = {
-  LocatorComponent,
-};
-
-const LocatorCategory = Object.keys(
   LocatorCategoryComponents,
-) as (keyof LocatorCategoryProps)[];
+  LocatorCategoryProps,
+} from "@yext/visual-editor";
 
 interface MainProps
   extends PageSectionCategoryProps,
     LayoutBlockCategoryProps,
     CardCategoryProps,
     ContentBlockCategoryProps,
-    DirectoryCategoryProps,
-    OtherCategoryProps,
-    LocatorCategoryProps {}
+    OtherCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...LayoutBlockCategoryComponents,
   ...CardCategoryComponents,
   ...ContentBlockCategoryComponents,
-  ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
-  ...LocatorCategoryComponents,
 };
 
 // All the available components for locations
@@ -73,14 +57,6 @@ export const mainConfig: Config<MainProps> = {
       title: "Content Blocks",
       components: ContentBlockCategory,
     },
-    directory: {
-      title: "Directory",
-      components: DirectoryCategory,
-    },
-    locator: {
-      title: "Locator",
-      components: LocatorCategory,
-    },
   },
   root: {
     render: () => {
@@ -99,6 +75,48 @@ export const mainConfig: Config<MainProps> = {
   },
 };
 
+interface DirectoryConfigProps
+  extends DirectoryCategoryProps,
+    OtherCategoryProps {}
+
+export const directoryConfig: Config<DirectoryConfigProps> = {
+  components: {
+    ...DirectoryCategoryComponents,
+    ...OtherCategoryComponents,
+  },
+  root: {
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
+    },
+  },
+};
+
+interface LocatorConfigProps extends LocatorCategoryProps, OtherCategoryProps {}
+
+export const locatorConfig: Config<LocatorConfigProps> = {
+  components: {
+    ...LocatorCategoryComponents,
+    ...OtherCategoryComponents,
+  },
+  root: {
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
+    },
+  },
+};
+
 export const componentRegistry = new Map<string, Config<any>>([
-  ["dev", mainConfig],
+  ["main", mainConfig],
+  ["directory", directoryConfig],
+  ["locator", locatorConfig],
 ]);
