@@ -172,14 +172,14 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
           </div>
         </EntityField>
       )}
-      {resolvedPeople && (
+      {resolvedPeople?.people && (
         <EntityField
           displayName="Team"
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-            {resolvedPeople.map((person, index) => (
+            {resolvedPeople.people.map((person, index) => (
               <PersonCard
                 key={index}
                 person={person}
@@ -205,7 +205,9 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       },
       people: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          people: [],
+        },
         constantValueEnabled: false,
       },
     },

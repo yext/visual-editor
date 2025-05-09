@@ -99,14 +99,14 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
         </EntityField>
       )}
-      {resolvedFAQs && resolvedFAQs.length > 0 && (
+      {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
           displayName="FAQs"
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
-            {resolvedFAQs?.map((faqItem, index) => (
+            {resolvedFAQs?.faqs?.map((faqItem, index) => (
               <AccordionItem value={index.toString()} key={index}>
                 <AccordionTrigger>
                   <Body variant="lg" className="font-bold text-left">
@@ -153,7 +153,9 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
       },
       faqs: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          faqs: [],
+        },
         constantValueEnabled: false,
       },
     },

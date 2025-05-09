@@ -148,14 +148,14 @@ const TestimonialSectionWrapper = ({
           </div>
         </EntityField>
       )}
-      {resolvedTestimonials && (
+      {resolvedTestimonials?.testimonials && (
         <EntityField
           displayName="Testimonials"
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-            {resolvedTestimonials.map((testimonial, index) => (
+            {resolvedTestimonials.testimonials.map((testimonial, index) => (
               <TestimonialCard
                 key={index}
                 testimonial={testimonial}
@@ -186,7 +186,9 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
       },
       testimonials: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          testimonials: [],
+        },
         constantValueEnabled: false,
       },
     },

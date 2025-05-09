@@ -160,14 +160,14 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
           </div>
         </EntityField>
       )}
-      {resolvedProducts && (
+      {resolvedProducts?.products && (
         <EntityField
           displayName="Products"
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {resolvedProducts.map((product, index) => (
+            {resolvedProducts.products.map((product, index) => (
               <ProductCard
                 key={index}
                 product={product}
@@ -193,7 +193,9 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       },
       products: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          products: [],
+        },
         constantValueEnabled: false,
       },
     },

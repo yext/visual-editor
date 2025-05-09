@@ -163,14 +163,14 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
           </div>
         </EntityField>
       )}
-      {resolvedEvents && (
+      {resolvedEvents?.events && (
         <EntityField
           displayName="Events"
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >
           <div className="flex flex-col gap-8">
-            {resolvedEvents.map((event, index) => (
+            {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
                 event={event}
@@ -196,7 +196,9 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       },
       events: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          events: [],
+        },
       },
     },
     styles: {

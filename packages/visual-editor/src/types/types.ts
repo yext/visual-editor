@@ -15,7 +15,9 @@ export type PromoSectionType = {
   cta?: CTAType;
 };
 
-export type ProductSectionType = Array<ProductStruct>;
+export type ProductSectionType = {
+  products: Array<ProductStruct>;
+};
 
 export type ProductStruct = {
   image?: ImageType;
@@ -25,7 +27,9 @@ export type ProductStruct = {
   cta?: CTAType;
 };
 
-export type EventSectionType = Array<EventStruct>;
+export type EventSectionType = {
+  events: Array<EventStruct>;
+};
 
 export type EventStruct = {
   image?: ImageType;
@@ -35,14 +39,18 @@ export type EventStruct = {
   cta?: CTAType;
 };
 
-export type FAQSectionType = Array<FAQStruct>;
+export type FAQSectionType = {
+  faqs: Array<FAQStruct>;
+};
 
 export type FAQStruct = {
   question: string;
   answer: RTF2;
 };
 
-export type TestimonialSectionType = Array<TestimonialStruct>;
+export type TestimonialSectionType = {
+  testimonials: Array<TestimonialStruct>;
+};
 
 export type TestimonialStruct = {
   description?: RTF2;
@@ -50,7 +58,9 @@ export type TestimonialStruct = {
   contributionDate?: dateTime;
 };
 
-export type InsightSectionType = Array<InsightStruct>;
+export type InsightSectionType = {
+  insights: Array<InsightStruct>;
+};
 
 export type InsightStruct = {
   image?: ImageType;
@@ -61,7 +71,9 @@ export type InsightStruct = {
   cta?: CTAType;
 };
 
-export type TeamSectionType = Array<PersonStruct>;
+export type TeamSectionType = {
+  people: Array<PersonStruct>;
+};
 
 export type PersonStruct = {
   headshot?: ImageType;

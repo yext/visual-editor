@@ -161,14 +161,14 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
           </EntityField>
         </div>
       )}
-      {resolvedInsights && (
+      {resolvedInsights?.insights && (
         <EntityField
           displayName="Insights"
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {resolvedInsights.map((insight, index) => (
+            {resolvedInsights.insights.map((insight, index) => (
               <InsightCard
                 key={index}
                 insight={insight}
@@ -199,7 +199,9 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       },
       insights: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          insights: [],
+        },
       },
     },
     liveVisibility: true,
