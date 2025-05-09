@@ -2,13 +2,13 @@ import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { axe, viewports } from "../WCAG/WCAG.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { FAQsSection, VisualEditorProvider } from "@yext/visual-editor";
+import { FAQSection, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 describe.each(viewports)("FAQsSection $name", ({ width, height }) => {
   const puckConfig: Config = {
-    components: { FAQsSection },
+    components: { FAQSection },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
@@ -25,7 +25,7 @@ describe.each(viewports)("FAQsSection $name", ({ width, height }) => {
             content: [
               {
                 type: "FAQsSection",
-                props: { id: "abc", ...FAQsSection.defaultProps },
+                props: { id: "abc", ...FAQSection.defaultProps },
               },
             ],
           }}
