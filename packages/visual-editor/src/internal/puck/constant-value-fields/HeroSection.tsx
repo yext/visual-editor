@@ -4,8 +4,8 @@ import { ctaFields } from "./CallToAction.tsx";
 
 export const HERO_CONSTANT_CONFIG: Field<{
   image: ImageType;
-  primaryCta: CTA;
-  secondaryCta: CTA;
+  primaryCta?: CTA;
+  secondaryCta?: CTA;
 }> = {
   label: "",
   type: "object",

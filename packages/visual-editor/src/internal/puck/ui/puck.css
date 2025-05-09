@@ -121,3 +121,16 @@
 .font-select-option:active {
   background-color: var(--puck-color-grey-09);
 }
+
+.date-time-picker {
+  border: 1px solid var(--puck-color-grey-09);
+  border-radius: 4px;
+  padding: 12px 15px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+}
+
+.empty-array-fix > div > div > div > div {
+  display: none;
+}

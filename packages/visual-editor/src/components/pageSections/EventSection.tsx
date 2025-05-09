@@ -46,6 +46,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
       events: YextField("Events", {
         type: "entityField",
         filter: {
+          includeListsOnly: true,
           types: ["type.events_section"],
         },
       }),
@@ -112,12 +113,16 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {event.description?.json && (
-          <Body>
-            <LexicalRichText
-              serializedAST={JSON.stringify(event.description?.json) ?? ""}
-            />
-          </Body>
+        {typeof event.description === "string" ? (
+          <Body>{event.description}</Body>
+        ) : (
+          event.description?.json && (
+            <Body>
+              <LexicalRichText
+                serializedAST={JSON.stringify(event.description?.json) ?? ""}
+              />
+            </Body>
+          )
         )}
         {event.cta && (
           <CTA

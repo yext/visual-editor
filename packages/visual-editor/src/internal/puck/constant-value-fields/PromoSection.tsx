@@ -6,7 +6,7 @@ export const PROMO_CONSTANT_CONFIG: Field<{
   image: ImageType;
   title: string;
   description: string;
-  cta: CTA;
+  cta?: CTA;
 }> = {
   label: "",
   type: "object",

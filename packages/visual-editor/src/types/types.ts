@@ -35,7 +35,7 @@ export type EventStruct = {
   image?: ImageType;
   title?: string;
   dateTime?: string;
-  description?: RTF2;
+  description?: RTF2 | string;
   cta?: CTAType;
 };
 
