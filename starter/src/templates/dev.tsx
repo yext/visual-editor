@@ -17,11 +17,20 @@ import {
   defaultThemeConfig,
   applyAnalytics,
   applyHeaderScript,
+  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
+import {
+  // CloudChoice,
+  // CloudRegion,
+  // Environment,
+  // HeadlessConfig,
+  provideHeadless,
+  SearchHeadlessProvider,
+} from "@yext/search-headless-react";
 
 export const config = {
   name: "dev-location",
@@ -112,6 +121,25 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
 
+  const searchHeadlessConfig = createSearchHeadlessConfig(document);
+  if (!searchHeadlessConfig) {
+    return <></>;
+  }
+  const searcher = provideHeadless(searchHeadlessConfig);
+
+  // Uncomment this to use the config object directly while we're waiting for other work to be done
+  // const config = {
+  //   apiKey: "",
+  //   experienceKey: "jacob-test",
+  //   locale: "en",
+  //   experienceVersion: "STAGING",
+  //   verticalKey: "locations",
+  //   cloudRegion: CloudRegion.US,
+  //   cloudChoice: CloudChoice.GLOBAL_MULTI,
+  //   environment: Environment.PROD,
+  // };
+  // const searcher = provideHeadless(config);
+
   return (
     <div>
       <div className={"flex-container"}>
@@ -125,19 +153,21 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         </button>
       </div>
       <div>
-        <VisualEditorProvider
-          templateProps={props}
-          entityFields={{ fields: entityFields }}
-          tailwindConfig={tailwindConfig}
-        >
-          <Editor
-            document={document}
-            componentRegistry={componentRegistry}
-            themeConfig={defaultThemeConfig}
-            localDev={true}
-            forceThemeMode={themeMode}
-          />
-        </VisualEditorProvider>
+        <SearchHeadlessProvider searcher={searcher}>
+          <VisualEditorProvider
+            templateProps={props}
+            entityFields={{ fields: entityFields }}
+            tailwindConfig={tailwindConfig}
+          >
+            <Editor
+              document={document}
+              componentRegistry={componentRegistry}
+              themeConfig={defaultThemeConfig}
+              localDev={true}
+              forceThemeMode={themeMode}
+            />
+          </VisualEditorProvider>
+        </SearchHeadlessProvider>
       </div>
     </div>
   );
