@@ -90,13 +90,7 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {testimonial.description?.html ? (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-            <div
-              dangerouslySetInnerHTML={{ __html: testimonial.description.html }}
-            />
-          </div>
-        ) : (
+        {testimonial.description?.json && (
           <Body>
             <LexicalRichText
               serializedAST={

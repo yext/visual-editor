@@ -84,19 +84,6 @@ const PromoDescription = ({ description }: PromoSectionType) => {
     return <Body>{description}</Body>;
   } else if (
     typeof description === "object" &&
-    typeof description.html === "string"
-  ) {
-    return (
-      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: description.html,
-          }}
-        />
-      </div>
-    );
-  } else if (
-    typeof description === "object" &&
     typeof description.json === "string"
   ) {
     return (

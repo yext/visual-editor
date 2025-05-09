@@ -117,11 +117,7 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {event.description?.html ? (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-            <div dangerouslySetInnerHTML={{ __html: event.description.html }} />
-          </div>
-        ) : (
+        {event.description?.json && (
           <Body>
             <LexicalRichText
               serializedAST={JSON.stringify(event.description?.json) ?? ""}

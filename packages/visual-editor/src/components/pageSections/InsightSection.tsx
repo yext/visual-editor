@@ -113,13 +113,7 @@ const InsightCard = ({
             </div>
           )}
           {insight.name && <Heading level={3}>{insight.name}</Heading>}
-          {insight.description?.html ? (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-              <div
-                dangerouslySetInnerHTML={{ __html: insight.description.html }}
-              />
-            </div>
-          ) : (
+          {insight.description?.json && (
             <Body>
               <LexicalRichText
                 serializedAST={JSON.stringify(insight.description?.json) ?? ""}

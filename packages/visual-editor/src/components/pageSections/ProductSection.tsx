@@ -112,13 +112,7 @@ const ProductCard = ({
               <Body>{product.category}</Body>
             </Background>
           )}
-          {product.description?.html ? (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-              <div
-                dangerouslySetInnerHTML={{ __html: product.description.html }}
-              />
-            </div>
-          ) : (
+          {product.description?.json && (
             <Body className="max-w-[290px]">
               <LexicalRichText
                 serializedAST={JSON.stringify(product.description?.json) ?? ""}

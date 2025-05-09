@@ -114,15 +114,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  {faqItem.answer?.html ? (
-                    <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: faqItem.answer.html,
-                        }}
-                      />
-                    </div>
-                  ) : (
+                  {faqItem.answer?.json && (
                     <Body>
                       <LexicalRichText
                         serializedAST={
