@@ -18,7 +18,7 @@ import {
   InsightStruct,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Timestamp, TimestampOption } from "../atoms/timestamp.tsx";
+import { Timestamp } from "../atoms/timestamp.tsx";
 import { LexicalRichText } from "@yext/pages-components";
 
 export interface InsightSectionProps {
@@ -103,23 +103,13 @@ const InsightCard = ({
             >
               <Body>{insight.category}</Body>
               {insight.category && insight.publishTime && <Body>|</Body>}
-              {insight.publishTime?.start && (
-                <Timestamp
-                  date={insight.publishTime.start}
-                  option={TimestampOption.DATE}
-                  hideTimeZone={true}
-                />
+              {insight.publishTime && (
+                <Timestamp date={insight.publishTime} hideTimeZone={true} />
               )}
             </div>
           )}
           {insight.name && <Heading level={3}>{insight.name}</Heading>}
-          {insight.description?.html ? (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-              <div
-                dangerouslySetInnerHTML={{ __html: insight.description.html }}
-              />
-            </div>
-          ) : (
+          {insight.description?.json && (
             <Body>
               <LexicalRichText
                 serializedAST={JSON.stringify(insight.description?.json) ?? ""}
@@ -161,14 +151,14 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
           </EntityField>
         </div>
       )}
-      {resolvedInsights && (
+      {resolvedInsights?.insights && (
         <EntityField
           displayName="Insights"
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {resolvedInsights.map((insight, index) => (
+            {resolvedInsights.insights.map((insight, index) => (
               <InsightCard
                 key={index}
                 insight={insight}
@@ -199,7 +189,9 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       },
       insights: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          insights: [],
+        },
       },
     },
     liveVisibility: true,

@@ -99,14 +99,14 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
         </EntityField>
       )}
-      {resolvedFAQs && resolvedFAQs.length > 0 && (
+      {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
           displayName="FAQs"
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
-            {resolvedFAQs?.map((faqItem, index) => (
+            {resolvedFAQs?.faqs?.map((faqItem, index) => (
               <AccordionItem value={index.toString()} key={index}>
                 <AccordionTrigger>
                   <Body variant="lg" className="font-bold text-left">
@@ -114,15 +114,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  {faqItem.answer?.html ? (
-                    <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: faqItem.answer.html,
-                        }}
-                      />
-                    </div>
-                  ) : (
+                  {faqItem.answer?.json && (
                     <Body>
                       <LexicalRichText
                         serializedAST={
@@ -153,7 +145,9 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
       },
       faqs: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          faqs: [],
+        },
         constantValueEnabled: false,
       },
     },

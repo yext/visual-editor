@@ -90,13 +90,7 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {testimonial.description?.html ? (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-            <div
-              dangerouslySetInnerHTML={{ __html: testimonial.description.html }}
-            />
-          </div>
-        ) : (
+        {testimonial.description?.json && (
           <Body>
             <LexicalRichText
               serializedAST={
@@ -110,11 +104,8 @@ const TestimonialCard = ({
         {testimonial.contributorName && (
           <Heading level={3}>{testimonial.contributorName}</Heading>
         )}
-        {testimonial.contributionDate?.start && (
-          <Timestamp
-            date={testimonial.contributionDate.start}
-            hideTimeZone={true}
-          />
+        {testimonial.contributionDate && (
+          <Timestamp date={testimonial.contributionDate} hideTimeZone={true} />
         )}
       </Background>
     </div>
@@ -148,14 +139,14 @@ const TestimonialSectionWrapper = ({
           </div>
         </EntityField>
       )}
-      {resolvedTestimonials && (
+      {resolvedTestimonials?.testimonials && (
         <EntityField
           displayName="Testimonials"
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-            {resolvedTestimonials.map((testimonial, index) => (
+            {resolvedTestimonials.testimonials.map((testimonial, index) => (
               <TestimonialCard
                 key={index}
                 testimonial={testimonial}
@@ -186,7 +177,9 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
       },
       testimonials: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          testimonials: [],
+        },
         constantValueEnabled: false,
       },
     },

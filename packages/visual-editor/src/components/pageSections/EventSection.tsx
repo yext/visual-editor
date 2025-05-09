@@ -105,23 +105,14 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && <Heading level={6}>{event.title}</Heading>}
-        {event.dateTime?.start && (
+        {event.dateTime && (
           <Timestamp
-            date={event.dateTime.start}
-            endDate={event.dateTime.end}
-            option={
-              event.dateTime.end
-                ? TimestampOption.DATE_TIME_RANGE
-                : TimestampOption.DATE_TIME
-            }
+            date={event.dateTime}
+            option={TimestampOption.DATE_TIME}
             hideTimeZone={true}
           />
         )}
-        {event.description?.html ? (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-            <div dangerouslySetInnerHTML={{ __html: event.description.html }} />
-          </div>
-        ) : (
+        {event.description?.json && (
           <Body>
             <LexicalRichText
               serializedAST={JSON.stringify(event.description?.json) ?? ""}
@@ -163,14 +154,14 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
           </div>
         </EntityField>
       )}
-      {resolvedEvents && (
+      {resolvedEvents?.events && (
         <EntityField
           displayName="Events"
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >
           <div className="flex flex-col gap-8">
-            {resolvedEvents.map((event, index) => (
+            {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
                 event={event}
@@ -196,7 +187,9 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       },
       events: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          events: [],
+        },
       },
     },
     styles: {

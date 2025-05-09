@@ -112,13 +112,7 @@ const ProductCard = ({
               <Body>{product.category}</Body>
             </Background>
           )}
-          {product.description?.html ? (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-              <div
-                dangerouslySetInnerHTML={{ __html: product.description.html }}
-              />
-            </div>
-          ) : (
+          {product.description?.json && (
             <Body className="max-w-[290px]">
               <LexicalRichText
                 serializedAST={JSON.stringify(product.description?.json) ?? ""}
@@ -160,14 +154,14 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
           </div>
         </EntityField>
       )}
-      {resolvedProducts && (
+      {resolvedProducts?.products && (
         <EntityField
           displayName="Products"
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {resolvedProducts.map((product, index) => (
+            {resolvedProducts.products.map((product, index) => (
               <ProductCard
                 key={index}
                 product={product}
@@ -193,7 +187,9 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       },
       products: {
         field: "",
-        constantValue: [],
+        constantValue: {
+          products: [],
+        },
         constantValueEnabled: false,
       },
     },
