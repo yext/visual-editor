@@ -29,7 +29,6 @@ import {
   Heading,
   normalizeSlug,
   useDocument,
-  useTemplateProps,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "@yext/visual-editor";
@@ -140,6 +139,9 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
   const document = useDocument();
+  if (!document) {
+    return <></>;
+  }
   const searchHeadlessConfig = createSearchHeadlessConfig(document);
   const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
   if (
@@ -347,8 +349,8 @@ interface MapProps {
 
 const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
   const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
-  const mapboxApiKey =
-    useTemplateProps<any>().document?._env?.YEXT_MAPBOX_API_KEY;
+  const entityDocument: any = useDocument();
+  const mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
@@ -475,7 +477,8 @@ const getPath = (location: Location, locale: string) => {
 };
 
 const getDocumentLocale = () => {
-  const fullLocale = useTemplateProps<any>().document?.meta?.locale || "en";
+  const entityDocument: any = useDocument();
+  const fullLocale = entityDocument.meta?.locale || "en";
   let locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
   if (!(locale in TRANSLATIONS)) {
     locale = "en";
