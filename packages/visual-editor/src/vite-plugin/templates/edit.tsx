@@ -46,7 +46,7 @@ const Edit: () => JSX.Element = () => {
   // In the meantime, we can gate wrapping with SearchHeadlessProvider to only when
   // the entity document has a locator config on it (waiting on Spruce):
   // https://yexttest.atlassian.net/browse/SPR-6003
-  const searchHeadlessConfig = createSearchHeadlessConfig(entityDocument);
+  // const searchHeadlessConfig = createSearchHeadlessConfig(entityDocument);
 
   return (
     <VisualEditorProvider

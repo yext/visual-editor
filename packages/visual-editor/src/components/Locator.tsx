@@ -138,7 +138,7 @@ const Locator: React.FC<LocatorProps> = (props) => {
   const locale = getDocumentLocale();
   const { mapStyle } = props;
   const resultCount = useSearchState(
-    (state) => state.vertical.resultsCount || 0,
+    (state) => state.vertical.resultsCount || 0
   );
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
@@ -399,7 +399,7 @@ const LocationCard: CardComponent<Location> = ({
                 : {
                     latitude: 0,
                     longitude: 0,
-                  },
+                  }
             )}
             linkType={"DRIVING_DIRECTIONS"}
             target={"_blank"}

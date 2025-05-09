@@ -48,9 +48,7 @@ export const createSearchHeadlessConfig = (document: any) => {
     return;
   }
 
-  // experienceKey will eventually be on the entity document, waiting on Spruce
-  // https://yext.slack.com/archives/C06A06BCUUF/p1745963801890889
-  const experienceKey = "jacob-test";
+  const experienceKey = getExperienceKey(document);
   const headlessConfig: HeadlessConfig = {
     apiKey: searchApiKey,
     experienceKey: experienceKey,
@@ -100,10 +98,7 @@ export const createSearchAnalyticsConfig = (document: any) => {
     environment === Environment.SANDBOX ? "SANDBOX" : "PRODUCTION";
   // from @yext/analytics RegionEnum
   const analyticsRegion = cloudRegion.toUpperCase();
-  // experienceKey will eventually be on the entity document, waiting on Spruce
-  // https://yext.slack.com/archives/C06A06BCUUF/p1745963801890889
-  const experienceKey = "jacob-test";
-  // from @yext/analytics SearchAnalyticsConfig
+  const experienceKey = getExperienceKey(document);
   const analyticsConfig = {
     businessId: businessId,
     experienceKey: experienceKey,
@@ -112,6 +107,19 @@ export const createSearchAnalyticsConfig = (document: any) => {
     env: analyticsEnvironment,
   };
   return analyticsConfig;
+};
+
+const getExperienceKey = (document: any) => {
+  let experienceKey = "";
+  try {
+    experienceKey = JSON.parse(document._pageset).typeConfig.locatorConfig
+      .experienceKey;
+    console.log("Kyle was right");
+  } catch {
+    experienceKey = document._pageset.typeConfig.locatorConfig.experienceKey;
+    console.log("Duval was right");
+  }
+  return experienceKey;
 };
 
 const isValidCloudRegion = (value: any): value is CloudRegion => {

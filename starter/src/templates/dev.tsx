@@ -27,7 +27,6 @@ import {
   // CloudChoice,
   // CloudRegion,
   // Environment,
-  // HeadlessConfig,
   provideHeadless,
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
@@ -129,10 +128,10 @@ const Dev: Template<TemplateRenderProps> = (props) => {
 
   // Uncomment this to use the config object directly while we're waiting for other work to be done
   // const config = {
-  //   apiKey: "",
+  //   apiKey: "722d20ad53157666ea2df0d3831433c2",
   //   experienceKey: "jacob-test",
   //   locale: "en",
-  //   experienceVersion: "STAGING",
+  //   experienceVersion: "PRODUCTION",
   //   verticalKey: "locations",
   //   cloudRegion: CloudRegion.US,
   //   cloudChoice: CloudChoice.GLOBAL_MULTI,

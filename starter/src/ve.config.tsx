@@ -21,13 +21,13 @@ import {
   DirectoryCategoryProps,
 } from "@yext/visual-editor";
 
-import { Locator, LocatorProps } from "./components/Locator.js"; // only for hot reloading; final code should be imported above
+import { LocatorComponent, LocatorProps } from "./components/Locator.js"; // only for hot reloading; final code should be imported above
 
 interface LocatorCategoryProps {
   Locator: LocatorProps;
 }
 const LocatorCategoryComponents = {
-  Locator,
+  LocatorComponent,
 };
 
 const LocatorCategory = Object.keys(

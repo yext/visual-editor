@@ -22,16 +22,11 @@ import {
   createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import {
-  CloudChoice,
-  CloudRegion,
-  Environment,
   provideHeadless,
   SearchHeadlessProvider,
 } from "@yext/search-headless-react";
 import { themeConfig } from "../../theme.config";
 import { SchemaWrapper } from "@yext/pages-components";
-
-const EXPERIENCE_VERSION = "PRODUCTION";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
