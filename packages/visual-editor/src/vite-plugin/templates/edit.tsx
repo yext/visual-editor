@@ -18,6 +18,10 @@ import {
 } from "@yext/pages";
 import { themeConfig } from "../../theme.config";
 import tailwindConfig from "../../tailwind.config";
+import {
+  provideHeadless,
+  SearchHeadlessProvider,
+} from "@yext/search-headless-react";
 
 // Editor is avaliable at /edit
 export const getPath: GetPath<TemplateProps> = () => {
@@ -46,22 +50,45 @@ const Edit: () => JSX.Element = () => {
   // In the meantime, we can gate wrapping with SearchHeadlessProvider to only when
   // the entity document has a locator config on it (waiting on Spruce):
   // https://yexttest.atlassian.net/browse/SPR-6003
-  // const searchHeadlessConfig = createSearchHeadlessConfig(entityDocument);
+  const searchHeadlessConfig = createSearchHeadlessConfig(entityDocument);
+
+  if (!searchHeadlessConfig) {
+    return (
+      <VisualEditorProvider
+        templateProps={{
+          document: entityDocument,
+        }}
+        entityFields={entityFields}
+        tailwindConfig={tailwindConfig}
+      >
+        <Editor
+          document={entityDocument}
+          componentRegistry={componentRegistry}
+          themeConfig={themeConfig}
+        />
+      </VisualEditorProvider>
+    );
+  }
+
+  // Uncomment this to use the config object directly while we're waiting for other work to be done
+  const searcher = provideHeadless(searchHeadlessConfig);
 
   return (
-    <VisualEditorProvider
-      templateProps={{
-        document: entityDocument,
-      }}
-      entityFields={entityFields}
-      tailwindConfig={tailwindConfig}
-    >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-      />
-    </VisualEditorProvider>
+    <SearchHeadlessProvider searcher={searcher}>
+      <VisualEditorProvider
+        templateProps={{
+          document: entityDocument,
+        }}
+        entityFields={entityFields}
+        tailwindConfig={tailwindConfig}
+      >
+        <Editor
+          document={entityDocument}
+          componentRegistry={componentRegistry}
+          themeConfig={themeConfig}
+        />
+      </VisualEditorProvider>
+    </SearchHeadlessProvider>
   );
 };
 
