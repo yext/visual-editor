@@ -5,7 +5,6 @@ import {
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
-  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { componentRegistry } from "../ve.config";
 import {
@@ -18,10 +17,6 @@ import {
 } from "@yext/pages";
 import { themeConfig } from "../../theme.config";
 import tailwindConfig from "../../tailwind.config";
-import {
-  provideHeadless,
-  SearchHeadlessProvider,
-} from "@yext/search-headless-react";
 
 // Editor is avaliable at /edit
 export const getPath: GetPath<TemplateProps> = () => {
@@ -45,50 +40,20 @@ const Edit: () => JSX.Element = () => {
   const entityDocument = usePlatformBridgeDocument();
   const entityFields = usePlatformBridgeEntityFields();
 
-  // TODO (kgerner): move this to a Locator-specific template once we make one
-  // See this PR for example: https://github.com/yext/visual-editor/pull/409
-  // In the meantime, we can gate wrapping with SearchHeadlessProvider to only when
-  // the entity document has a locator config on it (waiting on Spruce):
-  // https://yexttest.atlassian.net/browse/SPR-6003
-  const searchHeadlessConfig = createSearchHeadlessConfig(entityDocument);
-
-  if (!searchHeadlessConfig) {
-    return (
-      <VisualEditorProvider
-        templateProps={{
-          document: entityDocument,
-        }}
-        entityFields={entityFields}
-        tailwindConfig={tailwindConfig}
-      >
-        <Editor
-          document={entityDocument}
-          componentRegistry={componentRegistry}
-          themeConfig={themeConfig}
-        />
-      </VisualEditorProvider>
-    );
-  }
-
-  // Uncomment this to use the config object directly while we're waiting for other work to be done
-  const searcher = provideHeadless(searchHeadlessConfig);
-
   return (
-    <SearchHeadlessProvider searcher={searcher}>
-      <VisualEditorProvider
-        templateProps={{
-          document: entityDocument,
-        }}
-        entityFields={entityFields}
-        tailwindConfig={tailwindConfig}
-      >
-        <Editor
-          document={entityDocument}
-          componentRegistry={componentRegistry}
-          themeConfig={themeConfig}
-        />
-      </VisualEditorProvider>
-    </SearchHeadlessProvider>
+    <VisualEditorProvider
+      templateProps={{
+        document: entityDocument,
+      }}
+      entityFields={entityFields}
+      tailwindConfig={tailwindConfig}
+    >
+      <Editor
+        document={entityDocument}
+        componentRegistry={componentRegistry}
+        themeConfig={themeConfig}
+      />
+    </VisualEditorProvider>
   );
 };
 

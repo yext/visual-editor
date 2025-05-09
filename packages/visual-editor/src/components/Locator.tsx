@@ -10,12 +10,15 @@ import {
   OnSelectParams,
   ResultsCount,
   VerticalResults,
+  AnalyticsProvider,
 } from "@yext/search-ui-react";
 import {
   Matcher,
+  SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  provideHeadless,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
@@ -25,7 +28,10 @@ import {
   CTA,
   Heading,
   normalizeSlug,
+  useDocument,
   useTemplateProps,
+  createSearchAnalyticsConfig,
+  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 import { useEffect, useState } from "react";
@@ -129,12 +135,32 @@ const locatorFields: Fields<LocatorProps> = {
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
   label: "Locator",
-  render: (props) => <Locator {...props} />,
+  render: (props) => <LocatorWrapper {...props} />,
+};
+
+const LocatorWrapper: React.FC<LocatorProps> = (props) => {
+  const document = useDocument();
+  const searchHeadlessConfig = createSearchHeadlessConfig(document);
+  const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
+  if (
+    searchHeadlessConfig === undefined ||
+    searchAnalyticsConfig === undefined
+  ) {
+    return <></>;
+  }
+  const searcher = provideHeadless(searchHeadlessConfig);
+  return (
+    <SearchHeadlessProvider searcher={searcher}>
+      <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+        <LocatorInternal {...props} />
+      </AnalyticsProvider>
+    </SearchHeadlessProvider>
+  );
 };
 
 type SearchState = "not started" | "loading" | "complete";
 
-const Locator: React.FC<LocatorProps> = (props) => {
+const LocatorInternal: React.FC<LocatorProps> = (props) => {
   const locale = getDocumentLocale();
   const { mapStyle } = props;
   const resultCount = useSearchState(
