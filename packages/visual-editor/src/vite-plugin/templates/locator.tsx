@@ -21,6 +21,7 @@ import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "@yext/visual-editor";
+import { AnalyticsProvider } from "@yext/search-ui-react";
 import {
   provideHeadless,
   SearchHeadlessProvider,
