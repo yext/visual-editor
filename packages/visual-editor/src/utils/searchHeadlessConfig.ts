@@ -43,12 +43,15 @@ export const createSearchHeadlessConfig = (document: any) => {
       "Invalid or missing YEXT_ENVIRONMENT! Unable to set up locator."
     );
   }
+  const experienceKey = getExperienceKey(document);
+  if (!experienceKey) {
+    warnings.push("Missing experienceKey! Unable to set up locator.");
+  }
   if (warnings.length > 0) {
     warnings.forEach((msg) => console.warn(msg));
     return;
   }
 
-  const experienceKey = getExperienceKey(document);
   const headlessConfig: HeadlessConfig = {
     apiKey: searchApiKey,
     experienceKey: experienceKey,
@@ -88,6 +91,10 @@ export const createSearchAnalyticsConfig = (document: any) => {
       "Invalid or missing YEXT_CLOUD_REGION! Unable to set up locator analytics."
     );
   }
+  const experienceKey = getExperienceKey(document);
+  if (!experienceKey) {
+    warnings.push("Missing experienceKey! Unable to set up locator analytics.");
+  }
   if (warnings.length > 0) {
     warnings.forEach((msg) => console.warn(msg));
     return;
@@ -98,7 +105,6 @@ export const createSearchAnalyticsConfig = (document: any) => {
     environment === Environment.SANDBOX ? "SANDBOX" : "PRODUCTION";
   // from @yext/analytics RegionEnum
   const analyticsRegion = cloudRegion.toUpperCase();
-  const experienceKey = getExperienceKey(document);
   const analyticsConfig = {
     businessId: businessId,
     experienceKey: experienceKey,
@@ -109,17 +115,18 @@ export const createSearchAnalyticsConfig = (document: any) => {
   return analyticsConfig;
 };
 
+/**
+ * Extracts the experienceKey from the entity document if possible, otherwise returns undefined.
+ * @param document the entity document
+ */
 const getExperienceKey = (document: any) => {
-  let experienceKey = "";
   try {
-    experienceKey = JSON.parse(document._pageset).typeConfig.locatorConfig
+    const experienceKey = JSON.parse(document._pageset).typeConfig.locatorConfig
       .experienceKey;
-    console.log("Kyle was right");
+    return experienceKey;
   } catch {
-    experienceKey = document._pageset.typeConfig.locatorConfig.experienceKey;
-    console.log("Duval was right");
+    return;
   }
-  return experienceKey;
 };
 
 const isValidCloudRegion = (value: any): value is CloudRegion => {
