@@ -26,19 +26,19 @@ export const createSearchHeadlessConfig = (document: any) => {
     warnings.push("Missing YEXT_MAPBOX_API_KEY! Unable to set up locator.");
   }
   const cloudRegion = document?._env?.YEXT_CLOUD_REGION?.toLowerCase();
-  if (!cloudRegion || !isValidCloudRegion(cloudRegion)) {
+  if (!isValidCloudRegion(cloudRegion)) {
     warnings.push(
       "Invalid or missing YEXT_CLOUD_REGION! Unable to set up locator."
     );
   }
   const cloudChoice = document?._env?.YEXT_CLOUD_CHOICE;
-  if (!cloudChoice || !isValidCloudChoice(cloudChoice)) {
+  if (!isValidCloudChoice(cloudChoice)) {
     warnings.push(
       "Invalid or missing YEXT_CLOUD_CHOICE! Unable to set up locator."
     );
   }
   const environment = document?._env?.YEXT_ENVIRONMENT?.toLowerCase();
-  if (!environment || !isValidEnvironment(environment)) {
+  if (!isValidEnvironment(environment)) {
     warnings.push(
       "Invalid or missing YEXT_ENVIRONMENT! Unable to set up locator."
     );
@@ -79,13 +79,13 @@ export const createSearchAnalyticsConfig = (document: any) => {
     warnings.push("Missing businessId! Unable to set up locator analytics.");
   }
   const environment = document?._env?.YEXT_ENVIRONMENT?.toLowerCase();
-  if (!environment || !isValidEnvironment(environment)) {
+  if (!isValidEnvironment(environment)) {
     warnings.push(
       "Invalid or missing YEXT_ENVIRONMENT! Unable to set up locator analytics."
     );
   }
   const cloudRegion = document?._env?.YEXT_CLOUD_REGION?.toLowerCase();
-  if (!cloudRegion || !isValidCloudRegion(cloudRegion)) {
+  if (!isValidCloudRegion(cloudRegion)) {
     warnings.push(
       "Invalid or missing YEXT_CLOUD_REGION! Unable to set up locator analytics."
     );
