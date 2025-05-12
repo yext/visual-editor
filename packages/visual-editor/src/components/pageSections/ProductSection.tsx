@@ -37,11 +37,11 @@ const productSectionFields: Fields<ProductSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
+      heading: YextField<any, string>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      products: YextField("Product Section", {
+      products: YextField("Products", {
         type: "entityField",
         filter: {
           types: ["type.products_section"],
