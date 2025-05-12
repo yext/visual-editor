@@ -46,7 +46,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
       events: YextField("Events", {
         type: "entityField",
         filter: {
-          includeListsOnly: true,
           types: ["type.events_section"],
         },
       }),

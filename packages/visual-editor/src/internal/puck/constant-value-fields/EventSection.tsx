@@ -3,7 +3,7 @@ import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 
-export const EVENT_LIST_CONSTANT_CONFIG: CustomField<EventSectionType> = {
+export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
   render: ({
     onChange,
