@@ -109,11 +109,7 @@ const InsightCard = ({
             </div>
           )}
           {insight.name && <Heading level={3}>{insight.name}</Heading>}
-          {insight.description && (
-            <Body>
-              <MaybeRTF data={insight.description} />
-            </Body>
-          )}
+          <MaybeRTF data={insight.description} />
         </div>
         {insight.cta && (
           <CTA
