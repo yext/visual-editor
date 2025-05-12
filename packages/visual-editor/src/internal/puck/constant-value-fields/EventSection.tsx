@@ -15,7 +15,7 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
     return (
       <div
         className={
-          "mt-4" + (value.events.length === 0 ? " empty-array-fix" : "")
+          "ve-mt-4" + (value.events.length === 0 ? " empty-array-fix" : "")
         }
       >
         <AutoField

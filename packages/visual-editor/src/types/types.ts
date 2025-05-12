@@ -82,7 +82,7 @@ export type PersonStruct = {
   cta?: CTAType;
 };
 
-type RTF2 = {
+export type RTF2 = {
   html?: string;
   json?: string;
 };

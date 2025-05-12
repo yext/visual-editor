@@ -46,6 +46,11 @@ export const ui: Registry["items"] = [
     files: [{ path: "atoms/maybeLink.tsx", type: "registry:component" }],
   },
   {
+    name: "maybeRTF",
+    type: "registry:component",
+    files: [{ path: "atoms/maybeRTF.tsx", type: "registry:component" }],
+  },
+  {
     name: "pageSection",
     type: "registry:component",
     files: [{ path: "atoms/pageSection.tsx", type: "registry:component" }],
@@ -158,12 +163,12 @@ export const ui: Registry["items"] = [
     registryDependencies: [
       "pageSection",
       "heading",
-      "body",
       "cta",
       "image",
       "timestamp",
       "background",
       "visibilityWrapper",
+      "maybeRTF",
     ],
     files: [{ path: "pageSections/EventSection.tsx", type: "registry:ui" }],
   },
