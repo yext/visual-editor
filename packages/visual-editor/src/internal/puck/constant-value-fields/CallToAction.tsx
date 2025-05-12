@@ -60,8 +60,9 @@ export const CTA_CONSTANT_CONFIG: CustomField<
 };
 
 // Fields for CTA with labels
-export const ctaFields: Field<CTA> = {
+export const ctaFields: Field<CTA | undefined> = {
   type: "object",
+  label: "Call To Action",
   objectFields: {
     label: {
       label: "Label",

@@ -17,11 +17,10 @@ import {
   VisibilityWrapper,
   EventSectionType,
   EventStruct,
-  Body,
   Timestamp,
   TimestampOption,
+  MaybeRTF,
 } from "@yext/visual-editor";
-import { LexicalRichText } from "@yext/pages-components";
 
 export interface EventSectionProps {
   data: {
@@ -105,7 +104,11 @@ const EventCard = ({
         )}
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
-        {event.title && <Heading level={6}>{event.title}</Heading>}
+        {event.title && (
+          <Heading level={6} semanticLevelOverride="h3">
+            {event.title}
+          </Heading>
+        )}
         {event.dateTime && (
           <Timestamp
             date={event.dateTime}
@@ -113,13 +116,7 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {event.description?.json && (
-          <Body>
-            <LexicalRichText
-              serializedAST={JSON.stringify(event.description?.json) ?? ""}
-            />
-          </Body>
-        )}
+        <MaybeRTF data={event.description} />
         {event.cta && (
           <CTA
             label={event.cta.label}
