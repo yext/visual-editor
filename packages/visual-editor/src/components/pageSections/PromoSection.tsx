@@ -17,6 +17,7 @@ import {
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
+  EntityField,
 } from "@yext/visual-editor";
 import { LexicalRichText } from "@yext/pages-components";
 
@@ -109,24 +110,48 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       )}
     >
       {resolvedPromo?.image && (
-        <Image
-          image={resolvedPromo.image}
-          layout={"auto"}
-          aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
-        />
+        <EntityField
+          displayName="Image"
+          fieldId={data.promo.field}
+          constantValueEnabled={data.promo.constantValueOverride.image}
+        >
+          <Image
+            image={resolvedPromo.image}
+            layout={"auto"}
+            aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+          />
+        </EntityField>
       )}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
-          <Heading level={3}>{resolvedPromo?.title}</Heading>
+          <EntityField
+            displayName="Title"
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.title}
+          >
+            <Heading level={3}>{resolvedPromo?.title}</Heading>
+          </EntityField>
         )}
-        <PromoDescription description={resolvedPromo?.description} />
+        <EntityField
+          displayName="Description"
+          fieldId={data.promo.field}
+          constantValueEnabled={data.promo.constantValueOverride.description}
+        >
+          <PromoDescription description={resolvedPromo?.description} />
+        </EntityField>
         {resolvedPromo?.cta?.label && (
-          <CTA
-            variant={styles?.ctaVariant}
-            label={resolvedPromo?.cta.label}
-            link={resolvedPromo?.cta.link}
-            linkType={resolvedPromo?.cta.linkType}
-          />
+          <EntityField
+            displayName="Call To Action"
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.cta}
+          >
+            <CTA
+              variant={styles?.ctaVariant}
+              label={resolvedPromo?.cta.label}
+              link={resolvedPromo?.cta.link}
+              linkType={resolvedPromo?.cta.linkType}
+            />
+          </EntityField>
         )}
       </div>
     </PageSection>

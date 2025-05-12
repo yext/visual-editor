@@ -7,6 +7,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
+  EntityField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -66,7 +67,13 @@ const BannerComponent = ({
       verticalPadding="sm"
       className={`flex ${justifyClass} items-center`}
     >
-      <Body>{resolvedText}</Body>
+      <EntityField
+        displayName="Banner Text"
+        fieldId={text.field}
+        constantValueEnabled={text.constantValueEnabled}
+      >
+        <Body>{resolvedText}</Body>
+      </EntityField>
     </PageSection>
   );
 };
