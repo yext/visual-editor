@@ -17,9 +17,9 @@ import {
   InsightSectionType,
   InsightStruct,
   Timestamp,
+  MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { LexicalRichText } from "@yext/pages-components";
 
 export interface InsightSectionProps {
   data: {
@@ -109,11 +109,9 @@ const InsightCard = ({
             </div>
           )}
           {insight.name && <Heading level={3}>{insight.name}</Heading>}
-          {insight.description?.json && (
+          {insight.description && (
             <Body>
-              <LexicalRichText
-                serializedAST={JSON.stringify(insight.description?.json) ?? ""}
-              />
+              <MaybeRTF data={insight.description} />
             </Body>
           )}
         </div>

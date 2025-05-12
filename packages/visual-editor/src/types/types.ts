@@ -65,7 +65,7 @@ export type InsightStruct = {
   name?: string;
   category?: string;
   publishTime?: string;
-  description?: RTF2;
+  description?: RTF2 | string;
   cta?: CTAType;
 };
 
