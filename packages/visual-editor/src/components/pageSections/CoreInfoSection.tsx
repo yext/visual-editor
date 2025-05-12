@@ -374,7 +374,7 @@ const CoreInfoSectionWrapper = ({
         <section aria-label="Hours Section" className="flex flex-col gap-4">
           {hoursHeadingText && (
             <EntityField
-              displayName="Address"
+              displayName="Heading Text"
               fieldId={hoursField.headingText.field}
               constantValueEnabled={hoursField.headingText.constantValueEnabled}
             >
@@ -401,11 +401,11 @@ const CoreInfoSectionWrapper = ({
           )}
         </section>
       )}
-      {servicesList && (
+      {servicesList && servicesList.length > 0 && (
         <section aria-label="Services Section" className="flex flex-col gap-4">
           {servicesHeadingText && (
             <EntityField
-              displayName="Address"
+              displayName="Heading Text"
               fieldId={servicesField.headingText.field}
               constantValueEnabled={
                 servicesField.headingText.constantValueEnabled
