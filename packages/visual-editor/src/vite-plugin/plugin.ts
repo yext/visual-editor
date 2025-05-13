@@ -4,12 +4,14 @@ import { Plugin } from "vite";
 import mainTemplate from "./templates/main.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
+import locatorTemplate from "./templates/locator.tsx?raw";
 
 // files to generate
 const virtualFiles: Record<string, string> = {
   "src/templates/main.tsx": mainTemplate,
   "src/templates/edit.tsx": editTemplate,
   "src/templates/directory.tsx": directoryTemplate,
+  "src/templates/locator.tsx": locatorTemplate,
 };
 
 export const yextVisualEditorPlugin = (): Plugin => {
