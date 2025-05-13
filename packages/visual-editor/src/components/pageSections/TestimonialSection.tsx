@@ -171,7 +171,6 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
         constantValue: {
           testimonials: [],
         },
-        constantValueEnabled: false,
       },
     },
     liveVisibility: true,
