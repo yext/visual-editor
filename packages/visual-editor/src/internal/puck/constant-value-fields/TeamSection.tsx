@@ -41,14 +41,6 @@ const PersonStructArrayField: ArrayField<PersonStruct[]> = {
           label: "URL",
           type: "text",
         },
-        width: {
-          label: "Width",
-          type: "number",
-        },
-        height: {
-          label: "Height",
-          type: "number",
-        },
       },
     },
     name: {

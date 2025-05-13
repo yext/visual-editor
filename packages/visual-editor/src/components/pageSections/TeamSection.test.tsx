@@ -48,8 +48,6 @@ describe.each(viewports)("TeamSection $name", ({ width, height }) => {
                 {
                   headshot: {
                     url: "https://placehold.co/600x400",
-                    width: 600,
-                    height: 400,
                   },
                   name: "John Doe",
                   title: "CEO",
