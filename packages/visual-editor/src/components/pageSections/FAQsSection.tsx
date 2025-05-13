@@ -1,0 +1,168 @@
+import * as React from "react";
+import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  useDocument,
+  resolveYextEntityField,
+  YextEntityField,
+  Body,
+  HeadingProps,
+  BackgroundStyle,
+  PageSection,
+  Heading,
+  backgroundColors,
+  YextField,
+  VisibilityWrapper,
+  EntityField,
+  FAQSectionType,
+} from "@yext/visual-editor";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../atoms/accordion.js";
+import { LexicalRichText } from "@yext/pages-components";
+
+export interface FAQSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    faqs: YextEntityField<FAQSectionType>;
+  };
+  styles: {
+    backgroundColor?: BackgroundStyle;
+    headingLevel: HeadingProps["level"];
+  };
+  liveVisibility: boolean;
+}
+
+const FAQsSectionFields: Fields<FAQSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Section Heading", {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      faqs: YextField("FAQs", {
+        type: "entityField",
+        filter: {
+          types: ["type.faq_section"],
+        },
+      }),
+    },
+  }),
+  styles: YextField("Styles", {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "BACKGROUND_COLOR",
+      }),
+      headingLevel: YextField("Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+    },
+  }),
+  liveVisibility: YextField("Visible on Live Page", {
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  }),
+};
+
+const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
+  const document = useDocument();
+  const resolvedHeading = resolveYextEntityField<string>(
+    document,
+    data?.heading
+  );
+  const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
+
+  return (
+    <PageSection
+      background={styles.backgroundColor}
+      className="flex flex-col gap-8 md:gap-12"
+    >
+      {resolvedHeading && (
+        <EntityField
+          displayName="Heading Text"
+          fieldId={data?.heading.field}
+          constantValueEnabled={data?.heading.constantValueEnabled}
+        >
+          <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
+        </EntityField>
+      )}
+      {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
+        <EntityField
+          displayName="FAQs"
+          fieldId={data?.faqs.field}
+          constantValueEnabled={data?.faqs.constantValueEnabled}
+        >
+          <Accordion type="single" collapsible>
+            {resolvedFAQs?.faqs?.map((faqItem, index) => (
+              <AccordionItem value={index.toString()} key={index}>
+                <AccordionTrigger>
+                  <Body variant="lg" className="font-bold text-left">
+                    {faqItem.question}
+                  </Body>
+                </AccordionTrigger>
+                <AccordionContent>
+                  {faqItem.answer?.json && (
+                    <Body>
+                      <LexicalRichText
+                        serializedAST={
+                          JSON.stringify(faqItem.answer?.json) ?? ""
+                        }
+                      />
+                    </Body>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </EntityField>
+      )}
+    </PageSection>
+  );
+};
+
+export const FAQSection: ComponentConfig<FAQSectionProps> = {
+  label: "FAQs Section",
+  fields: FAQsSectionFields,
+  defaultProps: {
+    data: {
+      heading: {
+        field: "",
+        constantValue: "Frequently Asked Questions",
+        constantValueEnabled: true,
+      },
+      faqs: {
+        field: "",
+        constantValue: {
+          faqs: [],
+        },
+        constantValueEnabled: false,
+      },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background2.value,
+      headingLevel: 2,
+    },
+    liveVisibility: true,
+  },
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <FAQsSectionComponent {...props} />
+    </VisibilityWrapper>
+  ),
+};

@@ -1,5 +1,33 @@
-import { CustomField } from "@measured/puck";
+import { CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
+import { CTA } from "@yext/pages-components";
+
+const linkTypeOptions = [
+  {
+    label: "URL",
+    value: "URL",
+  },
+  {
+    label: "Email",
+    value: "EMAIL",
+  },
+  {
+    label: "Phone",
+    value: "PHONE",
+  },
+  {
+    label: "Click to Website",
+    value: "CLICK_TO_WEBSITE",
+  },
+  {
+    label: "Driving Directions",
+    value: "DRIVING_DIRECTIONS",
+  },
+  {
+    label: "Other",
+    value: "OTHER",
+  },
+];
 
 export const CTA_CONSTANT_CONFIG: CustomField<
   { label: string; link: string; linkType: string }[]
@@ -24,34 +52,30 @@ export const CTA_CONSTANT_CONFIG: CustomField<
           label: "Link Type",
           field: "linkType",
           fieldType: "select",
-          options: [
-            {
-              label: "URL",
-              value: "URL",
-            },
-            {
-              label: "Email",
-              value: "EMAIL",
-            },
-            {
-              label: "Phone",
-              value: "PHONE",
-            },
-            {
-              label: "Click to Website",
-              value: "CLICK_TO_WEBSITE",
-            },
-            {
-              label: "Driving Directions",
-              value: "DRIVING_DIRECTIONS",
-            },
-            {
-              label: "Other",
-              value: "OTHER",
-            },
-          ],
+          options: linkTypeOptions,
         },
       ],
     });
+  },
+};
+
+// Fields for CTA with labels
+export const ctaFields: Field<CTA | undefined> = {
+  type: "object",
+  label: "Call To Action",
+  objectFields: {
+    label: {
+      label: "Label",
+      type: "text",
+    },
+    link: {
+      label: "Link",
+      type: "text",
+    },
+    linkType: {
+      label: "Link Type",
+      type: "select",
+      options: linkTypeOptions,
+    },
   },
 };

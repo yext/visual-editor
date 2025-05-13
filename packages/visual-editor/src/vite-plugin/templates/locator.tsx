@@ -89,10 +89,7 @@ const Locator: Template<TemplateRenderProps> = (props) => {
 
   return (
     <VisualEditorProvider templateProps={props}>
-      <Render
-        config={locatorConfig} // TODO (kgerner): update ve.config in starter repo
-        data={JSON.parse(document.__.layout)}
-      />
+      <Render config={locatorConfig} data={JSON.parse(document.__.layout)} />
     </VisualEditorProvider>
   );
 };

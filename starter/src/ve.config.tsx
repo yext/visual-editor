@@ -5,35 +5,21 @@ import {
   PageSectionCategory,
   PageSectionCategoryComponents,
   PageSectionCategoryProps,
-  LayoutBlockCategory,
-  CardCategory,
-  ContentBlockCategory,
-  LayoutBlockCategoryComponents,
-  CardCategoryComponents,
-  ContentBlockCategoryComponents,
   OtherCategoryComponents,
-  LayoutBlockCategoryProps,
-  CardCategoryProps,
-  ContentBlockCategoryProps,
   OtherCategoryProps,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
-  LocatorCategoryComponents,
-  LocatorCategoryProps,
 } from "@yext/visual-editor";
 
 interface MainProps
   extends PageSectionCategoryProps,
-    LayoutBlockCategoryProps,
-    CardCategoryProps,
-    ContentBlockCategoryProps,
-    OtherCategoryProps {}
+    DirectoryCategoryProps,
+    OtherCategoryProps,
+    LocatorCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
-  ...LayoutBlockCategoryComponents,
-  ...CardCategoryComponents,
-  ...ContentBlockCategoryComponents,
+  ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
 };
 
@@ -45,63 +31,10 @@ export const mainConfig: Config<MainProps> = {
       title: "Page Sections",
       components: PageSectionCategory,
     },
-    layoutBlocks: {
-      title: "Layout Blocks",
-      components: LayoutBlockCategory,
+    directory: {
+      title: "Directory",
+      components: DirectoryCategory,
     },
-    cardBlocks: {
-      title: "Cards",
-      components: CardCategory,
-    },
-    contentBlocks: {
-      title: "Content Blocks",
-      components: ContentBlockCategory,
-    },
-  },
-  root: {
-    render: () => {
-      return (
-        <DropZone
-          zone="default-zone"
-          disallow={[
-            ...ContentBlockCategory,
-            ...CardCategory,
-            ...LayoutBlockCategory,
-          ]}
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-        />
-      );
-    },
-  },
-};
-
-interface DirectoryConfigProps
-  extends DirectoryCategoryProps,
-    OtherCategoryProps {}
-
-export const directoryConfig: Config<DirectoryConfigProps> = {
-  components: {
-    ...DirectoryCategoryComponents,
-    ...OtherCategoryComponents,
-  },
-  root: {
-    render: () => {
-      return (
-        <DropZone
-          zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-        />
-      );
-    },
-  },
-};
-
-interface LocatorConfigProps extends LocatorCategoryProps, OtherCategoryProps {}
-
-export const locatorConfig: Config<LocatorConfigProps> = {
-  components: {
-    ...LocatorCategoryComponents,
-    ...OtherCategoryComponents,
   },
   root: {
     render: () => {
@@ -116,7 +49,5 @@ export const locatorConfig: Config<LocatorConfigProps> = {
 };
 
 export const componentRegistry = new Map<string, Config<any>>([
-  ["main", mainConfig],
-  ["directory", directoryConfig],
-  ["locator", locatorConfig],
+  ["dev", mainConfig],
 ]);

@@ -2,163 +2,73 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursStatus, HoursType } from "@yext/pages-components";
 import {
+  HeroSectionType,
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   Image,
-  ImageProps,
-  ImageWrapperProps,
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
   CTA,
-  CTAProps,
   Heading,
   PageSection,
   YextField,
   VisibilityWrapper,
+  CTAProps,
+  resolveYextStructField,
+  YextStructFieldSelector,
+  YextStructEntityField,
 } from "@yext/visual-editor";
-import {
-  ImageWrapperFields,
-  resolvedImageFields,
-} from "../contentBlocks/Image.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface HeroSectionProps {
-  image: ImageWrapperProps;
-  businessName: {
-    entityField: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  localGeoModifier: {
-    entityField: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  hours: {
-    entityField: YextEntityField<HoursType>;
-    showHours: boolean;
-  };
-  primaryCta: {
-    entityField: YextEntityField<CTAProps>;
-    variant: CTAProps["variant"];
-    showCTA: boolean;
-  };
-  secondaryCta: {
-    entityField: YextEntityField<CTAProps>;
-    variant: CTAProps["variant"];
-    showCTA: boolean;
+  data: {
+    businessName: YextEntityField<string>;
+    localGeoModifier: YextEntityField<string>;
+    hours: YextEntityField<HoursType>;
+    hero: YextStructEntityField<HeroSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     imageOrientation: "left" | "right";
+    businessNameLevel: HeadingLevel;
+    localGeoModifierLevel: HeadingLevel;
+    primaryCTA: CTAProps["variant"];
+    secondaryCTA: CTAProps["variant"];
   };
   liveVisibility: boolean;
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
-  image: YextField("Image", {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      ...ImageWrapperFields,
-      image: {
-        ...ImageWrapperFields.image,
-        label: "Value",
-      },
-    },
-  }),
-  businessName: YextField("Business Name", {
-    type: "object",
-    objectFields: {
-      entityField: YextField<any, string>("Value", {
+      businessName: YextField<any, string>("Business Name", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  localGeoModifier: YextField("Local GeoModifier", {
-    type: "object",
-    objectFields: {
-      entityField: YextField<any, string>("Value", {
+      localGeoModifier: YextField<any, string>("Local GeoModifier", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  hours: YextField("Hours", {
-    type: "object",
-    objectFields: {
-      entityField: YextField("Hours Field", {
+      hours: YextField("Hours", {
         type: "entityField",
         filter: {
           types: ["type.hours"],
         },
       }),
-      showHours: YextField("Show Hours", {
-        type: "radio",
-        options: [
-          { label: "Show", value: true },
-          { label: "Hide", value: false },
-        ],
-      }),
-    },
-  }),
-  primaryCta: YextField("Primary CTA", {
-    type: "object",
-    objectFields: {
-      entityField: YextField("Value", {
-        type: "entityField",
+      hero: YextStructFieldSelector({
+        label: "Hero",
         filter: {
-          types: ["type.cta"],
+          type: "type.hero_section",
         },
-      }),
-      variant: YextField("Button Variant", {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
-      showCTA: YextField("CTA", {
-        type: "radio",
-        options: [
-          { label: "Show", value: true },
-          { label: "Hide", value: false },
-        ],
-      }),
-    },
-  }),
-  secondaryCta: YextField("Secondary CTA", {
-    type: "object",
-    objectFields: {
-      entityField: YextField("Value", {
-        type: "entityField",
-        filter: {
-          types: ["type.cta"],
-        },
-      }),
-      variant: YextField("Button Variant", {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
-      showCTA: YextField("CTA", {
-        type: "radio",
-        options: [
-          { label: "Show", value: true },
-          { label: "Hide", value: false },
-        ],
       }),
     },
   }),
@@ -177,6 +87,24 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           { label: "Right", value: "right" },
         ],
       }),
+      businessNameLevel: YextField("Business Name Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+      localGeoModifierLevel: YextField("Local GeoModifier Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+      primaryCTA: YextField("Primary CTA Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+      secondaryCTA: YextField("Secondary CTA Variant", {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
@@ -188,40 +116,21 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   }),
 };
 
-const HeroSectionWrapper = ({
-  businessName: businessNameField,
-  localGeoModifier: localGeoModifierField,
-  hours: hoursField,
-  primaryCta: primaryCtaField,
-  secondaryCta: secondaryCtaField,
-  image: imageField,
-  styles,
-}: HeroSectionProps) => {
+const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const document = useDocument() as any;
-  const businessName = resolveYextEntityField<string>(
+  const resolvedBusinessName = resolveYextEntityField<string>(
     document,
-    businessNameField.entityField
+    data?.businessName
   );
-  const localGeoModifier = resolveYextEntityField<string>(
+  const resolvedLocalGeoModifier = resolveYextEntityField<string>(
     document,
-    localGeoModifierField.entityField
+    data?.localGeoModifier
   );
-  const hours = resolveYextEntityField<HoursType>(
+  const resolvedHours = resolveYextEntityField<HoursType>(
     document,
-    hoursField.entityField
+    data?.hours
   );
-  const primaryCta = resolveYextEntityField<CTAProps>(
-    document,
-    primaryCtaField.entityField
-  );
-  const secondaryCta = resolveYextEntityField<CTAProps>(
-    document,
-    secondaryCtaField.entityField
-  );
-  const image = resolveYextEntityField<ImageProps["image"]>(
-    document,
-    imageField.image
-  );
+  const resolvedHero = resolveYextStructField(document, data?.hero);
 
   const { timezone } = document as {
     timezone: string;
@@ -246,101 +155,75 @@ const HeroSectionWrapper = ({
             className="flex flex-col gap-y-0"
             aria-label="Business Information"
           >
-            {businessName && (
+            {resolvedBusinessName && (
               <EntityField
                 displayName="Business Name"
-                fieldId={businessNameField.entityField.field}
-                constantValueEnabled={
-                  businessNameField.entityField.constantValueEnabled
-                }
+                fieldId={data?.businessName.field}
+                constantValueEnabled={data?.businessName.constantValueEnabled}
               >
-                <Heading level={businessNameField.level}>
-                  {businessName}
+                <Heading level={styles?.businessNameLevel}>
+                  {resolvedBusinessName}
                 </Heading>
               </EntityField>
             )}
-            {localGeoModifier && (
+            {resolvedLocalGeoModifier && (
               <EntityField
                 displayName="Local GeoModifier"
-                fieldId={localGeoModifierField.entityField.field}
+                fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
-                  localGeoModifierField.entityField.constantValueEnabled
+                  data?.localGeoModifier.constantValueEnabled
                 }
               >
-                <Heading level={localGeoModifierField.level}>
-                  {localGeoModifier}
+                <Heading level={styles?.localGeoModifierLevel}>
+                  {resolvedLocalGeoModifier}
                 </Heading>
               </EntityField>
             )}
           </section>
-          {hours && hoursField.showHours && (
+          {resolvedHours && (
             <EntityField
               displayName="Hours"
-              fieldId={hoursField.entityField.field}
-              constantValueEnabled={hoursField.entityField.constantValueEnabled}
+              fieldId={data?.hours.field}
+              constantValueEnabled={data?.hours.constantValueEnabled}
             >
-              <HoursStatus hours={hours} timezone={timezone} />
+              <HoursStatus hours={resolvedHours} timezone={timezone} />
             </EntityField>
           )}
         </header>
-        {((primaryCta && primaryCtaField.showCTA) ||
-          (secondaryCta && secondaryCtaField.showCTA)) && (
+        {(resolvedHero?.primaryCta?.label ||
+          resolvedHero?.secondaryCta?.label) && (
           <div
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
             aria-label="Call to Actions"
           >
-            {primaryCta && primaryCtaField.showCTA && (
-              <EntityField
-                displayName="Primary CTA"
-                fieldId={primaryCtaField.entityField.field}
-                constantValueEnabled={
-                  primaryCtaField.entityField.constantValueEnabled
-                }
-              >
-                <CTA
-                  variant={primaryCtaField.variant}
-                  label={primaryCta.label}
-                  link={primaryCta.link}
-                  linkType={primaryCta.linkType}
-                  className={"py-3"}
-                />
-              </EntityField>
+            {resolvedHero?.primaryCta?.label && (
+              <CTA
+                variant={styles?.primaryCTA}
+                label={resolvedHero.primaryCta.label}
+                link={resolvedHero.primaryCta.link}
+                linkType={resolvedHero.primaryCta.linkType}
+                className={"py-3"}
+              />
             )}
-            {secondaryCta && secondaryCtaField.showCTA && (
-              <EntityField
-                displayName="Secondary CTA"
-                fieldId={secondaryCtaField.entityField.field}
-                constantValueEnabled={
-                  secondaryCtaField.entityField.constantValueEnabled
-                }
-              >
-                <CTA
-                  variant={secondaryCtaField.variant}
-                  label={secondaryCta.label}
-                  link={secondaryCta.link}
-                  linkType={secondaryCta.linkType}
-                  className={"py-3"}
-                />
-              </EntityField>
+            {resolvedHero?.secondaryCta?.label && (
+              <CTA
+                variant={styles?.secondaryCTA}
+                label={resolvedHero.secondaryCta.label}
+                link={resolvedHero.secondaryCta.link}
+                linkType={resolvedHero.secondaryCta.linkType}
+                className={"py-3"}
+              />
             )}
           </div>
         )}
       </div>
-      {image && (
+      {resolvedHero?.image && (
         <div className="w-full" role="region" aria-label="Hero Image">
-          <EntityField
-            displayName="Image"
-            fieldId={imageField.image.field}
-            constantValueEnabled={imageField.image.constantValueEnabled}
-          >
-            <Image
-              image={image}
-              layout={imageField.layout}
-              width={imageField.width}
-              height={imageField.height}
-              aspectRatio={imageField.aspectRatio}
-            />
-          </EntityField>
+          <Image
+            image={resolvedHero?.image}
+            layout="auto"
+            aspectRatio={resolvedHero?.image.width / resolvedHero?.image.height}
+          />
         </div>
       )}
     </PageSection>
@@ -351,79 +234,54 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
   label: "Hero Section",
   fields: heroSectionFields,
   defaultProps: {
-    image: {
-      image: {
-        field: "",
-        constantValue: {
-          height: 360,
-          width: 640,
-          url: PLACEHOLDER_IMAGE_URL,
-        },
-      },
-      layout: "auto",
-      aspectRatio: 1.78,
-    },
-    businessName: {
-      entityField: {
+    data: {
+      businessName: {
         field: "name",
         constantValue: "Business Name",
       },
-      level: 3,
-    },
-    localGeoModifier: {
-      entityField: {
+      localGeoModifier: {
         field: "address.city",
         constantValue: "Geomodifier Name",
       },
-      level: 1,
-    },
-    hours: {
-      entityField: {
+      hours: {
         field: "hours",
         constantValue: {},
       },
-      showHours: true,
-    },
-    primaryCta: {
-      entityField: {
+      hero: {
         field: "",
         constantValue: {
-          label: "Call To Action",
-          link: "#",
-          linkType: "URL",
+          image: {
+            height: 360,
+            width: 640,
+            url: PLACEHOLDER_IMAGE_URL,
+          },
+          primaryCta: {
+            label: "Call To Action",
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCta: {
+            label: "Call To Action",
+            link: "#",
+            linkType: "URL",
+          },
         },
-        constantValueEnabled: true,
-      },
-      variant: "primary",
-      showCTA: true,
-    },
-    secondaryCta: {
-      entityField: {
-        field: "",
-        constantValue: {
-          label: "Call To Action",
-          link: "#",
-          linkType: "URL",
+        constantValueOverride: {
+          image: false,
+          primaryCta: false,
+          secondaryCta: false,
         },
-        constantValueEnabled: true,
       },
-      variant: "secondary",
-      showCTA: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
       imageOrientation: "right",
+      businessNameLevel: 3,
+      localGeoModifierLevel: 1,
+      primaryCTA: "primary",
+      secondaryCTA: "secondary",
     },
     liveVisibility: true,
-  },
-  resolveFields(data) {
-    return {
-      ...heroSectionFields,
-      image: {
-        ...heroSectionFields.image,
-        objectFields: resolvedImageFields(data.props.image.layout),
-      },
-    };
   },
   render: (props) => (
     <VisibilityWrapper

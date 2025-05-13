@@ -17,6 +17,8 @@ import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Ph
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
+import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
+import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
 
 const devLogger = new DevLogger();
 
@@ -41,12 +43,14 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     disableConstantValueToggle?: boolean;
   };
 
-const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
   "type.cta": CTA_CONSTANT_CONFIG,
+  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
+  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -54,9 +58,9 @@ const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.image": IMAGE_LIST_CONSTANT_CONFIG,
 };
 
-const getConstantConfigFromType = (
+export const getConstantConfigFromType = (
   type: EntityFieldTypes,
-  isList: boolean
+  isList?: boolean
 ): Field<any> | undefined => {
   if (isList) {
     return LIST_TYPE_TO_CONSTANT_CONFIG[type];
@@ -138,6 +142,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
           )}
           {!value?.constantValueEnabled && (
             <EntityFieldInput<T>
+              className="ve-pt-4"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -192,6 +197,7 @@ export const YextCollectionSubfieldSelector = <
             />
           ) : (
             <EntityFieldInput<T>
+              className="ve-pt-4"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -203,7 +209,7 @@ export const YextCollectionSubfieldSelector = <
   };
 };
 
-const ConstantValueModeToggler = ({
+export const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
@@ -266,9 +272,10 @@ type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
   onChange: (value: any, uiState: any) => void;
   value: any;
+  className?: string;
 };
 
-const ConstantValueInput = <T extends Record<string, any>>({
+export const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
@@ -320,10 +327,11 @@ const ConstantValueInput = <T extends Record<string, any>>({
   );
 };
 
-const EntityFieldInput = <T extends Record<string, any>>({
+export const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
+  className,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
 
@@ -359,7 +367,7 @@ const EntityFieldInput = <T extends Record<string, any>>({
   }, [entityFields, filter]);
 
   return (
-    <div className={"ve-inline-block ve-w-full ve-pt-4"}>
+    <div className={"ve-inline-block ve-w-full " + className}>
       <AutoField
         field={basicSelectorField}
         onChange={(selectedEntityField, uiState) => {
@@ -368,6 +376,7 @@ const EntityFieldInput = <T extends Record<string, any>>({
               field: selectedEntityField,
               constantValue: value?.constantValue ?? "",
               constantValueEnabled: false,
+              constantValueOverride: {},
             },
             uiState
           );
