@@ -181,8 +181,9 @@ export const ui: Registry["items"] = [
       "pageSection",
       "accordion",
       "visibilityWrapper",
+      "maybeRTF",
     ],
-    files: [{ path: "pageSections/FAQs.tsx", type: "registry:ui" }],
+    files: [{ path: "pageSections/FAQsSection.tsx", type: "registry:ui" }],
   },
   {
     name: "Flex",

@@ -43,7 +43,7 @@ export type FAQSectionType = {
 
 export type FAQStruct = {
   question: string;
-  answer: RTF2;
+  answer: RTF2 | string;
 };
 
 export type TestimonialSectionType = {
