@@ -63,7 +63,13 @@ export const yextVisualEditorPlugin = (): Plugin => {
   let isBuildMode = false;
   const filesToCleanup: string[] = [];
 
-  // generateFiles generates the template files and also the template-manifest.json
+  /**
+   * generateFiles generates the template files and .temlpate-manifest.json file
+   *
+   * Does not overwrite files that already exists
+   *
+   * Created files will be marked for deletion on buildEnd
+   */
   const generateFiles = () => {
     // Create a structure to store the manifest data
     const manifest: {
