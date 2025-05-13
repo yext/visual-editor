@@ -112,11 +112,7 @@ const ProductCard = ({
               <Body>{product.category}</Body>
             </Background>
           )}
-          {product.description && (
-            <Body className="max-w-[290px]">
-              <MaybeRTF data={product.description} />
-            </Body>
-          )}
+          <MaybeRTF data={product.description} />
         </div>
         {product.cta && (
           <CTA
