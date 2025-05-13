@@ -1,29 +1,28 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { InsightSectionType, InsightStruct } from "../../../types/types.ts";
+import { ProductSectionType, ProductStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
-import { DateSelector } from "../components/DateSelector.tsx";
 
-export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
+export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   {
     type: "custom",
     render: ({
       onChange,
       value,
     }: {
-      value: InsightSectionType;
-      onChange: (value: InsightSectionType, uiState?: Partial<UiState>) => void;
+      value: ProductSectionType;
+      onChange: (value: ProductSectionType, uiState?: Partial<UiState>) => void;
     }) => {
       return (
         <div
           className={
-            "ve-mt-4" + (value.insights.length === 0 ? " empty-array-fix" : "")
+            "ve-mt-4" + (value.products.length === 0 ? " empty-array-fix" : "")
           }
         >
           <AutoField
-            field={InsightStructArrayField}
-            value={value.insights}
+            field={ProductStructArrayField}
+            value={value.products}
             onChange={(newValue, uiState) =>
-              onChange({ insights: newValue }, uiState)
+              onChange({ products: newValue }, uiState)
             }
           />
         </div>
@@ -31,7 +30,7 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
     },
   };
 
-const InsightStructArrayField: ArrayField<InsightStruct[]> = {
+const ProductStructArrayField: ArrayField<ProductStruct[]> = {
   label: "Array Field",
   type: "array",
   arrayFields: {
@@ -53,12 +52,11 @@ const InsightStructArrayField: ArrayField<InsightStruct[]> = {
       type: "text",
       label: "Category",
     },
-    publishTime: DateSelector,
     description: {
       type: "textarea",
       label: "Description",
     },
     cta: ctaFields,
   },
-  getItemSummary: (item, i) => item.name ?? "Insight " + ((i ?? 0) + 1),
+  getItemSummary: (item, i) => item.name ?? "Product " + ((i ?? 0) + 1),
 };

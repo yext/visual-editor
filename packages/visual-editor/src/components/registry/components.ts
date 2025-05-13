@@ -181,8 +181,9 @@ export const ui: Registry["items"] = [
       "pageSection",
       "accordion",
       "visibilityWrapper",
+      "maybeRTF",
     ],
-    files: [{ path: "pageSections/FAQs.tsx", type: "registry:ui" }],
+    files: [{ path: "pageSections/FAQsSection.tsx", type: "registry:ui" }],
   },
   {
     name: "Flex",
@@ -272,6 +273,7 @@ export const ui: Registry["items"] = [
       "cta",
       "image",
       "visibilityWrapper",
+      "maybeRTF",
     ],
     files: [{ path: "pageSection/InsightSection.tsx", type: "registry:ui" }],
   },
@@ -341,6 +343,7 @@ export const ui: Registry["items"] = [
       "image",
       "background",
       "visibilityWrapper",
+      "maybeRTF",
     ],
     files: [{ path: "pageSections/ProductSection.tsx", type: "registry:ui" }],
   },
@@ -395,9 +398,9 @@ export const ui: Registry["items"] = [
     registryDependencies: [
       "pageSection",
       "heading",
-      "body",
       "timestamp",
       "visibilityWrapper",
+      "maybeRTF",
     ],
     files: [
       { path: "pageSections/TestimonialSection.tsx", type: "registry:ui" },

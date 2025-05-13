@@ -16,9 +16,9 @@ import {
   VisibilityWrapper,
   ProductSectionType,
   ProductStruct,
+  MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { LexicalRichText } from "@yext/pages-components";
 
 export interface ProductSectionProps {
   data: {
@@ -112,13 +112,7 @@ const ProductCard = ({
               <Body>{product.category}</Body>
             </Background>
           )}
-          {product.description?.json && (
-            <Body className="max-w-[290px]">
-              <LexicalRichText
-                serializedAST={JSON.stringify(product.description?.json) ?? ""}
-              />
-            </Body>
-          )}
+          <MaybeRTF data={product.description} />
         </div>
         {product.cta && (
           <CTA
@@ -190,7 +184,6 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
         constantValue: {
           products: [],
         },
-        constantValueEnabled: false,
       },
     },
     styles: {

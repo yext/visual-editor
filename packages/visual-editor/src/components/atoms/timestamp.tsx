@@ -2,6 +2,7 @@ const format1: Intl.DateTimeFormatOptions = {
   month: "short",
   day: "numeric",
   year: "numeric",
+  timeZone: "UTC",
 };
 
 const format2: Intl.DateTimeFormatOptions = {
@@ -98,8 +99,15 @@ export function Timestamp({
 }: TimestampProps): JSX.Element {
   let timestamp;
   try {
-    const startDate = new Date(date);
-    const formattedEndDate = new Date(endDate);
+    // For date-only strings (YYYY-MM-DD), create the date in UTC
+    const startDate =
+      date.length === 10 ? new Date(date + "T12:00:00.000Z") : new Date(date);
+    const formattedEndDate = endDate
+      ? endDate.length === 10
+        ? new Date(endDate + "T12:00:00.000Z")
+        : new Date(endDate)
+      : undefined;
+
     timestamp = timestampFormatter({
       date: startDate,
       option,
