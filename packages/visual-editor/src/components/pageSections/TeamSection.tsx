@@ -207,7 +207,6 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
         constantValue: {
           people: [],
         },
-        constantValueEnabled: false,
       },
     },
     styles: {
