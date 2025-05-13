@@ -184,7 +184,6 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
         constantValue: {
           products: [],
         },
-        constantValueEnabled: false,
       },
     },
     styles: {

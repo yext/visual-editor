@@ -20,6 +20,7 @@ import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fiel
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
 import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ProductSection.tsx";
+import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import { TEAM_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TeamSection.tsx";
 
 const devLogger = new DevLogger();
@@ -54,6 +55,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
   "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
+  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
   "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
 };
 
