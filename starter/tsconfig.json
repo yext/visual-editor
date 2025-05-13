@@ -4,6 +4,9 @@
     "strict": true,
     "moduleResolution": "Node",
     "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
     "module": "esnext"
