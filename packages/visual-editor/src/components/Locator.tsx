@@ -348,6 +348,10 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
+  // During page generation we don't exist in a browser context, so conditionally skip here to handle
+  if (typeof document === "undefined") {
+    return <></>;
+  }
   const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
   const entityDocument: any = useDocument();
   const mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;

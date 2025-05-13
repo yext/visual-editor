@@ -7,6 +7,7 @@ import {
   PageSectionCategoryProps,
   OtherCategoryComponents,
   OtherCategoryProps,
+  DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
 } from "@yext/visual-editor";
@@ -14,8 +15,7 @@ import {
 interface MainProps
   extends PageSectionCategoryProps,
     DirectoryCategoryProps,
-    OtherCategoryProps,
-    LocatorCategoryProps {}
+    OtherCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
