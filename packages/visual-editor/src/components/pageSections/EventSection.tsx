@@ -20,6 +20,7 @@ import {
   Body,
   Timestamp,
   TimestampOption,
+  ComponentFieldMappings,
 } from "@yext/visual-editor";
 import { LexicalRichText } from "@yext/pages-components";
 
@@ -47,7 +48,9 @@ const eventSectionFields: Fields<EventSectionProps> = {
       events: YextField("Events", {
         type: "entityField",
         filter: {
-          types: ["type.events_section"],
+          types: [
+            ComponentFieldMappings.EventsSection.fieldTypeDefinition.type,
+          ],
         },
       }),
     },

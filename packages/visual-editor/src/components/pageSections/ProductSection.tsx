@@ -16,6 +16,7 @@ import {
   VisibilityWrapper,
   ProductSectionType,
   ProductStruct,
+  ComponentFieldMappings,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { LexicalRichText } from "@yext/pages-components";
@@ -44,7 +45,9 @@ const productSectionFields: Fields<ProductSectionProps> = {
       products: YextField("Products", {
         type: "entityField",
         filter: {
-          types: ["type.products_section"],
+          types: [
+            ComponentFieldMappings.ProductsSection.fieldTypeDefinition.type,
+          ],
         },
       }),
     },

@@ -17,6 +17,7 @@ import {
   InsightSectionType,
   InsightStruct,
   Timestamp,
+  ComponentFieldMappings,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { LexicalRichText } from "@yext/pages-components";
@@ -45,7 +46,9 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       insights: YextField("Insight Section", {
         type: "entityField",
         filter: {
-          types: ["type.insights_section"],
+          types: [
+            ComponentFieldMappings.InsightsSection.fieldTypeDefinition.type,
+          ],
         },
       }),
     },
