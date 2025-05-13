@@ -37,4 +37,58 @@ describe.each(viewports)("TestimonialSection $name", ({ width, height }) => {
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
+
+  it("should pass wcag with testimonials", async () => {
+    const { container } = reactRender(
+      <VisualEditorProvider
+        templateProps={{
+          document: {
+            c_testimonialsSection: {
+              testimonials: [
+                {
+                  description: {
+                    html: "<strong>Great service!</strong> I had an amazing experience.",
+                  },
+                  contributorName: "John Doe",
+                  contributionDate: "2024-03-20",
+                },
+                {
+                  description: "Very satisfied with the results.",
+                  contributorName: "Jane Smith",
+                  contributionDate: "2024-03-19",
+                },
+              ],
+            },
+          },
+        }}
+      >
+        <Render
+          config={puckConfig}
+          data={{
+            content: [
+              {
+                type: "TestimonialSection",
+                props: {
+                  id: "abc",
+                  ...TestimonialSection.defaultProps,
+                  data: {
+                    ...TestimonialSection.defaultProps!.data,
+                    testimonials: {
+                      field: "c_testimonialsSection",
+                      constantValue: {},
+                    },
+                  },
+                },
+              },
+            ],
+          }}
+        />
+      </VisualEditorProvider>
+    );
+
+    await page.viewport(width, height);
+    await page.screenshot();
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
