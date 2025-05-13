@@ -782,3 +782,43 @@ const myComponentFields: Fields<MyComponentProps> = {
     },
   },
 ```
+
+## migrate
+
+`migrate` transforms Puck layout data to handle updates to the Puck version and to `visual-editor` components.
+It is run when data is loaded into the editor (both published and save state). It should also be
+run before using `<Render>` in a template. It does not currently handle dropzones but will be updated
+in future version to handle slots.
+
+`migrate` first runs Puck's `migrate` function to handle Puck migrations and then applies
+the migrations specified in `components/migrations/migrationRegistry.ts`.
+
+A version number is stored in `data.root.props.version` of the layout data. This corresponds to
+the index of the last applied migration from the `migrationRegistry`.
+
+Migrations should be specified as a map of ComponentName to MigrationAction.
+The ComponentName is the name of a component as provided to Puck Config in the `components` object
+(see `components/_componentCategories.ts`).
+
+There are three type of MigrationActions:
+
+```ts
+{
+  ComponentName: {
+    action: "removed"
+    // This component will be removed from all layouts
+  },
+  ComponentName: {
+    action: "renamed"
+    newName: string;
+    // This component will be renamed in all layouts
+    // Updates Puck's "type" property in data
+  },
+  ComponentName: {
+    action: "updated"
+    propTransformation: (oldProps: Record<string, any>) => Record<string, any>;
+    // The Puck props of this component will be updated
+    // See Puck's transformProps documentation
+  }
+}
+```

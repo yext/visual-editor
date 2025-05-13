@@ -1,5 +1,5 @@
 import React from "react";
-import { AppState, Data, usePuck, type History } from "@measured/puck";
+import { Data, usePuck, type History } from "@measured/puck";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
@@ -8,6 +8,8 @@ import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import "../ui/puck.css";
 import "../../../editor/index.css";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 
 type LayoutHeaderProps = {
   onClearLocalChanges: () => void;
@@ -16,6 +18,7 @@ type LayoutHeaderProps = {
   isDevMode: boolean;
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
+  localDev: boolean;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -26,10 +29,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     isDevMode,
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
+    localDev,
   } = props;
 
   const {
     appState,
+    config,
     history: {
       back,
       forward,
@@ -39,12 +44,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       hasFuture,
       setHistories,
     },
-  } = usePuck() as {
-    appState: ReturnType<typeof usePuck>["appState"];
-    history: Omit<ReturnType<typeof usePuck>["history"], "histories"> & {
-      histories: History<Partial<AppState>>[];
-    };
-  };
+  } = usePuck();
 
   useEffect(() => {
     onHistoryChange(histories, index);
@@ -55,6 +55,35 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       <div className="header-left">
         <UIButtonsToggle showLeft={true} />
         <EntityFieldsToggle />
+        {localDev && (
+          <>
+            <Button
+              onClick={() => console.log(JSON.stringify(appState.data))}
+              variant="outline"
+              className="ve-ml-4"
+            >
+              Log Layout Data
+            </Button>
+            <Button
+              onClick={() => {
+                let data = { root: {}, content: [] };
+                try {
+                  data = JSON.parse(prompt("Enter layout data:") ?? "{}");
+                } finally {
+                  const migratedData = migrate(data, migrationRegistry, config);
+                  setHistories([
+                    ...histories,
+                    { state: { data: migratedData } },
+                  ]);
+                }
+              }}
+              variant="outline"
+              className="ve-ml-4"
+            >
+              Set Layout Data
+            </Button>
+          </>
+        )}
       </div>
       <div className="header-center"></div>
       <div className="actions">
