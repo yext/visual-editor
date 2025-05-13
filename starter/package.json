@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "cd .. && pnpm build && cd ./starter && pages dev --local --no-prod-url --noInit",
+    "dev:local": "pages dev --local --no-prod-url --noInit",
     "prod": "pages prod",
     "build": "pages build",
     "components": "REGISTRY_URL=https://reliably-numerous-kit.pgsdemo.com/components npx shadcn add"
