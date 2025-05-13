@@ -15,6 +15,7 @@ import {
   EntityField,
   FAQSectionType,
   ComponentFieldMappings,
+  MaybeRTF,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -22,7 +23,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
-import { LexicalRichText } from "@yext/pages-components";
 
 export interface FAQSectionProps {
   data: {
@@ -115,15 +115,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  {faqItem.answer?.json && (
-                    <Body>
-                      <LexicalRichText
-                        serializedAST={
-                          JSON.stringify(faqItem.answer?.json) ?? ""
-                        }
-                      />
-                    </Body>
-                  )}
+                  <MaybeRTF data={faqItem.answer} />
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -149,7 +141,6 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
         constantValue: {
           faqs: [],
         },
-        constantValueEnabled: false,
       },
     },
     styles: {

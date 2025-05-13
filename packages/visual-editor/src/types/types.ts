@@ -20,7 +20,7 @@ export type ProductSectionType = {
 export type ProductStruct = {
   image?: ImageType;
   name?: string;
-  description?: RTF2;
+  description?: RTF2 | string;
   category?: string;
   cta?: CTAType;
 };
@@ -33,7 +33,7 @@ export type EventStruct = {
   image?: ImageType;
   title?: string;
   dateTime?: string;
-  description?: RTF2;
+  description?: RTF2 | string;
   cta?: CTAType;
 };
 
@@ -43,7 +43,7 @@ export type FAQSectionType = {
 
 export type FAQStruct = {
   question: string;
-  answer: RTF2;
+  answer: RTF2 | string;
 };
 
 export type TestimonialSectionType = {
@@ -65,7 +65,7 @@ export type InsightStruct = {
   name?: string;
   category?: string;
   publishTime?: string;
-  description?: RTF2;
+  description?: RTF2 | string;
   cta?: CTAType;
 };
 
@@ -82,7 +82,7 @@ export type PersonStruct = {
   cta?: CTAType;
 };
 
-type RTF2 = {
+export type RTF2 = {
   html?: string;
   json?: string;
 };
