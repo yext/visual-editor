@@ -10,12 +10,15 @@ import {
   OnSelectParams,
   ResultsCount,
   VerticalResults,
+  AnalyticsProvider,
 } from "@yext/search-ui-react";
 import {
   Matcher,
+  SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  provideHeadless,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
@@ -25,7 +28,9 @@ import {
   CTA,
   Heading,
   normalizeSlug,
-  useTemplateProps,
+  useDocument,
+  createSearchAnalyticsConfig,
+  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 import { useEffect, useState } from "react";
@@ -102,7 +107,7 @@ const TRANSLATIONS = {
   },
 };
 
-type LocatorProps = {
+export type LocatorProps = {
   mapStyle?: string;
 };
 
@@ -126,19 +131,42 @@ const locatorFields: Fields<LocatorProps> = {
   ]),
 };
 
-const LocatorComponent: ComponentConfig<LocatorProps> = {
+export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
   label: "Locator",
-  render: (props) => <Locator {...props} />,
+  render: (props) => <LocatorWrapper {...props} />,
+};
+
+const LocatorWrapper: React.FC<LocatorProps> = (props) => {
+  const document = useDocument();
+  if (!document) {
+    return <></>;
+  }
+  const searchHeadlessConfig = createSearchHeadlessConfig(document);
+  const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
+  if (
+    searchHeadlessConfig === undefined ||
+    searchAnalyticsConfig === undefined
+  ) {
+    return <></>;
+  }
+  const searcher = provideHeadless(searchHeadlessConfig);
+  return (
+    <SearchHeadlessProvider searcher={searcher}>
+      <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+        <LocatorInternal {...props} />
+      </AnalyticsProvider>
+    </SearchHeadlessProvider>
+  );
 };
 
 type SearchState = "not started" | "loading" | "complete";
 
-const Locator: React.FC<LocatorProps> = (props) => {
+const LocatorInternal: React.FC<LocatorProps> = (props) => {
   const locale = getDocumentLocale();
   const { mapStyle } = props;
   const resultCount = useSearchState(
-    (state) => state.vertical.resultsCount || 0,
+    (state) => state.vertical.resultsCount || 0
   );
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
@@ -320,8 +348,14 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
+  // During page generation we don't exist in a browser context, so conditionally skip here to handle
+  if (typeof document === "undefined") {
+    return <></>;
+  }
   const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
-  const mapboxApiKey = "";
+  const entityDocument: any = useDocument();
+  const mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
+  //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
     return (
@@ -397,7 +431,7 @@ const LocationCard: CardComponent<Location> = ({
                 : {
                     latitude: 0,
                     longitude: 0,
-                  },
+                  }
             )}
             linkType={"DRIVING_DIRECTIONS"}
             target={"_blank"}
@@ -447,7 +481,8 @@ const getPath = (location: Location, locale: string) => {
 };
 
 const getDocumentLocale = () => {
-  const fullLocale = useTemplateProps<any>().document?.meta?.locale || "en";
+  const entityDocument: any = useDocument();
+  const fullLocale = entityDocument.meta?.locale || "en";
   let locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
   if (!(locale in TRANSLATIONS)) {
     locale = "en";
@@ -466,5 +501,3 @@ interface Location {
   timezone: string;
   yextDisplayCoordinate?: Coordinate;
 }
-
-export { type LocatorProps, LocatorComponent as Locator };

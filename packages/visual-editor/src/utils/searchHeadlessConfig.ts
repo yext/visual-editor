@@ -43,14 +43,15 @@ export const createSearchHeadlessConfig = (document: any) => {
       "Invalid or missing YEXT_ENVIRONMENT! Unable to set up locator."
     );
   }
+  const experienceKey = getExperienceKey(document);
+  if (!experienceKey) {
+    warnings.push("Missing experienceKey! Unable to set up locator.");
+  }
   if (warnings.length > 0) {
     warnings.forEach((msg) => console.warn(msg));
     return;
   }
 
-  // experienceKey will eventually be on the entity document, waiting on Spruce
-  // https://yext.slack.com/archives/C06A06BCUUF/p1745963801890889
-  const experienceKey = "jacob-test";
   const headlessConfig: HeadlessConfig = {
     apiKey: searchApiKey,
     experienceKey: experienceKey,
@@ -90,6 +91,10 @@ export const createSearchAnalyticsConfig = (document: any) => {
       "Invalid or missing YEXT_CLOUD_REGION! Unable to set up locator analytics."
     );
   }
+  const experienceKey = getExperienceKey(document);
+  if (!experienceKey) {
+    warnings.push("Missing experienceKey! Unable to set up locator analytics.");
+  }
   if (warnings.length > 0) {
     warnings.forEach((msg) => console.warn(msg));
     return;
@@ -100,10 +105,6 @@ export const createSearchAnalyticsConfig = (document: any) => {
     environment === Environment.SANDBOX ? "SANDBOX" : "PRODUCTION";
   // from @yext/analytics RegionEnum
   const analyticsRegion = cloudRegion.toUpperCase();
-  // experienceKey will eventually be on the entity document, waiting on Spruce
-  // https://yext.slack.com/archives/C06A06BCUUF/p1745963801890889
-  const experienceKey = "jacob-test";
-  // from @yext/analytics SearchAnalyticsConfig
   const analyticsConfig = {
     businessId: businessId,
     experienceKey: experienceKey,
@@ -112,6 +113,20 @@ export const createSearchAnalyticsConfig = (document: any) => {
     env: analyticsEnvironment,
   };
   return analyticsConfig;
+};
+
+/**
+ * Extracts the experienceKey from the entity document if possible, otherwise returns undefined.
+ * @param document the entity document
+ */
+const getExperienceKey = (document: any) => {
+  try {
+    const experienceKey = JSON.parse(document._pageset).typeConfig.locatorConfig
+      .experienceKey;
+    return experienceKey;
+  } catch {
+    return;
+  }
 };
 
 const isValidCloudRegion = (value: any): value is CloudRegion => {

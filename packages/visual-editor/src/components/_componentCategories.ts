@@ -62,6 +62,7 @@ import { TextList, TextListProps } from "./contentBlocks/TextList.tsx";
 import { Header, HeaderProps } from "./Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
+import { LocatorComponent, LocatorProps } from "./Locator.tsx";
 import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
 import { ProductCardProps, ProductCard } from "./cards/ProductCard.tsx";
 import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
@@ -210,3 +211,15 @@ export const ContentBlockCategoryComponents = {
 export const ContentBlockCategory = Object.keys(
   ContentBlockCategoryComponents
 ) as (keyof ContentBlockCategoryProps)[];
+
+export interface LocatorCategoryProps {
+  Locator: LocatorProps;
+}
+
+export const LocatorCategoryComponents = {
+  Locator: LocatorComponent,
+};
+
+export const LocatorCategory = Object.keys(
+  LocatorCategoryComponents
+) as (keyof LocatorCategoryProps)[];

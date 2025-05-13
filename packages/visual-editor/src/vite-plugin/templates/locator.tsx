@@ -18,20 +18,9 @@ import {
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
-  createSearchAnalyticsConfig,
-  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
-import {
-  CloudChoice,
-  CloudRegion,
-  Environment,
-  provideHeadless,
-  SearchHeadlessProvider,
-} from "@yext/search-headless-react";
 import { themeConfig } from "../../theme.config";
 import { SchemaWrapper } from "@yext/pages-components";
-
-const EXPERIENCE_VERSION = "PRODUCTION";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
@@ -98,47 +87,10 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 const Locator: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
 
-  const searchHeadlessConfig = createSearchHeadlessConfig(document);
-  const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
-  if (
-    searchHeadlessConfig === undefined ||
-    searchAnalyticsConfig === undefined
-  ) {
-    return <></>;
-  }
-  const searcher = provideHeadless(searchHeadlessConfig);
-
-  // Uncomment this to use the config object directly while we're waiting for other work to be done
-  // const config = {
-  //   apiKey: "",
-  //   experienceKey: "jacob-test",
-  //   locale: "en",
-  //   experienceVersion: EXPERIENCE_VERSION,
-  //   verticalKey: "locations",
-  //   cloudRegion: CloudRegion.US,
-  //   cloudChoice: CloudChoice.GLOBAL_MULTI,
-  //   environment: Environment.PROD,
-  // };
-  // const searchAnalyticsConfig = {
-  //   businessId: 70452,
-  //   experienceKey: "jacob-test",
-  //   experienceVersion: EXPERIENCE_VERSION,
-  //   region: 'US',
-  //   env: 'PRODUCTION',
-  // }
-  // const searcher = provideHeadless(config);
-
   return (
-    <SearchHeadlessProvider searcher={searcher}>
-      <AnalyticsProvider {...searchAnalyticsConfig}>
-        <VisualEditorProvider templateProps={props}>
-          <Render
-            config={locatorConfig} // TODO (kgerner): update ve.config in starter repo
-            data={JSON.parse(document.__.layout)}
-          />
-        </VisualEditorProvider>
-      </AnalyticsProvider>
-    </SearchHeadlessProvider>
+    <VisualEditorProvider templateProps={props}>
+      <Render config={locatorConfig} data={JSON.parse(document.__.layout)} />
+    </VisualEditorProvider>
   );
 };
 
