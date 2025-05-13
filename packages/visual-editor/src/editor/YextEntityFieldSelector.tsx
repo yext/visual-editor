@@ -21,6 +21,7 @@ import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-f
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
 import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ProductSection.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
+import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TestimonialSection.tsx";
 
 const devLogger = new DevLogger();
 
@@ -55,6 +56,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
   "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
   "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
+  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {

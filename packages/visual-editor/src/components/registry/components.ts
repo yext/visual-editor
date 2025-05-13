@@ -398,9 +398,9 @@ export const ui: Registry["items"] = [
     registryDependencies: [
       "pageSection",
       "heading",
-      "body",
       "timestamp",
       "visibilityWrapper",
+      "maybeRTF",
     ],
     files: [
       { path: "pageSections/TestimonialSection.tsx", type: "registry:ui" },
