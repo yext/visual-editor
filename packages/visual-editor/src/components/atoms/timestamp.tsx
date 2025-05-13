@@ -96,15 +96,21 @@ export function Timestamp({
   timeZone,
   hideTimeZone = false,
 }: TimestampProps): JSX.Element {
-  const startDate = new Date(date);
-  const formattedEndDate = new Date(endDate);
-  const timestamp = timestampFormatter({
-    date: startDate,
-    option,
-    endDate: formattedEndDate,
-    timeZone,
-    hideTimeZone,
-  });
+  let timestamp;
+  try {
+    const startDate = new Date(date);
+    const formattedEndDate = new Date(endDate);
+    timestamp = timestampFormatter({
+      date: startDate,
+      option,
+      endDate: formattedEndDate,
+      timeZone,
+      hideTimeZone,
+    });
+  } catch (e) {
+    console.warn("error formatting timestamp:", e);
+    return <></>;
+  }
 
   return (
     <div className="components font-body-fontFamily font-body-fontWeight text-body-fontSize inline-block">

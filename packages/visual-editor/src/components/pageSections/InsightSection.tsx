@@ -16,10 +16,10 @@ import {
   VisibilityWrapper,
   InsightSectionType,
   InsightStruct,
+  Timestamp,
+  MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Timestamp } from "../atoms/timestamp.tsx";
-import { LexicalRichText } from "@yext/pages-components";
 
 export interface InsightSectionProps {
   data: {
@@ -38,7 +38,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
+      heading: YextField<any, string>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -109,13 +109,7 @@ const InsightCard = ({
             </div>
           )}
           {insight.name && <Heading level={3}>{insight.name}</Heading>}
-          {insight.description?.json && (
-            <Body>
-              <LexicalRichText
-                serializedAST={JSON.stringify(insight.description?.json) ?? ""}
-              />
-            </Body>
-          )}
+          <MaybeRTF data={insight.description} />
         </div>
         {insight.cta && (
           <CTA
