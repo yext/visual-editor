@@ -15,6 +15,7 @@ import {
   TestimonialStruct,
   Timestamp,
   MaybeRTF,
+  TimestampOption,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -96,7 +97,11 @@ const TestimonialCard = ({
           <Heading level={3}>{testimonial.contributorName}</Heading>
         )}
         {testimonial.contributionDate && (
-          <Timestamp date={testimonial.contributionDate} hideTimeZone={true} />
+          <Timestamp
+            date={testimonial.contributionDate}
+            option={TimestampOption.DATE}
+            hideTimeZone={true}
+          />
         )}
       </Background>
     </div>

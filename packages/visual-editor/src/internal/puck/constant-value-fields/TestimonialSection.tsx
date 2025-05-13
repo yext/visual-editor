@@ -3,7 +3,7 @@ import {
   TestimonialSectionType,
   TestimonialStruct,
 } from "../../../types/types.ts";
-import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
+import { DateSelector } from "../components/DateSelector.tsx";
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -49,7 +49,7 @@ const TestimonialStructArrayField: ArrayField<TestimonialStruct[]> = {
       type: "text",
       label: "Contributor Name",
     },
-    contributionDate: DateTimeSelector,
+    contributionDate: DateSelector,
   },
   getItemSummary: (item, i) =>
     item.contributorName ?? "Testimonial " + ((i ?? 0) + 1),
