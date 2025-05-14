@@ -6,9 +6,9 @@ import { Button } from "../ui/button.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
+import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
-import { TemplateMetadata } from "../../types/templateMetadata.ts";
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
