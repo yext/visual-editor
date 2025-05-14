@@ -176,24 +176,17 @@
     "region": "FL"
   },
   "businessId": 1000146856,
-  "c_deliveryPromo": {
-    "cta": {
-      "name": "Order Now"
-    },
-    "description": "Craving Galaxy Grill but can’t make it to the diner? No problem! Order your favorite meals from Galaxy Grill on DoorDash and enjoy our delicious dishes delivered right to your doorstep. Click below to order now and bring the taste of the Galaxy home!",
-    "image": {
-      "image": {
-        "height": 474,
-        "url": "http://a.mktgcdn.com/p-dev/kkgTZWHLvzC87uvfD1F9UvPcGAWzdJleluwpbKiJaeM/640x474.png",
-        "width": 640
-      }
-    },
-    "title": "Order Delivery with DoorDash"
-  },
-  "c_faqSection": {
-    "linkedFAQs": [
+  "emails": ["yext@gmail.com", "yext2@gmail.com"],
+  "c_exampleEvents": {
+    "events": [
       {
-        "answerV2": {
+        "cta": {
+          "label": "Learn More",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        "dateTime": "2025-06-01T10:00",
+        "description": {
           "json": {
             "root": {
               "children": [
@@ -204,7 +197,52 @@
                       "format": 0,
                       "mode": "normal",
                       "style": "",
-                      "text": "We take food allergies seriously and can accommodate most dietary restrictions. Please inform your server of any allergies, and we will ensure your meal is prepared safely.",
+                      "text": "Join our hands-on ",
+                      "type": "text",
+                      "version": 1
+                    },
+                    {
+                      "detail": 0,
+                      "format": 1,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "cooking class",
+                      "type": "text",
+                      "version": 1
+                    },
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": " to learn delicious recipes and ",
+                      "type": "text",
+                      "version": 1
+                    },
+                    {
+                      "detail": 0,
+                      "format": 2,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "unleash",
+                      "type": "text",
+                      "version": 1
+                    },
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": " your inner chef. ",
+                      "type": "text",
+                      "version": 1
+                    },
+                    {
+                      "detail": 0,
+                      "format": 8,
+                      "mode": "normal",
+                      "style": "background-color: #ffc107;",
+                      "text": "Perfect for all levels!",
                       "type": "text",
                       "version": 1
                     }
@@ -224,10 +262,49 @@
             }
           }
         },
-        "question": "Are you able to accommodate food allergies?"
+        "image": {
+          "alternateText": "cooking class",
+          "height": 1554,
+          "thumbnails": [
+            {
+              "height": 1554,
+              "url": "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/2048x1554.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1442,
+              "url": "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/1900x1442.jpg",
+              "width": 1900
+            },
+            {
+              "height": 470,
+              "url": "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/619x470.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/593x450.jpg",
+              "width": 593
+            },
+            {
+              "height": 149,
+              "url": "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/196x149.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/2048x1554.jpg",
+          "width": 2048
+        },
+        "title": "Cooking Class"
       },
       {
-        "answerV2": {
+        "cta": {
+          "label": "Sign Up",
+          "link": "sumo@yext.com",
+          "linkType": "EMAIL"
+        },
+        "dateTime": "2026-06-30T08:00",
+        "description": {
           "json": {
             "root": {
               "children": [
@@ -238,7 +315,7 @@
                       "format": 0,
                       "mode": "normal",
                       "style": "",
-                      "text": "Absolutely! Our kids’ menu features a range of child-friendly options like mini pancakes, chicken tenders, and grilled cheese sandwiches, all served with a side of fun.",
+                      "text": "Join our group for a refreshing hike on local trails! Enjoy:",
                       "type": "text",
                       "version": 1
                     }
@@ -247,6 +324,75 @@
                   "format": "",
                   "indent": 0,
                   "type": "paragraph",
+                  "version": 1
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "nature",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": "ltr",
+                      "format": "",
+                      "indent": 0,
+                      "type": "listitem",
+                      "value": 1,
+                      "version": 1
+                    },
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "good company",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": "ltr",
+                      "format": "",
+                      "indent": 0,
+                      "type": "listitem",
+                      "value": 2,
+                      "version": 1
+                    },
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "fresh air together",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": "ltr",
+                      "format": "",
+                      "indent": 0,
+                      "type": "listitem",
+                      "value": 3,
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "listType": "bullet",
+                  "start": 1,
+                  "tag": "ul",
+                  "type": "list",
                   "version": 1
                 }
               ],
@@ -258,178 +404,926 @@
             }
           }
         },
-        "question": "Do you have a kids’ menu?"
-      },
-      {
-        "answerV2": {
-          "json": {
-            "root": {
-              "children": [
-                {
-                  "children": [
-                    {
-                      "detail": 0,
-                      "format": 0,
-                      "mode": "normal",
-                      "style": "",
-                      "text": "Yes, we offer both takeout and delivery services. You can place your order online through our website or by calling your nearest Galaxy Grill location.",
-                      "type": "text",
-                      "version": 1
-                    }
-                  ],
-                  "direction": "ltr",
-                  "format": "",
-                  "indent": 0,
-                  "type": "paragraph",
-                  "version": 1
-                }
-              ],
-              "direction": "ltr",
-              "format": "",
-              "indent": 0,
-              "type": "root",
-              "version": 1
+        "image": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/196x196.jpg",
+              "width": 196
             }
-          }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/2048x2048.jpg",
+          "width": 2048
         },
-        "question": "Do you offer takeout or delivery services?"
-      },
-      {
-        "answerV2": {
-          "json": {
-            "root": {
-              "children": [
-                {
-                  "children": [
-                    {
-                      "detail": 0,
-                      "format": 0,
-                      "mode": "normal",
-                      "style": "",
-                      "text": "Yes, we have a variety of vegetarian and vegan dishes available, including our popular veggie burger, salads, and plant-based breakfast items.",
-                      "type": "text",
-                      "version": 1
-                    }
-                  ],
-                  "direction": "ltr",
-                  "format": "",
-                  "indent": 0,
-                  "type": "paragraph",
-                  "version": 1
-                }
-              ],
-              "direction": "ltr",
-              "format": "",
-              "indent": 0,
-              "type": "root",
-              "version": 1
-            }
-          }
-        },
-        "question": "Do you offer vegetarian or vegan options?"
-      },
-      {
-        "answerV2": {
-          "json": {
-            "root": {
-              "children": [
-                {
-                  "children": [
-                    {
-                      "detail": 0,
-                      "format": 0,
-                      "mode": "normal",
-                      "style": "",
-                      "text": "Yes, Galaxy Grill offers ample parking spaces for our guests, including designated spots for families and individuals with disabilities.",
-                      "type": "text",
-                      "version": 1
-                    }
-                  ],
-                  "direction": "ltr",
-                  "format": "",
-                  "indent": 0,
-                  "type": "paragraph",
-                  "version": 1
-                }
-              ],
-              "direction": "ltr",
-              "format": "",
-              "indent": 0,
-              "type": "root",
-              "version": 1
-            }
-          }
-        },
-        "question": "Is there parking available?"
+        "title": "Hike"
       }
     ]
   },
-  "c_hero": {
-    "primaryCta": {
-      "label": "Get Directions",
-      "link": "#"
+  "c_exampleFAQs": {
+    "faqs": [
+      {
+        "answer": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "We offer Delivery, Catering, Take Out, and Dine In.",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "question": "What services do you offer?"
+      },
+      {
+        "answer": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Yes. There are a limited number of spots in front and we validate parking at ",
+                      "type": "text",
+                      "version": 1
+                    },
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "these garages",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": "ltr",
+                      "format": "",
+                      "indent": 0,
+                      "rel": "noopener",
+                      "type": "link",
+                      "url": "https://",
+                      "version": 1
+                    },
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": ".",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "question": "Do you have parking available?"
+      }
+    ]
+  },
+  "c_exampleInsights": {
+    "insights": [
+      {
+        "category": "Blog",
+        "cta": {
+          "label": "Read Now",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Discover how Galaxy Grill is redefining fast casual dining with its commitment to fresh, locally-sourced ingredients and innovative menu that caters to health-conscious diners. Learn about our unique concept.",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "image": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/196x196.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+          "width": 2048
+        },
+        "name": "Fresh Flavors Fast",
+        "publishTime": "2025-01-01T12:00"
+      },
+      {
+        "category": "Menu",
+        "cta": {
+          "label": "Order Now",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Galaxy Grill is more than just burgers. We offer a wide range of options, from salads and sandwiches to bowls and innovative sides. Explore the full menu and find your new favorite.",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "image": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/196x196.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/2048x2048.jpg",
+          "width": 2048
+        },
+        "name": "Beyond the Burger"
+      },
+      {
+        "category": "Impact",
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "At Galaxy Grill, we believe in supporting our community. Discover our commitment to using locally-sourced ingredients, partnering with regional farmers, and giving back to the place we call home.",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "name": "Our Commitment to Community",
+        "publishTime": "2018-06-01T12:00"
+      }
+    ]
+  },
+  "c_exampleProducts": {
+    "products": [
+      {
+        "category": "Burgers",
+        "cta": {
+          "label": "Order Now",
+          "link": "order",
+          "linkType": "OTHER"
+        },
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Our signature burger! A juicy beef patty topped with melted cheese, crisp lettuce, ripe tomato, and our special Galaxy sauce, all served on a toasted sesame seed bun.",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "image": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/196x196.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+          "width": 2048
+        },
+        "name": "Galaxy Burger"
+      },
+      {
+        "image": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+          "width": 2048
+        },
+        "name": "Galaxy Salad"
+      },
+      {
+        "category": "Desserts",
+        "cta": {
+          "label": "Order Now",
+          "link": "order",
+          "linkType": "OTHER"
+        },
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Indulge in our decadent milkshake! Thick and creamy, topped with whipped cream, chocolate shavings, and a cherry. The perfect sweet treat.",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        },
+        "name": "Galaxy Milkshake"
+      }
+    ]
+  },
+  "c_examplePromo": {
+    "cta": {
+      "label": "Call to Order",
+      "link": "+18005551010",
+      "linkType": "PHONE"
     },
-    "secondaryCta": {
-      "label": "Order Online",
-      "link": "#"
+    "description": {
+      "json": {
+        "root": {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "color: #59359a;",
+                  "text": "Our out-of-this-world ",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 1,
+                  "mode": "normal",
+                  "style": "color: #59359a;",
+                  "text": "burgers",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "color: #59359a;",
+                  "text": " and",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 1,
+                  "mode": "normal",
+                  "style": "color: #59359a;",
+                  "text": " fresh salads",
+                  "type": "text",
+                  "version": 1
+                },
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "color: #59359a;",
+                  "text": " are a flavor journey you won\u0027t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "paragraph",
+              "version": 1
+            }
+          ],
+          "direction": "ltr",
+          "format": "",
+          "indent": 0,
+          "type": "root",
+          "version": 1
+        }
+      }
     },
     "image": {
-      "height": 2592,
-      "url": "http://a.mktgcdn.com/p-dev/ETWoS5bg4iVNVcSQA4yvzm7w1uMtr37ub1GG5oeNWKc/3834x2592.jpg",
-      "width": 3834
-    }
+      "height": 2048,
+      "thumbnails": [
+        {
+          "height": 2048,
+          "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+          "width": 2048
+        },
+        {
+          "height": 1900,
+          "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+          "width": 1900
+        },
+        {
+          "height": 619,
+          "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+          "width": 619
+        },
+        {
+          "height": 450,
+          "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+          "width": 450
+        },
+        {
+          "height": 196,
+          "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+          "width": 196
+        }
+      ],
+      "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+      "width": 2048
+    },
+    "title": "Taste the universe!"
   },
-  "c_productSection": {
-    "linkedProducts": [
+  "c_exampleTeam": {
+    "people": [
       {
-        "c_coverPhoto": {
-          "image": {
-            "height": 2247,
-            "url": "http://a.mktgcdn.com/p-dev/zOfEayCr7Wo4c9PGB5qF0ZrViYSPt-71itc-bD3HT3Q/3996x2247.webp",
-            "width": 3996
-          }
+        "cta": {
+          "label": "Email Me",
+          "link": "cosmo@galaxygrill.com",
+          "linkType": "EMAIL"
         },
-        "c_description": "Indulge in our signature burger, a juicy beef patty topped with melted cheese, fresh lettuce, and ripe tomatoes, served with a side of crispy, golden fries.",
-        "c_productCTA": {
-          "name": "Order Online"
+        "email": "cosmo@galaxygrill.com",
+        "headshot": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/oLt7FTuLqSqCm72i_7pDW5cABF2BD6TiJz56eKG_TY8/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/oLt7FTuLqSqCm72i_7pDW5cABF2BD6TiJz56eKG_TY8/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/oLt7FTuLqSqCm72i_7pDW5cABF2BD6TiJz56eKG_TY8/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/oLt7FTuLqSqCm72i_7pDW5cABF2BD6TiJz56eKG_TY8/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/oLt7FTuLqSqCm72i_7pDW5cABF2BD6TiJz56eKG_TY8/196x196.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/oLt7FTuLqSqCm72i_7pDW5cABF2BD6TiJz56eKG_TY8/2048x2048.jpg",
+          "width": 2048
         },
-        "c_productPromo": "Fan favorite!",
-        "name": "Signature Burger"
+        "name": "Captain Cosmo",
+        "phoneNumber": "+18005551010",
+        "title": "Founder \u0026 CEO"
       },
       {
-        "c_coverPhoto": {
-          "image": {
-            "height": 1260,
-            "url": "http://a.mktgcdn.com/p-dev/RKPadSazcHHB32D54e9fAvvfFFLjBsWb3X3tIIa4p_Y/900x1260.png",
-            "width": 900
-          }
+        "cta": {
+          "link": "nova@galaxygrill.com",
+          "label": "Email Me",
+          "linkType": "EMAIL"
         },
-        "c_description": "Don’t miss out on our limited-time quesadilla, packed with melted cheese, tender grilled steak, and a hint of zesty peppers, all perfectly toasted to golden perfection.",
-        "c_productCTA": {
-          "name": "Order Online"
-        },
-        "c_productPromo": "Limited time only!",
-        "name": "Quesadilla"
+        "name": "Chef Nova",
+        "phoneNumber": "+528005551010",
+        "title": "Culinary Directory"
       },
       {
-        "c_coverPhoto": {
-          "image": {
-            "height": 867,
-            "url": "http://a.mktgcdn.com/p-dev/w8dNwz5T8hcM_mGwyU8yxr7qpmLZE_8FtWSp04KgxVI/1300x867.png",
-            "width": 1300
-          }
+        "headshot": {
+          "height": 2048,
+          "thumbnails": [
+            {
+              "height": 2048,
+              "url": "https://a.mktgcdn.com/p-dev/L0MNT7skLmP_utpGEzNhI0BzglmzSAojiPGOvI6P32A/2048x2048.jpg",
+              "width": 2048
+            },
+            {
+              "height": 1900,
+              "url": "https://a.mktgcdn.com/p-dev/L0MNT7skLmP_utpGEzNhI0BzglmzSAojiPGOvI6P32A/1900x1900.jpg",
+              "width": 1900
+            },
+            {
+              "height": 619,
+              "url": "https://a.mktgcdn.com/p-dev/L0MNT7skLmP_utpGEzNhI0BzglmzSAojiPGOvI6P32A/619x619.jpg",
+              "width": 619
+            },
+            {
+              "height": 450,
+              "url": "https://a.mktgcdn.com/p-dev/L0MNT7skLmP_utpGEzNhI0BzglmzSAojiPGOvI6P32A/450x450.jpg",
+              "width": 450
+            },
+            {
+              "height": 196,
+              "url": "https://a.mktgcdn.com/p-dev/L0MNT7skLmP_utpGEzNhI0BzglmzSAojiPGOvI6P32A/196x196.jpg",
+              "width": 196
+            }
+          ],
+          "url": "https://a.mktgcdn.com/p-dev/L0MNT7skLmP_utpGEzNhI0BzglmzSAojiPGOvI6P32A/2048x2048.jpg",
+          "width": 2048
         },
-        "c_description": "Start your day with our delicious breakfast tacos, featuring freshly made tortillas filled with savory eggs, crispy chorizo, and a blend of authentic spices.",
-        "c_productCTA": {
-          "name": "Order Online"
-        },
-        "c_productPromo": "Available until 1 PM!",
-        "name": "Breakfast Tacos"
+        "name": "Admiral Aster",
+        "title": "Operations Manager"
       }
-    ],
-    "sectionTitle": "Featured Menu Items at Galaxy Grill in Miami"
+    ]
   },
-  "emails": ["yext@gmail.com", "yext2@gmail.com"],
+  "c_exampleTestimonials": {
+    "testimonials": [
+      {
+        "contributionDate": "2024-04-02T15:23",
+        "contributorName": "Jane",
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "This burger is a flavor explosion! The juicy patty, nestled in a soft bun, boasts a perfect sear. Crisp lettuce, ripe tomatoes, and a tangy sauce complete this culinary masterpiece. A must-try for any burger enthusiast!",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        }
+      },
+      {
+        "contributionDate": "2010-02-02T11:00",
+        "contributorName": "Sam",
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "The Galaxy Grill burger is out of this world! It’s savory, satisfying, and simply delicious. From the first bite to the last, this burger delivers a taste experience that’s truly unforgettable. Don’t miss out on this cosmic culinary adventure!",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        }
+      },
+      {
+        "contributionDate": "2024-11-11T17:00",
+        "contributorName": "John",
+        "description": {
+          "json": {
+            "root": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "detail": 0,
+                      "format": 0,
+                      "mode": "normal",
+                      "style": "",
+                      "text": "Absolutely incredible! This burger is pure perfection. Juicy, flavorful, and everything just works together. The bun is soft, the toppings are fresh, and the overall taste is out of this world. A definite must-get!",
+                      "type": "text",
+                      "version": 1
+                    }
+                  ],
+                  "direction": "ltr",
+                  "format": "",
+                  "indent": 0,
+                  "type": "paragraph",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "root",
+              "version": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  "photoGallery": [
+    {
+      "image": {
+        "height": 2048,
+        "thumbnails": [
+          {
+            "height": 2048,
+            "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+            "width": 2048
+          },
+          {
+            "height": 1900,
+            "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+            "width": 1900
+          },
+          {
+            "height": 619,
+            "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+            "width": 619
+          },
+          {
+            "height": 450,
+            "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+            "width": 450
+          },
+          {
+            "height": 196,
+            "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+            "width": 196
+          }
+        ],
+        "url": "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+        "width": 2048
+      }
+    },
+    {
+      "image": {
+        "height": 2048,
+        "thumbnails": [
+          {
+            "height": 2048,
+            "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+            "width": 2048
+          },
+          {
+            "height": 1900,
+            "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/1900x1900.jpg",
+            "width": 1900
+          },
+          {
+            "height": 619,
+            "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/619x619.jpg",
+            "width": 619
+          },
+          {
+            "height": 450,
+            "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/450x450.jpg",
+            "width": 450
+          },
+          {
+            "height": 196,
+            "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/196x196.jpg",
+            "width": 196
+          }
+        ],
+        "url": "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+        "width": 2048
+      }
+    },
+    {
+      "image": {
+        "height": 2048,
+        "thumbnails": [
+          {
+            "height": 2048,
+            "url": "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/2048x2048.jpg",
+            "width": 2048
+          },
+          {
+            "height": 1900,
+            "url": "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/1900x1900.jpg",
+            "width": 1900
+          },
+          {
+            "height": 619,
+            "url": "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/619x619.jpg",
+            "width": 619
+          },
+          {
+            "height": 450,
+            "url": "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/450x450.jpg",
+            "width": 450
+          },
+          {
+            "height": 196,
+            "url": "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/196x196.jpg",
+            "width": 196
+          }
+        ],
+        "url": "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/2048x2048.jpg",
+        "width": 2048
+      }
+    },
+    {
+      "image": {
+        "height": 2048,
+        "thumbnails": [
+          {
+            "height": 2048,
+            "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+            "width": 2048
+          },
+          {
+            "height": 1900,
+            "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/1900x1900.jpg",
+            "width": 1900
+          },
+          {
+            "height": 619,
+            "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/619x619.jpg",
+            "width": 619
+          },
+          {
+            "height": 450,
+            "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/450x450.jpg",
+            "width": 450
+          },
+          {
+            "height": 196,
+            "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/196x196.jpg",
+            "width": 196
+          }
+        ],
+        "url": "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+        "width": 2048
+      }
+    }
+  ],
   "hours": {
     "friday": {
       "openIntervals": [
