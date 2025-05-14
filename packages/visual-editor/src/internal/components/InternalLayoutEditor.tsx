@@ -54,7 +54,7 @@ export const InternalLayoutEditor = ({
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
   const [approvalModalOpen, setApprovalModalOpen] =
-    React.useState<boolean>(true);
+    React.useState<boolean>(false);
   const [approvalModalData, setApprovalModalData] = React.useState<Data>();
 
   /**
