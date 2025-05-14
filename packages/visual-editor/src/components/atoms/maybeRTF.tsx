@@ -22,11 +22,7 @@ export const MaybeRTF = ({ data, ...props }: MaybeRTFProps) => {
     }
 
     if ("json" in data && data.json) {
-      return (
-        <Body {...props}>
-          <LexicalRichText serializedAST={JSON.stringify(data.json)} />
-        </Body>
-      );
+      return <LexicalRichText serializedAST={JSON.stringify(data.json)} />;
     }
   }
 };
