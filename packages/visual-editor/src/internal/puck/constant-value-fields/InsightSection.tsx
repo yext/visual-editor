@@ -1,7 +1,7 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { InsightSectionType, InsightStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
-import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
+import { DateSelector } from "../components/DateSelector.tsx";
 
 export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
   {
@@ -53,7 +53,7 @@ const InsightStructArrayField: ArrayField<InsightStruct[]> = {
       type: "text",
       label: "Category",
     },
-    publishTime: DateTimeSelector,
+    publishTime: DateSelector,
     description: {
       type: "textarea",
       label: "Description",

@@ -14,11 +14,11 @@ import {
   TestimonialSectionType,
   TestimonialStruct,
   Timestamp,
-  Body,
   ComponentFields,
+  MaybeRTF,
+  TimestampOption,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { LexicalRichText } from "@yext/pages-components";
 
 export interface TestimonialSectionProps {
   data: {
@@ -91,22 +91,18 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8"
       >
-        {testimonial.description?.json && (
-          <Body>
-            <LexicalRichText
-              serializedAST={
-                JSON.stringify(testimonial.description?.json) ?? ""
-              }
-            />
-          </Body>
-        )}
+        <MaybeRTF data={testimonial.description} />
       </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (
           <Heading level={3}>{testimonial.contributorName}</Heading>
         )}
         {testimonial.contributionDate && (
-          <Timestamp date={testimonial.contributionDate} hideTimeZone={true} />
+          <Timestamp
+            date={testimonial.contributionDate}
+            option={TimestampOption.DATE}
+            hideTimeZone={true}
+          />
         )}
       </Background>
     </div>
@@ -181,7 +177,6 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
         constantValue: {
           testimonials: [],
         },
-        constantValueEnabled: false,
       },
     },
     liveVisibility: true,
