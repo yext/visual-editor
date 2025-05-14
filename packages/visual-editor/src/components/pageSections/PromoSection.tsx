@@ -17,7 +17,7 @@ import {
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
-  ComponentFieldMappings,
+  ComponentFields,
 } from "@yext/visual-editor";
 import { LexicalRichText } from "@yext/pages-components";
 
@@ -42,7 +42,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       promo: YextStructFieldSelector({
         label: "Promo",
         filter: {
-          type: ComponentFieldMappings.PromoSection.fieldTypeDefinition.type,
+          type: ComponentFields.PromoSection.type,
         },
       }),
     },

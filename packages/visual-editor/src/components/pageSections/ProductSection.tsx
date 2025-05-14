@@ -16,7 +16,7 @@ import {
   VisibilityWrapper,
   ProductSectionType,
   ProductStruct,
-  ComponentFieldMappings,
+  ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -45,9 +45,7 @@ const productSectionFields: Fields<ProductSectionProps> = {
       products: YextField("Products", {
         type: "entityField",
         filter: {
-          types: [
-            ComponentFieldMappings.ProductsSection.fieldTypeDefinition.type,
-          ],
+          types: [ComponentFields.ProductsSection.type],
         },
       }),
     },

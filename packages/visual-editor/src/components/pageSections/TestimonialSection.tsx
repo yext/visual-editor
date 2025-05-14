@@ -15,7 +15,7 @@ import {
   TestimonialStruct,
   Timestamp,
   Body,
-  ComponentFieldMappings,
+  ComponentFields,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { LexicalRichText } from "@yext/pages-components";
@@ -44,9 +44,7 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       testimonials: YextField("Testimonial Section", {
         type: "entityField",
         filter: {
-          types: [
-            ComponentFieldMappings.TestimonialsSection.fieldTypeDefinition.type,
-          ],
+          types: [ComponentFields.TestimonialsSection.type],
         },
       }),
     },

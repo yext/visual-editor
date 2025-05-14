@@ -14,7 +14,7 @@ import {
   VisibilityWrapper,
   EntityField,
   FAQSectionType,
-  ComponentFieldMappings,
+  ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
 import {
@@ -49,7 +49,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       faqs: YextField("FAQs", {
         type: "entityField",
         filter: {
-          types: [ComponentFieldMappings.FAQSection.fieldTypeDefinition.type],
+          types: [ComponentFields.FAQSection.type],
         },
       }),
     },
