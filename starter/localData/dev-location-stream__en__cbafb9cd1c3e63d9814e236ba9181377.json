@@ -989,7 +989,7 @@
     "people": [
       {
         "cta": {
-          "label": "Email",
+          "label": "Email Me",
           "link": "cosmo@galaxygrill.com",
           "linkType": "EMAIL"
         },
@@ -1033,7 +1033,7 @@
       {
         "cta": {
           "link": "nova@galaxygrill.com",
-          "label": "Email",
+          "label": "Email Me",
           "linkType": "EMAIL"
         },
         "name": "Chef Nova",
