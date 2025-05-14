@@ -788,7 +788,7 @@ const myComponentFields: Fields<MyComponentProps> = {
 `migrate` transforms Puck layout data to handle updates to the Puck version and to `visual-editor` components.
 It is run when data is loaded into the editor (both published and save state). It should also be
 run before using `<Render>` in a template. It does not currently handle dropzones but will be updated
-in future version to handle slots.
+in a future version to handle slots.
 
 `migrate` first runs Puck's `migrate` function to handle Puck migrations and then applies
 the migrations specified in `components/migrations/migrationRegistry.ts`.
