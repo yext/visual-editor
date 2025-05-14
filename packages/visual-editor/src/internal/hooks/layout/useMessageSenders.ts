@@ -11,6 +11,11 @@ export const useLayoutMessageSenders = () => {
     TARGET_ORIGINS
   );
 
+  const { sendToParent: sendForApproval } = useSendMessageToParent(
+    "sendForApproval",
+    TARGET_ORIGINS
+  );
+
   const { sendToParent: publishLayout } = useSendMessageToParent(
     "publishLayout",
     TARGET_ORIGINS
@@ -19,6 +24,7 @@ export const useLayoutMessageSenders = () => {
   return {
     saveLayoutSaveState,
     deleteLayoutSaveState,
+    sendForApproval,
     publishLayout,
   };
 };

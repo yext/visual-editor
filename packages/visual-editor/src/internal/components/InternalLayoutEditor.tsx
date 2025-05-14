@@ -8,6 +8,7 @@ import {
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
+import { ApprovalModal } from "./modals/ApprovalModal.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -27,6 +28,7 @@ type InternalLayoutEditorProps = {
   layoutSaveState: LayoutSaveState | undefined;
   saveLayoutSaveState: (data: any) => void;
   publishLayout: (data: any) => void;
+  sendForApproval: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
@@ -42,6 +44,7 @@ export const InternalLayoutEditor = ({
   layoutSaveState,
   saveLayoutSaveState,
   publishLayout,
+  sendForApproval,
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
   localDev,
@@ -50,6 +53,9 @@ export const InternalLayoutEditor = ({
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
+  const [approvalModalOpen, setApprovalModalOpen] =
+    React.useState<boolean>(true);
+  const [approvalModalData, setApprovalModalData] = React.useState<Data>();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -112,6 +118,22 @@ export const InternalLayoutEditor = ({
     });
   };
 
+  const handleSendForApproval = async ({
+    data,
+    comment,
+  }: {
+    data: Data;
+    comment: string;
+  }) => {
+    setApprovalModalOpen(false);
+    sendForApproval({
+      payload: {
+        layoutData: JSON.stringify(data),
+        comment: comment,
+      },
+    });
+  };
+
   const change = async () => {
     if (isLoading) {
       return;
@@ -158,25 +180,45 @@ export const InternalLayoutEditor = ({
   }, [puckConfig]);
 
   return (
-    <EntityTooltipsProvider>
-      <Puck
-        config={puckConfigWithRootFields}
-        data={{}} // we use puckInitialHistory instead
-        initialHistory={puckInitialHistory}
-        onChange={change}
-        overrides={{
-          header: () => (
-            <LayoutHeader
-              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
-              onClearLocalChanges={handleClearLocalChanges}
-              onHistoryChange={handleHistoryChange}
-              onPublishLayout={handlePublishLayout}
-              isDevMode={templateMetadata.isDevMode}
-            />
-          ),
+    <>
+      <ApprovalModal
+        open={approvalModalOpen}
+        onOpenChange={setApprovalModalOpen}
+        onSend={async (comment: string) => {
+          if (!approvalModalData) {
+            throw new Error("Cannot submit undefined data for approval");
+          }
+          await handleSendForApproval({
+            data: approvalModalData,
+            comment: comment,
+          });
         }}
       />
-    </EntityTooltipsProvider>
+      <EntityTooltipsProvider>
+        <Puck
+          config={puckConfigWithRootFields}
+          data={{}} // we use puckInitialHistory instead
+          initialHistory={puckInitialHistory}
+          onChange={change}
+          overrides={{
+            header: () => (
+              <LayoutHeader
+                templateMetadata={templateMetadata}
+                clearLocalChangesModalOpen={clearLocalChangesModalOpen}
+                setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
+                onClearLocalChanges={handleClearLocalChanges}
+                onHistoryChange={handleHistoryChange}
+                onPublishLayout={handlePublishLayout}
+                openApprovalModal={(data: Data) => {
+                  setApprovalModalOpen(true);
+                  setApprovalModalData(data);
+                }}
+                isDevMode={templateMetadata.isDevMode}
+              />
+            ),
+          }}
+        />
+      </EntityTooltipsProvider>
+    </>
   );
 };

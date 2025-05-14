@@ -36,8 +36,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     localDev,
   } = props;
 
-  const { saveLayoutSaveState, publishLayout, deleteLayoutSaveState } =
-    useLayoutMessageSenders();
+  const {
+    saveLayoutSaveState,
+    publishLayout,
+    sendForApproval,
+    deleteLayoutSaveState,
+  } = useLayoutMessageSenders();
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
@@ -246,6 +250,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       layoutSaveState={layoutSaveState}
       saveLayoutSaveState={saveLayoutSaveState}
       publishLayout={publishLayout}
+      sendForApproval={sendForApproval}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}

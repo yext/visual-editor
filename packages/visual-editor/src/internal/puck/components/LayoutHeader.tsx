@@ -8,11 +8,14 @@ import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import "../ui/puck.css";
 import "../../../editor/index.css";
+import { TemplateMetadata } from "../../types/templateMetadata.ts";
 
 type LayoutHeaderProps = {
+  templateMetadata: TemplateMetadata;
   onClearLocalChanges: () => void;
   onHistoryChange: (histories: History[], index: number) => void;
   onPublishLayout: (data: Data) => Promise<void>;
+  openApprovalModal: (data: Data) => void;
   isDevMode: boolean;
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
@@ -20,9 +23,11 @@ type LayoutHeaderProps = {
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
   const {
+    templateMetadata,
     onClearLocalChanges,
     onHistoryChange,
     onPublishLayout,
+    openApprovalModal,
     isDevMode,
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
@@ -86,12 +91,16 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             variant="secondary"
             disabled={histories.length === 1}
             onClick={async () => {
-              await onPublishLayout(appState.data);
-              onClearLocalChanges();
-              setHistories([{ id: "root", state: { data: appState.data } }]);
+              if (templateMetadata.devOverride) {
+                openApprovalModal(appState.data);
+              } else {
+                await onPublishLayout(appState.data);
+                onClearLocalChanges();
+                setHistories([{ id: "root", state: { data: appState.data } }]);
+              }
             }}
           >
-            Publish
+            {templateMetadata.devOverride ? "Send for Approval" : "Publish"}
           </Button>
         )}
       </div>
