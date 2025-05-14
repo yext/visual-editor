@@ -44,7 +44,7 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       testimonials: YextField("Testimonial Section", {
         type: "entityField",
         filter: {
-          types: [ComponentFields.TestimonialsSection.type],
+          types: [ComponentFields.TestimonialSection.type],
         },
       }),
     },

@@ -18,7 +18,7 @@ type TemplateManifestEntry = {
 
 type VirtualFile = {
   filepath: string;
-  content: string;
+  content: any;
   templateManifestEntry?: TemplateManifestEntry;
 };
 
@@ -31,7 +31,7 @@ type VirtualFile = {
 const virtualFiles: VirtualFile[] = [
   {
     filepath: "src/templates/main.tsx",
-    content: mainTemplate as string,
+    content: mainTemplate,
     templateManifestEntry: {
       name: "main",
       description:
@@ -42,18 +42,18 @@ const virtualFiles: VirtualFile[] = [
       componentFields: [
         ComponentFields.HeroSection,
         ComponentFields.PromoSection,
-        ComponentFields.ProductsSection,
-        ComponentFields.EventsSection,
+        ComponentFields.ProductSection,
+        ComponentFields.EventSection,
         ComponentFields.FAQSection,
-        ComponentFields.TestimonialsSection,
-        ComponentFields.InsightsSection,
+        ComponentFields.TestimonialSection,
+        ComponentFields.InsightSection,
         ComponentFields.TeamSection,
       ],
     },
   },
   {
     filepath: "src/templates/directory.tsx",
-    content: directoryTemplate as string,
+    content: directoryTemplate,
     templateManifestEntry: {
       name: "directory",
       description:
@@ -67,7 +67,7 @@ const virtualFiles: VirtualFile[] = [
   },
   {
     filepath: "src/templates/edit.tsx",
-    content: editTemplate as string,
+    content: editTemplate,
   },
 ];
 

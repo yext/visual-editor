@@ -45,7 +45,7 @@ const productSectionFields: Fields<ProductSectionProps> = {
       products: YextField("Products", {
         type: "entityField",
         filter: {
-          types: [ComponentFields.ProductsSection.type],
+          types: [ComponentFields.ProductSection.type],
         },
       }),
     },

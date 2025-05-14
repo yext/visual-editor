@@ -46,7 +46,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       insights: YextField("Insight Section", {
         type: "entityField",
         filter: {
-          types: [ComponentFields.InsightsSection.type],
+          types: [ComponentFields.InsightSection.type],
         },
       }),
     },
