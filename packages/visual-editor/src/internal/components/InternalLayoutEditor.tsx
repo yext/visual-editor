@@ -186,6 +186,7 @@ export const InternalLayoutEditor = ({
               onPublishLayout={handlePublishLayout}
               onSendForApproval={handleSendForApproval}
               isDevMode={templateMetadata.isDevMode}
+              localDev={localDev}
             />
           ),
         }}
