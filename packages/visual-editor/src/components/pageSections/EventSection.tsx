@@ -105,7 +105,7 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
-          <Heading level={6} semanticLevelOverride="h3">
+          <Heading level={6} semanticLevelOverride={3}>
             {event.title}
           </Heading>
         )}
