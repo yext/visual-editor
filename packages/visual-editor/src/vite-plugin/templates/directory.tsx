@@ -18,6 +18,8 @@ import {
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
+  migrate,
+  migrationRegistry,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -96,7 +98,11 @@ const Directory: Template<TemplateRenderProps> = (props) => {
       <VisualEditorProvider templateProps={props}>
         <Render
           config={directoryConfig}
-          data={JSON.parse(document.__.layout)}
+          data={migrate(
+            JSON.parse(document.__.layout),
+            migrationRegistry,
+            directoryConfig
+          )}
         />
       </VisualEditorProvider>
     </AnalyticsProvider>

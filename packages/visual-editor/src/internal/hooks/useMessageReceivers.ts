@@ -8,6 +8,8 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@measured/puck";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 
 const devLogger = new DevLogger();
 
@@ -42,11 +44,18 @@ export const useCommonMessageReceivers = (
       setTemplateMetadata(devMetadata);
       const puckConfig = componentRegistry.get(devMetadata.templateId);
       setPuckConfig(puckConfig);
-      setLayoutData({
-        root: {},
-        content: [],
-        zones: {},
-      });
+      // applies current migration version to empty data
+      setLayoutData(
+        migrate(
+          {
+            root: {},
+            content: [],
+            zones: {},
+          },
+          migrationRegistry,
+          puckConfig
+        )
+      );
       setLayoutDataFetched(true);
       setThemeData({});
       setThemeDataFetched(true);
@@ -87,7 +96,8 @@ export const useCommonMessageReceivers = (
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
     const data = JSON.parse(payload.layoutData) as Data;
     devLogger.logData("LAYOUT_DATA", data);
-    setLayoutData(data);
+    const migratedData = migrate(data, migrationRegistry, puckConfig);
+    setLayoutData(migratedData);
     setLayoutDataFetched(true);
     send({
       status: "success",

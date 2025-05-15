@@ -173,6 +173,7 @@ export const InternalLayoutEditor = ({
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
               isDevMode={templateMetadata.isDevMode}
+              localDev={localDev}
             />
           ),
         }}
