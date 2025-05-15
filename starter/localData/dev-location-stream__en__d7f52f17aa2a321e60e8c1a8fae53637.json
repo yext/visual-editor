@@ -1325,6 +1325,26 @@
     }
   ],
   "c_exampleOption": "Option 1",
+  "c_exampleOptionExpanded": [
+    {
+      "displayName": "Option 1",
+      "numericValue": 504227,
+      "selected": false,
+      "value": "OPTION_1"
+    },
+    {
+      "displayName": "Option 2",
+      "numericValue": 504228,
+      "selected": true,
+      "value": "OPTION_2"
+    },
+    {
+      "displayName": "Option 3",
+      "numericValue": 504229,
+      "selected": false,
+      "value": "OPTION_3"
+    }
+  ],
   "c_exampleMultiOption": ["Option 2", "Option 3"],
   "hours": {
     "friday": {

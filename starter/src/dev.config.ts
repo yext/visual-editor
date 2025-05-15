@@ -1272,6 +1272,35 @@ export const devTemplateStream = {
           },
         },
         {
+          name: "c_exampleOptionExpanded",
+          definition: {
+            name: "c_exampleOptionExpanded",
+            registryId: "location.custom.1000152098.exampleoption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            options: [
+              {
+                numericValue: 504227,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504228,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504229,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
+              },
+            ],
+          },
+          optionFormat: "OPTION_FORMAT_EXPANDED",
+        },
+        {
           name: "c_exampleMultiOption",
           definition: {
             name: "c_exampleMultiOption",

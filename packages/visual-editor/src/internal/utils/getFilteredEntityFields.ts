@@ -43,6 +43,7 @@ export type EntityFieldTypes =
   | "type.coordinate"
   | "type.cta"
   | "type.boolean"
+  | "type.option"
   | "type.faq_section"
   | "type.testimonials_section"
   | "type.products_section"
@@ -116,13 +117,11 @@ const walkSubfields = (
 };
 
 const getTypeFromSchemaField = (schemaField: YextSchemaField) => {
-  const type =
+  return (
     schemaField.definition.typeName ||
     schemaField.definition.typeRegistryId ||
-    Object.entries(schemaField.definition.type)[0][1];
-
-  // type.option is a string from an enum
-  return type === "type.option" ? "type.string" : type;
+    Object.entries(schemaField.definition.type)[0][1]
+  );
 };
 
 function appendToMapList<K, V>(
@@ -147,6 +146,14 @@ const getEntityTypeToFieldNames = (
       const typeName = getTypeFromSchemaField(fieldToSchema.schemaField);
       if (typeName) {
         prev = appendToMapList(prev, typeName, fieldToSchema.name);
+
+        // Also list type.option as type.string if not expanded
+        if (
+          typeName === "type.option" &&
+          fieldToSchema.schemaField.optionFormat !== "OPTION_FORMAT_EXPANDED"
+        ) {
+          prev = appendToMapList(prev, "type.string", fieldToSchema.name);
+        }
       }
     }
 
