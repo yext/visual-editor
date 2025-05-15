@@ -8,7 +8,6 @@ import {
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
-import { ApprovalModal } from "./modals/ApprovalModal.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -53,9 +52,6 @@ export const InternalLayoutEditor = ({
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
-  const [approvalModalOpen, setApprovalModalOpen] =
-    React.useState<boolean>(false);
-  const [approvalModalData, setApprovalModalData] = React.useState<Data>();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -118,24 +114,13 @@ export const InternalLayoutEditor = ({
     });
   };
 
-  const handleSendForApproval = async ({
-    data,
-    comment,
-  }: {
-    data: Data | undefined;
-    comment: string;
-  }) => {
-    setApprovalModalOpen(false);
-    if (data) {
-      sendForApproval({
-        payload: {
-          layoutData: JSON.stringify(data),
-          comment: comment,
-        },
-      });
-    } else {
-      console.error("Cannot submit undefined data for approval");
-    }
+  const handleSendForApproval = async (data: Data, comment: string) => {
+    sendForApproval({
+      payload: {
+        layoutData: JSON.stringify(data),
+        comment: comment,
+      },
+    });
   };
 
   const change = async () => {
@@ -184,42 +169,27 @@ export const InternalLayoutEditor = ({
   }, [puckConfig]);
 
   return (
-    <>
-      <ApprovalModal
-        open={approvalModalOpen}
-        onOpenChange={setApprovalModalOpen}
-        onSendLayoutForApproval={async (comment: string) => {
-          await handleSendForApproval({
-            data: approvalModalData,
-            comment: comment,
-          });
+    <EntityTooltipsProvider>
+      <Puck
+        config={puckConfigWithRootFields}
+        data={{}} // we use puckInitialHistory instead
+        initialHistory={puckInitialHistory}
+        onChange={change}
+        overrides={{
+          header: () => (
+            <LayoutHeader
+              templateMetadata={templateMetadata}
+              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
+              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
+              onClearLocalChanges={handleClearLocalChanges}
+              onHistoryChange={handleHistoryChange}
+              onPublishLayout={handlePublishLayout}
+              onSendForApproval={handleSendForApproval}
+              isDevMode={templateMetadata.isDevMode}
+            />
+          ),
         }}
       />
-      <EntityTooltipsProvider>
-        <Puck
-          config={puckConfigWithRootFields}
-          data={{}} // we use puckInitialHistory instead
-          initialHistory={puckInitialHistory}
-          onChange={change}
-          overrides={{
-            header: () => (
-              <LayoutHeader
-                templateMetadata={templateMetadata}
-                clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-                setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
-                onClearLocalChanges={handleClearLocalChanges}
-                onHistoryChange={handleHistoryChange}
-                onPublishLayout={handlePublishLayout}
-                openApprovalModal={(data: Data) => {
-                  setApprovalModalOpen(true);
-                  setApprovalModalData(data);
-                }}
-                isDevMode={templateMetadata.isDevMode}
-              />
-            ),
-          }}
-        />
-      </EntityTooltipsProvider>
-    </>
+    </EntityTooltipsProvider>
   );
 };

@@ -6,6 +6,7 @@ import { Button } from "../ui/button.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
+import { ApprovalModal } from "../../components/modals/ApprovalModal.tsx";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
@@ -15,7 +16,7 @@ type LayoutHeaderProps = {
   onClearLocalChanges: () => void;
   onHistoryChange: (histories: History[], index: number) => void;
   onPublishLayout: (data: Data) => Promise<void>;
-  openApprovalModal: (data: Data) => void;
+  onSendForApproval: (data: Data, comment: string) => void;
   isDevMode: boolean;
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
@@ -27,11 +28,14 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onClearLocalChanges,
     onHistoryChange,
     onPublishLayout,
-    openApprovalModal,
+    onSendForApproval,
     isDevMode,
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
   } = props;
+
+  const [approvalModalOpen, setApprovalModalOpen] =
+    React.useState<boolean>(false);
 
   const {
     appState,
@@ -56,54 +60,70 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   }, [index, histories, onHistoryChange]);
 
   return (
-    <header className="puck-header">
-      <div className="header-left">
-        <UIButtonsToggle showLeft={true} />
-        <EntityFieldsToggle />
-      </div>
-      <div className="header-center"></div>
-      <div className="actions">
-        <Button variant="ghost" size="icon" disabled={!hasPast} onClick={back}>
-          <RotateCcw className="sm-icon" />
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          disabled={!hasFuture}
-          onClick={forward}
-        >
-          <RotateCw className="sm-icon" />
-        </Button>
-        <ClearLocalChangesButton
-          modalOpen={clearLocalChangesModalOpen}
-          setModalOpen={setClearLocalChangesModalOpen}
-          disabled={histories.length === 1}
-          onClearLocalChanges={() => {
-            onClearLocalChanges();
-            setHistories([
-              { id: "root", state: { data: histories[0].state.data } },
-            ]);
-          }}
-        />
-        {!isDevMode && (
+    <>
+      <ApprovalModal
+        open={approvalModalOpen}
+        onOpenChange={setApprovalModalOpen}
+        onSendLayoutForApproval={async (comment: string) => {
+          await onSendForApproval(appState.data, comment);
+        }}
+      />
+      <header className="puck-header">
+        <div className="header-left">
+          <UIButtonsToggle showLeft={true} />
+          <EntityFieldsToggle />
+        </div>
+        <div className="header-center"></div>
+        <div className="actions">
           <Button
-            variant="secondary"
-            disabled={histories.length === 1}
-            onClick={async () => {
-              if (templateMetadata.assignment) {
-                openApprovalModal(appState.data);
-              } else {
-                await onPublishLayout(appState.data);
-                onClearLocalChanges();
-                setHistories([{ id: "root", state: { data: appState.data } }]);
-              }
-            }}
+            variant="ghost"
+            size="icon"
+            disabled={!hasPast}
+            onClick={back}
           >
-            {templateMetadata.devOverride ? "Send for Approval" : "Publish"}
+            <RotateCcw className="sm-icon" />
           </Button>
-        )}
-      </div>
-    </header>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            disabled={!hasFuture}
+            onClick={forward}
+          >
+            <RotateCw className="sm-icon" />
+          </Button>
+          <ClearLocalChangesButton
+            modalOpen={clearLocalChangesModalOpen}
+            setModalOpen={setClearLocalChangesModalOpen}
+            disabled={histories.length === 1}
+            onClearLocalChanges={() => {
+              onClearLocalChanges();
+              setHistories([
+                { id: "root", state: { data: histories[0].state.data } },
+              ]);
+            }}
+          />
+          {!isDevMode && (
+            <Button
+              variant="secondary"
+              disabled={histories.length === 1}
+              onClick={async () => {
+                if (templateMetadata.assignment) {
+                  setApprovalModalOpen(true);
+                } else {
+                  await onPublishLayout(appState.data);
+                  onClearLocalChanges();
+                  setHistories([
+                    { id: "root", state: { data: appState.data } },
+                  ]);
+                }
+              }}
+            >
+              {templateMetadata.devOverride ? "Send for Approval" : "Publish"}
+            </Button>
+          )}
+        </div>
+      </header>
+    </>
   );
 };
