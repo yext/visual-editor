@@ -42,6 +42,7 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
+  | "type.boolean"
   | "type.faq_section"
   | "type.testimonials_section"
   | "type.products_section"
@@ -115,11 +116,13 @@ const walkSubfields = (
 };
 
 const getTypeFromSchemaField = (schemaField: YextSchemaField) => {
-  return (
+  const type =
     schemaField.definition.typeName ||
     schemaField.definition.typeRegistryId ||
-    Object.entries(schemaField.definition.type)[0][1]
-  );
+    Object.entries(schemaField.definition.type)[0][1];
+
+  // type.option is a string from an enum
+  return type === "type.option" ? "type.string" : type;
 };
 
 function appendToMapList<K, V>(

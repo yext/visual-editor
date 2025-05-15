@@ -1346,6 +1346,8 @@
       "width": 600
     }
   },
+  "c_exampleOption": "Option 1",
+  "c_exampleMultiOption": ["Option 2", "Option 3"],
   "hours": {
     "friday": {
       "openIntervals": [
