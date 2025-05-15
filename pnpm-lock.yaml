@@ -42,7 +42,7 @@ importers:
         version: 3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7))
       eslint-plugin-import:
         specifier: ^2.31.0
-        version: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@1.21.7))
+        version: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7)))(eslint@9.25.1(jiti@1.21.7))
       eslint-plugin-react:
         specifier: ^7.37.2
         version: 7.37.5(eslint@9.25.1(jiti@1.21.7))
@@ -109,9 +109,6 @@ importers:
       "@radix-ui/react-dialog":
         specifier: ^1.1.13
         version: 1.1.13(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      "@radix-ui/react-icons":
-        specifier: ^1.3.2
-        version: 1.3.2(react@18.3.1)
       "@radix-ui/react-label":
         specifier: ^2.1.0
         version: 2.1.4(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -138,7 +135,7 @@ importers:
         version: 5.74.7(react@18.3.1)
       "@yext/pages-components":
         specifier: ^1.1.4
-        version: 1.1.5(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@types/react@18.3.20)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.26)
+        version: 1.1.5(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -265,7 +262,7 @@ importers:
         version: 4.10.3
       eslint-plugin-import:
         specifier: ^2.29.1
-        version: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@1.21.7))
+        version: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7)))(eslint@9.25.1(jiti@1.21.7))
       execa:
         specifier: ^8.0.1
         version: 8.0.1
@@ -2698,14 +2695,6 @@ packages:
         optional: true
       "@types/react-dom":
         optional: true
-
-  "@radix-ui/react-icons@1.3.2":
-    resolution:
-      {
-        integrity: sha512-fyQIhGDhzfc9pK2kH6Pl9c4BDJGfMkPqkyIgYDthyNYoNg3wVhoJMMh19WS4Up/1KMPFVpNsT2q3WmXn2N1m6g==,
-      }
-    peerDependencies:
-      react: ^16.x || ^17.x || ^18.x || ^19.0.0 || ^19.0.0-rc
 
   "@radix-ui/react-id@1.1.1":
     resolution:
@@ -11963,19 +11952,6 @@ snapshots:
       - "@lexical/clipboard"
       - "@lexical/selection"
 
-  "@lexical/markdown@0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(lexical@0.12.6)":
-    dependencies:
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/text": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      lexical: 0.12.6
-    transitivePeerDependencies:
-      - "@lexical/clipboard"
-      - "@lexical/selection"
-
   "@lexical/offset@0.12.6(lexical@0.12.6)":
     dependencies:
       lexical: 0.12.6
@@ -11985,13 +11961,6 @@ snapshots:
       lexical: 0.12.6
 
   "@lexical/plain-text@0.12.6(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@lexical/utils@0.12.6(lexical@0.12.6))(lexical@0.12.6)":
-    dependencies:
-      "@lexical/clipboard": 0.12.6(lexical@0.12.6)
-      "@lexical/selection": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      lexical: 0.12.6
-
-  "@lexical/plain-text@0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)":
     dependencies:
       "@lexical/clipboard": 0.12.6(lexical@0.12.6)
       "@lexical/selection": 0.12.6(lexical@0.12.6)
@@ -12024,40 +11993,7 @@ snapshots:
     transitivePeerDependencies:
       - yjs
 
-  "@lexical/react@0.12.6(lexical@0.12.6)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.26)":
-    dependencies:
-      "@lexical/clipboard": 0.12.6(lexical@0.12.6)
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/dragon": 0.12.6(lexical@0.12.6)
-      "@lexical/hashtag": 0.12.6(lexical@0.12.6)
-      "@lexical/history": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/mark": 0.12.6(lexical@0.12.6)
-      "@lexical/markdown": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(lexical@0.12.6)
-      "@lexical/overflow": 0.12.6(lexical@0.12.6)
-      "@lexical/plain-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/selection": 0.12.6(lexical@0.12.6)
-      "@lexical/table": 0.12.6(lexical@0.12.6)
-      "@lexical/text": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      "@lexical/yjs": 0.12.6(lexical@0.12.6)(yjs@13.6.26)
-      lexical: 0.12.6
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-error-boundary: 3.1.4(react@18.3.1)
-    transitivePeerDependencies:
-      - yjs
-
   "@lexical/rich-text@0.12.6(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@lexical/utils@0.12.6(lexical@0.12.6))(lexical@0.12.6)":
-    dependencies:
-      "@lexical/clipboard": 0.12.6(lexical@0.12.6)
-      "@lexical/selection": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      lexical: 0.12.6
-
-  "@lexical/rich-text@0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)":
     dependencies:
       "@lexical/clipboard": 0.12.6(lexical@0.12.6)
       "@lexical/selection": 0.12.6(lexical@0.12.6)
@@ -12472,10 +12408,6 @@ snapshots:
     optionalDependencies:
       "@types/react": 18.3.20
       "@types/react-dom": 18.3.6(@types/react@18.3.20)
-
-  "@radix-ui/react-icons@1.3.2(react@18.3.1)":
-    dependencies:
-      react: 18.3.1
 
   "@radix-ui/react-id@1.1.1(@types/react@18.3.20)(react@18.3.1)":
     dependencies:
@@ -13635,44 +13567,6 @@ snapshots:
       - supports-color
       - yjs
 
-  "@yext/pages-components@1.1.5(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@types/react@18.3.20)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.26)":
-    dependencies:
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/hashtag": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/react": 0.12.6(lexical@0.12.6)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.26)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/table": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      "@yext/analytics": 1.1.0
-      browser-or-node: 2.1.1
-      classnames: 2.5.1
-      cross-fetch: 4.1.0
-      lexical: 0.12.6
-      mdast-util-from-markdown: 1.2.0
-      mdast-util-to-hast: 12.3.0
-      micromark-util-chunked: 1.0.0
-      micromark-util-classify-character: 1.0.0
-      micromark-util-combine-extensions: 1.0.0
-      micromark-util-resolve-all: 1.0.0
-      micromark-util-symbol: 1.0.1
-      micromark-util-types: 1.0.2
-      picocolors: 1.1.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-markdown: 8.0.7(@types/react@18.3.20)(react@18.3.1)
-      remark-rehype: 10.1.0
-      unified: 11.0.4
-      uvu: 0.5.6
-    transitivePeerDependencies:
-      - "@lexical/clipboard"
-      - "@lexical/selection"
-      - "@types/react"
-      - encoding
-      - supports-color
-      - yjs
-
   "@yext/pages@1.2.0-beta.4(@algolia/client-search@5.23.4)(@types/node@20.17.32)(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(vite@5.4.18(@types/node@20.17.32))":
     dependencies:
       ansi-to-html: 0.7.2
@@ -14297,12 +14191,6 @@ snapshots:
 
   create-require@1.1.1: {}
 
-  cross-fetch@4.1.0:
-    dependencies:
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-
   cross-fetch@4.1.0(encoding@0.1.13):
     dependencies:
       node-fetch: 2.7.0(encoding@0.1.13)
@@ -14776,11 +14664,11 @@ snapshots:
       tinyglobby: 0.2.13
       unrs-resolver: 1.7.2
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@1.21.7))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7)))(eslint@9.25.1(jiti@1.21.7))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@1.21.7)):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7)))(eslint@9.25.1(jiti@1.21.7)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -14791,7 +14679,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@1.21.7)):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7)))(eslint@9.25.1(jiti@1.21.7)):
     dependencies:
       "@rtsao/scc": 1.1.0
       array-includes: 3.1.8
@@ -14802,7 +14690,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.25.1(jiti@1.21.7)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@1.21.7))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.25.1(jiti@1.21.7)))(eslint@9.25.1(jiti@1.21.7))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -16184,10 +16072,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-
-  node-fetch@2.7.0:
-    dependencies:
-      whatwg-url: 5.0.0
 
   node-fetch@2.7.0(encoding@0.1.13):
     dependencies:

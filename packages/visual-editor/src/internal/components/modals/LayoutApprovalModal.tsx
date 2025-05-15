@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { X } from "lucide-react";
 import React from "react";
 import { Button } from "../../puck/ui/button.tsx";
 
@@ -31,7 +31,7 @@ export const LayoutApprovalModal = (props: ApprovalModalProps) => {
                 aria-label="Close"
                 className="ve-text-gray-400 ve-transition-colors hover:ve-text-gray-600"
               >
-                <Cross2Icon />
+                <X />
               </button>
             </Dialog.Close>
           </div>
