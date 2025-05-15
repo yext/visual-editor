@@ -163,6 +163,7 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
+  const entityType = getEntityType();
   const locale = getDocumentLocale();
   const { mapStyle } = props;
   const resultCount = useSearchState(
@@ -294,7 +295,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         <div className="w-full h-full md:w-2/5 lg:w-1/3 p-4 flex flex-col">
           <FilterSearch
             searchFields={[
-              { fieldApiName: DEFAULT_FIELD, entityType: DEFAULT_ENTITY_TYPE },
+              { fieldApiName: DEFAULT_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={TRANSLATIONS[locale].searchHere}
@@ -478,6 +479,17 @@ const getPath = (location: Location, locale: string) => {
     : `${localePath}${location.id}`;
 
   return normalizeSlug(path);
+};
+
+const getEntityType = () => {
+  const entityDocument: any = useDocument();
+  try {
+    const entityType = JSON.parse(entityDocument._pageset).typeConfig
+      .locatorConfig.entityType;
+    return entityType || DEFAULT_ENTITY_TYPE;
+  } catch {
+    return DEFAULT_ENTITY_TYPE;
+  }
 };
 
 const getDocumentLocale = () => {
