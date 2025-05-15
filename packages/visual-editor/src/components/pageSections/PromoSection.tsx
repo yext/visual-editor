@@ -13,12 +13,12 @@ import {
   VisibilityWrapper,
   CTAProps,
   PromoSectionType,
-  Body,
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
+  EntityField,
+  MaybeRTF,
 } from "@yext/visual-editor";
-import { LexicalRichText } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -76,26 +76,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoDescription = ({ description }: PromoSectionType) => {
-  if (!description) {
-    return null;
-  }
-  if (typeof description === "string") {
-    return <Body>{description}</Body>;
-  } else if (
-    typeof description === "object" &&
-    typeof description.json === "string"
-  ) {
-    return (
-      <Body>
-        <LexicalRichText
-          serializedAST={JSON.stringify(description.json) ?? ""}
-        />
-      </Body>
-    );
-  }
-};
-
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
@@ -104,29 +84,56 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     <PageSection
       background={styles.backgroundColor}
       className={themeManagerCn(
-        "flex flex-col md:flex-row overflow-hidden md:gap-8",
+        "flex flex-col md:flex-row md:gap-8",
         styles.orientation === "right" && "md:flex-row-reverse"
       )}
     >
       {resolvedPromo?.image && (
-        <Image
-          image={resolvedPromo.image}
-          layout={"auto"}
-          aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
-        />
+        <EntityField
+          displayName="Image"
+          fieldId={data.promo.field}
+          constantValueEnabled={data.promo.constantValueOverride.image}
+        >
+          <Image
+            image={resolvedPromo.image}
+            layout={"auto"}
+            aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+          />
+        </EntityField>
       )}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
-          <Heading level={3}>{resolvedPromo?.title}</Heading>
+          <EntityField
+            displayName="Title"
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.title}
+          >
+            <Heading level={3}>{resolvedPromo?.title}</Heading>
+          </EntityField>
         )}
-        <PromoDescription description={resolvedPromo?.description} />
+        <EntityField
+          displayName="Description"
+          fieldId={data.promo.field}
+          constantValueEnabled={
+            !resolvedPromo?.description ||
+            data.promo.constantValueOverride.description
+          }
+        >
+          <MaybeRTF data={resolvedPromo?.description} />
+        </EntityField>
         {resolvedPromo?.cta?.label && (
-          <CTA
-            variant={styles?.ctaVariant}
-            label={resolvedPromo?.cta.label}
-            link={resolvedPromo?.cta.link}
-            linkType={resolvedPromo?.cta.linkType}
-          />
+          <EntityField
+            displayName="Call To Action"
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.cta}
+          >
+            <CTA
+              variant={styles?.ctaVariant}
+              label={resolvedPromo?.cta.label}
+              link={resolvedPromo?.cta.link}
+              linkType={resolvedPromo?.cta.linkType}
+            />
+          </EntityField>
         )}
       </div>
     </PageSection>

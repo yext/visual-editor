@@ -140,42 +140,50 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   }),
 };
 
-type PhotoGallerySectionComponentProps = {
-  backgroundColor: PhotoGallerySectionProps["styles"]["backgroundColor"];
-  sectionHeading: {
-    text?: string;
-    level: HeadingLevel;
-    field: PhotoGallerySectionProps["sectionHeading"]["text"];
-  };
-  images?: ImageProps[];
-};
-
 const PhotoGallerySectionComponent = ({
-  backgroundColor,
-  sectionHeading,
-  images,
-}: PhotoGallerySectionComponentProps) => {
+  styles,
+  sectionHeading: sectionHeadingField,
+  images: imageField,
+}: PhotoGallerySectionProps) => {
+  const document = useDocument();
+  const sectionHeading = resolveYextEntityField(
+    document,
+    sectionHeadingField.text
+  );
+
+  const resolvedImages = resolveYextEntityField(document, imageField.images);
+
+  const filteredImages: ImageProps[] = (resolvedImages || [])
+    .filter((image): image is ImageType | ComplexImageType => !!image)
+    .map((image) => ({
+      image,
+      layout: imageField.imageStyle.layout,
+      aspectRatio: imageField.imageStyle.aspectRatio,
+      width: imageField.imageStyle.width,
+      height: imageField.imageStyle.height,
+    }));
+
   return (
     <PageSection
       aria-label="Photo Gallery Section"
-      background={backgroundColor}
+      background={styles.backgroundColor}
       className="flex flex-col gap-8 justify-center text-center"
     >
-      {sectionHeading.text && (
+      {sectionHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeading.field.field}
-          constantValueEnabled={sectionHeading.field.constantValueEnabled}
+          fieldId={sectionHeadingField.text.field}
+          constantValueEnabled={sectionHeadingField.text.constantValueEnabled}
         >
-          <Heading level={sectionHeading.level}>{sectionHeading.text}</Heading>
+          <Heading level={sectionHeadingField.level}>{sectionHeading}</Heading>
         </EntityField>
       )}
-      {images && images.length > 0 && (
+      {filteredImages && filteredImages.length > 0 && (
         <CarouselProvider
           className="flex flex-col md:flex-row justify-center gap-8"
           naturalSlideWidth={100}
           naturalSlideHeight={100}
-          totalSlides={images.length}
+          totalSlides={filteredImages.length}
           isIntrinsicHeight={true}
         >
           <DynamicChildColors category="arrow">
@@ -184,21 +192,27 @@ const PhotoGallerySectionComponent = ({
             </ButtonBack>
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
-            <Slider>
-              {images.map((image, idx) => {
-                return (
-                  <Slide index={idx} key={idx}>
-                    <Image
-                      image={image.image}
-                      layout={image.layout}
-                      aspectRatio={image.aspectRatio}
-                      height={image.height}
-                      width={image.width}
-                    />
-                  </Slide>
-                );
-              })}
-            </Slider>
+            <EntityField
+              displayName="Images"
+              fieldId={imageField.images.field}
+              constantValueEnabled={imageField.images.constantValueEnabled}
+            >
+              <Slider>
+                {filteredImages.map((image, idx) => {
+                  return (
+                    <Slide index={idx} key={idx}>
+                      <Image
+                        image={image.image}
+                        layout={image.layout}
+                        aspectRatio={image.aspectRatio}
+                        height={image.height}
+                        width={image.width}
+                      />
+                    </Slide>
+                  );
+                })}
+              </Slider>
+            </EntityField>
             <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
               <DynamicChildColors category="arrow">
                 <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
@@ -206,7 +220,7 @@ const PhotoGallerySectionComponent = ({
                 </ButtonBack>
               </DynamicChildColors>
               <div className="flex gap-2 justify-center flex-grow w-full">
-                {images.map((_, idx) => (
+                {filteredImages.map((_, idx) => (
                   <DynamicChildColors category="slide" key={idx}>
                     <Dot
                       slide={idx}
@@ -222,7 +236,7 @@ const PhotoGallerySectionComponent = ({
               </DynamicChildColors>
             </div>
             <div className="hidden md:flex justify-center">
-              {images.map((_, idx) => {
+              {filteredImages.map((_, idx) => {
                 const afterStyles =
                   "after:content-[' '] after:py-2 after:block";
                 return (
@@ -246,42 +260,6 @@ const PhotoGallerySectionComponent = ({
         </CarouselProvider>
       )}
     </PageSection>
-  );
-};
-
-const PhotoGallerySectionWrapper = ({
-  styles,
-  sectionHeading: sectionHeadingField,
-  images,
-}: PhotoGallerySectionProps) => {
-  const document = useDocument();
-  const sectionHeading = resolveYextEntityField(
-    document,
-    sectionHeadingField.text
-  );
-
-  const resolvedImages = resolveYextEntityField(document, images.images);
-
-  const filteredImages: ImageProps[] = (resolvedImages || [])
-    .filter((image): image is ImageType | ComplexImageType => !!image)
-    .map((image) => ({
-      image,
-      layout: images.imageStyle.layout,
-      aspectRatio: images.imageStyle.aspectRatio,
-      width: images.imageStyle.width,
-      height: images.imageStyle.height,
-    }));
-
-  return (
-    <PhotoGallerySectionComponent
-      backgroundColor={styles.backgroundColor}
-      images={filteredImages}
-      sectionHeading={{
-        text: sectionHeading,
-        level: sectionHeadingField.level,
-        field: sectionHeadingField.text,
-      }}
-    />
   );
 };
 
@@ -340,7 +318,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
     >
-      <PhotoGallerySectionWrapper {...props} />
+      <PhotoGallerySectionComponent {...props} />
     </VisibilityWrapper>
   ),
 };
