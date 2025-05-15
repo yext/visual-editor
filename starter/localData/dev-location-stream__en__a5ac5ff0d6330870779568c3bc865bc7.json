@@ -1324,6 +1324,21 @@
       }
     }
   ],
+  "c_exampleHero": {
+    "primaryCta": {
+      "label": "Get Directions",
+      "link": "#"
+    },
+    "secondaryCta": {
+      "label": "Order Online",
+      "link": "#"
+    },
+    "image": {
+      "height": 300,
+      "url": "http://a.mktgcdn.com/p-dev/ETWoS5bg4iVNVcSQA4yvzm7w1uMtr37ub1GG5oeNWKc/3834x2592.jpg",
+      "width": 600
+    }
+  },
   "hours": {
     "friday": {
       "openIntervals": [
