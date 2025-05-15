@@ -81,9 +81,11 @@ const productSectionFields: Fields<ProductSectionProps> = {
 const ProductCard = ({
   product,
   backgroundColor,
+  sectionHeadingLevel,
 }: {
   product: ProductStruct;
   backgroundColor?: BackgroundStyle;
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
     <Background
@@ -100,7 +102,15 @@ const ProductCard = ({
       <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col">
           {product.name && (
-            <Heading level={3} className="mb-2">
+            <Heading
+              level={3}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+              className="mb-2"
+            >
               {product.name}
             </Heading>
           )}
@@ -160,6 +170,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 key={index}
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
+                sectionHeadingLevel={styles.headingLevel}
               />
             ))}
           </div>

@@ -82,9 +82,11 @@ const insightSectionFields: Fields<InsightSectionProps> = {
 const InsightCard = ({
   insight,
   backgroundColor,
+  sectionHeadingLevel,
 }: {
   insight: InsightStruct;
   backgroundColor?: BackgroundStyle;
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
     <Background className="rounded-sm h-full" background={backgroundColor}>
@@ -108,7 +110,18 @@ const InsightCard = ({
               )}
             </div>
           )}
-          {insight.name && <Heading level={3}>{insight.name}</Heading>}
+          {insight.name && (
+            <Heading
+              level={3}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
+              {insight.name}
+            </Heading>
+          )}
           <MaybeRTF data={insight.description} />
         </div>
         {insight.cta && (
@@ -157,6 +170,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 key={index}
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
+                sectionHeadingLevel={styles.headingLevel}
               />
             ))}
           </div>
