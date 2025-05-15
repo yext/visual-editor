@@ -1,9 +1,10 @@
 import { configureAxe } from "jest-axe";
 import { defaultThemeConfig, applyTheme } from "@yext/visual-editor";
 // Applies the theme tailwind classes
-import "./WCAG.css";
+import "./componentTests.css";
 // Enabled expect().toHaveNoViolations()
 import "jest-axe/extend-expect";
+import { BrowserPage } from "@vitest/browser/context";
 
 // Applies the theme variables
 beforeEach(() => {
@@ -27,6 +28,19 @@ export const viewports = [
   { name: "mobile", width: 375, height: 667 },
   { name: "desktop", width: 1440, height: 900 },
 ];
+
+export type ComponentTest = {
+  name: string;
+  document: Record<string, any>;
+  version: number;
+  props: Record<string, any>;
+  tests: (page: BrowserPage) => Promise<void>;
+  viewport?: {
+    name: string;
+    width: number;
+    height: number;
+  };
+};
 
 // Shared Test Data
 export const testSite = {
@@ -125,4 +139,14 @@ export const testHours = {
       },
     ],
   },
+};
+
+export const testAddress = {
+  city: "Brooklyn",
+  countryCode: "US",
+  line1: "288 Grand St",
+  localizedCountryName: "United States",
+  localizedRegionName: "New York",
+  postalCode: "11211",
+  region: "NY",
 };
