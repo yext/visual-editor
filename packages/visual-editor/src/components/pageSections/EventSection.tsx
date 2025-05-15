@@ -83,9 +83,11 @@ const eventSectionFields: Fields<EventSectionProps> = {
 const EventCard = ({
   event,
   backgroundColor,
+  sectionHeadingLevel,
 }: {
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
     <Background
@@ -105,7 +107,14 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
-          <Heading level={6} semanticLevelOverride={3}>
+          <Heading
+            level={6}
+            semanticLevelOverride={
+              sectionHeadingLevel < 6
+                ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                : "span"
+            }
+          >
             {event.title}
           </Heading>
         )}
@@ -164,6 +173,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 key={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
+                sectionHeadingLevel={styles.headingLevel}
               />
             ))}
           </div>
