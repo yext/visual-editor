@@ -457,6 +457,14 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
+          name: "c_exampleOption",
+          fullObject: true,
+        },
+        {
+          name: "c_exampleMultiOption",
+          fullObject: true,
+        },
+        {
           name: "meta",
           children: {
             fields: [
@@ -1231,6 +1239,92 @@ export const devTemplateStream = {
                     },
                   ],
                 },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_exampleOption",
+          definition: {
+            name: "c_exampleOption",
+            registryId: "location.custom.1000152098.exampleoption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            options: [
+              {
+                numericValue: 504227,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504228,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504229,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
+              },
+            ],
+          },
+        },
+        {
+          name: "c_exampleOptionExpanded",
+          definition: {
+            name: "c_exampleOptionExpanded",
+            registryId: "location.custom.1000152098.exampleoption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            options: [
+              {
+                numericValue: 504227,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504228,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504229,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
+              },
+            ],
+          },
+          optionFormat: "OPTION_FORMAT_EXPANDED",
+        },
+        {
+          name: "c_exampleMultiOption",
+          definition: {
+            name: "c_exampleMultiOption",
+            registryId: "location.custom.1000152098.examplemultioption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            isList: true,
+            options: [
+              {
+                numericValue: 504230,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504231,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504232,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
               },
             ],
           },
