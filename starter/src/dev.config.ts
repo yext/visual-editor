@@ -453,6 +453,10 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
+          name: "c_exampleHero",
+          fullObject: true,
+        },
+        {
           name: "meta",
           children: {
             fields: [
@@ -1284,6 +1288,187 @@ export const devTemplateStream = {
                         name: "contributionDate",
                         typeRegistryId: "type.datetime",
                         type: { stringType: "STRING_TYPE_LOCAL_DATE_TIME" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_exampleHero",
+          definition: {
+            name: "c_exampleHero",
+            registryId: "location.custom.1000146856.hero.0",
+            typeRegistryId: "type.hero_section",
+            type: {
+              objectType: "OBJECT_TYPE_DEFAULT",
+            },
+          },
+          children: {
+            fields: [
+              {
+                name: "image",
+                definition: {
+                  name: "image",
+                  type: {
+                    objectType: "OBJECT_TYPE_IMAGE",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "url",
+                      definition: {
+                        name: "url",
+                        type: {
+                          stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "alternateText",
+                      definition: {
+                        name: "alternateText",
+                        type: {
+                          stringType: "STRING_TYPE_MULTILINE",
+                        },
+                      },
+                    },
+                    {
+                      name: "width",
+                      definition: {
+                        name: "width",
+                        type: {
+                          numberType: "NUMBER_TYPE_INT",
+                        },
+                      },
+                    },
+                    {
+                      name: "height",
+                      definition: {
+                        name: "height",
+                        type: {
+                          numberType: "NUMBER_TYPE_INT",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "description",
+                definition: {
+                  name: "description",
+                  type: {
+                    stringType: "STRING_TYPE_MULTILINE",
+                  },
+                },
+              },
+              {
+                name: "details",
+                definition: {
+                  name: "details",
+                  type: {
+                    stringType: "STRING_TYPE_MULTILINE",
+                  },
+                },
+              },
+              {
+                name: "clickthroughUrl",
+                definition: {
+                  name: "clickthroughUrl",
+                  type: {
+                    stringType: "STRING_TYPE_URL",
+                  },
+                },
+              },
+              {
+                name: "primaryCta",
+                definition: {
+                  name: "primaryCta",
+                  typeName: "c_cta",
+                  typeRegistryId: "type.c1000146856.cta",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "label",
+                      definition: {
+                        name: "label",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "link",
+                      definition: {
+                        name: "link",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "secondaryCta",
+                definition: {
+                  name: "secondaryCta",
+                  typeName: "c_cta",
+                  typeRegistryId: "type.c1000146856.cta",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "label",
+                      definition: {
+                        name: "label",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "link",
+                      definition: {
+                        name: "link",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
                       },
                     },
                   ],

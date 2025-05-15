@@ -13,13 +13,12 @@ import {
   VisibilityWrapper,
   CTAProps,
   PromoSectionType,
-  Body,
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
   EntityField,
+  MaybeRTF,
 } from "@yext/visual-editor";
-import { LexicalRichText } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -77,26 +76,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoDescription = ({ description }: PromoSectionType) => {
-  if (!description) {
-    return null;
-  }
-  if (typeof description === "string") {
-    return <Body>{description}</Body>;
-  } else if (
-    typeof description === "object" &&
-    typeof description.json === "string"
-  ) {
-    return (
-      <Body>
-        <LexicalRichText
-          serializedAST={JSON.stringify(description.json) ?? ""}
-        />
-      </Body>
-    );
-  }
-};
-
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
@@ -135,9 +114,12 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         <EntityField
           displayName="Description"
           fieldId={data.promo.field}
-          constantValueEnabled={data.promo.constantValueOverride.description}
+          constantValueEnabled={
+            !resolvedPromo?.description ||
+            data.promo.constantValueOverride.description
+          }
         >
-          <PromoDescription description={resolvedPromo?.description} />
+          <MaybeRTF data={resolvedPromo?.description} />
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
