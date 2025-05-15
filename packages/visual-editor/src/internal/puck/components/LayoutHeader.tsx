@@ -141,7 +141,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               variant="secondary"
               disabled={histories.length === 1}
               onClick={async () => {
-                if (templateMetadata.assignment) {
+                if (templateMetadata.assignment == "ENTITY") {
                   setApprovalModalOpen(true);
                 } else {
                   await onPublishLayout(appState.data);
@@ -152,7 +152,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 }
               }}
             >
-              {templateMetadata.assignment ? "Send for Approval" : "Publish"}
+              {templateMetadata.assignment === "ENTITY"
+                ? "Send for Approval"
+                : "Publish"}
             </Button>
           )}
         </div>
