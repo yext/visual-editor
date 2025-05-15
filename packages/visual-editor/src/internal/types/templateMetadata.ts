@@ -6,6 +6,7 @@ export type TemplateMetadata = {
   layoutId?: number;
   entityId?: number;
   themeEntityId?: number;
+  assignment: "ALL" | "ENTITY";
   isDevMode: boolean;
   devOverride: boolean;
   isxYextDebug: boolean;
@@ -19,6 +20,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
     templateId: "dev",
     entityId: hashCode(cleanString),
     layoutId: hashCode(cleanString),
+    assignment: "ALL",
     isDevMode: true,
     isxYextDebug: true,
     isThemeMode: false,

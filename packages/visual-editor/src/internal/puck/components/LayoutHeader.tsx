@@ -91,7 +91,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             variant="secondary"
             disabled={histories.length === 1}
             onClick={async () => {
-              if (templateMetadata.devOverride) {
+              if (templateMetadata.assignment) {
                 openApprovalModal(appState.data);
               } else {
                 await onPublishLayout(appState.data);

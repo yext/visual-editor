@@ -122,16 +122,20 @@ export const InternalLayoutEditor = ({
     data,
     comment,
   }: {
-    data: Data;
+    data: Data | undefined;
     comment: string;
   }) => {
     setApprovalModalOpen(false);
-    sendForApproval({
-      payload: {
-        layoutData: JSON.stringify(data),
-        comment: comment,
-      },
-    });
+    if (data) {
+      sendForApproval({
+        payload: {
+          layoutData: JSON.stringify(data),
+          comment: comment,
+        },
+      });
+    } else {
+      console.error("Cannot submit undefined data for approval");
+    }
   };
 
   const change = async () => {
@@ -184,10 +188,7 @@ export const InternalLayoutEditor = ({
       <ApprovalModal
         open={approvalModalOpen}
         onOpenChange={setApprovalModalOpen}
-        onSend={async (comment: string) => {
-          if (!approvalModalData) {
-            throw new Error("Cannot submit undefined data for approval");
-          }
+        onSendLayoutForApproval={async (comment: string) => {
           await handleSendForApproval({
             data: approvalModalData,
             comment: comment,
