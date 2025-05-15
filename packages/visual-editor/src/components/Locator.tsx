@@ -33,7 +33,6 @@ import {
   createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
-import { useEffect, useState } from "react";
 import { AddressType, HoursStatus, HoursType } from "@yext/pages-components";
 
 const DEFAULT_FIELD = "builtin.location";
@@ -148,6 +147,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
     searchHeadlessConfig === undefined ||
     searchAnalyticsConfig === undefined
   ) {
+    console.warn(
+      "Could not create Locator component because Search Headless or Search Analytics config is undefined. Please check your environment variables."
+    );
     return <></>;
   }
   const searcher = provideHeadless(searchHeadlessConfig);
@@ -271,9 +273,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
 
   const searchLoading = useSearchState((state) => state.searchStatus.isLoading);
 
-  const [searchState, setSearchState] = useState<SearchState>("not started");
+  const [searchState, setSearchState] =
+    React.useState<SearchState>("not started");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!searchLoading && searchState === "loading") {
       setSearchState("complete");
     }
@@ -362,7 +365,7 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
     return (
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
-          <span className="text-gray-700 text-lg font-medium">
+          <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
             Loading Map...
           </span>
         </div>
@@ -406,11 +409,9 @@ const LocationCard: CardComponent<Location> = ({
           {location.name}
         </Heading>
         {location.hours && (
-          <HoursStatus
-            hours={location.hours}
-            timezone={location.timezone}
-            className="text-body-sm-fontSize"
-          />
+          <div className="font-body-fontFamily text-body-sm-fontSize">
+            <HoursStatus hours={location.hours} timezone={location.timezone} />
+          </div>
         )}
         {location.mainPhone && (
           <CTA

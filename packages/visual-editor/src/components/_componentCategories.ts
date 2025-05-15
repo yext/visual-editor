@@ -140,6 +140,18 @@ export const DirectoryCategory = Object.keys(
   DirectoryCategoryComponents
 ) as (keyof DirectoryCategoryProps)[];
 
+export interface LocatorCategoryProps {
+  Locator: LocatorProps;
+}
+
+export const LocatorCategoryComponents = {
+  Locator: LocatorComponent,
+};
+
+export const LocatorCategory = Object.keys(
+  LocatorCategoryComponents
+) as (keyof LocatorCategoryProps)[];
+
 /** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 
 export interface LayoutBlockCategoryProps {
@@ -211,15 +223,3 @@ export const ContentBlockCategoryComponents = {
 export const ContentBlockCategory = Object.keys(
   ContentBlockCategoryComponents
 ) as (keyof ContentBlockCategoryProps)[];
-
-export interface LocatorCategoryProps {
-  Locator: LocatorProps;
-}
-
-export const LocatorCategoryComponents = {
-  Locator: LocatorComponent,
-};
-
-export const LocatorCategory = Object.keys(
-  LocatorCategoryComponents
-) as (keyof LocatorCategoryProps)[];
