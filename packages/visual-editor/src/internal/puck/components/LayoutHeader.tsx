@@ -6,7 +6,7 @@ import { Button } from "../ui/button.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { ApprovalModal } from "../../components/modals/ApprovalModal.tsx";
+import { LayoutApprovalModal } from "../../components/modals/LayoutApprovalModal.tsx";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
@@ -18,7 +18,7 @@ type LayoutHeaderProps = {
   onClearLocalChanges: () => void;
   onHistoryChange: (histories: History[], index: number) => void;
   onPublishLayout: (data: Data) => Promise<void>;
-  onSendForApproval: (data: Data, comment: string) => void;
+  onSendLayoutForApproval: (data: Data, comment: string) => void;
   isDevMode: boolean;
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
@@ -31,7 +31,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onClearLocalChanges,
     onHistoryChange,
     onPublishLayout,
-    onSendForApproval,
+    onSendLayoutForApproval,
     isDevMode,
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
@@ -61,11 +61,11 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
   return (
     <>
-      <ApprovalModal
+      <LayoutApprovalModal
         open={approvalModalOpen}
         onOpenChange={setApprovalModalOpen}
         onSendLayoutForApproval={(comment: string) => {
-          onSendForApproval(appState.data, comment);
+          onSendLayoutForApproval(appState.data, comment);
         }}
       />
       <header className="puck-header">
@@ -152,7 +152,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 }
               }}
             >
-              {templateMetadata.devOverride ? "Send for Approval" : "Publish"}
+              {templateMetadata.assignment ? "Send for Approval" : "Publish"}
             </Button>
           )}
         </div>

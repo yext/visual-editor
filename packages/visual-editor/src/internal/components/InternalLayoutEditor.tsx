@@ -27,7 +27,7 @@ type InternalLayoutEditorProps = {
   layoutSaveState: LayoutSaveState | undefined;
   saveLayoutSaveState: (data: any) => void;
   publishLayout: (data: any) => void;
-  sendForApproval: (data: any) => void;
+  sendLayoutForApproval: (data: any) => void;
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
@@ -43,7 +43,7 @@ export const InternalLayoutEditor = ({
   layoutSaveState,
   saveLayoutSaveState,
   publishLayout,
-  sendForApproval,
+  sendLayoutForApproval,
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
   localDev,
@@ -114,8 +114,8 @@ export const InternalLayoutEditor = ({
     });
   };
 
-  const handleSendForApproval = async (data: Data, comment: string) => {
-    sendForApproval({
+  const handleSendLayoutForApproval = async (data: Data, comment: string) => {
+    sendLayoutForApproval({
       payload: {
         layoutData: JSON.stringify(data),
         comment: comment,
@@ -184,7 +184,7 @@ export const InternalLayoutEditor = ({
               onClearLocalChanges={handleClearLocalChanges}
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
-              onSendForApproval={handleSendForApproval}
+              onSendLayoutForApproval={handleSendLayoutForApproval}
               isDevMode={templateMetadata.isDevMode}
               localDev={localDev}
             />

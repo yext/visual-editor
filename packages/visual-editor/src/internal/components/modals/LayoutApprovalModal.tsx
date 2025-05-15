@@ -9,7 +9,7 @@ type ApprovalModalProps = {
   onSendLayoutForApproval: (comment: string) => void;
 };
 
-export const ApprovalModal = (props: ApprovalModalProps) => {
+export const LayoutApprovalModal = (props: ApprovalModalProps) => {
   const { open, onOpenChange, onSendLayoutForApproval } = props;
   const [comment, setComment] = React.useState("");
 
