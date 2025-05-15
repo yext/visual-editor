@@ -42,8 +42,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
 
-  const { layoutSaveState, layoutSaveStateFetched } =
-    useLayoutMessageReceivers(localDev);
+  const { layoutSaveState, layoutSaveStateFetched } = useLayoutMessageReceivers(
+    localDev,
+    puckConfig
+  );
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
