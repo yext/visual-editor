@@ -34,7 +34,7 @@ jobs:
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
-            const commentBody = "Warning: Component files have been updated but no migrations have been added.";
+            const commentBody = "Warning: Component files have been updated but no migrations have been added. See https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/migrations/README.md for more information.";
 
             await github.rest.issues.createComment({
               ...context.repo,
