@@ -25,7 +25,7 @@ export const fetchNearbyLocations = async ({
   url.searchParams.append("api_key", apiKey);
   url.searchParams.append("v", V_PARAM);
   url.searchParams.append(
-    "geocodedCoordinate__geo",
+    "yextDisplayCoordinate__geo",
     `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
   );
   if (limit) {

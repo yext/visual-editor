@@ -251,13 +251,13 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
     {
       queryKey: [
         "NearbyLocations",
-        coordinate?.latitude,
-        coordinate?.longitude,
-        radius,
         businessId,
         apiKey,
         contentEndpointId,
         contentDeliveryAPIDomain,
+        coordinate?.latitude,
+        coordinate?.longitude,
+        radius,
         limit,
       ],
       queryFn: async () => {
@@ -274,12 +274,13 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
       },
       enabled:
         !!businessId &&
+        !!apiKey &&
+        !!contentEndpointId &&
+        !!contentDeliveryAPIDomain &&
         !!coordinate?.latitude &&
         !!coordinate.longitude &&
         !!radius &&
-        !!apiKey &&
-        !!contentEndpointId &&
-        !!contentDeliveryAPIDomain,
+        !!limit,
     }
   );
 
@@ -368,7 +369,7 @@ function parseDocument(document: any): {
     businessId: businessId,
     apiKey: apiKey,
     contentEndpointId: contentEndpointId,
-    contentDeliveryAPIDomain: "",
+    contentDeliveryAPIDomain: contentDeliveryAPIDomain,
   };
 }
 
