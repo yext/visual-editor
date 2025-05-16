@@ -565,10 +565,10 @@ export const devTemplateStream = {
                       children: {
                         fields: [
                           {
-                            name: "json",
+                            name: "html",
                             definition: {
-                              name: "json",
-                              type: { rawType: "RAW_TYPE_LEXICAL" },
+                              name: "html",
+                              type: { stringType: "STRING_TYPE_HTML" },
                             },
                           },
                         ],
@@ -660,10 +660,10 @@ export const devTemplateStream = {
                       children: {
                         fields: [
                           {
-                            name: "json",
+                            name: "html",
                             definition: {
-                              name: "json",
-                              type: { rawType: "RAW_TYPE_LEXICAL" },
+                              name: "html",
+                              type: { stringType: "STRING_TYPE_HTML" },
                             },
                           },
                         ],
@@ -769,10 +769,10 @@ export const devTemplateStream = {
                       children: {
                         fields: [
                           {
-                            name: "json",
+                            name: "html",
                             definition: {
-                              name: "json",
-                              type: { rawType: "RAW_TYPE_LEXICAL" },
+                              name: "html",
+                              type: { stringType: "STRING_TYPE_HTML" },
                             },
                           },
                         ],
@@ -904,10 +904,10 @@ export const devTemplateStream = {
                       children: {
                         fields: [
                           {
-                            name: "json",
+                            name: "html",
                             definition: {
-                              name: "json",
-                              type: { rawType: "RAW_TYPE_LEXICAL" },
+                              name: "html",
+                              type: { stringType: "STRING_TYPE_HTML" },
                             },
                           },
                         ],
@@ -1037,10 +1037,10 @@ export const devTemplateStream = {
                 children: {
                   fields: [
                     {
-                      name: "json",
+                      name: "html",
                       definition: {
-                        name: "json",
-                        type: { rawType: "RAW_TYPE_LEXICAL" },
+                        name: "html",
+                        type: { stringType: "STRING_TYPE_HTML" },
                       },
                     },
                   ],
@@ -1261,10 +1261,10 @@ export const devTemplateStream = {
                       children: {
                         fields: [
                           {
-                            name: "json",
+                            name: "html",
                             definition: {
-                              name: "json",
-                              type: { rawType: "RAW_TYPE_LEXICAL" },
+                              name: "html",
+                              type: { stringType: "STRING_TYPE_HTML" },
                             },
                           },
                         ],

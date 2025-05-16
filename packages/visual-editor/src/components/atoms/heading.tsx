@@ -7,21 +7,21 @@ export const headingVariants = cva("components", {
   variants: {
     level: {
       1:
-        "font-h2-fontWeight text-h2-fontSize text-h2-color font-h2-fontFamily " +
-        "sm:font-h1-fontWeight sm:text-h1-fontSize sm:text-h1-color sm:font-h1-fontFamily",
+        "font-h2-fontWeight text-h2-fontSize font-h2-fontFamily " +
+        "sm:font-h1-fontWeight sm:text-h1-fontSize sm:font-h1-fontFamily",
       2:
-        "font-h3-fontWeight text-h3-fontSize text-h3-color font-h3-fontFamily " +
-        "sm:font-h2-fontWeight sm:text-h2-fontSize sm:text-h2-color sm:font-h2-fontFamily",
+        "font-h3-fontWeight text-h3-fontSize font-h3-fontFamily " +
+        "sm:font-h2-fontWeight sm:text-h2-fontSize sm:font-h2-fontFamily",
       3:
-        "font-h4-fontWeight text-h4-fontSize text-h4-color font-h4-fontFamily " +
-        "sm:font-h3-fontWeight sm:text-h3-fontSize sm:text-h3-color sm:font-h3-fontFamily",
+        "font-h4-fontWeight text-h4-fontSize font-h4-fontFamily " +
+        "sm:font-h3-fontWeight sm:text-h3-fontSize sm:font-h3-fontFamily",
       4:
-        "font-h5-fontWeight text-h5-fontSize text-h5-color font-h5-fontFamily " +
-        "sm:font-h4-fontWeight sm:text-h4-fontSize sm:text-h4-color sm:font-h4-fontFamily",
+        "font-h5-fontWeight text-h5-fontSize font-h5-fontFamily " +
+        "sm:font-h4-fontWeight sm:text-h4-fontSize sm:font-h4-fontFamily",
       5:
-        "font-h6-fontWeight text-h6-fontSize text-h6-color font-h6-fontFamily " +
-        "sm:font-h5-fontWeight sm:text-h5-fontSize sm:text-h5-color sm:font-h5-fontFamily",
-      6: "font-h6-fontWeight text-h6-fontSize text-h6-color font-h6-fontFamily",
+        "font-h6-fontWeight text-h6-fontSize font-h6-fontFamily " +
+        "sm:font-h5-fontWeight sm:text-h5-fontSize sm:font-h5-fontFamily",
+      6: "font-h6-fontWeight text-h6-fontSize font-h6-fontFamily",
     },
     fontSize: {
       default: "",
