@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  Image,
   HeadingLevel,
   BackgroundStyle,
   YextField,
@@ -94,17 +93,6 @@ const EventCard = ({
       background={backgroundColor}
       className={`flex flex-col md:flex-row rounded-lg overflow-hidden h-fit md:h-64`}
     >
-      <div className="lg:w-[45%] w-full h-full">
-        {event.image && (
-          <div className="h-full">
-            <Image
-              image={event.image}
-              layout="auto"
-              aspectRatio={event.image.width / event.image.height}
-            />
-          </div>
-        )}
-      </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
           <Heading
