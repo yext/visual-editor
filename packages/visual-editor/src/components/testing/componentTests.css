@@ -1,4 +1,4 @@
-@config "./WCAG.tailwind.config.ts"
+@config "./componentTests.tailwind.config.ts"
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
