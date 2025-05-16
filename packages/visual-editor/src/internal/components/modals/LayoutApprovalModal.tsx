@@ -5,16 +5,16 @@ import { Button } from "../../puck/ui/button.tsx";
 
 type ApprovalModalProps = {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  setOpen: (open: boolean) => void;
   onSendLayoutForApproval: (comment: string) => void;
 };
 
 export const LayoutApprovalModal = (props: ApprovalModalProps) => {
-  const { open, onOpenChange, onSendLayoutForApproval } = props;
+  const { open, setOpen, onSendLayoutForApproval } = props;
   const [comment, setComment] = React.useState("");
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange} modal>
+    <Dialog.Root open={open} onOpenChange={setOpen} modal>
       <Dialog.Portal>
         <Dialog.Overlay className="ve-fixed ve-inset-0 ve-bg-black/50 ve-backdrop-blur-sm" />
         <Dialog.Content
@@ -66,7 +66,10 @@ export const LayoutApprovalModal = (props: ApprovalModalProps) => {
             </Dialog.Close>
             <Button
               variant="default"
-              onClick={() => onSendLayoutForApproval(comment)}
+              onClick={() => {
+                setOpen(false);
+                onSendLayoutForApproval(comment);
+              }}
               className="ve-px-4 ve-py-2"
             >
               Send for Approval

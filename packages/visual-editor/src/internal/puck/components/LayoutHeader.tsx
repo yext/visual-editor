@@ -63,7 +63,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     <>
       <LayoutApprovalModal
         open={approvalModalOpen}
-        onOpenChange={setApprovalModalOpen}
+        setOpen={setApprovalModalOpen}
         onSendLayoutForApproval={(comment: string) => {
           onSendLayoutForApproval(appState.data, comment);
         }}
