@@ -32,8 +32,6 @@ describe.each(viewports)("TestimonialSection $name", ({ width, height }) => {
       </VisualEditorProvider>
     );
 
-    await page.viewport(width, height);
-    await page.screenshot();
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
