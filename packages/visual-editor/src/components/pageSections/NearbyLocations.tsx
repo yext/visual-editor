@@ -243,15 +243,10 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
   );
   const headingText = resolveYextEntityField<string>(document, heading.text);
 
-  const contentEndpoint: string = document?._env?.YEXT_CONTENT_ENDPOINT;
-  if (!contentEndpoint) {
-    console.warn(
-      "Missing YEXT_CONTENT_ENDPOINT! Unable to fetch nearby locations."
-    );
-    return <></>;
-  }
+  // parse variables from document
+  const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =
+    parseDocument(document);
 
-  const entityType: string = document?.meta?.entityType?.id || "location";
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
       queryKey: [
@@ -259,25 +254,32 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
         coordinate?.latitude,
         coordinate?.longitude,
         radius,
-        entityType,
+        businessId,
+        apiKey,
+        contentEndpointId,
+        contentDeliveryAPIDomain,
         limit,
       ],
       queryFn: async () => {
         return await fetchNearbyLocations({
-          contentEndpoint: contentEndpoint,
+          businessId: businessId,
+          apiKey: apiKey,
+          contentEndpointId: contentEndpointId,
+          contentDeliveryAPIDomain: contentDeliveryAPIDomain,
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
           radiusMi: radius,
           limit: limit,
-          entityType: entityType,
         });
       },
       enabled:
+        !!businessId &&
         !!coordinate?.latitude &&
         !!coordinate.longitude &&
         !!radius &&
-        !!contentEndpoint &&
-        !!entityType,
+        !!apiKey &&
+        !!contentEndpointId &&
+        !!contentDeliveryAPIDomain,
     }
   );
 
@@ -315,6 +317,60 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
     </PageSection>
   );
 };
+
+// parseDocument parses the document to get teh apiKey, contentEndpointId, and contentDeliveryAPIDomain
+function parseDocument(document: any): {
+  businessId: string;
+  apiKey: string;
+  contentEndpointId: string;
+  contentDeliveryAPIDomain: string;
+} {
+  // read businessId
+  const businessId: string = document?.businessId;
+  if (!businessId) {
+    console.warn("Missing businessId! Unable to fetch nearby locations.");
+  }
+
+  // read API key
+  const apiKey: string = document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+  if (!apiKey) {
+    console.warn(
+      "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to fetch nearby locations."
+    );
+  }
+
+  // parse contentEndpointId
+  let contentEndpointId: string = "";
+  if (document?._pageset) {
+    try {
+      const pagesetJson = JSON.parse(document?._pageset);
+      contentEndpointId =
+        pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
+    } catch (e) {
+      console.error("Failed to parse pageset from document. err=", e);
+    }
+  }
+  if (!contentEndpointId) {
+    console.warn(
+      "Missing contentEndpointId! Unable to fetch nearby locations."
+    );
+  }
+
+  // read contentDeliveryAPIDomain
+  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
+  if (!contentDeliveryAPIDomain) {
+    console.warn(
+      "Missing contentDeliveryAPIDomain! Unable to fetch nearby locations."
+    );
+  }
+
+  return {
+    businessId: businessId,
+    apiKey: apiKey,
+    contentEndpointId: contentEndpointId,
+    contentDeliveryAPIDomain: "",
+  };
+}
 
 export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
   {
