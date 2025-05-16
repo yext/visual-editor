@@ -81,9 +81,11 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
 const TestimonialCard = ({
   testimonial,
   backgroundColor,
+  sectionHeadingLevel,
 }: {
   testimonial: TestimonialStruct;
   backgroundColor?: BackgroundStyle;
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border h-full">
@@ -95,7 +97,16 @@ const TestimonialCard = ({
       </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (
-          <Heading level={3}>{testimonial.contributorName}</Heading>
+          <Heading
+            level={3}
+            semanticLevelOverride={
+              sectionHeadingLevel < 6
+                ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                : "span"
+            }
+          >
+            {testimonial.contributorName}
+          </Heading>
         )}
         {testimonial.contributionDate && (
           <Timestamp
@@ -148,6 +159,7 @@ const TestimonialSectionWrapper = ({
                 key={index}
                 testimonial={testimonial}
                 backgroundColor={styles.cardBackgroundColor}
+                sectionHeadingLevel={styles.headingLevel}
               />
             ))}
           </div>

@@ -58,7 +58,7 @@ const DirectoryCard = ({
               : profile.slug
           }
         >
-          <Heading level={4} semanticLevelOverride="h3">
+          <Heading level={4} semanticLevelOverride={3}>
             {profile.name}
           </Heading>
         </MaybeLink>

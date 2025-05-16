@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Coordinate } from "@yext/pages-components";
 import {
+  EntityField,
   resolveYextEntityField,
   useDocument,
   YextEntityField,
@@ -151,11 +152,17 @@ export const MapboxStaticMapComponent = ({
   const marker = `pin-l+${getPrimaryColor(document)}(${coordinate.longitude},${coordinate.latitude})`;
 
   return (
-    <img
-      ref={imgRef}
-      className="components w-full h-full object-cover"
-      src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=${apiKey}`}
-    />
+    <EntityField
+      displayName="Coordinate"
+      fieldId={coordinateField.field}
+      constantValueEnabled={coordinateField.constantValueEnabled}
+    >
+      <img
+        ref={imgRef}
+        className="components w-full h-full object-cover"
+        src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=${apiKey}`}
+      />
+    </EntityField>
   );
 };
 
