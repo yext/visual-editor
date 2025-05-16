@@ -319,7 +319,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
   );
 };
 
-// parseDocument parses the document to get teh apiKey, contentEndpointId, and contentDeliveryAPIDomain
+// parseDocument parses the document to get the apiKey, contentEndpointId, and contentDeliveryAPIDomain
 function parseDocument(document: any): {
   businessId: string;
   apiKey: string;
