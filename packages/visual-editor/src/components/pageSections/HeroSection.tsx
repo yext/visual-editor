@@ -20,6 +20,7 @@ import {
   resolveYextStructField,
   YextStructFieldSelector,
   YextStructEntityField,
+  ComponentFields,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -67,7 +68,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       hero: YextStructFieldSelector({
         label: "Hero",
         filter: {
-          type: "type.hero_section",
+          type: ComponentFields.HeroSection.type,
         },
       }),
     },
@@ -197,34 +198,58 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             aria-label="Call to Actions"
           >
             {resolvedHero?.primaryCta?.label && (
-              <CTA
-                variant={styles?.primaryCTA}
-                label={resolvedHero.primaryCta.label}
-                link={resolvedHero.primaryCta.link}
-                linkType={resolvedHero.primaryCta.linkType}
-                className={"py-3"}
-              />
+              <EntityField
+                displayName="Primary CTA"
+                fieldId={data.hero.field}
+                constantValueEnabled={
+                  data.hero.constantValueOverride.primaryCta
+                }
+              >
+                <CTA
+                  variant={styles?.primaryCTA}
+                  label={resolvedHero.primaryCta.label}
+                  link={resolvedHero.primaryCta.link}
+                  linkType={resolvedHero.primaryCta.linkType}
+                  className={"py-3"}
+                />
+              </EntityField>
             )}
             {resolvedHero?.secondaryCta?.label && (
-              <CTA
-                variant={styles?.secondaryCTA}
-                label={resolvedHero.secondaryCta.label}
-                link={resolvedHero.secondaryCta.link}
-                linkType={resolvedHero.secondaryCta.linkType}
-                className={"py-3"}
-              />
+              <EntityField
+                displayName="Secondary CTA"
+                fieldId={data.hero.field}
+                constantValueEnabled={
+                  data.hero.constantValueOverride.secondaryCta
+                }
+              >
+                <CTA
+                  variant={styles?.secondaryCTA}
+                  label={resolvedHero.secondaryCta.label}
+                  link={resolvedHero.secondaryCta.link}
+                  linkType={resolvedHero.secondaryCta.linkType}
+                  className={"py-3"}
+                />
+              </EntityField>
             )}
           </div>
         )}
       </div>
       {resolvedHero?.image && (
-        <div className="w-full" role="region" aria-label="Hero Image">
-          <Image
-            image={resolvedHero?.image}
-            layout="auto"
-            aspectRatio={resolvedHero?.image.width / resolvedHero?.image.height}
-          />
-        </div>
+        <EntityField
+          displayName="Image"
+          fieldId={data.hero.field}
+          constantValueEnabled={data.hero.constantValueOverride.image}
+        >
+          <div className="w-full" role="region" aria-label="Hero Image">
+            <Image
+              image={resolvedHero?.image}
+              layout="auto"
+              aspectRatio={
+                resolvedHero?.image.width / resolvedHero?.image.height
+              }
+            />
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );

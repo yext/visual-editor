@@ -42,6 +42,8 @@ export type EntityFieldTypes =
   | "type.phone"
   | "type.coordinate"
   | "type.cta"
+  | "type.boolean"
+  | "type.option"
   | "type.faq_section"
   | "type.testimonials_section"
   | "type.products_section"
@@ -144,6 +146,14 @@ const getEntityTypeToFieldNames = (
       const typeName = getTypeFromSchemaField(fieldToSchema.schemaField);
       if (typeName) {
         prev = appendToMapList(prev, typeName, fieldToSchema.name);
+
+        // Also list type.option as type.string if not expanded
+        if (
+          typeName === "type.option" &&
+          fieldToSchema.schemaField.optionFormat !== "OPTION_FORMAT_EXPANDED"
+        ) {
+          prev = appendToMapList(prev, "type.string", fieldToSchema.name);
+        }
       }
     }
 

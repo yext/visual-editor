@@ -19,6 +19,7 @@ import {
   EventStruct,
   Timestamp,
   TimestampOption,
+  ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
 
@@ -46,7 +47,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
       events: YextField("Events", {
         type: "entityField",
         filter: {
-          types: ["type.events_section"],
+          types: [ComponentFields.EventSection.type],
         },
       }),
     },
@@ -83,9 +84,11 @@ const eventSectionFields: Fields<EventSectionProps> = {
 const EventCard = ({
   event,
   backgroundColor,
+  sectionHeadingLevel,
 }: {
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
     <Background
@@ -105,7 +108,14 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
-          <Heading level={6} semanticLevelOverride="h3">
+          <Heading
+            level={6}
+            semanticLevelOverride={
+              sectionHeadingLevel < 6
+                ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                : "span"
+            }
+          >
             {event.title}
           </Heading>
         )}
@@ -164,6 +174,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 key={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
+                sectionHeadingLevel={styles.headingLevel}
               />
             ))}
           </div>

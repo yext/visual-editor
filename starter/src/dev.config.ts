@@ -453,6 +453,18 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
+          name: "c_exampleHero",
+          fullObject: true,
+        },
+        {
+          name: "c_exampleOption",
+          fullObject: true,
+        },
+        {
+          name: "c_exampleMultiOption",
+          fullObject: true,
+        },
+        {
           name: "meta",
           children: {
             fields: [
@@ -1232,6 +1244,92 @@ export const devTemplateStream = {
           },
         },
         {
+          name: "c_exampleOption",
+          definition: {
+            name: "c_exampleOption",
+            registryId: "location.custom.1000152098.exampleoption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            options: [
+              {
+                numericValue: 504227,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504228,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504229,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
+              },
+            ],
+          },
+        },
+        {
+          name: "c_exampleOptionExpanded",
+          definition: {
+            name: "c_exampleOptionExpanded",
+            registryId: "location.custom.1000152098.exampleoption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            options: [
+              {
+                numericValue: 504227,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504228,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504229,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
+              },
+            ],
+          },
+          optionFormat: "OPTION_FORMAT_EXPANDED",
+        },
+        {
+          name: "c_exampleMultiOption",
+          definition: {
+            name: "c_exampleMultiOption",
+            registryId: "location.custom.1000152098.examplemultioption.0",
+            typeRegistryId: "type.option",
+            type: {
+              stringType: "STRING_TYPE_OPTION",
+            },
+            isList: true,
+            options: [
+              {
+                numericValue: 504230,
+                textValue: "OPTION_1",
+                displayName: "Option 1",
+              },
+              {
+                numericValue: 504231,
+                textValue: "OPTION_2",
+                displayName: "Option 2",
+              },
+              {
+                numericValue: 504232,
+                textValue: "OPTION_3",
+                displayName: "Option 3",
+              },
+            ],
+          },
+        },
+        {
           name: "c_exampleTestimonials",
           definition: {
             name: "c_exampleTestimonials",
@@ -1284,6 +1382,187 @@ export const devTemplateStream = {
                         name: "contributionDate",
                         typeRegistryId: "type.datetime",
                         type: { stringType: "STRING_TYPE_LOCAL_DATE_TIME" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_exampleHero",
+          definition: {
+            name: "c_exampleHero",
+            registryId: "location.custom.1000146856.hero.0",
+            typeRegistryId: "type.hero_section",
+            type: {
+              objectType: "OBJECT_TYPE_DEFAULT",
+            },
+          },
+          children: {
+            fields: [
+              {
+                name: "image",
+                definition: {
+                  name: "image",
+                  type: {
+                    objectType: "OBJECT_TYPE_IMAGE",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "url",
+                      definition: {
+                        name: "url",
+                        type: {
+                          stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "alternateText",
+                      definition: {
+                        name: "alternateText",
+                        type: {
+                          stringType: "STRING_TYPE_MULTILINE",
+                        },
+                      },
+                    },
+                    {
+                      name: "width",
+                      definition: {
+                        name: "width",
+                        type: {
+                          numberType: "NUMBER_TYPE_INT",
+                        },
+                      },
+                    },
+                    {
+                      name: "height",
+                      definition: {
+                        name: "height",
+                        type: {
+                          numberType: "NUMBER_TYPE_INT",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "description",
+                definition: {
+                  name: "description",
+                  type: {
+                    stringType: "STRING_TYPE_MULTILINE",
+                  },
+                },
+              },
+              {
+                name: "details",
+                definition: {
+                  name: "details",
+                  type: {
+                    stringType: "STRING_TYPE_MULTILINE",
+                  },
+                },
+              },
+              {
+                name: "clickthroughUrl",
+                definition: {
+                  name: "clickthroughUrl",
+                  type: {
+                    stringType: "STRING_TYPE_URL",
+                  },
+                },
+              },
+              {
+                name: "primaryCta",
+                definition: {
+                  name: "primaryCta",
+                  typeName: "c_cta",
+                  typeRegistryId: "type.c1000146856.cta",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "label",
+                      definition: {
+                        name: "label",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "link",
+                      definition: {
+                        name: "link",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "secondaryCta",
+                definition: {
+                  name: "secondaryCta",
+                  typeName: "c_cta",
+                  typeRegistryId: "type.c1000146856.cta",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "label",
+                      definition: {
+                        name: "label",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "link",
+                      definition: {
+                        name: "link",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_URL",
+                        },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
                       },
                     },
                   ],

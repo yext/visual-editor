@@ -17,6 +17,7 @@ import {
   PhoneAtom,
   TeamSectionType,
   PersonStruct,
+  ComponentFields,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -45,7 +46,7 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       people: YextField("Team Section", {
         type: "entityField",
         filter: {
-          types: ["type.team_section"],
+          types: [ComponentFields.TeamSection.type],
         },
       }),
     },
@@ -82,9 +83,11 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
 const PersonCard = ({
   person,
   backgroundColor,
+  sectionHeadingLevel,
 }: {
   person: PersonStruct;
   backgroundColor?: BackgroundStyle;
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
@@ -99,7 +102,18 @@ const PersonCard = ({
           )}
         </div>
         <div className="flex flex-col justify-center gap-1">
-          {person.name && <Heading level={3}>{person.name}</Heading>}
+          {person.name && (
+            <Heading
+              level={3}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
+              {person.name}
+            </Heading>
+          )}
           {person.title && <Body variant="base">{person.title}</Body>}
         </div>
       </Background>
@@ -183,6 +197,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 key={index}
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
+                sectionHeadingLevel={styles.headingLevel}
               />
             ))}
           </div>
