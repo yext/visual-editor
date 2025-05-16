@@ -1,0 +1,112 @@
+.rtf-theme {
+  p {
+    font-family: var(--fontFamily-body-fontFamily) !important;
+    font-size: var(--fontSize-body-fontSize) !important;
+    line-height: calc(var(--fontSize-body-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-body-fontWeight) !important;
+  }
+  li {
+    font-family: var(--fontFamily-body-fontFamily) !important;
+    font-size: var(--fontSize-body-fontSize) !important;
+    line-height: calc(var(--fontSize-body-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-body-fontWeight) !important;
+  }
+  h1 {
+    font-family: var(--fontFamily-h2-fontFamily) !important;
+    font-size: var(--fontSize-h2-fontSize) !important;
+    line-height: calc(var(--fontSize-h2-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-h2-fontWeight) !important;
+    @media (min-width: 640px) {
+      font-family: var(--fontFamily-h1-fontFamily) !important;
+      font-size: var(--fontSize-h1-fontSize) !important;
+      line-height: calc(var(--fontSize-h1-fontSize) + 4px) !important;
+      font-weight: var(--fontWeight-h1-fontWeight) !important;
+    }
+  }
+  h2 {
+    font-family: var(--fontFamily-h3-fontFamily) !important;
+    font-size: var(--fontSize-h3-fontSize) !important;
+    line-height: calc(var(--fontSize-h3-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-h3-fontWeight) !important;
+    @media (min-width: 640px) {
+      font-family: var(--fontFamily-h2-fontFamily) !important;
+      font-size: var(--fontSize-h2-fontSize) !important;
+      line-height: calc(var(--fontSize-h2-fontSize) + 4px) !important;
+      font-weight: var(--fontWeight-h2-fontWeight) !important;
+    }
+  }
+  h3 {
+    font-family: var(--fontFamily-h4-fontFamily) !important;
+    font-size: var(--fontSize-h4-fontSize) !important;
+    line-height: calc(var(--fontSize-h4-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-h4-fontWeight) !important;
+    @media (min-width: 640px) {
+      font-family: var(--fontFamily-h3-fontFamily) !important;
+      font-size: var(--fontSize-h3-fontSize) !important;
+      line-height: calc(var(--fontSize-h3-fontSize) + 4px) !important;
+      font-weight: var(--fontWeight-h3-fontWeight) !important;
+    }
+  }
+  h4 {
+    font-family: var(--fontFamily-h5-fontFamily) !important;
+    font-size: var(--fontSize-h5-fontSize) !important;
+    line-height: calc(var(--fontSize-h5-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-h5-fontWeight) !important;
+    @media (min-width: 640px) {
+      font-family: var(--fontFamily-h4-fontFamily) !important;
+      font-size: var(--fontSize-h4-fontSize) !important;
+      line-height: calc(var(--fontSize-h4-fontSize) + 4px) !important;
+      font-weight: var(--fontWeight-h4-fontWeight) !important;
+    }
+  }
+  h5 {
+    font-family: var(--fontFamily-h6-fontFamily) !important;
+    font-size: var(--fontSize-h6-fontSize) !important;
+    line-height: calc(var(--fontSize-h6-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-h6-fontWeight) !important;
+    @media (min-width: 640px) {
+      font-family: var(--fontFamily-h5-fontFamily) !important;
+      font-size: var(--fontSize-h5-fontSize) !important;
+      line-height: calc(var(--fontSize-h5-fontSize) + 4px) !important;
+      font-weight: var(--fontWeight-h5-fontWeight) !important;
+    }
+  }
+  h6 {
+    font-family: var(--fontFamily-h6-fontFamily) !important;
+    font-size: var(--fontSize-h6-fontSize) !important;
+    line-height: calc(var(--fontSize-h6-fontSize) + 4px) !important;
+    font-weight: var(--fontWeight-h6-fontWeight) !important;
+  }
+  a {
+    font-family: var(--fontFamily-link-fontFamily) !important;
+    font-size: var(--fontSize-link-fontSize) !important;
+    font-weight: var(--fontWeight-link-fontWeight) !important;
+    line-height: calc(var(--fontSize-link-fontSize) + 4px) !important;
+    text-decoration: underline !important;
+    color: hsl(
+      from var(--colors-palette-primary) h s 20
+    ) !important; /* palette-primary-dark */
+    text-transform: var(--textTransform-link-textTransform) !important;
+    letter-spacing: var(--letterSpacing-link-letterSpacing) !important;
+  }
+  a:hover {
+    text-decoration: none !important;
+  }
+  strong {
+    /* streams outputs strong tags wrapped in <b> tags which automatically apply font-weight: bolder  */
+    font-weight: inherit !important;
+  }
+}
+
+/* If the parent has a dark background, override text color to white. */
+.rtf-dark-background h1,
+.rtf-dark-background h2,
+.rtf-dark-background h3,
+.rtf-dark-background h4,
+.rtf-dark-background h5,
+.rtf-dark-background h6,
+.rtf-dark-background p,
+.rtf-dark-background li,
+.rtf-dark-background a {
+  color: white !important;
+}

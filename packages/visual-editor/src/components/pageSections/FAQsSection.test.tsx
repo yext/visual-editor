@@ -19,98 +19,13 @@ const faqData = {
   faqs: [
     {
       answer: {
-        json: {
-          root: {
-            children: [
-              {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "We offer Delivery, Catering, Take Out, and Dine In.",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            type: "root",
-            version: 1,
-          },
-        },
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>We offer Delivery, Catering, Take Out, and Dine In.</span></p>',
       },
       question: "What services do you offer?",
     },
     {
       answer: {
-        json: {
-          root: {
-            children: [
-              {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Yes. There are a limited number of spots in front and we validate parking at ",
-                    type: "text",
-                    version: 1,
-                  },
-                  {
-                    children: [
-                      {
-                        detail: 0,
-                        format: 0,
-                        mode: "normal",
-                        style: "",
-                        text: "these garages",
-                        type: "text",
-                        version: 1,
-                      },
-                    ],
-                    direction: "ltr",
-                    format: "",
-                    indent: 0,
-                    rel: "noopener",
-                    type: "link",
-                    url: "https://",
-                    version: 1,
-                  },
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: ".",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            type: "root",
-            version: 1,
-          },
-        },
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Yes. There are a limited number of spots in front and we validate parking at </span><a href="https://" rel="noopener" style="color: rgb(33, 111, 219); text-decoration: none;"><span>these garages</span></a><span>.</span></p>',
       },
       question: "Do you have parking available?",
     },

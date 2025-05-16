@@ -10,7 +10,7 @@ export const DateSelector: CustomField<string | undefined> = {
           className="date-time-picker"
           type="date"
           onChange={(e) => onChange(e.target.value)}
-          value={value}
+          value={value ?? ""}
           // needed so that the browser's date picker opens
           onClick={(e) => e.stopPropagation()}
         />
