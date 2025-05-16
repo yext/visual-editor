@@ -6,5 +6,3 @@ import { MigrationRegistry } from "../../utils/migrate.ts";
 // The migrations are run in the order of this array
 // and the data's version number indicates the last applied index.
 export const migrationRegistry: MigrationRegistry = [];
-
-export const a = 1;

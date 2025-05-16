@@ -14,6 +14,7 @@ import {
   TestimonialSectionType,
   TestimonialStruct,
   Timestamp,
+  MaybeRTF,
   TimestampOption,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -87,6 +88,12 @@ const TestimonialCard = ({
 }) => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border h-full">
+      <Background
+        background={backgroundColors.background1.value}
+        className="p-8"
+      >
+        <MaybeRTF data={testimonial.description} />
+      </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (
           <Heading
