@@ -14,6 +14,7 @@ import {
   TestimonialSectionType,
   TestimonialStruct,
   Timestamp,
+  ComponentFields,
   MaybeRTF,
   TimestampOption,
 } from "@yext/visual-editor";
@@ -43,7 +44,7 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       testimonials: YextField("Testimonial Section", {
         type: "entityField",
         filter: {
-          types: ["type.testimonials_section"],
+          types: [ComponentFields.TestimonialSection.type],
         },
       }),
     },
