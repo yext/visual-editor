@@ -201,7 +201,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     if (mapCenter && mapBounds) {
       const locationFilter: SelectableStaticFilter = {
         selected: true,
-        displayName: TRANSLATIONS[locale].currentMapArea,
+        displayName: "",
         filter: {
           kind: "fieldValue",
           fieldId: "builtin.location",
@@ -246,7 +246,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         searchActions.setStaticFilters([
           {
             selected: true,
-            displayName: TRANSLATIONS[locale].currentLocation,
+            displayName: "",
             filter: {
               kind: "fieldValue",
               fieldId: "builtin.location",
@@ -264,7 +264,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         searchActions.setStaticFilters([
           {
             selected: true,
-            displayName: "New York City, New York, NY",
+            displayName: "New York City, New York, United States",
             filter: {
               kind: "fieldValue",
               fieldId: "builtin.location",
@@ -305,7 +305,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
 
   return (
     <>
-      <div className="flex ve-h-screen ve-w-screen">
+      <div className="components flex ve-h-screen ve-w-screen">
         {/* Left Section: FilterSearch + Results. Full width for small screens */}
         <div className="w-full h-full md:w-2/5 lg:w-1/3 p-4 flex flex-col">
           <FilterSearch

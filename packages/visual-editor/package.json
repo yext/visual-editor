@@ -74,10 +74,7 @@
     "react-error-boundary": "^5.0.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
-    "tsx": "^4.16.3",
-    "mapbox-gl": "^2.9.2",
-    "@yext/search-headless-react": "^2.5.0",
-    "@yext/search-ui-react": "^1.8.2"
+    "tsx": "^4.16.3"
   },
   "engines": {
     "node": "^18 || ^20.2.0 || ^22"
@@ -137,6 +134,9 @@
   "peerDependencies": {
     "@yext/pages-components": "^1.1.4",
     "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react-dom": "^17.0.2 || ^18.2.0",
+    "mapbox-gl": "^2.9.2",
+    "@yext/search-headless-react": "^2.5.0",
+    "@yext/search-ui-react": "^1.8.2"
   }
 }

@@ -93,12 +93,12 @@ const Locator: Template<TemplateRenderProps> = (props) => {
       <script
         id="mapbox-script"
         src={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.js`}
-      ></script>
+      />
       <link
         id="mapbox-stylesheet"
         rel="stylesheet"
         href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
-      ></link>
+      />
       <VisualEditorProvider templateProps={props}>
         <Render config={locatorConfig} data={JSON.parse(document.__.layout)} />
       </VisualEditorProvider>
