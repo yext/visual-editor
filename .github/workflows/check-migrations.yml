@@ -26,7 +26,7 @@ jobs:
             grep -vE '^packages/visual-editor/src/components/(migrations|testing|registry)' | \
             grep -v -q '\.test\.' && echo "components_updated=true" >> $GITHUB_ENV || echo "components_updated=false" >> $GITHUB_ENV
 
-          grep -q '^packages/visual-editor/src/components/migrations/' changed_files.txt && echo "migrations_updated=true" >> $GITHUB_ENV || echo "migrations_updated=false" >> $GITHUB_ENV
+          grep -q '^packages/visual-editor/src/components/migrations/migrationRegistry.ts' changed_files.txt && echo "migrations_updated=true" >> $GITHUB_ENV || echo "migrations_updated=false" >> $GITHUB_ENV
 
       - name: Comment on PR
         if: env.components_updated == 'true' && env.migrations_updated == 'false'
