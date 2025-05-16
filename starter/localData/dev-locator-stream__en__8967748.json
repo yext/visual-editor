@@ -9,12 +9,12 @@
     "YEXT_CLOUD_REGION": "US",
     "YEXT_CONTENT_ENDPOINT": "https://streams-dev.yext.com/v2/accounts/2095538/content/visualEditorLocations?api_key=6c04d784ca88279742506e0272a379f2",
     "YEXT_ENVIRONMENT": "DEV",
-    "YEXT_MAPBOX_API_KEY": "pk.eyJ1IjoieWV4dCIsImEiOiJjbWFnNDVjdmswNG02Mmxwbm8xZHM1MHRiIn0.JfmX-96q3kpGQYKLD4rhjQ",
-    "YEXT_PUBLIC_EVENTS_API_KEY": "6c04d784ca88279742506e0272a379f2",
-    "YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY": "6c04d784ca88279742506e0272a379f2",
-    "YEXT_SEARCH_API_KEY": "e42b0eddc5805b9faaf9297d1e7e8b98"
+    "YEXT_MAPBOX_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
+    "YEXT_PUBLIC_EVENTS_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
+    "YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
+    "YEXT_SEARCH_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS"
   },
-  "_pageset": "{\"name\":\"accounts/2095538/sites/63797/pagesets/locations-locator\",\"uid\":\"0196b2a4-b79f-706b-b64e-79438fa7b7d1\",\"codeTemplate\":\"locator\",\"assignments\":[\"global\"],\"createTime\":\"2025-05-09T01:24:22Z\",\"updateTime\":\"2025-05-09T01:24:22Z\",\"scope\":{\"locales\":[\"en\"],\"savedFilters\":[\"locator-saved-search-63797-locations\"]},\"defaultLayout\":\"accounts/2095538/sites/63797/layouts/locations-locator-default-layout\",\"displayName\":\"Locations Locator\",\"type\":\"LOCATOR\",\"typeConfig\":{\"locatorConfig\":{\"source\":\"accounts/2095538/sites/63797/pagesets/locations\",\"experienceKey\":\"locator-20\"}}}",
+  "_pageset": "{\"name\":\"accounts/2095538/sites/63797/pagesets/locations-locator\",\"uid\":\"0196b2a4-b79f-706b-b64e-79438fa7b7d1\",\"codeTemplate\":\"locator\",\"assignments\":[\"global\"],\"createTime\":\"2025-05-09T01:24:22Z\",\"updateTime\":\"2025-05-09T01:24:22Z\",\"scope\":{\"locales\":[\"en\"],\"savedFilters\":[\"locator-saved-search-63797-locations\"]},\"defaultLayout\":\"accounts/2095538/sites/63797/layouts/locations-locator-default-layout\",\"displayName\":\"Locations Locator\",\"type\":\"LOCATOR\",\"typeConfig\":{\"locatorConfig\":{\"source\":\"accounts/2095538/sites/63797/pagesets/locations\",\"experienceKey\":\"locator-20\",\"entityType\":\"location\"}}}",
   "_schema": {
     "@context": "https://schema.org",
     "@type": "Thing",

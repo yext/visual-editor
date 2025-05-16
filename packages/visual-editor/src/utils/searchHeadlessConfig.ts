@@ -12,10 +12,6 @@ const EXPERIENCE_VERSION = "PRODUCTION";
  * @param document the entity document
  */
 export const createSearchHeadlessConfig = (document: any) => {
-  if (!document) {
-    // document may not exist while loading the page - no need to warn
-    return;
-  }
   const warnings = [];
   const searchApiKey = document?._env?.YEXT_SEARCH_API_KEY;
   if (!searchApiKey) {
@@ -70,10 +66,6 @@ export const createSearchHeadlessConfig = (document: any) => {
  * @param document the entity document
  */
 export const createSearchAnalyticsConfig = (document: any) => {
-  if (!document) {
-    // document may not exist while loading the page - no need to warn
-    return;
-  }
   const warnings = [];
   const businessId = document?.businessId;
   if (!businessId) {
@@ -100,10 +92,10 @@ export const createSearchAnalyticsConfig = (document: any) => {
     return;
   }
 
-  // from @yext/analytics EnvironmentEnum
+  // corresponds to @yext/analytics EnvironmentEnum
   const analyticsEnvironment =
     environment === Environment.SANDBOX ? "SANDBOX" : "PRODUCTION";
-  // from @yext/analytics RegionEnum
+  // corresponds to @yext/analytics RegionEnum
   const analyticsRegion = cloudRegion.toUpperCase();
   const analyticsConfig = {
     businessId: businessId,

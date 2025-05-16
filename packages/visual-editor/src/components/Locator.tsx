@@ -14,26 +14,34 @@ import {
 } from "@yext/search-ui-react";
 import {
   Matcher,
+  provideHeadless,
   SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
-  provideHeadless,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
+  Background,
+  backgroundColors,
   BasicSelector,
   Body,
   Button,
+  createSearchAnalyticsConfig,
+  createSearchHeadlessConfig,
   CTA,
   Heading,
   normalizeSlug,
+  PhoneAtom,
   useDocument,
-  createSearchAnalyticsConfig,
-  createSearchHeadlessConfig,
 } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
-import { AddressType, HoursStatus, HoursType } from "@yext/pages-components";
+import {
+  Address,
+  AddressType,
+  HoursStatus,
+  HoursType,
+} from "@yext/pages-components";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -137,22 +145,29 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 };
 
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
-  const document = useDocument();
+  const document: any = useDocument();
   if (!document) {
     return <></>;
   }
-  const searchHeadlessConfig = createSearchHeadlessConfig(document);
-  const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
-  if (
-    searchHeadlessConfig === undefined ||
-    searchAnalyticsConfig === undefined
-  ) {
+  const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
+    const searchHeadlessConfig = createSearchHeadlessConfig(document);
+    if (searchHeadlessConfig === undefined) {
+      return { searchAnalyticsConfig: undefined, searcher: undefined };
+    }
+
+    const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
+    return {
+      searchAnalyticsConfig,
+      searcher: provideHeadless(searchHeadlessConfig),
+    };
+  }, [document.id]);
+
+  if (searcher === undefined || searchAnalyticsConfig === undefined) {
     console.warn(
       "Could not create Locator component because Search Headless or Search Analytics config is undefined. Please check your environment variables."
     );
     return <></>;
   }
-  const searcher = provideHeadless(searchHeadlessConfig);
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
@@ -290,10 +305,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
 
   return (
     <>
-      <div
-        className="flex w-full aspect-[1/2] md:aspect-[3/2]"
-        style={{ height: "fit-content" }}
-      >
+      <div className="flex ve-h-screen ve-w-screen">
         {/* Left Section: FilterSearch + Results. Full width for small screens */}
         <div className="w-full h-full md:w-2/5 lg:w-1/3 p-4 flex flex-col">
           <FilterSearch
@@ -335,7 +347,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
                 onClick={handleSearchAreaClick}
                 className="py-2 px-4 shadow-xl"
               >
-                <p>{TRANSLATIONS[locale].searchThisArea}</p>
+                {TRANSLATIONS[locale].searchThisArea}
               </Button>
             </div>
           )}
@@ -404,48 +416,65 @@ const LocationCard: CardComponent<Location> = ({
 
   return (
     <div className="flex flex-wrap border-y px-4 py-4">
-      <div className="basis-3/4 pb-4">
-        <Heading className="py-2 text-palette-primary-dark" level={1}>
-          {location.name}
-        </Heading>
-        {location.hours && (
-          <div className="font-body-fontFamily text-body-sm-fontSize">
-            <HoursStatus hours={location.hours} timezone={location.timezone} />
-          </div>
-        )}
-        {location.mainPhone && (
-          <CTA
-            label={formatPhoneNumber(location.mainPhone)}
-            link={location.mainPhone}
-            linkType={"PHONE"}
-            className="py-3"
-            variant="link"
-          />
-        )}
-        <Body>{location.address.line1}</Body>
-        <Body>{`${location.address.city}, ${location.address.region} ${location.address.postalCode}`}</Body>
-        {location.yextDisplayCoordinate && (
-          <CTA
-            label={TRANSLATIONS[locale].getDirections}
-            link={getGoogleMapsLink(
-              location.yextDisplayCoordinate
-                ? location.yextDisplayCoordinate
-                : {
-                    latitude: 0,
-                    longitude: 0,
-                  }
-            )}
-            linkType={"DRIVING_DIRECTIONS"}
-            target={"_blank"}
-            variant="link"
-          />
-        )}
-      </div>
-      {distanceInMiles && (
-        <div className="basis-1/4 text-right py-2">
-          {distanceInMiles + " mi"}
+      <Background
+        background={backgroundColors.background1.value}
+        className="container"
+      >
+        <div className="basis-3/4 pb-4">
+          <Heading className="py-2" level={3}>
+            {location.name}
+          </Heading>
+          {location.hours && (
+            <div className="font-body-fontFamily text-body-sm-fontSize">
+              <HoursStatus
+                hours={location.hours}
+                timezone={location.timezone}
+              />
+            </div>
+          )}
+          {location.mainPhone && (
+            <PhoneAtom
+              phoneNumber={location.mainPhone}
+              includeHyperlink={true}
+              includeIcon={false}
+              format={
+                location.mainPhone.slice(0, 2) === "+1"
+                  ? "domestic"
+                  : "international"
+              }
+            />
+          )}
+          {location.address && (
+            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+              <Address
+                address={location.address}
+                lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
+              />
+            </div>
+          )}
+          {location.yextDisplayCoordinate && (
+            <CTA
+              label={TRANSLATIONS[locale].getDirections}
+              link={getGoogleMapsLink(
+                location.yextDisplayCoordinate
+                  ? location.yextDisplayCoordinate
+                  : {
+                      latitude: 0,
+                      longitude: 0,
+                    }
+              )}
+              linkType={"DRIVING_DIRECTIONS"}
+              target={"_blank"}
+              variant="link"
+            />
+          )}
+          {distanceInMiles && (
+            <div className="basis-1/4 py-2 font-body-fontFamily font-body-fontWeight text-body-fontSize">
+              {distanceInMiles + " mi"}
+            </div>
+          )}
         </div>
-      )}
+      </Background>
       <CTA
         label={TRANSLATIONS[locale].viewMoreInformation}
         link={getPath(location, locale)}
@@ -457,17 +486,6 @@ const LocationCard: CardComponent<Location> = ({
     </div>
   );
 };
-
-//reformats a phone number in the familiar (123)-456-7890 style
-function formatPhoneNumber(phoneNumber: string) {
-  const cleaned = ("" + phoneNumber).replace(/\D/g, "");
-  const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    const intlCode = match[1] ? "+1 " : "";
-    return [intlCode, "(", match[2], ") ", match[3], "-", match[4]].join("");
-  }
-  return null;
-}
 
 const getPath = (location: Location, locale: string) => {
   if (location.slug) {
