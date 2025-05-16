@@ -140,13 +140,3 @@ export const testHours = {
     ],
   },
 };
-
-export const testAddress = {
-  city: "Brooklyn",
-  countryCode: "US",
-  line1: "288 Grand St",
-  localizedCountryName: "United States",
-  localizedRegionName: "New York",
-  postalCode: "11211",
-  region: "NY",
-};

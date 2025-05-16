@@ -4,7 +4,6 @@ import {
   axe,
   ComponentTest,
   testHours,
-  testAddress,
   viewports,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
@@ -16,6 +15,16 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+
+const testAddress = {
+  city: "Brooklyn",
+  countryCode: "US",
+  line1: "288 Grand St",
+  localizedCountryName: "United States",
+  localizedRegionName: "New York",
+  postalCode: "11211",
+  region: "NY",
+};
 
 const tests: ComponentTest[] = [
   {
