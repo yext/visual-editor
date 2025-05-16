@@ -17,6 +17,7 @@ import {
   PhoneAtom,
   TeamSectionType,
   PersonStruct,
+  ComponentFields,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -45,7 +46,7 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       people: YextField("Team Section", {
         type: "entityField",
         filter: {
-          types: ["type.team_section"],
+          types: [ComponentFields.TeamSection.type],
         },
       }),
     },

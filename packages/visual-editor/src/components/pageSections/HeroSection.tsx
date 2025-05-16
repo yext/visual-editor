@@ -20,6 +20,7 @@ import {
   resolveYextStructField,
   YextStructFieldSelector,
   YextStructEntityField,
+  ComponentFields,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -67,7 +68,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       hero: YextStructFieldSelector({
         label: "Hero",
         filter: {
-          type: "type.hero_section",
+          type: ComponentFields.HeroSection.type,
         },
       }),
     },

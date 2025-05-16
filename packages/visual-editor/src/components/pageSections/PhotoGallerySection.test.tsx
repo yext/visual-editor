@@ -1,12 +1,300 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "../WCAG/WCAG.setup.ts";
+import {
+  axe,
+  ComponentTest,
+  viewports,
+} from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { PhotoGallerySection, VisualEditorProvider } from "@yext/visual-editor";
+import {
+  PhotoGallerySection,
+  migrate,
+  migrationRegistry,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("PhotoGallerySection $name", ({ width, height }) => {
+const photoGalleryData = [
+  {
+    image: {
+      height: 2048,
+      thumbnails: [
+        {
+          height: 2048,
+          url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+          width: 2048,
+        },
+        {
+          height: 1900,
+          url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+          width: 1900,
+        },
+        {
+          height: 619,
+          url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+          width: 619,
+        },
+        {
+          height: 450,
+          url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+          width: 450,
+        },
+        {
+          height: 196,
+          url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+          width: 196,
+        },
+      ],
+      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+      width: 2048,
+    },
+  },
+  {
+    image: {
+      height: 2048,
+      thumbnails: [
+        {
+          height: 2048,
+          url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+          width: 2048,
+        },
+        {
+          height: 1900,
+          url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/1900x1900.jpg",
+          width: 1900,
+        },
+        {
+          height: 619,
+          url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/619x619.jpg",
+          width: 619,
+        },
+        {
+          height: 450,
+          url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/450x450.jpg",
+          width: 450,
+        },
+        {
+          height: 196,
+          url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/196x196.jpg",
+          width: 196,
+        },
+      ],
+      url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+      width: 2048,
+    },
+  },
+  {
+    image: {
+      height: 2048,
+      thumbnails: [
+        {
+          height: 2048,
+          url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/2048x2048.jpg",
+          width: 2048,
+        },
+        {
+          height: 1900,
+          url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/1900x1900.jpg",
+          width: 1900,
+        },
+        {
+          height: 619,
+          url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/619x619.jpg",
+          width: 619,
+        },
+        {
+          height: 450,
+          url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/450x450.jpg",
+          width: 450,
+        },
+        {
+          height: 196,
+          url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/196x196.jpg",
+          width: 196,
+        },
+      ],
+      url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/2048x2048.jpg",
+      width: 2048,
+    },
+  },
+  {
+    image: {
+      height: 2048,
+      thumbnails: [
+        {
+          height: 2048,
+          url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+          width: 2048,
+        },
+        {
+          height: 1900,
+          url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/1900x1900.jpg",
+          width: 1900,
+        },
+        {
+          height: 619,
+          url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/619x619.jpg",
+          width: 619,
+        },
+        {
+          height: 450,
+          url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/450x450.jpg",
+          width: 450,
+        },
+        {
+          height: 196,
+          url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/196x196.jpg",
+          width: 196,
+        },
+      ],
+      url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+      width: 2048,
+    },
+  },
+];
+
+const tests: ComponentTest[] = [
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...PhotoGallerySection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Gallery")).toBeVisible();
+      expect(page.getByRole("option").elements()).toHaveLength(3);
+    },
+  },
+  {
+    name: "default props with document data",
+    document: { photoGallery: photoGalleryData },
+    props: { ...PhotoGallerySection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Gallery")).toBeVisible();
+      expect(page.getByRole("option").elements()).toHaveLength(3);
+    },
+  },
+  {
+    name: "version 0 props with entity values",
+    document: { photoGallery: photoGalleryData, name: "Test Name" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
+      sectionHeading: {
+        text: {
+          field: "name",
+          constantValue: "Gallery",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        level: 2,
+      },
+      images: {
+        images: {
+          field: "photoGallery",
+          constantValue: [
+            {
+              height: 570,
+              width: 1000,
+              url: "https://placehold.co/1000x570/png",
+            },
+            {
+              height: 570,
+              width: 1000,
+              url: "https://placehold.co/1000x570/png",
+            },
+            {
+              height: 570,
+              width: 1000,
+              url: "https://placehold.co/1000x570/png",
+            },
+          ],
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        imageStyle: {
+          layout: "auto",
+          height: 570,
+          width: 1000,
+          aspectRatio: 1.25,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Test Name")).toBeVisible();
+      expect(page.getByRole("option").elements()).toHaveLength(4);
+    },
+  },
+  {
+    name: "version 0 props with constant value",
+    document: { photoGallery: photoGalleryData },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+      },
+      sectionHeading: {
+        text: {
+          field: "name",
+          constantValue: "Gallery",
+          constantValueEnabled: true,
+        },
+        level: 5,
+      },
+      images: {
+        images: {
+          field: "photoGallery",
+          constantValue: [
+            {
+              height: 570,
+              width: 1000,
+              url: "https://placehold.co/1000x570/png",
+            },
+            {
+              height: 570,
+              width: 1000,
+              url: "https://placehold.co/1000x570/png",
+            },
+            {
+              height: 570,
+              width: 1000,
+              url: "https://placehold.co/1000x570/png",
+            },
+          ],
+          constantValueEnabled: true,
+        },
+        imageStyle: {
+          layout: "fixed",
+          height: 50,
+          width: 50,
+          aspectRatio: 1.25,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Gallery")).toBeVisible();
+      expect(page.getByRole("option").elements()).toHaveLength(3);
+    },
+  },
+];
+
+const testsWithViewports: ComponentTest[] = [
+  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
+  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+];
+
+describe("PhotoGallerySection", async () => {
   const puckConfig: Config = {
     components: { PhotoGallerySection },
     root: {
@@ -15,26 +303,39 @@ describe.each(viewports)("PhotoGallerySection $name", ({ width, height }) => {
       },
     },
   };
-  it("should pass wcag with default props", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "PhotoGallerySection",
-                props: { id: "abc", ...PhotoGallerySection.defaultProps },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
+  it.each(testsWithViewports)(
+    "renders $name $viewport.name",
+    async ({
+      document,
+      props,
+      tests,
+      version,
+      viewport: { width, height } = viewports[0],
+    }) => {
+      const data = migrate(
+        {
+          root: { version },
+          content: [
+            {
+              type: "PhotoGallerySection",
+              props: props,
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig
+      );
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render config={puckConfig} data={data} />
+        </VisualEditorProvider>
+      );
 
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
+      await page.viewport(width, height);
+      await page.screenshot();
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+      await tests(page);
+    }
+  );
 });

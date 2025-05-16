@@ -18,6 +18,7 @@ import {
   EventStruct,
   Timestamp,
   TimestampOption,
+  ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
 
@@ -45,7 +46,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
       events: YextField("Events", {
         type: "entityField",
         filter: {
-          types: ["type.events_section"],
+          types: [ComponentFields.EventSection.type],
         },
       }),
     },

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, testSite, viewports } from "./WCAG/WCAG.setup.ts";
+import { axe, testSite, viewports } from "./testing/componentTests.setup.ts";
 import { act, render as reactRender, screen } from "@testing-library/react";
 import { Header, VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";

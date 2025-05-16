@@ -1,12 +1,328 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "../WCAG/WCAG.setup.ts";
+import {
+  axe,
+  ComponentTest,
+  viewports,
+} from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { InsightSection, VisualEditorProvider } from "@yext/visual-editor";
+import {
+  InsightSection,
+  migrate,
+  migrationRegistry,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("InsightSection $name", ({ width, height }) => {
+const insightsData = {
+  insights: [
+    {
+      category: "Blog",
+      cta: {
+        label: "Read Now",
+        link: "https://yext.com",
+        linkType: "URL",
+      },
+      description: {
+        json: {
+          root: {
+            children: [
+              {
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "Discover how Galaxy Grill is redefining fast casual dining with its commitment to fresh, locally-sourced ingredients and innovative menu that caters to health-conscious diners. Learn about our unique concept.",
+                    type: "text",
+                    version: 1,
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "paragraph",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "root",
+            version: 1,
+          },
+        },
+      },
+      image: {
+        height: 2048,
+        thumbnails: [
+          {
+            height: 2048,
+            url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+            width: 2048,
+          },
+          {
+            height: 1900,
+            url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/1900x1900.jpg",
+            width: 1900,
+          },
+          {
+            height: 619,
+            url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/619x619.jpg",
+            width: 619,
+          },
+          {
+            height: 450,
+            url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/450x450.jpg",
+            width: 450,
+          },
+          {
+            height: 196,
+            url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/196x196.jpg",
+            width: 196,
+          },
+        ],
+        url: "https://a.mktgcdn.com/p-dev/9sn-xdC6lJIbOEIj0bZBZhaM5EM963H1Rv044oszkgs/2048x2048.jpg",
+        width: 2048,
+      },
+      name: "Fresh Flavors Fast",
+      publishTime: "2025-01-01T12:00",
+    },
+    {
+      category: "Menu",
+      cta: {
+        label: "Order Now",
+        link: "https://yext.com",
+        linkType: "URL",
+      },
+      description: {
+        json: {
+          root: {
+            children: [
+              {
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "Galaxy Grill is more than just burgers. We offer a wide range of options, from salads and sandwiches to bowls and innovative sides. Explore the full menu and find your new favorite.",
+                    type: "text",
+                    version: 1,
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "paragraph",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "root",
+            version: 1,
+          },
+        },
+      },
+      image: {
+        height: 2048,
+        thumbnails: [
+          {
+            height: 2048,
+            url: "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/2048x2048.jpg",
+            width: 2048,
+          },
+          {
+            height: 1900,
+            url: "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/1900x1900.jpg",
+            width: 1900,
+          },
+          {
+            height: 619,
+            url: "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/619x619.jpg",
+            width: 619,
+          },
+          {
+            height: 450,
+            url: "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/450x450.jpg",
+            width: 450,
+          },
+          {
+            height: 196,
+            url: "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/196x196.jpg",
+            width: 196,
+          },
+        ],
+        url: "https://a.mktgcdn.com/p-dev/XjYQ-lBgPfQcqPPbXCDWyyt65raas-2yCQYeJOHisuA/2048x2048.jpg",
+        width: 2048,
+      },
+      name: "Beyond the Burger",
+    },
+    {
+      category: "Impact",
+      description: {
+        json: {
+          root: {
+            children: [
+              {
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "At Galaxy Grill, we believe in supporting our community. Discover our commitment to using locally-sourced ingredients, partnering with regional farmers, and giving back to the place we call home.",
+                    type: "text",
+                    version: 1,
+                  },
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "paragraph",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "root",
+            version: 1,
+          },
+        },
+      },
+      name: "Our Commitment to Community",
+      publishTime: "2018-06-01T12:00",
+    },
+  ],
+};
+
+const tests: ComponentTest[] = [
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...InsightSection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Insights")).toBeVisible();
+    },
+  },
+  {
+    name: "default props with document data",
+    document: { c_insights: insightsData, name: "test name" },
+    props: { ...InsightSection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Insights")).toBeVisible();
+      expect(document.body.textContent).not.toContain("Burger");
+    },
+  },
+  {
+    name: "version 0 props with entity values",
+    document: { c_insights: insightsData, name: "test name" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        cardBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        headingLevel: 1,
+      },
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: { insights: [] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      expect(page.getByText("test name")).toBeVisible();
+      expect(page.getByText("Fresh Flavors Fast")).toBeVisible();
+      expect(page.getByText("Blog")).toBeVisible();
+      expect(page.getByText("2025")).toBeVisible();
+      expect(page.getByText("Read Now")).toBeVisible();
+      expect(page.getByText("Discover how")).toBeVisible();
+      expect(page.getByText("Beyond the Burger")).toBeVisible();
+      expect(page.getByText("wide range")).toBeVisible();
+      expect(page.getByText("Order Now")).toBeVisible();
+      expect(page.getByText("Our Commitment to Community")).toBeVisible();
+      expect(page.getByText("Impact")).toBeVisible();
+      expect(page.getByText("2018")).toBeVisible();
+      expect(page.getByText("farmers")).toBeVisible();
+    },
+  },
+  {
+    name: "version 0 props with constant value",
+    document: { c_insights: insightsData },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cardBackgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        headingLevel: 6,
+      },
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: true,
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: {
+            insights: [
+              {
+                name: "Insight 1",
+                category: "Category 1",
+                publishTime: "2025-05-14",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Insights")).toBeVisible();
+      expect(page.getByText("Insight 1")).toBeVisible();
+      expect(page.getByText("Category 1")).toBeVisible();
+      expect(page.getByText("2025")).toBeVisible();
+      expect(page.getByText("CTA")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+    },
+  },
+];
+
+const testsWithViewports: ComponentTest[] = [
+  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
+  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+];
+
+describe("InsightSection", async () => {
   const puckConfig: Config = {
     components: { InsightSection },
     root: {
@@ -15,90 +331,39 @@ describe.each(viewports)("InsightSection $name", ({ width, height }) => {
       },
     },
   };
-  it("should pass wcag with default props", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "InsightSection",
-                props: { id: "abc", ...InsightSection.defaultProps },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
-
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it("should pass wcag with insights", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider
-        templateProps={{
-          document: {
-            c_insightsSection: {
-              insights: [
-                {
-                  image: {
-                    url: "https://placehold.co/600x400",
-                    width: 600,
-                    height: 400,
-                  },
-                  name: "Insight 1",
-                  category: "Category 1",
-                  publishTime: "2025-05-12T13:00:00Z",
-                  description: { html: "<strong>Test</strong> RTF" },
-                  cta: {
-                    link: "https://yext.com",
-                    label: "Learn More",
-                    linkType: "URL",
-                  },
-                },
-                {
-                  name: "Insight 2",
-                  category: "Category 2",
-                  publishTime: "invalid date",
-                  description: "This is normal text",
-                },
-              ],
+  it.each(testsWithViewports)(
+    "renders $name $viewport.name",
+    async ({
+      document,
+      props,
+      tests,
+      version,
+      viewport: { width, height } = viewports[0],
+    }) => {
+      const data = migrate(
+        {
+          root: { version },
+          content: [
+            {
+              type: "InsightSection",
+              props: props,
             },
-          },
-        }}
-      >
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "InsightSection",
-                props: {
-                  id: "abc",
-                  ...InsightSection.defaultProps,
-                  data: {
-                    ...InsightSection.defaultProps!.data,
-                    insights: {
-                      field: "c_insightsSection",
-                      constantValue: {},
-                    },
-                  },
-                },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
+          ],
+        },
+        migrationRegistry,
+        puckConfig
+      );
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render config={puckConfig} data={data} />
+        </VisualEditorProvider>
+      );
 
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
+      await page.viewport(width, height);
+      await page.screenshot();
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+      await tests(page);
+    }
+  );
 });
