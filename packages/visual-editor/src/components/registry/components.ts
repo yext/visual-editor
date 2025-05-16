@@ -406,9 +406,4 @@ export const ui: Registry["items"] = [
       { path: "pageSections/TestimonialSection.tsx", type: "registry:ui" },
     ],
   },
-  {
-    name: "TextList",
-    type: "registry:ui",
-    files: [{ path: "contentBlocks/TextList.tsx", type: "registry:ui" }],
-  },
 ];
