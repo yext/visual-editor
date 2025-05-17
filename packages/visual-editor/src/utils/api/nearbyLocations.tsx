@@ -1,31 +1,35 @@
 const V_PARAM = "20250407";
 
 export const fetchNearbyLocations = async ({
-  contentEndpoint,
+  businessId,
+  apiKey,
+  contentEndpointId,
+  contentDeliveryAPIDomain,
   latitude,
   longitude,
   radiusMi,
   limit,
-  entityType,
 }: {
-  contentEndpoint: string;
+  businessId: string;
+  apiKey: string;
+  contentEndpointId: string;
+  contentDeliveryAPIDomain: string;
   longitude: number;
   latitude: number;
   radiusMi: number;
   limit: number;
-  entityType: string;
 }): Promise<Record<string, any>> => {
-  const url = new URL(contentEndpoint);
+  const url = new URL(
+    `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
+  );
+  url.searchParams.append("api_key", apiKey);
   url.searchParams.append("v", V_PARAM);
   url.searchParams.append(
-    "geocodedCoordinate__geo",
+    "yextDisplayCoordinate__geo",
     `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
   );
   if (limit) {
     url.searchParams.append("limit", limit.toString());
-  }
-  if (entityType) {
-    url.searchParams.append("meta.entityType.id", entityType);
   }
 
   const response = await fetch(url);
