@@ -7,7 +7,7 @@
   "_env": {
     "YEXT_CLOUD_CHOICE": "GLOBAL-MULTI",
     "YEXT_CLOUD_REGION": "US",
-    "YEXT_CONTENT_ENDPOINT": "https://streams-dev.yext.com/v2/accounts/2095538/content/visualEditorLocations?api_key=6c04d784ca88279742506e0272a379f2",
+    "YEXT_CONTENT_ENDPOINT": "https://streams-dev.yext.com/v2/accounts/2095538/content/visualEditorLocations?api_key=<REPLACE ME WITH KEY FROM ENV VARS>",
     "YEXT_ENVIRONMENT": "DEV",
     "YEXT_MAPBOX_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
     "YEXT_PUBLIC_EVENTS_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
