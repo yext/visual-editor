@@ -209,7 +209,7 @@ const LocationCard = ({
         />
       )}
       {address && (
-        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
             address={address}
             lines={[

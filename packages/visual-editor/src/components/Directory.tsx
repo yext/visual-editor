@@ -86,7 +86,7 @@ const DirectoryCard = ({
         />
       )}
       {profile.address && (
-        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
             address={profile.address}
             lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
