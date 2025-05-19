@@ -31,3 +31,9 @@ export {
   createSearchHeadlessConfig,
   createSearchAnalyticsConfig,
 } from "./searchHeadlessConfig.ts";
+export {
+  type Migration,
+  type MigrationAction,
+  type MigrationRegistry,
+  migrate,
+} from "./migrate.ts";

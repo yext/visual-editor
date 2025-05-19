@@ -1,12 +1,239 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "../WCAG/WCAG.setup.ts";
+import {
+  axe,
+  ComponentTest,
+  viewports,
+} from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { PromoSection, VisualEditorProvider } from "@yext/visual-editor";
+import {
+  PromoSection,
+  migrate,
+  migrationRegistry,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("PromoSection $name", ({ width, height }) => {
+const promoData = {
+  cta: {
+    label: "Call to Order",
+    link: "+18005551010",
+    linkType: "PHONE",
+  },
+  description: {
+    json: {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "color: #59359a;",
+                text: "Our out-of-this-world ",
+                type: "text",
+                version: 1,
+              },
+              {
+                detail: 0,
+                format: 1,
+                mode: "normal",
+                style: "color: #59359a;",
+                text: "burgers",
+                type: "text",
+                version: 1,
+              },
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "color: #59359a;",
+                text: " and",
+                type: "text",
+                version: 1,
+              },
+              {
+                detail: 0,
+                format: 1,
+                mode: "normal",
+                style: "color: #59359a;",
+                text: " fresh salads",
+                type: "text",
+                version: 1,
+              },
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "color: #59359a;",
+                text: " are a flavor journey you won\u0027t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!",
+                type: "text",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "paragraph",
+            version: 1,
+          },
+        ],
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        type: "root",
+        version: 1,
+      },
+    },
+  },
+  image: {
+    height: 2048,
+    thumbnails: [
+      {
+        height: 2048,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+        width: 2048,
+      },
+      {
+        height: 1900,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+        width: 1900,
+      },
+      {
+        height: 619,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+        width: 619,
+      },
+      {
+        height: 450,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+        width: 450,
+      },
+      {
+        height: 196,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+        width: 196,
+      },
+    ],
+    url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+    width: 2048,
+  },
+  title: "Taste the universe!",
+};
+
+const tests: ComponentTest[] = [
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...PromoSection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Title")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("Call To Action")).toBeVisible();
+    },
+  },
+  {
+    name: "default props with document data",
+    document: { c_promo: promoData },
+    props: { ...PromoSection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Title")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("Call To Action")).toBeVisible();
+    },
+  },
+  {
+    name: "version 0 props with entity values",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: "Title",
+            description: "Description",
+            cta: { label: "Call To Action", link: "#", linkType: "URL" },
+          },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        orientation: "right",
+        ctaVariant: "secondary",
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Taste the universe!")).toBeVisible();
+      expect(page.getByText("Call to Order")).toBeVisible();
+      expect(page.getByText("out-of-this-world")).toBeVisible();
+    },
+  },
+  {
+    name: "version 0 props with constant value",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          constantValueOverride: {
+            image: true,
+            title: true,
+            description: true,
+            cta: true,
+          },
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: "Title",
+            description: "Description",
+            cta: { label: "Call To Action", link: "#", linkType: "URL" },
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        orientation: "right",
+        ctaVariant: "secondary",
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Title")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("Call to Action")).toBeVisible();
+    },
+  },
+];
+
+const testsWithViewports: ComponentTest[] = [
+  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
+  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+];
+
+describe("PromoSection", async () => {
   const puckConfig: Config = {
     components: { PromoSection },
     root: {
@@ -15,26 +242,39 @@ describe.each(viewports)("PromoSection $name", ({ width, height }) => {
       },
     },
   };
-  it("should pass wcag with default props", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "PromoSection",
-                props: { id: "abc", ...PromoSection.defaultProps },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
+  it.each(testsWithViewports)(
+    "renders $name $viewport.name",
+    async ({
+      document,
+      props,
+      tests,
+      version,
+      viewport: { width, height } = viewports[0],
+    }) => {
+      const data = migrate(
+        {
+          root: { version },
+          content: [
+            {
+              type: "PromoSection",
+              props: props,
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig
+      );
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render config={puckConfig} data={data} />
+        </VisualEditorProvider>
+      );
 
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
+      await page.viewport(width, height);
+      await page.screenshot();
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+      await tests(page);
+    }
+  );
 });

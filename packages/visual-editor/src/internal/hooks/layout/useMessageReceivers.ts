@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
+import { AppState, Config } from "@measured/puck";
 import { DevLogger } from "../../../utils/devLogger.ts";
 import { LayoutSaveState } from "../../types/saveState.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
+import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
+import { migrate } from "../../../utils/migrate.ts";
 
 const devLogger = new DevLogger();
 
-export const useLayoutMessageReceivers = (localDev: boolean) => {
+export const useLayoutMessageReceivers = (
+  localDev: boolean,
+  puckConfig: Config
+) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
   // Trigger additional data flow from parent
@@ -22,9 +28,15 @@ export const useLayoutMessageReceivers = (localDev: boolean) => {
   useReceiveMessage("getLayoutSaveState", TARGET_ORIGINS, (send, payload) => {
     let receivedLayoutSaveState;
     if (payload?.history) {
+      const history = JSON.parse(payload.history) as AppState;
+      const migratedHistory = {
+        ...history,
+        data: migrate(history.data, migrationRegistry, puckConfig),
+      };
+
       receivedLayoutSaveState = {
         hash: payload.hash,
-        history: JSON.parse(payload.history),
+        history: migratedHistory,
       } as LayoutSaveState;
     }
     devLogger.logData("LAYOUT_SAVE_STATE", receivedLayoutSaveState);

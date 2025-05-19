@@ -354,7 +354,7 @@ export const ui: Registry["items"] = [
       "pageSection",
       "heading",
       "cta",
-      "body",
+      "maybeRTF",
       "image",
       "visibilityWrapper",
     ],

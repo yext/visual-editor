@@ -5,6 +5,7 @@ export type YextSchemaField = {
   children?: {
     fields: YextSchemaField[];
   };
+  optionFormat?: "OPTION_FORMAT_EXPANDED";
 };
 
 export type YextFieldDefinition = {
