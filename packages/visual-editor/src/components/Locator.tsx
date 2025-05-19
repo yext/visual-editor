@@ -312,6 +312,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={TRANSLATIONS[locale].searchHere}
             ariaLabel={"Search Dropdown Input"}
+            customCssClasses={{
+              focusedOption: "bg-gray-200",
+              inputElement: "rounded-md h-9 p-2",
+            }}
           />
           <div id="innerDiv" className="overflow-y-auto">
             {resultCount > 0 && (
