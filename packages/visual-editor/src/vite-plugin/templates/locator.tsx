@@ -20,7 +20,7 @@ import {
   applyHeaderScript,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
-import { SchemaWrapper } from "@yext/pages-components";
+import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
@@ -87,6 +87,7 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 const Locator: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
+  console.log("in template!", props);
 
   return (
     <>
@@ -99,9 +100,18 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         rel="stylesheet"
         href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
       />
-      <VisualEditorProvider templateProps={props}>
-        <Render config={locatorConfig} data={JSON.parse(document.__.layout)} />
-      </VisualEditorProvider>
+      <AnalyticsProvider
+        apiKey={document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
+        templateData={props}
+        currency="USD"
+      >
+        <VisualEditorProvider templateProps={props}>
+          <Render
+            config={locatorConfig}
+            data={JSON.parse(document.__.layout)}
+          />
+        </VisualEditorProvider>
+      </AnalyticsProvider>
     </>
   );
 };
