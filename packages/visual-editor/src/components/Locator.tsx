@@ -445,7 +445,7 @@ const LocationCard: CardComponent<Location> = ({
             />
           )}
           {location.address && (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize-sm">
+            <div className="font-body-fontFamily font-body-fontWeight text-body-sm-fontSize">
               <Address
                 address={location.address}
                 lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
