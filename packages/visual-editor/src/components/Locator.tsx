@@ -146,9 +146,6 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
   const document: any = useDocument();
-  if (!document) {
-    return <></>;
-  }
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(document);
     if (searchHeadlessConfig === undefined) {
@@ -160,7 +157,7 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
       searchAnalyticsConfig,
       searcher: provideHeadless(searchHeadlessConfig),
     };
-  }, [document.id]);
+  }, [document.id, document.locale]);
 
   if (searcher === undefined || searchAnalyticsConfig === undefined) {
     console.warn(
@@ -295,7 +292,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     if (!searchLoading && searchState === "loading") {
       setSearchState("complete");
     }
-  }, [searchLoading]);
+  }, [searchLoading, searchState]);
 
   const mapProps: MapProps = {
     ...(userLocation && { centerCoords: userLocation }),
