@@ -88,7 +88,7 @@ const ProductCardItem = ({
           {resolvedCategory && (
             <Background
               background={backgroundColors.background5.value}
-              className="py-2 px-4 rounded-sm w-fit"
+              className="py-2 px-4 rounded w-fit"
             >
               <Body>{resolvedCategory}</Body>
             </Background>
