@@ -131,14 +131,6 @@
   width: 100%;
 }
 
-/* 
- * Removes a Puck-rendered div with -1px margin that causes 
- * the plus button of an ArrayField to be clipped.
- */
-.empty-array-fix > div > div > div > div {
-  display: none;
-}
-
 /*
  * Override specific classes from "react-phone-number-input/style.css"
  * for the Phone constant value input.

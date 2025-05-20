@@ -13,11 +13,7 @@ export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
     onChange: (value: TeamSectionType, uiState?: Partial<UiState>) => void;
   }) => {
     return (
-      <div
-        className={
-          "ve-mt-4" + (value.people.length === 0 ? " empty-array-fix" : "")
-        }
-      >
+      <div className={"ve-mt-4"}>
         <AutoField
           field={PersonStructArrayField}
           value={value.people}

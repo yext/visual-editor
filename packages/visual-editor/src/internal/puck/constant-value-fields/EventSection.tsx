@@ -13,11 +13,7 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
     onChange: (value: EventSectionType, uiState?: Partial<UiState>) => void;
   }) => {
     return (
-      <div
-        className={
-          "ve-mt-4" + (value.events.length === 0 ? " empty-array-fix" : "")
-        }
-      >
+      <div className={"ve-mt-4"}>
         <AutoField
           field={EventStructArrayField}
           value={value.events}
