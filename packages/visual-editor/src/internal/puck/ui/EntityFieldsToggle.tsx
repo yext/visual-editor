@@ -28,11 +28,11 @@ export const EntityFieldsToggle = () => {
               onCheckedChange={toggleTooltips}
               checked={tooltipsVisible}
             />
-            <p className="ve-self-center ve-text-sm">Entity Fields</p>
+            <p className="ve-self-center ve-text-sm">Show Labels</p>
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          {tooltipsVisible ? "Hide Entity Fields" : "Show Entity Fields"}
+          {tooltipsVisible ? "Hide Labels" : "Show Labels"}
           <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>
