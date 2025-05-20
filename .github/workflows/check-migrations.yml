@@ -1,0 +1,43 @@
+name: Check Migrations
+
+on:
+  pull_request:
+    paths:
+      # Trigger when files in components are updated
+      - "packages/visual-editor/src/components/**"
+
+jobs:
+  comment-on-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get changed files
+        id: changes
+        run: |
+          # Get the list of files changed in this PR
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git diff --name-only origin/${{ github.event.pull_request.base.ref }} > changed_files.txt
+
+          # Check for changes under components, excluding the migrations, testing, and registry subdirectories and .test. files
+          grep '^packages/visual-editor/src/components/' changed_files.txt | \
+            grep -vE '^packages/visual-editor/src/components/(migrations|testing|registry)' | \
+            grep -v -q '\.test\.' && echo "components_updated=true" >> $GITHUB_ENV || echo "components_updated=false" >> $GITHUB_ENV
+
+          grep -q '^packages/visual-editor/src/components/migrations/migrationRegistry.ts' changed_files.txt && echo "migrations_updated=true" >> $GITHUB_ENV || echo "migrations_updated=false" >> $GITHUB_ENV
+
+      - name: Comment on PR
+        if: env.components_updated == 'true' && env.migrations_updated == 'false'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const commentBody = "Warning: Component files have been updated but no migrations have been added. See https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/migrations/README.md for more information.";
+
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: prNumber,
+              body: commentBody
+            });
