@@ -42,10 +42,20 @@ export const Image: React.FC<ImageProps> = ({
         />
       ) : (
         <img
-          alt={image?.alternateText ?? image?.image?.alternateText ?? ""}
-          src={image?.url ?? image?.image?.url}
-        ></img>
+          src={isComplexImageType(image) ? image.image.url : image.url}
+          alt={
+            isComplexImageType(image)
+              ? (image.image.alternateText ?? "")
+              : (image.alternateText ?? "")
+          }
+        />
       )}
     </div>
   );
 };
+
+function isComplexImageType(
+  image: ImageType | ComplexImageType
+): image is ComplexImageType {
+  return "image" in image;
+}
