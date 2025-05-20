@@ -87,7 +87,6 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 const Locator: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
-  console.log("in template!", props);
 
   return (
     <>
