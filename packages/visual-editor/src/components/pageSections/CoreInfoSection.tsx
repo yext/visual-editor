@@ -214,9 +214,6 @@ const CoreInfoSectionWrapper = ({
   services: servicesField,
 }: CoreInfoSectionProps) => {
   const document = useDocument();
-  React.useEffect(() => {
-    console.log(coreInfoSectionFields);
-  }, []);
   const addressHeadingText = resolveYextEntityField<string>(
     document,
     addressField.headingText

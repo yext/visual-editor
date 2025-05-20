@@ -1,6 +1,7 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { TeamSectionType, PersonStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
+import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
 
 export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
   type: "custom",
@@ -51,10 +52,7 @@ const PersonStructArrayField: ArrayField<PersonStruct[]> = {
       type: "text",
       label: "Title",
     },
-    phoneNumber: {
-      type: "text",
-      label: "Phone Number",
-    },
+    phoneNumber: PHONE_CONSTANT_CONFIG,
     email: {
       type: "text",
       label: "Email",

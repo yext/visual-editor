@@ -4,7 +4,7 @@ import PhoneInputWithCountrySelect from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "../ui/puck.css";
 
-export const PHONE_CONSTANT_CONFIG: CustomField<string> = {
+export const PHONE_CONSTANT_CONFIG: CustomField<string | undefined> = {
   type: "custom",
   render: ({ value, onChange }) => {
     return (
