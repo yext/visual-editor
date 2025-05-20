@@ -48,6 +48,7 @@ export const Image: React.FC<ImageProps> = ({
               ? (image.image.alternateText ?? "")
               : (image.alternateText ?? "")
           }
+          className="object-cover"
         />
       )}
     </div>
