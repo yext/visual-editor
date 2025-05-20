@@ -214,6 +214,9 @@ const CoreInfoSectionWrapper = ({
   services: servicesField,
 }: CoreInfoSectionProps) => {
   const document = useDocument();
+  React.useEffect(() => {
+    console.log(coreInfoSectionFields);
+  }, []);
   const addressHeadingText = resolveYextEntityField<string>(
     document,
     addressField.headingText
@@ -272,7 +275,7 @@ const CoreInfoSectionWrapper = ({
             <Heading level={styles.headingLevel}>{addressHeadingText}</Heading>
           </EntityField>
         )}
-        <div className="flex flex-col gap-2 text">
+        <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
           {resolvedAddress && (
             <EntityField
               displayName="Address"
@@ -390,6 +393,7 @@ const CoreInfoSectionWrapper = ({
               hours={resolvedHours}
               startOfWeek={hoursField.startOfWeek}
               collapseDays={hoursField.collapseDays}
+              className="text-body-fontSize font-body-fontWeight font-body-fontFamily"
             />
           </EntityField>
           {additionalHoursText && hoursField.showAdditionalHoursText && (
