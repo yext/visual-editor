@@ -25,35 +25,7 @@ const insightsData = {
         linkType: "URL",
       },
       description: {
-        json: {
-          root: {
-            children: [
-              {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Discover how Galaxy Grill is redefining fast casual dining with its commitment to fresh, locally-sourced ingredients and innovative menu that caters to health-conscious diners. Learn about our unique concept.",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            type: "root",
-            version: 1,
-          },
-        },
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Discover how Galaxy Grill is redefining fast casual dining with its commitment to fresh, locally-sourced ingredients and innovative menu that caters to health-conscious diners. Learn about our unique concept.</span></p>',
       },
       image: {
         height: 2048,
@@ -98,35 +70,7 @@ const insightsData = {
         linkType: "URL",
       },
       description: {
-        json: {
-          root: {
-            children: [
-              {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Galaxy Grill is more than just burgers. We offer a wide range of options, from salads and sandwiches to bowls and innovative sides. Explore the full menu and find your new favorite.",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            type: "root",
-            version: 1,
-          },
-        },
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Galaxy Grill is more than just burgers. We offer a wide range of options, from salads and sandwiches to bowls and innovative sides. Explore the full menu and find your new favorite.</span></p>',
       },
       image: {
         height: 2048,
@@ -165,35 +109,7 @@ const insightsData = {
     {
       category: "Impact",
       description: {
-        json: {
-          root: {
-            children: [
-              {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "At Galaxy Grill, we believe in supporting our community. Discover our commitment to using locally-sourced ingredients, partnering with regional farmers, and giving back to the place we call home.",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            type: "root",
-            version: 1,
-          },
-        },
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>At Galaxy Grill, we believe in supporting our community. Discover our commitment to using locally-sourced ingredients, partnering with regional farmers, and giving back to the place we call home.</span></p>',
       },
       name: "Our Commitment to Community",
       publishTime: "2018-06-01T12:00",
