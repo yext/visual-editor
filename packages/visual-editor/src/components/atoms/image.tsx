@@ -32,7 +32,7 @@ export const Image: React.FC<ImageProps> = ({
           aspectRatio={aspectRatio}
           className="object-cover w-full"
         />
-      ) : (
+      ) : !!width && !!height ? (
         <ImageComponent
           image={image}
           layout={"fixed"}
@@ -40,6 +40,11 @@ export const Image: React.FC<ImageProps> = ({
           height={height}
           className="object-cover"
         />
+      ) : (
+        <img
+          alt={image?.alternateText ?? image?.image?.alternateText ?? ""}
+          src={image?.url ?? image?.image?.url}
+        ></img>
       )}
     </div>
   );
