@@ -11,6 +11,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/AlertDialog.tsx";
 import { Button } from "../ui/button.tsx";
+import { Link } from "@yext/pages-components";
 import "../../../editor/index.css";
 
 type ClearLocalChangesButtonProps = {
@@ -34,11 +35,15 @@ export const ClearLocalChangesButton = ({
   return (
     <AlertDialog open={modalOpen} onOpenChange={setModalOpen}>
       <AlertDialogTrigger disabled={disabled} asChild>
-        <Button variant="outline">Clear Local Changes</Button>
+        <Button asChild variant="link">
+          <Link cta={{ link: "#", linkType: "URL" }} className="text-sm">
+            Discard Changes
+          </Link>
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Clear Local Changes</AlertDialogTitle>
+          <AlertDialogTitle>Discard Changes</AlertDialogTitle>
           <AlertDialogDescription>
             This action will remove your local changes. It cannot be undone.
           </AlertDialogDescription>
