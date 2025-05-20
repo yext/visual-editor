@@ -16,6 +16,7 @@ import {
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
+  ComponentFields,
   EntityField,
   MaybeRTF,
 } from "@yext/visual-editor";
@@ -41,7 +42,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       promo: YextStructFieldSelector({
         label: "Promo",
         filter: {
-          type: "type.promo_section",
+          type: ComponentFields.PromoSection.type,
         },
       }),
     },

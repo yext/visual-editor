@@ -17,6 +17,7 @@ import {
   InsightSectionType,
   InsightStruct,
   Timestamp,
+  ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -45,7 +46,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       insights: YextField("Insight Section", {
         type: "entityField",
         filter: {
-          types: ["type.insights_section"],
+          types: [ComponentFields.InsightSection.type],
         },
       }),
     },
@@ -89,12 +90,13 @@ const InsightCard = ({
   sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
-    <Background className="rounded-sm h-full" background={backgroundColor}>
+    <Background className="rounded h-full" background={backgroundColor}>
       {insight.image && (
         <Image
           image={insight.image}
           layout="auto"
-          className="rounded-[inherit]"
+          aspectRatio={1.778} // 16:9
+          className="rounded-t-[inherit]"
         />
       )}
       <div className="flex flex-col gap-8 p-8">

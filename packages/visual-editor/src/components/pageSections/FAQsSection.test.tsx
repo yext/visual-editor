@@ -1,12 +1,150 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, viewports } from "../WCAG/WCAG.setup.ts";
+import {
+  axe,
+  ComponentTest,
+  viewports,
+} from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { FAQSection, VisualEditorProvider } from "@yext/visual-editor";
+import {
+  FAQSection,
+  migrate,
+  migrationRegistry,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("FAQSection $name", ({ width, height }) => {
+const faqData = {
+  faqs: [
+    {
+      answer: {
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>We offer Delivery, Catering, Take Out, and Dine In.</span></p>',
+      },
+      question: "What services do you offer?",
+    },
+    {
+      answer: {
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Yes. There are a limited number of spots in front and we validate parking at </span><a href="https://" rel="noopener" style="color: rgb(33, 111, 219); text-decoration: none;"><span>these garages</span></a><span>.</span></p>',
+      },
+      question: "Do you have parking available?",
+    },
+  ],
+};
+
+const tests: ComponentTest[] = [
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...FAQSection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Frequently Asked Questions")).toBeVisible();
+      expect(document.body.textContent).not.toContain("parking");
+    },
+  },
+  {
+    name: "default props with document data",
+    document: { c_faq: faqData },
+    props: { ...FAQSection.defaultProps },
+    version: migrationRegistry.length,
+    tests: async (page) => {
+      expect(page.getByText("Frequently Asked Questions")).toBeVisible();
+      expect(document.body.textContent).not.toContain("parking");
+    },
+  },
+  {
+    name: "version 0 props with entity values",
+    document: { c_faq: faqData, name: "test name" },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Frequently Asked Questions",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        faqs: {
+          field: "c_faq",
+          constantValue: { faqs: [] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        headingLevel: 2,
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      const q1 = page.getByText("What services do you offer?");
+      const q2 = page.getByText("Do you have parking available?");
+      expect(page.getByText("test name")).toBeVisible();
+      expect(q1).toBeVisible();
+      expect(q2).toBeVisible();
+      await q1.click();
+      expect(page.getByText("delivery")).toBeVisible();
+      await q2.click();
+      expect(page.getByText("limited")).toBeVisible();
+    },
+  },
+  {
+    name: "version 0 props with constant value",
+    document: { c_faq: faqData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Frequently Asked Questions",
+          constantValueEnabled: true,
+          constantValueOverride: {},
+        },
+        faqs: {
+          field: "c_faq",
+          constantValue: {
+            faqs: [
+              { question: "Test Question 1", answer: "Answer 1" },
+              { question: "Test Question 2", answer: "Answer 2" },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        headingLevel: 5,
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+    tests: async (page) => {
+      const q1 = page.getByText("Test Question 1");
+      const q2 = page.getByText("Test Question 2");
+      expect(page.getByText("Frequently Asked Questions")).toBeVisible();
+      expect(q1).toBeVisible();
+      expect(q2).toBeVisible();
+      await q1.click();
+      expect(page.getByText("Answer 1")).toBeVisible();
+      await q2.click();
+      expect(page.getByText("Answer 2")).toBeVisible();
+    },
+  },
+];
+
+const testsWithViewports: ComponentTest[] = [
+  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
+  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+];
+
+describe("FAQSection", async () => {
   const puckConfig: Config = {
     components: { FAQSection },
     root: {
@@ -15,80 +153,39 @@ describe.each(viewports)("FAQSection $name", ({ width, height }) => {
       },
     },
   };
-
-  it("should pass wcag with default props", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "FAQSection",
-                props: { id: "abc", ...FAQSection.defaultProps },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
-
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it("should pass wcag with faqs", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider
-        templateProps={{
-          document: {
-            c_faqsSection: {
-              faqs: [
-                {
-                  question: "What is Yext?",
-                  answer: {
-                    html: "<strong>Yext</strong> is a digital presence platform.",
-                  },
-                },
-                {
-                  question: "How does it work?",
-                  answer:
-                    "It works by helping businesses manage their digital presence.",
-                },
-              ],
+  it.each(testsWithViewports)(
+    "renders $name $viewport.name",
+    async ({
+      document,
+      props,
+      tests,
+      version,
+      viewport: { width, height } = viewports[0],
+    }) => {
+      const data = migrate(
+        {
+          root: { version },
+          content: [
+            {
+              type: "FAQSection",
+              props: props,
             },
-          },
-        }}
-      >
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "FAQSection",
-                props: {
-                  id: "abc",
-                  ...FAQSection.defaultProps,
-                  data: {
-                    ...FAQSection.defaultProps!.data,
-                    faqs: {
-                      field: "c_faqsSection",
-                      constantValue: {},
-                    },
-                  },
-                },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
+          ],
+        },
+        migrationRegistry,
+        puckConfig
+      );
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render config={puckConfig} data={data} />
+        </VisualEditorProvider>
+      );
 
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
+      await page.viewport(width, height);
+      await page.screenshot();
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+      await tests(page);
+    }
+  );
 });

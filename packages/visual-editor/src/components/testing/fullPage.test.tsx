@@ -5,7 +5,7 @@ import { VisualEditorProvider } from "@yext/visual-editor";
 import { Render, Config, ComponentConfig } from "@measured/puck";
 import * as allExports from "../index.ts";
 import { page } from "@vitest/browser/context";
-import { axe, testHours, testSite, viewports } from "./WCAG.setup.ts";
+import { axe, testHours, testSite, viewports } from "./componentTests.setup.ts";
 
 describe.each(viewports)("full page wcag $name", ({ width }) => {
   const components: Record<string, ComponentConfig<any>> = {};

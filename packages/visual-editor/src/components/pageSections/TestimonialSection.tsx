@@ -14,6 +14,7 @@ import {
   TestimonialSectionType,
   TestimonialStruct,
   Timestamp,
+  ComponentFields,
   MaybeRTF,
   TimestampOption,
 } from "@yext/visual-editor";
@@ -43,7 +44,7 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       testimonials: YextField("Testimonial Section", {
         type: "entityField",
         filter: {
-          types: ["type.testimonials_section"],
+          types: [ComponentFields.TestimonialSection.type],
         },
       }),
     },
@@ -90,7 +91,7 @@ const TestimonialCard = ({
     <div className="flex flex-col rounded-lg overflow-hidden border h-full">
       <Background
         background={backgroundColors.background1.value}
-        className="p-8"
+        className="p-8 grow"
       >
         <MaybeRTF data={testimonial.description} />
       </Background>

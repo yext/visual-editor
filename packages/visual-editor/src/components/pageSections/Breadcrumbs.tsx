@@ -68,31 +68,33 @@ export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
     );
   }
 
+  if (!breadcrumbs?.length) {
+    return <PageSection></PageSection>;
+  }
+
   return (
-    <PageSection as="nav" verticalPadding="sm" aria-label="Breadcrumb">
-      {breadcrumbs?.length > 0 && (
-        <ol className="flex flex-wrap">
-          {breadcrumbs.map(({ name, slug }, idx) => {
-            const isLast = idx === breadcrumbs.length - 1;
-            const href = relativePrefixToRoot
-              ? relativePrefixToRoot + slug
-              : slug;
-            return (
-              <li key={idx} className="flex items-center">
-                <MaybeLink
-                  href={isLast ? "" : href}
-                  // Force body-sm and link-fontFamily for all breadcrumbs
-                  className="text-body-sm-fontSize font-link-fontFamily"
-                  alwaysHideCaret={true}
-                >
-                  <Body variant={"sm"}>{name}</Body>
-                </MaybeLink>
-                {!isLast && <span className="mx-2">{separator}</span>}
-              </li>
-            );
-          })}
-        </ol>
-      )}
+    <PageSection as={"nav"} verticalPadding="sm" aria-label="Breadcrumb">
+      <ol className="flex flex-wrap">
+        {breadcrumbs.map(({ name, slug }, idx) => {
+          const isLast = idx === breadcrumbs.length - 1;
+          const href = relativePrefixToRoot
+            ? relativePrefixToRoot + slug
+            : slug;
+          return (
+            <li key={idx} className="flex items-center">
+              <MaybeLink
+                href={isLast ? "" : href}
+                // Force body-sm and link-fontFamily for all breadcrumbs
+                className="text-body-sm-fontSize font-link-fontFamily"
+                alwaysHideCaret={true}
+              >
+                <Body variant={"sm"}>{name}</Body>
+              </MaybeLink>
+              {!isLast && <span className="mx-2">{separator}</span>}
+            </li>
+          );
+        })}
+      </ol>
     </PageSection>
   );
 };
@@ -103,13 +105,15 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   defaultProps: {
     liveVisibility: true,
   },
-  render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-      iconSize="md"
-    >
-      <BreadcrumbsComponent {...props} />
-    </VisibilityWrapper>
-  ),
+  render: (props) => {
+    return (
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <BreadcrumbsComponent {...props} />
+      </VisibilityWrapper>
+    );
+  },
 };
