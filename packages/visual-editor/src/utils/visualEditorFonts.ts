@@ -33,10 +33,12 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * fall outside of the font's supported values
  */
 const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
-  const prefix = `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?`;
-  const postfix = `display=swap" rel="stylesheet">`;
+  const preconnectTags =
+    '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
+
+  const prefix = '<link href="https://fonts.googleapis.com/css2?';
+  const postfix = 'display=swap" rel="stylesheet">';
 
   const fontEntries = Object.entries(fonts);
   const chunkSize = 7;
@@ -48,10 +50,16 @@ const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     const params = chunk
       .map(([fontName, fontDetails]) => {
         const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
-        const weightRange = `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+
+        const weightRange =
+          fontDetails.minWeight === fontDetails.maxWeight
+            ? `${fontDetails.minWeight}`
+            : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+
         const weightParam = fontDetails.italics
           ? `0,${weightRange};1,${weightRange}`
           : weightRange;
+
         return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
       })
       .join("&");
@@ -59,7 +67,7 @@ const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     linkTags.push(`${prefix}${params}&${postfix}`);
   }
 
-  return linkTags.join("\n");
+  return preconnectTags + linkTags.join("\n");
 };
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);

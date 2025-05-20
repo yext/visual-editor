@@ -114,10 +114,11 @@ const buildFontRegistry = async () => {
 };
 
 const constructGoogleFontLinkTags = (fonts) => {
-  const prefix =
+  const preconnectTags =
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-    '<link href="https://fonts.googleapis.com/css2?';
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
+
+  const prefix = '<link href="https://fonts.googleapis.com/css2?';
   const postfix = 'display=swap" rel="stylesheet">';
 
   const fontEntries = Object.entries(fonts);
@@ -130,10 +131,17 @@ const constructGoogleFontLinkTags = (fonts) => {
     const params = chunk
       .map(([fontName, fontDetails]) => {
         const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
-        const weightRange = `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+
+        // If minWeight === maxWeight, just use the single weight value, else use the range
+        const weightRange =
+          fontDetails.minWeight === fontDetails.maxWeight
+            ? `${fontDetails.minWeight}`
+            : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+
         const weightParam = fontDetails.italics
           ? `0,${weightRange};1,${weightRange}`
           : weightRange;
+
         return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
       })
       .join("&");
@@ -141,7 +149,7 @@ const constructGoogleFontLinkTags = (fonts) => {
     linkTags.push(`${prefix}${params}&${postfix}`);
   }
 
-  return linkTags.join("\n");
+  return preconnectTags + linkTags.join("\n");
 };
 
 const generateOutputString = async (registry) => {
