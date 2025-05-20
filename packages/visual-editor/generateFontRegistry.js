@@ -2,7 +2,16 @@
 import fs from "fs";
 import path from "path";
 
-const GOOGLE_FONTS_API_KEY = "REPLACE ME!"; // Replace with your Google Fonts API key
+const GOOGLE_FONTS_API_KEY = process.argv[2]; // Replace with your Google Fonts API key
+if (!GOOGLE_FONTS_API_KEY) {
+  console.error(
+    "Error: No API key provided. Usage: node generateFontRegistry.js YOUR_API_KEY"
+  );
+  process.exit(1);
+}
+
+console.log("Using API key:", GOOGLE_FONTS_API_KEY);
+
 const OUTPUT_FILE = path.join(
   process.cwd(),
   "src",
