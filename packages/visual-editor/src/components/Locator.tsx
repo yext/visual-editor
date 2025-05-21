@@ -11,6 +11,7 @@ import {
   ResultsCount,
   VerticalResults,
   AnalyticsProvider,
+  PinComponent,
 } from "@yext/search-ui-react";
 import {
   Matcher,
@@ -19,6 +20,7 @@ import {
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  Result,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
@@ -294,10 +296,38 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     }
   }, [searchLoading, searchState]);
 
+  const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
+  const resultsContainer = React.useRef<HTMLDivElement>(null);
+
+  const setResultsRef = React.useCallback((index: number) => {
+    if (!resultsRef?.current) return null;
+    return (result: HTMLDivElement) => (resultsRef.current[index] = result);
+  }, []);
+
+  const scrollToResult = React.useCallback(
+    (result: Result | undefined) => {
+      if (result) {
+        // sum up the height of all search results that are listed above this result
+        const previousResultsHeight = resultsRef.current
+          .filter((r, index) =>
+            r && result.index ? index < result.index : false
+          )
+          .map((elem) => elem?.scrollHeight ?? 0)
+          .reduce((total, height) => total + height);
+        resultsContainer.current?.scroll({
+          top: previousResultsHeight,
+          behavior: "smooth",
+        });
+      }
+    },
+    [resultsRef.current, resultsContainer]
+  );
+
   const mapProps: MapProps = {
     ...(userLocation && { centerCoords: userLocation }),
     ...(mapStyle && { mapStyle }),
     onDragHandler: handleDrag,
+    scrollToResult: scrollToResult,
   };
 
   return (
@@ -317,14 +347,17 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
               inputElement: "rounded-md h-9 p-2",
             }}
           />
+          {resultCount > 0 && (
+            <ResultsCount
+              customCssClasses={{ resultsCountContainer: "py-1 text-lg" }}
+            />
+          )}
           <div id="innerDiv" className="overflow-y-auto">
             {resultCount > 0 && (
-              <div>
-                <ResultsCount
-                  customCssClasses={{ resultsCountContainer: "py-1 text-lg" }}
-                />
-                <VerticalResults CardComponent={LocationCard} />
-              </div>
+              <VerticalResults
+                CardComponent={LocationCard}
+                setResultsRef={setResultsRef}
+              />
             )}
             {resultCount === 0 && searchState === "not started" && (
               <Body className="py-2 border-y">
@@ -362,9 +395,15 @@ interface MapProps {
   mapStyle?: string;
   centerCoords?: [number, number];
   onDragHandler?: OnDragHandler;
+  scrollToResult?: (result: Result | undefined) => void;
 }
 
-const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
+const Map: React.FC<MapProps> = ({
+  mapStyle,
+  centerCoords,
+  onDragHandler,
+  scrollToResult,
+}) => {
   // During page generation we don't exist in a browser context
   const iframe =
     typeof document === "undefined"
@@ -392,10 +431,45 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
         center: centerCoords ?? DEFAULT_MAP_CENTER,
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
+      PinComponent={MapPin}
       onDrag={onDragHandler}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
+      scrollToResult={scrollToResult}
     />
+  );
+};
+
+const MapPin: PinComponent<Record<string, unknown>> = (props) => {
+  const { result, selected, onClick } = props;
+  const { width, height } = React.useMemo(() => {
+    return selected
+      ? {
+          // zoomed in pin size
+          width: "44",
+          height: "58",
+        }
+      : {
+          // default pin size
+          width: "33",
+          height: "42",
+        };
+  }, [selected]);
+
+  return (
+    <button onClick={() => onClick?.(result)} aria-label="Show pin details">
+      <svg
+        width={width}
+        height={height}
+        viewBox="0 0 30 38"
+        fill="#1e293b"
+        stroke="#fff"
+        strokeWidth="2px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M30 15.0882C30 23.4212 23.3333 30.7353 15 38C7.22222 31.2941 0 23.4212 0 15.0882C0 6.75523 6.71573 0 15 0C23.2843 0 30 6.75523 30 15.0882Z" />
+      </svg>
+    </button>
   );
 };
 
