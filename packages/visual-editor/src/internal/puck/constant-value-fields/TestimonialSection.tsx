@@ -19,12 +19,7 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
       ) => void;
     }) => {
       return (
-        <div
-          className={
-            "ve-mt-4" +
-            (value.testimonials.length === 0 ? " empty-array-fix" : "")
-          }
-        >
+        <div className={"ve-mt-4"}>
           <AutoField
             field={TestimonialStructArrayField}
             value={value.testimonials}
