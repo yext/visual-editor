@@ -98,8 +98,8 @@ importers:
   packages/visual-editor:
     dependencies:
       "@measured/puck":
-        specifier: 0.18.2
-        version: 0.18.2(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
+        specifier: 0.18.3
+        version: 0.18.3(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
       "@radix-ui/react-accordion":
         specifier: ^1.2.3
         version: 1.2.8(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -196,6 +196,9 @@ importers:
       react-error-boundary:
         specifier: ^5.0.0
         version: 5.0.0(react@18.3.1)
+      react-phone-number-input:
+        specifier: ^3.4.12
+        version: 3.4.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -357,8 +360,8 @@ importers:
         specifier: ^7.10.1
         version: 7.17.5(react@18.3.1)
       "@measured/puck":
-        specifier: 0.18.2
-        version: 0.18.2(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
+        specifier: 0.18.3
+        version: 0.18.3(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
       "@radix-ui/react-accordion":
         specifier: ^1.2.0
         version: 1.2.8(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2366,13 +2369,13 @@ packages:
       }
     engines: { node: ">=6.0.0" }
 
-  "@measured/puck@0.18.2":
+  "@measured/puck@0.18.3":
     resolution:
       {
-        integrity: sha512-WI8AQ9V6MnxbEjnaB9fd2p8RGwrQ44jriJNDwoDKgKxIsHIk1IEdz8cK7Qf30yepJ4iKqr9ug6lLZJcutFPgMA==,
+        integrity: sha512-mw78Z7Ykk4LbyM+8n3CPsjI41SyMg1dOfYoV3VSWJiZWkMj47x6DJS6SdwfaNSyseyPpcSx6sEbL6BaOBAVoHQ==,
       }
     peerDependencies:
-      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^18.0.0 || ^19.0.0
 
   "@napi-rs/wasm-runtime@0.2.9":
     resolution:
@@ -5535,6 +5538,12 @@ packages:
       typescript:
         optional: true
 
+  country-flag-icons@1.5.19:
+    resolution:
+      {
+        integrity: sha512-D/ZkRyj+ywJC6b2IrAN3/tpbReMUqmuRLlcKFoY/o0+EPQN9Ev/e8tV+D3+9scvu/tarxwLErNwS73C3yzxs/g==,
+      }
+
   create-ecdh@4.0.4:
     resolution:
       {
@@ -7073,6 +7082,20 @@ packages:
       {
         integrity: sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==,
       }
+
+  input-format@0.3.14:
+    resolution:
+      {
+        integrity: sha512-gHMrgrbCgmT4uK5Um5eVDUohuV9lcs95ZUUN9Px2Y0VIfjTzT2wF8Q3Z4fwLFm7c5Z2OXCm53FHoovj6SlOKdg==,
+      }
+    peerDependencies:
+      react: ">=18.1.0"
+      react-dom: ">=18.1.0"
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   internal-slot@1.1.0:
     resolution:
@@ -9670,6 +9693,15 @@ packages:
     peerDependencies:
       react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  react-phone-number-input@3.4.12:
+    resolution:
+      {
+        integrity: sha512-Raob77KdtLGm49iC6nuOX9qy6Mg16idkgC7Y1mHmvG2WBYoauHpzxYNlfmFskQKeiztrJIwPhPzBhjFwjenNCA==,
+      }
+    peerDependencies:
+      react: ">=16.8"
+      react-dom: ">=16.8"
 
   react-refresh@0.17.0:
     resolution:
@@ -12898,7 +12930,7 @@ snapshots:
 
   "@mapbox/whoots-js@3.1.0": {}
 
-  "@measured/puck@0.18.2(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))":
+  "@measured/puck@0.18.3(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))":
     dependencies:
       "@dnd-kit/helpers": 0.0.7-beta-20250130032138
       "@dnd-kit/react": 0.0.7-beta-20250130032138(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -15156,6 +15188,8 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
 
+  country-flag-icons@1.5.19: {}
+
   create-ecdh@4.0.4:
     dependencies:
       bn.js: 4.12.2
@@ -16315,6 +16349,13 @@ snapshots:
   ini@5.0.0: {}
 
   inline-style-parser@0.1.1: {}
+
+  input-format@0.3.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+    optionalDependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   internal-slot@1.1.0:
     dependencies:
@@ -18014,6 +18055,16 @@ snapshots:
 
   react-number-format@5.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  react-phone-number-input@3.4.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      classnames: 2.5.1
+      country-flag-icons: 1.5.19
+      input-format: 0.3.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      libphonenumber-js: 1.12.7
+      prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
