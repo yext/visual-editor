@@ -11,11 +11,7 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
     onChange: (value: FAQSectionType, uiState?: Partial<UiState>) => void;
   }) => {
     return (
-      <div
-        className={
-          "ve-mt-4" + (value.faqs.length === 0 ? " empty-array-fix" : "")
-        }
-      >
+      <div className={"ve-mt-4"}>
         <AutoField
           field={FAQStructArrayField}
           value={value.faqs}

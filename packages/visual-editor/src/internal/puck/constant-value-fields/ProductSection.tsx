@@ -13,11 +13,7 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
       onChange: (value: ProductSectionType, uiState?: Partial<UiState>) => void;
     }) => {
       return (
-        <div
-          className={
-            "ve-mt-4" + (value.products.length === 0 ? " empty-array-fix" : "")
-          }
-        >
+        <div className={"ve-mt-4"}>
           <AutoField
             field={ProductStructArrayField}
             value={value.products}
