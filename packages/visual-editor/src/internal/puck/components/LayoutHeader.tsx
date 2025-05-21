@@ -2,6 +2,7 @@ import React from "react";
 import { Data, usePuck, type History } from "@measured/puck";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
+import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
@@ -69,8 +70,13 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         }}
       />
       <header className="puck-header">
-        <div className="header-left">
+        <div className="header-left flex items-center">
           <UIButtonsToggle showLeft={true} />
+          <Separator
+            orientation="vertical"
+            decorative
+            className="mx-4 h-7 w-px bg-gray-300 my-auto"
+          />
           <EntityFieldsToggle />
           {localDev && (
             <>
@@ -125,6 +131,11 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           >
             <RotateCw className="sm-icon" />
           </Button>
+          <Separator
+            orientation="vertical"
+            decorative
+            className="mx-4 h-7 w-px bg-gray-300 my-auto"
+          />
           <ClearLocalChangesButton
             modalOpen={clearLocalChangesModalOpen}
             setModalOpen={setClearLocalChangesModalOpen}
