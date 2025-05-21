@@ -24,6 +24,9 @@ export default defineConfig(() => ({
         "@measured/puck",
         "uuid",
         "@yext/pages-components",
+        "mapbox-gl",
+        "@yext/search-headless-react",
+        "@yext/search-ui-react",
       ],
       output: {
         globals: {

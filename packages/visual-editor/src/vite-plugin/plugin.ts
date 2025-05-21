@@ -4,6 +4,7 @@ import { Plugin } from "vite";
 import mainTemplate from "./templates/main.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
+import locatorTemplate from "./templates/locator.tsx?raw";
 import { ComponentField, ComponentFields } from "@yext/visual-editor";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 
@@ -63,6 +64,17 @@ const virtualFiles: VirtualFile[] = [
       defaultLayoutData: defaultLayoutData.directory,
       // no componentFields are defined because this is handled in the back-end for the dynamically
       // generated DM fields
+    },
+  },
+  {
+    filepath: "src/templates/locator.tsx",
+    content: locatorTemplate,
+    templateManifestEntry: {
+      name: "locator",
+      description: "Use this template to generate pages for your Locators.",
+      exampleSiteUrl: "",
+      layoutRequired: true,
+      defaultLayoutData: defaultLayoutData.locator,
     },
   },
   {
