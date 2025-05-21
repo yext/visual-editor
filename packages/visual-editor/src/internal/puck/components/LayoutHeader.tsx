@@ -75,7 +75,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           <Separator
             orientation="vertical"
             decorative
-            className="mx-4 h-7 w-px bg-gray-300 my-auto"
+            className="ve-mx-4 ve-h-7 ve-w-px bg-gray-300 my-auto"
           />
           <EntityFieldsToggle />
           {localDev && (
@@ -134,7 +134,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           <Separator
             orientation="vertical"
             decorative
-            className="mx-4 h-7 w-px bg-gray-300 my-auto"
+            className="ve-mx-4 ve-h-7 ve-w-px bg-gray-300 my-auto"
           />
           <ClearLocalChangesButton
             modalOpen={clearLocalChangesModalOpen}

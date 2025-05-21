@@ -9,6 +9,7 @@ import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, usePuck } from "@measured/puck";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
+import { Separator } from "@radix-ui/react-separator";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -146,6 +147,11 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
         >
           <RotateCw className="sm-icon" />
         </Button>
+        <Separator
+          orientation="vertical"
+          decorative
+          className="ve-mx-4 ve-h-7 ve-w-px bg-gray-300 my-auto"
+        />
         <ClearLocalChangesButton
           modalOpen={clearLocalChangesModalOpen}
           setModalOpen={setClearLocalChangesModalOpen}
