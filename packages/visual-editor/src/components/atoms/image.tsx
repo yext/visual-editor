@@ -32,7 +32,7 @@ export const Image: React.FC<ImageProps> = ({
           aspectRatio={aspectRatio}
           className="object-cover w-full"
         />
-      ) : (
+      ) : !!width && !!height ? (
         <ImageComponent
           image={image}
           layout={"fixed"}
@@ -40,7 +40,23 @@ export const Image: React.FC<ImageProps> = ({
           height={height}
           className="object-cover"
         />
+      ) : (
+        <img
+          src={isComplexImageType(image) ? image.image.url : image.url}
+          alt={
+            isComplexImageType(image)
+              ? (image.image.alternateText ?? "")
+              : (image.alternateText ?? "")
+          }
+          className="object-cover"
+        />
       )}
     </div>
   );
 };
+
+function isComplexImageType(
+  image: ImageType | ComplexImageType
+): image is ComplexImageType {
+  return "image" in image;
+}
