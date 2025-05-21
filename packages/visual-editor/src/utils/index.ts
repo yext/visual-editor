@@ -28,6 +28,10 @@ export { applyHeaderScript } from "./applyHeaderScript.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
 export {
+  createSearchHeadlessConfig,
+  createSearchAnalyticsConfig,
+} from "./searchHeadlessConfig.ts";
+export {
   type Migration,
   type MigrationAction,
   type MigrationRegistry,

@@ -1,0 +1,50 @@
+{
+  "__": {
+    "codeTemplate": "locator",
+    "entityPageSet": {},
+    "name": "locations-locator"
+  },
+  "_env": {
+    "YEXT_CLOUD_CHOICE": "GLOBAL-MULTI",
+    "YEXT_CLOUD_REGION": "US",
+    "YEXT_ENVIRONMENT": "DEV",
+    "YEXT_MAPBOX_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
+    "YEXT_PUBLIC_EVENTS_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
+    "YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
+    "YEXT_SEARCH_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS"
+  },
+  "_pageset": "{\"name\":\"accounts/2095538/sites/63797/pagesets/locations-locator\",\"uid\":\"0196b2a4-b79f-706b-b64e-79438fa7b7d1\",\"codeTemplate\":\"locator\",\"assignments\":[\"global\"],\"createTime\":\"2025-05-09T01:24:22Z\",\"updateTime\":\"2025-05-09T01:24:22Z\",\"scope\":{\"locales\":[\"en\"],\"savedFilters\":[\"locator-saved-search-63797-locations\"]},\"defaultLayout\":\"accounts/2095538/sites/63797/layouts/locations-locator-default-layout\",\"displayName\":\"Locations Locator\",\"type\":\"LOCATOR\",\"typeConfig\":{\"locatorConfig\":{\"source\":\"accounts/2095538/sites/63797/pagesets/locations\",\"experienceKey\":\"locator-20\",\"entityType\":\"location\"}}}",
+  "_schema": {
+    "@context": "https://schema.org",
+    "@type": "Thing",
+    "name": "Locator 63797-locations",
+    "url": "/locator-slug-63797-locations"
+  },
+  "_site": {
+    "id": "site-63797",
+    "meta": {
+      "entityType": {
+        "id": "site",
+        "uid": 29107
+      },
+      "locale": "en"
+    },
+    "uid": 8966913
+  },
+  "businessId": 2095538,
+  "id": "locator-63797-locations",
+  "locale": "en",
+  "meta": {
+    "entityType": {
+      "id": "locator",
+      "uid": 29112
+    },
+    "locale": "en"
+  },
+  "name": "Locator 63797-locations",
+  "siteDomain": "",
+  "siteId": 63797,
+  "siteInternalHostName": "",
+  "slug": "locator-slug-63797-locations",
+  "uid": 8967748
+}
