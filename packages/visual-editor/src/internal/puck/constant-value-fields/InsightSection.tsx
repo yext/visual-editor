@@ -14,11 +14,7 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
       onChange: (value: InsightSectionType, uiState?: Partial<UiState>) => void;
     }) => {
       return (
-        <div
-          className={
-            "ve-mt-4" + (value.insights.length === 0 ? " empty-array-fix" : "")
-          }
-        >
+        <div className={"ve-mt-4"}>
           <AutoField
             field={InsightStructArrayField}
             value={value.insights}
