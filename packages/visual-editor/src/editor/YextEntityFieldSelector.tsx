@@ -267,7 +267,7 @@ export const ConstantValueModeToggler = ({
                   htmlFor={entityButtonId}
                   onClick={() => toggleConstantValueEnabled(false)}
                 >
-                  Use page-specific Content
+                  Use Page-specific Content
                 </Label>
               </TooltipTrigger>
               <TooltipContent>
