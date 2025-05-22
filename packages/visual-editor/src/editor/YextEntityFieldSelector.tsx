@@ -23,6 +23,13 @@ import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import { TEAM_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TeamSection.tsx";
 import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TestimonialSection.tsx";
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../internal/puck/ui/Tooltip.tsx";
 
 const devLogger = new DevLogger();
 
@@ -253,22 +260,42 @@ export const ConstantValueModeToggler = ({
       >
         <div className="ve-flex ve-items-center ve-space-x-2">
           <RadioGroupItem value="false" id={entityButtonId} />
-          <Label
-            htmlFor={entityButtonId}
-            onClick={() => toggleConstantValueEnabled(false)}
-          >
-            Use Entity Value
-          </Label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Label
+                  htmlFor={entityButtonId}
+                  onClick={() => toggleConstantValueEnabled(false)}
+                >
+                  Use page-specific Content
+                </Label>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Use content specific to each page</p>
+                <TooltipArrow fill="ve-bg-popover" />
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
         {constantValueInputSupported && (
           <div className="ve-flex ve-items-center ve-space-x-2">
             <RadioGroupItem value="true" id={constantButtonId} />
-            <Label
-              onClick={() => toggleConstantValueEnabled(true)}
-              htmlFor={constantButtonId}
-            >
-              Use Constant Value
-            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Label
+                    onClick={() => toggleConstantValueEnabled(true)}
+                    htmlFor={constantButtonId}
+                  >
+                    Use Static Content
+                  </Label>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Use the same content for each page</p>
+                  <TooltipArrow fill="ve-bg-popover" />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         )}
       </RadioGroup>
