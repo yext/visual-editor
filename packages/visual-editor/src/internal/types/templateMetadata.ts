@@ -12,7 +12,7 @@ export type TemplateMetadata = {
   isxYextDebug: boolean;
   isThemeMode: boolean;
   entityCount: number;
-  totalPageCount: number;
+  totalEntityCount: number;
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
@@ -28,7 +28,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
     isThemeMode: false,
     devOverride: false,
     entityCount: 0,
-    totalPageCount: 0,
+    totalEntityCount: 0,
   };
 }
 
