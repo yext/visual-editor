@@ -287,6 +287,114 @@ const tests: ComponentTest[] = [
       expect(page.getByRole("option").elements()).toHaveLength(3);
     },
   },
+  {
+    name: "version 1 props with entity values",
+    document: { photoGallery: photoGalleryData, name: "Test Name" },
+    props: {
+      data: {
+        heading: {
+          constantValue: "Gallery",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+          field: "name",
+        },
+        images: {
+          constantValue: [
+            {
+              height: 570,
+              url: "https://placehold.co/1000x570/png",
+              width: 1000,
+            },
+            {
+              height: 570,
+              url: "https://placehold.co/1000x570/png",
+              width: 1000,
+            },
+            {
+              height: 570,
+              url: "https://placehold.co/1000x570/png",
+              width: 1000,
+            },
+          ],
+          constantValueEnabled: false,
+          constantValueOverride: {},
+          field: "photoGallery",
+        },
+      },
+      liveVisibility: true,
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        headingLevel: 2,
+        imageStyle: {
+          aspectRatio: 1.25,
+          height: 570,
+          layout: "auto",
+          width: 1000,
+        },
+      },
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Test Name")).toBeVisible();
+      expect(page.getByRole("option").elements()).toHaveLength(4);
+    },
+  },
+  {
+    name: "version 0 props with constant value",
+    document: { photoGallery: photoGalleryData },
+    props: {
+      data: {
+        heading: {
+          constantValue: "Gallery",
+          constantValueEnabled: true,
+          field: "name",
+        },
+        images: {
+          constantValue: [
+            {
+              height: 570,
+              url: "https://placehold.co/1000x570/png",
+              width: 1000,
+            },
+            {
+              height: 570,
+              url: "https://placehold.co/1000x570/png",
+              width: 1000,
+            },
+            {
+              height: 570,
+              url: "https://placehold.co/1000x570/png",
+              width: 1000,
+            },
+          ],
+          constantValueEnabled: true,
+          field: "photoGallery",
+        },
+      },
+      liveVisibility: true,
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        headingLevel: 5,
+        imageStyle: {
+          aspectRatio: 1.25,
+          height: 50,
+          layout: "fixed",
+          width: 50,
+        },
+      },
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Gallery")).toBeVisible();
+      expect(page.getByRole("option").elements()).toHaveLength(3);
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
@@ -314,7 +422,11 @@ describe("PhotoGallerySection", async () => {
     }) => {
       const data = migrate(
         {
-          root: { version },
+          root: {
+            props: {
+              version,
+            },
+          },
           content: [
             {
               type: "PhotoGallerySection",

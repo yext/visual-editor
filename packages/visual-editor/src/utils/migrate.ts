@@ -26,7 +26,9 @@ export type Migration = Record<string, MigrationAction>;
 export type MigrationRegistry = Migration[];
 
 interface RootProps extends DefaultRootProps {
-  version?: number;
+  props?: {
+    version?: number;
+  };
 }
 
 export const migrate = (
@@ -36,7 +38,7 @@ export const migrate = (
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   config?: Config
 ): Data => {
-  const version = data.root?.version ?? 0;
+  const version = data.root?.props?.version ?? 0;
 
   // Apply puck migrations
   data = migratePuck(data);
@@ -62,11 +64,11 @@ export const migrate = (
     });
   });
 
-  if (!data.root) {
-    data.root = {};
+  if (!data.root.props) {
+    data.root.props = {};
   }
-  data.root.version = migrationRegistry.length;
-
+  data.root.props.version = migrationRegistry.length;
+  console.log(data);
   return data;
 };
 

@@ -164,7 +164,11 @@ describe("FAQSection", async () => {
     }) => {
       const data = migrate(
         {
-          root: { version },
+          root: {
+            props: {
+              version,
+            },
+          },
           content: [
             {
               type: "FAQSection",

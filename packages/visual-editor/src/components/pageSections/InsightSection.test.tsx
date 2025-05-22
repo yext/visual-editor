@@ -258,7 +258,11 @@ describe("InsightSection", async () => {
     }) => {
       const data = migrate(
         {
-          root: { version },
+          root: {
+            props: {
+              version,
+            },
+          },
           content: [
             {
               type: "InsightSection",
