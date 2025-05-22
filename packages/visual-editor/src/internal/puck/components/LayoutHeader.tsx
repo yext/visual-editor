@@ -154,7 +154,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             >
               {templateMetadata.assignment === "ENTITY"
                 ? "Send for Approval"
-                : "Publish"}
+                : `Update ${templateMetadata.liveUrlCount} Pages`}
             </Button>
           )}
         </div>
