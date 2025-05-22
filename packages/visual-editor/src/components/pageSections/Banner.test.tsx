@@ -70,6 +70,59 @@ const tests: ComponentTest[] = [
       expect(page.getByText("test")).toBeVisible();
     },
   },
+  {
+    name: "version 1 props with entity values",
+    document: {
+      name: "test",
+    },
+    props: {
+      data: {
+        text: {
+          field: "",
+          constantValue: "Constant Text",
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        textAlignment: "left",
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Constant Text")).toBeVisible();
+    },
+  },
+  {
+    name: "version 1 props with constant value",
+    document: {
+      name: "test",
+    },
+    props: {
+      data: {
+        text: {
+          field: "name",
+          constantValue: "Constant Text",
+        },
+      },
+      styles: {
+        textAlignment: "right",
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("test")).toBeVisible();
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
@@ -97,7 +150,11 @@ describe("BannerSection", async () => {
     }) => {
       const data = migrate(
         {
-          root: { version },
+          root: {
+            props: {
+              version,
+            },
+          },
           content: [
             {
               type: "BannerSection",

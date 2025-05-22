@@ -8,13 +8,20 @@ import { MapboxStaticMapComponent } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export type StaticMapSectionProps = {
-  apiKey: string;
+  data: {
+    apiKey: string;
+  };
   liveVisibility: boolean;
 };
 
 const staticMapSectionFields: Fields<StaticMapSectionProps> = {
-  apiKey: YextField("API Key", {
-    type: "text",
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      apiKey: YextField("API Key", {
+        type: "text",
+      }),
+    },
   }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
@@ -25,14 +32,14 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
   }),
 };
 
-export const StaticMapSectionWrapper = (props: StaticMapSectionProps) => {
+export const StaticMapSectionWrapper = ({ data }: StaticMapSectionProps) => {
   return (
     <PageSection
       background={backgroundColors.background1.value}
       className={`flex items-center`}
     >
       <MapboxStaticMapComponent
-        apiKey={props.apiKey}
+        apiKey={data.apiKey}
         coordinate={{
           field: "yextDisplayCoordinate",
           constantValue: {
@@ -49,7 +56,9 @@ export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
   label: "Static Map Section",
   fields: staticMapSectionFields,
   defaultProps: {
-    apiKey: "",
+    data: {
+      apiKey: "",
+    },
     liveVisibility: true,
   },
   render: (props) => (

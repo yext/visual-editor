@@ -43,15 +43,13 @@ const DEFAULT_IMAGE = {
 };
 
 export interface PhotoGallerySectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    images: YextEntityField<ImageType[] | ComplexImageType[]>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
-  };
-  sectionHeading: {
-    text: YextEntityField<string>;
-    level: HeadingLevel;
-  };
-  images: {
-    images: YextEntityField<ImageType[] | ComplexImageType[]>;
+    headingLevel: HeadingLevel;
     imageStyle: Omit<ImageWrapperProps, "image">;
   };
   liveVisibility: boolean;
@@ -92,41 +90,36 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  sectionHeading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Text", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      level: YextField("Heading Level", {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-    },
-  }),
-  images: YextField("Images", {
-    type: "object",
-    objectFields: {
-      images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
-        type: "entityField",
-        filter: {
-          types: ["type.image"],
-          includeListsOnly: true,
-        },
-      }),
-      imageStyle: YextField("Style", {
+      imageStyle: YextField("Image Style", {
         type: "object",
         objectFields: {
           layout: ImageWrapperFields.layout,
           aspectRatio: ImageWrapperFields.aspectRatio,
           height: ImageWrapperFields.height,
           width: ImageWrapperFields.width,
+        },
+      }),
+    },
+  }),
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading", {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+          includeListsOnly: true,
         },
       }),
     },
@@ -141,26 +134,22 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
 };
 
 const PhotoGallerySectionComponent = ({
+  data,
   styles,
-  sectionHeading: sectionHeadingField,
-  images: imageField,
 }: PhotoGallerySectionProps) => {
   const document = useDocument();
-  const sectionHeading = resolveYextEntityField(
-    document,
-    sectionHeadingField.text
-  );
+  const sectionHeading = resolveYextEntityField(document, data.heading);
 
-  const resolvedImages = resolveYextEntityField(document, imageField.images);
+  const resolvedImages = resolveYextEntityField(document, data.images);
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
     .filter((image): image is ImageType | ComplexImageType => !!image)
     .map((image) => ({
       image,
-      layout: imageField.imageStyle.layout,
-      aspectRatio: imageField.imageStyle.aspectRatio,
-      width: imageField.imageStyle.width,
-      height: imageField.imageStyle.height,
+      layout: styles.imageStyle.layout,
+      aspectRatio: styles.imageStyle.aspectRatio,
+      width: styles.imageStyle.width,
+      height: styles.imageStyle.height,
     }));
 
   return (
@@ -172,10 +161,10 @@ const PhotoGallerySectionComponent = ({
       {sectionHeading && (
         <EntityField
           displayName="Heading Text"
-          fieldId={sectionHeadingField.text.field}
-          constantValueEnabled={sectionHeadingField.text.constantValueEnabled}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <Heading level={sectionHeadingField.level}>{sectionHeading}</Heading>
+          <Heading level={styles.headingLevel}>{sectionHeading}</Heading>
         </EntityField>
       )}
       {filteredImages && filteredImages.length > 0 && (
@@ -194,8 +183,8 @@ const PhotoGallerySectionComponent = ({
           <div className="flex flex-col gap-y-8">
             <EntityField
               displayName="Images"
-              fieldId={imageField.images.field}
-              constantValueEnabled={imageField.images.constantValueEnabled}
+              fieldId={data.images.field}
+              constantValueEnabled={data.images.constantValueEnabled}
             >
               <Slider>
                 {filteredImages.map((image, idx) => {
@@ -269,21 +258,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
-    },
-    sectionHeading: {
-      text: {
-        field: "",
-        constantValue: "Gallery",
-        constantValueEnabled: true,
-      },
-      level: 2,
-    },
-    images: {
-      images: {
-        field: "",
-        constantValue: [DEFAULT_IMAGE, DEFAULT_IMAGE, DEFAULT_IMAGE],
-        constantValueEnabled: true,
-      },
+      headingLevel: 2,
       imageStyle: {
         layout: "fixed",
         height: 570,
@@ -291,22 +266,34 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
         aspectRatio: 1.78,
       },
     },
+    data: {
+      heading: {
+        field: "",
+        constantValue: "Gallery",
+        constantValueEnabled: true,
+      },
+      images: {
+        field: "",
+        constantValue: [DEFAULT_IMAGE, DEFAULT_IMAGE, DEFAULT_IMAGE],
+        constantValueEnabled: true,
+      },
+    },
     liveVisibility: true,
   },
   resolveFields(data, { fields }) {
-    const layout = data.props.images?.imageStyle?.layout ?? "auto";
+    const layout = data.props.styles?.imageStyle?.layout ?? "auto";
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { image, ...rest } = resolvedImageFields(layout);
     return {
       ...fields,
-      images: {
-        ...fields.images,
+      styles: {
+        ...fields.styles,
         objectFields: {
           // @ts-expect-error ts(2339) objectFields exists
-          ...fields.images.objectFields,
+          ...fields.styles.objectFields,
           imageStyle: {
             // @ts-expect-error ts(2339) objectFields exists
-            ...fields.images.objectFields.imageStyle,
+            ...fields.styles.objectFields.imageStyle,
             objectFields: rest,
           },
         },

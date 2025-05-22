@@ -16,27 +16,41 @@ import {
 } from "../../utils/themeConfigOptions.js";
 
 export type BannerSectionProps = {
-  text: YextEntityField<string>;
-  textAlignment: "left" | "right" | "center";
-  backgroundColor?: BackgroundStyle;
+  styles: {
+    backgroundColor?: BackgroundStyle;
+    textAlignment: "left" | "right" | "center";
+  };
+  data: {
+    text: YextEntityField<string>;
+  };
   liveVisibility: boolean;
 };
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
-  text: YextField<any, string>("Text", {
-    type: "entityField",
-    filter: {
-      types: ["type.string"],
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      text: YextField<any, string>("Text", {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
     },
   }),
-  textAlignment: YextField("Text Alignment", {
-    type: "radio",
-    options: "ALIGNMENT",
-  }),
-  backgroundColor: YextField("Background Color", {
-    type: "select",
-    hasSearch: true,
-    options: "DARK_BACKGROUND_COLOR",
+  styles: YextField("Styles", {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField("Background Color", {
+        type: "select",
+        hasSearch: true,
+        options: "DARK_BACKGROUND_COLOR",
+      }),
+      textAlignment: YextField("Text Alignment", {
+        type: "radio",
+        options: "ALIGNMENT",
+      }),
+    },
   }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
@@ -47,30 +61,26 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   }),
 };
 
-const BannerComponent = ({
-  text,
-  textAlignment,
-  backgroundColor,
-}: BannerSectionProps) => {
+const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const document = useDocument();
-  const resolvedText = resolveYextEntityField<string>(document, text);
+  const resolvedText = resolveYextEntityField<string>(document, data.text);
 
   const justifyClass = {
     left: "justify-start",
     center: "justify-center",
     right: "justify-end",
-  }[textAlignment];
+  }[styles.textAlignment];
 
   return (
     <PageSection
-      background={backgroundColor}
+      background={styles.backgroundColor}
       verticalPadding="sm"
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
         displayName="Banner Text"
-        fieldId={text.field}
-        constantValueEnabled={text.constantValueEnabled}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
       >
         <Body>{resolvedText}</Body>
       </EntityField>
@@ -82,13 +92,17 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
   label: "Banner Section",
   fields: bannerSectionFields,
   defaultProps: {
-    text: {
-      field: "",
-      constantValue: "Banner Text",
-      constantValueEnabled: true,
+    data: {
+      text: {
+        field: "",
+        constantValue: "Banner Text",
+        constantValueEnabled: true,
+      },
     },
-    textAlignment: "center",
-    backgroundColor: backgroundColors.background6.value,
+    styles: {
+      backgroundColor: backgroundColors.background6.value,
+      textAlignment: "center",
+    },
     liveVisibility: true,
   },
   render: (props) => (

@@ -245,7 +245,11 @@ describe("ProductSection", async () => {
     }) => {
       const data = migrate(
         {
-          root: { version },
+          root: {
+            props: {
+              version,
+            },
+          },
           content: [
             {
               type: "ProductSection",
