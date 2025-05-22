@@ -38,7 +38,7 @@
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "@yext/search-ui-react": "^1.8.7",
+    "@yext/search-ui-react": "^1.8.8",
     "@yext/search-headless-react": "^2.5.0",
     "@types/mapbox-gl": "^2.7.5",
     "mapbox-gl": "^2.9.2"

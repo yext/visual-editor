@@ -11,7 +11,6 @@ import {
   ResultsCount,
   VerticalResults,
   AnalyticsProvider,
-  PinComponent,
 } from "@yext/search-ui-react";
 import {
   Matcher,
@@ -37,7 +36,7 @@ import {
   PhoneAtom,
   useDocument,
 } from "@yext/visual-editor";
-import { LngLat, LngLatBounds } from "mapbox-gl";
+import { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
   Address,
   AddressType,
@@ -307,27 +306,40 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
   const scrollToResult = React.useCallback(
     (result: Result | undefined) => {
       if (result) {
+        // the search results that are listed above this result
+        const previousResults = resultsRef.current.filter((r, index) =>
+          r && result.index ? index < result.index : false
+        );
+
         // sum up the height of all search results that are listed above this result
-        const previousResultsHeight = resultsRef.current
-          .filter((r, index) =>
-            r && result.index ? index < result.index : false
-          )
-          .map((elem) => elem?.scrollHeight ?? 0)
-          .reduce((total, height) => total + height);
-        resultsContainer.current?.scroll({
-          top: previousResultsHeight,
-          behavior: "smooth",
-        });
+        if (previousResults.length > 1) {
+          const previousResultsHeight = previousResults
+            .map((elem) => elem?.scrollHeight ?? 0)
+            .reduce((total, height) => total + height);
+
+          resultsContainer.current?.scroll({
+            top: previousResultsHeight,
+            behavior: "smooth",
+          });
+        }
       }
     },
     [resultsRef.current, resultsContainer]
   );
+
+  const markerOptionsOverride: (selected: boolean) => MarkerOptions =
+    React.useCallback((selected: boolean) => {
+      return {
+        scale: selected ? 1.5 : 1,
+      };
+    }, []);
 
   const mapProps: MapProps = {
     ...(userLocation && { centerCoords: userLocation }),
     ...(mapStyle && { mapStyle }),
     onDragHandler: handleDrag,
     scrollToResult: scrollToResult,
+    markerOptionsOverride: markerOptionsOverride,
   };
 
   return (
@@ -352,7 +364,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
               customCssClasses={{ resultsCountContainer: "py-1 text-lg" }}
             />
           )}
-          <div id="innerDiv" className="overflow-y-auto">
+          <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
             {resultCount > 0 && (
               <VerticalResults
                 CardComponent={LocationCard}
@@ -396,6 +408,7 @@ interface MapProps {
   centerCoords?: [number, number];
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result | undefined) => void;
+  markerOptionsOverride?: (selected: boolean) => MarkerOptions;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -403,6 +416,7 @@ const Map: React.FC<MapProps> = ({
   centerCoords,
   onDragHandler,
   scrollToResult,
+  markerOptionsOverride,
 }) => {
   // During page generation we don't exist in a browser context
   const iframe =
@@ -424,6 +438,7 @@ const Map: React.FC<MapProps> = ({
       </div>
     );
   }
+
   return (
     <MapboxMap
       mapboxAccessToken={mapboxApiKey || ""}
@@ -431,45 +446,12 @@ const Map: React.FC<MapProps> = ({
         center: centerCoords ?? DEFAULT_MAP_CENTER,
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
-      PinComponent={MapPin}
       onDrag={onDragHandler}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
       scrollToResult={scrollToResult}
+      markerOptionsOverride={markerOptionsOverride}
     />
-  );
-};
-
-const MapPin: PinComponent<Record<string, unknown>> = (props) => {
-  const { result, selected, onClick } = props;
-  const { width, height } = React.useMemo(() => {
-    return selected
-      ? {
-          // zoomed in pin size
-          width: "44",
-          height: "58",
-        }
-      : {
-          // default pin size
-          width: "33",
-          height: "42",
-        };
-  }, [selected]);
-
-  return (
-    <button onClick={() => onClick?.(result)} aria-label="Show pin details">
-      <svg
-        width={width}
-        height={height}
-        viewBox="0 0 30 38"
-        fill="#1e293b"
-        stroke="#fff"
-        strokeWidth="2px"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M30 15.0882C30 23.4212 23.3333 30.7353 15 38C7.22222 31.2941 0 23.4212 0 15.0882C0 6.75523 6.71573 0 15 0C23.2843 0 30 6.75523 30 15.0882Z" />
-      </svg>
-    </button>
   );
 };
 
