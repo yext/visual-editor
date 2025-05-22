@@ -32,7 +32,7 @@ export interface CoreInfoSectionProps {
     info: {
       headingText: YextEntityField<string>;
       address: YextEntityField<AddressType>;
-      phoneNumber: Array<{ number: YextEntityField<string>; label: string }>;
+      phoneNumbers: Array<{ number: YextEntityField<string>; label: string }>;
       emails: YextEntityField<string[]>;
     };
     hours: {
@@ -77,7 +77,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             type: "entityField",
             filter: { types: ["type.address"] },
           }),
-          phoneNumber: YextField("Phone Numbers", {
+          phoneNumbers: YextField("Phone Numbers", {
             type: "array",
             arrayFields: {
               number: YextField<any, string>("Phone Number", {
@@ -304,9 +304,9 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             />
           )}
         </div>
-        {data.info.phoneNumber && (
+        {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
-            {data.info.phoneNumber.map((item) => {
+            {data.info.phoneNumbers.map((item) => {
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -460,7 +460,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
             countryCode: "",
           },
         },
-        phoneNumber: [
+        phoneNumbers: [
           {
             number: {
               field: "mainPhone",
