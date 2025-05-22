@@ -1,3 +1,49 @@
+#### 0.0.40 (2025-05-22)
+
+##### Chores
+
+- improve automated tests (#459) (1210ee5b)
+- update test data (#454) (e63591aa)
+
+##### New Features
+
+- update publish to update pages (#471) (ef9567a8)
+- update fields to data, styles, liveVis format (#475) (ca9681b7)
+- font search (#474) (baffdbb4)
+- header updates (#470) (2b4ca9b7)
+- update text and tooltip for YextEntityFieldSelector (#472) (5db5b0aa)
+- expand font options (#460) (d1090523)
+- phone constant input (#468) (2fc2c589)
+- add search locator component (#453) (b5752a0e)
+- add migration check (#462) (15611fcc)
+- use app API key for analytics (#465) (2066858a)
+- update NearbyLocations to use new document data (#463) (277d788c)
+- generate template manifest (#451) (591e3549)
+- add modal for Send for Approval flow (#456) (41ddab2a)
+- support boolean and option with YextEntityField (#458) (7f4e8492)
+- data migrations (#452) (cee1c445)
+- add const value support for testimonials section (#449) (62c04ffc)
+- support const values for team section (#448) (b93ac418)
+- add const support for faqs section (#447) (8b3b45e6)
+- product section const value support (#444) (0a29c8da)
+- insight section const value support (#443) (556360d1)
+- event section constant value support (#441) (3785204a)
+
+##### Bug Fixes
+
+- fix image warnings (#467) (8ef85bd0)
+- react warnings and RTF styling (#455) (05fe4dc6)
+- small component updates (#466) (302f8c1d)
+- remove text-body-fontSize-sm (#464) (6a0c378d)
+- card heading levels (#457) (4b3276f4)
+- hide columns in CoreInfoComponent if no data (#442) (be00e55d)
+- cleanup component registry (#439) (8997d635)
+
+##### Refactors
+
+- handle missing data in Insights and Products (#473) (7b318116)
+- update entity field tooltips (#445) (8148f7c7)
+
 #### 0.0.39 (2025-05-09)
 
 ##### New Features
