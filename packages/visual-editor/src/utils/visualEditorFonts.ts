@@ -1,37 +1,18 @@
 import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "./applyTheme.ts";
 import { StyleSelectOption } from "./themeResolver.ts";
+import { defaultFonts as fontsJs } from "./font_registry.js";
 
 export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
   minWeight: number; // minimum weight the font supports
   maxWeight: number; // maximum weight the font supports
   italics: boolean; // whether the font supports italics
-  fallback: "sans-serif" | "serif" | "monospace";
+  fallback: "sans-serif" | "serif" | "monospace" | "cursive";
 };
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
-export const defaultFonts: FontRegistry = {
-  Alegreya: { italics: true, minWeight: 400, maxWeight: 900, fallback: "serif" },
-  Asap: { italics: true, minWeight: 100, maxWeight: 900, fallback: "sans-serif" },
-  Bitter: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  Cabin: { italics: true, minWeight: 400, maxWeight: 700, fallback: "sans-serif" },
-  Cinzel: { italics: false, minWeight: 400, maxWeight: 900, fallback: "serif" },
-  "EB Garamond": { italics: true, minWeight: 400, maxWeight: 800, fallback: "serif" },
-  "Exo 2": { italics: true, minWeight: 100, maxWeight: 900, fallback: "sans-serif" },
-  Inconsolata: { italics: false, minWeight: 200, maxWeight: 900, fallback: "sans-serif" },
-  "Josefin Sans": { italics: true, minWeight: 100, maxWeight: 700, fallback: "sans-serif" },
-  Lora: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Montserrat: { italics: true, minWeight: 100, maxWeight: 900, fallback: "sans-serif" },
-  "Open Sans": { italics: true, minWeight: 300, maxWeight: 800, fallback: "sans-serif" },
-  "Playfair Display": { italics: true, minWeight: 400, maxWeight: 900, fallback: "serif" },
-  Raleway: { italics: true, minWeight: 100, maxWeight: 900, fallback: "sans-serif" },
-  "Roboto Flex": { italics: false, minWeight: 100, maxWeight: 900, fallback: "sans-serif" },
-  "Roboto Slab": { italics: false, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  "Source Code Pro": { italics: true, minWeight: 200, maxWeight: 900, fallback: "monospace" },
-  "Source Sans 3": { italics: true, minWeight: 200, maxWeight: 900, fallback: "sans-serif" },
-  "Ubuntu Sans": { italics: true, minWeight: 100, maxWeight: 800, fallback: 'sans-serif' },
-};
+export const defaultFonts: FontRegistry = fontsJs as FontRegistry;
 
 export const constructFontSelectOptions = (fonts: FontRegistry) => {
   const fontOptions: StyleSelectOption[] = [];
@@ -51,24 +32,42 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * Note: Google does not return font file URLs if the params
  * fall outside of the font's supported values
  */
-const constructGoogleFontLinkTags = (fonts: FontRegistry) => {
-  const prefix = `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?`;
+const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
+  const preconnectTags =
+    '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
 
-  const postfix = `display=swap" rel="stylesheet">`;
-  let params = "";
-  for (const fontName in fonts) {
-    const fontDetails = fonts[fontName];
-    const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
-    const weightRange = `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
-    const weightParam = fontDetails.italics
-      ? `0,${weightRange};1,${weightRange}`
-      : weightRange;
-    params +=
-      "family=" + fontName.replaceAll(" ", "+") + axes + weightParam + "&";
+  const prefix = '<link href="https://fonts.googleapis.com/css2?';
+  const postfix = 'display=swap" rel="stylesheet">';
+
+  const fontEntries = Object.entries(fonts);
+  const chunkSize = 7;
+  const linkTags: string[] = [];
+
+  for (let i = 0; i < fontEntries.length; i += chunkSize) {
+    const chunk = fontEntries.slice(i, i + chunkSize);
+
+    const params = chunk
+      .map(([fontName, fontDetails]) => {
+        const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
+
+        const weightRange =
+          fontDetails.minWeight === fontDetails.maxWeight
+            ? `${fontDetails.minWeight}`
+            : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+
+        const weightParam = fontDetails.italics
+          ? `0,${weightRange};1,${weightRange}`
+          : weightRange;
+
+        return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
+      })
+      .join("&");
+
+    linkTags.push(`${prefix}${params}&${postfix}`);
   }
-  return prefix + params + postfix;
+
+  return preconnectTags + linkTags.join("\n");
 };
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
