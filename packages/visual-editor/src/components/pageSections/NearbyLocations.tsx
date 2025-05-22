@@ -19,16 +19,17 @@ import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
 import * as React from "react";
 
 export interface NearbyLocationsSectionProps {
+  data: {
+    heading: YextEntityField<string>;
+    coordinate: YextEntityField<Coordinate>;
+    radius: number;
+    limit: number;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-  };
-  heading: {
-    level: HeadingLevel;
-    text: YextEntityField<string>;
-  };
-  cards: {
     headingLevel: HeadingLevel;
+    cardHeadingLevel: HeadingLevel;
     phoneNumberFormat: "domestic" | "international";
     phoneNumberLink: boolean;
     hours: {
@@ -38,13 +39,34 @@ export interface NearbyLocationsSectionProps {
       showDayNames?: boolean;
     };
   };
-  coordinate: YextEntityField<Coordinate>;
-  radius: number;
-  limit: number;
   liveVisibility: boolean;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, string>("Heading", {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      coordinate: YextField<any, Coordinate>("Coordinates", {
+        type: "entityField",
+        filter: { types: ["type.coordinate"] },
+      }),
+      radius: YextField("Radius (Miles)", {
+        type: "number",
+        min: 0,
+      }),
+      limit: YextField("Limit", {
+        type: "number",
+        min: 0,
+        max: 50,
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -58,31 +80,26 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  heading: YextField("Section Heading", {
-    type: "object",
-    objectFields: {
-      text: YextField<any, string>("Text", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      level: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  cards: YextField("Cards", {
-    type: "object",
-    objectFields: {
       headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
+      }),
+      cardHeadingLevel: YextField("Card Heading Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+      phoneNumberFormat: YextField("Phone Number Format", {
+        type: "radio",
+        options: "PHONE_OPTIONS",
+      }),
+      phoneNumberLink: YextField("Include Phone Hyperlink", {
+        type: "radio",
+        options: [
+          { label: "Yes", value: true },
+          { label: "No", value: false },
+        ],
       }),
       hours: YextField("Hours", {
         type: "object",
@@ -117,31 +134,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
           }),
         },
       }),
-      phoneNumberFormat: YextField("Phone Number Format", {
-        type: "radio",
-        options: "PHONE_OPTIONS",
-      }),
-      phoneNumberLink: YextField("Include Phone Hyperlink", {
-        type: "radio",
-        options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
-        ],
-      }),
     },
-  }),
-  coordinate: YextField<any, Coordinate>("Coordinates", {
-    type: "entityField",
-    filter: { types: ["type.coordinate"] },
-  }),
-  radius: YextField("Radius (Miles)", {
-    type: "number",
-    min: 0,
-  }),
-  limit: YextField("Limit", {
-    type: "number",
-    min: 0,
-    max: 50,
   }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
@@ -153,48 +146,46 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
 };
 
 const LocationCard = ({
-  cards,
+  styles,
   name,
-  address,
   hours,
+  address,
   timezone,
   mainPhone,
-  backgroundColor,
 }: {
-  cards: NearbyLocationsSectionProps["cards"];
+  styles: NearbyLocationsSectionProps["styles"];
   name: string;
-  address: any;
   hours: any;
+  address: any;
   timezone: string;
   mainPhone: string;
-  backgroundColor?: BackgroundStyle;
 }) => {
   return (
     <Background
-      background={backgroundColor}
+      background={styles?.cardBackgroundColor}
       className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
       as="section"
     >
-      <Heading level={cards.headingLevel}>{name}</Heading>
+      <Heading level={styles?.cardHeadingLevel}>{name}</Heading>
       {hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
           <HoursStatus
             hours={hours}
             timezone={timezone}
             currentTemplate={
-              cards.hours.showCurrentStatus ? undefined : () => <></>
+              styles?.hours?.showCurrentStatus ? undefined : () => <></>
             }
             separatorTemplate={
-              cards.hours.showCurrentStatus ? undefined : () => <></>
+              styles?.hours?.showCurrentStatus ? undefined : () => <></>
             }
             timeOptions={{
-              hour12: cards.hours.timeFormat === "12h",
+              hour12: styles?.hours?.timeFormat === "12h",
             }}
             dayOptions={{
-              weekday: cards.hours.dayOfWeekFormat,
+              weekday: styles?.hours?.dayOfWeekFormat,
             }}
             dayOfWeekTemplate={
-              cards.hours.showDayNames ? undefined : () => <></>
+              styles?.hours?.showDayNames ? undefined : () => <></>
             }
             className="h-full"
           />
@@ -203,8 +194,8 @@ const LocationCard = ({
       {mainPhone && (
         <PhoneAtom
           phoneNumber={mainPhone}
-          format={cards.phoneNumberFormat}
-          includeHyperlink={cards.phoneNumberLink}
+          format={styles?.phoneNumberFormat}
+          includeHyperlink={styles?.phoneNumberLink}
           includeIcon={false}
         />
       )}
@@ -224,24 +215,16 @@ const LocationCard = ({
   );
 };
 
-const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
-  props
-) => {
-  const {
-    heading,
-    cards,
-    coordinate: coordinateField,
-    radius,
-    limit,
-    styles,
-  } = props;
+const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
+  styles,
+  data,
+}: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
-
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
-    coordinateField
+    data?.coordinate
   );
-  const headingText = resolveYextEntityField<string>(document, heading.text);
+  const headingText = resolveYextEntityField<string>(document, data?.heading);
 
   // parse variables from document
   const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =
@@ -257,8 +240,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
         contentDeliveryAPIDomain,
         coordinate?.latitude,
         coordinate?.longitude,
-        radius,
-        limit,
+        data?.radius,
+        data?.limit,
       ],
       queryFn: async () => {
         return await fetchNearbyLocations({
@@ -268,8 +251,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
           contentDeliveryAPIDomain: contentDeliveryAPIDomain,
           latitude: coordinate?.latitude || 0,
           longitude: coordinate?.longitude || 0,
-          radiusMi: radius,
-          limit: limit,
+          radiusMi: data?.radius,
+          limit: data?.limit,
         });
       },
       enabled:
@@ -279,17 +262,20 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
         !!contentDeliveryAPIDomain &&
         !!coordinate?.latitude &&
         !!coordinate.longitude &&
-        !!radius &&
-        !!limit,
+        !!data?.radius &&
+        !!data?.limit,
     }
   );
 
   return (
-    <PageSection background={styles.backgroundColor}>
+    <PageSection background={styles?.backgroundColor}>
       <div className="space-y-6">
         {headingText && (
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
-            <Heading level={heading.level} className="text-center md:text-left">
+            <Heading
+              level={styles?.headingLevel}
+              className="text-center md:text-left"
+            >
               {headingText}
             </Heading>
           </div>
@@ -302,13 +288,12 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = (
                 (location: any, index: number) => (
                   <LocationCard
                     key={index}
-                    cards={cards}
+                    styles={styles}
                     name={location.name}
                     address={location.address}
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
-                    backgroundColor={styles.cardBackgroundColor}
                   />
                 )
               )}
@@ -378,20 +363,27 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
     label: "Nearby Locations Section",
     fields: nearbyLocationsSectionFields,
     defaultProps: {
-      styles: {
-        backgroundColor: backgroundColors.background1.value,
-        cardBackgroundColor: backgroundColors.background1.value,
-      },
-      heading: {
-        text: {
+      data: {
+        heading: {
           field: "",
           constantValue: "Nearby Locations",
           constantValueEnabled: true,
         },
-        level: 3,
+        coordinate: {
+          field: "yextDisplayCoordinate",
+          constantValue: {
+            latitude: 0,
+            longitude: 0,
+          },
+        },
+        radius: 10,
+        limit: 3,
       },
-      cards: {
-        headingLevel: 4,
+      styles: {
+        backgroundColor: backgroundColors.background1.value,
+        cardBackgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+        cardHeadingLevel: 4,
         hours: {
           showCurrentStatus: true,
           timeFormat: "12h",
@@ -400,15 +392,6 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
         },
         phoneNumberFormat: "domestic",
         phoneNumberLink: false,
-      },
-      radius: 10,
-      limit: 3,
-      coordinate: {
-        field: "yextDisplayCoordinate",
-        constantValue: {
-          latitude: 0,
-          longitude: 0,
-        },
       },
       liveVisibility: true,
     },
