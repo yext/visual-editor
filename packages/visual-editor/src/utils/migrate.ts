@@ -68,7 +68,6 @@ export const migrate = (
     data.root.props = {};
   }
   data.root.props.version = migrationRegistry.length;
-  console.log(data);
   return data;
 };
 
