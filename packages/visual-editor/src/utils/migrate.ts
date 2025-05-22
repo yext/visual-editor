@@ -36,7 +36,7 @@ export const migrate = (
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   config?: Config
 ): Data => {
-  const version = data.root?.props?.version ?? 0;
+  const version = data.root?.version ?? 0;
 
   // Apply puck migrations
   data = migratePuck(data);
@@ -62,10 +62,10 @@ export const migrate = (
     });
   });
 
-  if (!data.root.props) {
-    data.root.props = {};
+  if (!data.root) {
+    data.root = {};
   }
-  data.root.props.version = migrationRegistry.length;
+  data.root.version = migrationRegistry.length;
 
   return data;
 };

@@ -40,9 +40,7 @@ export const migrationRegistry: MigrationRegistry = [
 
 const exampleDataBefore = {
   root: {
-    props: {
-      version: 1,
-    },
+    version: 1,
   },
   content: [
     {
@@ -177,9 +175,7 @@ const exampleDataBefore = {
 
 const exampleDataAfter = {
   root: {
-    props: {
-      version: 2,
-    },
+    version: 2,
   },
   content: [
     {

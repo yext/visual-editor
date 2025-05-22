@@ -1,7 +1,7 @@
 import { Migration } from "../../utils/migrate.ts";
 
 export const adjustPropObjectsMigration: Migration = {
-  Banner: {
+  BannerSection: {
     action: "updated",
     propTransformation: ({
       text,
