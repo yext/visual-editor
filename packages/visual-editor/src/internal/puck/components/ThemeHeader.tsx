@@ -20,7 +20,7 @@ type ThemeHeaderProps = {
   puckInitialHistory: InitialHistory | undefined;
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
-  liveUrlCount: number;
+  totalPageCount: number;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {
@@ -34,7 +34,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     puckInitialHistory,
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
-    liveUrlCount,
+    totalPageCount,
   } = props;
 
   const {
@@ -179,7 +179,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
               await onPublishTheme();
             }}
           >
-            {`Update ${liveUrlCount} Pages`}
+            {`Update ${totalPageCount} ${totalPageCount === 1 ? "Page" : "Pages"}`}
           </Button>
         )}
       </div>

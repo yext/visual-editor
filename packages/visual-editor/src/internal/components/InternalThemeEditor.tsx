@@ -178,7 +178,7 @@ export const InternalThemeEditor = ({
               puckInitialHistory={puckInitialHistory}
               clearLocalChangesModalOpen={clearLocalChangesModalOpen}
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
-              liveUrlCount={templateMetadata.liveUrlCount}
+              totalPageCount={templateMetadata.totalPageCount}
             />
           ),
           actionBar: () => <></>,
