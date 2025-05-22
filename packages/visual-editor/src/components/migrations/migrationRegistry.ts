@@ -1,5 +1,5 @@
 import { MigrationRegistry } from "../../utils/migrate.ts";
-import { adjustPropObjectsMigration } from "./1_adjust_prop_objects.ts";
+import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
