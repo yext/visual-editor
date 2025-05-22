@@ -102,12 +102,13 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-height: 200px;
   overflow-y: auto;
+  width: 100%;
 }
 
 .font-select-option {
   text-align: left;
   width: 100%;
-  padding: 8px 12px;
+  padding: 12px 15px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -120,6 +121,25 @@
 
 .font-select-option:active {
   background-color: var(--puck-color-grey-09);
+}
+
+.font-select-search {
+  display: flex;
+  gap: 16px;
+  background-color: white;
+  padding: 12px 15px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.font-search-input {
+  font-family: var(--puck-font-family);
+}
+
+.font-search-input:focus {
+  outline: none;
 }
 
 .date-time-picker {
