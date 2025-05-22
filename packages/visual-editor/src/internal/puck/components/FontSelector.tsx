@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FieldLabel } from "@measured/puck";
 import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import "../ui/puck.css";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 
 type FontSelectorProps = {
   label: string;
@@ -18,33 +18,61 @@ export const FontSelector = ({
   options,
 }: FontSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+    if (isOpen) {
+      setSearchTerm("");
+    }
   };
 
   const handleFontChange = (font: string) => {
     onChange(font);
     setIsOpen(false);
+    setSearchTerm("");
   };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const selectedFontLabel =
     options.find((option) => option.value === value)?.label ?? "Choose a font";
 
   return (
-    <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-      <div style={{ position: "relative" }}>
-        <button
-          onClick={toggleDropdown}
-          className="font-select"
-          style={{ fontFamily: value }}
-        >
-          {selectedFontLabel}
-        </button>
+    <FieldLabel
+      label={label}
+      el="div"
+      className="ve-relative"
+      icon={<ChevronDown size={16} />}
+    >
+      <button
+        onClick={toggleDropdown}
+        className="font-select"
+        style={{ fontFamily: value }}
+      >
+        {selectedFontLabel}
+      </button>
 
-        {isOpen && (
-          <div className="font-select-dropdown">
-            {options.map((option) => (
+      {isOpen && (
+        <div className="font-select-dropdown">
+          <div className="font-select-search">
+            <Search size={16} />
+            <input
+              type="text"
+              placeholder="Search fonts..."
+              className="font-search-input"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((option) => (
               <button
                 key={option.value}
                 value={option.value}
@@ -61,10 +89,14 @@ export const FontSelector = ({
               >
                 {option.label}
               </button>
-            ))}
-          </div>
-        )}
-      </div>
+            ))
+          ) : (
+            <div className="font-select-option ve-font-normal">
+              No fonts found.
+            </div>
+          )}
+        </div>
+      )}
     </FieldLabel>
   );
 };
