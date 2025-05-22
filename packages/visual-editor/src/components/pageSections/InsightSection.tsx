@@ -90,16 +90,21 @@ const InsightCard = ({
   sectionHeadingLevel: HeadingLevel;
 }) => {
   return (
-    <Background className="rounded h-full" background={backgroundColor}>
-      {insight.image && (
+    <Background
+      className="rounded h-full flex flex-col"
+      background={backgroundColor}
+    >
+      {insight.image ? (
         <Image
           image={insight.image}
           layout="auto"
           aspectRatio={1.778} // 16:9
-          className="rounded-t-[inherit]"
+          className="rounded-t-[inherit] h-[200px]"
         />
+      ) : (
+        <div className="sm:h-[200px]" />
       )}
-      <div className="flex flex-col gap-8 p-8">
+      <div className="flex flex-col gap-8 p-8 flex-grow">
         <div className="flex flex-col gap-4">
           {(insight.category || insight.publishTime) && (
             <div
@@ -132,6 +137,7 @@ const InsightCard = ({
             label={insight.cta.label}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
+            className="mt-auto"
           />
         )}
       </div>
