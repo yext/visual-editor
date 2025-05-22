@@ -90,17 +90,20 @@ const ProductCard = ({
 }) => {
   return (
     <Background
-      className="flex flex-col justify-between rounded-lg overflow-hidden border h-full"
+      className="flex flex-col rounded-lg overflow-hidden border h-full"
       background={backgroundColor}
     >
-      {product.image && (
+      {product.image ? (
         <Image
           image={product.image}
           layout={"auto"}
-          aspectRatio={product.image.width / product.image.height}
+          aspectRatio={1.778} // 16:9
+          className="h-[200px]"
         />
+      ) : (
+        <div className="sm:h-[200px]" />
       )}
-      <div className="p-8 gap-8 flex flex-col">
+      <div className="p-8 gap-8 flex flex-col flex-grow">
         <div className="gap-4 flex flex-col">
           {product.name && (
             <Heading
@@ -131,6 +134,7 @@ const ProductCard = ({
             label={product.cta.label}
             link={product.cta.link}
             linkType={product.cta.linkType}
+            className="mt-auto"
           />
         )}
       </div>
