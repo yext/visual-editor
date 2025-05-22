@@ -70,7 +70,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         }}
       />
       <header className="puck-header">
-        <div className="header-left items-center">
+        <div className="header-left ve-items-center">
           <UIButtonsToggle showLeft={true} />
           <Separator
             orientation="vertical"
@@ -134,7 +134,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           <Separator
             orientation="vertical"
             decorative
-            className="ve-mx-4 ve-h-7 ve-w-px bg-gray-300 my-auto"
+            className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
           <ClearLocalChangesButton
             modalOpen={clearLocalChangesModalOpen}

@@ -150,7 +150,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
         <Separator
           orientation="vertical"
           decorative
-          className="ve-mx-4 ve-h-7 ve-w-px bg-gray-300 my-auto"
+          className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
         />
         <ClearLocalChangesButton
           modalOpen={clearLocalChangesModalOpen}
