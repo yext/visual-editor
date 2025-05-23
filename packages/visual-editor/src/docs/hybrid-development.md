@@ -6,11 +6,12 @@
 2. In the Yext Platform, navigate to Pages > All Sites in the sidebar and create a new site
    via the "Add New Site" button. Use the repo you created in step 1.
 3. In Knowledge Graph, create a Site entity.
-   It is standard to use your business name as the site entity's "name" field.
-4. Configure your [site stream](https://hitchhikers.yext.com/docs/pages/site-configuration/?target=site-stream)
+   Configure your [site stream](https://hitchhikers.yext.com/docs/pages/site-configuration/?target=site-stream)
    by updating your `config.yaml` to use the site entity's id in place of `entity-id`.
-   Also add any alternate profiles you wish to use with your site entity.
-5. Set up content endpoints?
+   Also add any alternate profiles and fields you wish to use with your site entity.
+4. If you want to use Yext Analytics, create a [Developer App](https://hitchhikers.yext.com/tracks/platform/pl240-developer-console/01-intro-to-the-developer-console-apps/)
+   with access to the events api. In Site Settings, set `YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY`
+   to your api key.
 
 ## Types of Page Groups
 
@@ -34,6 +35,20 @@ You can also define static and entity pages in your repo that do not support vis
 If you add templates without following any steps below, these pages will behave like
 [normal PagesJS Pages](https://hitchhikers.yext.com/docs/pages/templates/).
 They will not appear on the Page Groups page.
+
+## In-Platform Page Groups Templates
+
+### Modifying the In-Platform Page Groups Template
+
+If you want to use a modified template for In-Platform Page Groups,
+create `main.tsx` template with no `TemplateConfig`.
+
+If you want to modify the list of components available for In-Platform Page Groups,
+update the `mainConfig` in `ve.config.tsx`. By default, we use an exported
+object that includes all the default components, but each component is exported
+individually if you want to modify the list. You can also add your own components
+to the list. You may want to modify the default layout stored in the
+`.template-manifest.json` based on your component changes.
 
 ## Adding an In-Repo VLE Page Group
 
@@ -89,7 +104,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
           data={migrate(
             JSON.parse(document.__.layout),
             migrationRegistry,
-            mainConfig,
+            mainConfig
           )}
         />
       </VisualEditorProvider>
@@ -99,7 +114,8 @@ const Location: Template<TemplateRenderProps> = (props) => {
 ```
 
 `<Render>` converts the saved layout data from the editor into the rendered page.
-`migrate` handles updates to built in `visual-editor` components.
+
+`migrate` handles updates to the components exported from `@yext/visual-editor`. If you are not using `@yext/visual-editor` components, you do not need to use `migrate`.
 
 ### Puck Configs
 
@@ -113,7 +129,7 @@ which defines the components available to that template. To associate a config w
 export const componentRegistry = new Map<string, Config<any>>([
   ["main", mainConfig],
   ["directory", directoryConfig],
-  // templateName must match the file name of the template (excluding the file extension)
+  // templateName must match the name field of the TemplateConfig
   // configs can be shared between templates
   ["templateName", mainConfig],
 ]);
