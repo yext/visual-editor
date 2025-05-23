@@ -30,7 +30,7 @@ export const Image: React.FC<ImageProps> = ({
           image={image}
           layout={"aspect"}
           aspectRatio={aspectRatio}
-          className="object-cover w-full"
+          className="object-cover w-full h-full"
         />
       ) : !!width && !!height ? (
         <ImageComponent

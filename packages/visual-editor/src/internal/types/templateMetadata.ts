@@ -11,6 +11,8 @@ export type TemplateMetadata = {
   devOverride: boolean;
   isxYextDebug: boolean;
   isThemeMode: boolean;
+  entityCount: number;
+  totalEntityCount: number;
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
@@ -25,6 +27,8 @@ export function generateTemplateMetadata(): TemplateMetadata {
     isxYextDebug: true,
     isThemeMode: false,
     devOverride: false,
+    entityCount: 0,
+    totalEntityCount: 0,
   };
 }
 
