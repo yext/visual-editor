@@ -28,39 +28,118 @@ import {
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
+  data: {
+    info: {
+      headingText: YextEntityField<string>;
+      address: YextEntityField<AddressType>;
+      phoneNumbers: Array<{ number: YextEntityField<string>; label: string }>;
+      emails: YextEntityField<string[]>;
+    };
+    hours: {
+      headingText: YextEntityField<string>;
+      hours: YextEntityField<HoursType>;
+    };
+    services: {
+      headingText: YextEntityField<string>;
+      servicesList: YextEntityField<string[]>;
+    };
+  };
   styles: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-  };
-  address: {
-    headingText: YextEntityField<string>;
-    address: YextEntityField<AddressType>;
-    showGetDirectionsLink: boolean;
-  };
-  phoneNumbers: {
-    phoneNumber: Array<{ number: YextEntityField<string>; label: string }>;
-    phoneFormat: "domestic" | "international";
-    includePhoneHyperlink: boolean;
-  };
-  emails: {
-    emails: YextEntityField<string[]>;
-    listLength: number;
-  };
-  hours: {
-    headingText: YextEntityField<string>;
-    hours: YextEntityField<HoursType>;
-    startOfWeek: keyof DayOfWeekNames | "today";
-    collapseDays: boolean;
-    showAdditionalHoursText: boolean;
-  };
-  services: {
-    headingText: YextEntityField<string>;
-    servicesList: YextEntityField<string[]>;
+    info: {
+      showGetDirectionsLink: boolean;
+      phoneFormat: "domestic" | "international";
+      includePhoneHyperlink: boolean;
+      emailsListLength: number;
+    };
+    hours: {
+      startOfWeek: keyof DayOfWeekNames | "today";
+      collapseDays: boolean;
+      showAdditionalHoursText: boolean;
+    };
   };
   liveVisibility: boolean;
 }
 
 const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      info: YextField("Info Column", {
+        type: "object",
+        objectFields: {
+          headingText: YextField<any, string>("Heading Text", {
+            type: "entityField",
+            filter: { types: ["type.string"] },
+          }),
+          address: YextField<any, AddressType>("Address", {
+            type: "entityField",
+            filter: { types: ["type.address"] },
+          }),
+          phoneNumbers: YextField("Phone Numbers", {
+            type: "array",
+            arrayFields: {
+              number: YextField<any, string>("Phone Number", {
+                type: "entityField",
+                filter: {
+                  types: ["type.phone"],
+                },
+              }),
+              label: YextField("Label", {
+                type: "text",
+              }),
+            },
+            getItemSummary: (item) => item.label || "Item",
+          }),
+          emails: YextField<any, string[]>("Emails", {
+            type: "entityField",
+            filter: {
+              types: ["type.string"],
+              includeListsOnly: true,
+              allowList: ["emails"],
+            },
+          }),
+        },
+      }),
+      hours: YextField("Hours Column", {
+        type: "object",
+        objectFields: {
+          headingText: YextField<any, string>("Heading Text", {
+            type: "entityField",
+            filter: {
+              types: ["type.string"],
+            },
+          }),
+          hours: YextField("Hours", {
+            type: "entityField",
+            filter: {
+              types: ["type.hours"],
+            },
+          }),
+        },
+      }),
+      services: YextField("Services Column", {
+        type: "object",
+        objectFields: {
+          headingText: YextField<any, string>("Heading Text", {
+            type: "entityField",
+            filter: {
+              types: ["type.string"],
+            },
+          }),
+          servicesList: YextField<any, string[]>("Services List", {
+            type: "entityField",
+            filter: {
+              types: ["type.string"],
+              includeListsOnly: true,
+              allowList: ["services"],
+            },
+          }),
+        },
+      }),
+    },
+  }),
   styles: YextField("Styles", {
     type: "object",
     objectFields: {
@@ -74,124 +153,56 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-    },
-  }),
-  address: YextField("Info Column - Address", {
-    type: "object",
-    objectFields: {
-      headingText: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      address: YextField<any, AddressType>("Address", {
-        type: "entityField",
-        filter: { types: ["type.address"] },
-      }),
-      showGetDirectionsLink: YextField("Show Get Directions Link", {
-        type: "radio",
-        options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
-        ],
-      }),
-    },
-  }),
-  phoneNumbers: YextField("Info Column - Phone", {
-    type: "object",
-    objectFields: {
-      phoneNumber: YextField("Phone Numbers", {
-        type: "array",
-        arrayFields: {
-          number: YextField<any, string>("Phone Number", {
-            type: "entityField",
-            filter: {
-              types: ["type.phone"],
-            },
+      info: YextField("Info Column", {
+        type: "object",
+        objectFields: {
+          showGetDirectionsLink: YextField("Show Get Directions Link", {
+            type: "radio",
+            options: [
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ],
           }),
-          label: YextField("Label", {
-            type: "text",
+          phoneFormat: YextField("Phone Format", {
+            type: "radio",
+            options: "PHONE_OPTIONS",
+          }),
+          includePhoneHyperlink: YextField("Include Phone Hyperlink", {
+            type: "radio",
+            options: [
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ],
+          }),
+          emailsListLength: YextField("List Length", {
+            type: "number",
+            min: 0,
+            max: 3,
           }),
         },
-        getItemSummary: (item) => item.label || "Item",
       }),
-      phoneFormat: YextField("Phone Format", {
-        type: "radio",
-        options: "PHONE_OPTIONS",
-      }),
-      includePhoneHyperlink: YextField("Include Phone Hyperlink", {
-        type: "radio",
-        options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
-        ],
-      }),
-    },
-  }),
-  emails: YextField("Info Column - Emails", {
-    type: "object",
-    objectFields: {
-      emails: YextField<any, string[]>("Emails", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-          includeListsOnly: true,
-          allowList: ["emails"],
-        },
-      }),
-      listLength: YextField("List Length", { type: "number", min: 0, max: 3 }),
-    },
-  }),
-  hours: YextField("Info Column - Hours", {
-    type: "object",
-    objectFields: {
-      headingText: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      hours: YextField("Hours", {
-        type: "entityField",
-        filter: {
-          types: ["type.hours"],
-        },
-      }),
-      startOfWeek: YextField("Start of the Week", {
-        type: "select",
-        hasSearch: true,
-        options: "HOURS_OPTIONS",
-      }),
-      collapseDays: YextField("Collapse Days", {
-        type: "radio",
-        options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
-        ],
-      }),
-      showAdditionalHoursText: YextField("Show additional hours text", {
-        type: "radio",
-        options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
-        ],
-      }),
-    },
-  }),
-  services: YextField("Info Column - Services", {
-    type: "object",
-    objectFields: {
-      headingText: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      servicesList: YextField<any, string[]>("Text List", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-          includeListsOnly: true,
-          allowList: ["services"],
+      hours: YextField("Hours Column", {
+        type: "object",
+        objectFields: {
+          startOfWeek: YextField("Start of the Week", {
+            type: "select",
+            hasSearch: true,
+            options: "HOURS_OPTIONS",
+          }),
+          collapseDays: YextField("Collapse Days", {
+            type: "radio",
+            options: [
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ],
+          }),
+          showAdditionalHoursText: YextField("Show additional hours text", {
+            type: "radio",
+            options: [
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ],
+          }),
         },
       }),
     },
@@ -205,42 +216,35 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   }),
 };
 
-const CoreInfoSectionWrapper = ({
-  styles,
-  address: addressField,
-  phoneNumbers: phoneNumbersField,
-  emails: emailsField,
-  hours: hoursField,
-  services: servicesField,
-}: CoreInfoSectionProps) => {
+const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const document = useDocument();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
-    addressField.headingText
+    data.info.headingText
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
     document,
-    addressField.address
+    data.info.address
   );
   const resolvedEmails = resolveYextEntityField<string[]>(
     document,
-    emailsField.emails
+    data.info.emails
   );
   const hoursHeadingText = resolveYextEntityField<string>(
     document,
-    hoursField.headingText
+    data.hours.headingText
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
-    hoursField.hours
+    data.hours.hours
   );
   const servicesHeadingText = resolveYextEntityField<string>(
     document,
-    servicesField.headingText
+    data.services.headingText
   );
   const servicesList = resolveYextEntityField<string[]>(
     document,
-    servicesField.servicesList
+    data.services.servicesList
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
@@ -266,18 +270,18 @@ const CoreInfoSectionWrapper = ({
         {addressHeadingText && (
           <EntityField
             displayName="Heading Text"
-            fieldId={addressField.headingText.field}
-            constantValueEnabled={addressField.headingText.constantValueEnabled}
+            fieldId={data.info.headingText.field}
+            constantValueEnabled={data.info.headingText.constantValueEnabled}
           >
             <Heading level={styles.headingLevel}>{addressHeadingText}</Heading>
           </EntityField>
         )}
-        <div className="flex flex-col gap-2 text">
+        <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
           {resolvedAddress && (
             <EntityField
               displayName="Address"
-              fieldId={addressField.address.field}
-              constantValueEnabled={addressField.address.constantValueEnabled}
+              fieldId={data.info.address.field}
+              constantValueEnabled={data.info.address.constantValueEnabled}
             >
               <Address
                 address={resolvedAddress}
@@ -289,7 +293,7 @@ const CoreInfoSectionWrapper = ({
               />
             </EntityField>
           )}
-          {coordinates && addressField.showGetDirectionsLink && (
+          {coordinates && styles.info.showGetDirectionsLink && (
             <CTA
               className="font-bold"
               link={coordinates}
@@ -300,9 +304,9 @@ const CoreInfoSectionWrapper = ({
             />
           )}
         </div>
-        {phoneNumbersField.phoneNumber && (
+        {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
-            {phoneNumbersField.phoneNumber.map((item) => {
+            {data.info.phoneNumbers.map((item) => {
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -324,10 +328,8 @@ const CoreInfoSectionWrapper = ({
                           backgroundColor={backgroundColors.background2.value}
                           label={item.label}
                           phoneNumber={resolvedNumber}
-                          format={phoneNumbersField.phoneFormat}
-                          includeHyperlink={
-                            phoneNumbersField.includePhoneHyperlink
-                          }
+                          format={styles.info.phoneFormat}
+                          includeHyperlink={styles.info.includePhoneHyperlink}
                           includeIcon={true}
                         />
                       </div>
@@ -341,14 +343,14 @@ const CoreInfoSectionWrapper = ({
         {resolvedEmails && (
           <EntityField
             displayName="Email List"
-            fieldId={emailsField.emails.field}
-            constantValueEnabled={emailsField.emails.constantValueEnabled}
+            fieldId={data.info.emails.field}
+            constantValueEnabled={data.info.emails.constantValueEnabled}
           >
             <ul className="list-inside flex flex-col gap-4">
               {resolvedEmails
                 .slice(
                   0,
-                  Math.min(resolvedEmails.length, emailsField.listLength)
+                  Math.min(resolvedEmails.length, styles.info.emailsListLength)
                 )
                 .map((email, index) => (
                   <li key={index} className={`flex items-center gap-3`}>
@@ -375,8 +377,8 @@ const CoreInfoSectionWrapper = ({
           {hoursHeadingText && (
             <EntityField
               displayName="Heading Text"
-              fieldId={hoursField.headingText.field}
-              constantValueEnabled={hoursField.headingText.constantValueEnabled}
+              fieldId={data.hours.headingText.field}
+              constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
               <Heading level={styles.headingLevel}>{hoursHeadingText}</Heading>
             </EntityField>
@@ -384,15 +386,16 @@ const CoreInfoSectionWrapper = ({
           <EntityField
             displayName="Hours"
             fieldId="hours"
-            constantValueEnabled={hoursField.hours.constantValueEnabled}
+            constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
             <HoursTable
               hours={resolvedHours}
-              startOfWeek={hoursField.startOfWeek}
-              collapseDays={hoursField.collapseDays}
+              startOfWeek={styles.hours.startOfWeek}
+              collapseDays={styles.hours.collapseDays}
+              className="text-body-fontSize font-body-fontWeight font-body-fontFamily"
             />
           </EntityField>
-          {additionalHoursText && hoursField.showAdditionalHoursText && (
+          {additionalHoursText && styles.hours.showAdditionalHoursText && (
             <EntityField displayName="Hours Text" fieldId="additionalHoursText">
               <Body className="mt-4 text-body-sm-fontSize">
                 {additionalHoursText}
@@ -406,9 +409,9 @@ const CoreInfoSectionWrapper = ({
           {servicesHeadingText && (
             <EntityField
               displayName="Heading Text"
-              fieldId={servicesField.headingText.field}
+              fieldId={data.services.headingText.field}
               constantValueEnabled={
-                servicesField.headingText.constantValueEnabled
+                data.services.headingText.constantValueEnabled
               }
             >
               <Heading level={styles.headingLevel}>
@@ -418,9 +421,9 @@ const CoreInfoSectionWrapper = ({
           )}
           <EntityField
             displayName="Text List"
-            fieldId={servicesField.servicesList.field}
+            fieldId={data.services.servicesList.field}
             constantValueEnabled={
-              servicesField.servicesList.constantValueEnabled
+              data.services.servicesList.constantValueEnabled
             }
           >
             <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
@@ -441,70 +444,72 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
   label: "Core Info Section",
   fields: coreInfoSectionFields,
   defaultProps: {
+    data: {
+      info: {
+        headingText: {
+          field: "",
+          constantValue: "Information",
+          constantValueEnabled: true,
+        },
+        address: {
+          field: "address",
+          constantValue: {
+            line1: "",
+            city: "",
+            postalCode: "",
+            countryCode: "",
+          },
+        },
+        phoneNumbers: [
+          {
+            number: {
+              field: "mainPhone",
+              constantValue: "",
+            },
+            label: "Phone",
+          },
+        ],
+        emails: {
+          field: "emails",
+          constantValue: [],
+        },
+      },
+      hours: {
+        headingText: {
+          field: "",
+          constantValue: "Hours",
+          constantValueEnabled: true,
+        },
+        hours: {
+          field: "hours",
+          constantValue: {},
+        },
+      },
+      services: {
+        headingText: {
+          field: "",
+          constantValue: "Services",
+          constantValueEnabled: true,
+        },
+        servicesList: {
+          field: "services",
+          constantValue: [],
+        },
+      },
+    },
     styles: {
       headingLevel: 3,
       backgroundColor: backgroundColors.background1.value,
-    },
-    address: {
-      headingText: {
-        field: "",
-        constantValue: "Information",
-        constantValueEnabled: true,
-      },
-      address: {
-        field: "address",
-        constantValue: {
-          line1: "",
-          city: "",
-          postalCode: "",
-          countryCode: "",
-        },
-      },
-      showGetDirectionsLink: true,
-    },
-    phoneNumbers: {
-      phoneNumber: [
-        {
-          number: {
-            field: "mainPhone",
-            constantValue: "",
-          },
-          label: "Phone",
-        },
-      ],
-      phoneFormat: "domestic",
-      includePhoneHyperlink: true,
-    },
-    emails: {
-      emails: {
-        field: "emails",
-        constantValue: [],
-      },
-      listLength: 1,
-    },
-    hours: {
-      headingText: {
-        field: "",
-        constantValue: "Hours",
-        constantValueEnabled: true,
+      info: {
+        showGetDirectionsLink: true,
+        phoneFormat: "domestic",
+        includePhoneHyperlink: true,
+        emailsListLength: 1,
       },
       hours: {
-        field: "hours",
-        constantValue: {},
-      },
-      startOfWeek: "today",
-      collapseDays: false,
-      showAdditionalHoursText: true,
-    },
-    services: {
-      headingText: {
-        field: "",
-        constantValue: "Services",
-        constantValueEnabled: true,
-      },
-      servicesList: {
-        field: "services",
-        constantValue: [],
+        startOfWeek: "today",
+        collapseDays: false,
+        showAdditionalHoursText: true,
       },
     },
     liveVisibility: true,

@@ -34,11 +34,11 @@ export const ClearLocalChangesButton = ({
   return (
     <AlertDialog open={modalOpen} onOpenChange={setModalOpen}>
       <AlertDialogTrigger disabled={disabled} asChild>
-        <Button variant="outline">Clear Local Changes</Button>
+        <Button variant="link">Discard Changes</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Clear Local Changes</AlertDialogTitle>
+          <AlertDialogTitle>Discard Changes</AlertDialogTitle>
           <AlertDialogDescription>
             This action will remove your local changes. It cannot be undone.
           </AlertDialogDescription>

@@ -14,6 +14,7 @@ import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
+import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 
 const devLogger = new DevLogger();
@@ -189,6 +190,7 @@ export const InternalLayoutEditor = ({
               localDev={localDev}
             />
           ),
+          iframe: loadMapboxIntoIframe,
         }}
       />
     </EntityTooltipsProvider>

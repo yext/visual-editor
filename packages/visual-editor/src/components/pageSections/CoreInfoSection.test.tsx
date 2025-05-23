@@ -243,6 +243,216 @@ const tests: ComponentTest[] = [
       expect(page.getByText("Repair")).toBeVisible();
     },
   },
+  {
+    name: "version 1 props with entity values",
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      data: {
+        hours: {
+          headingText: {
+            constantValue: "Hours",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "name",
+          },
+          hours: {
+            constantValue: {},
+            field: "hours",
+          },
+        },
+        info: {
+          address: {
+            constantValue: {
+              city: "",
+              countryCode: "",
+              line1: "",
+              postalCode: "",
+            },
+            field: "address",
+          },
+          emails: {
+            constantValue: [],
+            field: "emails",
+          },
+          headingText: {
+            constantValue: "Information",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "id",
+          },
+          phoneNumbers: [
+            {
+              label: "Phone",
+              number: {
+                constantValue: "",
+                field: "mainPhone",
+              },
+            },
+          ],
+        },
+        services: {
+          headingText: {
+            constantValue: "Services",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "description",
+          },
+          servicesList: {
+            constantValue: [],
+            field: "services",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        headingLevel: 3,
+        hours: {
+          collapseDays: false,
+          showAdditionalHoursText: true,
+          startOfWeek: "today",
+        },
+        info: {
+          emailsListLength: 1,
+          includePhoneHyperlink: true,
+          phoneFormat: "domestic",
+          showGetDirectionsLink: true,
+        },
+      },
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("test-id")).toBeVisible();
+      expect(page.getByText("Galaxy Grill")).toBeVisible();
+      expect(page.getByText("test-description")).toBeVisible();
+      expect(page.getByText("288 Grand St")).toBeVisible();
+      expect(page.getByText("(800) 555-1010")).toBeVisible();
+      expect(page.getByText("sumo@yext.com")).toBeVisible();
+      expect(page.getByText("Wednesday")).toBeVisible();
+      expect(page.getByText("Delivery")).toBeVisible();
+    },
+  },
+  {
+    name: "version 1 props with constant value",
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      data: {
+        hours: {
+          headingText: {
+            constantValue: "Hours",
+            constantValueEnabled: true,
+            field: "name",
+          },
+          hours: {
+            constantValue: {},
+            field: "hours",
+          },
+        },
+        info: {
+          address: {
+            constantValue: {
+              city: "Arlington",
+              countryCode: "",
+              line1: "Test",
+              postalCode: "",
+              region: "VA",
+            },
+            constantValueEnabled: true,
+            field: "address",
+          },
+          emails: {
+            constantValue: ["email1@yext.com", "email2@yext.com"],
+            constantValueEnabled: true,
+            field: "emails",
+          },
+          headingText: {
+            constantValue: "Information",
+            constantValueEnabled: true,
+            field: "id",
+          },
+          phoneNumbers: [
+            {
+              label: "Main",
+              number: {
+                constantValue: "5555551010",
+                constantValueEnabled: true,
+                field: "mainPhone",
+              },
+            },
+            {
+              label: "Cell",
+              number: {
+                constantValue: "8888888888",
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+          ],
+        },
+        services: {
+          headingText: {
+            constantValue: "Services",
+            constantValueEnabled: true,
+            field: "description",
+          },
+          servicesList: {
+            constantValue: ["Repair"],
+            constantValueEnabled: true,
+            field: "services",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        headingLevel: 6,
+        hours: {
+          collapseDays: true,
+          showAdditionalHoursText: false,
+          startOfWeek: "monday",
+        },
+        info: {
+          emailsListLength: 2,
+          includePhoneHyperlink: false,
+          phoneFormat: "domestic",
+          showGetDirectionsLink: false,
+        },
+      },
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Information")).toBeVisible();
+      expect(page.getByText("hours")).toBeVisible();
+      expect(page.getByText("Services")).toBeVisible();
+      expect(page.getByText("Arlington")).toBeVisible();
+      expect(page.getByText("Cell")).toBeVisible();
+      expect(page.getByText("email2@yext.com")).toBeVisible();
+      expect(page.getByText("Monday - Sunday")).toBeVisible();
+      expect(page.getByText("Repair")).toBeVisible();
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
@@ -270,7 +480,11 @@ describe("CoreInfoSection", async () => {
     }) => {
       const data = migrate(
         {
-          root: { version },
+          root: {
+            props: {
+              version,
+            },
+          },
           content: [
             {
               type: "CoreInfoSection",

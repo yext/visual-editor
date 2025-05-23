@@ -24,6 +24,9 @@ export default [
     "plugin:@typescript-eslint/recommended",
   ),
   {
+    ignores: ["**/font_registry.js"],
+  },
+  {
     plugins: {
       react,
       typescriptEslint: fixupPluginRules(typescriptEslint),

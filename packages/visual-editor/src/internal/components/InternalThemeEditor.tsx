@@ -8,6 +8,7 @@ import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebar
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
@@ -177,11 +178,13 @@ export const InternalThemeEditor = ({
               puckInitialHistory={puckInitialHistory}
               clearLocalChangesModalOpen={clearLocalChangesModalOpen}
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
+              totalEntityCount={templateMetadata.totalEntityCount}
             />
           ),
           actionBar: () => <></>,
           components: () => <></>,
           fields: fieldsOverride,
+          iframe: loadMapboxIntoIframe,
         }}
       />
     </EntityTooltipsProvider>

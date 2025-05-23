@@ -1,6 +1,7 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { TeamSectionType, PersonStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
+import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
 
 export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
   type: "custom",
@@ -12,11 +13,7 @@ export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
     onChange: (value: TeamSectionType, uiState?: Partial<UiState>) => void;
   }) => {
     return (
-      <div
-        className={
-          "ve-mt-4" + (value.people.length === 0 ? " empty-array-fix" : "")
-        }
-      >
+      <div className={"ve-mt-4"}>
         <AutoField
           field={PersonStructArrayField}
           value={value.people}
@@ -51,10 +48,7 @@ const PersonStructArrayField: ArrayField<PersonStruct[]> = {
       type: "text",
       label: "Title",
     },
-    phoneNumber: {
-      type: "text",
-      label: "Phone Number",
-    },
+    phoneNumber: PHONE_CONSTANT_CONFIG,
     email: {
       type: "text",
       label: "Email",

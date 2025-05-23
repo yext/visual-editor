@@ -26,7 +26,9 @@ export type Migration = Record<string, MigrationAction>;
 export type MigrationRegistry = Migration[];
 
 interface RootProps extends DefaultRootProps {
-  version?: number;
+  props?: {
+    version?: number;
+  };
 }
 
 export const migrate = (
@@ -66,7 +68,6 @@ export const migrate = (
     data.root.props = {};
   }
   data.root.props.version = migrationRegistry.length;
-
   return data;
 };
 
