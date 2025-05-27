@@ -1,3 +1,8 @@
+---
+title: Hybrid Site Development Guide
+outline: deep
+---
+
 # Hybrid Site Development Guide
 
 ## Set Up
