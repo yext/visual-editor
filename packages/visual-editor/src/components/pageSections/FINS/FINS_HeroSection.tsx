@@ -154,7 +154,11 @@ const heroSectionFields: Fields<FINS_HeroSectionProps> = {
           { label: "No", value: false },
         ],
       }),
-      listLength: YextField("List Length", { type: "number", min: 0, max: 3 }),
+      listLength: YextField("Emails List Length", {
+        type: "number",
+        min: 0,
+        max: 3,
+      }),
     },
   }),
   liveVisibility: YextField("Visible on Live Page", {
