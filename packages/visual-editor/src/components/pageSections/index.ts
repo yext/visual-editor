@@ -9,6 +9,10 @@ export {
 } from "./CoreInfoSection.tsx";
 export { EventSection, type EventSectionProps } from "./EventSection.tsx";
 export { FAQSection, type FAQSectionProps } from "./FAQsSection.tsx";
+export {
+  FINS_HeroSection,
+  type FINS_HeroSectionProps,
+} from "./FINS/FINS_HeroSection.tsx";
 export { HeroSection, type HeroSectionProps } from "./HeroSection.tsx";
 export { InsightSection, type InsightSectionProps } from "./InsightSection.tsx";
 export {
