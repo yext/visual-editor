@@ -388,35 +388,48 @@ const CoreInfoSectionWrapper = ({
     >
       <div className="w-full md:w-2/3 flex flex-col gap-8">
         <div className="flex flex-col gap-8 md:gap-16 divide-y-2 md:divide-y-0">
-          <div className="flex flex-col gap-8">
-            <EntityField
-              displayName="Heading Text"
-              fieldId={biography.headingText.field}
-              constantValueEnabled={biography.headingText.constantValueEnabled}
+          {resolvedBiography && (
+            <section aria-label="Biography" className="flex flex-col gap-8">
+              {resolvedBiographyHeading && (
+                <EntityField
+                  displayName="Heading Text"
+                  fieldId={biography.headingText.field}
+                  constantValueEnabled={
+                    biography.headingText.constantValueEnabled
+                  }
+                >
+                  <Heading level={mainHeadingLevel}>
+                    {resolvedBiographyHeading}
+                  </Heading>
+                </EntityField>
+              )}
+              <EntityField
+                displayName="Description"
+                fieldId={biography.entityField.field}
+                constantValueEnabled={
+                  biography.entityField.constantValueEnabled
+                }
+              >
+                <Body>
+                  <MaybeRTF data={resolvedBiography} />
+                </Body>
+              </EntityField>
+            </section>
+          )}
+          {resolvedAwards?.awards && (
+            <section
+              aria-label="Awards"
+              className="flex flex-col gap-4 pt-4 md:pt-0"
             >
-              <Heading level={mainHeadingLevel}>
-                {resolvedBiographyHeading}
-              </Heading>
-            </EntityField>
-            <EntityField
-              displayName="Description"
-              fieldId={biography.entityField.field}
-              constantValueEnabled={biography.entityField.constantValueEnabled}
-            >
-              <Body>
-                <MaybeRTF data={resolvedBiography} />
-              </Body>
-            </EntityField>
-          </div>
-          <div className="flex flex-col gap-4 pt-4 md:pt-0">
-            <EntityField
-              displayName="Heading Text"
-              fieldId={awards.headingText.field}
-              constantValueEnabled={awards.headingText.constantValueEnabled}
-            >
-              <Heading level={subHeadingLevel}>{resolvedAwardsHeading}</Heading>
-            </EntityField>
-            {resolvedAwards?.awards && (
+              <EntityField
+                displayName="Heading Text"
+                fieldId={awards.headingText.field}
+                constantValueEnabled={awards.headingText.constantValueEnabled}
+              >
+                <Heading level={subHeadingLevel}>
+                  {resolvedAwardsHeading}
+                </Heading>
+              </EntityField>
               <EntityField
                 displayName="Award"
                 fieldId={awards.entityField.field}
@@ -428,8 +441,8 @@ const CoreInfoSectionWrapper = ({
                   ))}
                 </div>
               </EntityField>
-            )}
-          </div>
+            </section>
+          )}
         </div>
       </div>
       <div className="w-full md:w-1/3 flex flex-col divide-y-2">
@@ -457,7 +470,11 @@ const CoreInfoSectionWrapper = ({
                     fieldId={hours.hours.field}
                     constantValueEnabled={hours.hours.constantValueEnabled}
                   >
-                    <HoursStatus hours={resolvedHours} timezone={timezone} />
+                    <HoursStatus
+                      hours={resolvedHours}
+                      timezone={timezone}
+                      dayOfWeekTemplate={() => null}
+                    />
                   </EntityField>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -501,7 +518,7 @@ const CoreInfoSectionWrapper = ({
               constantValueEnabled={services.entityField.constantValueEnabled}
             >
               <ul className="list-disc list-inside">
-                {resolvedServices.map((text: any, index: any) => (
+                {resolvedServices.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
                   </li>
@@ -536,7 +553,7 @@ const CoreInfoSectionWrapper = ({
               }
             >
               <ul className="list-disc list-inside">
-                {resolvedAreasServed.map((text: any, index: number) => (
+                {resolvedAreasServed.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
                   </li>
@@ -569,7 +586,7 @@ const CoreInfoSectionWrapper = ({
               constantValueEnabled={languages.entityField.constantValueEnabled}
             >
               <ul className="list-disc list-inside">
-                {resolvedLanguages.map((text: any, index: number) => (
+                {resolvedLanguages.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
                   </li>
@@ -602,7 +619,7 @@ const CoreInfoSectionWrapper = ({
               constantValueEnabled={education.entityField.constantValueEnabled}
             >
               <ul className="list-disc list-inside">
-                {resolvedEducation.map((text: any, index: number) => (
+                {resolvedEducation.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
                   </li>
@@ -616,7 +633,7 @@ const CoreInfoSectionWrapper = ({
           instagramHandle ||
           linkedInUrl) && (
           <section
-            aria-label="Services Section"
+            aria-label="Social Section"
             className="flex flex-col gap-4 py-8 first:md:pt-0 last:md:pb-0"
           >
             {resolvedFollowUsHeading && (
@@ -634,53 +651,37 @@ const CoreInfoSectionWrapper = ({
               <ul className="list-none flex gap-5">
                 {twitterHandle && (
                   <li
-                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${
-                      !hasDarkBackground
-                        ? "bg-palette-primary-dark text-white"
-                        : "bg-white text-palette-primary-dark"
-                    }`}
+                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={twitterHandle}>
-                      <FaXTwitter className="h-6 w-6" />
+                    <a href={twitterHandle} aria-label="Twitter">
+                      <FaXTwitter className="h-6 w-6" aria-hidden="true" />
                     </a>
                   </li>
                 )}
                 {facebookPageUrl && (
                   <li
-                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${
-                      !hasDarkBackground
-                        ? "bg-palette-primary-dark text-white"
-                        : "bg-white text-palette-primary-dark"
-                    }`}
+                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={facebookPageUrl}>
-                      <FaFacebookF className="h-6 w-6" />
+                    <a href={facebookPageUrl} aria-label="Facebook">
+                      <FaFacebookF className="h-6 w-6" aria-hidden="true" />
                     </a>
                   </li>
                 )}
                 {instagramHandle && (
                   <li
-                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${
-                      !hasDarkBackground
-                        ? "bg-palette-primary-dark text-white"
-                        : "bg-white text-palette-primary-dark"
-                    }`}
+                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={instagramHandle}>
-                      <FaInstagram className="h-6 w-6" />
+                    <a href={instagramHandle} aria-label="Instagram">
+                      <FaInstagram className="h-6 w-6" aria-hidden="true" />
                     </a>
                   </li>
                 )}
                 {linkedInUrl && (
                   <li
-                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${
-                      !hasDarkBackground
-                        ? "bg-palette-primary-dark text-white"
-                        : "bg-white text-palette-primary-dark"
-                    }`}
+                    className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={linkedInUrl}>
-                      <FaLinkedinIn className="h-6 w-6" />
+                    <a href={linkedInUrl} aria-label="LinkedIn">
+                      <FaLinkedinIn className="h-6 w-6" aria-hidden="true" />
                     </a>
                   </li>
                 )}
