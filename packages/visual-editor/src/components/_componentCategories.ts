@@ -75,7 +75,10 @@ import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
-
+import {
+  FINS_CoreInfoSectionProps,
+  FINS_CoreInfoSection,
+} from "./pageSections/FINS/FINS_CoreInfoSection.tsx";
 export interface PageSectionCategoryProps {
   BreadcrumbsSection: BreadcrumbsSectionProps;
   HeroSection: HeroSectionProps;
@@ -91,6 +94,7 @@ export interface PageSectionCategoryProps {
   FAQSection: FAQSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TestimonialSection: TestimonialSectionProps;
+  FINS_CoreInfoSection: FINS_CoreInfoSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -108,6 +112,7 @@ export const PageSectionCategoryComponents = {
   PromoSection,
   TeamSection,
   TestimonialSection,
+  FINS_CoreInfoSection,
 };
 
 export const PageSectionCategory = Object.keys(

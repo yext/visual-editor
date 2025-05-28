@@ -53,6 +53,7 @@ export type EntityFieldTypes =
   | "type.events_section"
   | "type.promo_section"
   | "type.hero_section"
+  | "type.awards_section"
   | `c_${string}`;
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];

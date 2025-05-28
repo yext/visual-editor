@@ -73,6 +73,16 @@ export type TeamSectionType = {
   people: Array<PersonStruct>;
 };
 
+export type AwardSectionType = {
+  awards: Array<AwardStruct>;
+};
+
+export type AwardStruct = {
+  title: string;
+  description: RTF2 | string;
+  image?: ImageType;
+};
+
 export type PersonStruct = {
   headshot?: ImageType;
   name?: string;
