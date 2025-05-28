@@ -88,7 +88,7 @@ const InsuranceProvidersSectionWrapper = ({
     <PageSection
       background={backgroundColor}
       aria-label="Core Info Section"
-      className="flex flex-col flex-col gap-8"
+      className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
@@ -101,28 +101,32 @@ const InsuranceProvidersSectionWrapper = ({
           </Heading>
         </EntityField>
       )}
+
       {resolvedProviders?.insuranceProviders && (
         <EntityField
           displayName="Insurance Providers"
           fieldId={entityField.field}
           constantValueEnabled={entityField.constantValueEnabled}
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            {resolvedProviders?.insuranceProviders.map((item, idx) => (
-              <div key={idx} className="flex flex-col gap-2.5">
+          <ul
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
+            aria-label="Insurance Providers List"
+          >
+            {resolvedProviders.insuranceProviders.map((item, idx) => (
+              <li key={idx} className="flex flex-col gap-2.5">
                 {item.image && (
                   <Image
                     image={item.image}
-                    layout={"auto"}
+                    layout="auto"
                     aspectRatio={item.image.width / item.image.height}
                   />
                 )}
                 <Heading level={insuranceProviderNameLevel}>
                   {item.title}
                 </Heading>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </EntityField>
       )}
     </PageSection>
