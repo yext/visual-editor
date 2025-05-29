@@ -842,14 +842,6 @@ const Mock: ComponentConfig<MockProps> = {
 };
 ```
 
-And a mapping of which props are allowed to be overridden:
-
-```ts
-type ComponentPropOverrides = {
-  Mock: Pick<MockProps, "name">;
-};
-```
-
 You can inject `name` like this:
 
 ```ts
@@ -858,9 +850,11 @@ withPropOverrides(Mock, {
 });
 ```
 
+and would end up with a component that shows "Hello World"
+
 ### Supported usages for in-repo developers
 
-This allows in-repo developers to specify the env var to be used for the NearbyLocationsSection's content endpoint.
+This allows in-repo developers to specify the env var to be used for the NearbyLocationsSection's content endpoint. All other props may be overriden as well but that is not necessarily a recommended usage as most props rely on values inputted via the editor.
 
 ```ts
 export const mockConfig: Config<MockProps> = {

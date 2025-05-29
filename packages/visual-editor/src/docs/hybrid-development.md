@@ -139,3 +139,26 @@ export const componentRegistry = new Map<string, Config<any>>([
   ["templateName", mainConfig],
 ]);
 ```
+
+### Working with Existing Components
+
+The **NearbyLocationsSection** component requires [withPropOverrides](../utils/README.md#withpropoverrides) to pass in a value for contentEndpointEnvVar. Without this, the component will not work in a hybrid development. This can look like:
+
+```ts
+interface MainProps
+  extends PageSectionCategoryProps,
+    OtherCategoryProps {}
+
+const components: Config<MainProps>["components"] = {
+  ...PageSectionCategoryComponents,
+  ...OtherCategoryComponents,
+};
+
+export const mainConfig: Config<MainProps> = {
+  components: {
+    ...components,
+    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {contentEndpointEnvVar: "YEXT_PUBLIC_FOO"})
+  },
+  .....
+}
+```

@@ -1,20 +1,8 @@
-import { ComponentConfig } from "@measured/puck";
-import { NearbyLocationsSectionProps } from "../components/pageSections/NearbyLocations.tsx";
+import { ComponentConfig, DefaultComponentProps } from "@measured/puck";
 
-// ComponentPropOverrides contains a mapping of overridable props for a component
-type ComponentPropOverrides = {
-  NearbyLocationsSection: Pick<
-    NearbyLocationsSectionProps,
-    "contentEndpointEnvVar"
-  >;
-};
-
-export function withPropOverrides<
-  K extends keyof ComponentPropOverrides,
-  P extends object = ComponentPropOverrides[K] & object,
->(
+export function withPropOverrides<P extends DefaultComponentProps>(
   base: ComponentConfig<P>,
-  overrides: ComponentPropOverrides[K]
+  overrides: Partial<P>
 ): ComponentConfig<P> {
   return {
     ...base,
