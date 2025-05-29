@@ -96,13 +96,7 @@ const InsuranceProvidersSectionWrapper = ({
           fieldId={headingText.field}
           constantValueEnabled={headingText.constantValueEnabled}
         >
-          <Heading
-            level={headingLevel}
-            semanticLevelOverride={
-              headingLevel < 6 ? ((headingLevel + 1) as HeadingLevel) : "span"
-            }
-            className="text-center"
-          >
+          <Heading level={headingLevel} className="text-center">
             {resolvedHeading}
           </Heading>
         </EntityField>
@@ -121,13 +115,16 @@ const InsuranceProvidersSectionWrapper = ({
             {resolvedProviders.insuranceProviders.map((item, idx) => (
               <li key={idx} className="flex flex-col gap-2.5">
                 {item.image && (
-                  <Image
-                    image={item.image}
-                    layout="auto"
-                    aspectRatio={item.image.width / item.image.height}
-                  />
+                  <Image image={item.image} layout="auto" aspectRatio={2.5} />
                 )}
-                <Heading level={insuranceProviderNameLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    headingLevel < 6
+                      ? ((headingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={insuranceProviderNameLevel}
+                >
                   {item.title}
                 </Heading>
               </li>
