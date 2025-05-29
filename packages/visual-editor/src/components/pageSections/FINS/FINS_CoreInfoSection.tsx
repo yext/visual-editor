@@ -1,10 +1,10 @@
 import { ComponentConfig, Fields } from "@measured/puck";
-
 import {
   HoursType,
   DayOfWeekNames,
   HoursTable,
   HoursStatus,
+  Link,
 } from "@yext/pages-components";
 import {
   backgroundColors,
@@ -28,7 +28,8 @@ import {
   AwardStruct,
 } from "@yext/visual-editor";
 import { FaInstagram } from "react-icons/fa";
-import { FaFacebookF, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import {
   Accordion,
   AccordionContent,
@@ -149,6 +150,7 @@ const coreInfoSectionFields: Fields<FINS_CoreInfoSectionProps> = {
             filter: {
               types: ["type.string"],
               includeListsOnly: true,
+              allowList: ["services"],
             },
           }),
         },
@@ -279,7 +281,7 @@ const AwardCard = ({ title, description, image }: AwardStruct) => {
         </figure>
       )}
       <div className="flex flex-col gap-1 w-2/3">
-        <Body className="text-base md:text-lg font-bold">{title}</Body>
+        <Body className="md:text-lg font-bold">{title}</Body>
         <MaybeRTF className="text-xs md:text-sm" data={description}></MaybeRTF>
       </div>
     </section>
@@ -410,9 +412,7 @@ const CoreInfoSectionWrapper = ({
                   biography.entityField.constantValueEnabled
                 }
               >
-                <Body>
-                  <MaybeRTF data={resolvedBiography} />
-                </Body>
+                <MaybeRTF data={resolvedBiography} />
               </EntityField>
             </section>
           )}
@@ -426,7 +426,14 @@ const CoreInfoSectionWrapper = ({
                 fieldId={awards.headingText.field}
                 constantValueEnabled={awards.headingText.constantValueEnabled}
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedAwardsHeading}
                 </Heading>
               </EntityField>
@@ -457,7 +464,14 @@ const CoreInfoSectionWrapper = ({
                 fieldId={hours.headingText.field}
                 constantValueEnabled={hours.headingText.constantValueEnabled}
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedHoursHeading}
                 </Heading>
               </EntityField>
@@ -491,7 +505,7 @@ const CoreInfoSectionWrapper = ({
                 displayName="Hours Text"
                 fieldId="additionalHoursText"
               >
-                <Body className="text-sm">{additionalHoursText}</Body>
+                <Body variant={"sm"}>{additionalHoursText}</Body>
               </EntityField>
             )}
           </section>
@@ -507,7 +521,14 @@ const CoreInfoSectionWrapper = ({
                 fieldId={services.headingText.field}
                 constantValueEnabled={services.headingText.constantValueEnabled}
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedServicesHeading}
                 </Heading>
               </EntityField>
@@ -517,7 +538,7 @@ const CoreInfoSectionWrapper = ({
               fieldId={services.entityField.field}
               constantValueEnabled={services.entityField.constantValueEnabled}
             >
-              <ul className="list-disc list-inside">
+              <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
                 {resolvedServices.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
@@ -540,7 +561,14 @@ const CoreInfoSectionWrapper = ({
                   areasServed.headingText.constantValueEnabled
                 }
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedAreasServedHeading}
                 </Heading>
               </EntityField>
@@ -552,7 +580,7 @@ const CoreInfoSectionWrapper = ({
                 areasServed.entityField.constantValueEnabled
               }
             >
-              <ul className="list-disc list-inside">
+              <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
                 {resolvedAreasServed.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
@@ -575,7 +603,14 @@ const CoreInfoSectionWrapper = ({
                   languages.headingText.constantValueEnabled
                 }
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedLanguagesHeading}
                 </Heading>
               </EntityField>
@@ -585,7 +620,7 @@ const CoreInfoSectionWrapper = ({
               fieldId={languages.entityField.field}
               constantValueEnabled={languages.entityField.constantValueEnabled}
             >
-              <ul className="list-disc list-inside">
+              <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
                 {resolvedLanguages.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
@@ -608,7 +643,14 @@ const CoreInfoSectionWrapper = ({
                   education.headingText.constantValueEnabled
                 }
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedEducationHeading}
                 </Heading>
               </EntityField>
@@ -618,7 +660,7 @@ const CoreInfoSectionWrapper = ({
               fieldId={education.entityField.field}
               constantValueEnabled={education.entityField.constantValueEnabled}
             >
-              <ul className="list-disc list-inside">
+              <ul className="list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
                 {resolvedEducation.map((text, index) => (
                   <li key={index} className="mb-2">
                     {text}
@@ -642,47 +684,60 @@ const CoreInfoSectionWrapper = ({
                 fieldId={followUs.headingText.field}
                 constantValueEnabled={followUs.headingText.constantValueEnabled}
               >
-                <Heading level={subHeadingLevel}>
+                <Heading
+                  semanticLevelOverride={
+                    mainHeadingLevel < 6
+                      ? ((mainHeadingLevel + 1) as HeadingLevel)
+                      : "span"
+                  }
+                  level={subHeadingLevel}
+                >
                   {resolvedFollowUsHeading}
                 </Heading>
               </EntityField>
             )}
-            <EntityField displayName="Social">
+            <EntityField displayName="Social Media Fields">
               <ul className="list-none flex gap-5">
                 {twitterHandle && (
                   <li
                     className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={twitterHandle} aria-label="Twitter">
+                    <Link
+                      href={`https://x.com/${twitterHandle}`}
+                      aria-label="Twitter"
+                    >
                       <FaXTwitter className="h-6 w-6" aria-hidden="true" />
-                    </a>
+                    </Link>
                   </li>
                 )}
                 {facebookPageUrl && (
                   <li
                     className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={facebookPageUrl} aria-label="Facebook">
+                    <Link href={facebookPageUrl} aria-label="Facebook">
                       <FaFacebookF className="h-6 w-6" aria-hidden="true" />
-                    </a>
+                    </Link>
                   </li>
                 )}
                 {instagramHandle && (
                   <li
                     className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={instagramHandle} aria-label="Instagram">
+                    <Link
+                      href={`https://instagram.com/${instagramHandle}`}
+                      aria-label="Instagram"
+                    >
                       <FaInstagram className="h-6 w-6" aria-hidden="true" />
-                    </a>
+                    </Link>
                   </li>
                 )}
                 {linkedInUrl && (
                   <li
                     className={`h-12 w-12 flex items-center justify-center border rounded-full ${!hasDarkBackground ? "bg-palette-primary-dark text-white" : "bg-white text-palette-primary-dark"}`}
                   >
-                    <a href={linkedInUrl} aria-label="LinkedIn">
+                    <Link href={linkedInUrl} aria-label="LinkedIn">
                       <FaLinkedinIn className="h-6 w-6" aria-hidden="true" />
-                    </a>
+                    </Link>
                   </li>
                 )}
               </ul>
