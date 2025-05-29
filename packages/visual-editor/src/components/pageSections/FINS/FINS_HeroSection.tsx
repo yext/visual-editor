@@ -311,7 +311,6 @@ const HeroSectionWrapper = ({
                   constantValueEnabled={address.constantValueEnabled}
                 >
                   <Address
-                    className="not-italic"
                     address={resolvedAddress}
                     lines={[
                       ["line1"],
