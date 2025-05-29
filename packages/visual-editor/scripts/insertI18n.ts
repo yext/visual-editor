@@ -81,7 +81,7 @@ const isDryRun = process.argv.includes("--dry-run");
       }
     });
 
-    // 3) Wrap label/title/description properties
+    // 3) Wrap label/title/description properties — exclude option arrays
     const stringKeysToWrap = new Set(["label", "title", "description"]);
     const jsxPropertyAssignments = sourceFile.getDescendantsOfKind(
       SyntaxKind.PropertyAssignment
@@ -97,6 +97,20 @@ const isDryRun = process.argv.includes("--dry-run");
         initializer?.getKind() === SyntaxKind.StringLiteral &&
         !initializer.getText().startsWith("i18n(")
       ) {
+        // Avoid wrapping if the property is inside an object in a top-level array declaration
+        const parentArray = prop.getFirstAncestorByKind(
+          SyntaxKind.ArrayLiteralExpression
+        );
+        const parentVar = parentArray?.getFirstAncestorByKind(
+          SyntaxKind.VariableDeclaration
+        );
+
+        if (parentVar) {
+          const varName = parentVar.getName();
+          const isLikelyOptionArray = /Options$/.test(varName); // e.g., borderRadiusOptions
+          if (isLikelyOptionArray) return; // skip wrapping
+        }
+
         const strValue = initializer.getText();
         initializer.replaceWithText(`i18n(${strValue})`);
         modified = true;

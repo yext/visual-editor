@@ -6,15 +6,15 @@ import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 
 export const borderRadiusOptions = [
-  { label: i18n("None"), value: "none", px: "0" },
-  { label: i18n("XS"), value: "xs", px: "2" },
-  { label: i18n("SM"), value: "sm", px: "4" },
-  { label: i18n("MD"), value: "md", px: "6" },
-  { label: i18n("LG"), value: "lg", px: "8" },
-  { label: i18n("XL"), value: "xl", px: "12" },
-  { label: i18n("2XL"), value: "2xl", px: "16" },
-  { label: i18n("3XL"), value: "3xl", px: "24" },
-  { label: i18n("Full"), value: "full", px: "9999" },
+  { label: "None", value: "none", px: "0" },
+  { label: "XS", value: "xs", px: "2" },
+  { label: "SM", value: "sm", px: "4" },
+  { label: "MD", value: "md", px: "6" },
+  { label: "LG", value: "lg", px: "8" },
+  { label: "XL", value: "xl", px: "12" },
+  { label: "2XL", value: "2xl", px: "16" },
+  { label: "3XL", value: "3xl", px: "24" },
+  { label: "Full", value: "full", px: "9999" },
 ];
 
 export const convertToPixels = (borderRadius: string): number => {
