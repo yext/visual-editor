@@ -9,6 +9,7 @@ import {
   LayoutBlockCategory,
   YextField,
   VisibilityWrapper,
+  i18n,
 } from "@yext/visual-editor";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
@@ -78,28 +79,28 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
-  rows: YextField("Rows", {
+  rows: YextField(i18n("Rows"), {
     type: "number",
     min: 1,
     max: 12,
   }),
-  columns: YextField("Columns", {
+  columns: YextField(i18n("Columns"), {
     type: "number",
     min: 1,
     max: 12,
   }),
   ...layoutFields,
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
 
 export const Grid: ComponentConfig<GridProps> = {
-  label: "Grid",
+  label: i18n("Grid"),
   fields: gridSectionFields,
   defaultProps: {
     rows: 1,

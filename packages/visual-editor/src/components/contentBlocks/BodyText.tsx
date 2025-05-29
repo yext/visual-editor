@@ -8,6 +8,7 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
@@ -15,13 +16,13 @@ export interface BodyTextProps extends BodyProps {
 }
 
 const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextField<any, string>("Text", {
+  text: YextField<any, string>(i18n("Text"), {
     type: "entityField",
     filter: {
       types: ["type.string"],
     },
   }),
-  variant: YextField("Variant", {
+  variant: YextField(i18n("Variant"), {
     type: "radio",
     options: "BODY_VARIANT",
   }),
@@ -33,7 +34,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 
     return (
       <EntityField
-        displayName="Body"
+        displayName={i18n("Body")}
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >
@@ -48,7 +49,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 BodyTextComponent.displayName = "BodyText";
 
 export const BodyText: ComponentConfig<BodyTextProps> = {
-  label: "Body Text",
+  label: i18n("Body Text"),
   fields: bodyTextFields,
   defaultProps: {
     text: {

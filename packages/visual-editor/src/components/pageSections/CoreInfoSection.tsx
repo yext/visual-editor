@@ -25,6 +25,7 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -63,36 +64,36 @@ export interface CoreInfoSectionProps {
 }
 
 const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
-      info: YextField("Info Column", {
+      info: YextField(i18n("Info Column"), {
         type: "object",
         objectFields: {
-          headingText: YextField<any, string>("Heading Text", {
+          headingText: YextField<any, string>(i18n("Heading Text"), {
             type: "entityField",
             filter: { types: ["type.string"] },
           }),
-          address: YextField<any, AddressType>("Address", {
+          address: YextField<any, AddressType>(i18n("Address"), {
             type: "entityField",
             filter: { types: ["type.address"] },
           }),
-          phoneNumbers: YextField("Phone Numbers", {
+          phoneNumbers: YextField(i18n("Phone Numbers"), {
             type: "array",
             arrayFields: {
-              number: YextField<any, string>("Phone Number", {
+              number: YextField<any, string>(i18n("Phone Number"), {
                 type: "entityField",
                 filter: {
                   types: ["type.phone"],
                 },
               }),
-              label: YextField("Label", {
+              label: YextField(i18n("Label"), {
                 type: "text",
               }),
             },
             getItemSummary: (item) => item.label || "Item",
           }),
-          emails: YextField<any, string[]>("Emails", {
+          emails: YextField<any, string[]>(i18n("Emails"), {
             type: "entityField",
             filter: {
               types: ["type.string"],
@@ -102,16 +103,16 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           }),
         },
       }),
-      hours: YextField("Hours Column", {
+      hours: YextField(i18n("Hours Column"), {
         type: "object",
         objectFields: {
-          headingText: YextField<any, string>("Heading Text", {
+          headingText: YextField<any, string>(i18n("Heading Text"), {
             type: "entityField",
             filter: {
               types: ["type.string"],
             },
           }),
-          hours: YextField("Hours", {
+          hours: YextField(i18n("Hours"), {
             type: "entityField",
             filter: {
               types: ["type.hours"],
@@ -119,16 +120,16 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           }),
         },
       }),
-      services: YextField("Services Column", {
+      services: YextField(i18n("Services Column"), {
         type: "object",
         objectFields: {
-          headingText: YextField<any, string>("Heading Text", {
+          headingText: YextField<any, string>(i18n("Heading Text"), {
             type: "entityField",
             filter: {
               types: ["type.string"],
             },
           }),
-          servicesList: YextField<any, string[]>("Services List", {
+          servicesList: YextField<any, string[]>(i18n("Services List"), {
             type: "entityField",
             filter: {
               types: ["type.string"],
@@ -140,78 +141,81 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(i18n("Styles"), {
     type: "object",
     objectFields: {
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(i18n("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(i18n("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      info: YextField("Info Column", {
+      info: YextField(i18n("Info Column"), {
         type: "object",
         objectFields: {
-          showGetDirectionsLink: YextField("Show Get Directions Link", {
+          showGetDirectionsLink: YextField(i18n("Show Get Directions Link"), {
             type: "radio",
             options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
+              { label: i18n("Yes"), value: true },
+              { label: i18n("No"), value: false },
             ],
           }),
-          phoneFormat: YextField("Phone Format", {
+          phoneFormat: YextField(i18n("Phone Format"), {
             type: "radio",
             options: "PHONE_OPTIONS",
           }),
-          includePhoneHyperlink: YextField("Include Phone Hyperlink", {
+          includePhoneHyperlink: YextField(i18n("Include Phone Hyperlink"), {
             type: "radio",
             options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
+              { label: i18n("Yes"), value: true },
+              { label: i18n("No"), value: false },
             ],
           }),
-          emailsListLength: YextField("List Length", {
+          emailsListLength: YextField(i18n("List Length"), {
             type: "number",
             min: 0,
             max: 3,
           }),
         },
       }),
-      hours: YextField("Hours Column", {
+      hours: YextField(i18n("Hours Column"), {
         type: "object",
         objectFields: {
-          startOfWeek: YextField("Start of the Week", {
+          startOfWeek: YextField(i18n("Start of the Week"), {
             type: "select",
             hasSearch: true,
             options: "HOURS_OPTIONS",
           }),
-          collapseDays: YextField("Collapse Days", {
+          collapseDays: YextField(i18n("Collapse Days"), {
             type: "radio",
             options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
+              { label: i18n("Yes"), value: true },
+              { label: i18n("No"), value: false },
             ],
           }),
-          showAdditionalHoursText: YextField("Show additional hours text", {
-            type: "radio",
-            options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
-            ],
-          }),
+          showAdditionalHoursText: YextField(
+            i18n("Show additional hours text"),
+            {
+              type: "radio",
+              options: [
+                { label: i18n("Yes"), value: true },
+                { label: i18n("No"), value: false },
+              ],
+            }
+          ),
         },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -269,7 +273,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       <section aria-label="Information Section" className="flex flex-col gap-4">
         {addressHeadingText && (
           <EntityField
-            displayName="Heading Text"
+            displayName={i18n("Heading Text")}
             fieldId={data.info.headingText.field}
             constantValueEnabled={data.info.headingText.constantValueEnabled}
           >
@@ -279,7 +283,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
           {resolvedAddress && (
             <EntityField
-              displayName="Address"
+              displayName={i18n("Address")}
               fieldId={data.info.address.field}
               constantValueEnabled={data.info.address.constantValueEnabled}
             >
@@ -318,7 +322,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               return (
                 <li key={item.label} className="flex gap-2 items-center">
                   <EntityField
-                    displayName="Phone Number"
+                    displayName={i18n("Phone Number")}
                     fieldId={item.number.field}
                     constantValueEnabled={item.number.constantValueEnabled}
                   >
@@ -342,7 +346,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         )}
         {resolvedEmails && (
           <EntityField
-            displayName="Email List"
+            displayName={i18n("Email List")}
             fieldId={data.info.emails.field}
             constantValueEnabled={data.info.emails.constantValueEnabled}
           >
@@ -376,7 +380,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         <section aria-label="Hours Section" className="flex flex-col gap-4">
           {hoursHeadingText && (
             <EntityField
-              displayName="Heading Text"
+              displayName={i18n("Heading Text")}
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
@@ -384,7 +388,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             </EntityField>
           )}
           <EntityField
-            displayName="Hours"
+            displayName={i18n("Hours")}
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
@@ -396,7 +400,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             />
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
-            <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+            <EntityField
+              displayName={i18n("Hours Text")}
+              fieldId="additionalHoursText"
+            >
               <Body className="mt-4 text-body-sm-fontSize">
                 {additionalHoursText}
               </Body>
@@ -408,7 +415,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         <section aria-label="Services Section" className="flex flex-col gap-4">
           {servicesHeadingText && (
             <EntityField
-              displayName="Heading Text"
+              displayName={i18n("Heading Text")}
               fieldId={data.services.headingText.field}
               constantValueEnabled={
                 data.services.headingText.constantValueEnabled
@@ -420,7 +427,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             </EntityField>
           )}
           <EntityField
-            displayName="Text List"
+            displayName={i18n("Text List")}
             fieldId={data.services.servicesList.field}
             constantValueEnabled={
               data.services.servicesList.constantValueEnabled
@@ -441,7 +448,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 };
 
 export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
-  label: "Core Info Section",
+  label: i18n("Core Info Section"),
   fields: coreInfoSectionFields,
   defaultProps: {
     data: {
@@ -466,7 +473,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
               field: "mainPhone",
               constantValue: "",
             },
-            label: "Phone",
+            label: i18n("Phone"),
           },
         ],
         emails: {

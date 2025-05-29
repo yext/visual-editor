@@ -6,6 +6,7 @@ import {
   useDocument,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -19,10 +20,10 @@ export type MapboxStaticProps = {
 };
 
 const mapboxFields: Fields<MapboxStaticProps> = {
-  apiKey: YextField("API Key", {
+  apiKey: YextField(i18n("API Key"), {
     type: "text",
   }),
-  coordinate: YextField<any, Coordinate>("Coordinates", {
+  coordinate: YextField<any, Coordinate>(i18n("Coordinates"), {
     type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),
@@ -153,7 +154,7 @@ export const MapboxStaticMapComponent = ({
 
   return (
     <EntityField
-      displayName="Coordinate"
+      displayName={i18n("Coordinate")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
@@ -167,7 +168,7 @@ export const MapboxStaticMapComponent = ({
 };
 
 export const MapboxStaticMap: ComponentConfig<MapboxStaticProps> = {
-  label: "Mapbox Static Map",
+  label: i18n("Mapbox Static Map"),
   fields: mapboxFields,
   defaultProps: {
     apiKey: "",

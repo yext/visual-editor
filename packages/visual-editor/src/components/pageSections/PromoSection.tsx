@@ -19,6 +19,7 @@ import {
   ComponentFields,
   EntityField,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -36,43 +37,43 @@ export interface PromoSectionProps {
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
       promo: YextStructFieldSelector({
-        label: "Promo",
+        label: i18n("Promo"),
         filter: {
           type: ComponentFields.PromoSection.type,
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(i18n("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(i18n("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      orientation: YextField("Image Orientation", {
+      orientation: YextField(i18n("Image Orientation"), {
         type: "radio",
         options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
+          { label: i18n("Left"), value: "left" },
+          { label: i18n("Right"), value: "right" },
         ],
       }),
-      ctaVariant: YextField("CTA Variant", {
+      ctaVariant: YextField(i18n("CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -91,7 +92,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName="Image"
+          displayName={i18n("Image")}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
@@ -105,7 +106,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
-            displayName="Title"
+            displayName={i18n("Title")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
@@ -113,7 +114,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
         <EntityField
-          displayName="Description"
+          displayName={i18n("Description")}
           fieldId={data.promo.field}
           constantValueEnabled={
             !resolvedPromo?.description ||
@@ -124,7 +125,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
-            displayName="Call To Action"
+            displayName={i18n("Call To Action")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
@@ -142,7 +143,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
 };
 
 export const PromoSection: ComponentConfig<PromoSectionProps> = {
-  label: "Promo Section",
+  label: i18n("Promo Section"),
   fields: promoSectionFields,
   defaultProps: {
     data: {
@@ -154,10 +155,10 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             width: 640,
             url: PLACEHOLDER_IMAGE_URL,
           },
-          title: "Title",
-          description: "Description",
+          title: i18n("Title"),
+          description: i18n("Description"),
           cta: {
-            label: "Call To Action",
+            label: i18n("Call To Action"),
             link: "#",
             linkType: "URL",
           },

@@ -8,6 +8,7 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -27,10 +28,10 @@ export type BannerSectionProps = {
 };
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
-      text: YextField<any, string>("Text", {
+      text: YextField<any, string>(i18n("Text"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -38,25 +39,25 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(i18n("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(i18n("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "DARK_BACKGROUND_COLOR",
       }),
-      textAlignment: YextField("Text Alignment", {
+      textAlignment: YextField(i18n("Text Alignment"), {
         type: "radio",
         options: "ALIGNMENT",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -78,7 +79,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
-        displayName="Banner Text"
+        displayName={i18n("Banner Text")}
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
@@ -89,7 +90,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
 };
 
 export const BannerSection: ComponentConfig<BannerSectionProps> = {
-  label: "Banner Section",
+  label: i18n("Banner Section"),
   fields: bannerSectionFields,
   defaultProps: {
     data: {

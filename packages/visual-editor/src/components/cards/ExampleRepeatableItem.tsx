@@ -10,6 +10,7 @@ import {
   Body,
   YextCollection,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -90,7 +91,7 @@ const ExampleRepeatableItemCard = (props: ExampleRepeatableItemCardProps) => {
 
 export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableItemProps> =
   {
-    label: "Repeatable Card",
+    label: i18n("Repeatable Card"),
     fields: ExampleRepeatableItemFields,
     resolveFields: (data, params) => {
       // Set the collection prop and determine how to update fields
@@ -105,7 +106,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
       // Update each subfield based on isCollection
       return {
         ...params.lastFields,
-        text: YextField<any, string>("Text", {
+        text: YextField<any, string>(i18n("Text"), {
           type: "entityField",
           isCollection: isCollection,
           filter: {
@@ -113,7 +114,7 @@ export const ExampleRepeatableItemComponent: ComponentConfig<ExampleRepeatableIt
             types: ["type.string"],
           },
         }),
-        image: YextField<any, ImageType>("Image", {
+        image: YextField<any, ImageType>(i18n("Image"), {
           type: "entityField",
           isCollection: isCollection,
           filter: {

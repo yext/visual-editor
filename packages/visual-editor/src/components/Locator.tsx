@@ -34,6 +34,7 @@ import {
   normalizeSlug,
   PhoneAtom,
   useDocument,
+  i18n,
 } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 import {
@@ -120,19 +121,19 @@ export type LocatorProps = {
 
 const locatorFields: Fields<LocatorProps> = {
   mapStyle: BasicSelector("Map Style", [
-    { label: "Default", value: "mapbox://styles/mapbox/streets-v12" },
+    { label: i18n("Default"), value: "mapbox://styles/mapbox/streets-v12" },
     {
-      label: "Satellite",
+      label: i18n("Satellite"),
       value: "mapbox://styles/mapbox/satellite-streets-v12",
     },
-    { label: "Light", value: "mapbox://styles/mapbox/light-v11" },
-    { label: "Dark", value: "mapbox://styles/mapbox/dark-v11" },
+    { label: i18n("Light"), value: "mapbox://styles/mapbox/light-v11" },
+    { label: i18n("Dark"), value: "mapbox://styles/mapbox/dark-v11" },
     {
-      label: "Navigation (Day)",
+      label: i18n("Navigation (Day)"),
       value: "mapbox://styles/mapbox/navigation-day-v1",
     },
     {
-      label: "Navigation (Night)",
+      label: i18n("Navigation (Night)"),
       value: "mapbox://styles/mapbox/navigation-night-v1",
     },
   ]),
@@ -140,7 +141,7 @@ const locatorFields: Fields<LocatorProps> = {
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
-  label: "Locator",
+  label: i18n("Locator"),
   render: (props) => <LocatorWrapper {...props} />,
 };
 

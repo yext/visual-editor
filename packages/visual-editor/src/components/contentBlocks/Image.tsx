@@ -8,6 +8,7 @@ import {
   Image,
   ImageProps,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -18,47 +19,47 @@ export interface ImageWrapperProps extends Omit<ImageProps, "image"> {
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
-  image: YextField<any, ImageType | ComplexImageType>("Image", {
+  image: YextField<any, ImageType | ComplexImageType>(i18n("Image"), {
     type: "entityField",
     filter: {
       types: ["type.image"],
     },
   }),
-  layout: YextField("Layout", {
+  layout: YextField(i18n("Layout"), {
     type: "radio",
     options: [
-      { label: "Auto", value: "auto" },
-      { label: "Fixed", value: "fixed" },
+      { label: i18n("Auto"), value: "auto" },
+      { label: i18n("Fixed"), value: "fixed" },
     ],
   }),
-  width: YextField("Width", {
+  width: YextField(i18n("Width"), {
     type: "number",
     min: 0,
   }),
-  height: YextField("Height", {
+  height: YextField(i18n("Height"), {
     type: "number",
     min: 0,
   }),
-  aspectRatio: YextField("Aspect Ratio", {
+  aspectRatio: YextField(i18n("Aspect Ratio"), {
     type: "select",
     options: [
-      { label: "1:1", value: 1 },
-      { label: "5:4", value: 1.25 },
-      { label: "4:3", value: 1.33 },
-      { label: "3:2", value: 1.5 },
-      { label: "5:3", value: 1.67 },
-      { label: "16:9", value: 1.78 },
-      { label: "2:1", value: 2 },
-      { label: "3:1", value: 3 },
-      { label: "4:1", value: 4 },
-      { label: "4:5", value: 0.8 },
-      { label: "3:4", value: 0.75 },
-      { label: "2:3", value: 0.67 },
-      { label: "3:5", value: 0.6 },
-      { label: "9:16", value: 0.56 },
-      { label: "1:2", value: 0.5 },
-      { label: "1:3", value: 0.33 },
-      { label: "1:4", value: 0.25 },
+      { label: i18n("1:1"), value: 1 },
+      { label: i18n("5:4"), value: 1.25 },
+      { label: i18n("4:3"), value: 1.33 },
+      { label: i18n("3:2"), value: 1.5 },
+      { label: i18n("5:3"), value: 1.67 },
+      { label: i18n("16:9"), value: 1.78 },
+      { label: i18n("2:1"), value: 2 },
+      { label: i18n("3:1"), value: 3 },
+      { label: i18n("4:1"), value: 4 },
+      { label: i18n("4:5"), value: 0.8 },
+      { label: i18n("3:4"), value: 0.75 },
+      { label: i18n("2:3"), value: 0.67 },
+      { label: i18n("3:5"), value: 0.6 },
+      { label: i18n("9:16"), value: 0.56 },
+      { label: i18n("1:2"), value: 0.5 },
+      { label: i18n("1:3"), value: 0.33 },
+      { label: i18n("1:4"), value: 0.25 },
     ],
   }),
 };
@@ -82,7 +83,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 
   return (
     <EntityField
-      displayName="Image"
+      displayName={i18n("Image")}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >
@@ -113,7 +114,7 @@ export const resolvedImageFields = (layout: "auto" | "fixed") => {
 };
 
 export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
-  label: "Image",
+  label: i18n("Image"),
   fields: ImageWrapperFields,
   defaultProps: {
     image: {

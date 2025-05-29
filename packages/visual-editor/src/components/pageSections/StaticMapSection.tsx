@@ -3,6 +3,7 @@ import {
   PageSection,
   VisibilityWrapper,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { MapboxStaticMapComponent } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -15,19 +16,19 @@ export type StaticMapSectionProps = {
 };
 
 const staticMapSectionFields: Fields<StaticMapSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
-      apiKey: YextField("API Key", {
+      apiKey: YextField(i18n("API Key"), {
         type: "text",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -53,7 +54,7 @@ export const StaticMapSectionWrapper = ({ data }: StaticMapSectionProps) => {
 };
 
 export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
-  label: "Static Map Section",
+  label: i18n("Static Map Section"),
   fields: staticMapSectionFields,
   defaultProps: {
     data: {

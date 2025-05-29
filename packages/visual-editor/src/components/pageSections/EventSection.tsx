@@ -21,6 +21,7 @@ import {
   TimestampOption,
   ComponentFields,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface EventSectionProps {
@@ -37,14 +38,14 @@ export interface EventSectionProps {
 }
 
 const eventSectionFields: Fields<EventSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
+      heading: YextField<any, string>(i18n("Section Heading"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      events: YextField("Events", {
+      events: YextField(i18n("Events"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.EventSection.type],
@@ -52,31 +53,31 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(i18n("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(i18n("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(i18n("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(i18n("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -153,7 +154,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -164,7 +165,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
       )}
       {resolvedEvents?.events && (
         <EntityField
-          displayName="Events"
+          displayName={i18n("Events")}
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >
@@ -185,7 +186,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
 };
 
 export const EventSection: ComponentConfig<EventSectionProps> = {
-  label: "Events Section",
+  label: i18n("Events Section"),
   fields: eventSectionFields,
   defaultProps: {
     data: {

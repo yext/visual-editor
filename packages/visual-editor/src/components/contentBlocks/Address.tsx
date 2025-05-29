@@ -13,6 +13,7 @@ import {
   YextEntityField,
   CTA,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export type AddressProps = {
@@ -21,15 +22,15 @@ export type AddressProps = {
 };
 
 const addressFields: Fields<AddressProps> = {
-  address: YextField<any, AddressType>("Address", {
+  address: YextField<any, AddressType>(i18n("Address"), {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),
-  showGetDirections: YextField("Show Get Directions Link", {
+  showGetDirections: YextField(i18n("Show Get Directions Link"), {
     type: "radio",
     options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
+      { label: i18n("Yes"), value: true },
+      { label: i18n("No"), value: false },
     ],
   }),
 };
@@ -51,7 +52,7 @@ const AddressComponent = ({
     <>
       {address && (
         <EntityField
-          displayName="Address"
+          displayName={i18n("Address")}
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >
@@ -77,7 +78,7 @@ const AddressComponent = ({
 };
 
 export const Address: ComponentConfig<AddressProps> = {
-  label: "Address",
+  label: i18n("Address"),
   fields: addressFields,
   defaultProps: {
     address: {

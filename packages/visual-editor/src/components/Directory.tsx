@@ -7,6 +7,7 @@ import {
   MaybeLink,
   PageSection,
   PhoneAtom,
+  i18n,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -227,6 +228,6 @@ const DirectoryComponent = (props: DirectoryProps) => {
 };
 
 export const Directory: ComponentConfig<DirectoryProps> = {
-  label: "Directory",
+  label: i18n("Directory"),
   render: (props) => <DirectoryComponent {...props} />,
 };

@@ -18,6 +18,7 @@ import {
   TeamSectionType,
   PersonStruct,
   ComponentFields,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -36,14 +37,14 @@ export interface TeamSectionProps {
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
+      heading: YextField<any, string>(i18n("Heading Text"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      people: YextField("Team Section", {
+      people: YextField(i18n("Team Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.TeamSection.type],
@@ -51,31 +52,31 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(i18n("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(i18n("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(i18n("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(i18n("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -176,7 +177,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -187,7 +188,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName="Team"
+          displayName={i18n("Team")}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
@@ -208,7 +209,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
 };
 
 export const TeamSection: ComponentConfig<TeamSectionProps> = {
-  label: "Team Section",
+  label: i18n("Team Section"),
   fields: TeamSectionFields,
   defaultProps: {
     data: {

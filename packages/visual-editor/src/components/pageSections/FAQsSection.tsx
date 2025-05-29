@@ -16,6 +16,7 @@ import {
   FAQSectionType,
   ComponentFields,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -37,16 +38,16 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(i18n("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
+      heading: YextField<any, string>(i18n("Section Heading"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      faqs: YextField("FAQs", {
+      faqs: YextField(i18n("FAQs"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.FAQSection.type],
@@ -54,26 +55,26 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(i18n("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(i18n("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(i18n("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(i18n("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: i18n("Show"), value: true },
+      { label: i18n("Hide"), value: false },
     ],
   }),
 };
@@ -93,7 +94,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("Heading Text")}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -102,7 +103,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName="FAQs"
+          displayName={i18n("FAQs")}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
@@ -127,7 +128,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
 };
 
 export const FAQSection: ComponentConfig<FAQSectionProps> = {
-  label: "FAQs Section",
+  label: i18n("FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {
     data: {
