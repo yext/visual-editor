@@ -186,6 +186,23 @@ export const ui: Registry["items"] = [
     files: [{ path: "pageSections/FAQsSection.tsx", type: "registry:ui" }],
   },
   {
+    name: "FINS_DisclosureSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "maybeRTF",
+      "image",
+      "visibilityWrapper",
+    ],
+    files: [
+      {
+        path: "pageSections/FINS/FINS_DisclosureSection.tsx",
+        type: "registry:ui",
+      },
+    ],
+  },
+  {
     name: "FINS_InsuranceSection",
     type: "registry:ui",
     registryDependencies: [
