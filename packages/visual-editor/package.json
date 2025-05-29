@@ -46,7 +46,8 @@
     "build-registry-docs": "pnpm run docs:build && pnpm run generate-registry",
     "i18n:insert": "pnpm exec ts-node scripts/insertI18n.js",
     "i18n:insert:dry": "pnpm exec ts-node scripts/insertI18n.js --dry-run",
-    "i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs"
+    "i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs",
+    "i18n:translate": "pnpm exec node scripts/generateTranslations.js"
   },
   "dependencies": {
     "@measured/puck": "0.18.3",
