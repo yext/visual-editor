@@ -380,7 +380,7 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
           <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
-            Loading Map...
+            {i18n("Loading Map...")}
           </span>
         </div>
       </div>

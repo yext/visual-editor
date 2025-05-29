@@ -100,7 +100,29 @@ const isDryRun = process.argv.includes("--dry-run");
       }
     });
 
-    // 4) Insert i18n import if needed
+    // 4) Wrap JSX text nodes inside JSX Elements
+    const jsxText = sourceFile.getDescendantsOfKind(SyntaxKind.JsxText);
+    jsxText.forEach((jsxTextNode) => {
+      const textValue = jsxTextNode.getText();
+
+      // Skip if text is only whitespace or already wrapped (naive check)
+      if (
+        textValue.trim().length > 0 &&
+        !textValue.includes("i18n(") &&
+        textValue !== "|"
+      ) {
+        // Replace the text node with JSX expression wrapping i18n("...")
+        // Note: we need to preserve the exact text, escaping quotes if necessary
+        const escapedText = textValue.replace(/"/g, '\\"').trim();
+
+        // Insert the expression {i18n("text")}
+        jsxTextNode.replaceWithText(`{i18n("${escapedText}")}`);
+
+        modified = true;
+      }
+    });
+
+    // 5) Insert i18n import if needed
     if (modified) {
       const existingImport = sourceFile
         .getImportDeclarations()
