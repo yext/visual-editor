@@ -1,4 +1,4 @@
-import { useTranslation as useRealTranslation } from "react-i18next";
+import i18next from "i18next";
 
 const fallbackT = (key: string) => key;
 
@@ -10,17 +10,9 @@ const fallbackT = (key: string) => key;
  *
  * @param key translation key
  */
-export const i18n = (key: string) => {
+export const i18n = (key: string): string => {
   try {
-    const { t } = useRealTranslation() || {};
-    if (typeof t === "function") {
-      const translation = t(key);
-      // Return translation if valid, else return original key
-      if (translation) {
-        return translation;
-      }
-    }
-    return fallbackT(key);
+    return i18next.t(key) || fallbackT(key);
   } catch {
     return fallbackT(key);
   }

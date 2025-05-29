@@ -1,6 +1,7 @@
 module.exports = {
   input: [
-    "src/**/*.{ts,tsx}",
+    "src/components/**/*.{ts,tsx}",
+    "src/editor/**/*.{ts,tsx}",
     "!**/__screenshots__/**", // exclude this folder and all files inside it
   ],
 

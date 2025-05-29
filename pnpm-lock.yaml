@@ -138,13 +138,13 @@ importers:
         version: 5.74.3(react@18.3.1)
       "@yext/pages-components":
         specifier: ^1.1.4
-        version: 1.1.4(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.20)
+        version: 1.1.4(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.12)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
       "@yext/search-headless-react":
         specifier: ^2.5.0
-        version: 2.5.1(react@18.3.1)
+        version: 2.5.1(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
         specifier: ^1.8.2
-        version: 1.8.5(@types/react@18.3.12)(@yext/search-headless-react@2.5.1)(react-dom@18.3.1)(react@18.3.1)(tailwindcss@3.4.14)
+        version: 1.8.5(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -181,9 +181,6 @@ importers:
       picocolors:
         specifier: ^1.0.1
         version: 1.1.1
-      prettier:
-        specifier: ^3.3.3
-        version: 3.3.3
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
@@ -202,9 +199,6 @@ importers:
       react-error-boundary:
         specifier: ^5.0.0
         version: 5.0.0(react@18.3.1)
-      react-i18next:
-        specifier: ^15.5.2
-        version: 15.5.2(i18next@25.2.1(typescript@5.6.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
       react-phone-number-input:
         specifier: ^3.4.12
         version: 3.4.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -320,15 +314,12 @@ importers:
       minimist:
         specifier: ^1.2.8
         version: 1.2.8
-      node-fetch:
-        specifier: ^3.3.2
-        version: 3.3.2
-      p-limit:
-        specifier: ^6.2.0
-        version: 6.2.0
       playwright:
         specifier: ^1.51.1
         version: 1.52.0
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
       react-icons:
         specifier: ^5.2.1
         version: 5.5.0(react@18.3.1)
@@ -5798,13 +5789,6 @@ packages:
         integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==,
       }
 
-  data-uri-to-buffer@4.0.1:
-    resolution:
-      {
-        integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==,
-      }
-    engines: { node: ">= 12" }
-
   data-urls@5.0.0:
     resolution:
       {
@@ -6713,13 +6697,6 @@ packages:
       picomatch:
         optional: true
 
-  fetch-blob@3.2.0:
-    resolution:
-      {
-        integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==,
-      }
-    engines: { node: ^12.20 || >= 14.13 }
-
   file-entry-cache@8.0.0:
     resolution:
       {
@@ -6786,13 +6763,6 @@ packages:
         integrity: sha512-tzN8e4TX8+kkxGPK8D5u0FNmjPUjw3lwC9lSLxxoB/+GtsJG91CO8bSWy73APlgAZzZbXEYZJuxjkHH2w+Ezhw==,
       }
     engines: { node: ">= 6" }
-
-  formdata-polyfill@4.0.10:
-    resolution:
-      {
-        integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==,
-      }
-    engines: { node: ">=12.20.0" }
 
   forwarded@0.2.0:
     resolution:
@@ -7256,12 +7226,6 @@ packages:
         integrity: sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ==,
       }
     engines: { node: ">=18" }
-
-  html-parse-stringify@3.0.1:
-    resolution:
-      {
-        integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==,
-      }
 
   html-void-elements@1.0.5:
     resolution:
@@ -8197,10 +8161,10 @@ packages:
         integrity: sha512-Nlfjc+k9cIWpOMv7XufF0Mv09TAXSemNAuAqFLaOwTcN+RvhvYTDtVLSp9D9r+5I097fYs1Vf/UYwH2xEpkFfQ==,
       }
 
-  lib0@0.2.98:
+  lib0@0.2.108:
     resolution:
       {
-        integrity: sha512-XteTiNO0qEXqqweWx+b21p/fBnNHUA1NwAtJNJek1oPrewEZs2uiT4gWivHKr9GqCjDPAhchz0UQO8NwU3bBNA==,
+        integrity: sha512-+3eK/B0SqYoZiQu9fNk4VEc6EX8cb0Li96tPGKgugzoGj/OdRdREtuTLvUW+mtinoB2mFiJjSqOJBIaMkAGhxQ==,
       }
     engines: { node: ">=16" }
     hasBin: true
@@ -9078,14 +9042,6 @@ packages:
       react: ^16.8 || ^17 || ^18
       react-dom: ^16.8 || ^17 || ^18
 
-  node-domexception@1.0.0:
-    resolution:
-      {
-        integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==,
-      }
-    engines: { node: ">=10.5.0" }
-    deprecated: Use your platform's native DOMException instead
-
   node-fetch@2.7.0:
     resolution:
       {
@@ -9097,13 +9053,6 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
-
-  node-fetch@3.3.2:
-    resolution:
-      {
-        integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==,
-      }
-    engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
 
   node-gyp@10.2.0:
     resolution:
@@ -9395,13 +9344,6 @@ packages:
         integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==,
       }
     engines: { node: ">=10" }
-
-  p-limit@6.2.0:
-    resolution:
-      {
-        integrity: sha512-kuUqqHNUqoIWp/c467RI4X6mmyuojY5jGutNU0wVTmEOOfcuwLqyMVoAi9MKi2Ak+5i9+nhmrK4ufZE8069kHA==,
-      }
-    engines: { node: ">=18" }
 
   p-locate@5.0.0:
     resolution:
@@ -10154,25 +10096,6 @@ packages:
     peerDependencies:
       react: ">=16.8.1"
       react-dom: ">=16.8.1"
-
-  react-i18next@15.5.2:
-    resolution:
-      {
-        integrity: sha512-ePODyXgmZQAOYTbZXQn5rRsSBu3Gszo69jxW6aKmlSgxKAI1fOhDwSu6bT4EKHciWPKQ7v7lPrjeiadR6Gi+1A==,
-      }
-    peerDependencies:
-      i18next: ">= 23.2.3"
-      react: ">= 16.8.0"
-      react-dom: "*"
-      react-native: "*"
-      typescript: ^5
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-      typescript:
-        optional: true
 
   react-icons@5.5.0:
     resolution:
@@ -12362,13 +12285,6 @@ packages:
         integrity: sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==,
       }
 
-  void-elements@3.1.0:
-    resolution:
-      {
-        integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==,
-      }
-    engines: { node: ">=0.10.0" }
-
   vt-pbf@3.1.3:
     resolution:
       {
@@ -12430,13 +12346,6 @@ packages:
       {
         integrity: sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==,
       }
-
-  web-streams-polyfill@3.3.3:
-    resolution:
-      {
-        integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==,
-      }
-    engines: { node: ">= 8" }
 
   webidl-conversions@3.0.1:
     resolution:
@@ -12695,13 +12604,6 @@ packages:
         integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==,
       }
     engines: { node: ">=10" }
-
-  yocto-queue@1.2.1:
-    resolution:
-      {
-        integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==,
-      }
-    engines: { node: ">=12.20" }
 
   zod@3.23.8:
     resolution:
@@ -13563,19 +13465,6 @@ snapshots:
       - "@lexical/clipboard"
       - "@lexical/selection"
 
-  "@lexical/markdown@0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(lexical@0.12.6)":
-    dependencies:
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/text": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      lexical: 0.12.6
-    transitivePeerDependencies:
-      - "@lexical/clipboard"
-      - "@lexical/selection"
-
   "@lexical/offset@0.12.6(lexical@0.12.6)":
     dependencies:
       lexical: 0.12.6
@@ -13585,13 +13474,6 @@ snapshots:
       lexical: 0.12.6
 
   "@lexical/plain-text@0.12.6(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@lexical/utils@0.12.6(lexical@0.12.6))(lexical@0.12.6)":
-    dependencies:
-      "@lexical/clipboard": 0.12.6(lexical@0.12.6)
-      "@lexical/selection": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      lexical: 0.12.6
-
-  "@lexical/plain-text@0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)":
     dependencies:
       "@lexical/clipboard": 0.12.6(lexical@0.12.6)
       "@lexical/selection": 0.12.6(lexical@0.12.6)
@@ -13624,40 +13506,7 @@ snapshots:
     transitivePeerDependencies:
       - yjs
 
-  "@lexical/react@0.12.6(lexical@0.12.6)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.20)":
-    dependencies:
-      "@lexical/clipboard": 0.12.6(lexical@0.12.6)
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/dragon": 0.12.6(lexical@0.12.6)
-      "@lexical/hashtag": 0.12.6(lexical@0.12.6)
-      "@lexical/history": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/mark": 0.12.6(lexical@0.12.6)
-      "@lexical/markdown": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(lexical@0.12.6)
-      "@lexical/overflow": 0.12.6(lexical@0.12.6)
-      "@lexical/plain-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/selection": 0.12.6(lexical@0.12.6)
-      "@lexical/table": 0.12.6(lexical@0.12.6)
-      "@lexical/text": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      "@lexical/yjs": 0.12.6(lexical@0.12.6)(yjs@13.6.20)
-      lexical: 0.12.6
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-error-boundary: 3.1.4(react@18.3.1)
-    transitivePeerDependencies:
-      - yjs
-
   "@lexical/rich-text@0.12.6(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@lexical/utils@0.12.6(lexical@0.12.6))(lexical@0.12.6)":
-    dependencies:
-      "@lexical/clipboard": 0.12.6(lexical@0.12.6)
-      "@lexical/selection": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      lexical: 0.12.6
-
-  "@lexical/rich-text@0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)":
     dependencies:
       "@lexical/clipboard": 0.12.6(lexical@0.12.6)
       "@lexical/selection": 0.12.6(lexical@0.12.6)
@@ -14624,20 +14473,6 @@ snapshots:
       uncontrollable: 8.0.4(react@18.3.1)
       warning: 4.0.3
 
-  "@restart/ui@1.9.4(react-dom@18.3.1)(react@18.3.1)":
-    dependencies:
-      "@babel/runtime": 7.26.0
-      "@popperjs/core": 2.11.8
-      "@react-aria/ssr": 3.9.8(react@18.3.1)
-      "@restart/hooks": 0.5.1(react@18.3.1)
-      "@types/warning": 3.0.3
-      dequal: 2.0.3
-      dom-helpers: 5.2.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      uncontrollable: 8.0.4(react@18.3.1)
-      warning: 4.0.3
-
   "@rollup/plugin-inject@5.0.5(rollup@4.34.9)":
     dependencies:
       "@rollup/pluginutils": 5.1.4(rollup@4.34.9)
@@ -14888,18 +14723,9 @@ snapshots:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3))
 
-  "@tailwindcss/forms@0.5.10(tailwindcss@3.4.14)":
-    dependencies:
-      mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.14(ts-node@10.9.2)
-
   "@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))":
     dependencies:
       tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3))
-
-  "@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.14)":
-    dependencies:
-      tailwindcss: 3.4.14(ts-node@10.9.2)
 
   "@tailwindcss/typography@0.5.15(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))":
     dependencies:
@@ -14908,14 +14734,6 @@ snapshots:
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3))
-
-  "@tailwindcss/typography@0.5.15(tailwindcss@3.4.14)":
-    dependencies:
-      lodash.castarray: 4.4.0
-      lodash.isplainobject: 4.0.6
-      lodash.merge: 4.6.2
-      postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.14(ts-node@10.9.2)
 
   "@tanstack/query-core@5.74.3": {}
 
@@ -15514,13 +15332,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  "@yext/analytics@0.6.8":
-    dependencies:
-      cross-fetch: 3.2.0
-      ulidx: 2.4.1
-    transitivePeerDependencies:
-      - encoding
-
   "@yext/analytics@0.6.8(encoding@0.1.13)":
     dependencies:
       cross-fetch: 3.2.0(encoding@0.1.13)
@@ -15546,44 +15357,6 @@ snapshots:
       browser-or-node: 2.1.1
       classnames: 2.5.1
       cross-fetch: 4.0.0(encoding@0.1.13)
-      lexical: 0.12.6
-      mdast-util-from-markdown: 1.2.0
-      mdast-util-to-hast: 12.3.0
-      micromark-util-chunked: 1.0.0
-      micromark-util-classify-character: 1.0.0
-      micromark-util-combine-extensions: 1.0.0
-      micromark-util-resolve-all: 1.0.0
-      micromark-util-symbol: 1.0.1
-      micromark-util-types: 1.0.2
-      picocolors: 1.1.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-markdown: 8.0.7(@types/react@18.3.12)(react@18.3.1)
-      remark-rehype: 10.1.0
-      unified: 11.0.4
-      uvu: 0.5.6
-    transitivePeerDependencies:
-      - "@lexical/clipboard"
-      - "@lexical/selection"
-      - "@types/react"
-      - encoding
-      - supports-color
-      - yjs
-
-  "@yext/pages-components@1.1.4(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.20)":
-    dependencies:
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/hashtag": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/react": 0.12.6(lexical@0.12.6)(react-dom@18.3.1)(react@18.3.1)(yjs@13.6.20)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6)(@lexical/selection@0.12.6)(@lexical/utils@0.12.6)(lexical@0.12.6)
-      "@lexical/table": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      "@yext/analytics": 1.0.1
-      browser-or-node: 2.1.1
-      classnames: 2.5.1
-      cross-fetch: 4.0.0
       lexical: 0.12.6
       mdast-util-from-markdown: 1.2.0
       mdast-util-to-hast: 12.3.0
@@ -15666,13 +15439,6 @@ snapshots:
       - terser
       - universal-cookie
 
-  "@yext/search-core@2.6.1":
-    dependencies:
-      "@babel/runtime-corejs3": 7.27.1
-      cross-fetch: 3.2.0
-    transitivePeerDependencies:
-      - encoding
-
   "@yext/search-core@2.6.1(encoding@0.1.13)":
     dependencies:
       "@babel/runtime-corejs3": 7.27.1
@@ -15689,30 +15455,10 @@ snapshots:
       - encoding
       - react-redux
 
-  "@yext/search-headless-react@2.5.1(react@18.3.1)":
-    dependencies:
-      "@yext/search-headless": 2.6.1(react@18.3.1)
-      react: 18.3.1
-      use-sync-external-store: 1.5.0(react@18.3.1)
-    transitivePeerDependencies:
-      - encoding
-      - react-redux
-
   "@yext/search-headless@2.6.1(encoding@0.1.13)(react@18.3.1)":
     dependencies:
       "@reduxjs/toolkit": 1.9.7(react@18.3.1)
       "@yext/search-core": 2.6.1(encoding@0.1.13)
-      js-levenshtein: 1.1.6
-      lodash: 4.17.21
-    transitivePeerDependencies:
-      - encoding
-      - react
-      - react-redux
-
-  "@yext/search-headless@2.6.1(react@18.3.1)":
-    dependencies:
-      "@reduxjs/toolkit": 1.9.7(react@18.3.1)
-      "@yext/search-core": 2.6.1
       js-levenshtein: 1.1.6
       lodash: 4.17.21
     transitivePeerDependencies:
@@ -15735,35 +15481,6 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
       react-collapsed: 4.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-dom: 18.3.1(react@18.3.1)
-      react-markdown: 6.0.3(@types/react@18.3.12)(react@18.3.1)
-      recent-searches: 1.0.5
-      rehype-raw: 5.1.0
-      rehype-sanitize: 4.0.0
-      remark-gfm: 1.0.0
-      tailwind-merge: 1.14.0
-      use-isomorphic-layout-effect: 1.2.0(@types/react@18.3.12)(react@18.3.1)
-    transitivePeerDependencies:
-      - "@types/react"
-      - encoding
-      - supports-color
-      - tailwindcss
-
-  "@yext/search-ui-react@1.8.5(@types/react@18.3.12)(@yext/search-headless-react@2.5.1)(react-dom@18.3.1)(react@18.3.1)(tailwindcss@3.4.14)":
-    dependencies:
-      "@restart/ui": 1.9.4(react-dom@18.3.1)(react@18.3.1)
-      "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.14)
-      "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.14)
-      "@tailwindcss/typography": 0.5.15(tailwindcss@3.4.14)
-      "@yext/analytics": 0.6.8
-      "@yext/search-headless-react": 2.5.1(react@18.3.1)
-      classnames: 2.5.1
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      mapbox-gl: 2.15.0
-      prop-types: 15.8.1
-      react: 18.3.1
-      react-collapsed: 4.2.0(react-dom@18.3.1)(react@18.3.1)
       react-dom: 18.3.1(react@18.3.1)
       react-markdown: 6.0.3(@types/react@18.3.12)(react@18.3.1)
       recent-searches: 1.0.5
@@ -16434,21 +16151,9 @@ snapshots:
 
   create-require@1.1.1: {}
 
-  cross-fetch@3.2.0:
-    dependencies:
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-
   cross-fetch@3.2.0(encoding@0.1.13):
     dependencies:
       node-fetch: 2.7.0(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
-
-  cross-fetch@4.0.0:
-    dependencies:
-      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
 
@@ -16494,8 +16199,6 @@ snapshots:
       rrweb-cssom: 0.7.1
 
   csstype@3.1.3: {}
-
-  data-uri-to-buffer@4.0.1: {}
 
   data-urls@5.0.0:
     dependencies:
@@ -17187,11 +16890,6 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.2
 
-  fetch-blob@3.2.0:
-    dependencies:
-      node-domexception: 1.0.0
-      web-streams-polyfill: 3.3.3
-
   file-entry-cache@8.0.0:
     dependencies:
       flat-cache: 4.0.1
@@ -17242,10 +16940,6 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-
-  formdata-polyfill@4.0.10:
-    dependencies:
-      fetch-blob: 3.2.0
 
   forwarded@0.2.0: {}
 
@@ -17566,10 +17260,6 @@ snapshots:
   html-encoding-sniffer@4.0.0:
     dependencies:
       whatwg-encoding: 3.1.1
-
-  html-parse-stringify@3.0.1:
-    dependencies:
-      void-elements: 3.1.0
 
   html-void-elements@1.0.5: {}
 
@@ -18065,7 +17755,7 @@ snapshots:
 
   lexical@0.12.6: {}
 
-  lib0@0.2.98:
+  lib0@0.2.108:
     dependencies:
       isomorphic.js: 0.2.5
 
@@ -18714,23 +18404,11 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  node-domexception@1.0.0: {}
-
-  node-fetch@2.7.0:
-    dependencies:
-      whatwg-url: 5.0.0
-
   node-fetch@2.7.0(encoding@0.1.13):
     dependencies:
       whatwg-url: 5.0.0
     optionalDependencies:
       encoding: 0.1.13
-
-  node-fetch@3.3.2:
-    dependencies:
-      data-uri-to-buffer: 4.0.1
-      fetch-blob: 3.2.0
-      formdata-polyfill: 4.0.10
 
   node-gyp@10.2.0:
     dependencies:
@@ -18973,10 +18651,6 @@ snapshots:
     dependencies:
       yocto-queue: 0.1.0
 
-  p-limit@6.2.0:
-    dependencies:
-      yocto-queue: 1.2.1
-
   p-locate@5.0.0:
     dependencies:
       p-limit: 3.1.0
@@ -19173,13 +18847,6 @@ snapshots:
       postcss: 8.4.47
       ts-node: 10.9.2(@types/node@20.17.6)(typescript@5.6.3)
 
-  postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.9.2):
-    dependencies:
-      lilconfig: 3.1.2
-      postcss: 8.4.47
-      ts-node: 10.9.2(@types/node@20.17.6)(typescript@5.6.3)
-      yaml: 2.6.0
-
   postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(tsx@4.19.2)(yaml@2.6.0):
     dependencies:
       lilconfig: 3.1.2
@@ -19369,12 +19036,6 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       tiny-warning: 1.0.3
 
-  react-collapsed@4.2.0(react-dom@18.3.1)(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      tiny-warning: 1.0.3
-
   react-color@2.19.3(react@18.3.1):
     dependencies:
       "@icons/material": 0.2.4(react@18.3.1)
@@ -19406,16 +19067,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-
-  react-i18next@15.5.2(i18next@25.2.1(typescript@5.6.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3):
-    dependencies:
-      "@babel/runtime": 7.26.0
-      html-parse-stringify: 3.0.1
-      i18next: 25.2.1(typescript@5.6.3)
-      react: 18.3.1
-    optionalDependencies:
-      react-dom: 18.3.1(react@18.3.1)
-      typescript: 5.6.3
 
   react-icons@5.5.0(react@18.3.1):
     dependencies:
@@ -20264,33 +19915,6 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.14(ts-node@10.9.2):
-    dependencies:
-      "@alloc/quick-lru": 5.2.0
-      arg: 5.0.2
-      chokidar: 3.6.0
-      didyoumean: 1.2.2
-      dlv: 1.1.3
-      fast-glob: 3.3.2
-      glob-parent: 6.0.2
-      is-glob: 4.0.3
-      jiti: 1.21.6
-      lilconfig: 2.1.0
-      micromatch: 4.0.8
-      normalize-path: 3.0.0
-      object-hash: 3.0.0
-      picocolors: 1.1.1
-      postcss: 8.4.47
-      postcss-import: 15.1.0(postcss@8.4.47)
-      postcss-js: 4.0.1(postcss@8.4.47)
-      postcss-load-config: 4.0.2(postcss@8.4.47)(ts-node@10.9.2)
-      postcss-nested: 6.2.0(postcss@8.4.47)
-      postcss-selector-parser: 6.1.2
-      resolve: 1.22.8
-      sucrase: 3.35.0
-    transitivePeerDependencies:
-      - ts-node
-
   tapable@2.2.1: {}
 
   tar@6.2.1:
@@ -21062,8 +20686,6 @@ snapshots:
 
   vm-browserify@1.1.2: {}
 
-  void-elements@3.1.0: {}
-
   vt-pbf@3.1.3:
     dependencies:
       "@mapbox/point-geometry": 0.1.0
@@ -21099,8 +20721,6 @@ snapshots:
       defaults: 1.0.4
 
   web-namespaces@1.1.4: {}
-
-  web-streams-polyfill@3.3.3: {}
 
   webidl-conversions@3.0.1: {}
 
@@ -21234,13 +20854,11 @@ snapshots:
 
   yjs@13.6.20:
     dependencies:
-      lib0: 0.2.98
+      lib0: 0.2.108
 
   yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
-
-  yocto-queue@1.2.1: {}
 
   zod@3.23.8: {}
 
