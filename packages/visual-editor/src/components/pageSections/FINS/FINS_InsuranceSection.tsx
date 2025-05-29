@@ -96,7 +96,13 @@ const InsuranceProvidersSectionWrapper = ({
           fieldId={headingText.field}
           constantValueEnabled={headingText.constantValueEnabled}
         >
-          <Heading level={headingLevel} className="text-center">
+          <Heading
+            level={headingLevel}
+            semanticLevelOverride={
+              headingLevel < 6 ? ((headingLevel + 1) as HeadingLevel) : "span"
+            }
+            className="text-center"
+          >
             {resolvedHeading}
           </Heading>
         </EntityField>

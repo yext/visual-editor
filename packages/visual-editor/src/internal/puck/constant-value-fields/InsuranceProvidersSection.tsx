@@ -18,12 +18,7 @@ export const INSURANCE_PROVIDERS_SECTION_CONSTANT_CONFIG: CustomField<InsuranceP
       ) => void;
     }) => {
       return (
-        <div
-          className={
-            "ve-mt-4" +
-            (value.insuranceProviders.length === 0 ? " empty-array-fix" : "")
-          }
-        >
+        <div className="ve-mt-4">
           <AutoField
             field={InsuranceProvidersStructArrayField}
             value={value.insuranceProviders}
