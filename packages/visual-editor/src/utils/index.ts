@@ -37,3 +37,4 @@ export {
   type MigrationRegistry,
   migrate,
 } from "./migrate.ts";
+export { withPropOverrides } from "./withPropOverrides.ts";

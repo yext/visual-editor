@@ -822,3 +822,51 @@ There are three type of MigrationActions:
   }
 }
 ```
+
+## withPropOverrides
+
+`withPropOverrides` lets you inject specific props into a component's `render` function. This is useful for customizing all instances of a component without making the value visible via fields in the Editor.
+
+### Example
+
+Given a component like this:
+
+```ts
+interface MockProps {
+  name: string;
+}
+
+const Mock: ComponentConfig<MockProps> = {
+  label: "Mock",
+  render: (props) => <>Hello {props.name}</>,
+};
+```
+
+And a mapping of which props are allowed to be overridden:
+
+```ts
+type ComponentPropOverrides = {
+  Mock: Pick<MockProps, "name">;
+};
+```
+
+You can inject `name` like this:
+
+```ts
+withPropOverrides(Mock, {
+  name: "World",
+});
+```
+
+### Supported usages for in-repo developers
+
+This allows in-repo developers to specify the env var to be used for the NearbyLocationsSection's content endpoint.
+
+```ts
+export const mockConfig: Config<MockProps> = {
+  components: {
+    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {contentEndpointEnvVar: "YEXT_PUBLIC_FOO"})
+  },
+  .....
+}
+```
