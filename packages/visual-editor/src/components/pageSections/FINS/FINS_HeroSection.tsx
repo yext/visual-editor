@@ -42,6 +42,7 @@ export interface FINS_HeroSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
+    jobTitleLevel: HeadingLevel;
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
     showGetDirectionsLink: boolean;
@@ -128,6 +129,11 @@ const heroSectionFields: Fields<FINS_HeroSectionProps> = {
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
+      jobTitleLevel: YextField("Job Title Level", {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
       primaryCTA: YextField("Primary CTA Variant", {
         type: "radio",
         options: "CTA_VARIANT",
@@ -184,6 +190,7 @@ const HeroSectionWrapper = ({
   styles: {
     backgroundColor,
     headingLevel,
+    jobTitleLevel,
     primaryCTA,
     secondaryCTA,
     showGetDirectionsLink,
@@ -237,53 +244,62 @@ const HeroSectionWrapper = ({
         aria-labelledby="hero-heading"
       >
         <header className="flex flex-col gap-4">
-          <div className="w-full flex flex-col gap-1 text-center md:text-left">
-            {resolvedBusinessName && (
-              <EntityField
-                displayName="Business Name"
-                fieldId={businessName.field}
-                constantValueEnabled={businessName.constantValueEnabled}
-              >
-                <Body className="text-lg font-bold">
-                  {resolvedBusinessName}
-                </Body>
-              </EntityField>
-            )}
-            {resolvedName && (
-              <EntityField
-                displayName="Name"
-                fieldId={title.field}
-                constantValueEnabled={title.constantValueEnabled}
-              >
-                <Heading level={headingLevel} id="hero-heading">
-                  {resolvedName}
-                </Heading>
-              </EntityField>
-            )}
-          </div>
-          {(resolvedJobTitle || resolvedNMLS) && (
-            <div className="flex flex-col gap-2 text-center md:text-left">
-              {resolvedJobTitle && (
+          <div className="flex flex-col">
+            <div className="w-full flex flex-col gap-1 text-center md:text-left">
+              {resolvedBusinessName && (
                 <EntityField
-                  displayName="Job Title"
-                  fieldId={jobTitle.field}
-                  constantValueEnabled={jobTitle.constantValueEnabled}
+                  displayName="Business Name"
+                  fieldId={businessName.field}
+                  constantValueEnabled={businessName.constantValueEnabled}
                 >
-                  <Body className="text-xl font-bold">{resolvedJobTitle}</Body>
+                  <Body variant={"lg"} className="font-bold">
+                    {resolvedBusinessName}
+                  </Body>
                 </EntityField>
               )}
-              {resolvedNMLS && (
+              {resolvedName && (
                 <EntityField
-                  displayName="NMLS Number"
-                  fieldId={nmls.field}
-                  constantValueEnabled={nmls.constantValueEnabled}
+                  displayName="Name"
+                  fieldId={title.field}
+                  constantValueEnabled={title.constantValueEnabled}
                 >
-                  <Body className="font-bold text-base">{resolvedNMLS}</Body>
+                  <Heading level={headingLevel}>{resolvedName}</Heading>
                 </EntityField>
               )}
             </div>
-          )}
-          <div className="flex flex-col md:flex-row md:gap-8">
+            {(resolvedJobTitle || resolvedNMLS) && (
+              <div className="flex flex-col gap-2 text-center md:text-left">
+                {resolvedJobTitle && (
+                  <EntityField
+                    displayName="Job Title"
+                    fieldId={jobTitle.field}
+                    constantValueEnabled={jobTitle.constantValueEnabled}
+                  >
+                    <Heading
+                      level={jobTitleLevel}
+                      semanticLevelOverride={
+                        headingLevel < 6
+                          ? ((headingLevel + 1) as HeadingLevel)
+                          : "span"
+                      }
+                    >
+                      {resolvedJobTitle}
+                    </Heading>
+                  </EntityField>
+                )}
+                {resolvedNMLS && (
+                  <EntityField
+                    displayName="NMLS Number"
+                    fieldId={nmls.field}
+                    constantValueEnabled={nmls.constantValueEnabled}
+                  >
+                    <Body className="font-bold">{resolvedNMLS}</Body>
+                  </EntityField>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col md:flex-row md:gap-8 gap-4">
             {resolvedAddress && (
               <section
                 className="w-full md:w-1/2 flex flex-col gap-2"
@@ -294,21 +310,18 @@ const HeroSectionWrapper = ({
                   fieldId={address.field}
                   constantValueEnabled={address.constantValueEnabled}
                 >
-                  <address>
-                    <Address
-                      className="not-italic"
-                      address={resolvedAddress}
-                      lines={[
-                        ["line1"],
-                        ["line2"],
-                        ["city", ",", "region", "postalCode"],
-                      ]}
-                    />
-                  </address>
+                  <Address
+                    className="not-italic"
+                    address={resolvedAddress}
+                    lines={[
+                      ["line1"],
+                      ["line2"],
+                      ["city", ",", "region", "postalCode"],
+                    ]}
+                  />
                 </EntityField>
                 {coordinates && showGetDirectionsLink && (
                   <CTA
-                    className="font-bold"
                     link={coordinates}
                     label="Get Directions"
                     linkType="DRIVING_DIRECTIONS"
@@ -506,6 +519,7 @@ export const FINS_HeroSection: ComponentConfig<FINS_HeroSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
       headingLevel: 1,
+      jobTitleLevel: 5,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
       showGetDirectionsLink: true,
