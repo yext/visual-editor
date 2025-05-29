@@ -12,6 +12,10 @@ const fallbackT = (key: string) => key;
  */
 export const i18n = (key: string): string => {
   try {
+    if (!i18next.isInitialized) {
+      return fallbackT(key);
+    }
+
     return i18next.t(key) || fallbackT(key);
   } catch {
     return fallbackT(key);

@@ -6,7 +6,7 @@ import fs from "fs";
 const isDryRun = process.argv.includes("--dry-run");
 
 /**
- * Runs through everything under src/components and adds i18n("...") to all appropriate strings
+ * Runs through everything under src/components and src/editor and adds i18n("...") to all appropriate strings
  */
 (async () => {
   const project = new Project({
@@ -14,7 +14,10 @@ const isDryRun = process.argv.includes("--dry-run");
   });
 
   // Load all .ts/.tsx files under src/components recursively
-  let sourceFiles = project.getSourceFiles("src/components/**/*.{ts,tsx}");
+  let sourceFiles = project.getSourceFiles([
+    "src/components/**/*.{ts,tsx}",
+    "src/editor/**/*.{ts,tsx}",
+  ]);
 
   // Exclude files inside "migrations" folder or with ".test." in filename
   sourceFiles = sourceFiles.filter((sf) => {

@@ -1,3 +1,4 @@
+import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -267,11 +268,11 @@ export const ConstantValueModeToggler = ({
                   htmlFor={entityButtonId}
                   onClick={() => toggleConstantValueEnabled(false)}
                 >
-                  Use Page-specific Content
+                  {i18n("Use Page-specific Content")}
                 </Label>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Use content specific to each page</p>
+                <p>{i18n("Use content specific to each page")}</p>
                 <TooltipArrow fill="ve-bg-popover" />
               </TooltipContent>
             </Tooltip>
@@ -287,11 +288,11 @@ export const ConstantValueModeToggler = ({
                     onClick={() => toggleConstantValueEnabled(true)}
                     htmlFor={constantButtonId}
                   >
-                    Use Static Content
+                    {i18n("Use Static Content")}
                   </Label>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Use the same content for each page</p>
+                  <p>{i18n("Use the same content for each page")}</p>
                   <TooltipArrow fill="ve-bg-popover" />
                 </TooltipContent>
               </Tooltip>
@@ -383,7 +384,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     return BasicSelector("Entity Field", [
-      { value: "", label: "Select a Content field" },
+      { value: "", label: i18n("Select a Content field") },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {
           return {

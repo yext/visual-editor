@@ -1,3 +1,4 @@
+import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -7,21 +8,21 @@ import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 
 export const fontSizeOptions = (includeLargeSizes = true) => {
   const fontSizeOptions = [
-    { label: "XS", value: "xs", px: "12" },
-    { label: "SM", value: "sm", px: "14" },
-    { label: "Base", value: "base", px: "16" },
-    { label: "LG", value: "lg", px: "18" },
-    { label: "XL", value: "xl", px: "20" },
-    { label: "2XL", value: "2xl", px: "24" },
-    { label: "3XL", value: "3xl", px: "32" },
-    { label: "4XL", value: "4xl", px: "40" },
+    { label: i18n("XS"), value: "xs", px: "12" },
+    { label: i18n("SM"), value: "sm", px: "14" },
+    { label: i18n("Base"), value: "base", px: "16" },
+    { label: i18n("LG"), value: "lg", px: "18" },
+    { label: i18n("XL"), value: "xl", px: "20" },
+    { label: i18n("2XL"), value: "2xl", px: "24" },
+    { label: i18n("3XL"), value: "3xl", px: "32" },
+    { label: i18n("4XL"), value: "4xl", px: "40" },
   ];
   const largeFontSizeOptions = [
-    { label: "5XL", value: "5xl", px: "48" },
-    { label: "6XL", value: "6xl", px: "60" },
-    { label: "7XL", value: "7xl", px: "72" },
-    { label: "8XL", value: "8xl", px: "96" },
-    { label: "9XL", value: "9xl", px: "128" },
+    { label: i18n("5XL"), value: "5xl", px: "48" },
+    { label: i18n("6XL"), value: "6xl", px: "60" },
+    { label: i18n("7XL"), value: "7xl", px: "72" },
+    { label: i18n("8XL"), value: "8xl", px: "96" },
+    { label: i18n("9XL"), value: "9xl", px: "128" },
   ];
   return includeLargeSizes
     ? [...fontSizeOptions, ...largeFontSizeOptions]
@@ -102,7 +103,7 @@ export const FontSizeSelector = (
       const tailwindConfig: TailwindConfig = useTailwindConfig();
       const options = convertDefaultFontSizesToOptions(
         [
-          { label: "Default", value: "default", px: "" },
+          { label: i18n("Default"), value: "default", px: "" },
           ...fontSizeOptions(includeLargeSizes),
         ],
         tailwindConfig
