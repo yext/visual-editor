@@ -4,7 +4,7 @@ import { cn } from "../../../utils/cn.ts";
 
 interface SwitchProps
   extends React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> {
-  icon?: React.ReactNode; // Add the icon prop here
+  icon?: React.ReactNode;
 }
 
 const Switch = React.forwardRef<
