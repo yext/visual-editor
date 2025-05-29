@@ -10,6 +10,7 @@ const EXPERIENCE_VERSION = "PRODUCTION";
 /**
  * Builds the search headless config for the template. Returns undefined if the config is not valid.
  * @param document the entity document
+ * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
 export const createSearchHeadlessConfig = (
   document: any,
@@ -67,6 +68,7 @@ export const createSearchHeadlessConfig = (
 /**
  * Builds the search analytics config for the template. Returns undefined if the config is not valid.
  * @param document the entity document
+ * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
 export const createSearchAnalyticsConfig = (
   document: any,
@@ -116,6 +118,7 @@ export const createSearchAnalyticsConfig = (
 /**
  * Extracts the experienceKey from the entity document if possible, otherwise returns undefined.
  * @param document the entity document
+ * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
 const getExperienceKey = (document: any, experienceKeyEnvVar?: string) => {
   if (!document._pageset && experienceKeyEnvVar) {
