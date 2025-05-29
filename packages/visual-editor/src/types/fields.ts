@@ -66,6 +66,13 @@ export const ComponentFields = {
     tooltipDescription: "",
     altLanguageBehavior: "LANGUAGE_SPECIFIC",
   },
+  InsuranceProviderSection: {
+    name: "Insurance Provider Section",
+    type: "type.insuranceProviders_section",
+    isList: false,
+    tooltipDescription: "",
+    altLanguageBehavior: "LANGUAGE_SPECIFIC",
+  },
   AwardSection: {
     name: "Award Section",
     type: "type.awards_section",

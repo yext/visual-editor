@@ -76,6 +76,14 @@ import {
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
 import {
+  FINS_DisclosureSection,
+  FINS_DisclosureSectionProps,
+} from "./pageSections/FINS/FINS_DisclosureSection.tsx";
+import {
+  FINS_InsuranceSectionProps,
+  FINS_InsuranceProvidersSection,
+} from "./pageSections/FINS/FINS_InsuranceSection.tsx";
+import {
   FINS_CoreInfoSectionProps,
   FINS_CoreInfoSection,
 } from "./pageSections/FINS/FINS_CoreInfoSection.tsx";
@@ -94,6 +102,8 @@ export interface PageSectionCategoryProps {
   FAQSection: FAQSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TestimonialSection: TestimonialSectionProps;
+  FINS_DisclosureSection: FINS_DisclosureSectionProps;
+  FINS_InsuranceProvidersSection: FINS_InsuranceSectionProps;
   FINS_CoreInfoSection: FINS_CoreInfoSectionProps;
 }
 
@@ -112,6 +122,8 @@ export const PageSectionCategoryComponents = {
   PromoSection,
   TeamSection,
   TestimonialSection,
+  FINS_DisclosureSection,
+  FINS_InsuranceProvidersSection,
   FINS_CoreInfoSection,
 };
 

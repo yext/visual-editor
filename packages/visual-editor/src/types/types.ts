@@ -73,6 +73,15 @@ export type TeamSectionType = {
   people: Array<PersonStruct>;
 };
 
+export type InsuranceProvidersSectionType = {
+  insuranceProviders: Array<InsuranceProvidersStruct>;
+};
+
+export type InsuranceProvidersStruct = {
+  title: string;
+  image?: ImageType;
+};
+
 export type AwardSectionType = {
   awards: Array<AwardStruct>;
 };
