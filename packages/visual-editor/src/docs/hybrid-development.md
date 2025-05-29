@@ -157,8 +157,39 @@ const components: Config<MainProps>["components"] = {
 export const mainConfig: Config<MainProps> = {
   components: {
     ...components,
-    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {contentEndpointEnvVar: "YEXT_PUBLIC_FOO"})
+    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {
+      contentEndpointEnvVar: "YEXT_PUBLIC_FOO",
+    })
   },
   .....
 }
+```
+
+The **Locator** component also has two env vars, entityTypeEnvVar and experienceKeyEnvVar, that are required to support usage in hybrid development. That can look like:
+
+```ts
+interface LocatorConfigProps
+  extends LocatorCategoryProps,
+    OtherCategoryProps {}
+
+export const locatorConfig: Config<LocatorConfigProps> = {
+  components: {
+    ...LocatorCategoryComponents,
+    ...OtherCategoryComponents,
+    Locator: withPropOverrides(Locator, {
+      entityTypeEnvVar: "YEXT_PUBLIC_ENTITY_TYPE",
+      experienceKeyEnvVar: "YEXT_PUBLIC_KEY",
+    })
+  },
+  root: {
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
+    },
+  },
+};
 ```
