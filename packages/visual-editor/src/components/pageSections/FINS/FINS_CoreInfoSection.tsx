@@ -99,7 +99,7 @@ const coreInfoSectionFields: Fields<FINS_CoreInfoSectionProps> = {
           entityField: YextField("Description", {
             type: "entityField",
             filter: {
-              types: ["type.string"],
+              types: ["type.string", "type.rich_text_v2"],
             },
           }),
         },
