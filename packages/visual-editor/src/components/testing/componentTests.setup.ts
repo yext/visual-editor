@@ -9,9 +9,21 @@ import { BrowserPage } from "@vitest/browser/context";
 // Applies the theme variables
 beforeEach(() => {
   const tag = document.createElement("style");
-  const style = applyTheme({}, defaultThemeConfig);
-  document.head.appendChild(tag);
-  tag.outerHTML = style;
+  const themeTags = applyTheme({}, defaultThemeConfig);
+
+  // we only need to load Open Sans for the tests
+  const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);
+  if (match && match[0]) {
+    const theme = `<link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+      ${match[0]}`;
+
+    document.head.appendChild(tag);
+    tag.outerHTML = theme;
+  } else {
+    console.error("failed to apply theme");
+  }
 });
 
 // jest-axe disabled color contrast checks by default because they are

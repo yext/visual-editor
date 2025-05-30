@@ -45,7 +45,7 @@ const fallbackFromCategory = (category) => {
 };
 
 const getFontData = async () => {
-  const url = `https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_API_KEY}&sort=alpha`;
+  const url = `https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_API_KEY}&sort=alpha&capability=VF`;
   const response = await fetch(url);
   if (!response.ok) throw new Error(`API request failed: ${response.status}`);
   const data = await response.json();
@@ -56,6 +56,17 @@ const parseFontDetails = (font) => {
   const variants = font.variants;
 
   const hasItalic = variants.some((v) => v.includes("italic"));
+
+  if ("axes" in font) {
+    const wghtTag = font.axes.find((dim) => dim.tag === "wght");
+
+    return {
+      italics: hasItalic,
+      minWeight: wghtTag.start,
+      maxWeight: wghtTag.end,
+      fallback: fallbackFromCategory(font.category),
+    };
+  }
 
   // Extract weights (some variants are like 'regular' which is 400)
   const weights = variants
@@ -70,13 +81,9 @@ const parseFontDetails = (font) => {
     weights.push(400);
   }
 
-  const minWeight = Math.min(...weights);
-  const maxWeight = Math.max(...weights);
-
   return {
     italics: hasItalic,
-    minWeight,
-    maxWeight,
+    weights: [...new Set(weights)], // remove duplicates
     fallback: fallbackFromCategory(font.category),
   };
 };
@@ -132,15 +139,28 @@ const constructGoogleFontLinkTags = (fonts) => {
       .map(([fontName, fontDetails]) => {
         const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
 
-        // If minWeight === maxWeight, just use the single weight value, else use the range
-        const weightRange =
-          fontDetails.minWeight === fontDetails.maxWeight
-            ? `${fontDetails.minWeight}`
-            : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
-
-        const weightParam = fontDetails.italics
-          ? `0,${weightRange};1,${weightRange}`
-          : weightRange;
+        let weightParam;
+        if ("weights" in fontDetails) {
+          // static font, use enumerated weights
+          if (fontDetails.italics) {
+            weightParam =
+              fontDetails.weights.map((w) => `0,${w};`).join("") +
+              fontDetails.weights.map((w) => `1,${w};`).join("");
+            // remove trailing semicolon
+            weightParam = weightParam.slice(0, -1);
+          } else {
+            weightParam = fontDetails.weights.join(";");
+          }
+        } else {
+          // variable font, use range of weights
+          const weightRange =
+            fontDetails.minWeight === fontDetails.maxWeight
+              ? `${fontDetails.minWeight}`
+              : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+          weightParam = fontDetails.italics
+            ? `0,${weightRange};1,${weightRange}`
+            : weightRange;
+        }
 
         return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
       })
@@ -160,9 +180,7 @@ const generateOutputString = async (registry) => {
   ];
 
   for (const [name, spec] of Object.entries(registry)) {
-    lines.push(
-      `  ${JSON.stringify(name)}: { italics: ${spec.italics}, minWeight: ${spec.minWeight}, maxWeight: ${spec.maxWeight}, fallback: "${spec.fallback}" },`
-    );
+    lines.push(`  ${JSON.stringify(name)}: ${JSON.stringify(spec)},`);
   }
 
   lines.push("};\n\n");
