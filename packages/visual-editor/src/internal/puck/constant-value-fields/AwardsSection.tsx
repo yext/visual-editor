@@ -11,11 +11,7 @@ export const AWARDS_SECTION_CONSTANT_CONFIG: CustomField<AwardSectionType> = {
     onChange: (value: AwardSectionType, uiState?: Partial<UiState>) => void;
   }) => {
     return (
-      <div
-        className={
-          "ve-mt-4" + (value.awards.length === 0 ? " empty-array-fix" : "")
-        }
-      >
+      <div className={"ve-mt-4"}>
         <AutoField
           field={AwardsStructArrayField}
           value={value.awards}
