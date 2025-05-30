@@ -128,18 +128,19 @@ export const useCommonMessageReceivers = (
   };
 };
 
-const TemplateMetadataContext = React.createContext<
-  TemplateMetadata | null | undefined
->(undefined);
+const TemplateMetadataContext = React.createContext<TemplateMetadata>(
+  {} as TemplateMetadata
+);
 
 const useTemplateMetadata = () => {
   const context = React.useContext(TemplateMetadataContext);
-  // context === undefined means useTemplateMetadata outside ThemeEditor or LayoutEditor
-  // context === null means useCommonMessageReceivers has not received a message yet
   if (context === undefined) {
     throw new Error(
       "useTemplateMetadata must be used within ThemeEditor or LayoutEditor"
     );
+  }
+  if (context === null) {
+    throw new Error("useCommonMessageReceivers has not received a message yet");
   }
 
   return context;

@@ -116,7 +116,7 @@ export const Editor = ({
   });
 
   return (
-    <TemplateMetadataContext.Provider value={templateMetadata}>
+    <TemplateMetadataContext.Provider value={templateMetadata!}>
       <ErrorBoundary fallback={<></>} onError={logError}>
         {!isLoading ? (
           templateMetadata?.isThemeMode || forceThemeMode ? (
