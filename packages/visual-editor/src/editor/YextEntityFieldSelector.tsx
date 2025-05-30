@@ -14,6 +14,7 @@ import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Call
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
@@ -351,6 +352,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   className,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
+  const templateMetadata = useTemplateMetadata();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -364,7 +366,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
-    return BasicSelector("Entity Field", [
+    const selectorLabel = templateMetadata?.entityTypeDisplayName
+      ? templateMetadata.entityTypeDisplayName + " Field"
+      : "Field";
+
+    return BasicSelector(selectorLabel, [
       { value: "", label: "Select a Content field" },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {

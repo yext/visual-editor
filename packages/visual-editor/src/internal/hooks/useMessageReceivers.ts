@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
 import {
@@ -126,3 +127,22 @@ export const useCommonMessageReceivers = (
     puckConfig,
   };
 };
+
+const TemplateMetadataContext = React.createContext<
+  TemplateMetadata | null | undefined
+>(undefined);
+
+const useTemplateMetadata = () => {
+  const context = React.useContext(TemplateMetadataContext);
+  // context === undefined means useTemplateMetadata outside ThemeEditor or LayoutEditor
+  // context === null means useCommonMessageReceivers has not received a message yet
+  if (context === undefined) {
+    throw new Error(
+      "useTemplateMetadata must be used within ThemeEditor or LayoutEditor"
+    );
+  }
+
+  return context;
+};
+
+export { useTemplateMetadata, TemplateMetadataContext };
