@@ -30,7 +30,7 @@ jobs:
         uses: pnpm/action-setup@v4.0.0
 
       - name: Install deps
-        run: pnpm i
+        run: pnpm i --frozen-lockfile --ignore-scripts
 
       - name: Build
         run: pnpm run build

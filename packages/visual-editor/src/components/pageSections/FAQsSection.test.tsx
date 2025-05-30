@@ -5,7 +5,7 @@ import {
   ComponentTest,
   viewports,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, act } from "@testing-library/react";
 import {
   FAQSection,
   migrate,
@@ -87,9 +87,13 @@ const tests: ComponentTest[] = [
       expect(page.getByText("test name")).toBeVisible();
       expect(q1).toBeVisible();
       expect(q2).toBeVisible();
-      await q1.click();
+      await act(async () => {
+        await q1.click();
+      });
       expect(page.getByText("delivery")).toBeVisible();
-      await q2.click();
+      await act(async () => {
+        await q2.click();
+      });
       expect(page.getByText("limited")).toBeVisible();
     },
   },
@@ -131,9 +135,13 @@ const tests: ComponentTest[] = [
       expect(page.getByText("Frequently Asked Questions")).toBeVisible();
       expect(q1).toBeVisible();
       expect(q2).toBeVisible();
-      await q1.click();
+      await act(async () => {
+        await q1.click();
+      });
       expect(page.getByText("Answer 1")).toBeVisible();
-      await q2.click();
+      await act(async () => {
+        await q2.click();
+      });
       expect(page.getByText("Answer 2")).toBeVisible();
     },
   },

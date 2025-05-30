@@ -29,14 +29,8 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: "test with node ${{ matrix.node-version }}"
-        uses: actions/setup-node@v4.0.2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-
       - name: Install deps
-        run: pnpm i
+        run: pnpm i --frozen-lockfile --ignore-scripts
 
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
@@ -45,7 +39,7 @@ jobs:
         uses: actions/download-artifact@v4.1.7
         with:
           name: build-output-${{ matrix.node-version }}
-          path: dist/
+          path: "./packages/${{ inputs.package }}/dist"
 
       - name: Run tests
         run: pnpm run test
