@@ -9,7 +9,12 @@ module.exports = {
 
   options: {
     debug: true,
-    defaultValue: (lng, ns, key, options) => options.defaultValue || key,
+    defaultValue: (lng, ns, key, options) => {
+      if (lng.toLowerCase().startsWith("en")) {
+        return options.defaultValue || key;
+      }
+      return "";
+    },
     func: {
       list: ["t", "i18next.t", "i18n"],
       extensions: [".ts", ".tsx"],
