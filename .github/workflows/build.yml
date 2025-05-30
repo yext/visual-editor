@@ -35,6 +35,14 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ matrix.node-version }}-
+
       - name: Create build-output artifact
         uses: actions/upload-artifact@v4.3.3
         with:
