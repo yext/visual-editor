@@ -182,9 +182,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
-  const entityType = getEntityType(props.entityTypeEnvVar);
+  const { mapStyle, entityTypeEnvVar } = props;
+  const entityType = getEntityType(entityTypeEnvVar);
   const locale = getDocumentLocale();
-  const { mapStyle } = props;
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
