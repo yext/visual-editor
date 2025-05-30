@@ -25,17 +25,13 @@ jobs:
         uses: actions/setup-node@v4.0.2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: Restore cached dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-${{ matrix.node-version }}-
+      - name: Install deps
+        run: pnpm i --ignore-scripts
 
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps

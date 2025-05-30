@@ -25,23 +25,16 @@ jobs:
         uses: actions/setup-node@v4.0.2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
       - name: Install deps
-        run: pnpm i
+        run: pnpm i --ignore-scripts
 
       - name: Build
         run: pnpm run build
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-${{ matrix.node-version }}-
 
       - name: Create build-output artifact
         uses: actions/upload-artifact@v4.3.3
