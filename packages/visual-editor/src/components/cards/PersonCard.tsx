@@ -19,6 +19,7 @@ import {
   YextCollection,
   resolveYextSubfield,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -74,7 +75,7 @@ const PersonCardItem = ({
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedImage && (
             <EntityField
-              displayName="Headshot"
+              displayName={i18n("headshot", { defaultValue: "Headshot" })}
               fieldId={card?.headshot?.field}
               constantValueEnabled={
                 resolvedHeadshot?.image?.constantValueEnabled
@@ -87,7 +88,7 @@ const PersonCardItem = ({
         <div className="flex flex-col justify-center gap-1">
           {resolvedName && (
             <EntityField
-              displayName="Name"
+              displayName={i18n("name", { defaultValue: "Name" })}
               fieldId={card?.name?.field}
               constantValueEnabled={card?.name?.constantValueEnabled}
             >
@@ -96,7 +97,7 @@ const PersonCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName="Title"
+              displayName={i18n("title", { defaultValue: "Title" })}
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -113,7 +114,7 @@ const PersonCardItem = ({
         <div className="flex flex-col gap-4">
           {resolvedPhone && (
             <EntityField
-              displayName="Phone"
+              displayName={i18n("phone", { defaultValue: "Phone" })}
               fieldId={resolvedPhone}
               constantValueEnabled={card?.phone?.constantValueEnabled}
             >
@@ -132,7 +133,7 @@ const PersonCardItem = ({
           )}
           {resolvedEmail && (
             <EntityField
-              displayName="Email"
+              displayName={i18n("email", { defaultValue: "Email" })}
               fieldId={card?.email?.field}
               constantValueEnabled={card?.email?.constantValueEnabled}
             >
@@ -151,7 +152,7 @@ const PersonCardItem = ({
           )}
           {resolvedCTA?.link && (
             <EntityField
-              displayName="CTA"
+              displayName={i18n("cta", { defaultValue: "CTA" })}
               fieldId={card?.cta?.field}
               constantValueEnabled={card?.cta?.constantValueEnabled}
             >

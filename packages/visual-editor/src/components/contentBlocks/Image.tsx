@@ -8,6 +8,7 @@ import {
   Image,
   ImageProps,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -82,7 +83,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 
   return (
     <EntityField
-      displayName="Image"
+      displayName={i18n("image", { defaultValue: "Image" })}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >

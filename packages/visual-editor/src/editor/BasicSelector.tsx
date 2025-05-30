@@ -1,3 +1,4 @@
+import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
@@ -22,7 +23,11 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
       if (!options || options.length === 0) {
         return (
           <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-            <p>No options available</p>
+            <p>
+              {i18n("noOptionsAvailable", {
+                defaultValue: "No options available",
+              })}
+            </p>
           </FieldLabel>
         );
       }

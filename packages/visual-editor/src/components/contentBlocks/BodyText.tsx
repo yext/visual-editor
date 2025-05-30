@@ -8,6 +8,7 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
@@ -33,7 +34,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 
     return (
       <EntityField
-        displayName="Body"
+        displayName={i18n("body", { defaultValue: "Body" })}
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >

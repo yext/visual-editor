@@ -19,6 +19,7 @@ import {
   ComponentFields,
   EntityField,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -91,7 +92,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName="Image"
+          displayName={i18n("image", { defaultValue: "Image" })}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
@@ -105,7 +106,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
-            displayName="Title"
+            displayName={i18n("title", { defaultValue: "Title" })}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
@@ -113,7 +114,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
         <EntityField
-          displayName="Description"
+          displayName={i18n("description", { defaultValue: "Description" })}
           fieldId={data.promo.field}
           constantValueEnabled={
             !resolvedPromo?.description ||
@@ -124,7 +125,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
-            displayName="Call To Action"
+            displayName={i18n("callToAction", {
+              defaultValue: "Call To Action",
+            })}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >

@@ -8,6 +8,7 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -78,7 +79,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
-        displayName="Banner Text"
+        displayName={i18n("bannerText", { defaultValue: "Banner Text" })}
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >

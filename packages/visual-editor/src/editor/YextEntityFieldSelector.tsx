@@ -1,3 +1,4 @@
+import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -365,7 +366,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     return BasicSelector("Entity Field", [
-      { value: "", label: "Select a Content field" },
+      {
+        value: "",
+        label: i18n("selectAContentField", {
+          defaultValue: "Select a Content field",
+        }),
+      },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {
           return {

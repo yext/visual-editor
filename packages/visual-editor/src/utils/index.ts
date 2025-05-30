@@ -37,4 +37,4 @@ export {
   type MigrationRegistry,
   migrate,
 } from "./migrate.ts";
-export { i18n } from "./i18n.ts";
+export { i18n, useI18n, initI18n } from "./i18n.ts";

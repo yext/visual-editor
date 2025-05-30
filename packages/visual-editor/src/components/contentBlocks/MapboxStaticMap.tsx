@@ -6,6 +6,7 @@ import {
   useDocument,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -153,7 +154,7 @@ export const MapboxStaticMapComponent = ({
 
   return (
     <EntityField
-      displayName="Coordinate"
+      displayName={i18n("coordinate", { defaultValue: "Coordinate" })}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >

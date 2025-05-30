@@ -2,157 +2,144 @@ import { Project, SyntaxKind } from "ts-morph";
 import prettier from "prettier";
 import fs from "fs";
 
-// CLI flag
 const isDryRun = process.argv.includes("--dry-run");
 
 /**
  * Runs through everything under src/components and src/editor and adds i18n("...") to all appropriate strings
  */
 (async () => {
-  const project = new Project({
-    tsConfigFilePath: "tsconfig.json",
-  });
+  const project = new Project({ tsConfigFilePath: "tsconfig.json" });
 
-  // Load all .ts/.tsx files under src/components recursively
   let sourceFiles = project.getSourceFiles([
     "src/components/**/*.{ts,tsx}",
     "src/editor/**/*.{ts,tsx}",
   ]);
 
-  // Exclude files inside "migrations" folder or with ".test." in filename
   sourceFiles = sourceFiles.filter((sf) => {
     const filePath = sf.getFilePath();
     const fileName = sf.getBaseName();
-    return !filePath.includes("/migrations/") && !fileName.includes(".test.");
+    return (
+      !filePath.includes("/migrations/") &&
+      !fileName.includes(".test.") &&
+      fileName !== "DefaultThemeConfig.ts"
+    );
   });
 
   for (const sourceFile of sourceFiles) {
     let modified = false;
 
-    const hasYextFieldCall = sourceFile
-      .getDescendantsOfKind(SyntaxKind.CallExpression)
-      .some((call) => call.getExpression().getText() === "YextField");
+    const componentConfigVars = new Set<string>();
+    const fieldConstVars = new Set<string>();
 
-    const hasJsx =
-      sourceFile.getDescendantsOfKind(SyntaxKind.JsxElement).length > 0 ||
-      sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement).length >
-        0;
+    // Collect ComponentConfig vars
+    sourceFile.getVariableDeclarations().forEach((decl) => {
+      const typeNode = decl.getTypeNode();
+      const name = decl.getName();
+      if (typeNode?.getText().startsWith("ComponentConfig")) {
+        componentConfigVars.add(name);
+      }
+    });
 
-    if (!hasYextFieldCall && !hasJsx) {
-      continue;
-    }
+    // Collect Fields<T> vars
+    sourceFile.getVariableDeclarations().forEach((decl) => {
+      const typeNode = decl.getTypeNode();
+      const name = decl.getName();
+      if (typeNode?.getText()?.startsWith("Fields<")) {
+        fieldConstVars.add(name);
+      }
+    });
 
-    // 1) Wrap first argument of YextField(...)
-    sourceFile
-      .getDescendantsOfKind(SyntaxKind.CallExpression)
-      .forEach((callExpr) => {
-        if (callExpr.getExpression().getText() === "YextField") {
-          const args = callExpr.getArguments();
-          if (
-            args.length > 0 &&
-            args[0].getKind() === SyntaxKind.StringLiteral &&
-            !args[0].getText().startsWith("i18n(")
-          ) {
-            const originalText = args[0].getText();
-            args[0].replaceWithText(`i18n(${originalText})`);
-            modified = true;
-          }
-        }
-      });
-
-    // 2) Wrap displayName JSX attributes
-    const jsxAttributes = sourceFile.getDescendantsOfKind(
-      SyntaxKind.JsxAttribute
-    );
-
-    jsxAttributes.forEach((attr) => {
+    // 1) JSX attributes
+    const attributesToWrap = new Set(["displayName", "aria-label"]);
+    sourceFile.getDescendantsOfKind(SyntaxKind.JsxAttribute).forEach((attr) => {
       const nameNode = attr.getFirstChildByKind(SyntaxKind.Identifier);
-      const name = nameNode ? nameNode.getText() : null;
-      if (!name) return;
+      const name = nameNode?.getText();
+      const init = attr.getInitializer();
 
       if (
-        name === "displayName" &&
-        attr.getInitializer()?.getKind() === SyntaxKind.StringLiteral &&
-        !attr.getInitializer().getText().startsWith("i18n(")
+        attributesToWrap.has(name || "") &&
+        init?.getKind() === SyntaxKind.StringLiteral &&
+        !init.getText().startsWith("i18n(")
       ) {
-        const strValue = attr.getInitializer().getText();
-        attr.getInitializer()?.replaceWithText(`{i18n(${strValue})}`);
+        const raw = init.getText().slice(1, -1);
+        const key = toCamelCase(raw);
+        attr.setInitializer(
+          `{i18n("${key}", { defaultValue: "${escapeString(raw)}" })}`
+        );
         modified = true;
       }
     });
 
-    // 3) Wrap label/title/description properties — exclude option arrays
-    const stringKeysToWrap = new Set(["label", "title", "description"]);
-    const jsxPropertyAssignments = sourceFile.getDescendantsOfKind(
-      SyntaxKind.PropertyAssignment
-    );
+    // 2) Object props like label/title/description — but skip ComponentConfig + Fields<T>
+    const keysToWrap = new Set(["label", "title", "description"]);
+    sourceFile
+      .getDescendantsOfKind(SyntaxKind.PropertyAssignment)
+      .forEach((prop) => {
+        const nameNode = prop.getNameNode();
+        const initializer = prop.getInitializer();
+        const keyName = nameNode?.getText().replace(/['"]/g, "");
 
-    jsxPropertyAssignments.forEach((prop) => {
-      const nameNode = prop.getNameNode();
-      const initializer = prop.getInitializer();
+        if (
+          !keysToWrap.has(keyName || "") ||
+          initializer?.getKind() !== SyntaxKind.StringLiteral ||
+          initializer.getText().startsWith("i18n(")
+        ) {
+          return;
+        }
 
-      if (
-        nameNode &&
-        stringKeysToWrap.has(nameNode.getText().replace(/['"]/g, "")) &&
-        initializer?.getKind() === SyntaxKind.StringLiteral &&
-        !initializer.getText().startsWith("i18n(")
-      ) {
-        // Avoid wrapping if the property is inside an object in a top-level array declaration
+        // Check if inside ComponentConfig
+        const varDecl = prop.getFirstAncestorByKind(
+          SyntaxKind.VariableDeclaration
+        );
+        if (varDecl && componentConfigVars.has(varDecl.getName())) return;
+
+        // Check if inside Fields<T>
+        if (varDecl && fieldConstVars.has(varDecl.getName())) return;
+
+        // Avoid constants like ThemeOptions
         const parentArray = prop.getFirstAncestorByKind(
           SyntaxKind.ArrayLiteralExpression
         );
         const parentVar = parentArray?.getFirstAncestorByKind(
           SyntaxKind.VariableDeclaration
         );
+        if (parentVar && /Options$/.test(parentVar.getName())) return;
 
-        if (parentVar) {
-          const varName = parentVar.getName();
-          const isLikelyOptionArray = /Options$/.test(varName); // e.g., borderRadiusOptions
-          if (isLikelyOptionArray) return; // skip wrapping
+        const raw = initializer.getText().slice(1, -1);
+        if (/^\d+$/.test(raw) || /^\d+:\d+$/.test(raw)) return;
+
+        const key = toCamelCase(raw);
+        initializer.replaceWithText(
+          `i18n("${key}", { defaultValue: "${escapeString(raw)}" })`
+        );
+        modified = true;
+      });
+
+    // 3) Wrap raw JSX text
+    sourceFile
+      .getDescendantsOfKind(SyntaxKind.JsxText)
+      .forEach((jsxTextNode) => {
+        const raw = jsxTextNode.getText().trim();
+        if (raw && !raw.includes("i18n(") && raw !== "|") {
+          const key = toCamelCase(raw);
+          const escaped = escapeString(raw);
+          jsxTextNode.replaceWithText(
+            `{i18n("${key}", { defaultValue: "${escaped}" })}`
+          );
+          modified = true;
         }
+      });
 
-        const strValue = initializer.getText();
-        initializer.replaceWithText(`i18n(${strValue})`);
-        modified = true;
-      }
-    });
-
-    // 4) Wrap JSX text nodes inside JSX Elements
-    const jsxText = sourceFile.getDescendantsOfKind(SyntaxKind.JsxText);
-    jsxText.forEach((jsxTextNode) => {
-      const textValue = jsxTextNode.getText();
-
-      // Skip if text is only whitespace or already wrapped (naive check)
-      if (
-        textValue.trim().length > 0 &&
-        !textValue.includes("i18n(") &&
-        textValue !== "|"
-      ) {
-        // Replace the text node with JSX expression wrapping i18n("...")
-        // Note: we need to preserve the exact text, escaping quotes if necessary
-        const escapedText = textValue.replace(/"/g, '\\"').trim();
-
-        // Insert the expression {i18n("text")}
-        jsxTextNode.replaceWithText(`{i18n("${escapedText}")}`);
-
-        modified = true;
-      }
-    });
-
-    // 5) Insert i18n import if needed
+    // 4) Ensure i18n import exists
     if (modified) {
       const existingImport = sourceFile
         .getImportDeclarations()
         .find((imp) => imp.getModuleSpecifierValue() === "@yext/visual-editor");
-
       if (existingImport) {
-        const namedImports = existingImport.getNamedImports();
-        const hasI18n = namedImports.some(
-          (named) => named.getName() === "i18n"
-        );
-        if (!hasI18n) {
-          existingImport.addNamedImport("i18n");
-        }
+        const hasI18n = existingImport
+          .getNamedImports()
+          .some((n) => n.getName() === "i18n");
+        if (!hasI18n) existingImport.addNamedImport("i18n");
       } else {
         sourceFile.insertImportDeclaration(0, {
           namedImports: ["i18n"],
@@ -160,21 +147,40 @@ const isDryRun = process.argv.includes("--dry-run");
         });
       }
 
-      if (isDryRun) {
-        console.log(`[DRY RUN] Would update: ${sourceFile.getFilePath()}`);
-      } else {
-        console.log(`Updated: ${sourceFile.getFilePath()}`);
-        sourceFile.saveSync();
+      const filePath = sourceFile.getFilePath();
+      console.log(
+        `${isDryRun ? "[DRY RUN] Would update" : "Updated"}: ${filePath}`
+      );
 
-        const filePath = sourceFile.getFilePath();
+      if (!isDryRun) {
+        sourceFile.saveSync();
         const content = fs.readFileSync(filePath, "utf-8");
         const options = (await prettier.resolveConfig(filePath)) || {};
-        options.filepath = filePath;
-
-        const formatted = await prettier.format(content, options);
+        const formatted = await prettier.format(content, {
+          ...options,
+          filepath: filePath,
+        });
         fs.writeFileSync(filePath, formatted);
         console.log(`Formatted: ${filePath}`);
       }
     }
   }
 })();
+
+function toCamelCase(str: string): string {
+  if (!str) return "";
+  return str
+    .trim()
+    .replace(/[^a-zA-Z0-9 ]+/g, "")
+    .split(/[\s-_]+/)
+    .map((word, i) =>
+      i === 0
+        ? word.toLowerCase()
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join("");
+}
+
+function escapeString(str: string): string {
+  return str.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}

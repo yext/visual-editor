@@ -8,6 +8,7 @@ import {
   CTA,
   CTAProps,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
@@ -39,7 +40,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
 
   return (
     <EntityField
-      displayName="CTA"
+      displayName={i18n("cta", { defaultValue: "CTA" })}
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >

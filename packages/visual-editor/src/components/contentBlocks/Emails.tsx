@@ -9,6 +9,7 @@ import {
   CTA,
   Body,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -55,7 +56,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 
   return (
     <EntityField
-      displayName="Email List"
+      displayName={i18n("emailList", { defaultValue: "Email List" })}
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >

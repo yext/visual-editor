@@ -10,6 +10,7 @@ import {
   CTA,
   CTAProps,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -51,7 +52,7 @@ const GetDirectionsComponent = ({
 
   return (
     <EntityField
-      displayName="Get Directions"
+      displayName={i18n("getDirections", { defaultValue: "Get Directions" })}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >

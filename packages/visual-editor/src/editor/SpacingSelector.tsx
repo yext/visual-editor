@@ -1,3 +1,4 @@
+import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -98,7 +99,14 @@ export const SpacingSelector = (
                 spacingType,
                 includeDefault
                   ? [
-                      { label: "Default", value: "default", px: "" },
+                      {
+                        label: i18n("default", {
+                          defaultValue: "Default",
+                          context: "spacing",
+                        }),
+                        value: "default",
+                        px: "",
+                      },
                       ...spacingOptions,
                     ]
                   : spacingOptions,

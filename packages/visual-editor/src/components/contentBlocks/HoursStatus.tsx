@@ -11,6 +11,7 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface HoursStatusProps {
@@ -76,7 +77,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 
   return (
     <EntityField
-      displayName="Hours"
+      displayName={i18n("hours", { defaultValue: "Hours" })}
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >

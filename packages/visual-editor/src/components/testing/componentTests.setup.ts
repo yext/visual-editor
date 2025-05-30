@@ -1,5 +1,5 @@
 import { configureAxe } from "jest-axe";
-import { defaultThemeConfig, applyTheme } from "@yext/visual-editor";
+import { defaultThemeConfig, applyTheme, i18n } from "@yext/visual-editor";
 // Applies the theme tailwind classes
 import "./componentTests.css";
 // Enabled expect().toHaveNoViolations()
@@ -46,13 +46,21 @@ export type ComponentTest = {
 export const testSite = {
   header: {
     links: [
-      { label: "Home", link: "index.html", linkType: "OTHER" },
       {
-        label: "More Info",
+        label: i18n("home", { defaultValue: "Home" }),
+        link: "index.html",
+        linkType: "OTHER",
+      },
+      {
+        label: i18n("moreInfo", { defaultValue: "More Info" }),
         link: "https://yext.com",
         linkType: "URL",
       },
-      { label: "Call Us", link: "+12125550110", linkType: "PHONE" },
+      {
+        label: i18n("callUs", { defaultValue: "Call Us" }),
+        link: "+12125550110",
+        linkType: "PHONE",
+      },
     ],
   },
   logo: {
@@ -67,12 +75,12 @@ export const testSite = {
   footer: {
     links: [
       {
-        label: "Privacy Policy",
+        label: i18n("privacyPolicy", { defaultValue: "Privacy Policy" }),
         link: "https://www.yext.com/privacy-policy",
         linkType: "URL",
       },
       {
-        label: "Contact Us",
+        label: i18n("contactUs", { defaultValue: "Contact Us" }),
         link: "sumo@yext.com",
         linkType: "EMAIL",
       },

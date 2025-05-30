@@ -13,6 +13,7 @@ import {
   YextEntityField,
   CTA,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export type AddressProps = {
@@ -51,7 +52,7 @@ const AddressComponent = ({
     <>
       {address && (
         <EntityField
-          displayName="Address"
+          displayName={i18n("address", { defaultValue: "Address" })}
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >

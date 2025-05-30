@@ -19,6 +19,7 @@ import {
   Timestamp,
   ComponentFields,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -158,7 +159,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName="Heading Text"
+            displayName={i18n("headingText", { defaultValue: "Heading Text" })}
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -168,7 +169,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName="Insights"
+          displayName={i18n("insights", { defaultValue: "Insights" })}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >

@@ -18,6 +18,7 @@ import {
   ProductStruct,
   ComponentFields,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -154,7 +155,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -165,7 +166,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName="Products"
+          displayName={i18n("products", { defaultValue: "Products" })}
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >

@@ -21,6 +21,7 @@ import {
   TimestampOption,
   ComponentFields,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface EventSectionProps {
@@ -153,7 +154,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -164,7 +165,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
       )}
       {resolvedEvents?.events && (
         <EntityField
-          displayName="Events"
+          displayName={i18n("events", { defaultValue: "Events" })}
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >

@@ -26,6 +26,7 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
+  i18n,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -154,13 +155,15 @@ const PhotoGallerySectionComponent = ({
 
   return (
     <PageSection
-      aria-label="Photo Gallery Section"
+      aria-label={i18n("photoGallerySection", {
+        defaultValue: "Photo Gallery Section",
+      })}
       background={styles.backgroundColor}
       className="flex flex-col gap-8 justify-center text-center"
     >
       {sectionHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -182,7 +185,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName="Images"
+              displayName={i18n("images", { defaultValue: "Images" })}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >

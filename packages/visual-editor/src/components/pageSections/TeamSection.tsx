@@ -18,6 +18,7 @@ import {
   TeamSectionType,
   PersonStruct,
   ComponentFields,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -176,7 +177,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -187,7 +188,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName="Team"
+          displayName={i18n("team", { defaultValue: "Team" })}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >

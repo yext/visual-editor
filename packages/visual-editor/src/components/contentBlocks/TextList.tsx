@@ -6,6 +6,7 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
@@ -41,7 +42,7 @@ const TextListComponent: React.FC<TextListProps> = ({
 
   return (
     <EntityField
-      displayName="Text List"
+      displayName={i18n("textList", { defaultValue: "Text List" })}
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >

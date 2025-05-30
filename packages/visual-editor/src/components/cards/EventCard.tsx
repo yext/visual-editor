@@ -14,6 +14,7 @@ import {
   EntityField,
   CTA,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -56,7 +57,7 @@ const EventCardItem = ({
       <div className="lg:w-[45%] w-full h-full">
         {resolvedImage && (
           <EntityField
-            displayName="Image"
+            displayName={i18n("image", { defaultValue: "Image" })}
             fieldId={card?.image?.field}
             constantValueEnabled={card?.image?.constantValueEnabled}
           >
@@ -69,7 +70,7 @@ const EventCardItem = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {resolvedTitle && (
           <EntityField
-            displayName="Title"
+            displayName={i18n("title", { defaultValue: "Title" })}
             fieldId={card?.title?.field}
             constantValueEnabled={card?.title?.constantValueEnabled}
           >
@@ -78,7 +79,7 @@ const EventCardItem = ({
         )}
         {resolvedDateTime && (
           <EntityField
-            displayName="Date/Time"
+            displayName={i18n("datetime", { defaultValue: "Date/Time" })}
             fieldId={card?.dateTime?.field}
             constantValueEnabled={card?.dateTime?.constantValueEnabled}
           >
@@ -87,7 +88,7 @@ const EventCardItem = ({
         )}
         {resolvedDescription && (
           <EntityField
-            displayName="Description"
+            displayName={i18n("description", { defaultValue: "Description" })}
             fieldId={card?.description?.field}
             constantValueEnabled={card?.description?.constantValueEnabled}
           >
@@ -98,7 +99,7 @@ const EventCardItem = ({
         )}
         {resolvedCTA?.link && (
           <EntityField
-            displayName="CTA"
+            displayName={i18n("cta", { defaultValue: "CTA" })}
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >
