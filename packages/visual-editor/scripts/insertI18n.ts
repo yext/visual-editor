@@ -15,13 +15,18 @@ const isDryRun = process.argv.includes("--dry-run");
     "src/editor/**/*.{ts,tsx}",
   ]);
 
+  const avoidFileNames: string[] = [
+    "DefaultThemeConfig.ts",
+    "componentTests.setup.ts",
+  ];
+
   sourceFiles = sourceFiles.filter((sf) => {
     const filePath = sf.getFilePath();
     const fileName = sf.getBaseName();
     return (
       !filePath.includes("/migrations/") &&
       !fileName.includes(".test.") &&
-      fileName !== "DefaultThemeConfig.ts"
+      !avoidFileNames.includes(fileName)
     );
   });
 
