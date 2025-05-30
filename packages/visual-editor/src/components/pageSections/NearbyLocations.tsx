@@ -41,6 +41,7 @@ export interface NearbyLocationsSectionProps {
     };
   };
   liveVisibility: boolean;
+  contentEndpointIdEnvVar?: string; // to be set via withPropOverrides
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -219,6 +220,7 @@ const LocationCard = ({
 const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   styles,
   data,
+  contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -229,7 +231,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 
   // parse variables from document
   const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =
-    parseDocument(document);
+    parseDocument(document, contentEndpointIdEnvVar);
 
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
@@ -306,7 +308,10 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 };
 
 // parseDocument parses the document to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain
-function parseDocument(document: any): {
+function parseDocument(
+  document: any,
+  contentEndpointIdEnvVar?: string
+): {
   businessId: string;
   apiKey: string;
   contentEndpointId: string;
@@ -336,6 +341,8 @@ function parseDocument(document: any): {
     } catch (e) {
       console.error("Failed to parse pageset from document. err=", e);
     }
+  } else if (contentEndpointIdEnvVar) {
+    contentEndpointId = document?._env?.[contentEndpointIdEnvVar];
   }
   if (!contentEndpointId) {
     console.warn(

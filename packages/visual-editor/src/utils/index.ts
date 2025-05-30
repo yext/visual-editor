@@ -38,3 +38,4 @@ export {
   migrate,
 } from "./migrate.ts";
 export { i18n } from "./i18n.ts";
+export { withPropOverrides } from "./withPropOverrides.ts";
