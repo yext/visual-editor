@@ -8,7 +8,7 @@ type FontSpecification = {
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
 } & (
   | {
-      // Variable fonts
+      // variable fonts
       minWeight: number; // minimum weight the font supports
       maxWeight: number; // maximum weight the font supports
     }
