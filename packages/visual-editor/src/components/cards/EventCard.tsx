@@ -14,7 +14,6 @@ import {
   EntityField,
   CTA,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -57,7 +56,7 @@ const EventCardItem = ({
       <div className="lg:w-[45%] w-full h-full">
         {resolvedImage && (
           <EntityField
-            displayName={i18n("Image")}
+            displayName="Image"
             fieldId={card?.image?.field}
             constantValueEnabled={card?.image?.constantValueEnabled}
           >
@@ -70,7 +69,7 @@ const EventCardItem = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {resolvedTitle && (
           <EntityField
-            displayName={i18n("Title")}
+            displayName="Title"
             fieldId={card?.title?.field}
             constantValueEnabled={card?.title?.constantValueEnabled}
           >
@@ -79,7 +78,7 @@ const EventCardItem = ({
         )}
         {resolvedDateTime && (
           <EntityField
-            displayName={i18n("Date/Time")}
+            displayName="Date/Time"
             fieldId={card?.dateTime?.field}
             constantValueEnabled={card?.dateTime?.constantValueEnabled}
           >
@@ -88,7 +87,7 @@ const EventCardItem = ({
         )}
         {resolvedDescription && (
           <EntityField
-            displayName={i18n("Description")}
+            displayName="Description"
             fieldId={card?.description?.field}
             constantValueEnabled={card?.description?.constantValueEnabled}
           >
@@ -99,7 +98,7 @@ const EventCardItem = ({
         )}
         {resolvedCTA?.link && (
           <EntityField
-            displayName={i18n("CTA")}
+            displayName="CTA"
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >
@@ -144,7 +143,7 @@ const EventCardComponent = (props: EventCardProps) => {
 };
 
 export const EventCard: ComponentConfig<EventCardProps> = {
-  label: i18n("Event Card"),
+  label: "Event Card",
   fields: EventCardItemFields,
   resolveFields: (data, params) => {
     // Set the collection prop and determine how to update fields
@@ -159,10 +158,10 @@ export const EventCard: ComponentConfig<EventCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: YextField(i18n("Card"), {
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          title: YextField<any, string>(i18n("Title"), {
+          title: YextField<any, string>("Title", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -170,7 +169,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.string"],
             },
           }),
-          image: YextField<any, ImageType>(i18n("Image"), {
+          image: YextField<any, ImageType>("Image", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -178,7 +177,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.image"],
             },
           }),
-          dateTime: YextField<any, string>(i18n("Date Time"), {
+          dateTime: YextField<any, string>("Date Time", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -186,7 +185,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.string"],
             },
           }),
-          description: YextField<any, string>(i18n("Description"), {
+          description: YextField<any, string>("Description", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -194,7 +193,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
               types: ["type.string"],
             },
           }),
-          cta: YextField<any, CTAProps>(i18n("CTA"), {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -232,7 +231,7 @@ export const EventCard: ComponentConfig<EventCardProps> = {
       cta: {
         field: "",
         constantValue: {
-          label: i18n("Learn more"),
+          label: "Learn more",
           link: "#",
           linkType: "URL",
         },

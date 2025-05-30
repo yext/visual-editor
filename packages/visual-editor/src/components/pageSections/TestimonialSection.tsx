@@ -17,7 +17,6 @@ import {
   ComponentFields,
   MaybeRTF,
   TimestampOption,
-  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -35,14 +34,14 @@ export interface TestimonialSectionProps {
 }
 
 const testimonialSectionFields: Fields<TestimonialSectionProps> = {
-  data: YextField(i18n("Data"), {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>(i18n("Heading Text"), {
+      heading: YextField<any, string>("Heading Text", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      testimonials: YextField(i18n("Testimonial Section"), {
+      testimonials: YextField("Testimonial Section", {
         type: "entityField",
         filter: {
           types: [ComponentFields.TestimonialSection.type],
@@ -50,31 +49,31 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       }),
     },
   }),
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(i18n("Background Color"), {
+      backgroundColor: YextField("Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField(i18n("Card Background Color"), {
+      cardBackgroundColor: YextField("Card Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField(i18n("Heading Level"), {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
@@ -139,7 +138,7 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName={i18n("Heading Text")}
+          displayName="Heading Text"
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -150,7 +149,7 @@ const TestimonialSectionWrapper = ({
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName={i18n("Testimonials")}
+          displayName="Testimonials"
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >
@@ -171,7 +170,7 @@ const TestimonialSectionWrapper = ({
 };
 
 export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
-  label: i18n("Testimonials Section"),
+  label: "Testimonials Section",
   fields: testimonialSectionFields,
   defaultProps: {
     styles: {

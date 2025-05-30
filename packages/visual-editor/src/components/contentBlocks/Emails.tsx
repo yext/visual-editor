@@ -9,7 +9,6 @@ import {
   CTA,
   Body,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -19,7 +18,7 @@ export interface EmailsProps {
 }
 
 const EmailsFields: Fields<EmailsProps> = {
-  list: YextField<any, string[]>(i18n("Emails"), {
+  list: YextField<any, string[]>("Emails", {
     type: "entityField",
     filter: {
       types: ["type.string"],
@@ -27,14 +26,14 @@ const EmailsFields: Fields<EmailsProps> = {
       includeListsOnly: true,
     },
   }),
-  includeHyperlink: YextField(i18n("Include Hyperlink"), {
+  includeHyperlink: YextField("Include Hyperlink", {
     type: "radio",
     options: [
-      { label: i18n("Yes"), value: true },
-      { label: i18n("No"), value: false },
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
-  listLength: YextField(i18n("List Length"), {
+  listLength: YextField("List Length", {
     type: "number",
     min: 1,
     max: 100,
@@ -56,7 +55,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("Email List")}
+      displayName="Email List"
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >
@@ -84,7 +83,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 };
 
 export const Emails: ComponentConfig<EmailsProps> = {
-  label: i18n("Emails"),
+  label: "Emails",
   fields: EmailsFields,
   defaultProps: {
     list: {

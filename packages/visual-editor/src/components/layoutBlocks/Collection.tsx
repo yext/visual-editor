@@ -14,7 +14,6 @@ import {
   themeManagerCn,
   YextField,
   VisibilityWrapper,
-  i18n,
 } from "@yext/visual-editor";
 
 export interface CollectionProps {
@@ -26,17 +25,17 @@ export interface CollectionProps {
 }
 
 const collectionFields: Fields<CollectionProps> = {
-  collection: YextField(i18n("Collection"), {
+  collection: YextField("Collection", {
     type: "object",
     objectFields: {
-      items: YextField<any, Array<any>>(i18n("Items"), {
+      items: YextField<any, Array<any>>("Items", {
         type: "entityField",
         isCollection: true,
         filter: {
           includeListsOnly: true,
         },
       }),
-      limit: YextField(i18n("Items Limit"), {
+      limit: YextField("Items Limit", {
         type: "optionalNumber",
         hideNumberFieldRadioLabel: "All",
         showNumberFieldRadioLabel: "Limit",
@@ -44,11 +43,11 @@ const collectionFields: Fields<CollectionProps> = {
       }),
     },
   }),
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
@@ -102,7 +101,7 @@ const CollectionSectionWrapper: React.FC<
 };
 
 export const Collection: ComponentConfig<CollectionProps> = {
-  label: i18n("Collection"),
+  label: "Collection",
   fields: collectionFields,
   resolveFields: (data, { fields }) => {
     // Add or remove the Items limit field based on whether
@@ -112,20 +111,20 @@ export const Collection: ComponentConfig<CollectionProps> = {
       delete fields.collection.objectFields.limit;
       return {
         ...fields,
-        layout: YextField(i18n("Layout"), {
+        layout: YextField("Layout", {
           type: "radio",
           options: [
-            { label: i18n("Flex"), value: "flex" },
-            { label: i18n("Grid"), value: "grid" },
+            { label: "Flex", value: "flex" },
+            { label: "Grid", value: "grid" },
           ],
         }),
         ...(data.props.layout === "flex"
           ? {
-              direction: YextField(i18n("Direction"), {
+              direction: YextField("Direction", {
                 type: "radio",
                 options: [
-                  { label: i18n("Horizontal"), value: "flex-row" },
-                  { label: i18n("Vertical"), value: "flex-col" },
+                  { label: "Horizontal", value: "flex-row" },
+                  { label: "Vertical", value: "flex-col" },
                 ],
               }),
             }
@@ -139,7 +138,7 @@ export const Collection: ComponentConfig<CollectionProps> = {
         objectFields: {
           // @ts-expect-error ts(2339) objectFields exists
           ...fields.collection.objectFields,
-          limit: YextField(i18n("Items Limit"), {
+          limit: YextField("Items Limit", {
             type: "optionalNumber",
             hideNumberFieldRadioLabel: "All",
             showNumberFieldRadioLabel: "Limit",

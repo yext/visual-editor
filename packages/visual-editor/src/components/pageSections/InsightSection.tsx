@@ -19,7 +19,6 @@ import {
   Timestamp,
   ComponentFields,
   MaybeRTF,
-  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -37,14 +36,14 @@ export interface InsightSectionProps {
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
-  data: YextField(i18n("Data"), {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>(i18n("Section Heading"), {
+      heading: YextField<any, string>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      insights: YextField(i18n("Insight Section"), {
+      insights: YextField("Insight Section", {
         type: "entityField",
         filter: {
           types: [ComponentFields.InsightSection.type],
@@ -52,31 +51,31 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       }),
     },
   }),
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(i18n("Background Color"), {
+      backgroundColor: YextField("Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField(i18n("Card Background Color"), {
+      cardBackgroundColor: YextField("Card Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField(i18n("Heading Level"), {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
@@ -159,7 +158,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName={i18n("Heading Text")}
+            displayName="Heading Text"
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -169,7 +168,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName={i18n("Insights")}
+          displayName="Insights"
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
@@ -190,7 +189,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: i18n("Insights Section"),
+  label: "Insights Section",
   fields: insightSectionFields,
   defaultProps: {
     styles: {

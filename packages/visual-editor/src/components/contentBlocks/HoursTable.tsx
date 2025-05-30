@@ -12,7 +12,6 @@ import {
   useDocument,
   YextEntityField,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export type HoursTableProps = {
@@ -24,36 +23,36 @@ export type HoursTableProps = {
 };
 
 const hoursTableFields: Fields<HoursTableProps> = {
-  hours: YextField(i18n("Hours"), {
+  hours: YextField("Hours", {
     type: "entityField",
     filter: {
       types: ["type.hours"],
     },
   }),
-  startOfWeek: YextField(i18n("Start of the Week"), {
+  startOfWeek: YextField("Start of the Week", {
     type: "select",
     hasSearch: true,
     options: "HOURS_OPTIONS",
   }),
-  collapseDays: YextField(i18n("Collapse days"), {
+  collapseDays: YextField("Collapse days", {
     type: "radio",
     options: [
-      { label: i18n("Yes"), value: true },
-      { label: i18n("No"), value: false },
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
-  showAdditionalHoursText: YextField(i18n("Show additional hours text"), {
+  showAdditionalHoursText: YextField("Show additional hours text", {
     type: "radio",
     options: [
-      { label: i18n("Yes"), value: true },
-      { label: i18n("No"), value: false },
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
-  alignment: YextField(i18n("Align card"), {
+  alignment: YextField("Align card", {
     type: "radio",
     options: [
-      { label: i18n("Left"), value: "items-start" },
-      { label: i18n("Center"), value: "items-center" },
+      { label: "Left", value: "items-start" },
+      { label: "Center", value: "items-center" },
     ],
   }),
 };
@@ -76,7 +75,7 @@ const VisualEditorHoursTable = ({
     <div className={`flex flex-col ${alignment}`}>
       {hours && (
         <EntityField
-          displayName={i18n("Hours")}
+          displayName="Hours"
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
@@ -88,10 +87,7 @@ const VisualEditorHoursTable = ({
         </EntityField>
       )}
       {additionalHoursText && showAdditionalHoursText && (
-        <EntityField
-          displayName={i18n("Hours Text")}
-          fieldId="additionalHoursText"
-        >
+        <EntityField displayName="Hours Text" fieldId="additionalHoursText">
           <div className="mt-4 text-body-sm-fontSize">
             {additionalHoursText}
           </div>
@@ -113,6 +109,6 @@ export const HoursTable: ComponentConfig<HoursTableProps> = {
     showAdditionalHoursText: true,
     alignment: "items-center",
   },
-  label: i18n("Hours Table"),
+  label: "Hours Table",
   render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };

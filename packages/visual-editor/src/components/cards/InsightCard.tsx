@@ -16,7 +16,6 @@ import {
   EntityField,
   CTA,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -62,7 +61,7 @@ const InsightCardItem = ({
     >
       {resolvedImage && (
         <EntityField
-          displayName={i18n("Image")}
+          displayName="Image"
           fieldId={card?.image?.field}
           constantValueEnabled={card?.image?.constantValueEnabled}
         >
@@ -80,7 +79,7 @@ const InsightCardItem = ({
               className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
             >
               <EntityField
-                displayName={i18n("Category")}
+                displayName="Category"
                 fieldId={card?.category?.field}
                 constantValueEnabled={card?.category?.constantValueEnabled}
               >
@@ -88,7 +87,7 @@ const InsightCardItem = ({
               </EntityField>
               {resolvedCategory && resolvedDate && <Body>|</Body>}
               <EntityField
-                displayName={i18n("Date")}
+                displayName="Date"
                 fieldId={card?.date?.field}
                 constantValueEnabled={card?.date?.constantValueEnabled}
               >
@@ -98,7 +97,7 @@ const InsightCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName={i18n("Insight Title")}
+              displayName="Insight Title"
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -109,7 +108,7 @@ const InsightCardItem = ({
           )}
           {resolvedDescription && (
             <EntityField
-              displayName={i18n("Description")}
+              displayName="Description"
               fieldId={card?.description?.field}
               constantValueEnabled={card?.description?.constantValueEnabled}
             >
@@ -119,7 +118,7 @@ const InsightCardItem = ({
         </div>
         {resolvedCTA?.link && (
           <EntityField
-            displayName={i18n("CTA")}
+            displayName="CTA"
             fieldId={card?.cta.field}
             constantValueEnabled={card?.cta.constantValueEnabled}
           >
@@ -163,7 +162,7 @@ const InsightCardComponent = (props: InsightCardProps) => {
 };
 
 export const InsightCard: ComponentConfig<InsightCardProps> = {
-  label: i18n("Insight Card"),
+  label: "Insight Card",
   fields: InsightCardItemFields,
   resolveFields: (data, params) => {
     // Set the collection prop and determine how to update fields
@@ -178,10 +177,10 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: YextField(i18n("Card"), {
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          image: YextField<any, ImageType>(i18n("Image"), {
+          image: YextField<any, ImageType>("Image", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -189,7 +188,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.image"],
             },
           }),
-          title: YextField<any, string>(i18n("Title"), {
+          title: YextField<any, string>("Title", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -197,7 +196,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          category: YextField<any, string>(i18n("Category"), {
+          category: YextField<any, string>("Category", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -205,7 +204,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          date: YextField<any, string>(i18n("Date"), {
+          date: YextField<any, string>("Date", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -213,7 +212,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          description: YextField<any, string>(i18n("Description"), {
+          description: YextField<any, string>("Description", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -221,7 +220,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
               types: ["type.string"],
             },
           }),
-          cta: YextField<any, CTAProps>(i18n("CTA"), {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -264,7 +263,7 @@ export const InsightCard: ComponentConfig<InsightCardProps> = {
       cta: {
         field: "",
         constantValue: {
-          label: i18n("Read more"),
+          label: "Read more",
           link: "#",
           linkType: "URL",
         },

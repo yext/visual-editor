@@ -1,4 +1,3 @@
-import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -103,7 +102,7 @@ export const FontSizeSelector = (
       const tailwindConfig: TailwindConfig = useTailwindConfig();
       const options = convertDefaultFontSizesToOptions(
         [
-          { label: i18n("Default"), value: "default", px: "" },
+          { label: "Default", value: "default", px: "" },
           ...fontSizeOptions(includeLargeSizes),
         ],
         tailwindConfig

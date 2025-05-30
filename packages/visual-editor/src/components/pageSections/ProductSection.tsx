@@ -18,7 +18,6 @@ import {
   ProductStruct,
   ComponentFields,
   MaybeRTF,
-  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -36,14 +35,14 @@ export interface ProductSectionProps {
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
-  data: YextField(i18n("Data"), {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>(i18n("Section Heading"), {
+      heading: YextField<any, string>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      products: YextField(i18n("Products"), {
+      products: YextField("Products", {
         type: "entityField",
         filter: {
           types: [ComponentFields.ProductSection.type],
@@ -51,31 +50,31 @@ const productSectionFields: Fields<ProductSectionProps> = {
       }),
     },
   }),
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(i18n("Background Color"), {
+      backgroundColor: YextField("Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField(i18n("Card Background Color"), {
+      cardBackgroundColor: YextField("Card Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField(i18n("Heading Level"), {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
@@ -155,7 +154,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={i18n("Heading Text")}
+          displayName="Heading Text"
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -166,7 +165,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName={i18n("Products")}
+          displayName="Products"
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >
@@ -187,7 +186,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
 };
 
 export const ProductSection: ComponentConfig<ProductSectionProps> = {
-  label: i18n("Products Section"),
+  label: "Products Section",
   fields: productSectionFields,
   defaultProps: {
     data: {

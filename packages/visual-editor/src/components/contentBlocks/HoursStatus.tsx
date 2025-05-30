@@ -11,7 +11,6 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export interface HoursStatusProps {
@@ -24,38 +23,38 @@ export interface HoursStatusProps {
 }
 
 const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
-  hours: YextField(i18n("Hours"), {
+  hours: YextField("Hours", {
     type: "entityField",
     filter: {
       types: ["type.hours"],
     },
   }),
-  showCurrentStatus: YextField(i18n("Show Current Status"), {
+  showCurrentStatus: YextField("Show Current Status", {
     type: "radio",
     options: [
-      { label: i18n("Yes"), value: true },
-      { label: i18n("No"), value: false },
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
-  timeFormat: YextField(i18n("Time Format"), {
+  timeFormat: YextField("Time Format", {
     type: "radio",
     options: [
-      { label: i18n("12-hour"), value: "12h" },
-      { label: i18n("24-hour"), value: "24h" },
+      { label: "12-hour", value: "12h" },
+      { label: "24-hour", value: "24h" },
     ],
   }),
-  showDayNames: YextField(i18n("Show Day Names"), {
+  showDayNames: YextField("Show Day Names", {
     type: "radio",
     options: [
-      { label: i18n("Yes"), value: true },
-      { label: i18n("No"), value: false },
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
-  dayOfWeekFormat: YextField(i18n("Day of Week Format"), {
+  dayOfWeekFormat: YextField("Day of Week Format", {
     type: "radio",
     options: [
-      { label: i18n("Short"), value: "short" },
-      { label: i18n("Long"), value: "long" },
+      { label: "Short", value: "short" },
+      { label: "Long", value: "long" },
     ],
   }),
 };
@@ -77,7 +76,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("Hours")}
+      displayName="Hours"
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >
@@ -99,7 +98,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 };
 
 export const HoursStatus: ComponentConfig<HoursStatusProps> = {
-  label: i18n("Hours Status"),
+  label: "Hours Status",
   fields: hoursStatusWrapperFields,
   defaultProps: {
     hours: {

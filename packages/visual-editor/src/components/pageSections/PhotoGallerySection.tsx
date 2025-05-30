@@ -26,7 +26,6 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
-  i18n,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -83,20 +82,20 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(i18n("Background Color"), {
+      backgroundColor: YextField("Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField(i18n("Heading Level"), {
+      headingLevel: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      imageStyle: YextField(i18n("Image Style"), {
+      imageStyle: YextField("Image Style", {
         type: "object",
         objectFields: {
           layout: ImageWrapperFields.layout,
@@ -107,16 +106,16 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       }),
     },
   }),
-  data: YextField(i18n("Data"), {
+  data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>(i18n("Heading"), {
+      heading: YextField<any, string>("Heading", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      images: YextField<any, ImageType[] | ComplexImageType[]>(i18n("Images"), {
+      images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
         type: "entityField",
         filter: {
           types: ["type.image"],
@@ -125,11 +124,11 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       }),
     },
   }),
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
@@ -161,7 +160,7 @@ const PhotoGallerySectionComponent = ({
     >
       {sectionHeading && (
         <EntityField
-          displayName={i18n("Heading Text")}
+          displayName="Heading Text"
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -183,7 +182,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName={i18n("Images")}
+              displayName="Images"
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >
@@ -254,7 +253,7 @@ const PhotoGallerySectionComponent = ({
 };
 
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
-  label: i18n("Photo Gallery Section"),
+  label: "Photo Gallery Section",
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {

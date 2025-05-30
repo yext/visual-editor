@@ -8,7 +8,6 @@ import {
   CTA,
   CTAProps,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
@@ -18,13 +17,13 @@ export interface CTAWrapperProps {
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
-  entityField: YextField(i18n("CTA"), {
+  entityField: YextField("CTA", {
     type: "entityField",
     filter: {
       types: ["type.cta"],
     },
   }),
-  variant: YextField(i18n("Variant"), {
+  variant: YextField("Variant", {
     type: "radio",
     options: "CTA_VARIANT",
   }),
@@ -40,7 +39,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("CTA")}
+      displayName="CTA"
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >
@@ -56,13 +55,13 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
 };
 
 export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
-  label: i18n("Call to Action"),
+  label: "Call to Action",
   fields: ctaWrapperFields,
   defaultProps: {
     entityField: {
       field: "",
       constantValue: {
-        label: i18n("Call to Action"),
+        label: "Call to Action",
       },
     },
     variant: "primary",

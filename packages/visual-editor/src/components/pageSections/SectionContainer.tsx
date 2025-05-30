@@ -13,7 +13,6 @@ import {
   useDocument,
   YextField,
   VisibilityWrapper,
-  i18n,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -34,36 +33,36 @@ export type SectionContainerProps = {
 };
 
 const sectionContainerFields: Fields<SectionContainerProps> = {
-  background: YextField(i18n("Background Color"), {
+  background: YextField("Background Color", {
     type: "select",
     hasSearch: true,
     options: "BACKGROUND_COLOR",
   }),
-  sectionHeading: YextField(i18n("Section Heading"), {
+  sectionHeading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextField<any, string>(i18n("Section Heading Text"), {
+      text: YextField<any, string>("Section Heading Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      level: YextField(i18n("Heading Level"), {
+      level: YextField("Heading Level", {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      alignment: YextField(i18n("Alignment"), {
+      alignment: YextField("Alignment", {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       }),
     },
   }),
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
@@ -104,7 +103,7 @@ const SectionContainerComponent = (
 };
 
 export const SectionContainer: ComponentConfig<SectionContainerProps> = {
-  label: i18n("Section Container"),
+  label: "Section Container",
   fields: sectionContainerFields,
   defaultProps: {
     background: backgroundColors.background1.value,

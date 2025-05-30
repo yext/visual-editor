@@ -1,4 +1,3 @@
-import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -108,7 +107,7 @@ export const BorderRadiusSelector = (label?: string): Field => {
               type: "select",
               options: convertDefaultBorderRadiusToOptions(
                 [
-                  { label: i18n("Default"), value: "default", px: "" },
+                  { label: "Default", value: "default", px: "" },
                   ...borderRadiusOptions,
                 ],
                 tailwindConfig

@@ -17,7 +17,6 @@ import {
   YextField,
   CTAProps,
   ImageWrapperProps,
-  i18n,
 } from "@yext/visual-editor";
 import { ImageWrapperFields } from "../contentBlocks/Image.js";
 
@@ -38,10 +37,10 @@ export type ProductCardProps = {
 };
 
 const ProductCardItemFields: Fields<ProductCardProps> = {
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      cardBackgroundColor: YextField(i18n("Card Background Color"), {
+      cardBackgroundColor: YextField("Card Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
@@ -163,7 +162,7 @@ const ProductCardComponent = (props: ProductCardProps) => {
 };
 
 export const ProductCard: ComponentConfig<ProductCardProps> = {
-  label: i18n("Product Card"),
+  label: "Product Card",
   fields: ProductCardItemFields,
   resolveFields: (data, params) => {
     // Set the collection prop and determine how to update fields
@@ -182,13 +181,13 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: YextField(i18n("Card"), {
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          image: YextField(i18n("Image"), {
+          image: YextField("Image", {
             type: "object",
             objectFields: {
-              image: YextField<any, ImageWrapperProps>(i18n("Image"), {
+              image: YextField<any, ImageWrapperProps>("Image", {
                 type: "entityField",
                 isCollection: isCollection,
                 filter: {
@@ -209,7 +208,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
                   }),
             },
           }),
-          heading: YextField<any, string>(i18n("Heading"), {
+          heading: YextField<any, string>("Heading", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -217,7 +216,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
               types: ["type.string"],
             },
           }),
-          category: YextField<any, string>(i18n("Category"), {
+          category: YextField<any, string>("Category", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -225,7 +224,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
               types: ["type.string"],
             },
           }),
-          description: YextField<any, string>(i18n("Description"), {
+          description: YextField<any, string>("Description", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -233,7 +232,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
               types: ["type.string"],
             },
           }),
-          cta: YextField<any, CTAProps>(i18n("CTA"), {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -279,7 +278,7 @@ export const ProductCard: ComponentConfig<ProductCardProps> = {
       cta: {
         field: "",
         constantValue: {
-          label: i18n("Learn More"),
+          label: "Learn More",
           link: "#",
           linkType: "URL",
         },

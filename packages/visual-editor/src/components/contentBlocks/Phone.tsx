@@ -7,7 +7,6 @@ import {
   YextEntityField,
   PhoneAtom,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export interface PhoneProps {
@@ -17,21 +16,21 @@ export interface PhoneProps {
 }
 
 const PhoneFields: Fields<PhoneProps> = {
-  phone: YextField(i18n("Phone Number"), {
+  phone: YextField("Phone Number", {
     type: "entityField",
     filter: {
       types: ["type.phone"],
     },
   }),
-  format: YextField(i18n("Format"), {
+  format: YextField("Format", {
     type: "radio",
     options: "PHONE_OPTIONS",
   }),
-  includeHyperlink: YextField(i18n("Include Hyperlink"), {
+  includeHyperlink: YextField("Include Hyperlink", {
     type: "radio",
     options: [
-      { label: i18n("Yes"), value: true },
-      { label: i18n("No"), value: false },
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
 };
@@ -50,7 +49,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("Phone")}
+      displayName="Phone"
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >
@@ -65,7 +64,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 };
 
 export const Phone: ComponentConfig<PhoneProps> = {
-  label: i18n("Phone"),
+  label: "Phone",
   fields: PhoneFields,
   defaultProps: {
     phone: {

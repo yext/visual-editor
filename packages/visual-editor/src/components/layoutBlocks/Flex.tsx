@@ -10,7 +10,6 @@ import {
   LayoutBlockCategory,
   YextField,
   VisibilityWrapper,
-  i18n,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
@@ -72,40 +71,40 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: YextField(i18n("Direction"), {
+  direction: YextField("Direction", {
     type: "radio",
     options: [
-      { label: i18n("Horizontal"), value: "flex-row" },
-      { label: i18n("Vertical"), value: "flex-col" },
+      { label: "Horizontal", value: "flex-row" },
+      { label: "Vertical", value: "flex-col" },
     ],
   }),
-  justifyContent: YextField(i18n("Justify Content"), {
+  justifyContent: YextField("Justify Content", {
     type: "radio",
     options: "JUSTIFY_CONTENT",
   }),
-  alignItems: YextField(i18n("Align Items"), {
+  alignItems: YextField("Align Items", {
     type: "radio",
     options: "JUSTIFY_CONTENT",
   }),
-  wrap: YextField(i18n("Wrap"), {
+  wrap: YextField("Wrap", {
     type: "radio",
     options: [
-      { label: i18n("No Wrap"), value: "nowrap" },
-      { label: i18n("Wrap"), value: "wrap" },
+      { label: "No Wrap", value: "nowrap" },
+      { label: "Wrap", value: "wrap" },
     ],
   }),
   ...layoutFields,
-  liveVisibility: YextField(i18n("Visible on Live Page"), {
+  liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
-      { label: i18n("Show"), value: true },
-      { label: i18n("Hide"), value: false },
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
     ],
   }),
 };
 
 export const Flex: ComponentConfig<FlexProps> = {
-  label: i18n("Flex"),
+  label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
     direction: "flex-row",

@@ -11,7 +11,6 @@ import {
   Background,
   YextField,
   Image,
-  i18n,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -29,9 +28,9 @@ export type HeaderProps = {
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
-  label: i18n("Header"),
+  label: "Header",
   fields: {
-    logoWidth: YextField(i18n("Logo Width"), {
+    logoWidth: YextField("Logo Width", {
       type: "number",
       min: 0,
     }),
@@ -77,7 +76,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName={i18n("Business Logo")}
+            displayName="Business Logo"
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -87,7 +86,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {links?.length > 0 && (
           <>
             <EntityField
-              displayName={i18n("Header Links")}
+              displayName="Header Links"
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />

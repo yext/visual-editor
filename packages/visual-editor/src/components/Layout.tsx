@@ -4,7 +4,6 @@ import {
   SpacingSelector,
   BackgroundStyle,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export const layoutVariants = cva("components w-full", {
@@ -103,7 +102,7 @@ export interface layoutProps
 }
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: YextField(i18n("Background Color"), {
+  backgroundColor: YextField("Background Color", {
     type: "select",
     hasSearch: true,
     options: "BACKGROUND_COLOR",

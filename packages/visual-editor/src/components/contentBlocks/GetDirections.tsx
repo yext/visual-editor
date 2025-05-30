@@ -10,7 +10,6 @@ import {
   CTA,
   CTAProps,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -19,11 +18,11 @@ export type GetDirectionsProps = {
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
-  coordinate: YextField<any, Coordinate>(i18n("Coordinates"), {
+  coordinate: YextField<any, Coordinate>("Coordinates", {
     type: "entityField",
     filter: { types: ["type.coordinate"] },
   }),
-  variant: YextField(i18n("Variant"), {
+  variant: YextField("Variant", {
     type: "radio",
     options: "CTA_VARIANT",
   }),
@@ -52,7 +51,7 @@ const GetDirectionsComponent = ({
 
   return (
     <EntityField
-      displayName={i18n("Get Directions")}
+      displayName="Get Directions"
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
@@ -67,7 +66,7 @@ const GetDirectionsComponent = ({
 };
 
 export const GetDirections: ComponentConfig<GetDirectionsProps> = {
-  label: i18n("Get Directions"),
+  label: "Get Directions",
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",

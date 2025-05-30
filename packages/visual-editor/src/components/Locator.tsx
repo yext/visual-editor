@@ -34,7 +34,6 @@ import {
   normalizeSlug,
   PhoneAtom,
   useDocument,
-  i18n,
 } from "@yext/visual-editor";
 import { LngLat, LngLatBounds } from "mapbox-gl";
 import {
@@ -121,19 +120,19 @@ export type LocatorProps = {
 
 const locatorFields: Fields<LocatorProps> = {
   mapStyle: BasicSelector("Map Style", [
-    { label: i18n("Default"), value: "mapbox://styles/mapbox/streets-v12" },
+    { label: "Default", value: "mapbox://styles/mapbox/streets-v12" },
     {
-      label: i18n("Satellite"),
+      label: "Satellite",
       value: "mapbox://styles/mapbox/satellite-streets-v12",
     },
-    { label: i18n("Light"), value: "mapbox://styles/mapbox/light-v11" },
-    { label: i18n("Dark"), value: "mapbox://styles/mapbox/dark-v11" },
+    { label: "Light", value: "mapbox://styles/mapbox/light-v11" },
+    { label: "Dark", value: "mapbox://styles/mapbox/dark-v11" },
     {
-      label: i18n("Navigation (Day)"),
+      label: "Navigation (Day)",
       value: "mapbox://styles/mapbox/navigation-day-v1",
     },
     {
-      label: i18n("Navigation (Night)"),
+      label: "Navigation (Night)",
       value: "mapbox://styles/mapbox/navigation-night-v1",
     },
   ]),
@@ -141,7 +140,7 @@ const locatorFields: Fields<LocatorProps> = {
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
-  label: i18n("Locator"),
+  label: "Locator",
   render: (props) => <LocatorWrapper {...props} />,
 };
 
@@ -380,7 +379,7 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
           <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
-            {i18n("Loading Map...")}
+            Loading Map...
           </span>
         </div>
       </div>

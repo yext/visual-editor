@@ -13,7 +13,6 @@ import {
   resolveYextSubfield,
   handleResolveFieldsForCollections,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 export type TestimonialCardProps = {
@@ -29,10 +28,10 @@ export type TestimonialCardProps = {
 };
 
 const TestimonialCardItemFields: Fields<TestimonialCardProps> = {
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      cardBackgroundColor: YextField(i18n("Card Background Color"), {
+      cardBackgroundColor: YextField("Card Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
@@ -112,7 +111,7 @@ const TestimonialCardComponent = (props: TestimonialCardProps) => {
 };
 
 export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
-  label: i18n("Testimonial Card"),
+  label: "Testimonial Card",
   fields: TestimonialCardItemFields,
   resolveFields: (data, params) => {
     // Set the collection prop and determine how to update fields
@@ -127,10 +126,10 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: YextField(i18n("Card"), {
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          testimonial: YextField<any, string>(i18n("Testimonial"), {
+          testimonial: YextField<any, string>("Testimonial", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -138,7 +137,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
               types: ["type.string"],
             },
           }),
-          authorName: YextField<any, string>(i18n("Author Name"), {
+          authorName: YextField<any, string>("Author Name", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -146,7 +145,7 @@ export const TestimonialCard: ComponentConfig<TestimonialCardProps> = {
               types: ["type.string"],
             },
           }),
-          date: YextField<any, string>(i18n("Date"), {
+          date: YextField<any, string>("Date", {
             type: "entityField",
             isCollection: isCollection,
             filter: {

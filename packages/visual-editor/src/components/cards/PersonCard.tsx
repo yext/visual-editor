@@ -19,7 +19,6 @@ import {
   YextCollection,
   resolveYextSubfield,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -40,10 +39,10 @@ export interface PersonCardProps {
 }
 
 const PersonCardItemFields: Fields<PersonCardProps> = {
-  styles: YextField(i18n("Styles"), {
+  styles: YextField("Styles", {
     type: "object",
     objectFields: {
-      cardBackgroundColor: YextField(i18n("Card Background Color"), {
+      cardBackgroundColor: YextField("Card Background Color", {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
@@ -75,7 +74,7 @@ const PersonCardItem = ({
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedImage && (
             <EntityField
-              displayName={i18n("Headshot")}
+              displayName="Headshot"
               fieldId={card?.headshot?.field}
               constantValueEnabled={
                 resolvedHeadshot?.image?.constantValueEnabled
@@ -88,7 +87,7 @@ const PersonCardItem = ({
         <div className="flex flex-col justify-center gap-1">
           {resolvedName && (
             <EntityField
-              displayName={i18n("Name")}
+              displayName="Name"
               fieldId={card?.name?.field}
               constantValueEnabled={card?.name?.constantValueEnabled}
             >
@@ -97,7 +96,7 @@ const PersonCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName={i18n("Title")}
+              displayName="Title"
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -114,7 +113,7 @@ const PersonCardItem = ({
         <div className="flex flex-col gap-4">
           {resolvedPhone && (
             <EntityField
-              displayName={i18n("Phone")}
+              displayName="Phone"
               fieldId={resolvedPhone}
               constantValueEnabled={card?.phone?.constantValueEnabled}
             >
@@ -133,7 +132,7 @@ const PersonCardItem = ({
           )}
           {resolvedEmail && (
             <EntityField
-              displayName={i18n("Email")}
+              displayName="Email"
               fieldId={card?.email?.field}
               constantValueEnabled={card?.email?.constantValueEnabled}
             >
@@ -152,7 +151,7 @@ const PersonCardItem = ({
           )}
           {resolvedCTA?.link && (
             <EntityField
-              displayName={i18n("CTA")}
+              displayName="CTA"
               fieldId={card?.cta?.field}
               constantValueEnabled={card?.cta?.constantValueEnabled}
             >
@@ -225,7 +224,7 @@ const PersonCardComponent = (props: PersonCardProps) => {
 };
 
 export const PersonCard: ComponentConfig<PersonCardProps> = {
-  label: i18n("Person Card"),
+  label: "Person Card",
   fields: PersonCardItemFields,
   resolveFields: (data, params) => {
     // Set the collection prop and determine how to update fields
@@ -240,10 +239,10 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
     // Update each subfield based on isCollection
     return {
       ...params.lastFields,
-      card: YextField(i18n("Card"), {
+      card: YextField("Card", {
         type: "object",
         objectFields: {
-          headshot: YextField<any, ImageWrapperProps>(i18n("Headshot"), {
+          headshot: YextField<any, ImageWrapperProps>("Headshot", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -251,7 +250,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
               types: ["type.image"],
             },
           }),
-          name: YextField<any, string>(i18n("Name"), {
+          name: YextField<any, string>("Name", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -259,7 +258,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
               types: ["type.string"],
             },
           }),
-          title: YextField<any, string>(i18n("Title"), {
+          title: YextField<any, string>("Title", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -267,7 +266,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
               types: ["type.string"],
             },
           }),
-          email: YextField<any, string>(i18n("Email"), {
+          email: YextField<any, string>("Email", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -276,7 +275,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
               allowList: ["emails"],
             },
           }),
-          phone: YextField<any, string>(i18n("Phone"), {
+          phone: YextField<any, string>("Phone", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -284,7 +283,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
               types: ["type.phone"],
             },
           }),
-          cta: YextField<any, CTAProps>(i18n("CTA"), {
+          cta: YextField<any, CTAProps>("CTA", {
             type: "entityField",
             isCollection: isCollection,
             filter: {
@@ -337,7 +336,7 @@ export const PersonCard: ComponentConfig<PersonCardProps> = {
       cta: {
         field: "",
         constantValue: {
-          label: i18n("Visit Profile"),
+          label: "Visit Profile",
           link: "#",
           linkType: "URL",
         },

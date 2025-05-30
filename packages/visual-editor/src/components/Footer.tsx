@@ -10,7 +10,6 @@ import {
   backgroundColors,
   PageSection,
   YextField,
-  i18n,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -34,7 +33,7 @@ type FooterProps = {
 };
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: YextField(i18n("Background Color"), {
+  backgroundColor: YextField("Background Color", {
     type: "select",
     hasSearch: true,
     options: "BACKGROUND_COLOR",
@@ -42,7 +41,7 @@ const footerFields: Fields<FooterProps> = {
 };
 
 const Footer: ComponentConfig<FooterProps> = {
-  label: i18n("Footer"),
+  label: "Footer",
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
@@ -109,16 +108,13 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
     >
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
-          <EntityField
-            displayName={i18n("Footer Links")}
-            fieldId={"site.footer.links"}
-          >
+          <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
             <FooterLinks links={links} />
           </EntityField>
         )}
         {socialLinks && (
           <EntityField
-            displayName={i18n("Footer Social Icons")}
+            displayName="Footer Social Icons"
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -128,7 +124,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName={i18n("Copyright Text")}
+            displayName="Copyright Text"
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>
