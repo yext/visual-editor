@@ -31,6 +31,7 @@ import {
   TooltipTrigger,
 } from "../internal/puck/ui/Tooltip.tsx";
 import { INSURANCE_PROVIDERS_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsuranceProvidersSection.tsx";
+import { AWARDS_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/AwardsSection.tsx";
 
 const devLogger = new DevLogger();
 
@@ -69,6 +70,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
   "type.insuranceProviders_section":
     INSURANCE_PROVIDERS_SECTION_CONSTANT_CONFIG,
+  "type.awards_section": AWARDS_SECTION_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
