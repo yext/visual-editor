@@ -40,7 +40,7 @@ export interface NearbyLocationsSectionProps {
     };
   };
   liveVisibility: boolean;
-  contentEndpointEnvVar?: string; // to be set via withPropOverrides
+  contentEndpointIdEnvVar?: string; // to be set via withPropOverrides
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -219,7 +219,7 @@ const LocationCard = ({
 const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   styles,
   data,
-  contentEndpointEnvVar,
+  contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
@@ -230,7 +230,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 
   // parse variables from document
   const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =
-    parseDocument(document, contentEndpointEnvVar);
+    parseDocument(document, contentEndpointIdEnvVar);
 
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
@@ -309,7 +309,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 // parseDocument parses the document to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain
 function parseDocument(
   document: any,
-  contentEndpointEnvVar?: string
+  contentEndpointIdEnvVar?: string
 ): {
   businessId: string;
   apiKey: string;
@@ -340,8 +340,8 @@ function parseDocument(
     } catch (e) {
       console.error("Failed to parse pageset from document. err=", e);
     }
-  } else if (contentEndpointEnvVar) {
-    contentEndpointId = document?._env?.[contentEndpointEnvVar];
+  } else if (contentEndpointIdEnvVar) {
+    contentEndpointId = document?._env?.[contentEndpointIdEnvVar];
   }
   if (!contentEndpointId) {
     console.warn(

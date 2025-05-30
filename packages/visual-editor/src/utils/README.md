@@ -859,7 +859,7 @@ This allows in-repo developers to specify the env var to be used for the NearbyL
 ```ts
 export const mockConfig: Config<MockProps> = {
   components: {
-    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {contentEndpointEnvVar: "YEXT_PUBLIC_FOO"})
+    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {contentEndpointIdEnvVar: "YEXT_PUBLIC_FOO"})
   },
   .....
 }
