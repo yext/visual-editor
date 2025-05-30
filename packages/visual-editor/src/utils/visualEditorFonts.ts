@@ -4,11 +4,19 @@ import { defaultFonts as fontsJs } from "./font_registry.js";
 
 export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
-  minWeight: number; // minimum weight the font supports
-  maxWeight: number; // maximum weight the font supports
   italics: boolean; // whether the font supports italics
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
-};
+} & (
+  | {
+      // Variable fonts
+      minWeight: number; // minimum weight the font supports
+      maxWeight: number; // maximum weight the font supports
+    }
+  | {
+      // static fonts
+      weights: number[]; // the weights the font supports
+    }
+);
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
@@ -51,14 +59,28 @@ const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
       .map(([fontName, fontDetails]) => {
         const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
 
-        const weightRange =
-          fontDetails.minWeight === fontDetails.maxWeight
-            ? `${fontDetails.minWeight}`
-            : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
-
-        const weightParam = fontDetails.italics
-          ? `0,${weightRange};1,${weightRange}`
-          : weightRange;
+        let weightParam;
+        if ("weights" in fontDetails) {
+          // static font, use enumerated weights
+          if (fontDetails.italics) {
+            weightParam =
+              fontDetails.weights.map((w) => `0,${w};`).join("") +
+              fontDetails.weights.map((w) => `1,${w};`).join("");
+            // remove trailing semicolon
+            weightParam = weightParam.slice(0, -1);
+          } else {
+            weightParam = fontDetails.weights.join(";");
+          }
+        } else {
+          // variable font, use range of weights
+          const weightRange =
+            fontDetails.minWeight === fontDetails.maxWeight
+              ? `${fontDetails.minWeight}`
+              : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+          weightParam = fontDetails.italics
+            ? `0,${weightRange};1,${weightRange}`
+            : weightRange;
+        }
 
         return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
       })
@@ -177,10 +199,17 @@ const filterFontWeights = (
     return weightOptions;
   }
 
+  const font = fontList[fontName];
   // filter the font weights by the font's allowed values
-  return weightOptions.filter(
-    (weight) =>
-      Number(weight.value) <= fontList[fontName].maxWeight &&
-      Number(weight.value) >= fontList[fontName].minWeight
-  );
+  if ("weights" in font) {
+    return weightOptions.filter((weight) =>
+      font.weights.map(String).includes(weight.value)
+    );
+  } else {
+    return weightOptions.filter(
+      (weight) =>
+        Number(weight.value) <= font.maxWeight &&
+        Number(weight.value) >= font.minWeight
+    );
+  }
 };
