@@ -16,6 +16,7 @@ import {
   FAQSectionType,
   ComponentFields,
   MaybeRTF,
+  i18n,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -93,7 +94,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -102,7 +103,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName="FAQs"
+          displayName={i18n("faqs", { defaultValue: "FAQs" })}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >

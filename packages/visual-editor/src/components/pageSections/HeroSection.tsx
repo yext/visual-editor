@@ -21,6 +21,7 @@ import {
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
+  i18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -140,7 +141,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   return (
     <PageSection
       background={styles.backgroundColor}
-      aria-label="Hero Banner"
+      aria-label={i18n("heroBanner", { defaultValue: "Hero Banner" })}
       className={`flex flex-col gap-6 md:gap-10 ${
         styles.imageOrientation === "right"
           ? "md:flex-row"
@@ -151,14 +152,21 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
         className="flex flex-col justify-center gap-y-6 w-full break-words md:gap-y-8"
         aria-labelledby="hero-heading"
       >
-        <header className="flex flex-col gap-y-4" aria-label="Hero Header">
+        <header
+          className="flex flex-col gap-y-4"
+          aria-label={i18n("heroHeader", { defaultValue: "Hero Header" })}
+        >
           <section
             className="flex flex-col gap-y-0"
-            aria-label="Business Information"
+            aria-label={i18n("businessInformation", {
+              defaultValue: "Business Information",
+            })}
           >
             {resolvedBusinessName && (
               <EntityField
-                displayName="Business Name"
+                displayName={i18n("businessName", {
+                  defaultValue: "Business Name",
+                })}
                 fieldId={data?.businessName.field}
                 constantValueEnabled={data?.businessName.constantValueEnabled}
               >
@@ -169,7 +177,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedLocalGeoModifier && (
               <EntityField
-                displayName="Local GeoModifier"
+                displayName={i18n("localGeomodifier", {
+                  defaultValue: "Local GeoModifier",
+                })}
                 fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
                   data?.localGeoModifier.constantValueEnabled
@@ -183,7 +193,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           </section>
           {resolvedHours && (
             <EntityField
-              displayName="Hours"
+              displayName={i18n("hours", { defaultValue: "Hours" })}
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
@@ -195,11 +205,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           resolvedHero?.secondaryCta?.label) && (
           <div
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label="Call to Actions"
+            aria-label={i18n("callToActions", {
+              defaultValue: "Call to Actions",
+            })}
           >
             {resolvedHero?.primaryCta?.label && (
               <EntityField
-                displayName="Primary CTA"
+                displayName={i18n("primaryCta", {
+                  defaultValue: "Primary CTA",
+                })}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.primaryCta
@@ -216,7 +230,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedHero?.secondaryCta?.label && (
               <EntityField
-                displayName="Secondary CTA"
+                displayName={i18n("secondaryCta", {
+                  defaultValue: "Secondary CTA",
+                })}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.secondaryCta
@@ -236,11 +252,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
       </div>
       {resolvedHero?.image && (
         <EntityField
-          displayName="Image"
+          displayName={i18n("image", { defaultValue: "Image" })}
           fieldId={data.hero.field}
           constantValueEnabled={data.hero.constantValueOverride.image}
         >
-          <div className="w-full" role="region" aria-label="Hero Image">
+          <div
+            className="w-full"
+            role="region"
+            aria-label={i18n("heroImage", { defaultValue: "Hero Image" })}
+          >
             <Image
               image={resolvedHero?.image}
               layout="auto"

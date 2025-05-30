@@ -16,6 +16,7 @@ import {
   EntityField,
   CTA,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -61,7 +62,7 @@ const InsightCardItem = ({
     >
       {resolvedImage && (
         <EntityField
-          displayName="Image"
+          displayName={i18n("image", { defaultValue: "Image" })}
           fieldId={card?.image?.field}
           constantValueEnabled={card?.image?.constantValueEnabled}
         >
@@ -79,7 +80,7 @@ const InsightCardItem = ({
               className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
             >
               <EntityField
-                displayName="Category"
+                displayName={i18n("category", { defaultValue: "Category" })}
                 fieldId={card?.category?.field}
                 constantValueEnabled={card?.category?.constantValueEnabled}
               >
@@ -87,7 +88,7 @@ const InsightCardItem = ({
               </EntityField>
               {resolvedCategory && resolvedDate && <Body>|</Body>}
               <EntityField
-                displayName="Date"
+                displayName={i18n("date", { defaultValue: "Date" })}
                 fieldId={card?.date?.field}
                 constantValueEnabled={card?.date?.constantValueEnabled}
               >
@@ -97,7 +98,9 @@ const InsightCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName="Insight Title"
+              displayName={i18n("insightTitle", {
+                defaultValue: "Insight Title",
+              })}
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -108,7 +111,7 @@ const InsightCardItem = ({
           )}
           {resolvedDescription && (
             <EntityField
-              displayName="Description"
+              displayName={i18n("description", { defaultValue: "Description" })}
               fieldId={card?.description?.field}
               constantValueEnabled={card?.description?.constantValueEnabled}
             >
@@ -118,7 +121,7 @@ const InsightCardItem = ({
         </div>
         {resolvedCTA?.link && (
           <EntityField
-            displayName="CTA"
+            displayName={i18n("cta", { defaultValue: "CTA" })}
             fieldId={card?.cta.field}
             constantValueEnabled={card?.cta.constantValueEnabled}
           >

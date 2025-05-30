@@ -7,6 +7,7 @@ import {
   YextEntityField,
   PhoneAtom,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export interface PhoneProps {
@@ -49,7 +50,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName="Phone"
+      displayName={i18n("phone", { defaultValue: "Phone" })}
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >

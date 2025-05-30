@@ -10,6 +10,7 @@ import {
   backgroundColors,
   PageSection,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -108,13 +109,18 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
     >
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
-          <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
+          <EntityField
+            displayName={i18n("footerLinks", { defaultValue: "Footer Links" })}
+            fieldId={"site.footer.links"}
+          >
             <FooterLinks links={links} />
           </EntityField>
         )}
         {socialLinks && (
           <EntityField
-            displayName="Footer Social Icons"
+            displayName={i18n("footerSocialIcons", {
+              defaultValue: "Footer Social Icons",
+            })}
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -124,7 +130,9 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName="Copyright Text"
+            displayName={i18n("copyrightText", {
+              defaultValue: "Copyright Text",
+            })}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>

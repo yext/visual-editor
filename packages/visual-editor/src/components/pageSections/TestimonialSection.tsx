@@ -17,6 +17,7 @@ import {
   ComponentFields,
   MaybeRTF,
   TimestampOption,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -138,7 +139,7 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -149,7 +150,7 @@ const TestimonialSectionWrapper = ({
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName="Testimonials"
+          displayName={i18n("testimonials", { defaultValue: "Testimonials" })}
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >

@@ -12,6 +12,7 @@ import {
   useDocument,
   YextEntityField,
   YextField,
+  i18n,
 } from "@yext/visual-editor";
 
 export type HoursTableProps = {
@@ -75,7 +76,7 @@ const VisualEditorHoursTable = ({
     <div className={`flex flex-col ${alignment}`}>
       {hours && (
         <EntityField
-          displayName="Hours"
+          displayName={i18n("hours", { defaultValue: "Hours" })}
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
@@ -87,7 +88,10 @@ const VisualEditorHoursTable = ({
         </EntityField>
       )}
       {additionalHoursText && showAdditionalHoursText && (
-        <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+        <EntityField
+          displayName={i18n("hoursText", { defaultValue: "Hours Text" })}
+          fieldId="additionalHoursText"
+        >
           <div className="mt-4 text-body-sm-fontSize">
             {additionalHoursText}
           </div>

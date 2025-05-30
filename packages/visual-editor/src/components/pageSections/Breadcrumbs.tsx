@@ -5,6 +5,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
+  i18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -73,7 +74,11 @@ export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
   }
 
   return (
-    <PageSection as={"nav"} verticalPadding="sm" aria-label="Breadcrumb">
+    <PageSection
+      as={"nav"}
+      verticalPadding="sm"
+      aria-label={i18n("breadcrumb", { defaultValue: "Breadcrumb" })}
+    >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {
           const isLast = idx === breadcrumbs.length - 1;
