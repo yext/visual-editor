@@ -66,7 +66,7 @@ const AddressComponent = ({
           {coordinates && showGetDirections && (
             <CTA
               link={coordinates}
-              label="Get Directions"
+              label={i18n("getDirections", { defaultValue: "Get Directions" })}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
               variant="link"

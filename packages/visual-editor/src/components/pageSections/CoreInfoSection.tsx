@@ -306,7 +306,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             <CTA
               className="font-bold"
               link={coordinates}
-              label="Get Directions"
+              label={i18n("getDirections", { defaultValue: "Get Directions" })}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
               variant="link"
