@@ -1,12 +1,17 @@
 import { LexicalRichText } from "@yext/pages-components";
-import { Body, RTF2, useBackground } from "@yext/visual-editor";
+import { Body, BodyProps, RTF2, useBackground } from "@yext/visual-editor";
 import "./maybeRTF.css";
 
 export interface MaybeRTFProps extends Record<string, any> {
   data: RTF2 | string | undefined;
+  bodyVariant?: BodyProps["variant"];
 }
 
-export const MaybeRTF = ({ data, ...props }: MaybeRTFProps) => {
+export const MaybeRTF = ({
+  data,
+  bodyVariant = "base",
+  ...props
+}: MaybeRTFProps) => {
   const background = useBackground();
 
   if (!data) {
@@ -14,7 +19,11 @@ export const MaybeRTF = ({ data, ...props }: MaybeRTFProps) => {
   }
 
   if (typeof data === "string") {
-    return <Body {...props}>{data}</Body>;
+    return (
+      <Body {...props} variant={bodyVariant}>
+        {data}
+      </Body>
+    );
   }
 
   if (typeof data === "object") {
@@ -23,7 +32,7 @@ export const MaybeRTF = ({ data, ...props }: MaybeRTFProps) => {
         <div
           {...props}
           dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme ${background?.textColor == "text-white" ? "rtf-dark-background" : "rtf-light-background"}`}
+          className={`rtf-theme ${background?.textColor == "text-white" ? "rtf-dark-background" : "rtf-light-background"} rtf-body-${bodyVariant}`}
         />
       );
     }
