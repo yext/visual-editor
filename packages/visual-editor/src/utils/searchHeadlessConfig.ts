@@ -48,6 +48,17 @@ export const createSearchHeadlessConfig = (document: any) => {
     return;
   }
 
+  // The iframe'd locator will need a non-URL-restricted Mapbox API key in order to display the map
+  // properly. Without this key, we will fall back to the site-specific Mapbox API key, which is not
+  // guaranteed to work in the iframe.
+  const iframeMapboxApiKey =
+    document?._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  if (!iframeMapboxApiKey) {
+    console.warn(
+      "Missing YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY! Some map behavior may be unavailable in the layout editor."
+    );
+  }
+
   const headlessConfig: HeadlessConfig = {
     apiKey: searchApiKey,
     experienceKey: experienceKey,
