@@ -118,6 +118,29 @@
           "link": "sumo@yext.com",
           "linkType": "EMAIL"
         }
+      ],
+      "images": [
+        {
+          "image": {
+            "height": 100,
+            "url": "https://placehold.co/100",
+            "width": 100
+          }
+        },
+        {
+          "image": {
+            "height": 100,
+            "url": "https://placehold.co/100",
+            "width": 100
+          }
+        },
+        {
+          "image": {
+            "height": 100,
+            "url": "https://placehold.co/100",
+            "width": 100
+          }
+        }
       ]
     },
     "header": {
