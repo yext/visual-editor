@@ -31,14 +31,16 @@ export const EntityField = ({
 }: EntityFieldProps) => {
   const tooltipsContext = useEntityTooltips();
 
-  if (!tooltipsContext || constantValueEnabled) {
+  if (!tooltipsContext) {
     return children;
   }
 
   const { tooltipsVisible } = tooltipsContext;
 
   let tooltipContent = "";
-  if (displayName && fieldId) {
+  if (constantValueEnabled) {
+    tooltipContent = "Static content";
+  } else if (displayName && fieldId) {
     tooltipContent = `${displayName} (${fieldId})`;
   } else if (fieldId) {
     tooltipContent = `${fieldId}`;
@@ -54,16 +56,22 @@ export const EntityField = ({
             <div
               className={
                 tooltipsVisible
-                  ? "ve-outline-2 ve-outline-dotted ve-outline-[#5A58F2]"
+                  ? "ve-outline-2 ve-outline-dotted" +
+                    (!constantValueEnabled ? " ve-outline-primary" : "")
                   : ""
               }
             >
               <MemoizedChildren>{children}</MemoizedChildren>
             </div>
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent
+            className={!constantValueEnabled ? "ve-bg-primary" : ""}
+          >
             <p>{tooltipContent}</p>
-            <TooltipArrow fill="bg-popover" />
+            <TooltipArrow
+              fill="bg-popover"
+              className={!constantValueEnabled ? "ve-fill-primary" : ""}
+            />
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
