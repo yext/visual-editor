@@ -8,7 +8,7 @@ import {
   Image,
   ImageProps,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -72,6 +72,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   height,
 }) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
     document,
     imageField

@@ -8,7 +8,7 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
@@ -31,6 +31,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
     const document = useDocument();
+    const i18n = useI18n();
 
     return (
       <EntityField

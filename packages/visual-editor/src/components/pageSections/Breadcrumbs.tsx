@@ -5,7 +5,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -61,6 +61,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
+  const i18n = useI18n();
   let breadcrumbs = getDirectoryParents(document);
   if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
     // append the current and filter out missing or malformed data

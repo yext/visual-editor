@@ -16,7 +16,7 @@ import {
   EntityField,
   CTA,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -55,6 +55,7 @@ const InsightCardItem = ({
     card?.description
   );
   const resolvedCTA = resolveYextSubfield<CTAProps>(document, card?.cta);
+  const i18n = useI18n();
   return (
     <Background
       className="rounded-lg h-full"

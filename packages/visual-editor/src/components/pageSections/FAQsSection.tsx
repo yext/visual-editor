@@ -16,7 +16,7 @@ import {
   FAQSectionType,
   ComponentFields,
   MaybeRTF,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -86,6 +86,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     data?.heading
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
+  const i18n = useI18n();
 
   return (
     <PageSection

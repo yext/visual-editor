@@ -25,7 +25,7 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -219,6 +219,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
     data.info.headingText

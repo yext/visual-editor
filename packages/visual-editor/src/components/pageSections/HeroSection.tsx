@@ -21,7 +21,7 @@ import {
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -120,6 +120,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const document = useDocument() as any;
+  const i18n = useI18n();
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
     data?.businessName

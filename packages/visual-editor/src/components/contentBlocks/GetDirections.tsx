@@ -10,7 +10,7 @@ import {
   CTA,
   CTAProps,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -34,6 +34,7 @@ const GetDirectionsComponent = ({
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     coordinateField

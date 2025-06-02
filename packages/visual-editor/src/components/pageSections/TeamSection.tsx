@@ -18,7 +18,7 @@ import {
   TeamSectionType,
   PersonStruct,
   ComponentFields,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -167,6 +167,7 @@ const PersonCard = ({
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 

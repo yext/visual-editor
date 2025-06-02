@@ -8,7 +8,7 @@ import {
   CTA,
   CTAProps,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
@@ -36,6 +36,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   className,
 }) => {
   const document = useDocument();
+  const i18n = useI18n();
   const cta = resolveYextEntityField(document, entityField);
 
   return (

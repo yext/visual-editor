@@ -6,7 +6,7 @@ import {
   useDocument,
   YextEntityField,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -134,6 +134,7 @@ export const MapboxStaticMapComponent = ({
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
   const document = useDocument<any>();
+  const i18n = useI18n();
 
   const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 

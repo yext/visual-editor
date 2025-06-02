@@ -8,7 +8,7 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -64,6 +64,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedText = resolveYextEntityField<string>(document, data.text);
 
   const justifyClass = {

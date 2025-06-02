@@ -17,7 +17,7 @@ import {
   ComponentFields,
   MaybeRTF,
   TimestampOption,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -126,6 +126,7 @@ const TestimonialSectionWrapper = ({
   styles,
 }: TestimonialSectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedTestimonials = resolveYextEntityField(
     document,
     data.testimonials

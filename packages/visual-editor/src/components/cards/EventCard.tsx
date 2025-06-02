@@ -14,7 +14,7 @@ import {
   EntityField,
   CTA,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -51,6 +51,7 @@ const EventCardItem = ({
     card?.description
   );
   const resolvedCTA = resolveYextSubfield<CTAProps>(document, card?.cta);
+  const i18n = useI18n();
 
   return (
     <div className="flex flex-col md:flex-row rounded-lg overflow-hidden bg-white text-black h-fit md:h-64">

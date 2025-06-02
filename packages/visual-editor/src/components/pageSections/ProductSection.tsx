@@ -18,7 +18,7 @@ import {
   ProductStruct,
   ComponentFields,
   MaybeRTF,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -145,6 +145,7 @@ const ProductCard = ({
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 

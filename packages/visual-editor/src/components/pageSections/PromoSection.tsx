@@ -19,7 +19,7 @@ import {
   ComponentFields,
   EntityField,
   MaybeRTF,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -80,6 +80,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
   return (

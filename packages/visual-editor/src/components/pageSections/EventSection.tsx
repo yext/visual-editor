@@ -21,7 +21,7 @@ import {
   TimestampOption,
   ComponentFields,
   MaybeRTF,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface EventSectionProps {
@@ -144,6 +144,7 @@ const EventCard = ({
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   const { data, styles } = props;
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedEvents = resolveYextEntityField(document, data.events);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 

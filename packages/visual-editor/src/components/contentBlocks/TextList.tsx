@@ -6,7 +6,7 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
@@ -27,6 +27,7 @@ const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
   const document = useDocument();
+  const i18n = useI18n();
   let resolvedTextList = resolveYextEntityField(document, textListField);
 
   // When constantValueEnabled is true but no constant values have been set yet, show defaults

@@ -26,7 +26,7 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -139,6 +139,7 @@ const PhotoGallerySectionComponent = ({
   styles,
 }: PhotoGallerySectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const sectionHeading = resolveYextEntityField(document, data.heading);
 
   const resolvedImages = resolveYextEntityField(document, data.images);

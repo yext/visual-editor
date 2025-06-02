@@ -7,7 +7,7 @@ import {
   YextEntityField,
   PhoneAtom,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface PhoneProps {
@@ -42,6 +42,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   includeHyperlink,
 }) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
   if (!resolvedPhone) {

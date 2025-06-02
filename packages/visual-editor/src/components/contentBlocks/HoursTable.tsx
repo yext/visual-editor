@@ -12,7 +12,7 @@ import {
   useDocument,
   YextEntityField,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export type HoursTableProps = {
@@ -66,6 +66,7 @@ const VisualEditorHoursTable = ({
   alignment,
 }: HoursTableProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const hours = resolveYextEntityField(document, hoursField);
 
   const { additionalHoursText } = document as {

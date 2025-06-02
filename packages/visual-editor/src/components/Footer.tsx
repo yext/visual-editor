@@ -10,7 +10,7 @@ import {
   backgroundColors,
   PageSection,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -55,6 +55,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
   const document = useDocument<any>();
+  const i18n = useI18n();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
   const links = document?._site?.footer?.links ?? [];

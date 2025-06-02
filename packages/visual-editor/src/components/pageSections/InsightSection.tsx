@@ -19,7 +19,7 @@ import {
   Timestamp,
   ComponentFields,
   MaybeRTF,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -148,6 +148,7 @@ const InsightCard = ({
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 

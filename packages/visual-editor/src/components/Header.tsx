@@ -11,7 +11,7 @@ import {
   Background,
   YextField,
   Image,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -66,6 +66,7 @@ interface HeaderLayoutProps {
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const i18n = useI18n();
   const { logo, logoWidth, logoLink, links } = props;
 
   return (

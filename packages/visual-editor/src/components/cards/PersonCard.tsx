@@ -19,7 +19,7 @@ import {
   YextCollection,
   resolveYextSubfield,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -68,6 +68,7 @@ const PersonCardItem = ({
   const resolvedPhone = resolveYextSubfield(document, card?.phone);
   const resolvedEmail = resolveYextSubfield(document, card?.email);
   const resolvedCTA = resolveYextSubfield(document, card?.cta);
+  const i18n = useI18n();
 
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">

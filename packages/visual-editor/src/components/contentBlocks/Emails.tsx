@@ -9,7 +9,7 @@ import {
   CTA,
   Body,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -47,6 +47,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   listLength,
 }) => {
   const document = useDocument();
+  const i18n = useI18n();
   let resolvedEmailList = resolveYextEntityField(document, emailListField);
   if (!resolvedEmailList) {
     return;

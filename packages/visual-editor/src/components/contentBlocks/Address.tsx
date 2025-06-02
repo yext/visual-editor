@@ -13,7 +13,7 @@ import {
   YextEntityField,
   CTA,
   YextField,
-  i18n,
+  useI18n,
 } from "@yext/visual-editor";
 
 export type AddressProps = {
@@ -40,6 +40,7 @@ const AddressComponent = ({
   showGetDirections,
 }: AddressProps) => {
   const document = useDocument();
+  const i18n = useI18n();
   const address = resolveYextEntityField(document, addressField);
   const coordinates = getDirections(
     address as AddressType,
