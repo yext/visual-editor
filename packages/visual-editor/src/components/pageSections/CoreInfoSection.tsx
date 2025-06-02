@@ -59,6 +59,9 @@ export interface CoreInfoSectionProps {
       showAdditionalHoursText: boolean;
     };
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -207,6 +210,14 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -216,7 +227,12 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   }),
 };
 
-const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
+const CoreInfoSectionWrapper = ({
+  data,
+  styles,
+  analytics,
+}: CoreInfoSectionProps) => {
+  const scope = analytics?.scope || "coreInfoSection";
   const document = useDocument();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
@@ -295,6 +311,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           )}
           {coordinates && styles.info.showGetDirectionsLink && (
             <CTA
+              eventName={`${scope}_getDirections`}
               className="font-bold"
               link={coordinates}
               label="Get Directions"
@@ -306,7 +323,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         </div>
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
-            {data.info.phoneNumbers.map((item) => {
+            {data.info.phoneNumbers.map((item, idx) => {
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -325,6 +342,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                     <div className={"flex items-center gap-3"}>
                       <div className="flex gap-2 items-center">
                         <PhoneAtom
+                          eventName={`${scope}_phone_${idx}`}
                           backgroundColor={backgroundColors.background2.value}
                           label={item.label}
                           phoneNumber={resolvedNumber}
@@ -361,6 +379,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                       <FaRegEnvelope className="w-4 h-4" />
                     </Background>
                     <CTA
+                      eventName={`${scope}_email_${index}`}
                       link={email}
                       label={email}
                       linkType="EMAIL"
@@ -511,6 +530,9 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         collapseDays: false,
         showAdditionalHoursText: true,
       },
+    },
+    analytics: {
+      scope: "coreInfoSection",
     },
     liveVisibility: true,
   },

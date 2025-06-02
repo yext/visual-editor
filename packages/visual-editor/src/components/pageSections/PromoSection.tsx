@@ -32,6 +32,9 @@ export interface PromoSectionProps {
     orientation: "left" | "right";
     ctaVariant: CTAProps["variant"];
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -68,6 +71,14 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -77,7 +88,12 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
+const PromoWrapper: React.FC<PromoSectionProps> = ({
+  data,
+  styles,
+  analytics,
+}) => {
+  const scope = analytics?.scope || "promoSection";
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
@@ -129,6 +145,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
             <CTA
+              eventName={`${scope}_cta`}
               variant={styles?.ctaVariant}
               label={resolvedPromo?.cta.label}
               link={resolvedPromo?.cta.link}
@@ -169,6 +186,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
       backgroundColor: backgroundColors.background1.value,
       orientation: "left",
       ctaVariant: "primary",
+    },
+    analytics: {
+      scope: "promoSection",
     },
     liveVisibility: true,
   },

@@ -32,6 +32,9 @@ export interface TeamSectionProps {
     heading: YextEntityField<string>;
     people: YextEntityField<TeamSectionType>;
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -71,6 +74,14 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -81,13 +92,17 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
 };
 
 const PersonCard = ({
+  key,
   person,
   backgroundColor,
   sectionHeadingLevel,
+  scope,
 }: {
+  key: number;
   person: PersonStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  scope: string;
 }) => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
@@ -125,6 +140,7 @@ const PersonCard = ({
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
             <PhoneAtom
+              eventName={`${scope}_phone_${key}`}
               phoneNumber={person.phoneNumber}
               includeHyperlink={true}
               includeIcon={true}
@@ -141,6 +157,7 @@ const PersonCard = ({
                 <FaEnvelope />
               </div>
               <CTA
+                eventName={`${scope}_email_${key}`}
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
@@ -151,6 +168,7 @@ const PersonCard = ({
           {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
+                eventName={`${scope}_cta_${key}`}
                 label={person.cta.label}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
@@ -164,7 +182,8 @@ const PersonCard = ({
   );
 };
 
-const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
+const TeamSectionWrapper = ({ data, styles, analytics }: TeamSectionProps) => {
+  const scope = analytics?.scope || "teamSection";
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -198,6 +217,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
+                scope={scope}
               />
             ))}
           </div>
@@ -228,6 +248,9 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
+    },
+    analytics: {
+      scope: "teamSection",
     },
     liveVisibility: true,
   },

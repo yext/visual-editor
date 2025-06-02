@@ -32,6 +32,9 @@ export interface InsightSectionProps {
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -71,6 +74,14 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -81,13 +92,17 @@ const insightSectionFields: Fields<InsightSectionProps> = {
 };
 
 const InsightCard = ({
+  key,
   insight,
   backgroundColor,
   sectionHeadingLevel,
+  scope,
 }: {
+  key: number;
   insight: InsightStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  scope: string;
 }) => {
   return (
     <Background
@@ -133,6 +148,7 @@ const InsightCard = ({
         </div>
         {insight.cta && (
           <CTA
+            eventName={`${scope}_cta_${key}`}
             variant={"link"}
             label={insight.cta.label}
             link={insight.cta.link}
@@ -145,7 +161,12 @@ const InsightCard = ({
   );
 };
 
-const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
+const InsightSectionWrapper = ({
+  data,
+  styles,
+  analytics,
+}: InsightSectionProps) => {
+  const scope = analytics?.scope || "insightSection";
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -179,6 +200,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
+                scope={scope}
               />
             ))}
           </div>
@@ -209,6 +231,9 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
           insights: [],
         },
       },
+    },
+    analytics: {
+      scope: "insightSection",
     },
     liveVisibility: true,
   },

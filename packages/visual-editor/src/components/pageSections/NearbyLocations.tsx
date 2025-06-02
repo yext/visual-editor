@@ -39,6 +39,9 @@ export interface NearbyLocationsSectionProps {
       showDayNames?: boolean;
     };
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
   contentEndpointIdEnvVar?: string; // to be set via withPropOverrides
 }
@@ -137,6 +140,14 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -147,19 +158,23 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
 };
 
 const LocationCard = ({
+  key,
   styles,
   name,
   hours,
   address,
   timezone,
   mainPhone,
+  scope,
 }: {
+  key: number;
   styles: NearbyLocationsSectionProps["styles"];
   name: string;
   hours: any;
   address: any;
   timezone: string;
   mainPhone: string;
+  scope: string;
 }) => {
   return (
     <Background
@@ -194,6 +209,7 @@ const LocationCard = ({
       )}
       {mainPhone && (
         <PhoneAtom
+          eventName={`${scope}_phone_${key}`}
           phoneNumber={mainPhone}
           format={styles?.phoneNumberFormat}
           includeHyperlink={styles?.phoneNumberLink}
@@ -219,8 +235,10 @@ const LocationCard = ({
 const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   styles,
   data,
+  analytics,
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
+  const scope = analytics?.scope || "nearbyLocationsSection";
   const document = useDocument<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
@@ -296,6 +314,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
+                    scope={scope}
                   />
                 )
               )}
@@ -399,6 +418,9 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
         },
         phoneNumberFormat: "domestic",
         phoneNumberLink: false,
+      },
+      analytics: {
+        scope: "nearbyLocationsSection",
       },
       liveVisibility: true,
     },

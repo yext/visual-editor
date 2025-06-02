@@ -33,6 +33,9 @@ export interface EventSectionProps {
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -72,6 +75,14 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -82,13 +93,17 @@ const eventSectionFields: Fields<EventSectionProps> = {
 };
 
 const EventCard = ({
+  key,
   event,
   backgroundColor,
   sectionHeadingLevel,
+  scope,
 }: {
+  key: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  scope: string;
 }) => {
   return (
     <Background
@@ -129,6 +144,7 @@ const EventCard = ({
         <MaybeRTF data={event.description} />
         {event.cta && (
           <CTA
+            eventName={`${scope}_cta_${key}`}
             label={event.cta.label}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -141,7 +157,8 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
-  const { data, styles } = props;
+  const { data, styles, analytics } = props;
+  const scope = analytics?.scope || "eventSection";
   const document = useDocument();
   const resolvedEvents = resolveYextEntityField(document, data.events);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -175,6 +192,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
+                scope={scope}
               />
             ))}
           </div>
@@ -205,6 +223,9 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
+    },
+    analytics: {
+      scope: "eventSection",
     },
     liveVisibility: true,
   },

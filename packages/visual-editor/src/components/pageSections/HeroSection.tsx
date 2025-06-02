@@ -40,6 +40,9 @@ export interface HeroSectionProps {
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -108,6 +111,14 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -117,7 +128,8 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   }),
 };
 
-const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
+const HeroSectionWrapper = ({ data, styles, analytics }: HeroSectionProps) => {
+  const scope = analytics?.scope || "heroSection";
   const document = useDocument() as any;
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
@@ -206,6 +218,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 }
               >
                 <CTA
+                  eventName={`${scope}_primaryCta`}
                   variant={styles?.primaryCTA}
                   label={resolvedHero.primaryCta.label}
                   link={resolvedHero.primaryCta.link}
@@ -223,6 +236,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 }
               >
                 <CTA
+                  eventName={`${scope}_secondaryCta`}
                   variant={styles?.secondaryCTA}
                   label={resolvedHero.secondaryCta.label}
                   link={resolvedHero.secondaryCta.link}
@@ -305,6 +319,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       localGeoModifierLevel: 1,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
+    },
+    analytics: {
+      scope: "heroSection",
     },
     liveVisibility: true,
   },

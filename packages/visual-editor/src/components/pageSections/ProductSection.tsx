@@ -31,6 +31,9 @@ export interface ProductSectionProps {
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
   };
+  analytics: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 }
 
@@ -70,6 +73,14 @@ const productSectionFields: Fields<ProductSectionProps> = {
       }),
     },
   }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -80,13 +91,17 @@ const productSectionFields: Fields<ProductSectionProps> = {
 };
 
 const ProductCard = ({
+  key,
   product,
   backgroundColor,
   sectionHeadingLevel,
+  scope,
 }: {
+  key: number;
   product: ProductStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  scope: string;
 }) => {
   return (
     <Background
@@ -130,6 +145,7 @@ const ProductCard = ({
         </div>
         {product.cta && (
           <CTA
+            eventName={`${scope}_cta_${key}`}
             variant="secondary"
             label={product.cta.label}
             link={product.cta.link}
@@ -142,7 +158,12 @@ const ProductCard = ({
   );
 };
 
-const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
+const ProductSectionWrapper = ({
+  data,
+  styles,
+  analytics,
+}: ProductSectionProps) => {
+  const scope = analytics?.scope || "productSection";
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -176,6 +197,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
+                scope={scope}
               />
             ))}
           </div>
@@ -206,6 +228,9 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       backgroundColor: backgroundColors.background2.value,
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
+    },
+    analytics: {
+      scope: "productSection",
     },
     liveVisibility: true,
   },
