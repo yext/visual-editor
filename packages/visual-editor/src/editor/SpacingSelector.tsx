@@ -1,4 +1,4 @@
-import { i18n } from "@yext/visual-editor";
+import { i18n } from "../utils/i18n.ts";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";

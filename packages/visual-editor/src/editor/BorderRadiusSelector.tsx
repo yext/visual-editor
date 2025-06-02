@@ -1,7 +1,7 @@
-import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
+import { i18n } from "../utils/i18n.ts";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 

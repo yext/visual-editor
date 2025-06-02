@@ -1,8 +1,8 @@
-import { i18n } from "@yext/visual-editor";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
+import { i18n } from "../utils/i18n.ts";
 
 type Option<T = any> = {
   label: string;
