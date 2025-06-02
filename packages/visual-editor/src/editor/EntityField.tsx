@@ -21,6 +21,7 @@ type EntityFieldProps = {
   fieldId?: string;
   constantValueEnabled?: boolean;
   children: React.ReactNode;
+  zIndex?: number;
 };
 
 export const EntityField = ({
@@ -28,6 +29,7 @@ export const EntityField = ({
   fieldId,
   constantValueEnabled,
   children,
+  zIndex,
 }: EntityFieldProps) => {
   const tooltipsContext = useEntityTooltips();
 
@@ -61,7 +63,7 @@ export const EntityField = ({
               <MemoizedChildren>{children}</MemoizedChildren>
             </div>
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent className={zIndex ? `ve-z-${zIndex}` : ""}>
             <p>{tooltipContent}</p>
             <TooltipArrow fill="bg-popover" />
           </TooltipContent>

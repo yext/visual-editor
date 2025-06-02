@@ -113,10 +113,51 @@
       ]
     },
     "header": {
+      "primaryCta": {
+        "label": "Call To Action",
+        "link": "index.html",
+        "linkType": "OTHER"
+      },
+      "secondaryCta": {
+        "label": "Call To Action",
+        "link": "https://yext.com",
+        "linkType": "URL"
+      },
       "links": [
         { "label": "Home", "link": "index.html", "linkType": "OTHER" },
-        { "label": "More Info", "link": "https://yext.com", "linkType": "URL" },
+        {
+          "label": "More Info",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
         { "label": "Call Us", "link": "+12125550110", "linkType": "PHONE" }
+      ],
+      "secondaryLinks": [
+        {
+          "label": "Secondary Header Link",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        {
+          "label": "Secondary Header Link",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        {
+          "label": "Secondary Header Link",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        {
+          "label": "Secondary Header Link",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        },
+        {
+          "label": "Secondary Header Link",
+          "link": "https://yext.com",
+          "linkType": "URL"
+        }
       ]
     },
     "id": "site-63590",

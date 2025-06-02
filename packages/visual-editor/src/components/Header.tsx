@@ -24,7 +24,7 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 };
 
 export type HeaderProps = {
-  logoWidth?: number;
+  logoWidth: number;
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
@@ -42,72 +42,92 @@ export const Header: ComponentConfig<HeaderProps> = {
 };
 
 const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [mainSectionHeight, setMainSectionHeight] = React.useState(0);
+
+  return (
+    <header>
+      <HeaderSecondarySection />
+      <HeaderMainSection
+        logoWidth={logoWidth}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+        setMainSectionHeight={setMainSectionHeight}
+      />
+      <HeaderMobileMenu
+        isOpen={mobileMenuOpen}
+        mainSectionHeight={mainSectionHeight}
+      />
+    </header>
+  );
+};
+
+const HeaderMainSection = (props: {
+  logoWidth: number;
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: (v: boolean) => void;
+  setMainSectionHeight: (v: number) => void;
+}) => {
+  const { logoWidth, mobileMenuOpen, setMobileMenuOpen, setMainSectionHeight } =
+    props;
+
   const document: {
     _site?: {
       header?: {
         links?: CTAType[];
+        primaryCta?: CTAType;
+        secondaryCta?: CTAType;
       };
       logo?: ComplexImageType;
     };
   } = useDocument();
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
+  const primaryCta = document._site?.header?.primaryCta;
+  const secondaryCta = document._site?.header?.secondaryCta;
 
-  return <HeaderLayout links={links} logo={logo} logoWidth={logoWidth} />;
-};
-
-interface HeaderLayoutProps {
-  links: CTAType[];
-  logoLink?: string;
-  logo?: ComplexImageType;
-  logoWidth?: number;
-}
-
-const HeaderLayout = (props: HeaderLayoutProps) => {
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoWidth, logoLink, links } = props;
+  // store the height of the main section for use in the mobile menu
+  const headerRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (headerRef.current) {
+      setMainSectionHeight(headerRef.current.offsetHeight);
+    }
+  }, [mobileMenuOpen]);
 
   return (
     <PageSection
-      as="header"
+      as="div"
       verticalPadding="header"
       background={backgroundColors.background1.value}
+      className="flex justify-between items-center relative"
+      ref={headerRef}
     >
-      <div className="flex justify-start md:justify-between items-center">
-        {logo && (
-          <EntityField
-            displayName="Business Logo"
-            fieldId={"site.businessLogo"}
-          >
-            <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
-          </EntityField>
-        )}
-
-        {links?.length > 0 && (
+      {logo && (
+        <EntityField displayName="Business Logo" fieldId={"site.businessLogo"}>
+          <HeaderLogo logo={logo} logoWidth={logoWidth} />
+        </EntityField>
+      )}
+      <div className="flex justify-end items-center gap-8">
+        {
           <>
-            <EntityField
-              displayName="Header Links"
-              fieldId={"site.header.links"}
-            >
-              <HeaderLinks links={links} />
-            </EntityField>
+            <HeaderLinks links={links} />
             <button
               className="flex md:hidden ml-auto my-auto"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "Close header menu" : "Open header menu"}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={
+                mobileMenuOpen ? "Close header menu" : "Open header menu"
+              }
             >
-              {menuOpen ? (
-                <FaTimes size={"1.5rem"} />
+              {mobileMenuOpen ? (
+                <FaTimes size={"16px"} />
               ) : (
-                <FaBars size={"1.5rem"} />
+                <FaBars size={"16px"} />
               )}
             </button>
           </>
-        )}
+        }
+        <HeaderCTASection primaryCta={primaryCta} secondaryCta={secondaryCta} />
       </div>
-      {links?.length > 0 && (
-        <HeaderMobileMenu isOpen={menuOpen} links={links} />
-      )}
     </PageSection>
   );
 };
@@ -130,60 +150,209 @@ const HeaderLogo = (props: {
   );
 };
 
-const HeaderLinks = (props: { links: CTAType[] }) => {
+const HeaderLinks = (props: { links?: CTAType[] }) => {
+  if (!props.links?.length) {
+    return;
+  }
+
   return (
     <div className="hidden md:flex items-center">
-      <ul className="flex gap-4 lg:gap-10">
-        {props.links
-          .filter((item) => !!item?.link)
-          .map((item, idx) => (
+      <EntityField displayName="Header Links" fieldId={"site.header.links"}>
+        <ul className="flex gap-4 lg:gap-10">
+          {props.links.map((item, idx) => (
             <li key={item.link}>
               <CTA
                 label={item.label}
                 link={item.link}
                 linkType={item.linkType}
-                variant="link"
+                variant="headerFooterMainLink"
                 eventName={`headerlink${idx}`}
                 alwaysHideCaret={true}
               />
             </li>
           ))}
-      </ul>
+        </ul>
+      </EntityField>
     </div>
   );
 };
 
-type HeaderMobileMenuProps = {
-  isOpen?: boolean;
-  links: CTAType[];
+const HeaderCTASection = (props: {
+  primaryCta?: CTAType;
+  secondaryCta?: CTAType;
+}) => {
+  const { primaryCta, secondaryCta } = props;
+
+  if (!primaryCta && !secondaryCta) {
+    return;
+  }
+
+  return (
+    <div className="hidden md:flex items-center gap-2">
+      {primaryCta && (
+        <EntityField displayName="Primary CTA" fieldId="site.header.primaryCta">
+          <CTA
+            label={primaryCta.label}
+            link={primaryCta.link}
+            linkType={primaryCta.linkType}
+            variant="primary"
+            eventName="headerPrimaryCta"
+          />
+        </EntityField>
+      )}
+      {secondaryCta && (
+        <EntityField
+          displayName="Secondary CTA"
+          fieldId="site.header.secondaryCta"
+        >
+          <CTA
+            label={secondaryCta.label}
+            link={secondaryCta.link}
+            linkType={secondaryCta.linkType}
+            variant="secondary"
+            eventName="headerSecondaryCta"
+          />
+        </EntityField>
+      )}
+    </div>
+  );
 };
 
-const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
-  const { isOpen, links } = props;
+const HeaderSecondarySection = () => {
+  const document: {
+    _site?: {
+      header?: {
+        secondaryLinks?: CTAType[];
+      };
+    };
+  } = useDocument();
+  const secondaryLinks = document._site?.header?.secondaryLinks;
+
+  if (!secondaryLinks?.length) {
+    return;
+  }
+
+  return (
+    <PageSection
+      as="div"
+      verticalPadding="headerSecondary"
+      background={{ bgColor: "bg-[#F4F4F4]", textColor: "text-black" }}
+      outerClassName="hidden md:block"
+    >
+      <EntityField
+        displayName="Secondary Header Links"
+        fieldId="site.header.secondaryLinks"
+      >
+        <div className="flex justify-end items-center gap-6">
+          {secondaryLinks.map((link, idx) => {
+            return (
+              <CTA
+                key={"secondarylink" + idx}
+                link={link.link}
+                label={link.label}
+                linkType={link.linkType}
+                variant={"headerSecondaryLink"}
+                eventName={"headerSecondaryLink" + idx}
+              />
+            );
+          })}
+        </div>
+      </EntityField>
+    </PageSection>
+  );
+};
+
+const HeaderMobileMenu = (props: {
+  isOpen: boolean;
+  mainSectionHeight: number;
+}) => {
+  const { isOpen, mainSectionHeight } = props;
+
+  const document: {
+    _site?: {
+      header?: {
+        secondaryLinks?: CTAType[];
+        links: CTAType[];
+        primaryCta: CTAType;
+      };
+    };
+  } = useDocument();
+  const links = document._site?.header?.links;
+  const secondaryLinks = document._site?.header?.secondaryLinks;
+  const primaryCta = document._site?.header?.primaryCta;
+
+  if (!isOpen) {
+    return;
+  }
+
   return (
     <div
-      className={
-        `${isOpen ? "visible" : "hidden"} bg-white text-black` +
-        "components absolute left-0 right-0 h-screen z-50"
-      }
+      className={"bg-white text-black absolute left-0 w-full z-40"}
+      style={{
+        top: `${mainSectionHeight}px`,
+        height: `calc(100vh - ${mainSectionHeight}px)`,
+      }}
     >
       <Background
         background={backgroundColors.background1.value}
-        className="container"
+        className="flex flex-col justify-between h-full"
       >
-        <ul className="flex flex-col p-4 gap-4">
-          {links.map((item: CTAType, idx) => (
-            <li key={item.link}>
+        <div>
+          <EntityField
+            displayName="Header Links"
+            fieldId="site.header.links"
+            zIndex={45}
+          >
+            <div className="px-4">
+              {links?.map((item: CTAType, idx) => (
+                <CTA
+                  key={`headermobilelink${idx}`}
+                  link={item.link}
+                  label={item.label}
+                  linkType={item.linkType}
+                  variant="directoryLink"
+                  eventName={`headermobilelink${idx}`}
+                  className="border-none font-bold text-link-sm-fontSize"
+                />
+              ))}
+            </div>
+          </EntityField>
+          <EntityField
+            displayName="Secondary Header Links"
+            fieldId="site.header.secondaryLinks"
+            zIndex={45}
+          >
+            <div className="bg-[#F4F4F4] px-4">
+              {secondaryLinks?.map((item: CTAType, idx) => (
+                <CTA
+                  key={`headermobilesecondarylink${idx}`}
+                  link={item.link}
+                  label={item.label}
+                  linkType={item.linkType}
+                  variant="headerSecondaryLink"
+                  eventName={`headerMobileSecondaryLink${idx}`}
+                  className="py-4 justify-start"
+                />
+              ))}
+            </div>
+          </EntityField>
+        </div>
+        <div className="px-4 pb-4">
+          {primaryCta && (
+            <EntityField
+              displayName="Primary CTA"
+              fieldId="site.header.primaryCta"
+              zIndex={45}
+            >
               <CTA
-                link={item.link}
-                label={item.label}
-                linkType={item.linkType}
-                variant="link"
-                eventName={`headermobilelink${idx}`}
+                link={primaryCta.link}
+                label={primaryCta.label}
+                linkType={primaryCta.linkType}
+                variant={"primary"}
               />
-            </li>
-          ))}
-        </ul>
+            </EntityField>
+          )}
+        </div>
       </Background>
     </div>
   );

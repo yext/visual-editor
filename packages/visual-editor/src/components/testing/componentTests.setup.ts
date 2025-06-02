@@ -66,6 +66,20 @@ export const testSite = {
       },
       { label: "Call Us", link: "+12125550110", linkType: "PHONE" },
     ],
+    secondaryLinks: [
+      { label: "Secondary Link 1", link: "index.html", linkType: "OTHER" },
+      { label: "Secondary Link 2", link: "index.html", linkType: "OTHER" },
+    ],
+    primaryCta: {
+      label: "Call To Action 1",
+      link: "index.html",
+      linkType: "OTHER",
+    },
+    secondaryCta: {
+      label: "Call To Action 2",
+      link: "index.html",
+      linkType: "OTHER",
+    },
   },
   logo: {
     image: {

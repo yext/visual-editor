@@ -65,6 +65,13 @@ describe.each(viewports)("Header $name", async ({ name, width, height }) => {
       await page.viewport(width, height);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
+
+      expect(page.getByText("Home")).not.toBeVisible();
+      expect(page.getByText("More Info")).not.toBeVisible();
+      expect(page.getByText("Call Us")).not.toBeVisible();
+      expect(page.getByText("Secondary Link 1")).not.toBeVisible();
+      expect(page.getByText("Secondary Link 2")).not.toBeVisible();
+      expect(page.getByText("Call To Action 1")).not.toBeVisible();
     });
 
     it("should pass wcag with a open mobile menu", async () => {
@@ -97,6 +104,14 @@ describe.each(viewports)("Header $name", async ({ name, width, height }) => {
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
+
+      expect(page.getByText("Home").last()).toBeVisible();
+      expect(page.getByText("More Info").last()).toBeVisible();
+      expect(page.getByText("Call Us").last()).toBeVisible();
+      expect(page.getByText("Secondary Link 1").last()).toBeVisible();
+      expect(page.getByText("Secondary Link 2").last()).toBeVisible();
+      expect(page.getByText("Call To Action 1").last()).toBeVisible();
+      expect(page.getByText("Call To Action 2").last()).not.toBeVisible();
     });
   } else {
     it("should pass wcag on a desktop screen size", async () => {
@@ -124,6 +139,14 @@ describe.each(viewports)("Header $name", async ({ name, width, height }) => {
       await page.viewport(width, height);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
+
+      expect(page.getByText("Home")).toBeVisible();
+      expect(page.getByText("More Info")).toBeVisible();
+      expect(page.getByText("Call Us")).toBeVisible();
+      expect(page.getByText("Secondary Link 1")).toBeVisible();
+      expect(page.getByText("Secondary Link 2")).toBeVisible();
+      expect(page.getByText("Call To Action 1")).toBeVisible();
+      expect(page.getByText("Call To Action 2")).toBeVisible();
     });
   }
 });
