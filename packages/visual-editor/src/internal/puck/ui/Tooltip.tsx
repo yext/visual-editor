@@ -16,13 +16,24 @@ interface TooltipContentProps
   zoomWithViewport?: boolean;
 }
 
+// Safe fallback if tooltip renders outside of puck context
+const tryUsePuck = () => {
+  try {
+    const puck = usePuck();
+    return puck;
+  } catch {
+    return undefined;
+  }
+};
+
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   TooltipContentProps
 >(({ className, sideOffset = 4, zoomWithViewport, ...props }, ref) => {
   const [scaleFactor, setScaleFactor] = React.useState<number>(1);
   const [iframeWidth, setIFrameWidth] = React.useState<number | undefined>();
-  const { appState } = usePuck();
+  const puck = tryUsePuck();
+  const viewportWidth = puck?.appState.ui.viewports.current.width;
 
   React.useEffect(() => {
     if (!zoomWithViewport) {
@@ -62,14 +73,10 @@ const TooltipContent = React.forwardRef<
     // Scale the tooltip using on Puck's zoom factor
     // Based on https://github.com/puckeditor/puck/blob/af1dc89139e0311b1dc014e328f431b1ebab0067/packages/core/components/DraggableComponent/index.tsx#L608
     // and https://github.com/puckeditor/puck/blob/af1dc89139e0311b1dc014e328f431b1ebab0067/packages/core/lib/get-zoom-config.ts#L6
-    if (
-      iframeWidth &&
-      appState.ui.viewports.current.width &&
-      zoomWithViewport
-    ) {
-      setScaleFactor(1 / (iframeWidth / appState.ui.viewports.current.width));
+    if (iframeWidth && viewportWidth && zoomWithViewport) {
+      setScaleFactor(1 / (iframeWidth / viewportWidth));
     }
-  }, [appState.ui.viewports.current.width, iframeWidth, zoomWithViewport]);
+  }, [viewportWidth, iframeWidth, zoomWithViewport]);
 
   return (
     <TooltipPrimitive.Content
