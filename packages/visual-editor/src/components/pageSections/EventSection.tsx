@@ -23,6 +23,7 @@ import {
   ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface EventSectionProps {
   data: {
@@ -33,6 +34,9 @@ export interface EventSectionProps {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
 }
@@ -83,10 +87,12 @@ const eventSectionFields: Fields<EventSectionProps> = {
 };
 
 const EventCard = ({
+  key,
   event,
   backgroundColor,
   sectionHeadingLevel,
 }: {
+  key: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -130,6 +136,7 @@ const EventCard = ({
         <MaybeRTF data={event.description} />
         {event.cta && (
           <CTA
+            eventName={`cta${key}`}
             label={event.cta.label}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -208,14 +215,19 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
     },
+    analytics: {
+      scope: "eventSection",
+    },
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <EventSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "eventSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <EventSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

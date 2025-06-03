@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { CTA as CTAType } from "@yext/pages-components";
+import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
   Body,
@@ -31,6 +31,9 @@ type socialLink = {
 
 type FooterProps = {
   backgroundColor?: BackgroundStyle;
+  analytics?: {
+    scope?: string;
+  };
 };
 
 const footerFields: Fields<FooterProps> = {
@@ -46,9 +49,16 @@ const Footer: ComponentConfig<FooterProps> = {
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
+    analytics: {
+      scope: "footer",
+    },
   },
   inline: true,
-  render: (props) => <FooterComponent {...props} />,
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "footer"}>
+      <FooterComponent {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
 
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
@@ -153,7 +163,7 @@ const FooterLinks = (props: { links: CTAType[] }) => {
               link={item.link}
               label={item.label}
               linkType={item.linkType}
-              eventName={`footerlink${idx}`}
+              eventName={`link${idx}`}
               variant="link"
               alwaysHideCaret={true}
               className="sm:pr-8"
@@ -174,7 +184,7 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
             label={socialLink.label}
             link={`${socialLink.prefix ?? ""}${socialLink.link}`}
             variant={"link"}
-            eventName={socialLink.name}
+            eventName={`socialLink${idx}`}
             alwaysHideCaret={true}
             ariaLabel={socialLink.label + " link"}
           />
