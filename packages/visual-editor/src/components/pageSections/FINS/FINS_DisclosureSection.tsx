@@ -40,7 +40,7 @@ const disclosureSectionFields: Fields<FINS_DisclosureSectionProps> = {
       description: YextField("Description", {
         type: "entityField",
         filter: {
-          types: ["type.string"],
+          types: ["type.string", "type.rich_text_v2"],
         },
       }),
     },
@@ -74,8 +74,8 @@ const DisclosureSectionWrapper = ({
   styles: { backgroundColor, headingLevel },
 }: FINS_DisclosureSectionProps) => {
   const document = useDocument();
-  const resolvedHeadingText = resolveYextEntityField(document, headingText);
-  const resolvedDisclosureText = resolveYextEntityField(document, description);
+  const resolvedHeadingText = resolveYextEntityField<string>(document, headingText);
+  const resolvedDisclosureText = resolveYextEntityField<string | RTF2>(document, description);
 
   return (
     <PageSection
@@ -109,35 +109,35 @@ const DisclosureSectionWrapper = ({
 };
 
 export const FINS_DisclosureSection: ComponentConfig<FINS_DisclosureSectionProps> =
-  {
-    label: "FINS - Disclosure Section",
-    fields: disclosureSectionFields,
-    defaultProps: {
-      data: {
-        headingText: {
-          field: "",
-          constantValue: "Disclosure",
-          constantValueEnabled: true,
-        },
-        description: {
-          field: "",
-          constantValue:
-            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, modi asperiores, suscipit delectus eos expedita vero iste iure vel facere sed recusandae temporibus, fugiat natus. Dolore cumque blanditiis eligendi adipisci?",
-          constantValueEnabled: true,
-        },
+{
+  label: "FINS - Disclosure Section",
+  fields: disclosureSectionFields,
+  defaultProps: {
+    data: {
+      headingText: {
+        field: "",
+        constantValue: "Disclosure",
+        constantValueEnabled: true,
       },
-      styles: {
-        headingLevel: 4,
-        backgroundColor: backgroundColors.background3.value,
+      description: {
+        field: "",
+        constantValue:
+          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, modi asperiores, suscipit delectus eos expedita vero iste iure vel facere sed recusandae temporibus, fugiat natus. Dolore cumque blanditiis eligendi adipisci?",
+        constantValueEnabled: true,
       },
-      liveVisibility: true,
     },
-    render: (props) => (
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <DisclosureSectionWrapper {...props} />
-      </VisibilityWrapper>
-    ),
-  };
+    styles: {
+      headingLevel: 4,
+      backgroundColor: backgroundColors.background3.value,
+    },
+    liveVisibility: true,
+  },
+  render: (props) => (
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
+      isEditing={props.puck.isEditing}
+    >
+      <DisclosureSectionWrapper {...props} />
+    </VisibilityWrapper>
+  ),
+};
