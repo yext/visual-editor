@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { HoursStatus, HoursType } from "@yext/pages-components";
+import { HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
   useDocument,
@@ -22,10 +22,7 @@ import {
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
-  HoursStatusParams,
-  hoursDayOfWeekTemplateOverride,
-  hoursCurrentTemplateOverride,
-  hoursFutureTemplateOverride,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -203,18 +200,11 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
-              <HoursStatus
+              <HoursStatusAtom
                 hours={resolvedHours}
+                t={t}
                 timezone={timezone}
-                currentTemplate={(params: HoursStatusParams) =>
-                  hoursCurrentTemplateOverride(params, t)
-                }
-                futureTemplate={(params: HoursStatusParams) =>
-                  hoursFutureTemplateOverride(params, t)
-                }
-                dayOfWeekTemplate={(params: HoursStatusParams) =>
-                  hoursDayOfWeekTemplateOverride(params, locale)
-                }
+                locale={locale}
               />
             </EntityField>
           )}

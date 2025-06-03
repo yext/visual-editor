@@ -13,13 +13,10 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
-  HoursStatusParams,
-  hoursCurrentTemplateOverride,
-  hoursFutureTemplateOverride,
-  hoursDayOfWeekTemplateOverride,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
-import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
+import { Address, Coordinate } from "@yext/pages-components";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
@@ -180,34 +177,15 @@ const LocationCard = ({
       <Heading level={styles?.cardHeadingLevel}>{name}</Heading>
       {hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-          <HoursStatus
+          <HoursStatusAtom
             hours={hours}
-            timezone={timezone}
-            currentTemplate={
-              styles?.hours?.showCurrentStatus
-                ? (params: HoursStatusParams) =>
-                    hoursCurrentTemplateOverride(params, t)
-                : () => <></>
-            }
-            separatorTemplate={
-              styles?.hours?.showCurrentStatus
-                ? (params: HoursStatusParams) =>
-                    hoursFutureTemplateOverride(params, t)
-                : () => <></>
-            }
-            timeOptions={{
-              hour12: styles?.hours?.timeFormat === "12h",
-            }}
-            dayOptions={{
-              weekday: styles?.hours?.dayOfWeekFormat,
-            }}
-            dayOfWeekTemplate={
-              styles?.hours?.showDayNames
-                ? (params: HoursStatusParams) =>
-                    hoursDayOfWeekTemplateOverride(params, locale)
-                : () => <></>
-            }
+            t={t}
             className="h-full"
+            timezone={timezone}
+            showCurrentStatus={styles?.hours?.showCurrentStatus}
+            timeFormat={"12h"}
+            dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+            locale={locale}
           />
         </div>
       )}
