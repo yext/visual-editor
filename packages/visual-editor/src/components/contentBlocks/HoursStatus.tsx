@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -60,6 +61,14 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   }),
 };
 
+interface StatusParams {
+  isOpen: boolean;
+  currentInterval: any | null;
+  futureInterval: any | null;
+  timeOptions?: Intl.DateTimeFormatOptions;
+  dayOptions?: Intl.DateTimeFormatOptions;
+}
+
 const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   hours: hoursField,
   className,
@@ -68,9 +77,10 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   showDayNames,
   dayOfWeekFormat,
 }) => {
-  const { t } = useTranslation();
   const document = useDocument();
+  const { t } = useTranslation();
   const hours = resolveYextEntityField(document, hoursField);
+  const locale = "en-US"; // TODO pass real locale through
 
   if (!hours) {
     return null;
@@ -88,9 +98,17 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
           "components mb-2 font-body-fontWeight text-body-lg-fontSize",
           className
         )}
-        currentTemplate={showCurrentStatus ? undefined : () => <></>}
+        currentTemplate={
+          showCurrentStatus
+            ? (params: StatusParams) => currentTemplate(params, t)
+            : () => <></>
+        }
         separatorTemplate={showCurrentStatus ? undefined : () => <></>}
-        dayOfWeekTemplate={showDayNames ? undefined : () => <></>}
+        dayOfWeekTemplate={
+          showDayNames
+            ? (params: StatusParams) => dayOfWeekTemplate(params, locale)
+            : () => <></>
+        }
         dayOptions={{ weekday: dayOfWeekFormat }}
         timeOptions={{ hour12: timeFormat === "12h" }}
         timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
@@ -98,6 +116,65 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
     </EntityField>
   );
 };
+
+/**
+ * Overrides the status text to incorporate i18n
+ * @param params used to determine the status
+ * @param t translation function
+ */
+function currentTemplate(params: StatusParams, t: TFunction): React.ReactNode {
+  if (params?.currentInterval?.is24h?.()) {
+    return (
+      <span className="HoursStatus-current">
+        {t("open24Hours", { defaultValue: "Open 24 Hours" })}
+      </span>
+    );
+  }
+  if (!params.futureInterval) {
+    return (
+      <span className="HoursStatus-current">
+        {t("temporarilyClosed", { defaultValue: "Temporarily Closed" })}
+      </span>
+    );
+  }
+  return (
+    <span className="HoursStatus-current">
+      {params.isOpen
+        ? t("openNow", { defaultValue: "Open Now" })
+        : t("closed", { defaultValue: "Closed" })}
+    </span>
+  );
+}
+
+/**
+ * Overrides the day of the week appearance
+ * @param params used to determine the day of the week
+ * @param locale used to translate the day of the week
+ */
+function dayOfWeekTemplate(
+  params: StatusParams,
+  locale: string
+): React.ReactNode {
+  if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
+    return null;
+  }
+  const dayOptions: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    ...(params.dayOptions ?? {}),
+  };
+
+  let dayOfWeek = "";
+  if (params.isOpen) {
+    const interval = params.currentInterval;
+    dayOfWeek +=
+      interval?.end?.setLocale(locale).toLocaleString(dayOptions) || "";
+  } else {
+    const interval = params.futureInterval;
+    dayOfWeek +=
+      interval?.start?.setLocale(locale).toLocaleString(dayOptions) || "";
+  }
+  return <span className="HoursStatus-dayOfWeek"> {dayOfWeek}</span>;
+}
 
 export const HoursStatus: ComponentConfig<HoursStatusProps> = {
   label: "Hours Status",

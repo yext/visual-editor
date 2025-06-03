@@ -56,5 +56,9 @@
   "default_radius": "",
   "default_size": "",
   "default_spacing": "",
-  "selectAContentField": ""
+  "selectAContentField": "",
+  "open24Hours": "",
+  "temporarilyClosed": "",
+  "openNow": "",
+  "closed": ""
 }

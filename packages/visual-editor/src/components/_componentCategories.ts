@@ -117,11 +117,15 @@ export const PageSectionCategory = Object.keys(
 export interface OtherCategoryProps {
   Header: HeaderProps;
   Footer: FooterProps;
+  Address: AddressProps;
+  HoursStatus: HoursStatusProps;
 }
 
 export const OtherCategoryComponents = {
   Header,
   Footer,
+  Address,
+  HoursStatus,
 };
 
 export const OtherCategory = Object.keys(
