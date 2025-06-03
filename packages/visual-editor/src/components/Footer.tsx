@@ -30,7 +30,7 @@ type socialLink = {
 
 type FooterProps = {
   backgroundColor?: BackgroundStyle;
-  analytics: {
+  analytics?: {
     scope?: string;
   };
 };
@@ -40,14 +40,6 @@ const footerFields: Fields<FooterProps> = {
     type: "select",
     hasSearch: true,
     options: "BACKGROUND_COLOR",
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
-      }),
-    },
   }),
 };
 
@@ -62,7 +54,7 @@ const Footer: ComponentConfig<FooterProps> = {
   },
   inline: true,
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "footer"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "footer"}>
       <FooterComponent {...props} />
     </AnalyticsScopeProvider>
   ),

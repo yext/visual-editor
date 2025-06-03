@@ -7,7 +7,6 @@ import {
   MaybeLink,
   PageSection,
   PhoneAtom,
-  YextField,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -18,7 +17,7 @@ import {
 } from "@yext/pages-components";
 
 export interface DirectoryProps {
-  analytics: {
+  analytics?: {
     scope?: string;
   };
 }
@@ -238,23 +237,13 @@ const DirectoryComponent = () => {
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: "Directory",
-  fields: {
-    analytics: YextField("Analytics", {
-      type: "object",
-      objectFields: {
-        scope: YextField("Scope", {
-          type: "text",
-        }),
-      },
-    }),
-  },
   defaultProps: {
     analytics: {
       scope: "directory",
     },
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props?.analytics?.scope || "directory"}>
+    <AnalyticsScopeProvider name={props?.analytics?.scope ?? "directory"}>
       <DirectoryComponent />
     </AnalyticsScopeProvider>
   ),

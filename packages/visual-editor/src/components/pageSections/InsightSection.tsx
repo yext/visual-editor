@@ -33,7 +33,7 @@ export interface InsightSectionProps {
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -72,14 +72,6 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -231,7 +223,7 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "insightSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "insightSection"}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

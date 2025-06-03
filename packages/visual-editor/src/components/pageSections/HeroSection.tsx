@@ -44,7 +44,7 @@ export interface HeroSectionProps {
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -112,14 +112,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       secondaryCTA: YextField("Secondary CTA Variant", {
         type: "radio",
         options: "CTA_VARIANT",
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -329,7 +321,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "heroSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

@@ -29,7 +29,7 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 
 export type HeaderProps = {
   logoWidth?: number;
-  analytics: {
+  analytics?: {
     scope?: string;
   };
 };
@@ -38,14 +38,6 @@ const headerFields: Fields<HeaderProps> = {
   logoWidth: YextField("Logo Width", {
     type: "number",
     min: 0,
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
-      }),
-    },
   }),
 };
 
@@ -59,7 +51,7 @@ export const Header: ComponentConfig<HeaderProps> = {
     },
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "header"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "header"}>
       <HeaderComponent {...props} />
     </AnalyticsScopeProvider>
   ),

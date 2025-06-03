@@ -33,7 +33,7 @@ export interface TeamSectionProps {
     heading: YextEntityField<string>;
     people: YextEntityField<TeamSectionType>;
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -72,14 +72,6 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -252,7 +244,7 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "teamSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "teamSection"}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

@@ -44,7 +44,7 @@ export interface NearbyLocationsSectionProps {
       showDayNames?: boolean;
     };
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -142,14 +142,6 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
             ],
           }),
         },
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -426,7 +418,7 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
     },
     render: (props) => (
       <AnalyticsScopeProvider
-        name={props.analytics?.scope || "nearbyLocationsSection"}
+        name={props.analytics?.scope ?? "nearbyLocationsSection"}
       >
         <VisibilityWrapper
           liveVisibility={props.liveVisibility}

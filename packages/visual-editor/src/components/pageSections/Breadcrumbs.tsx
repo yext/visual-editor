@@ -10,21 +10,13 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
-      }),
-    },
-  }),
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -123,7 +115,7 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider name={props?.analytics?.scope || "breadcrumbs"}>
+      <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
         <VisibilityWrapper
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}

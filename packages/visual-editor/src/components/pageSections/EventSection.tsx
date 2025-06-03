@@ -34,7 +34,7 @@ export interface EventSectionProps {
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -73,14 +73,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -227,7 +219,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "eventSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "eventSection"}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

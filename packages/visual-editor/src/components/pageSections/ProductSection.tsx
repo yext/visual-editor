@@ -32,7 +32,7 @@ export interface ProductSectionProps {
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -71,14 +71,6 @@ const productSectionFields: Fields<ProductSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -228,7 +220,7 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "productSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "productSection"}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

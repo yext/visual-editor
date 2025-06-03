@@ -33,7 +33,7 @@ export interface PromoSectionProps {
     orientation: "left" | "right";
     ctaVariant: CTAProps["variant"];
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -69,14 +69,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       ctaVariant: YextField("CTA Variant", {
         type: "radio",
         options: "CTA_VARIANT",
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -189,7 +181,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "promoSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

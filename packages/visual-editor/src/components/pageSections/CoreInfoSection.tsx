@@ -60,7 +60,7 @@ export interface CoreInfoSectionProps {
       showAdditionalHoursText: boolean;
     };
   };
-  analytics: {
+  analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
@@ -208,14 +208,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             ],
           }),
         },
-      }),
-    },
-  }),
-  analytics: YextField("Analytics", {
-    type: "object",
-    objectFields: {
-      scope: YextField("Scope", {
-        type: "text",
       }),
     },
   }),
@@ -533,7 +525,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope || "coreInfoSection"}>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? ""}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
