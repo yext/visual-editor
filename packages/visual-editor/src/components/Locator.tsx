@@ -116,6 +116,8 @@ const TRANSLATIONS = {
 
 export type LocatorProps = {
   mapStyle?: string;
+  entityTypeEnvVar?: string; // to be set via withPropOverrides
+  experienceKeyEnvVar?: string; // to be set via withPropOverrides
 };
 
 const locatorFields: Fields<LocatorProps> = {
@@ -147,7 +149,10 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
   const document: any = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
-    const searchHeadlessConfig = createSearchHeadlessConfig(document);
+    const searchHeadlessConfig = createSearchHeadlessConfig(
+      document,
+      props.experienceKeyEnvVar
+    );
     if (searchHeadlessConfig === undefined) {
       return { searchAnalyticsConfig: undefined, searcher: undefined };
     }
@@ -177,9 +182,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
-  const entityType = getEntityType();
+  const { mapStyle, entityTypeEnvVar } = props;
+  const entityType = getEntityType(entityTypeEnvVar);
   const locale = getDocumentLocale();
-  const { mapStyle } = props;
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -501,8 +506,12 @@ const getPath = (location: Location, locale: string) => {
   return normalizeSlug(path);
 };
 
-const getEntityType = () => {
+const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
+  if (!entityDocument._pageset && entityTypeEnvVar) {
+    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
+  }
+
   try {
     const entityType = JSON.parse(entityDocument._pageset).typeConfig
       .locatorConfig.entityType;

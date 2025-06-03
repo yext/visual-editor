@@ -20,3 +20,4 @@ export {
   YextStructFieldSelector,
   type YextStructEntityField,
 } from "./YextStructFieldSelector.tsx";
+export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";

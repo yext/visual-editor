@@ -104,11 +104,12 @@ const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
         return (
           <div key={idx} className="ObjectField">
             <div className="ObjectField-fieldset">
-              <FieldLabel label={label}>
+              <>
                 <ConstantValueModeToggler
                   fieldTypeFilter={[type]}
                   constantValueEnabled={value?.constantValueOverride?.[field]}
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
+                  label={label}
                 />
                 {value?.constantValueOverride?.[field] && (
                   <div
@@ -138,7 +139,7 @@ const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
                     />
                   </div>
                 )}
-              </FieldLabel>
+              </>
             </div>
           </div>
         );

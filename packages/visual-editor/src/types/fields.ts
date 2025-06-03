@@ -73,4 +73,11 @@ export const ComponentFields = {
     tooltipDescription: "",
     altLanguageBehavior: "LANGUAGE_SPECIFIC",
   },
+  AwardSection: {
+    name: "Award Section",
+    type: "type.awards_section",
+    isList: false,
+    tooltipDescription: "",
+    altLanguageBehavior: "LANGUAGE_SPECIFIC",
+  },
 } as const satisfies Record<string, ComponentField>;

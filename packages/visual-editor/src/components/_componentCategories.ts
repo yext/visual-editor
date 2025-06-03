@@ -84,6 +84,10 @@ import {
   FINS_InsuranceProvidersSection,
 } from "./pageSections/FINS/FINS_InsuranceSection.tsx";
 import {
+  FINS_CoreInfoSectionProps,
+  FINS_CoreInfoSection,
+} from "./pageSections/FINS/FINS_CoreInfoSection.tsx";
+import {
   FINS_HeroSection,
   FINS_HeroSectionProps,
 } from "./pageSections/FINS/FINS_HeroSection.tsx";
@@ -105,6 +109,7 @@ export interface PageSectionCategoryProps {
   TestimonialSection: TestimonialSectionProps;
   FINS_DisclosureSection: FINS_DisclosureSectionProps;
   FINS_InsuranceProvidersSection: FINS_InsuranceSectionProps;
+  FINS_CoreInfoSection: FINS_CoreInfoSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -125,6 +130,7 @@ export const PageSectionCategoryComponents = {
   TestimonialSection,
   FINS_DisclosureSection,
   FINS_InsuranceProvidersSection,
+  FINS_CoreInfoSection,
 };
 
 export const PageSectionCategory = Object.keys(
