@@ -51,7 +51,7 @@ export interface CoreInfoSectionProps {
       showGetDirectionsLink: boolean;
       phoneFormat: "domestic" | "international";
       includePhoneHyperlink: boolean;
-      emailsListLength: number;
+      emailsListLength?: number;
     };
     hours: {
       startOfWeek: keyof DayOfWeekNames | "today";
@@ -173,11 +173,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               { label: "Yes", value: true },
               { label: "No", value: false },
             ],
-          }),
-          emailsListLength: YextField("List Length", {
-            type: "number",
-            min: 0,
-            max: 3,
           }),
         },
       }),
@@ -350,7 +345,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               {resolvedEmails
                 .slice(
                   0,
-                  Math.min(resolvedEmails.length, styles.info.emailsListLength)
+                  Math.min(
+                    resolvedEmails.length,
+                    styles.info.emailsListLength ?? Infinity
+                  )
                 )
                 .map((email, index) => (
                   <li key={index} className={`flex items-center gap-3`}>
@@ -443,6 +441,35 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
   label: "Core Info Section",
   fields: coreInfoSectionFields,
+  resolveFields: (data, { fields }) => {
+    if (data.props.data.info.emails.constantValueEnabled) {
+      return fields;
+    }
+
+    return {
+      ...fields,
+      styles: {
+        ...fields.styles,
+        objectFields: {
+          // @ts-expect-error ts(2339) objectFields exists
+          ...fields.styles.objectFields,
+          info: {
+            // @ts-expect-error ts(2339) objectFields exists
+            ...fields.styles.objectFields.info,
+            objectFields: {
+              // @ts-expect-error ts(2339) objectFields exists
+              ...fields.styles.objectFields.info.objectFields,
+              emailsListLength: YextField("Emails List Length", {
+                type: "number",
+                min: 0,
+                max: 3,
+              }),
+            },
+          },
+        },
+      },
+    };
+  },
   defaultProps: {
     data: {
       info: {
