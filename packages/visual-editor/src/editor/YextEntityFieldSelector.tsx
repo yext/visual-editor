@@ -56,6 +56,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
