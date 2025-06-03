@@ -110,7 +110,10 @@ export const BorderRadiusSelector = (label?: string): Field => {
               options: convertDefaultBorderRadiusToOptions(
                 [
                   {
-                    label: t("default", { defaultValue: "Default" }),
+                    label: t("default", {
+                      defaultValue: "Default",
+                      context: "radius",
+                    }),
                     value: "default",
                     px: "",
                   },
