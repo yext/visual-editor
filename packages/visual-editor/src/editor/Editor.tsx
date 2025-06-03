@@ -9,7 +9,10 @@ import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
-import { useCommonMessageReceivers } from "../internal/hooks/useMessageReceivers.ts";
+import {
+  useCommonMessageReceivers,
+  TemplateMetadataContext,
+} from "../internal/hooks/useMessageReceivers.ts";
 import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
@@ -113,31 +116,33 @@ export const Editor = ({
   });
 
   return (
-    <ErrorBoundary fallback={<></>} onError={logError}>
-      {!isLoading ? (
-        templateMetadata?.isThemeMode || forceThemeMode ? (
-          <ThemeEditor
-            puckConfig={puckConfig!}
-            templateMetadata={templateMetadata!}
-            layoutData={layoutData!}
-            themeData={themeData!}
-            themeConfig={themeConfig}
-            localDev={!!localDev}
-          />
+    <TemplateMetadataContext.Provider value={templateMetadata!}>
+      <ErrorBoundary fallback={<></>} onError={logError}>
+        {!isLoading ? (
+          templateMetadata?.isThemeMode || forceThemeMode ? (
+            <ThemeEditor
+              puckConfig={puckConfig!}
+              templateMetadata={templateMetadata!}
+              layoutData={layoutData!}
+              themeData={themeData!}
+              themeConfig={themeConfig}
+              localDev={!!localDev}
+            />
+          ) : (
+            <LayoutEditor
+              puckConfig={puckConfig!}
+              templateMetadata={templateMetadata!}
+              layoutData={layoutData!}
+              themeData={themeData!}
+              themeConfig={themeConfig}
+              localDev={!!localDev}
+            />
+          )
         ) : (
-          <LayoutEditor
-            puckConfig={puckConfig!}
-            templateMetadata={templateMetadata!}
-            layoutData={layoutData!}
-            themeData={themeData!}
-            themeConfig={themeConfig}
-            localDev={!!localDev}
-          />
-        )
-      ) : (
-        parentLoaded && <LoadingScreen progress={progress} />
-      )}
-      <Toaster closeButton richColors />
-    </ErrorBoundary>
+          parentLoaded && <LoadingScreen progress={progress} />
+        )}
+        <Toaster closeButton richColors />
+      </ErrorBoundary>
+    </TemplateMetadataContext.Provider>
   );
 };
