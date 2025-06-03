@@ -28,7 +28,6 @@ module.exports = {
       "da_DK",
       "nl",
       "en_GB",
-      "en_US",
       "et_EE",
       "fi_FI",
       "fr_FR",
