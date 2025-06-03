@@ -56,5 +56,10 @@
   "default_radius": "Default",
   "default_size": "Default",
   "default_spacing": "Default",
-  "selectAContentField": "Select a Content field"
+  "selectAContentField": "Select a Content field",
+  "basicSelectorNoOptionsLabel": "No options available",
+  "basicSelectorDefaultContentLabel": "Select a Content field",
+  "borderRadiusDefaultLabel": "Default",
+  "fontSizeDefaultLabel": "Default",
+  "spacingDefaultLabel": "Default"
 }

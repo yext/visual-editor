@@ -24,11 +24,7 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
       if (!options || options.length === 0) {
         return (
           <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-            <p>
-              {t("noOptionsAvailable", {
-                defaultValue: "No options available",
-              })}
-            </p>
+            <p>{t("basicSelectorNoOptionsLabel", "No options available")}</p>
           </FieldLabel>
         );
       }

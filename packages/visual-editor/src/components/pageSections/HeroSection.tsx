@@ -149,7 +149,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   return (
     <PageSection
       background={styles.backgroundColor}
-      aria-label={t("heroBanner", { defaultValue: "Hero Banner" })}
+      aria-label={t("heroBanner", "Hero Banner")}
       className={`flex flex-col gap-6 md:gap-10 ${
         styles.imageOrientation === "right"
           ? "md:flex-row"
@@ -162,19 +162,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
       >
         <header
           className="flex flex-col gap-y-4"
-          aria-label={t("heroHeader", { defaultValue: "Hero Header" })}
+          aria-label={t("heroHeader", "Hero Header")}
         >
           <section
             className="flex flex-col gap-y-0"
-            aria-label={t("businessInformation", {
-              defaultValue: "Business Information",
-            })}
+            aria-label={t("businessInformation", "Business Information")}
           >
             {resolvedBusinessName && (
               <EntityField
-                displayName={t("businessName", {
-                  defaultValue: "Business Name",
-                })}
+                displayName={t("businessName", "Business Name")}
                 fieldId={data?.businessName.field}
                 constantValueEnabled={data?.businessName.constantValueEnabled}
               >
@@ -185,9 +181,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedLocalGeoModifier && (
               <EntityField
-                displayName={t("localGeomodifier", {
-                  defaultValue: "Local GeoModifier",
-                })}
+                displayName={t("localGeomodifier", "Local GeoModifier")}
                 fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
                   data?.localGeoModifier.constantValueEnabled
@@ -201,7 +195,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           </section>
           {resolvedHours && (
             <EntityField
-              displayName={t("hours", { defaultValue: "Hours" })}
+              displayName={t("hours", "Hours")}
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
@@ -213,11 +207,11 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           resolvedHero?.secondaryCta?.label) && (
           <div
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label={t("callToActions", { defaultValue: "Call to Actions" })}
+            aria-label={t("callToActions", "Call to Actions")}
           >
             {resolvedHero?.primaryCta?.label && (
               <EntityField
-                displayName={t("primaryCta", { defaultValue: "Primary CTA" })}
+                displayName={t("primaryCta", "Primary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.primaryCta
@@ -235,9 +229,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedHero?.secondaryCta?.label && (
               <EntityField
-                displayName={t("secondaryCta", {
-                  defaultValue: "Secondary CTA",
-                })}
+                displayName={t("secondaryCta", "Secondary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.secondaryCta
@@ -258,14 +250,14 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
       </div>
       {resolvedHero?.image && (
         <EntityField
-          displayName={t("image", { defaultValue: "Image" })}
+          displayName={t("image", "Image")}
           fieldId={data.hero.field}
           constantValueEnabled={data.hero.constantValueOverride.image}
         >
           <div
             className="w-full"
             role="region"
-            aria-label={t("heroImage", { defaultValue: "Hero Image" })}
+            aria-label={t("heroImage", "Hero Image")}
           >
             <Image
               image={resolvedHero?.image}

@@ -56,5 +56,10 @@
   "default_radius": "",
   "default_size": "",
   "default_spacing": "",
-  "selectAContentField": ""
+  "selectAContentField": "",
+  "basicSelectorNoOptionsLabel": "",
+  "basicSelectorDefaultContentLabel": "",
+  "borderRadiusDefaultLabel": "",
+  "fontSizeDefaultLabel": "",
+  "spacingDefaultLabel": ""
 }

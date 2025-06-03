@@ -35,7 +35,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 
     return (
       <EntityField
-        displayName={t("body", { defaultValue: "Body" })}
+        displayName={t("body", "Body")}
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >

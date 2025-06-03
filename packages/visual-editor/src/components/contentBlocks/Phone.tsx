@@ -51,7 +51,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName={t("phone", { defaultValue: "Phone" })}
+      displayName={t("phone", "Phone")}
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >

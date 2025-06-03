@@ -11,6 +11,25 @@ import fs from "fs";
 
 const isDryRun = process.argv.includes("--dry-run");
 
+/**
+ * Inserts t("...") around relevant strings
+ *
+ * Adds t("...") around "aria-label" and "displayName" attributes
+ * and around props "label", "description", and "title"
+ *
+ * t("...") is not added to component configs
+ *
+ * t("...") is only applied to files under src/components and src/editor
+ *
+ * const { t } = useTranslation(); is added to relevant functions
+ *
+ * imports are added to affected files
+ *
+ * The original string is used as the default value
+ *
+ * The key is set to the camelCase version of the original string
+ *
+ */
 (async () => {
   const project = new Project({ tsConfigFilePath: "tsconfig.json" });
 
@@ -168,9 +187,7 @@ const isDryRun = process.argv.includes("--dry-run");
     // Now modify all collected nodes and track functions to add t()
     for (const { attr, raw, funcAncestor } of jsxAttrsToModify) {
       const key = toCamelCase(raw);
-      attr.setInitializer(
-        `{t("${key}", { defaultValue: "${escapeString(raw)}" })}`
-      );
+      attr.setInitializer(`{t("${key}", "${escapeString(raw)}")}`);
       modified = true;
       if (funcAncestor) functionsToAddT.add(funcAncestor);
     }
@@ -179,9 +196,7 @@ const isDryRun = process.argv.includes("--dry-run");
       const key = toCamelCase(raw);
       const initializer = prop.getInitializer();
       if (initializer) {
-        initializer.replaceWithText(
-          `t("${key}", { defaultValue: "${escapeString(raw)}" })`
-        );
+        initializer.replaceWithText(`t("${key}", "${escapeString(raw)}")`);
         modified = true;
         if (funcAncestor) functionsToAddT.add(funcAncestor);
       }
@@ -190,7 +205,7 @@ const isDryRun = process.argv.includes("--dry-run");
     for (const { node, raw, funcAncestor } of jsxTextToModify) {
       const key = toCamelCase(raw);
       const escaped = escapeString(raw);
-      node.replaceWithText(`{t("${key}", { defaultValue: "${escaped}" })}`);
+      node.replaceWithText(`{t("${key}", "${escaped}")}`);
       modified = true;
       if (funcAncestor) functionsToAddT.add(funcAncestor);
     }

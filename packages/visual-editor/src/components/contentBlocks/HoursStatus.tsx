@@ -78,7 +78,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 
   return (
     <EntityField
-      displayName={t("hours", { defaultValue: "Hours" })}
+      displayName={t("hours", "Hours")}
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >

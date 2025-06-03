@@ -58,7 +58,7 @@ const EventCardItem = ({
       <div className="lg:w-[45%] w-full h-full">
         {resolvedImage && (
           <EntityField
-            displayName={t("image", { defaultValue: "Image" })}
+            displayName={t("image", "Image")}
             fieldId={card?.image?.field}
             constantValueEnabled={card?.image?.constantValueEnabled}
           >
@@ -71,7 +71,7 @@ const EventCardItem = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {resolvedTitle && (
           <EntityField
-            displayName={t("title", { defaultValue: "Title" })}
+            displayName={t("title", "Title")}
             fieldId={card?.title?.field}
             constantValueEnabled={card?.title?.constantValueEnabled}
           >
@@ -80,7 +80,7 @@ const EventCardItem = ({
         )}
         {resolvedDateTime && (
           <EntityField
-            displayName={t("datetime", { defaultValue: "Date/Time" })}
+            displayName={t("datetime", "Date/Time")}
             fieldId={card?.dateTime?.field}
             constantValueEnabled={card?.dateTime?.constantValueEnabled}
           >
@@ -89,7 +89,7 @@ const EventCardItem = ({
         )}
         {resolvedDescription && (
           <EntityField
-            displayName={t("description", { defaultValue: "Description" })}
+            displayName={t("description", "Description")}
             fieldId={card?.description?.field}
             constantValueEnabled={card?.description?.constantValueEnabled}
           >
@@ -100,7 +100,7 @@ const EventCardItem = ({
         )}
         {resolvedCTA?.link && (
           <EntityField
-            displayName={t("cta", { defaultValue: "CTA" })}
+            displayName={t("cta", "CTA")}
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >

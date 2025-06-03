@@ -77,7 +77,7 @@ const VisualEditorHoursTable = ({
     <div className={`flex flex-col ${alignment}`}>
       {hours && (
         <EntityField
-          displayName={t("hours", { defaultValue: "Hours" })}
+          displayName={t("hours", "Hours")}
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
@@ -90,7 +90,7 @@ const VisualEditorHoursTable = ({
       )}
       {additionalHoursText && showAdditionalHoursText && (
         <EntityField
-          displayName={t("hoursText", { defaultValue: "Hours Text" })}
+          displayName={t("hoursText", "Hours Text")}
           fieldId="additionalHoursText"
         >
           <div className="mt-4 text-body-sm-fontSize">

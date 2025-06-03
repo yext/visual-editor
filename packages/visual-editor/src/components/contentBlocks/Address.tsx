@@ -53,7 +53,7 @@ const AddressComponent = ({
     <>
       {address && (
         <EntityField
-          displayName={t("address", { defaultValue: "Address" })}
+          displayName={t("address", "Address")}
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >

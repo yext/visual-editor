@@ -57,7 +57,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 
   return (
     <EntityField
-      displayName={t("emailList", { defaultValue: "Email List" })}
+      displayName={t("emailList", "Email List")}
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >

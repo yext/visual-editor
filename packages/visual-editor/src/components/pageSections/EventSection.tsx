@@ -162,7 +162,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -173,7 +173,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
       )}
       {resolvedEvents?.events && (
         <EntityField
-          displayName={t("events", { defaultValue: "Events" })}
+          displayName={t("events", "Events")}
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >

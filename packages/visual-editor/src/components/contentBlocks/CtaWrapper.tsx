@@ -41,7 +41,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
 
   return (
     <EntityField
-      displayName={t("cta", { defaultValue: "CTA" })}
+      displayName={t("cta", "CTA")}
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >

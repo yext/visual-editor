@@ -97,7 +97,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName={t("image", { defaultValue: "Image" })}
+          displayName={t("image", "Image")}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
@@ -111,7 +111,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
-            displayName={t("title", { defaultValue: "Title" })}
+            displayName={t("title", "Title")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
@@ -119,7 +119,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
         <EntityField
-          displayName={t("description", { defaultValue: "Description" })}
+          displayName={t("description", "Description")}
           fieldId={data.promo.field}
           constantValueEnabled={
             !resolvedPromo?.description ||
@@ -130,7 +130,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
-            displayName={t("callToAction", { defaultValue: "Call To Action" })}
+            displayName={t("callToAction", "Call To Action")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >

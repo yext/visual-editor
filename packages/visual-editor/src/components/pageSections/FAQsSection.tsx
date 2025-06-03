@@ -95,7 +95,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", "Heading Text")}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -104,7 +104,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName={t("faqs", { defaultValue: "FAQs" })}
+          displayName={t("faqs", "FAQs")}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >

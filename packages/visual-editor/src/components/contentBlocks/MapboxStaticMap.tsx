@@ -155,7 +155,7 @@ export const MapboxStaticMapComponent = ({
 
   return (
     <EntityField
-      displayName={t("coordinate", { defaultValue: "Coordinate" })}
+      displayName={t("coordinate", "Coordinate")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >

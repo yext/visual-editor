@@ -82,7 +82,7 @@ export const BreadcrumbsComponent = () => {
     <PageSection
       as={"nav"}
       verticalPadding="sm"
-      aria-label={t("breadcrumb", { defaultValue: "Breadcrumb" })}
+      aria-label={t("breadcrumb", "Breadcrumb")}
     >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {
