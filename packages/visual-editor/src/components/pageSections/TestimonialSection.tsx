@@ -131,7 +131,7 @@ const TestimonialSectionWrapper = ({
   );
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 
-  // test
+  // test 2
   return (
     <PageSection
       background={styles.backgroundColor}
