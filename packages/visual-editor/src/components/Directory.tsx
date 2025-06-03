@@ -7,13 +7,16 @@ import {
   MaybeLink,
   PageSection,
   PhoneAtom,
+  YextField,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
 import { Address, HoursStatus } from "@yext/pages-components";
 
 export interface DirectoryProps {
-  separator?: string;
+  analytics: {
+    scope?: string;
+  };
 }
 
 // isDirectoryGrid indicates whether the children should appear in
@@ -40,16 +43,21 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 
 // DirectoryCard is the card used within DirectoryGrid.
 const DirectoryCard = ({
+  key,
   profile,
   relativePrefixToRoot,
+  scope,
 }: {
+  key: number;
   profile: any;
   relativePrefixToRoot: string;
+  scope: string;
 }) => {
   return (
     <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
       <div>
         <MaybeLink
+          eventName={`${scope}_link${key}`}
           alwaysHideCaret={true}
           className="mb-2"
           href={
@@ -101,9 +109,11 @@ const DirectoryCard = ({
 const DirectoryGrid = ({
   directoryChildren,
   relativePrefixToRoot,
+  scope,
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
+  scope: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -123,6 +133,7 @@ const DirectoryGrid = ({
           key={idx}
           profile={child}
           relativePrefixToRoot={relativePrefixToRoot}
+          scope={scope}
         />
       ))}
     </PageSection>
@@ -133,10 +144,12 @@ const DirectoryList = ({
   directoryChildren,
   relativePrefixToRoot,
   level,
+  scope,
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
   level: string;
+  scope: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -162,6 +175,7 @@ const DirectoryList = ({
           return (
             <li key={idx}>
               <MaybeLink
+                eventName={`${scope}_child${idx}`}
                 variant="directoryLink"
                 href={
                   relativePrefixToRoot
@@ -179,8 +193,8 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = (props: DirectoryProps) => {
-  const { separator = "/" } = props;
+const DirectoryComponent = ({ analytics }: DirectoryProps) => {
+  const scope = analytics?.scope || "directory";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   let headingText;
@@ -200,7 +214,10 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
   return (
     <>
-      <BreadcrumbsComponent separator={separator} liveVisibility={true} />
+      <BreadcrumbsComponent
+        analytics={{ scope: scope }}
+        liveVisibility={true}
+      />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
           <Heading level={4}>{document._site.name}</Heading>
@@ -212,6 +229,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot}
+            scope={scope}
           />
         )}
       {document.dm_directoryChildren &&
@@ -220,6 +238,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot}
             level={document?.meta?.entityType?.id}
+            scope={scope}
           />
         )}
     </>
@@ -228,5 +247,20 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: "Directory",
+  fields: {
+    analytics: YextField("Analytics", {
+      type: "object",
+      objectFields: {
+        scope: YextField("Scope", {
+          type: "text",
+        }),
+      },
+    }),
+  },
+  defaultProps: {
+    analytics: {
+      scope: "directory",
+    },
+  },
   render: (props) => <DirectoryComponent {...props} />,
 };
