@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   HeadingLevel,
   BackgroundStyle,
@@ -17,7 +18,6 @@ import {
   ComponentFields,
   MaybeRTF,
   TimestampOption,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -125,8 +125,8 @@ const TestimonialSectionWrapper = ({
   data,
   styles,
 }: TestimonialSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedTestimonials = resolveYextEntityField(
     document,
     data.testimonials
@@ -140,7 +140,7 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -151,7 +151,7 @@ const TestimonialSectionWrapper = ({
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName={i18n("testimonials", { defaultValue: "Testimonials" })}
+          displayName={t("testimonials", { defaultValue: "Testimonials" })}
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >

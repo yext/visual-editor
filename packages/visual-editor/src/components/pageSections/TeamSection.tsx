@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Image,
   HeadingLevel,
@@ -18,7 +19,6 @@ import {
   TeamSectionType,
   PersonStruct,
   ComponentFields,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -166,8 +166,8 @@ const PersonCard = ({
 };
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 
@@ -178,7 +178,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -189,7 +189,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName={i18n("team", { defaultValue: "Team" })}
+          displayName={t("team", { defaultValue: "Team" })}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >

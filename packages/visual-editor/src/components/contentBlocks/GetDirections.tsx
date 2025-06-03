@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { getDirections, Coordinate } from "@yext/pages-components";
@@ -10,7 +11,6 @@ import {
   CTA,
   CTAProps,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -33,8 +33,8 @@ const GetDirectionsComponent = ({
   variant,
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     coordinateField
@@ -53,7 +53,7 @@ const GetDirectionsComponent = ({
 
   return (
     <EntityField
-      displayName={i18n("getDirections", { defaultValue: "Get Directions" })}
+      displayName={t("getDirections", { defaultValue: "Get Directions" })}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >

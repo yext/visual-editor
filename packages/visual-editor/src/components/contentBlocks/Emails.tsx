@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -9,7 +10,6 @@ import {
   CTA,
   Body,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -46,8 +46,8 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   includeHyperlink,
   listLength,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   let resolvedEmailList = resolveYextEntityField(document, emailListField);
   if (!resolvedEmailList) {
     return;
@@ -57,7 +57,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("emailList", { defaultValue: "Email List" })}
+      displayName={t("emailList", { defaultValue: "Email List" })}
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >

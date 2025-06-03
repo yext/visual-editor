@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -7,7 +8,6 @@ import {
   YextEntityField,
   PhoneAtom,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface PhoneProps {
@@ -41,8 +41,8 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   format,
   includeHyperlink,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
   if (!resolvedPhone) {
@@ -51,7 +51,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("phone", { defaultValue: "Phone" })}
+      displayName={t("phone", { defaultValue: "Phone" })}
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Image,
   HeadingLevel,
@@ -18,7 +19,6 @@ import {
   ProductStruct,
   ComponentFields,
   MaybeRTF,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -144,8 +144,8 @@ const ProductCard = ({
 };
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 
@@ -156,7 +156,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -167,7 +167,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName={i18n("products", { defaultValue: "Products" })}
+          displayName={t("products", { defaultValue: "Products" })}
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >

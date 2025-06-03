@@ -1,4 +1,4 @@
-import { i18n } from "../utils/i18n.ts";
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -100,14 +100,12 @@ export const FontSizeSelector = (
   return {
     type: "custom",
     render: ({ value, onChange }) => {
+      const { t } = useTranslation();
       const tailwindConfig: TailwindConfig = useTailwindConfig();
       const options = convertDefaultFontSizesToOptions(
         [
           {
-            label: i18n("default", {
-              defaultValue: "Default",
-              context: "size",
-            }),
+            label: t("default", { defaultValue: "Default" }),
             value: "default",
             px: "",
           },

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { CTA as CTAType, ComplexImageType } from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
@@ -11,7 +12,6 @@ import {
   Background,
   YextField,
   Image,
-  useI18n,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -65,8 +65,8 @@ interface HeaderLayoutProps {
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const i18n = useI18n();
   const { logo, logoWidth, logoLink, links } = props;
 
   return (
@@ -78,9 +78,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName={i18n("businessLogo", {
-              defaultValue: "Business Logo",
-            })}
+            displayName={t("businessLogo", { defaultValue: "Business Logo" })}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -90,9 +88,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {links?.length > 0 && (
           <>
             <EntityField
-              displayName={i18n("headerLinks", {
-                defaultValue: "Header Links",
-              })}
+              displayName={t("headerLinks", { defaultValue: "Header Links" })}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />

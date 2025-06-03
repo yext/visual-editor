@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Body,
   useTemplateProps,
@@ -5,7 +6,6 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -59,9 +59,9 @@ function isValidDirectoryParents(value: any[]): boolean {
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
+  const { t } = useTranslation();
   const { separator = "/" } = props;
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
-  const i18n = useI18n();
   let breadcrumbs = getDirectoryParents(document);
   if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
     // append the current and filter out missing or malformed data
@@ -78,7 +78,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
     <PageSection
       as={"nav"}
       verticalPadding="sm"
-      aria-label={i18n("breadcrumb", { defaultValue: "Breadcrumb" })}
+      aria-label={t("breadcrumb", { defaultValue: "Breadcrumb" })}
     >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {

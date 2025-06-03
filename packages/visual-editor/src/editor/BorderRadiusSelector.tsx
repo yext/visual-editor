@@ -1,7 +1,7 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
-import { i18n } from "../utils/i18n.ts";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 
@@ -94,6 +94,7 @@ export const BorderRadiusSelector = (label?: string): Field => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {
+      const { t } = useTranslation();
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
@@ -109,10 +110,7 @@ export const BorderRadiusSelector = (label?: string): Field => {
               options: convertDefaultBorderRadiusToOptions(
                 [
                   {
-                    label: i18n("default", {
-                      defaultValue: "Default",
-                      context: "radius",
-                    }),
+                    label: t("default", { defaultValue: "Default" }),
                     value: "default",
                     px: "",
                   },

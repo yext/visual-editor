@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -16,7 +17,6 @@ import {
   EntityField,
   CTA,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -43,6 +43,7 @@ const InsightCardItem = ({
   document: any;
   card: InsightCardProps["card"];
 }) => {
+  const { t } = useTranslation();
   const resolvedImage = resolveYextSubfield(document, card?.image);
   const resolvedTitle = resolveYextSubfield<string>(document, card?.title);
   const resolvedCategory = resolveYextSubfield<string>(
@@ -55,7 +56,6 @@ const InsightCardItem = ({
     card?.description
   );
   const resolvedCTA = resolveYextSubfield<CTAProps>(document, card?.cta);
-  const i18n = useI18n();
   return (
     <Background
       className="rounded-lg h-full"
@@ -63,7 +63,7 @@ const InsightCardItem = ({
     >
       {resolvedImage && (
         <EntityField
-          displayName={i18n("image", { defaultValue: "Image" })}
+          displayName={t("image", { defaultValue: "Image" })}
           fieldId={card?.image?.field}
           constantValueEnabled={card?.image?.constantValueEnabled}
         >
@@ -81,7 +81,7 @@ const InsightCardItem = ({
               className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
             >
               <EntityField
-                displayName={i18n("category", { defaultValue: "Category" })}
+                displayName={t("category", { defaultValue: "Category" })}
                 fieldId={card?.category?.field}
                 constantValueEnabled={card?.category?.constantValueEnabled}
               >
@@ -89,7 +89,7 @@ const InsightCardItem = ({
               </EntityField>
               {resolvedCategory && resolvedDate && <Body>|</Body>}
               <EntityField
-                displayName={i18n("date", { defaultValue: "Date" })}
+                displayName={t("date", { defaultValue: "Date" })}
                 fieldId={card?.date?.field}
                 constantValueEnabled={card?.date?.constantValueEnabled}
               >
@@ -99,9 +99,7 @@ const InsightCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName={i18n("insightTitle", {
-                defaultValue: "Insight Title",
-              })}
+              displayName={t("insightTitle", { defaultValue: "Insight Title" })}
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -112,7 +110,7 @@ const InsightCardItem = ({
           )}
           {resolvedDescription && (
             <EntityField
-              displayName={i18n("description", { defaultValue: "Description" })}
+              displayName={t("description", { defaultValue: "Description" })}
               fieldId={card?.description?.field}
               constantValueEnabled={card?.description?.constantValueEnabled}
             >
@@ -122,7 +120,7 @@ const InsightCardItem = ({
         </div>
         {resolvedCTA?.link && (
           <EntityField
-            displayName={i18n("cta", { defaultValue: "CTA" })}
+            displayName={t("cta", { defaultValue: "CTA" })}
             fieldId={card?.cta.field}
             constantValueEnabled={card?.cta.constantValueEnabled}
           >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import {
   YextEntityField,
@@ -8,7 +9,6 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -63,8 +63,8 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 };
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedText = resolveYextEntityField<string>(document, data.text);
 
   const justifyClass = {
@@ -80,7 +80,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
-        displayName={i18n("bannerText", { defaultValue: "Banner Text" })}
+        displayName={t("bannerText", { defaultValue: "Banner Text" })}
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -6,7 +7,6 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
@@ -26,8 +26,8 @@ const textListFields: Fields<TextListProps> = {
 const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   let resolvedTextList = resolveYextEntityField(document, textListField);
 
   // When constantValueEnabled is true but no constant values have been set yet, show defaults
@@ -43,7 +43,7 @@ const TextListComponent: React.FC<TextListProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("textList", { defaultValue: "Text List" })}
+      displayName={t("textList", { defaultValue: "Text List" })}
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >

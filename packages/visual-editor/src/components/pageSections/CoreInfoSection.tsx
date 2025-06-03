@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -25,7 +26,6 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -218,8 +218,8 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 };
 
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
     data.info.headingText
@@ -266,19 +266,17 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           : "md:[&>section]:w-1/3"
       }`}
       background={styles.backgroundColor}
-      aria-label={i18n("coreInfoSection", {
-        defaultValue: "Core Info Section",
-      })}
+      aria-label={t("coreInfoSection", { defaultValue: "Core Info Section" })}
     >
       <section
-        aria-label={i18n("informationSection", {
+        aria-label={t("informationSection", {
           defaultValue: "Information Section",
         })}
         className="flex flex-col gap-4"
       >
         {addressHeadingText && (
           <EntityField
-            displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+            displayName={t("headingText", { defaultValue: "Heading Text" })}
             fieldId={data.info.headingText.field}
             constantValueEnabled={data.info.headingText.constantValueEnabled}
           >
@@ -288,7 +286,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
           {resolvedAddress && (
             <EntityField
-              displayName={i18n("address", { defaultValue: "Address" })}
+              displayName={t("address", { defaultValue: "Address" })}
               fieldId={data.info.address.field}
               constantValueEnabled={data.info.address.constantValueEnabled}
             >
@@ -306,7 +304,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             <CTA
               className="font-bold"
               link={coordinates}
-              label={i18n("getDirections", { defaultValue: "Get Directions" })}
+              label="Get Directions"
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
               variant="link"
@@ -316,6 +314,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item) => {
+              const { t } = useTranslation();
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -327,7 +326,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               return (
                 <li key={item.label} className="flex gap-2 items-center">
                   <EntityField
-                    displayName={i18n("phoneNumber", {
+                    displayName={t("phoneNumber", {
                       defaultValue: "Phone Number",
                     })}
                     fieldId={item.number.field}
@@ -353,7 +352,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         )}
         {resolvedEmails && (
           <EntityField
-            displayName={i18n("emailList", { defaultValue: "Email List" })}
+            displayName={t("emailList", { defaultValue: "Email List" })}
             fieldId={data.info.emails.field}
             constantValueEnabled={data.info.emails.constantValueEnabled}
           >
@@ -385,14 +384,12 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       </section>
       {resolvedHours && (
         <section
-          aria-label={i18n("hoursSection", { defaultValue: "Hours Section" })}
+          aria-label={t("hoursSection", { defaultValue: "Hours Section" })}
           className="flex flex-col gap-4"
         >
           {hoursHeadingText && (
             <EntityField
-              displayName={i18n("headingText", {
-                defaultValue: "Heading Text",
-              })}
+              displayName={t("headingText", { defaultValue: "Heading Text" })}
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
@@ -400,7 +397,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             </EntityField>
           )}
           <EntityField
-            displayName={i18n("hours", { defaultValue: "Hours" })}
+            displayName={t("hours", { defaultValue: "Hours" })}
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
@@ -413,7 +410,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
             <EntityField
-              displayName={i18n("hoursText", { defaultValue: "Hours Text" })}
+              displayName={t("hoursText", { defaultValue: "Hours Text" })}
               fieldId="additionalHoursText"
             >
               <Body className="mt-4 text-body-sm-fontSize">
@@ -425,16 +422,14 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       )}
       {servicesList && servicesList.length > 0 && (
         <section
-          aria-label={i18n("servicesSection", {
+          aria-label={t("servicesSection", {
             defaultValue: "Services Section",
           })}
           className="flex flex-col gap-4"
         >
           {servicesHeadingText && (
             <EntityField
-              displayName={i18n("headingText", {
-                defaultValue: "Heading Text",
-              })}
+              displayName={t("headingText", { defaultValue: "Heading Text" })}
               fieldId={data.services.headingText.field}
               constantValueEnabled={
                 data.services.headingText.constantValueEnabled
@@ -446,7 +441,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             </EntityField>
           )}
           <EntityField
-            displayName={i18n("textList", { defaultValue: "Text List" })}
+            displayName={t("textList", { defaultValue: "Text List" })}
             fieldId={data.services.servicesList.field}
             constantValueEnabled={
               data.services.servicesList.constantValueEnabled

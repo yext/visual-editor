@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -14,7 +15,6 @@ import {
   EntityField,
   CTA,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 import { ImageType } from "@yext/pages-components";
 
@@ -40,6 +40,7 @@ const EventCardItem = ({
   document: any;
   card: EventCardProps["card"];
 }) => {
+  const { t } = useTranslation();
   const resolvedImage = resolveYextSubfield(document, card?.image);
   const resolvedTitle = resolveYextSubfield<string>(document, card?.title);
   const resolvedDateTime = resolveYextSubfield<string>(
@@ -51,14 +52,13 @@ const EventCardItem = ({
     card?.description
   );
   const resolvedCTA = resolveYextSubfield<CTAProps>(document, card?.cta);
-  const i18n = useI18n();
 
   return (
     <div className="flex flex-col md:flex-row rounded-lg overflow-hidden bg-white text-black h-fit md:h-64">
       <div className="lg:w-[45%] w-full h-full">
         {resolvedImage && (
           <EntityField
-            displayName={i18n("image", { defaultValue: "Image" })}
+            displayName={t("image", { defaultValue: "Image" })}
             fieldId={card?.image?.field}
             constantValueEnabled={card?.image?.constantValueEnabled}
           >
@@ -71,7 +71,7 @@ const EventCardItem = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {resolvedTitle && (
           <EntityField
-            displayName={i18n("title", { defaultValue: "Title" })}
+            displayName={t("title", { defaultValue: "Title" })}
             fieldId={card?.title?.field}
             constantValueEnabled={card?.title?.constantValueEnabled}
           >
@@ -80,7 +80,7 @@ const EventCardItem = ({
         )}
         {resolvedDateTime && (
           <EntityField
-            displayName={i18n("datetime", { defaultValue: "Date/Time" })}
+            displayName={t("datetime", { defaultValue: "Date/Time" })}
             fieldId={card?.dateTime?.field}
             constantValueEnabled={card?.dateTime?.constantValueEnabled}
           >
@@ -89,7 +89,7 @@ const EventCardItem = ({
         )}
         {resolvedDescription && (
           <EntityField
-            displayName={i18n("description", { defaultValue: "Description" })}
+            displayName={t("description", { defaultValue: "Description" })}
             fieldId={card?.description?.field}
             constantValueEnabled={card?.description?.constantValueEnabled}
           >
@@ -100,7 +100,7 @@ const EventCardItem = ({
         )}
         {resolvedCTA?.link && (
           <EntityField
-            displayName={i18n("cta", { defaultValue: "CTA" })}
+            displayName={t("cta", { defaultValue: "CTA" })}
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -11,7 +12,6 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface HoursStatusProps {
@@ -68,8 +68,8 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   showDayNames,
   dayOfWeekFormat,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const hours = resolveYextEntityField(document, hoursField);
 
   if (!hours) {
@@ -78,7 +78,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("hours", { defaultValue: "Hours" })}
+      displayName={t("hours", { defaultValue: "Hours" })}
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >

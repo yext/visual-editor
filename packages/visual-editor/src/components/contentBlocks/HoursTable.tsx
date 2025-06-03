@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -12,7 +13,6 @@ import {
   useDocument,
   YextEntityField,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export type HoursTableProps = {
@@ -65,8 +65,8 @@ const VisualEditorHoursTable = ({
   showAdditionalHoursText,
   alignment,
 }: HoursTableProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const hours = resolveYextEntityField(document, hoursField);
 
   const { additionalHoursText } = document as {
@@ -77,7 +77,7 @@ const VisualEditorHoursTable = ({
     <div className={`flex flex-col ${alignment}`}>
       {hours && (
         <EntityField
-          displayName={i18n("hours", { defaultValue: "Hours" })}
+          displayName={t("hours", { defaultValue: "Hours" })}
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
@@ -90,7 +90,7 @@ const VisualEditorHoursTable = ({
       )}
       {additionalHoursText && showAdditionalHoursText && (
         <EntityField
-          displayName={i18n("hoursText", { defaultValue: "Hours Text" })}
+          displayName={t("hoursText", { defaultValue: "Hours Text" })}
           fieldId="additionalHoursText"
         >
           <div className="mt-4 text-body-sm-fontSize">

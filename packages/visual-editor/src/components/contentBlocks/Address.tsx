@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -13,7 +14,6 @@ import {
   YextEntityField,
   CTA,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export type AddressProps = {
@@ -39,8 +39,8 @@ const AddressComponent = ({
   address: addressField,
   showGetDirections,
 }: AddressProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const address = resolveYextEntityField(document, addressField);
   const coordinates = getDirections(
     address as AddressType,
@@ -53,7 +53,7 @@ const AddressComponent = ({
     <>
       {address && (
         <EntityField
-          displayName={i18n("address", { defaultValue: "Address" })}
+          displayName={t("address", { defaultValue: "Address" })}
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >
@@ -66,7 +66,7 @@ const AddressComponent = ({
           {coordinates && showGetDirections && (
             <CTA
               link={coordinates}
-              label={i18n("getDirections", { defaultValue: "Get Directions" })}
+              label="Get Directions"
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
               variant="link"

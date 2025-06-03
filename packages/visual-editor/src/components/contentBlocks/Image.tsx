@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -8,7 +9,6 @@ import {
   Image,
   ImageProps,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -71,8 +71,8 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   width,
   height,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
     document,
     imageField
@@ -84,7 +84,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 
   return (
     <EntityField
-      displayName={i18n("image", { defaultValue: "Image" })}
+      displayName={t("image", { defaultValue: "Image" })}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >

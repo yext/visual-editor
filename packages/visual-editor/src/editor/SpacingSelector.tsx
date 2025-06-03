@@ -1,4 +1,4 @@
-import { i18n } from "../utils/i18n.ts";
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -86,6 +86,7 @@ export const SpacingSelector = (
   return {
     type: "custom",
     render: ({ value, onChange }) => {
+      const { t } = useTranslation();
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
@@ -100,10 +101,7 @@ export const SpacingSelector = (
                 includeDefault
                   ? [
                       {
-                        label: i18n("default", {
-                          defaultValue: "Default",
-                          context: "spacing",
-                        }),
+                        label: t("default", { defaultValue: "Default" }),
                         value: "default",
                         px: "",
                       },

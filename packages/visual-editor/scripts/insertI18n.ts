@@ -1,12 +1,16 @@
-import { Project, SyntaxKind } from "ts-morph";
+import {
+  Project,
+  SyntaxKind,
+  Node,
+  FunctionDeclaration,
+  FunctionExpression,
+  ArrowFunction,
+} from "ts-morph";
 import prettier from "prettier";
 import fs from "fs";
 
 const isDryRun = process.argv.includes("--dry-run");
 
-/**
- * Runs through everything under src/components and src/editor and adds i18n("...") to all appropriate strings
- */
 (async () => {
   const project = new Project({ tsConfigFilePath: "tsconfig.json" });
 
@@ -36,7 +40,6 @@ const isDryRun = process.argv.includes("--dry-run");
     const componentConfigVars = new Set<string>();
     const fieldConstVars = new Set<string>();
 
-    // Collect ComponentConfig vars
     sourceFile.getVariableDeclarations().forEach((decl) => {
       const typeNode = decl.getTypeNode();
       const name = decl.getName();
@@ -45,7 +48,6 @@ const isDryRun = process.argv.includes("--dry-run");
       }
     });
 
-    // Collect Fields<T> vars
     sourceFile.getVariableDeclarations().forEach((decl) => {
       const typeNode = decl.getTypeNode();
       const name = decl.getName();
@@ -54,8 +56,19 @@ const isDryRun = process.argv.includes("--dry-run");
       }
     });
 
-    // 1) JSX attributes
+    // We will collect all nodes to modify + their function ancestors here
+    type FuncNode = FunctionDeclaration | FunctionExpression | ArrowFunction;
+
+    const functionsToAddT = new Set<FuncNode>();
+
+    // 1) JSX attributes to wrap
     const attributesToWrap = new Set(["displayName", "aria-label"]);
+    const jsxAttrsToModify: {
+      attr: Node;
+      raw: string;
+      funcAncestor: FuncNode | undefined;
+    }[] = [];
+
     sourceFile.getDescendantsOfKind(SyntaxKind.JsxAttribute).forEach((attr) => {
       const nameNode = attr.getFirstChildByKind(SyntaxKind.Identifier);
       const name = nameNode?.getText();
@@ -64,19 +77,27 @@ const isDryRun = process.argv.includes("--dry-run");
       if (
         attributesToWrap.has(name || "") &&
         init?.getKind() === SyntaxKind.StringLiteral &&
-        !init.getText().startsWith("i18n(")
+        !init.getText().startsWith("t(")
       ) {
         const raw = init.getText().slice(1, -1);
-        const key = toCamelCase(raw);
-        attr.setInitializer(
-          `{i18n("${key}", { defaultValue: "${escapeString(raw)}" })}`
-        );
-        modified = true;
+        const funcAncestor = attr.getFirstAncestor(
+          (a) =>
+            Node.isFunctionDeclaration(a) ||
+            Node.isFunctionExpression(a) ||
+            Node.isArrowFunction(a)
+        ) as FuncNode | undefined;
+        jsxAttrsToModify.push({ attr, raw, funcAncestor });
       }
     });
 
-    // 2) Object props like label/title/description — but skip ComponentConfig + Fields<T>
+    // 2) Object props like label/title/description — skip ComponentConfig + Fields<T>
     const keysToWrap = new Set(["label", "title", "description"]);
+    const objectPropsToModify: {
+      prop: Node;
+      raw: string;
+      funcAncestor: FuncNode | undefined;
+    }[] = [];
+
     sourceFile
       .getDescendantsOfKind(SyntaxKind.PropertyAssignment)
       .forEach((prop) => {
@@ -87,7 +108,7 @@ const isDryRun = process.argv.includes("--dry-run");
         if (
           !keysToWrap.has(keyName || "") ||
           initializer?.getKind() !== SyntaxKind.StringLiteral ||
-          initializer.getText().startsWith("i18n(")
+          initializer.getText().startsWith("t(")
         ) {
           return;
         }
@@ -113,42 +134,99 @@ const isDryRun = process.argv.includes("--dry-run");
         const raw = initializer.getText().slice(1, -1);
         if (/^\d+$/.test(raw) || /^\d+:\d+$/.test(raw)) return;
 
-        const key = toCamelCase(raw);
-        initializer.replaceWithText(
-          `i18n("${key}", { defaultValue: "${escapeString(raw)}" })`
-        );
-        modified = true;
+        const funcAncestor = prop.getFirstAncestor(
+          (a) =>
+            Node.isFunctionDeclaration(a) ||
+            Node.isFunctionExpression(a) ||
+            Node.isArrowFunction(a)
+        ) as FuncNode | undefined;
+
+        objectPropsToModify.push({ prop, raw, funcAncestor });
       });
 
     // 3) Wrap raw JSX text
+    const jsxTextToModify: {
+      node: Node;
+      raw: string;
+      funcAncestor: FuncNode | undefined;
+    }[] = [];
     sourceFile
       .getDescendantsOfKind(SyntaxKind.JsxText)
       .forEach((jsxTextNode) => {
         const raw = jsxTextNode.getText().trim();
-        if (raw && !raw.includes("i18n(") && raw !== "|") {
-          const key = toCamelCase(raw);
-          const escaped = escapeString(raw);
-          jsxTextNode.replaceWithText(
-            `{i18n("${key}", { defaultValue: "${escaped}" })}`
-          );
-          modified = true;
+        if (raw && !raw.includes("t(") && raw !== "|") {
+          const funcAncestor = jsxTextNode.getFirstAncestor(
+            (a) =>
+              Node.isFunctionDeclaration(a) ||
+              Node.isFunctionExpression(a) ||
+              Node.isArrowFunction(a)
+          ) as FuncNode | undefined;
+          jsxTextToModify.push({ node: jsxTextNode, raw, funcAncestor });
         }
       });
 
-    // 4) Ensure i18n import exists
+    // Now modify all collected nodes and track functions to add t()
+    for (const { attr, raw, funcAncestor } of jsxAttrsToModify) {
+      const key = toCamelCase(raw);
+      attr.setInitializer(
+        `{t("${key}", { defaultValue: "${escapeString(raw)}" })}`
+      );
+      modified = true;
+      if (funcAncestor) functionsToAddT.add(funcAncestor);
+    }
+
+    for (const { prop, raw, funcAncestor } of objectPropsToModify) {
+      const key = toCamelCase(raw);
+      const initializer = prop.getInitializer();
+      if (initializer) {
+        initializer.replaceWithText(
+          `t("${key}", { defaultValue: "${escapeString(raw)}" })`
+        );
+        modified = true;
+        if (funcAncestor) functionsToAddT.add(funcAncestor);
+      }
+    }
+
+    for (const { node, raw, funcAncestor } of jsxTextToModify) {
+      const key = toCamelCase(raw);
+      const escaped = escapeString(raw);
+      node.replaceWithText(`{t("${key}", { defaultValue: "${escaped}" })}`);
+      modified = true;
+      if (funcAncestor) functionsToAddT.add(funcAncestor);
+    }
+
+    // Insert `const { t } = useTranslation();` at top of each function that needs it
+    for (const func of functionsToAddT) {
+      const body = func.getBody();
+      if (!body) continue;
+      // Check if already has this exact statement
+      if (
+        body
+          .getStatements()
+          .some((stmt) =>
+            stmt.getText().includes("const { t } = useTranslation()")
+          )
+      )
+        continue;
+
+      body.insertStatements(0, "const { t } = useTranslation();");
+      modified = true;
+    }
+
+    // Ensure react-i18next import exists if modified
     if (modified) {
       const existingImport = sourceFile
         .getImportDeclarations()
-        .find((imp) => imp.getModuleSpecifierValue() === "@yext/visual-editor");
+        .find((imp) => imp.getModuleSpecifierValue() === "react-i18next");
       if (existingImport) {
         const hasI18n = existingImport
           .getNamedImports()
-          .some((n) => n.getName() === "i18n");
-        if (!hasI18n) existingImport.addNamedImport("i18n");
+          .some((n) => n.getName() === "useTranslation");
+        if (!hasI18n) existingImport.addNamedImport("useTranslation");
       } else {
         sourceFile.insertImportDeclaration(0, {
-          namedImports: ["i18n"],
-          moduleSpecifier: "@yext/visual-editor",
+          namedImports: ["useTranslation"],
+          moduleSpecifier: "react-i18next",
         });
       }
 

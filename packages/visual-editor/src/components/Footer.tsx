@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
@@ -10,7 +11,6 @@ import {
   backgroundColors,
   PageSection,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -54,8 +54,8 @@ const Footer: ComponentConfig<FooterProps> = {
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
+  const { t } = useTranslation();
   const document = useDocument<any>();
-  const i18n = useI18n();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
   const links = document?._site?.footer?.links ?? [];
@@ -111,7 +111,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
           <EntityField
-            displayName={i18n("footerLinks", { defaultValue: "Footer Links" })}
+            displayName={t("footerLinks", { defaultValue: "Footer Links" })}
             fieldId={"site.footer.links"}
           >
             <FooterLinks links={links} />
@@ -119,7 +119,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
         )}
         {socialLinks && (
           <EntityField
-            displayName={i18n("footerSocialIcons", {
+            displayName={t("footerSocialIcons", {
               defaultValue: "Footer Social Icons",
             })}
             fieldId={"site.footer"}
@@ -131,9 +131,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName={i18n("copyrightText", {
-              defaultValue: "Copyright Text",
-            })}
+            displayName={t("copyrightText", { defaultValue: "Copyright Text" })}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Image,
   HeadingLevel,
@@ -19,7 +20,6 @@ import {
   Timestamp,
   ComponentFields,
   MaybeRTF,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -147,8 +147,8 @@ const InsightCard = ({
 };
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 
@@ -160,7 +160,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+            displayName={t("headingText", { defaultValue: "Heading Text" })}
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -170,7 +170,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName={i18n("insights", { defaultValue: "Insights" })}
+          displayName={t("insights", { defaultValue: "Insights" })}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >

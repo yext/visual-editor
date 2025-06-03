@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -31,7 +32,6 @@ import {
 } from "../internal/puck/ui/Tooltip.tsx";
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
-import { useI18n } from "../utils/i18n.ts";
 
 const devLogger = new DevLogger();
 
@@ -355,7 +355,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
-  const i18n = useI18n();
+  const { t } = useTranslation();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -372,7 +372,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
       {
         value: "",
-        label: i18n("selectAContentField", {
+        label: t("selectAContentField", {
           defaultValue: "Select a Content field",
         }),
       },

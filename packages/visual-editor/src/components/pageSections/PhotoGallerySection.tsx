@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { cloneElement } from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -26,7 +27,6 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
-  useI18n,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -138,8 +138,8 @@ const PhotoGallerySectionComponent = ({
   data,
   styles,
 }: PhotoGallerySectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const sectionHeading = resolveYextEntityField(document, data.heading);
 
   const resolvedImages = resolveYextEntityField(document, data.images);
@@ -156,7 +156,7 @@ const PhotoGallerySectionComponent = ({
 
   return (
     <PageSection
-      aria-label={i18n("photoGallerySection", {
+      aria-label={t("photoGallerySection", {
         defaultValue: "Photo Gallery Section",
       })}
       background={styles.backgroundColor}
@@ -164,7 +164,7 @@ const PhotoGallerySectionComponent = ({
     >
       {sectionHeading && (
         <EntityField
-          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -186,7 +186,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName={i18n("images", { defaultValue: "Images" })}
+              displayName={t("images", { defaultValue: "Images" })}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >

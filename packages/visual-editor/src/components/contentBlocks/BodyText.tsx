@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -8,7 +9,6 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
@@ -30,12 +30,12 @@ const bodyTextFields: Fields<BodyTextProps> = {
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
+    const { t } = useTranslation();
     const document = useDocument();
-    const i18n = useI18n();
 
     return (
       <EntityField
-        displayName={i18n("body", { defaultValue: "Body" })}
+        displayName={t("body", { defaultValue: "Body" })}
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >

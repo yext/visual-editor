@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -8,7 +9,6 @@ import {
   CTA,
   CTAProps,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
@@ -35,13 +35,13 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   variant,
   className,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
-  const i18n = useI18n();
   const cta = resolveYextEntityField(document, entityField);
 
   return (
     <EntityField
-      displayName={i18n("cta", { defaultValue: "CTA" })}
+      displayName={t("cta", { defaultValue: "CTA" })}
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >

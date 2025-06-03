@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -21,7 +22,6 @@ import {
   TimestampOption,
   ComponentFields,
   MaybeRTF,
-  useI18n,
 } from "@yext/visual-editor";
 
 export interface EventSectionProps {
@@ -142,9 +142,9 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
+  const { t } = useTranslation();
   const { data, styles } = props;
   const document = useDocument();
-  const i18n = useI18n();
   const resolvedEvents = resolveYextEntityField(document, data.events);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
 
@@ -155,7 +155,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={i18n("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", { defaultValue: "Heading Text" })}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -166,7 +166,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
       )}
       {resolvedEvents?.events && (
         <EntityField
-          displayName={i18n("events", { defaultValue: "Events" })}
+          displayName={t("events", { defaultValue: "Events" })}
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >

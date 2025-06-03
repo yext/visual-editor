@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { Coordinate } from "@yext/pages-components";
 import {
@@ -6,7 +7,6 @@ import {
   useDocument,
   YextEntityField,
   YextField,
-  useI18n,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -133,8 +133,8 @@ export const MapboxStaticMapComponent = ({
   zoom = 14,
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
+  const { t } = useTranslation();
   const document = useDocument<any>();
-  const i18n = useI18n();
 
   const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
@@ -155,7 +155,7 @@ export const MapboxStaticMapComponent = ({
 
   return (
     <EntityField
-      displayName={i18n("coordinate", { defaultValue: "Coordinate" })}
+      displayName={t("coordinate", { defaultValue: "Coordinate" })}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
