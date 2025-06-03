@@ -15,7 +15,12 @@ import {
   VisibilityWrapper,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
-import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
+import {
+  Address,
+  AnalyticsScopeProvider,
+  Coordinate,
+  HoursStatus,
+} from "@yext/pages-components";
 import * as React from "react";
 
 export interface NearbyLocationsSectionProps {
@@ -38,6 +43,9 @@ export interface NearbyLocationsSectionProps {
       dayOfWeekFormat?: "short" | "long";
       showDayNames?: boolean;
     };
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
   contentEndpointIdEnvVar?: string; // to be set via withPropOverrides
@@ -147,6 +155,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
 };
 
 const LocationCard = ({
+  key,
   styles,
   name,
   hours,
@@ -154,6 +163,7 @@ const LocationCard = ({
   timezone,
   mainPhone,
 }: {
+  key: number;
   styles: NearbyLocationsSectionProps["styles"];
   name: string;
   hours: any;
@@ -194,6 +204,7 @@ const LocationCard = ({
       )}
       {mainPhone && (
         <PhoneAtom
+          eventName={`phone${key}`}
           phoneNumber={mainPhone}
           format={styles?.phoneNumberFormat}
           includeHyperlink={styles?.phoneNumberLink}
@@ -400,14 +411,21 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
         phoneNumberFormat: "domestic",
         phoneNumberLink: false,
       },
+      analytics: {
+        scope: "nearbyLocationsSection",
+      },
       liveVisibility: true,
     },
     render: (props) => (
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={props.analytics?.scope ?? "nearbyLocationsSection"}
       >
-        <NearbyLocationsComponent {...props} />
-      </VisibilityWrapper>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <NearbyLocationsComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     ),
   };

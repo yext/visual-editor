@@ -21,6 +21,7 @@ import {
   MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface InsightSectionProps {
   data: {
@@ -31,6 +32,9 @@ export interface InsightSectionProps {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
 }
@@ -81,10 +85,12 @@ const insightSectionFields: Fields<InsightSectionProps> = {
 };
 
 const InsightCard = ({
+  key,
   insight,
   backgroundColor,
   sectionHeadingLevel,
 }: {
+  key: number;
   insight: InsightStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -133,6 +139,7 @@ const InsightCard = ({
         </div>
         {insight.cta && (
           <CTA
+            eventName={`cta${key}`}
             variant={"link"}
             label={insight.cta.label}
             link={insight.cta.link}
@@ -210,14 +217,19 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
         },
       },
     },
+    analytics: {
+      scope: "insightSection",
+    },
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <InsightSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "insightSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <InsightSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

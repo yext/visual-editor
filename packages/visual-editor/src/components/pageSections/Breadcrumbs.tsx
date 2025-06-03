@@ -7,9 +7,12 @@ import {
   VisibilityWrapper,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
-  separator?: string;
+  analytics?: {
+    scope?: string;
+  };
   liveVisibility: boolean;
 };
 
@@ -22,6 +25,7 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
     ],
   }),
 };
+
 // getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
 // the directory parent are not the expected objects, returns an empty array.
 const getDirectoryParents = (
@@ -57,8 +61,8 @@ function isValidDirectoryParents(value: any[]): boolean {
 // then displays nothing. In the case of a root DM page, there are
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
-export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
-  const { separator = "/" } = props;
+export const BreadcrumbsComponent = () => {
+  const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
   if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
@@ -83,6 +87,7 @@ export const BreadcrumbsComponent = (props: BreadcrumbsSectionProps) => {
           return (
             <li key={idx} className="flex items-center">
               <MaybeLink
+                eventName={`link${idx}`}
                 href={isLast ? "" : href}
                 // Force body-sm and link-fontFamily for all breadcrumbs
                 className="text-body-sm-fontSize font-link-fontFamily"
@@ -103,17 +108,22 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: "Breadcrumbs",
   fields: breadcrumbsSectionFields,
   defaultProps: {
+    analytics: {
+      scope: "breadcrumbs",
+    },
     liveVisibility: true,
   },
   render: (props) => {
     return (
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-        iconSize="md"
-      >
-        <BreadcrumbsComponent {...props} />
-      </VisibilityWrapper>
+      <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+          iconSize="md"
+        >
+          <BreadcrumbsComponent />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     );
   },
 };

@@ -3,6 +3,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AddressType,
+  AnalyticsScopeProvider,
   DayOfWeekNames,
   getDirections,
   HoursTable,
@@ -58,6 +59,9 @@ export interface CoreInfoSectionProps {
       collapseDays: boolean;
       showAdditionalHoursText: boolean;
     };
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
 }
@@ -295,6 +299,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           )}
           {coordinates && styles.info.showGetDirectionsLink && (
             <CTA
+              eventName={`getDirections`}
               className="font-bold"
               link={coordinates}
               label="Get Directions"
@@ -306,7 +311,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         </div>
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
-            {data.info.phoneNumbers.map((item) => {
+            {data.info.phoneNumbers.map((item, idx) => {
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -325,6 +330,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                     <div className={"flex items-center gap-3"}>
                       <div className="flex gap-2 items-center">
                         <PhoneAtom
+                          eventName={`phone${idx}`}
                           backgroundColor={backgroundColors.background2.value}
                           label={item.label}
                           phoneNumber={resolvedNumber}
@@ -361,6 +367,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                       <FaRegEnvelope className="w-4 h-4" />
                     </Background>
                     <CTA
+                      eventName={`email${index}`}
                       link={email}
                       label={email}
                       linkType="EMAIL"
@@ -512,14 +519,19 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         showAdditionalHoursText: true,
       },
     },
+    analytics: {
+      scope: "coreInfoSection",
+    },
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <CoreInfoSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? ""}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <CoreInfoSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };
