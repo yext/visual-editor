@@ -240,6 +240,23 @@ export const ui: Registry["items"] = [
     ],
   },
   {
+    name: "FINS_HeroSection",
+    type: "registry:ui",
+    registryDependencies: [
+      "pageSection",
+      "heading",
+      "body",
+      "background",
+      "cta",
+      "image",
+      "phone",
+      "visibilityWrapper",
+    ],
+    files: [
+      { path: "pageSections/FINS/FINS_HeroSection.tsx", type: "registry:ui" },
+    ],
+  },
+  {
     name: "Flex",
     type: "registry:ui",
     registryDependencies: ["layout", "background", "visibilityWrapper"],

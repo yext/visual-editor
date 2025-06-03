@@ -87,7 +87,12 @@ import {
   FINS_CoreInfoSectionProps,
   FINS_CoreInfoSection,
 } from "./pageSections/FINS/FINS_CoreInfoSection.tsx";
+import {
+  FINS_HeroSection,
+  FINS_HeroSectionProps,
+} from "./pageSections/FINS/FINS_HeroSection.tsx";
 export interface PageSectionCategoryProps {
+  FINS_HeroSection: FINS_HeroSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   HeroSection: HeroSectionProps;
   EventSection: EventSectionProps;
@@ -108,6 +113,7 @@ export interface PageSectionCategoryProps {
 }
 
 export const PageSectionCategoryComponents = {
+  FINS_HeroSection,
   BreadcrumbsSection,
   HeroSection,
   CoreInfoSection,
