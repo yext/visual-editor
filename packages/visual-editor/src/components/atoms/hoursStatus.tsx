@@ -113,7 +113,7 @@ function hoursFutureTemplateOverride(
 }
 
 /**
- * Overrides the day of the week appearance
+ * Overrides the day of the week appearance to pass through locale
  * @param params used to determine the day of the week
  * @param locale used to translate the day of the week
  */
