@@ -22,9 +22,10 @@ import {
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
+  HoursStatusParams,
   hoursDayOfWeekTemplateOverride,
   hoursCurrentTemplateOverride,
-  HoursStatusParams,
+  hoursFutureTemplateOverride,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -207,6 +208,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 timezone={timezone}
                 currentTemplate={(params: HoursStatusParams) =>
                   hoursCurrentTemplateOverride(params, t)
+                }
+                futureTemplate={(params: HoursStatusParams) =>
+                  hoursFutureTemplateOverride(params, t)
                 }
                 dayOfWeekTemplate={(params: HoursStatusParams) =>
                   hoursDayOfWeekTemplateOverride(params, locale)

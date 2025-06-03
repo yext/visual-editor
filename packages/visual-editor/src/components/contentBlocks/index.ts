@@ -7,9 +7,10 @@ export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
 export {
   HoursStatus,
   type HoursStatusProps,
+  type HoursStatusParams,
   hoursDayOfWeekTemplateOverride,
   hoursCurrentTemplateOverride,
-  type HoursStatusParams,
+  hoursFutureTemplateOverride,
 } from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";

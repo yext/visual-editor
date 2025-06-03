@@ -104,6 +104,9 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
                 hoursCurrentTemplateOverride(params, t)
             : () => <></>
         }
+        futureTemplate={(params: HoursStatusParams) =>
+          hoursFutureTemplateOverride(params, t)
+        }
         separatorTemplate={showCurrentStatus ? undefined : () => <></>}
         dayOfWeekTemplate={
           showDayNames
@@ -120,7 +123,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 };
 
 /**
- * Overrides the status text to incorporate i18n
+ * Overrides the current status text to incorporate i18n
  * @param params used to determine the status
  * @param t translation function
  */
@@ -147,6 +150,27 @@ export function hoursCurrentTemplateOverride(
       {params.isOpen
         ? t("openNow", { defaultValue: "Open Now" })
         : t("closed", { defaultValue: "Closed" })}
+    </span>
+  );
+}
+
+/**
+ * Overrides the future status text to incorporate i18n
+ * @param params used to determine the status
+ * @param t translation function
+ */
+export function hoursFutureTemplateOverride(
+  params: HoursStatusParams,
+  t: TFunction
+): React.ReactNode {
+  if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
+    return null;
+  }
+  return (
+    <span className="HoursStatus-future">
+      {params.isOpen
+        ? t("closesAt", { defaultValue: "Closes at" })
+        : t("opensAt", { defaultValue: "Opens at" })}
     </span>
   );
 }

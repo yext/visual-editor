@@ -60,5 +60,7 @@
   "open24Hours": "Open 24 Hours",
   "temporarilyClosed": "Temporarily Closed",
   "openNow": "Open Now",
-  "closed": "Closed"
+  "closed": "Closed",
+  "closesAt": "Closes at",
+  "opensAt": "Opens at"
 }
