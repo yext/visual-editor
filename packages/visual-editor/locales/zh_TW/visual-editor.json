@@ -1,4 +1,10 @@
 {
+  "open24Hours": "",
+  "temporarilyClosed": "",
+  "openNow": "",
+  "closed": "",
+  "closesAt": "",
+  "opensAt": "",
   "image": "",
   "title": "",
   "datetime": "",
@@ -56,11 +62,5 @@
   "default_radius": "",
   "default_size": "",
   "default_spacing": "",
-  "selectAContentField": "",
-  "open24Hours": "",
-  "temporarilyClosed": "",
-  "openNow": "",
-  "closed": "",
-  "closesAt": "",
-  "opensAt": ""
+  "selectAContentField": ""
 }
