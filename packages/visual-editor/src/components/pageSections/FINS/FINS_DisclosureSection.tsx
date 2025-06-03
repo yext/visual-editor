@@ -40,7 +40,7 @@ const disclosureSectionFields: Fields<FINS_DisclosureSectionProps> = {
       description: YextField("Description", {
         type: "entityField",
         filter: {
-          types: ["type.string"],
+          types: ["type.string", "type.rich_text_v2"],
         },
       }),
     },
@@ -74,8 +74,14 @@ const DisclosureSectionWrapper = ({
   styles: { backgroundColor, headingLevel },
 }: FINS_DisclosureSectionProps) => {
   const document = useDocument();
-  const resolvedHeadingText = resolveYextEntityField(document, headingText);
-  const resolvedDisclosureText = resolveYextEntityField(document, description);
+  const resolvedHeadingText = resolveYextEntityField<string>(
+    document,
+    headingText
+  );
+  const resolvedDisclosureText = resolveYextEntityField<string | RTF2>(
+    document,
+    description
+  );
 
   return (
     <PageSection
