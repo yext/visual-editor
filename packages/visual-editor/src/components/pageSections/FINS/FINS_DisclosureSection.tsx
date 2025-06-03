@@ -74,8 +74,14 @@ const DisclosureSectionWrapper = ({
   styles: { backgroundColor, headingLevel },
 }: FINS_DisclosureSectionProps) => {
   const document = useDocument();
-  const resolvedHeadingText = resolveYextEntityField<string>(document, headingText);
-  const resolvedDisclosureText = resolveYextEntityField<string | RTF2>(document, description);
+  const resolvedHeadingText = resolveYextEntityField<string>(
+    document,
+    headingText
+  );
+  const resolvedDisclosureText = resolveYextEntityField<string | RTF2>(
+    document,
+    description
+  );
 
   return (
     <PageSection
@@ -109,35 +115,35 @@ const DisclosureSectionWrapper = ({
 };
 
 export const FINS_DisclosureSection: ComponentConfig<FINS_DisclosureSectionProps> =
-{
-  label: "FINS - Disclosure Section",
-  fields: disclosureSectionFields,
-  defaultProps: {
-    data: {
-      headingText: {
-        field: "",
-        constantValue: "Disclosure",
-        constantValueEnabled: true,
+  {
+    label: "FINS - Disclosure Section",
+    fields: disclosureSectionFields,
+    defaultProps: {
+      data: {
+        headingText: {
+          field: "",
+          constantValue: "Disclosure",
+          constantValueEnabled: true,
+        },
+        description: {
+          field: "",
+          constantValue:
+            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, modi asperiores, suscipit delectus eos expedita vero iste iure vel facere sed recusandae temporibus, fugiat natus. Dolore cumque blanditiis eligendi adipisci?",
+          constantValueEnabled: true,
+        },
       },
-      description: {
-        field: "",
-        constantValue:
-          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, modi asperiores, suscipit delectus eos expedita vero iste iure vel facere sed recusandae temporibus, fugiat natus. Dolore cumque blanditiis eligendi adipisci?",
-        constantValueEnabled: true,
+      styles: {
+        headingLevel: 4,
+        backgroundColor: backgroundColors.background3.value,
       },
+      liveVisibility: true,
     },
-    styles: {
-      headingLevel: 4,
-      backgroundColor: backgroundColors.background3.value,
-    },
-    liveVisibility: true,
-  },
-  render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <DisclosureSectionWrapper {...props} />
-    </VisibilityWrapper>
-  ),
-};
+    render: (props) => (
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <DisclosureSectionWrapper {...props} />
+      </VisibilityWrapper>
+    ),
+  };
