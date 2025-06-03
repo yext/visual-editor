@@ -4,7 +4,13 @@ export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
 export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";
 export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
-export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
+export {
+  HoursStatus,
+  type HoursStatusProps,
+  hoursDayOfWeekTemplateOverride,
+  hoursCurrentTemplateOverride,
+  type HoursStatusParams,
+} from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";

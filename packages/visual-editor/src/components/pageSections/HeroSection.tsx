@@ -22,6 +22,9 @@ import {
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
+  hoursDayOfWeekTemplateOverride,
+  hoursCurrentTemplateOverride,
+  HoursStatusParams,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -121,6 +124,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t } = useTranslation();
   const document = useDocument() as any;
+  const locale = "en-US"; // TODO override with real locale
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
     data?.businessName
@@ -198,7 +202,16 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
-              <HoursStatus hours={resolvedHours} timezone={timezone} />
+              <HoursStatus
+                hours={resolvedHours}
+                timezone={timezone}
+                currentTemplate={(params: HoursStatusParams) =>
+                  hoursCurrentTemplateOverride(params, t)
+                }
+                dayOfWeekTemplate={(params: HoursStatusParams) =>
+                  hoursDayOfWeekTemplateOverride(params, locale)
+                }
+              />
             </EntityField>
           )}
         </header>

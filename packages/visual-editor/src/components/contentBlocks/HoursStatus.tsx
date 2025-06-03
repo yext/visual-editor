@@ -61,7 +61,7 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   }),
 };
 
-interface StatusParams {
+export interface HoursStatusParams {
   isOpen: boolean;
   currentInterval: any | null;
   futureInterval: any | null;
@@ -100,13 +100,15 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
         )}
         currentTemplate={
           showCurrentStatus
-            ? (params: StatusParams) => currentTemplate(params, t)
+            ? (params: HoursStatusParams) =>
+                hoursCurrentTemplateOverride(params, t)
             : () => <></>
         }
         separatorTemplate={showCurrentStatus ? undefined : () => <></>}
         dayOfWeekTemplate={
           showDayNames
-            ? (params: StatusParams) => dayOfWeekTemplate(params, locale)
+            ? (params: HoursStatusParams) =>
+                hoursDayOfWeekTemplateOverride(params, locale)
             : () => <></>
         }
         dayOptions={{ weekday: dayOfWeekFormat }}
@@ -122,7 +124,10 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
  * @param params used to determine the status
  * @param t translation function
  */
-function currentTemplate(params: StatusParams, t: TFunction): React.ReactNode {
+export function hoursCurrentTemplateOverride(
+  params: HoursStatusParams,
+  t: TFunction
+): React.ReactNode {
   if (params?.currentInterval?.is24h?.()) {
     return (
       <span className="HoursStatus-current">
@@ -151,8 +156,8 @@ function currentTemplate(params: StatusParams, t: TFunction): React.ReactNode {
  * @param params used to determine the day of the week
  * @param locale used to translate the day of the week
  */
-function dayOfWeekTemplate(
-  params: StatusParams,
+export function hoursDayOfWeekTemplateOverride(
+  params: HoursStatusParams,
   locale: string
 ): React.ReactNode {
   if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
