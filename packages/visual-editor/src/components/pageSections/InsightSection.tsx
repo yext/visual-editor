@@ -148,7 +148,7 @@ const InsightCard = ({
         </div>
         {insight.cta && (
           <CTA
-            eventName={`${scope}_cta_${key}`}
+            eventName={`${scope}_cta${key}`}
             variant={"link"}
             label={insight.cta.label}
             link={insight.cta.link}

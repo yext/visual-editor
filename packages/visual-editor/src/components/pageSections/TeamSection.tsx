@@ -140,7 +140,7 @@ const PersonCard = ({
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
             <PhoneAtom
-              eventName={`${scope}_phone_${key}`}
+              eventName={`${scope}_phone${key}`}
               phoneNumber={person.phoneNumber}
               includeHyperlink={true}
               includeIcon={true}
@@ -157,7 +157,7 @@ const PersonCard = ({
                 <FaEnvelope />
               </div>
               <CTA
-                eventName={`${scope}_email_${key}`}
+                eventName={`${scope}_email${key}`}
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
@@ -168,7 +168,7 @@ const PersonCard = ({
           {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
-                eventName={`${scope}_cta_${key}`}
+                eventName={`${scope}_cta${key}`}
                 label={person.cta.label}
                 link={person.cta.link}
                 linkType={person.cta.linkType}

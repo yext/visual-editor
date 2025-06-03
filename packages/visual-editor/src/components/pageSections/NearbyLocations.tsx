@@ -209,7 +209,7 @@ const LocationCard = ({
       )}
       {mainPhone && (
         <PhoneAtom
-          eventName={`${scope}_phone_${key}`}
+          eventName={`${scope}_phone${key}`}
           phoneNumber={mainPhone}
           format={styles?.phoneNumberFormat}
           includeHyperlink={styles?.phoneNumberLink}

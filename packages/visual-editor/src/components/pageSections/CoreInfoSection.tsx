@@ -342,7 +342,7 @@ const CoreInfoSectionWrapper = ({
                     <div className={"flex items-center gap-3"}>
                       <div className="flex gap-2 items-center">
                         <PhoneAtom
-                          eventName={`${scope}_phone_${idx}`}
+                          eventName={`${scope}_phone${idx}`}
                           backgroundColor={backgroundColors.background2.value}
                           label={item.label}
                           phoneNumber={resolvedNumber}
@@ -379,7 +379,7 @@ const CoreInfoSectionWrapper = ({
                       <FaRegEnvelope className="w-4 h-4" />
                     </Background>
                     <CTA
-                      eventName={`${scope}_email_${index}`}
+                      eventName={`${scope}_email${index}`}
                       link={email}
                       label={email}
                       linkType="EMAIL"

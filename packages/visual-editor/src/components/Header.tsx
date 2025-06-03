@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CTA as CTAType, ComplexImageType } from "@yext/pages-components";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
@@ -25,23 +25,40 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 
 export type HeaderProps = {
   logoWidth?: number;
+  analytics: {
+    scope?: string;
+  };
+};
+
+const headerFields: Fields<HeaderProps> = {
+  logoWidth: YextField("Logo Width", {
+    type: "number",
+    min: 0,
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
   label: "Header",
-  fields: {
-    logoWidth: YextField("Logo Width", {
-      type: "number",
-      min: 0,
-    }),
-  },
+  fields: headerFields,
   defaultProps: {
     logoWidth: 80,
+    analytics: {
+      scope: "header",
+    },
   },
   render: (props) => <HeaderComponent {...props} />,
 };
 
-const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
+const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth, analytics }) => {
+  const scope = analytics?.scope || "header";
   const document: {
     _site?: {
       header?: {
@@ -53,7 +70,14 @@ const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  return <HeaderLayout links={links} logo={logo} logoWidth={logoWidth} />;
+  return (
+    <HeaderLayout
+      links={links}
+      logo={logo}
+      logoWidth={logoWidth}
+      scope={scope}
+    />
+  );
 };
 
 interface HeaderLayoutProps {
@@ -61,11 +85,12 @@ interface HeaderLayoutProps {
   logoLink?: string;
   logo?: ComplexImageType;
   logoWidth?: number;
+  scope: string;
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoWidth, logoLink, links } = props;
+  const { logo, logoWidth, logoLink, links, scope } = props;
 
   return (
     <PageSection
@@ -89,7 +114,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
               displayName="Header Links"
               fieldId={"site.header.links"}
             >
-              <HeaderLinks links={links} />
+              <HeaderLinks links={links} scope={scope} />
             </EntityField>
             <button
               className="flex md:hidden ml-auto my-auto"
@@ -106,7 +131,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         )}
       </div>
       {links?.length > 0 && (
-        <HeaderMobileMenu isOpen={menuOpen} links={links} />
+        <HeaderMobileMenu isOpen={menuOpen} links={links} scope={scope} />
       )}
     </PageSection>
   );
@@ -130,7 +155,7 @@ const HeaderLogo = (props: {
   );
 };
 
-const HeaderLinks = (props: { links: CTAType[] }) => {
+const HeaderLinks = (props: { links: CTAType[]; scope: string }) => {
   return (
     <div className="hidden md:flex items-center">
       <ul className="flex gap-4 lg:gap-10">
@@ -143,7 +168,7 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
                 link={item.link}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`headerlink${idx}`}
+                eventName={`${props.scope}_link${idx}`}
                 alwaysHideCaret={true}
               />
             </li>
@@ -156,10 +181,11 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
 type HeaderMobileMenuProps = {
   isOpen?: boolean;
   links: CTAType[];
+  scope: string;
 };
 
 const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
-  const { isOpen, links } = props;
+  const { isOpen, links, scope } = props;
   return (
     <div
       className={
@@ -179,7 +205,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
                 label={item.label}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`headermobilelink${idx}`}
+                eventName={`${scope}_mobilelink${idx}`}
               />
             </li>
           ))}

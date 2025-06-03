@@ -97,7 +97,7 @@ export const BreadcrumbsComponent = ({
           return (
             <li key={idx} className="flex items-center">
               <MaybeLink
-                eventName={`${scope}_link_${idx}`}
+                eventName={`${scope}_link${idx}`}
                 href={isLast ? "" : href}
                 // Force body-sm and link-fontFamily for all breadcrumbs
                 className="text-body-sm-fontSize font-link-fontFamily"

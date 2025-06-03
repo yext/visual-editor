@@ -145,7 +145,7 @@ const ProductCard = ({
         </div>
         {product.cta && (
           <CTA
-            eventName={`${scope}_cta_${key}`}
+            eventName={`${scope}_cta${key}`}
             variant="secondary"
             label={product.cta.label}
             link={product.cta.link}

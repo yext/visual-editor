@@ -144,7 +144,7 @@ const EventCard = ({
         <MaybeRTF data={event.description} />
         {event.cta && (
           <CTA
-            eventName={`${scope}_cta_${key}`}
+            eventName={`${scope}_cta${key}`}
             label={event.cta.label}
             link={event.cta.link}
             linkType={event.cta.linkType}
