@@ -65,6 +65,7 @@ export const EntityField = ({
             </div>
           </TooltipTrigger>
           <TooltipContent
+            zoomWithViewport
             className={!constantValueEnabled ? "ve-bg-primary" : ""}
           >
             <p>{tooltipContent}</p>
