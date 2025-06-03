@@ -13,10 +13,16 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
+  HoursStatusParams,
+  hoursCurrentTemplateOverride,
+  hoursFutureTemplateOverride,
+  hoursDayOfWeekTemplateOverride,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 
 export interface NearbyLocationsSectionProps {
   data: {
@@ -153,6 +159,8 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
+  locale,
+  t,
 }: {
   styles: NearbyLocationsSectionProps["styles"];
   name: string;
@@ -160,6 +168,8 @@ const LocationCard = ({
   address: any;
   timezone: string;
   mainPhone: string;
+  locale: string;
+  t: TFunction;
 }) => {
   return (
     <Background
@@ -174,10 +184,16 @@ const LocationCard = ({
             hours={hours}
             timezone={timezone}
             currentTemplate={
-              styles?.hours?.showCurrentStatus ? undefined : () => <></>
+              styles?.hours?.showCurrentStatus
+                ? (params: HoursStatusParams) =>
+                    hoursCurrentTemplateOverride(params, t)
+                : () => <></>
             }
             separatorTemplate={
-              styles?.hours?.showCurrentStatus ? undefined : () => <></>
+              styles?.hours?.showCurrentStatus
+                ? (params: HoursStatusParams) =>
+                    hoursFutureTemplateOverride(params, t)
+                : () => <></>
             }
             timeOptions={{
               hour12: styles?.hours?.timeFormat === "12h",
@@ -186,7 +202,10 @@ const LocationCard = ({
               weekday: styles?.hours?.dayOfWeekFormat,
             }}
             dayOfWeekTemplate={
-              styles?.hours?.showDayNames ? undefined : () => <></>
+              styles?.hours?.showDayNames
+                ? (params: HoursStatusParams) =>
+                    hoursDayOfWeekTemplateOverride(params, locale)
+                : () => <></>
             }
             className="h-full"
           />
@@ -222,6 +241,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
+  const { t } = useTranslation();
+  const locale = "en-US"; // TODO replace with real locale
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     data?.coordinate
@@ -296,6 +317,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
+                    locale={locale}
+                    t={t}
                   />
                 )
               )}
