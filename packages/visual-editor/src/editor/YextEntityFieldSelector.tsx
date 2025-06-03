@@ -14,6 +14,7 @@ import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Call
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
@@ -58,6 +59,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
@@ -356,6 +358,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   className,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
+  const templateMetadata = useTemplateMetadata();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -369,7 +372,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
-    return BasicSelector("Entity Field", [
+    return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
       { value: "", label: "Select a Content field" },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {
