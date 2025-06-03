@@ -84,7 +84,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 
   return (
     <EntityField
-      displayName={t("image", { defaultValue: "Image" })}
+      displayName={t("image", "Image")}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >

@@ -43,7 +43,7 @@ const TextListComponent: React.FC<TextListProps> = ({
 
   return (
     <EntityField
-      displayName={t("textList", { defaultValue: "Text List" })}
+      displayName={t("textList", "Text List")}
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >

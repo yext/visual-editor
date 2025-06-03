@@ -156,15 +156,13 @@ const PhotoGallerySectionComponent = ({
 
   return (
     <PageSection
-      aria-label={t("photoGallerySection", {
-        defaultValue: "Photo Gallery Section",
-      })}
+      aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
       className="flex flex-col gap-8 justify-center text-center"
     >
       {sectionHeading && (
         <EntityField
-          displayName={t("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -186,7 +184,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName={t("images", { defaultValue: "Images" })}
+              displayName={t("images", "Images")}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >

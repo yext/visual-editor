@@ -167,7 +167,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName={t("headingText", { defaultValue: "Heading Text" })}
+            displayName={t("headingText", "Heading Text")}
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -177,7 +177,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName={t("insights", { defaultValue: "Insights" })}
+          displayName={t("insights", "Insights")}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >

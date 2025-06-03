@@ -163,7 +163,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", { defaultValue: "Heading Text" })}
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -174,7 +174,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName={t("products", { defaultValue: "Products" })}
+          displayName={t("products", "Products")}
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >

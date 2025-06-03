@@ -53,7 +53,7 @@ const GetDirectionsComponent = ({
 
   return (
     <EntityField
-      displayName={t("getDirections", { defaultValue: "Get Directions" })}
+      displayName={t("getDirections", "Get Directions")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >

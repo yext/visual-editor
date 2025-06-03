@@ -121,7 +121,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
           <EntityField
-            displayName={t("footerLinks", { defaultValue: "Footer Links" })}
+            displayName={t("footerLinks", "Footer Links")}
             fieldId={"site.footer.links"}
           >
             <FooterLinks links={links} />
@@ -129,9 +129,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
         )}
         {socialLinks && (
           <EntityField
-            displayName={t("footerSocialIcons", {
-              defaultValue: "Footer Social Icons",
-            })}
+            displayName={t("footerSocialIcons", "Footer Social Icons")}
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -141,7 +139,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName={t("copyrightText", { defaultValue: "Copyright Text" })}
+            displayName={t("copyrightText", "Copyright Text")}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>

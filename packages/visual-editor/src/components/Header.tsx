@@ -94,7 +94,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName={t("businessLogo", { defaultValue: "Business Logo" })}
+            displayName={t("businessLogo", "Business Logo")}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -104,7 +104,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {links?.length > 0 && (
           <>
             <EntityField
-              displayName={t("headerLinks", { defaultValue: "Header Links" })}
+              displayName={t("headerLinks", "Header Links")}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />

@@ -105,7 +105,7 @@ export const FontSizeSelector = (
       const options = convertDefaultFontSizesToOptions(
         [
           {
-            label: t("default", { defaultValue: "Default", context: "size" }),
+            label: t("fontSizeDefaultLabel", "Default"),
             value: "default",
             px: "",
           },

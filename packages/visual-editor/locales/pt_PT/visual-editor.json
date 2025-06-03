@@ -57,10 +57,9 @@
   "callToAction": "",
   "team": "",
   "testimonials": "",
-  "noOptionsAvailable": "",
-  "default": "",
-  "default_radius": "",
-  "default_size": "",
-  "default_spacing": "",
-  "selectAContentField": ""
+  "basicSelectorNoOptionsLabel": "",
+  "borderRadiusDefaultLabel": "",
+  "fontSizeDefaultLabel": "",
+  "spacingDefaultLabel": "",
+  "basicSelectorDefaultContentLabel": ""
 }

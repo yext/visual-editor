@@ -63,7 +63,7 @@ const InsightCardItem = ({
     >
       {resolvedImage && (
         <EntityField
-          displayName={t("image", { defaultValue: "Image" })}
+          displayName={t("image", "Image")}
           fieldId={card?.image?.field}
           constantValueEnabled={card?.image?.constantValueEnabled}
         >
@@ -81,7 +81,7 @@ const InsightCardItem = ({
               className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
             >
               <EntityField
-                displayName={t("category", { defaultValue: "Category" })}
+                displayName={t("category", "Category")}
                 fieldId={card?.category?.field}
                 constantValueEnabled={card?.category?.constantValueEnabled}
               >
@@ -89,7 +89,7 @@ const InsightCardItem = ({
               </EntityField>
               {resolvedCategory && resolvedDate && <Body>|</Body>}
               <EntityField
-                displayName={t("date", { defaultValue: "Date" })}
+                displayName={t("date", "Date")}
                 fieldId={card?.date?.field}
                 constantValueEnabled={card?.date?.constantValueEnabled}
               >
@@ -99,7 +99,7 @@ const InsightCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName={t("insightTitle", { defaultValue: "Insight Title" })}
+              displayName={t("insightTitle", "Insight Title")}
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -110,7 +110,7 @@ const InsightCardItem = ({
           )}
           {resolvedDescription && (
             <EntityField
-              displayName={t("description", { defaultValue: "Description" })}
+              displayName={t("description", "Description")}
               fieldId={card?.description?.field}
               constantValueEnabled={card?.description?.constantValueEnabled}
             >
@@ -120,7 +120,7 @@ const InsightCardItem = ({
         </div>
         {resolvedCTA?.link && (
           <EntityField
-            displayName={t("cta", { defaultValue: "CTA" })}
+            displayName={t("cta", "CTA")}
             fieldId={card?.cta.field}
             constantValueEnabled={card?.cta.constantValueEnabled}
           >

@@ -80,7 +80,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
-        displayName={t("bannerText", { defaultValue: "Banner Text" })}
+        displayName={t("bannerText", "Banner Text")}
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >

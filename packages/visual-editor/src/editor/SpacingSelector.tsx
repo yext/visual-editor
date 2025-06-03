@@ -101,10 +101,7 @@ export const SpacingSelector = (
                 includeDefault
                   ? [
                       {
-                        label: t("default", {
-                          defaultValue: "Default",
-                          context: "spacing",
-                        }),
+                        label: t("spacingDefaultLabel", "Default"),
                         value: "default",
                         px: "",
                       },

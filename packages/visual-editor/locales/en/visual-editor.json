@@ -57,10 +57,9 @@
   "callToAction": "Call To Action",
   "team": "Team",
   "testimonials": "Testimonials",
-  "noOptionsAvailable": "No options available",
-  "default": "Default",
-  "default_radius": "Default",
-  "default_size": "Default",
-  "default_spacing": "Default",
-  "selectAContentField": "Select a Content field"
+  "basicSelectorNoOptionsLabel": "No options available",
+  "borderRadiusDefaultLabel": "Default",
+  "fontSizeDefaultLabel": "Default",
+  "spacingDefaultLabel": "Default",
+  "basicSelectorDefaultContentLabel": "Select a Content field"
 }

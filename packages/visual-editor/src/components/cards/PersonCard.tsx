@@ -76,7 +76,7 @@ const PersonCardItem = ({
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {resolvedImage && (
             <EntityField
-              displayName={t("headshot", { defaultValue: "Headshot" })}
+              displayName={t("headshot", "Headshot")}
               fieldId={card?.headshot?.field}
               constantValueEnabled={
                 resolvedHeadshot?.image?.constantValueEnabled
@@ -89,7 +89,7 @@ const PersonCardItem = ({
         <div className="flex flex-col justify-center gap-1">
           {resolvedName && (
             <EntityField
-              displayName={t("name", { defaultValue: "Name" })}
+              displayName={t("name", "Name")}
               fieldId={card?.name?.field}
               constantValueEnabled={card?.name?.constantValueEnabled}
             >
@@ -98,7 +98,7 @@ const PersonCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName={t("title", { defaultValue: "Title" })}
+              displayName={t("title", "Title")}
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -115,7 +115,7 @@ const PersonCardItem = ({
         <div className="flex flex-col gap-4">
           {resolvedPhone && (
             <EntityField
-              displayName={t("phone", { defaultValue: "Phone" })}
+              displayName={t("phone", "Phone")}
               fieldId={resolvedPhone}
               constantValueEnabled={card?.phone?.constantValueEnabled}
             >
@@ -134,7 +134,7 @@ const PersonCardItem = ({
           )}
           {resolvedEmail && (
             <EntityField
-              displayName={t("email", { defaultValue: "Email" })}
+              displayName={t("email", "Email")}
               fieldId={card?.email?.field}
               constantValueEnabled={card?.email?.constantValueEnabled}
             >
@@ -153,7 +153,7 @@ const PersonCardItem = ({
           )}
           {resolvedCTA?.link && (
             <EntityField
-              displayName={t("cta", { defaultValue: "CTA" })}
+              displayName={t("cta", "CTA")}
               fieldId={card?.cta?.field}
               constantValueEnabled={card?.cta?.constantValueEnabled}
             >

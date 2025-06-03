@@ -372,9 +372,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
       {
         value: "",
-        label: t("selectAContentField", {
-          defaultValue: "Select a Content field",
-        }),
+        label: t("basicSelectorDefaultContentLabel", "Select a Content field"),
       },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {
