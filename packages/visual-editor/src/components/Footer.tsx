@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CTA as CTAType } from "@yext/pages-components";
+import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
   Body,
@@ -61,19 +61,18 @@ const Footer: ComponentConfig<FooterProps> = {
     },
   },
   inline: true,
-  render: (props) => <FooterComponent {...props} />,
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope || "footer"}>
+      <FooterComponent {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
 
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
   const document = useDocument<any>();
-  const {
-    backgroundColor = backgroundColors.background1.value,
-    puck,
-    analytics,
-  } = props;
-  const scope = analytics?.scope || "footer";
+  const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
   const links = document?._site?.footer?.links ?? [];
   const copyrightMessage = document?._site?.copyrightMessage;
@@ -128,7 +127,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
           <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
-            <FooterLinks links={links} scope={scope} />
+            <FooterLinks links={links} />
           </EntityField>
         )}
         {socialLinks && (
@@ -136,7 +135,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
             displayName="Footer Social Icons"
             fieldId={"site.footer"}
           >
-            <FooterSocialIcons socialLinks={socialLinks} scope={scope} />
+            <FooterSocialIcons socialLinks={socialLinks} />
           </EntityField>
         )}
       </div>
@@ -154,7 +153,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   );
 };
 
-const FooterLinks = (props: { links: CTAType[]; scope: string }) => {
+const FooterLinks = (props: { links: CTAType[] }) => {
   return (
     <ul className="flex flex-col sm:flex-row items-center pb-4">
       {props.links
@@ -165,7 +164,7 @@ const FooterLinks = (props: { links: CTAType[]; scope: string }) => {
               link={item.link}
               label={item.label}
               linkType={item.linkType}
-              eventName={`${props.scope}_link${idx}`}
+              eventName={`link${idx}`}
               variant="link"
               alwaysHideCaret={true}
               className="sm:pr-8"
@@ -176,13 +175,7 @@ const FooterLinks = (props: { links: CTAType[]; scope: string }) => {
   );
 };
 
-const FooterSocialIcons = ({
-  socialLinks,
-  scope,
-}: {
-  socialLinks: socialLink[];
-  scope: string;
-}) => {
+const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
   return (
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
       {socialLinks.map((socialLink: socialLink, idx: number) =>
@@ -192,7 +185,7 @@ const FooterSocialIcons = ({
             label={socialLink.label}
             link={`${socialLink.prefix ?? ""}${socialLink.link}`}
             variant={"link"}
-            eventName={`${scope}_socialLink${idx}`}
+            eventName={`socialLink${idx}`}
             alwaysHideCaret={true}
             ariaLabel={socialLink.label + " link"}
           />

@@ -21,6 +21,7 @@ import {
   MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface InsightSectionProps {
   data: {
@@ -96,13 +97,11 @@ const InsightCard = ({
   insight,
   backgroundColor,
   sectionHeadingLevel,
-  scope,
 }: {
   key: number;
   insight: InsightStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
-  scope: string;
 }) => {
   return (
     <Background
@@ -148,7 +147,7 @@ const InsightCard = ({
         </div>
         {insight.cta && (
           <CTA
-            eventName={`${scope}_cta${key}`}
+            eventName={`cta${key}`}
             variant={"link"}
             label={insight.cta.label}
             link={insight.cta.link}
@@ -161,12 +160,7 @@ const InsightCard = ({
   );
 };
 
-const InsightSectionWrapper = ({
-  data,
-  styles,
-  analytics,
-}: InsightSectionProps) => {
-  const scope = analytics?.scope || "insightSection";
+const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -200,7 +194,6 @@ const InsightSectionWrapper = ({
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
-                scope={scope}
               />
             ))}
           </div>
@@ -238,11 +231,13 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <InsightSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope || "insightSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <InsightSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

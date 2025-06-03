@@ -7,13 +7,20 @@ import {
   MaybeLink,
   PageSection,
   PhoneAtom,
+  YextField,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
-import { Address, HoursStatus } from "@yext/pages-components";
+import {
+  Address,
+  AnalyticsScopeProvider,
+  HoursStatus,
+} from "@yext/pages-components";
 
 export interface DirectoryProps {
-  separator?: string;
+  analytics: {
+    scope?: string;
+  };
 }
 
 // isDirectoryGrid indicates whether the children should appear in
@@ -40,9 +47,11 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 
 // DirectoryCard is the card used within DirectoryGrid.
 const DirectoryCard = ({
+  key,
   profile,
   relativePrefixToRoot,
 }: {
+  key: number;
   profile: any;
   relativePrefixToRoot: string;
 }) => {
@@ -50,6 +59,7 @@ const DirectoryCard = ({
     <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
       <div>
         <MaybeLink
+          eventName={`link${key}`}
           alwaysHideCaret={true}
           className="mb-2"
           href={
@@ -162,6 +172,7 @@ const DirectoryList = ({
           return (
             <li key={idx}>
               <MaybeLink
+                eventName={`child${idx}`}
                 variant="directoryLink"
                 href={
                   relativePrefixToRoot
@@ -179,8 +190,7 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = (props: DirectoryProps) => {
-  const { separator = "/" } = props;
+const DirectoryComponent = () => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   let headingText;
@@ -200,7 +210,7 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
   return (
     <>
-      <BreadcrumbsComponent separator={separator} liveVisibility={true} />
+      <BreadcrumbsComponent />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
           <Heading level={4}>{document._site.name}</Heading>
@@ -228,5 +238,24 @@ const DirectoryComponent = (props: DirectoryProps) => {
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: "Directory",
-  render: (props) => <DirectoryComponent {...props} />,
+  fields: {
+    analytics: YextField("Analytics", {
+      type: "object",
+      objectFields: {
+        scope: YextField("Scope", {
+          type: "text",
+        }),
+      },
+    }),
+  },
+  defaultProps: {
+    analytics: {
+      scope: "directory",
+    },
+  },
+  render: (props) => (
+    <AnalyticsScopeProvider name={props?.analytics?.scope || "directory"}>
+      <DirectoryComponent />
+    </AnalyticsScopeProvider>
+  ),
 };

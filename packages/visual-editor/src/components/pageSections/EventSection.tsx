@@ -22,6 +22,7 @@ import {
   ComponentFields,
   MaybeRTF,
 } from "@yext/visual-editor";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface EventSectionProps {
   data: {
@@ -97,13 +98,11 @@ const EventCard = ({
   event,
   backgroundColor,
   sectionHeadingLevel,
-  scope,
 }: {
   key: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
-  scope: string;
 }) => {
   return (
     <Background
@@ -144,7 +143,7 @@ const EventCard = ({
         <MaybeRTF data={event.description} />
         {event.cta && (
           <CTA
-            eventName={`${scope}_cta${key}`}
+            eventName={`cta${key}`}
             label={event.cta.label}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -157,8 +156,7 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
-  const { data, styles, analytics } = props;
-  const scope = analytics?.scope || "eventSection";
+  const { data, styles } = props;
   const document = useDocument();
   const resolvedEvents = resolveYextEntityField(document, data.events);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -192,7 +190,6 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
-                scope={scope}
               />
             ))}
           </div>
@@ -230,11 +227,13 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <EventSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope || "eventSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <EventSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

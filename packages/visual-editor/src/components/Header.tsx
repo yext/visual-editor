@@ -1,5 +1,9 @@
 import * as React from "react";
-import { CTA as CTAType, ComplexImageType } from "@yext/pages-components";
+import {
+  AnalyticsScopeProvider,
+  CTA as CTAType,
+  ComplexImageType,
+} from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
@@ -54,11 +58,14 @@ export const Header: ComponentConfig<HeaderProps> = {
       scope: "header",
     },
   },
-  render: (props) => <HeaderComponent {...props} />,
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope || "header"}>
+      <HeaderComponent {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
 
-const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth, analytics }) => {
-  const scope = analytics?.scope || "header";
+const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
   const document: {
     _site?: {
       header?: {
@@ -70,14 +77,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth, analytics }) => {
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  return (
-    <HeaderLayout
-      links={links}
-      logo={logo}
-      logoWidth={logoWidth}
-      scope={scope}
-    />
-  );
+  return <HeaderLayout links={links} logo={logo} logoWidth={logoWidth} />;
 };
 
 interface HeaderLayoutProps {
@@ -85,12 +85,11 @@ interface HeaderLayoutProps {
   logoLink?: string;
   logo?: ComplexImageType;
   logoWidth?: number;
-  scope: string;
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoWidth, logoLink, links, scope } = props;
+  const { logo, logoWidth, logoLink, links } = props;
 
   return (
     <PageSection
@@ -114,7 +113,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
               displayName="Header Links"
               fieldId={"site.header.links"}
             >
-              <HeaderLinks links={links} scope={scope} />
+              <HeaderLinks links={links} />
             </EntityField>
             <button
               className="flex md:hidden ml-auto my-auto"
@@ -131,7 +130,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         )}
       </div>
       {links?.length > 0 && (
-        <HeaderMobileMenu isOpen={menuOpen} links={links} scope={scope} />
+        <HeaderMobileMenu isOpen={menuOpen} links={links} />
       )}
     </PageSection>
   );
@@ -155,7 +154,7 @@ const HeaderLogo = (props: {
   );
 };
 
-const HeaderLinks = (props: { links: CTAType[]; scope: string }) => {
+const HeaderLinks = (props: { links: CTAType[] }) => {
   return (
     <div className="hidden md:flex items-center">
       <ul className="flex gap-4 lg:gap-10">
@@ -168,7 +167,7 @@ const HeaderLinks = (props: { links: CTAType[]; scope: string }) => {
                 link={item.link}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`${props.scope}_link${idx}`}
+                eventName={`link${idx}`}
                 alwaysHideCaret={true}
               />
             </li>
@@ -181,11 +180,10 @@ const HeaderLinks = (props: { links: CTAType[]; scope: string }) => {
 type HeaderMobileMenuProps = {
   isOpen?: boolean;
   links: CTAType[];
-  scope: string;
 };
 
 const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
-  const { isOpen, links, scope } = props;
+  const { isOpen, links } = props;
   return (
     <div
       className={
@@ -205,7 +203,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
                 label={item.label}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`${scope}_mobilelink${idx}`}
+                eventName={`mobilelink${idx}`}
               />
             </li>
           ))}

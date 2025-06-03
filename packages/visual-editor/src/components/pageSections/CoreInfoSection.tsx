@@ -3,6 +3,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AddressType,
+  AnalyticsScopeProvider,
   DayOfWeekNames,
   getDirections,
   HoursTable,
@@ -227,12 +228,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   }),
 };
 
-const CoreInfoSectionWrapper = ({
-  data,
-  styles,
-  analytics,
-}: CoreInfoSectionProps) => {
-  const scope = analytics?.scope || "coreInfoSection";
+const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const document = useDocument();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
@@ -311,7 +307,7 @@ const CoreInfoSectionWrapper = ({
           )}
           {coordinates && styles.info.showGetDirectionsLink && (
             <CTA
-              eventName={`${scope}_getDirections`}
+              eventName={`getDirections`}
               className="font-bold"
               link={coordinates}
               label="Get Directions"
@@ -342,7 +338,7 @@ const CoreInfoSectionWrapper = ({
                     <div className={"flex items-center gap-3"}>
                       <div className="flex gap-2 items-center">
                         <PhoneAtom
-                          eventName={`${scope}_phone${idx}`}
+                          eventName={`phone${idx}`}
                           backgroundColor={backgroundColors.background2.value}
                           label={item.label}
                           phoneNumber={resolvedNumber}
@@ -379,7 +375,7 @@ const CoreInfoSectionWrapper = ({
                       <FaRegEnvelope className="w-4 h-4" />
                     </Background>
                     <CTA
-                      eventName={`${scope}_email${index}`}
+                      eventName={`email${index}`}
                       link={email}
                       label={email}
                       linkType="EMAIL"
@@ -537,11 +533,13 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <CoreInfoSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope || "coreInfoSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <CoreInfoSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

@@ -20,6 +20,7 @@ import {
   EntityField,
   MaybeRTF,
 } from "@yext/visual-editor";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -88,12 +89,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   }),
 };
 
-const PromoWrapper: React.FC<PromoSectionProps> = ({
-  data,
-  styles,
-  analytics,
-}) => {
-  const scope = analytics?.scope || "promoSection";
+const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
@@ -145,7 +141,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
             <CTA
-              eventName={`${scope}_cta`}
+              eventName={`cta`}
               variant={styles?.ctaVariant}
               label={resolvedPromo?.cta.label}
               link={resolvedPromo?.cta.link}
@@ -193,11 +189,13 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <PromoWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope || "promoSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <PromoWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

@@ -21,6 +21,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface TeamSectionProps {
   styles: {
@@ -96,13 +97,11 @@ const PersonCard = ({
   person,
   backgroundColor,
   sectionHeadingLevel,
-  scope,
 }: {
   key: number;
   person: PersonStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
-  scope: string;
 }) => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
@@ -140,7 +139,7 @@ const PersonCard = ({
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
             <PhoneAtom
-              eventName={`${scope}_phone${key}`}
+              eventName={`phone${key}`}
               phoneNumber={person.phoneNumber}
               includeHyperlink={true}
               includeIcon={true}
@@ -157,7 +156,7 @@ const PersonCard = ({
                 <FaEnvelope />
               </div>
               <CTA
-                eventName={`${scope}_email${key}`}
+                eventName={`email${key}`}
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
@@ -168,7 +167,7 @@ const PersonCard = ({
           {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
-                eventName={`${scope}_cta${key}`}
+                eventName={`cta${key}`}
                 label={person.cta.label}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
@@ -182,8 +181,7 @@ const PersonCard = ({
   );
 };
 
-const TeamSectionWrapper = ({ data, styles, analytics }: TeamSectionProps) => {
-  const scope = analytics?.scope || "teamSection";
+const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -217,7 +215,6 @@ const TeamSectionWrapper = ({ data, styles, analytics }: TeamSectionProps) => {
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
-                scope={scope}
               />
             ))}
           </div>
@@ -255,11 +252,13 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <TeamSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope || "teamSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <TeamSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

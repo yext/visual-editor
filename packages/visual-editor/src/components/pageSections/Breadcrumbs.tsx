@@ -7,6 +7,7 @@ import {
   VisibilityWrapper,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
   analytics: {
@@ -68,10 +69,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 // then displays nothing. In the case of a root DM page, there are
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
-export const BreadcrumbsComponent = ({
-  analytics,
-}: BreadcrumbsSectionProps) => {
-  const scope = analytics?.scope || "breadcrumbs";
+export const BreadcrumbsComponent = () => {
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
@@ -97,7 +95,7 @@ export const BreadcrumbsComponent = ({
           return (
             <li key={idx} className="flex items-center">
               <MaybeLink
-                eventName={`${scope}_link${idx}`}
+                eventName={`link${idx}`}
                 href={isLast ? "" : href}
                 // Force body-sm and link-fontFamily for all breadcrumbs
                 className="text-body-sm-fontSize font-link-fontFamily"
@@ -125,13 +123,15 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   },
   render: (props) => {
     return (
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-        iconSize="md"
-      >
-        <BreadcrumbsComponent {...props} />
-      </VisibilityWrapper>
+      <AnalyticsScopeProvider name={props?.analytics?.scope || "breadcrumbs"}>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+          iconSize="md"
+        >
+          <BreadcrumbsComponent />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     );
   },
 };

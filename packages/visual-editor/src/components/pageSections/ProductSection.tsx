@@ -20,6 +20,7 @@ import {
   MaybeRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface ProductSectionProps {
   data: {
@@ -95,13 +96,11 @@ const ProductCard = ({
   product,
   backgroundColor,
   sectionHeadingLevel,
-  scope,
 }: {
   key: number;
   product: ProductStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
-  scope: string;
 }) => {
   return (
     <Background
@@ -145,7 +144,7 @@ const ProductCard = ({
         </div>
         {product.cta && (
           <CTA
-            eventName={`${scope}_cta${key}`}
+            eventName={`cta${key}`}
             variant="secondary"
             label={product.cta.label}
             link={product.cta.link}
@@ -158,12 +157,7 @@ const ProductCard = ({
   );
 };
 
-const ProductSectionWrapper = ({
-  data,
-  styles,
-  analytics,
-}: ProductSectionProps) => {
-  const scope = analytics?.scope || "productSection";
+const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -197,7 +191,6 @@ const ProductSectionWrapper = ({
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}
-                scope={scope}
               />
             ))}
           </div>
@@ -235,11 +228,13 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <ProductSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope || "productSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <ProductSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

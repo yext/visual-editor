@@ -15,7 +15,12 @@ import {
   VisibilityWrapper,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
-import { Address, Coordinate, HoursStatus } from "@yext/pages-components";
+import {
+  Address,
+  AnalyticsScopeProvider,
+  Coordinate,
+  HoursStatus,
+} from "@yext/pages-components";
 import * as React from "react";
 
 export interface NearbyLocationsSectionProps {
@@ -165,7 +170,6 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
-  scope,
 }: {
   key: number;
   styles: NearbyLocationsSectionProps["styles"];
@@ -174,7 +178,6 @@ const LocationCard = ({
   address: any;
   timezone: string;
   mainPhone: string;
-  scope: string;
 }) => {
   return (
     <Background
@@ -209,7 +212,7 @@ const LocationCard = ({
       )}
       {mainPhone && (
         <PhoneAtom
-          eventName={`${scope}_phone${key}`}
+          eventName={`phone${key}`}
           phoneNumber={mainPhone}
           format={styles?.phoneNumberFormat}
           includeHyperlink={styles?.phoneNumberLink}
@@ -235,10 +238,8 @@ const LocationCard = ({
 const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   styles,
   data,
-  analytics,
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
-  const scope = analytics?.scope || "nearbyLocationsSection";
   const document = useDocument<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
@@ -314,7 +315,6 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
-                    scope={scope}
                   />
                 )
               )}
@@ -425,11 +425,15 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
       liveVisibility: true,
     },
     render: (props) => (
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={props.analytics?.scope || "nearbyLocationsSection"}
       >
-        <NearbyLocationsComponent {...props} />
-      </VisibilityWrapper>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <NearbyLocationsComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     ),
   };
