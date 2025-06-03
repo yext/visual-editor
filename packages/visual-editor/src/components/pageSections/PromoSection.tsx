@@ -21,6 +21,7 @@ import {
   EntityField,
   MaybeRTF,
 } from "@yext/visual-editor";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -32,6 +33,9 @@ export interface PromoSectionProps {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
     ctaVariant: CTAProps["variant"];
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
 }
@@ -131,6 +135,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
             <CTA
+              eventName={`cta`}
               variant={styles?.ctaVariant}
               label={resolvedPromo?.cta.label}
               link={resolvedPromo?.cta.link}
@@ -172,14 +177,19 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
       orientation: "left",
       ctaVariant: "primary",
     },
+    analytics: {
+      scope: "promoSection",
+    },
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <PromoWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <PromoWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

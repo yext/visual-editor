@@ -1,7 +1,11 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { CTA as CTAType, ComplexImageType } from "@yext/pages-components";
-import { ComponentConfig } from "@measured/puck";
+import {
+  AnalyticsScopeProvider,
+  CTA as CTAType,
+  ComplexImageType,
+} from "@yext/pages-components";
+import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
@@ -26,20 +30,32 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 
 export type HeaderProps = {
   logoWidth?: number;
+  analytics?: {
+    scope?: string;
+  };
+};
+
+const headerFields: Fields<HeaderProps> = {
+  logoWidth: YextField("Logo Width", {
+    type: "number",
+    min: 0,
+  }),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
   label: "Header",
-  fields: {
-    logoWidth: YextField("Logo Width", {
-      type: "number",
-      min: 0,
-    }),
-  },
+  fields: headerFields,
   defaultProps: {
     logoWidth: 80,
+    analytics: {
+      scope: "header",
+    },
   },
-  render: (props) => <HeaderComponent {...props} />,
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "header"}>
+      <HeaderComponent {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
 
 const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
@@ -145,7 +161,7 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
                 link={item.link}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`headerlink${idx}`}
+                eventName={`link${idx}`}
                 alwaysHideCaret={true}
               />
             </li>
@@ -181,7 +197,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
                 label={item.label}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`headermobilelink${idx}`}
+                eventName={`mobilelink${idx}`}
               />
             </li>
           ))}

@@ -1,7 +1,11 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { HoursStatus, HoursType } from "@yext/pages-components";
+import {
+  AnalyticsScopeProvider,
+  HoursStatus,
+  HoursType,
+} from "@yext/pages-components";
 import {
   HeroSectionType,
   useDocument,
@@ -40,6 +44,9 @@ export interface HeroSectionProps {
     localGeoModifierLevel: HeadingLevel;
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
 }
@@ -217,6 +224,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 }
               >
                 <CTA
+                  eventName={`primaryCta`}
                   variant={styles?.primaryCTA}
                   label={resolvedHero.primaryCta.label}
                   link={resolvedHero.primaryCta.link}
@@ -236,6 +244,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 }
               >
                 <CTA
+                  eventName={`secondaryCta`}
                   variant={styles?.secondaryCTA}
                   label={resolvedHero.secondaryCta.label}
                   link={resolvedHero.secondaryCta.link}
@@ -323,14 +332,19 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       primaryCTA: "primary",
       secondaryCTA: "secondary",
     },
+    analytics: {
+      scope: "heroSection",
+    },
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <HeroSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <HeroSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };
