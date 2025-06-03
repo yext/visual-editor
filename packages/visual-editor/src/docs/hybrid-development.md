@@ -139,3 +139,59 @@ export const componentRegistry = new Map<string, Config<any>>([
   ["templateName", mainConfig],
 ]);
 ```
+
+### Working with Existing Components
+
+The avaliable components for a template are defined in that template's [config](#puck-configs). All configs and their component assignments can be found in `ve.config.tsx`. Any usages of [withPropOverrides](../utils/README.md#withpropoverrides) would be done in the `ve.config.tsx` file.
+
+The **NearbyLocationsSection** component requires [withPropOverrides](../utils/README.md#withpropoverrides) to pass in a value for contentEndpointIdEnvVar. Without this, the component will not work in a hybrid development. This can look like:
+
+```ts
+interface MainProps
+  extends PageSectionCategoryProps,
+    OtherCategoryProps {}
+
+const components: Config<MainProps>["components"] = {
+  ...PageSectionCategoryComponents,
+  ...OtherCategoryComponents,
+};
+
+export const mainConfig: Config<MainProps> = {
+  components: {
+    ...components,
+    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {
+      contentEndpointIdEnvVar: "YEXT_PUBLIC_FOO",
+    })
+  },
+  .....
+}
+```
+
+The **Locator** component also has two env vars, entityTypeEnvVar and experienceKeyEnvVar, that are required to support usage in hybrid development. That can look like:
+
+```ts
+interface LocatorConfigProps
+  extends LocatorCategoryProps,
+    OtherCategoryProps {}
+
+export const locatorConfig: Config<LocatorConfigProps> = {
+  components: {
+    ...LocatorCategoryComponents,
+    ...OtherCategoryComponents,
+    Locator: withPropOverrides(Locator, {
+      entityTypeEnvVar: "YEXT_PUBLIC_FOO",
+      experienceKeyEnvVar: "YEXT_PUBLIC_BAR",
+    })
+  },
+  root: {
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        />
+      );
+    },
+  },
+};
+```

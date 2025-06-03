@@ -7,78 +7,27 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  ABeeZee: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "ADLaM Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  ABeeZee: { italics: true, weights: [400], fallback: "sans-serif" },
+  "ADLaM Display": { italics: false, weights: [400], fallback: "sans-serif" },
   "AR One Sans": {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Abel: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Abel: { italics: false, weights: [400], fallback: "sans-serif" },
   "Abhaya Libre": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 600, 700, 800],
     fallback: "serif",
   },
-  Aboreto: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Abril Fatface": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Abyssinica SIL": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Aclonica: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Acme: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Actor: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Adamina: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Aboreto: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Abril Fatface": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Abyssinica SIL": { italics: false, weights: [400], fallback: "serif" },
+  Aclonica: { italics: false, weights: [400], fallback: "sans-serif" },
+  Acme: { italics: false, weights: [400], fallback: "sans-serif" },
+  Actor: { italics: false, weights: [400], fallback: "sans-serif" },
+  Adamina: { italics: false, weights: [400], fallback: "serif" },
   "Advent Pro": {
     italics: true,
     minWeight: 100,
@@ -94,99 +43,41 @@ export const defaultFonts = {
   "Afacad Flux": {
     italics: false,
     minWeight: 100,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  Agbalumo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Agdasima: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Agu Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Aguafina Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Agbalumo: { italics: false, weights: [400], fallback: "sans-serif" },
+  Agdasima: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  "Aguafina Script": { italics: false, weights: [400], fallback: "cursive" },
   Akatab: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Akaya Kanadaka": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Akaya Kanadaka": { italics: false, weights: [400], fallback: "sans-serif" },
   "Akaya Telivigala": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Akronim: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Akronim: { italics: false, weights: [400], fallback: "sans-serif" },
   Akshar: {
     italics: false,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Aladin: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Alata: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Alatsi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Aladin: { italics: false, weights: [400], fallback: "sans-serif" },
+  Alata: { italics: false, weights: [400], fallback: "sans-serif" },
+  Alatsi: { italics: false, weights: [400], fallback: "sans-serif" },
   "Albert Sans": {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Aldrich: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Alef: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Aldrich: { italics: false, weights: [400], fallback: "sans-serif" },
+  Alef: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Alegreya: {
     italics: true,
     minWeight: 400,
@@ -195,115 +86,55 @@ export const defaultFonts = {
   },
   "Alegreya SC": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 500, 700, 800, 900],
     fallback: "serif",
   },
   "Alegreya Sans": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 500, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Alegreya Sans SC": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 500, 700, 800, 900],
     fallback: "sans-serif",
   },
   Aleo: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  "Alex Brush": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Alex Brush": { italics: false, weights: [400], fallback: "cursive" },
   Alexandria: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Alfa Slab One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Alice: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Alike: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Alike Angular": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Alkalami: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Alfa Slab One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Alice: { italics: false, weights: [400], fallback: "serif" },
+  Alike: { italics: false, weights: [400], fallback: "serif" },
+  "Alike Angular": { italics: false, weights: [400], fallback: "serif" },
+  Alkalami: { italics: false, weights: [400], fallback: "serif" },
   Alkatra: {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Allan: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Allerta: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Allerta Stencil": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Allison: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Allura: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Allan: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Allerta: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Allerta Stencil": { italics: false, weights: [400], fallback: "sans-serif" },
+  Allison: { italics: false, weights: [400], fallback: "cursive" },
+  Allura: { italics: false, weights: [400], fallback: "cursive" },
   Almarai: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 800,
+    weights: [300, 400, 700, 800],
     fallback: "sans-serif",
   },
-  Almendra: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
+  Almendra: { italics: true, weights: [400, 700], fallback: "serif" },
   "Almendra Display": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Almendra SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Almendra SC": { italics: false, weights: [400], fallback: "serif" },
   "Alumni Sans": {
     italics: true,
     minWeight: 100,
@@ -312,65 +143,27 @@ export const defaultFonts = {
   },
   "Alumni Sans Collegiate One": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Alumni Sans Inline One": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Alumni Sans Pinstripe": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Amarante: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Amaranth: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Amatic SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
-  Amethysta: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Amiko: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Amiri: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  "Amiri Quran": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Amita: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
+  Amarante: { italics: false, weights: [400], fallback: "sans-serif" },
+  Amaranth: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Amatic SC": { italics: false, weights: [400, 700], fallback: "cursive" },
+  Amethysta: { italics: false, weights: [400], fallback: "serif" },
+  Amiko: { italics: false, weights: [400, 600, 700], fallback: "sans-serif" },
+  Amiri: { italics: true, weights: [400, 700], fallback: "serif" },
+  "Amiri Quran": { italics: false, weights: [400], fallback: "serif" },
+  Amita: { italics: false, weights: [400, 700], fallback: "cursive" },
   Anaheim: {
     italics: false,
     minWeight: 400,
@@ -380,7 +173,7 @@ export const defaultFonts = {
   "Ancizar Sans": {
     italics: true,
     minWeight: 100,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Ancizar Serif": {
@@ -392,15 +185,10 @@ export const defaultFonts = {
   "Andada Pro": {
     italics: true,
     minWeight: 400,
-    maxWeight: 800,
+    maxWeight: 840,
     fallback: "serif",
   },
-  Andika: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Andika: { italics: true, weights: [400, 700], fallback: "sans-serif" },
   "Anek Bangla": {
     italics: false,
     minWeight: 100,
@@ -461,66 +249,24 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Angkor: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Annapurna SIL": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
+  Angkor: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Annapurna SIL": { italics: false, weights: [400, 700], fallback: "serif" },
   "Annie Use Your Telescope": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Anonymous Pro": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "monospace",
   },
-  Anta: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Antic: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Antic Didone": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Antic Slab": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Anton: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Anton SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Anta: { italics: false, weights: [400], fallback: "sans-serif" },
+  Antic: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Antic Didone": { italics: false, weights: [400], fallback: "serif" },
+  "Antic Slab": { italics: false, weights: [400], fallback: "serif" },
+  Anton: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Anton SC": { italics: false, weights: [400], fallback: "sans-serif" },
   Antonio: {
     italics: false,
     minWeight: 100,
@@ -539,29 +285,13 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Aoboshi One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Arapey: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Arbutus: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Arbutus Slab": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Aoboshi One": { italics: false, weights: [400], fallback: "serif" },
+  Arapey: { italics: true, weights: [400], fallback: "serif" },
+  Arbutus: { italics: false, weights: [400], fallback: "serif" },
+  "Arbutus Slab": { italics: false, weights: [400], fallback: "serif" },
   "Architects Daughter": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   Archivo: {
@@ -570,36 +300,16 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Archivo Black": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Archivo Black": { italics: false, weights: [400], fallback: "sans-serif" },
   "Archivo Narrow": {
     italics: true,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Are You Serious": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Aref Ruqaa": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  "Aref Ruqaa Ink": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
+  "Are You Serious": { italics: false, weights: [400], fallback: "cursive" },
+  "Aref Ruqaa": { italics: false, weights: [400, 700], fallback: "serif" },
+  "Aref Ruqaa Ink": { italics: false, weights: [400, 700], fallback: "serif" },
   Arima: {
     italics: false,
     minWeight: 100,
@@ -612,43 +322,13 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Arizonia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Armata: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Arsenal: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Arsenal SC": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Artifika: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Arvo: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Arya: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Arizonia: { italics: false, weights: [400], fallback: "cursive" },
+  Armata: { italics: false, weights: [400], fallback: "sans-serif" },
+  Arsenal: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Arsenal SC": { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Artifika: { italics: false, weights: [400], fallback: "serif" },
+  Arvo: { italics: true, weights: [400, 700], fallback: "serif" },
+  Arya: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Asap: {
     italics: true,
     minWeight: 100,
@@ -657,45 +337,27 @@ export const defaultFonts = {
   },
   "Asap Condensed": {
     italics: true,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  Asar: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Asset: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Asar: { italics: false, weights: [400], fallback: "serif" },
+  Asset: { italics: false, weights: [400], fallback: "sans-serif" },
   Assistant: {
     italics: false,
     minWeight: 200,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Astloch: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Asul: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Astloch: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Asul: { italics: false, weights: [400, 700], fallback: "serif" },
   Athiti: {
     italics: false,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Atkinson Hyperlegible": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
   "Atkinson Hyperlegible Mono": {
@@ -712,68 +374,33 @@ export const defaultFonts = {
   },
   Atma: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Atomic Age": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Aubrey: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Audiowide: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Autour One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Average: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Average Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Atomic Age": { italics: false, weights: [400], fallback: "sans-serif" },
+  Aubrey: { italics: false, weights: [400], fallback: "sans-serif" },
+  Audiowide: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Autour One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Average: { italics: false, weights: [400], fallback: "serif" },
+  "Average Sans": { italics: false, weights: [400], fallback: "sans-serif" },
   "Averia Gruesa Libre": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Averia Libre": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   "Averia Sans Libre": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   "Averia Serif Libre": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   "Azeret Mono": {
@@ -782,102 +409,33 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "monospace",
   },
-  B612: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "B612 Mono": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "monospace",
-  },
+  B612: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "B612 Mono": { italics: true, weights: [400, 700], fallback: "monospace" },
   "BIZ UDGothic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  "BIZ UDMincho": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
+  "BIZ UDMincho": { italics: false, weights: [400, 700], fallback: "serif" },
   "BIZ UDPGothic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  "BIZ UDPMincho": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Babylonica: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Bacasime Antique": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Bad Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Badeen Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bagel Fat One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Bahiana: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Bahianita: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "BIZ UDPMincho": { italics: false, weights: [400, 700], fallback: "serif" },
+  Babylonica: { italics: false, weights: [400], fallback: "cursive" },
+  "Bacasime Antique": { italics: false, weights: [400], fallback: "serif" },
+  "Bad Script": { italics: false, weights: [400], fallback: "cursive" },
+  "Badeen Display": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bagel Fat One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Bahiana: { italics: false, weights: [400], fallback: "sans-serif" },
+  Bahianita: { italics: false, weights: [400], fallback: "sans-serif" },
   "Bai Jamjuree": {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Bakbak One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ballet: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Bakbak One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Baloo 2": {
     italics: false,
     minWeight: 400,
@@ -940,106 +498,50 @@ export const defaultFonts = {
   },
   "Balsamiq Sans": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  Balthazar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Bangers: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Balthazar: { italics: false, weights: [400], fallback: "serif" },
+  Bangers: { italics: false, weights: [400], fallback: "sans-serif" },
   Barlow: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Barlow Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Barlow Semi Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  Barriecito: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Barrio: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Basic: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Barriecito: { italics: false, weights: [400], fallback: "sans-serif" },
+  Barrio: { italics: false, weights: [400], fallback: "sans-serif" },
+  Basic: { italics: false, weights: [400], fallback: "sans-serif" },
   Baskervville: {
     italics: true,
     minWeight: 400,
-    maxWeight: 400,
+    maxWeight: 700,
     fallback: "serif",
   },
-  "Baskervville SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Baskervville SC": { italics: false, weights: [400], fallback: "serif" },
   Battambang: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 700, 900],
     fallback: "sans-serif",
   },
-  Baumans: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Bayon: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Baumans: { italics: false, weights: [400], fallback: "sans-serif" },
+  Bayon: { italics: false, weights: [400], fallback: "sans-serif" },
   "Be Vietnam Pro": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Beau Rivage": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Bebas Neue": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Beau Rivage": { italics: false, weights: [400], fallback: "cursive" },
+  "Bebas Neue": { italics: false, weights: [400], fallback: "sans-serif" },
   Beiruti: {
     italics: false,
     minWeight: 200,
@@ -1048,73 +550,30 @@ export const defaultFonts = {
   },
   Belanosima: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 600, 700],
     fallback: "sans-serif",
   },
-  Belgrano: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Bellefair: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Belleza: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Bellota: {
-    italics: true,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Belgrano: { italics: false, weights: [400], fallback: "serif" },
+  Bellefair: { italics: false, weights: [400], fallback: "serif" },
+  Belleza: { italics: false, weights: [400], fallback: "sans-serif" },
+  Bellota: { italics: true, weights: [300, 400, 700], fallback: "sans-serif" },
   "Bellota Text": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   BenchNine: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
-  Benne: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Bentham: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Berkshire Swash": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Benne: { italics: false, weights: [400], fallback: "serif" },
+  Bentham: { italics: false, weights: [400], fallback: "serif" },
+  "Berkshire Swash": { italics: false, weights: [400], fallback: "cursive" },
   Besley: { italics: true, minWeight: 400, maxWeight: 900, fallback: "serif" },
-  "Beth Ellen": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Bevan: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "BhuTuka Expanded One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Beth Ellen": { italics: false, weights: [400], fallback: "cursive" },
+  Bevan: { italics: true, weights: [400], fallback: "serif" },
+  "BhuTuka Expanded One": { italics: false, weights: [400], fallback: "serif" },
   "Big Shoulders": {
     italics: false,
     minWeight: 100,
@@ -1133,30 +592,10 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Bigelow Rules": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bigshot One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Bilbo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Bilbo Swash Caps": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Bigelow Rules": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bigshot One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Bilbo: { italics: false, weights: [400], fallback: "cursive" },
+  "Bilbo Swash Caps": { italics: false, weights: [400], fallback: "cursive" },
   BioRhyme: {
     italics: false,
     minWeight: 200,
@@ -1165,69 +604,34 @@ export const defaultFonts = {
   },
   "BioRhyme Expanded": {
     italics: false,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 700, 800],
     fallback: "serif",
   },
-  Birthstone: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Birthstone: { italics: false, weights: [400], fallback: "cursive" },
   "Birthstone Bounce": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 500,
+    weights: [400, 500],
     fallback: "cursive",
   },
   Biryani: {
     italics: false,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   Bitter: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
   "Black And White Picture": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Black Han Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Black Ops One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Blaka: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Blaka Hollow": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Blaka Ink": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Black Han Sans": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Black Ops One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Blaka: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Blaka Hollow": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Blaka Ink": { italics: false, weights: [400], fallback: "sans-serif" },
   Blinker: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Bodoni Moda": {
@@ -1242,192 +646,52 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  Bokor: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Boldonse: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bona Nova": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  "Bona Nova SC": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Bonbon: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Bonheur Royale": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Boogaloo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Borel: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Bowlby One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bowlby One SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Braah One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Brawler: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  "Bree Serif": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Bokor: { italics: false, weights: [400], fallback: "sans-serif" },
+  Boldonse: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bona Nova": { italics: true, weights: [400, 700], fallback: "serif" },
+  "Bona Nova SC": { italics: true, weights: [400, 700], fallback: "serif" },
+  Bonbon: { italics: false, weights: [400], fallback: "cursive" },
+  "Bonheur Royale": { italics: false, weights: [400], fallback: "cursive" },
+  Boogaloo: { italics: false, weights: [400], fallback: "sans-serif" },
+  Borel: { italics: false, weights: [400], fallback: "cursive" },
+  "Bowlby One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bowlby One SC": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Braah One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Brawler: { italics: false, weights: [400, 700], fallback: "serif" },
+  "Bree Serif": { italics: false, weights: [400], fallback: "serif" },
   "Bricolage Grotesque": {
     italics: false,
     minWeight: 200,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Bruno Ace": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bruno Ace SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Bruno Ace": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bruno Ace SC": { italics: false, weights: [400], fallback: "sans-serif" },
   "Brygada 1918": {
     italics: true,
     minWeight: 400,
     maxWeight: 700,
     fallback: "serif",
   },
-  "Bubblegum Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bubbler One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Buda: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 300,
-    fallback: "sans-serif",
-  },
+  "Bubblegum Sans": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bubbler One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Buda: { italics: false, weights: [300], fallback: "sans-serif" },
   Buenard: {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "serif",
   },
-  Bungee: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bungee Hairline": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bungee Inline": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bungee Outline": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bungee Shade": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bungee Spice": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Bungee Tint": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Butcherman: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Butterfly Kids": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Bytesized: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Bungee: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bungee Hairline": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bungee Inline": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bungee Outline": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bungee Shade": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bungee Spice": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Bungee Tint": { italics: false, weights: [400], fallback: "sans-serif" },
+  Butcherman: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Butterfly Kids": { italics: false, weights: [400], fallback: "cursive" },
+  Bytesized: { italics: false, weights: [400], fallback: "sans-serif" },
   Cabin: {
     italics: true,
     minWeight: 400,
@@ -1436,151 +700,57 @@ export const defaultFonts = {
   },
   "Cabin Condensed": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Cabin Sketch": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
   "Cactus Classical Serif": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  "Caesar Dressing": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Cagliostro: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Caesar Dressing": { italics: false, weights: [400], fallback: "sans-serif" },
+  Cagliostro: { italics: false, weights: [400], fallback: "sans-serif" },
   Cairo: {
     italics: false,
     minWeight: 200,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Cairo Play": {
     italics: false,
     minWeight: 200,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  "Cal Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Caladea: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Calistoga: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Calligraffitti: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Cambay: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Cambo: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Candal: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Cantarell: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Cantata One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Cantora One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Caprasimo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Capriola: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Caramel: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Carattere: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Cardo: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Carlito: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Carme: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Carrois Gothic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Cal Sans": { italics: false, weights: [400], fallback: "sans-serif" },
+  Caladea: { italics: true, weights: [400, 700], fallback: "serif" },
+  Calistoga: { italics: false, weights: [400], fallback: "sans-serif" },
+  Calligraffitti: { italics: false, weights: [400], fallback: "cursive" },
+  Cambay: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Cambo: { italics: false, weights: [400], fallback: "serif" },
+  Candal: { italics: false, weights: [400], fallback: "sans-serif" },
+  Cantarell: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Cantata One": { italics: false, weights: [400], fallback: "serif" },
+  "Cantora One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Caprasimo: { italics: false, weights: [400], fallback: "sans-serif" },
+  Capriola: { italics: false, weights: [400], fallback: "sans-serif" },
+  Caramel: { italics: false, weights: [400], fallback: "cursive" },
+  Carattere: { italics: false, weights: [400], fallback: "cursive" },
+  Cardo: { italics: true, weights: [400, 700], fallback: "serif" },
+  Carlito: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Carme: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Carrois Gothic": { italics: false, weights: [400], fallback: "sans-serif" },
   "Carrois Gothic SC": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Carter One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Carter One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Cascadia Code": {
     italics: true,
     minWeight: 200,
@@ -1593,48 +763,27 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Castoro: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Castoro Titling": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Castoro: { italics: true, weights: [400], fallback: "serif" },
+  "Castoro Titling": { italics: false, weights: [400], fallback: "sans-serif" },
   Catamaran: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Caudex: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
+  Caudex: { italics: true, weights: [400, 700], fallback: "serif" },
   Caveat: {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "cursive",
   },
-  "Caveat Brush": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Cedarville Cursive": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Ceviche One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Caveat Brush": { italics: false, weights: [400], fallback: "cursive" },
+  "Cedarville Cursive": { italics: false, weights: [400], fallback: "cursive" },
+  "Ceviche One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Chakra Petch": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   Changa: {
@@ -1643,102 +792,38 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Changa One": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Chango: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Charis SIL": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Charm: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
-  Charmonman: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
+  "Changa One": { italics: true, weights: [400], fallback: "sans-serif" },
+  Chango: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Charis SIL": { italics: true, weights: [400, 700], fallback: "serif" },
+  Charm: { italics: false, weights: [400, 700], fallback: "cursive" },
+  Charmonman: { italics: false, weights: [400, 700], fallback: "cursive" },
   Chathura: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 800,
+    weights: [100, 300, 400, 700, 800],
     fallback: "sans-serif",
   },
   "Chau Philomene One": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Chela One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Chelsea Market": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Cherish: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Cherry Bomb One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Chela One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Chelsea Market": { italics: false, weights: [400], fallback: "sans-serif" },
+  Cherish: { italics: false, weights: [400], fallback: "cursive" },
+  "Cherry Bomb One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Cherry Cream Soda": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Cherry Swash": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  Chewy: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Chicle: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Chilanka: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Chewy: { italics: false, weights: [400], fallback: "sans-serif" },
+  Chicle: { italics: false, weights: [400], fallback: "sans-serif" },
+  Chilanka: { italics: false, weights: [400], fallback: "cursive" },
   Chivo: {
     italics: true,
     minWeight: 100,
@@ -1753,101 +838,41 @@ export const defaultFonts = {
   },
   "Chocolate Classical Sans": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Chokokutai: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Chonburi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Chokokutai: { italics: false, weights: [400], fallback: "sans-serif" },
+  Chonburi: { italics: false, weights: [400], fallback: "sans-serif" },
   Cinzel: { italics: false, minWeight: 400, maxWeight: 900, fallback: "serif" },
   "Cinzel Decorative": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 700, 900],
     fallback: "sans-serif",
   },
-  "Clicker Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Climate Crisis": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Coda: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 800,
-    fallback: "sans-serif",
-  },
-  Codystar: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Coiny: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Combo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Clicker Script": { italics: false, weights: [400], fallback: "cursive" },
+  Coda: { italics: false, weights: [400, 800], fallback: "sans-serif" },
+  Codystar: { italics: false, weights: [300, 400], fallback: "sans-serif" },
+  Coiny: { italics: false, weights: [400], fallback: "sans-serif" },
+  Combo: { italics: false, weights: [400], fallback: "sans-serif" },
   Comfortaa: {
     italics: false,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Comforter: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Comforter Brush": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Comforter: { italics: false, weights: [400], fallback: "cursive" },
+  "Comforter Brush": { italics: false, weights: [400], fallback: "cursive" },
   "Comic Neue": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "cursive",
   },
   "Comic Relief": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  "Coming Soon": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Coming Soon": { italics: false, weights: [400], fallback: "cursive" },
   Comme: {
     italics: false,
     minWeight: 100,
@@ -1860,55 +885,15 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Concert One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Condiment: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Contrail One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Convergence: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Cookie: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Copse: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Coral Pixels": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Corben: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Corinthia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
+  "Concert One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Condiment: { italics: false, weights: [400], fallback: "cursive" },
+  "Contrail One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Convergence: { italics: false, weights: [400], fallback: "sans-serif" },
+  Cookie: { italics: false, weights: [400], fallback: "cursive" },
+  Copse: { italics: false, weights: [400], fallback: "serif" },
+  "Coral Pixels": { italics: false, weights: [400], fallback: "sans-serif" },
+  Corben: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Corinthia: { italics: false, weights: [400, 700], fallback: "cursive" },
   Cormorant: {
     italics: true,
     minWeight: 300,
@@ -1929,70 +914,35 @@ export const defaultFonts = {
   },
   "Cormorant SC": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "serif",
   },
   "Cormorant Unicase": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "serif",
   },
   "Cormorant Upright": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "serif",
   },
-  Courgette: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Courgette: { italics: false, weights: [400], fallback: "cursive" },
   "Courier Prime": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "monospace",
   },
-  Cousine: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "monospace",
-  },
-  Coustard: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 900,
-    fallback: "serif",
-  },
+  Cousine: { italics: true, weights: [400, 700], fallback: "monospace" },
+  Coustard: { italics: false, weights: [400, 900], fallback: "serif" },
   "Covered By Your Grace": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Crafty Girls": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Creepster: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Crete Round": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Crafty Girls": { italics: false, weights: [400], fallback: "cursive" },
+  Creepster: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Crete Round": { italics: true, weights: [400], fallback: "serif" },
   "Crimson Pro": {
     italics: true,
     minWeight: 200,
@@ -2001,313 +951,117 @@ export const defaultFonts = {
   },
   "Crimson Text": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 600, 700],
     fallback: "serif",
   },
-  "Croissant One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Crushed: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Croissant One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Crushed: { italics: false, weights: [400], fallback: "sans-serif" },
   Cuprum: {
     italics: true,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Cute Font": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Cutive: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Cutive Mono": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "DM Mono": {
-    italics: true,
-    minWeight: 300,
-    maxWeight: 500,
-    fallback: "monospace",
-  },
+  "Cute Font": { italics: false, weights: [400], fallback: "sans-serif" },
+  Cutive: { italics: false, weights: [400], fallback: "serif" },
+  "Cutive Mono": { italics: false, weights: [400], fallback: "monospace" },
+  "DM Mono": { italics: true, weights: [300, 400, 500], fallback: "monospace" },
   "DM Sans": {
     italics: true,
     minWeight: 100,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  "DM Serif Display": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "DM Serif Text": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "DM Serif Display": { italics: true, weights: [400], fallback: "serif" },
+  "DM Serif Text": { italics: true, weights: [400], fallback: "serif" },
   "Dai Banna SIL": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "serif",
   },
-  Damion: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Damion: { italics: false, weights: [400], fallback: "cursive" },
   "Dancing Script": {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "cursive",
   },
-  Danfo: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Dangrek: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Dangrek: { italics: false, weights: [400], fallback: "sans-serif" },
   "Darker Grotesque": {
     italics: false,
     minWeight: 300,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Darumadrop One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Darumadrop One": { italics: false, weights: [400], fallback: "sans-serif" },
   "David Libre": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 700],
     fallback: "serif",
   },
   "Dawning of a New Day": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Days One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Dekko: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Dela Gothic One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Delicious Handrawn": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Delius: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Delius Swash Caps": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Days One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Dekko: { italics: false, weights: [400], fallback: "cursive" },
+  "Dela Gothic One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Delicious Handrawn": { italics: false, weights: [400], fallback: "cursive" },
+  Delius: { italics: false, weights: [400], fallback: "cursive" },
+  "Delius Swash Caps": { italics: false, weights: [400], fallback: "cursive" },
   "Delius Unicase": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "cursive",
   },
-  "Della Respira": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Denk One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Devonshire: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Dhurjati: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Didact Gothic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Diphylleia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Diplomata: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Diplomata SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Do Hyeon": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Dokdo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Della Respira": { italics: false, weights: [400], fallback: "serif" },
+  "Denk One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Devonshire: { italics: false, weights: [400], fallback: "cursive" },
+  Dhurjati: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Didact Gothic": { italics: false, weights: [400], fallback: "sans-serif" },
+  Diphylleia: { italics: false, weights: [400], fallback: "serif" },
+  Diplomata: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Diplomata SC": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Do Hyeon": { italics: false, weights: [400], fallback: "sans-serif" },
+  Dokdo: { italics: false, weights: [400], fallback: "sans-serif" },
   Domine: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  "Donegal One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Dongle: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Doppio One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Dorsa: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Donegal One": { italics: false, weights: [400], fallback: "serif" },
+  Dongle: { italics: false, weights: [300, 400, 700], fallback: "sans-serif" },
+  "Doppio One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Dorsa: { italics: false, weights: [400], fallback: "sans-serif" },
   Dosis: {
     italics: false,
     minWeight: 200,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  DotGothic16: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  DotGothic16: { italics: false, weights: [400], fallback: "sans-serif" },
   Doto: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Dr Sugiyama": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Duru Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Dr Sugiyama": { italics: false, weights: [400], fallback: "cursive" },
+  "Duru Sans": { italics: false, weights: [400], fallback: "sans-serif" },
   DynaPuff: {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Dynalight: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Dynalight: { italics: false, weights: [400], fallback: "sans-serif" },
   "EB Garamond": {
     italics: true,
     minWeight: 400,
     maxWeight: 800,
     fallback: "serif",
   },
-  "Eagle Lake": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "East Sea Dokdo": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Eater: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Economica: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Eagle Lake": { italics: false, weights: [400], fallback: "cursive" },
+  "East Sea Dokdo": { italics: false, weights: [400], fallback: "cursive" },
+  Eater: { italics: false, weights: [400], fallback: "sans-serif" },
+  Economica: { italics: true, weights: [400, 700], fallback: "sans-serif" },
   Eczar: { italics: false, minWeight: 400, maxWeight: 800, fallback: "serif" },
   "Edu AU VIC WA NT Arrows": {
     italics: false,
@@ -2375,36 +1129,15 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Electrolize: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Elsie: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 900,
-    fallback: "sans-serif",
-  },
+  Electrolize: { italics: false, weights: [400], fallback: "sans-serif" },
+  Elsie: { italics: false, weights: [400, 900], fallback: "sans-serif" },
   "Elsie Swash Caps": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 900],
     fallback: "sans-serif",
   },
-  "Emblema One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Emilys Candy": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Emblema One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Emilys Candy": { italics: false, weights: [400], fallback: "sans-serif" },
   "Encode Sans": {
     italics: false,
     minWeight: 100,
@@ -2413,14 +1146,12 @@ export const defaultFonts = {
   },
   "Encode Sans Condensed": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Encode Sans Expanded": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Encode Sans SC": {
@@ -2431,82 +1162,34 @@ export const defaultFonts = {
   },
   "Encode Sans Semi Condensed": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Encode Sans Semi Expanded": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  Engagement: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Englebert: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Engagement: { italics: false, weights: [400], fallback: "cursive" },
+  Englebert: { italics: false, weights: [400], fallback: "sans-serif" },
   Enriqueta: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 600, 700],
     fallback: "serif",
   },
-  Ephesis: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Ephesis: { italics: false, weights: [400], fallback: "cursive" },
   Epilogue: {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Erica One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Esteban: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Estonia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Euphoria Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Ewert: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Exile: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Erica One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Esteban: { italics: false, weights: [400], fallback: "serif" },
+  Estonia: { italics: false, weights: [400], fallback: "cursive" },
+  "Euphoria Script": { italics: false, weights: [400], fallback: "cursive" },
+  Ewert: { italics: false, weights: [400], fallback: "sans-serif" },
+  Exile: { italics: false, weights: [400], fallback: "sans-serif" },
   Exo: {
     italics: true,
     minWeight: 100,
@@ -2525,22 +1208,11 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Explora: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Faculty Glyphic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Explora: { italics: false, weights: [400], fallback: "cursive" },
+  "Faculty Glyphic": { italics: false, weights: [400], fallback: "sans-serif" },
   Fahkwang: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Familjen Grotesk": {
@@ -2549,97 +1221,40 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Fanwood Text": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Fanwood Text": { italics: true, weights: [400], fallback: "serif" },
   Farro: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 700],
     fallback: "sans-serif",
   },
-  Farsan: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Fascinate: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Farsan: { italics: false, weights: [400], fallback: "sans-serif" },
+  Fascinate: { italics: false, weights: [400], fallback: "sans-serif" },
   "Fascinate Inline": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Faster One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Fasthand: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Fauna One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Faster One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Fasthand: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Fauna One": { italics: false, weights: [400], fallback: "serif" },
   Faustina: {
     italics: true,
     minWeight: 300,
     maxWeight: 800,
     fallback: "serif",
   },
-  Federant: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Federo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Felipa: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Fenix: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Festive: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Federant: { italics: false, weights: [400], fallback: "sans-serif" },
+  Federo: { italics: false, weights: [400], fallback: "sans-serif" },
+  Felipa: { italics: false, weights: [400], fallback: "cursive" },
+  Fenix: { italics: false, weights: [400], fallback: "serif" },
+  Festive: { italics: false, weights: [400], fallback: "cursive" },
   Figtree: {
     italics: true,
     minWeight: 300,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Finger Paint": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Finger Paint": { italics: false, weights: [400], fallback: "sans-serif" },
   Finlandica: {
     italics: true,
     minWeight: 400,
@@ -2654,112 +1269,47 @@ export const defaultFonts = {
   },
   "Fira Mono": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 700],
     fallback: "monospace",
   },
   "Fira Sans": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Fira Sans Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Fira Sans Extra Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Fjalla One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Fjord One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Flamenco: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Flavors: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Fleur De Leah": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Flow Block": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Flow Circular": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Flow Rounded": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Fjalla One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Fjord One": { italics: false, weights: [400], fallback: "serif" },
+  Flamenco: { italics: false, weights: [300, 400], fallback: "sans-serif" },
+  Flavors: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Fleur De Leah": { italics: false, weights: [400], fallback: "cursive" },
+  "Flow Block": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Flow Circular": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Flow Rounded": { italics: false, weights: [400], fallback: "sans-serif" },
   Foldit: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Fondamento: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Fondamento: { italics: true, weights: [400], fallback: "cursive" },
   "Fontdiner Swanky": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Forum: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Fragment Mono": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "Francois One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Forum: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Fragment Mono": { italics: true, weights: [400], fallback: "monospace" },
+  "Francois One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Frank Ruhl Libre": {
     italics: false,
     minWeight: 300,
@@ -2772,16 +1322,10 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Freckle Face": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Freckle Face": { italics: false, weights: [400], fallback: "sans-serif" },
   "Fredericka the Great": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   Fredoka: {
@@ -2790,48 +1334,13 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Freehand: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Freeman: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Fresca: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Frijole: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Fruktur: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Fugaz One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Fuggles: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Freehand: { italics: false, weights: [400], fallback: "sans-serif" },
+  Freeman: { italics: false, weights: [400], fallback: "sans-serif" },
+  Fresca: { italics: false, weights: [400], fallback: "sans-serif" },
+  Frijole: { italics: false, weights: [400], fallback: "sans-serif" },
+  Fruktur: { italics: true, weights: [400], fallback: "sans-serif" },
+  "Fugaz One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Fuggles: { italics: false, weights: [400], fallback: "cursive" },
   "Funnel Display": {
     italics: false,
     minWeight: 300,
@@ -2850,100 +1359,38 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Fuzzy Bubbles": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
-  "GFS Didot": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Fuzzy Bubbles": { italics: false, weights: [400, 700], fallback: "cursive" },
+  "GFS Didot": { italics: false, weights: [400], fallback: "serif" },
   "GFS Neohellenic": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  "Ga Maamli": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Ga Maamli": { italics: false, weights: [400], fallback: "sans-serif" },
   Gabarito: {
     italics: false,
     minWeight: 400,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Gabriela: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Gaegu: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
-  Gafata: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Gajraj One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Galada: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Galdeano: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Galindo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Gamja Flower": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Gabriela: { italics: false, weights: [400], fallback: "serif" },
+  Gaegu: { italics: false, weights: [300, 400, 700], fallback: "cursive" },
+  Gafata: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Gajraj One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Galada: { italics: false, weights: [400], fallback: "sans-serif" },
+  Galdeano: { italics: false, weights: [400], fallback: "sans-serif" },
+  Galindo: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Gamja Flower": { italics: false, weights: [400], fallback: "cursive" },
   Gantari: {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Gasoek One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Gasoek One": { italics: false, weights: [400], fallback: "sans-serif" },
   Gayathri: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 400, 700],
     fallback: "sans-serif",
   },
   Geist: {
@@ -2973,22 +1420,11 @@ export const defaultFonts = {
   },
   "Gentium Book Plus": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "serif",
   },
-  "Gentium Plus": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Geo: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Gentium Plus": { italics: true, weights: [400, 700], fallback: "serif" },
+  Geo: { italics: true, weights: [400], fallback: "sans-serif" },
   Geologica: {
     italics: false,
     minWeight: 100,
@@ -3001,74 +1437,19 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Geostar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Geostar Fill": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Germania One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Gideon Roman": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Gidole: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Gidugu: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Gilda Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Girassol: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Give You Glory": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Glass Antiqua": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Glegoo: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Gloock: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Gloria Hallelujah": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Geostar: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Geostar Fill": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Germania One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Gideon Roman": { italics: false, weights: [400], fallback: "sans-serif" },
+  Gidole: { italics: false, weights: [400], fallback: "sans-serif" },
+  Gidugu: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Gilda Display": { italics: false, weights: [400], fallback: "serif" },
+  Girassol: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Give You Glory": { italics: false, weights: [400], fallback: "cursive" },
+  "Glass Antiqua": { italics: false, weights: [400], fallback: "sans-serif" },
+  Glegoo: { italics: false, weights: [400, 700], fallback: "serif" },
+  Gloock: { italics: false, weights: [400], fallback: "serif" },
+  "Gloria Hallelujah": { italics: false, weights: [400], fallback: "cursive" },
   Glory: {
     italics: true,
     minWeight: 100,
@@ -3081,209 +1462,85 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Goblin One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Gochi Hand": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Goldman: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Goblin One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Gochi Hand": { italics: false, weights: [400], fallback: "cursive" },
+  Goldman: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   "Golos Text": {
     italics: false,
     minWeight: 400,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Gorditas: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Gorditas: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   "Gothic A1": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  Gotu: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Gotu: { italics: false, weights: [400], fallback: "sans-serif" },
   "Goudy Bookletter 1911": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  "Gowun Batang": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  "Gowun Dodum": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Graduate: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Grand Hotel": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Grandiflora One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Gowun Batang": { italics: false, weights: [400, 700], fallback: "serif" },
+  "Gowun Dodum": { italics: false, weights: [400], fallback: "sans-serif" },
+  Graduate: { italics: false, weights: [400], fallback: "serif" },
+  "Grand Hotel": { italics: false, weights: [400], fallback: "cursive" },
+  "Grandiflora One": { italics: false, weights: [400], fallback: "serif" },
   Grandstander: {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Grape Nuts": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
+  "Grape Nuts": { italics: false, weights: [400], fallback: "cursive" },
+  "Gravitas One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Great Vibes": { italics: false, weights: [400], fallback: "cursive" },
+  "Grechen Fuemen": { italics: false, weights: [400], fallback: "cursive" },
+  Grenze: {
+    italics: true,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    fallback: "serif",
   },
-  "Gravitas One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Great Vibes": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Grechen Fuemen": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Grenze: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
   "Grenze Gotisch": {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Grey Qo": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Griffy: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Gruppo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Gudea: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Gugi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Gulzar: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Gupter: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Gurajada: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Gwendolyn: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
-  Habibi: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Hachi Maru Pop": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Grey Qo": { italics: false, weights: [400], fallback: "cursive" },
+  Griffy: { italics: false, weights: [400], fallback: "sans-serif" },
+  Gruppo: { italics: false, weights: [400], fallback: "sans-serif" },
+  Gudea: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Gugi: { italics: false, weights: [400], fallback: "sans-serif" },
+  Gulzar: { italics: false, weights: [400], fallback: "serif" },
+  Gupter: { italics: false, weights: [400, 500, 700], fallback: "serif" },
+  Gurajada: { italics: false, weights: [400], fallback: "sans-serif" },
+  Gwendolyn: { italics: false, weights: [400, 700], fallback: "cursive" },
+  Habibi: { italics: false, weights: [400], fallback: "serif" },
+  "Hachi Maru Pop": { italics: false, weights: [400], fallback: "cursive" },
   Hahmlet: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "serif",
   },
-  Halant: { italics: false, minWeight: 300, maxWeight: 700, fallback: "serif" },
-  "Hammersmith One": {
+  Halant: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
+    weights: [300, 400, 500, 600, 700],
+    fallback: "serif",
   },
-  Hanalei: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Hanalei Fill": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Hammersmith One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Hanalei: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Hanalei Fill": { italics: false, weights: [400], fallback: "sans-serif" },
   Handjet: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Handlee: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Handlee: { italics: false, weights: [400], fallback: "cursive" },
   "Hanken Grotesk": {
     italics: true,
     minWeight: 100,
@@ -3292,39 +1549,20 @@ export const defaultFonts = {
   },
   Hanuman: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 700, 900],
     fallback: "serif",
   },
-  "Happy Monkey": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Happy Monkey": { italics: false, weights: [400], fallback: "sans-serif" },
   Harmattan: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Headland One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Headland One": { italics: false, weights: [400], fallback: "serif" },
   "Hedvig Letters Sans": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
-  },
-  "Hedvig Letters Serif": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
   },
   Heebo: {
     italics: false,
@@ -3332,124 +1570,70 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Henny Penny": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Henny Penny": { italics: false, weights: [400], fallback: "sans-serif" },
   "Hepta Slab": {
     italics: false,
-    minWeight: 100,
+    minWeight: 1,
     maxWeight: 900,
     fallback: "serif",
   },
   "Herr Von Muellerhoff": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Hi Melody": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Hina Mincho": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Hi Melody": { italics: false, weights: [400], fallback: "cursive" },
+  "Hina Mincho": { italics: false, weights: [400], fallback: "serif" },
   Hind: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Hind Guntur": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Hind Madurai": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Hind Mysuru": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Hind Siliguri": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Hind Vadodara": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Holtwood One SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Homemade Apple": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Homenaje: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Honk: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Holtwood One SC": { italics: false, weights: [400], fallback: "serif" },
+  "Homemade Apple": { italics: false, weights: [400], fallback: "cursive" },
+  Homenaje: { italics: false, weights: [400], fallback: "sans-serif" },
   "Host Grotesk": {
     italics: true,
     minWeight: 300,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Hubballi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Hubballi: { italics: false, weights: [400], fallback: "sans-serif" },
   "Hubot Sans": {
     italics: true,
     minWeight: 200,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Hurricane: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Hurricane: { italics: false, weights: [400], fallback: "cursive" },
   "IBM Plex Mono": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "monospace",
   },
   "IBM Plex Sans": {
@@ -3460,155 +1644,83 @@ export const defaultFonts = {
   },
   "IBM Plex Sans Arabic": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans Devanagari": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans Hebrew": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans JP": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans KR": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans Thai": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Sans Thai Looped": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "IBM Plex Serif": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "serif",
   },
-  "IM Fell DW Pica": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "IM Fell DW Pica SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "IM Fell Double Pica": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "IM Fell DW Pica": { italics: true, weights: [400], fallback: "serif" },
+  "IM Fell DW Pica SC": { italics: false, weights: [400], fallback: "serif" },
+  "IM Fell Double Pica": { italics: true, weights: [400], fallback: "serif" },
   "IM Fell Double Pica SC": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  "IM Fell English": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "IM Fell English SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "IM Fell French Canon": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "IM Fell English": { italics: true, weights: [400], fallback: "serif" },
+  "IM Fell English SC": { italics: false, weights: [400], fallback: "serif" },
+  "IM Fell French Canon": { italics: true, weights: [400], fallback: "serif" },
   "IM Fell French Canon SC": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  "IM Fell Great Primer": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "IM Fell Great Primer": { italics: true, weights: [400], fallback: "serif" },
   "IM Fell Great Primer SC": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  Iansui: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Iansui: { italics: false, weights: [400], fallback: "cursive" },
   "Ibarra Real Nova": {
     italics: true,
     minWeight: 400,
     maxWeight: 700,
     fallback: "serif",
   },
-  Iceberg: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Iceland: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Iceberg: { italics: false, weights: [400], fallback: "sans-serif" },
+  Iceland: { italics: false, weights: [400], fallback: "sans-serif" },
   Imbue: { italics: false, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  "Imperial Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Imprima: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Imperial Script": { italics: false, weights: [400], fallback: "cursive" },
+  Imprima: { italics: false, weights: [400], fallback: "sans-serif" },
   "Inclusive Sans": {
     italics: true,
     minWeight: 300,
@@ -3621,61 +1733,29 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "monospace",
   },
-  Inder: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Indie Flower": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Ingrid Darling": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Inika: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
+  Inder: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Indie Flower": { italics: false, weights: [400], fallback: "cursive" },
+  "Ingrid Darling": { italics: false, weights: [400], fallback: "cursive" },
+  Inika: { italics: false, weights: [400, 700], fallback: "serif" },
   "Inknut Antiqua": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 900,
+    weights: [300, 400, 500, 600, 700, 800, 900],
     fallback: "serif",
   },
   "Inria Sans": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
-  "Inria Serif": {
-    italics: true,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Inspiration: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Inria Serif": { italics: true, weights: [300, 400, 700], fallback: "serif" },
+  Inspiration: { italics: false, weights: [400], fallback: "cursive" },
   "Instrument Sans": {
     italics: true,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Instrument Serif": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Instrument Serif": { italics: true, weights: [400], fallback: "serif" },
   Inter: {
     italics: true,
     minWeight: 100,
@@ -3688,155 +1768,65 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Irish Grover": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Island Moments": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Istok Web": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Italiana: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Italianno: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Itim: { italics: false, minWeight: 400, maxWeight: 400, fallback: "cursive" },
-  "Jacquard 12": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Irish Grover": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Island Moments": { italics: false, weights: [400], fallback: "cursive" },
+  "Istok Web": { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Italiana: { italics: false, weights: [400], fallback: "sans-serif" },
+  Italianno: { italics: false, weights: [400], fallback: "cursive" },
+  Itim: { italics: false, weights: [400], fallback: "cursive" },
+  "Jacquard 12": { italics: false, weights: [400], fallback: "sans-serif" },
   "Jacquard 12 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Jacquard 24": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Jacquard 24": { italics: false, weights: [400], fallback: "sans-serif" },
   "Jacquard 24 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Jacquarda Bastarda 9": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Jacquarda Bastarda 9 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Jacques Francois": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Jacques Francois": { italics: false, weights: [400], fallback: "serif" },
   "Jacques Francois Shadow": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Jaini: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Jaini Purva": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Jaldi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Jaro: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Jersey 10": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Jaini: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Jaini Purva": { italics: false, weights: [400], fallback: "sans-serif" },
+  Jaldi: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  "Jersey 10": { italics: false, weights: [400], fallback: "sans-serif" },
   "Jersey 10 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Jersey 15": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Jersey 15": { italics: false, weights: [400], fallback: "sans-serif" },
   "Jersey 15 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Jersey 20": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Jersey 20": { italics: false, weights: [400], fallback: "sans-serif" },
   "Jersey 20 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Jersey 25": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Jersey 25": { italics: false, weights: [400], fallback: "sans-serif" },
   "Jersey 25 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "JetBrains Mono": {
@@ -3845,37 +1835,12 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "monospace",
   },
-  "Jim Nightshade": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Joan: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Jockey One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Jolly Lodger": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Jomhuria: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Jomolhari: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Jim Nightshade": { italics: false, weights: [400], fallback: "cursive" },
+  Joan: { italics: false, weights: [400], fallback: "serif" },
+  "Jockey One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Jolly Lodger": { italics: false, weights: [400], fallback: "sans-serif" },
+  Jomhuria: { italics: false, weights: [400], fallback: "sans-serif" },
+  Jomolhari: { italics: false, weights: [400], fallback: "serif" },
   "Josefin Sans": {
     italics: true,
     minWeight: 100,
@@ -3894,93 +1859,51 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Joti One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Jua: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Judson: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Julee: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Julius Sans One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Junge: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
+  "Joti One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Jua: { italics: false, weights: [400], fallback: "sans-serif" },
+  Judson: { italics: true, weights: [400, 700], fallback: "serif" },
+  Julee: { italics: false, weights: [400], fallback: "cursive" },
+  "Julius Sans One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Junge: { italics: false, weights: [400], fallback: "serif" },
   Jura: {
     italics: false,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Just Another Hand": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Just Another Hand": { italics: false, weights: [400], fallback: "cursive" },
   "Just Me Again Down Here": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   K2D: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 800,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
-  Kablammo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Kadwa: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
+  Kadwa: { italics: false, weights: [400, 700], fallback: "serif" },
   "Kaisei Decol": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 700],
     fallback: "serif",
   },
   "Kaisei HarunoUmi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 700],
     fallback: "serif",
   },
   "Kaisei Opti": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 700],
     fallback: "serif",
   },
   "Kaisei Tokumin": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 700, 800],
     fallback: "serif",
   },
-  Kalam: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
+  Kalam: { italics: false, weights: [300, 400, 700], fallback: "cursive" },
   Kalnia: { italics: false, minWeight: 100, maxWeight: 700, fallback: "serif" },
   "Kalnia Glaze": {
     italics: false,
@@ -3996,14 +1919,12 @@ export const defaultFonts = {
   },
   Kanchenjunga: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 600, 700],
     fallback: "sans-serif",
   },
   Kanit: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Kantumruy Pro": {
@@ -4012,10 +1933,15 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Karantina: {
+  Kapakana: {
     italics: false,
     minWeight: 300,
-    maxWeight: 700,
+    maxWeight: 400,
+    fallback: "cursive",
+  },
+  Karantina: {
+    italics: false,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   Karla: {
@@ -4024,119 +1950,48 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Karma: { italics: false, minWeight: 300, maxWeight: 700, fallback: "serif" },
-  Katibeh: {
+  Karma: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kaushan Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Kavivanar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Kavoon: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kay Pho Du": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "serif",
   },
-  "Kdam Thmor Pro": {
+  Katibeh: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kaushan Script": { italics: false, weights: [400], fallback: "cursive" },
+  Kavivanar: { italics: false, weights: [400], fallback: "cursive" },
+  Kavoon: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kay Pho Du": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
+    weights: [400, 500, 600, 700],
+    fallback: "serif",
   },
-  "Keania One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kelly Slab": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Kenia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Kdam Thmor Pro": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Keania One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kelly Slab": { italics: false, weights: [400], fallback: "sans-serif" },
+  Kenia: { italics: false, weights: [400], fallback: "sans-serif" },
   Khand: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   Khula: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 800,
+    weights: [300, 400, 600, 700, 800],
     fallback: "sans-serif",
   },
-  Kings: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Kirang Haerang": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kite One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kiwi Maru": {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 500,
-    fallback: "serif",
-  },
-  "Klee One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 600,
-    fallback: "cursive",
-  },
-  Knewave: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Kings: { italics: false, weights: [400], fallback: "cursive" },
+  "Kirang Haerang": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kite One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kiwi Maru": { italics: false, weights: [300, 400, 500], fallback: "serif" },
+  "Klee One": { italics: false, weights: [400, 600], fallback: "cursive" },
+  Knewave: { italics: false, weights: [400], fallback: "sans-serif" },
   KoHo: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   Kodchasan: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Kode Mono": {
@@ -4147,69 +2002,26 @@ export const defaultFonts = {
   },
   "Koh Santepheap": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 700, 900],
     fallback: "serif",
   },
-  "Kolker Brush": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Kolker Brush": { italics: false, weights: [400], fallback: "cursive" },
   "Konkhmer Sleokchher": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Kosugi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kosugi Maru": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Kotta One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Koulen: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Kranky: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Kosugi: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kosugi Maru": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Kotta One": { italics: false, weights: [400], fallback: "serif" },
+  Koulen: { italics: false, weights: [400], fallback: "sans-serif" },
+  Kranky: { italics: false, weights: [400], fallback: "sans-serif" },
   Kreon: { italics: false, minWeight: 300, maxWeight: 700, fallback: "serif" },
-  Kristi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Krona One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Kristi: { italics: false, weights: [400], fallback: "cursive" },
+  "Krona One": { italics: false, weights: [400], fallback: "sans-serif" },
   Krub: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   Kufam: {
@@ -4220,20 +2032,13 @@ export const defaultFonts = {
   },
   "Kulim Park": {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 600, 700],
     fallback: "sans-serif",
   },
-  "Kumar One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Kumar One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Kumar One Outline": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Kumbh Sans": {
@@ -4242,112 +2047,51 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Kurale: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
+  Kurale: { italics: false, weights: [400], fallback: "serif" },
   "LXGW WenKai Mono TC": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "monospace",
   },
   "LXGW WenKai TC": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "cursive",
   },
-  "La Belle Aurore": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "La Belle Aurore": { italics: false, weights: [400], fallback: "cursive" },
   Labrada: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  Lacquer: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Lacquer: { italics: false, weights: [400], fallback: "sans-serif" },
   Laila: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "sans-serif",
+    weights: [300, 400, 500, 600, 700],
+    fallback: "serif",
   },
-  "Lakki Reddy": {
+  "Lakki Reddy": { italics: false, weights: [400], fallback: "cursive" },
+  Lalezar: { italics: false, weights: [400], fallback: "sans-serif" },
+  Lancelot: { italics: false, weights: [400], fallback: "sans-serif" },
+  Langar: { italics: false, weights: [400], fallback: "sans-serif" },
+  Lateef: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
+    weights: [200, 300, 400, 500, 600, 700, 800],
+    fallback: "serif",
   },
-  Lalezar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Lancelot: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Langar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Lateef: { italics: false, minWeight: 200, maxWeight: 800, fallback: "serif" },
   Lato: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 700, 900],
     fallback: "sans-serif",
   },
-  "Lavishly Yours": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "League Gothic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "League Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Lavishly Yours": { italics: false, weights: [400], fallback: "cursive" },
+  "League Script": { italics: false, weights: [400], fallback: "cursive" },
   "League Spartan": {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Leckerli One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Ledger: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Lekton: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "monospace",
-  },
-  Lemon: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Leckerli One": { italics: false, weights: [400], fallback: "cursive" },
+  Ledger: { italics: false, weights: [400], fallback: "serif" },
+  Lekton: { italics: true, weights: [400, 700], fallback: "monospace" },
+  Lemon: { italics: false, weights: [400], fallback: "sans-serif" },
   Lemonada: {
     italics: false,
     minWeight: 300,
@@ -4404,50 +2148,42 @@ export const defaultFonts = {
   },
   "Libre Barcode 128": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Barcode 128 Text": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Barcode 39": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Barcode 39 Extended": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Barcode 39 Extended Text": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Barcode 39 Text": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Barcode EAN13 Text": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Libre Baskerville": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "serif",
   },
   "Libre Bodoni": {
@@ -4456,16 +2192,10 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "serif",
   },
-  "Libre Caslon Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Libre Caslon Display": { italics: false, weights: [400], fallback: "serif" },
   "Libre Caslon Text": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "serif",
   },
   "Libre Franklin": {
@@ -4474,193 +2204,72 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Licorice: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Licorice: { italics: false, weights: [400], fallback: "cursive" },
   "Life Savers": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 700, 800],
     fallback: "sans-serif",
   },
-  "Lilita One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Lily Script One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Limelight: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Linden Hill": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Lilita One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Lily Script One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Limelight: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Linden Hill": { italics: true, weights: [400], fallback: "serif" },
   Linefont: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 4,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Lisu Bosa": {
     italics: true,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "serif",
   },
-  Liter: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Liter: { italics: false, weights: [400], fallback: "sans-serif" },
   Literata: {
     italics: true,
     minWeight: 200,
     maxWeight: 900,
     fallback: "serif",
   },
-  "Liu Jian Mao Cao": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Liu Jian Mao Cao": { italics: false, weights: [400], fallback: "cursive" },
   Livvic: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 900],
     fallback: "sans-serif",
   },
-  Lobster: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Lobster Two": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Lobster: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Lobster Two": { italics: true, weights: [400, 700], fallback: "sans-serif" },
   "Londrina Outline": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Londrina Shadow": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Londrina Sketch": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Londrina Shadow": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Londrina Sketch": { italics: false, weights: [400], fallback: "sans-serif" },
   "Londrina Solid": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 900],
     fallback: "sans-serif",
   },
-  "Long Cang": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Long Cang": { italics: false, weights: [400], fallback: "cursive" },
   Lora: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  "Love Light": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Love Light": { italics: false, weights: [400], fallback: "cursive" },
   "Love Ya Like A Sister": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Loved by the King": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Lovers Quarrel": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Luckiest Guy": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Lugrasimo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Lumanosimo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Lunasima: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Lusitana: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Lustria: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Luxurious Roman": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Luxurious Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Loved by the King": { italics: false, weights: [400], fallback: "cursive" },
+  "Lovers Quarrel": { italics: false, weights: [400], fallback: "cursive" },
+  "Luckiest Guy": { italics: false, weights: [400], fallback: "sans-serif" },
+  Lugrasimo: { italics: false, weights: [400], fallback: "cursive" },
+  Lumanosimo: { italics: false, weights: [400], fallback: "cursive" },
+  Lunasima: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Lusitana: { italics: false, weights: [400, 700], fallback: "serif" },
+  Lustria: { italics: false, weights: [400], fallback: "serif" },
+  "Luxurious Roman": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Luxurious Script": { italics: false, weights: [400], fallback: "cursive" },
   "M PLUS 1": {
     italics: false,
     minWeight: 100,
@@ -4675,8 +2284,7 @@ export const defaultFonts = {
   },
   "M PLUS 1p": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 500, 700, 800, 900],
     fallback: "sans-serif",
   },
   "M PLUS 2": {
@@ -4693,26 +2301,14 @@ export const defaultFonts = {
   },
   "M PLUS Rounded 1c": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 500, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Ma Shan Zheng": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Macondo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Ma Shan Zheng": { italics: false, weights: [400], fallback: "cursive" },
+  Macondo: { italics: false, weights: [400], fallback: "sans-serif" },
   "Macondo Swash Caps": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   Mada: {
@@ -4721,99 +2317,41 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Madimi One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Magra: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Maiden Orange": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Madimi One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Magra: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  "Maiden Orange": { italics: false, weights: [400], fallback: "serif" },
   Maitree: {
     italics: false,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "serif",
   },
   "Major Mono Display": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "monospace",
   },
-  Mako: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
+  Mako: { italics: false, weights: [400], fallback: "sans-serif" },
+  Mali: {
+    italics: true,
+    weights: [200, 300, 400, 500, 600, 700],
+    fallback: "cursive",
   },
-  Mali: { italics: true, minWeight: 200, maxWeight: 700, fallback: "cursive" },
-  Mallanna: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Maname: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Mandali: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Manjari: {
-    italics: false,
-    minWeight: 100,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Mallanna: { italics: false, weights: [400], fallback: "sans-serif" },
+  Maname: { italics: false, weights: [400], fallback: "serif" },
+  Mandali: { italics: false, weights: [400], fallback: "sans-serif" },
+  Manjari: { italics: false, weights: [100, 400, 700], fallback: "sans-serif" },
   Manrope: {
     italics: false,
     minWeight: 200,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Mansalva: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Mansalva: { italics: false, weights: [400], fallback: "cursive" },
   Manuale: { italics: true, minWeight: 300, maxWeight: 800, fallback: "serif" },
-  Marcellus: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Marcellus SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Marck Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Margarine: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Marcellus: { italics: false, weights: [400], fallback: "serif" },
+  "Marcellus SC": { italics: false, weights: [400], fallback: "serif" },
+  "Marck Script": { italics: false, weights: [400], fallback: "cursive" },
+  Margarine: { italics: false, weights: [400], fallback: "sans-serif" },
   Marhey: {
     italics: false,
     minWeight: 300,
@@ -4826,23 +2364,16 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "serif",
   },
-  "Marko One": {
+  "Marko One": { italics: false, weights: [400], fallback: "serif" },
+  Marmelad: { italics: false, weights: [400], fallback: "sans-serif" },
+  Martel: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [200, 300, 400, 600, 700, 800, 900],
     fallback: "serif",
   },
-  Marmelad: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Martel: { italics: false, minWeight: 200, maxWeight: 900, fallback: "serif" },
   "Martel Sans": {
     italics: false,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Martian Mono": {
@@ -4851,53 +2382,29 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "monospace",
   },
-  Marvel: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Mate: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Mate SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Matemasie: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Material Icons": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
+  Marvel: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Mate: { italics: true, weights: [400], fallback: "serif" },
+  "Mate SC": { italics: false, weights: [400], fallback: "serif" },
+  Matemasie: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Material Icons": { italics: false, weights: [400], fallback: "monospace" },
   "Material Icons Outlined": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "monospace",
   },
   "Material Icons Round": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "monospace",
   },
   "Material Icons Sharp": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "monospace",
   },
   "Material Icons Two Tone": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "monospace",
   },
   "Material Symbols": {
@@ -4930,60 +2437,15 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  McLaren: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Mea Culpa": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Meddon: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  MedievalSharp: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Medula One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Meera Inimai": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Megrim: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Meie Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Meow Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  McLaren: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Mea Culpa": { italics: false, weights: [400], fallback: "cursive" },
+  Meddon: { italics: false, weights: [400], fallback: "cursive" },
+  MedievalSharp: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Medula One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Meera Inimai": { italics: false, weights: [400], fallback: "sans-serif" },
+  Megrim: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Meie Script": { italics: false, weights: [400], fallback: "cursive" },
+  "Meow Script": { italics: false, weights: [400], fallback: "cursive" },
   Merienda: {
     italics: false,
     minWeight: 300,
@@ -5002,158 +2464,60 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Metal: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Metal Mania": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Metamorphous: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Metrophobic: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Michroma: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Micro 5": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Micro 5 Charted": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Milonga: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Miltonian: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Metal: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Metal Mania": { italics: false, weights: [400], fallback: "sans-serif" },
+  Metamorphous: { italics: false, weights: [400], fallback: "sans-serif" },
+  Metrophobic: { italics: false, weights: [400], fallback: "sans-serif" },
+  Michroma: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Micro 5": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Micro 5 Charted": { italics: false, weights: [400], fallback: "sans-serif" },
+  Milonga: { italics: false, weights: [400], fallback: "sans-serif" },
+  Miltonian: { italics: false, weights: [400], fallback: "sans-serif" },
   "Miltonian Tattoo": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Mina: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Mingzat: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Miniver: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Mina: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Mingzat: { italics: false, weights: [400], fallback: "sans-serif" },
+  Miniver: { italics: false, weights: [400], fallback: "sans-serif" },
   "Miriam Libre": {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Mirza: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  "Miss Fajardose": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Mirza: { italics: false, weights: [400, 500, 600, 700], fallback: "serif" },
+  "Miss Fajardose": { italics: false, weights: [400], fallback: "cursive" },
   Mitr: {
     italics: false,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Mochiy Pop One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Mochiy Pop One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Mochiy Pop P One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Modak: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Modern Antiqua": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Modak: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Modern Antiqua": { italics: false, weights: [400], fallback: "sans-serif" },
   Moderustic: {
     italics: false,
     minWeight: 300,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Mogra: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Mogra: { italics: false, weights: [400], fallback: "sans-serif" },
   Mohave: {
     italics: true,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Moirai One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Molengo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Molle: { italics: true, minWeight: 400, maxWeight: 400, fallback: "cursive" },
+  "Moirai One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Molengo: { italics: false, weights: [400], fallback: "sans-serif" },
+  Molle: { italics: true, weights: [400], fallback: "cursive" },
   "Mona Sans": {
     italics: true,
     minWeight: 200,
@@ -5166,60 +2530,24 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Monofett: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  Monomakh: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Monomaniac One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Monoton: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Monofett: { italics: false, weights: [400], fallback: "monospace" },
+  Monomakh: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Monomaniac One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Monoton: { italics: false, weights: [400], fallback: "sans-serif" },
   "Monsieur La Doulaise": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  Montaga: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Montaga: { italics: false, weights: [400], fallback: "serif" },
   "Montagu Slab": {
     italics: false,
     minWeight: 100,
     maxWeight: 700,
     fallback: "serif",
   },
-  MonteCarlo: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Montez: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  MonteCarlo: { italics: false, weights: [400], fallback: "cursive" },
+  Montez: { italics: false, weights: [400], fallback: "cursive" },
   Montserrat: {
     italics: true,
     minWeight: 100,
@@ -5228,8 +2556,7 @@ export const defaultFonts = {
   },
   "Montserrat Alternates": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Montserrat Underline": {
@@ -5238,112 +2565,51 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Moo Lah Lah": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Mooli: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Moon Dance": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Moul: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Moulpali: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Moo Lah Lah": { italics: false, weights: [400], fallback: "sans-serif" },
+  Mooli: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Moon Dance": { italics: false, weights: [400], fallback: "cursive" },
+  Moul: { italics: false, weights: [400], fallback: "sans-serif" },
+  Moulpali: { italics: false, weights: [400], fallback: "sans-serif" },
   "Mountains of Christmas": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  "Mouse Memoirs": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Mr Bedfort": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Mr Dafoe": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Mr De Haviland": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Mouse Memoirs": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Mr Bedfort": { italics: false, weights: [400], fallback: "cursive" },
+  "Mr Dafoe": { italics: false, weights: [400], fallback: "cursive" },
+  "Mr De Haviland": { italics: false, weights: [400], fallback: "cursive" },
   "Mrs Saint Delafield": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Mrs Sheppards": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Ms Madi": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Mrs Sheppards": { italics: false, weights: [400], fallback: "cursive" },
+  "Ms Madi": { italics: false, weights: [400], fallback: "cursive" },
   Mukta: {
     italics: false,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
   "Mukta Mahee": {
     italics: false,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
   "Mukta Malar": {
     italics: false,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
   "Mukta Vaani": {
     italics: false,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
   Mulish: {
     italics: true,
     minWeight: 200,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   Murecho: {
@@ -5358,77 +2624,36 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "My Soul": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Mynerve: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Mystery Quest": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  NTR: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Nabla: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "My Soul": { italics: false, weights: [400], fallback: "cursive" },
+  Mynerve: { italics: false, weights: [400], fallback: "cursive" },
+  "Mystery Quest": { italics: false, weights: [400], fallback: "sans-serif" },
+  NTR: { italics: false, weights: [400], fallback: "sans-serif" },
   Namdhinggo: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 600, 700, 800],
     fallback: "serif",
   },
-  "Nanum Brush Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Nanum Brush Script": { italics: false, weights: [400], fallback: "cursive" },
   "Nanum Gothic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 700, 800],
     fallback: "sans-serif",
   },
   "Nanum Gothic Coding": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "cursive",
   },
   "Nanum Myeongjo": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 700, 800],
     fallback: "serif",
   },
-  "Nanum Pen Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Nanum Pen Script": { italics: false, weights: [400], fallback: "cursive" },
   Narnoor: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
-    fallback: "serif",
+    weights: [400, 500, 600, 700, 800],
+    fallback: "sans-serif",
   },
   "National Park": {
     italics: false,
@@ -5436,127 +2661,53 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Neonderthaw: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Nerko One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Neucha: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Neuton: { italics: true, minWeight: 200, maxWeight: 800, fallback: "serif" },
-  "New Amsterdam": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "New Rocker": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "New Tegomin": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+  Neonderthaw: { italics: false, weights: [400], fallback: "cursive" },
+  "Nerko One": { italics: false, weights: [400], fallback: "cursive" },
+  Neucha: { italics: false, weights: [400], fallback: "cursive" },
+  Neuton: {
+    italics: true,
+    weights: [200, 300, 400, 700, 800],
     fallback: "serif",
   },
-  "News Cycle": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "New Amsterdam": { italics: false, weights: [400], fallback: "sans-serif" },
+  "New Rocker": { italics: false, weights: [400], fallback: "sans-serif" },
+  "New Tegomin": { italics: false, weights: [400], fallback: "serif" },
+  "News Cycle": { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Newsreader: {
     italics: true,
     minWeight: 200,
     maxWeight: 800,
     fallback: "serif",
   },
-  Niconne: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Niconne: { italics: false, weights: [400], fallback: "cursive" },
   Niramit: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 700,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Nixie One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Nobile: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Nixie One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Nobile: { italics: true, weights: [400, 500, 700], fallback: "sans-serif" },
   Nokora: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 700, 900],
     fallback: "sans-serif",
   },
-  Norican: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Nosifer: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Notable: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Norican: { italics: false, weights: [400], fallback: "cursive" },
+  Nosifer: { italics: false, weights: [400], fallback: "sans-serif" },
+  Notable: { italics: false, weights: [400], fallback: "sans-serif" },
   "Nothing You Could Do": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Noticia Text": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
+  "Noticia Text": { italics: true, weights: [400, 700], fallback: "serif" },
   "Noto Kufi Arabic": {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Noto Music": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Music": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Naskh Arabic": {
     italics: false,
     minWeight: 400,
@@ -5595,8 +2746,7 @@ export const defaultFonts = {
   },
   "Noto Sans Anatolian Hieroglyphs": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Arabic": {
@@ -5613,8 +2763,7 @@ export const defaultFonts = {
   },
   "Noto Sans Avestan": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Balinese": {
@@ -5635,12 +2784,7 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Noto Sans Batak": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Batak": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Bengali": {
     italics: false,
     minWeight: 100,
@@ -5649,28 +2793,20 @@ export const defaultFonts = {
   },
   "Noto Sans Bhaiksuki": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Brahmi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Buginese": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Buhid": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Buhid": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Canadian Aboriginal": {
     italics: false,
     minWeight: 100,
@@ -5679,20 +2815,17 @@ export const defaultFonts = {
   },
   "Noto Sans Carian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Caucasian Albanian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Chakma": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Cham": {
@@ -5709,38 +2842,32 @@ export const defaultFonts = {
   },
   "Noto Sans Chorasmian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Coptic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Cuneiform": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Cypriot": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Cypro Minoan": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Deseret": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Devanagari": {
@@ -5757,26 +2884,22 @@ export const defaultFonts = {
   },
   "Noto Sans Duployan": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
   "Noto Sans Egyptian Hieroglyphs": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Elbasan": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Elymaic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Ethiopic": {
@@ -5793,20 +2916,17 @@ export const defaultFonts = {
   },
   "Noto Sans Glagolitic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Gothic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Grantha": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Gujarati": {
@@ -5841,14 +2961,12 @@ export const defaultFonts = {
   },
   "Noto Sans Hanunoo": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Hatran": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Hebrew": {
@@ -5859,26 +2977,22 @@ export const defaultFonts = {
   },
   "Noto Sans Imperial Aramaic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Indic Siyaq Numbers": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Inscriptional Pahlavi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Inscriptional Parthian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans JP": {
@@ -5901,8 +3015,7 @@ export const defaultFonts = {
   },
   "Noto Sans Kaithi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Kannada": {
@@ -5925,8 +3038,7 @@ export const defaultFonts = {
   },
   "Noto Sans Kharoshthi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Khmer": {
@@ -5937,14 +3049,12 @@ export const defaultFonts = {
   },
   "Noto Sans Khojki": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Khudawadi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Lao": {
@@ -5961,26 +3071,18 @@ export const defaultFonts = {
   },
   "Noto Sans Lepcha": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Limbu": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Limbu": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Linear A": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Linear B": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Lisu": {
@@ -5991,14 +3093,12 @@ export const defaultFonts = {
   },
   "Noto Sans Lydian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Mahajani": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Malayalam": {
@@ -6009,38 +3109,28 @@ export const defaultFonts = {
   },
   "Noto Sans Mandaic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Manichaean": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Marchen": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Masaram Gondi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Math": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Math": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Mayan Numerals": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Medefaidrin": {
@@ -6057,32 +3147,19 @@ export const defaultFonts = {
   },
   "Noto Sans Mende Kikakui": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Meroitic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Miao": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Noto Sans Modi": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Miao": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Noto Sans Modi": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Mongolian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Mono": {
@@ -6091,24 +3168,13 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Noto Sans Mro": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Mro": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Multani": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans NKo": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans NKo": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans NKo Unjoined": {
     italics: false,
     minWeight: 400,
@@ -6117,8 +3183,7 @@ export const defaultFonts = {
   },
   "Noto Sans Nabataean": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Nag Mundari": {
@@ -6129,8 +3194,7 @@ export const defaultFonts = {
   },
   "Noto Sans Nandinagari": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans New Tai Lue": {
@@ -6139,24 +3203,9 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Noto Sans Newa": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Noto Sans Nushu": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Noto Sans Ogham": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Newa": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Noto Sans Nushu": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Noto Sans Ogham": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Ol Chiki": {
     italics: false,
     minWeight: 400,
@@ -6165,50 +3214,42 @@ export const defaultFonts = {
   },
   "Noto Sans Old Hungarian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old Italic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old North Arabian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old Permic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old Persian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old Sogdian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old South Arabian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Old Turkic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Oriya": {
@@ -6217,66 +3258,48 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Noto Sans Osage": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Osage": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Osmanya": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Pahawh Hmong": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Palmyrene": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Pau Cin Hau": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans PhagsPa": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Phoenician": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Psalter Pahlavi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Rejang": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Runic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Runic": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans SC": {
     italics: false,
     minWeight: 100,
@@ -6285,38 +3308,32 @@ export const defaultFonts = {
   },
   "Noto Sans Samaritan": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Saurashtra": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Sharada": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Shavian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Siddham": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans SignWriting": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Sinhala": {
@@ -6327,8 +3344,7 @@ export const defaultFonts = {
   },
   "Noto Sans Sogdian": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Sora Sompeng": {
@@ -6339,8 +3355,7 @@ export const defaultFonts = {
   },
   "Noto Sans Soyombo": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Sundanese": {
@@ -6351,8 +3366,7 @@ export const defaultFonts = {
   },
   "Noto Sans Syloti Nagri": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Symbols": {
@@ -6363,8 +3377,7 @@ export const defaultFonts = {
   },
   "Noto Sans Symbols 2": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Syriac": {
@@ -6387,20 +3400,17 @@ export const defaultFonts = {
   },
   "Noto Sans Tagalog": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Tagbanwa": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Tai Le": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Tai Tham": {
@@ -6411,16 +3421,10 @@ export const defaultFonts = {
   },
   "Noto Sans Tai Viet": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Takri": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Takri": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Tamil": {
     italics: false,
     minWeight: 100,
@@ -6429,8 +3433,7 @@ export const defaultFonts = {
   },
   "Noto Sans Tamil Supplement": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Tangsa": {
@@ -6459,34 +3462,25 @@ export const defaultFonts = {
   },
   "Noto Sans Thai Looped": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Noto Sans Tifinagh": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Tirhuta": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Ugaritic": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Vai": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Vai": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Vithkuqi": {
     italics: false,
     minWeight: 400,
@@ -6495,26 +3489,18 @@ export const defaultFonts = {
   },
   "Noto Sans Wancho": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Sans Warang Citi": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Noto Sans Yi": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Noto Sans Yi": { italics: false, weights: [400], fallback: "sans-serif" },
   "Noto Sans Zanabazar Square": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Noto Serif": {
@@ -6523,24 +3509,14 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Ahom": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Noto Serif Ahom": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Armenian": {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Balinese": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Noto Serif Balinese": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Bengali": {
     italics: false,
     minWeight: 100,
@@ -6559,12 +3535,12 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Dogra": {
+  "Noto Serif Dives Akuru": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
+    weights: [400],
+    fallback: "sans-serif",
   },
+  "Noto Serif Dogra": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Ethiopic": {
     italics: false,
     minWeight: 100,
@@ -6577,12 +3553,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Grantha": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Noto Serif Grantha": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Gujarati": {
     italics: false,
     minWeight: 100,
@@ -6633,8 +3604,7 @@ export const defaultFonts = {
   },
   "Noto Serif Khitan Small Script": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
   "Noto Serif Khmer": {
@@ -6655,12 +3625,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Makasar": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Noto Serif Makasar": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Malayalam": {
     italics: false,
     minWeight: 100,
@@ -6675,8 +3640,7 @@ export const defaultFonts = {
   },
   "Noto Serif Old Uyghur": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
   "Noto Serif Oriya": {
@@ -6687,8 +3651,7 @@ export const defaultFonts = {
   },
   "Noto Serif Ottoman Siyaq": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
   "Noto Serif SC": {
@@ -6715,12 +3678,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Tangut": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Noto Serif Tangut": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Telugu": {
     italics: false,
     minWeight: 100,
@@ -6739,12 +3697,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  "Noto Serif Todhri": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Noto Serif Todhri": { italics: false, weights: [400], fallback: "serif" },
   "Noto Serif Toto": {
     italics: false,
     minWeight: 400,
@@ -6771,135 +3724,52 @@ export const defaultFonts = {
   },
   "Noto Znamenny Musical Notation": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Nova Cut": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Nova Flat": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Nova Mono": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "Nova Oval": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Nova Round": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Nova Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Nova Slim": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Nova Square": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Numans: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Nova Cut": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Nova Flat": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Nova Mono": { italics: false, weights: [400], fallback: "monospace" },
+  "Nova Oval": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Nova Round": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Nova Script": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Nova Slim": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Nova Square": { italics: false, weights: [400], fallback: "sans-serif" },
+  Numans: { italics: false, weights: [400], fallback: "sans-serif" },
   Nunito: {
     italics: true,
     minWeight: 200,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Nunito Sans": {
     italics: true,
     minWeight: 200,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  "Nuosu SIL": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Odibee Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Odor Mean Chey": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Offside: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Oi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Nuosu SIL": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Odibee Sans": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Odor Mean Chey": { italics: false, weights: [400], fallback: "serif" },
+  Offside: { italics: false, weights: [400], fallback: "sans-serif" },
+  Oi: { italics: false, weights: [400], fallback: "sans-serif" },
   Ojuju: {
     italics: false,
     minWeight: 200,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Old Standard TT": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Oldenburg: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ole: { italics: false, minWeight: 400, maxWeight: 400, fallback: "cursive" },
+  "Old Standard TT": { italics: true, weights: [400, 700], fallback: "serif" },
+  Oldenburg: { italics: false, weights: [400], fallback: "sans-serif" },
+  Ole: { italics: false, weights: [400], fallback: "cursive" },
   "Oleo Script": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
   "Oleo Script Swash Caps": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
   Onest: {
@@ -6908,60 +3778,25 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Oooh Baby": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Oooh Baby": { italics: false, weights: [400], fallback: "cursive" },
   "Open Sans": {
     italics: true,
     minWeight: 300,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Oranienbaum: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Orbit: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Oranienbaum: { italics: false, weights: [400], fallback: "serif" },
+  Orbit: { italics: false, weights: [400], fallback: "sans-serif" },
   Orbitron: {
     italics: false,
     minWeight: 400,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Oregano: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Orelega One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Orienta: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Original Surfer": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Oregano: { italics: true, weights: [400], fallback: "sans-serif" },
+  "Orelega One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Orienta: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Original Surfer": { italics: false, weights: [400], fallback: "sans-serif" },
   Oswald: {
     italics: false,
     minWeight: 200,
@@ -6974,24 +3809,9 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Over the Rainbow": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Overlock: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 900,
-    fallback: "sans-serif",
-  },
-  "Overlock SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Over the Rainbow": { italics: false, weights: [400], fallback: "cursive" },
+  Overlock: { italics: true, weights: [400, 700, 900], fallback: "sans-serif" },
+  "Overlock SC": { italics: false, weights: [400], fallback: "sans-serif" },
   Overpass: {
     italics: true,
     minWeight: 100,
@@ -7004,139 +3824,63 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "monospace",
   },
-  Ovo: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
+  Ovo: { italics: false, weights: [400], fallback: "serif" },
   Oxanium: {
     italics: false,
     minWeight: 200,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Oxygen: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Oxygen Mono": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "PT Mono": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "PT Sans": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Oxygen: { italics: false, weights: [300, 400, 700], fallback: "sans-serif" },
+  "Oxygen Mono": { italics: false, weights: [400], fallback: "monospace" },
+  "PT Mono": { italics: false, weights: [400], fallback: "monospace" },
+  "PT Sans": { italics: true, weights: [400, 700], fallback: "sans-serif" },
   "PT Sans Caption": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
   "PT Sans Narrow": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  "PT Serif": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  "PT Serif Caption": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Pacifico: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Padauk: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "PT Serif": { italics: true, weights: [400, 700], fallback: "serif" },
+  "PT Serif Caption": { italics: true, weights: [400], fallback: "serif" },
+  Pacifico: { italics: false, weights: [400], fallback: "cursive" },
+  Padauk: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   "Padyakke Expanded One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
   Palanquin: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 700,
+    weights: [100, 200, 300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
   "Palanquin Dark": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  "Palette Mosaic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Pangolin: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Paprika: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Parisienne: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Palette Mosaic": { italics: false, weights: [400], fallback: "sans-serif" },
+  Pangolin: { italics: false, weights: [400], fallback: "cursive" },
+  Paprika: { italics: false, weights: [400], fallback: "sans-serif" },
+  Parisienne: { italics: false, weights: [400], fallback: "cursive" },
   Parkinsans: {
     italics: false,
     minWeight: 300,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Passero One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Passero One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Passion One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 700, 900],
     fallback: "sans-serif",
   },
-  "Passions Conflict": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Passions Conflict": { italics: false, weights: [400], fallback: "cursive" },
   "Pathway Extreme": {
     italics: true,
     minWeight: 100,
@@ -7145,83 +3889,26 @@ export const defaultFonts = {
   },
   "Pathway Gothic One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Patrick Hand": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Patrick Hand SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Pattaya: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Patua One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Pavanam: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Paytone One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Peddana: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Peralta: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Permanent Marker": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Petemoss: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Patrick Hand": { italics: false, weights: [400], fallback: "cursive" },
+  "Patrick Hand SC": { italics: false, weights: [400], fallback: "cursive" },
+  Pattaya: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Patua One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Pavanam: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Paytone One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Peddana: { italics: false, weights: [400], fallback: "serif" },
+  Peralta: { italics: false, weights: [400], fallback: "serif" },
+  "Permanent Marker": { italics: false, weights: [400], fallback: "cursive" },
+  Petemoss: { italics: false, weights: [400], fallback: "cursive" },
   "Petit Formal Script": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   Petrona: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  Philosopher: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Philosopher: { italics: true, weights: [400, 700], fallback: "sans-serif" },
   Phudu: {
     italics: false,
     minWeight: 300,
@@ -7234,49 +3921,19 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  Piedra: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Pinyon Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Pirata One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Piedra: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Pinyon Script": { italics: false, weights: [400], fallback: "cursive" },
+  "Pirata One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Pixelify Sans": {
     italics: false,
     minWeight: 400,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Plaster: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Plaster: { italics: false, weights: [400], fallback: "sans-serif" },
   Platypi: { italics: true, minWeight: 300, maxWeight: 800, fallback: "serif" },
-  Play: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Playball: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Play: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Playball: { italics: false, weights: [400], fallback: "sans-serif" },
   Playfair: {
     italics: true,
     minWeight: 300,
@@ -7291,8 +3948,7 @@ export const defaultFonts = {
   },
   "Playfair Display SC": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 700, 900],
     fallback: "serif",
   },
   "Playpen Sans": {
@@ -7333,8 +3989,7 @@ export const defaultFonts = {
   },
   "Playwrite AR Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite AT": {
@@ -7343,12 +3998,7 @@ export const defaultFonts = {
     maxWeight: 400,
     fallback: "cursive",
   },
-  "Playwrite AT Guides": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Playwrite AT Guides": { italics: true, weights: [400], fallback: "cursive" },
   "Playwrite AU NSW": {
     italics: false,
     minWeight: 100,
@@ -7357,8 +4007,7 @@ export const defaultFonts = {
   },
   "Playwrite AU NSW Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite AU QLD": {
@@ -7369,8 +4018,7 @@ export const defaultFonts = {
   },
   "Playwrite AU QLD Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite AU SA": {
@@ -7381,8 +4029,7 @@ export const defaultFonts = {
   },
   "Playwrite AU SA Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite AU TAS": {
@@ -7393,8 +4040,7 @@ export const defaultFonts = {
   },
   "Playwrite AU TAS Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite AU VIC": {
@@ -7405,8 +4051,7 @@ export const defaultFonts = {
   },
   "Playwrite AU VIC Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite BE VLG": {
@@ -7417,8 +4062,7 @@ export const defaultFonts = {
   },
   "Playwrite BE VLG Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite BE WAL": {
@@ -7429,8 +4073,7 @@ export const defaultFonts = {
   },
   "Playwrite BE WAL Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite BR": {
@@ -7441,8 +4084,7 @@ export const defaultFonts = {
   },
   "Playwrite BR Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite CA": {
@@ -7453,8 +4095,7 @@ export const defaultFonts = {
   },
   "Playwrite CA Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite CL": {
@@ -7465,8 +4106,7 @@ export const defaultFonts = {
   },
   "Playwrite CL Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite CO": {
@@ -7477,8 +4117,7 @@ export const defaultFonts = {
   },
   "Playwrite CO Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite CU": {
@@ -7489,8 +4128,7 @@ export const defaultFonts = {
   },
   "Playwrite CU Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite CZ": {
@@ -7501,8 +4139,7 @@ export const defaultFonts = {
   },
   "Playwrite CZ Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite DE Grund": {
@@ -7513,8 +4150,7 @@ export const defaultFonts = {
   },
   "Playwrite DE Grund Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite DE LA": {
@@ -7525,8 +4161,7 @@ export const defaultFonts = {
   },
   "Playwrite DE LA Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite DE SAS": {
@@ -7537,8 +4172,7 @@ export const defaultFonts = {
   },
   "Playwrite DE SAS Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite DE VA": {
@@ -7549,8 +4183,7 @@ export const defaultFonts = {
   },
   "Playwrite DE VA Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite DK Loopet": {
@@ -7561,8 +4194,7 @@ export const defaultFonts = {
   },
   "Playwrite DK Loopet Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite DK Uloopet": {
@@ -7573,8 +4205,7 @@ export const defaultFonts = {
   },
   "Playwrite DK Uloopet Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite ES": {
@@ -7591,14 +4222,12 @@ export const defaultFonts = {
   },
   "Playwrite ES Deco Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite ES Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite FR Moderne": {
@@ -7609,8 +4238,7 @@ export const defaultFonts = {
   },
   "Playwrite FR Moderne Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite FR Trad": {
@@ -7621,8 +4249,7 @@ export const defaultFonts = {
   },
   "Playwrite FR Trad Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite GB J": {
@@ -7633,8 +4260,7 @@ export const defaultFonts = {
   },
   "Playwrite GB J Guides": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite GB S": {
@@ -7645,8 +4271,7 @@ export const defaultFonts = {
   },
   "Playwrite GB S Guides": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite HR": {
@@ -7657,8 +4282,7 @@ export const defaultFonts = {
   },
   "Playwrite HR Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite HR Lijeva": {
@@ -7669,8 +4293,7 @@ export const defaultFonts = {
   },
   "Playwrite HR Lijeva Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite HU": {
@@ -7681,8 +4304,7 @@ export const defaultFonts = {
   },
   "Playwrite HU Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite ID": {
@@ -7693,8 +4315,7 @@ export const defaultFonts = {
   },
   "Playwrite ID Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite IE": {
@@ -7705,8 +4326,7 @@ export const defaultFonts = {
   },
   "Playwrite IE Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite IN": {
@@ -7717,8 +4337,7 @@ export const defaultFonts = {
   },
   "Playwrite IN Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite IS": {
@@ -7729,8 +4348,7 @@ export const defaultFonts = {
   },
   "Playwrite IS Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite IT Moderna": {
@@ -7741,8 +4359,7 @@ export const defaultFonts = {
   },
   "Playwrite IT Moderna Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite IT Trad": {
@@ -7753,8 +4370,7 @@ export const defaultFonts = {
   },
   "Playwrite IT Trad Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite MX": {
@@ -7765,8 +4381,7 @@ export const defaultFonts = {
   },
   "Playwrite MX Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite NG Modern": {
@@ -7777,8 +4392,7 @@ export const defaultFonts = {
   },
   "Playwrite NG Modern Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite NL": {
@@ -7789,8 +4403,7 @@ export const defaultFonts = {
   },
   "Playwrite NL Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite NO": {
@@ -7801,8 +4414,7 @@ export const defaultFonts = {
   },
   "Playwrite NO Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite NZ": {
@@ -7813,8 +4425,7 @@ export const defaultFonts = {
   },
   "Playwrite NZ Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite PE": {
@@ -7825,8 +4436,7 @@ export const defaultFonts = {
   },
   "Playwrite PE Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite PL": {
@@ -7837,8 +4447,7 @@ export const defaultFonts = {
   },
   "Playwrite PL Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite PT": {
@@ -7849,8 +4458,7 @@ export const defaultFonts = {
   },
   "Playwrite PT Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite RO": {
@@ -7861,8 +4469,7 @@ export const defaultFonts = {
   },
   "Playwrite RO Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite SK": {
@@ -7873,8 +4480,7 @@ export const defaultFonts = {
   },
   "Playwrite SK Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite TZ": {
@@ -7885,8 +4491,7 @@ export const defaultFonts = {
   },
   "Playwrite TZ Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite US Modern": {
@@ -7897,8 +4502,7 @@ export const defaultFonts = {
   },
   "Playwrite US Modern Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite US Trad": {
@@ -7909,8 +4513,7 @@ export const defaultFonts = {
   },
   "Playwrite US Trad Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite VN": {
@@ -7921,8 +4524,7 @@ export const defaultFonts = {
   },
   "Playwrite VN Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Playwrite ZA": {
@@ -7933,8 +4535,7 @@ export const defaultFonts = {
   },
   "Playwrite ZA Guides": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Plus Jakarta Sans": {
@@ -7943,175 +4544,82 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Pochaevsk: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Pochaevsk: { italics: false, weights: [400], fallback: "sans-serif" },
   Podkova: {
     italics: false,
     minWeight: 400,
     maxWeight: 800,
     fallback: "serif",
   },
-  "Poetsen One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Poiret One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Poller One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Poetsen One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Poiret One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Poller One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Poltawski Nowy": {
     italics: true,
     minWeight: 400,
     maxWeight: 700,
     fallback: "serif",
   },
-  Poly: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Pompiere: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ponnala: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ponomar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Poly: { italics: true, weights: [400], fallback: "serif" },
+  Pompiere: { italics: false, weights: [400], fallback: "sans-serif" },
+  Ponnala: { italics: false, weights: [400], fallback: "sans-serif" },
+  Ponomar: { italics: false, weights: [400], fallback: "sans-serif" },
   "Pontano Sans": {
     italics: false,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Poor Story": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Poor Story": { italics: false, weights: [400], fallback: "sans-serif" },
   Poppins: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Port Lligat Sans": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Port Lligat Slab": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Potta One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Port Lligat Slab": { italics: false, weights: [400], fallback: "serif" },
+  "Potta One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Pragati Narrow": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  Praise: {
+  Praise: { italics: false, weights: [400], fallback: "cursive" },
+  Prata: { italics: false, weights: [400], fallback: "serif" },
+  Preahvihear: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Press Start 2P": { italics: false, weights: [400], fallback: "sans-serif" },
+  Pridi: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Prata: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Preahvihear: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Press Start 2P": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Pridi: { italics: false, minWeight: 200, maxWeight: 700, fallback: "serif" },
-  "Princess Sofia": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Prociono: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [200, 300, 400, 500, 600, 700],
     fallback: "serif",
   },
+  "Princess Sofia": { italics: false, weights: [400], fallback: "cursive" },
+  Prociono: { italics: false, weights: [400], fallback: "serif" },
   Prompt: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Prosto One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Prosto One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Protest Guerrilla": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Protest Revolution": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Protest Riot": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Protest Strike": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Protest Riot": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Protest Strike": { italics: false, weights: [400], fallback: "sans-serif" },
   "Proza Libre": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
   "Public Sans": {
@@ -8120,77 +4628,30 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Puppies Play": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Puritan: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Purple Purse": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Qahiri: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Quando: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Quantico: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Quattrocento: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
+  "Puppies Play": { italics: false, weights: [400], fallback: "cursive" },
+  Puritan: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Purple Purse": { italics: false, weights: [400], fallback: "sans-serif" },
+  Qahiri: { italics: false, weights: [400], fallback: "sans-serif" },
+  Quando: { italics: false, weights: [400], fallback: "serif" },
+  Quantico: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  Quattrocento: { italics: false, weights: [400, 700], fallback: "serif" },
   "Quattrocento Sans": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  Questrial: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Questrial: { italics: false, weights: [400], fallback: "sans-serif" },
   Quicksand: {
     italics: false,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Quintessential: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Qwigley: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Quintessential: { italics: false, weights: [400], fallback: "cursive" },
+  Qwigley: { italics: false, weights: [400], fallback: "cursive" },
   "Qwitcher Grypen": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "cursive",
   },
   REM: {
@@ -8199,12 +4660,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Racing Sans One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Racing Sans One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Radio Canada": {
     italics: true,
     minWeight: 300,
@@ -8217,102 +4673,41 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Radley: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
+  Radley: { italics: true, weights: [400], fallback: "serif" },
   Rajdhani: {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  Rakkas: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Rakkas: { italics: false, weights: [400], fallback: "sans-serif" },
   Raleway: {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Raleway Dots": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ramabhadra: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ramaraja: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Rambla: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Rammetto One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rampart One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ranchers: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Rancho: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Ranga: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Raleway Dots": { italics: false, weights: [400], fallback: "sans-serif" },
+  Ramabhadra: { italics: false, weights: [400], fallback: "sans-serif" },
+  Ramaraja: { italics: false, weights: [400], fallback: "serif" },
+  Rambla: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Rammetto One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rampart One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Ranchers: { italics: false, weights: [400], fallback: "sans-serif" },
+  Rancho: { italics: false, weights: [400], fallback: "cursive" },
+  Ranga: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Rasa: { italics: true, minWeight: 300, maxWeight: 700, fallback: "serif" },
-  Rationale: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Ravi Prakash": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Rationale: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Ravi Prakash": { italics: false, weights: [400], fallback: "sans-serif" },
   "Readex Pro": {
     italics: false,
-    minWeight: 200,
+    minWeight: 160,
     maxWeight: 700,
     fallback: "sans-serif",
   },
   Recursive: {
     italics: false,
     minWeight: 300,
-    maxWeight: 900,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Red Hat Display": {
@@ -8339,16 +4734,10 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Redacted: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Redacted: { italics: false, weights: [400], fallback: "sans-serif" },
   "Redacted Script": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   "Reddit Mono": {
@@ -8369,12 +4758,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Redressed: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Redressed: { italics: false, weights: [400], fallback: "cursive" },
   "Reem Kufi": {
     italics: false,
     minWeight: 400,
@@ -8387,72 +4771,22 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Reem Kufi Ink": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Reenie Beanie": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Reggae One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Reem Kufi Ink": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Reenie Beanie": { italics: false, weights: [400], fallback: "cursive" },
+  "Reggae One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Rethink Sans": {
     italics: true,
     minWeight: 400,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Revalia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rhodium Libre": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Ribeye: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Ribeye Marrow": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Righteous: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Risque: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Road Rage": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Revalia: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rhodium Libre": { italics: false, weights: [400], fallback: "serif" },
+  Ribeye: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Ribeye Marrow": { italics: false, weights: [400], fallback: "sans-serif" },
+  Righteous: { italics: false, weights: [400], fallback: "sans-serif" },
+  Risque: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Road Rage": { italics: false, weights: [400], fallback: "sans-serif" },
   Roboto: {
     italics: true,
     minWeight: 100,
@@ -8467,8 +4801,8 @@ export const defaultFonts = {
   },
   "Roboto Flex": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    minWeight: 100,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Roboto Mono": {
@@ -8489,291 +4823,99 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "serif",
   },
-  Rochester: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Rock 3D": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rock Salt": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "RocknRoll One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Rochester: { italics: false, weights: [400], fallback: "cursive" },
+  "Rock 3D": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rock Salt": { italics: false, weights: [400], fallback: "cursive" },
+  "RocknRoll One": { italics: false, weights: [400], fallback: "sans-serif" },
   Rokkitt: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
-  Romanesco: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Ropa Sans": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Romanesco: { italics: false, weights: [400], fallback: "cursive" },
+  "Ropa Sans": { italics: true, weights: [400], fallback: "sans-serif" },
   Rosario: {
     italics: true,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Rosarivo: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Rouge Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Rowdies: {
-    italics: false,
-    minWeight: 300,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Rozha One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Rosarivo: { italics: true, weights: [400], fallback: "serif" },
+  "Rouge Script": { italics: false, weights: [400], fallback: "cursive" },
+  Rowdies: { italics: false, weights: [300, 400, 700], fallback: "sans-serif" },
+  "Rozha One": { italics: false, weights: [400], fallback: "serif" },
   Rubik: {
     italics: true,
     minWeight: 300,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Rubik 80s Fade": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Beastly": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Rubik 80s Fade": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Beastly": { italics: false, weights: [400], fallback: "sans-serif" },
   "Rubik Broken Fax": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Rubik Bubbles": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Burned": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Dirt": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Rubik Bubbles": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Burned": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Dirt": { italics: false, weights: [400], fallback: "sans-serif" },
   "Rubik Distressed": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Rubik Doodle Shadow": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Rubik Doodle Triangles": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Rubik Gemstones": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Glitch": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Rubik Gemstones": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Glitch": { italics: false, weights: [400], fallback: "sans-serif" },
   "Rubik Glitch Pop": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Rubik Iso": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Lines": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Maps": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Rubik Iso": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Lines": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Maps": { italics: false, weights: [400], fallback: "sans-serif" },
   "Rubik Marker Hatch": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Rubik Maze": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Microbe": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Mono One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Moonrocks": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Pixels": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Puddles": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Scribble": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Rubik Maze": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Microbe": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Mono One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Moonrocks": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Pixels": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Puddles": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Scribble": { italics: false, weights: [400], fallback: "sans-serif" },
   "Rubik Spray Paint": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Rubik Storm": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Vinyl": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rubik Wet Paint": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Rubik Storm": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Vinyl": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rubik Wet Paint": { italics: false, weights: [400], fallback: "sans-serif" },
   Ruda: {
     italics: false,
     minWeight: 400,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Rufina: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  "Ruge Boogie": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Ruluko: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Rum Raisin": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Ruslan Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Russo One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Ruthie: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Ruwudu: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Rye: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Rufina: { italics: false, weights: [400, 700], fallback: "serif" },
+  "Ruge Boogie": { italics: false, weights: [400], fallback: "cursive" },
+  Ruluko: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Rum Raisin": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Ruslan Display": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Russo One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Ruthie: { italics: false, weights: [400], fallback: "cursive" },
+  Ruwudu: { italics: false, weights: [400, 500, 600, 700], fallback: "serif" },
+  Rye: { italics: false, weights: [400], fallback: "sans-serif" },
   "STIX Two Text": {
     italics: true,
     minWeight: 400,
@@ -8786,24 +4928,9 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Sacramento: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Sahitya: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "serif",
-  },
-  Sail: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Sacramento: { italics: false, weights: [400], fallback: "cursive" },
+  Sahitya: { italics: false, weights: [400, 700], fallback: "serif" },
+  Sail: { italics: false, weights: [400], fallback: "sans-serif" },
   Saira: {
     italics: true,
     minWeight: 100,
@@ -8812,57 +4939,36 @@ export const defaultFonts = {
   },
   "Saira Condensed": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Saira Extra Condensed": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Saira Semi Condensed": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Saira Stencil One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Salsa: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Sanchez: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Sancreek: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Sankofa Display": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Salsa: { italics: false, weights: [400], fallback: "sans-serif" },
+  Sanchez: { italics: true, weights: [400], fallback: "serif" },
+  Sancreek: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Sankofa Display": { italics: false, weights: [400], fallback: "sans-serif" },
   Sansation: {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
   Sansita: {
     italics: true,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 700, 800, 900],
     fallback: "sans-serif",
   },
   "Sansita Swashed": {
@@ -8873,62 +4979,24 @@ export const defaultFonts = {
   },
   Sarabun: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 800,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
-  Sarala: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Sarina: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Sarala: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Sarina: { italics: false, weights: [400], fallback: "sans-serif" },
   Sarpanch: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Sassy Frass": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Satisfy: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Sawarabi Gothic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Sawarabi Mincho": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Scada: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Sassy Frass": { italics: false, weights: [400], fallback: "cursive" },
+  Satisfy: { italics: false, weights: [400], fallback: "cursive" },
+  "Sawarabi Gothic": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Sawarabi Mincho": { italics: false, weights: [400], fallback: "serif" },
+  Scada: { italics: true, weights: [400, 700], fallback: "sans-serif" },
   "Scheherazade New": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 500, 600, 700],
     fallback: "serif",
   },
   "Schibsted Grotesk": {
@@ -8937,47 +5005,16 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Schoolbell: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Scope One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Seaweed Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Secular One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Sedan: { italics: true, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  "Sedan SC": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Sedgwick Ave": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Schoolbell: { italics: false, weights: [400], fallback: "cursive" },
+  "Scope One": { italics: false, weights: [400], fallback: "serif" },
+  "Seaweed Script": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Secular One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Sedan: { italics: true, weights: [400], fallback: "serif" },
+  "Sedan SC": { italics: false, weights: [400], fallback: "serif" },
+  "Sedgwick Ave": { italics: false, weights: [400], fallback: "cursive" },
   "Sedgwick Ave Display": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   Sen: {
@@ -8986,138 +5023,53 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Send Flowers": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Sevillana: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Seymour One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Shadows Into Light": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Send Flowers": { italics: false, weights: [400], fallback: "cursive" },
+  Sevillana: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Seymour One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Shadows Into Light": { italics: false, weights: [400], fallback: "cursive" },
   "Shadows Into Light Two": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  Shafarik: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Shalimar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Shafarik: { italics: false, weights: [400], fallback: "sans-serif" },
+  Shalimar: { italics: false, weights: [400], fallback: "cursive" },
   "Shantell Sans": {
     italics: true,
     minWeight: 300,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Shanti: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Share: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Share Tech": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Share Tech Mono": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
+  Shanti: { italics: false, weights: [400], fallback: "sans-serif" },
+  Share: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Share Tech": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Share Tech Mono": { italics: false, weights: [400], fallback: "monospace" },
   "Shippori Antique": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Shippori Antique B1": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Shippori Mincho": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 600, 700, 800],
     fallback: "serif",
   },
   "Shippori Mincho B1": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 600, 700, 800],
     fallback: "serif",
   },
-  Shizuru: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Shojumaru: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Short Stack": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Shrikhand: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Sigmar: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Sigmar One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Shizuru: { italics: false, weights: [400], fallback: "sans-serif" },
+  Shojumaru: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Short Stack": { italics: false, weights: [400], fallback: "cursive" },
+  Shrikhand: { italics: false, weights: [400], fallback: "sans-serif" },
+  Sigmar: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Sigmar One": { italics: false, weights: [400], fallback: "sans-serif" },
   Signika: {
     italics: false,
     minWeight: 300,
@@ -9130,163 +5082,60 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  Silkscreen: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Simonetta: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 900,
-    fallback: "sans-serif",
-  },
-  Sintony: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Sirin Stencil": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Six Caps": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Sixtyfour: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "Sixtyfour Convergence": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  Skranji: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Slabo 13px": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Slabo 27px": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Slackey: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Slackside One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Smokum: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Smooch: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Silkscreen: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Simonetta: { italics: true, weights: [400, 900], fallback: "sans-serif" },
+  Sintony: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  "Sirin Stencil": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Six Caps": { italics: false, weights: [400], fallback: "sans-serif" },
+  Skranji: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  "Slabo 13px": { italics: false, weights: [400], fallback: "serif" },
+  "Slabo 27px": { italics: false, weights: [400], fallback: "serif" },
+  Slackey: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Slackside One": { italics: false, weights: [400], fallback: "cursive" },
+  Smokum: { italics: false, weights: [400], fallback: "sans-serif" },
+  Smooch: { italics: false, weights: [400], fallback: "cursive" },
   "Smooch Sans": {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Smythe: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Sniglet: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 800,
-    fallback: "sans-serif",
-  },
-  Snippet: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Snowburst One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Sofadi One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Sofia: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Smythe: { italics: false, weights: [400], fallback: "sans-serif" },
+  Sniglet: { italics: false, weights: [400, 800], fallback: "sans-serif" },
+  Snippet: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Snowburst One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Sofadi One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Sofia: { italics: false, weights: [400], fallback: "cursive" },
   "Sofia Sans": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Sofia Sans Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Sofia Sans Extra Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Sofia Sans Semi Condensed": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  Solitreo: {
+  Solitreo: { italics: false, weights: [400], fallback: "cursive" },
+  Solway: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
+    weights: [300, 400, 500, 700, 800],
+    fallback: "serif",
   },
-  Solway: { italics: false, minWeight: 300, maxWeight: 800, fallback: "serif" },
   "Sometype Mono": {
     italics: true,
     minWeight: 400,
@@ -9299,24 +5148,14 @@ export const defaultFonts = {
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Sonsie One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Sonsie One": { italics: false, weights: [400], fallback: "sans-serif" },
   Sora: {
     italics: false,
     minWeight: 100,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Sorts Mill Goudy": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Sorts Mill Goudy": { italics: true, weights: [400], fallback: "serif" },
   "Sour Gummy": {
     italics: true,
     minWeight: 100,
@@ -9347,72 +5186,33 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Space Mono": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "monospace",
-  },
-  "Special Elite": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Special Gothic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Space Mono": { italics: true, weights: [400, 700], fallback: "monospace" },
+  "Special Elite": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Special Gothic": { italics: false, weights: [400], fallback: "sans-serif" },
   "Special Gothic Condensed One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   "Special Gothic Expanded One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
   Spectral: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 600, 700, 800],
     fallback: "serif",
   },
   "Spectral SC": {
     italics: true,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 600, 700, 800],
     fallback: "serif",
   },
-  "Spicy Rice": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Spinnaker: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Spirax: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Splash: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Spicy Rice": { italics: false, weights: [400], fallback: "sans-serif" },
+  Spinnaker: { italics: false, weights: [400], fallback: "sans-serif" },
+  Spirax: { italics: false, weights: [400], fallback: "sans-serif" },
+  Splash: { italics: false, weights: [400], fallback: "cursive" },
   "Spline Sans": {
     italics: false,
     minWeight: 300,
@@ -9425,66 +5225,20 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "monospace",
   },
-  "Squada One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Square Peg": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Sree Krushnadevaraya": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Sriracha: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Srisakdi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Staatliches: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Stalemate: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Stalinist One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Squada One": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Square Peg": { italics: false, weights: [400], fallback: "cursive" },
+  "Sree Krushnadevaraya": { italics: false, weights: [400], fallback: "serif" },
+  Sriracha: { italics: false, weights: [400], fallback: "cursive" },
+  Srisakdi: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Staatliches: { italics: false, weights: [400], fallback: "sans-serif" },
+  Stalemate: { italics: false, weights: [400], fallback: "cursive" },
+  "Stalinist One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Stardos Stencil": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "sans-serif",
   },
-  Stick: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Stick: { italics: false, weights: [400], fallback: "sans-serif" },
   "Stick No Bills": {
     italics: false,
     minWeight: 200,
@@ -9493,158 +5247,70 @@ export const defaultFonts = {
   },
   "Stint Ultra Condensed": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  "Stint Ultra Expanded": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Stoke: { italics: false, minWeight: 300, maxWeight: 400, fallback: "serif" },
-  Strait: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Style Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Stint Ultra Expanded": { italics: false, weights: [400], fallback: "serif" },
+  Stoke: { italics: false, weights: [300, 400], fallback: "serif" },
+  Strait: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Style Script": { italics: false, weights: [400], fallback: "cursive" },
   "Sue Ellen Francisco": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Suez One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Suez One": { italics: false, weights: [400], fallback: "serif" },
   "Sulphur Point": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 700],
     fallback: "sans-serif",
   },
-  Sumana: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Sunshiney: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Sumana: { italics: false, weights: [400, 700], fallback: "serif" },
+  Sunshiney: { italics: false, weights: [400], fallback: "cursive" },
   "Supermercado One": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Sura: { italics: false, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Suranna: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Suravaram: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Sura: { italics: false, weights: [400, 700], fallback: "serif" },
+  Suranna: { italics: false, weights: [400], fallback: "serif" },
+  Suravaram: { italics: false, weights: [400], fallback: "serif" },
   Suwannaphum: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 700, 900],
     fallback: "serif",
   },
-  "Swanky and Moo Moo": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Syncopate: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Swanky and Moo Moo": { italics: false, weights: [400], fallback: "cursive" },
+  Syncopate: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Syne: {
     italics: false,
     minWeight: 400,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  "Syne Mono": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "Syne Tactile": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Tac One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Tagesschrift: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Syne Mono": { italics: false, weights: [400], fallback: "monospace" },
+  "Syne Tactile": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Tac One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Tagesschrift: { italics: false, weights: [400], fallback: "sans-serif" },
   "Tai Heritage Pro": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "serif",
   },
   Tajawal: {
     italics: false,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 500, 700, 800, 900],
     fallback: "sans-serif",
   },
-  Tangerine: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
+  Tangerine: { italics: false, weights: [400, 700], fallback: "cursive" },
+  Tapestry: { italics: false, weights: [400], fallback: "cursive" },
+  Taprom: { italics: false, weights: [400], fallback: "sans-serif" },
+  Tauri: { italics: false, weights: [400], fallback: "sans-serif" },
+  Taviraj: {
+    italics: true,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    fallback: "serif",
   },
-  Tapestry: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Taprom: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Tauri: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Taviraj: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
   Teachers: {
     italics: true,
     minWeight: 400,
@@ -9663,156 +5329,57 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Telex: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Telex: { italics: false, weights: [400], fallback: "sans-serif" },
   "Tenali Ramakrishna": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Tenor Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Text Me One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Tenor Sans": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Text Me One": { italics: false, weights: [400], fallback: "sans-serif" },
   Texturina: {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "serif",
   },
-  Thasadith: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "The Girl Next Door": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "The Nautigal": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "cursive",
-  },
-  Tienne: { italics: false, minWeight: 400, maxWeight: 900, fallback: "serif" },
+  Thasadith: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "The Girl Next Door": { italics: false, weights: [400], fallback: "cursive" },
+  "The Nautigal": { italics: false, weights: [400, 700], fallback: "cursive" },
+  Tienne: { italics: false, weights: [400, 700, 900], fallback: "serif" },
   Tillana: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 800,
+    weights: [400, 500, 600, 700, 800],
     fallback: "sans-serif",
   },
-  "Tilt Neon": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Tilt Prism": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Tilt Warp": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Timmana: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Tinos: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Tiny5: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Tiro Bangla": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Tiro Devanagari Hindi": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Timmana: { italics: false, weights: [400], fallback: "sans-serif" },
+  Tinos: { italics: true, weights: [400, 700], fallback: "serif" },
+  Tiny5: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Tiro Bangla": { italics: true, weights: [400], fallback: "serif" },
+  "Tiro Devanagari Hindi": { italics: true, weights: [400], fallback: "serif" },
   "Tiro Devanagari Marathi": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
   "Tiro Devanagari Sanskrit": {
     italics: true,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "serif",
   },
-  "Tiro Gurmukhi": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Tiro Kannada": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Tiro Tamil": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Tiro Telugu": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Titan One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Tiro Gurmukhi": { italics: true, weights: [400], fallback: "serif" },
+  "Tiro Kannada": { italics: true, weights: [400], fallback: "serif" },
+  "Tiro Tamil": { italics: true, weights: [400], fallback: "serif" },
+  "Tiro Telugu": { italics: true, weights: [400], fallback: "serif" },
+  "Titan One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Titillium Web": {
     italics: true,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 600, 700, 900],
     fallback: "sans-serif",
   },
   Tomorrow: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     fallback: "sans-serif",
   },
   Tourney: {
@@ -9821,103 +5388,53 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Trade Winds": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
+  "Trade Winds": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Train One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Triodion: { italics: false, weights: [400], fallback: "sans-serif" },
+  Trirong: {
+    italics: true,
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    fallback: "serif",
   },
-  "Train One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Triodion: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Trirong: { italics: true, minWeight: 100, maxWeight: 900, fallback: "serif" },
   Trispace: {
     italics: false,
     minWeight: 100,
     maxWeight: 800,
     fallback: "sans-serif",
   },
-  Trocchi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Trochut: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  Trocchi: { italics: false, weights: [400], fallback: "serif" },
+  Trochut: { italics: true, weights: [400, 700], fallback: "sans-serif" },
   Truculenta: {
     italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Trykker: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  Trykker: { italics: false, weights: [400], fallback: "serif" },
   "Tsukimi Rounded": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "sans-serif",
   },
-  Tuffy: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  "Tulpen One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  Tuffy: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+  "Tulpen One": { italics: false, weights: [400], fallback: "sans-serif" },
   "Turret Road": {
     italics: false,
-    minWeight: 200,
-    maxWeight: 800,
+    weights: [200, 300, 400, 500, 700, 800],
     fallback: "sans-serif",
   },
-  "Twinkle Star": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Twinkle Star": { italics: false, weights: [400], fallback: "cursive" },
   Ubuntu: {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 700],
     fallback: "sans-serif",
   },
   "Ubuntu Condensed": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Ubuntu Mono": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "monospace",
-  },
+  "Ubuntu Mono": { italics: true, weights: [400, 700], fallback: "monospace" },
   "Ubuntu Sans": {
     italics: true,
     minWeight: 100,
@@ -9930,105 +5447,44 @@ export const defaultFonts = {
     maxWeight: 700,
     fallback: "monospace",
   },
-  Uchen: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
-  Ultra: { italics: false, minWeight: 400, maxWeight: 400, fallback: "serif" },
+  Uchen: { italics: false, weights: [400], fallback: "serif" },
+  Ultra: { italics: false, weights: [400], fallback: "serif" },
   Unbounded: {
     italics: false,
     minWeight: 200,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Uncial Antiqua": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Underdog: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Unica One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  UnifrakturCook: {
-    italics: false,
-    minWeight: 700,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Uncial Antiqua": { italics: false, weights: [400], fallback: "sans-serif" },
+  Underdog: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Unica One": { italics: false, weights: [400], fallback: "sans-serif" },
+  UnifrakturCook: { italics: false, weights: [700], fallback: "sans-serif" },
   UnifrakturMaguntia: {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  Unkempt: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
-  Unlock: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Unna: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
-  Updock: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Unkempt: { italics: false, weights: [400, 700], fallback: "sans-serif" },
+  Unlock: { italics: false, weights: [400], fallback: "sans-serif" },
+  Unna: { italics: true, weights: [400, 700], fallback: "serif" },
+  Updock: { italics: false, weights: [400], fallback: "cursive" },
   Urbanist: {
     italics: true,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  VT323: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "Vampiro One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Varela: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Varela Round": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  VT323: { italics: false, weights: [400], fallback: "monospace" },
+  "Vampiro One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Varela: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Varela Round": { italics: false, weights: [400], fallback: "sans-serif" },
   Varta: {
     italics: false,
     minWeight: 300,
     maxWeight: 700,
     fallback: "sans-serif",
   },
-  "Vast Shadow": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Vast Shadow": { italics: false, weights: [400], fallback: "serif" },
   Vazirmatn: {
     italics: false,
     minWeight: 100,
@@ -10037,59 +5493,23 @@ export const defaultFonts = {
   },
   "Vesper Libre": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 500, 700, 900],
     fallback: "serif",
   },
-  "Viaoda Libre": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Vibes: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Vibur: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Viaoda Libre": { italics: false, weights: [400], fallback: "sans-serif" },
+  Vibes: { italics: false, weights: [400], fallback: "sans-serif" },
+  Vibur: { italics: false, weights: [400], fallback: "cursive" },
   "Victor Mono": {
     italics: true,
     minWeight: 100,
     maxWeight: 700,
     fallback: "monospace",
   },
-  Vidaloka: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  Viga: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Vina Sans": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Voces: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Volkhov: { italics: true, minWeight: 400, maxWeight: 700, fallback: "serif" },
+  Vidaloka: { italics: false, weights: [400], fallback: "serif" },
+  Viga: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Vina Sans": { italics: false, weights: [400], fallback: "sans-serif" },
+  Voces: { italics: false, weights: [400], fallback: "sans-serif" },
+  Volkhov: { italics: true, weights: [400, 700], fallback: "serif" },
   Vollkorn: {
     italics: true,
     minWeight: 400,
@@ -10098,88 +5518,36 @@ export const defaultFonts = {
   },
   "Vollkorn SC": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 600, 700, 900],
     fallback: "serif",
   },
-  Voltaire: {
+  Voltaire: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Vujahday Script": { italics: false, weights: [400], fallback: "cursive" },
+  "WDXL Lubrifont TC": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
-  },
-  "Vujahday Script": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
   },
   "Waiting for the Sunrise": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  Wallpoet: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Walter Turncoat": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Warnes: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Water Brush": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Waterfall: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  Wallpoet: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Walter Turncoat": { italics: false, weights: [400], fallback: "cursive" },
+  Warnes: { italics: false, weights: [400], fallback: "sans-serif" },
+  "Water Brush": { italics: false, weights: [400], fallback: "cursive" },
+  Waterfall: { italics: false, weights: [400], fallback: "cursive" },
   Wavefont: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 4,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  Wellfleet: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Wendy One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Whisper: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  WindSong: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 500,
-    fallback: "cursive",
-  },
+  Wellfleet: { italics: false, weights: [400], fallback: "serif" },
+  "Wendy One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Whisper: { italics: false, weights: [400], fallback: "cursive" },
+  WindSong: { italics: false, weights: [400, 500], fallback: "cursive" },
   "Winky Rough": {
     italics: true,
     minWeight: 300,
@@ -10192,12 +5560,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  "Wire One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Wire One": { italics: false, weights: [400], fallback: "sans-serif" },
   Wittgenstein: {
     italics: true,
     minWeight: 400,
@@ -10222,18 +5585,7 @@ export const defaultFonts = {
     maxWeight: 900,
     fallback: "sans-serif",
   },
-  Workbench: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
-  "Xanh Mono": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "monospace",
-  },
+  "Xanh Mono": { italics: true, weights: [400], fallback: "monospace" },
   Yaldevi: {
     italics: false,
     minWeight: 200,
@@ -10248,243 +5600,115 @@ export const defaultFonts = {
   },
   Yantramanav: {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    weights: [100, 300, 400, 500, 700, 900],
     fallback: "sans-serif",
   },
-  "Yarndings 12": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Yarndings 12": { italics: false, weights: [400], fallback: "sans-serif" },
   "Yarndings 12 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Yarndings 20": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Yarndings 20": { italics: false, weights: [400], fallback: "sans-serif" },
   "Yarndings 20 Charted": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "Yatra One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Yellowtail: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Yeon Sung": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Yeseva One": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Yesteryear: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  Yomogi: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Young Serif": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Yatra One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Yellowtail: { italics: false, weights: [400], fallback: "cursive" },
+  "Yeon Sung": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Yeseva One": { italics: false, weights: [400], fallback: "sans-serif" },
+  Yesteryear: { italics: false, weights: [400], fallback: "cursive" },
+  Yomogi: { italics: false, weights: [400], fallback: "cursive" },
+  "Young Serif": { italics: false, weights: [400], fallback: "serif" },
   Yrsa: { italics: true, minWeight: 300, maxWeight: 700, fallback: "serif" },
   Ysabeau: {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Ysabeau Infant": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Ysabeau Office": {
     italics: true,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
   "Ysabeau SC": {
     italics: false,
-    minWeight: 100,
-    maxWeight: 900,
+    minWeight: 1,
+    maxWeight: 1000,
     fallback: "sans-serif",
   },
-  "Yuji Boku": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
+  "Yuji Boku": { italics: false, weights: [400], fallback: "serif" },
   "Yuji Hentaigana Akari": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
   "Yuji Hentaigana Akebono": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "cursive",
   },
-  "Yuji Mai": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Yuji Syuku": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Yusei Magic": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "ZCOOL KuaiLe": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Yuji Mai": { italics: false, weights: [400], fallback: "serif" },
+  "Yuji Syuku": { italics: false, weights: [400], fallback: "serif" },
+  "Yusei Magic": { italics: false, weights: [400], fallback: "sans-serif" },
+  "ZCOOL KuaiLe": { italics: false, weights: [400], fallback: "sans-serif" },
   "ZCOOL QingKe HuangYou": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 400,
+    weights: [400],
     fallback: "sans-serif",
   },
-  "ZCOOL XiaoWei": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "ZCOOL XiaoWei": { italics: false, weights: [400], fallback: "sans-serif" },
   Zain: {
     italics: true,
-    minWeight: 200,
-    maxWeight: 900,
+    weights: [200, 300, 400, 700, 800, 900],
     fallback: "sans-serif",
   },
-  "Zen Antique": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Zen Antique Soft": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "serif",
-  },
-  "Zen Dots": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Zen Antique": { italics: false, weights: [400], fallback: "serif" },
+  "Zen Antique Soft": { italics: false, weights: [400], fallback: "serif" },
+  "Zen Dots": { italics: false, weights: [400], fallback: "sans-serif" },
   "Zen Kaku Gothic Antique": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 900,
+    weights: [300, 400, 500, 700, 900],
     fallback: "sans-serif",
   },
   "Zen Kaku Gothic New": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 900,
+    weights: [300, 400, 500, 700, 900],
     fallback: "sans-serif",
   },
-  "Zen Kurenaido": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  "Zen Loop": {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
+  "Zen Kurenaido": { italics: false, weights: [400], fallback: "sans-serif" },
+  "Zen Loop": { italics: true, weights: [400], fallback: "sans-serif" },
   "Zen Maru Gothic": {
     italics: false,
-    minWeight: 300,
-    maxWeight: 900,
+    weights: [300, 400, 500, 700, 900],
     fallback: "sans-serif",
   },
   "Zen Old Mincho": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 900,
+    weights: [400, 500, 600, 700, 900],
     fallback: "serif",
   },
-  "Zen Tokyo Zoo": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "sans-serif",
-  },
-  Zeyada: {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
-  "Zhi Mang Xing": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 400,
-    fallback: "cursive",
-  },
+  "Zen Tokyo Zoo": { italics: false, weights: [400], fallback: "sans-serif" },
+  Zeyada: { italics: false, weights: [400], fallback: "cursive" },
+  "Zhi Mang Xing": { italics: false, weights: [400], fallback: "cursive" },
   "Zilla Slab": {
     italics: true,
-    minWeight: 300,
-    maxWeight: 700,
+    weights: [300, 400, 500, 600, 700],
     fallback: "serif",
   },
   "Zilla Slab Highlight": {
     italics: false,
-    minWeight: 400,
-    maxWeight: 700,
+    weights: [400, 700],
     fallback: "serif",
   },
 };
@@ -10492,263 +5716,261 @@ export const defaultFonts = {
 export const defaultGoogleFontsLinkTags =
   '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=ABeeZee:ital,wght@0,400;1,400&family=ADLaM+Display:wght@400&family=AR+One+Sans:wght@400..700&family=Abel:wght@400&family=Abhaya+Libre:wght@400..800&family=Aboreto:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=ABeeZee:ital,wght@0,400;1,400&family=ADLaM+Display:wght@400&family=AR+One+Sans:wght@400..700&family=Abel:wght@400&family=Abhaya+Libre:wght@400;500;600;700;800&family=Aboreto:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface:wght@400&family=Abyssinica+SIL:wght@400&family=Aclonica:wght@400&family=Acme:wght@400&family=Actor:wght@400&family=Adamina:wght@400&family=Advent+Pro:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Afacad+Flux:wght@100..900&family=Agbalumo:wght@400&family=Agdasima:wght@400..700&family=Agu+Display:wght@400&family=Aguafina+Script:wght@400&family=Akatab:wght@400..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka:wght@400&family=Akaya+Telivigala:wght@400&family=Akronim:wght@400&family=Akshar:wght@300..700&family=Aladin:wght@400&family=Alata:wght@400&family=Alatsi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Aldrich:wght@400&family=Alef:wght@400..700&family=Alegreya:ital,wght@0,400..900;1,400..900&family=Alegreya+SC:ital,wght@0,400..900;1,400..900&family=Alegreya+Sans:ital,wght@0,100..900;1,100..900&family=Alegreya+Sans+SC:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Aleo:ital,wght@0,100..900;1,100..900&family=Alex+Brush:wght@400&family=Alexandria:wght@100..900&family=Alfa+Slab+One:wght@400&family=Alice:wght@400&family=Alike:wght@400&family=Alike+Angular:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Alkalami:wght@400&family=Alkatra:wght@400..700&family=Allan:wght@400..700&family=Allerta:wght@400&family=Allerta+Stencil:wght@400&family=Allison:wght@400&family=Allura:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300..800&family=Almendra:ital,wght@0,400..700;1,400..700&family=Almendra+Display:wght@400&family=Almendra+SC:wght@400&family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Alumni+Sans+Collegiate+One:ital,wght@0,400;1,400&family=Alumni+Sans+Inline+One:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital,wght@0,400;1,400&family=Amarante:wght@400&family=Amaranth:ital,wght@0,400..700;1,400..700&family=Amatic+SC:wght@400..700&family=Amethysta:wght@400&family=Amiko:wght@400..700&family=Amiri:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran:wght@400&family=Amita:wght@400..700&family=Anaheim:wght@400..800&family=Ancizar+Sans:ital,wght@0,100..900;1,100..900&family=Ancizar+Serif:ital,wght@0,300..900;1,300..900&family=Andada+Pro:ital,wght@0,400..800;1,400..800&family=Andika:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&family=Anek+Devanagari:wght@100..800&family=Anek+Gujarati:wght@100..800&family=Anek+Gurmukhi:wght@100..800&family=Anek+Kannada:wght@100..800&family=Anek+Latin:wght@100..800&family=Anek+Malayalam:wght@100..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Anek+Odia:wght@100..800&family=Anek+Tamil:wght@100..800&family=Anek+Telugu:wght@100..800&family=Angkor:wght@400&family=Annapurna+SIL:wght@400..700&family=Annie+Use+Your+Telescope:wght@400&family=Anonymous+Pro:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Anta:wght@400&family=Antic:wght@400&family=Antic+Didone:wght@400&family=Antic+Slab:wght@400&family=Anton:wght@400&family=Anton+SC:wght@400&family=Antonio:wght@100..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Anybody:ital,wght@0,100..900;1,100..900&family=Aoboshi+One:wght@400&family=Arapey:ital,wght@0,400;1,400&family=Arbutus:wght@400&family=Arbutus+Slab:wght@400&family=Architects+Daughter:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Archivo+Black:wght@400&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Are+You+Serious:wght@400&family=Aref+Ruqaa:wght@400..700&family=Aref+Ruqaa+Ink:wght@400..700&family=Arima:wght@100..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Arizonia:wght@400&family=Armata:wght@400&family=Arsenal:ital,wght@0,400..700;1,400..700&family=Arsenal+SC:ital,wght@0,400..700;1,400..700&family=Artifika:wght@400&family=Arvo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Arya:wght@400..700&family=Asap:ital,wght@0,100..900;1,100..900&family=Asap+Condensed:ital,wght@0,200..900;1,200..900&family=Asar:wght@400&family=Asset:wght@400&family=Assistant:wght@200..800&family=Astloch:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Asul:wght@400..700&family=Athiti:wght@200..700&family=Atkinson+Hyperlegible:ital,wght@0,400..700;1,400..700&family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Atma:wght@300..700&family=Atomic+Age:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Aubrey:wght@400&family=Audiowide:wght@400&family=Autour+One:wght@400&family=Average:wght@400&family=Average+Sans:wght@400&family=Averia+Gruesa+Libre:wght@400&family=Averia+Libre:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Averia+Sans+Libre:ital,wght@0,300..700;1,300..700&family=Averia+Serif+Libre:ital,wght@0,300..700;1,300..700&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=B612:ital,wght@0,400..700;1,400..700&family=B612+Mono:ital,wght@0,400..700;1,400..700&family=BIZ+UDGothic:wght@400..700&family=BIZ+UDMincho:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400..700&family=BIZ+UDPMincho:wght@400..700&family=Babylonica:wght@400&family=Bacasime+Antique:wght@400&family=Bad+Script:wght@400&family=Badeen+Display:wght@400&family=Bagel+Fat+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Bahiana:wght@400&family=Bahianita:wght@400&family=Bai+Jamjuree:ital,wght@0,200..700;1,200..700&family=Bakbak+One:wght@400&family=Ballet:wght@400&family=Baloo+2:wght@400..800&family=Baloo+Bhai+2:wght@400..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Baloo+Bhaina+2:wght@400..800&family=Baloo+Chettan+2:wght@400..800&family=Baloo+Da+2:wght@400..800&family=Baloo+Paaji+2:wght@400..800&family=Baloo+Tamma+2:wght@400..800&family=Baloo+Tammudu+2:wght@400..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400..800&family=Balsamiq+Sans:ital,wght@0,400..700;1,400..700&family=Balthazar:wght@400&family=Bangers:wght@400&family=Barlow:ital,wght@0,100..900;1,100..900&family=Barlow+Condensed:ital,wght@0,100..900;1,100..900&family=Barlow+Semi+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Barriecito:wght@400&family=Barrio:wght@400&family=Basic:wght@400&family=Baskervville:ital,wght@0,400;1,400&family=Baskervville+SC:wght@400&family=Battambang:wght@100..900&family=Baumans:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Bayon:wght@400&family=Be+Vietnam+Pro:ital,wght@0,100..900;1,100..900&family=Beau+Rivage:wght@400&family=Bebas+Neue:wght@400&family=Beiruti:wght@200..900&family=Belanosima:wght@400..700&family=Belgrano:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Bellefair:wght@400&family=Belleza:wght@400&family=Bellota:ital,wght@0,300..700;1,300..700&family=Bellota+Text:ital,wght@0,300..700;1,300..700&family=BenchNine:wght@300..700&family=Benne:wght@400&family=Bentham:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash:wght@400&family=Besley:ital,wght@0,400..900;1,400..900&family=Beth+Ellen:wght@400&family=Bevan:ital,wght@0,400;1,400&family=BhuTuka+Expanded+One:wght@400&family=Big+Shoulders:wght@100..900&family=Big+Shoulders+Inline:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@100..900&family=Bigelow+Rules:wght@400&family=Bigshot+One:wght@400&family=Bilbo:wght@400&family=Bilbo+Swash+Caps:wght@400&family=BioRhyme:wght@200..800&family=BioRhyme+Expanded:wght@200..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Birthstone:wght@400&family=Birthstone+Bounce:wght@400..500&family=Biryani:wght@200..900&family=Bitter:ital,wght@0,100..900;1,100..900&family=Black+And+White+Picture:wght@400&family=Black+Han+Sans:wght@400&family=Black+Ops+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Blaka:wght@400&family=Blaka+Hollow:wght@400&family=Blaka+Ink:wght@400&family=Blinker:wght@100..900&family=Bodoni+Moda:ital,wght@0,400..900;1,400..900&family=Bodoni+Moda+SC:ital,wght@0,400..900;1,400..900&family=Bokor:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Boldonse:wght@400&family=Bona+Nova:ital,wght@0,400..700;1,400..700&family=Bona+Nova+SC:ital,wght@0,400..700;1,400..700&family=Bonbon:wght@400&family=Bonheur+Royale:wght@400&family=Boogaloo:wght@400&family=Borel:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Bowlby+One:wght@400&family=Bowlby+One+SC:wght@400&family=Braah+One:wght@400&family=Brawler:wght@400..700&family=Bree+Serif:wght@400&family=Bricolage+Grotesque:wght@200..800&family=Bruno+Ace:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC:wght@400&family=Brygada+1918:ital,wght@0,400..700;1,400..700&family=Bubblegum+Sans:wght@400&family=Bubbler+One:wght@400&family=Buda:wght@300&family=Buenard:wght@400..700&family=Bungee:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Bungee+Hairline:wght@400&family=Bungee+Inline:wght@400&family=Bungee+Outline:wght@400&family=Bungee+Shade:wght@400&family=Bungee+Spice:wght@400&family=Bungee+Tint:wght@400&family=Butcherman:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Butterfly+Kids:wght@400&family=Bytesized:wght@400&family=Cabin:ital,wght@0,400..700;1,400..700&family=Cabin+Condensed:wght@400..700&family=Cabin+Sketch:wght@400..700&family=Cactus+Classical+Serif:wght@400&family=Caesar+Dressing:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Cagliostro:wght@400&family=Cairo:wght@200..900&family=Cairo+Play:wght@200..900&family=Cal+Sans:wght@400&family=Caladea:ital,wght@0,400..700;1,400..700&family=Calistoga:wght@400&family=Calligraffitti:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Cambay:ital,wght@0,400..700;1,400..700&family=Cambo:wght@400&family=Candal:wght@400&family=Cantarell:ital,wght@0,400..700;1,400..700&family=Cantata+One:wght@400&family=Cantora+One:wght@400&family=Caprasimo:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Capriola:wght@400&family=Caramel:wght@400&family=Carattere:wght@400&family=Cardo:ital,wght@0,400..700;1,400..700&family=Carlito:ital,wght@0,400..700;1,400..700&family=Carme:wght@400&family=Carrois+Gothic:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC:wght@400&family=Carter+One:wght@400&family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Castoro:ital,wght@0,400;1,400&family=Castoro+Titling:wght@400&family=Catamaran:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400..700;1,400..700&family=Caveat:wght@400..700&family=Caveat+Brush:wght@400&family=Cedarville+Cursive:wght@400&family=Ceviche+One:wght@400&family=Chakra+Petch:ital,wght@0,300..700;1,300..700&family=Changa:wght@200..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Changa+One:ital,wght@0,400;1,400&family=Chango:wght@400&family=Charis+SIL:ital,wght@0,400..700;1,400..700&family=Charm:wght@400..700&family=Charmonman:wght@400..700&family=Chathura:wght@100..800&family=Chau+Philomene+One:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Chela+One:wght@400&family=Chelsea+Market:wght@400&family=Cherish:wght@400&family=Cherry+Bomb+One:wght@400&family=Cherry+Cream+Soda:wght@400&family=Cherry+Swash:wght@400..700&family=Chewy:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Chicle:wght@400&family=Chilanka:wght@400&family=Chivo:ital,wght@0,100..900;1,100..900&family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Chocolate+Classical+Sans:wght@400&family=Chokokutai:wght@400&family=Chonburi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cinzel+Decorative:wght@400..900&family=Clicker+Script:wght@400&family=Climate+Crisis:wght@400&family=Coda:wght@400..800&family=Codystar:wght@300..400&family=Coiny:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Combo:wght@400&family=Comfortaa:wght@300..700&family=Comforter:wght@400&family=Comforter+Brush:wght@400&family=Comic+Neue:ital,wght@0,300..700;1,300..700&family=Comic+Relief:wght@400..700&family=Coming+Soon:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Comme:wght@100..900&family=Commissioner:wght@100..900&family=Concert+One:wght@400&family=Condiment:wght@400&family=Contrail+One:wght@400&family=Convergence:wght@400&family=Cookie:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Copse:wght@400&family=Coral+Pixels:wght@400&family=Corben:wght@400..700&family=Corinthia:wght@400..700&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300..700&family=Cormorant+Unicase:wght@300..700&family=Cormorant+Upright:wght@300..700&family=Courgette:wght@400&family=Courier+Prime:ital,wght@0,400..700;1,400..700&family=Cousine:ital,wght@0,400..700;1,400..700&family=Coustard:wght@400..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace:wght@400&family=Crafty+Girls:wght@400&family=Creepster:wght@400&family=Crete+Round:ital,wght@0,400;1,400&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Crimson+Text:ital,wght@0,400..700;1,400..700&family=Croissant+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Crushed:wght@400&family=Cuprum:ital,wght@0,400..700;1,400..700&family=Cute+Font:wght@400&family=Cutive:wght@400&family=Cutive+Mono:wght@400&family=DM+Mono:ital,wght@0,300..500;1,300..500&family=DM+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital,wght@0,400;1,400&family=DM+Serif+Text:ital,wght@0,400;1,400&family=Dai+Banna+SIL:ital,wght@0,300..700;1,300..700&family=Damion:wght@400&family=Dancing+Script:wght@400..700&family=Danfo:wght@400&family=Dangrek:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&family=Darumadrop+One:wght@400&family=David+Libre:wght@400..700&family=Dawning+of+a+New+Day:wght@400&family=Days+One:wght@400&family=Dekko:wght@400&family=Dela+Gothic+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Delicious+Handrawn:wght@400&family=Delius:wght@400&family=Delius+Swash+Caps:wght@400&family=Delius+Unicase:wght@400..700&family=Della+Respira:wght@400&family=Denk+One:wght@400&family=Devonshire:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Dhurjati:wght@400&family=Didact+Gothic:wght@400&family=Diphylleia:wght@400&family=Diplomata:wght@400&family=Diplomata+SC:wght@400&family=Do+Hyeon:wght@400&family=Dokdo:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Donegal+One:wght@400&family=Dongle:wght@300..700&family=Doppio+One:wght@400&family=Dorsa:wght@400&family=Dosis:wght@200..800&family=DotGothic16:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Dr+Sugiyama:wght@400&family=Duru+Sans:wght@400&family=DynaPuff:wght@400..700&family=Dynalight:wght@400&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Eagle+Lake:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo:wght@400&family=Eater:wght@400&family=Economica:ital,wght@0,400..700;1,400..700&family=Eczar:wght@400..800&family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Edu+AU+VIC+WA+NT+Dots:wght@400..700&family=Edu+AU+VIC+WA+NT+Guides:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Edu+NSW+ACT+Foundation:wght@400..700&family=Edu+QLD+Beginner:wght@400..700&family=Edu+SA+Beginner:wght@400..700&family=Edu+TAS+Beginner:wght@400..700&family=Edu+VIC+WA+NT+Beginner:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&family=Electrolize:wght@400&family=Elsie:wght@400..900&family=Elsie+Swash+Caps:wght@400..900&family=Emblema+One:wght@400&family=Emilys+Candy:wght@400&family=Encode+Sans:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@100..900&family=Encode+Sans+Expanded:wght@100..900&family=Encode+Sans+SC:wght@100..900&family=Encode+Sans+Semi+Condensed:wght@100..900&family=Encode+Sans+Semi+Expanded:wght@100..900&family=Engagement:wght@400&family=Englebert:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Enriqueta:wght@400..700&family=Ephesis:wght@400&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Erica+One:wght@400&family=Esteban:wght@400&family=Estonia:wght@400&family=Euphoria+Script:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Ewert:wght@400&family=Exile:wght@400&family=Exo:ital,wght@0,100..900;1,100..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Expletus+Sans:ital,wght@0,400..700;1,400..700&family=Explora:wght@400&family=Faculty+Glyphic:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Fahkwang:ital,wght@0,200..700;1,200..700&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Fanwood+Text:ital,wght@0,400;1,400&family=Farro:wght@300..700&family=Farsan:wght@400&family=Fascinate:wght@400&family=Fascinate+Inline:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Faster+One:wght@400&family=Fasthand:wght@400&family=Fauna+One:wght@400&family=Faustina:ital,wght@0,300..800;1,300..800&family=Federant:wght@400&family=Federo:wght@400&family=Felipa:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Fenix:wght@400&family=Festive:wght@400&family=Figtree:ital,wght@0,300..900;1,300..900&family=Finger+Paint:wght@400&family=Finlandica:ital,wght@0,400..700;1,400..700&family=Fira+Code:wght@300..700&family=Fira+Mono:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100..900;1,100..900&family=Fira+Sans+Condensed:ital,wght@0,100..900;1,100..900&family=Fira+Sans+Extra+Condensed:ital,wght@0,100..900;1,100..900&family=Fjalla+One:wght@400&family=Fjord+One:wght@400&family=Flamenco:wght@300..400&family=Flavors:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah:wght@400&family=Flow+Block:wght@400&family=Flow+Circular:wght@400&family=Flow+Rounded:wght@400&family=Foldit:wght@100..900&family=Fondamento:ital,wght@0,400;1,400&family=Fontdiner+Swanky:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Forum:wght@400&family=Fragment+Mono:ital,wght@0,400;1,400&family=Francois+One:wght@400&family=Frank+Ruhl+Libre:wght@300..900&family=Fraunces:ital,wght@0,100..900;1,100..900&family=Freckle+Face:wght@400&family=Fredericka+the+Great:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Freehand:wght@400&family=Freeman:wght@400&family=Fresca:wght@400&family=Frijole:wght@400&family=Fruktur:ital,wght@0,400;1,400&family=Fugaz+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Fuggles:wght@400&family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Fustat:wght@200..800&family=Fuzzy+Bubbles:wght@400..700&family=GFS+Didot:wght@400&family=GFS+Neohellenic:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Ga+Maamli:wght@400&family=Gabarito:wght@400..900&family=Gabriela:wght@400&family=Gaegu:wght@300..700&family=Gafata:wght@400&family=Gajraj+One:wght@400&family=Galada:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Galdeano:wght@400&family=Galindo:wght@400&family=Gamja+Flower:wght@400&family=Gantari:ital,wght@0,100..900;1,100..900&family=Gasoek+One:wght@400&family=Gayathri:wght@100..700&family=Geist:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Gelasio:ital,wght@0,400..700;1,400..700&family=Gemunu+Libre:wght@200..800&family=Genos:ital,wght@0,100..900;1,100..900&family=Gentium+Book+Plus:ital,wght@0,400..700;1,400..700&family=Gentium+Plus:ital,wght@0,400..700;1,400..700&family=Geo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Georama:ital,wght@0,100..900;1,100..900&family=Geostar:wght@400&family=Geostar+Fill:wght@400&family=Germania+One:wght@400&family=Gideon+Roman:wght@400&family=Gidole:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Gidugu:wght@400&family=Gilda+Display:wght@400&family=Girassol:wght@400&family=Give+You+Glory:wght@400&family=Glass+Antiqua:wght@400&family=Glegoo:wght@400..700&family=Gloock:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah:wght@400&family=Glory:ital,wght@0,100..800;1,100..800&family=Gluten:wght@100..900&family=Goblin+One:wght@400&family=Gochi+Hand:wght@400&family=Goldman:wght@400..700&family=Golos+Text:wght@400..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Gorditas:wght@400..700&family=Gothic+A1:wght@100..900&family=Gotu:wght@400&family=Goudy+Bookletter+1911:wght@400&family=Gowun+Batang:wght@400..700&family=Gowun+Dodum:wght@400&family=Graduate:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Grand+Hotel:wght@400&family=Grandiflora+One:wght@400&family=Grandstander:ital,wght@0,100..900;1,100..900&family=Grape+Nuts:wght@400&family=Gravitas+One:wght@400&family=Great+Vibes:wght@400&family=Grechen+Fuemen:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Grenze:ital,wght@0,100..900;1,100..900&family=Grenze+Gotisch:wght@100..900&family=Grey+Qo:wght@400&family=Griffy:wght@400&family=Gruppo:wght@400&family=Gudea:ital,wght@0,400..700;1,400..700&family=Gugi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Gulzar:wght@400&family=Gupter:wght@400..700&family=Gurajada:wght@400&family=Gwendolyn:wght@400..700&family=Habibi:wght@400&family=Hachi+Maru+Pop:wght@400&family=Hahmlet:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Halant:wght@300..700&family=Hammersmith+One:wght@400&family=Hanalei:wght@400&family=Hanalei+Fill:wght@400&family=Handjet:wght@100..900&family=Handlee:wght@400&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@100..900&family=Happy+Monkey:wght@400&family=Harmattan:wght@400..700&family=Headland+One:wght@400&family=Hedvig+Letters+Sans:wght@400&family=Hedvig+Letters+Serif:wght@400&family=Heebo:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Henny+Penny:wght@400&family=Hepta+Slab:wght@100..900&family=Herr+Von+Muellerhoff:wght@400&family=Hi+Melody:wght@400&family=Hina+Mincho:wght@400&family=Hind:wght@300..700&family=Hind+Guntur:wght@300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300..700&family=Hind+Mysuru:wght@300..700&family=Hind+Siliguri:wght@300..700&family=Hind+Vadodara:wght@300..700&family=Holtwood+One+SC:wght@400&family=Homemade+Apple:wght@400&family=Homenaje:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Honk:wght@400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Hubballi:wght@400&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Hurricane:wght@400&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100..700&family=IBM+Plex+Sans+Condensed:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Sans+Devanagari:wght@100..700&family=IBM+Plex+Sans+Hebrew:wght@100..700&family=IBM+Plex+Sans+JP:wght@100..700&family=IBM+Plex+Sans+KR:wght@100..700&family=IBM+Plex+Sans+Thai:wght@100..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@100..700&family=IBM+Plex+Serif:ital,wght@0,100..700;1,100..700&family=IM+Fell+DW+Pica:ital,wght@0,400;1,400&family=IM+Fell+DW+Pica+SC:wght@400&family=IM+Fell+Double+Pica:ital,wght@0,400;1,400&family=IM+Fell+Double+Pica+SC:wght@400&family=IM+Fell+English:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC:wght@400&family=IM+Fell+French+Canon:ital,wght@0,400;1,400&family=IM+Fell+French+Canon+SC:wght@400&family=IM+Fell+Great+Primer:ital,wght@0,400;1,400&family=IM+Fell+Great+Primer+SC:wght@400&family=Iansui:wght@400&family=Ibarra+Real+Nova:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Iceberg:wght@400&family=Iceland:wght@400&family=Imbue:wght@100..900&family=Imperial+Script:wght@400&family=Imprima:wght@400&family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Inder:wght@400&family=Indie+Flower:wght@400&family=Ingrid+Darling:wght@400&family=Inika:wght@400..700&family=Inknut+Antiqua:wght@300..900&family=Inria+Sans:ital,wght@0,300..700;1,300..700&family=Inria+Serif:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Inspiration:wght@400&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:ital,wght@0,100..900;1,100..900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Irish+Grover:wght@400&family=Island+Moments:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400..700;1,400..700&family=Italiana:wght@400&family=Italianno:wght@400&family=Itim:wght@400&family=Jacquard+12:wght@400&family=Jacquard+12+Charted:wght@400&family=Jacquard+24:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Jacquard+24+Charted:wght@400&family=Jacquarda+Bastarda+9:wght@400&family=Jacquarda+Bastarda+9+Charted:wght@400&family=Jacques+Francois:wght@400&family=Jacques+Francois+Shadow:wght@400&family=Jaini:wght@400&family=Jaini+Purva:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Jaldi:wght@400..700&family=Jaro:wght@400&family=Jersey+10:wght@400&family=Jersey+10+Charted:wght@400&family=Jersey+15:wght@400&family=Jersey+15+Charted:wght@400&family=Jersey+20:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Afacad+Flux:wght@100..1000&family=Agbalumo:wght@400&family=Agdasima:wght@400;700&family=Aguafina+Script:wght@400&family=Akatab:wght@400;500;600;700;800;900&family=Akaya+Kanadaka:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala:wght@400&family=Akronim:wght@400&family=Akshar:wght@300..700&family=Aladin:wght@400&family=Alata:wght@400&family=Alatsi:wght@400&family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Aldrich:wght@400&family=Alef:wght@400;700&family=Alegreya:ital,wght@0,400..900;1,400..900&family=Alegreya+SC:ital,wght@0,400;0,500;0,700;0,800;0,900;1,400;1,500;1,700;1,800;1,900&family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&family=Alegreya+Sans+SC:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&family=Aleo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Alex+Brush:wght@400&family=Alexandria:wght@100..900&family=Alfa+Slab+One:wght@400&family=Alice:wght@400&family=Alike:wght@400&family=Alike+Angular:wght@400&family=Alkalami:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Alkatra:wght@400..700&family=Allan:wght@400;700&family=Allerta:wght@400&family=Allerta+Stencil:wght@400&family=Allison:wght@400&family=Allura:wght@400&family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Almendra+Display:wght@400&family=Almendra+SC:wght@400&family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Alumni+Sans+Collegiate+One:ital,wght@0,400;1,400&family=Alumni+Sans+Inline+One:ital,wght@0,400;1,400&family=Alumni+Sans+Pinstripe:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Amarante:wght@400&family=Amaranth:ital,wght@0,400;0,700;1,400;1,700&family=Amatic+SC:wght@400;700&family=Amethysta:wght@400&family=Amiko:wght@400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Amiri+Quran:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Amita:wght@400;700&family=Anaheim:wght@400..800&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Ancizar+Serif:ital,wght@0,300..900;1,300..900&family=Andada+Pro:ital,wght@0,400..840;1,400..840&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Anek+Bangla:wght@100..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@100..800&family=Anek+Gujarati:wght@100..800&family=Anek+Gurmukhi:wght@100..800&family=Anek+Kannada:wght@100..800&family=Anek+Latin:wght@100..800&family=Anek+Malayalam:wght@100..800&family=Anek+Odia:wght@100..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@100..800&family=Anek+Telugu:wght@100..800&family=Angkor:wght@400&family=Annapurna+SIL:wght@400;700&family=Annie+Use+Your+Telescope:wght@400&family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Anta:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Antic:wght@400&family=Antic+Didone:wght@400&family=Antic+Slab:wght@400&family=Anton:wght@400&family=Anton+SC:wght@400&family=Antonio:wght@100..700&family=Anuphan:wght@100..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wght@0,100..900;1,100..900&family=Aoboshi+One:wght@400&family=Arapey:ital,wght@0,400;1,400&family=Arbutus:wght@400&family=Arbutus+Slab:wght@400&family=Architects+Daughter:wght@400&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Archivo+Black:wght@400&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Are+You+Serious:wght@400&family=Aref+Ruqaa:wght@400;700&family=Aref+Ruqaa+Ink:wght@400;700&family=Arima:wght@100..700&family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Arizonia:wght@400&family=Armata:wght@400&family=Arsenal:ital,wght@0,400;0,700;1,400;1,700&family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&family=Artifika:wght@400&family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Arya:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Asap+Condensed:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Asar:wght@400&family=Asset:wght@400&family=Assistant:wght@200..800&family=Astloch:wght@400;700&family=Asul:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Athiti:wght@200;300;400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Atma:wght@300;400;500;600;700&family=Atomic+Age:wght@400&family=Aubrey:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Audiowide:wght@400&family=Autour+One:wght@400&family=Average:wght@400&family=Average+Sans:wght@400&family=Averia+Gruesa+Libre:wght@400&family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Averia+Sans+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=B612:ital,wght@0,400;0,700;1,400;1,700&family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&family=BIZ+UDGothic:wght@400;700&family=BIZ+UDMincho:wght@400;700&family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPMincho:wght@400;700&family=Babylonica:wght@400&family=Bacasime+Antique:wght@400&family=Bad+Script:wght@400&family=Badeen+Display:wght@400&family=Bagel+Fat+One:wght@400&family=Bahiana:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Bahianita:wght@400&family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Bakbak+One:wght@400&family=Baloo+2:wght@400..800&family=Baloo+Bhai+2:wght@400..800&family=Baloo+Bhaijaan+2:wght@400..800&family=Baloo+Bhaina+2:wght@400..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2:wght@400..800&family=Baloo+Da+2:wght@400..800&family=Baloo+Paaji+2:wght@400..800&family=Baloo+Tamma+2:wght@400..800&family=Baloo+Tammudu+2:wght@400..800&family=Baloo+Thambi+2:wght@400..800&family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Balthazar:wght@400&family=Bangers:wght@400&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barriecito:wght@400&family=Barrio:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Basic:wght@400&family=Baskervville:ital,wght@0,400..700;1,400..700&family=Baskervville+SC:wght@400&family=Battambang:wght@100;300;400;700;900&family=Baumans:wght@400&family=Bayon:wght@400&family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Beau+Rivage:wght@400&family=Bebas+Neue:wght@400&family=Beiruti:wght@200..900&family=Belanosima:wght@400;600;700&family=Belgrano:wght@400&family=Bellefair:wght@400&family=Belleza:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Bellota:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Bellota+Text:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BenchNine:wght@300;400;700&family=Benne:wght@400&family=Bentham:wght@400&family=Berkshire+Swash:wght@400&family=Besley:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Beth+Ellen:wght@400&family=Bevan:ital,wght@0,400;1,400&family=BhuTuka+Expanded+One:wght@400&family=Big+Shoulders:wght@100..900&family=Big+Shoulders+Inline:wght@100..900&family=Big+Shoulders+Stencil:wght@100..900&family=Bigelow+Rules:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Bigshot+One:wght@400&family=Bilbo:wght@400&family=Bilbo+Swash+Caps:wght@400&family=BioRhyme:wght@200..800&family=BioRhyme+Expanded:wght@200;300;400;700;800&family=Birthstone:wght@400&family=Birthstone+Bounce:wght@400;500&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Bitter:ital,wght@0,100..900;1,100..900&family=Black+And+White+Picture:wght@400&family=Black+Han+Sans:wght@400&family=Black+Ops+One:wght@400&family=Blaka:wght@400&family=Blaka+Hollow:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Blaka+Ink:wght@400&family=Blinker:wght@100;200;300;400;600;700;800;900&family=Bodoni+Moda:ital,wght@0,400..900;1,400..900&family=Bodoni+Moda+SC:ital,wght@0,400..900;1,400..900&family=Bokor:wght@400&family=Boldonse:wght@400&family=Bona+Nova:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400;1,700&family=Bonbon:wght@400&family=Bonheur+Royale:wght@400&family=Boogaloo:wght@400&family=Borel:wght@400&family=Bowlby+One:wght@400&family=Bowlby+One+SC:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Braah+One:wght@400&family=Brawler:wght@400;700&family=Bree+Serif:wght@400&family=Bricolage+Grotesque:wght@200..800&family=Bruno+Ace:wght@400&family=Bruno+Ace+SC:wght@400&family=Brygada+1918:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans:wght@400&family=Bubbler+One:wght@400&family=Buda:wght@300&family=Buenard:wght@400..700&family=Bungee:wght@400&family=Bungee+Hairline:wght@400&family=Bungee+Inline:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Bungee+Outline:wght@400&family=Bungee+Shade:wght@400&family=Bungee+Spice:wght@400&family=Bungee+Tint:wght@400&family=Butcherman:wght@400&family=Butterfly+Kids:wght@400&family=Bytesized:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Cabin+Condensed:wght@400;500;600;700&family=Cabin+Sketch:wght@400;700&family=Cactus+Classical+Serif:wght@400&family=Caesar+Dressing:wght@400&family=Cagliostro:wght@400&family=Cairo:wght@200..1000&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Cairo+Play:wght@200..1000&family=Cal+Sans:wght@400&family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=Calistoga:wght@400&family=Calligraffitti:wght@400&family=Cambay:ital,wght@0,400;0,700;1,400;1,700&family=Cambo:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Candal:wght@400&family=Cantarell:ital,wght@0,400;0,700;1,400;1,700&family=Cantata+One:wght@400&family=Cantora+One:wght@400&family=Caprasimo:wght@400&family=Capriola:wght@400&family=Caramel:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Carattere:wght@400&family=Cardo:ital,wght@0,400;0,700;1,400;1,700&family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Carme:wght@400&family=Carrois+Gothic:wght@400&family=Carrois+Gothic+SC:wght@400&family=Carter+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Castoro:ital,wght@0,400;1,400&family=Castoro+Titling:wght@400&family=Catamaran:wght@100..900&family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush:wght@400&family=Cedarville+Cursive:wght@400&family=Ceviche+One:wght@400&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Changa:wght@200..800&family=Changa+One:ital,wght@0,400;1,400&family=Chango:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Charis+SIL:ital,wght@0,400;0,700;1,400;1,700&family=Charm:wght@400;700&family=Charmonman:wght@400;700&family=Chathura:wght@100;300;400;700;800&family=Chau+Philomene+One:ital,wght@0,400;1,400&family=Chela+One:wght@400&family=Chelsea+Market:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Cherish:wght@400&family=Cherry+Bomb+One:wght@400&family=Cherry+Cream+Soda:wght@400&family=Cherry+Swash:wght@400;700&family=Chewy:wght@400&family=Chicle:wght@400&family=Chilanka:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Chocolate+Classical+Sans:wght@400&family=Chokokutai:wght@400&family=Chonburi:wght@400&family=Cinzel:wght@400..900&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Clicker+Script:wght@400&family=Coda:wght@400;800&family=Codystar:wght@300;400&family=Coiny:wght@400&family=Combo:wght@400&family=Comfortaa:wght@300..700&family=Comforter:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Comforter+Brush:wght@400&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Comic+Relief:wght@400;700&family=Coming+Soon:wght@400&family=Comme:wght@100..900&family=Commissioner:wght@100..900&family=Concert+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Condiment:wght@400&family=Contrail+One:wght@400&family=Convergence:wght@400&family=Cookie:wght@400&family=Copse:wght@400&family=Coral+Pixels:wght@400&family=Corben:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&family=Cormorant+SC:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=Cormorant+Upright:wght@300;400;500;600;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Courgette:wght@400&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Coustard:wght@400;900&family=Covered+By+Your+Grace:wght@400&family=Crafty+Girls:wght@400&family=Creepster:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Crete+Round:ital,wght@0,400;1,400&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Croissant+One:wght@400&family=Crushed:wght@400&family=Cuprum:ital,wght@0,400..700;1,400..700&family=Cute+Font:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Cutive:wght@400&family=Cutive+Mono:wght@400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,100..1000;1,100..1000&family=DM+Serif+Display:ital,wght@0,400;1,400&family=DM+Serif+Text:ital,wght@0,400;1,400&family=Dai+Banna+SIL:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Damion:wght@400&family=Dancing+Script:wght@400..700&family=Dangrek:wght@400&family=Darker+Grotesque:wght@300..900&family=Darumadrop+One:wght@400&family=David+Libre:wght@400;500;700&family=Dawning+of+a+New+Day:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Days+One:wght@400&family=Dekko:wght@400&family=Dela+Gothic+One:wght@400&family=Delicious+Handrawn:wght@400&family=Delius:wght@400&family=Delius+Swash+Caps:wght@400&family=Delius+Unicase:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Della+Respira:wght@400&family=Denk+One:wght@400&family=Devonshire:wght@400&family=Dhurjati:wght@400&family=Didact+Gothic:wght@400&family=Diphylleia:wght@400&family=Diplomata:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Diplomata+SC:wght@400&family=Do+Hyeon:wght@400&family=Dokdo:wght@400&family=Domine:wght@400..700&family=Donegal+One:wght@400&family=Dongle:wght@300;400;700&family=Doppio+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Dorsa:wght@400&family=Dosis:wght@200..800&family=DotGothic16:wght@400&family=Doto:wght@100..900&family=Dr+Sugiyama:wght@400&family=Duru+Sans:wght@400&family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Dynalight:wght@400&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Eagle+Lake:wght@400&family=East+Sea+Dokdo:wght@400&family=Eater:wght@400&family=Economica:ital,wght@0,400;0,700;1,400;1,700&family=Eczar:wght@400..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Edu+AU+VIC+WA+NT+Dots:wght@400..700&family=Edu+AU+VIC+WA+NT+Guides:wght@400..700&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Edu+NSW+ACT+Foundation:wght@400..700&family=Edu+QLD+Beginner:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Edu+SA+Beginner:wght@400..700&family=Edu+TAS+Beginner:wght@400..700&family=Edu+VIC+WA+NT+Beginner:wght@400..700&family=El+Messiri:wght@400..700&family=Electrolize:wght@400&family=Elsie:wght@400;900&family=Elsie+Swash+Caps:wght@400;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Emblema+One:wght@400&family=Emilys+Candy:wght@400&family=Encode+Sans:wght@100..900&family=Encode+Sans+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Encode+Sans+SC:wght@100..900&family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Engagement:wght@400&family=Englebert:wght@400&family=Enriqueta:wght@400;500;600;700&family=Ephesis:wght@400&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Erica+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Esteban:wght@400&family=Estonia:wght@400&family=Euphoria+Script:wght@400&family=Ewert:wght@400&family=Exile:wght@400&family=Exo:ital,wght@0,100..900;1,100..900&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:ital,wght@0,400..700;1,400..700&family=Explora:wght@400&family=Faculty+Glyphic:wght@400&family=Fahkwang:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Fanwood+Text:ital,wght@0,400;1,400&family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Farsan:wght@400&family=Fascinate:wght@400&family=Fascinate+Inline:wght@400&family=Faster+One:wght@400&family=Fasthand:wght@400&family=Fauna+One:wght@400&family=Faustina:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Federant:wght@400&family=Federo:wght@400&family=Felipa:wght@400&family=Fenix:wght@400&family=Festive:wght@400&family=Figtree:ital,wght@0,300..900;1,300..900&family=Finger+Paint:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Finlandica:ital,wght@0,400..700;1,400..700&family=Fira+Code:wght@300..700&family=Fira+Mono:wght@400;500;700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fjalla+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Fjord+One:wght@400&family=Flamenco:wght@300;400&family=Flavors:wght@400&family=Fleur+De+Leah:wght@400&family=Flow+Block:wght@400&family=Flow+Circular:wght@400&family=Flow+Rounded:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Foldit:wght@100..900&family=Fondamento:ital,wght@0,400;1,400&family=Fontdiner+Swanky:wght@400&family=Forum:wght@400&family=Fragment+Mono:ital,wght@0,400;1,400&family=Francois+One:wght@400&family=Frank+Ruhl+Libre:wght@300..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,100..900;1,100..900&family=Freckle+Face:wght@400&family=Fredericka+the+Great:wght@400&family=Fredoka:wght@300..700&family=Freehand:wght@400&family=Freeman:wght@400&family=Fresca:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Frijole:wght@400&family=Fruktur:ital,wght@0,400;1,400&family=Fugaz+One:wght@400&family=Fuggles:wght@400&family=Funnel+Display:wght@300..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Fustat:wght@200..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&family=GFS+Didot:wght@400&family=GFS+Neohellenic:ital,wght@0,400;0,700;1,400;1,700&family=Ga+Maamli:wght@400&family=Gabarito:wght@400..900&family=Gabriela:wght@400&family=Gaegu:wght@300;400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gafata:wght@400&family=Gajraj+One:wght@400&family=Galada:wght@400&family=Galdeano:wght@400&family=Galindo:wght@400&family=Gamja+Flower:wght@400&family=Gantari:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gasoek+One:wght@400&family=Gayathri:wght@100;400;700&family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&family=Gelasio:ital,wght@0,400..700;1,400..700&family=Gemunu+Libre:wght@200..800&family=Genos:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Geo:ital,wght@0,400;1,400&family=Geologica:wght@100..900&family=Georama:ital,wght@0,100..900;1,100..900&family=Geostar:wght@400&family=Geostar+Fill:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Germania+One:wght@400&family=Gideon+Roman:wght@400&family=Gidole:wght@400&family=Gidugu:wght@400&family=Gilda+Display:wght@400&family=Girassol:wght@400&family=Give+You+Glory:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Glass+Antiqua:wght@400&family=Glegoo:wght@400;700&family=Gloock:wght@400&family=Gloria+Hallelujah:wght@400&family=Glory:ital,wght@0,100..800;1,100..800&family=Gluten:wght@100..900&family=Goblin+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand:wght@400&family=Goldman:wght@400;700&family=Golos+Text:wght@400..900&family=Gorditas:wght@400;700&family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&family=Gotu:wght@400&family=Goudy+Bookletter+1911:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum:wght@400&family=Graduate:wght@400&family=Grand+Hotel:wght@400&family=Grandiflora+One:wght@400&family=Grandstander:ital,wght@0,100..900;1,100..900&family=Grape+Nuts:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gravitas+One:wght@400&family=Great+Vibes:wght@400&family=Grechen+Fuemen:wght@400&family=Grenze:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Grenze+Gotisch:wght@100..900&family=Grey+Qo:wght@400&family=Griffy:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Gruppo:wght@400&family=Gudea:ital,wght@0,400;0,700;1,400;1,700&family=Gugi:wght@400&family=Gulzar:wght@400&family=Gupter:wght@400;500;700&family=Gurajada:wght@400&family=Gwendolyn:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Habibi:wght@400&family=Hachi+Maru+Pop:wght@400&family=Hahmlet:wght@100..900&family=Halant:wght@300;400;500;600;700&family=Hammersmith+One:wght@400&family=Hanalei:wght@400&family=Hanalei+Fill:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&family=Handlee:wght@400&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Hanuman:wght@100;300;400;700;900&family=Happy+Monkey:wght@400&family=Harmattan:wght@400;500;600;700&family=Headland+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans:wght@400&family=Heebo:wght@100..900&family=Henny+Penny:wght@400&family=Hepta+Slab:wght@1..900&family=Herr+Von+Muellerhoff:wght@400&family=Hi+Melody:wght@400&family=Hina+Mincho:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Hind+Guntur:wght@300;400;500;600;700&family=Hind+Madurai:wght@300;400;500;600;700&family=Hind+Mysuru:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&family=Hind+Vadodara:wght@300;400;500;600;700&family=Holtwood+One+SC:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Homemade+Apple:wght@400&family=Homenaje:wght@400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Hubballi:wght@400&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Hurricane:wght@400&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans+Devanagari:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+JP:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@100;200;300;400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IM+Fell+DW+Pica:ital,wght@0,400;1,400&family=IM+Fell+DW+Pica+SC:wght@400&family=IM+Fell+Double+Pica:ital,wght@0,400;1,400&family=IM+Fell+Double+Pica+SC:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=IM+Fell+English+SC:wght@400&family=IM+Fell+French+Canon:ital,wght@0,400;1,400&family=IM+Fell+French+Canon+SC:wght@400&family=IM+Fell+Great+Primer:ital,wght@0,400;1,400&family=IM+Fell+Great+Primer+SC:wght@400&family=Iansui:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400..700;1,400..700&family=Iceberg:wght@400&family=Iceland:wght@400&family=Imbue:wght@100..900&family=Imperial+Script:wght@400&family=Imprima:wght@400&family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Inder:wght@400&family=Indie+Flower:wght@400&family=Ingrid+Darling:wght@400&family=Inika:wght@400;700&family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inspiration:wght@400&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:ital,wght@0,100..900;1,100..900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Irish+Grover:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Island+Moments:wght@400&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Italiana:wght@400&family=Italianno:wght@400&family=Itim:wght@400&family=Jacquard+12:wght@400&family=Jacquard+12+Charted:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Jacquard+24:wght@400&family=Jacquard+24+Charted:wght@400&family=Jacquarda+Bastarda+9:wght@400&family=Jacquarda+Bastarda+9+Charted:wght@400&family=Jacques+Francois:wght@400&family=Jacques+Francois+Shadow:wght@400&family=Jaini:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Jaini+Purva:wght@400&family=Jaldi:wght@400;700&family=Jersey+10:wght@400&family=Jersey+10+Charted:wght@400&family=Jersey+15:wght@400&family=Jersey+15+Charted:wght@400&family=Jersey+20:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Jersey+20+Charted:wght@400&family=Jersey+25:wght@400&family=Jersey+25+Charted:wght@400&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Jim+Nightshade:wght@400&family=Joan:wght@400&family=Jockey+One:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger:wght@400&family=Jomhuria:wght@400&family=Jomolhari:wght@400&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Joti+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Jua:wght@400&family=Judson:ital,wght@0,400..700;1,400..700&family=Julee:wght@400&family=Julius+Sans+One:wght@400&family=Junge:wght@400&family=Jura:wght@300..700&family=Just+Another+Hand:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here:wght@400&family=K2D:ital,wght@0,100..800;1,100..800&family=Kablammo:wght@400&family=Kadwa:wght@400..700&family=Kaisei+Decol:wght@400..700&family=Kaisei+HarunoUmi:wght@400..700&family=Kaisei+Opti:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400..800&family=Kalam:wght@300..700&family=Kalnia:wght@100..700&family=Kalnia+Glaze:wght@100..700&family=Kameron:wght@400..700&family=Kanchenjunga:wght@400..700&family=Kanit:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Karantina:wght@300..700&family=Karla:ital,wght@0,200..800;1,200..800&family=Karma:wght@300..700&family=Katibeh:wght@400&family=Kaushan+Script:wght@400&family=Kavivanar:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Kavoon:wght@400&family=Kay+Pho+Du:wght@400..700&family=Kdam+Thmor+Pro:wght@400&family=Keania+One:wght@400&family=Kelly+Slab:wght@400&family=Kenia:wght@400&family=Khand:wght@300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Khula:wght@300..800&family=Kings:wght@400&family=Kirang+Haerang:wght@400&family=Kite+One:wght@400&family=Kiwi+Maru:wght@300..500&family=Klee+One:wght@400..600&family=Knewave:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200..700;1,200..700&family=Kodchasan:ital,wght@0,200..700;1,200..700&family=Kode+Mono:wght@400..700&family=Koh+Santepheap:wght@100..900&family=Kolker+Brush:wght@400&family=Konkhmer+Sleokchher:wght@400&family=Kosugi:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Jua:wght@400&family=Judson:ital,wght@0,400;0,700;1,400;1,700&family=Julee:wght@400&family=Julius+Sans+One:wght@400&family=Junge:wght@400&family=Jura:wght@300..700&family=Just+Another+Hand:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here:wght@400&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Kadwa:wght@400;700&family=Kaisei+Decol:wght@400;500;700&family=Kaisei+HarunoUmi:wght@400;500;700&family=Kaisei+Opti:wght@400;500;700&family=Kaisei+Tokumin:wght@400;500;700;800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Kalnia:wght@100..700&family=Kalnia+Glaze:wght@100..700&family=Kameron:wght@400..700&family=Kanchenjunga:wght@400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@300..400&family=Karantina:wght@300;400;700&family=Karla:ital,wght@0,200..800;1,200..800&family=Karma:wght@300;400;500;600;700&family=Katibeh:wght@400&family=Kaushan+Script:wght@400&family=Kavivanar:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Kavoon:wght@400&family=Kay+Pho+Du:wght@400;500;600;700&family=Kdam+Thmor+Pro:wght@400&family=Keania+One:wght@400&family=Kelly+Slab:wght@400&family=Kenia:wght@400&family=Khand:wght@300;400;500;600;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Khula:wght@300;400;600;700;800&family=Kings:wght@400&family=Kirang+Haerang:wght@400&family=Kite+One:wght@400&family=Kiwi+Maru:wght@300;400;500&family=Klee+One:wght@400;600&family=Knewave:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Kode+Mono:wght@400..700&family=Koh+Santepheap:wght@100;300;400;700;900&family=Kolker+Brush:wght@400&family=Konkhmer+Sleokchher:wght@400&family=Kosugi:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru:wght@400&family=Kotta+One:wght@400&family=Koulen:wght@400&family=Kranky:wght@400&family=Kreon:wght@300..700&family=Kristi:wght@400&family=Krona+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Krub:ital,wght@0,200..700;1,200..700&family=Kufam:ital,wght@0,400..900;1,400..900&family=Kulim+Park:ital,wght@0,200..700;1,200..700&family=Kumar+One:wght@400&family=Kumar+One+Outline:wght@400&family=Kumbh+Sans:wght@100..900&family=Kurale:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300..700&family=LXGW+WenKai+TC:wght@300..700&family=La+Belle+Aurore:wght@400&family=Labrada:ital,wght@0,100..900;1,100..900&family=Lacquer:wght@400&family=Laila:wght@300..700&family=Lakki+Reddy:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Lalezar:wght@400&family=Lancelot:wght@400&family=Langar:wght@400&family=Lateef:wght@200..800&family=Lato:ital,wght@0,100..900;1,100..900&family=Lavishly+Yours:wght@400&family=League+Gothic:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=League+Script:wght@400&family=League+Spartan:wght@100..900&family=Leckerli+One:wght@400&family=Ledger:wght@400&family=Lekton:ital,wght@0,400..700;1,400..700&family=Lemon:wght@400&family=Lemonada:wght@300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lexend+Deca:wght@100..900&family=Lexend+Exa:wght@100..900&family=Lexend+Giga:wght@100..900&family=Lexend+Mega:wght@100..900&family=Lexend+Peta:wght@100..900&family=Lexend+Tera:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@100..900&family=Libre+Barcode+128:wght@400&family=Libre+Barcode+128+Text:wght@400&family=Libre+Barcode+39:wght@400&family=Libre+Barcode+39+Extended:wght@400&family=Libre+Barcode+39+Extended+Text:wght@400&family=Libre+Barcode+39+Text:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+EAN13+Text:wght@400&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Libre+Caslon+Display:wght@400&family=Libre+Caslon+Text:ital,wght@0,400..700;1,400..700&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Licorice:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Life+Savers:wght@400..800&family=Lilita+One:wght@400&family=Lily+Script+One:wght@400&family=Limelight:wght@400&family=Linden+Hill:ital,wght@0,400;1,400&family=Linefont:wght@100..900&family=Lisu+Bosa:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Liter:wght@400&family=Literata:ital,wght@0,200..900;1,200..900&family=Liu+Jian+Mao+Cao:wght@400&family=Livvic:ital,wght@0,100..900;1,100..900&family=Lobster:wght@400&family=Lobster+Two:ital,wght@0,400..700;1,400..700&family=Londrina+Outline:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow:wght@400&family=Londrina+Sketch:wght@400&family=Londrina+Solid:wght@100..900&family=Long+Cang:wght@400&family=Lora:ital,wght@0,400..700;1,400..700&family=Love+Light:wght@400&family=Love+Ya+Like+A+Sister:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Loved+by+the+King:wght@400&family=Lovers+Quarrel:wght@400&family=Luckiest+Guy:wght@400&family=Lugrasimo:wght@400&family=Lumanosimo:wght@400&family=Lunasima:wght@400..700&family=Lusitana:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Lustria:wght@400&family=Luxurious+Roman:wght@400&family=Luxurious+Script:wght@400&family=M+PLUS+1:wght@100..900&family=M+PLUS+1+Code:wght@100..700&family=M+PLUS+1p:wght@100..900&family=M+PLUS+2:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Code+Latin:wght@100..700&family=M+PLUS+Rounded+1c:wght@100..900&family=Ma+Shan+Zheng:wght@400&family=Macondo:wght@400&family=Macondo+Swash+Caps:wght@400&family=Mada:wght@200..900&family=Madimi+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Magra:wght@400..700&family=Maiden+Orange:wght@400&family=Maitree:wght@200..700&family=Major+Mono+Display:wght@400&family=Mako:wght@400&family=Mali:ital,wght@0,200..700;1,200..700&family=Mallanna:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Maname:wght@400&family=Mandali:wght@400&family=Manjari:wght@100..700&family=Manrope:wght@200..800&family=Mansalva:wght@400&family=Manuale:ital,wght@0,300..800;1,300..800&family=Marcellus:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Marcellus+SC:wght@400&family=Marck+Script:wght@400&family=Margarine:wght@400&family=Marhey:wght@300..700&family=Markazi+Text:wght@400..700&family=Marko+One:wght@400&family=Marmelad:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Martel:wght@200..900&family=Martel+Sans:wght@200..900&family=Martian+Mono:wght@100..800&family=Marvel:ital,wght@0,400..700;1,400..700&family=Mate:ital,wght@0,400;1,400&family=Mate+SC:wght@400&family=Matemasie:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Material+Icons:wght@400&family=Material+Icons+Outlined:wght@400&family=Material+Icons+Round:wght@400&family=Material+Icons+Sharp:wght@400&family=Material+Icons+Two+Tone:wght@400&family=Material+Symbols:wght@100..700&family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@100..700&family=Material+Symbols+Sharp:wght@100..700&family=Maven+Pro:wght@400..900&family=McLaren:wght@400&family=Mea+Culpa:wght@400&family=Meddon:wght@400&family=MedievalSharp:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Medula+One:wght@400&family=Meera+Inimai:wght@400&family=Megrim:wght@400&family=Meie+Script:wght@400&family=Meow+Script:wght@400&family=Merienda:wght@300..900&family=Merriweather:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Metal:wght@400&family=Metal+Mania:wght@400&family=Metamorphous:wght@400&family=Metrophobic:wght@400&family=Michroma:wght@400&family=Micro+5:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Micro+5+Charted:wght@400&family=Milonga:wght@400&family=Miltonian:wght@400&family=Miltonian+Tattoo:wght@400&family=Mina:wght@400..700&family=Mingzat:wght@400&family=Miniver:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400..700&family=Mirza:wght@400..700&family=Miss+Fajardose:wght@400&family=Mitr:wght@200..700&family=Mochiy+Pop+One:wght@400&family=Mochiy+Pop+P+One:wght@400&family=Modak:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Modern+Antiqua:wght@400&family=Moderustic:wght@300..800&family=Mogra:wght@400&family=Mohave:ital,wght@0,300..700;1,300..700&family=Moirai+One:wght@400&family=Molengo:wght@400&family=Molle:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&family=Monda:wght@400..700&family=Monofett:wght@400&family=Monomakh:wght@400&family=Monomaniac+One:wght@400&family=Monoton:wght@400&family=Monsieur+La+Doulaise:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Montaga:wght@400&family=Montagu+Slab:wght@100..700&family=MonteCarlo:wght@400&family=Montez:wght@400&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Montserrat+Alternates:ital,wght@0,100..900;1,100..900&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Moo+Lah+Lah:wght@400&family=Mooli:wght@400&family=Moon+Dance:wght@400&family=Moul:wght@400&family=Moulpali:wght@400&family=Mountains+of+Christmas:wght@400..700&family=Mouse+Memoirs:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Mr+Bedfort:wght@400&family=Mr+Dafoe:wght@400&family=Mr+De+Haviland:wght@400&family=Mrs+Saint+Delafield:wght@400&family=Mrs+Sheppards:wght@400&family=Ms+Madi:wght@400&family=Mukta:wght@200..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Mukta+Mahee:wght@200..800&family=Mukta+Malar:wght@200..800&family=Mukta+Vaani:wght@200..800&family=Mulish:ital,wght@0,200..900;1,200..900&family=Murecho:wght@100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=My+Soul:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Mynerve:wght@400&family=Mystery+Quest:wght@400&family=NTR:wght@400&family=Nabla:wght@400&family=Namdhinggo:wght@400..800&family=Nanum+Brush+Script:wght@400&family=Nanum+Gothic:wght@400..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400..700&family=Nanum+Myeongjo:wght@400..800&family=Nanum+Pen+Script:wght@400&family=Narnoor:wght@400..800&family=National+Park:wght@200..800&family=Neonderthaw:wght@400&family=Nerko+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Neucha:wght@400&family=Neuton:ital,wght@0,200..800;1,200..800&family=New+Amsterdam:wght@400&family=New+Rocker:wght@400&family=New+Tegomin:wght@400&family=News+Cycle:wght@400..700&family=Newsreader:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Niconne:wght@400&family=Niramit:ital,wght@0,200..700;1,200..700&family=Nixie+One:wght@400&family=Nobile:ital,wght@0,400..700;1,400..700&family=Nokora:wght@100..900&family=Norican:wght@400&family=Nosifer:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Notable:wght@400&family=Nothing+You+Could+Do:wght@400&family=Noticia+Text:ital,wght@0,400..700;1,400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Noto+Music:wght@400&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Adlam:wght@400..700&family=Noto+Sans+Adlam+Unjoined:wght@400..700&family=Noto+Sans+Anatolian+Hieroglyphs:wght@400&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans+Armenian:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Avestan:wght@400&family=Noto+Sans+Balinese:wght@400..700&family=Noto+Sans+Bamum:wght@400..700&family=Noto+Sans+Bassa+Vah:wght@400..700&family=Noto+Sans+Batak:wght@400&family=Noto+Sans+Bengali:wght@100..900&family=Noto+Sans+Bhaiksuki:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Brahmi:wght@400&family=Noto+Sans+Buginese:wght@400&family=Noto+Sans+Buhid:wght@400&family=Noto+Sans+Canadian+Aboriginal:wght@100..900&family=Noto+Sans+Carian:wght@400&family=Noto+Sans+Caucasian+Albanian:wght@400&family=Noto+Sans+Chakma:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Cham:wght@100..900&family=Noto+Sans+Cherokee:wght@100..900&family=Noto+Sans+Chorasmian:wght@400&family=Noto+Sans+Coptic:wght@400&family=Noto+Sans+Cuneiform:wght@400&family=Noto+Sans+Cypriot:wght@400&family=Noto+Sans+Cypro+Minoan:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Deseret:wght@400&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Duployan:wght@400..700&family=Noto+Sans+Egyptian+Hieroglyphs:wght@400&family=Noto+Sans+Elbasan:wght@400&family=Noto+Sans+Elymaic:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@100..900&family=Noto+Sans+Georgian:wght@100..900&family=Noto+Sans+Glagolitic:wght@400&family=Noto+Sans+Gothic:wght@400&family=Noto+Sans+Grantha:wght@400&family=Noto+Sans+Gujarati:wght@100..900&family=Noto+Sans+Gunjala+Gondi:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gurmukhi:wght@100..900&family=Noto+Sans+HK:wght@100..900&family=Noto+Sans+Hanifi+Rohingya:wght@400..700&family=Noto+Sans+Hanunoo:wght@400&family=Noto+Sans+Hatran:wght@400&family=Noto+Sans+Hebrew:wght@100..900&family=Noto+Sans+Imperial+Aramaic:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Indic+Siyaq+Numbers:wght@400&family=Noto+Sans+Inscriptional+Pahlavi:wght@400&family=Noto+Sans+Inscriptional+Parthian:wght@400&family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+Javanese:wght@400..700&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans+Kaithi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@100..900&family=Noto+Sans+Kawi:wght@400..700&family=Noto+Sans+Kayah+Li:wght@400..700&family=Noto+Sans+Kharoshthi:wght@400&family=Noto+Sans+Khmer:wght@100..900&family=Noto+Sans+Khojki:wght@400&family=Noto+Sans+Khudawadi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&family=Noto+Sans+Lao+Looped:wght@100..900&family=Noto+Sans+Lepcha:wght@400&family=Noto+Sans+Limbu:wght@400&family=Noto+Sans+Linear+A:wght@400&family=Noto+Sans+Linear+B:wght@400&family=Noto+Sans+Lisu:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lydian:wght@400&family=Noto+Sans+Mahajani:wght@400&family=Noto+Sans+Malayalam:wght@100..900&family=Noto+Sans+Mandaic:wght@400&family=Noto+Sans+Manichaean:wght@400&family=Noto+Sans+Marchen:wght@400&family=Noto+Sans+Masaram+Gondi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math:wght@400&family=Noto+Sans+Mayan+Numerals:wght@400&family=Noto+Sans+Medefaidrin:wght@400..700&family=Noto+Sans+Meetei+Mayek:wght@100..900&family=Noto+Sans+Mende+Kikakui:wght@400&family=Noto+Sans+Meroitic:wght@400&family=Noto+Sans+Miao:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Modi:wght@400&family=Noto+Sans+Mongolian:wght@400&family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans+Mro:wght@400&family=Noto+Sans+Multani:wght@400&family=Noto+Sans+NKo:wght@400&family=Noto+Sans+NKo+Unjoined:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Nabataean:wght@400&family=Noto+Sans+Nag+Mundari:wght@400..700&family=Noto+Sans+Nandinagari:wght@400&family=Noto+Sans+New+Tai+Lue:wght@400..700&family=Noto+Sans+Newa:wght@400&family=Noto+Sans+Nushu:wght@400&family=Noto+Sans+Ogham:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ol+Chiki:wght@400..700&family=Noto+Sans+Old+Hungarian:wght@400&family=Noto+Sans+Old+Italic:wght@400&family=Noto+Sans+Old+North+Arabian:wght@400&family=Noto+Sans+Old+Permic:wght@400&family=Noto+Sans+Old+Persian:wght@400&family=Noto+Sans+Old+Sogdian:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Old+South+Arabian:wght@400&family=Noto+Sans+Old+Turkic:wght@400&family=Noto+Sans+Oriya:wght@100..900&family=Noto+Sans+Osage:wght@400&family=Noto+Sans+Osmanya:wght@400&family=Noto+Sans+Pahawh+Hmong:wght@400&family=Noto+Sans+Palmyrene:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Pau+Cin+Hau:wght@400&family=Noto+Sans+PhagsPa:wght@400&family=Noto+Sans+Phoenician:wght@400&family=Noto+Sans+Psalter+Pahlavi:wght@400&family=Noto+Sans+Rejang:wght@400&family=Noto+Sans+Runic:wght@400&family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Samaritan:wght@400&family=Noto+Sans+Saurashtra:wght@400&family=Noto+Sans+Sharada:wght@400&family=Noto+Sans+Shavian:wght@400&family=Noto+Sans+Siddham:wght@400&family=Noto+Sans+SignWriting:wght@400&family=Noto+Sans+Sinhala:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sogdian:wght@400&family=Noto+Sans+Sora+Sompeng:wght@400..700&family=Noto+Sans+Soyombo:wght@400&family=Noto+Sans+Sundanese:wght@400..700&family=Noto+Sans+Syloti+Nagri:wght@400&family=Noto+Sans+Symbols:wght@100..900&family=Noto+Sans+Symbols+2:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Syriac:wght@100..900&family=Noto+Sans+Syriac+Eastern:wght@100..900&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans+Tagalog:wght@400&family=Noto+Sans+Tagbanwa:wght@400&family=Noto+Sans+Tai+Le:wght@400&family=Noto+Sans+Tai+Tham:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tai+Viet:wght@400&family=Noto+Sans+Takri:wght@400&family=Noto+Sans+Tamil:wght@100..900&family=Noto+Sans+Tamil+Supplement:wght@400&family=Noto+Sans+Tangsa:wght@400..700&family=Noto+Sans+Telugu:wght@100..900&family=Noto+Sans+Thaana:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans+Thai+Looped:wght@100..900&family=Noto+Sans+Tifinagh:wght@400&family=Noto+Sans+Tirhuta:wght@400&family=Noto+Sans+Ugaritic:wght@400&family=Noto+Sans+Vai:wght@400&family=Noto+Sans+Vithkuqi:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Wancho:wght@400&family=Noto+Sans+Warang+Citi:wght@400&family=Noto+Sans+Yi:wght@400&family=Noto+Sans+Zanabazar+Square:wght@400&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Ahom:wght@400&family=Noto+Serif+Armenian:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Balinese:wght@400&family=Noto+Serif+Bengali:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Dogra:wght@400&family=Noto+Serif+Ethiopic:wght@100..900&family=Noto+Serif+Georgian:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Grantha:wght@400&family=Noto+Serif+Gujarati:wght@100..900&family=Noto+Serif+Gurmukhi:wght@100..900&family=Noto+Serif+HK:wght@200..900&family=Noto+Serif+Hebrew:wght@100..900&family=Noto+Serif+Hentaigana:wght@200..900&family=Noto+Serif+JP:wght@200..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&family=Noto+Serif+Kannada:wght@100..900&family=Noto+Serif+Khitan+Small+Script:wght@400&family=Noto+Serif+Khmer:wght@100..900&family=Noto+Serif+Khojki:wght@400..700&family=Noto+Serif+Lao:wght@100..900&family=Noto+Serif+Makasar:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@100..900&family=Noto+Serif+NP+Hmong:wght@400..700&family=Noto+Serif+Old+Uyghur:wght@400&family=Noto+Serif+Oriya:wght@400..700&family=Noto+Serif+Ottoman+Siyaq:wght@400&family=Noto+Serif+SC:wght@200..900&family=Noto+Serif+Sinhala:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&family=Noto+Serif+Tamil:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Tangut:wght@400&family=Noto+Serif+Telugu:wght@100..900&family=Noto+Serif+Thai:wght@100..900&family=Noto+Serif+Tibetan:wght@100..900&family=Noto+Serif+Todhri:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Toto:wght@400..700&family=Noto+Serif+Vithkuqi:wght@400..700&family=Noto+Serif+Yezidi:wght@400..700&family=Noto+Traditional+Nushu:wght@300..700&family=Noto+Znamenny+Musical+Notation:wght@400&family=Nova+Cut:wght@400&family=Nova+Flat:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Nova+Mono:wght@400&family=Nova+Oval:wght@400&family=Nova+Round:wght@400&family=Nova+Script:wght@400&family=Nova+Slim:wght@400&family=Nova+Square:wght@400&family=Numans:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..900;1,200..900&family=Nunito+Sans:ital,wght@0,200..900;1,200..900&family=Nuosu+SIL:wght@400&family=Odibee+Sans:wght@400&family=Odor+Mean+Chey:wght@400&family=Offside:wght@400&family=Oi:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Ojuju:wght@200..800&family=Old+Standard+TT:ital,wght@0,400..700;1,400..700&family=Oldenburg:wght@400&family=Ole:wght@400&family=Oleo+Script:wght@400..700&family=Oleo+Script+Swash+Caps:wght@400..700&family=Onest:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Oooh+Baby:wght@400&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oranienbaum:wght@400&family=Orbit:wght@400&family=Orbitron:wght@400..900&family=Oregano:ital,wght@0,400;1,400&family=Orelega+One:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Orienta:wght@400&family=Original+Surfer:wght@400&family=Oswald:wght@200..700&family=Outfit:wght@100..900&family=Over+the+Rainbow:wght@400&family=Overlock:ital,wght@0,400..900;1,400..900&family=Overlock+SC:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&family=Overpass+Mono:wght@300..700&family=Ovo:wght@400&family=Oxanium:wght@200..800&family=Oxygen:wght@300..700&family=Oxygen+Mono:wght@400&family=PT+Mono:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400..700;1,400..700&family=PT+Sans+Caption:wght@400..700&family=PT+Sans+Narrow:wght@400..700&family=PT+Serif:ital,wght@0,400..700;1,400..700&family=PT+Serif+Caption:ital,wght@0,400;1,400&family=Pacifico:wght@400&family=Padauk:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Padyakke+Expanded+One:wght@400&family=Palanquin:wght@100..700&family=Palanquin+Dark:wght@400..700&family=Palette+Mosaic:wght@400&family=Pangolin:wght@400&family=Paprika:wght@400&family=Parisienne:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&family=Passero+One:wght@400&family=Passion+One:wght@400..900&family=Passions+Conflict:wght@400&family=Pathway+Extreme:ital,wght@0,100..900;1,100..900&family=Pathway+Gothic+One:wght@400&family=Patrick+Hand:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand+SC:wght@400&family=Pattaya:wght@400&family=Patua+One:wght@400&family=Pavanam:wght@400&family=Paytone+One:wght@400&family=Peddana:wght@400&family=Peralta:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker:wght@400&family=Petemoss:wght@400&family=Petit+Formal+Script:wght@400&family=Petrona:ital,wght@0,100..900;1,100..900&family=Philosopher:ital,wght@0,400..700;1,400..700&family=Phudu:wght@300..900&family=Piazzolla:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Piedra:wght@400&family=Pinyon+Script:wght@400&family=Pirata+One:wght@400&family=Pixelify+Sans:wght@400..700&family=Plaster:wght@400&family=Platypi:ital,wght@0,300..800;1,300..800&family=Play:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playball:wght@400&family=Playfair:ital,wght@0,300..900;1,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair+Display+SC:ital,wght@0,400..900;1,400..900&family=Playpen+Sans:wght@100..800&family=Playpen+Sans+Arabic:wght@100..800&family=Playpen+Sans+Deva:wght@100..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@100..800&family=Playpen+Sans+Thai:wght@100..800&family=Playwrite+AR:wght@100..400&family=Playwrite+AR+Guides:wght@400&family=Playwrite+AT:ital,wght@0,100..400;1,100..400&family=Playwrite+AT+Guides:ital,wght@0,400;1,400&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+AU+NSW+Guides:wght@400&family=Playwrite+AU+QLD:wght@100..400&family=Playwrite+AU+QLD+Guides:wght@400&family=Playwrite+AU+SA:wght@100..400&family=Playwrite+AU+SA+Guides:wght@400&family=Playwrite+AU+TAS:wght@100..400&family=Playwrite+AU+TAS+Guides:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+AU+VIC:wght@100..400&family=Playwrite+AU+VIC+Guides:wght@400&family=Playwrite+BE+VLG:wght@100..400&family=Playwrite+BE+VLG+Guides:wght@400&family=Playwrite+BE+WAL:wght@100..400&family=Playwrite+BE+WAL+Guides:wght@400&family=Playwrite+BR:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+BR+Guides:wght@400&family=Playwrite+CA:wght@100..400&family=Playwrite+CA+Guides:wght@400&family=Playwrite+CL:wght@100..400&family=Playwrite+CL+Guides:wght@400&family=Playwrite+CO:wght@100..400&family=Playwrite+CO+Guides:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&family=Playwrite+CU+Guides:wght@400&family=Playwrite+CZ:wght@100..400&family=Playwrite+CZ+Guides:wght@400&family=Playwrite+DE+Grund:wght@100..400&family=Playwrite+DE+Grund+Guides:wght@400&family=Playwrite+DE+LA:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+DE+LA+Guides:wght@400&family=Playwrite+DE+SAS:wght@100..400&family=Playwrite+DE+SAS+Guides:wght@400&family=Playwrite+DE+VA:wght@100..400&family=Playwrite+DE+VA+Guides:wght@400&family=Playwrite+DK+Loopet:wght@100..400&family=Playwrite+DK+Loopet+Guides:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+DK+Uloopet:wght@100..400&family=Playwrite+DK+Uloopet+Guides:wght@400&family=Playwrite+ES:wght@100..400&family=Playwrite+ES+Deco:wght@100..400&family=Playwrite+ES+Deco+Guides:wght@400&family=Playwrite+ES+Guides:wght@400&family=Playwrite+FR+Moderne:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+FR+Moderne+Guides:wght@400&family=Playwrite+FR+Trad:wght@100..400&family=Playwrite+FR+Trad+Guides:wght@400&family=Playwrite+GB+J:ital,wght@0,100..400;1,100..400&family=Playwrite+GB+J+Guides:ital,wght@0,400;1,400&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Playwrite+GB+S+Guides:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+HR:wght@100..400&family=Playwrite+HR+Guides:wght@400&family=Playwrite+HR+Lijeva:wght@100..400&family=Playwrite+HR+Lijeva+Guides:wght@400&family=Playwrite+HU:wght@100..400&family=Playwrite+HU+Guides:wght@400&family=Playwrite+ID:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+ID+Guides:wght@400&family=Playwrite+IE:wght@100..400&family=Playwrite+IE+Guides:wght@400&family=Playwrite+IN:wght@100..400&family=Playwrite+IN+Guides:wght@400&family=Playwrite+IS:wght@100..400&family=Playwrite+IS+Guides:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&family=Playwrite+IT+Moderna+Guides:wght@400&family=Playwrite+IT+Trad:wght@100..400&family=Playwrite+IT+Trad+Guides:wght@400&family=Playwrite+MX:wght@100..400&family=Playwrite+MX+Guides:wght@400&family=Playwrite+NG+Modern:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern+Guides:wght@400&family=Playwrite+NL:wght@100..400&family=Playwrite+NL+Guides:wght@400&family=Playwrite+NO:wght@100..400&family=Playwrite+NO+Guides:wght@400&family=Playwrite+NZ:wght@100..400&family=Playwrite+NZ+Guides:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+PE:wght@100..400&family=Playwrite+PE+Guides:wght@400&family=Playwrite+PL:wght@100..400&family=Playwrite+PL+Guides:wght@400&family=Playwrite+PT:wght@100..400&family=Playwrite+PT+Guides:wght@400&family=Playwrite+RO:wght@100..400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+RO+Guides:wght@400&family=Playwrite+SK:wght@100..400&family=Playwrite+SK+Guides:wght@400&family=Playwrite+TZ:wght@100..400&family=Playwrite+TZ+Guides:wght@400&family=Playwrite+US+Modern:wght@100..400&family=Playwrite+US+Modern+Guides:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&family=Playwrite+US+Trad+Guides:wght@400&family=Playwrite+VN:wght@100..400&family=Playwrite+VN+Guides:wght@400&family=Playwrite+ZA:wght@100..400&family=Playwrite+ZA+Guides:wght@400&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Pochaevsk:wght@400&family=Podkova:wght@400..800&family=Poetsen+One:wght@400&family=Poiret+One:wght@400&family=Poller+One:wght@400&family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&family=Poly:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Pompiere:wght@400&family=Ponnala:wght@400&family=Ponomar:wght@400&family=Pontano+Sans:wght@300..700&family=Poor+Story:wght@400&family=Poppins:ital,wght@0,100..900;1,100..900&family=Port+Lligat+Sans:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Port+Lligat+Slab:wght@400&family=Potta+One:wght@400&family=Pragati+Narrow:wght@400..700&family=Praise:wght@400&family=Prata:wght@400&family=Preahvihear:wght@400&family=Press+Start+2P:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Pridi:wght@200..700&family=Princess+Sofia:wght@400&family=Prociono:wght@400&family=Prompt:ital,wght@0,100..900;1,100..900&family=Prosto+One:wght@400&family=Protest+Guerrilla:wght@400&family=Protest+Revolution:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Protest+Riot:wght@400&family=Protest+Strike:wght@400&family=Proza+Libre:ital,wght@0,400..800;1,400..800&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Puppies+Play:wght@400&family=Puritan:ital,wght@0,400..700;1,400..700&family=Purple+Purse:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Qahiri:wght@400&family=Quando:wght@400&family=Quantico:ital,wght@0,400..700;1,400..700&family=Quattrocento:wght@400..700&family=Quattrocento+Sans:ital,wght@0,400..700;1,400..700&family=Questrial:wght@400&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Quintessential:wght@400&family=Qwigley:wght@400&family=Qwitcher+Grypen:wght@400..700&family=REM:ital,wght@0,100..900;1,100..900&family=Racing+Sans+One:wght@400&family=Radio+Canada:ital,wght@0,300..700;1,300..700&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Radley:ital,wght@0,400;1,400&family=Rajdhani:wght@300..700&family=Rakkas:wght@400&family=Raleway:ital,wght@0,100..900;1,100..900&family=Raleway+Dots:wght@400&family=Ramabhadra:wght@400&family=Ramaraja:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rambla:ital,wght@0,400..700;1,400..700&family=Rammetto+One:wght@400&family=Rampart+One:wght@400&family=Ranchers:wght@400&family=Rancho:wght@400&family=Ranga:wght@400..700&family=Rasa:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rationale:wght@400&family=Ravi+Prakash:wght@400&family=Readex+Pro:wght@200..700&family=Recursive:wght@300..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Red+Hat+Mono:ital,wght@0,300..700;1,300..700&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Red+Rose:wght@300..700&family=Redacted:wght@400&family=Redacted+Script:wght@300..700&family=Reddit+Mono:wght@200..900&family=Reddit+Sans:ital,wght@0,200..900;1,200..900&family=Reddit+Sans+Condensed:wght@200..900&family=Redressed:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Reem+Kufi+Fun:wght@400..700&family=Reem+Kufi+Ink:wght@400&family=Reenie+Beanie:wght@400&family=Reggae+One:wght@400&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&family=Revalia:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rhodium+Libre:wght@400&family=Ribeye:wght@400&family=Ribeye+Marrow:wght@400&family=Righteous:wght@400&family=Risque:wght@400&family=Road+Rage:wght@400&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:wght@400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Rochester:wght@400&family=Rock+3D:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rock+Salt:wght@400&family=RocknRoll+One:wght@400&family=Rokkitt:ital,wght@0,100..900;1,100..900&family=Romanesco:wght@400&family=Ropa+Sans:ital,wght@0,400;1,400&family=Rosario:ital,wght@0,300..700;1,300..700&family=Rosarivo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rouge+Script:wght@400&family=Rowdies:wght@300..700&family=Rozha+One:wght@400&family=Rubik:ital,wght@0,300..900;1,300..900&family=Rubik+80s+Fade:wght@400&family=Rubik+Beastly:wght@400&family=Rubik+Broken+Fax:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles:wght@400&family=Rubik+Burned:wght@400&family=Rubik+Dirt:wght@400&family=Rubik+Distressed:wght@400&family=Rubik+Doodle+Shadow:wght@400&family=Rubik+Doodle+Triangles:wght@400&family=Rubik+Gemstones:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch:wght@400&family=Rubik+Glitch+Pop:wght@400&family=Rubik+Iso:wght@400&family=Rubik+Lines:wght@400&family=Rubik+Maps:wght@400&family=Rubik+Marker+Hatch:wght@400&family=Rubik+Maze:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe:wght@400&family=Rubik+Mono+One:wght@400&family=Rubik+Moonrocks:wght@400&family=Rubik+Pixels:wght@400&family=Rubik+Puddles:wght@400&family=Rubik+Scribble:wght@400&family=Rubik+Spray+Paint:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Storm:wght@400&family=Rubik+Vinyl:wght@400&family=Rubik+Wet+Paint:wght@400&family=Ruda:wght@400..900&family=Rufina:wght@400..700&family=Ruge+Boogie:wght@400&family=Ruluko:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Rum+Raisin:wght@400&family=Ruslan+Display:wght@400&family=Russo+One:wght@400&family=Ruthie:wght@400&family=Ruwudu:wght@400..700&family=Rye:wght@400&family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&family=Sacramento:wght@400&family=Sahitya:wght@400..700&family=Sail:wght@400&family=Saira:ital,wght@0,100..900;1,100..900&family=Saira+Condensed:wght@100..900&family=Saira+Extra+Condensed:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@100..900&family=Saira+Stencil+One:wght@400&family=Salsa:wght@400&family=Sanchez:ital,wght@0,400;1,400&family=Sancreek:wght@400&family=Sankofa+Display:wght@400&family=Sansation:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sansita:ital,wght@0,400..900;1,400..900&family=Sansita+Swashed:wght@300..900&family=Sarabun:ital,wght@0,100..800;1,100..800&family=Sarala:wght@400..700&family=Sarina:wght@400&family=Sarpanch:wght@400..900&family=Sassy+Frass:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Satisfy:wght@400&family=Sawarabi+Gothic:wght@400&family=Sawarabi+Mincho:wght@400&family=Scada:ital,wght@0,400..700;1,400..700&family=Scheherazade+New:wght@400..700&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Schoolbell:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Scope+One:wght@400&family=Seaweed+Script:wght@400&family=Secular+One:wght@400&family=Sedan:ital,wght@0,400;1,400&family=Sedan+SC:wght@400&family=Sedgwick+Ave:wght@400&family=Sedgwick+Ave+Display:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sen:wght@400..800&family=Send+Flowers:wght@400&family=Sevillana:wght@400&family=Seymour+One:wght@400&family=Shadows+Into+Light:wght@400&family=Shadows+Into+Light+Two:wght@400&family=Shafarik:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Shalimar:wght@400&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&family=Shanti:wght@400&family=Share:ital,wght@0,400..700;1,400..700&family=Share+Tech:wght@400&family=Share+Tech+Mono:wght@400&family=Shippori+Antique:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Shippori+Antique+B1:wght@400&family=Shippori+Mincho:wght@400..800&family=Shippori+Mincho+B1:wght@400..800&family=Shizuru:wght@400&family=Shojumaru:wght@400&family=Short+Stack:wght@400&family=Shrikhand:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sigmar:wght@400&family=Sigmar+One:wght@400&family=Signika:wght@300..700&family=Signika+Negative:wght@300..700&family=Silkscreen:wght@400..700&family=Simonetta:ital,wght@0,400..900;1,400..900&family=Sintony:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sirin+Stencil:wght@400&family=Six+Caps:wght@400&family=Sixtyfour:wght@400&family=Sixtyfour+Convergence:wght@400&family=Skranji:wght@400..700&family=Slabo+13px:wght@400&family=Slabo+27px:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Slackey:wght@400&family=Slackside+One:wght@400&family=Smokum:wght@400&family=Smooch:wght@400&family=Smooch+Sans:wght@100..900&family=Smythe:wght@400&family=Sniglet:wght@400..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Snippet:wght@400&family=Snowburst+One:wght@400&family=Sofadi+One:wght@400&family=Sofia:wght@400&family=Sofia+Sans:ital,wght@0,100..900;1,100..900&family=Sofia+Sans+Condensed:ital,wght@0,100..900;1,100..900&family=Sofia+Sans+Extra+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Semi+Condensed:ital,wght@0,100..900;1,100..900&family=Solitreo:wght@400&family=Solway:wght@300..800&family=Sometype+Mono:ital,wght@0,400..700;1,400..700&family=Sono:wght@200..800&family=Sonsie+One:wght@400&family=Sora:wght@100..800&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital,wght@0,400;1,400&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Special+Elite:wght@400&family=Special+Gothic:wght@400&family=Special+Gothic+Condensed+One:wght@400&family=Special+Gothic+Expanded+One:wght@400&family=Spectral:ital,wght@0,200..800;1,200..800&family=Spectral+SC:ital,wght@0,200..800;1,200..800&family=Spicy+Rice:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Spinnaker:wght@400&family=Spirax:wght@400&family=Splash:wght@400&family=Spline+Sans:wght@300..700&family=Spline+Sans+Mono:ital,wght@0,300..700;1,300..700&family=Squada+One:wght@400&family=Square+Peg:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sree+Krushnadevaraya:wght@400&family=Sriracha:wght@400&family=Srisakdi:wght@400..700&family=Staatliches:wght@400&family=Stalemate:wght@400&family=Stalinist+One:wght@400&family=Stardos+Stencil:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Stick:wght@400&family=Stick+No+Bills:wght@200..800&family=Stint+Ultra+Condensed:wght@400&family=Stint+Ultra+Expanded:wght@400&family=Stoke:wght@300..400&family=Strait:wght@400&family=Style+Script:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco:wght@400&family=Suez+One:wght@400&family=Sulphur+Point:wght@300..700&family=Sumana:wght@400..700&family=Sunshiney:wght@400&family=Supermercado+One:wght@400&family=Sura:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Suranna:wght@400&family=Suravaram:wght@400&family=Suwannaphum:wght@100..900&family=Swanky+and+Moo+Moo:wght@400&family=Syncopate:wght@400..700&family=Syne:wght@400..800&family=Syne+Mono:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Syne+Tactile:wght@400&family=Tac+One:wght@400&family=Tagesschrift:wght@400&family=Tai+Heritage+Pro:wght@400..700&family=Tajawal:wght@200..900&family=Tangerine:wght@400..700&family=Tapestry:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Taprom:wght@400&family=Tauri:wght@400&family=Taviraj:ital,wght@0,100..900;1,100..900&family=Teachers:ital,wght@0,400..800;1,400..800&family=Teko:wght@300..700&family=Tektur:wght@400..900&family=Telex:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Tenali+Ramakrishna:wght@400&family=Tenor+Sans:wght@400&family=Text+Me+One:wght@400&family=Texturina:ital,wght@0,100..900;1,100..900&family=Thasadith:ital,wght@0,400..700;1,400..700&family=The+Girl+Next+Door:wght@400&family=The+Nautigal:wght@400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Tienne:wght@400..900&family=Tillana:wght@400..800&family=Tilt+Neon:wght@400&family=Tilt+Prism:wght@400&family=Tilt+Warp:wght@400&family=Timmana:wght@400&family=Tinos:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Tiny5:wght@400&family=Tiro+Bangla:ital,wght@0,400;1,400&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&family=Tiro+Devanagari+Marathi:ital,wght@0,400;1,400&family=Tiro+Devanagari+Sanskrit:ital,wght@0,400;1,400&family=Tiro+Gurmukhi:ital,wght@0,400;1,400&family=Tiro+Kannada:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil:ital,wght@0,400;1,400&family=Tiro+Telugu:ital,wght@0,400;1,400&family=Titan+One:wght@400&family=Titillium+Web:ital,wght@0,200..900;1,200..900&family=Tomorrow:ital,wght@0,100..900;1,100..900&family=Tourney:ital,wght@0,100..900;1,100..900&family=Trade+Winds:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Train+One:wght@400&family=Triodion:wght@400&family=Trirong:ital,wght@0,100..900;1,100..900&family=Trispace:wght@100..800&family=Trocchi:wght@400&family=Trochut:ital,wght@0,400..700;1,400..700&family=Truculenta:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Trykker:wght@400&family=Tsukimi+Rounded:wght@300..700&family=Tuffy:ital,wght@0,400..700;1,400..700&family=Tulpen+One:wght@400&family=Turret+Road:wght@200..800&family=Twinkle+Star:wght@400&family=Ubuntu:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Condensed:wght@400&family=Ubuntu+Mono:ital,wght@0,400..700;1,400..700&family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&family=Uchen:wght@400&family=Ultra:wght@400&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua:wght@400&family=Underdog:wght@400&family=Unica+One:wght@400&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia:wght@400&family=Unkempt:wght@400..700&family=Unlock:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Unna:ital,wght@0,400..700;1,400..700&family=Updock:wght@400&family=Urbanist:ital,wght@0,100..900;1,100..900&family=VT323:wght@400&family=Vampiro+One:wght@400&family=Varela:wght@400&family=Varela+Round:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Varta:wght@300..700&family=Vast+Shadow:wght@400&family=Vazirmatn:wght@100..900&family=Vesper+Libre:wght@400..900&family=Viaoda+Libre:wght@400&family=Vibes:wght@400&family=Vibur:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@0,100..700;1,100..700&family=Vidaloka:wght@400&family=Viga:wght@400&family=Vina+Sans:wght@400&family=Voces:wght@400&family=Volkhov:ital,wght@0,400..700;1,400..700&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Vollkorn+SC:wght@400..900&family=Voltaire:wght@400&family=Vujahday+Script:wght@400&family=Waiting+for+the+Sunrise:wght@400&family=Wallpoet:wght@400&family=Walter+Turncoat:wght@400&family=Warnes:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Water+Brush:wght@400&family=Waterfall:wght@400&family=Wavefont:wght@100..900&family=Wellfleet:wght@400&family=Wendy+One:wght@400&family=Whisper:wght@400&family=WindSong:wght@400..500&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&family=Wire+One:wght@400&family=Wittgenstein:ital,wght@0,400..900;1,400..900&family=Wix+Madefor+Display:wght@400..800&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Workbench:wght@400&family=Xanh+Mono:ital,wght@0,400;1,400&family=Yaldevi:wght@200..700&family=Yanone+Kaffeesatz:wght@200..700&family=Yantramanav:wght@100..900&family=Yarndings+12:wght@400&family=Yarndings+12+Charted:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Yarndings+20:wght@400&family=Yarndings+20+Charted:wght@400&family=Yatra+One:wght@400&family=Yellowtail:wght@400&family=Yeon+Sung:wght@400&family=Yeseva+One:wght@400&family=Yesteryear:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Yomogi:wght@400&family=Young+Serif:wght@400&family=Yrsa:ital,wght@0,300..700;1,300..700&family=Ysabeau:ital,wght@0,100..900;1,100..900&family=Ysabeau+Infant:ital,wght@0,100..900;1,100..900&family=Ysabeau+Office:ital,wght@0,100..900;1,100..900&family=Ysabeau+SC:wght@100..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Yuji+Boku:wght@400&family=Yuji+Hentaigana+Akari:wght@400&family=Yuji+Hentaigana+Akebono:wght@400&family=Yuji+Mai:wght@400&family=Yuji+Syuku:wght@400&family=Yusei+Magic:wght@400&family=ZCOOL+KuaiLe:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou:wght@400&family=ZCOOL+XiaoWei:wght@400&family=Zain:ital,wght@0,200..900;1,200..900&family=Zen+Antique:wght@400&family=Zen+Antique+Soft:wght@400&family=Zen+Dots:wght@400&family=Zen+Kaku+Gothic+Antique:wght@300..900&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300..900&family=Zen+Kurenaido:wght@400&family=Zen+Loop:ital,wght@0,400;1,400&family=Zen+Maru+Gothic:wght@300..900&family=Zen+Old+Mincho:wght@400..900&family=Zen+Tokyo+Zoo:wght@400&family=Zeyada:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing:wght@400&family=Zilla+Slab:ital,wght@0,300..700;1,300..700&family=Zilla+Slab+Highlight:wght@400..700&display=swap" rel="stylesheet">';
+  '<link href="https://fonts.googleapis.com/css2?family=Krub:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Kufam:ital,wght@0,400..900;1,400..900&family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&family=Kumar+One:wght@400&family=Kumar+One+Outline:wght@400&family=Kumbh+Sans:wght@100..900&family=Kurale:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=LXGW+WenKai+TC:wght@300;400;700&family=La+Belle+Aurore:wght@400&family=Labrada:ital,wght@0,100..900;1,100..900&family=Lacquer:wght@400&family=Laila:wght@300;400;500;600;700&family=Lakki+Reddy:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Lalezar:wght@400&family=Lancelot:wght@400&family=Langar:wght@400&family=Lateef:wght@200;300;400;500;600;700;800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lavishly+Yours:wght@400&family=League+Script:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Leckerli+One:wght@400&family=Ledger:wght@400&family=Lekton:ital,wght@0,400;0,700;1,400;1,700&family=Lemon:wght@400&family=Lemonada:wght@300..700&family=Lexend:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Lexend+Exa:wght@100..900&family=Lexend+Giga:wght@100..900&family=Lexend+Mega:wght@100..900&family=Lexend+Peta:wght@100..900&family=Lexend+Tera:wght@100..900&family=Lexend+Zetta:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+128:wght@400&family=Libre+Barcode+128+Text:wght@400&family=Libre+Barcode+39:wght@400&family=Libre+Barcode+39+Extended:wght@400&family=Libre+Barcode+39+Extended+Text:wght@400&family=Libre+Barcode+39+Text:wght@400&family=Libre+Barcode+EAN13+Text:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Libre+Caslon+Display:wght@400&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Licorice:wght@400&family=Life+Savers:wght@400;700;800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Lilita+One:wght@400&family=Lily+Script+One:wght@400&family=Limelight:wght@400&family=Linden+Hill:ital,wght@0,400;1,400&family=Linefont:wght@4..1000&family=Lisu+Bosa:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,200..900;1,200..900&family=Liu+Jian+Mao+Cao:wght@400&family=Livvic:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&family=Lobster:wght@400&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Londrina+Outline:wght@400&family=Londrina+Shadow:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Londrina+Sketch:wght@400&family=Londrina+Solid:wght@100;300;400;900&family=Long+Cang:wght@400&family=Lora:ital,wght@0,400..700;1,400..700&family=Love+Light:wght@400&family=Love+Ya+Like+A+Sister:wght@400&family=Loved+by+the+King:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Lovers+Quarrel:wght@400&family=Luckiest+Guy:wght@400&family=Lugrasimo:wght@400&family=Lumanosimo:wght@400&family=Lunasima:wght@400;700&family=Lusitana:wght@400;700&family=Lustria:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Luxurious+Roman:wght@400&family=Luxurious+Script:wght@400&family=M+PLUS+1:wght@100..900&family=M+PLUS+1+Code:wght@100..700&family=M+PLUS+1p:wght@100;300;400;500;700;800;900&family=M+PLUS+2:wght@100..900&family=M+PLUS+Code+Latin:wght@100..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&family=Ma+Shan+Zheng:wght@400&family=Macondo:wght@400&family=Macondo+Swash+Caps:wght@400&family=Mada:wght@200..900&family=Madimi+One:wght@400&family=Magra:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Maiden+Orange:wght@400&family=Maitree:wght@200;300;400;500;600;700&family=Major+Mono+Display:wght@400&family=Mako:wght@400&family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Mallanna:wght@400&family=Maname:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Mandali:wght@400&family=Manjari:wght@100;400;700&family=Manrope:wght@200..800&family=Mansalva:wght@400&family=Manuale:ital,wght@0,300..800;1,300..800&family=Marcellus:wght@400&family=Marcellus+SC:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Marck+Script:wght@400&family=Margarine:wght@400&family=Marhey:wght@300..700&family=Markazi+Text:wght@400..700&family=Marko+One:wght@400&family=Marmelad:wght@400&family=Martel:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800;900&family=Martian+Mono:wght@100..800&family=Marvel:ital,wght@0,400;0,700;1,400;1,700&family=Mate:ital,wght@0,400;1,400&family=Mate+SC:wght@400&family=Matemasie:wght@400&family=Material+Icons:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined:wght@400&family=Material+Icons+Round:wght@400&family=Material+Icons+Sharp:wght@400&family=Material+Icons+Two+Tone:wght@400&family=Material+Symbols:wght@100..700&family=Material+Symbols+Outlined:wght@100..700&family=Material+Symbols+Rounded:wght@100..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:wght@100..700&family=Maven+Pro:wght@400..900&family=McLaren:wght@400&family=Mea+Culpa:wght@400&family=Meddon:wght@400&family=MedievalSharp:wght@400&family=Medula+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Meera+Inimai:wght@400&family=Megrim:wght@400&family=Meie+Script:wght@400&family=Meow+Script:wght@400&family=Merienda:wght@300..900&family=Merriweather:ital,wght@0,300..900;1,300..900&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Metal:wght@400&family=Metal+Mania:wght@400&family=Metamorphous:wght@400&family=Metrophobic:wght@400&family=Michroma:wght@400&family=Micro+5:wght@400&family=Micro+5+Charted:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Milonga:wght@400&family=Miltonian:wght@400&family=Miltonian+Tattoo:wght@400&family=Mina:wght@400;700&family=Mingzat:wght@400&family=Miniver:wght@400&family=Miriam+Libre:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Mirza:wght@400;500;600;700&family=Miss+Fajardose:wght@400&family=Mitr:wght@200;300;400;500;600;700&family=Mochiy+Pop+One:wght@400&family=Mochiy+Pop+P+One:wght@400&family=Modak:wght@400&family=Modern+Antiqua:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Moderustic:wght@300..800&family=Mogra:wght@400&family=Mohave:ital,wght@0,300..700;1,300..700&family=Moirai+One:wght@400&family=Molengo:wght@400&family=Molle:ital,wght@0,400;1,400&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&family=Monofett:wght@400&family=Monomakh:wght@400&family=Monomaniac+One:wght@400&family=Monoton:wght@400&family=Monsieur+La+Doulaise:wght@400&family=Montaga:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:wght@100..700&family=MonteCarlo:wght@400&family=Montez:wght@400&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&family=Moo+Lah+Lah:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Mooli:wght@400&family=Moon+Dance:wght@400&family=Moul:wght@400&family=Moulpali:wght@400&family=Mountains+of+Christmas:wght@400;700&family=Mouse+Memoirs:wght@400&family=Mr+Bedfort:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe:wght@400&family=Mr+De+Haviland:wght@400&family=Mrs+Saint+Delafield:wght@400&family=Mrs+Sheppards:wght@400&family=Ms+Madi:wght@400&family=Mukta:wght@200;300;400;500;600;700;800&family=Mukta+Mahee:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@200;300;400;500;600;700;800&family=Mukta+Vaani:wght@200;300;400;500;600;700;800&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Murecho:wght@100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=My+Soul:wght@400&family=Mynerve:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Mystery+Quest:wght@400&family=NTR:wght@400&family=Namdhinggo:wght@400;500;600;700;800&family=Nanum+Brush+Script:wght@400&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Gothic+Coding:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script:wght@400&family=Narnoor:wght@400;500;600;700;800&family=National+Park:wght@200..800&family=Neonderthaw:wght@400&family=Nerko+One:wght@400&family=Neucha:wght@400&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,200;1,300;1,400;1,700;1,800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=New+Amsterdam:wght@400&family=New+Rocker:wght@400&family=New+Tegomin:wght@400&family=News+Cycle:wght@400;700&family=Newsreader:ital,wght@0,200..800;1,200..800&family=Niconne:wght@400&family=Niramit:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Nixie+One:wght@400&family=Nobile:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Nokora:wght@100;300;400;700;900&family=Norican:wght@400&family=Nosifer:wght@400&family=Notable:wght@400&family=Nothing+You+Could+Do:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noticia+Text:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Kufi+Arabic:wght@100..900&family=Noto+Music:wght@400&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Nastaliq+Urdu:wght@400..700&family=Noto+Rashi+Hebrew:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Adlam:wght@400..700&family=Noto+Sans+Adlam+Unjoined:wght@400..700&family=Noto+Sans+Anatolian+Hieroglyphs:wght@400&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans+Armenian:wght@100..900&family=Noto+Sans+Avestan:wght@400&family=Noto+Sans+Balinese:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bamum:wght@400..700&family=Noto+Sans+Bassa+Vah:wght@400..700&family=Noto+Sans+Batak:wght@400&family=Noto+Sans+Bengali:wght@100..900&family=Noto+Sans+Bhaiksuki:wght@400&family=Noto+Sans+Brahmi:wght@400&family=Noto+Sans+Buginese:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Buhid:wght@400&family=Noto+Sans+Canadian+Aboriginal:wght@100..900&family=Noto+Sans+Carian:wght@400&family=Noto+Sans+Caucasian+Albanian:wght@400&family=Noto+Sans+Chakma:wght@400&family=Noto+Sans+Cham:wght@100..900&family=Noto+Sans+Cherokee:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Chorasmian:wght@400&family=Noto+Sans+Coptic:wght@400&family=Noto+Sans+Cuneiform:wght@400&family=Noto+Sans+Cypriot:wght@400&family=Noto+Sans+Cypro+Minoan:wght@400&family=Noto+Sans+Deseret:wght@400&family=Noto+Sans+Devanagari:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Duployan:wght@400;700&family=Noto+Sans+Egyptian+Hieroglyphs:wght@400&family=Noto+Sans+Elbasan:wght@400&family=Noto+Sans+Elymaic:wght@400&family=Noto+Sans+Ethiopic:wght@100..900&family=Noto+Sans+Georgian:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Glagolitic:wght@400&family=Noto+Sans+Gothic:wght@400&family=Noto+Sans+Grantha:wght@400&family=Noto+Sans+Gujarati:wght@100..900&family=Noto+Sans+Gunjala+Gondi:wght@400..700&family=Noto+Sans+Gurmukhi:wght@100..900&family=Noto+Sans+HK:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hanifi+Rohingya:wght@400..700&family=Noto+Sans+Hanunoo:wght@400&family=Noto+Sans+Hatran:wght@400&family=Noto+Sans+Hebrew:wght@100..900&family=Noto+Sans+Imperial+Aramaic:wght@400&family=Noto+Sans+Indic+Siyaq+Numbers:wght@400&family=Noto+Sans+Inscriptional+Pahlavi:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Inscriptional+Parthian:wght@400&family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+Javanese:wght@400..700&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans+Kaithi:wght@400&family=Noto+Sans+Kannada:wght@100..900&family=Noto+Sans+Kawi:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kayah+Li:wght@400..700&family=Noto+Sans+Kharoshthi:wght@400&family=Noto+Sans+Khmer:wght@100..900&family=Noto+Sans+Khojki:wght@400&family=Noto+Sans+Khudawadi:wght@400&family=Noto+Sans+Lao:wght@100..900&family=Noto+Sans+Lao+Looped:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lepcha:wght@400&family=Noto+Sans+Limbu:wght@400&family=Noto+Sans+Linear+A:wght@400&family=Noto+Sans+Linear+B:wght@400&family=Noto+Sans+Lisu:wght@400..700&family=Noto+Sans+Lydian:wght@400&family=Noto+Sans+Mahajani:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@100..900&family=Noto+Sans+Mandaic:wght@400&family=Noto+Sans+Manichaean:wght@400&family=Noto+Sans+Marchen:wght@400&family=Noto+Sans+Masaram+Gondi:wght@400&family=Noto+Sans+Math:wght@400&family=Noto+Sans+Mayan+Numerals:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Medefaidrin:wght@400..700&family=Noto+Sans+Meetei+Mayek:wght@100..900&family=Noto+Sans+Mende+Kikakui:wght@400&family=Noto+Sans+Meroitic:wght@400&family=Noto+Sans+Miao:wght@400&family=Noto+Sans+Modi:wght@400&family=Noto+Sans+Mongolian:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans+Mro:wght@400&family=Noto+Sans+Multani:wght@400&family=Noto+Sans+NKo:wght@400&family=Noto+Sans+NKo+Unjoined:wght@400..700&family=Noto+Sans+Nabataean:wght@400&family=Noto+Sans+Nag+Mundari:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Nandinagari:wght@400&family=Noto+Sans+New+Tai+Lue:wght@400..700&family=Noto+Sans+Newa:wght@400&family=Noto+Sans+Nushu:wght@400&family=Noto+Sans+Ogham:wght@400&family=Noto+Sans+Ol+Chiki:wght@400..700&family=Noto+Sans+Old+Hungarian:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Old+Italic:wght@400&family=Noto+Sans+Old+North+Arabian:wght@400&family=Noto+Sans+Old+Permic:wght@400&family=Noto+Sans+Old+Persian:wght@400&family=Noto+Sans+Old+Sogdian:wght@400&family=Noto+Sans+Old+South+Arabian:wght@400&family=Noto+Sans+Old+Turkic:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@100..900&family=Noto+Sans+Osage:wght@400&family=Noto+Sans+Osmanya:wght@400&family=Noto+Sans+Pahawh+Hmong:wght@400&family=Noto+Sans+Palmyrene:wght@400&family=Noto+Sans+Pau+Cin+Hau:wght@400&family=Noto+Sans+PhagsPa:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician:wght@400&family=Noto+Sans+Psalter+Pahlavi:wght@400&family=Noto+Sans+Rejang:wght@400&family=Noto+Sans+Runic:wght@400&family=Noto+Sans+SC:wght@100..900&family=Noto+Sans+Samaritan:wght@400&family=Noto+Sans+Saurashtra:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sharada:wght@400&family=Noto+Sans+Shavian:wght@400&family=Noto+Sans+Siddham:wght@400&family=Noto+Sans+SignWriting:wght@400&family=Noto+Sans+Sinhala:wght@100..900&family=Noto+Sans+Sogdian:wght@400&family=Noto+Sans+Sora+Sompeng:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Soyombo:wght@400&family=Noto+Sans+Sundanese:wght@400..700&family=Noto+Sans+Syloti+Nagri:wght@400&family=Noto+Sans+Symbols:wght@100..900&family=Noto+Sans+Symbols+2:wght@400&family=Noto+Sans+Syriac:wght@100..900&family=Noto+Sans+Syriac+Eastern:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Noto+Sans+Tagalog:wght@400&family=Noto+Sans+Tagbanwa:wght@400&family=Noto+Sans+Tai+Le:wght@400&family=Noto+Sans+Tai+Tham:wght@400..700&family=Noto+Sans+Tai+Viet:wght@400&family=Noto+Sans+Takri:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100..900&family=Noto+Sans+Tamil+Supplement:wght@400&family=Noto+Sans+Tangsa:wght@400..700&family=Noto+Sans+Telugu:wght@100..900&family=Noto+Sans+Thaana:wght@100..900&family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans+Thai+Looped:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tifinagh:wght@400&family=Noto+Sans+Tirhuta:wght@400&family=Noto+Sans+Ugaritic:wght@400&family=Noto+Sans+Vai:wght@400&family=Noto+Sans+Vithkuqi:wght@400..700&family=Noto+Sans+Wancho:wght@400&family=Noto+Sans+Warang+Citi:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Yi:wght@400&family=Noto+Sans+Zanabazar+Square:wght@400&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Ahom:wght@400&family=Noto+Serif+Armenian:wght@100..900&family=Noto+Serif+Balinese:wght@400&family=Noto+Serif+Bengali:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@100..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Dives+Akuru:wght@400&family=Noto+Serif+Dogra:wght@400&family=Noto+Serif+Ethiopic:wght@100..900&family=Noto+Serif+Georgian:wght@100..900&family=Noto+Serif+Grantha:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@100..900&family=Noto+Serif+Gurmukhi:wght@100..900&family=Noto+Serif+HK:wght@200..900&family=Noto+Serif+Hebrew:wght@100..900&family=Noto+Serif+Hentaigana:wght@200..900&family=Noto+Serif+JP:wght@200..900&family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Kannada:wght@100..900&family=Noto+Serif+Khitan+Small+Script:wght@400&family=Noto+Serif+Khmer:wght@100..900&family=Noto+Serif+Khojki:wght@400..700&family=Noto+Serif+Lao:wght@100..900&family=Noto+Serif+Makasar:wght@400&family=Noto+Serif+Malayalam:wght@100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+NP+Hmong:wght@400..700&family=Noto+Serif+Old+Uyghur:wght@400&family=Noto+Serif+Oriya:wght@400..700&family=Noto+Serif+Ottoman+Siyaq:wght@400&family=Noto+Serif+SC:wght@200..900&family=Noto+Serif+Sinhala:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Tamil:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Tangut:wght@400&family=Noto+Serif+Telugu:wght@100..900&family=Noto+Serif+Thai:wght@100..900&family=Noto+Serif+Tibetan:wght@100..900&family=Noto+Serif+Todhri:wght@400&family=Noto+Serif+Toto:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Vithkuqi:wght@400..700&family=Noto+Serif+Yezidi:wght@400..700&family=Noto+Traditional+Nushu:wght@300..700&family=Noto+Znamenny+Musical+Notation:wght@400&family=Nova+Cut:wght@400&family=Nova+Flat:wght@400&family=Nova+Mono:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Nova+Oval:wght@400&family=Nova+Round:wght@400&family=Nova+Script:wght@400&family=Nova+Slim:wght@400&family=Nova+Square:wght@400&family=Numans:wght@400&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200..1000;1,200..1000&family=Nuosu+SIL:wght@400&family=Odibee+Sans:wght@400&family=Odor+Mean+Chey:wght@400&family=Offside:wght@400&family=Oi:wght@400&family=Ojuju:wght@200..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400;1,700&family=Oldenburg:wght@400&family=Ole:wght@400&family=Oleo+Script:wght@400;700&family=Oleo+Script+Swash+Caps:wght@400;700&family=Onest:wght@100..900&family=Oooh+Baby:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oranienbaum:wght@400&family=Orbit:wght@400&family=Orbitron:wght@400..900&family=Oregano:ital,wght@0,400;1,400&family=Orelega+One:wght@400&family=Orienta:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Original+Surfer:wght@400&family=Oswald:wght@200..700&family=Outfit:wght@100..900&family=Over+the+Rainbow:wght@400&family=Overlock:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Overlock+SC:wght@400&family=Overpass:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300..700&family=Ovo:wght@400&family=Oxanium:wght@200..800&family=Oxygen:wght@300;400;700&family=Oxygen+Mono:wght@400&family=PT+Mono:wght@400&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption:wght@400;700&family=PT+Sans+Narrow:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=PT+Serif+Caption:ital,wght@0,400;1,400&family=Pacifico:wght@400&family=Padauk:wght@400;700&family=Padyakke+Expanded+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Palanquin:wght@100;200;300;400;500;600;700&family=Palanquin+Dark:wght@400;500;600;700&family=Palette+Mosaic:wght@400&family=Pangolin:wght@400&family=Paprika:wght@400&family=Parisienne:wght@400&family=Parkinsans:wght@300..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Passero+One:wght@400&family=Passion+One:wght@400;700;900&family=Passions+Conflict:wght@400&family=Pathway+Extreme:ital,wght@0,100..900;1,100..900&family=Pathway+Gothic+One:wght@400&family=Patrick+Hand:wght@400&family=Patrick+Hand+SC:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Pattaya:wght@400&family=Patua+One:wght@400&family=Pavanam:wght@400&family=Paytone+One:wght@400&family=Peddana:wght@400&family=Peralta:wght@400&family=Permanent+Marker:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Petemoss:wght@400&family=Petit+Formal+Script:wght@400&family=Petrona:ital,wght@0,100..900;1,100..900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Phudu:wght@300..900&family=Piazzolla:ital,wght@0,100..900;1,100..900&family=Piedra:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script:wght@400&family=Pirata+One:wght@400&family=Pixelify+Sans:wght@400..700&family=Plaster:wght@400&family=Platypi:ital,wght@0,300..800;1,300..800&family=Play:wght@400;700&family=Playball:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playfair:ital,wght@0,300..900;1,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Playpen+Sans:wght@100..800&family=Playpen+Sans+Arabic:wght@100..800&family=Playpen+Sans+Deva:wght@100..800&family=Playpen+Sans+Hebrew:wght@100..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@100..800&family=Playwrite+AR:wght@100..400&family=Playwrite+AR+Guides:wght@400&family=Playwrite+AT:ital,wght@0,100..400;1,100..400&family=Playwrite+AT+Guides:ital,wght@0,400;1,400&family=Playwrite+AU+NSW:wght@100..400&family=Playwrite+AU+NSW+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD:wght@100..400&family=Playwrite+AU+QLD+Guides:wght@400&family=Playwrite+AU+SA:wght@100..400&family=Playwrite+AU+SA+Guides:wght@400&family=Playwrite+AU+TAS:wght@100..400&family=Playwrite+AU+TAS+Guides:wght@400&family=Playwrite+AU+VIC:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+AU+VIC+Guides:wght@400&family=Playwrite+BE+VLG:wght@100..400&family=Playwrite+BE+VLG+Guides:wght@400&family=Playwrite+BE+WAL:wght@100..400&family=Playwrite+BE+WAL+Guides:wght@400&family=Playwrite+BR:wght@100..400&family=Playwrite+BR+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+CA:wght@100..400&family=Playwrite+CA+Guides:wght@400&family=Playwrite+CL:wght@100..400&family=Playwrite+CL+Guides:wght@400&family=Playwrite+CO:wght@100..400&family=Playwrite+CO+Guides:wght@400&family=Playwrite+CU:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+CU+Guides:wght@400&family=Playwrite+CZ:wght@100..400&family=Playwrite+CZ+Guides:wght@400&family=Playwrite+DE+Grund:wght@100..400&family=Playwrite+DE+Grund+Guides:wght@400&family=Playwrite+DE+LA:wght@100..400&family=Playwrite+DE+LA+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+DE+SAS:wght@100..400&family=Playwrite+DE+SAS+Guides:wght@400&family=Playwrite+DE+VA:wght@100..400&family=Playwrite+DE+VA+Guides:wght@400&family=Playwrite+DK+Loopet:wght@100..400&family=Playwrite+DK+Loopet+Guides:wght@400&family=Playwrite+DK+Uloopet:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+DK+Uloopet+Guides:wght@400&family=Playwrite+ES:wght@100..400&family=Playwrite+ES+Deco:wght@100..400&family=Playwrite+ES+Deco+Guides:wght@400&family=Playwrite+ES+Guides:wght@400&family=Playwrite+FR+Moderne:wght@100..400&family=Playwrite+FR+Moderne+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+FR+Trad:wght@100..400&family=Playwrite+FR+Trad+Guides:wght@400&family=Playwrite+GB+J:ital,wght@0,100..400;1,100..400&family=Playwrite+GB+J+Guides:ital,wght@0,400;1,400&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Playwrite+GB+S+Guides:ital,wght@0,400;1,400&family=Playwrite+HR:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+HR+Guides:wght@400&family=Playwrite+HR+Lijeva:wght@100..400&family=Playwrite+HR+Lijeva+Guides:wght@400&family=Playwrite+HU:wght@100..400&family=Playwrite+HU+Guides:wght@400&family=Playwrite+ID:wght@100..400&family=Playwrite+ID+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+IE:wght@100..400&family=Playwrite+IE+Guides:wght@400&family=Playwrite+IN:wght@100..400&family=Playwrite+IN+Guides:wght@400&family=Playwrite+IS:wght@100..400&family=Playwrite+IS+Guides:wght@400&family=Playwrite+IT+Moderna:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna+Guides:wght@400&family=Playwrite+IT+Trad:wght@100..400&family=Playwrite+IT+Trad+Guides:wght@400&family=Playwrite+MX:wght@100..400&family=Playwrite+MX+Guides:wght@400&family=Playwrite+NG+Modern:wght@100..400&family=Playwrite+NG+Modern+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+NL:wght@100..400&family=Playwrite+NL+Guides:wght@400&family=Playwrite+NO:wght@100..400&family=Playwrite+NO+Guides:wght@400&family=Playwrite+NZ:wght@100..400&family=Playwrite+NZ+Guides:wght@400&family=Playwrite+PE:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+PE+Guides:wght@400&family=Playwrite+PL:wght@100..400&family=Playwrite+PL+Guides:wght@400&family=Playwrite+PT:wght@100..400&family=Playwrite+PT+Guides:wght@400&family=Playwrite+RO:wght@100..400&family=Playwrite+RO+Guides:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+SK:wght@100..400&family=Playwrite+SK+Guides:wght@400&family=Playwrite+TZ:wght@100..400&family=Playwrite+TZ+Guides:wght@400&family=Playwrite+US+Modern:wght@100..400&family=Playwrite+US+Modern+Guides:wght@400&family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad+Guides:wght@400&family=Playwrite+VN:wght@100..400&family=Playwrite+VN+Guides:wght@400&family=Playwrite+ZA:wght@100..400&family=Playwrite+ZA+Guides:wght@400&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Pochaevsk:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Podkova:wght@400..800&family=Poetsen+One:wght@400&family=Poiret+One:wght@400&family=Poller+One:wght@400&family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&family=Poly:ital,wght@0,400;1,400&family=Pompiere:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ponnala:wght@400&family=Ponomar:wght@400&family=Pontano+Sans:wght@300..700&family=Poor+Story:wght@400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Port+Lligat+Sans:wght@400&family=Port+Lligat+Slab:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Potta+One:wght@400&family=Pragati+Narrow:wght@400;700&family=Praise:wght@400&family=Prata:wght@400&family=Preahvihear:wght@400&family=Press+Start+2P:wght@400&family=Pridi:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Princess+Sofia:wght@400&family=Prociono:wght@400&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Prosto+One:wght@400&family=Protest+Guerrilla:wght@400&family=Protest+Revolution:wght@400&family=Protest+Riot:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Protest+Strike:wght@400&family=Proza+Libre:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Puppies+Play:wght@400&family=Puritan:ital,wght@0,400;0,700;1,400;1,700&family=Purple+Purse:wght@400&family=Qahiri:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Quando:wght@400&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Quattrocento:wght@400;700&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Questrial:wght@400&family=Quicksand:wght@300..700&family=Quintessential:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Qwigley:wght@400&family=Qwitcher+Grypen:wght@400;700&family=REM:ital,wght@0,100..900;1,100..900&family=Racing+Sans+One:wght@400&family=Radio+Canada:ital,wght@0,300..700;1,300..700&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Radley:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Rakkas:wght@400&family=Raleway:ital,wght@0,100..900;1,100..900&family=Raleway+Dots:wght@400&family=Ramabhadra:wght@400&family=Ramaraja:wght@400&family=Rambla:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rammetto+One:wght@400&family=Rampart+One:wght@400&family=Ranchers:wght@400&family=Rancho:wght@400&family=Ranga:wght@400;700&family=Rasa:ital,wght@0,300..700;1,300..700&family=Rationale:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ravi+Prakash:wght@400&family=Readex+Pro:wght@160..700&family=Recursive:wght@300..1000&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Red+Hat+Mono:ital,wght@0,300..700;1,300..700&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&family=Red+Rose:wght@300..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Redacted:wght@400&family=Redacted+Script:wght@300;400;700&family=Reddit+Mono:wght@200..900&family=Reddit+Sans:ital,wght@0,200..900;1,200..900&family=Reddit+Sans+Condensed:wght@200..900&family=Redressed:wght@400&family=Reem+Kufi:wght@400..700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400..700&family=Reem+Kufi+Ink:wght@400&family=Reenie+Beanie:wght@400&family=Reggae+One:wght@400&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&family=Revalia:wght@400&family=Rhodium+Libre:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ribeye:wght@400&family=Ribeye+Marrow:wght@400&family=Righteous:wght@400&family=Risque:wght@400&family=Road+Rage:wght@400&family=Roboto:ital,wght@0,100..900;1,100..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..1000&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Rochester:wght@400&family=Rock+3D:wght@400&family=Rock+Salt:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=RocknRoll+One:wght@400&family=Rokkitt:ital,wght@0,100..900;1,100..900&family=Romanesco:wght@400&family=Ropa+Sans:ital,wght@0,400;1,400&family=Rosario:ital,wght@0,300..700;1,300..700&family=Rosarivo:ital,wght@0,400;1,400&family=Rouge+Script:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&family=Rozha+One:wght@400&family=Rubik:ital,wght@0,300..900;1,300..900&family=Rubik+80s+Fade:wght@400&family=Rubik+Beastly:wght@400&family=Rubik+Broken+Fax:wght@400&family=Rubik+Bubbles:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Burned:wght@400&family=Rubik+Dirt:wght@400&family=Rubik+Distressed:wght@400&family=Rubik+Doodle+Shadow:wght@400&family=Rubik+Doodle+Triangles:wght@400&family=Rubik+Gemstones:wght@400&family=Rubik+Glitch:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch+Pop:wght@400&family=Rubik+Iso:wght@400&family=Rubik+Lines:wght@400&family=Rubik+Maps:wght@400&family=Rubik+Marker+Hatch:wght@400&family=Rubik+Maze:wght@400&family=Rubik+Microbe:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One:wght@400&family=Rubik+Moonrocks:wght@400&family=Rubik+Pixels:wght@400&family=Rubik+Puddles:wght@400&family=Rubik+Scribble:wght@400&family=Rubik+Spray+Paint:wght@400&family=Rubik+Storm:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Rubik+Vinyl:wght@400&family=Rubik+Wet+Paint:wght@400&family=Ruda:wght@400..900&family=Rufina:wght@400;700&family=Ruge+Boogie:wght@400&family=Ruluko:wght@400&family=Rum+Raisin:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ruslan+Display:wght@400&family=Russo+One:wght@400&family=Ruthie:wght@400&family=Ruwudu:wght@400;500;600;700&family=Rye:wght@400&family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=SUSE:wght@100..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sacramento:wght@400&family=Sahitya:wght@400;700&family=Sail:wght@400&family=Saira:ital,wght@0,100..900;1,100..900&family=Saira+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Saira+Extra+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Saira+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One:wght@400&family=Salsa:wght@400&family=Sanchez:ital,wght@0,400;1,400&family=Sancreek:wght@400&family=Sankofa+Display:wght@400&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Sansita:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarala:wght@400;700&family=Sarina:wght@400&family=Sarpanch:wght@400;500;600;700;800;900&family=Sassy+Frass:wght@400&family=Satisfy:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sawarabi+Gothic:wght@400&family=Sawarabi+Mincho:wght@400&family=Scada:ital,wght@0,400;0,700;1,400;1,700&family=Scheherazade+New:wght@400;500;600;700&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Schoolbell:wght@400&family=Scope+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Seaweed+Script:wght@400&family=Secular+One:wght@400&family=Sedan:ital,wght@0,400;1,400&family=Sedan+SC:wght@400&family=Sedgwick+Ave:wght@400&family=Sedgwick+Ave+Display:wght@400&family=Sen:wght@400..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Send+Flowers:wght@400&family=Sevillana:wght@400&family=Seymour+One:wght@400&family=Shadows+Into+Light:wght@400&family=Shadows+Into+Light+Two:wght@400&family=Shafarik:wght@400&family=Shalimar:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&family=Shanti:wght@400&family=Share:ital,wght@0,400;0,700;1,400;1,700&family=Share+Tech:wght@400&family=Share+Tech+Mono:wght@400&family=Shippori+Antique:wght@400&family=Shippori+Antique+B1:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Shippori+Mincho+B1:wght@400;500;600;700;800&family=Shizuru:wght@400&family=Shojumaru:wght@400&family=Short+Stack:wght@400&family=Shrikhand:wght@400&family=Sigmar:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sigmar+One:wght@400&family=Signika:wght@300..700&family=Signika+Negative:wght@300..700&family=Silkscreen:wght@400;700&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&family=Sintony:wght@400;700&family=Sirin+Stencil:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Six+Caps:wght@400&family=Skranji:wght@400;700&family=Slabo+13px:wght@400&family=Slabo+27px:wght@400&family=Slackey:wght@400&family=Slackside+One:wght@400&family=Smokum:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Smooch:wght@400&family=Smooch+Sans:wght@100..900&family=Smythe:wght@400&family=Sniglet:wght@400;800&family=Snippet:wght@400&family=Snowburst+One:wght@400&family=Sofadi+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sofia:wght@400&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&family=Sofia+Sans+Extra+Condensed:ital,wght@0,1..1000;1,1..1000&family=Sofia+Sans+Semi+Condensed:ital,wght@0,1..1000;1,1..1000&family=Solitreo:wght@400&family=Solway:wght@300;400;500;700;800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:ital,wght@0,400..700;1,400..700&family=Sono:wght@200..800&family=Sonsie+One:wght@400&family=Sora:wght@100..800&family=Sorts+Mill+Goudy:ital,wght@0,400;1,400&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite:wght@400&family=Special+Gothic:wght@400&family=Special+Gothic+Condensed+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One:wght@400&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Spectral+SC:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Spicy+Rice:wght@400&family=Spinnaker:wght@400&family=Spirax:wght@400&family=Splash:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300..700&family=Spline+Sans+Mono:ital,wght@0,300..700;1,300..700&family=Squada+One:wght@400&family=Square+Peg:wght@400&family=Sree+Krushnadevaraya:wght@400&family=Sriracha:wght@400&family=Srisakdi:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Staatliches:wght@400&family=Stalemate:wght@400&family=Stalinist+One:wght@400&family=Stardos+Stencil:wght@400;700&family=Stick:wght@400&family=Stick+No+Bills:wght@200..800&family=Stint+Ultra+Condensed:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Stint+Ultra+Expanded:wght@400&family=Stoke:wght@300;400&family=Strait:wght@400&family=Style+Script:wght@400&family=Sue+Ellen+Francisco:wght@400&family=Suez+One:wght@400&family=Sulphur+Point:wght@300;400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Sumana:wght@400;700&family=Sunshiney:wght@400&family=Supermercado+One:wght@400&family=Sura:wght@400;700&family=Suranna:wght@400&family=Suravaram:wght@400&family=Suwannaphum:wght@100;300;400;700;900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Swanky+and+Moo+Moo:wght@400&family=Syncopate:wght@400;700&family=Syne:wght@400..800&family=Syne+Mono:wght@400&family=Syne+Tactile:wght@400&family=Tac+One:wght@400&family=Tagesschrift:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Tai+Heritage+Pro:wght@400;700&family=Tajawal:wght@200;300;400;500;700;800;900&family=Tangerine:wght@400;700&family=Tapestry:wght@400&family=Taprom:wght@400&family=Tauri:wght@400&family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Teachers:ital,wght@0,400..800;1,400..800&family=Teko:wght@300..700&family=Tektur:wght@400..900&family=Telex:wght@400&family=Tenali+Ramakrishna:wght@400&family=Tenor+Sans:wght@400&family=Text+Me+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Texturina:ital,wght@0,100..900;1,100..900&family=Thasadith:ital,wght@0,400;0,700;1,400;1,700&family=The+Girl+Next+Door:wght@400&family=The+Nautigal:wght@400;700&family=Tienne:wght@400;700;900&family=Tillana:wght@400;500;600;700;800&family=Timmana:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Tiny5:wght@400&family=Tiro+Bangla:ital,wght@0,400;1,400&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&family=Tiro+Devanagari+Marathi:ital,wght@0,400;1,400&family=Tiro+Devanagari+Sanskrit:ital,wght@0,400;1,400&family=Tiro+Gurmukhi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Tiro+Kannada:ital,wght@0,400;1,400&family=Tiro+Tamil:ital,wght@0,400;1,400&family=Tiro+Telugu:ital,wght@0,400;1,400&family=Titan+One:wght@400&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Trade+Winds:wght@400&family=Train+One:wght@400&family=Triodion:wght@400&family=Trirong:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Trispace:wght@100..800&family=Trocchi:wght@400&family=Trochut:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Truculenta:wght@100..900&family=Trykker:wght@400&family=Tsukimi+Rounded:wght@300;400;500;600;700&family=Tuffy:ital,wght@0,400;0,700;1,400;1,700&family=Tulpen+One:wght@400&family=Turret+Road:wght@200;300;400;500;700;800&family=Twinkle+Star:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Ubuntu+Condensed:wght@400&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&family=Uchen:wght@400&family=Ultra:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Uncial+Antiqua:wght@400&family=Underdog:wght@400&family=Unica+One:wght@400&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia:wght@400&family=Unkempt:wght@400;700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Unlock:wght@400&family=Unna:ital,wght@0,400;0,700;1,400;1,700&family=Updock:wght@400&family=Urbanist:ital,wght@0,100..900;1,100..900&family=VT323:wght@400&family=Vampiro+One:wght@400&family=Varela:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Varela+Round:wght@400&family=Varta:wght@300..700&family=Vast+Shadow:wght@400&family=Vazirmatn:wght@100..900&family=Vesper+Libre:wght@400;500;700;900&family=Viaoda+Libre:wght@400&family=Vibes:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Vibur:wght@400&family=Victor+Mono:ital,wght@0,100..700;1,100..700&family=Vidaloka:wght@400&family=Viga:wght@400&family=Vina+Sans:wght@400&family=Voces:wght@400&family=Volkhov:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400..900;1,400..900&family=Vollkorn+SC:wght@400;600;700;900&family=Voltaire:wght@400&family=Vujahday+Script:wght@400&family=WDXL+Lubrifont+TC:wght@400&family=Waiting+for+the+Sunrise:wght@400&family=Wallpoet:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Walter+Turncoat:wght@400&family=Warnes:wght@400&family=Water+Brush:wght@400&family=Waterfall:wght@400&family=Wavefont:wght@4..1000&family=Wellfleet:wght@400&family=Wendy+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Whisper:wght@400&family=WindSong:wght@400;500&family=Winky+Rough:ital,wght@0,300..900;1,300..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&family=Wire+One:wght@400&family=Wittgenstein:ital,wght@0,400..900;1,400..900&family=Wix+Madefor+Display:wght@400..800&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Xanh+Mono:ital,wght@0,400;1,400&family=Yaldevi:wght@200..700&family=Yanone+Kaffeesatz:wght@200..700&family=Yantramanav:wght@100;300;400;500;700;900&family=Yarndings+12:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Yarndings+12+Charted:wght@400&family=Yarndings+20:wght@400&family=Yarndings+20+Charted:wght@400&family=Yatra+One:wght@400&family=Yellowtail:wght@400&family=Yeon+Sung:wght@400&family=Yeseva+One:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Yesteryear:wght@400&family=Yomogi:wght@400&family=Young+Serif:wght@400&family=Yrsa:ital,wght@0,300..700;1,300..700&family=Ysabeau:ital,wght@0,1..1000;1,1..1000&family=Ysabeau+Infant:ital,wght@0,1..1000;1,1..1000&family=Ysabeau+Office:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@1..1000&family=Yuji+Boku:wght@400&family=Yuji+Hentaigana+Akari:wght@400&family=Yuji+Hentaigana+Akebono:wght@400&family=Yuji+Mai:wght@400&family=Yuji+Syuku:wght@400&family=Yusei+Magic:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe:wght@400&family=ZCOOL+QingKe+HuangYou:wght@400&family=ZCOOL+XiaoWei:wght@400&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,200;1,300;1,400;1,700;1,800;1,900&family=Zen+Antique:wght@400&family=Zen+Antique+Soft:wght@400&family=Zen+Dots:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Zen+Kurenaido:wght@400&family=Zen+Loop:ital,wght@0,400;1,400&family=Zen+Maru+Gothic:wght@300;400;500;700;900&family=Zen+Old+Mincho:wght@400;500;600;700;900&family=Zen+Tokyo+Zoo:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Zeyada:wght@400&family=Zhi+Mang+Xing:wght@400&family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Zilla+Slab+Highlight:wght@400;700&display=swap" rel="stylesheet">';
