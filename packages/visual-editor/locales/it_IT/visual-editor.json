@@ -55,5 +55,14 @@
   "borderRadiusDefaultLabel": "",
   "fontSizeDefaultLabel": "",
   "spacingDefaultLabel": "",
-  "basicSelectorContentLabel": ""
+  "basicSelectorContentLabel": "",
+  "monday": "",
+  "tuesday": "",
+  "wednesday": "",
+  "thursday": "",
+  "friday": "",
+  "saturday": "",
+  "sunday": "",
+  "closed": "",
+  "open24Hours": ""
 }

@@ -55,5 +55,14 @@
   "borderRadiusDefaultLabel": "Default",
   "fontSizeDefaultLabel": "Default",
   "spacingDefaultLabel": "Default",
-  "basicSelectorContentLabel": "Select a Content field"
+  "basicSelectorContentLabel": "Select a Content field",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "sunday": "Sunday",
+  "closed": "Closed",
+  "open24Hours": "Open 24 Hours"
 }

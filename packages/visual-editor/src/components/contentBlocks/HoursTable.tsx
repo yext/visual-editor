@@ -1,14 +1,11 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  DayOfWeekNames,
-  HoursTable as HoursTableJS,
-  HoursType,
-} from "@yext/pages-components";
+import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
   EntityField,
+  HoursTableAtom,
   resolveYextEntityField,
   useDocument,
   YextEntityField,
@@ -81,7 +78,7 @@ const VisualEditorHoursTable = ({
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
-          <HoursTableJS
+          <HoursTableAtom
             hours={hours}
             startOfWeek={startOfWeek}
             collapseDays={collapseDays}
