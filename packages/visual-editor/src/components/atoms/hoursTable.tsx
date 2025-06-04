@@ -40,9 +40,23 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
         intervalStrings.push(t("open24Hours", "Open 24 Hours"));
       } else {
         dayData.intervals.forEach((interval) => {
-          const startTime = interval.getStartTime(i18n.language, timeOptions);
-          const endTime = interval.getEndTime(i18n.language, timeOptions);
-          intervalStrings.push(`${startTime} - ${endTime}`);
+          try {
+            const startTime = interval.getStartTime(
+              i18n.language.replace("_", "-"),
+              timeOptions
+            );
+            const endTime = interval.getEndTime(
+              i18n.language.replace("_", "-"),
+              timeOptions
+            );
+            intervalStrings.push(`${startTime} - ${endTime}`);
+          } catch {
+            console.warn(
+              "Could not format hours for locale",
+              i18n.language.replace("_", "-")
+            );
+            intervalStrings.push("");
+          }
         });
       }
       return intervalStrings;
