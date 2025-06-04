@@ -432,8 +432,6 @@ const Map: React.FC<MapProps> = ({
     typeof document === "undefined"
       ? undefined
       : (document.getElementById("preview-frame") as HTMLIFrameElement);
-  const entityDocument: any = useDocument();
-  const mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
@@ -446,6 +444,16 @@ const Map: React.FC<MapProps> = ({
         </div>
       </div>
     );
+  }
+
+  const entityDocument: any = useDocument();
+  let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+    mapboxApiKey = entityDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
   }
 
   return (
