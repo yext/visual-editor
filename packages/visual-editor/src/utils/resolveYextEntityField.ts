@@ -1,6 +1,43 @@
 import { Fields } from "@measured/puck";
-import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import {
+  TranslatableString,
+  YextEntityField,
+} from "../editor/YextEntityFieldSelector.tsx";
 import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
+
+// Utility function to detect browser language
+const getBrowserLanguage = (): string => {
+  const browserLocales = navigator.languages || [navigator.language];
+  if (!browserLocales || browserLocales.length === 0) {
+    return "en"; // Fallback to English
+  }
+  // Return primary language code (e.g., "en" from "en-US")
+  return browserLocales[0].split("-")[0];
+};
+
+export const resolveTranslatableString = (
+  field?: TranslatableString
+): string | undefined => {
+  if (!field) {
+    return;
+  }
+
+  if (typeof field === "object") {
+    const detectedLanguage = getBrowserLanguage();
+    if (detectedLanguage in field) {
+      return field[detectedLanguage];
+    } else if ("en" in field) {
+      // TODO: Have a fallback language that isn't just English
+      return field["en"];
+    } else {
+      // Field does not have locale key for detected language
+      return;
+    }
+  }
+
+  // console.error(`Field is not a TranslatableString: ${field}`);
+  return field;
+};
 
 export const resolveYextEntityField = <T>(
   document: any,

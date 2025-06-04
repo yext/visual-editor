@@ -15,6 +15,8 @@ import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
+import { TranslatableString } from "../../editor/YextEntityFieldSelector.tsx";
+import { resolveTranslatableString } from "../../utils/resolveYextEntityField.ts";
 
 export type BannerSectionProps = {
   styles: {
@@ -22,7 +24,7 @@ export type BannerSectionProps = {
     textAlignment: "left" | "right" | "center";
   };
   data: {
-    text: YextEntityField<string>;
+    text: YextEntityField<TranslatableString>;
   };
   liveVisibility: boolean;
 };
@@ -31,11 +33,12 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      text: YextField<any, string>("Text", {
+      text: YextField<any, TranslatableString>("Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
+        locales: ["en", "es", "fr"],
       }),
     },
   }),
@@ -65,7 +68,10 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const { t } = useTranslation();
   const document = useDocument();
-  const resolvedText = resolveYextEntityField<string>(document, data.text);
+  const resolvedText = resolveYextEntityField<TranslatableString>(
+    document,
+    data.text
+  );
 
   const justifyClass = {
     left: "justify-start",
@@ -84,7 +90,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        <Body>{resolvedText}</Body>
+        <Body>{resolveTranslatableString(resolvedText)}</Body>
       </EntityField>
     </PageSection>
   );
