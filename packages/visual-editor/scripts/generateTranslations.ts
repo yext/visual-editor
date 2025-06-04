@@ -27,32 +27,14 @@ interface GoogleTranslateResponse {
   detectedSourceLang: string;
 }
 
-/** Target languages to translate to (locale format) */
-const targetLngs: string[] = [
-  "zh_CN",
-  "zh_TW",
-  "hr_HR",
-  "cs_CZ",
-  "da_DK",
-  "nl",
-  "et_EE",
-  "fi_FI",
-  "fr_FR",
-  "de_DE",
-  "hu_HU",
-  "it_IT",
-  "ja_JP",
-  "lv_LV",
-  "lt_LT",
-  "nb_NO",
-  "pl_PL",
-  "pt_PT",
-  "ro_RO",
-  "sk_SK",
-  "es_ES",
-  "sv_SE",
-  "tr_TR",
-];
+/**
+ * Reads all directories under localesDir and returns them as target languages.
+ */
+async function getTargetLanguages(): Promise<string[]> {
+  const entries = await fs.readdir(localesDir, { withFileTypes: true });
+  // Filter directories only
+  return entries.filter((entry) => entry.isDirectory()).map((dir) => dir.name);
+}
 
 /**
  * Converts a snake_case locale code to kebab-case
@@ -178,7 +160,7 @@ async function translateFile(): Promise<void> {
   const defaultPath = path.join(localesDir, defaultLng, `${ns}.json`);
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
 
-  for (const lng of targetLngs) {
+  for (const lng of await getTargetLanguages()) {
     const targetPath = path.join(localesDir, lng, `${ns}.json`);
     const targetJson = flatten(await loadJsonSafe(targetPath));
 
