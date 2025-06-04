@@ -32,7 +32,6 @@ export const initI18n = (): Promise<typeof i18next> => {
         ns: [NAMESPACE],
         defaultNS: NAMESPACE,
         interpolation: { escapeValue: false },
-        returnEmptyString: false,
         resources,
       },
       (err) => {

@@ -48,7 +48,9 @@
     "i18n:insert:dry": "pnpm exec tsx scripts/insertI18n.ts --dry-run",
     "i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs",
     "i18n:translate": "pnpm exec tsx scripts/generateTranslations.ts",
-    "i18n:translate:dry": "pnpm exec tsx scripts/generateTranslations.ts --dry-run"
+    "i18n:translate:dry": "pnpm exec tsx scripts/generateTranslations.ts --dry-run",
+    "i18n:sort": "pnpm exec tsx scripts/sortTranslations.ts",
+    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort"
   },
   "dependencies": {
     "@measured/puck": "0.18.3",
