@@ -18,13 +18,13 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
   const { t, i18n } = useTranslation();
 
   const dayOfWeekNames = {
-    monday: t("monday", { defaultValue: "Monday" }),
-    tuesday: t("tuesday", { defaultValue: "Tuesday" }),
-    wednesday: t("wednesday", { defaultValue: "Wednesday" }),
-    thursday: t("thursday", { defaultValue: "Thursday" }),
-    friday: t("friday", { defaultValue: "Friday" }),
-    saturday: t("saturday", { defaultValue: "Saturday" }),
-    sunday: t("sunday", { defaultValue: "Sunday" }),
+    monday: t("monday", "Monday"),
+    tuesday: t("tuesday", "Tuesday"),
+    wednesday: t("wednesday", "Wednesday"),
+    thursday: t("thursday", "Thursday"),
+    friday: t("friday", "Friday"),
+    saturday: t("saturday", "Saturday"),
+    sunday: t("sunday", "Sunday"),
   };
 
   // Based on defaultIntervalStringsBuilder in pages-components
@@ -35,11 +35,9 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
       const isOpen24h =
         dayData.intervals.length > 0 && dayData.intervals[0].is24h();
       if (dayData.intervals.length === 0) {
-        intervalStrings.push(t("closed", { defaultValue: "Closed" }));
+        intervalStrings.push(t("closed", "Closed"));
       } else if (isOpen24h) {
-        intervalStrings.push(
-          t("open24Hours", { defaultValue: "Open 24 Hours" })
-        );
+        intervalStrings.push(t("open24Hours", "Open 24 Hours"));
       } else {
         dayData.intervals.forEach((interval) => {
           const startTime = interval.getStartTime(i18n.language, timeOptions);
