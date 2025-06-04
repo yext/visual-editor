@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 
 /** Default source language used for translation */
-const defaultLng = "en";
+const defaultLng = "en-US";
 
 /** i18next namespace to operate on */
 const ns = "visual-editor";
@@ -32,8 +32,6 @@ async function getTargetLanguages(): Promise<string[]> {
   return entries.filter((entry) => entry.isDirectory()).map((dir) => dir.name);
 }
 
-const snakeToKebab = (s: string) => s.replace("_", "-");
-
 /**
  * Translates a string of text using the unofficial Google Translate API
  * @param text - The original English text to translate
@@ -44,7 +42,7 @@ async function translateText(
   text: string,
   targetLang: string
 ): Promise<string> {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${defaultLng}&tl=${snakeToKebab(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${defaultLng}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
   const res = await fetch(url);
 
   if (!res.ok) {
