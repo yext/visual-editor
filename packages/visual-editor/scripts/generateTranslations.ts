@@ -61,7 +61,7 @@ async function translateText(
   }
 
   const translatedText = translations
-    .map((segment) => segment[0]) // each segment[0] is the translated portion
+    .map(([translatedText]: TranslationSegment) => translatedText)
     .join("");
 
   return translatedText || text;
