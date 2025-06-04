@@ -2,13 +2,36 @@ import fs from "fs/promises";
 import path from "path";
 import pLimit from "p-limit";
 
+/** Default source language used for translation */
 const defaultLng = "en";
+
+/** i18next namespace to operate on */
 const ns = "visual-editor";
+
+/** Path to the root locales directory */
 const localesDir = "./locales";
+
+/** Maximum number of concurrent translation requests */
 const CONCURRENCY_LIMIT = 5;
 
+/** Whether to perform a dry run (simulate only, no file writes) */
 const isDryRun = process.argv.includes("--dry-run");
 
+/** Represents one translation segment from the Google Translate API */
+type TranslationSegment = [
+  translatedText: string,
+  originalText: string,
+  ...rest: unknown[],
+];
+
+/** Structured response from the Google Translate API */
+interface GoogleTranslateResponse {
+  translations: TranslationSegment[];
+  additionalData?: unknown;
+  detectedSourceLang: string;
+}
+
+/** Target languages to translate to (locale format) */
 const targetLngs: string[] = [
   "zh_CN",
   "zh_TW",
@@ -35,46 +58,54 @@ const targetLngs: string[] = [
   "tr_TR",
 ];
 
-const localeToGoogleTranslateMap: Record<string, string> = {
-  zh_CN: "zh-CN",
-  zh_TW: "zh-TW",
-  hr_HR: "hr",
-  cs_CZ: "cs",
-  da_DK: "da",
-  nl: "nl",
-  et_EE: "et",
-  fi_FI: "fi",
-  fr_FR: "fr",
-  de_DE: "de",
-  hu_HU: "hu",
-  it_IT: "it",
-  ja_JP: "ja",
-  lv_LV: "lv",
-  lt_LT: "lt",
-  nb_NO: "no",
-  pl_PL: "pl",
-  pt_PT: "pt",
-  ro_RO: "ro",
-  sk_SK: "sk",
-  es_ES: "es",
-  sv_SE: "sv",
-  tr_TR: "tr",
-};
-
-function toGoogleTranslateLang(locale: string): string {
-  return localeToGoogleTranslateMap[locale] || locale.split("_")[0];
+/**
+ * Converts a snake_case locale code to kebab-case
+ * @param code - Locale code in snake_case format (e.g., "zh_CN")
+ * @returns The code in kebab-case format (e.g., "zh-CN")
+ */
+function snakeToKebab(code: string): string {
+  return code.replace("_", "-");
 }
 
+/**
+ * Converts an i18next-style locale code to Google Translate's expected format
+ * @param lang - Target language code (e.g., "zh_CN")
+ * @returns Language code formatted for Google Translate (e.g., "zh-CN")
+ */
+function toGoogleTranslateLang(lang: string): string {
+  return snakeToKebab(lang);
+}
+
+/**
+ * Translates a string of text using the unofficial Google Translate API
+ * @param text - The original English text to translate
+ * @param targetLang - The target locale code (e.g., "fr_FR")
+ * @returns The translated string, or the original text if translation fails
+ */
 async function translateText(
   text: string,
   targetLang: string
 ): Promise<string> {
   const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${defaultLng}&tl=${toGoogleTranslateLang(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
   const res = await fetch(url);
-  const data: any = await res.json();
-  return data?.[0]?.[0]?.[0] || text;
+
+  if (!res.ok) {
+    throw new Error(`Google Translate API error: ${res.status}`);
+  }
+
+  const [translations] = (await res.json()) as GoogleTranslateResponse;
+
+  const [firstSegment] = translations ?? [];
+  const [translatedText] = firstSegment ?? [];
+
+  return translatedText ?? text;
 }
 
+/**
+ * Reads a JSON file safely, returning an empty object if the file doesn't exist or is invalid
+ * @param filePath - Full path to the JSON file
+ * @returns Parsed JSON object or an empty object if reading fails
+ */
 async function loadJsonSafe(filePath: string): Promise<Record<string, any>> {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
@@ -84,6 +115,11 @@ async function loadJsonSafe(filePath: string): Promise<Record<string, any>> {
   }
 }
 
+/**
+ * Writes a JSON object to the specified path
+ * @param filePath - Full path to the output file
+ * @param data - JSON data to write
+ */
 async function saveJson(
   filePath: string,
   data: Record<string, string>
@@ -92,6 +128,12 @@ async function saveJson(
   await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
 
+/**
+ * Flattens a nested JSON object into a dot-separated key-value structure
+ * @param obj - The object to flatten
+ * @param prefix - Prefix for nested keys (used internally)
+ * @returns A flat object with dot-separated keys
+ */
 function flatten(
   obj: Record<string, any>,
   prefix = ""
@@ -109,6 +151,11 @@ function flatten(
   return result;
 }
 
+/**
+ * Reconstructs a nested JSON object from a flat dot-separated key structure
+ * @param obj - Flat object with dot-separated keys
+ * @returns A nested object
+ */
 function unflatten(obj: Record<string, string>): Record<string, any> {
   const result: Record<string, any> = {};
   for (const flatKey in obj) {
@@ -127,6 +174,10 @@ function unflatten(obj: Record<string, string>): Record<string, any> {
   return result;
 }
 
+/**
+ * Loads the base English translation file, compares it to each target language file,
+ * translates missing or empty keys using Google Translate, and optionally writes them back.
+ */
 async function translateFile(): Promise<void> {
   const defaultPath = path.join(localesDir, defaultLng, `${ns}.json`);
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
@@ -167,7 +218,6 @@ async function translateFile(): Promise<void> {
         } catch (e) {
           failCount++;
           console.error(`[${lng}] ❌ Failed to translate key "${key}":`, e);
-          cache.set(key.trim(), english); // fallback to English
         }
       })
     );
@@ -185,4 +235,5 @@ async function translateFile(): Promise<void> {
   }
 }
 
+// Kick off the translation process
 translateFile().catch(console.error);
