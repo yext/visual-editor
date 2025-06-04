@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -29,11 +30,12 @@ const bodyTextFields: Fields<BodyTextProps> = {
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
+    const { t } = useTranslation();
     const document = useDocument();
 
     return (
       <EntityField
-        displayName="Body"
+        displayName={t("body", "Body")}
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >

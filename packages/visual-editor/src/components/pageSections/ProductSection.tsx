@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Image,
   HeadingLevel,
@@ -150,6 +151,7 @@ const ProductCard = ({
 };
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -161,7 +163,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -172,7 +174,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName="Products"
+          displayName={t("products", "Products")}
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >

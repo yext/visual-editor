@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -354,6 +355,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
+  const { t } = useTranslation();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -368,7 +370,10 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
-      { value: "", label: "Select a Content field" },
+      {
+        value: "",
+        label: t("basicSelectorContentLabel", "Select a Content field"),
+      },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {
           return {

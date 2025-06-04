@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Body,
   useTemplateProps,
@@ -62,6 +63,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = () => {
+  const { t } = useTranslation();
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
@@ -77,7 +79,11 @@ export const BreadcrumbsComponent = () => {
   }
 
   return (
-    <PageSection as={"nav"} verticalPadding="sm" aria-label="Breadcrumb">
+    <PageSection
+      as={"nav"}
+      verticalPadding="sm"
+      aria-label={t("breadcrumb", "Breadcrumb")}
+    >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {
           const isLast = idx === breadcrumbs.length - 1;

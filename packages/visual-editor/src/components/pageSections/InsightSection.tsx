@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Image,
   HeadingLevel,
@@ -153,6 +154,7 @@ const InsightCard = ({
 };
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -165,7 +167,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName="Heading Text"
+            displayName={t("headingText", "Heading Text")}
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -175,7 +177,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName="Insights"
+          displayName={t("insights", "Insights")}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >

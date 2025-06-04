@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
@@ -19,10 +20,11 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
+      const { t } = useTranslation();
       if (!options || options.length === 0) {
         return (
           <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-            <p>No options available</p>
+            <p>{t("basicSelectorNoOptionsLabel", "No options available")}</p>
           </FieldLabel>
         );
       }

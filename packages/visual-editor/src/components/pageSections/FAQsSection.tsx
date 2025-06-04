@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -79,6 +80,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
 };
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedHeading = resolveYextEntityField<string>(
     document,
@@ -93,7 +95,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={t("headingText", "Heading Text")}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -102,7 +104,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName="FAQs"
+          displayName={t("faqs", "FAQs")}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >

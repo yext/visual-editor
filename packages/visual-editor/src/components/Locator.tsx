@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CardComponent,
@@ -370,6 +371,7 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
+  const { t } = useTranslation();
   // During page generation we don't exist in a browser context
   const iframe =
     typeof document === "undefined"
@@ -384,7 +386,7 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
           <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
-            Loading Map...
+            {t("loadingMap", "Loading Map...")}
           </span>
         </div>
       </div>

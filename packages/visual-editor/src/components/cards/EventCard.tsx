@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -39,6 +40,7 @@ const EventCardItem = ({
   document: any;
   card: EventCardProps["card"];
 }) => {
+  const { t } = useTranslation();
   const resolvedImage = resolveYextSubfield(document, card?.image);
   const resolvedTitle = resolveYextSubfield<string>(document, card?.title);
   const resolvedDateTime = resolveYextSubfield<string>(
@@ -56,7 +58,7 @@ const EventCardItem = ({
       <div className="lg:w-[45%] w-full h-full">
         {resolvedImage && (
           <EntityField
-            displayName="Image"
+            displayName={t("image", "Image")}
             fieldId={card?.image?.field}
             constantValueEnabled={card?.image?.constantValueEnabled}
           >
@@ -69,7 +71,7 @@ const EventCardItem = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {resolvedTitle && (
           <EntityField
-            displayName="Title"
+            displayName={t("title", "Title")}
             fieldId={card?.title?.field}
             constantValueEnabled={card?.title?.constantValueEnabled}
           >
@@ -78,7 +80,7 @@ const EventCardItem = ({
         )}
         {resolvedDateTime && (
           <EntityField
-            displayName="Date/Time"
+            displayName={t("datetime", "Date/Time")}
             fieldId={card?.dateTime?.field}
             constantValueEnabled={card?.dateTime?.constantValueEnabled}
           >
@@ -87,7 +89,7 @@ const EventCardItem = ({
         )}
         {resolvedDescription && (
           <EntityField
-            displayName="Description"
+            displayName={t("description", "Description")}
             fieldId={card?.description?.field}
             constantValueEnabled={card?.description?.constantValueEnabled}
           >
@@ -98,7 +100,7 @@ const EventCardItem = ({
         )}
         {resolvedCTA?.link && (
           <EntityField
-            displayName="CTA"
+            displayName={t("cta", "CTA")}
             fieldId={card?.cta?.field}
             constantValueEnabled={card?.cta?.constantValueEnabled}
           >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -221,6 +222,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 };
 
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const addressHeadingText = resolveYextEntityField<string>(
     document,
@@ -268,12 +270,15 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           : "md:[&>section]:w-1/3"
       }`}
       background={styles.backgroundColor}
-      aria-label="Core Info Section"
+      aria-label={t("coreInfoSection", "Core Info Section")}
     >
-      <section aria-label="Information Section" className="flex flex-col gap-4">
+      <section
+        aria-label={t("informationSection", "Information Section")}
+        className="flex flex-col gap-4"
+      >
         {addressHeadingText && (
           <EntityField
-            displayName="Heading Text"
+            displayName={t("headingText", "Heading Text")}
             fieldId={data.info.headingText.field}
             constantValueEnabled={data.info.headingText.constantValueEnabled}
           >
@@ -283,7 +288,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
           {resolvedAddress && (
             <EntityField
-              displayName="Address"
+              displayName={t("address", "Address")}
               fieldId={data.info.address.field}
               constantValueEnabled={data.info.address.constantValueEnabled}
             >
@@ -312,6 +317,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item, idx) => {
+              const { t } = useTranslation();
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -323,7 +329,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               return (
                 <li key={item.label} className="flex gap-2 items-center">
                   <EntityField
-                    displayName="Phone Number"
+                    displayName={t("phoneNumber", "Phone Number")}
                     fieldId={item.number.field}
                     constantValueEnabled={item.number.constantValueEnabled}
                   >
@@ -348,7 +354,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         )}
         {resolvedEmails && (
           <EntityField
-            displayName="Email List"
+            displayName={t("emailList", "Email List")}
             fieldId={data.info.emails.field}
             constantValueEnabled={data.info.emails.constantValueEnabled}
           >
@@ -380,10 +386,13 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         )}
       </section>
       {resolvedHours && (
-        <section aria-label="Hours Section" className="flex flex-col gap-4">
+        <section
+          aria-label={t("hoursSection", "Hours Section")}
+          className="flex flex-col gap-4"
+        >
           {hoursHeadingText && (
             <EntityField
-              displayName="Heading Text"
+              displayName={t("headingText", "Heading Text")}
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
@@ -391,7 +400,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             </EntityField>
           )}
           <EntityField
-            displayName="Hours"
+            displayName={t("hours", "Hours")}
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
@@ -403,7 +412,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             />
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
-            <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+            <EntityField
+              displayName={t("hoursText", "Hours Text")}
+              fieldId="additionalHoursText"
+            >
               <Body className="mt-4 text-body-sm-fontSize">
                 {additionalHoursText}
               </Body>
@@ -412,10 +424,13 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         </section>
       )}
       {servicesList && servicesList.length > 0 && (
-        <section aria-label="Services Section" className="flex flex-col gap-4">
+        <section
+          aria-label={t("servicesSection", "Services Section")}
+          className="flex flex-col gap-4"
+        >
           {servicesHeadingText && (
             <EntityField
-              displayName="Heading Text"
+              displayName={t("headingText", "Heading Text")}
               fieldId={data.services.headingText.field}
               constantValueEnabled={
                 data.services.headingText.constantValueEnabled
@@ -427,7 +442,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             </EntityField>
           )}
           <EntityField
-            displayName="Text List"
+            displayName={t("textList", "Text List")}
             fieldId={data.services.servicesList.field}
             constantValueEnabled={
               data.services.servicesList.constantValueEnabled

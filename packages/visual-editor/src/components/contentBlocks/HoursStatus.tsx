@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -67,6 +68,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   showDayNames,
   dayOfWeekFormat,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
 
@@ -76,7 +78,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 
   return (
     <EntityField
-      displayName="Hours"
+      displayName={t("hours", "Hours")}
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >

@@ -1,0 +1,62 @@
+module.exports = {
+  input: [
+    "src/components/**/*.{ts,tsx}",
+    "src/editor/**/*.{ts,tsx}",
+    "!**/__screenshots__/**",
+  ],
+
+  output: "",
+
+  options: {
+    debug: true,
+    defaultValue: (lng, ns, key, options) => {
+      if (lng.toLowerCase().startsWith("en")) {
+        return options.defaultValue || key;
+      }
+      return "";
+    },
+    func: {
+      list: ["t", "i18next.t", "i18n"],
+      extensions: [".ts", ".tsx"],
+    },
+    lngs: [
+      "en",
+      "zh_CN",
+      "zh_TW",
+      "hr_HR",
+      "cs_CZ",
+      "da_DK",
+      "nl",
+      "en_GB",
+      "et_EE",
+      "fi_FI",
+      "fr_FR",
+      "de_DE",
+      "hu_HU",
+      "it_IT",
+      "ja_JP",
+      "lv_LV",
+      "lt_LT",
+      "nb_NO",
+      "pl_PL",
+      "pt_PT",
+      "ro_RO",
+      "sk_SK",
+      "es_ES",
+      "sv_SE",
+      "tr_TR",
+    ],
+    defaultLng: "en",
+    ns: ["visual-editor"],
+    defaultNs: "visual-editor",
+    resource: {
+      loadPath: "locales/{{lng}}/{{ns}}.json",
+      savePath: "locales/{{lng}}/{{ns}}.json",
+      jsonIndent: 2,
+    },
+    interpolation: {
+      prefix: "{{",
+      suffix: "}}",
+    },
+  },
+};

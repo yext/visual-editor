@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -125,6 +126,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 };
 
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument() as any;
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
@@ -147,7 +149,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   return (
     <PageSection
       background={styles.backgroundColor}
-      aria-label="Hero Banner"
+      aria-label={t("heroBanner", "Hero Banner")}
       className={`flex flex-col gap-6 md:gap-10 ${
         styles.imageOrientation === "right"
           ? "md:flex-row"
@@ -158,14 +160,17 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
         className="flex flex-col justify-center gap-y-6 w-full break-words md:gap-y-8"
         aria-labelledby="hero-heading"
       >
-        <header className="flex flex-col gap-y-4" aria-label="Hero Header">
+        <header
+          className="flex flex-col gap-y-4"
+          aria-label={t("heroHeader", "Hero Header")}
+        >
           <section
             className="flex flex-col gap-y-0"
-            aria-label="Business Information"
+            aria-label={t("businessInformation", "Business Information")}
           >
             {resolvedBusinessName && (
               <EntityField
-                displayName="Business Name"
+                displayName={t("businessName", "Business Name")}
                 fieldId={data?.businessName.field}
                 constantValueEnabled={data?.businessName.constantValueEnabled}
               >
@@ -176,7 +181,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedLocalGeoModifier && (
               <EntityField
-                displayName="Local GeoModifier"
+                displayName={t("localGeomodifier", "Local GeoModifier")}
                 fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
                   data?.localGeoModifier.constantValueEnabled
@@ -190,7 +195,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           </section>
           {resolvedHours && (
             <EntityField
-              displayName="Hours"
+              displayName={t("hours", "Hours")}
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
@@ -202,11 +207,11 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           resolvedHero?.secondaryCta?.label) && (
           <div
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label="Call to Actions"
+            aria-label={t("callToActions", "Call to Actions")}
           >
             {resolvedHero?.primaryCta?.label && (
               <EntityField
-                displayName="Primary CTA"
+                displayName={t("primaryCta", "Primary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.primaryCta
@@ -224,7 +229,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedHero?.secondaryCta?.label && (
               <EntityField
-                displayName="Secondary CTA"
+                displayName={t("secondaryCta", "Secondary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.secondaryCta
@@ -245,11 +250,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
       </div>
       {resolvedHero?.image && (
         <EntityField
-          displayName="Image"
+          displayName={t("image", "Image")}
           fieldId={data.hero.field}
           constantValueEnabled={data.hero.constantValueOverride.image}
         >
-          <div className="w-full" role="region" aria-label="Hero Image">
+          <div
+            className="w-full"
+            role="region"
+            aria-label={t("heroImage", "Hero Image")}
+          >
             <Image
               image={resolvedHero?.image}
               layout="auto"

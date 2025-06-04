@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -64,6 +65,7 @@ const VisualEditorHoursTable = ({
   showAdditionalHoursText,
   alignment,
 }: HoursTableProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const hours = resolveYextEntityField(document, hoursField);
 
@@ -75,7 +77,7 @@ const VisualEditorHoursTable = ({
     <div className={`flex flex-col ${alignment}`}>
       {hours && (
         <EntityField
-          displayName="Hours"
+          displayName={t("hours", "Hours")}
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
@@ -87,7 +89,10 @@ const VisualEditorHoursTable = ({
         </EntityField>
       )}
       {additionalHoursText && showAdditionalHoursText && (
-        <EntityField displayName="Hours Text" fieldId="additionalHoursText">
+        <EntityField
+          displayName={t("hoursText", "Hours Text")}
+          fieldId="additionalHoursText"
+        >
           <div className="mt-4 text-body-sm-fontSize">
             {additionalHoursText}
           </div>

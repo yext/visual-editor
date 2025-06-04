@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import {
   AnalyticsScopeProvider,
@@ -80,6 +81,7 @@ interface HeaderLayoutProps {
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const { logo, logoWidth, logoLink, links } = props;
 
@@ -92,7 +94,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName="Business Logo"
+            displayName={t("businessLogo", "Business Logo")}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -102,7 +104,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {links?.length > 0 && (
           <>
             <EntityField
-              displayName="Header Links"
+              displayName={t("headerLinks", "Header Links")}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />

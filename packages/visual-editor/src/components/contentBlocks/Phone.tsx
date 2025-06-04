@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -40,6 +41,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   format,
   includeHyperlink,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedPhone = resolveYextEntityField<string>(document, phone);
 
@@ -49,7 +51,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName="Phone"
+      displayName={t("phone", "Phone")}
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >

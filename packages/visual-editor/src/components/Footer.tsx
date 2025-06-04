@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
@@ -63,6 +64,7 @@ const Footer: ComponentConfig<FooterProps> = {
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
+  const { t } = useTranslation();
   const document = useDocument<any>();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
@@ -118,13 +120,16 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
     >
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
-          <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
+          <EntityField
+            displayName={t("footerLinks", "Footer Links")}
+            fieldId={"site.footer.links"}
+          >
             <FooterLinks links={links} />
           </EntityField>
         )}
         {socialLinks && (
           <EntityField
-            displayName="Footer Social Icons"
+            displayName={t("footerSocialIcons", "Footer Social Icons")}
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -134,7 +139,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName="Copyright Text"
+            displayName={t("copyrightText", "Copyright Text")}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>

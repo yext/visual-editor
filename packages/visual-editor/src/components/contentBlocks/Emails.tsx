@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -45,6 +46,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   includeHyperlink,
   listLength,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   let resolvedEmailList = resolveYextEntityField(document, emailListField);
   if (!resolvedEmailList) {
@@ -55,7 +57,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 
   return (
     <EntityField
-      displayName="Email List"
+      displayName={t("emailList", "Email List")}
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >

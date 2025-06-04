@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -34,12 +35,13 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   variant,
   className,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const cta = resolveYextEntityField(document, entityField);
 
   return (
     <EntityField
-      displayName="CTA"
+      displayName={t("cta", "CTA")}
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >

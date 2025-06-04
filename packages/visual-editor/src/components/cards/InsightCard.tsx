@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -42,6 +43,7 @@ const InsightCardItem = ({
   document: any;
   card: InsightCardProps["card"];
 }) => {
+  const { t } = useTranslation();
   const resolvedImage = resolveYextSubfield(document, card?.image);
   const resolvedTitle = resolveYextSubfield<string>(document, card?.title);
   const resolvedCategory = resolveYextSubfield<string>(
@@ -61,7 +63,7 @@ const InsightCardItem = ({
     >
       {resolvedImage && (
         <EntityField
-          displayName="Image"
+          displayName={t("image", "Image")}
           fieldId={card?.image?.field}
           constantValueEnabled={card?.image?.constantValueEnabled}
         >
@@ -79,7 +81,7 @@ const InsightCardItem = ({
               className={`flex ${resolvedCategory && resolvedDate && `gap-4`}`}
             >
               <EntityField
-                displayName="Category"
+                displayName={t("category", "Category")}
                 fieldId={card?.category?.field}
                 constantValueEnabled={card?.category?.constantValueEnabled}
               >
@@ -87,7 +89,7 @@ const InsightCardItem = ({
               </EntityField>
               {resolvedCategory && resolvedDate && <Body>|</Body>}
               <EntityField
-                displayName="Date"
+                displayName={t("date", "Date")}
                 fieldId={card?.date?.field}
                 constantValueEnabled={card?.date?.constantValueEnabled}
               >
@@ -97,7 +99,7 @@ const InsightCardItem = ({
           )}
           {resolvedTitle && (
             <EntityField
-              displayName="Insight Title"
+              displayName={t("insightTitle", "Insight Title")}
               fieldId={card?.title?.field}
               constantValueEnabled={card?.title?.constantValueEnabled}
             >
@@ -108,7 +110,7 @@ const InsightCardItem = ({
           )}
           {resolvedDescription && (
             <EntityField
-              displayName="Description"
+              displayName={t("description", "Description")}
               fieldId={card?.description?.field}
               constantValueEnabled={card?.description?.constantValueEnabled}
             >
@@ -118,7 +120,7 @@ const InsightCardItem = ({
         </div>
         {resolvedCTA?.link && (
           <EntityField
-            displayName="CTA"
+            displayName={t("cta", "CTA")}
             fieldId={card?.cta.field}
             constantValueEnabled={card?.cta.constantValueEnabled}
           >
