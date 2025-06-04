@@ -21,11 +21,7 @@ type TranslationSegment = [
 ];
 
 /** Structured response from the Google Translate API */
-interface GoogleTranslateResponse {
-  translations: TranslationSegment[];
-  additionalData?: unknown;
-  detectedSourceLang: string;
-}
+type GoogleTranslateRawResponse = [TranslationSegment[], unknown, string];
 
 /**
  * Reads all directories under localesDir and returns them as target languages.
@@ -55,20 +51,17 @@ async function translateText(
     throw new Error(`Google Translate API error: ${res.status}`);
   }
 
-  // The response is an array, where the first element is an array of segments
-  const data: GoogleTranslateResponse =
-    (await res.json()) as GoogleTranslateResponse;
+  const data = (await res.json()) as GoogleTranslateRawResponse;
 
-  const translations = data.translations; // array of segments: [translatedText, originalText, ...]
+  const translations = data[0];
   if (!translations || !Array.isArray(translations)) {
     throw new Error(
       `No translation received for text=${text} language=${targetLang}`
     );
   }
 
-  // Concatenate all translated segment texts
   const translatedText = translations
-    .map((segment: TranslationSegment) => segment[0]) // segment[0] is the translated text for that segment
+    .map((segment) => segment[0]) // each segment[0] is the translated portion
     .join("");
 
   return translatedText || text;
