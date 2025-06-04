@@ -1,16 +1,5 @@
 name: Check i18n
-
-on:
-  pull_request:
-    paths:
-      # Trigger on changes to locale files
-      - "packages/visual-editor/locales/**"
-      # Trigger on changes to source files that might introduce new i18n keys
-      - "packages/visual-editor/src/**"
-      # Trigger on changes to the i18n scanner configuration
-      - "packages/visual-editor/i18next-scanner.config.cjs"
-      # Trigger on changes to the workflow file itself
-      - ".github/workflows/check-locales.yml"
+on: pull_request
 
 jobs:
   check-locales:
