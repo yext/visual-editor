@@ -22,32 +22,7 @@ for (const path in modules) {
 }
 
 i18nComponentsInstance.use(initReactI18next).init({
-  // TODO: replace these fallbacks once we remove the dialects
-  // from the stored translations
-  fallbackLng: {
-    cs: ["cs_CZ"],
-    da: ["da_DK"],
-    de: ["de_DE"],
-    es: ["es_ES"],
-    et: ["et_EE"],
-    fi: ["fi_FI"],
-    fr: ["fr_FR"],
-    hr: ["hr_HR"],
-    hu: ["hu_HU"],
-    it: ["it_IT"],
-    ja: ["ja_JP"],
-    lt: ["lt_LT"],
-    lv: ["lv_LV"],
-    nb: ["nb_NO"],
-    pl: ["pl_PL"],
-    pt: ["pt_PT"],
-    ro: ["ro_RO"],
-    sk: ["sk_SK"],
-    sv: ["sv_SE"],
-    tr: ["tr_TR"],
-    zh: ["zh_CN"],
-    default: ["en"],
-  },
+  fallbackLng: "en",
   ns: [NAMESPACE],
   defaultNS: NAMESPACE,
   interpolation: { escapeValue: false },

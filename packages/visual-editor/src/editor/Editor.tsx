@@ -106,9 +106,7 @@ export const Editor = ({
 
   useEffect(() => {
     if (templateMetadata?.platformLocale) {
-      i18nPlatformInstance.changeLanguage(
-        templateMetadata?.platformLocale.replace("-", "_")
-      );
+      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
     }
   }, [templateMetadata?.platformLocale]);
 
