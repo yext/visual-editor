@@ -14,7 +14,7 @@ import {
 
 export interface EmailsProps {
   list: YextEntityField<string[]>;
-  listLength: number;
+  listLength?: number;
   includeHyperlink: boolean;
 }
 
@@ -33,11 +33,6 @@ const EmailsFields: Fields<EmailsProps> = {
       { label: "Yes", value: true },
       { label: "No", value: false },
     ],
-  }),
-  listLength: YextField("List Length", {
-    type: "number",
-    min: 1,
-    max: 100,
   }),
 };
 
@@ -63,7 +58,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
     >
       <ul className="components list-inside">
         {resolvedEmailList
-          .slice(0, Math.min(resolvedEmailList.length, listLength))
+          .slice(0, Math.min(resolvedEmailList.length, listLength ?? Infinity))
           ?.map((email, index) => (
             <li key={index} className={`mb-2 flex items-center`}>
               <FaEnvelope className={"mr-2 my-auto"} />
@@ -87,6 +82,20 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 export const Emails: ComponentConfig<EmailsProps> = {
   label: "Emails",
   fields: EmailsFields,
+  resolveFields: (data, { fields }) => {
+    if (data.props.list.constantValueEnabled) {
+      return fields;
+    }
+
+    return {
+      ...fields,
+      listLength: YextField("List Length", {
+        type: "number",
+        min: 1,
+        max: 100,
+      }),
+    };
+  },
   defaultProps: {
     list: {
       field: "emails",
