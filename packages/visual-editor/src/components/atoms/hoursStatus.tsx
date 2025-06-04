@@ -71,22 +71,20 @@ function hoursCurrentTemplateOverride(
   if (params?.currentInterval?.is24h?.()) {
     return (
       <span className="HoursStatus-current">
-        {t("open24Hours", { defaultValue: "Open 24 Hours" })}
+        {t("open24Hours", "Open 24 Hours")}
       </span>
     );
   }
   if (!params.futureInterval) {
     return (
       <span className="HoursStatus-current">
-        {t("temporarilyClosed", { defaultValue: "Temporarily Closed" })}
+        {t("temporarilyClosed", "Temporarily Closed")}
       </span>
     );
   }
   return (
     <span className="HoursStatus-current">
-      {params.isOpen
-        ? t("openNow", { defaultValue: "Open Now" })
-        : t("closed", { defaultValue: "Closed" })}
+      {params.isOpen ? t("openNow", "Open Now") : t("closed", "Closed")}
     </span>
   );
 }
@@ -105,9 +103,7 @@ function hoursFutureTemplateOverride(
   }
   return (
     <span className="HoursStatus-future">
-      {params.isOpen
-        ? t("closesAt", { defaultValue: "Closes at" })
-        : t("opensAt", { defaultValue: "Opens at" })}
+      {params.isOpen ? t("closesAt", "Closes at") : t("opensAt", "Opens at")}
     </span>
   );
 }
