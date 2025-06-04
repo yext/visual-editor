@@ -55,5 +55,5 @@
   "borderRadiusDefaultLabel": "Default",
   "fontSizeDefaultLabel": "Default",
   "spacingDefaultLabel": "Default",
-  "basicSelectorDefaultContentLabel": "Select a Content field"
+  "basicSelectorContentLabel": "Select a Content field"
 }
