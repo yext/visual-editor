@@ -46,7 +46,8 @@
     "build-registry-docs": "pnpm run docs:build && pnpm run generate-registry",
     "i18n:insert": "pnpm exec tsx scripts/insertI18n.ts",
     "i18n:insert:dry": "pnpm exec tsx scripts/insertI18n.ts --dry-run",
-    "i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs"
+    "i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs",
+    "i18n:translate": "pnpm exec tsx scripts/generateTranslations.ts"
   },
   "dependencies": {
     "@measured/puck": "0.18.3",
@@ -126,6 +127,7 @@
     "libphonenumber-js": "^1.11.19",
     "lint-staged": "^15.2.7",
     "minimist": "^1.2.8",
+    "p-limit": "^6.2.0",
     "playwright": "^1.51.1",
     "prettier": "^3.3.3",
     "react-icons": "^5.2.1",
