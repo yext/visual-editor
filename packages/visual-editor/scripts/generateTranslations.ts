@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 
 /** Default source language used for translation */
-const defaultLng = "en-US";
+const defaultLng = "en";
 
 /** i18next namespace to operate on */
 const ns = "visual-editor";
