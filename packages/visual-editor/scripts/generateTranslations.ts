@@ -36,23 +36,7 @@ async function getTargetLanguages(): Promise<string[]> {
   return entries.filter((entry) => entry.isDirectory()).map((dir) => dir.name);
 }
 
-/**
- * Converts a snake_case locale code to kebab-case
- * @param code - Locale code in snake_case format (e.g., "zh_CN")
- * @returns The code in kebab-case format (e.g., "zh-CN")
- */
-function snakeToKebab(code: string): string {
-  return code.replace("_", "-");
-}
-
-/**
- * Converts an i18next-style locale code to Google Translate's expected format
- * @param lang - Target language code (e.g., "zh_CN")
- * @returns Language code formatted for Google Translate (e.g., "zh-CN")
- */
-function toGoogleTranslateLang(lang: string): string {
-  return snakeToKebab(lang);
-}
+const snakeToKebab = (s: string) => s.replace("_", "-");
 
 /**
  * Translates a string of text using the unofficial Google Translate API
@@ -64,19 +48,30 @@ async function translateText(
   text: string,
   targetLang: string
 ): Promise<string> {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${defaultLng}&tl=${toGoogleTranslateLang(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${defaultLng}&tl=${snakeToKebab(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
   const res = await fetch(url);
 
   if (!res.ok) {
     throw new Error(`Google Translate API error: ${res.status}`);
   }
 
-  const [translations] = (await res.json()) as GoogleTranslateResponse;
+  // The response is an array, where the first element is an array of segments
+  const data: GoogleTranslateResponse =
+    (await res.json()) as GoogleTranslateResponse;
 
-  const [firstSegment] = translations ?? [];
-  const [translatedText] = firstSegment ?? [];
+  const translations = data.translations; // array of segments: [translatedText, originalText, ...]
+  if (!translations || !Array.isArray(translations)) {
+    throw new Error(
+      `No translation received for text=${text} language=${targetLang}`
+    );
+  }
 
-  return translatedText ?? text;
+  // Concatenate all translated segment texts
+  const translatedText = translations
+    .map((segment: TranslationSegment) => segment[0]) // segment[0] is the translated text for that segment
+    .join("");
+
+  return translatedText || text;
 }
 
 /**
