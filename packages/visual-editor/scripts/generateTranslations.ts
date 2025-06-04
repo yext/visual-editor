@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import path from "path";
-import pLimit from "p-limit";
 
 /** Default source language used for translation */
 const defaultLng = "en";
@@ -10,9 +9,6 @@ const ns = "visual-editor";
 
 /** Path to the root locales directory */
 const localesDir = "./locales";
-
-/** Maximum number of concurrent translation requests */
-const CONCURRENCY_LIMIT = 5;
 
 /** Whether to perform a dry run (simulate only, no file writes) */
 const isDryRun = process.argv.includes("--dry-run");
@@ -203,24 +199,21 @@ async function translateFile(): Promise<void> {
       `🔄 Translating ${keysToTranslate.length} keys for [${lng}]...`
     );
 
-    const limit = pLimit(CONCURRENCY_LIMIT);
     let successCount = 0;
     let failCount = 0;
 
-    const translateTasks = keysToTranslate.map((key) =>
-      limit(async () => {
-        const english = defaultJson[key];
-        try {
-          const translated = await translateText(english, lng);
-          cache.set(key.trim(), translated);
-          successCount++;
-          console.log(`[${lng}] ${key}: "${english}" → "${translated}"`);
-        } catch (e) {
-          failCount++;
-          console.error(`[${lng}] ❌ Failed to translate key "${key}":`, e);
-        }
-      })
-    );
+    const translateTasks = keysToTranslate.map(async (key) => {
+      const english = defaultJson[key];
+      try {
+        const translated = await translateText(english, lng);
+        cache.set(key.trim(), translated);
+        successCount++;
+        console.log(`[${lng}] ${key}: "${english}" → "${translated}"`);
+      } catch (e) {
+        failCount++;
+        console.error(`[${lng}] ❌ Failed to translate key "${key}":`, e);
+      }
+    });
 
     await Promise.all(translateTasks);
 
