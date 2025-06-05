@@ -58,7 +58,7 @@ const virtualFiles: VirtualFile[] = [
     templateManifestEntry: {
       name: "directory",
       description:
-        "Use this template to generate pages for each of your Locations.",
+        "Use this template to generate pages for each of your Directory entities.",
       exampleSiteUrl: "",
       layoutRequired: true,
       defaultLayoutData: defaultLayoutData.directory,
