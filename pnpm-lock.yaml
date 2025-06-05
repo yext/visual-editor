@@ -143,8 +143,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.1(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz
-        version: https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))
+        specifier: ^1.8.9
+        version: 1.8.9(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -396,8 +396,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.1(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz
-        version: https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))
+        specifier: ^1.8.9
+        version: 1.8.9(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -4627,12 +4627,11 @@ packages:
         integrity: sha512-PFNKLHTRJNZqq6QhyTTsv7RcO9mQFtd5AMMRsiT/OFhB3YLKhAftZ0g47uRGclG9TMfx2fW5LiKfcdUdWNeRkg==,
       }
 
-  "@yext/search-ui-react@https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz":
+  "@yext/search-ui-react@1.8.9":
     resolution:
       {
-        tarball: https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz,
+        integrity: sha512-0y0GbeW82qM8EgXLyTjTD9LauRtwstGMr2aQJuazFgoI7tkxKw3BokI/qKPDavxwTa4+2gFHEKbuTJIZJO5IuA==,
       }
-    version: 1.8.9
     peerDependencies:
       "@yext/search-headless-react": ^2.5.0
       react: ^16.14 || ^17 || ^18
@@ -15078,7 +15077,7 @@ snapshots:
       - react
       - react-redux
 
-  "@yext/search-ui-react@https://github.com/anguyen-yext2/visual-editor-artifacts/raw/refs/heads/main/yext-search-ui-react-1.8.27.tgz(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))":
+  "@yext/search-ui-react@1.8.9(@types/react@18.3.12)(@yext/search-headless-react@2.5.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.6.3)))
