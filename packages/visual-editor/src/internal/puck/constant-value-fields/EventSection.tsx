@@ -2,6 +2,7 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -15,7 +16,7 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
     return (
       <div className={"ve-mt-4"}>
         <AutoField
-          field={EventStructArrayField}
+          field={EventStructArrayField()}
           value={value.events}
           onChange={(newValue, uiState) =>
             onChange({ events: newValue }, uiState)
@@ -26,30 +27,35 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   },
 };
 
-const EventStructArrayField: ArrayField<EventStruct[]> = {
-  label: "Array Field",
-  type: "array",
-  arrayFields: {
-    image: {
-      type: "object",
-      label: "Image",
-      objectFields: {
-        url: {
-          label: "URL",
-          type: "text",
+const EventStructArrayField = (): ArrayField<EventStruct[]> => {
+  const { t } = usePlatformTranslation();
+
+  return {
+    label: t("arrayField", "Array Field"),
+    type: "array",
+    arrayFields: {
+      image: {
+        type: "object",
+        label: t("image", "Image"),
+        objectFields: {
+          url: {
+            label: t("url", "URL"),
+            type: "text",
+          },
         },
       },
+      title: {
+        type: "text",
+        label: t("title", "Title"),
+      },
+      dateTime: DateTimeSelector,
+      description: {
+        type: "textarea",
+        label: t("description", "Description"),
+      },
+      cta: ctaFields(),
     },
-    title: {
-      type: "text",
-      label: "Title",
-    },
-    dateTime: DateTimeSelector,
-    description: {
-      type: "textarea",
-      label: "Description",
-    },
-    cta: ctaFields,
-  },
-  getItemSummary: (item, i) => item.title ?? "Event " + ((i ?? 0) + 1),
+    getItemSummary: (item, i) =>
+      item.title ? item.title : t("event", "Event") + " " + ((i ?? 0) + 1),
+  };
 };

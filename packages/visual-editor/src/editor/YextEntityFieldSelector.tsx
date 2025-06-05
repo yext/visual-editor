@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -32,6 +31,7 @@ import {
 } from "../internal/puck/ui/Tooltip.tsx";
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
+import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -71,9 +71,11 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
 };
 
-const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TEXT_LIST_CONSTANT_CONFIG,
-  "type.image": IMAGE_LIST_CONSTANT_CONFIG,
+const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
+  return {
+    "type.string": TEXT_LIST_CONSTANT_CONFIG,
+    "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
+  };
 };
 
 export const getConstantConfigFromType = (
@@ -81,7 +83,7 @@ export const getConstantConfigFromType = (
   isList?: boolean
 ): Field<any> | undefined => {
   if (isList) {
-    return LIST_TYPE_TO_CONSTANT_CONFIG[type];
+    return LIST_TYPE_TO_CONSTANT_CONFIG()[type];
   }
   const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
@@ -244,6 +246,8 @@ export const ConstantValueModeToggler = ({
   disableConstantValue?: boolean;
   label: string;
 }) => {
+  const { t } = usePlatformTranslation();
+
   // If disableConstantValue is true, constantValueInputSupported is always false.
   // Else if isCollection or a supported field type, constantValueInputSupported is true
   const constantValueInputSupported =
@@ -274,8 +278,8 @@ export const ConstantValueModeToggler = ({
             </TooltipTrigger>
             <TooltipContent>
               {constantValueEnabled
-                ? "Static content"
-                : "Knowledge Graph content"}
+                ? t("staticContent", "Static content")
+                : t("knowledgeGraphContent", "Knowledge Graph content")}
               <TooltipArrow fill="ve-bg-popover" />
             </TooltipContent>
           </Tooltip>
@@ -355,7 +359,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
-  const { t } = useTranslation();
+  const { t } = usePlatformTranslation();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -369,26 +373,30 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
-    return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
-      {
-        value: "",
-        label: t("basicSelectorContentLabel", "Select a Content field"),
-      },
-      ...filteredEntityFields
-        .map((entityFieldNameToSchema) => {
-          return {
-            label:
-              entityFieldNameToSchema.displayName ??
-              entityFieldNameToSchema.name,
-            value: entityFieldNameToSchema.name,
-          };
-        })
-        .sort((entityFieldA, entityFieldB) => {
-          const nameA = entityFieldA.label.toUpperCase();
-          const nameB = entityFieldB.label.toUpperCase();
-          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-        }),
-    ]);
+    // TODO: translation concatenation
+    return BasicSelector(
+      templateMetadata.entityTypeDisplayName + " " + t("field", "Field"),
+      [
+        {
+          value: "",
+          label: t("basicSelectorContentLabel", "Select a Content field"),
+        },
+        ...filteredEntityFields
+          .map((entityFieldNameToSchema) => {
+            return {
+              label:
+                entityFieldNameToSchema.displayName ??
+                entityFieldNameToSchema.name,
+              value: entityFieldNameToSchema.name,
+            };
+          })
+          .sort((entityFieldA, entityFieldB) => {
+            const nameA = entityFieldA.label.toUpperCase();
+            const nameB = entityFieldB.label.toUpperCase();
+            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+          }),
+      ]
+    );
   }, [entityFields, filter]);
 
   return (

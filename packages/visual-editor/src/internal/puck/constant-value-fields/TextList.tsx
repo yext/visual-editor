@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AutoField, IconButton, Button, CustomField } from "@measured/puck";
 import { Trash2 as TrashIcon } from "lucide-react";
 import { Plus as PlusIcon } from "lucide-react";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
@@ -9,6 +10,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
   render: ({ onChange, value, id }) => {
     const [localItems, setLocalItems] = useState<string[]>(value);
+    const { t } = usePlatformTranslation();
 
     const updateItem = (index: number, value: string) => {
       const updatedItems = [...localItems];
@@ -75,7 +77,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
               <IconButton
                 onClick={() => removeItem(index)}
                 variant="secondary"
-                title="Delete Item"
+                title={t("deleteItem", "Delete Item")}
                 type="button"
                 disabled={localItems.length === 1}
               >

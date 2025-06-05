@@ -4,6 +4,7 @@ import { ThemeConfig } from "../../../../utils/themeResolver.ts";
 import { OnThemeChangeFunc, ThemeHistories } from "../../../types/themeData.ts";
 import "@measured/puck/dist/index.css";
 import { ThemeFieldsSidebar } from "./ThemeFieldsSidebar.tsx";
+import { usePlatformTranslation } from "../../../../utils/i18nPlatform.ts";
 
 type ThemeEditorRightSidebarProps = {
   themeHistoriesRef: React.MutableRefObject<ThemeHistories | undefined>;
@@ -15,6 +16,7 @@ export const ThemeEditorRightSidebar = (
   props: ThemeEditorRightSidebarProps
 ) => {
   const { themeConfig, themeHistoriesRef, onThemeChange } = props;
+  const { t } = usePlatformTranslation();
 
   if (!themeHistoriesRef.current) {
     return;
@@ -25,7 +27,10 @@ export const ThemeEditorRightSidebar = (
       <div>
         <Alert>
           <AlertDescription>
-            Please contact your developer to set up theme management.
+            {t(
+              "themeSidebar.noTheme",
+              "Please contact your developer to set up theme management."
+            )}
           </AlertDescription>
         </Alert>
       </div>
@@ -39,7 +44,10 @@ export const ThemeEditorRightSidebar = (
     <div>
       <Alert>
         <AlertDescription>
-          Changes will affect all page sets and layouts for the entire site.
+          {t(
+            "themeSidebar.warning",
+            "Changes will affect all page sets and layouts for the entire site."
+          )}
         </AlertDescription>
       </Alert>
 

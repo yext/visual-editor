@@ -2,6 +2,7 @@ module.exports = {
   input: [
     "src/components/**/*.{ts,tsx}",
     "src/editor/**/*.{ts,tsx}",
+    "src/internal/**/*.{ts,tsx}",
     "!**/__screenshots__/**",
   ],
 

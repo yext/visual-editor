@@ -1,8 +1,8 @@
-import { useTranslation } from "react-i18next";
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
+import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 
 type Option<T = any> = {
   label: string;
@@ -20,7 +20,7 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
-      const { t } = useTranslation();
+      const { t } = usePlatformTranslation();
       if (!options || options.length === 0) {
         return (
           <FieldLabel label={label} icon={<ChevronDown size={16} />}>

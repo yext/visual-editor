@@ -3,6 +3,7 @@ import { FieldLabel } from "@measured/puck";
 import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import "../ui/puck.css";
 import { ChevronDown, Search } from "lucide-react";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
 type FontSelectorProps = {
   label: string;
@@ -19,6 +20,7 @@ export const FontSelector = ({
 }: FontSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const { t } = usePlatformTranslation();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -42,7 +44,8 @@ export const FontSelector = ({
   );
 
   const selectedFontLabel =
-    options.find((option) => option.value === value)?.label ?? "Choose a font";
+    options.find((option) => option.value === value)?.label ??
+    t("fonts.choose", "Choose a font");
 
   return (
     <FieldLabel
@@ -65,7 +68,7 @@ export const FontSelector = ({
             <Search size={16} />
             <input
               type="text"
-              placeholder="Search fonts..."
+              placeholder={t("fonts.search", "Search fonts...")}
               className="font-search-input"
               value={searchTerm}
               onChange={handleSearchChange}
@@ -92,7 +95,7 @@ export const FontSelector = ({
             ))
           ) : (
             <div className="font-select-option ve-font-normal">
-              No fonts found.
+              {t("fonts.notFound", "No fonts found.")}
             </div>
           )}
         </div>
