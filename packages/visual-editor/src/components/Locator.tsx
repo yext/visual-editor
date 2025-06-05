@@ -545,7 +545,7 @@ const LocationCard: CardComponent<Location> = ({
             )}
           </div>
           {location.hours && (
-            <div className="font-body-fontFamily text-body-md-fontSize gap-8">
+            <div className="font-body-fontFamily text-body-fontSize gap-8">
               <HoursStatus
                 hours={location.hours}
                 timezone={location.timezone}
