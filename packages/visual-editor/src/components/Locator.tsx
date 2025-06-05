@@ -327,7 +327,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         );
 
         // sum up the height of all search results that are listed above this result
-        if (previousResultsRef.length > 1) {
+        if (previousResultsRef.length > 0) {
           scrollPos = previousResultsRef
             .map((elem) => elem?.scrollHeight ?? 0)
             .reduce((total, height) => total + height);
@@ -382,7 +382,6 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
           {resultCount > 0 &&
             filterDisplayName &&
             `${resultCount} locations near "${filterDisplayName}"`}
-          {/* TRANSLATIONS[locale].useLocator} */}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -495,7 +494,7 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
 
   return (
     <svg
-      className={color}
+      className={`${color} hover:cursor-pointer`}
       display="block"
       height={height}
       width={width}
