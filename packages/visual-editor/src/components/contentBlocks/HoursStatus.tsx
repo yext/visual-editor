@@ -68,7 +68,6 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   const document = useDocument();
   const { t } = useTranslation();
   const hours = resolveYextEntityField(document, hoursField);
-  const locale = "en-US"; // TODO pass real locale through
 
   if (!hours) {
     return null;
@@ -82,9 +81,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
     >
       <HoursStatusAtom
         hours={hours}
-        t={t}
         className={className}
-        locale={locale}
         showCurrentStatus={showCurrentStatus}
         showDayNames={showDayNames}
         timeFormat={timeFormat}
