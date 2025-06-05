@@ -14,7 +14,10 @@ import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import { i18nComponentsInstance } from "../../../utils/i18nComponents.ts";
-import { i18nPlatformInstance } from "../../../utils/i18nPlatform.ts";
+import {
+  i18nPlatformInstance,
+  usePlatformTranslation,
+} from "../../../utils/i18nPlatform.ts";
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
@@ -56,6 +59,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       setHistories,
     },
   } = usePuck();
+  const { t } = usePlatformTranslation();
 
   useEffect(() => {
     onHistoryChange(histories, index);
@@ -88,6 +92,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             size="icon"
             disabled={!hasPast}
             onClick={back}
+            aria-label={t("undo", "Undo")}
           >
             <RotateCcw className="sm-icon" />
           </Button>
@@ -97,6 +102,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             size="icon"
             disabled={!hasFuture}
             onClick={forward}
+            aria-label={t("redo", "Redo")}
           >
             <RotateCw className="sm-icon" />
           </Button>
@@ -133,8 +139,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               }}
             >
               {templateMetadata.assignment === "ENTITY"
-                ? "Send for Approval"
-                : `Update ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? "Page" : "Pages"}`}
+                ? t("approvals.send", "Send for Approval")
+                : // TODO: translation concatenation
+                  `${t("update", "Update")} ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? t("page", "Page") : t("pages", "Pages")}`}
             </Button>
           )}
         </div>
@@ -143,7 +150,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   );
 };
 
-const LocalDevOverrideButtons = () => {
+export const LocalDevOverrideButtons = () => {
   const {
     appState,
     config,

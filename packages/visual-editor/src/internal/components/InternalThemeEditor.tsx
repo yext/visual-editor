@@ -179,6 +179,7 @@ export const InternalThemeEditor = ({
               clearLocalChangesModalOpen={clearLocalChangesModalOpen}
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               totalEntityCount={templateMetadata.totalEntityCount}
+              localDev={localDev}
             />
           ),
           actionBar: () => <></>,

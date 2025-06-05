@@ -146,7 +146,12 @@ export const Editor = ({
             />
           )
         ) : (
-          parentLoaded && <LoadingScreen progress={progress} />
+          parentLoaded && (
+            <LoadingScreen
+              progress={progress}
+              platformLanguageIsSet={!!templateMetadata?.platformLocale}
+            />
+          )
         )}
         <Toaster closeButton richColors />
       </ErrorBoundary>

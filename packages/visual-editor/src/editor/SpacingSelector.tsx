@@ -1,9 +1,9 @@
-import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
+import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 
 export const spacingOptions = [
   { label: "0", value: "0", px: "0" },
@@ -86,7 +86,7 @@ export const SpacingSelector = (
   return {
     type: "custom",
     render: ({ value, onChange }) => {
-      const { t } = useTranslation();
+      const { t } = usePlatformTranslation();
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
