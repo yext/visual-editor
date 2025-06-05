@@ -13,15 +13,17 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
   Address,
-  AnalyticsScopeProvider,
   Coordinate,
-  HoursStatus,
+  AnalyticsScopeProvider,
 } from "@yext/pages-components";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 
 export interface NearbyLocationsSectionProps {
   data: {
@@ -162,6 +164,8 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
+  locale,
+  t,
 }: {
   key: number;
   styles: NearbyLocationsSectionProps["styles"];
@@ -170,6 +174,8 @@ const LocationCard = ({
   address: any;
   timezone: string;
   mainPhone: string;
+  locale: string;
+  t: TFunction;
 }) => {
   return (
     <Background
@@ -180,25 +186,15 @@ const LocationCard = ({
       <Heading level={styles?.cardHeadingLevel}>{name}</Heading>
       {hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-          <HoursStatus
+          <HoursStatusAtom
             hours={hours}
-            timezone={timezone}
-            currentTemplate={
-              styles?.hours?.showCurrentStatus ? undefined : () => <></>
-            }
-            separatorTemplate={
-              styles?.hours?.showCurrentStatus ? undefined : () => <></>
-            }
-            timeOptions={{
-              hour12: styles?.hours?.timeFormat === "12h",
-            }}
-            dayOptions={{
-              weekday: styles?.hours?.dayOfWeekFormat,
-            }}
-            dayOfWeekTemplate={
-              styles?.hours?.showDayNames ? undefined : () => <></>
-            }
+            t={t}
             className="h-full"
+            timezone={timezone}
+            showCurrentStatus={styles?.hours?.showCurrentStatus}
+            timeFormat={"12h"}
+            dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+            locale={locale}
           />
         </div>
       )}
@@ -233,6 +229,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
+  const { t } = useTranslation();
+  const locale = "en-US"; // TODO replace with real locale
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     data?.coordinate
@@ -307,6 +305,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
+                    locale={locale}
+                    t={t}
                   />
                 )
               )}

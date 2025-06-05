@@ -9,6 +9,7 @@ export { PageSection, type PageSectionProps } from "./pageSection.tsx";
 export { PhoneAtom, type PhoneAtomProps } from "./phone.tsx";
 export { Background, type BackgroundProps } from "./background.tsx";
 export { VisibilityWrapper } from "./visibilityWrapper.tsx";
+export { HoursStatusAtom, type HoursStatusAtomProps } from "./hoursStatus.tsx";
 export {
   Timestamp,
   type TimestampProps,
