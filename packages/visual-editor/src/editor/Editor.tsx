@@ -17,6 +17,7 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
+import { i18nPlatformInstance } from "../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -53,7 +54,7 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, document, !!localDev);
+  } = useCommonMessageReceivers(componentRegistry, !!localDev);
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -102,6 +103,12 @@ export const Editor = ({
       });
     }
   }, [templateMetadata?.isDevMode, devPageSets]);
+
+  useEffect(() => {
+    if (templateMetadata?.platformLocale) {
+      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
+    }
+  }, [templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({
     maxProgress: 60,

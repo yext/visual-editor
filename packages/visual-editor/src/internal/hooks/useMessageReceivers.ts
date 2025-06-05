@@ -16,7 +16,6 @@ const devLogger = new DevLogger();
 
 export const useCommonMessageReceivers = (
   componentRegistry: Map<string, Config<any>>,
-  document: any,
   localDev: boolean
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();

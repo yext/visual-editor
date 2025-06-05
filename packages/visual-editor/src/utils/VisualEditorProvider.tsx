@@ -5,10 +5,8 @@ import { TailwindConfig } from "./themeResolver.ts";
 import { StreamFields } from "../types/entityFields.ts";
 import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { i18n as I18nType } from "i18next";
 import { I18nextProvider } from "react-i18next";
-import { initI18n } from "./i18n.ts";
-import { FaSpinner } from "react-icons/fa";
+import { i18nComponentsInstance } from "./i18nComponents.ts";
 
 type AllOrNothing<T extends Record<string, any>> =
   | T
@@ -27,59 +25,20 @@ type EditorProps = {
 type VisualEditorProviderProps<T> = UniversalProps<T> &
   AllOrNothing<EditorProps>;
 
-const VisualEditorProvider = <T,>({
+const VisualEditorProvider = <T extends Record<string, any>>({
   templateProps,
   entityFields,
   tailwindConfig,
   children,
 }: VisualEditorProviderProps<T>) => {
   const queryClient = new QueryClient();
-  const [i18nInstance, setI18nInstance] = React.useState<I18nType | null>(null);
-  React.useEffect(() => {
-    initI18n().then((i18n) => setI18nInstance(i18n));
-  }, []);
 
-  if (!i18nInstance) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          gap: 16,
-          fontFamily: "system-ui, sans-serif",
-          color: "#333",
-        }}
-        aria-live="polite"
-        aria-busy="true"
-      >
-        <FaSpinner
-          style={{
-            width: 48,
-            height: 48,
-            color: "#4F46E5",
-            animation: "spin 1s linear infinite",
-          }}
-          aria-hidden="true"
-        />
-        <div style={{ fontSize: 16 }}>Loading translations...</div>
-
-        <style>
-          {`
-          @keyframes spin {
-            0% { transform: rotate(0deg);}
-            100% { transform: rotate(360deg);}
-          }
-        `}
-        </style>
-      </div>
-    );
+  if (templateProps?.document?.locale) {
+    i18nComponentsInstance.changeLanguage(templateProps.document.locale);
   }
 
   return (
-    <I18nextProvider i18n={i18nInstance}>
+    <I18nextProvider i18n={i18nComponentsInstance}>
       <QueryClientProvider client={queryClient}>
         <TemplatePropsContext.Provider value={templateProps}>
           <EntityFieldsContext.Provider value={entityFields}>
