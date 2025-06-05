@@ -1,5 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const localesDir = path.join(__dirname, "../locales");
 let foundEmptyTranslation = false;
@@ -16,7 +20,6 @@ try {
   for (const locale of localeDirs) {
     const filePath = path.join(localesDir, locale, "visual-editor.json");
     if (fs.existsSync(filePath)) {
-      console.log(`Checking file: ${filePath}`);
       const content = fs.readFileSync(filePath, "utf8");
       const json = JSON.parse(content);
       for (const key in json) {
@@ -39,7 +42,7 @@ try {
     errorMessages.forEach((msg) => console.error(msg));
     process.exit(1); // Exit with error code
   } else {
-    console.log("\nNo empty translation strings found. All good!");
+    console.log("\nSuccess: no empty translation strings found.");
     process.exit(0);
   }
 } catch (error) {
