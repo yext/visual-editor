@@ -9,11 +9,15 @@ import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
-import { useCommonMessageReceivers } from "../internal/hooks/useMessageReceivers.ts";
+import {
+  useCommonMessageReceivers,
+  TemplateMetadataContext,
+} from "../internal/hooks/useMessageReceivers.ts";
 import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
+import { i18nPlatformInstance } from "../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -50,7 +54,7 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, document, !!localDev);
+  } = useCommonMessageReceivers(componentRegistry, !!localDev);
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -100,6 +104,12 @@ export const Editor = ({
     }
   }, [templateMetadata?.isDevMode, devPageSets]);
 
+  useEffect(() => {
+    if (templateMetadata?.platformLocale) {
+      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
+    }
+  }, [templateMetadata?.platformLocale]);
+
   const { isLoading, progress } = useProgress({
     maxProgress: 60,
     completionCriteria: [
@@ -113,31 +123,33 @@ export const Editor = ({
   });
 
   return (
-    <ErrorBoundary fallback={<></>} onError={logError}>
-      {!isLoading ? (
-        templateMetadata?.isThemeMode || forceThemeMode ? (
-          <ThemeEditor
-            puckConfig={puckConfig!}
-            templateMetadata={templateMetadata!}
-            layoutData={layoutData!}
-            themeData={themeData!}
-            themeConfig={themeConfig}
-            localDev={!!localDev}
-          />
+    <TemplateMetadataContext.Provider value={templateMetadata!}>
+      <ErrorBoundary fallback={<></>} onError={logError}>
+        {!isLoading ? (
+          templateMetadata?.isThemeMode || forceThemeMode ? (
+            <ThemeEditor
+              puckConfig={puckConfig!}
+              templateMetadata={templateMetadata!}
+              layoutData={layoutData!}
+              themeData={themeData!}
+              themeConfig={themeConfig}
+              localDev={!!localDev}
+            />
+          ) : (
+            <LayoutEditor
+              puckConfig={puckConfig!}
+              templateMetadata={templateMetadata!}
+              layoutData={layoutData!}
+              themeData={themeData!}
+              themeConfig={themeConfig}
+              localDev={!!localDev}
+            />
+          )
         ) : (
-          <LayoutEditor
-            puckConfig={puckConfig!}
-            templateMetadata={templateMetadata!}
-            layoutData={layoutData!}
-            themeData={themeData!}
-            themeConfig={themeConfig}
-            localDev={!!localDev}
-          />
-        )
-      ) : (
-        parentLoaded && <LoadingScreen progress={progress} />
-      )}
-      <Toaster closeButton richColors />
-    </ErrorBoundary>
+          parentLoaded && <LoadingScreen progress={progress} />
+        )}
+        <Toaster closeButton richColors />
+      </ErrorBoundary>
+    </TemplateMetadataContext.Provider>
   );
 };

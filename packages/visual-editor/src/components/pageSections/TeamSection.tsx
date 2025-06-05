@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Image,
   HeadingLevel,
@@ -21,6 +22,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface TeamSectionProps {
   styles: {
@@ -31,6 +33,9 @@ export interface TeamSectionProps {
   data: {
     heading: YextEntityField<string>;
     people: YextEntityField<TeamSectionType>;
+  };
+  analytics?: {
+    scope?: string;
   };
   liveVisibility: boolean;
 }
@@ -81,10 +86,12 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
 };
 
 const PersonCard = ({
+  key,
   person,
   backgroundColor,
   sectionHeadingLevel,
 }: {
+  key: number;
   person: PersonStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -125,6 +132,7 @@ const PersonCard = ({
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
             <PhoneAtom
+              eventName={`phone${key}`}
               phoneNumber={person.phoneNumber}
               includeHyperlink={true}
               includeIcon={true}
@@ -141,6 +149,7 @@ const PersonCard = ({
                 <FaEnvelope />
               </div>
               <CTA
+                eventName={`email${key}`}
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
@@ -151,6 +160,7 @@ const PersonCard = ({
           {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
+                eventName={`cta${key}`}
                 label={person.cta.label}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
@@ -165,6 +175,7 @@ const PersonCard = ({
 };
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveYextEntityField(document, data.heading);
@@ -176,7 +187,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -187,7 +198,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName="Team"
+          displayName={t("team", "Team")}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
@@ -229,14 +240,19 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
     },
+    analytics: {
+      scope: "teamSection",
+    },
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <TeamSectionWrapper {...props} />
-    </VisibilityWrapper>
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "teamSection"}>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <TeamSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

@@ -10,8 +10,12 @@ const EXPERIENCE_VERSION = "PRODUCTION";
 /**
  * Builds the search headless config for the template. Returns undefined if the config is not valid.
  * @param document the entity document
+ * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
-export const createSearchHeadlessConfig = (document: any) => {
+export const createSearchHeadlessConfig = (
+  document: any,
+  experienceKeyEnvVar?: string
+) => {
   const warnings = [];
   const searchApiKey = document?._env?.YEXT_SEARCH_API_KEY;
   if (!searchApiKey) {
@@ -39,7 +43,7 @@ export const createSearchHeadlessConfig = (document: any) => {
       "Invalid or missing YEXT_ENVIRONMENT! Unable to set up locator."
     );
   }
-  const experienceKey = getExperienceKey(document);
+  const experienceKey = getExperienceKey(document, experienceKeyEnvVar);
   if (!experienceKey) {
     warnings.push("Missing experienceKey! Unable to set up locator.");
   }
@@ -75,8 +79,12 @@ export const createSearchHeadlessConfig = (document: any) => {
 /**
  * Builds the search analytics config for the template. Returns undefined if the config is not valid.
  * @param document the entity document
+ * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
-export const createSearchAnalyticsConfig = (document: any) => {
+export const createSearchAnalyticsConfig = (
+  document: any,
+  experienceKeyEnvVar?: string
+) => {
   const warnings = [];
   const businessId = document?.businessId;
   if (!businessId) {
@@ -94,7 +102,7 @@ export const createSearchAnalyticsConfig = (document: any) => {
       "Invalid or missing YEXT_CLOUD_REGION! Unable to set up locator analytics."
     );
   }
-  const experienceKey = getExperienceKey(document);
+  const experienceKey = getExperienceKey(document, experienceKeyEnvVar);
   if (!experienceKey) {
     warnings.push("Missing experienceKey! Unable to set up locator analytics.");
   }
@@ -121,8 +129,13 @@ export const createSearchAnalyticsConfig = (document: any) => {
 /**
  * Extracts the experienceKey from the entity document if possible, otherwise returns undefined.
  * @param document the entity document
+ * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
-const getExperienceKey = (document: any) => {
+const getExperienceKey = (document: any, experienceKeyEnvVar?: string) => {
+  if (!document._pageset && experienceKeyEnvVar) {
+    return document._env?.[experienceKeyEnvVar];
+  }
+
   try {
     const experienceKey = JSON.parse(document._pageset).typeConfig.locatorConfig
       .experienceKey;

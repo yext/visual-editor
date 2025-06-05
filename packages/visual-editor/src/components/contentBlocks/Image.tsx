@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -70,6 +71,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   width,
   height,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
     document,
@@ -82,7 +84,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 
   return (
     <EntityField
-      displayName="Image"
+      displayName={t("image", "Image")}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >

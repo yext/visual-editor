@@ -1,5 +1,6 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { CTA as CTAType } from "@yext/pages-components";
+import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
   Body,
@@ -30,6 +31,9 @@ type socialLink = {
 
 type FooterProps = {
   backgroundColor?: BackgroundStyle;
+  analytics?: {
+    scope?: string;
+  };
 };
 
 const footerFields: Fields<FooterProps> = {
@@ -45,14 +49,22 @@ const Footer: ComponentConfig<FooterProps> = {
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
+    analytics: {
+      scope: "footer",
+    },
   },
   inline: true,
-  render: (props) => <FooterComponent {...props} />,
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "footer"}>
+      <FooterComponent {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
 
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
+  const { t } = useTranslation();
   const document = useDocument<any>();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
@@ -108,13 +120,16 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
     >
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
-          <EntityField displayName="Footer Links" fieldId={"site.footer.links"}>
+          <EntityField
+            displayName={t("footerLinks", "Footer Links")}
+            fieldId={"site.footer.links"}
+          >
             <FooterLinks links={links} />
           </EntityField>
         )}
         {socialLinks && (
           <EntityField
-            displayName="Footer Social Icons"
+            displayName={t("footerSocialIcons", "Footer Social Icons")}
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -124,7 +139,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName="Copyright Text"
+            displayName={t("copyrightText", "Copyright Text")}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>
@@ -146,7 +161,7 @@ const FooterLinks = (props: { links: CTAType[] }) => {
               link={item.link}
               label={item.label}
               linkType={item.linkType}
-              eventName={`footerlink${idx}`}
+              eventName={`link${idx}`}
               variant="link"
               alwaysHideCaret={true}
               className="sm:pr-8"
@@ -167,7 +182,7 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
             label={socialLink.label}
             link={`${socialLink.prefix ?? ""}${socialLink.link}`}
             variant={"link"}
-            eventName={socialLink.name}
+            eventName={`socialLink${idx}`}
             alwaysHideCaret={true}
             ariaLabel={socialLink.label + " link"}
           />

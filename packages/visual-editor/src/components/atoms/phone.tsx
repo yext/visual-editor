@@ -7,6 +7,7 @@ import { BackgroundStyle } from "@yext/visual-editor";
 export type PhoneAtomProps = {
   phoneNumber: string;
   label?: string;
+  eventName?: string;
   backgroundColor?: BackgroundStyle;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
@@ -38,6 +39,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           label={formattedPhoneNumber}
           linkType="PHONE"
           variant="link"
+          eventName={props.eventName}
         />
       ) : (
         <Body>{formattedPhoneNumber}</Body>

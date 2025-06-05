@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CardComponent,
@@ -129,6 +130,8 @@ const TRANSLATIONS = {
 
 export type LocatorProps = {
   mapStyle?: string;
+  entityTypeEnvVar?: string; // to be set via withPropOverrides
+  experienceKeyEnvVar?: string; // to be set via withPropOverrides
 };
 
 const locatorFields: Fields<LocatorProps> = {
@@ -160,7 +163,10 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
   const document: any = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
-    const searchHeadlessConfig = createSearchHeadlessConfig(document);
+    const searchHeadlessConfig = createSearchHeadlessConfig(
+      document,
+      props.experienceKeyEnvVar
+    );
     if (searchHeadlessConfig === undefined) {
       return { searchAnalyticsConfig: undefined, searcher: undefined };
     }
@@ -190,9 +196,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
-  const entityType = getEntityType();
+  const { mapStyle, entityTypeEnvVar } = props;
+  const entityType = getEntityType(entityTypeEnvVar);
   const locale = getDocumentLocale();
-  const { mapStyle } = props;
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -423,6 +429,7 @@ const Map: React.FC<MapProps> = ({
   scrollToResult,
   markerOptionsOverride,
 }) => {
+  const { t } = useTranslation();
   // During page generation we don't exist in a browser context
   const iframe =
     typeof document === "undefined"
@@ -435,7 +442,7 @@ const Map: React.FC<MapProps> = ({
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
           <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
-            Loading Map...
+            {t("loadingMap", "Loading Map...")}
           </span>
         </div>
       </div>
@@ -613,8 +620,12 @@ const getPath = (location: Location, locale: string) => {
   return normalizeSlug(path);
 };
 
-const getEntityType = () => {
+const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
+  if (!entityDocument._pageset && entityTypeEnvVar) {
+    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
+  }
+
   try {
     const entityType = JSON.parse(entityDocument._pageset).typeConfig
       .locatorConfig.entityType;

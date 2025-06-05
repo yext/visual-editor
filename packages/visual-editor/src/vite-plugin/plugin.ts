@@ -58,7 +58,7 @@ const virtualFiles: VirtualFile[] = [
     templateManifestEntry: {
       name: "directory",
       description:
-        "Use this template to generate pages for each of your Locations.",
+        "Use this template to generate pages for each of your Directory entities.",
       exampleSiteUrl: "",
       layoutRequired: true,
       defaultLayoutData: defaultLayoutData.directory,
@@ -123,9 +123,6 @@ export const yextVisualEditorPlugin = (): Plugin => {
     if (!fs.existsSync(manifestPath)) {
       // Write the manifest to the .template-manifest.json file
       fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-
-      // Add the manifest file path to the cleanup list
-      filesToCleanup.push(manifestPath);
     }
   };
 

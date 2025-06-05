@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { cloneElement } from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -137,6 +138,7 @@ const PhotoGallerySectionComponent = ({
   data,
   styles,
 }: PhotoGallerySectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const sectionHeading = resolveYextEntityField(document, data.heading);
 
@@ -154,13 +156,13 @@ const PhotoGallerySectionComponent = ({
 
   return (
     <PageSection
-      aria-label="Photo Gallery Section"
+      aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
       className="flex flex-col gap-8 justify-center text-center"
     >
       {sectionHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -182,7 +184,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName="Images"
+              displayName={t("images", "Images")}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >

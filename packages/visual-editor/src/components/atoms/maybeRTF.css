@@ -98,6 +98,17 @@
   }
 }
 
+/* Set the body variants */
+.rtf-body-sm p,
+.rtf-body-sm li {
+  font-size: calc(var(--fontSize-body-fontSize) - 2px) !important;
+}
+
+.rtf-body-lg p,
+.rtf-body-lg li {
+  font-size: calc(var(--fontSize-body-fontSize) + 2px) !important;
+}
+
 /* If the parent has a dark background, override text color to white. */
 .rtf-dark-background h1,
 .rtf-dark-background h2,

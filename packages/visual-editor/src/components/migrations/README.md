@@ -1,3 +1,8 @@
+---
+title: Migrations
+outline: deep
+---
+
 # Migrations
 
 Migrations ensure backwards compatibility for component updates. When a site is updated, it immediately begins

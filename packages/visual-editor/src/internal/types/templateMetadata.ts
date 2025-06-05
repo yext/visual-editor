@@ -13,6 +13,8 @@ export type TemplateMetadata = {
   isThemeMode: boolean;
   entityCount: number;
   totalEntityCount: number;
+  entityTypeDisplayName: string;
+  platformLocale?: string;
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
@@ -29,6 +31,8 @@ export function generateTemplateMetadata(): TemplateMetadata {
     devOverride: false,
     entityCount: 0,
     totalEntityCount: 0,
+    entityTypeDisplayName: "Entity",
+    platformLocale: "en",
   };
 }
 

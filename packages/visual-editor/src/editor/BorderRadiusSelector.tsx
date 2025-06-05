@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
@@ -93,6 +94,7 @@ export const BorderRadiusSelector = (label?: string): Field => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {
+      const { t } = useTranslation();
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
@@ -107,7 +109,11 @@ export const BorderRadiusSelector = (label?: string): Field => {
               type: "select",
               options: convertDefaultBorderRadiusToOptions(
                 [
-                  { label: "Default", value: "default", px: "" },
+                  {
+                    label: t("borderRadiusDefaultLabel", "Default"),
+                    value: "default",
+                    px: "",
+                  },
                   ...borderRadiusOptions,
                 ],
                 tailwindConfig

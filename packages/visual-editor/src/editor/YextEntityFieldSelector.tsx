@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -5,8 +6,6 @@ import {
   getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
-import { RadioGroup, RadioGroupItem } from "../internal/puck/ui/radio.tsx";
-import { Label } from "../internal/puck/ui/label.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { TEXT_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Text.tsx";
@@ -16,6 +15,7 @@ import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Call
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
@@ -30,6 +30,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../internal/puck/ui/Tooltip.tsx";
+import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
+import { Switch } from "../internal/puck/ui/switch.tsx";
 
 const devLogger = new DevLogger();
 
@@ -56,6 +58,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
@@ -140,13 +143,14 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       };
 
       return (
-        <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
+        <>
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
+            label={props.label}
           />
           {value?.constantValueEnabled && !props.isCollection && (
             <ConstantValueInput<T>
@@ -163,7 +167,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               filter={props.filter}
             />
           )}
-        </FieldLabel>
+        </>
       );
     },
   };
@@ -196,13 +200,14 @@ export const YextCollectionSubfieldSelector = <
       };
 
       return (
-        <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
+        <>
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
+            label={props.label}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
@@ -218,7 +223,7 @@ export const YextCollectionSubfieldSelector = <
               filter={props.filter}
             />
           )}
-        </FieldLabel>
+        </>
       );
     },
   };
@@ -230,17 +235,15 @@ export const ConstantValueModeToggler = ({
   toggleConstantValueEnabled,
   isCollection,
   disableConstantValue,
+  label,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
   isCollection?: boolean;
   disableConstantValue?: boolean;
+  label: string;
 }) => {
-  const random = Math.floor(Math.random() * 999999);
-  const entityButtonId = `ve-use-entity-value-${random}`;
-  const constantButtonId = `ve-use-constant-value-${random}`;
-
   // If disableConstantValue is true, constantValueInputSupported is always false.
   // Else if isCollection or a supported field type, constantValueInputSupported is true
   const constantValueInputSupported =
@@ -253,52 +256,34 @@ export const ConstantValueModeToggler = ({
       ));
 
   return (
-    <div className="ve-w-full">
-      <RadioGroup
-        value={constantValueEnabled?.toString() ?? "false"}
-        onValueChange={(value) => toggleConstantValueEnabled(value === "true")}
-      >
-        <div className="ve-flex ve-items-center ve-space-x-2">
-          <RadioGroupItem value="false" id={entityButtonId} />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Label
-                  htmlFor={entityButtonId}
-                  onClick={() => toggleConstantValueEnabled(false)}
-                >
-                  Use Page-specific Content
-                </Label>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Use content specific to each page</p>
-                <TooltipArrow fill="ve-bg-popover" />
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        {constantValueInputSupported && (
-          <div className="ve-flex ve-items-center ve-space-x-2">
-            <RadioGroupItem value="true" id={constantButtonId} />
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Label
-                    onClick={() => toggleConstantValueEnabled(true)}
-                    htmlFor={constantButtonId}
-                  >
-                    Use Static Content
-                  </Label>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Use the same content for each page</p>
-                  <TooltipArrow fill="ve-bg-popover" />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        )}
-      </RadioGroup>
+    <div className="ve-w-full ve-flex ve-gap-3">
+      {constantValueInputSupported && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="ve-flex ve-flex-row ve-self-center">
+                <Switch
+                  onCheckedChange={(entityFieldEnabled) =>
+                    toggleConstantValueEnabled(!entityFieldEnabled)
+                  }
+                  checked={!constantValueEnabled}
+                  icon={<KnowledgeGraphIcon enabled={!constantValueEnabled} />}
+                  className="data-[state=unchecked]:ve-bg-gray-500"
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              {constantValueEnabled
+                ? "Static content"
+                : "Knowledge Graph content"}
+              <TooltipArrow fill="ve-bg-popover" />
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+      <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
+        {label}
+      </p>
     </div>
   );
 };
@@ -369,6 +354,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   className,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
+  const templateMetadata = useTemplateMetadata();
+  const { t } = useTranslation();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -382,8 +369,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
-    return BasicSelector("Entity Field", [
-      { value: "", label: "Select a Content field" },
+    return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
+      {
+        value: "",
+        label: t("basicSelectorContentLabel", "Select a Content field"),
+      },
       ...filteredEntityFields
         .map((entityFieldNameToSchema) => {
           return {

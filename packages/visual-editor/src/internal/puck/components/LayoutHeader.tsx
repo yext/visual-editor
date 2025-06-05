@@ -13,6 +13,8 @@ import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
+import { i18nComponentsInstance } from "../../../utils/i18nComponents.ts";
+import { i18nPlatformInstance } from "../../../utils/i18nPlatform.ts";
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
@@ -44,7 +46,6 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
   const {
     appState,
-    config,
     history: {
       back,
       forward,
@@ -78,39 +79,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
           <EntityFieldsToggle />
-          {localDev && (
-            <>
-              <Button
-                onClick={() => console.log(JSON.stringify(appState.data))}
-                variant="outline"
-                className="ve-ml-4"
-              >
-                Log Layout Data
-              </Button>
-              <Button
-                onClick={() => {
-                  let data = { root: {}, content: [] };
-                  try {
-                    data = JSON.parse(prompt("Enter layout data:") ?? "{}");
-                  } finally {
-                    const migratedData = migrate(
-                      data,
-                      migrationRegistry,
-                      config
-                    );
-                    setHistories([
-                      ...histories,
-                      { state: { data: migratedData } },
-                    ]);
-                  }
-                }}
-                variant="outline"
-                className="ve-ml-4"
-              >
-                Set Layout Data
-              </Button>
-            </>
-          )}
+          {localDev && <LocalDevOverrideButtons />}
         </div>
         <div className="header-center"></div>
         <div className="actions">
@@ -170,6 +139,61 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           )}
         </div>
       </header>
+    </>
+  );
+};
+
+const LocalDevOverrideButtons = () => {
+  const {
+    appState,
+    config,
+    history: { histories, setHistories },
+  } = usePuck();
+
+  return (
+    <>
+      <Button
+        onClick={() => console.log(JSON.stringify(appState.data))}
+        variant="outline"
+        className="ve-ml-4"
+      >
+        Log Layout Data
+      </Button>
+      <Button
+        onClick={() => {
+          let data = { root: {}, content: [] };
+          try {
+            data = JSON.parse(prompt("Enter layout data:") ?? "{}");
+          } finally {
+            const migratedData = migrate(data, migrationRegistry, config);
+            setHistories([...histories, { state: { data: migratedData } }]);
+          }
+        }}
+        variant="outline"
+        className="ve-ml-4"
+      >
+        Set Layout Data
+      </Button>
+      <Button
+        onClick={() => {
+          const locale = prompt("Enter components locale:");
+          i18nComponentsInstance.changeLanguage(locale ?? "en");
+        }}
+        variant="outline"
+        className="ve-ml-4"
+      >
+        Set Components Locale
+      </Button>
+      <Button
+        onClick={() => {
+          const locale = prompt("Enter platform locale:");
+          i18nPlatformInstance.changeLanguage(locale ?? "en");
+        }}
+        variant="outline"
+        className="ve-ml-4"
+      >
+        Set Platform Locale
+      </Button>
     </>
   );
 };
