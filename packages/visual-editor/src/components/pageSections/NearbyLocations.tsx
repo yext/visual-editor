@@ -14,6 +14,8 @@ import {
   YextField,
   VisibilityWrapper,
   HoursStatusAtom,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -27,7 +29,7 @@ import { TFunction } from "i18next";
 
 export interface NearbyLocationsSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     coordinate: YextEntityField<Coordinate>;
     radius: number;
     limit: number;
@@ -57,7 +59,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading", {
+      heading: YextField<any, TranslatableString>("Heading", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -235,7 +237,9 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     document,
     data?.coordinate
   );
-  const headingText = resolveYextEntityField<string>(document, data?.heading);
+  const headingText = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data?.heading)
+  );
 
   // parse variables from document
   const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =

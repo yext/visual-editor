@@ -27,6 +27,7 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -34,6 +35,7 @@ import {
 } from "../contentBlocks/Image.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { TranslatableString } from "../../editor/YextEntityFieldSelector.tsx";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 
@@ -45,7 +47,7 @@ const DEFAULT_IMAGE = {
 
 export interface PhotoGallerySectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     images: YextEntityField<ImageType[] | ComplexImageType[]>;
   };
   styles: {
@@ -110,7 +112,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading", {
+      heading: YextField<any, TranslatableString>("Heading", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -140,7 +142,9 @@ const PhotoGallerySectionComponent = ({
 }: PhotoGallerySectionProps) => {
   const { t } = useTranslation();
   const document = useDocument();
-  const sectionHeading = resolveYextEntityField(document, data.heading);
+  const sectionHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading)
+  );
 
   const resolvedImages = resolveYextEntityField(document, data.images);
 
