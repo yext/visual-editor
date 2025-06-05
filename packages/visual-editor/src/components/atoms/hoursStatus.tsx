@@ -5,12 +5,11 @@ import {
 import { themeManagerCn } from "@yext/visual-editor";
 import * as React from "react";
 import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export interface HoursStatusAtomProps {
   hours: HoursType;
-  t: TFunction;
   className?: string;
-  locale?: string;
   showCurrentStatus?: boolean;
   showDayNames?: boolean;
   timeFormat?: "12h" | "24h";
@@ -20,21 +19,21 @@ export interface HoursStatusAtomProps {
 
 export const HoursStatusAtom = ({
   hours,
-  t,
   className,
-  locale = "en-US",
   showCurrentStatus = true,
   showDayNames = true,
-  timeFormat = "12h",
+  timeFormat,
   dayOfWeekFormat = "long",
   timezone,
 }: HoursStatusAtomProps): any => {
+  const { t, i18n } = useTranslation();
+
   return (
     <HoursStatusJS
       hours={hours}
       className={themeManagerCn(
         "components mb-2 font-body-fontWeight text-body-lg-fontSize",
-        className || ""
+        className
       )}
       currentTemplate={
         showCurrentStatus
@@ -49,12 +48,13 @@ export const HoursStatusAtom = ({
       dayOfWeekTemplate={
         showDayNames
           ? (params: HoursStatusParams) =>
-              hoursDayOfWeekTemplateOverride(params, locale || "en-US")
+              hoursDayOfWeekTemplateOverride(params, i18n.language)
           : () => <></>
       }
       dayOptions={{ weekday: dayOfWeekFormat }}
-      timeOptions={{ hour12: timeFormat === "12h" }}
+      timeOptions={timeFormat ? { hour12: timeFormat === "12h" } : undefined}
       timezone={timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone}
+      timeTemplate={(params) => timeTemplate(params, i18n.language)}
     />
   );
 };
@@ -137,6 +137,29 @@ function hoursDayOfWeekTemplateOverride(
   }
   return <span className="HoursStatus-dayOfWeek"> {dayOfWeek}</span>;
 }
+
+/**
+ * Overrides the time shown in the status
+ * @param params used to determine the time
+ * @param locale used to set the formatting
+ */
+const timeTemplate = (
+  params: HoursStatusParams,
+  locale: string
+): React.ReactNode => {
+  if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
+    return null;
+  }
+  let time = "";
+  if (params.isOpen) {
+    const interval = params.currentInterval;
+    time += interval ? interval.getEndTime(locale, params.timeOptions) : "";
+  } else {
+    const interval = params.futureInterval;
+    time += interval ? interval.getStartTime(locale, params.timeOptions) : "";
+  }
+  return <span className="HoursStatus-time"> {time}</span>;
+};
 
 interface HoursStatusParams {
   isOpen: boolean;

@@ -125,7 +125,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t } = useTranslation();
   const document = useDocument() as any;
-  const locale = "en-US"; // TODO override with real locale
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
     data?.businessName
@@ -197,12 +196,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
-              <HoursStatusAtom
-                hours={resolvedHours}
-                t={t}
-                timezone={timezone}
-                locale={locale}
-              />
+              <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
           )}
         </header>
