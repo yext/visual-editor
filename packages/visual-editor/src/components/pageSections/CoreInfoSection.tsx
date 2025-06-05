@@ -7,7 +7,6 @@ import {
   AnalyticsScopeProvider,
   DayOfWeekNames,
   getDirections,
-  HoursTable,
   HoursType,
 } from "@yext/pages-components";
 import { FaRegEnvelope } from "react-icons/fa";
@@ -27,6 +26,7 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
+  HoursTableAtom,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -402,11 +402,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
-            <HoursTable
+            <HoursTableAtom
               hours={resolvedHours}
               startOfWeek={styles.hours.startOfWeek}
               collapseDays={styles.hours.collapseDays}
-              className="text-body-fontSize font-body-fontWeight font-body-fontFamily"
             />
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
