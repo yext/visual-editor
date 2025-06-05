@@ -9,9 +9,9 @@ import {
   MapboxMap,
   OnDragHandler,
   OnSelectParams,
-  ResultsCount,
   VerticalResults,
   AnalyticsProvider,
+  PinComponent,
 } from "@yext/search-ui-react";
 import {
   Matcher,
@@ -20,13 +20,13 @@ import {
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  Result,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
   Background,
   backgroundColors,
   BasicSelector,
-  Body,
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
@@ -36,13 +36,14 @@ import {
   PhoneAtom,
   useDocument,
 } from "@yext/visual-editor";
-import { LngLat, LngLatBounds } from "mapbox-gl";
+import { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
   Address,
   AddressType,
   HoursStatus,
   HoursType,
 } from "@yext/pages-components";
+import { MapPinIcon } from "./MapPinIcon.js";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -58,6 +59,8 @@ const TRANSLATIONS = {
     currentMapArea: "Current map area",
     currentLocation: "Current Location",
     searchHere: "Search here...",
+    findALocation: "Find a Location",
+    newYorkCity: "New York City, New York, United States",
   },
   fr: {
     searchThisArea: "Rechercher cette zone",
@@ -69,6 +72,8 @@ const TRANSLATIONS = {
     currentMapArea: "Zone de carte actuelle",
     currentLocation: "Emplacement actuel",
     searchHere: "Rechercher ici...",
+    findALocation: "Trouver un emplacement",
+    newYorkCity: "New York, État de New York, États-Unis",
   },
   es: {
     searchThisArea: "Buscar esta área",
@@ -80,6 +85,8 @@ const TRANSLATIONS = {
     currentMapArea: "Área del mapa actual",
     currentLocation: "Ubicación actual",
     searchHere: "Buscar aquí...",
+    findALocation: "Buscar una ubicación",
+    newYorkCity: "Nueva York, Nueva York, Estados Unidos",
   },
   de: {
     searchThisArea: "Diese Fläche durchsuchen",
@@ -91,6 +98,8 @@ const TRANSLATIONS = {
     currentMapArea: "Aktueller Kartenbereich",
     currentLocation: "Aktueller Standort",
     searchHere: "Hier suchen...",
+    findALocation: "Standort finden",
+    newYorkCity: "New York City, New York, Vereinigte Staaten",
   },
   it: {
     searchThisArea: "Cerca in quest'area",
@@ -102,6 +111,8 @@ const TRANSLATIONS = {
     currentMapArea: "Area della mappa corrente",
     currentLocation: "Posizione attuale",
     searchHere: "Cerca qui...",
+    findALocation: "Trova una posizione",
+    newYorkCity: "New York City, New York, Stati Uniti",
   },
   ja: {
     searchThisArea: "このエリアを検索",
@@ -112,6 +123,8 @@ const TRANSLATIONS = {
     currentMapArea: "現在の地図エリア",
     currentLocation: "現在地",
     searchHere: "ここを検索...",
+    findALocation: "場所を探す",
+    newYorkCity: "ニューヨーク市、ニューヨーク州、アメリカ合衆国",
   },
 };
 
@@ -224,6 +237,9 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
   };
 
   const searchActions = useSearchActions();
+  const filterDisplayName = useSearchState(
+    (state) => state.filters.static?.[0]?.displayName
+  );
   const handleFilterSelect = (params: OnSelectParams) => {
     const locationFilter: SelectableStaticFilter = {
       displayName: params.newDisplayName,
@@ -267,7 +283,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         searchActions.setStaticFilters([
           {
             selected: true,
-            displayName: "New York City, New York, United States",
+            displayName: TRANSLATIONS[locale].newYorkCity,
             filter: {
               kind: "fieldValue",
               fieldId: "builtin.location",
@@ -300,17 +316,52 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     }
   }, [searchLoading, searchState]);
 
+  const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
+  const resultsContainer = React.useRef<HTMLDivElement>(null);
+
+  const setResultsRef = React.useCallback((index: number) => {
+    if (!resultsRef?.current) return null;
+    return (result: HTMLDivElement) => (resultsRef.current[index] = result);
+  }, []);
+
+  const scrollToResult = React.useCallback(
+    (result: Result | undefined) => {
+      if (result) {
+        let scrollPos = 0;
+        // the search results that are listed above this result
+        const previousResultsRef = resultsRef.current.filter(
+          (r, index) => r && result.index && index < result.index
+        );
+
+        // sum up the height of all search results that are listed above this result
+        if (previousResultsRef.length > 0) {
+          scrollPos = previousResultsRef
+            .map((elem) => elem?.scrollHeight ?? 0)
+            .reduce((total, height) => total + height);
+        }
+
+        resultsContainer.current?.scroll({
+          top: scrollPos,
+          behavior: "smooth",
+        });
+      }
+    },
+    [resultsContainer]
+  );
+
   const mapProps: MapProps = {
     ...(userLocation && { centerCoords: userLocation }),
     ...(mapStyle && { mapStyle }),
     onDragHandler: handleDrag,
+    scrollToResult: scrollToResult,
   };
 
   return (
-    <>
-      <div className="components flex ve-h-screen ve-w-screen">
-        {/* Left Section: FilterSearch + Results. Full width for small screens */}
-        <div className="w-full h-full md:w-2/5 lg:w-1/3 p-4 flex flex-col">
+    <div className="components flex ve-h-screen ve-w-screen mx-auto">
+      {/* Left Section: FilterSearch + Results. Full width for small screens */}
+      <div className="w-full ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
+        <div className="px-8 py-6 gap-4 flex flex-col">
+          <Heading level={3}>{TRANSLATIONS[locale].findALocation}</Heading>
           <FilterSearch
             searchFields={[
               { fieldApiName: DEFAULT_FIELD, entityType: entityType },
@@ -320,47 +371,46 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             ariaLabel={"Search Dropdown Input"}
             customCssClasses={{
               focusedOption: "bg-gray-200",
-              inputElement: "rounded-md h-9 p-2",
+              inputElement: "rounded-md p-4",
             }}
           />
-          <div id="innerDiv" className="overflow-y-auto">
-            {resultCount > 0 && (
-              <div>
-                <ResultsCount
-                  customCssClasses={{ resultsCountContainer: "py-1 text-lg" }}
-                />
-                <VerticalResults CardComponent={LocationCard} />
-              </div>
-            )}
-            {resultCount === 0 && searchState === "not started" && (
-              <Body className="py-2 border-y">
-                {TRANSLATIONS[locale].useLocator}
-              </Body>
-            )}
-            {resultCount === 0 && searchState === "complete" && (
-              <Body className="py-2 border-y">
-                {TRANSLATIONS[locale].noResults}
-              </Body>
-            )}
-          </div>
         </div>
-
-        {/* Right Section: Map. Hidden for small screens */}
-        <div className="md:w-3/5 lg:w-2/3 md:flex hidden relative">
-          <Map {...mapProps} />
-          {showSearchAreaButton && (
-            <div className="absolute bottom-10 left-0 right-0 flex justify-center">
-              <Button
-                onClick={handleSearchAreaClick}
-                className="py-2 px-4 shadow-xl"
-              >
-                {TRANSLATIONS[locale].searchThisArea}
-              </Button>
-            </div>
+        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
+          {resultCount === 0 &&
+            searchState === "not started" &&
+            TRANSLATIONS[locale].useLocator}
+          {resultCount === 0 &&
+            searchState === "complete" &&
+            TRANSLATIONS[locale].noResults}
+          {resultCount > 0 &&
+            filterDisplayName &&
+            `${resultCount} locations near "${filterDisplayName}"`}
+        </div>
+        <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
+          {resultCount > 0 && (
+            <VerticalResults
+              CardComponent={LocationCard}
+              setResultsRef={setResultsRef}
+            />
           )}
         </div>
       </div>
-    </>
+
+      {/* Right Section: Map. Hidden for small screens */}
+      <div className="md:w-3/5 lg:w-2/3 md:flex hidden relative">
+        <Map {...mapProps} />
+        {showSearchAreaButton && (
+          <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+            <Button
+              onClick={handleSearchAreaClick}
+              className="py-2 px-4 shadow-xl"
+            >
+              {TRANSLATIONS[locale].searchThisArea}
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
@@ -368,17 +418,23 @@ interface MapProps {
   mapStyle?: string;
   centerCoords?: [number, number];
   onDragHandler?: OnDragHandler;
+  scrollToResult?: (result: Result | undefined) => void;
+  markerOptionsOverride?: (selected: boolean) => MarkerOptions;
 }
 
-const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
+const Map: React.FC<MapProps> = ({
+  mapStyle,
+  centerCoords,
+  onDragHandler,
+  scrollToResult,
+  markerOptionsOverride,
+}) => {
   const { t } = useTranslation();
   // During page generation we don't exist in a browser context
   const iframe =
     typeof document === "undefined"
       ? undefined
       : (document.getElementById("preview-frame") as HTMLIFrameElement);
-  const entityDocument: any = useDocument();
-  const mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
@@ -392,6 +448,17 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
       </div>
     );
   }
+
+  const entityDocument: any = useDocument();
+  let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+    mapboxApiKey = entityDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  }
+
   return (
     <MapboxMap
       mapboxAccessToken={mapboxApiKey || ""}
@@ -400,8 +467,40 @@ const Map: React.FC<MapProps> = ({ mapStyle, centerCoords, onDragHandler }) => {
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
       onDrag={onDragHandler}
+      PinComponent={LocatorMapPin}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
+      onPinClick={scrollToResult}
+      markerOptionsOverride={markerOptionsOverride}
+    />
+  );
+};
+
+const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
+  const { result, selected } = props;
+
+  const { width, height, color } = React.useMemo(() => {
+    return selected
+      ? {
+          // zoomed in pin stylings
+          height: "61.5px",
+          width: "40.5px",
+          color: "text-palette-secondary-dark",
+        }
+      : {
+          // default pin stylings
+          height: "41px",
+          width: "27px",
+          color: "text-palette-primary-dark",
+        };
+  }, [selected]);
+
+  return (
+    <MapPinIcon
+      height={height}
+      width={width}
+      color={color}
+      resultIndex={result.index}
     />
   );
 };
@@ -423,17 +522,30 @@ const LocationCard: CardComponent<Location> = ({
     : undefined;
 
   return (
-    <div className="flex flex-wrap border-y px-4 py-4">
+    <Background
+      background={backgroundColors.background1.value}
+      className="container flex flex-row border-b border-gray-300 p-8 gap-4"
+    >
       <Background
-        background={backgroundColors.background1.value}
-        className="container"
+        background={backgroundColors.background6.value}
+        className="flex-shrink-0 w-6 h-6 rounded-full font-bold flex items-center justify-center text-body-sm-fontSize"
       >
-        <div className="basis-3/4 pb-4">
-          <Heading className="py-2" level={3}>
-            {location.name}
-          </Heading>
+        {result.index}
+      </Background>
+      <div className="flex flex-wrap gap-6">
+        <div className="w-full flex flex-col gap-4">
+          <div className="flex flex-row justify-between items-center">
+            <Heading className="font-bold text-palette-primary-dark" level={4}>
+              {location.name}
+            </Heading>
+            {distanceInMiles && (
+              <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
+                {distanceInMiles + " mi"}
+              </div>
+            )}
+          </div>
           {location.hours && (
-            <div className="font-body-fontFamily text-body-sm-fontSize">
+            <div className="font-body-fontFamily text-body-fontSize gap-8">
               <HoursStatus
                 hours={location.hours}
                 timezone={location.timezone}
@@ -452,46 +564,46 @@ const LocationCard: CardComponent<Location> = ({
               }
             />
           )}
-          {location.address && (
-            <div className="font-body-fontFamily font-body-fontWeight text-body-sm-fontSize">
-              <Address
-                address={location.address}
-                lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
+          <div className="flex flex-col gap-1 w-full">
+            {location.address && (
+              <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
+                <Address
+                  address={location.address}
+                  lines={[
+                    ["line1"],
+                    ["line2"],
+                    ["city", "region", "postalCode"],
+                  ]}
+                />
+              </div>
+            )}
+            {location.yextDisplayCoordinate && (
+              <CTA
+                label={TRANSLATIONS[locale].getDirections}
+                link={getGoogleMapsLink(
+                  location.yextDisplayCoordinate || {
+                    latitude: 0,
+                    longitude: 0,
+                  }
+                )}
+                linkType={"DRIVING_DIRECTIONS"}
+                target={"_blank"}
+                variant="link"
+                className="font-bold text-palette-primary-dark"
               />
-            </div>
-          )}
-          {location.yextDisplayCoordinate && (
-            <CTA
-              label={TRANSLATIONS[locale].getDirections}
-              link={getGoogleMapsLink(
-                location.yextDisplayCoordinate
-                  ? location.yextDisplayCoordinate
-                  : {
-                      latitude: 0,
-                      longitude: 0,
-                    }
-              )}
-              linkType={"DRIVING_DIRECTIONS"}
-              target={"_blank"}
-              variant="link"
-            />
-          )}
-          {distanceInMiles && (
-            <div className="basis-1/4 py-2 font-body-fontFamily font-body-fontWeight text-body-fontSize">
-              {distanceInMiles + " mi"}
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </Background>
-      <CTA
-        label={TRANSLATIONS[locale].viewMoreInformation}
-        link={getPath(location, locale)}
-        linkType={"URL"}
-        className="text-center basis-full py-3 break-words whitespace-normal"
-        target={"_blank"}
-        variant="primary"
-      />
-    </div>
+        <CTA
+          label={TRANSLATIONS[locale].viewMoreInformation}
+          link={getPath(location, locale)}
+          linkType={"URL"}
+          className="text-center basis-full py-3 break-words whitespace-normal"
+          target={"_blank"}
+          variant="primary"
+        />
+      </div>
+    </Background>
   );
 };
 
