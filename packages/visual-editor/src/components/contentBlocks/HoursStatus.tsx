@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { HoursType } from "@yext/pages-components";
 import {
-  HoursStatus as HoursStatusJS,
-  HoursType,
-} from "@yext/pages-components";
-import {
-  themeManagerCn,
   useDocument,
   resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextField,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 
 export interface HoursStatusProps {
@@ -68,9 +65,10 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   showDayNames,
   dayOfWeekFormat,
 }) => {
-  const { t } = useTranslation();
   const document = useDocument();
+  const { t } = useTranslation();
   const hours = resolveYextEntityField(document, hoursField);
+  const locale = "en-US"; // TODO pass real locale through
 
   if (!hours) {
     return null;
@@ -82,18 +80,15 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >
-      <HoursStatusJS
+      <HoursStatusAtom
         hours={hours}
-        className={themeManagerCn(
-          "components mb-2 font-body-fontWeight text-body-lg-fontSize",
-          className
-        )}
-        currentTemplate={showCurrentStatus ? undefined : () => <></>}
-        separatorTemplate={showCurrentStatus ? undefined : () => <></>}
-        dayOfWeekTemplate={showDayNames ? undefined : () => <></>}
-        dayOptions={{ weekday: dayOfWeekFormat }}
-        timeOptions={{ hour12: timeFormat === "12h" }}
-        timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+        t={t}
+        className={className}
+        locale={locale}
+        showCurrentStatus={showCurrentStatus}
+        showDayNames={showDayNames}
+        timeFormat={timeFormat}
+        dayOfWeekFormat={dayOfWeekFormat}
       />
     </EntityField>
   );

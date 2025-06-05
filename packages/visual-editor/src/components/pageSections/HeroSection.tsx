@@ -1,11 +1,7 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  AnalyticsScopeProvider,
-  HoursStatus,
-  HoursType,
-} from "@yext/pages-components";
+import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
   useDocument,
@@ -26,6 +22,7 @@ import {
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -128,6 +125,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t } = useTranslation();
   const document = useDocument() as any;
+  const locale = "en-US"; // TODO override with real locale
   const resolvedBusinessName = resolveYextEntityField<string>(
     document,
     data?.businessName
@@ -199,7 +197,12 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
-              <HoursStatus hours={resolvedHours} timezone={timezone} />
+              <HoursStatusAtom
+                hours={resolvedHours}
+                t={t}
+                timezone={timezone}
+                locale={locale}
+              />
             </EntityField>
           )}
         </header>
