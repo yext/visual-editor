@@ -8,9 +8,15 @@ import {
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { TRANSLATABLE_TEXT_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Text.tsx";
+import {
+  TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+} from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
-import { TEXT_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TextList.tsx";
+import {
+  TEXT_LIST_CONSTANT_CONFIG,
+  TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+} from "../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
@@ -43,6 +49,7 @@ export type YextEntityField<T> = {
   field: string;
   constantValue: T;
   constantValueEnabled?: boolean;
+  isTranslatable?: boolean;
 };
 
 export type YextCollection = {
@@ -56,11 +63,12 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
     isCollection?: boolean;
     disableConstantValueToggle?: boolean;
+    isTranslatable?: boolean;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  "type.string": TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
@@ -78,14 +86,30 @@ const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.image": IMAGE_LIST_CONSTANT_CONFIG,
 };
 
+const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+};
+
+const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+};
+
 export const getConstantConfigFromType = (
   type: EntityFieldTypes,
-  isList?: boolean
+  isList?: boolean,
+  isTranslatable?: boolean
 ): Field<any> | undefined => {
   if (isList) {
+    if (isTranslatable) {
+      return TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG[type];
+    }
     return LIST_TYPE_TO_CONSTANT_CONFIG[type];
   }
-  const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
+  const constantConfig = isTranslatable
+    ? TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG[type]
+    : TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
     devLogger.log(`No constant configuration for ${type}`);
     return;
@@ -96,10 +120,13 @@ export const getConstantConfigFromType = (
 /**
  * Returns the constant type configuration if all types match
  * @param typeFilter
+ * @param isList
+ * @param isTranslatable
  */
 const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
-  isList: boolean
+  isList: boolean,
+  isTranslatable: boolean
 ): Field | undefined => {
   if (!typeFilter) {
     return undefined;
@@ -109,7 +136,8 @@ const returnConstantFieldConfig = (
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = getConstantConfigFromType(
       entityFieldType,
-      isList
+      isList,
+      isTranslatable
     );
     if (!mappedConfiguration) {
       devLogger.log(`No mapped configuration for ${entityFieldType}`);
@@ -159,6 +187,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               onChange={onChange}
               value={value}
               filter={props.filter}
+              isTranslatable={props.isTranslatable}
             />
           )}
           {!value?.constantValueEnabled && (
@@ -216,6 +245,7 @@ export const YextCollectionSubfieldSelector = <
               onChange={onChange}
               value={value}
               filter={props.filter}
+              isTranslatable={props.isTranslatable}
             />
           ) : (
             <EntityFieldInput<T>
@@ -295,16 +325,19 @@ type InputProps<T extends Record<string, any>> = {
   onChange: (value: any, uiState: any) => void;
   value: any;
   className?: string;
+  isTranslatable?: boolean;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
+  isTranslatable,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
-    !!filter.includeListsOnly
+    !!filter.includeListsOnly,
+    !!isTranslatable
   );
 
   if (!constantFieldConfig) {
