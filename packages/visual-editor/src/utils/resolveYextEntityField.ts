@@ -1,9 +1,9 @@
 import { Fields } from "@measured/puck";
-import {
-  TranslatableString,
-  YextEntityField,
-} from "../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
+import { RTF2, TranslatableString } from "../types/types.ts";
+import { MaybeRTF } from "../components/atoms/maybeRTF.tsx";
+import React from "react";
 
 export const resolveYextEntityField = <T>(
   document: any,
@@ -208,9 +208,25 @@ const getBrowserLanguage = (): string => {
   return browserLocales[0].split("-")[0];
 };
 
+function toStringOrElement(value: string | RTF2): string | React.ReactElement {
+  const isRTF2: boolean =
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    ("html" in value || "json" in value) &&
+    ((value as any).html === undefined ||
+      typeof (value as any).html === "string") &&
+    ((value as any).json === undefined ||
+      typeof (value as any).json === "string");
+  if (isRTF2) {
+    return MaybeRTF({ data: value }) ?? "";
+  }
+  return value?.toString() ?? "";
+}
+
 export const resolveTranslatableString = (
   field?: TranslatableString
-): string => {
+): string | React.ReactElement => {
   if (!field) {
     return "";
   }
@@ -218,14 +234,14 @@ export const resolveTranslatableString = (
   if (typeof field === "object") {
     const detectedLanguage = getBrowserLanguage();
     if (detectedLanguage in field) {
-      return field[detectedLanguage];
+      return toStringOrElement(field[detectedLanguage]);
     } else if ("en" in field) {
       // TODO: Have a fallback language that isn't just English
-      return field["en"];
+      return toStringOrElement(field["en"]);
     } else {
       return "";
     }
   }
 
-  return field;
+  return toStringOrElement(field);
 };

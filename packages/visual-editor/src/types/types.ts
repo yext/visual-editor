@@ -8,8 +8,8 @@ export type HeroSectionType = {
 
 export type PromoSectionType = {
   image?: ImageType;
-  title?: string;
-  description?: RTF2 | string;
+  title?: TranslatableString;
+  description?: TranslatableString;
   cta?: CTAType;
 };
 
@@ -81,6 +81,8 @@ export type PersonStruct = {
   email?: string;
   cta?: CTAType;
 };
+
+export type TranslatableString = string | Record<string, string | RTF2>;
 
 export type RTF2 = {
   html?: string;

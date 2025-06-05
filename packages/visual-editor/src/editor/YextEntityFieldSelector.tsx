@@ -43,8 +43,6 @@ const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
-export type TranslatableString = string | Record<string, string>;
-
 export type YextEntityField<T> = {
   field: string;
   constantValue: T;
@@ -103,12 +101,16 @@ export const getConstantConfigFromType = (
 ): Field<any> | undefined => {
   if (isList) {
     if (isTranslatable) {
-      return TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG[type];
+      return (
+        TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG[type] ??
+        LIST_TYPE_TO_CONSTANT_CONFIG[type]
+      );
     }
     return LIST_TYPE_TO_CONSTANT_CONFIG[type];
   }
   const constantConfig = isTranslatable
-    ? TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG[type]
+    ? (TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG[type] ??
+      TYPE_TO_CONSTANT_CONFIG[type])
     : TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
     devLogger.log(`No constant configuration for ${type}`);

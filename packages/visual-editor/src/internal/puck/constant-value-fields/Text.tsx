@@ -70,7 +70,7 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
  * @param code
  * @param targetLang
  */
-function getLocaleName(code: string, targetLang: string): string {
+export function getLocaleName(code: string, targetLang: string): string {
   const displayNames = new Intl.DisplayNames([targetLang], {
     type: "language",
   });

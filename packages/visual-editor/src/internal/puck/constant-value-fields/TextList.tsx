@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { AutoField, IconButton, Button, CustomField } from "@measured/puck";
-import { Trash2 as TrashIcon } from "lucide-react";
-import { Plus as PlusIcon } from "lucide-react";
+import {
+  AutoField,
+  Button,
+  CustomField,
+  FieldLabel,
+  IconButton,
+} from "@measured/puck";
+import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { TranslatableString } from "../../../editor/YextEntityFieldSelector.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
+import { getLocaleName } from "./Text.tsx";
+import { RTF2 } from "../../../types/types.ts";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
@@ -112,35 +119,31 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
     const locales: string[] = [baseLocale];
 
     if (typeof document?._pageset === "string") {
-      try {
-        const parsed = JSON.parse(document._pageset);
-        if (Array.isArray(parsed?.scope?.locales)) {
-          locales.push(...parsed.scope.locales);
-        }
-      } catch {
-        // ignore parse failure
+      const parsed = JSON.parse(document._pageset);
+      if (Array.isArray(parsed?.scope?.locales)) {
+        locales.push(...parsed.scope.locales);
       }
     }
 
-    // Optional: remove or customize
+    // TODO remove these
     locales.push("es", "fr");
 
     const dedupedLocales = Array.from(new Set(locales));
 
     const [localItems, setLocalItems] = useState<TranslatableString[]>(value);
 
-    const updateItem = (index: number, locale: string, localeValue: string) => {
+    const updateItem = (
+      index: number,
+      locale: string,
+      localeValue: string | RTF2
+    ) => {
       const newItems = [...localItems];
       const currentItem = newItems[index];
 
-      const newItem =
-        typeof currentItem === "object" &&
-        currentItem !== null &&
-        !Array.isArray(currentItem)
+      newItems[index] =
+        typeof currentItem === "object" && !Array.isArray(currentItem)
           ? { ...currentItem, [locale]: localeValue }
           : { [locale]: localeValue };
-
-      newItems[index] = newItem;
       setLocalItems(newItems);
       onChange(newItems);
     };
@@ -202,13 +205,15 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
                     : "";
 
               return (
-                <AutoField
-                  key={locale}
-                  field={{ type: "text" }}
-                  id={`${id}-value-${index}-${localeIndex}`}
-                  value={displayValue}
-                  onChange={(val) => updateItem(index, locale, val)}
-                />
+                <FieldLabel key={locale} label={getLocaleName(locale, "en")}>
+                  <AutoField
+                    key={locale}
+                    field={{ type: "text" }}
+                    id={`${id}-value-${index}-${localeIndex}`}
+                    value={displayValue}
+                    onChange={(val) => updateItem(index, locale, val)}
+                  />
+                </FieldLabel>
               );
             })}
             <div className="ve-flex ve-justify-end">

@@ -117,6 +117,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
         filter: {
           types: ["type.string"],
         },
+        isTranslatable: true,
       }),
       images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
         type: "entityField",

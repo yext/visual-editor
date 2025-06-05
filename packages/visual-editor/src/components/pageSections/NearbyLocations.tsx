@@ -64,6 +64,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         filter: {
           types: ["type.string"],
         },
+        isTranslatable: true,
       }),
       coordinate: YextField<any, Coordinate>("Coordinates", {
         type: "entityField",

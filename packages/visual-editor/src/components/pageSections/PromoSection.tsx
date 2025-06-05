@@ -20,6 +20,7 @@ import {
   ComponentFields,
   EntityField,
   MaybeRTF,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -49,6 +50,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         filter: {
           type: ComponentFields.PromoSection.type,
         },
+        isTranslatable: true,
       }),
     },
   }),
@@ -115,7 +117,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
-            <Heading level={3}>{resolvedPromo?.title}</Heading>
+            <Heading level={3}>
+              {resolveTranslatableString(resolvedPromo?.title)}
+            </Heading>
           </EntityField>
         )}
         <EntityField

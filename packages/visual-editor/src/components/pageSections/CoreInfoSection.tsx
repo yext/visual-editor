@@ -79,6 +79,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           headingText: YextField<any, TranslatableString>("Heading Text", {
             type: "entityField",
             filter: { types: ["type.string"] },
+            isTranslatable: true,
           }),
           address: YextField<any, AddressType>("Address", {
             type: "entityField",
@@ -117,6 +118,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             filter: {
               types: ["type.string"],
             },
+            isTranslatable: true,
           }),
           hours: YextField("Hours", {
             type: "entityField",
@@ -134,6 +136,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             filter: {
               types: ["type.string"],
             },
+            isTranslatable: true,
           }),
           servicesList: YextField<any, TranslatableString[]>("Services List", {
             type: "entityField",
@@ -142,6 +145,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               includeListsOnly: true,
               allowList: ["services"],
             },
+            isTranslatable: true,
           }),
         },
       }),
