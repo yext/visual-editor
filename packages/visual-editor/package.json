@@ -50,7 +50,8 @@
     "i18n:translate": "pnpm exec tsx scripts/generateTranslations.ts",
     "i18n:translate:dry": "pnpm exec tsx scripts/generateTranslations.ts --dry-run",
     "i18n:sort": "pnpm exec tsx scripts/sortTranslations.ts",
-    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort"
+    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort",
+    "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
   },
   "dependencies": {
     "@measured/puck": "0.18.3",

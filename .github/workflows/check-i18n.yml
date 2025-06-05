@@ -34,3 +34,6 @@ jobs:
         with:
           script: |
             core.setFailed('i18n changes were made. A new commit with autofixes was pushed.')
+
+      - name: Check for empty translation strings
+        run: pnpm run i18n:check-empty # This will fail the workflow if it exits with a non-zero code
