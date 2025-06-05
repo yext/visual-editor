@@ -357,10 +357,12 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               {resolvedEmails
                 .slice(
                   0,
-                  Math.min(
-                    resolvedEmails.length,
-                    styles.info.emailsListLength ?? Infinity
-                  )
+                  data.info.emails.constantValueEnabled
+                    ? resolvedEmails.length
+                    : Math.min(
+                        resolvedEmails.length,
+                        styles.info.emailsListLength!
+                      )
                 )
                 .map((email, index) => (
                   <li key={index} className={`flex items-center gap-3`}>
