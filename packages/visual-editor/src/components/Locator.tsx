@@ -532,7 +532,7 @@ const LocationCard: CardComponent<Location> = ({
       >
         {result.index}
       </Background>
-      <div className="flex flex-wrap gap-6">
+      <div className="flex flex-wrap gap-6 w-full">
         <div className="w-full flex flex-col gap-4">
           <div className="flex flex-row justify-between items-center">
             <Heading className="font-bold text-palette-primary-dark" level={4}>
