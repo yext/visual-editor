@@ -98,7 +98,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                 type: "text",
               }),
             },
-            getItemSummary: (item) => item.label || "Item",
+            getItemSummary: (item) => item.label || "Phone",
           }),
           emails: YextField<any, string[]>("Emails", {
             type: "entityField",
