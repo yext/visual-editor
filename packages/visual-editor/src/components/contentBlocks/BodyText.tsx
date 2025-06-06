@@ -33,7 +33,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const document = useDocument();
 
     return (
@@ -43,7 +43,10 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         constantValueEnabled={text.constantValueEnabled}
       >
         <Body ref={ref} {...bodyProps}>
-          {resolveTranslatableString(resolveYextEntityField(document, text))}
+          {resolveTranslatableString(
+            resolveYextEntityField(document, text),
+            i18n.language
+          )}
         </Body>
       </EntityField>
     );

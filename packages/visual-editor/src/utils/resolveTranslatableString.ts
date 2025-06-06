@@ -4,10 +4,13 @@ import React from "react";
 /**
  * Converts a type TranslatableString to a type that can be viewed on the page
  * @param translatableString
+ * @param locale
  */
 export const resolveTranslatableString = (
-  translatableString?: TranslatableString
+  translatableString?: TranslatableString,
+  locale?: string
 ): string | React.ReactElement => {
+  locale = locale ?? "en";
   if (!translatableString) {
     return "";
   }
@@ -17,12 +20,8 @@ export const resolveTranslatableString = (
   }
 
   if (typeof translatableString === "object") {
-    const detectedLanguage = getBrowserLanguage();
-    if (detectedLanguage in translatableString) {
-      return toStringOrElement(translatableString[detectedLanguage]);
-    } else if ("en" in translatableString) {
-      // TODO: Have a fallback language that isn't just English
-      return toStringOrElement(translatableString["en"]);
+    if (locale in translatableString) {
+      return toStringOrElement(translatableString[locale]);
     }
   }
 
@@ -59,17 +58,6 @@ export function getDisplayValue(
 
   return "";
 }
-
-// TODO - replace with document i18n
-// Utility function to detect browser language
-const getBrowserLanguage = (): string => {
-  const browserLocales = navigator.languages || [navigator.language];
-  if (!browserLocales || browserLocales.length === 0) {
-    return "en"; // Fallback to English
-  }
-  // Return primary language code (e.g., "en" from "en-US")
-  return browserLocales[0].split("-")[0];
-};
 
 function rtf2ToString(rtf: RTF2): string {
   return rtf.html || rtf.json || "";

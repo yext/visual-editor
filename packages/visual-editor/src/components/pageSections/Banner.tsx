@@ -66,10 +66,11 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 };
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.text)
+    resolveYextEntityField<TranslatableString>(document, data.text),
+    i18n.language
   );
 
   const justifyClass = {

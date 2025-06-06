@@ -11,6 +11,7 @@ import {
   TranslatableString,
   resolveTranslatableString,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 
 export interface HeadingTextProps extends HeadingProps {
   text: YextEntityField<TranslatableString>;
@@ -21,6 +22,7 @@ const HeadingTextWrapper = React.forwardRef<
   HeadingTextProps
 >(({ text, ...headingProps }, ref) => {
   const document = useDocument();
+  const { i18n } = useTranslation();
 
   return (
     <EntityField
@@ -29,7 +31,10 @@ const HeadingTextWrapper = React.forwardRef<
       constantValueEnabled={text.constantValueEnabled}
     >
       <Heading ref={ref} {...headingProps}>
-        {resolveTranslatableString(resolveYextEntityField(document, text))}
+        {resolveTranslatableString(
+          resolveYextEntityField(document, text),
+          i18n.language
+        )}
       </Heading>
     </EntityField>
   );

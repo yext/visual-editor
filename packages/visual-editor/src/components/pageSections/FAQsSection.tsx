@@ -83,10 +83,11 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
 };
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading)
+    resolveYextEntityField<TranslatableString>(document, data?.heading),
+    i18n.language
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 
