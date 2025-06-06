@@ -154,11 +154,12 @@ const ProductCard = ({
 };
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading)
+    resolveYextEntityField(document, data.heading),
+    i18n.language
   );
 
   return (

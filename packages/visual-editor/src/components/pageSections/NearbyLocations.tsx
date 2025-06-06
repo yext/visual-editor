@@ -24,6 +24,7 @@ import {
   AnalyticsScopeProvider,
 } from "@yext/pages-components";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 
 export interface NearbyLocationsSectionProps {
   data: {
@@ -223,12 +224,14 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
+  const { i18n } = useTranslation();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     data?.coordinate
   );
   const headingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading)
+    resolveYextEntityField<TranslatableString>(document, data?.heading),
+    i18n.language
   );
 
   // parse variables from document

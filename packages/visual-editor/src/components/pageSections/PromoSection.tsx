@@ -84,7 +84,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
@@ -117,7 +117,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
             <Heading level={3}>
-              {resolveTranslatableString(resolvedPromo?.title)}
+              {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
             </Heading>
           </EntityField>
         )}
@@ -129,7 +129,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          {resolveTranslatableString(resolvedPromo?.description)}
+          {resolveTranslatableString(resolvedPromo?.description, i18n.language)}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField

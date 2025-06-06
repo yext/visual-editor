@@ -23,6 +23,7 @@ import {
   WithId,
   WithPuckProps,
 } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 
 export type SectionContainerProps = {
   background?: BackgroundStyle;
@@ -75,9 +76,11 @@ const SectionContainerComponent = (
 ) => {
   const { background, sectionHeading } = props;
   const document = useDocument();
+  const { i18n } = useTranslation();
 
   const resolvedHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, sectionHeading.text)
+    resolveYextEntityField<TranslatableString>(document, sectionHeading.text),
+    i18n.language
   );
 
   const justifyClass = {

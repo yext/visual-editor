@@ -178,11 +178,12 @@ const PersonCard = ({
 };
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading)
+    resolveYextEntityField(document, data.heading),
+    i18n.language
   );
 
   return (
