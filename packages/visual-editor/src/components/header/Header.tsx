@@ -5,7 +5,7 @@ import {
   CTA as CTAType,
   ComplexImageType,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig } from "@measured/puck";
 import {
   CTA,
   EntityField,
@@ -18,6 +18,11 @@ import {
   Image,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
+import {
+  LanguageDropdown,
+  LanguageDropdownProps,
+  parseDocumentForLanguageDropdown,
+} from "./languageDropdown.tsx";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
   image: {
@@ -30,23 +35,30 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 
 export type HeaderProps = {
   logoWidth?: number;
+  enableLanguageSelector: boolean;
   analytics?: {
     scope?: string;
   };
 };
 
-const headerFields: Fields<HeaderProps> = {
-  logoWidth: YextField("Logo Width", {
-    type: "number",
-    min: 0,
-  }),
-};
-
 export const Header: ComponentConfig<HeaderProps> = {
   label: "Header",
-  fields: headerFields,
+  fields: {
+    logoWidth: YextField("Logo Width", {
+      type: "number",
+      min: 0,
+    }),
+    enableLanguageSelector: YextField("Enable Language Selector", {
+      type: "radio",
+      options: [
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+      ],
+    }),
+  },
   defaultProps: {
     logoWidth: 80,
+    enableLanguageSelector: false,
     analytics: {
       scope: "header",
     },
@@ -58,22 +70,28 @@ export const Header: ComponentConfig<HeaderProps> = {
   ),
 };
 
-const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
-  const document: {
-    _site?: {
-      header?: {
-        links?: CTAType[];
-      };
-      logo?: ComplexImageType;
-    };
-  } = useDocument();
+const HeaderComponent: React.FC<HeaderProps> = ({
+  logoWidth,
+  enableLanguageSelector,
+}) => {
+  const document: any = useDocument();
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  return <HeaderLayout links={links} logo={logo} logoWidth={logoWidth} />;
+  return (
+    <HeaderLayout
+      links={links}
+      logo={logo}
+      logoWidth={logoWidth}
+      enableLanguageSelector={enableLanguageSelector}
+      languageDropDownProps={parseDocumentForLanguageDropdown(document)}
+    />
+  );
 };
 
 interface HeaderLayoutProps {
+  languageDropDownProps?: LanguageDropdownProps;
+  enableLanguageSelector: boolean;
   links: CTAType[];
   logoLink?: string;
   logo?: ComplexImageType;
@@ -83,7 +101,18 @@ interface HeaderLayoutProps {
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoWidth, logoLink, links } = props;
+  const {
+    logo,
+    logoWidth,
+    logoLink,
+    links,
+    languageDropDownProps,
+    enableLanguageSelector,
+  } = props;
+  const showLanguageSelector =
+    languageDropDownProps &&
+    enableLanguageSelector &&
+    languageDropDownProps.locales?.length > 1;
 
   return (
     <PageSection
@@ -101,7 +130,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
           </EntityField>
         )}
 
-        {links?.length > 0 && (
+        {(links?.length > 0 || showLanguageSelector) && (
           <>
             <EntityField
               displayName={t("headerLinks", "Header Links")}
@@ -122,9 +151,21 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             </button>
           </>
         )}
+        {showLanguageSelector && (
+          <LanguageDropdown
+            {...languageDropDownProps}
+            classname="hidden md:flex"
+          />
+        )}
       </div>
-      {links?.length > 0 && (
-        <HeaderMobileMenu isOpen={menuOpen} links={links} />
+      {(links?.length > 0 || showLanguageSelector) && (
+        <HeaderMobileMenu
+          isOpen={menuOpen}
+          links={links}
+          languageDropdownProps={
+            showLanguageSelector ? languageDropDownProps : undefined
+          }
+        />
       )}
     </PageSection>
   );
@@ -174,10 +215,11 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
 type HeaderMobileMenuProps = {
   isOpen?: boolean;
   links: CTAType[];
+  languageDropdownProps?: LanguageDropdownProps;
 };
 
 const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
-  const { isOpen, links } = props;
+  const { isOpen, links, languageDropdownProps } = props;
   return (
     <div
       className={
@@ -189,19 +231,27 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
         background={backgroundColors.background1.value}
         className="container"
       >
-        <ul className="flex flex-col p-4 gap-4">
-          {links.map((item: CTAType, idx) => (
-            <li key={item.link}>
-              <CTA
-                link={item.link}
-                label={item.label}
-                linkType={item.linkType}
-                variant="link"
-                eventName={`mobilelink${idx}`}
-              />
-            </li>
-          ))}
-        </ul>
+        {links.length > 0 && (
+          <ul className="flex flex-col p-4 gap-4">
+            {links.map((item: CTAType, idx) => (
+              <li key={item.link}>
+                <CTA
+                  link={item.link}
+                  label={item.label}
+                  linkType={item.linkType}
+                  variant="link"
+                  eventName={`mobilelink${idx}`}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+        {languageDropdownProps && (
+          <LanguageDropdown
+            {...languageDropdownProps}
+            classname="p-4 gap-4 w-full"
+          />
+        )}
       </Background>
     </div>
   );

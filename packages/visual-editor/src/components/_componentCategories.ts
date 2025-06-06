@@ -59,7 +59,7 @@ import {
 } from "./contentBlocks/MapboxStaticMap.tsx";
 import { Phone, PhoneProps } from "./contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "./contentBlocks/TextList.tsx";
-import { Header, HeaderProps } from "./Header.tsx";
+import { Header, HeaderProps } from "./header/Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
