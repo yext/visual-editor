@@ -11,6 +11,7 @@ import { useDocument } from "../../../hooks/useDocument.tsx";
 import { getLocaleName } from "./Text.tsx";
 import { RTF2, TranslatableString } from "../../../types/types.ts";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import { useTranslation } from "react-i18next";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
@@ -114,6 +115,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
   type: "custom",
   render: ({ onChange, value = [], id }) => {
     const document: any = useDocument();
+    const { i18n } = useTranslation();
 
     const baseLocale = document?.locale ?? "en";
     const locales: string[] = [baseLocale];
@@ -196,7 +198,10 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
           >
             {dedupedLocales.map((locale, localeIndex) => {
               return (
-                <FieldLabel key={locale} label={getLocaleName(locale, "en")}>
+                <FieldLabel
+                  key={locale}
+                  label={getLocaleName(locale, i18n.language)}
+                >
                   <AutoField
                     key={locale}
                     field={{ type: "text" }}

@@ -29,10 +29,10 @@ export const resolveTranslatableString = (
 };
 
 /**
- * Takes a TranslatableString and a locale and returns the value to be displayed
+ * Takes a TranslatableString and a locale and returns the value to be displayed in the editor input
  * @param translatableString a TranslatableString
  * @param locale "en" or other locale value
- * @return string a string to be displayed in the editor input
+ * @return string to be displayed in the editor input
  */
 export function getDisplayValue(
   translatableString: TranslatableString,
@@ -76,16 +76,7 @@ function isRTF2(value: unknown): value is RTF2 {
  * @param value
  */
 function toStringOrElement(value: string | RTF2): string | React.ReactElement {
-  const isRTF2: boolean =
-    typeof value === "object" &&
-    value !== null &&
-    !Array.isArray(value) &&
-    ("html" in value || "json" in value) &&
-    ((value as any).html === undefined ||
-      typeof (value as any).html === "string") &&
-    ((value as any).json === undefined ||
-      typeof (value as any).json === "string");
-  if (isRTF2) {
+  if (isRTF2(value)) {
     return MaybeRTF({ data: value }) ?? "";
   }
   return value?.toString() ?? "";

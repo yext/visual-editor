@@ -3,6 +3,7 @@ import React from "react";
 import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import { useTranslation } from "react-i18next";
 
 export const TEXT_CONSTANT_CONFIG: TextField = {
   type: "text",
@@ -14,6 +15,7 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
     type: "custom",
     render: ({ onChange, value }) => {
       const document: any = useDocument();
+      const { i18n } = useTranslation();
 
       const locales: string[] = [document?.locale ?? "en"];
       if (typeof document?._pageset === "string") {
@@ -30,14 +32,16 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
         locales.push(locale);
       });
 
-      // TODO replace "en" with platform locale
       return (
         <>
           {locales.map((locale: string) => {
             const displayValue: string = getDisplayValue(value, locale);
 
             return (
-              <FieldLabel key={locale} label={getLocaleName(locale, "en")}>
+              <FieldLabel
+                key={locale}
+                label={getLocaleName(locale, i18n.language)}
+              >
                 <AutoField
                   field={{ type: "text" }}
                   value={displayValue}
