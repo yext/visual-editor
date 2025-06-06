@@ -14,6 +14,7 @@ export type TemplateMetadata = {
   entityCount: number;
   totalEntityCount: number;
   entityTypeDisplayName: string;
+  platformLocale?: string;
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
@@ -31,6 +32,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
     entityCount: 0,
     totalEntityCount: 0,
     entityTypeDisplayName: "Entity",
+    platformLocale: "en",
   };
 }
 

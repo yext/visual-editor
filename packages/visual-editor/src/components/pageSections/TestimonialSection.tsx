@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   HeadingLevel,
   BackgroundStyle,
@@ -124,6 +125,7 @@ const TestimonialSectionWrapper = ({
   data,
   styles,
 }: TestimonialSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
@@ -138,7 +140,7 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName="Heading Text"
+          displayName={t("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -149,7 +151,7 @@ const TestimonialSectionWrapper = ({
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName="Testimonials"
+          displayName={t("testimonials", "Testimonials")}
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >

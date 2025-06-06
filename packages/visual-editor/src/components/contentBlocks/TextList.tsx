@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -25,6 +26,7 @@ const textListFields: Fields<TextListProps> = {
 const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
+  const { t } = useTranslation();
   const document = useDocument();
   let resolvedTextList = resolveYextEntityField(document, textListField);
 
@@ -41,7 +43,7 @@ const TextListComponent: React.FC<TextListProps> = ({
 
   return (
     <EntityField
-      displayName="Text List"
+      displayName={t("textList", "Text List")}
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >

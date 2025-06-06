@@ -1,5 +1,10 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { CTA as CTAType, ComplexImageType } from "@yext/pages-components";
+import {
+  AnalyticsScopeProvider,
+  CTA as CTAType,
+  ComplexImageType,
+} from "@yext/pages-components";
 import { ComponentConfig } from "@measured/puck";
 import {
   CTA,
@@ -31,6 +36,9 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 export type HeaderProps = {
   logoWidth?: number;
   enableLanguageSelector: boolean;
+  analytics?: {
+    scope?: string;
+  };
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
@@ -51,8 +59,15 @@ export const Header: ComponentConfig<HeaderProps> = {
   defaultProps: {
     logoWidth: 80,
     enableLanguageSelector: false,
+    analytics: {
+      scope: "header",
+    },
   },
-  render: (props) => <HeaderComponent {...props} />,
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "header"}>
+      <HeaderComponent {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
 
 const HeaderComponent: React.FC<HeaderProps> = ({
@@ -84,6 +99,7 @@ interface HeaderLayoutProps {
 }
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const {
     logo,
@@ -107,7 +123,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName="Business Logo"
+            displayName={t("businessLogo", "Business Logo")}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -117,7 +133,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {(links?.length > 0 || showLanguageSelector) && (
           <>
             <EntityField
-              displayName="Header Links"
+              displayName={t("headerLinks", "Header Links")}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />
@@ -186,7 +202,7 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
                 link={item.link}
                 linkType={item.linkType}
                 variant="link"
-                eventName={`headerlink${idx}`}
+                eventName={`link${idx}`}
                 alwaysHideCaret={true}
               />
             </li>
@@ -224,7 +240,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
                   label={item.label}
                   linkType={item.linkType}
                   variant="link"
-                  eventName={`headermobilelink${idx}`}
+                  eventName={`mobilelink${idx}`}
                 />
               </li>
             ))}

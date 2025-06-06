@@ -39,3 +39,8 @@ export {
   migrate,
 } from "./migrate.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
+export { i18nComponentsInstance } from "./i18nComponents.ts";
+export {
+  i18nPlatformInstance,
+  usePlatformTranslation,
+} from "./i18nPlatform.ts";

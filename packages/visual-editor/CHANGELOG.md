@@ -1,3 +1,46 @@
+#### 0.0.41 (2025-06-05)
+
+##### Chores
+
+- update languages to generics (#506) (8a3f5ddc)
+- automatic testing improvements (#488) (1075bcfa)
+
+##### Documentation Changes
+
+- update Migrations title (#478) (f46727d3)
+- add hybrid implementation docs (#469) (2b68f25d)
+
+##### New Features
+
+- make locator map interactive and update locator component stylings (#511) (82b24620)
+- add hoursTable atom with translations (#502) (9a3564cd)
+- set translation languages (#503) (76861274)
+- add translations for HoursStatus (#494) (57cc29f9)
+- add generateTranslation script (#501) (305a9633)
+- extract strings for translation (#483) (0f5f4e7c)
+- resize tooltips based on viewport (#497) (81ec1b9d)
+- update analytics (#496) (1bb41c3d)
+- add RTF body variants (#493) (54603344)
+- update colors for entity field tooltips (#491) (f8ca4514)
+- show entity type name in field label (#489) (e93e5448)
+- use string constant value for RTF (#492) (46f08312)
+- adjust paths in main template (#490) (d049168d)
+- support component prop overrides (#486) (b209aec8)
+- add entity field switch (#485) (3f244a28)
+
+##### Bug Fixes
+
+- ignore email list length in constant value mode (#513) (efd52422)
+- update template manifest description (#510) (0787f847)
+- hide email list length when using constant value (#500) (61baef67)
+- handle static fonts with multiple weights (#487) (fbe4be5b)
+- do not cleanup manifest file (#477) (e1938299)
+
+##### Refactors
+
+- enable locales in hours status (#512) (a831d64f)
+- only comment migration warning once (#499) (4338c25c)
+
 #### 0.0.40 (2025-05-22)
 
 ##### Chores

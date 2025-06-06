@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -38,6 +39,7 @@ const AddressComponent = ({
   address: addressField,
   showGetDirections,
 }: AddressProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const address = resolveYextEntityField(document, addressField);
   const coordinates = getDirections(
@@ -51,7 +53,7 @@ const AddressComponent = ({
     <>
       {address && (
         <EntityField
-          displayName="Address"
+          displayName={t("address", "Address")}
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >

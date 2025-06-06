@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import * as React from "react";
 import {
   YextEntityField,
@@ -62,6 +63,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 };
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
+  const { t } = useTranslation();
   const document = useDocument();
   const resolvedText = resolveYextEntityField<string>(document, data.text);
 
@@ -78,7 +80,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
-        displayName="Banner Text"
+        displayName={t("bannerText", "Banner Text")}
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
