@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
 import {
@@ -95,7 +96,11 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   return (
-    <div className={classname}>
+    <Background
+      background={backgroundColors.background1.value}
+      as="div"
+      className={classname}
+    >
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
           <div className="flex gap-4 items-center">
@@ -104,30 +109,31 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           </div>
           <ChevronDown />
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-lg">
-          <Background background={backgroundColors.background1.value} as="div">
-            {(status === "COMPLETE" || status === "ERROR") &&
-              Object.entries(validLocalesToPaths).map(([locale, path]) => (
+        <DropdownMenuContent align="end" className="w-40 rounded-l shadow-lg">
+          {(status === "COMPLETE" || status === "ERROR") &&
+            Object.entries(validLocalesToPaths).map(([locale, path]) => (
+              <Background
+                background={backgroundColors.background1.value}
+                as="div"
+                key={locale}
+              >
+                {locale !== selected && (
+                  <DropdownMenuSeparator className="bg-[#CCCCCC]" />
+                )}
                 <DropdownMenuItem
-                  key={locale}
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
-                    "text-body-fontSize font-body-fontFamily",
+                    "text-body-fontSize font-body-fontFamily focus:ve-bg-slate-100",
                     selected === locale ? "font-bold" : "font-body-fontWeight"
                   )}
                 >
-                  <Background
-                    background={backgroundColors.background1.value}
-                    as="div"
-                  >
-                    {getLanguageName(locale)}
-                  </Background>
+                  {getLanguageName(locale)}
                 </DropdownMenuItem>
-              ))}
-          </Background>
+              </Background>
+            ))}
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </Background>
   );
 };
 
