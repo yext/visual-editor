@@ -95,7 +95,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                 type: "text",
               }),
             },
-            getItemSummary: (item) => item.label || "Item",
+            getItemSummary: (item) => item.label || "Phone",
           }),
           emails: YextField<any, string[]>("Emails", {
             type: "entityField",
@@ -312,7 +312,6 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item, idx) => {
-              const { t } = useTranslation();
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
