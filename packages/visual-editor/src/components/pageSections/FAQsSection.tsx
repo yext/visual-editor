@@ -16,9 +16,9 @@ import {
   EntityField,
   FAQSectionType,
   ComponentFields,
-  MaybeRTF,
   TranslatableString,
   resolveTranslatableString,
+  MaybeRTF,
 } from "@yext/visual-editor";
 import {
   Accordion,

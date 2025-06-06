@@ -68,6 +68,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           filter: {
             types: ["type.string"],
           },
+          isTranslatable: true,
         }
       ),
       hours: YextField("Hours", {

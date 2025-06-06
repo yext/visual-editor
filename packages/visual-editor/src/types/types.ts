@@ -82,7 +82,9 @@ export type PersonStruct = {
   cta?: CTAType;
 };
 
-export type TranslatableString = string | Record<string, string | RTF2>;
+export type TranslatableString =
+  | (string | RTF2)
+  | Record<string, string | RTF2>;
 
 export type RTF2 = {
   html?: string;

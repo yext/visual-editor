@@ -1,7 +1,8 @@
 import { AutoField, CustomField, TextField, FieldLabel } from "@measured/puck";
 import React from "react";
-import { TranslatableString } from "../../../editor/YextEntityFieldSelector.tsx";
+import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
+import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
 
 export const TEXT_CONSTANT_CONFIG: TextField = {
   type: "text",
@@ -33,12 +34,7 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
       return (
         <>
           {locales.map((locale: string) => {
-            const displayValue =
-              typeof value === "object" && !Array.isArray(value)
-                ? (value[locale] ?? "")
-                : typeof value === "string"
-                  ? value
-                  : "";
+            const displayValue: string = getDisplayValue(value, locale);
 
             return (
               <FieldLabel key={locale} label={getLocaleName(locale, "en")}>

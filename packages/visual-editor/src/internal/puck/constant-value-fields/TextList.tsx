@@ -7,10 +7,10 @@ import {
   IconButton,
 } from "@measured/puck";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
-import { TranslatableString } from "../../../editor/YextEntityFieldSelector.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { getLocaleName } from "./Text.tsx";
-import { RTF2 } from "../../../types/types.ts";
+import { RTF2, TranslatableString } from "../../../types/types.ts";
+import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
@@ -195,22 +195,13 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-space-y-2"
           >
             {dedupedLocales.map((locale, localeIndex) => {
-              const displayValue =
-                typeof item === "object" &&
-                item !== null &&
-                !Array.isArray(item)
-                  ? (item[locale] ?? "")
-                  : locale === baseLocale && typeof item === "string"
-                    ? item
-                    : "";
-
               return (
                 <FieldLabel key={locale} label={getLocaleName(locale, "en")}>
                   <AutoField
                     key={locale}
                     field={{ type: "text" }}
                     id={`${id}-value-${index}-${localeIndex}`}
-                    value={displayValue}
+                    value={getDisplayValue(item, locale)}
                     onChange={(val) => updateItem(index, locale, val)}
                   />
                 </FieldLabel>

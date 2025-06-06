@@ -70,13 +70,13 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
-  "type.cta": CTA_CONSTANT_CONFIG,
-  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
-  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
-  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
-  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
-  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
-  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
+  "type.cta": CTA_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {

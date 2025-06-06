@@ -21,10 +21,10 @@ import {
   ComponentFields,
   MaybeRTF,
   resolveTranslatableString,
+  TranslatableString,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { TranslatableString } from "../../editor/YextEntityFieldSelector.tsx";
 
 export interface InsightSectionProps {
   data: {

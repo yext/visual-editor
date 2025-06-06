@@ -19,7 +19,6 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  MaybeRTF,
   resolveTranslatableString,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -130,7 +129,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          <MaybeRTF data={resolvedPromo?.description} />
+          {resolveTranslatableString(resolvedPromo?.description)}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField

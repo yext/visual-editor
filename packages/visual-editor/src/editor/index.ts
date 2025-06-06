@@ -6,7 +6,6 @@ export {
   type RenderYextEntityFieldSelectorProps,
   type YextEntityField,
   type YextCollection,
-  type TranslatableString,
 } from "./YextEntityFieldSelector.tsx";
 export {
   OptionalNumberField,

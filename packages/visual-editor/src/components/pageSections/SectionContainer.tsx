@@ -13,6 +13,8 @@ import {
   useDocument,
   YextField,
   VisibilityWrapper,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -21,8 +23,6 @@ import {
   WithId,
   WithPuckProps,
 } from "@measured/puck";
-import { TranslatableString } from "../../editor/YextEntityFieldSelector.tsx";
-import { resolveTranslatableString } from "../../utils/resolveYextEntityField.ts";
 
 export type SectionContainerProps = {
   background?: BackgroundStyle;

@@ -27,6 +27,7 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
+  TranslatableString,
   resolveTranslatableString,
 } from "@yext/visual-editor";
 import {
@@ -35,7 +36,6 @@ import {
 } from "../contentBlocks/Image.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { TranslatableString } from "../../editor/YextEntityFieldSelector.tsx";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 

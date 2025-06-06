@@ -1,9 +1,6 @@
 import { Fields } from "@measured/puck";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
-import { RTF2, TranslatableString } from "../types/types.ts";
-import { MaybeRTF } from "../components/atoms/maybeRTF.tsx";
-import React from "react";
 
 export const resolveYextEntityField = <T>(
   document: any,
@@ -196,52 +193,4 @@ export const handleResolveFieldsForCollections = (
     isCollection,
     directChildrenFilter: collectionField,
   };
-};
-
-// Utility function to detect browser language
-const getBrowserLanguage = (): string => {
-  const browserLocales = navigator.languages || [navigator.language];
-  if (!browserLocales || browserLocales.length === 0) {
-    return "en"; // Fallback to English
-  }
-  // Return primary language code (e.g., "en" from "en-US")
-  return browserLocales[0].split("-")[0];
-};
-
-function toStringOrElement(value: string | RTF2): string | React.ReactElement {
-  const isRTF2: boolean =
-    typeof value === "object" &&
-    value !== null &&
-    !Array.isArray(value) &&
-    ("html" in value || "json" in value) &&
-    ((value as any).html === undefined ||
-      typeof (value as any).html === "string") &&
-    ((value as any).json === undefined ||
-      typeof (value as any).json === "string");
-  if (isRTF2) {
-    return MaybeRTF({ data: value }) ?? "";
-  }
-  return value?.toString() ?? "";
-}
-
-export const resolveTranslatableString = (
-  field?: TranslatableString
-): string | React.ReactElement => {
-  if (!field) {
-    return "";
-  }
-
-  if (typeof field === "object") {
-    const detectedLanguage = getBrowserLanguage();
-    if (detectedLanguage in field) {
-      return toStringOrElement(field[detectedLanguage]);
-    } else if ("en" in field) {
-      // TODO: Have a fallback language that isn't just English
-      return toStringOrElement(field["en"]);
-    } else {
-      return "";
-    }
-  }
-
-  return toStringOrElement(field);
 };
