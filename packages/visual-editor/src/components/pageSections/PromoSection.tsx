@@ -19,7 +19,7 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  MaybeRTF,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -49,6 +49,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         filter: {
           type: ComponentFields.PromoSection.type,
         },
+        isTranslatable: true,
       }),
     },
   }),
@@ -83,7 +84,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
@@ -115,7 +116,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
-            <Heading level={3}>{resolvedPromo?.title}</Heading>
+            <Heading level={3}>
+              {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
+            </Heading>
           </EntityField>
         )}
         <EntityField
@@ -126,7 +129,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          <MaybeRTF data={resolvedPromo?.description} />
+          {resolveTranslatableString(resolvedPromo?.description, i18n.language)}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField

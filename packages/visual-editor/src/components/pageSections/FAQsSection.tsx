@@ -16,6 +16,8 @@ import {
   EntityField,
   FAQSectionType,
   ComponentFields,
+  TranslatableString,
+  resolveTranslatableString,
   MaybeRTF,
 } from "@yext/visual-editor";
 import {
@@ -27,7 +29,7 @@ import {
 
 export interface FAQSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     faqs: YextEntityField<FAQSectionType>;
   };
   styles: {
@@ -41,11 +43,12 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
+      heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
+        isTranslatable: true,
       }),
       faqs: YextField("FAQs", {
         type: "entityField",
@@ -80,11 +83,11 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
 };
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
-  const resolvedHeading = resolveYextEntityField<string>(
-    document,
-    data?.heading
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data?.heading),
+    i18n.language
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 

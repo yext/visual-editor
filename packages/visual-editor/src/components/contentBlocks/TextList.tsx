@@ -7,10 +7,12 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
-  list: YextEntityField<string[]>;
+  list: YextEntityField<TranslatableString[]>;
 }
 
 const textListFields: Fields<TextListProps> = {
@@ -20,13 +22,14 @@ const textListFields: Fields<TextListProps> = {
       types: ["type.string"],
       includeListsOnly: true,
     },
+    isTranslatable: true,
   }),
 };
 
 const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   let resolvedTextList = resolveYextEntityField(document, textListField);
 
@@ -51,7 +54,7 @@ const TextListComponent: React.FC<TextListProps> = ({
         <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
           {resolvedTextList.map((text, index) => (
             <li key={index} className="mb-2">
-              {text}
+              {resolveTranslatableString(text, i18n.language)}
             </li>
           ))}
         </ul>
