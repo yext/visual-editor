@@ -107,7 +107,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
   type: "custom",
   render: ({ onChange, value = [], id }) => {
     const document: any = useDocument();
-    const locale = document?.locale;
+    const locale = document?.locale ?? "en";
     const [localItems, setLocalItems] = useState<TranslatableString[]>(value);
 
     const updateItem = (
