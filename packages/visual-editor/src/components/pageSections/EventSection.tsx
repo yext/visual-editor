@@ -21,15 +21,15 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  MaybeRTF,
-  TranslatableString,
+  TranslatableRTF2,
+  resolveTranslatableRTF2,
   resolveTranslatableString,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface EventSectionProps {
   data: {
-    heading: YextEntityField<TranslatableString>;
+    heading: YextEntityField<TranslatableRTF2>;
     events: YextEntityField<EventSectionType>;
   };
   styles: {
@@ -47,7 +47,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Section Heading", {
+      heading: YextField<any, TranslatableRTF2>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -99,6 +99,7 @@ const EventCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       background={backgroundColor}
@@ -125,7 +126,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {event.title}
+            {resolveTranslatableString(event.title, i18n.language)}
           </Heading>
         )}
         {event.dateTime && (
@@ -135,7 +136,7 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        <MaybeRTF data={event.description} />
+        {resolveTranslatableRTF2(event.description, i18n.language)}
         {event.cta && (
           <CTA
             eventName={`cta${key}`}
@@ -155,7 +156,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   const { data, styles } = props;
   const document = useDocument();
   const resolvedEvents = resolveYextEntityField(document, data.events);
-  const resolvedHeading = resolveTranslatableString(
+  const resolvedHeading = resolveTranslatableRTF2(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

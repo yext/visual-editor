@@ -1,6 +1,6 @@
 import { AutoField, CustomField, TextField } from "@measured/puck";
 import React from "react";
-import { TranslatableString } from "../../../types/types.ts";
+import { TranslatableRTF2 } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
 
@@ -9,7 +9,7 @@ export const TEXT_CONSTANT_CONFIG: TextField = {
   label: "",
 };
 
-export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> =
+export const TRANSLATABLE_RTF2_CONSTANT_CONFIG: CustomField<TranslatableRTF2> =
   {
     type: "custom",
     render: ({ onChange, value }) => {
@@ -22,9 +22,7 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
           value={getDisplayValue(value, locale)}
           onChange={(val) =>
             onChange({
-              ...(typeof value === "object" &&
-              value !== null &&
-              !Array.isArray(value)
+              ...(typeof value === "object" && !Array.isArray(value)
                 ? value
                 : {}),
               [locale]: val,
@@ -34,3 +32,36 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
       );
     },
   };
+
+// export function generateTranslatableConstantConfig<T>(label?: string, fieldType?: "text" | "textarea"): CustomField<T> {
+//   return {
+//     type: "custom",
+//     render: ({ onChange, value }) => {
+//       const document: any = useDocument();
+//       const locale = document?.locale ?? "en";
+//       const { t } = useTranslation() // TODO use platformTranslation
+//
+//       const autoField = <AutoField
+//           field={{ type: fieldType ?? "text" }}
+//           value={getDisplayValue(value, locale)}
+//           onChange={(val) =>
+//               onChange({
+//                 ...(typeof value === "object" &&
+//                 !Array.isArray(value)
+//                     ? value
+//                     : {}),
+//                 [locale]: val,
+//               })
+//           }
+//       />;
+//
+//       if (!label) {
+//         return autoField;
+//       }
+//
+//       return <FieldLabel label={t(label, "Label")}>
+//         {autoField}
+//       </FieldLabel>
+//     },
+//   }
+// }

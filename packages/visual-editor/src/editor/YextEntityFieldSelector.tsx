@@ -10,7 +10,7 @@ import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import {
   TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_RTF2_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import {
@@ -85,8 +85,8 @@ const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 };
 
 const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  "type.string": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
 };
 
 const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {

@@ -19,8 +19,8 @@ import {
   TeamSectionType,
   PersonStruct,
   ComponentFields,
-  TranslatableString,
-  resolveTranslatableString,
+  TranslatableRTF2,
+  resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -33,7 +33,7 @@ export interface TeamSectionProps {
     headingLevel: HeadingLevel;
   };
   data: {
-    heading: YextEntityField<TranslatableString>;
+    heading: YextEntityField<TranslatableRTF2>;
     people: YextEntityField<TeamSectionType>;
   };
   analytics?: {
@@ -46,7 +46,7 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading Text", {
+      heading: YextField<any, TranslatableRTF2>("Heading Text", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -180,7 +180,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
-  const resolvedHeading = resolveTranslatableString(
+  const resolvedHeading = resolveTranslatableRTF2(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

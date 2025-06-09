@@ -26,26 +26,26 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
-  TranslatableString,
-  resolveTranslatableString,
+  TranslatableRTF2,
+  resolveTranslatableRTF2,
   HoursTableAtom,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
   data: {
     info: {
-      headingText: YextEntityField<TranslatableString>;
+      headingText: YextEntityField<TranslatableRTF2>;
       address: YextEntityField<AddressType>;
       phoneNumbers: Array<{ number: YextEntityField<string>; label: string }>;
       emails: YextEntityField<string[]>;
     };
     hours: {
-      headingText: YextEntityField<TranslatableString>;
+      headingText: YextEntityField<TranslatableRTF2>;
       hours: YextEntityField<HoursType>;
     };
     services: {
-      headingText: YextEntityField<TranslatableString>;
-      servicesList: YextEntityField<TranslatableString[]>;
+      headingText: YextEntityField<TranslatableRTF2>;
+      servicesList: YextEntityField<TranslatableRTF2[]>;
     };
   };
   styles: {
@@ -76,7 +76,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       info: YextField("Info Column", {
         type: "object",
         objectFields: {
-          headingText: YextField<any, TranslatableString>("Heading Text", {
+          headingText: YextField<any, TranslatableRTF2>("Heading Text", {
             type: "entityField",
             filter: { types: ["type.string"] },
           }),
@@ -113,7 +113,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       hours: YextField("Hours Column", {
         type: "object",
         objectFields: {
-          headingText: YextField<any, TranslatableString>("Heading Text", {
+          headingText: YextField<any, TranslatableRTF2>("Heading Text", {
             type: "entityField",
             filter: {
               types: ["type.string"],
@@ -130,13 +130,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       services: YextField("Services Column", {
         type: "object",
         objectFields: {
-          headingText: YextField<any, TranslatableString>("Heading Text", {
+          headingText: YextField<any, TranslatableRTF2>("Heading Text", {
             type: "entityField",
             filter: {
               types: ["type.string"],
             },
           }),
-          servicesList: YextField<any, TranslatableString[]>("Services List", {
+          servicesList: YextField<any, TranslatableRTF2[]>("Services List", {
             type: "entityField",
             filter: {
               types: ["type.string"],
@@ -222,8 +222,8 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
-  const addressHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.info.headingText),
+  const addressHeadingText = resolveTranslatableRTF2(
+    resolveYextEntityField<TranslatableRTF2>(document, data.info.headingText),
     i18n.language
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
@@ -234,29 +234,26 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     document,
     data.info.emails
   );
-  const hoursHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      document,
-      data.hours.headingText
-    ),
+  const hoursHeadingText = resolveTranslatableRTF2(
+    resolveYextEntityField<TranslatableRTF2>(document, data.hours.headingText),
     i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
     data.hours.hours
   );
-  const servicesHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
+  const servicesHeadingText = resolveTranslatableRTF2(
+    resolveYextEntityField<TranslatableRTF2>(
       document,
       data.services.headingText
     ),
     i18n.language
   );
-  const servicesList = resolveYextEntityField<TranslatableString[]>(
+  const servicesList = resolveYextEntityField<TranslatableRTF2[]>(
     document,
     data.services.servicesList
-  )?.map((translatableString: TranslatableString) =>
-    resolveTranslatableString(translatableString, i18n.language)
+  )?.map((translatableString: TranslatableRTF2) =>
+    resolveTranslatableRTF2(translatableString, i18n.language)
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,

@@ -19,7 +19,7 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  resolveTranslatableString,
+  resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -116,7 +116,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
             <Heading level={3}>
-              {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
+              {resolveTranslatableRTF2(resolvedPromo?.title, i18n.language)}
             </Heading>
           </EntityField>
         )}
@@ -128,7 +128,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          {resolveTranslatableString(resolvedPromo?.description, i18n.language)}
+          {resolveTranslatableRTF2(resolvedPromo?.description, i18n.language)}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField

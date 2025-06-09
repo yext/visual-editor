@@ -8,8 +8,8 @@ export type HeroSectionType = {
 
 export type PromoSectionType = {
   image?: ImageType;
-  title?: TranslatableString;
-  description?: TranslatableString;
+  title?: TranslatableRTF2;
+  description?: TranslatableRTF2;
   cta?: CTAType;
 };
 
@@ -31,9 +31,9 @@ export type EventSectionType = {
 
 export type EventStruct = {
   image?: ImageType;
-  title?: string;
+  title?: TranslatableString;
   dateTime?: string;
-  description?: RTF2 | string;
+  description?: TranslatableRTF2;
   cta?: CTAType;
 };
 
@@ -82,9 +82,9 @@ export type PersonStruct = {
   cta?: CTAType;
 };
 
-export type TranslatableString =
-  | (string | RTF2)
-  | Record<string, string | RTF2>;
+export type TranslatableString = string | Record<string, string>;
+
+export type TranslatableRTF2 = (string | RTF2) | Record<string, string | RTF2>;
 
 export type RTF2 = {
   html?: string;

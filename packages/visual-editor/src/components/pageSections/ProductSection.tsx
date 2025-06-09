@@ -19,15 +19,15 @@ import {
   ProductStruct,
   ComponentFields,
   MaybeRTF,
-  TranslatableString,
-  resolveTranslatableString,
+  TranslatableRTF2,
+  resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface ProductSectionProps {
   data: {
-    heading: YextEntityField<TranslatableString>;
+    heading: YextEntityField<TranslatableRTF2>;
     products: YextEntityField<ProductSectionType>;
   };
   styles: {
@@ -45,7 +45,7 @@ const productSectionFields: Fields<ProductSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Section Heading", {
+      heading: YextField<any, TranslatableRTF2>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -156,7 +156,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
-  const resolvedHeading = resolveTranslatableString(
+  const resolvedHeading = resolveTranslatableRTF2(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

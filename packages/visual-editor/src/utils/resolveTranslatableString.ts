@@ -1,28 +1,60 @@
-import { MaybeRTF, RTF2, TranslatableString } from "@yext/visual-editor";
+import {
+  MaybeRTF,
+  RTF2,
+  TranslatableRTF2,
+  TranslatableString,
+} from "@yext/visual-editor";
 import React from "react";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 
 /**
- * Converts a type TranslatableString to a type that can be viewed on the page
+ * Converts a type TranslatableString to a string
  * @param translatableString
  * @param locale
  */
 export const resolveTranslatableString = (
   translatableString?: TranslatableString,
   locale?: string
-): string | React.ReactElement => {
+): string => {
   locale = locale ?? "en";
   if (!translatableString) {
     return "";
   }
 
-  if (typeof translatableString === "string" || isRTF2(translatableString)) {
-    return toStringOrElement(translatableString);
+  if (typeof translatableString === "string") {
+    return translatableString;
   }
 
   if (typeof translatableString === "object") {
     if (locale in translatableString) {
-      return toStringOrElement(translatableString[locale]);
+      return translatableString[locale];
+    }
+  }
+
+  return "";
+};
+
+/**
+ * Converts a type TranslatableRTF2 to a type that can be viewed on the page
+ * @param translatableRTF2
+ * @param locale
+ */
+export const resolveTranslatableRTF2 = (
+  translatableRTF2?: TranslatableRTF2,
+  locale?: string
+): string | React.ReactElement => {
+  locale = locale ?? "en";
+  if (!translatableRTF2) {
+    return "";
+  }
+
+  if (typeof translatableRTF2 === "string" || isRTF2(translatableRTF2)) {
+    return toStringOrElement(translatableRTF2);
+  }
+
+  if (typeof translatableRTF2 === "object") {
+    if (locale in translatableRTF2) {
+      return toStringOrElement(translatableRTF2[locale]);
     }
   }
 
@@ -36,9 +68,15 @@ export const resolveTranslatableString = (
  * @return string to be displayed in the editor input
  */
 export function getDisplayValue(
-  translatableString: TranslatableString,
-  locale: string
+  translatableString?: TranslatableRTF2,
+  locale?: string
 ): string {
+  if (!translatableString) {
+    return "";
+  }
+  if (!locale) {
+    locale = "en";
+  }
   if (typeof translatableString === "string") {
     return translatableString;
   }

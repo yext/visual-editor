@@ -1,7 +1,22 @@
-import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { EventSectionType, EventStruct } from "../../../types/types.ts";
+import {
+  ArrayField,
+  CustomField,
+  AutoField,
+  UiState,
+  FieldLabel,
+} from "@measured/puck";
+import {
+  EventSectionType,
+  EventStruct,
+  TranslatableRTF2,
+  TranslatableString,
+} from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
+import { useDocument } from "@yext/visual-editor";
+import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -41,15 +56,59 @@ const EventStructArrayField: ArrayField<EventStruct[]> = {
       },
     },
     title: {
-      type: "text",
+      type: "custom",
       label: "Title",
-    },
+      render: ({ onChange, value }) => {
+        const document: any = useDocument();
+        const { t } = useTranslation(); // TODO use platform translation
+        const locale = document?.locale ?? "en";
+
+        return (
+          <FieldLabel label={t("title", "Title")}>
+            <AutoField
+              field={{ type: "text" }}
+              value={getDisplayValue(value, locale)}
+              onChange={(val) =>
+                onChange({
+                  ...(typeof value === "object" && !Array.isArray(value)
+                    ? value
+                    : {}),
+                  [locale]: val,
+                })
+              }
+            />
+          </FieldLabel>
+        );
+      },
+    } as CustomField<TranslatableString | undefined>,
     dateTime: DateTimeSelector,
     description: {
-      type: "textarea",
+      type: "custom",
       label: "Description",
-    },
+      render: ({ onChange, value }) => {
+        const document: any = useDocument();
+        const { t } = useTranslation(); // TODO use platform translation
+        const locale = document?.locale ?? "en";
+
+        return (
+          <FieldLabel label={t("description", "Description")}>
+            <AutoField
+              field={{ type: "textarea" }}
+              value={getDisplayValue(value, locale)}
+              onChange={(val) =>
+                onChange({
+                  ...(typeof value === "object" && !Array.isArray(value)
+                    ? value
+                    : {}),
+                  [locale]: val,
+                })
+              }
+            />
+          </FieldLabel>
+        );
+      },
+    } as CustomField<TranslatableRTF2 | undefined>,
     cta: ctaFields,
   },
-  getItemSummary: (item, i) => item.title ?? "Event " + ((i ?? 0) + 1),
+  getItemSummary: (item, i) => "Event " + ((i ?? 0) + 1),
 };

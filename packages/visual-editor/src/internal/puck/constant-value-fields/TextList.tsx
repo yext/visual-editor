@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { RTF2, TranslatableString } from "../../../types/types.ts";
+import { RTF2, TranslatableRTF2 } from "../../../types/types.ts";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
@@ -102,13 +102,13 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
 };
 
 export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
-  TranslatableString[]
+  TranslatableRTF2[]
 > = {
   type: "custom",
   render: ({ onChange, value = [], id }) => {
     const document: any = useDocument();
     const locale = document?.locale ?? "en";
-    const [localItems, setLocalItems] = useState<TranslatableString[]>(value);
+    const [localItems, setLocalItems] = useState<TranslatableRTF2[]>(value);
 
     const updateItem = (
       index: number,
