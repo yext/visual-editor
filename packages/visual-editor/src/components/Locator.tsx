@@ -184,6 +184,7 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
     );
     return <></>;
   }
+  searcher.setSessionTrackingEnabled(true);
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
