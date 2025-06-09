@@ -3,6 +3,7 @@ import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
+import { useTranslation } from "react-i18next";
 
 type Option<T = any> = {
   label: string;
@@ -20,7 +21,9 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
-      const { t } = usePlatformTranslation();
+      const { t } = useTranslation();
+      const { t: pt } = usePlatformTranslation();
+
       if (!options || options.length === 0) {
         return (
           <FieldLabel label={label} icon={<ChevronDown size={16} />}>
@@ -29,19 +32,26 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
         );
       }
 
-      // The values that we pass into the Combobox should match the labels
-      // so that the search functionality works as expected.
-      const labelOptions: Option<string>[] = options.map((option) => ({
-        ...option,
-        value: option.label,
+      const translatedOptions = options.map((o) => ({
+        ...o,
+        label: pt(o.label),
       }));
 
+      // The values that we pass into the Combobox should match the labels
+      // so that the search functionality works as expected.
+      const labelOptions: Option<string>[] = translatedOptions.map(
+        (option) => ({
+          ...option,
+          value: option.label,
+        })
+      );
+
       return (
-        <FieldLabel label={label} icon={<ChevronDown size={16} />}>
+        <FieldLabel label={pt(label)} icon={<ChevronDown size={16} />}>
           <Combobox
             defaultValue={
               labelOptions[
-                options.findIndex(
+                translatedOptions.findIndex(
                   (option) =>
                     JSON.stringify(option.value) === JSON.stringify(value)
                 )
@@ -49,8 +59,9 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
             }
             onChange={(selectedOption) =>
               onChange(
-                options.find((option) => option.label === selectedOption)
-                  ?.value ?? options[0].value
+                translatedOptions.find(
+                  (option) => option.label === selectedOption
+                )?.value ?? options[0].value
               )
             }
             options={labelOptions}

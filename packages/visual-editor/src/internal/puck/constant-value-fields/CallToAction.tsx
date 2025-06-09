@@ -51,7 +51,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<
           fieldType: "text",
         },
         {
-          label: t("link", "Link"),
+          label: t("Link", "Link"),
           field: "link",
           fieldType: "text",
         },
@@ -72,14 +72,14 @@ export const ctaFields = (): Field<CTA | undefined> => {
 
   return {
     type: "object",
-    label: "Call To Action",
+    label: t("Call To Action"),
     objectFields: {
       label: {
         label: t("label", "Label"),
         type: "text",
       },
       link: {
-        label: t("link", "Link"),
+        label: t("Link", "Link"),
         type: "text",
       },
       linkType: {

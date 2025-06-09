@@ -20,6 +20,8 @@ import {
   ComponentFields,
   EntityField,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -41,49 +43,50 @@ export interface PromoSectionProps {
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
       promo: YextStructFieldSelector({
-        label: "Promo",
+        label: msg("Promo"),
         filter: {
           type: ComponentFields.PromoSection.type,
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      orientation: YextField("Image Orientation", {
+      orientation: YextField(msg("Image Orientation"), {
         type: "radio",
         options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
+          { label: msg("Left"), value: "left" },
+          { label: msg("Right"), value: "right" },
         ],
       }),
-      ctaVariant: YextField("CTA Variant", {
+      ctaVariant: YextField(msg("CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
@@ -97,7 +100,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName={t("image", "Image")}
+          displayName={pt("image", "Image")}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
@@ -111,7 +114,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
-            displayName={t("title", "Title")}
+            displayName={pt("title", "Title")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
@@ -121,7 +124,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
         <EntityField
-          displayName={t("description", "Description")}
+          displayName={pt("description", "Description")}
           fieldId={data.promo.field}
           constantValueEnabled={
             !resolvedPromo?.description ||
@@ -132,7 +135,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
-            displayName={t("callToAction", "Call To Action")}
+            displayName={pt("callToAction", "Call To Action")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
@@ -151,7 +154,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
 };
 
 export const PromoSection: ComponentConfig<PromoSectionProps> = {
-  label: "Promo Section",
+  label: msg("Promo Section"),
   fields: promoSectionFields,
   defaultProps: {
     data: {

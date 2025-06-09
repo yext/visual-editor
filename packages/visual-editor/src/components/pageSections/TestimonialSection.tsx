@@ -20,6 +20,8 @@ import {
   TimestampOption,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -37,14 +39,14 @@ export interface TestimonialSectionProps {
 }
 
 const testimonialSectionFields: Fields<TestimonialSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading Text", {
+      heading: YextField<any, TranslatableString>(msg("Heading Text"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      testimonials: YextField("Testimonial Section", {
+      testimonials: YextField(msg("Testimonial Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.TestimonialSection.type],
@@ -52,31 +54,31 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(msg("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -127,7 +129,8 @@ const TestimonialSectionWrapper = ({
   data,
   styles,
 }: TestimonialSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
@@ -145,7 +148,7 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -156,7 +159,7 @@ const TestimonialSectionWrapper = ({
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName={t("testimonials", "Testimonials")}
+          displayName={pt("testimonials", "Testimonials")}
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >
@@ -177,7 +180,7 @@ const TestimonialSectionWrapper = ({
 };
 
 export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
-  label: "Testimonials Section",
+  label: msg("Testimonials Section"),
   fields: testimonialSectionFields,
   defaultProps: {
     styles: {

@@ -1,6 +1,7 @@
 import { borderRadiusOptions } from "../editor/BorderRadiusSelector.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
+import { msg } from "./i18nPlatform.ts";
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {
@@ -41,46 +42,46 @@ type BackgroundOption = {
 
 export const backgroundColors: Record<string, BackgroundOption> = {
   background1: {
-    label: "Background 1",
+    label: msg("Background 1"),
     value: { bgColor: "bg-white", textColor: "text-black" },
   },
   background2: {
-    label: "Background 2",
+    label: msg("Background 2"),
     value: {
       bgColor: "bg-palette-primary-light",
       textColor: "text-black",
     },
   },
   background3: {
-    label: "Background 3",
+    label: msg("Background 3"),
     value: {
       bgColor: "bg-palette-secondary-light",
       textColor: "text-black",
     },
   },
   background4: {
-    label: "Background 4",
+    label: msg("Background 4"),
     value: {
       bgColor: "bg-palette-tertiary-light",
       textColor: "text-black",
     },
   },
   background5: {
-    label: "Background 5",
+    label: msg("Background 5"),
     value: {
       bgColor: "bg-palette-quaternary-light",
       textColor: "text-black",
     },
   },
   background6: {
-    label: "Background 6",
+    label: msg("Background 6"),
     value: {
       bgColor: "bg-palette-primary-dark",
       textColor: "text-white",
     },
   },
   background7: {
-    label: "Background 7",
+    label: msg("Background 7"),
     value: {
       bgColor: "bg-palette-secondary-dark",
       textColor: "text-white",
@@ -165,50 +166,50 @@ const letterSpacingOptions = [
 ];
 
 const textTransformOptions = [
-  { label: "Normal", value: "none" },
-  { label: "Uppercase", value: "uppercase" },
-  { label: "Lowercase", value: "lowercase" },
-  { label: "Capitalize", value: "capitalize" },
+  { label: msg("Normal"), value: "none" },
+  { label: msg("Uppercase"), value: "uppercase" },
+  { label: msg("Lowercase"), value: "lowercase" },
+  { label: msg("Capitalize"), value: "capitalize" },
 ];
 
 const ctaVariantOptions = [
-  { label: "Primary", value: "primary" },
-  { label: "Secondary", value: "secondary" },
-  { label: "Link", value: "link" },
+  { label: msg("Primary"), value: "primary" },
+  { label: msg("Secondary"), value: "secondary" },
+  { label: msg("Link"), value: "link" },
 ];
 
 const alignmentOptions = [
-  { label: "Left", value: "left" },
-  { label: "Center", value: "center" },
-  { label: "Right", value: "right" },
+  { label: msg("Left"), value: "left" },
+  { label: msg("Center"), value: "center" },
+  { label: msg("Right"), value: "right" },
 ];
 
 const justifyContentOptions = [
-  { label: "Start", value: "start" },
-  { label: "Center", value: "center" },
-  { label: "End", value: "end" },
+  { label: msg("Start"), value: "start" },
+  { label: msg("Center"), value: "center" },
+  { label: msg("End"), value: "end" },
 ];
 
 const bodyVariantOptions = [
-  { label: "Small", value: "sm" },
-  { label: "Base", value: "base" },
-  { label: "Large", value: "lg" },
+  { label: msg("Small"), value: "sm" },
+  { label: msg("Base"), value: "base" },
+  { label: msg("Large"), value: "lg" },
 ];
 
 const hoursOptions = [
-  { label: "Monday", value: "monday" },
-  { label: "Tuesday", value: "tuesday" },
-  { label: "Wednesday", value: "wednesday" },
-  { label: "Thursday", value: "thursday" },
-  { label: "Friday", value: "friday" },
-  { label: "Saturday", value: "saturday" },
-  { label: "Sunday", value: "sunday" },
-  { label: "Today", value: "today" },
+  { label: msg("Monday"), value: "monday" },
+  { label: msg("Tuesday"), value: "tuesday" },
+  { label: msg("Wednesday"), value: "wednesday" },
+  { label: msg("Thursday"), value: "thursday" },
+  { label: msg("Friday"), value: "friday" },
+  { label: msg("Saturday"), value: "saturday" },
+  { label: msg("Sunday"), value: "sunday" },
+  { label: msg("Today"), value: "today" },
 ];
 
 const phoneOptions = [
-  { label: "Domestic", value: "domestic" },
-  { label: "International", value: "international" },
+  { label: msg("Domestic"), value: "domestic" },
+  { label: msg("International"), value: "international" },
 ];
 
 export const ThemeOptions = {

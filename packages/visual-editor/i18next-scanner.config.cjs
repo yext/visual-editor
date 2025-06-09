@@ -4,6 +4,7 @@ module.exports = {
     "src/editor/**/*.{ts,tsx}",
     "src/internal/**/*.{ts,tsx}",
     "!**/__screenshots__/**",
+    "src/utils/*.ts",
   ],
 
   output: "",
@@ -17,7 +18,7 @@ module.exports = {
       return "";
     },
     func: {
-      list: ["t", "i18next.t", "i18n"],
+      list: ["t", "i18next.t", "i18n", "pt", "msg"],
       extensions: [".ts", ".tsx"],
     },
     lngs: [

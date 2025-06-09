@@ -24,6 +24,7 @@ import {
   MaybeRTF,
   TranslatableString,
   resolveTranslatableString,
+  msg,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -44,14 +45,14 @@ export interface EventSectionProps {
 }
 
 const eventSectionFields: Fields<EventSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Section Heading", {
+      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      events: YextField("Events", {
+      events: YextField(msg("Events"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.EventSection.type],
@@ -59,31 +60,31 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(msg("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -199,7 +200,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
 };
 
 export const EventSection: ComponentConfig<EventSectionProps> = {
-  label: "Events Section",
+  label: msg("Events Section"),
   fields: eventSectionFields,
   defaultProps: {
     data: {

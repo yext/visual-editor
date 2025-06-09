@@ -171,8 +171,9 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 
   return {
     type: "custom",
-    label: props.label,
     render: ({ value, onChange }: RenderProps) => {
+      const { t } = usePlatformTranslation();
+
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
@@ -189,7 +190,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
-            label={props.label}
+            label={t(props.label)}
           />
           {value?.constantValueEnabled && !props.isCollection && (
             <ConstantValueInput<T>
@@ -234,8 +235,9 @@ export const YextCollectionSubfieldSelector = <
 
   return {
     type: "custom",
-    label: props.label,
     render: ({ value, onChange }: RenderProps) => {
+      const { t } = usePlatformTranslation();
+
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           field: value?.field ?? "",
@@ -252,7 +254,7 @@ export const YextCollectionSubfieldSelector = <
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
-            label={props.label}
+            label={t(props.label)}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
@@ -330,7 +332,7 @@ export const ConstantValueModeToggler = ({
         </TooltipProvider>
       )}
       <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
-        {label}
+        {t(label)}
       </p>
     </div>
   );

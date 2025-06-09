@@ -9,6 +9,7 @@ import {
   Image,
   ImageProps,
   YextField,
+  msg,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -19,7 +20,7 @@ export interface ImageWrapperProps extends Omit<ImageProps, "image"> {
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
-  image: YextField<any, ImageType | ComplexImageType>("Image", {
+  image: YextField<any, ImageType | ComplexImageType>(msg("Image"), {
     type: "entityField",
     filter: {
       types: ["type.image"],
@@ -28,19 +29,19 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   layout: YextField("Layout", {
     type: "radio",
     options: [
-      { label: "Auto", value: "auto" },
-      { label: "Fixed", value: "fixed" },
+      { label: msg("Auto"), value: "auto" },
+      { label: msg("Fixed"), value: "fixed" },
     ],
   }),
-  width: YextField("Width", {
+  width: YextField(msg("Width"), {
     type: "number",
     min: 0,
   }),
-  height: YextField("Height", {
+  height: YextField(msg("Height"), {
     type: "number",
     min: 0,
   }),
-  aspectRatio: YextField("Aspect Ratio", {
+  aspectRatio: YextField(msg("Aspect Ratio"), {
     type: "select",
     options: [
       { label: "1:1", value: 1 },

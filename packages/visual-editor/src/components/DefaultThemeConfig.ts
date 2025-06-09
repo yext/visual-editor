@@ -5,6 +5,7 @@ import {
   getFontWeightOptions,
   constructFontSelectOptions,
   ThemeOptions,
+  msg,
 } from "@yext/visual-editor";
 
 const fonts: FontRegistry = {
@@ -22,28 +23,28 @@ const fontWeightOptions = (fontVariable?: string) => {
 
 export const defaultThemeConfig: ThemeConfig = {
   palette: {
-    label: "Colors",
+    label: msg("Colors"),
     styles: {
       primary: {
-        label: "Primary",
+        label: msg("Primary"),
         type: "color",
         default: "#CF0A2C",
         plugin: "colors",
       },
       secondary: {
-        label: "Secondary",
+        label: msg("Secondary"),
         type: "color",
         default: "#737B82",
         plugin: "colors",
       },
       tertiary: {
-        label: "Tertiary",
+        label: msg("Tertiary"),
         type: "color",
         default: "#FF7E7E",
         plugin: "colors",
       },
       quaternary: {
-        label: "Quaternary",
+        label: msg("Quaternary"),
         type: "color",
         default: "#000000",
         plugin: "colors",
@@ -54,21 +55,21 @@ export const defaultThemeConfig: ThemeConfig = {
     label: "H1",
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "48px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-h1-fontFamily"),
@@ -80,21 +81,21 @@ export const defaultThemeConfig: ThemeConfig = {
     label: "H2",
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "40px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-h2-fontFamily"),
@@ -106,21 +107,21 @@ export const defaultThemeConfig: ThemeConfig = {
     label: "H3",
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "32px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-h3-fontFamily"),
@@ -132,21 +133,21 @@ export const defaultThemeConfig: ThemeConfig = {
     label: "H4",
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "24px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-h4-fontFamily"),
@@ -158,21 +159,21 @@ export const defaultThemeConfig: ThemeConfig = {
     label: "H5",
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "20px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-h5-fontFamily"),
@@ -184,21 +185,21 @@ export const defaultThemeConfig: ThemeConfig = {
     label: "H6",
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "18px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-h6-fontFamily"),
@@ -207,24 +208,24 @@ export const defaultThemeConfig: ThemeConfig = {
     },
   },
   body: {
-    label: "Body Text",
+    label: msg("Body Text"),
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "16px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-body-fontFamily"),
@@ -233,23 +234,23 @@ export const defaultThemeConfig: ThemeConfig = {
     },
   },
   pageSection: {
-    label: "Page Section",
+    label: msg("Page Section"),
     styles: {
       contentWidth: {
-        label: "Content Width",
+        label: msg("Content Width"),
         type: "select",
         plugin: "maxWidth",
         options: [
-          { label: "Compact (768px)", value: "768px" },
-          { label: "Narrow (960px)", value: "960px" },
-          { label: "Standard (1024px)", value: "1024px" },
-          { label: "Wide (1280px)", value: "1280px" },
-          { label: "Extra Wide (1440px)", value: "1440px" },
+          { label: msg("Compact (768px)"), value: "768px" },
+          { label: msg("Narrow (960px)"), value: "960px" },
+          { label: msg("Standard (1024px)"), value: "1024px" },
+          { label: msg("Wide (1280px)"), value: "1280px" },
+          { label: msg("Extra Wide (1440px)"), value: "1440px" },
         ],
         default: "1024px",
       },
       verticalPadding: {
-        label: "Top/Bottom Padding",
+        label: msg("Top/Bottom Padding"),
         type: "select",
         plugin: "padding",
         options: ThemeOptions.SPACING,
@@ -258,38 +259,38 @@ export const defaultThemeConfig: ThemeConfig = {
     },
   },
   button: {
-    label: "Button",
+    label: msg("Button"),
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "16px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-button-fontFamily"),
         default: "400",
       },
       textTransform: {
-        label: "Text Transform",
+        label: msg("Text Transform"),
         type: "select",
         plugin: "textTransform",
         options: ThemeOptions.TEXT_TRANSFORM,
         default: "none",
       },
       letterSpacing: {
-        label: "Letter Spacing",
+        label: msg("Letter Spacing"),
         type: "select",
         plugin: "letterSpacing",
         options: ThemeOptions.LETTER_SPACING,
@@ -298,50 +299,50 @@ export const defaultThemeConfig: ThemeConfig = {
     },
   },
   link: {
-    label: "Links",
+    label: msg("Links"),
     styles: {
       fontFamily: {
-        label: "Font",
+        label: msg("Font"),
         type: "select",
         plugin: "fontFamily",
         options: fontOptions,
         default: "'Open Sans', sans-serif",
       },
       fontSize: {
-        label: "Font Size",
+        label: msg("Font Size"),
         type: "select",
         plugin: "fontSize",
         options: ThemeOptions.FONT_SIZE,
         default: "16px",
       },
       fontWeight: {
-        label: "Font Weight",
+        label: msg("Font Weight"),
         type: "select",
         plugin: "fontWeight",
         options: fontWeightOptions("--fontFamily-link-fontFamily"),
         default: "400",
       },
       textTransform: {
-        label: "Text Transform",
+        label: msg("Text Transform"),
         type: "select",
         plugin: "textTransform",
         options: ThemeOptions.TEXT_TRANSFORM,
         default: "none",
       },
       letterSpacing: {
-        label: "Letter Spacing",
+        label: msg("Letter Spacing"),
         type: "select",
         plugin: "letterSpacing",
         options: ThemeOptions.LETTER_SPACING,
         default: "0em",
       },
       caret: {
-        label: "Include Caret",
+        label: msg("Include Caret"),
         type: "select",
         plugin: "display",
         options: [
-          { label: "Yes", value: "block" },
-          { label: "No", value: "none" },
+          { label: msg("Yes"), value: "block" },
+          { label: msg("No"), value: "none" },
         ],
         default: "block",
       },

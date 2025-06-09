@@ -32,6 +32,7 @@ import {
   createSearchHeadlessConfig,
   CTA,
   Heading,
+  msg,
   normalizeSlug,
   PhoneAtom,
   useDocument,
@@ -135,20 +136,20 @@ export type LocatorProps = {
 };
 
 const locatorFields: Fields<LocatorProps> = {
-  mapStyle: BasicSelector("Map Style", [
-    { label: "Default", value: "mapbox://styles/mapbox/streets-v12" },
+  mapStyle: BasicSelector(msg("Map Style"), [
+    { label: msg("Default"), value: "mapbox://styles/mapbox/streets-v12" },
     {
-      label: "Satellite",
+      label: msg("Satellite"),
       value: "mapbox://styles/mapbox/satellite-streets-v12",
     },
-    { label: "Light", value: "mapbox://styles/mapbox/light-v11" },
-    { label: "Dark", value: "mapbox://styles/mapbox/dark-v11" },
+    { label: msg("Light"), value: "mapbox://styles/mapbox/light-v11" },
+    { label: msg("Dark"), value: "mapbox://styles/mapbox/dark-v11" },
     {
-      label: "Navigation (Day)",
+      label: msg("Navigation (Day)"),
       value: "mapbox://styles/mapbox/navigation-day-v1",
     },
     {
-      label: "Navigation (Night)",
+      label: msg("Navigation (Night)"),
       value: "mapbox://styles/mapbox/navigation-night-v1",
     },
   ]),
@@ -156,7 +157,7 @@ const locatorFields: Fields<LocatorProps> = {
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
-  label: "Locator",
+  label: msg("Locator"),
   render: (props) => <LocatorWrapper {...props} />,
 };
 

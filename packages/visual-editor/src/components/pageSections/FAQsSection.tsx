@@ -19,6 +19,8 @@ import {
   TranslatableString,
   resolveTranslatableString,
   MaybeRTF,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -40,16 +42,16 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Section Heading", {
+      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      faqs: YextField("FAQs", {
+      faqs: YextField(msg("FAQs"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.FAQSection.type],
@@ -57,32 +59,33 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedHeading = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(document, data?.heading),
@@ -97,7 +100,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("headingText", "Heading Text")}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -106,7 +109,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName={t("faqs", "FAQs")}
+          displayName={pt("faqs", "FAQs")}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
@@ -131,7 +134,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
 };
 
 export const FAQSection: ComponentConfig<FAQSectionProps> = {
-  label: "FAQs Section",
+  label: msg("FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {
     data: {

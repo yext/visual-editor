@@ -29,6 +29,8 @@ import {
   VisibilityWrapper,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -85,20 +87,20 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      imageStyle: YextField("Image Style", {
+      imageStyle: YextField(msg("Image Style"), {
         type: "object",
         objectFields: {
           layout: ImageWrapperFields.layout,
@@ -109,16 +111,16 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       }),
     },
   }),
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading", {
+      heading: YextField<any, TranslatableString>(msg("Heading"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
+      images: YextField<any, ImageType[] | ComplexImageType[]>(msg("Images"), {
         type: "entityField",
         filter: {
           types: ["type.image"],
@@ -127,11 +129,11 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -141,6 +143,7 @@ const PhotoGallerySectionComponent = ({
   styles,
 }: PhotoGallerySectionProps) => {
   const { t, i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const sectionHeading = resolveTranslatableString(
     resolveYextEntityField(document, data.heading),
@@ -167,7 +170,7 @@ const PhotoGallerySectionComponent = ({
     >
       {sectionHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -189,7 +192,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName={t("images", "Images")}
+              displayName={pt("images", "Images")}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >
@@ -260,7 +263,7 @@ const PhotoGallerySectionComponent = ({
 };
 
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
-  label: "Photo Gallery Section",
+  label: msg("Photo Gallery Section"),
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {

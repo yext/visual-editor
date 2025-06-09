@@ -110,7 +110,10 @@ export const FontSizeSelector = (
             value: "default",
             px: "",
           },
-          ...fontSizeOptions(includeLargeSizes),
+          ...fontSizeOptions(includeLargeSizes).map((o) => ({
+            ...o,
+            label: t(o.label),
+          })),
         ],
         tailwindConfig
       );

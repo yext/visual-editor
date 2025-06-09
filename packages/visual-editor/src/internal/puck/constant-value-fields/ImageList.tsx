@@ -22,5 +22,6 @@ export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<ImageType[]> => {
         label: t("width", "width"),
       },
     },
+    getItemSummary: (_, i) => t("photo", "Photo") + " " + i,
   };
 };

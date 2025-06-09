@@ -33,4 +33,13 @@ const usePlatformTranslation = () => {
   return useTranslation(NAMESPACE, { i18n: i18nPlatformInstance });
 };
 
-export { i18nPlatformInstance, usePlatformTranslation };
+/**
+ * msg marks strings for translation in config JSON such
+ * as Puck fields or the theme config. These strings are
+ * dynamically replaced when the config is rendered.
+ */
+const msg = (s: string) => {
+  return s;
+};
+
+export { i18nPlatformInstance, usePlatformTranslation, msg };

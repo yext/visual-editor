@@ -25,6 +25,8 @@ import {
   HoursStatusAtom,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -51,17 +53,17 @@ export interface HeroSectionProps {
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      businessName: YextField<any, TranslatableString>("Business Name", {
+      businessName: YextField<any, TranslatableString>(msg("Business Name"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
       localGeoModifier: YextField<any, TranslatableString>(
-        "Local GeoModifier",
+        msg("Local GeoModifier"),
         {
           type: "entityField",
           filter: {
@@ -76,59 +78,60 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         },
       }),
       hero: YextStructFieldSelector({
-        label: "Hero",
+        label: msg("Hero"),
         filter: {
           type: ComponentFields.HeroSection.type,
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      imageOrientation: YextField("Image Orientation", {
+      imageOrientation: YextField(msg("Image Orientation"), {
         type: "radio",
         options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
+          { label: msg("Left"), value: "left" },
+          { label: msg("Right"), value: "right" },
         ],
       }),
-      businessNameLevel: YextField("Business Name Heading Level", {
+      businessNameLevel: YextField(msg("Business Name Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      localGeoModifierLevel: YextField("Local GeoModifier Heading Level", {
+      localGeoModifierLevel: YextField(msg("Local GeoModifier Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      primaryCTA: YextField("Primary CTA Variant", {
+      primaryCTA: YextField(msg("Primary CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
-      secondaryCTA: YextField("Secondary CTA Variant", {
+      secondaryCTA: YextField(msg("Secondary CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
 
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument() as any;
   const resolvedBusinessName = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(document, data?.businessName),
@@ -175,7 +178,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             {resolvedBusinessName && (
               <EntityField
-                displayName={t("businessName", "Business Name")}
+                displayName={pt("businessName", "Business Name")}
                 fieldId={data?.businessName.field}
                 constantValueEnabled={data?.businessName.constantValueEnabled}
               >
@@ -186,7 +189,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedLocalGeoModifier && (
               <EntityField
-                displayName={t("localGeomodifier", "Local GeoModifier")}
+                displayName={pt("localGeomodifier", "Local GeoModifier")}
                 fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
                   data?.localGeoModifier.constantValueEnabled
@@ -200,7 +203,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           </section>
           {resolvedHours && (
             <EntityField
-              displayName={t("hours", "Hours")}
+              displayName={pt("hours", "Hours")}
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
@@ -216,7 +219,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             {resolvedHero?.primaryCta?.label && (
               <EntityField
-                displayName={t("primaryCta", "Primary CTA")}
+                displayName={pt("primaryCta", "Primary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.primaryCta
@@ -234,7 +237,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedHero?.secondaryCta?.label && (
               <EntityField
-                displayName={t("secondaryCta", "Secondary CTA")}
+                displayName={pt("secondaryCta", "Secondary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.secondaryCta
@@ -255,7 +258,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
       </div>
       {resolvedHero?.image && (
         <EntityField
-          displayName={t("image", "Image")}
+          displayName={pt("image", "Image")}
           fieldId={data.hero.field}
           constantValueEnabled={data.hero.constantValueOverride.image}
         >
@@ -279,7 +282,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
 };
 
 export const HeroSection: ComponentConfig<HeroSectionProps> = {
-  label: "Hero Section",
+  label: msg("Hero Section"),
   fields: heroSectionFields,
   defaultProps: {
     data: {

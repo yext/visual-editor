@@ -11,6 +11,8 @@ import {
   EntityField,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -30,10 +32,10 @@ export type BannerSectionProps = {
 };
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString>("Text", {
+      text: YextField<any, TranslatableString>(msg("Text"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -41,31 +43,32 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "DARK_BACKGROUND_COLOR",
       }),
-      textAlignment: YextField("Text Alignment", {
+      textAlignment: YextField(msg("Text Alignment"), {
         type: "radio",
         options: "ALIGNMENT",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(document, data.text),
@@ -85,7 +88,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
       className={`flex ${justifyClass} items-center`}
     >
       <EntityField
-        displayName={t("bannerText", "Banner Text")}
+        displayName={pt("bannerText", "Banner Text")}
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
@@ -96,7 +99,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
 };
 
 export const BannerSection: ComponentConfig<BannerSectionProps> = {
-  label: "Banner Section",
+  label: msg("Banner Section"),
   fields: bannerSectionFields,
   defaultProps: {
     data: {

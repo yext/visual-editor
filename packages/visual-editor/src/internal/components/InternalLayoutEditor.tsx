@@ -16,6 +16,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
+import { msg, usePlatformTranslation } from "../../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -53,6 +54,7 @@ export const InternalLayoutEditor = ({
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
+  const { t, i18n } = usePlatformTranslation();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -134,20 +136,31 @@ export const InternalLayoutEditor = ({
     }
   };
 
-  const puckConfigWithRootFields = React.useMemo(() => {
+  const translatedPuckConfigWithRootFields = React.useMemo(() => {
+    const translatedComponents: Config["components"] = {};
+    Object.entries(puckConfig.components).forEach(
+      ([componentKey, component]) => {
+        translatedComponents[componentKey] = {
+          ...component,
+          label: t(component.label ?? ""),
+        };
+      }
+    );
+
     return {
-      ...puckConfig,
+      categories: puckConfig.categories,
+      components: translatedComponents,
       root: {
         ...puckConfig.root,
         fields: {
           title: YextEntityFieldSelector<any, string>({
-            label: "Title",
+            label: msg("Title"),
             filter: {
               types: ["type.string"],
             },
           }),
           description: YextEntityFieldSelector<any, string>({
-            label: "Description",
+            label: msg("Description"),
             filter: {
               types: ["type.string"],
             },
@@ -166,13 +179,13 @@ export const InternalLayoutEditor = ({
           },
         },
       },
-    };
-  }, [puckConfig]);
+    } as Config;
+  }, [puckConfig, i18n.language]);
 
   return (
     <EntityTooltipsProvider>
       <Puck
-        config={puckConfigWithRootFields}
+        config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
@@ -191,8 +204,70 @@ export const InternalLayoutEditor = ({
             />
           ),
           iframe: loadMapboxIntoIframe,
+          fieldTypes: {
+            number: TranslatePuckFieldLabels,
+            object: TranslatePuckFieldLabels,
+            radio: TranslatePuckFieldLabels,
+            select: TranslatePuckFieldLabels,
+            text: TranslatePuckFieldLabels,
+            textarea: TranslatePuckFieldLabels,
+          },
         }}
       />
     </EntityTooltipsProvider>
   );
+};
+
+// TranslatePuckFieldLabels recursively walks the React component tree
+// created by Puck fields and replaces labels with their translations.
+const TranslatePuckFieldLabels = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { t } = usePlatformTranslation();
+
+  const replaceText = (child: React.ReactNode): React.ReactNode => {
+    if (React.isValidElement(child)) {
+      if (typeof child.props.children === "string") {
+        return React.cloneElement(
+          child as React.ReactElement<{
+            children?: React.ReactNode;
+          }>,
+          {
+            ...child.props,
+            children: t(child.props.children),
+          }
+        );
+      }
+
+      if (
+        ("label" in child.props && "icon" in child.props) ||
+        "title" in child.props
+      ) {
+        return React.cloneElement(
+          child as React.ReactElement<{
+            children?: React.ReactNode;
+          }>,
+          {
+            ...child.props,
+            children: React.Children.map(child.props.children, replaceText),
+            label: child.props.label ? t(child.props.label) : undefined,
+            title: child.props.title ? t(child.props.title) : undefined,
+          }
+        );
+      } else {
+        return React.cloneElement(
+          child as React.ReactElement<{ children?: React.ReactNode }>,
+          {
+            children: React.Children.map(child.props.children, replaceText),
+          }
+        );
+      }
+    }
+
+    return child;
+  };
+
+  return <>{React.Children.map(children, replaceText)}</>;
 };

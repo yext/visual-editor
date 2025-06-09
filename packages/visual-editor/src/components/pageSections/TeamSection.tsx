@@ -21,6 +21,8 @@ import {
   ComponentFields,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -43,14 +45,14 @@ export interface TeamSectionProps {
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading Text", {
+      heading: YextField<any, TranslatableString>(msg("Heading Text"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      people: YextField("Team Section", {
+      people: YextField(msg("Team Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.TeamSection.type],
@@ -58,31 +60,31 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(msg("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -177,7 +179,8 @@ const PersonCard = ({
 };
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveTranslatableString(
@@ -192,7 +195,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -203,7 +206,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName={t("team", "Team")}
+          displayName={pt("team", "Team")}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
@@ -224,7 +227,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
 };
 
 export const TeamSection: ComponentConfig<TeamSectionProps> = {
-  label: "Team Section",
+  label: msg("Team Section"),
   fields: TeamSectionFields,
   defaultProps: {
     data: {

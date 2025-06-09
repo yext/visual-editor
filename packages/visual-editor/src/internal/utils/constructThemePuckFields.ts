@@ -9,13 +9,16 @@ import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
 import { useCallback } from "react";
+import { usePlatformTranslation } from "../../utils/i18nPlatform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 // Converts a ThemeConfigSection into a Puck fields object
 export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
+  const { t } = usePlatformTranslation();
+
   const field: ObjectField = {
-    label: themeSection.label,
+    label: t(themeSection.label),
     type: "object",
     objectFields: {},
   };
@@ -28,7 +31,7 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
       }
     } else {
       const styleGroupFields: ObjectField = {
-        label: style.label,
+        label: t(style.label),
         type: "object",
         objectFields: {},
       };
@@ -46,26 +49,28 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
 
 // Determines which Puck field type to use for a style
 export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
+  const { t } = usePlatformTranslation();
+
   switch (style.type) {
     case "number":
       return {
-        label: style.label,
+        label: t(style.label),
         type: "number",
       } as NumberField;
     case "select":
       if (plugin === "fontFamily") {
         return {
-          label: style.label,
+          label: t(style.label),
           type: "custom",
           options: style.options,
           render: useCallback(
             ({ onChange, value }: RenderProps) =>
               FontSelector({
-                label: style.label,
-                options:
-                  typeof style.options === "function"
-                    ? style.options()
-                    : style.options,
+                label: t(style.label),
+                options: (typeof style.options === "function"
+                  ? style.options()
+                  : style.options
+                ).map((o) => ({ ...o, label: t(o.label) })),
                 value,
                 onChange,
               }),
@@ -74,17 +79,17 @@ export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
         } as CustomField;
       } else {
         return {
-          label: style.label,
+          label: t(style.label),
           type: "select",
-          options:
-            typeof style.options === "function"
-              ? style.options()
-              : style.options,
+          options: (typeof style.options === "function"
+            ? style.options()
+            : style.options
+          ).map((o) => ({ ...o, label: t(o.label) })),
         } as SelectField;
       }
     case "color":
       return {
-        label: style.label,
+        label: t(style.label),
         type: "custom",
         render: ColorSelector,
       } as CustomField;

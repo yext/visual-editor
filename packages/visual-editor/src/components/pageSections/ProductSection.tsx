@@ -21,6 +21,8 @@ import {
   MaybeRTF,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -42,14 +44,14 @@ export interface ProductSectionProps {
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Section Heading", {
+      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      products: YextField("Products", {
+      products: YextField(msg("Products"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.ProductSection.type],
@@ -57,31 +59,31 @@ const productSectionFields: Fields<ProductSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(msg("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -153,7 +155,8 @@ const ProductCard = ({
 };
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
   const resolvedHeading = resolveTranslatableString(
@@ -168,7 +171,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -179,7 +182,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName={t("products", "Products")}
+          displayName={pt("products", "Products")}
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >
@@ -200,7 +203,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
 };
 
 export const ProductSection: ComponentConfig<ProductSectionProps> = {
-  label: "Products Section",
+  label: msg("Products Section"),
   fields: productSectionFields,
   defaultProps: {
     data: {

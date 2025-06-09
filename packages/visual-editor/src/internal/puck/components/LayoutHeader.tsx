@@ -59,11 +59,58 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       setHistories,
     },
   } = usePuck();
-  const { t } = usePlatformTranslation();
+  const { t, i18n } = usePlatformTranslation();
 
   useEffect(() => {
     onHistoryChange(histories, index);
   }, [index, histories, onHistoryChange]);
+
+  useEffect(() => {
+    // Translate the static left sidebar title
+    const componentListTitle = document.querySelector<HTMLElement>(
+      "[class*='PuckLayout-leftSideBar'] h2[class*='_Heading']"
+    );
+    if (componentListTitle) {
+      componentListTitle.innerText = t("components", "Components");
+    }
+
+    // Translate the dynamic right sidebar title
+    const rightSidebar = document.querySelector(
+      "[class*='PuckLayout-rightSideBar']"
+    );
+    if (!rightSidebar) {
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      const fieldListSingleTitle = document.querySelector<HTMLElement>(
+        "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-heading']:first-child > h2"
+      );
+      if (
+        fieldListSingleTitle &&
+        fieldListSingleTitle.innerText !== t("page", "Page")
+      ) {
+        fieldListSingleTitle.innerText = t("page", "Page");
+      }
+
+      const fieldListBreadcrumbTitle = document.querySelector<HTMLElement>(
+        "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-breadcrumb'] button"
+      );
+      if (
+        fieldListBreadcrumbTitle &&
+        fieldListBreadcrumbTitle.innerText !== t("page", "Page")
+      ) {
+        fieldListBreadcrumbTitle.innerText = t("page", "Page");
+      }
+    });
+
+    observer.observe(rightSidebar, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, [i18n.language]);
 
   return (
     <>

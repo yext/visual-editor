@@ -22,6 +22,8 @@ import {
   MaybeRTF,
   resolveTranslatableString,
   TranslatableString,
+  msg,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -43,14 +45,14 @@ export interface InsightSectionProps {
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Section Heading", {
+      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-      insights: YextField("Insight Section", {
+      insights: YextField(msg("Insight Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.InsightSection.type],
@@ -58,31 +60,31 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(msg("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -156,7 +158,8 @@ const InsightCard = ({
 };
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveTranslatableString(
@@ -172,7 +175,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName={t("headingText", "Heading Text")}
+            displayName={pt("headingText", "Heading Text")}
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -182,7 +185,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName={t("insights", "Insights")}
+          displayName={pt("insights", "Insights")}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
@@ -203,7 +206,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: "Insights Section",
+  label: msg("Insights Section"),
   fields: insightSectionFields,
   defaultProps: {
     styles: {

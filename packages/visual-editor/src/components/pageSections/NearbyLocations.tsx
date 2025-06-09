@@ -16,6 +16,7 @@ import {
   HoursStatusAtom,
   TranslatableString,
   resolveTranslatableString,
+  msg,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -55,104 +56,104 @@ export interface NearbyLocationsSectionProps {
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading", {
+      heading: YextField<any, TranslatableString>(msg("Heading"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      coordinate: YextField<any, Coordinate>("Coordinates", {
+      coordinate: YextField<any, Coordinate>(msg("Coordinates"), {
         type: "entityField",
         filter: { types: ["type.coordinate"] },
       }),
-      radius: YextField("Radius (Miles)", {
+      radius: YextField(msg("Radius (Miles)"), {
         type: "number",
         min: 0,
       }),
-      limit: YextField("Limit", {
+      limit: YextField(msg("Limit"), {
         type: "number",
         min: 0,
         max: 50,
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
+      backgroundColor: YextField(msg("Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      cardBackgroundColor: YextField("Card Background Color", {
+      cardBackgroundColor: YextField(msg("Card Background Color"), {
         type: "select",
         hasSearch: true,
         options: "BACKGROUND_COLOR",
       }),
-      headingLevel: YextField("Heading Level", {
+      headingLevel: YextField(msg("Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      cardHeadingLevel: YextField("Card Heading Level", {
+      cardHeadingLevel: YextField(msg("Card Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      phoneNumberFormat: YextField("Phone Number Format", {
+      phoneNumberFormat: YextField(msg("Phone Number Format"), {
         type: "radio",
         options: "PHONE_OPTIONS",
       }),
-      phoneNumberLink: YextField("Include Phone Hyperlink", {
+      phoneNumberLink: YextField(msg("Include Phone Hyperlink"), {
         type: "radio",
         options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
+          { label: msg("Yes"), value: true },
+          { label: msg("No"), value: false },
         ],
       }),
-      hours: YextField("Hours", {
+      hours: YextField(msg("Hours"), {
         type: "object",
         objectFields: {
-          showCurrentStatus: YextField("Show Current Status", {
+          showCurrentStatus: YextField(msg("Show Current Status"), {
             type: "radio",
             options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
+              { label: msg("Yes"), value: true },
+              { label: msg("No"), value: false },
             ],
           }),
-          timeFormat: YextField("Time Format", {
+          timeFormat: YextField(msg("Time Format"), {
             type: "radio",
             options: [
-              { label: "12-hour", value: "12h" },
-              { label: "24-hour", value: "24h" },
+              { label: msg("12-hour"), value: "12h" },
+              { label: msg("24-hour"), value: "24h" },
             ],
           }),
-          showDayNames: YextField("Show Day Names", {
+          showDayNames: YextField(msg("Show Day Names"), {
             type: "radio",
             options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
+              { label: msg("Yes"), value: true },
+              { label: msg("No"), value: false },
             ],
           }),
-          dayOfWeekFormat: YextField("Day of Week Format", {
+          dayOfWeekFormat: YextField(msg("Day of Week Format"), {
             type: "radio",
             options: [
-              { label: "Short", value: "short" },
-              { label: "Long", value: "long" },
+              { label: msg("Short"), value: "short" },
+              { label: msg("Long"), value: "long" },
             ],
           }),
         },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -372,7 +373,7 @@ function parseDocument(
 
 export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
   {
-    label: "Nearby Locations Section",
+    label: msg("Nearby Locations Section"),
     fields: nearbyLocationsSectionFields,
     defaultProps: {
       data: {

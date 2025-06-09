@@ -6,6 +6,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
+  msg,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -18,11 +19,11 @@ export type BreadcrumbsSectionProps = {
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
-  liveVisibility: YextField("Visible on Live Page", {
+  liveVisibility: YextField(msg("Visible on Live Page"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("Show"), value: true },
+      { label: msg("Hide"), value: false },
     ],
   }),
 };
@@ -111,7 +112,7 @@ export const BreadcrumbsComponent = () => {
 };
 
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
-  label: "Breadcrumbs",
+  label: msg("Breadcrumbs"),
   fields: breadcrumbsSectionFields,
   defaultProps: {
     analytics: {
