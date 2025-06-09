@@ -36,7 +36,7 @@ import {
   PhoneAtom,
   useDocument,
 } from "@yext/visual-editor";
-import { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
+import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
   Address,
   AddressType,
@@ -349,11 +349,18 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     [resultsContainer]
   );
 
+  const markerOptionsOverride = React.useCallback((selected: boolean) => {
+    return {
+      offset: new mapboxgl.Point(0, selected ? -21 : -14),
+    } as MarkerOptions;
+  }, []);
+
   const mapProps: MapProps = {
     ...(userLocation && { centerCoords: userLocation }),
     ...(mapStyle && { mapStyle }),
     onDragHandler: handleDrag,
     scrollToResult: scrollToResult,
+    markerOptionsOverride: markerOptionsOverride,
   };
 
   return (
@@ -384,7 +391,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             TRANSLATIONS[locale].noResults}
           {resultCount > 0 &&
             filterDisplayName &&
-            `${resultCount} locations near "${filterDisplayName}"`}
+            getTranslatedResultCount(locale, resultCount, filterDisplayName)}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -656,3 +663,24 @@ interface Location {
   timezone: string;
   yextDisplayCoordinate?: Coordinate;
 }
+
+const getTranslatedResultCount = (
+  locale: string,
+  resultCount: number,
+  filterDisplayName: string
+) => {
+  switch (locale) {
+    case "en":
+      return `${resultCount} locations near "${filterDisplayName}"`;
+    case "fr":
+      return `${resultCount} emplacements près de «${filterDisplayName}»`;
+    case "es":
+      return `${resultCount} ubicaciones cerca de "${filterDisplayName}"`;
+    case "de":
+      return `${resultCount} Standorte in der Nähe von "${filterDisplayName}"`;
+    case "it":
+      return `${resultCount} località vicino a "${filterDisplayName}"`;
+    case "ja":
+      return `「${filterDisplayName}」の近くの${resultCount}か所`;
+  }
+};
