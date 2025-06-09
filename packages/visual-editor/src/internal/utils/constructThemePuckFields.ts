@@ -9,14 +9,14 @@ import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
 import { useCallback } from "react";
-import { usePlatformTranslation } from "../../utils/i18nPlatform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 // Converts a ThemeConfigSection into a Puck fields object
-export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
-  const { t } = usePlatformTranslation();
-
+export const constructThemePuckFields = (
+  themeSection: ThemeConfigSection,
+  t: (s: string) => string = (s: string) => s
+) => {
   const field: ObjectField = {
     label: t(themeSection.label),
     type: "object",
@@ -25,7 +25,7 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
 
   Object.entries(themeSection.styles).forEach(([styleKey, style]) => {
     if ("type" in style) {
-      const styleField = convertStyleToPuckField(style, style.plugin);
+      const styleField = convertStyleToPuckField(style, style.plugin, t);
       if (styleField) {
         field.objectFields[styleKey] = styleField;
       }
@@ -38,7 +38,8 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
       for (const subkey in style.styles) {
         styleGroupFields.objectFields[subkey] = convertStyleToPuckField(
           style.styles[subkey],
-          style.plugin
+          style.plugin,
+          t
         );
       }
       field.objectFields[styleKey] = styleGroupFields;
@@ -48,9 +49,11 @@ export const constructThemePuckFields = (themeSection: ThemeConfigSection) => {
 };
 
 // Determines which Puck field type to use for a style
-export const convertStyleToPuckField = (style: CoreStyle, plugin: string) => {
-  const { t } = usePlatformTranslation();
-
+export const convertStyleToPuckField = (
+  style: CoreStyle,
+  plugin: string,
+  t: (s: string) => string = (s: string) => s
+) => {
   switch (style.type) {
     case "number":
       return {
