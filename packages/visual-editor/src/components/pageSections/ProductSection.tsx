@@ -48,7 +48,6 @@ const productSectionFields: Fields<ProductSectionProps> = {
       heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
-        isTranslatable: true,
       }),
       products: YextField("Products", {
         type: "entityField",

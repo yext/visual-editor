@@ -49,7 +49,6 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
-        isTranslatable: true,
       }),
       insights: YextField("Insight Section", {
         type: "entityField",

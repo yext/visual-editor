@@ -22,7 +22,6 @@ const textListFields: Fields<TextListProps> = {
       types: ["type.string"],
       includeListsOnly: true,
     },
-    isTranslatable: true,
   }),
 };
 

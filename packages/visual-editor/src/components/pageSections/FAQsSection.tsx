@@ -48,7 +48,6 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         filter: {
           types: ["type.string"],
         },
-        isTranslatable: true,
       }),
       faqs: YextField("FAQs", {
         type: "entityField",

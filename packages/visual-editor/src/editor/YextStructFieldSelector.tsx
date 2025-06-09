@@ -40,6 +40,11 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
     types: [props.filter.type],
   };
 
+  // set "isTranslatable" to true if it is missing from props
+  if (props.isTranslatable === undefined) {
+    props.isTranslatable = true;
+  }
+
   return {
     type: "custom",
     label: props.label,

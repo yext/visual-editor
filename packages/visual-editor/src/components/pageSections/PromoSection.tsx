@@ -49,7 +49,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         filter: {
           type: ComponentFields.PromoSection.type,
         },
-        isTranslatable: true,
       }),
     },
   }),

@@ -59,7 +59,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         filter: {
           types: ["type.string"],
         },
-        isTranslatable: true,
       }),
       localGeoModifier: YextField<any, TranslatableString>(
         "Local GeoModifier",
@@ -68,7 +67,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           filter: {
             types: ["type.string"],
           },
-          isTranslatable: true,
         }
       ),
       hours: YextField("Hours", {

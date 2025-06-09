@@ -50,7 +50,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
       heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
-        isTranslatable: true,
       }),
       events: YextField("Events", {
         type: "entityField",

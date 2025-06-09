@@ -38,7 +38,6 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
         filter: {
           types: ["type.string"],
         },
-        isTranslatable: true,
       }),
     },
   }),

@@ -23,7 +23,6 @@ const bodyTextFields: Fields<BodyTextProps> = {
     filter: {
       types: ["type.string"],
     },
-    isTranslatable: true,
   }),
   variant: YextField("Variant", {
     type: "radio",

@@ -162,6 +162,11 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
+  // set "isTranslatable" to true if it is missing from props
+  if (props.isTranslatable === undefined) {
+    props.isTranslatable = true;
+  }
+
   return {
     type: "custom",
     label: props.label,
@@ -218,6 +223,11 @@ export const YextCollectionSubfieldSelector = <
   // If the field is not part of a collection, redirect to the normal entity field selector
   if (!props.isCollection) {
     return YextEntityFieldSelector({ ...props });
+  }
+
+  // set "isTranslatable" to true if it is missing from props
+  if (props.isTranslatable === undefined) {
+    props.isTranslatable = true;
   }
 
   return {

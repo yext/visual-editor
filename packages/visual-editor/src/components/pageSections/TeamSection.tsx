@@ -49,7 +49,6 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       heading: YextField<any, TranslatableString>("Heading Text", {
         type: "entityField",
         filter: { types: ["type.string"] },
-        isTranslatable: true,
       }),
       people: YextField("Team Section", {
         type: "entityField",

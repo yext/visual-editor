@@ -43,7 +43,6 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
       heading: YextField<any, TranslatableString>("Heading Text", {
         type: "entityField",
         filter: { types: ["type.string"] },
-        isTranslatable: true,
       }),
       testimonials: YextField("Testimonial Section", {
         type: "entityField",

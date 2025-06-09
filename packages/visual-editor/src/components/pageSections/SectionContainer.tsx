@@ -49,7 +49,6 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
         filter: {
           types: ["type.string"],
         },
-        isTranslatable: true,
       }),
       level: YextField("Heading Level", {
         type: "select",
