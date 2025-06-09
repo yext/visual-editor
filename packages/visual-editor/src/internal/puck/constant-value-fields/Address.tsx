@@ -1,51 +1,54 @@
 import { CustomField } from "@measured/puck";
 import { AddressType } from "@yext/pages-components";
 import { ConstantFields } from "./ConstantField.tsx";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
 export const ADDRESS_CONSTANT_CONFIG: CustomField<AddressType> = {
   type: "custom",
   render: ({ onChange, value }) => {
+    const { t } = usePlatformTranslation();
+
     return ConstantFields({
       onChange: onChange,
       value: value,
       fields: [
         {
-          label: "Line 1",
+          label: t("addressInput.line1", "Line 1"),
           field: "line1",
           fieldType: "text",
         },
         {
-          label: "Line 2",
+          label: t("addressInput.line2", "Line 2"),
           field: "line2",
           fieldType: "text",
         },
         {
-          label: "Line 3",
+          label: t("addressInput.line3", "Line 3"),
           field: "line3",
           fieldType: "text",
         },
         {
-          label: "City",
+          label: t("addressInput.city", "City"),
           field: "city",
           fieldType: "text",
         },
         {
-          label: "State/Region",
+          label: t("addressInput.region", "State/Region"),
           field: "region",
           fieldType: "text",
         },
         {
-          label: "Sublocality",
+          label: t("addressInput.sublocality", "Sublocality"),
           field: "sublocality",
           fieldType: "text",
         },
         {
-          label: "Postal Code",
+          label: t("addressInput.postalCode", "Postal Code"),
           field: "postalCode",
           fieldType: "text",
         },
         {
-          label: "Country Code",
+          label: t("addressInput.countryCode", "Country Code"),
           field: "countryCode",
           fieldType: "text",
         },

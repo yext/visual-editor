@@ -1,58 +1,65 @@
 import { CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
 import { CTA } from "@yext/pages-components";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
-const linkTypeOptions = [
-  {
-    label: "URL",
-    value: "URL",
-  },
-  {
-    label: "Email",
-    value: "EMAIL",
-  },
-  {
-    label: "Phone",
-    value: "PHONE",
-  },
-  {
-    label: "Click to Website",
-    value: "CLICK_TO_WEBSITE",
-  },
-  {
-    label: "Driving Directions",
-    value: "DRIVING_DIRECTIONS",
-  },
-  {
-    label: "Other",
-    value: "OTHER",
-  },
-];
+const linkTypeOptions = () => {
+  const { t } = usePlatformTranslation();
+
+  return [
+    {
+      label: t("linkTypes.url", "URL"),
+      value: "URL",
+    },
+    {
+      label: t("linkTypes.email", "Email"),
+      value: "EMAIL",
+    },
+    {
+      label: t("linkTypes.phone", "Phone"),
+      value: "PHONE",
+    },
+    {
+      label: t("linkTypes.clickToWebsite", "Click to Website"),
+      value: "CLICK_TO_WEBSITE",
+    },
+    {
+      label: t("linkTypes.drivingDirections", "Driving Directions"),
+      value: "DRIVING_DIRECTIONS",
+    },
+    {
+      label: t("linkTypes.other", "Other"),
+      value: "OTHER",
+    },
+  ];
+};
 
 export const CTA_CONSTANT_CONFIG: CustomField<
   { label: string; link: string; linkType: string }[]
 > = {
   type: "custom",
   render: ({ onChange, value }) => {
+    const { t } = usePlatformTranslation();
+
     return ConstantFields({
       onChange: onChange,
       value: value,
       fields: [
         {
-          label: "Label",
+          label: t("label", "Label"),
           field: "label",
           fieldType: "text",
         },
         {
-          label: "Link",
+          label: t("link", "Link"),
           field: "link",
           fieldType: "text",
         },
         {
-          label: "Link Type",
+          label: t("linkType", "Link Type"),
           field: "linkType",
           fieldType: "select",
-          options: linkTypeOptions,
+          options: linkTypeOptions(),
         },
       ],
     });
@@ -60,22 +67,26 @@ export const CTA_CONSTANT_CONFIG: CustomField<
 };
 
 // Fields for CTA with labels
-export const ctaFields: Field<CTA | undefined> = {
-  type: "object",
-  label: "Call To Action",
-  objectFields: {
-    label: {
-      label: "Label",
-      type: "text",
+export const ctaFields = (): Field<CTA | undefined> => {
+  const { t } = usePlatformTranslation();
+
+  return {
+    type: "object",
+    label: "Call To Action",
+    objectFields: {
+      label: {
+        label: t("label", "Label"),
+        type: "text",
+      },
+      link: {
+        label: t("link", "Link"),
+        type: "text",
+      },
+      linkType: {
+        label: t("linkType", "Link Type"),
+        type: "select",
+        options: linkTypeOptions(),
+      },
     },
-    link: {
-      label: "Link",
-      type: "text",
-    },
-    linkType: {
-      label: "Link Type",
-      type: "select",
-      options: linkTypeOptions,
-    },
-  },
+  };
 };

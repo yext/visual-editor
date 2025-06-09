@@ -7,6 +7,7 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { getSubfieldsFromType } from "../internal/puck/Subfields.ts";
 import "./index.css";
+import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
@@ -83,6 +84,8 @@ const SubfieldsInput = ({
   value,
   isTranslatable,
 }: InputProps) => {
+  const { t } = usePlatformTranslation();
+
   const subfields = getSubfieldsFromType(filter.type);
   if (!subfields) {
     return;
@@ -94,7 +97,7 @@ const SubfieldsInput = ({
 
   return (
     <FieldLabel
-      label="Content Overrides"
+      label={t("contentOverrides", "Content Overrides")}
       className="ve-inline-block ve-w-full ve-pt-4"
     >
       {subfields.map(({ field, type, label }, idx: number) => {
