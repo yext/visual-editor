@@ -45,6 +45,8 @@ export const fetchLocalesToPathsForEntity = async ({
 };
 
 // getPath assumes the user is using Visual Editor in-platform. This does not work with some hybrid cases.
+// This should use the exact same logic as getPath in packages/visual-editor/src/vite-plugin/templates/main.tsx
+// as that is the code all in-platform developers are using.
 const getPath = (document: Record<string, any>): string => {
   if (document.slug) {
     return document.slug;
