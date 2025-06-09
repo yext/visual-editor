@@ -80,7 +80,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
         // just show the single current locale in the dropdown
         setValidLocalesToPaths({ [currentLocale]: "" });
         setStatus("ERROR");
-        console.warn("failed to fetch locales for entity");
+        console.error("failed to fetch locales for entity");
       } finally {
         setStatus("COMPLETE");
       }
@@ -123,7 +123,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                 <DropdownMenuItem
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
-                    "text-body-fontSize font-body-fontFamily focus:ve-bg-slate-100",
+                    "text-body-fontSize font-body-fontFamily focus:bg-slate-100",
                     selected === locale ? "font-bold" : "font-body-fontWeight"
                   )}
                 >
