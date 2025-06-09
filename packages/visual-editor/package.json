@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "type": "module",
   "author": "sumo@yext.com",
   "types": "dist/index.d.ts",
@@ -50,7 +50,8 @@
     "i18n:translate": "pnpm exec tsx scripts/generateTranslations.ts",
     "i18n:translate:dry": "pnpm exec tsx scripts/generateTranslations.ts --dry-run",
     "i18n:sort": "pnpm exec tsx scripts/sortTranslations.ts",
-    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort"
+    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort",
+    "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
   },
   "dependencies": {
     "@measured/puck": "0.18.3",
@@ -148,7 +149,7 @@
   "peerDependencies": {
     "@yext/pages-components": "^1.1.4",
     "@yext/search-headless-react": "^2.5.0",
-    "@yext/search-ui-react": "^1.8.2",
+    "@yext/search-ui-react": "^1.8.9",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
     "react-dom": "^17.0.2 || ^18.2.0"

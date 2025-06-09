@@ -58,7 +58,12 @@ const EmailsComponent: React.FC<EmailsProps> = ({
     >
       <ul className="components list-inside">
         {resolvedEmailList
-          .slice(0, Math.min(resolvedEmailList.length, listLength ?? Infinity))
+          .slice(
+            0,
+            emailListField.constantValueEnabled
+              ? resolvedEmailList.length
+              : Math.min(resolvedEmailList.length, listLength!)
+          )
           ?.map((email, index) => (
             <li key={index} className={`mb-2 flex items-center`}>
               <FaEnvelope className={"mr-2 my-auto"} />

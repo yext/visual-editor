@@ -7,7 +7,6 @@ import {
   AnalyticsScopeProvider,
   DayOfWeekNames,
   getDirections,
-  HoursTable,
   HoursType,
 } from "@yext/pages-components";
 import { FaRegEnvelope } from "react-icons/fa";
@@ -27,6 +26,7 @@ import {
   Background,
   YextField,
   VisibilityWrapper,
+  HoursTableAtom,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -95,7 +95,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                 type: "text",
               }),
             },
-            getItemSummary: (item) => item.label || "Item",
+            getItemSummary: (item) => item.label || "Phone",
           }),
           emails: YextField<any, string[]>("Emails", {
             type: "entityField",
@@ -312,7 +312,6 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item, idx) => {
-              const { t } = useTranslation();
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
                 item.number
@@ -357,10 +356,12 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               {resolvedEmails
                 .slice(
                   0,
-                  Math.min(
-                    resolvedEmails.length,
-                    styles.info.emailsListLength ?? Infinity
-                  )
+                  data.info.emails.constantValueEnabled
+                    ? resolvedEmails.length
+                    : Math.min(
+                        resolvedEmails.length,
+                        styles.info.emailsListLength!
+                      )
                 )
                 .map((email, index) => (
                   <li key={index} className={`flex items-center gap-3`}>
@@ -402,11 +403,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
-            <HoursTable
+            <HoursTableAtom
               hours={resolvedHours}
               startOfWeek={styles.hours.startOfWeek}
               collapseDays={styles.hours.collapseDays}
-              className="text-body-fontSize font-body-fontWeight font-body-fontFamily"
             />
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
