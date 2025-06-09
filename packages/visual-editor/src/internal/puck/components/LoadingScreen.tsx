@@ -18,7 +18,7 @@ export function LoadingScreen({
     <div className="ve-flex ve-h-screen ve-loading-wrapper ve-w-screen ve-flex-col ve-items-center ve-justify-center">
       <Progress className="ve-w-1/3 ve-loading-progress" value={progress} />
       {platformLanguageIsSet && (
-        <div>{t("loadingVE", "Loading Visual Editor")}...</div>
+        <div>{t("loadingVE", "Loading Visual Editor...")}</div>
       )}
     </div>
   );
