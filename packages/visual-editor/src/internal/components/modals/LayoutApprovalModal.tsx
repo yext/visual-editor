@@ -2,6 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import React from "react";
 import { Button } from "../../puck/ui/button.tsx";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
 type ApprovalModalProps = {
   open: boolean;
@@ -12,6 +13,7 @@ type ApprovalModalProps = {
 export const LayoutApprovalModal = (props: ApprovalModalProps) => {
   const { open, setOpen, onSendLayoutForApproval } = props;
   const [comment, setComment] = React.useState("");
+  const { t } = usePlatformTranslation();
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen} modal>
@@ -24,11 +26,11 @@ export const LayoutApprovalModal = (props: ApprovalModalProps) => {
         >
           <div className="ve-mb-6 ve-flex ve-items-start ve-justify-between">
             <Dialog.Title className="ve-text-xl ve-font-semibold ve-text-gray-900">
-              Send for Approval
+              {t("approvals.send", "Send for Approval")}
             </Dialog.Title>
             <Dialog.Close asChild>
               <button
-                aria-label="Close"
+                aria-label={t("close", "Close")}
                 className="ve-text-gray-400 ve-transition-colors hover:ve-text-gray-600"
               >
                 <X />
@@ -37,8 +39,13 @@ export const LayoutApprovalModal = (props: ApprovalModalProps) => {
           </div>
 
           <p className="ve-mb-4 ve-text-sm ve-text-gray-600">
-            Add a comment to help your approver understand what changed{" "}
-            <span className="ve-text-gray-400">(Optional)</span>
+            {t(
+              "approvals.addAComment",
+              "Add a comment to help your approver understand what changed"
+            )}{" "}
+            <span className="ve-text-gray-400">
+              ({t("optional", "Optional")})
+            </span>
           </p>
 
           <div className="ve-mb-6">
@@ -54,7 +61,10 @@ export const LayoutApprovalModal = (props: ApprovalModalProps) => {
               onChange={(e) => setComment(e.target.value)}
               rows={5}
               className="ve-w-full ve-rounded-lg ve-border ve-border-gray-300 ve-px-4 ve-py-3 ve-text-sm ve-text-gray-900 ve-shadow-sm ve-focus:border-blue-500 ve-focus:outline-none ve-focus:ring-2 ve-focus:ring-blue-500"
-              placeholder="Write your comment here..."
+              placeholder={t(
+                "approvals.writeComment",
+                "Write your comment here..."
+              )}
             />
           </div>
 
@@ -72,7 +82,7 @@ export const LayoutApprovalModal = (props: ApprovalModalProps) => {
               }}
               className="ve-px-4 ve-py-2"
             >
-              Send for Approval
+              {t("approvals.send", "Send for Approval")}
             </Button>
           </div>
         </Dialog.Content>
