@@ -27,35 +27,35 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
         });
       }
 
-      // TODO remove these
-      ["es", "fr"].forEach((locale) => {
-        locales.push(locale);
-      });
-
       return (
         <>
           {locales.map((locale: string) => {
             const displayValue: string = getDisplayValue(value, locale);
-
+            const autoField: React.ReactElement = (
+              <AutoField
+                field={{ type: "text" }}
+                value={displayValue}
+                onChange={(val) =>
+                  onChange({
+                    ...(typeof value === "object" &&
+                    value !== null &&
+                    !Array.isArray(value)
+                      ? value
+                      : {}),
+                    [locale]: val,
+                  })
+                }
+              />
+            );
+            if (locales.length <= 1) {
+              return autoField;
+            }
             return (
               <FieldLabel
                 key={locale}
                 label={getLocaleName(locale, i18n.language)}
               >
-                <AutoField
-                  field={{ type: "text" }}
-                  value={displayValue}
-                  onChange={(val) =>
-                    onChange({
-                      ...(typeof value === "object" &&
-                      value !== null &&
-                      !Array.isArray(value)
-                        ? value
-                        : {}),
-                      [locale]: val,
-                    })
-                  }
-                />
+                {autoField}
               </FieldLabel>
             );
           })}

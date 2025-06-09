@@ -127,9 +127,6 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
       }
     }
 
-    // TODO remove these
-    locales.push("es", "fr");
-
     const dedupedLocales = Array.from(new Set(locales));
 
     const [localItems, setLocalItems] = useState<TranslatableString[]>(value);
@@ -197,18 +194,24 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-space-y-2"
           >
             {dedupedLocales.map((locale, localeIndex) => {
+              const autoField: React.ReactElement = (
+                <AutoField
+                  key={locale}
+                  field={{ type: "text" }}
+                  id={`${id}-value-${index}-${localeIndex}`}
+                  value={getDisplayValue(item, locale)}
+                  onChange={(val) => updateItem(index, locale, val)}
+                />
+              );
+              if (dedupedLocales.length <= 1) {
+                return autoField;
+              }
               return (
                 <FieldLabel
                   key={locale}
                   label={getLocaleName(locale, i18n.language)}
                 >
-                  <AutoField
-                    key={locale}
-                    field={{ type: "text" }}
-                    id={`${id}-value-${index}-${localeIndex}`}
-                    value={getDisplayValue(item, locale)}
-                    onChange={(val) => updateItem(index, locale, val)}
-                  />
+                  {autoField}
                 </FieldLabel>
               );
             })}
