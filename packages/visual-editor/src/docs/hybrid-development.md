@@ -10,7 +10,7 @@ outline: deep
 1. Create a new repository using https://github.com/YextSolutions/pages-visual-editor-starter
 2. In the Yext Platform, navigate to Pages > All Sites in the sidebar and create a new site
    via the "Add New Site" button. Use the repo you created in step 1.
-3. In Site Settings, set the entity edit path to the path of your edit template, typically `edit`.
+3. In Site Settings, set the Visual Editor Path to the path of your edit template, typically `edit`.
    Also, turn on "Auto-Publish New Deploys".
 4. In Knowledge Graph, create a Site entity.
    Configure your [site stream](https://hitchhikers.yext.com/docs/pages/site-configuration/?target=site-stream)
