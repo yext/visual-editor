@@ -1,5 +1,6 @@
 import { MaybeRTF, RTF2, TranslatableString } from "@yext/visual-editor";
 import React from "react";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 
 /**
  * Converts a type TranslatableString to a type that can be viewed on the page
@@ -60,21 +61,40 @@ export function getDisplayValue(
 }
 
 /**
- * Takes in the document and returns the set of locales using document.locale and document._pageset.scope.locales
+ * Takes in the document and returns the set of locales using document.locale, document._pageset.scope.locales, and templateMetadata.locales
  * @param document
  */
 export function resolveLocales(document: any): string[] {
-  const baseLocale = document?.locale ?? "en";
-  const locales: string[] = [baseLocale];
+  const localesSet: Set<string> = new Set<string>();
+  if (document?.locale) {
+    localesSet.add(document.locale);
+  }
+
+  const templateMetadata = useTemplateMetadata();
+  templateMetadata.locales.forEach((locale: string) => {
+    localesSet.add(locale);
+  });
+
+  if (localesSet.size == 0) {
+    localesSet.add(document?.locale);
+  }
 
   if (typeof document?._pageset === "string") {
     const parsed = JSON.parse(document._pageset);
     if (Array.isArray(parsed?.scope?.locales)) {
-      locales.push(...parsed.scope.locales);
+      parsed?.scope?.locales?.forEach((locale: any) => {
+        if (typeof locale === "string") {
+          localesSet.add(locale);
+        }
+      });
     }
   }
 
-  return Array.from(new Set(locales));
+  if (localesSet.size == 0) {
+    localesSet.add("en");
+  }
+
+  return Array.from(localesSet);
 }
 
 function rtf2ToString(rtf: RTF2): string {
