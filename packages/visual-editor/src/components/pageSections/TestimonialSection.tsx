@@ -18,12 +18,14 @@ import {
   ComponentFields,
   MaybeRTF,
   TimestampOption,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export interface TestimonialSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     testimonials: YextEntityField<TestimonialSectionType>;
   };
   styles: {
@@ -38,7 +40,7 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
+      heading: YextField<any, TranslatableString>("Heading Text", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -125,13 +127,16 @@ const TestimonialSectionWrapper = ({
   data,
   styles,
 }: TestimonialSectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
     data.testimonials
   );
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
 
   return (
     <PageSection

@@ -22,12 +22,14 @@ import {
   TimestampOption,
   ComponentFields,
   MaybeRTF,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface EventSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     events: YextEntityField<EventSectionType>;
   };
   styles: {
@@ -45,7 +47,7 @@ const eventSectionFields: Fields<EventSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
+      heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -149,11 +151,14 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data, styles } = props;
   const document = useDocument();
   const resolvedEvents = resolveYextEntityField(document, data.events);
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
 
   return (
     <PageSection

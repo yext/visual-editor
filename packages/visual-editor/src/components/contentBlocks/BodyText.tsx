@@ -9,14 +9,16 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
-  text: YextEntityField<string>;
+  text: YextEntityField<TranslatableString>;
 }
 
 const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextField<any, string>("Text", {
+  text: YextField<any, TranslatableString>("Text", {
     type: "entityField",
     filter: {
       types: ["type.string"],
@@ -30,7 +32,7 @@ const bodyTextFields: Fields<BodyTextProps> = {
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const document = useDocument();
 
     return (
@@ -40,7 +42,10 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         constantValueEnabled={text.constantValueEnabled}
       >
         <Body ref={ref} {...bodyProps}>
-          {resolveYextEntityField(document, text)}
+          {resolveTranslatableString(
+            resolveYextEntityField(document, text),
+            i18n.language
+          )}
         </Body>
       </EntityField>
     );
