@@ -9,6 +9,8 @@ import {
   YextField,
   VisibilityWrapper,
   EntityField,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -22,7 +24,7 @@ export type BannerSectionProps = {
     textAlignment: "left" | "right" | "center";
   };
   data: {
-    text: YextEntityField<string>;
+    text: YextEntityField<TranslatableString>;
   };
   liveVisibility: boolean;
 };
@@ -31,7 +33,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      text: YextField<any, string>("Text", {
+      text: YextField<any, TranslatableString>("Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -63,9 +65,12 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 };
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
-  const resolvedText = resolveYextEntityField<string>(document, data.text);
+  const resolvedText = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data.text),
+    i18n.language
+  );
 
   const justifyClass = {
     left: "justify-start",
