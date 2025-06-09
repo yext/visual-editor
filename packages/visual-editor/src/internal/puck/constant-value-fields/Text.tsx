@@ -2,7 +2,10 @@ import { AutoField, CustomField, TextField, FieldLabel } from "@measured/puck";
 import React from "react";
 import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import {
+  getDisplayValue,
+  resolveLocales,
+} from "../../../utils/resolveTranslatableString.ts";
 import { useTranslation } from "react-i18next";
 
 export const TEXT_CONSTANT_CONFIG: TextField = {
@@ -16,16 +19,7 @@ export const TRANSLATABLE_TEXT_CONSTANT_CONFIG: CustomField<TranslatableString> 
     render: ({ onChange, value }) => {
       const document: any = useDocument();
       const { i18n } = useTranslation();
-
-      const locales: string[] = [document?.locale ?? "en"];
-      if (typeof document?._pageset === "string") {
-        const parsedPageset = JSON.parse(document?._pageset || "");
-        const scopeLocales: string[] = parsedPageset?.scope?.locales;
-
-        (scopeLocales ?? []).forEach((locale: string) => {
-          locales.push(locale);
-        });
-      }
+      const locales: string[] = resolveLocales(document);
 
       return (
         <>

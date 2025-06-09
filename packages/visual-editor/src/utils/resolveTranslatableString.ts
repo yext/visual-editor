@@ -59,6 +59,24 @@ export function getDisplayValue(
   return "";
 }
 
+/**
+ * Takes in the document and returns the set of locales using document.locale and document._pageset.scope.locales
+ * @param document
+ */
+export function resolveLocales(document: any): string[] {
+  const baseLocale = document?.locale ?? "en";
+  const locales: string[] = [baseLocale];
+
+  if (typeof document?._pageset === "string") {
+    const parsed = JSON.parse(document._pageset);
+    if (Array.isArray(parsed?.scope?.locales)) {
+      locales.push(...parsed.scope.locales);
+    }
+  }
+
+  return Array.from(new Set(locales));
+}
+
 function rtf2ToString(rtf: RTF2): string {
   return rtf.html || rtf.json || "";
 }

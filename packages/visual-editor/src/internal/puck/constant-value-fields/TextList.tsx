@@ -10,7 +10,10 @@ import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { getLocaleName } from "./Text.tsx";
 import { RTF2, TranslatableString } from "../../../types/types.ts";
-import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import {
+  getDisplayValue,
+  resolveLocales,
+} from "../../../utils/resolveTranslatableString.ts";
 import { useTranslation } from "react-i18next";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
@@ -116,19 +119,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
   render: ({ onChange, value = [], id }) => {
     const document: any = useDocument();
     const { i18n } = useTranslation();
-
-    const baseLocale = document?.locale ?? "en";
-    const locales: string[] = [baseLocale];
-
-    if (typeof document?._pageset === "string") {
-      const parsed = JSON.parse(document._pageset);
-      if (Array.isArray(parsed?.scope?.locales)) {
-        locales.push(...parsed.scope.locales);
-      }
-    }
-
-    const dedupedLocales = Array.from(new Set(locales));
-
+    const locales: string[] = resolveLocales(document);
     const [localItems, setLocalItems] = useState<TranslatableString[]>(value);
 
     const updateItem = (
@@ -193,7 +184,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             key={index}
             className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-space-y-2"
           >
-            {dedupedLocales.map((locale, localeIndex) => {
+            {locales.map((locale, localeIndex) => {
               const autoField: React.ReactElement = (
                 <AutoField
                   key={locale}
@@ -203,7 +194,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
                   onChange={(val) => updateItem(index, locale, val)}
                 />
               );
-              if (dedupedLocales.length <= 1) {
+              if (locales.length <= 1) {
                 return autoField;
               }
               return (
