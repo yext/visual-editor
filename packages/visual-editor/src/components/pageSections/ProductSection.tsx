@@ -18,9 +18,9 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  MaybeRTF,
   TranslatableRTF2,
   resolveTranslatableRTF2,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -97,6 +97,7 @@ const ProductCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -124,7 +125,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {product.name}
+              {resolveTranslatableString(product.name, i18n.language)}
             </Heading>
           )}
           {product.category && (
@@ -132,10 +133,12 @@ const ProductCard = ({
               background={backgroundColors.background5.value}
               className="py-2 px-4 rounded w-fit"
             >
-              <Body>{product.category}</Body>
+              <Body>
+                {resolveTranslatableString(product.category, i18n.language)}
+              </Body>
             </Background>
           )}
-          <MaybeRTF data={product.description} />
+          {resolveTranslatableRTF2(product.description, i18n.language)}
         </div>
         {product.cta && (
           <CTA

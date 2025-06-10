@@ -26,7 +26,6 @@ export function generateTranslatableConstantConfig<
       const document: any = useDocument();
       const locale = document?.locale ?? "en";
       const { t } = usePlatformTranslation();
-
       const autoField = (
         <AutoField
           field={{ type: fieldType ?? "text" }}

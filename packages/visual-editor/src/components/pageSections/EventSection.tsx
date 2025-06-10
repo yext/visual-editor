@@ -89,12 +89,12 @@ const eventSectionFields: Fields<EventSectionProps> = {
 };
 
 const EventCard = ({
-  key,
+  cardKey,
   event,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardKey: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -139,7 +139,7 @@ const EventCard = ({
         {resolveTranslatableRTF2(event.description, i18n.language)}
         {event.cta && (
           <CTA
-            eventName={`cta${key}`}
+            eventName={`cta${cardKey}`}
             label={event.cta.label}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -187,6 +187,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
             {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
+                cardKey={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}

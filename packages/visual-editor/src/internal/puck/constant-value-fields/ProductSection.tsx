@@ -1,7 +1,15 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { ProductSectionType, ProductStruct } from "../../../types/types.ts";
+import {
+  ProductSectionType,
+  ProductStruct,
+  TranslatableRTF2,
+  TranslatableString,
+} from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { useMemo } from "react";
 
 export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   {
@@ -28,7 +36,28 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   };
 
 const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
-  const { t } = usePlatformTranslation();
+  const { t, i18n } = usePlatformTranslation();
+
+  const nameField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+      { key: "name", defaultValue: "Name" },
+      "text"
+    );
+  }, []);
+
+  const categoryField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+      { key: "category", defaultValue: "Category" },
+      "text"
+    );
+  }, []);
+
+  const descriptionField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
+      { key: "description", defaultValue: "Description" },
+      "textarea"
+    );
+  }, []);
 
   return {
     label: t("arrayField", "Array Field"),
@@ -44,21 +73,16 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
           },
         },
       },
-      name: {
-        type: "text",
-        label: t("name", "Name"),
-      },
-      category: {
-        type: "text",
-        label: t("Category", "Category"),
-      },
-      description: {
-        type: "textarea",
-        label: t("description", "Description"),
-      },
+      name: nameField,
+      category: categoryField,
+      description: descriptionField,
       cta: ctaFields(),
     },
-    getItemSummary: (item, i) =>
-      item.name ? item.name : t("product", "Product") + " " + ((i ?? 0) + 1),
+    getItemSummary: (item, i) => {
+      if (item?.name) {
+        return resolveTranslatableString(item.name, i18n.language);
+      }
+      return t("product", "Product") + " " + ((i ?? 0) + 1);
+    },
   };
 };

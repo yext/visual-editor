@@ -9,7 +9,7 @@ import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
-import React from "react";
+import React, { useMemo } from "react";
 import { generateTranslatableConstantConfig } from "./Text.tsx";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
@@ -38,6 +38,20 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
+  const titleField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+      { key: "title", defaultValue: "Title" },
+      "text"
+    );
+  }, []);
+
+  const descriptionField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
+      { key: "description", defaultValue: "Description" },
+      "textarea"
+    );
+  }, []);
+
   return {
     label: t("arrayField", "Array Field"),
     type: "array",
@@ -52,14 +66,9 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
           },
         },
       },
-      title: generateTranslatableConstantConfig<TranslatableString | undefined>(
-        { key: "title", defaultValue: "Title" },
-        "text"
-      ),
+      title: titleField,
       dateTime: DateTimeSelector,
-      description: generateTranslatableConstantConfig<
-        TranslatableRTF2 | undefined
-      >({ key: "description", defaultValue: "Description" }, "textarea"),
+      description: descriptionField,
       cta: ctaFields(),
     },
     getItemSummary: (item, i): string => {
