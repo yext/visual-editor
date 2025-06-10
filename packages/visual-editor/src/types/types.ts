@@ -51,8 +51,8 @@ export type TestimonialSectionType = {
 };
 
 export type TestimonialStruct = {
-  description?: RTF2 | string;
-  contributorName?: string;
+  description?: TranslatableRTF2;
+  contributorName?: TranslatableString;
   contributionDate?: string;
 };
 
