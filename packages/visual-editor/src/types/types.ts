@@ -8,7 +8,7 @@ export type HeroSectionType = {
 
 export type PromoSectionType = {
   image?: ImageType;
-  title?: TranslatableRTF2;
+  title?: TranslatableString;
   description?: TranslatableRTF2;
   cta?: CTAType;
 };
