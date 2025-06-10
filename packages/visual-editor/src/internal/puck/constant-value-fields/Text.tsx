@@ -2,7 +2,7 @@ import { AutoField, CustomField, FieldLabel, TextField } from "@measured/puck";
 import React from "react";
 import { TranslatableRTF2, TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import { getDisplayValue } from "../../../utils/resolveTranslatableString.tsx";
 import { usePlatformTranslation } from "@yext/visual-editor";
 import { Translation } from "../../types/translation.ts";
 

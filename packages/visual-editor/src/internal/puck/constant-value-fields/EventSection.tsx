@@ -8,7 +8,7 @@ import {
 import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.ts";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import React from "react";
 import { generateTranslatableConstantConfig } from "./Text.tsx";
 

@@ -8,7 +8,7 @@ export {
 export {
   resolveTranslatableRTF2,
   resolveTranslatableString,
-} from "./resolveTranslatableString.ts";
+} from "./resolveTranslatableString.tsx";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {

@@ -3,7 +3,7 @@ import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RTF2, TranslatableRTF2 } from "../../../types/types.ts";
-import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
+import { getDisplayValue } from "../../../utils/resolveTranslatableString.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";

@@ -5,7 +5,6 @@ import {
   TranslatableString,
 } from "@yext/visual-editor";
 import React from "react";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 
 /**
  * Converts a type TranslatableString to a string
@@ -41,21 +40,17 @@ export const resolveTranslatableString = (
  */
 export const resolveTranslatableRTF2 = (
   translatableRTF2?: TranslatableRTF2,
-  locale?: string
+  locale: string = "en"
 ): string | React.ReactElement => {
-  locale = locale ?? "en";
-  if (!translatableRTF2) {
-    return "";
-  }
+  if (!translatableRTF2) return "";
 
   if (typeof translatableRTF2 === "string" || isRTF2(translatableRTF2)) {
     return toStringOrElement(translatableRTF2);
   }
 
-  if (typeof translatableRTF2 === "object") {
-    if (locale in translatableRTF2) {
-      return toStringOrElement(translatableRTF2[locale]);
-    }
+  const localizedValue = translatableRTF2[locale];
+  if (localizedValue) {
+    return toStringOrElement(localizedValue);
   }
 
   return "";
@@ -98,43 +93,6 @@ export function getDisplayValue(
   return "";
 }
 
-/**
- * Takes in the document and returns the set of locales using document.locale, document._pageset.scope.locales, and templateMetadata.locales
- * @param document
- */
-export function resolveLocales(document: any): string[] {
-  const localesSet: Set<string> = new Set<string>();
-  if (document?.locale) {
-    localesSet.add(document.locale);
-  }
-
-  const templateMetadata = useTemplateMetadata();
-  templateMetadata.locales.forEach((locale: string) => {
-    localesSet.add(locale);
-  });
-
-  if (localesSet.size == 0) {
-    localesSet.add(document?.locale);
-  }
-
-  if (typeof document?._pageset === "string") {
-    const parsed = JSON.parse(document._pageset);
-    if (Array.isArray(parsed?.scope?.locales)) {
-      parsed?.scope?.locales?.forEach((locale: any) => {
-        if (typeof locale === "string") {
-          localesSet.add(locale);
-        }
-      });
-    }
-  }
-
-  if (localesSet.size == 0) {
-    localesSet.add("en");
-  }
-
-  return Array.from(localesSet);
-}
-
 function rtf2ToString(rtf: RTF2): string {
   return rtf.html || rtf.json || "";
 }
@@ -153,7 +111,7 @@ function isRTF2(value: unknown): value is RTF2 {
  */
 function toStringOrElement(value: string | RTF2): string | React.ReactElement {
   if (isRTF2(value)) {
-    return MaybeRTF({ data: value }) ?? "";
+    return <MaybeRTF data={value} />;
   }
-  return value?.toString() ?? "";
+  return value ?? "";
 }
