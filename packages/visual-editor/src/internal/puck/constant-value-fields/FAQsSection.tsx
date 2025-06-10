@@ -1,6 +1,6 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -26,22 +26,20 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
 };
 
 const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
-  const { t } = usePlatformTranslation();
-
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       question: {
         type: "text",
-        label: t("question", "Question"),
+        label: pt("question", "Question"),
       },
       answer: {
         type: "textarea",
-        label: t("answer", "Answer"),
+        label: pt("answer", "Answer"),
       },
     },
     getItemSummary: (item, i) =>
-      item.question ? item.question : t("FAQ", "FAQ") + " " + ((i ?? 0) + 1),
+      item.question ? item.question : pt("FAQ", "FAQ") + " " + ((i ?? 0) + 1),
   };
 };

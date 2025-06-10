@@ -9,6 +9,7 @@ import {
   Image,
   ImageProps,
   YextField,
+  msg,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -19,28 +20,31 @@ export interface ImageWrapperProps extends Omit<ImageProps, "image"> {
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
-  image: YextField<any, ImageType | ComplexImageType>("Image", {
-    type: "entityField",
-    filter: {
-      types: ["type.image"],
-    },
-  }),
+  image: YextField<any, ImageType | ComplexImageType>(
+    msg("fields.options.image", "Image"),
+    {
+      type: "entityField",
+      filter: {
+        types: ["type.image"],
+      },
+    }
+  ),
   layout: YextField("Layout", {
     type: "radio",
     options: [
-      { label: "Auto", value: "auto" },
-      { label: "Fixed", value: "fixed" },
+      { label: msg("fields.options.auto", "Auto"), value: "auto" },
+      { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
     ],
   }),
-  width: YextField("Width", {
+  width: YextField(msg("fields.options.width", "Width"), {
     type: "number",
     min: 0,
   }),
-  height: YextField("Height", {
+  height: YextField(msg("fields.options.height", "Height"), {
     type: "number",
     min: 0,
   }),
-  aspectRatio: YextField("Aspect Ratio", {
+  aspectRatio: YextField(msg("fields.options.aspectRatio", "Aspect Ratio"), {
     type: "select",
     options: [
       { label: "1:1", value: 1 },

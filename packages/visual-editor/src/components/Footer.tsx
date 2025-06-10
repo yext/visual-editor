@@ -11,6 +11,8 @@ import {
   backgroundColors,
   PageSection,
   YextField,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -37,15 +39,18 @@ type FooterProps = {
 };
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: YextField("Background Color", {
-    type: "select",
-    hasSearch: true,
-    options: "BACKGROUND_COLOR",
-  }),
+  backgroundColor: YextField(
+    msg("fields.backgroundColor", "Background Color"),
+    {
+      type: "select",
+      hasSearch: true,
+      options: "BACKGROUND_COLOR",
+    }
+  ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
-  label: "Footer",
+  label: msg("components.footer", "Footer"),
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
@@ -64,7 +69,6 @@ const Footer: ComponentConfig<FooterProps> = {
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
-  const { t } = useTranslation();
   const document = useDocument<any>();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
@@ -121,7 +125,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
           <EntityField
-            displayName={t("footerLinks", "Footer Links")}
+            displayName={pt("fields.footerLinks", "Footer Links")}
             fieldId={"site.footer.links"}
           >
             <FooterLinks links={links} />
@@ -129,7 +133,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
         )}
         {socialLinks && (
           <EntityField
-            displayName={t("footerSocialIcons", "Footer Social Icons")}
+            displayName={pt("fields.footerSocialIcons", "Footer Social Icons")}
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -139,7 +143,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName={t("copyrightText", "Copyright Text")}
+            displayName={pt("fields.copyrightText", "Copyright Text")}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>
@@ -173,6 +177,7 @@ const FooterLinks = (props: { links: CTAType[] }) => {
 };
 
 const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
       {socialLinks.map((socialLink: socialLink, idx: number) =>
@@ -184,7 +189,8 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
             variant={"link"}
             eventName={`socialLink${idx}`}
             alwaysHideCaret={true}
-            ariaLabel={socialLink.label + " link"}
+            // TODO: translation concatenation
+            ariaLabel={socialLink.label + " " + t("link", "link")}
           />
         ) : null
       )}

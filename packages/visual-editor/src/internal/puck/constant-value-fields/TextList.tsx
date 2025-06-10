@@ -4,7 +4,7 @@ import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RTF2, TranslatableString } from "../../../types/types.ts";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.ts";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
@@ -12,7 +12,6 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
   render: ({ onChange, value, id }) => {
     const [localItems, setLocalItems] = useState<string[]>(value);
-    const { t: pt } = usePlatformTranslation();
 
     const updateItem = (index: number, value: string) => {
       const updatedItems = [...localItems];
@@ -109,7 +108,6 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
   type: "custom",
   render: ({ onChange, value = [], id }) => {
     const document: any = useDocument();
-    const { t: pt } = usePlatformTranslation();
     const locale = document?.locale ?? "en";
     const [localItems, setLocalItems] = useState<TranslatableString[]>(value);
 

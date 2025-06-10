@@ -2,7 +2,7 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -28,34 +28,32 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 };
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
-  const { t } = usePlatformTranslation();
-
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: pt("image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: pt("url", "URL"),
             type: "text",
           },
         },
       },
       title: {
         type: "text",
-        label: t("title", "Title"),
+        label: pt("title", "Title"),
       },
       dateTime: DateTimeSelector,
       description: {
         type: "textarea",
-        label: t("description", "Description"),
+        label: pt("description", "Description"),
       },
       cta: ctaFields(),
     },
     getItemSummary: (item, i) =>
-      item.title ? item.title : t("event", "Event") + " " + ((i ?? 0) + 1),
+      item.title ? item.title : pt("event", "Event") + " " + ((i ?? 0) + 1),
   };
 };

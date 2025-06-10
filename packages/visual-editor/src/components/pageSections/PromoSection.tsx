@@ -20,6 +20,8 @@ import {
   ComponentFields,
   EntityField,
   resolveTranslatableString,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -41,49 +43,58 @@ export interface PromoSectionProps {
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
       promo: YextStructFieldSelector({
-        label: "Promo",
+        label: msg("fields.promo", "Promo"),
         filter: {
           type: ComponentFields.PromoSection.type,
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      orientation: YextField("Image Orientation", {
-        type: "radio",
-        options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
-        ],
-      }),
-      ctaVariant: YextField("CTA Variant", {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      orientation: YextField(
+        msg("fields.imageOrientation", "Image Orientation"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.left", "Left"), value: "left" },
+            { label: msg("fields.options.right", "Right"), value: "right" },
+          ],
+        }
+      ),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
 
@@ -97,7 +108,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName={t("image", "Image")}
+          displayName={pt("fields.image", "Image")}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
@@ -111,7 +122,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
-            displayName={t("title", "Title")}
+            displayName={pt("fields.title", "Title")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
@@ -121,7 +132,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
         <EntityField
-          displayName={t("description", "Description")}
+          displayName={pt("fields.description", "Description")}
           fieldId={data.promo.field}
           constantValueEnabled={
             !resolvedPromo?.description ||
@@ -132,7 +143,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
-            displayName={t("callToAction", "Call To Action")}
+            displayName={pt("fields.callToAction", "Call To Action")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
@@ -151,7 +162,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
 };
 
 export const PromoSection: ComponentConfig<PromoSectionProps> = {
-  label: "Promo Section",
+  label: msg("components.promoSection", "Promo Section"),
   fields: promoSectionFields,
   defaultProps: {
     data: {

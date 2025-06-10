@@ -37,7 +37,7 @@ import {
 } from "../internal/puck/ui/Tooltip.tsx";
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
-import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -171,7 +171,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 
   return {
     type: "custom",
-    label: props.label,
     render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
@@ -189,7 +188,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
-            label={props.label}
+            label={pt(props.label)}
           />
           {value?.constantValueEnabled && !props.isCollection && (
             <ConstantValueInput<T>
@@ -234,7 +233,6 @@ export const YextCollectionSubfieldSelector = <
 
   return {
     type: "custom",
-    label: props.label,
     render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
@@ -252,7 +250,7 @@ export const YextCollectionSubfieldSelector = <
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
-            label={props.label}
+            label={pt(props.label)}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
@@ -290,8 +288,6 @@ export const ConstantValueModeToggler = ({
   disableConstantValue?: boolean;
   label: string;
 }) => {
-  const { t } = usePlatformTranslation();
-
   // If disableConstantValue is true, constantValueInputSupported is always false.
   // Else if isCollection or a supported field type, constantValueInputSupported is true
   const constantValueInputSupported =
@@ -322,15 +318,15 @@ export const ConstantValueModeToggler = ({
             </TooltipTrigger>
             <TooltipContent>
               {constantValueEnabled
-                ? t("staticContent", "Static content")
-                : t("knowledgeGraphContent", "Knowledge Graph content")}
+                ? pt("staticContent", "Static content")
+                : pt("knowledgeGraphContent", "Knowledge Graph content")}
               <TooltipArrow fill="ve-bg-popover" />
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       )}
       <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
-        {label}
+        {pt(label)}
       </p>
     </div>
   );
@@ -406,7 +402,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
-  const { t } = usePlatformTranslation();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -422,11 +417,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 
     // TODO: translation concatenation
     return BasicSelector(
-      templateMetadata.entityTypeDisplayName + " " + t("field", "Field"),
+      templateMetadata.entityTypeDisplayName + " " + pt("field", "Field"),
       [
         {
           value: "",
-          label: t("basicSelectorContentLabel", "Select a Content field"),
+          label: pt("basicSelectorContentLabel", "Select a Content field"),
         },
         ...filteredEntityFields
           .map((entityFieldNameToSchema) => {
@@ -442,7 +437,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
             const nameB = entityFieldB.label.toUpperCase();
             return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
           }),
-      ]
+      ],
+      false
     );
   }, [entityFields, filter]);
 

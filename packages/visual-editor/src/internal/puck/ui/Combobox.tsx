@@ -12,7 +12,7 @@ import {
   CommandList,
 } from "./Command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 type ComboboxOption = {
   label: string;
@@ -32,7 +32,6 @@ export const Combobox = ({
   options,
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
-  const { t } = usePlatformTranslation();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -68,10 +67,10 @@ export const Combobox = ({
       </PopoverTrigger>
       <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white">
         <Command>
-          <CommandInput placeholder={t("search", "Search")} />
+          <CommandInput placeholder={pt("search", "Search")} />
           <CommandList>
             <CommandEmpty>
-              {t("noMatchesFound", "No matches found.")}
+              {pt("noMatchesFound", "No matches found.")}
             </CommandEmpty>
             <CommandGroup>
               {options.map((option) => (

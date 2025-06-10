@@ -20,6 +20,8 @@ import {
   TimestampOption,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -37,48 +39,63 @@ export interface TestimonialSectionProps {
 }
 
 const testimonialSectionFields: Fields<TestimonialSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      testimonials: YextField("Testimonial Section", {
-        type: "entityField",
-        filter: {
-          types: [ComponentFields.TestimonialSection.type],
-        },
-      }),
+      heading: YextField<any, TranslatableString>(
+        msg("fields.headingText", "Heading Text"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      testimonials: YextField(
+        msg("fields.testimonialSection", "Testimonial Section"),
+        {
+          type: "entityField",
+          filter: {
+            types: [ComponentFields.TestimonialSection.type],
+          },
+        }
+      ),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const TestimonialCard = ({
@@ -127,7 +144,7 @@ const TestimonialSectionWrapper = ({
   data,
   styles,
 }: TestimonialSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
@@ -145,7 +162,7 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -156,7 +173,7 @@ const TestimonialSectionWrapper = ({
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName={t("testimonials", "Testimonials")}
+          displayName={pt("fields.testimonials", "Testimonials")}
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >
@@ -177,7 +194,7 @@ const TestimonialSectionWrapper = ({
 };
 
 export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
-  label: "Testimonials Section",
+  label: msg("components.testimonialsSection", "Testimonials Section"),
   fields: testimonialSectionFields,
   defaultProps: {
     styles: {

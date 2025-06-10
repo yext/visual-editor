@@ -2,7 +2,7 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { InsightSectionType, InsightStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
   {
@@ -29,38 +29,36 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
   };
 
 const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
-  const { t } = usePlatformTranslation();
-
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: pt("image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: pt("url", "URL"),
             type: "text",
           },
         },
       },
       name: {
         type: "text",
-        label: t("name", "Name"),
+        label: pt("name", "Name"),
       },
       category: {
         type: "text",
-        label: t("category", "Category"),
+        label: pt("category", "Category"),
       },
       publishTime: DateSelector,
       description: {
         type: "textarea",
-        label: t("descriptions", "Description"),
+        label: pt("descriptions", "Description"),
       },
       cta: ctaFields(),
     },
     getItemSummary: (item, i) =>
-      item.name ? item.name : t("insight", "Insight") + " " + ((i ?? 0) + 1),
+      item.name ? item.name : pt("insight", "Insight") + " " + ((i ?? 0) + 1),
   };
 };

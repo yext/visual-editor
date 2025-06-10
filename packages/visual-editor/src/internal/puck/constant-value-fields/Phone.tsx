@@ -3,17 +3,15 @@ import { Phone } from "lucide-react";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "../ui/puck.css";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const PHONE_CONSTANT_CONFIG: CustomField<string | undefined> = {
   type: "custom",
   render: ({ value, onChange }) => {
-    const { t } = usePlatformTranslation();
-
     return (
       <div className="ve-mt-[12px]">
         <FieldLabel
-          label={t("phoneNumber", "Phone Number")}
+          label={pt("phoneNumber", "Phone Number")}
           icon={<Phone size={16} />}
         >
           <PhoneInputWithCountrySelect

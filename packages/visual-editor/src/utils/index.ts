@@ -43,4 +43,6 @@ export { i18nComponentsInstance } from "./i18nComponents.ts";
 export {
   i18nPlatformInstance,
   usePlatformTranslation,
+  msg,
+  pt,
 } from "./i18nPlatform.ts";
