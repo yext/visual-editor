@@ -31,13 +31,12 @@ export function generateTranslatableConstantConfig<
           field={{ type: fieldType ?? "text" }}
           value={getDisplayValue(value, locale)}
           onChange={(val) =>
-            // @ts-expect-error TS2345
             onChange({
               ...(typeof value === "object" && !Array.isArray(value)
                 ? value
                 : {}),
               [locale]: val,
-            })
+            } as T)
           }
         />
       );
