@@ -42,8 +42,8 @@ export type FAQSectionType = {
 };
 
 export type FAQStruct = {
-  question: string;
-  answer: RTF2 | string;
+  question: TranslatableString;
+  answer: TranslatableRTF2;
 };
 
 export type TestimonialSectionType = {
