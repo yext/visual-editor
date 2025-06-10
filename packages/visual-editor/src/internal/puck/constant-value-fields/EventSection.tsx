@@ -8,6 +8,7 @@ import {
 import { ctaFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.ts";
 import React from "react";
 import { generateTranslatableConstantConfig } from "./Text.tsx";
 
@@ -35,7 +36,7 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 };
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
-  const { t } = usePlatformTranslation();
+  const { t, i18n } = usePlatformTranslation();
 
   return {
     label: t("arrayField", "Array Field"),
@@ -61,6 +62,11 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       >({ key: "description", defaultValue: "Description" }, "textarea"),
       cta: ctaFields(),
     },
-    getItemSummary: (item, i) => t("event", "Event") + " " + ((i ?? 0) + 1),
+    getItemSummary: (item, i): string => {
+      if (item?.title) {
+        return resolveTranslatableString(item.title, i18n.language);
+      }
+      return t("event", "Event") + " " + ((i ?? 0) + 1);
+    },
   };
 };
