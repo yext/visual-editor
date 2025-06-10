@@ -1,5 +1,6 @@
+import { TOptions } from "i18next";
+
 export type Translation = {
   key: string;
-  defaultValue: string;
-  context?: string;
+  options: TOptions;
 };

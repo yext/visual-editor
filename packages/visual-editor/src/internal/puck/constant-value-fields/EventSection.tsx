@@ -40,14 +40,24 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
 
   const titleField = useMemo(() => {
     return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      { key: "title", defaultValue: "Title" },
+      {
+        key: "title",
+        options: {
+          defaultValue: "Title",
+        },
+      },
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
     return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
-      { key: "description", defaultValue: "Description" },
+      {
+        key: "description",
+        options: {
+          defaultValue: "Description",
+        },
+      },
       "textarea"
     );
   }, []);
@@ -72,8 +82,9 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       cta: ctaFields(),
     },
     getItemSummary: (item, i): string => {
-      if (item?.title) {
-        return resolveTranslatableString(item.title, i18n.language);
+      const translation = resolveTranslatableString(item.title, i18n.language);
+      if (translation) {
+        return translation;
       }
       return t("event", "Event") + " " + ((i ?? 0) + 1);
     },

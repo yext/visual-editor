@@ -47,14 +47,7 @@ export function generateTranslatableConstantConfig<
       }
 
       return (
-        <FieldLabel
-          label={t(label.key, {
-            defaultValue: label.defaultValue,
-            context: label.context,
-          })}
-        >
-          {autoField}
-        </FieldLabel>
+        <FieldLabel label={t(label.key, label.options)}>{autoField}</FieldLabel>
       );
     },
   };

@@ -40,21 +40,36 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
 
   const nameField = useMemo(() => {
     return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      { key: "name", defaultValue: "Name" },
+      {
+        key: "name",
+        options: {
+          defaultValue: "Name",
+        },
+      },
       "text"
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      { key: "category", defaultValue: "Category" },
+      {
+        key: "category",
+        options: {
+          defaultValue: "Category",
+        },
+      },
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
     return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
-      { key: "description", defaultValue: "Description" },
+      {
+        key: "description",
+        options: {
+          defaultValue: "Description",
+        },
+      },
       "textarea"
     );
   }, []);
@@ -79,8 +94,9 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       cta: ctaFields(),
     },
     getItemSummary: (item, i) => {
-      if (item?.name) {
-        return resolveTranslatableString(item.name, i18n.language);
+      const translation = resolveTranslatableString(item.name, i18n.language);
+      if (translation) {
+        return translation;
       }
       return t("product", "Product") + " " + ((i ?? 0) + 1);
     },
