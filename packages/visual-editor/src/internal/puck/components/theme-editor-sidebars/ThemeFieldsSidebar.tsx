@@ -11,6 +11,7 @@ import {
   constructThemePuckValues,
 } from "../../../utils/constructThemePuckFields.ts";
 import { generateCssVariablesFromPuckFields } from "../../../utils/internalThemeResolver.ts";
+import { pt } from "../../../../utils/i18nPlatform.ts";
 
 type ThemeFieldsSidebarProps = {
   themeConfig: ThemeConfig;
@@ -52,7 +53,7 @@ export const ThemeFieldsSidebar = ({
   };
 
   return Object.entries(themeConfig).map(([themeSectionKey, themeSection]) => {
-    const field = constructThemePuckFields(themeSection);
+    const field = constructThemePuckFields(themeSection, pt);
     const values = constructThemePuckValues(
       themeData,
       themeSection,

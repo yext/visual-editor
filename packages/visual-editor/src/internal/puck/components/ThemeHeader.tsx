@@ -11,7 +11,7 @@ import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -46,7 +46,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     dispatch,
     history: { setHistories },
   } = usePuck();
-  const { t } = usePlatformTranslation();
 
   useEffect(() => {
     setHistories(puckInitialHistory?.histories || []);
@@ -141,7 +140,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           size="icon"
           disabled={!canUndo()}
           onClick={undo}
-          aria-label={t("undo", "Undo")}
+          aria-label={pt("undo", "Undo")}
         >
           <RotateCcw className="sm-icon" />
         </Button>
@@ -151,7 +150,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           size="icon"
           disabled={!canRedo()}
           onClick={redo}
-          aria-label={t("redo", "Redo")}
+          aria-label={pt("redo", "Redo")}
         >
           <RotateCw className="sm-icon" />
         </Button>
@@ -193,7 +192,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           >
             {
               // TODO: translation concatenation
-              `${t("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? t("page", "Page") : t("pages", "Pages")}`
+              `${pt("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
             }
           </Button>
         )}

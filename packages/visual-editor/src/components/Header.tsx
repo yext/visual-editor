@@ -16,6 +16,8 @@ import {
   Background,
   YextField,
   Image,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -36,14 +38,14 @@ export type HeaderProps = {
 };
 
 const headerFields: Fields<HeaderProps> = {
-  logoWidth: YextField("Logo Width", {
+  logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
     type: "number",
     min: 0,
   }),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
-  label: "Header",
+  label: msg("components.header", "Header"),
   fields: headerFields,
   defaultProps: {
     logoWidth: 80,
@@ -94,7 +96,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName={t("businessLogo", "Business Logo")}
+            displayName={pt("fields.businessLogo", "Business Logo")}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -104,7 +106,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {links?.length > 0 && (
           <>
             <EntityField
-              displayName={t("headerLinks", "Header Links")}
+              displayName={pt("fields.headerLinks", "Header Links")}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />
@@ -112,7 +114,11 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             <button
               className="flex md:hidden ml-auto my-auto"
               onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "Close header menu" : "Open header menu"}
+              aria-label={
+                menuOpen
+                  ? t("closeHeaderMenu", "Close header menu")
+                  : t("openHeaderMenu", "Open header menu")
+              }
             >
               {menuOpen ? (
                 <FaTimes size={"1.5rem"} />

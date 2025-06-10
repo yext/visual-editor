@@ -21,6 +21,8 @@ import {
   ComponentFields,
   TranslatableString,
   resolveTranslatableString,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -43,14 +45,17 @@ export interface TeamSectionProps {
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      people: YextField("Team Section", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.headingText", "Heading Text"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      people: YextField(msg("fields.teamSection", "Team Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.TeamSection.type],
@@ -58,33 +63,42 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const PersonCard = ({
@@ -177,7 +191,7 @@ const PersonCard = ({
 };
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
   const resolvedHeading = resolveTranslatableString(
@@ -192,7 +206,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -203,7 +217,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName={t("team", "Team")}
+          displayName={pt("fields.team", "Team")}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
@@ -224,7 +238,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
 };
 
 export const TeamSection: ComponentConfig<TeamSectionProps> = {
-  label: "Team Section",
+  label: msg("components.teamSection", "Team Section"),
   fields: TeamSectionFields,
   defaultProps: {
     data: {

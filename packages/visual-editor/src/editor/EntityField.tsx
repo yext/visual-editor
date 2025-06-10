@@ -6,7 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../internal/puck/ui/Tooltip.tsx";
-import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18nPlatform.ts";
 import React from "react";
 
 const MemoizedChildren = React.memo(function MemoizedChildren({
@@ -31,7 +31,6 @@ export const EntityField = ({
   children,
 }: EntityFieldProps) => {
   const tooltipsContext = useEntityTooltips();
-  const { t } = usePlatformTranslation();
 
   if (!tooltipsContext) {
     return children;
@@ -41,7 +40,7 @@ export const EntityField = ({
 
   let tooltipContent = "";
   if (constantValueEnabled) {
-    tooltipContent = t("staticContent", "Static content");
+    tooltipContent = pt("staticContent", "Static content");
   } else if (displayName && fieldId) {
     tooltipContent = `${displayName} (${fieldId})`;
   } else if (fieldId) {
