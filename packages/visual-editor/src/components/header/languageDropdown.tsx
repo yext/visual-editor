@@ -16,7 +16,7 @@ import {
 } from "@yext/visual-editor";
 
 export interface LanguageDropdownProps {
-  classname?: string;
+  className?: string;
   businessId: string;
   entityId: string;
   apiKey: string;
@@ -27,7 +27,7 @@ export interface LanguageDropdownProps {
 }
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
-  classname,
+  className,
   businessId,
   entityId,
   apiKey,
@@ -99,7 +99,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
     <Background
       background={backgroundColors.background1.value}
       as="div"
-      className={classname}
+      className={className}
     >
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">

@@ -154,7 +154,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {showLanguageSelector && (
           <LanguageDropdown
             {...languageDropDownProps}
-            classname="hidden md:flex"
+            className="hidden md:flex"
           />
         )}
       </div>
@@ -249,7 +249,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
         {languageDropdownProps && (
           <LanguageDropdown
             {...languageDropdownProps}
-            classname="p-4 gap-4 w-full"
+            className="p-4 gap-4 w-full"
           />
         )}
       </Background>
