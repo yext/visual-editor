@@ -1,7 +1,7 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { ProductSectionType, ProductStruct } from "../../../types/types.ts";
 import { ctaFields } from "./CallToAction.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   {
@@ -28,37 +28,35 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   };
 
 const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
-  const { t } = usePlatformTranslation();
-
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: pt("image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: pt("url", "URL"),
             type: "text",
           },
         },
       },
       name: {
         type: "text",
-        label: t("name", "Name"),
+        label: pt("name", "Name"),
       },
       category: {
         type: "text",
-        label: t("Category", "Category"),
+        label: pt("Category", "Category"),
       },
       description: {
         type: "textarea",
-        label: t("description", "Description"),
+        label: pt("description", "Description"),
       },
       cta: ctaFields(),
     },
     getItemSummary: (item, i) =>
-      item.name ? item.name : t("product", "Product") + " " + ((i ?? 0) + 1),
+      item.name ? item.name : pt("product", "Product") + " " + ((i ?? 0) + 1),
   };
 };

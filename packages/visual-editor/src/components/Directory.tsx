@@ -237,7 +237,7 @@ const DirectoryComponent = () => {
 };
 
 export const Directory: ComponentConfig<DirectoryProps> = {
-  label: msg("Directory"),
+  label: msg("components.directory", "Directory"),
   defaultProps: {
     analytics: {
       scope: "directory",

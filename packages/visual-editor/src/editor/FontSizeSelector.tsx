@@ -4,14 +4,13 @@ import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
-import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18nPlatform.ts";
 
 export const fontSizeOptions = (includeLargeSizes = true) => {
-  const { t } = usePlatformTranslation();
   const fontSizeOptions = [
     { label: "XS", value: "xs", px: "12" },
     { label: "SM", value: "sm", px: "14" },
-    { label: t("base", "Base"), value: "base", px: "16" },
+    { label: pt("base", "Base"), value: "base", px: "16" },
     { label: "LG", value: "lg", px: "18" },
     { label: "XL", value: "xl", px: "20" },
     { label: "2XL", value: "2xl", px: "24" },
@@ -101,18 +100,17 @@ export const FontSizeSelector = (
   return {
     type: "custom",
     render: ({ value, onChange }) => {
-      const { t } = usePlatformTranslation();
       const tailwindConfig: TailwindConfig = useTailwindConfig();
       const options = convertDefaultFontSizesToOptions(
         [
           {
-            label: t("fontSizeDefaultLabel", "Default"),
+            label: pt("fontSizeDefaultLabel", "Default"),
             value: "default",
             px: "",
           },
           ...fontSizeOptions(includeLargeSizes).map((o) => ({
             ...o,
-            label: t(o.label),
+            label: pt(o.label),
           })),
         ],
         tailwindConfig
@@ -120,7 +118,7 @@ export const FontSizeSelector = (
 
       return (
         <FieldLabel
-          label={label ?? t("FontSize", "Font Size")}
+          label={label ?? pt("FontSize", "Font Size")}
           icon={<ChevronDown size={16} />}
         >
           <Combobox

@@ -23,7 +23,7 @@ import {
   resolveTranslatableString,
   TranslatableString,
   msg,
-  usePlatformTranslation,
+  pt,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -45,14 +45,17 @@ export interface InsightSectionProps {
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
-  data: YextField(msg("Data"), {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      insights: YextField(msg("Insight Section"), {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      insights: YextField(msg("fields.insightSection", "Insight Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.InsightSection.type],
@@ -60,33 +63,42 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       }),
     },
   }),
-  styles: YextField(msg("Styles"), {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(msg("Background Color"), {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField(msg("Card Background Color"), {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField(msg("Heading Level"), {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField(msg("Visible on Live Page"), {
-    type: "radio",
-    options: [
-      { label: msg("Show"), value: true },
-      { label: msg("Hide"), value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const InsightCard = ({
@@ -159,7 +171,6 @@ const InsightCard = ({
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { i18n } = useTranslation();
-  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
   const resolvedHeading = resolveTranslatableString(
@@ -175,7 +186,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       {resolvedHeading && (
         <div className="text-center">
           <EntityField
-            displayName={pt("headingText", "Heading Text")}
+            displayName={pt("fields.headingText", "Heading Text")}
             fieldId={data.heading.field}
             constantValueEnabled={data.heading.constantValueEnabled}
           >
@@ -185,7 +196,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName={pt("insights", "Insights")}
+          displayName={pt("fields.insights", "Insights")}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
@@ -206,7 +217,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: msg("Insights Section"),
+  label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
   defaultProps: {
     styles: {

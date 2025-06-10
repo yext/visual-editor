@@ -136,20 +136,29 @@ export type LocatorProps = {
 };
 
 const locatorFields: Fields<LocatorProps> = {
-  mapStyle: BasicSelector(msg("Map Style"), [
-    { label: msg("Default"), value: "mapbox://styles/mapbox/streets-v12" },
+  mapStyle: BasicSelector(msg("fields.mapStyle", "Map Style"), [
     {
-      label: msg("Satellite"),
+      label: msg("fields.options.default", "Default"),
+      value: "mapbox://styles/mapbox/streets-v12",
+    },
+    {
+      label: msg("fields.options.satellite", "Satellite"),
       value: "mapbox://styles/mapbox/satellite-streets-v12",
     },
-    { label: msg("Light"), value: "mapbox://styles/mapbox/light-v11" },
-    { label: msg("Dark"), value: "mapbox://styles/mapbox/dark-v11" },
     {
-      label: msg("Navigation (Day)"),
+      label: msg("fields.options.light", "Light"),
+      value: "mapbox://styles/mapbox/light-v11",
+    },
+    {
+      label: msg("fields.options.dark", "Dark"),
+      value: "mapbox://styles/mapbox/dark-v11",
+    },
+    {
+      label: msg("fields.options.navigationDay", "Navigation (Day)"),
       value: "mapbox://styles/mapbox/navigation-day-v1",
     },
     {
-      label: msg("Navigation (Night)"),
+      label: msg("fields.options.navigationNight", "Navigation (Night)"),
       value: "mapbox://styles/mapbox/navigation-night-v1",
     },
   ]),
@@ -157,7 +166,7 @@ const locatorFields: Fields<LocatorProps> = {
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
-  label: msg("Locator"),
+  label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
 };
 

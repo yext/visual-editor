@@ -12,7 +12,7 @@ import {
   PageSection,
   YextField,
   msg,
-  usePlatformTranslation,
+  pt,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -39,15 +39,18 @@ type FooterProps = {
 };
 
 const footerFields: Fields<FooterProps> = {
-  backgroundColor: YextField(msg("Background Color"), {
-    type: "select",
-    hasSearch: true,
-    options: "BACKGROUND_COLOR",
-  }),
+  backgroundColor: YextField(
+    msg("fields.backgroundColor", "Background Color"),
+    {
+      type: "select",
+      hasSearch: true,
+      options: "BACKGROUND_COLOR",
+    }
+  ),
 };
 
 const Footer: ComponentConfig<FooterProps> = {
-  label: msg("Footer"),
+  label: msg("components.footer", "Footer"),
   fields: footerFields,
   defaultProps: {
     backgroundColor: backgroundColors.background1.value,
@@ -66,7 +69,6 @@ const Footer: ComponentConfig<FooterProps> = {
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
-  const { t: pt } = usePlatformTranslation();
   const document = useDocument<any>();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
@@ -123,7 +125,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       <div className="flex flex-col sm:flex-row justify-between w-full items-center text-body-fontSize font-body-fontFamily">
         {links && (
           <EntityField
-            displayName={pt("footerLinks", "Footer Links")}
+            displayName={pt("fields.footerLinks", "Footer Links")}
             fieldId={"site.footer.links"}
           >
             <FooterLinks links={links} />
@@ -131,7 +133,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
         )}
         {socialLinks && (
           <EntityField
-            displayName={pt("footerSocialIcons", "Footer Social Icons")}
+            displayName={pt("fields.footerSocialIcons", "Footer Social Icons")}
             fieldId={"site.footer"}
           >
             <FooterSocialIcons socialLinks={socialLinks} />
@@ -141,7 +143,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       {copyrightMessage && (
         <div className={`text-body-sm-fontSize text-center sm:text-left `}>
           <EntityField
-            displayName={pt("copyrightText", "Copyright Text")}
+            displayName={pt("fields.copyrightText", "Copyright Text")}
             fieldId="site.copyrightMessage"
           >
             <Body>{copyrightMessage}</Body>

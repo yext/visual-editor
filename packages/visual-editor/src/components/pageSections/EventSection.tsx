@@ -25,6 +25,7 @@ import {
   TranslatableString,
   resolveTranslatableString,
   msg,
+  pt,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -45,14 +46,17 @@ export interface EventSectionProps {
 }
 
 const eventSectionFields: Fields<EventSectionProps> = {
-  data: YextField(msg("Data"), {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      events: YextField(msg("Events"), {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      events: YextField(msg("fields.events", "Events"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.EventSection.type],
@@ -60,33 +64,42 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
-  styles: YextField(msg("Styles"), {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(msg("Background Color"), {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField(msg("Card Background Color"), {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField(msg("Heading Level"), {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField(msg("Visible on Live Page"), {
-    type: "radio",
-    options: [
-      { label: msg("Show"), value: true },
-      { label: msg("Hide"), value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
 const EventCard = ({
@@ -152,7 +165,7 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const { data, styles } = props;
   const document = useDocument();
   const resolvedEvents = resolveYextEntityField(document, data.events);
@@ -168,7 +181,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -179,7 +192,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
       )}
       {resolvedEvents?.events && (
         <EntityField
-          displayName={t("events", "Events")}
+          displayName={pt("fields.events", "Events")}
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >
@@ -200,7 +213,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
 };
 
 export const EventSection: ComponentConfig<EventSectionProps> = {
-  label: msg("Events Section"),
+  label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
   defaultProps: {
     data: {

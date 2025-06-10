@@ -20,28 +20,31 @@ export interface ImageWrapperProps extends Omit<ImageProps, "image"> {
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
-  image: YextField<any, ImageType | ComplexImageType>(msg("Image"), {
-    type: "entityField",
-    filter: {
-      types: ["type.image"],
-    },
-  }),
+  image: YextField<any, ImageType | ComplexImageType>(
+    msg("fields.options.image", "Image"),
+    {
+      type: "entityField",
+      filter: {
+        types: ["type.image"],
+      },
+    }
+  ),
   layout: YextField("Layout", {
     type: "radio",
     options: [
-      { label: msg("Auto"), value: "auto" },
-      { label: msg("Fixed"), value: "fixed" },
+      { label: msg("fields.options.auto", "Auto"), value: "auto" },
+      { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
     ],
   }),
-  width: YextField(msg("Width"), {
+  width: YextField(msg("fields.options.width", "Width"), {
     type: "number",
     min: 0,
   }),
-  height: YextField(msg("Height"), {
+  height: YextField(msg("fields.options.height", "Height"), {
     type: "number",
     min: 0,
   }),
-  aspectRatio: YextField(msg("Aspect Ratio"), {
+  aspectRatio: YextField(msg("fields.options.aspectRatio", "Aspect Ratio"), {
     type: "select",
     options: [
       { label: "1:1", value: 1 },

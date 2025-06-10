@@ -42,46 +42,46 @@ type BackgroundOption = {
 
 export const backgroundColors: Record<string, BackgroundOption> = {
   background1: {
-    label: msg("Background 1"),
+    label: msg("theme.bg.bg1", "Background 1"),
     value: { bgColor: "bg-white", textColor: "text-black" },
   },
   background2: {
-    label: msg("Background 2"),
+    label: msg("theme.bg.bg2", "Background 2"),
     value: {
       bgColor: "bg-palette-primary-light",
       textColor: "text-black",
     },
   },
   background3: {
-    label: msg("Background 3"),
+    label: msg("theme.bg.bg3", "Background 3"),
     value: {
       bgColor: "bg-palette-secondary-light",
       textColor: "text-black",
     },
   },
   background4: {
-    label: msg("Background 4"),
+    label: msg("theme.bg.bg4", "Background 4"),
     value: {
       bgColor: "bg-palette-tertiary-light",
       textColor: "text-black",
     },
   },
   background5: {
-    label: msg("Background 5"),
+    label: msg("theme.bg.bg5", "Background 5"),
     value: {
       bgColor: "bg-palette-quaternary-light",
       textColor: "text-black",
     },
   },
   background6: {
-    label: msg("Background 6"),
+    label: msg("theme.bg.bg6", "Background 6"),
     value: {
       bgColor: "bg-palette-primary-dark",
       textColor: "text-white",
     },
   },
   background7: {
-    label: msg("Background 7"),
+    label: msg("theme.bg.bg7", "Background 7"),
     value: {
       bgColor: "bg-palette-secondary-dark",
       textColor: "text-white",
@@ -166,50 +166,68 @@ const letterSpacingOptions = [
 ];
 
 const textTransformOptions = [
-  { label: msg("Normal"), value: "none" },
-  { label: msg("Uppercase"), value: "uppercase" },
-  { label: msg("Lowercase"), value: "lowercase" },
-  { label: msg("Capitalize"), value: "capitalize" },
+  { label: msg("theme.textTransform.normal", "Normal"), value: "none" },
+  {
+    label: msg("theme.textTransform.uppercase", "Uppercase"),
+    value: "uppercase",
+  },
+  {
+    label: msg("theme.textTransform.lowercase", "Lowercase"),
+    value: "lowercase",
+  },
+  {
+    label: msg("theme.textTransform.capitalize", "Capitalize"),
+    value: "capitalize",
+  },
 ];
 
 const ctaVariantOptions = [
-  { label: msg("Primary"), value: "primary" },
-  { label: msg("Secondary"), value: "secondary" },
-  { label: msg("Link"), value: "link" },
+  {
+    label: msg("fields.options.ctaVariant.primary", "Primary"),
+    value: "primary",
+  },
+  {
+    label: msg("fields.options.ctaVariant.secondary", "Secondary"),
+    value: "secondary",
+  },
+  { label: msg("fields.options.ctaVariant.link", "Link"), value: "link" },
 ];
 
 const alignmentOptions = [
-  { label: msg("Left"), value: "left" },
-  { label: msg("Center"), value: "center" },
-  { label: msg("Right"), value: "right" },
+  { label: msg("fields.options.left", "Left"), value: "left" },
+  { label: msg("fields.options.center", "Center"), value: "center" },
+  { label: msg("fields.options.right", "Right"), value: "right" },
 ];
 
 const justifyContentOptions = [
-  { label: msg("Start"), value: "start" },
-  { label: msg("Center"), value: "center" },
-  { label: msg("End"), value: "end" },
+  { label: msg("fields.options.start", "Start"), value: "start" },
+  { label: msg("fields.options.center", "Center"), value: "center" },
+  { label: msg("fields.options.end", "End"), value: "end" },
 ];
 
 const bodyVariantOptions = [
-  { label: msg("Small"), value: "sm" },
-  { label: msg("Base"), value: "base" },
-  { label: msg("Large"), value: "lg" },
+  { label: msg("fields.options.small", "Small"), value: "sm" },
+  { label: msg("fields.options.base", "Base"), value: "base" },
+  { label: msg("fields.options.large", "Large"), value: "lg" },
 ];
 
 const hoursOptions = [
-  { label: msg("Monday"), value: "monday" },
-  { label: msg("Tuesday"), value: "tuesday" },
-  { label: msg("Wednesday"), value: "wednesday" },
-  { label: msg("Thursday"), value: "thursday" },
-  { label: msg("Friday"), value: "friday" },
-  { label: msg("Saturday"), value: "saturday" },
-  { label: msg("Sunday"), value: "sunday" },
-  { label: msg("Today"), value: "today" },
+  { label: msg("fields.options.monday", "Monday"), value: "monday" },
+  { label: msg("fields.options.tuesday", "Tuesday"), value: "tuesday" },
+  { label: msg("fields.options.wednesday", "Wednesday"), value: "wednesday" },
+  { label: msg("fields.options.thursday", "Thursday"), value: "thursday" },
+  { label: msg("fields.options.friday", "Friday"), value: "friday" },
+  { label: msg("fields.options.saturday", "Saturday"), value: "saturday" },
+  { label: msg("fields.options.sunday", "Sunday"), value: "sunday" },
+  { label: msg("fields.options.today", "Today"), value: "today" },
 ];
 
 const phoneOptions = [
-  { label: msg("Domestic"), value: "domestic" },
-  { label: msg("International"), value: "international" },
+  { label: msg("fields.options.domestic", "Domestic"), value: "domestic" },
+  {
+    label: msg("fields.options.international", "International"),
+    value: "international",
+  },
 ];
 
 export const ThemeOptions = {

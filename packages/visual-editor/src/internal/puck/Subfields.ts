@@ -12,16 +12,28 @@ export type SubFieldProps = {
 }[];
 
 const HERO_SECTION_SUBFIELD: SubFieldProps = [
-  { field: "image", type: "type.image", label: msg("Image") },
-  { field: "primaryCta", type: "type.cta", label: msg("Primary CTA") },
-  { field: "secondaryCta", type: "type.cta", label: msg("Secondary CTA") },
+  { field: "image", type: "type.image", label: msg("fields.image", "Image") },
+  {
+    field: "primaryCta",
+    type: "type.cta",
+    label: msg("fields.primaryCTA", "Primary CTA"),
+  },
+  {
+    field: "secondaryCta",
+    type: "type.cta",
+    label: msg("fields.secondaryCTA", "Secondary CTA"),
+  },
 ];
 
 const PROMO_SECTION_SUBFIELD: SubFieldProps = [
-  { field: "image", type: "type.image", label: msg("Image") },
-  { field: "title", type: "type.string", label: msg("Title") },
-  { field: "description", type: "type.string", label: msg("Description") },
-  { field: "cta", type: "type.cta", label: msg("CTA") },
+  { field: "image", type: "type.image", label: msg("fields.image", "Image") },
+  { field: "title", type: "type.string", label: msg("fields.title", "Title") },
+  {
+    field: "description",
+    type: "type.string",
+    label: msg("fields.description", "Description"),
+  },
+  { field: "cta", type: "type.cta", label: msg("fields.cta", "CTA") },
 ];
 
 const STRUCT_TYPE_TO_SUBFIELDS: Record<StructEntityFieldTypes, SubFieldProps> =

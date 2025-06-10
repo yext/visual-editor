@@ -20,7 +20,7 @@ import {
   resolveTranslatableString,
   MaybeRTF,
   msg,
-  usePlatformTranslation,
+  pt,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -42,16 +42,19 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
-  data: YextField(msg("Data"), {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>(msg("Section Heading"), {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      faqs: YextField(msg("FAQs"), {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      faqs: YextField(msg("fields.faqs", "FAQs"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.FAQSection.type],
@@ -59,33 +62,38 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       }),
     },
   }),
-  styles: YextField(msg("Styles"), {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(msg("Background Color"), {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField(msg("Heading Level"), {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField(msg("Visible on Live Page"), {
-    type: "radio",
-    options: [
-      { label: msg("Show"), value: true },
-      { label: msg("Hide"), value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
-  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const resolvedHeading = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(document, data?.heading),
@@ -100,7 +108,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -109,7 +117,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName={pt("faqs", "FAQs")}
+          displayName={pt("fields.faqs", "FAQs")}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
@@ -134,7 +142,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
 };
 
 export const FAQSection: ComponentConfig<FAQSectionProps> = {
-  label: msg("FAQs Section"),
+  label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {
     data: {

@@ -17,6 +17,7 @@ import { i18nComponentsInstance } from "../../../utils/i18nComponents.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
+  pt,
 } from "../../../utils/i18nPlatform.ts";
 
 type LayoutHeaderProps = {
@@ -59,58 +60,13 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       setHistories,
     },
   } = usePuck();
-  const { t, i18n } = usePlatformTranslation();
+  const { i18n } = usePlatformTranslation();
 
   useEffect(() => {
     onHistoryChange(histories, index);
   }, [index, histories, onHistoryChange]);
 
-  useEffect(() => {
-    // Translate the static left sidebar title
-    const componentListTitle = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-leftSideBar'] h2[class*='_Heading']"
-    );
-    if (componentListTitle) {
-      componentListTitle.innerText = t("components", "Components");
-    }
-
-    // Translate the dynamic right sidebar title
-    const rightSidebar = document.querySelector(
-      "[class*='PuckLayout-rightSideBar']"
-    );
-    if (!rightSidebar) {
-      return;
-    }
-
-    const observer = new MutationObserver(() => {
-      const fieldListSingleTitle = document.querySelector<HTMLElement>(
-        "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-heading']:first-child > h2"
-      );
-      if (
-        fieldListSingleTitle &&
-        fieldListSingleTitle.innerText !== t("page", "Page")
-      ) {
-        fieldListSingleTitle.innerText = t("page", "Page");
-      }
-
-      const fieldListBreadcrumbTitle = document.querySelector<HTMLElement>(
-        "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-breadcrumb'] button"
-      );
-      if (
-        fieldListBreadcrumbTitle &&
-        fieldListBreadcrumbTitle.innerText !== t("page", "Page")
-      ) {
-        fieldListBreadcrumbTitle.innerText = t("page", "Page");
-      }
-    });
-
-    observer.observe(rightSidebar, {
-      childList: true,
-      subtree: true,
-    });
-
-    return () => observer.disconnect();
-  }, [i18n.language]);
+  useEffect(translatePuckSidebars, [i18n.language]);
 
   return (
     <>
@@ -139,7 +95,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             size="icon"
             disabled={!hasPast}
             onClick={back}
-            aria-label={t("undo", "Undo")}
+            aria-label={pt("undo", "Undo")}
           >
             <RotateCcw className="sm-icon" />
           </Button>
@@ -149,7 +105,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             size="icon"
             disabled={!hasFuture}
             onClick={forward}
-            aria-label={t("redo", "Redo")}
+            aria-label={pt("redo", "Redo")}
           >
             <RotateCw className="sm-icon" />
           </Button>
@@ -186,9 +142,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               }}
             >
               {templateMetadata.assignment === "ENTITY"
-                ? t("approvals.send", "Send for Approval")
+                ? pt("approvals.send", "Send for Approval")
                 : // TODO: translation concatenation
-                  `${t("update", "Update")} ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? t("page", "Page") : t("pages", "Pages")}`}
+                  `${pt("update", "Update")} ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`}
             </Button>
           )}
         </div>
@@ -250,4 +206,77 @@ export const LocalDevOverrideButtons = () => {
       </Button>
     </>
   );
+};
+
+const translatePuckSidebars = () => {
+  // Translate the static left sidebar titles
+  const leftSideBarTitles = document.querySelectorAll<HTMLElement>(
+    "[class*='PuckLayout-leftSideBar'] h2[class*='_Heading']"
+  );
+  if (leftSideBarTitles[0]) {
+    leftSideBarTitles[0].innerText = pt("components.components", "Components");
+  }
+  if (leftSideBarTitles[1]) {
+    leftSideBarTitles[1].innerText = pt("outline", "Outline");
+  }
+
+  // Translate the right sidebar title on load
+  const fieldListSingleTitle = document.querySelector<HTMLElement>(
+    "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-heading']:first-child > h2"
+  );
+  if (fieldListSingleTitle) {
+    fieldListSingleTitle.innerText = pt("page", "Page");
+  }
+
+  // Translate the component category labels
+  // These will only translate on initial load
+  const componentCategoryTitles = document.querySelectorAll<HTMLElement>(
+    "button[class*='ComponentList-title'] > div"
+  );
+  if (componentCategoryTitles?.length) {
+    componentCategoryTitles.forEach((title) => {
+      if (title.innerText === "PAGE SECTIONS") {
+        title.innerText = pt("categories.pageSections", "PAGE SECTIONS");
+      } else if (title.innerText === "OTHER") {
+        title.innerText = pt("categories.other", "OTHER");
+      }
+    });
+  }
+
+  // Dynamically translate the right sidebar title as it updates
+  const rightSidebar = document.querySelector(
+    "[class*='PuckLayout-rightSideBar']"
+  );
+  if (!rightSidebar) {
+    return;
+  }
+
+  const observer = new MutationObserver(() => {
+    const fieldListSingleTitle = document.querySelector<HTMLElement>(
+      "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-heading']:first-child > h2"
+    );
+    if (
+      fieldListSingleTitle &&
+      fieldListSingleTitle.innerText !== pt("page", "Page")
+    ) {
+      fieldListSingleTitle.innerText = pt("page", "Page");
+    }
+
+    const fieldListBreadcrumbTitle = document.querySelector<HTMLElement>(
+      "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-breadcrumb'] button"
+    );
+    if (
+      fieldListBreadcrumbTitle &&
+      fieldListBreadcrumbTitle.innerText !== pt("page", "Page")
+    ) {
+      fieldListBreadcrumbTitle.innerText = pt("page", "Page");
+    }
+  });
+
+  observer.observe(rightSidebar, {
+    childList: true,
+    subtree: true,
+  });
+
+  return () => observer.disconnect();
 };

@@ -19,13 +19,16 @@ export type BreadcrumbsSectionProps = {
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
-  liveVisibility: YextField(msg("Visible on Live Page"), {
-    type: "radio",
-    options: [
-      { label: msg("Show"), value: true },
-      { label: msg("Hide"), value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 // getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
@@ -112,7 +115,7 @@ export const BreadcrumbsComponent = () => {
 };
 
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
-  label: msg("Breadcrumbs"),
+  label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,
   defaultProps: {
     analytics: {

@@ -17,7 +17,7 @@ import {
   YextField,
   Image,
   msg,
-  usePlatformTranslation,
+  pt,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -38,14 +38,14 @@ export type HeaderProps = {
 };
 
 const headerFields: Fields<HeaderProps> = {
-  logoWidth: YextField(msg("Logo Width"), {
+  logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
     type: "number",
     min: 0,
   }),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
-  label: msg("Header"),
+  label: msg("components.header", "Header"),
   fields: headerFields,
   defaultProps: {
     logoWidth: 80,
@@ -84,7 +84,6 @@ interface HeaderLayoutProps {
 
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const { t } = useTranslation();
-  const { t: pt } = usePlatformTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const { logo, logoWidth, logoLink, links } = props;
 
@@ -97,7 +96,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName={pt("businessLogo", "Business Logo")}
+            displayName={pt("fields.businessLogo", "Business Logo")}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
@@ -107,7 +106,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
         {links?.length > 0 && (
           <>
             <EntityField
-              displayName={pt("headerLinks", "Header Links")}
+              displayName={pt("fields.headerLinks", "Header Links")}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />

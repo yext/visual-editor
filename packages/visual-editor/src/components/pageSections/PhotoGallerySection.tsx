@@ -30,7 +30,7 @@ import {
   TranslatableString,
   resolveTranslatableString,
   msg,
-  usePlatformTranslation,
+  pt,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -87,20 +87,23 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
-  styles: YextField(msg("Styles"), {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(msg("Background Color"), {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField(msg("Heading Level"), {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      imageStyle: YextField(msg("Image Style"), {
+      imageStyle: YextField(msg("fields.imageStyle", "Image Style"), {
         type: "object",
         objectFields: {
           layout: ImageWrapperFields.layout,
@@ -111,31 +114,40 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       }),
     },
   }),
-  data: YextField(msg("Data"), {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>(msg("Heading"), {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      images: YextField<any, ImageType[] | ComplexImageType[]>(msg("Images"), {
-        type: "entityField",
-        filter: {
-          types: ["type.image"],
-          includeListsOnly: true,
-        },
-      }),
+      heading: YextField<any, TranslatableString>(
+        msg("fields.heading", "Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      images: YextField<any, ImageType[] | ComplexImageType[]>(
+        msg("fields.images", "Images"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.image"],
+            includeListsOnly: true,
+          },
+        }
+      ),
     },
   }),
-  liveVisibility: YextField(msg("Visible on Live Page"), {
-    type: "radio",
-    options: [
-      { label: msg("Show"), value: true },
-      { label: msg("Hide"), value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const PhotoGallerySectionComponent = ({
@@ -143,7 +155,6 @@ const PhotoGallerySectionComponent = ({
   styles,
 }: PhotoGallerySectionProps) => {
   const { t, i18n } = useTranslation();
-  const { t: pt } = usePlatformTranslation();
   const document = useDocument();
   const sectionHeading = resolveTranslatableString(
     resolveYextEntityField(document, data.heading),
@@ -170,7 +181,7 @@ const PhotoGallerySectionComponent = ({
     >
       {sectionHeading && (
         <EntityField
-          displayName={pt("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
@@ -192,7 +203,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName={pt("images", "Images")}
+              displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >
@@ -263,7 +274,7 @@ const PhotoGallerySectionComponent = ({
 };
 
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
-  label: msg("Photo Gallery Section"),
+  label: msg("components.photoGallerySection", "Photo Gallery Section"),
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {

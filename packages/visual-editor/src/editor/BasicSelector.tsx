@@ -2,8 +2,7 @@ import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
-import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
-import { useTranslation } from "react-i18next";
+import { pt } from "../utils/i18nPlatform.ts";
 
 type Option<T = any> = {
   label: string;
@@ -11,7 +10,11 @@ type Option<T = any> = {
   color?: string;
 };
 
-export const BasicSelector = (label: string, options: Option[]): Field => {
+export const BasicSelector = (
+  label: string,
+  options: Option[],
+  translateOptions: boolean = true
+): Field => {
   return {
     type: "custom",
     render: ({
@@ -21,21 +24,20 @@ export const BasicSelector = (label: string, options: Option[]): Field => {
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
-      const { t } = useTranslation();
-      const { t: pt } = usePlatformTranslation();
-
       if (!options || options.length === 0) {
         return (
           <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-            <p>{t("basicSelectorNoOptionsLabel", "No options available")}</p>
+            <p>{pt("basicSelectorNoOptionsLabel", "No options available")}</p>
           </FieldLabel>
         );
       }
 
-      const translatedOptions = options.map((o) => ({
-        ...o,
-        label: pt(o.label),
-      }));
+      const translatedOptions = translateOptions
+        ? options.map((o) => ({
+            ...o,
+            label: pt(o.label),
+          }))
+        : options;
 
       // The values that we pass into the Combobox should match the labels
       // so that the search functionality works as expected.

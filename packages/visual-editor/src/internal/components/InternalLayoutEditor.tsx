@@ -16,7 +16,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
-import { msg, usePlatformTranslation } from "../../utils/i18nPlatform.ts";
+import { msg, pt, usePlatformTranslation } from "../../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -54,7 +54,7 @@ export const InternalLayoutEditor = ({
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
-  const { t, i18n } = usePlatformTranslation();
+  const { i18n } = usePlatformTranslation();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -142,7 +142,7 @@ export const InternalLayoutEditor = ({
       ([componentKey, component]) => {
         translatedComponents[componentKey] = {
           ...component,
-          label: t(component.label ?? ""),
+          label: pt(component.label ?? ""),
         };
       }
     );
@@ -154,13 +154,13 @@ export const InternalLayoutEditor = ({
         ...puckConfig.root,
         fields: {
           title: YextEntityFieldSelector<any, string>({
-            label: msg("Title"),
+            label: msg("fields.title", "Title"),
             filter: {
               types: ["type.string"],
             },
           }),
           description: YextEntityFieldSelector<any, string>({
-            label: msg("Description"),
+            label: msg("fields.description", "Description"),
             filter: {
               types: ["type.string"],
             },
@@ -205,6 +205,7 @@ export const InternalLayoutEditor = ({
           ),
           iframe: loadMapboxIntoIframe,
           fieldTypes: {
+            array: TranslatePuckArrayFieldLabels,
             number: TranslatePuckFieldLabels,
             object: TranslatePuckFieldLabels,
             radio: TranslatePuckFieldLabels,
@@ -225,8 +226,6 @@ const TranslatePuckFieldLabels = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { t } = usePlatformTranslation();
-
   const replaceText = (child: React.ReactNode): React.ReactNode => {
     if (React.isValidElement(child)) {
       if (typeof child.props.children === "string") {
@@ -236,7 +235,7 @@ const TranslatePuckFieldLabels = ({
           }>,
           {
             ...child.props,
-            children: t(child.props.children),
+            children: pt(child.props.children),
           }
         );
       }
@@ -252,8 +251,8 @@ const TranslatePuckFieldLabels = ({
           {
             ...child.props,
             children: React.Children.map(child.props.children, replaceText),
-            label: child.props.label ? t(child.props.label) : undefined,
-            title: child.props.title ? t(child.props.title) : undefined,
+            label: child.props.label ? pt(child.props.label) : undefined,
+            title: child.props.title ? pt(child.props.title) : undefined,
           }
         );
       } else {
@@ -270,4 +269,19 @@ const TranslatePuckFieldLabels = ({
   };
 
   return <>{React.Children.map(children, replaceText)}</>;
+};
+
+// Array fields are mostly handled by the children
+// field types but need an override for the array label.
+const TranslatePuckArrayFieldLabels = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  if (React.isValidElement(children)) {
+    return React.cloneElement(children, {
+      ...children.props,
+      label: pt(children.props.label),
+    });
+  }
 };

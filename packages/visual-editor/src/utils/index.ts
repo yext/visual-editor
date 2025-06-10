@@ -44,4 +44,5 @@ export {
   i18nPlatformInstance,
   usePlatformTranslation,
   msg,
+  pt,
 } from "./i18nPlatform.ts";
