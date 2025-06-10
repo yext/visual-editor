@@ -62,10 +62,10 @@ export type InsightSectionType = {
 
 export type InsightStruct = {
   image?: ImageType;
-  name?: string;
-  category?: string;
+  name?: TranslatableString;
+  category?: TranslatableString;
   publishTime?: string;
-  description?: RTF2 | string;
+  description?: TranslatableRTF2;
   cta?: CTAType;
 };
 
