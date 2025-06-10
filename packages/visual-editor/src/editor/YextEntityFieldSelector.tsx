@@ -74,7 +74,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.cta": CTA_CONSTANT_CONFIG, // TODO - add translatable version
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
   "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
   "type.team_section": TEAM_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
   "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
