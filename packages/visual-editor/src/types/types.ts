@@ -75,8 +75,8 @@ export type TeamSectionType = {
 
 export type PersonStruct = {
   headshot?: ImageType;
-  name?: string;
-  title?: string;
+  name?: TranslatableString;
+  title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
   cta?: CTAType;
