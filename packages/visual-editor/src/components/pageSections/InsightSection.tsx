@@ -20,15 +20,15 @@ import {
   Timestamp,
   ComponentFields,
   MaybeRTF,
-  resolveTranslatableRTF2,
-  TranslatableRTF2,
+  resolveTranslatableString,
+  TranslatableString,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface InsightSectionProps {
   data: {
-    heading: YextEntityField<TranslatableRTF2>;
+    heading: YextEntityField<TranslatableString>;
     insights: YextEntityField<InsightSectionType>;
   };
   styles: {
@@ -46,7 +46,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableRTF2>("Section Heading", {
+      heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
@@ -159,7 +159,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
-  const resolvedHeading = resolveTranslatableRTF2(
+  const resolvedHeading = resolveTranslatableString(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

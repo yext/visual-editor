@@ -19,8 +19,8 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  resolveTranslatableRTF2,
   resolveTranslatableString,
+  resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 

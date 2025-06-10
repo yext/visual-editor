@@ -7,12 +7,12 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  TranslatableRTF2,
-  resolveTranslatableRTF2,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
-  list: YextEntityField<TranslatableRTF2[]>;
+  list: YextEntityField<TranslatableString[]>;
 }
 
 const textListFields: Fields<TextListProps> = {
@@ -53,7 +53,7 @@ const TextListComponent: React.FC<TextListProps> = ({
         <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
           {resolvedTextList.map((text, index) => (
             <li key={index} className="mb-2">
-              {resolveTranslatableRTF2(text, i18n.language)}
+              {resolveTranslatableString(text, i18n.language)}
             </li>
           ))}
         </ul>

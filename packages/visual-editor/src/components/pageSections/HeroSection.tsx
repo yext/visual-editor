@@ -23,16 +23,16 @@ import {
   YextStructEntityField,
   ComponentFields,
   HoursStatusAtom,
-  TranslatableRTF2,
-  resolveTranslatableRTF2,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface HeroSectionProps {
   data: {
-    businessName: YextEntityField<TranslatableRTF2>;
-    localGeoModifier: YextEntityField<TranslatableRTF2>;
+    businessName: YextEntityField<TranslatableString>;
+    localGeoModifier: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
     hero: YextStructEntityField<HeroSectionType>;
   };
@@ -54,18 +54,21 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      businessName: YextField<any, TranslatableRTF2>("Business Name", {
+      businessName: YextField<any, TranslatableString>("Business Name", {
         type: "entityField",
         filter: {
           types: ["type.string"],
         },
       }),
-      localGeoModifier: YextField<any, TranslatableRTF2>("Local GeoModifier", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
+      localGeoModifier: YextField<any, TranslatableString>(
+        "Local GeoModifier",
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
       hours: YextField("Hours", {
         type: "entityField",
         filter: {
@@ -127,12 +130,15 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument() as any;
-  const resolvedBusinessName = resolveTranslatableRTF2(
-    resolveYextEntityField<TranslatableRTF2>(document, data?.businessName),
+  const resolvedBusinessName = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data?.businessName),
     i18n.language
   );
-  const resolvedLocalGeoModifier = resolveTranslatableRTF2(
-    resolveYextEntityField<TranslatableRTF2>(document, data?.localGeoModifier),
+  const resolvedLocalGeoModifier = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(
+      document,
+      data?.localGeoModifier
+    ),
     i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(

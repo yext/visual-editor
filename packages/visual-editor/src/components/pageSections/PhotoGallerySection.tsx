@@ -27,8 +27,8 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
-  TranslatableRTF2,
-  resolveTranslatableRTF2,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -47,7 +47,7 @@ const DEFAULT_IMAGE = {
 
 export interface PhotoGallerySectionProps {
   data: {
-    heading: YextEntityField<TranslatableRTF2>;
+    heading: YextEntityField<TranslatableString>;
     images: YextEntityField<ImageType[] | ComplexImageType[]>;
   };
   styles: {
@@ -112,7 +112,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableRTF2>("Heading", {
+      heading: YextField<any, TranslatableString>("Heading", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -142,7 +142,7 @@ const PhotoGallerySectionComponent = ({
 }: PhotoGallerySectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
-  const sectionHeading = resolveTranslatableRTF2(
+  const sectionHeading = resolveTranslatableString(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

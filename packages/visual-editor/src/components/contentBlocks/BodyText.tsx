@@ -9,16 +9,16 @@ import {
   EntityField,
   YextEntityField,
   YextField,
-  TranslatableRTF2,
-  resolveTranslatableRTF2,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 
 export interface BodyTextProps extends BodyProps {
-  text: YextEntityField<TranslatableRTF2>;
+  text: YextEntityField<TranslatableString>;
 }
 
 const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextField<any, TranslatableRTF2>("Text", {
+  text: YextField<any, TranslatableString>("Text", {
     type: "entityField",
     filter: {
       types: ["type.string"],
@@ -42,7 +42,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         constantValueEnabled={text.constantValueEnabled}
       >
         <Body ref={ref} {...bodyProps}>
-          {resolveTranslatableRTF2(
+          {resolveTranslatableString(
             resolveYextEntityField(document, text),
             i18n.language
           )}

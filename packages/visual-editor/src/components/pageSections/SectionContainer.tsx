@@ -13,8 +13,8 @@ import {
   useDocument,
   YextField,
   VisibilityWrapper,
-  TranslatableRTF2,
-  resolveTranslatableRTF2,
+  TranslatableString,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -28,7 +28,7 @@ import { useTranslation } from "react-i18next";
 export type SectionContainerProps = {
   background?: BackgroundStyle;
   sectionHeading: {
-    text: YextEntityField<TranslatableRTF2>;
+    text: YextEntityField<TranslatableString>;
     level: HeadingProps["level"];
     alignment: "left" | "right" | "center";
   };
@@ -44,7 +44,7 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
   sectionHeading: YextField("Section Heading", {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableRTF2>("Section Heading Text", {
+      text: YextField<any, TranslatableString>("Section Heading Text", {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -77,8 +77,8 @@ const SectionContainerComponent = (
   const document = useDocument();
   const { i18n } = useTranslation();
 
-  const resolvedHeadingText = resolveTranslatableRTF2(
-    resolveYextEntityField<TranslatableRTF2>(document, sectionHeading.text),
+  const resolvedHeadingText = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, sectionHeading.text),
     i18n.language
   );
 
