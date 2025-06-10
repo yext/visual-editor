@@ -18,16 +18,16 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  TranslatableRTF2,
   resolveTranslatableRTF2,
   resolveTranslatableString,
+  TranslatableString,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface ProductSectionProps {
   data: {
-    heading: YextEntityField<TranslatableRTF2>;
+    heading: YextEntityField<TranslatableString>;
     products: YextEntityField<ProductSectionType>;
   };
   styles: {
@@ -45,7 +45,7 @@ const productSectionFields: Fields<ProductSectionProps> = {
   data: YextField("Data", {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableRTF2>("Section Heading", {
+      heading: YextField<any, TranslatableString>("Section Heading", {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
