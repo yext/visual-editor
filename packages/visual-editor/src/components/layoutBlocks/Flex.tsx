@@ -5,9 +5,7 @@ import {
   backgroundColors,
   themeManagerCn,
   Background,
-  CardCategory,
   ContentBlockCategory,
-  LayoutBlockCategory,
   YextField,
   VisibilityWrapper,
 } from "@yext/visual-editor";
@@ -57,11 +55,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
             alignItems,
             flexWrap: wrap,
           }}
-          allow={[
-            ...CardCategory,
-            ...ContentBlockCategory,
-            ...LayoutBlockCategory.filter((x) => x !== "Collection"),
-          ]}
+          allow={[...ContentBlockCategory]}
         />
       </Background>
     );

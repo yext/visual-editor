@@ -161,37 +161,6 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
-## YextCollectionSubfieldSelector
-
-Use this to allow Visual Editor users to choose an entity field or constant value based on a subfield of a Collection.
-
-### Props
-
-| Name                     | Type            | Description                                                    |
-| ------------------------ | --------------- | -------------------------------------------------------------- |
-| label?                   | string          | The user-facing label for the field.                           |
-| isCollection             | boolean         | If false, will behave like YextEntityFieldSelector.            |
-| filter.types             | string[]        | Determines which fields will be available based on field type. |
-| filter.allowList?        | types: string[] | Field names to include. Cannot be combined with disallowList.  |
-| filter.disallowList?     | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
-| filter.directChildrenOf? | string          | Return only the fields that are direct children of this field. |
-
-### Usage
-
-```tsx
-{
-  // Will return the direct children of c_myCollection that are type string.
-  text: YextCollectionSubfieldSelector<any, string>({
-    label: "Text",
-    isCollection: true,
-    filter: {
-      directChildrenOf: "c_myCollection",
-      types: ["type.string"],
-    },
-  }),
-}
-```
-
 ## BasicSelector
 
 `BasicSelector` creates a labeled field and searchable dropdown with the provided options. Each option consists of a label, value, and an optional color. This can be used when creating the Fields for a new component.
@@ -265,7 +234,7 @@ const myComponentFields: Fields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [YextCollectionSubfieldSelector](##YextCollectionSubfieldSelector).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), and [YextEntityFieldSelector](##YextEntityFieldSelector).
 
 ### Features
 
@@ -468,7 +437,6 @@ linkedEntity: YextField("Linked Entity", {
 
 - `type`: `"entityField"`
 - `filter`: `any` — passed to [YextEntityFieldSelector](##YextEntityFieldSelector)
-- `isCollection?`: `boolean` — used when creating collection subfields, specifically in cardComponents.
 
 ---
 
