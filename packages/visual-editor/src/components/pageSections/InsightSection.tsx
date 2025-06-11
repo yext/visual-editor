@@ -244,7 +244,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: msg("components.insightSection", "Insight Section"),
+  label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
   defaultProps: {
     data: {

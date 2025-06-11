@@ -98,7 +98,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -149,18 +149,9 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
             {resolvedFAQs?.faqs?.map((faqItem: FAQStruct, index: number) => (
               <AccordionItem value={index.toString()} key={index}>
                 <AccordionTrigger>
-                  <EntityField
-                    displayName={pt("fields.question", "Question")}
-                    fieldId={data.faqs.field}
-                    constantValueEnabled={data.faqs.constantValueEnabled}
-                  >
-                    <Body>
-                      {resolveTranslatableString(
-                        faqItem.question,
-                        i18n.language
-                      )}
-                    </Body>
-                  </EntityField>
+                  <Body>
+                    {resolveTranslatableString(faqItem.question, i18n.language)}
+                  </Body>
                 </AccordionTrigger>
                 <AccordionContent>
                   <EntityField
