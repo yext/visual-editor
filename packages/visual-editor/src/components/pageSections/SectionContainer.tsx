@@ -16,13 +16,7 @@ import {
   TranslatableString,
   resolveTranslatableString,
 } from "@yext/visual-editor";
-import {
-  ComponentConfig,
-  DropZone,
-  Fields,
-  WithId,
-  WithPuckProps,
-} from "@measured/puck";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import { useTranslation } from "react-i18next";
 
 export type SectionContainerProps = {
@@ -33,6 +27,7 @@ export type SectionContainerProps = {
     alignment: "left" | "right" | "center";
   };
   liveVisibility: boolean;
+  sectionContent: Slot;
 };
 
 const sectionContainerFields: Fields<SectionContainerProps> = {
@@ -61,6 +56,9 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
       }),
     },
   }),
+  sectionContent: {
+    type: "slot",
+  },
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
     options: [
@@ -70,10 +68,10 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
   }),
 };
 
-const SectionContainerComponent = (
-  props: WithId<WithPuckProps<SectionContainerProps>>
+const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
+  props
 ) => {
-  const { background, sectionHeading } = props;
+  const { background, sectionHeading, sectionContent: SectionContent } = props;
   const document = useDocument();
   const { i18n } = useTranslation();
 
@@ -98,10 +96,7 @@ const SectionContainerComponent = (
           {resolvedHeadingText}
         </Heading>
       )}
-      <DropZone
-        zone="page-section"
-        disallow={[...OtherCategory, ...PageSectionCategory]}
-      />
+      <SectionContent disallow={[...OtherCategory, ...PageSectionCategory]} />
     </PageSection>
   );
 };
@@ -120,6 +115,7 @@ export const SectionContainer: ComponentConfig<SectionContainerProps> = {
       level: 2,
       alignment: "left",
     },
+    sectionContent: [],
     liveVisibility: true,
   },
   render: (props) => (

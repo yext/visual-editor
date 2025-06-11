@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, DropZone, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 import {
   backgroundColors,
@@ -9,6 +9,7 @@ import {
   YextField,
   VisibilityWrapper,
   LayoutBlockCategory,
+  msg,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
@@ -17,9 +18,13 @@ export interface FlexProps extends layoutProps {
   direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
   liveVisibility: boolean;
+  flexZone: Slot;
 }
 
-const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
+const FlexContainer = React.forwardRef<
+  HTMLDivElement,
+  Parameters<PuckComponent<FlexProps>>[0]
+>(
   (
     {
       direction,
@@ -30,6 +35,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       verticalPadding,
       horizontalPadding,
       backgroundColor,
+      flexZone: FlexZone,
     },
     ref
   ) => {
@@ -44,13 +50,12 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
         )}
         ref={ref}
       >
-        <DropZone
+        <FlexZone
           className={themeManagerCn(
             layoutVariants({ gap }),
             "flex w-full",
             direction
           )}
-          zone="flex-container"
           style={{
             justifyContent,
             alignItems,
@@ -88,6 +93,9 @@ const flexContainerFields: Fields<FlexProps> = {
       { label: "Wrap", value: "wrap" },
     ],
   }),
+  flexZone: {
+    type: "slot",
+  },
   ...layoutFields,
   liveVisibility: YextField("Visible on Live Page", {
     type: "radio",
@@ -99,7 +107,7 @@ const flexContainerFields: Fields<FlexProps> = {
 };
 
 export const Flex: ComponentConfig<FlexProps> = {
-  label: "Flex",
+  label: msg("components.flex", "Flex"),
   fields: flexContainerFields,
   defaultProps: {
     direction: "flex-row",
@@ -107,6 +115,7 @@ export const Flex: ComponentConfig<FlexProps> = {
     alignItems: "start",
     wrap: "nowrap",
     gap: "4",
+    flexZone: [],
     verticalPadding: "0",
     horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,

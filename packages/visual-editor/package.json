@@ -54,7 +54,7 @@
     "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
   },
   "dependencies": {
-    "@measured/puck": "0.18.3",
+    "@measured/puck": "0.19.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.13",

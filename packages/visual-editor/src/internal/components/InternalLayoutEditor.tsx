@@ -165,6 +165,7 @@ export const InternalLayoutEditor = ({
               types: ["type.string"],
             },
           }),
+          ...puckConfig.root?.fields,
         },
         defaultProps: {
           title: {
@@ -177,6 +178,7 @@ export const InternalLayoutEditor = ({
             constantValue: "",
             constantValueEnabled: false,
           },
+          ...puckConfig.root?.defaultProps,
         },
       },
     } as Config;
