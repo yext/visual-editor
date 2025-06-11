@@ -7,6 +7,7 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { getSubfieldsFromType } from "../internal/puck/Subfields.ts";
 import "./index.css";
+import { pt } from "../utils/i18nPlatform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
@@ -29,6 +30,7 @@ export type YextStructEntityField<T extends Record<string, any> = any> = {
 export type StructSelectorProps = {
   label: string;
   filter: EntityFieldTypesFilter;
+  isTranslatable?: boolean;
 };
 
 // YextStructFieldSelector will be used for new built-in struct and list field types.
@@ -38,6 +40,11 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
   const filter = {
     types: [props.filter.type],
   };
+
+  // set "isTranslatable" to true if it is missing from props
+  if (props.isTranslatable === undefined) {
+    props.isTranslatable = true;
+  }
 
   return {
     type: "custom",
@@ -54,6 +61,7 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
             onChange={onChange}
             value={value}
             filter={props.filter}
+            isTranslatable={!!props.isTranslatable}
           />
         </FieldLabel>
       );
@@ -65,11 +73,17 @@ type InputProps = {
   filter: EntityFieldTypesFilter;
   onChange: (value: any, uiState?: any) => void;
   value: any;
+  isTranslatable: boolean;
 };
 
 // SubfieldsInput renders the subfields such that users can choose to toggle between the
 // inferred entityValue (from field) being used or use a constantValue.
-const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
+const SubfieldsInput = ({
+  filter,
+  onChange,
+  value,
+  isTranslatable,
+}: InputProps) => {
   const subfields = getSubfieldsFromType(filter.type);
   if (!subfields) {
     return;
@@ -81,7 +95,7 @@ const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
 
   return (
     <FieldLabel
-      label="Content Overrides"
+      label={pt("contentOverrides", "Content Overrides")}
       className="ve-inline-block ve-w-full ve-pt-4"
     >
       {subfields.map(({ field, type, label }, idx: number) => {
@@ -96,7 +110,11 @@ const SubfieldsInput = ({ filter, onChange, value }: InputProps) => {
           });
         };
 
-        const constantConfig = getConstantConfigFromType(type);
+        const constantConfig = getConstantConfigFromType(
+          type,
+          false,
+          isTranslatable
+        );
         if (!constantConfig) {
           return;
         }

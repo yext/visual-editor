@@ -1,5 +1,6 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -13,7 +14,7 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
     return (
       <div className={"ve-mt-4"}>
         <AutoField
-          field={FAQStructArrayField}
+          field={FAQStructArrayField()}
           value={value.faqs}
           onChange={(newValue, uiState) =>
             onChange({ faqs: newValue }, uiState)
@@ -24,18 +25,21 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   },
 };
 
-const FAQStructArrayField: ArrayField<FAQStruct[]> = {
-  label: "Array Field",
-  type: "array",
-  arrayFields: {
-    question: {
-      type: "text",
-      label: "Question",
+const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
+  return {
+    label: pt("arrayField", "Array Field"),
+    type: "array",
+    arrayFields: {
+      question: {
+        type: "text",
+        label: pt("question", "Question"),
+      },
+      answer: {
+        type: "textarea",
+        label: pt("answer", "Answer"),
+      },
     },
-    answer: {
-      type: "textarea",
-      label: "Answer",
-    },
-  },
-  getItemSummary: (item, i) => item.question ?? "FAQ " + ((i ?? 0) + 1),
+    getItemSummary: (item, i) =>
+      item.question ? item.question : pt("FAQ", "FAQ") + " " + ((i ?? 0) + 1),
+  };
 };

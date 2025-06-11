@@ -1,3 +1,4 @@
+import { msg } from "../../utils/i18nPlatform.ts";
 import { StructEntityFieldTypes } from "../../editor/YextStructFieldSelector.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { EntityFieldTypes } from "../utils/getFilteredEntityFields.ts";
@@ -11,16 +12,28 @@ export type SubFieldProps = {
 }[];
 
 const HERO_SECTION_SUBFIELD: SubFieldProps = [
-  { field: "image", type: "type.image", label: "Image" },
-  { field: "primaryCta", type: "type.cta", label: "Primary CTA" },
-  { field: "secondaryCta", type: "type.cta", label: "Secondary CTA" },
+  { field: "image", type: "type.image", label: msg("fields.image", "Image") },
+  {
+    field: "primaryCta",
+    type: "type.cta",
+    label: msg("fields.primaryCTA", "Primary CTA"),
+  },
+  {
+    field: "secondaryCta",
+    type: "type.cta",
+    label: msg("fields.secondaryCTA", "Secondary CTA"),
+  },
 ];
 
 const PROMO_SECTION_SUBFIELD: SubFieldProps = [
-  { field: "image", type: "type.image", label: "Image" },
-  { field: "title", type: "type.string", label: "Title" },
-  { field: "description", type: "type.string", label: "Description" },
-  { field: "cta", type: "type.cta", label: "CTA" },
+  { field: "image", type: "type.image", label: msg("fields.image", "Image") },
+  { field: "title", type: "type.string", label: msg("fields.title", "Title") },
+  {
+    field: "description",
+    type: "type.string",
+    label: msg("fields.description", "Description"),
+  },
+  { field: "cta", type: "type.cta", label: msg("fields.cta", "CTA") },
 ];
 
 const STRUCT_TYPE_TO_SUBFIELDS: Record<StructEntityFieldTypes, SubFieldProps> =

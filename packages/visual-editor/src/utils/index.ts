@@ -5,6 +5,7 @@ export {
   resolveYextStructField,
   handleResolveFieldsForCollections,
 } from "./resolveYextEntityField.ts";
+export { resolveTranslatableString } from "./resolveTranslatableString.ts";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {
@@ -43,4 +44,6 @@ export { i18nComponentsInstance } from "./i18nComponents.ts";
 export {
   i18nPlatformInstance,
   usePlatformTranslation,
+  msg,
+  pt,
 } from "./i18nPlatform.ts";

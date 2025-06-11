@@ -6,6 +6,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
+  msg,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -18,13 +19,16 @@ export type BreadcrumbsSectionProps = {
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 // getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
@@ -111,7 +115,7 @@ export const BreadcrumbsComponent = () => {
 };
 
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
-  label: "Breadcrumbs",
+  label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,
   defaultProps: {
     analytics: {

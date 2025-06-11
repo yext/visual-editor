@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
@@ -8,9 +7,15 @@ import {
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { TEXT_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Text.tsx";
+import {
+  TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+} from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
-import { TEXT_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TextList.tsx";
+import {
+  TEXT_LIST_CONSTANT_CONFIG,
+  TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+} from "../internal/puck/constant-value-fields/TextList.tsx";
 import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
@@ -32,6 +37,7 @@ import {
 } from "../internal/puck/ui/Tooltip.tsx";
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
+import { pt } from "../utils/i18nPlatform.ts";
 
 const devLogger = new DevLogger();
 
@@ -41,6 +47,7 @@ export type YextEntityField<T> = {
   field: string;
   constantValue: T;
   constantValueEnabled?: boolean;
+  isTranslatable?: boolean;
 };
 
 export type YextCollection = {
@@ -54,6 +61,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
     isCollection?: boolean;
     disableConstantValueToggle?: boolean;
+    isTranslatable?: boolean;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -62,28 +70,50 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
-  "type.cta": CTA_CONSTANT_CONFIG,
-  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
-  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
-  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
-  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
-  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
-  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
+  "type.cta": CTA_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
 };
 
-const LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TEXT_LIST_CONSTANT_CONFIG,
-  "type.image": IMAGE_LIST_CONSTANT_CONFIG,
+const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
+  return {
+    "type.string": TEXT_LIST_CONSTANT_CONFIG,
+    "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
+  };
+};
+
+const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+};
+
+const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
 };
 
 export const getConstantConfigFromType = (
   type: EntityFieldTypes,
-  isList?: boolean
+  isList?: boolean,
+  isTranslatable?: boolean
 ): Field<any> | undefined => {
   if (isList) {
-    return LIST_TYPE_TO_CONSTANT_CONFIG[type];
+    if (isTranslatable) {
+      return (
+        TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG[type] ??
+        LIST_TYPE_TO_CONSTANT_CONFIG()[type]
+      );
+    }
+    return LIST_TYPE_TO_CONSTANT_CONFIG()[type];
   }
-  const constantConfig = TYPE_TO_CONSTANT_CONFIG[type];
+  const constantConfig = isTranslatable
+    ? (TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG[type] ??
+      TYPE_TO_CONSTANT_CONFIG[type])
+    : TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
     devLogger.log(`No constant configuration for ${type}`);
     return;
@@ -94,10 +124,13 @@ export const getConstantConfigFromType = (
 /**
  * Returns the constant type configuration if all types match
  * @param typeFilter
+ * @param isList
+ * @param isTranslatable
  */
 const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
-  isList: boolean
+  isList: boolean,
+  isTranslatable: boolean
 ): Field | undefined => {
   if (!typeFilter) {
     return undefined;
@@ -107,7 +140,8 @@ const returnConstantFieldConfig = (
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = getConstantConfigFromType(
       entityFieldType,
-      isList
+      isList,
+      isTranslatable
     );
     if (!mappedConfiguration) {
       devLogger.log(`No mapped configuration for ${entityFieldType}`);
@@ -130,9 +164,13 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
+  // set "isTranslatable" to true if it is missing from props
+  if (props.isTranslatable === undefined) {
+    props.isTranslatable = true;
+  }
+
   return {
     type: "custom",
-    label: props.label,
     render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
@@ -150,13 +188,14 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
-            label={props.label}
+            label={pt(props.label)}
           />
           {value?.constantValueEnabled && !props.isCollection && (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
               filter={props.filter}
+              isTranslatable={props.isTranslatable}
             />
           )}
           {!value?.constantValueEnabled && (
@@ -187,9 +226,13 @@ export const YextCollectionSubfieldSelector = <
     return YextEntityFieldSelector({ ...props });
   }
 
+  // set "isTranslatable" to true if it is missing from props
+  if (props.isTranslatable === undefined) {
+    props.isTranslatable = true;
+  }
+
   return {
     type: "custom",
-    label: props.label,
     render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
@@ -207,13 +250,14 @@ export const YextCollectionSubfieldSelector = <
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
-            label={props.label}
+            label={pt(props.label)}
           />
           {value?.constantValueEnabled ? (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
               filter={props.filter}
+              isTranslatable={props.isTranslatable}
             />
           ) : (
             <EntityFieldInput<T>
@@ -274,15 +318,15 @@ export const ConstantValueModeToggler = ({
             </TooltipTrigger>
             <TooltipContent>
               {constantValueEnabled
-                ? "Static content"
-                : "Knowledge Graph content"}
+                ? pt("staticContent", "Static content")
+                : pt("knowledgeGraphContent", "Knowledge Graph content")}
               <TooltipArrow fill="ve-bg-popover" />
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       )}
       <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
-        {label}
+        {pt(label)}
       </p>
     </div>
   );
@@ -293,16 +337,19 @@ type InputProps<T extends Record<string, any>> = {
   onChange: (value: any, uiState: any) => void;
   value: any;
   className?: string;
+  isTranslatable?: boolean;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
+  isTranslatable,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
-    !!filter.includeListsOnly
+    !!filter.includeListsOnly,
+    !!isTranslatable
   );
 
   if (!constantFieldConfig) {
@@ -355,7 +402,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
-  const { t } = useTranslation();
 
   const basicSelectorField = React.useMemo(() => {
     let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
@@ -369,26 +415,31 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
-    return BasicSelector(templateMetadata.entityTypeDisplayName + " Field", [
-      {
-        value: "",
-        label: t("basicSelectorContentLabel", "Select a Content field"),
-      },
-      ...filteredEntityFields
-        .map((entityFieldNameToSchema) => {
-          return {
-            label:
-              entityFieldNameToSchema.displayName ??
-              entityFieldNameToSchema.name,
-            value: entityFieldNameToSchema.name,
-          };
-        })
-        .sort((entityFieldA, entityFieldB) => {
-          const nameA = entityFieldA.label.toUpperCase();
-          const nameB = entityFieldB.label.toUpperCase();
-          return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-        }),
-    ]);
+    // TODO: translation concatenation
+    return BasicSelector(
+      templateMetadata.entityTypeDisplayName + " " + pt("field", "Field"),
+      [
+        {
+          value: "",
+          label: pt("basicSelectorContentLabel", "Select a Content field"),
+        },
+        ...filteredEntityFields
+          .map((entityFieldNameToSchema) => {
+            return {
+              label:
+                entityFieldNameToSchema.displayName ??
+                entityFieldNameToSchema.name,
+              value: entityFieldNameToSchema.name,
+            };
+          })
+          .sort((entityFieldA, entityFieldB) => {
+            const nameA = entityFieldA.label.toUpperCase();
+            const nameB = entityFieldB.label.toUpperCase();
+            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+          }),
+      ],
+      false
+    );
   }, [entityFields, filter]);
 
   return (

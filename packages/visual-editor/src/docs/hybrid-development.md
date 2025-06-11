@@ -10,11 +10,13 @@ outline: deep
 1. Create a new repository using https://github.com/YextSolutions/pages-visual-editor-starter
 2. In the Yext Platform, navigate to Pages > All Sites in the sidebar and create a new site
    via the "Add New Site" button. Use the repo you created in step 1.
-3. In Knowledge Graph, create a Site entity.
+3. In Site Settings, set the Visual Editor Path to the path of your edit template, typically `edit`.
+   Also, turn on "Auto-Publish New Deploys".
+4. In Knowledge Graph, create a Site entity.
    Configure your [site stream](https://hitchhikers.yext.com/docs/pages/site-configuration/?target=site-stream)
    by updating your `config.yaml` to use the site entity's id in place of `entity-id`.
    Also add any alternate profiles and fields you wish to use with your site entity.
-4. If you want to use Yext Analytics, create a [Developer App](https://hitchhikers.yext.com/tracks/platform/pl240-developer-console/01-intro-to-the-developer-console-apps/)
+5. If you want to use Yext Analytics, create a [Developer App](https://hitchhikers.yext.com/tracks/platform/pl240-developer-console/01-intro-to-the-developer-console-apps/)
    with access to the events api. In Site Settings, set `YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY`
    to your api key.
 

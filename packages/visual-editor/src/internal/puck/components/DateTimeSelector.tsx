@@ -1,11 +1,15 @@
 import { CustomField, FieldLabel } from "@measured/puck";
 import { Calendar } from "lucide-react";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const DateTimeSelector: CustomField<string | undefined> = {
   type: "custom",
   render: ({ value, onChange }) => {
     return (
-      <FieldLabel icon={<Calendar size={"16"} />} label="Date and Time">
+      <FieldLabel
+        icon={<Calendar size={"16"} />}
+        label={pt("dateAndTime", "Date and Time")}
+      >
         <input
           className="date-time-picker"
           type="datetime-local"

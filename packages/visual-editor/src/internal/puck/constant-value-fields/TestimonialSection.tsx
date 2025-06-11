@@ -4,6 +4,7 @@ import {
   TestimonialStruct,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -21,7 +22,7 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
       return (
         <div className={"ve-mt-4"}>
           <AutoField
-            field={TestimonialStructArrayField}
+            field={TestimonialStructArrayField()}
             value={value.testimonials}
             onChange={(newValue, uiState) =>
               onChange({ testimonials: newValue }, uiState)
@@ -32,20 +33,22 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
     },
   };
 
-const TestimonialStructArrayField: ArrayField<TestimonialStruct[]> = {
-  label: "Array Field",
+const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => ({
+  label: pt("arrayField", "Array Field"),
   type: "array",
   arrayFields: {
     description: {
       type: "textarea",
-      label: "Description",
+      label: pt("description", "Description"),
     },
     contributorName: {
       type: "text",
-      label: "Contributor Name",
+      label: pt("contributorName", "Contributor Name"),
     },
     contributionDate: DateSelector,
   },
   getItemSummary: (item, i) =>
-    item.contributorName ?? "Testimonial " + ((i ?? 0) + 1),
-};
+    item.contributorName
+      ? item.contributorName
+      : pt("testimonial", "Testimonial") + " " + ((i ?? 0) + 1),
+});

@@ -16,7 +16,11 @@ import {
   EntityField,
   FAQSectionType,
   ComponentFields,
+  TranslatableString,
+  resolveTranslatableString,
   MaybeRTF,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -27,7 +31,7 @@ import {
 
 export interface FAQSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     faqs: YextEntityField<FAQSectionType>;
   };
   styles: {
@@ -38,16 +42,19 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      faqs: YextField("FAQs", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      faqs: YextField(msg("fields.faqs", "FAQs"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.FAQSection.type],
@@ -55,36 +62,42 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
-  const resolvedHeading = resolveYextEntityField<string>(
-    document,
-    data?.heading
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data?.heading),
+    i18n.language
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 
@@ -95,7 +108,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
@@ -104,7 +117,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
         <EntityField
-          displayName={t("faqs", "FAQs")}
+          displayName={pt("fields.faqs", "FAQs")}
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
@@ -129,7 +142,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
 };
 
 export const FAQSection: ComponentConfig<FAQSectionProps> = {
-  label: "FAQs Section",
+  label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {
     data: {
