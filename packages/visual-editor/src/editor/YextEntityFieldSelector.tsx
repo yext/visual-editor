@@ -48,7 +48,7 @@ export type YextEntityField<T> = {
   field: string;
   constantValue: T;
   constantValueEnabled?: boolean;
-  isTranslatable?: boolean;
+  disallowTranslation?: boolean;
 };
 
 export type YextCollection = {
@@ -62,12 +62,12 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     filter: RenderEntityFieldFilter<T>;
     isCollection?: boolean;
     disableConstantValueToggle?: boolean;
-    isTranslatable?: boolean;
+    disallowTranslation?: boolean;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
+  "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
@@ -82,37 +82,40 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 
 const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
   return {
-    "type.string": TEXT_LIST_CONSTANT_CONFIG,
+    "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
     "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
   };
 };
 
-const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
+const TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
 };
 
-const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+const LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
+  string,
+  Field<any>
+> = {
+  "type.string": TEXT_LIST_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_LIST_CONSTANT_CONFIG,
 };
 
 export const getConstantConfigFromType = (
   type: EntityFieldTypes,
   isList?: boolean,
-  isTranslatable?: boolean
+  disallowTranslation?: boolean
 ): Field<any> | undefined => {
   if (isList) {
-    if (isTranslatable) {
+    if (disallowTranslation) {
       return (
-        TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG[type] ??
+        LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG[type] ??
         LIST_TYPE_TO_CONSTANT_CONFIG()[type]
       );
     }
     return LIST_TYPE_TO_CONSTANT_CONFIG()[type];
   }
-  const constantConfig = isTranslatable
-    ? (TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG[type] ??
+  const constantConfig = disallowTranslation
+    ? (TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG[type] ??
       TYPE_TO_CONSTANT_CONFIG[type])
     : TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
@@ -126,12 +129,12 @@ export const getConstantConfigFromType = (
  * Returns the constant type configuration if all types match
  * @param typeFilter
  * @param isList
- * @param isTranslatable
+ * @param disallowTranslation
  */
 const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
   isList: boolean,
-  isTranslatable: boolean
+  disallowTranslation: boolean
 ): Field | undefined => {
   if (!typeFilter) {
     return undefined;
@@ -142,7 +145,7 @@ const returnConstantFieldConfig = (
     const mappedConfiguration = getConstantConfigFromType(
       entityFieldType,
       isList,
-      isTranslatable
+      disallowTranslation
     );
     if (!mappedConfiguration) {
       devLogger.log(`No mapped configuration for ${entityFieldType}`);
@@ -165,11 +168,6 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
-  // set "isTranslatable" to true if it is missing from props
-  if (props.isTranslatable === undefined) {
-    props.isTranslatable = true;
-  }
-
   return {
     type: "custom",
     render: ({ value, onChange }: RenderProps) => {
@@ -196,7 +194,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               onChange={onChange}
               value={value}
               filter={props.filter}
-              isTranslatable={props.isTranslatable}
+              disallowTranslation={props.disallowTranslation}
             />
           )}
           {!value?.constantValueEnabled && (
@@ -227,11 +225,6 @@ export const YextCollectionSubfieldSelector = <
     return YextEntityFieldSelector({ ...props });
   }
 
-  // set "isTranslatable" to true if it is missing from props
-  if (props.isTranslatable === undefined) {
-    props.isTranslatable = true;
-  }
-
   return {
     type: "custom",
     render: ({ value, onChange }: RenderProps) => {
@@ -258,7 +251,7 @@ export const YextCollectionSubfieldSelector = <
               onChange={onChange}
               value={value}
               filter={props.filter}
-              isTranslatable={props.isTranslatable}
+              disallowTranslation={props.disallowTranslation}
             />
           ) : (
             <EntityFieldInput<T>
@@ -338,19 +331,19 @@ type InputProps<T extends Record<string, any>> = {
   onChange: (value: any, uiState: any) => void;
   value: any;
   className?: string;
-  isTranslatable?: boolean;
+  disallowTranslation?: boolean;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
-  isTranslatable,
+  disallowTranslation,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
     !!filter.includeListsOnly,
-    !!isTranslatable
+    !!disallowTranslation
   );
 
   if (!constantFieldConfig) {
