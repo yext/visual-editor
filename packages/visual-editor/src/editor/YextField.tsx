@@ -6,7 +6,6 @@ import {
   ObjectField,
 } from "@measured/puck";
 import {
-  YextCollectionSubfieldSelector,
   ThemeOptions,
   BasicSelector,
   OptionalNumberFieldProps,
@@ -15,6 +14,7 @@ import {
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
+  YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
 
 /** Copied from Puck, do not change */
@@ -71,7 +71,7 @@ type YextSelectField = YextBaseField & {
 type YextTextField = YextBaseField & {
   type: "text";
   isMultiline?: boolean;
-  isTranslatable?: boolean;
+  disallowTranslation?: boolean;
 };
 
 // YextOptionalNumberField has same functionality as OptionalNumberField
@@ -80,7 +80,7 @@ type YextOptionalNumberField = YextBaseField &
     type: "optionalNumber";
   };
 
-// YextEntitySelectorField has same functionality as YextCollectionSubfieldSelector
+// YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
 > = YextBaseField &
@@ -112,17 +112,13 @@ export function YextField<T, U>(
   fieldName: string,
   config: YextFieldConfig<T>
 ): Field<any> {
-  // use YextCollectionSubfieldSelector
+  // use YextEntityFieldSelector
   if (config.type === "entityField") {
-    return YextCollectionSubfieldSelector<
-      T extends Record<string, any> ? T : any,
-      U
-    >({
+    return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
       label: fieldName,
       filter: config.filter,
-      isCollection: config.isCollection,
       disableConstantValueToggle: config.disableConstantValueToggle,
-      isTranslatable: config.isTranslatable,
+      disallowTranslation: config.disallowTranslation,
     });
   }
 

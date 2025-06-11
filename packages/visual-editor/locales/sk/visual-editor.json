@@ -83,6 +83,7 @@
   "email": "E -mail",
   "emailList": "Zoznam e -mailov",
   "event": "Udalosť",
+  "faq": "Často",
   "field": "Pole",
   "fields": {
     "address": "Osloviť",
@@ -106,6 +107,7 @@
     "emailList": "Zoznam e -mailov",
     "emails": "E -maily",
     "emailsListLength": "Zoznam e -mailov dĺžka",
+    "enableLanguageSelector": "Povoliť výber jazyka",
     "events": "Udalosti",
     "faqs": "Časté otázky",
     "footerLinks": "Odkazy na päty",

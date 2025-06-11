@@ -83,6 +83,7 @@
   "email": "E -mail",
   "emailList": "E -mail -liste",
   "event": "Tilfælde",
+  "faq": "FAQ",
   "field": "Felt",
   "fields": {
     "address": "Adresse",
@@ -106,6 +107,7 @@
     "emailList": "E -mail -liste",
     "emails": "E -mails",
     "emailsListLength": "E -mails liste længde",
+    "enableLanguageSelector": "Aktivér sprogvælger",
     "events": "Begivenheder",
     "faqs": "FAQS",
     "footerLinks": "Sidefodslink",

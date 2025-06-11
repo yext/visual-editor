@@ -83,6 +83,7 @@
   "email": "E-mail",
   "emailList": "Lista de e -mailuri",
   "event": "Eveniment",
+  "faq": "FAQ",
   "field": "Domeniu",
   "fields": {
     "address": "Adresa",
@@ -106,6 +107,7 @@
     "emailList": "Lista de e -mailuri",
     "emails": "E -mailuri",
     "emailsListLength": "Lista listei de e -mailuri",
+    "enableLanguageSelector": "Activați selectorul de limbă",
     "events": "Evenimente",
     "faqs": "Întrebări frecvente",
     "footerLinks": "Legături de subsol",

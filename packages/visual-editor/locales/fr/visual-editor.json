@@ -83,6 +83,7 @@
   "email": "E-mail",
   "emailList": "Liste de diffusion",
   "event": "Événement",
+  "faq": "FAQ",
   "field": "Champ",
   "fields": {
     "address": "Adresse",
@@ -106,6 +107,7 @@
     "emailList": "Liste de diffusion",
     "emails": "E-mails",
     "emailsListLength": "Longueur de liste des e-mails",
+    "enableLanguageSelector": "Activer le sélecteur de langue",
     "events": "Événements",
     "faqs": "FAQ",
     "footerLinks": "Liens de pied de page",

@@ -83,6 +83,7 @@
   "email": "E -posta",
   "emailList": "E -posta Listesi",
   "event": "Etkinlik",
+  "faq": "SSS",
   "field": "Alan",
   "fields": {
     "address": "Adres",
@@ -106,6 +107,7 @@
     "emailList": "E -posta Listesi",
     "emails": "E -postalar",
     "emailsListLength": "E -postalar listesi uzunluğu",
+    "enableLanguageSelector": "Dil seçicisini etkinleştir",
     "events": "Olaylar",
     "faqs": "SSS",
     "footerLinks": "Altbilgi bağlantıları",

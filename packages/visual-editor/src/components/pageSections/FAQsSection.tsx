@@ -18,10 +18,10 @@ import {
   ComponentFields,
   TranslatableString,
   resolveTranslatableString,
-  MaybeRTF,
   msg,
   pt,
   ThemeOptions,
+  resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -138,11 +138,11 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
               <AccordionItem value={index.toString()} key={index}>
                 <AccordionTrigger>
                   <Body variant="lg" className="font-bold text-left">
-                    {faqItem.question}
+                    {resolveTranslatableString(faqItem.question, i18n.language)}
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <MaybeRTF data={faqItem.answer} />
+                  {resolveTranslatableRTF2(faqItem.answer, i18n.language)}
                 </AccordionContent>
               </AccordionItem>
             ))}

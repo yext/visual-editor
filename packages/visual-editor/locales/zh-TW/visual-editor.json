@@ -83,6 +83,7 @@
   "email": "電子郵件",
   "emailList": "電子郵件列表",
   "event": "事件",
+  "faq": "常問問題",
   "field": "場地",
   "fields": {
     "address": "地址",
@@ -106,6 +107,7 @@
     "emailList": "電子郵件列表",
     "emails": "電子郵件",
     "emailsListLength": "電子郵件列表長度",
+    "enableLanguageSelector": "啟用語言選擇器",
     "events": "事件",
     "faqs": "常見問題解答",
     "footerLinks": "頁腳鍊接",

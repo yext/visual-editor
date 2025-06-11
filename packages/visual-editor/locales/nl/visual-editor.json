@@ -83,6 +83,7 @@
   "email": "E -mail",
   "emailList": "E -maillijst",
   "event": "Evenement",
+  "faq": "FAQ",
   "field": "Veld",
   "fields": {
     "address": "Adres",
@@ -106,6 +107,7 @@
     "emailList": "E -maillijst",
     "emails": "E -mails",
     "emailsListLength": "E -mails lijst lengte",
+    "enableLanguageSelector": "Schakel taalselector in",
     "events": "Evenementen",
     "faqs": "FAQ's",
     "footerLinks": "Footer -links",

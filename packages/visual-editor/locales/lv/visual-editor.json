@@ -83,6 +83,7 @@
   "email": "E -pasts",
   "emailList": "E -pasta saraksts",
   "event": "Notikums",
+  "faq": "FAQ",
   "field": "Laukums",
   "fields": {
     "address": "Uzruna",
@@ -106,6 +107,7 @@
     "emailList": "E -pasta saraksts",
     "emails": "E -pasti",
     "emailsListLength": "E -pastu saraksta garums",
+    "enableLanguageSelector": "Iespējot valodas atlasītāju",
     "events": "Notikumi",
     "faqs": "FAQ",
     "footerLinks": "Kājenes saites",

@@ -119,7 +119,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               includeListsOnly: true,
               allowList: ["emails"],
             },
-            isTranslatable: false,
+            disallowTranslation: true,
           }),
         },
       }),

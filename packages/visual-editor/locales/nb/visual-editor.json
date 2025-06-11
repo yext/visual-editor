@@ -83,6 +83,7 @@
   "email": "E -post",
   "emailList": "E -postliste",
   "event": "Hendelse",
+  "faq": "FAQ",
   "field": "Felt",
   "fields": {
     "address": "Adresse",
@@ -106,6 +107,7 @@
     "emailList": "E -postliste",
     "emails": "E -post",
     "emailsListLength": "E -postlistelengde",
+    "enableLanguageSelector": "Aktiver språkvelger",
     "events": "Hendelser",
     "faqs": "Vanlige spørsmål",
     "footerLinks": "Bunntekstlenker",

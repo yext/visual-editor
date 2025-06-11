@@ -18,9 +18,9 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  MaybeRTF,
-  TranslatableString,
+  resolveTranslatableRTF2,
   resolveTranslatableString,
+  TranslatableString,
   msg,
   pt,
   ThemeOptions,
@@ -117,6 +117,7 @@ const ProductCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -144,7 +145,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {product.name}
+              {resolveTranslatableString(product.name, i18n.language)}
             </Heading>
           )}
           {product.category && (
@@ -152,16 +153,18 @@ const ProductCard = ({
               background={backgroundColors.background5.value}
               className="py-2 px-4 rounded w-fit"
             >
-              <Body>{product.category}</Body>
+              <Body>
+                {resolveTranslatableString(product.category, i18n.language)}
+              </Body>
             </Background>
           )}
-          <MaybeRTF data={product.description} />
+          {resolveTranslatableRTF2(product.description, i18n.language)}
         </div>
         {product.cta && (
           <CTA
             eventName={`cta${key}`}
             variant="secondary"
-            label={product.cta.label}
+            label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"
@@ -176,7 +179,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
-  const resolvedHeading = resolveTranslatableString(
+  const resolvedHeading = resolveTranslatableRTF2(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

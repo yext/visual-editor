@@ -83,6 +83,7 @@
   "email": "E-post",
   "emailList": "E -postlista",
   "event": "Händelse",
+  "faq": "Vanliga frågor",
   "field": "Fält",
   "fields": {
     "address": "Adress",
@@ -106,6 +107,7 @@
     "emailList": "E -postlista",
     "emails": "E -postmeddelanden",
     "emailsListLength": "E -postlistor",
+    "enableLanguageSelector": "Aktivera språkväljare",
     "events": "Evenemang",
     "faqs": "Vanliga frågor",
     "footerLinks": "Sidfotlänkar",

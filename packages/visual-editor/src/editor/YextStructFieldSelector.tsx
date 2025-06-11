@@ -30,7 +30,7 @@ export type YextStructEntityField<T extends Record<string, any> = any> = {
 export type StructSelectorProps = {
   label: string;
   filter: EntityFieldTypesFilter;
-  isTranslatable?: boolean;
+  disallowTranslation?: boolean;
 };
 
 // YextStructFieldSelector will be used for new built-in struct and list field types.
@@ -41,17 +41,15 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
     types: [props.filter.type],
   };
 
-  // set "isTranslatable" to true if it is missing from props
-  if (props.isTranslatable === undefined) {
-    props.isTranslatable = true;
-  }
-
   return {
     type: "custom",
     label: props.label,
     render: ({ value, onChange }: RenderProps) => {
       return (
-        <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
+        <FieldLabel
+          label={pt(props.label)}
+          className="ve-inline-block ve-w-full"
+        >
           <EntityFieldInput<U>
             onChange={onChange}
             value={value}
@@ -61,7 +59,7 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
             onChange={onChange}
             value={value}
             filter={props.filter}
-            isTranslatable={!!props.isTranslatable}
+            disallowTranslation={props.disallowTranslation ?? false}
           />
         </FieldLabel>
       );
@@ -73,7 +71,7 @@ type InputProps = {
   filter: EntityFieldTypesFilter;
   onChange: (value: any, uiState?: any) => void;
   value: any;
-  isTranslatable: boolean;
+  disallowTranslation: boolean;
 };
 
 // SubfieldsInput renders the subfields such that users can choose to toggle between the
@@ -82,7 +80,7 @@ const SubfieldsInput = ({
   filter,
   onChange,
   value,
-  isTranslatable,
+  disallowTranslation,
 }: InputProps) => {
   const subfields = getSubfieldsFromType(filter.type);
   if (!subfields) {
@@ -96,7 +94,7 @@ const SubfieldsInput = ({
   return (
     <FieldLabel
       label={pt("contentOverrides", "Content Overrides")}
-      className="ve-inline-block ve-w-full ve-pt-4"
+      className="ve-inline-block ve-w-full ve-pt-3"
     >
       {subfields.map(({ field, type, label }, idx: number) => {
         const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
@@ -113,7 +111,7 @@ const SubfieldsInput = ({
         const constantConfig = getConstantConfigFromType(
           type,
           false,
-          isTranslatable
+          disallowTranslation
         );
         if (!constantConfig) {
           return;
@@ -132,7 +130,7 @@ const SubfieldsInput = ({
                 {value?.constantValueOverride?.[field] && (
                   <div
                     className={
-                      constantConfig.type !== "custom" ? "ve-pt-4" : ""
+                      constantConfig.type !== "custom" ? "ve-pt-3" : ""
                     }
                   >
                     <AutoField

@@ -1,16 +1,21 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
 
+// A copy of CTAType that changes label from string to TranslatableString
+export type TranslatableCTA = Omit<CTAType, "label"> & {
+  label: TranslatableString;
+};
+
 export type HeroSectionType = {
   image?: ImageType;
-  primaryCta?: CTAType;
-  secondaryCta?: CTAType;
+  primaryCta?: TranslatableCTA;
+  secondaryCta?: TranslatableCTA;
 };
 
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
-  description?: TranslatableString;
-  cta?: CTAType;
+  description?: TranslatableRTF2;
+  cta?: TranslatableCTA;
 };
 
 export type ProductSectionType = {
@@ -19,10 +24,10 @@ export type ProductSectionType = {
 
 export type ProductStruct = {
   image?: ImageType;
-  name?: string;
-  description?: RTF2 | string;
-  category?: string;
-  cta?: CTAType;
+  name?: TranslatableString;
+  description?: TranslatableRTF2;
+  category?: TranslatableString;
+  cta?: TranslatableCTA;
 };
 
 export type EventSectionType = {
@@ -31,10 +36,10 @@ export type EventSectionType = {
 
 export type EventStruct = {
   image?: ImageType;
-  title?: string;
+  title?: TranslatableString;
   dateTime?: string;
-  description?: RTF2 | string;
-  cta?: CTAType;
+  description?: TranslatableRTF2;
+  cta?: TranslatableCTA;
 };
 
 export type FAQSectionType = {
@@ -42,8 +47,8 @@ export type FAQSectionType = {
 };
 
 export type FAQStruct = {
-  question: string;
-  answer: RTF2 | string;
+  question: TranslatableString;
+  answer: TranslatableRTF2;
 };
 
 export type TestimonialSectionType = {
@@ -51,8 +56,8 @@ export type TestimonialSectionType = {
 };
 
 export type TestimonialStruct = {
-  description?: RTF2 | string;
-  contributorName?: string;
+  description?: TranslatableRTF2;
+  contributorName?: TranslatableString;
   contributionDate?: string;
 };
 
@@ -62,11 +67,11 @@ export type InsightSectionType = {
 
 export type InsightStruct = {
   image?: ImageType;
-  name?: string;
-  category?: string;
+  name?: TranslatableString;
+  category?: TranslatableString;
   publishTime?: string;
-  description?: RTF2 | string;
-  cta?: CTAType;
+  description?: TranslatableRTF2;
+  cta?: TranslatableCTA;
 };
 
 export type TeamSectionType = {
@@ -75,16 +80,16 @@ export type TeamSectionType = {
 
 export type PersonStruct = {
   headshot?: ImageType;
-  name?: string;
-  title?: string;
+  name?: TranslatableString;
+  title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
-  cta?: CTAType;
+  cta?: TranslatableCTA;
 };
 
-export type TranslatableString =
-  | (string | RTF2)
-  | Record<string, string | RTF2>;
+export type TranslatableString = string | Record<string, string>;
+
+export type TranslatableRTF2 = (string | RTF2) | Record<string, string | RTF2>;
 
 export type RTF2 = {
   html?: string;

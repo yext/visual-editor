@@ -83,6 +83,7 @@
   "email": "Email",
   "emailList": "Email List",
   "event": "Event",
+  "faq": "FAQ",
   "field": "Field",
   "fields": {
     "address": "Address",
@@ -106,6 +107,7 @@
     "emailList": "Email List",
     "emails": "Emails",
     "emailsListLength": "Emails List Length",
+    "enableLanguageSelector": "Enable Language Selector",
     "events": "Events",
     "faqs": "FAQs",
     "footerLinks": "Footer Links",

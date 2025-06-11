@@ -83,6 +83,7 @@
   "email": "Sähköposti",
   "emailList": "Sähköpostiluettelo",
   "event": "Tapahtuma",
+  "faq": "Faq",
   "field": "Ala",
   "fields": {
     "address": "Osoite",
@@ -106,6 +107,7 @@
     "emailList": "Sähköpostiluettelo",
     "emails": "Sähköpostit",
     "emailsListLength": "Sähköpostiluettelon pituus",
+    "enableLanguageSelector": "Ota kielenvalitsin käyttöön",
     "events": "Tapahtumat",
     "faqs": "Faqit",
     "footerLinks": "Alatunnislinkit",

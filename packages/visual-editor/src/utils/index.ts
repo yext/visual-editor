@@ -1,11 +1,12 @@
 export { applyTheme } from "./applyTheme.ts";
 export {
   resolveYextEntityField,
-  resolveYextSubfield,
   resolveYextStructField,
-  handleResolveFieldsForCollections,
 } from "./resolveYextEntityField.ts";
-export { resolveTranslatableString } from "./resolveTranslatableString.ts";
+export {
+  resolveTranslatableRTF2,
+  resolveTranslatableString,
+} from "./resolveTranslatableString.tsx";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {
@@ -28,6 +29,7 @@ export { applyAnalytics } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
+export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
 export {
   createSearchHeadlessConfig,
   createSearchAnalyticsConfig,

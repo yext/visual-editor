@@ -83,6 +83,7 @@
   "email": "El. Paštas",
   "emailList": "El. Pašto sąrašas",
   "event": "Įvykis",
+  "faq": "DUK",
   "field": "Laukas",
   "fields": {
     "address": "Adresas",
@@ -106,6 +107,7 @@
     "emailList": "El. Pašto sąrašas",
     "emails": "El. Laiškai",
     "emailsListLength": "El. Laiškų sąrašo ilgis",
+    "enableLanguageSelector": "Įgalinti kalbos parinkiklį",
     "events": "Įvykiai",
     "faqs": "DUK",
     "footerLinks": "Poraštės nuorodos",

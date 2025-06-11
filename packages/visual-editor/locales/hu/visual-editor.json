@@ -83,6 +83,7 @@
   "email": "Email",
   "emailList": "E -mail lista",
   "event": "Esemény",
+  "faq": "GYIK",
   "field": "Mező",
   "fields": {
     "address": "Cím",
@@ -106,6 +107,7 @@
     "emailList": "E -mail lista",
     "emails": "E -mailek",
     "emailsListLength": "E -mailek listája hossza",
+    "enableLanguageSelector": "Engedélyezze a nyelvválasztót",
     "events": "Események",
     "faqs": "GYIK",
     "footerLinks": "Lábléc linkek",

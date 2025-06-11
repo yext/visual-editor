@@ -83,6 +83,7 @@
   "email": "メール",
   "emailList": "メーリングリスト",
   "event": "イベント",
+  "faq": "よくある質問",
   "field": "分野",
   "fields": {
     "address": "住所",
@@ -106,6 +107,7 @@
     "emailList": "メーリングリスト",
     "emails": "メール",
     "emailsListLength": "メールリストの長さ",
+    "enableLanguageSelector": "言語セレクターを有効にします",
     "events": "イベント",
     "faqs": "FAQ",
     "footerLinks": "フッターリンク",

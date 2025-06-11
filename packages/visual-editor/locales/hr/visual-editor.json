@@ -83,6 +83,7 @@
   "email": "E -pošta",
   "emailList": "Popis e -pošte",
   "event": "Događaj",
+  "faq": "FAQ",
   "field": "Polje",
   "fields": {
     "address": "Adresa",
@@ -106,6 +107,7 @@
     "emailList": "Popis e -pošte",
     "emails": "E -mailovi",
     "emailsListLength": "Dužina e -mailova",
+    "enableLanguageSelector": "Omogući selektor jezika",
     "events": "Događaj",
     "faqs": "Česta pitanja",
     "footerLinks": "Podnožje podnožja",

@@ -83,6 +83,7 @@
   "email": "Correo electrónico",
   "emailList": "Lista de correo electrónico",
   "event": "Evento",
+  "faq": "Preguntas frecuentes",
   "field": "Campo",
   "fields": {
     "address": "DIRECCIÓN",
@@ -106,6 +107,7 @@
     "emailList": "Lista de correo electrónico",
     "emails": "Correos electrónicos",
     "emailsListLength": "Longitud de la lista de correos electrónicos",
+    "enableLanguageSelector": "Habilitar el selector de idiomas",
     "events": "Eventos",
     "faqs": "Preguntas frecuentes",
     "footerLinks": "Enlaces de pie de página",
