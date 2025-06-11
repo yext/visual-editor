@@ -91,7 +91,7 @@ const SubfieldsInput = ({
   return (
     <FieldLabel
       label={pt("contentOverrides", "Content Overrides")}
-      className="ve-inline-block ve-w-full ve-pt-4"
+      className="ve-inline-block ve-w-full ve-pt-3"
     >
       {subfields.map(({ field, type, label }, idx: number) => {
         const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
@@ -127,7 +127,7 @@ const SubfieldsInput = ({
                 {value?.constantValueOverride?.[field] && (
                   <div
                     className={
-                      constantConfig.type !== "custom" ? "ve-pt-4" : ""
+                      constantConfig.type !== "custom" ? "ve-pt-3" : ""
                     }
                   >
                     <AutoField

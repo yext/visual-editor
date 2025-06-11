@@ -199,7 +199,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
           )}
           {!value?.constantValueEnabled && (
             <EntityFieldInput<T>
-              className="ve-pt-4"
+              className="ve-pt-3"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -255,7 +255,7 @@ export const YextCollectionSubfieldSelector = <
             />
           ) : (
             <EntityFieldInput<T>
-              className="ve-pt-4"
+              className="ve-pt-3"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -368,7 +368,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
-      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-4" : ""}`}
+      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-3" : ""}`}
     >
       <AutoField
         onChange={(newConstantValue, uiState) =>

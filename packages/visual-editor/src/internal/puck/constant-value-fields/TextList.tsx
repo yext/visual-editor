@@ -53,7 +53,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
     return (
       <div
         id={id}
-        className="ve-inline-block ve-pt-4 w-full"
+        className="ve-inline-block ve-pt-3 w-full"
         onKeyUp={handleKeyUp}
       >
         {localItems.map((item, index) => (
@@ -151,7 +151,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
     return (
       <div
         id={id}
-        className="ve-inline-block ve-pt-4 w-full"
+        className="ve-inline-block ve-pt-3 w-full"
         onKeyUp={handleKeyUp}
       >
         {localItems.map((item, index) => (
