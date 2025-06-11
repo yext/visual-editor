@@ -17,10 +17,7 @@ import {
   TEXT_LIST_CONSTANT_CONFIG,
   TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/TextList.tsx";
-import {
-  CTA_CONSTANT_CONFIG,
-  TRANSLATABLE_CTA_CONSTANT_CONFIG,
-} from "../internal/puck/constant-value-fields/CallToAction.tsx";
+import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
@@ -93,7 +90,6 @@ const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
 const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
   "type.rich_text_v2": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
-  "type.cta": TRANSLATABLE_CTA_CONSTANT_CONFIG,
 };
 
 const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {

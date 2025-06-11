@@ -34,39 +34,7 @@ const linkTypeOptions = () => {
   ];
 };
 
-export const CTA_CONSTANT_CONFIG: CustomField<{
-  label: string;
-  link: string;
-  linkType: string;
-}> = {
-  type: "custom",
-  render: ({ onChange, value }) => {
-    return ConstantFields({
-      onChange: onChange,
-      value: value,
-      fields: [
-        {
-          label: pt("label", "Label"),
-          field: "label",
-          fieldType: "text",
-        },
-        {
-          label: pt("Link", "Link"),
-          field: "link",
-          fieldType: "text",
-        },
-        {
-          label: pt("linkType", "Link Type"),
-          field: "linkType",
-          fieldType: "select",
-          options: linkTypeOptions(),
-        },
-      ],
-    });
-  },
-};
-
-export const TRANSLATABLE_CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
+export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const labelField = useMemo(() => {
