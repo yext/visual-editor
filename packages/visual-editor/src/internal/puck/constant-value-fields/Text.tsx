@@ -27,24 +27,22 @@ export function generateTranslatableConstantConfig<
       const locale = document?.locale ?? "en";
       const { t } = usePlatformTranslation();
       const autoField = (
-        <div className={"ve-pt-3"}>
-          <AutoField
-            field={{ type: fieldType ?? "text" }}
-            value={getDisplayValue(value, locale)}
-            onChange={(val) =>
-              onChange({
-                ...(typeof value === "object" && !Array.isArray(value)
-                  ? value
-                  : {}),
-                [locale]: val,
-              } as T)
-            }
-          />
-        </div>
+        <AutoField
+          field={{ type: fieldType ?? "text" }}
+          value={getDisplayValue(value, locale)}
+          onChange={(val) =>
+            onChange({
+              ...(typeof value === "object" && !Array.isArray(value)
+                ? value
+                : {}),
+              [locale]: val,
+            } as T)
+          }
+        />
       );
 
       if (!label) {
-        return autoField;
+        return <div className={"ve-pt-3"}>{autoField}</div>;
       }
 
       return (

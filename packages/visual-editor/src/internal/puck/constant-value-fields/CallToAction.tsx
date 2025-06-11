@@ -68,7 +68,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
     });
 
     return (
-      <div className={"ve-mt-4"}>
+      <div className={"ve-mt-3"}>
         <AutoField
           field={labelField}
           value={value.label}
