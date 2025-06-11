@@ -46,7 +46,10 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
     label: props.label,
     render: ({ value, onChange }: RenderProps) => {
       return (
-        <FieldLabel label={props.label} className="ve-inline-block ve-w-full">
+        <FieldLabel
+          label={pt(props.label)}
+          className="ve-inline-block ve-w-full"
+        >
           <EntityFieldInput<U>
             onChange={onChange}
             value={value}
