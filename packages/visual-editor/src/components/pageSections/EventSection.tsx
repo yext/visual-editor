@@ -154,7 +154,7 @@ const EventCard = ({
         {event.cta && (
           <CTA
             eventName={`cta${cardKey}`}
-            label={event.cta.label}
+            label={resolveTranslatableString(event.cta.label, i18n.language)}
             link={event.cta.link}
             linkType={event.cta.linkType}
             variant="link"

@@ -162,7 +162,7 @@ const InsightCard = ({
           <CTA
             eventName={`cta${key}`}
             variant={"link"}
-            label={insight.cta.label}
+            label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
             className="mt-auto"

@@ -151,7 +151,10 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             <CTA
               eventName={`cta`}
               variant={styles?.ctaVariant}
-              label={resolvedPromo?.cta.label}
+              label={resolveTranslatableString(
+                resolvedPromo?.cta.label,
+                i18n.language
+              )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}
             />

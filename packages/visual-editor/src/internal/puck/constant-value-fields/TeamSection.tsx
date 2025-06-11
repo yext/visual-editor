@@ -4,7 +4,7 @@ import {
   PersonStruct,
   TranslatableString,
 } from "../../../types/types.ts";
-import { ctaFields } from "./CallToAction.tsx";
+import { translatableCTAFields } from "./CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
@@ -82,7 +82,7 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
         type: "text",
         label: t("email", "Email"),
       },
-      cta: ctaFields(),
+      cta: translatableCTAFields(),
     },
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);

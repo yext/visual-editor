@@ -1,7 +1,10 @@
-import { CustomField, Field } from "@measured/puck";
+import { AutoField, CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
 import { CTA } from "@yext/pages-components";
 import { pt } from "../../../utils/i18nPlatform.ts";
+import { TranslatableCTA, TranslatableString } from "@yext/visual-editor";
+import React, { useMemo } from "react";
+import { generateTranslatableConstantConfig } from "./Text.tsx";
 
 const linkTypeOptions = () => {
   return [
@@ -32,9 +35,11 @@ const linkTypeOptions = () => {
   ];
 };
 
-export const CTA_CONSTANT_CONFIG: CustomField<
-  { label: string; link: string; linkType: string }[]
-> = {
+export const CTA_CONSTANT_CONFIG: CustomField<{
+  label: string;
+  link: string;
+  linkType: string;
+}> = {
   type: "custom",
   render: ({ onChange, value }) => {
     return ConstantFields({
@@ -62,6 +67,56 @@ export const CTA_CONSTANT_CONFIG: CustomField<
   },
 };
 
+export const TRANSLATABLE_CTA_CONSTANT_CONFIG: CustomField<{
+  label: TranslatableString;
+  link: string;
+  linkType: string;
+}> = {
+  type: "custom",
+  render: ({ onChange, value }) => {
+    const labelField = useMemo(() => {
+      return generateTranslatableConstantConfig<TranslatableString | undefined>(
+        {
+          key: "label",
+          options: {
+            defaultValue: "Label",
+          },
+        },
+        "text"
+      );
+    }, []);
+
+    const constantFields = ConstantFields({
+      onChange: onChange,
+      value: value,
+      fields: [
+        {
+          label: pt("Link", "Link"),
+          field: "link",
+          fieldType: "text",
+        },
+        {
+          label: pt("linkType", "Link Type"),
+          field: "linkType",
+          fieldType: "select",
+          options: linkTypeOptions(),
+        },
+      ],
+    });
+
+    return (
+      <div className={"ve-mt-4"}>
+        <AutoField
+          field={labelField}
+          value={value.label}
+          onChange={(newValue) => onChange({ ...value, label: newValue })}
+        />
+        {constantFields}
+      </div>
+    );
+  },
+};
+
 // Fields for CTA with labels
 export const ctaFields = (): Field<CTA | undefined> => {
   return {
@@ -72,6 +127,38 @@ export const ctaFields = (): Field<CTA | undefined> => {
         label: pt("label", "Label"),
         type: "text",
       },
+      link: {
+        label: pt("Link", "Link"),
+        type: "text",
+      },
+      linkType: {
+        label: pt("linkType", "Link Type"),
+        type: "select",
+        options: linkTypeOptions(),
+      },
+    },
+  };
+};
+
+// Fields for TranslatableCTA with labels
+export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
+  const labelField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+      {
+        key: "label",
+        options: {
+          defaultValue: "Label",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  return {
+    type: "object",
+    label: pt("Call To Action"),
+    objectFields: {
+      label: labelField,
       link: {
         label: pt("Link", "Link"),
         type: "text",
