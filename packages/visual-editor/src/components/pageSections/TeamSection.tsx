@@ -112,6 +112,8 @@ const PersonCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
       <Background background={backgroundColor} className="flex p-8 gap-6">
@@ -134,10 +136,14 @@ const PersonCard = ({
                   : "span"
               }
             >
-              {person.name}
+              {resolveTranslatableString(person.name, i18n.language)}
             </Heading>
           )}
-          {person.title && <Body variant="base">{person.title}</Body>}
+          {person.title && (
+            <Body variant="base">
+              {resolveTranslatableString(person.title, i18n.language)}
+            </Body>
+          )}
         </div>
       </Background>
       <hr className="border" />
@@ -177,7 +183,10 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${key}`}
-                label={person.cta.label}
+                label={resolveTranslatableString(
+                  person.cta.label,
+                  i18n.language
+                )}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
                 variant="link"

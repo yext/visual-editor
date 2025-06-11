@@ -71,7 +71,7 @@ type YextSelectField = YextBaseField & {
 type YextTextField = YextBaseField & {
   type: "text";
   isMultiline?: boolean;
-  isTranslatable?: boolean;
+  disallowTranslation?: boolean;
 };
 
 // YextOptionalNumberField has same functionality as OptionalNumberField
@@ -118,7 +118,7 @@ export function YextField<T, U>(
       label: fieldName,
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
-      isTranslatable: config.isTranslatable,
+      disallowTranslation: config.disallowTranslation,
     });
   }
 

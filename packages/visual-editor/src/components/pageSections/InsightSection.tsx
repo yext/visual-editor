@@ -19,11 +19,11 @@ import {
   InsightStruct,
   Timestamp,
   ComponentFields,
-  MaybeRTF,
   resolveTranslatableString,
   TranslatableString,
   msg,
   pt,
+  resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -112,6 +112,8 @@ const InsightCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <Background
       className="rounded h-full flex flex-col"
@@ -133,7 +135,9 @@ const InsightCard = ({
             <div
               className={`flex ${insight.category && insight.publishTime && `gap-4`}`}
             >
-              <Body>{insight.category}</Body>
+              <Body>
+                {resolveTranslatableString(insight.category, i18n.language)}
+              </Body>
               {insight.category && insight.publishTime && <Body>|</Body>}
               {insight.publishTime && (
                 <Timestamp date={insight.publishTime} hideTimeZone={true} />
@@ -149,16 +153,16 @@ const InsightCard = ({
                   : "span"
               }
             >
-              {insight.name}
+              {resolveTranslatableString(insight.name, i18n.language)}
             </Heading>
           )}
-          <MaybeRTF data={insight.description} />
+          {resolveTranslatableRTF2(insight.description, i18n.language)}
         </div>
         {insight.cta && (
           <CTA
             eventName={`cta${key}`}
             variant={"link"}
-            label={insight.cta.label}
+            label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
             className="mt-auto"

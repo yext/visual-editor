@@ -1,6 +1,14 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import {
+  FAQSectionType,
+  FAQStruct,
+  TranslatableRTF2,
+  TranslatableString,
+} from "../../../types/types.ts";
+import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { useMemo } from "react";
+import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { resolveTranslatableString } from "@yext/visual-editor";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -26,20 +34,48 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
 };
 
 const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
+  const { t, i18n } = usePlatformTranslation();
+
+  const questionField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString>(
+      {
+        key: "question",
+        options: {
+          defaultValue: "Question",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  const answerField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableRTF2>(
+      {
+        key: "answer",
+        options: {
+          defaultValue: "Answer",
+        },
+      },
+      "textarea"
+    );
+  }, []);
+
   return {
     label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
-      question: {
-        type: "text",
-        label: pt("question", "Question"),
-      },
-      answer: {
-        type: "textarea",
-        label: pt("answer", "Answer"),
-      },
+      question: questionField,
+      answer: answerField,
     },
-    getItemSummary: (item, i) =>
-      item.question ? item.question : pt("FAQ", "FAQ") + " " + ((i ?? 0) + 1),
+    getItemSummary: (item, i): string => {
+      const translation = resolveTranslatableString(
+        item.question,
+        i18n.language
+      );
+      if (translation) {
+        return translation;
+      }
+      return t("faq", "FAQ") + " " + ((i ?? 0) + 1);
+    },
   };
 };

@@ -1,7 +1,9 @@
-import { CustomField, Field } from "@measured/puck";
+import { AutoField, CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
-import { CTA } from "@yext/pages-components";
 import { pt } from "../../../utils/i18nPlatform.ts";
+import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
+import React, { useMemo } from "react";
+import { generateTranslatableConstantConfig } from "./Text.tsx";
 
 const linkTypeOptions = () => {
   return [
@@ -32,20 +34,25 @@ const linkTypeOptions = () => {
   ];
 };
 
-export const CTA_CONSTANT_CONFIG: CustomField<
-  { label: string; link: string; linkType: string }[]
-> = {
+export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   type: "custom",
   render: ({ onChange, value }) => {
-    return ConstantFields({
+    const labelField = useMemo(() => {
+      return generateTranslatableConstantConfig<TranslatableString | undefined>(
+        {
+          key: "label",
+          options: {
+            defaultValue: "Label",
+          },
+        },
+        "text"
+      );
+    }, []);
+
+    const constantFields = ConstantFields({
       onChange: onChange,
       value: value,
       fields: [
-        {
-          label: pt("label", "Label"),
-          field: "label",
-          fieldType: "text",
-        },
         {
           label: pt("Link", "Link"),
           field: "link",
@@ -59,19 +66,39 @@ export const CTA_CONSTANT_CONFIG: CustomField<
         },
       ],
     });
+
+    return (
+      <div className={"ve-mt-3"}>
+        <AutoField
+          field={labelField}
+          value={value.label}
+          onChange={(newValue) => onChange({ ...value, label: newValue })}
+        />
+        {constantFields}
+      </div>
+    );
   },
 };
 
-// Fields for CTA with labels
-export const ctaFields = (): Field<CTA | undefined> => {
+// Fields for TranslatableCTA with labels
+export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
+  const labelField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+      {
+        key: "label",
+        options: {
+          defaultValue: "Label",
+        },
+      },
+      "text"
+    );
+  }, []);
+
   return {
     type: "object",
     label: pt("Call To Action"),
     objectFields: {
-      label: {
-        label: pt("label", "Label"),
-        type: "text",
-      },
+      label: labelField,
       link: {
         label: pt("Link", "Link"),
         type: "text",

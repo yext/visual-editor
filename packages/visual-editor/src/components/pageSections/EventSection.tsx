@@ -21,9 +21,9 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  MaybeRTF,
-  TranslatableString,
+  resolveTranslatableRTF2,
   resolveTranslatableString,
+  TranslatableString,
   msg,
   pt,
 } from "@yext/visual-editor";
@@ -103,16 +103,17 @@ const eventSectionFields: Fields<EventSectionProps> = {
 };
 
 const EventCard = ({
-  key,
+  cardKey,
   event,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardKey: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       background={backgroundColor}
@@ -139,7 +140,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {event.title}
+            {resolveTranslatableString(event.title, i18n.language)}
           </Heading>
         )}
         {event.dateTime && (
@@ -149,11 +150,11 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        <MaybeRTF data={event.description} />
+        {resolveTranslatableRTF2(event.description, i18n.language)}
         {event.cta && (
           <CTA
-            eventName={`cta${key}`}
-            label={event.cta.label}
+            eventName={`cta${cardKey}`}
+            label={resolveTranslatableString(event.cta.label, i18n.language)}
             link={event.cta.link}
             linkType={event.cta.linkType}
             variant="link"
@@ -200,6 +201,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
             {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
+                cardKey={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.headingLevel}

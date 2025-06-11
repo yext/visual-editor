@@ -1,29 +1,56 @@
-import { MaybeRTF, RTF2, TranslatableString } from "@yext/visual-editor";
+import {
+  MaybeRTF,
+  RTF2,
+  TranslatableRTF2,
+  TranslatableString,
+} from "@yext/visual-editor";
 import React from "react";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 
 /**
- * Converts a type TranslatableString to a type that can be viewed on the page
+ * Converts a type TranslatableString to a string
  * @param translatableString
  * @param locale
  */
 export const resolveTranslatableString = (
   translatableString?: TranslatableString,
   locale?: string
-): string | React.ReactElement => {
+): string => {
   locale = locale ?? "en";
   if (!translatableString) {
     return "";
   }
 
-  if (typeof translatableString === "string" || isRTF2(translatableString)) {
-    return toStringOrElement(translatableString);
+  if (typeof translatableString === "string") {
+    return translatableString;
   }
 
   if (typeof translatableString === "object") {
     if (locale in translatableString) {
-      return toStringOrElement(translatableString[locale]);
+      return translatableString[locale];
     }
+  }
+
+  return "";
+};
+
+/**
+ * Converts a type TranslatableRTF2 to a type that can be viewed on the page
+ * @param translatableRTF2
+ * @param locale
+ */
+export const resolveTranslatableRTF2 = (
+  translatableRTF2?: TranslatableRTF2,
+  locale: string = "en"
+): string | React.ReactElement => {
+  if (!translatableRTF2) return "";
+
+  if (typeof translatableRTF2 === "string" || isRTF2(translatableRTF2)) {
+    return toStringOrElement(translatableRTF2);
+  }
+
+  const localizedValue = translatableRTF2[locale];
+  if (localizedValue) {
+    return toStringOrElement(localizedValue);
   }
 
   return "";
@@ -36,9 +63,15 @@ export const resolveTranslatableString = (
  * @return string to be displayed in the editor input
  */
 export function getDisplayValue(
-  translatableString: TranslatableString,
-  locale: string
+  translatableString?: TranslatableRTF2,
+  locale?: string
 ): string {
+  if (!translatableString) {
+    return "";
+  }
+  if (!locale) {
+    locale = "en";
+  }
   if (typeof translatableString === "string") {
     return translatableString;
   }
@@ -60,43 +93,6 @@ export function getDisplayValue(
   return "";
 }
 
-/**
- * Takes in the document and returns the set of locales using document.locale, document._pageset.scope.locales, and templateMetadata.locales
- * @param document
- */
-export function resolveLocales(document: any): string[] {
-  const localesSet: Set<string> = new Set<string>();
-  if (document?.locale) {
-    localesSet.add(document.locale);
-  }
-
-  const templateMetadata = useTemplateMetadata();
-  templateMetadata.locales.forEach((locale: string) => {
-    localesSet.add(locale);
-  });
-
-  if (localesSet.size == 0) {
-    localesSet.add(document?.locale);
-  }
-
-  if (typeof document?._pageset === "string") {
-    const parsed = JSON.parse(document._pageset);
-    if (Array.isArray(parsed?.scope?.locales)) {
-      parsed?.scope?.locales?.forEach((locale: any) => {
-        if (typeof locale === "string") {
-          localesSet.add(locale);
-        }
-      });
-    }
-  }
-
-  if (localesSet.size == 0) {
-    localesSet.add("en");
-  }
-
-  return Array.from(localesSet);
-}
-
 function rtf2ToString(rtf: RTF2): string {
   return rtf.html || rtf.json || "";
 }
@@ -115,7 +111,7 @@ function isRTF2(value: unknown): value is RTF2 {
  */
 function toStringOrElement(value: string | RTF2): string | React.ReactElement {
   if (isRTF2(value)) {
-    return MaybeRTF({ data: value }) ?? "";
+    return <MaybeRTF data={value} />;
   }
-  return value?.toString() ?? "";
+  return value ?? "";
 }

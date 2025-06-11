@@ -254,7 +254,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 <CTA
                   eventName={`primaryCta`}
                   variant={styles?.primaryCTA}
-                  label={resolvedHero.primaryCta.label}
+                  label={resolveTranslatableString(
+                    resolvedHero.primaryCta.label,
+                    i18n.language
+                  )}
                   link={resolvedHero.primaryCta.link}
                   linkType={resolvedHero.primaryCta.linkType}
                   className={"py-3"}
@@ -272,7 +275,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 <CTA
                   eventName={`secondaryCta`}
                   variant={styles?.secondaryCTA}
-                  label={resolvedHero.secondaryCta.label}
+                  label={resolveTranslatableString(
+                    resolvedHero.secondaryCta.label,
+                    i18n.language
+                  )}
                   link={resolvedHero.secondaryCta.link}
                   linkType={resolvedHero.secondaryCta.linkType}
                   className={"py-3"}
