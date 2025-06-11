@@ -11,6 +11,7 @@ import {
   CTA,
   CTAProps,
   YextField,
+  pt,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -53,12 +54,12 @@ const GetDirectionsComponent = ({
 
   return (
     <EntityField
-      displayName={t("getDirections", "Get Directions")}
+      displayName={pt("getDirections", "Get Directions")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
       <CTA
-        label={"Get Directions"}
+        label={t("getDirections", "Get Directions")}
         link={searchQuery}
         linkType={"DRIVING_DIRECTIONS"}
         variant={variant}
