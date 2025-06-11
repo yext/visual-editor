@@ -1,74 +1,62 @@
 import { Migration } from "../../utils/migrate.ts";
 
+const updateHeadingStructure = (oldProps: any) => {
+  if (!oldProps?.styles) {
+    return {
+      ...oldProps,
+      styles: {
+        heading: {
+          level: 2,
+          align: "left",
+        },
+      },
+    };
+  }
+
+  const { headingLevel, headingAlign, ...restStyles } = oldProps.styles;
+  return {
+    ...oldProps,
+    styles: {
+      ...restStyles,
+      heading: {
+        level: headingLevel ?? 2,
+        align: headingAlign ?? "left",
+      },
+    },
+  };
+};
+
 export const addHeadingAlignmentMigration: Migration = {
   ProductSection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
   },
   EventSection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
   },
   FAQSection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
   },
   PhotoGallerySection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
   },
   TeamSection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
   },
   InsightSection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
   },
   CoreInfoSection: {
     action: "updated",
-    propTransformation: (oldProps) => ({
-      ...oldProps,
-      styles: {
-        ...oldProps.styles,
-        headingAlign: "left",
-      },
-    }),
+    propTransformation: updateHeadingStructure,
+  },
+  NearbyLocationsSection: {
+    action: "updated",
+    propTransformation: updateHeadingStructure,
   },
 };

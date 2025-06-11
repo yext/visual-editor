@@ -38,8 +38,10 @@ export interface EventSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
-    headingAlign: "left" | "center" | "right";
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -85,14 +87,19 @@ const eventSectionFields: Fields<EventSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
-        type: "radio",
-        options: ThemeOptions.ALIGNMENT,
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -181,25 +188,29 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     i18n.language
   );
 
-  const justifyClass = {
-    left: "justify-start",
-    center: "justify-center",
-    right: "justify-end",
-  }[styles.headingAlign];
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className={`flex ${justifyClass}`}>
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
@@ -216,7 +227,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 cardKey={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -246,8 +257,10 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
-      headingAlign: "left",
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "eventSection",

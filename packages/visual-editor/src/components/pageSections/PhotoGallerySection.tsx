@@ -55,8 +55,10 @@ export interface PhotoGallerySectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
-    headingAlign: "left" | "center" | "right";
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
     imageStyle: Omit<ImageWrapperProps, "image">;
   };
   liveVisibility: boolean;
@@ -100,14 +102,19 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
-        type: "radio",
-        options: ThemeOptions.ALIGNMENT,
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
       imageStyle: YextField(msg("fields.imageStyle", "Image Style"), {
         type: "object",
@@ -183,7 +190,7 @@ const PhotoGallerySectionComponent = ({
     left: "justify-start",
     center: "justify-center",
     right: "justify-end",
-  }[styles.headingAlign];
+  }[styles.heading.align];
 
   return (
     <PageSection
@@ -198,7 +205,7 @@ const PhotoGallerySectionComponent = ({
           constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className={`flex ${justifyClass}`}>
-            <Heading level={styles.headingLevel}>{sectionHeading}</Heading>
+            <Heading level={styles.heading.level}>{sectionHeading}</Heading>
           </div>
         </EntityField>
       )}
@@ -293,8 +300,10 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
-      headingAlign: "left",
+      heading: {
+        level: 2,
+        align: "left",
+      },
       imageStyle: {
         layout: "fixed",
         height: 570,

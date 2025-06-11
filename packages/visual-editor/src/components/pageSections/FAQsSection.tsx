@@ -1,27 +1,28 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
+import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  useDocument,
-  resolveYextEntityField,
-  YextEntityField,
-  Body,
-  HeadingProps,
-  BackgroundStyle,
-  PageSection,
-  Heading,
   backgroundColors,
+  BackgroundStyle,
+  EntityField,
+  Heading,
+  HeadingLevel,
+  resolveYextEntityField,
+  PageSection,
+  useDocument,
+  YextEntityField,
   YextField,
   VisibilityWrapper,
-  EntityField,
-  FAQSectionType,
-  ComponentFields,
   TranslatableString,
   resolveTranslatableString,
   msg,
   pt,
   ThemeOptions,
+  Body,
+  FAQSectionType,
+  ComponentFields,
   resolveTranslatableRTF2,
+  FAQStruct,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -37,8 +38,10 @@ export interface FAQSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    headingLevel: HeadingProps["level"];
-    headingAlign: "left" | "center" | "right";
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   liveVisibility: boolean;
 }
@@ -73,14 +76,19 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
-        type: "radio",
-        options: ThemeOptions.ALIGNMENT,
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -105,11 +113,13 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 
-  const justifyClass = {
-    left: "justify-start",
-    center: "justify-center",
-    right: "justify-end",
-  }[styles.headingAlign];
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
@@ -118,12 +128,14 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
-          fieldId={data?.heading.field}
-          constantValueEnabled={data?.heading.constantValueEnabled}
+          displayName={pt("fields.heading", "Heading")}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className={`flex ${justifyClass}`}>
-            <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
@@ -134,15 +146,32 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
           <Accordion type="single" collapsible>
-            {resolvedFAQs?.faqs?.map((faqItem, index) => (
+            {resolvedFAQs?.faqs?.map((faqItem: FAQStruct, index: number) => (
               <AccordionItem value={index.toString()} key={index}>
                 <AccordionTrigger>
-                  <Body variant="lg" className="font-bold text-left">
-                    {resolveTranslatableString(faqItem.question, i18n.language)}
-                  </Body>
+                  <EntityField
+                    displayName={pt("fields.question", "Question")}
+                    fieldId={data.faqs.field}
+                    constantValueEnabled={data.faqs.constantValueEnabled}
+                  >
+                    <Body>
+                      {resolveTranslatableString(
+                        faqItem.question,
+                        i18n.language
+                      )}
+                    </Body>
+                  </EntityField>
                 </AccordionTrigger>
                 <AccordionContent>
-                  {resolveTranslatableRTF2(faqItem.answer, i18n.language)}
+                  <EntityField
+                    displayName={pt("fields.answer", "Answer")}
+                    fieldId={data.faqs.field}
+                    constantValueEnabled={data.faqs.constantValueEnabled}
+                  >
+                    <Body>
+                      {resolveTranslatableRTF2(faqItem.answer, i18n.language)}
+                    </Body>
+                  </EntityField>
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -172,8 +201,10 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      headingLevel: 2,
-      headingAlign: "left",
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     liveVisibility: true,
   },
