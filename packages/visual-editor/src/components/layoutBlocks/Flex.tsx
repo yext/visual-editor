@@ -8,6 +8,7 @@ import {
   ContentBlockCategory,
   YextField,
   VisibilityWrapper,
+  LayoutBlockCategory,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
@@ -55,7 +56,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
             alignItems,
             flexWrap: wrap,
           }}
-          allow={[...ContentBlockCategory]}
+          allow={[...ContentBlockCategory, ...LayoutBlockCategory]}
         />
       </Background>
     );

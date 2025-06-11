@@ -7,6 +7,7 @@ import {
   ContentBlockCategory,
   YextField,
   VisibilityWrapper,
+  LayoutBlockCategory,
 } from "@yext/visual-editor";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
@@ -59,7 +60,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
               <DropZone
                 className="flex flex-col w-full"
                 zone={`column-${idx}`}
-                allow={[...ContentBlockCategory]}
+                allow={[...ContentBlockCategory, ...LayoutBlockCategory]}
               />
             </div>
           ))}
