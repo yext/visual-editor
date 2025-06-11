@@ -5,7 +5,7 @@ import {
   TranslatableRTF2,
   TranslatableString,
 } from "../../../types/types.ts";
-import { ctaFields } from "./CallToAction.tsx";
+import { translatableCTAFields } from "./CallToAction.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { generateTranslatableConstantConfig } from "./Text.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
@@ -91,7 +91,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       name: nameField,
       category: categoryField,
       description: descriptionField,
-      cta: ctaFields(),
+      cta: translatableCTAFields(),
     },
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);

@@ -5,7 +5,7 @@ import {
   TranslatableRTF2,
   TranslatableString,
 } from "../../../types/types.ts";
-import { ctaFields } from "./CallToAction.tsx";
+import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
@@ -79,7 +79,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       title: titleField,
       dateTime: DateTimeSelector,
       description: descriptionField,
-      cta: ctaFields(),
+      cta: translatableCTAFields(),
     },
     getItemSummary: (item, i): string => {
       const translation = resolveTranslatableString(item.title, i18n.language);

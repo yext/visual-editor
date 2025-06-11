@@ -183,7 +183,10 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${key}`}
-                label={person.cta.label}
+                label={resolveTranslatableString(
+                  person.cta.label,
+                  i18n.language
+                )}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
                 variant="link"

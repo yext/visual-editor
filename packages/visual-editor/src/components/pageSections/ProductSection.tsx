@@ -158,7 +158,7 @@ const ProductCard = ({
           <CTA
             eventName={`cta${key}`}
             variant="secondary"
-            label={product.cta.label}
+            label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"

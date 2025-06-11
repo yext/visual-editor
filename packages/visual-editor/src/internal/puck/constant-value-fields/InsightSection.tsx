@@ -5,7 +5,7 @@ import {
   TranslatableRTF2,
   TranslatableString,
 } from "../../../types/types.ts";
-import { ctaFields } from "./CallToAction.tsx";
+import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
@@ -93,7 +93,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
       category: categoryField,
       publishTime: DateSelector,
       description: descriptionField,
-      cta: ctaFields(),
+      cta: translatableCTAFields(),
     },
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);

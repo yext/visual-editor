@@ -42,11 +42,13 @@ export function generateTranslatableConstantConfig<
       );
 
       if (!label) {
-        return autoField;
+        return <div className={"ve-pt-3"}>{autoField}</div>;
       }
 
       return (
-        <FieldLabel label={t(label.key, label.options)}>{autoField}</FieldLabel>
+        <FieldLabel label={t(label.key, label.options) + ` (${locale})`}>
+          {autoField}
+        </FieldLabel>
       );
     },
   };

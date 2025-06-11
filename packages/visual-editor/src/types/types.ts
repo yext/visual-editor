@@ -1,16 +1,21 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
 
+// A copy of CTAType that changes label from string to TranslatableString
+export type TranslatableCTA = Omit<CTAType, "label"> & {
+  label: TranslatableString;
+};
+
 export type HeroSectionType = {
   image?: ImageType;
-  primaryCta?: CTAType;
-  secondaryCta?: CTAType;
+  primaryCta?: TranslatableCTA;
+  secondaryCta?: TranslatableCTA;
 };
 
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
   description?: TranslatableRTF2;
-  cta?: CTAType;
+  cta?: TranslatableCTA;
 };
 
 export type ProductSectionType = {
@@ -22,7 +27,7 @@ export type ProductStruct = {
   name?: TranslatableString;
   description?: TranslatableRTF2;
   category?: TranslatableString;
-  cta?: CTAType;
+  cta?: TranslatableCTA;
 };
 
 export type EventSectionType = {
@@ -34,7 +39,7 @@ export type EventStruct = {
   title?: TranslatableString;
   dateTime?: string;
   description?: TranslatableRTF2;
-  cta?: CTAType;
+  cta?: TranslatableCTA;
 };
 
 export type FAQSectionType = {
@@ -66,7 +71,7 @@ export type InsightStruct = {
   category?: TranslatableString;
   publishTime?: string;
   description?: TranslatableRTF2;
-  cta?: CTAType;
+  cta?: TranslatableCTA;
 };
 
 export type TeamSectionType = {
@@ -79,7 +84,7 @@ export type PersonStruct = {
   title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
-  cta?: CTAType;
+  cta?: TranslatableCTA;
 };
 
 export type TranslatableString = string | Record<string, string>;
