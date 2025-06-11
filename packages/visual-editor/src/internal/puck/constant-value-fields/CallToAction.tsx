@@ -1,8 +1,7 @@
 import { AutoField, CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
-import { CTA } from "@yext/pages-components";
 import { pt } from "../../../utils/i18nPlatform.ts";
-import { TranslatableCTA, TranslatableString } from "@yext/visual-editor";
+import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
 import { generateTranslatableConstantConfig } from "./Text.tsx";
 
@@ -67,11 +66,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<{
   },
 };
 
-export const TRANSLATABLE_CTA_CONSTANT_CONFIG: CustomField<{
-  label: TranslatableString;
-  link: string;
-  linkType: string;
-}> = {
+export const TRANSLATABLE_CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const labelField = useMemo(() => {
@@ -115,29 +110,6 @@ export const TRANSLATABLE_CTA_CONSTANT_CONFIG: CustomField<{
       </div>
     );
   },
-};
-
-// Fields for CTA with labels
-export const ctaFields = (): Field<CTA | undefined> => {
-  return {
-    type: "object",
-    label: pt("Call To Action"),
-    objectFields: {
-      label: {
-        label: pt("label", "Label"),
-        type: "text",
-      },
-      link: {
-        label: pt("Link", "Link"),
-        type: "text",
-      },
-      linkType: {
-        label: pt("linkType", "Link Type"),
-        type: "select",
-        options: linkTypeOptions(),
-      },
-    },
-  };
 };
 
 // Fields for TranslatableCTA with labels
