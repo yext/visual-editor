@@ -5,7 +5,7 @@ import {
   CTA as CTAType,
   ComplexImageType,
 } from "@yext/pages-components";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
@@ -48,13 +48,16 @@ const headerFields: Fields<HeaderProps> = {
     type: "number",
     min: 0,
   }),
-  enableLanguageSelector: YextField("Enable Language Selector", {
-    type: "radio",
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
+  enableLanguageSelector: YextField(
+    msg("fields.enableLanguageSelector", "Enable Language Selector"),
+    {
+      type: "radio",
+      options: [
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+      ],
+    }
+  ),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
