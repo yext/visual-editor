@@ -38,7 +38,6 @@ import {
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
 import { TeamSection, TeamSectionProps } from "./pageSections/TeamSection.tsx";
-import { Collection, CollectionProps } from "./layoutBlocks/Collection.tsx";
 import { Flex, FlexProps } from "./layoutBlocks/Flex.tsx";
 import { Grid, GridProps } from "./layoutBlocks/Grid.tsx";
 import { Address, AddressProps } from "./contentBlocks/Address.tsx";
@@ -63,14 +62,6 @@ import { Header, HeaderProps } from "./header/Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
-import { EventCardProps, EventCard } from "./cards/EventCard.tsx";
-import { ProductCardProps, ProductCard } from "./cards/ProductCard.tsx";
-import { PersonCardProps, PersonCard } from "./cards/PersonCard.tsx";
-import { InsightCardProps, InsightCard } from "./cards/InsightCard.tsx";
-import {
-  TestimonialCardProps,
-  TestimonialCard,
-} from "./cards/TestimonialCard.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,
@@ -155,13 +146,11 @@ export const LocatorCategory = Object.keys(
 /** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 
 export interface LayoutBlockCategoryProps {
-  Collection: CollectionProps;
   Flex: FlexProps;
   Grid: GridProps;
 }
 
 export const LayoutBlockCategoryComponents = {
-  Collection,
   Flex,
   Grid,
 };
@@ -169,26 +158,6 @@ export const LayoutBlockCategoryComponents = {
 export const LayoutBlockCategory = Object.keys(
   LayoutBlockCategoryComponents
 ) as (keyof LayoutBlockCategoryProps)[];
-
-export interface CardCategoryProps {
-  EventCard: EventCardProps;
-  PersonCard: PersonCardProps;
-  InsightCard: InsightCardProps;
-  ProductCard: ProductCardProps;
-  TestimonialCard: TestimonialCardProps;
-}
-
-export const CardCategoryComponents = {
-  EventCard,
-  PersonCard,
-  InsightCard,
-  ProductCard,
-  TestimonialCard,
-};
-
-export const CardCategory = Object.keys(
-  CardCategoryComponents
-) as (keyof CardCategoryProps)[];
 
 export interface ContentBlockCategoryProps {
   Address: AddressProps;

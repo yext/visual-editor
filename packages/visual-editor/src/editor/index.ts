@@ -2,10 +2,8 @@ export { Editor } from "./Editor.tsx";
 export { EntityField } from "./EntityField.tsx";
 export {
   YextEntityFieldSelector,
-  YextCollectionSubfieldSelector,
   type RenderYextEntityFieldSelectorProps,
   type YextEntityField,
-  type YextCollection,
 } from "./YextEntityFieldSelector.tsx";
 export {
   OptionalNumberField,

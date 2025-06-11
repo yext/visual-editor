@@ -51,16 +51,10 @@ export type YextEntityField<T> = {
   disallowTranslation?: boolean;
 };
 
-export type YextCollection = {
-  items: YextEntityField<Array<any>>;
-  limit: string | number;
-};
-
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
     filter: RenderEntityFieldFilter<T>;
-    isCollection?: boolean;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
@@ -185,11 +179,10 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
-            isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
           />
-          {value?.constantValueEnabled && !props.isCollection && (
+          {value?.constantValueEnabled && (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
@@ -211,87 +204,28 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   };
 };
 
-/**
- * Allows the user to select an entity subfield from the document and set a constant value.
- */
-export const YextCollectionSubfieldSelector = <
-  T extends Record<string, any>,
-  U,
->(
-  props: RenderYextEntityFieldSelectorProps<T>
-): Field<YextEntityField<U>> => {
-  // If the field is not part of a collection, redirect to the normal entity field selector
-  if (!props.isCollection) {
-    return YextEntityFieldSelector({ ...props });
-  }
-
-  return {
-    type: "custom",
-    render: ({ value, onChange }: RenderProps) => {
-      const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
-        onChange({
-          field: value?.field ?? "",
-          constantValue: value?.constantValue ?? "",
-          constantValueEnabled: constantValueEnabled,
-        });
-      };
-
-      return (
-        <>
-          <ConstantValueModeToggler
-            fieldTypeFilter={props.filter.types ?? []}
-            constantValueEnabled={value?.constantValueEnabled}
-            toggleConstantValueEnabled={toggleConstantValueEnabled}
-            isCollection={!!props.isCollection}
-            disableConstantValue={props.disableConstantValueToggle}
-            label={pt(props.label)}
-          />
-          {value?.constantValueEnabled ? (
-            <ConstantValueInput<T>
-              onChange={onChange}
-              value={value}
-              filter={props.filter}
-              disallowTranslation={props.disallowTranslation}
-            />
-          ) : (
-            <EntityFieldInput<T>
-              className="ve-pt-3"
-              onChange={onChange}
-              value={value}
-              filter={props.filter}
-            />
-          )}
-        </>
-      );
-    },
-  };
-};
-
 export const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
-  isCollection,
   disableConstantValue,
   label,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
-  isCollection?: boolean;
   disableConstantValue?: boolean;
   label: string;
 }) => {
   // If disableConstantValue is true, constantValueInputSupported is always false.
-  // Else if isCollection or a supported field type, constantValueInputSupported is true
+  // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
-    (isCollection ||
-      fieldTypeFilter.some(
-        (fieldType) =>
-          Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
-          Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-      ));
+    fieldTypeFilter.some(
+      (fieldType) =>
+        Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
+        Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
+    );
 
   return (
     <div className="ve-w-full ve-flex ve-gap-3">
