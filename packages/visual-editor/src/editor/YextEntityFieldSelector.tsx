@@ -9,7 +9,8 @@ import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import {
   TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_RTF2_CONSTANT_CONFIG,
+  TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import {
@@ -71,12 +72,12 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
   "type.cta": CTA_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
+  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
+  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
+  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
+  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
+  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
@@ -87,8 +88,8 @@ const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
 };
 
 const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
 };
 
 const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {

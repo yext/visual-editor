@@ -5,7 +5,10 @@ export {
   resolveYextStructField,
   handleResolveFieldsForCollections,
 } from "./resolveYextEntityField.ts";
-export { resolveTranslatableString } from "./resolveTranslatableString.ts";
+export {
+  resolveTranslatableRTF2,
+  resolveTranslatableString,
+} from "./resolveTranslatableString.tsx";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {

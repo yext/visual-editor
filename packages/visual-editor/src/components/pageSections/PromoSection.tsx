@@ -20,6 +20,7 @@ import {
   ComponentFields,
   EntityField,
   resolveTranslatableString,
+  resolveTranslatableRTF2,
   msg,
   pt,
 } from "@yext/visual-editor";
@@ -139,7 +140,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          {resolveTranslatableString(resolvedPromo?.description, i18n.language)}
+          {resolveTranslatableRTF2(resolvedPromo?.description, i18n.language)}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField

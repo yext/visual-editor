@@ -9,7 +9,7 @@ export type HeroSectionType = {
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
-  description?: TranslatableString;
+  description?: TranslatableRTF2;
   cta?: CTAType;
 };
 
@@ -19,9 +19,9 @@ export type ProductSectionType = {
 
 export type ProductStruct = {
   image?: ImageType;
-  name?: string;
-  description?: RTF2 | string;
-  category?: string;
+  name?: TranslatableString;
+  description?: TranslatableRTF2;
+  category?: TranslatableString;
   cta?: CTAType;
 };
 
@@ -31,9 +31,9 @@ export type EventSectionType = {
 
 export type EventStruct = {
   image?: ImageType;
-  title?: string;
+  title?: TranslatableString;
   dateTime?: string;
-  description?: RTF2 | string;
+  description?: TranslatableRTF2;
   cta?: CTAType;
 };
 
@@ -42,8 +42,8 @@ export type FAQSectionType = {
 };
 
 export type FAQStruct = {
-  question: string;
-  answer: RTF2 | string;
+  question: TranslatableString;
+  answer: TranslatableRTF2;
 };
 
 export type TestimonialSectionType = {
@@ -51,8 +51,8 @@ export type TestimonialSectionType = {
 };
 
 export type TestimonialStruct = {
-  description?: RTF2 | string;
-  contributorName?: string;
+  description?: TranslatableRTF2;
+  contributorName?: TranslatableString;
   contributionDate?: string;
 };
 
@@ -62,10 +62,10 @@ export type InsightSectionType = {
 
 export type InsightStruct = {
   image?: ImageType;
-  name?: string;
-  category?: string;
+  name?: TranslatableString;
+  category?: TranslatableString;
   publishTime?: string;
-  description?: RTF2 | string;
+  description?: TranslatableRTF2;
   cta?: CTAType;
 };
 
@@ -75,16 +75,16 @@ export type TeamSectionType = {
 
 export type PersonStruct = {
   headshot?: ImageType;
-  name?: string;
-  title?: string;
+  name?: TranslatableString;
+  title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
   cta?: CTAType;
 };
 
-export type TranslatableString =
-  | (string | RTF2)
-  | Record<string, string | RTF2>;
+export type TranslatableString = string | Record<string, string>;
+
+export type TranslatableRTF2 = (string | RTF2) | Record<string, string | RTF2>;
 
 export type RTF2 = {
   html?: string;

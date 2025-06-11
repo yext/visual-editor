@@ -2,9 +2,14 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   TestimonialSectionType,
   TestimonialStruct,
+  TranslatableRTF2,
+  TranslatableString,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { useMemo } from "react";
+import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { resolveTranslatableString } from "@yext/visual-editor";
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -33,22 +38,50 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
     },
   };
 
-const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => ({
-  label: pt("arrayField", "Array Field"),
-  type: "array",
-  arrayFields: {
-    description: {
-      type: "textarea",
-      label: pt("description", "Description"),
+const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
+  const { t, i18n } = usePlatformTranslation();
+
+  const contributorNameField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+      {
+        key: "contributorName",
+        options: {
+          defaultValue: "Contributor Name",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  const descriptionField = useMemo(() => {
+    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
+      {
+        key: "description",
+        options: {
+          defaultValue: "Description",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  return {
+    label: t("arrayField", "Array Field"),
+    type: "array",
+    arrayFields: {
+      description: descriptionField,
+      contributorName: contributorNameField,
+      contributionDate: DateSelector,
     },
-    contributorName: {
-      type: "text",
-      label: pt("contributorName", "Contributor Name"),
+    getItemSummary: (item, i) => {
+      const translation = resolveTranslatableString(
+        item.contributorName,
+        i18n.language
+      );
+      if (translation) {
+        return translation;
+      }
+      return t("testimonial", "Testimonial") + " " + ((i ?? 0) + 1);
     },
-    contributionDate: DateSelector,
-  },
-  getItemSummary: (item, i) =>
-    item.contributorName
-      ? item.contributorName
-      : pt("testimonial", "Testimonial") + " " + ((i ?? 0) + 1),
-});
+  };
+};
