@@ -31,6 +31,7 @@ import {
   HoursTableAtom,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -53,6 +54,7 @@ export interface CoreInfoSectionProps {
   styles: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
+    headingAlign: "left" | "center" | "right";
     info: {
       showGetDirectionsLink: boolean;
       phoneFormat: "domestic" | "international";
@@ -184,6 +186,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
+      }),
       info: YextField(msg("fields.infoColumn", "Info Column"), {
         type: "object",
         objectFields: {
@@ -309,6 +315,12 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     additionalHoursText: string;
   };
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.headingAlign];
+
   return (
     <PageSection
       className={`flex flex-col md:flex-row justify-between w-full gap-8 ${
@@ -329,7 +341,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId={data.info.headingText.field}
             constantValueEnabled={data.info.headingText.constantValueEnabled}
           >
-            <Heading level={styles.headingLevel}>{addressHeadingText}</Heading>
+            <div className={`flex ${justifyClass}`}>
+              <Heading level={styles.headingLevel}>
+                {addressHeadingText}
+              </Heading>
+            </div>
           </EntityField>
         )}
         <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
@@ -604,6 +620,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
     styles: {
       headingLevel: 3,
       backgroundColor: backgroundColors.background1.value,
+      headingAlign: "left",
       info: {
         showGetDirectionsLink: true,
         phoneFormat: "domestic",

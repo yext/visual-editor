@@ -21,6 +21,7 @@ import {
   MaybeRTF,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -37,6 +38,7 @@ export interface FAQSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     headingLevel: HeadingProps["level"];
+    headingAlign: "left" | "center" | "right";
   };
   liveVisibility: boolean;
 }
@@ -49,9 +51,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         msg("fields.sectionHeading", "Section Heading"),
         {
           type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
+          filter: { types: ["type.string"] },
         }
       ),
       faqs: YextField(msg("fields.faqs", "FAQs"), {
@@ -78,6 +78,10 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
+      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -86,7 +90,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
+        { label: msg("fields.options.hide", "Hide"), value: true },
       ],
     }
   ),
@@ -101,6 +105,12 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.headingAlign];
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -112,7 +122,9 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           fieldId={data?.heading.field}
           constantValueEnabled={data?.heading.constantValueEnabled}
         >
-          <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
+          </div>
         </EntityField>
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
@@ -161,6 +173,7 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background2.value,
       headingLevel: 2,
+      headingAlign: "left",
     },
     liveVisibility: true,
   },

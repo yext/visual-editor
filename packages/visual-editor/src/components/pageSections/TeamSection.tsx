@@ -23,6 +23,7 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -33,6 +34,7 @@ export interface TeamSectionProps {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
+    headingAlign: "left" | "center" | "right";
   };
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -86,6 +88,10 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
+      }),
+      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
       }),
     },
   }),
@@ -199,6 +205,12 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     i18n.language
   );
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.headingAlign];
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -210,7 +222,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
+          <div className={`flex ${justifyClass}`}>
             <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
@@ -258,6 +270,7 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
+      headingAlign: "left",
     },
     analytics: {
       scope: "teamSection",

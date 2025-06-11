@@ -26,6 +26,7 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -38,6 +39,7 @@ export interface EventSectionProps {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
+    headingAlign: "left" | "center" | "right";
   };
   analytics?: {
     scope?: string;
@@ -87,6 +89,10 @@ const eventSectionFields: Fields<EventSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
+      }),
+      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
       }),
     },
   }),
@@ -174,6 +180,12 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
     i18n.language
   );
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.headingAlign];
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -185,7 +197,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
+          <div className={`flex ${justifyClass}`}>
             <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
@@ -233,6 +245,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
       headingLevel: 2,
+      headingAlign: "left",
     },
     analytics: {
       scope: "eventSection",

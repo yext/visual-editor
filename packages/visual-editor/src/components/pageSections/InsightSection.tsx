@@ -24,6 +24,7 @@ import {
   TranslatableString,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -37,6 +38,7 @@ export interface InsightSectionProps {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
     headingLevel: HeadingLevel;
+    headingAlign: "left" | "center" | "right";
   };
   analytics?: {
     scope?: string;
@@ -86,6 +88,10 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
+      }),
+      headingAlign: YextField(msg("fields.headingAlign", "Heading Align"), {
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
       }),
     },
   }),
@@ -178,21 +184,27 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
     i18n.language
   );
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.headingAlign];
+
   return (
     <PageSection
       background={styles.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
-        <div className="text-center">
-          <EntityField
-            displayName={pt("fields.headingText", "Heading Text")}
-            fieldId={data.heading.field}
-            constantValueEnabled={data.heading.constantValueEnabled}
-          >
+        <EntityField
+          displayName={pt("fields.headingText", "Heading Text")}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
+        >
+          <div className={`flex ${justifyClass}`}>
             <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
-          </EntityField>
-        </div>
+          </div>
+        </EntityField>
       )}
       {resolvedInsights?.insights && (
         <EntityField
@@ -217,14 +229,9 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: msg("components.insightsSection", "Insights Section"),
+  label: msg("components.insightSection", "Insight Section"),
   fields: insightSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
-    },
     data: {
       heading: {
         field: "",
@@ -237,6 +244,12 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
           insights: [],
         },
       },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background2.value,
+      cardBackgroundColor: backgroundColors.background1.value,
+      headingLevel: 2,
+      headingAlign: "left",
     },
     analytics: {
       scope: "insightSection",
