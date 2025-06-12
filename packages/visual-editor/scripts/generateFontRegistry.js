@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import prettier from "prettier";
-import { disallowedFonts } from "./disallowedFonts.js";
+import { allowedFonts } from "./allowedFonts.js";
 
 const GOOGLE_FONTS_API_KEY = process.argv[2]; // Replace with your Google Fonts API key
 if (!GOOGLE_FONTS_API_KEY) {
@@ -92,12 +92,8 @@ const buildFontRegistry = async () => {
       continue;
     }
 
-    // Blacklist nonsense fonts by exact name (case insensitive)
-    if (
-      disallowedFonts.some(
-        (name) => font.family.toLowerCase() === name.toLowerCase()
-      )
-    ) {
+    // Allow fonts by exact name
+    if (!allowedFonts.includes(font.family)) {
       continue;
     }
 
