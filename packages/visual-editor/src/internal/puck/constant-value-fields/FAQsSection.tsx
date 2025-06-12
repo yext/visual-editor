@@ -7,8 +7,9 @@ import {
 } from "../../../types/types.ts";
 import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
+import { translatableStringConfig } from "../../../puck/config/translatableStringConfig.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { translatableRTF2Config } from "@yext/visual-editor";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -37,7 +38,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const questionField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString>(
+    return translatableStringConfig<TranslatableString>(
       {
         key: "question",
         options: {
@@ -49,7 +50,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   }, []);
 
   const answerField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableRTF2>(
+    return translatableRTF2Config<TranslatableRTF2>(
       {
         key: "answer",
         options: {

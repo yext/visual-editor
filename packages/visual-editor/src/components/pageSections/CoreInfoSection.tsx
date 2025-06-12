@@ -33,7 +33,7 @@ import {
   pt,
   ThemeOptions,
   usePlatformTranslation,
-  generateTranslatableConfig,
+  translatableStringConfig,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -113,7 +113,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: generateTranslatableConfig<TranslatableString>(
+              label: translatableStringConfig<TranslatableString>(
                 { key: "fields.label", options: { defaultValue: "Label" } },
                 "text"
               ),

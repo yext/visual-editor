@@ -7,9 +7,10 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
+import { translatableStringConfig } from "../../../puck/config/translatableStringConfig.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
+import { translatableRTF2Config } from "@yext/visual-editor";
 
 export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   {
@@ -39,7 +40,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return translatableStringConfig<TranslatableString | undefined>(
       {
         key: "name",
         options: {
@@ -51,7 +52,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const categoryField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return translatableStringConfig<TranslatableString | undefined>(
       {
         key: "category",
         options: {
@@ -63,7 +64,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableRTF2 | undefined>(
+    return translatableRTF2Config<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {
