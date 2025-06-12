@@ -1,8 +1,6 @@
-import {
-  TranslatableRTF2,
-  useDocument,
-  usePlatformTranslation,
-} from "@yext/visual-editor";
+import { TranslatableRTF2 } from "../types/types.ts";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 import { Translation } from "../internal/types/translation.ts";
 import { AutoField, CustomField, FieldLabel } from "@measured/puck";
 import { getDisplayValue } from "./resolveTranslatableString.tsx";
