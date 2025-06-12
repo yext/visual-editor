@@ -12,7 +12,7 @@ import React from "react";
  * @param fieldType text or textarea display mode
  */
 export function translatableStringConfig<
-  T extends TranslatableString | undefined,
+  T extends TranslatableString | undefined = TranslatableString,
 >(label?: Translation, fieldType?: "text" | "textarea"): CustomField<T> {
   return {
     type: "custom",

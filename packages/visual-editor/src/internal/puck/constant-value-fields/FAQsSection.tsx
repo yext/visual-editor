@@ -1,10 +1,5 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import {
-  FAQSectionType,
-  FAQStruct,
-  TranslatableRTF2,
-  TranslatableString,
-} from "../../../types/types.ts";
+import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
 import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { translatableStringConfig } from "../../../puck/config/translatableStringConfig.tsx";
@@ -38,7 +33,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const questionField = useMemo(() => {
-    return translatableStringConfig<TranslatableString>(
+    return translatableStringConfig(
       {
         key: "question",
         options: {
@@ -50,7 +45,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   }, []);
 
   const answerField = useMemo(() => {
-    return translatableRTF2Config<TranslatableRTF2>(
+    return translatableRTF2Config(
       {
         key: "answer",
         options: {

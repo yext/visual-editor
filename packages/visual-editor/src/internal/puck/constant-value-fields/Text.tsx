@@ -9,7 +9,7 @@ export const TEXT_CONSTANT_CONFIG: TextField = {
 };
 
 export const TRANSLATABLE_STRING_CONSTANT_CONFIG: CustomField<TranslatableString> =
-  translatableStringConfig<TranslatableString>(undefined, "text");
+  translatableStringConfig(undefined, "text");
 
 export const TRANSLATABLE_RTF2_CONSTANT_CONFIG: CustomField<TranslatableRTF2> =
-  translatableRTF2Config<TranslatableRTF2>(undefined, "text");
+  translatableRTF2Config(undefined, "text");

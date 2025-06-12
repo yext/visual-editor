@@ -113,7 +113,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: translatableStringConfig<TranslatableString>(
+              label: translatableStringConfig(
                 { key: "fields.label", options: { defaultValue: "Label" } },
                 "text"
               ),
