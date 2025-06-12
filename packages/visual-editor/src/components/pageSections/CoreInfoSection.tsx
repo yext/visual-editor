@@ -32,6 +32,8 @@ import {
   msg,
   pt,
   ThemeOptions,
+  usePlatformTranslation,
+  generateTranslatableConfig,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -39,7 +41,10 @@ export interface CoreInfoSectionProps {
     info: {
       headingText: YextEntityField<TranslatableString>;
       address: YextEntityField<AddressType>;
-      phoneNumbers: Array<{ number: YextEntityField<string>; label: string }>;
+      phoneNumbers: Array<{
+        number: YextEntityField<string>;
+        label: TranslatableString;
+      }>;
       emails: YextEntityField<string[]>;
     };
     hours: {
@@ -108,11 +113,22 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: YextField(msg("fields.label", "Label"), {
-                type: "text",
-              }),
+              label: generateTranslatableConfig<TranslatableString>(
+                { key: "fields.label", options: { defaultValue: "Label" } },
+                "text"
+              ),
             },
-            getItemSummary: (item) => item.label || pt("phone", "Phone"),
+            getItemSummary: (item): string => {
+              const { i18n } = usePlatformTranslation();
+              const translation = resolveTranslatableString(
+                item.label,
+                i18n.language
+              );
+              if (translation) {
+                return translation;
+              }
+              return pt("phone", "Phone");
+            },
           }),
           emails: YextField<any, string[]>(msg("fields.emails", "Emails"), {
             type: "entityField",
@@ -397,8 +413,13 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 return;
               }
 
+              const phoneLabel = resolveTranslatableString(
+                item.label,
+                i18n.language
+              );
+
               return (
-                <li key={item.label} className="flex gap-2 items-center">
+                <li key={phoneLabel} className="flex gap-2 items-center">
                   <EntityField
                     displayName={pt("fields.phoneNumber", "Phone Number")}
                     fieldId={item.number.field}
@@ -409,7 +430,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                         <PhoneAtom
                           eventName={`phone${idx}`}
                           backgroundColor={backgroundColors.background2.value}
-                          label={item.label}
+                          label={phoneLabel}
                           phoneNumber={resolvedNumber}
                           format={styles.info.phoneFormat}
                           includeHyperlink={styles.info.includePhoneHyperlink}
