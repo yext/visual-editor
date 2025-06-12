@@ -32,8 +32,8 @@ import {
   msg,
   pt,
   usePlatformTranslation,
+  generateTranslatableConfig,
 } from "@yext/visual-editor";
-import { generateTranslatableConstantConfig } from "../../internal/puck/constant-value-fields/Text.tsx";
 
 export interface CoreInfoSectionProps {
   data: {
@@ -109,7 +109,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: generateTranslatableConstantConfig<TranslatableString>(
+              label: generateTranslatableConfig<TranslatableString>(
                 { key: "fields.label", options: { defaultValue: "Label" } },
                 "text"
               ),

@@ -48,3 +48,4 @@ export {
   msg,
   pt,
 } from "./i18nPlatform.ts";
+export { generateTranslatableConfig } from "./generateTranslatableConfig.tsx";

@@ -8,8 +8,8 @@ import {
 import { DateSelector } from "../components/DateSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
-import { resolveTranslatableString } from "@yext/visual-editor";
+import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -42,7 +42,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const contributorNameField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+    return generateTranslatableConfig<TranslatableString | undefined>(
       {
         key: "contributorName",
         options: {
@@ -54,7 +54,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
+    return generateTranslatableConfig<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {

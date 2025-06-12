@@ -10,7 +10,7 @@ import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import React, { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -39,7 +39,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const titleField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
+    return generateTranslatableConfig<TranslatableString | undefined>(
       {
         key: "title",
         options: {
@@ -51,7 +51,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
+    return generateTranslatableConfig<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {
