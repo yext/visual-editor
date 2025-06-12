@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import prettier from "prettier";
+import { disallowedFonts } from "./disallowedFonts.js";
 
 const GOOGLE_FONTS_API_KEY = process.argv[2]; // Replace with your Google Fonts API key
 if (!GOOGLE_FONTS_API_KEY) {
@@ -18,16 +19,6 @@ const OUTPUT_FILE = path.join(
   "utils",
   "font_registry.js"
 );
-
-const BLACKLIST_NAMES = [
-  "Wingdings",
-  "Wingdings 2",
-  "Wingdings 3",
-  "Webdings",
-  "Symbol",
-  "Zapf Dingbats",
-  "Marlett",
-];
 
 const fallbackFromCategory = (category) => {
   switch (category) {
@@ -103,7 +94,7 @@ const buildFontRegistry = async () => {
 
     // Blacklist nonsense fonts by exact name (case insensitive)
     if (
-      BLACKLIST_NAMES.some(
+      disallowedFonts.some(
         (name) => font.family.toLowerCase() === name.toLowerCase()
       )
     ) {
