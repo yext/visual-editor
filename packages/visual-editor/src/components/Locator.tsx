@@ -622,7 +622,7 @@ const getPath = (location: Location, locale: string) => {
 
   const localePath = locale !== "en" ? `${locale}/` : "";
   const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
+    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
     : `${localePath}${location.id}`;
 
   return normalizeSlug(path);
