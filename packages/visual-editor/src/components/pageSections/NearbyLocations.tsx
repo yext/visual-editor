@@ -17,6 +17,7 @@ import {
   TranslatableString,
   resolveTranslatableString,
   msg,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -37,7 +38,10 @@ export interface NearbyLocationsSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
     cardHeadingLevel: HeadingLevel;
     phoneNumberFormat: "domestic" | "international";
     phoneNumberLink: boolean;
@@ -105,10 +109,19 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
       cardHeadingLevel: YextField(
         msg("fields.cardHeadingLevel", "Card Heading Level"),
@@ -308,17 +321,20 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     }
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection background={styles?.backgroundColor}>
       <div className="space-y-6">
         {headingText && (
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
-            <Heading
-              level={styles?.headingLevel}
-              className="text-center md:text-left"
-            >
-              {headingText}
-            </Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>{headingText}</Heading>
           </div>
         )}
 
@@ -428,7 +444,10 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
       styles: {
         backgroundColor: backgroundColors.background1.value,
         cardBackgroundColor: backgroundColors.background1.value,
-        headingLevel: 3,
+        heading: {
+          level: 3,
+          align: "left",
+        },
         cardHeadingLevel: 4,
         hours: {
           showCurrentStatus: true,

@@ -23,6 +23,7 @@ import {
   TranslatableString,
   msg,
   pt,
+  ThemeOptions,
   resolveTranslatableRTF2,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -36,7 +37,10 @@ export interface InsightSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -82,10 +86,19 @@ const insightSectionFields: Fields<InsightSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -182,21 +195,31 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
     i18n.language
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
-        <div className="text-center">
-          <EntityField
-            displayName={pt("fields.headingText", "Heading Text")}
-            fieldId={data.heading.field}
-            constantValueEnabled={data.heading.constantValueEnabled}
-          >
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
-          </EntityField>
-        </div>
+        <EntityField
+          displayName={pt("fields.heading", "Heading")}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
+        >
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
+          </div>
+        </EntityField>
       )}
       {resolvedInsights?.insights && (
         <EntityField
@@ -210,7 +233,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 key={index}
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -224,11 +247,6 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
-    },
     data: {
       heading: {
         field: "",
@@ -240,6 +258,14 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
         constantValue: {
           insights: [],
         },
+      },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background2.value,
+      cardBackgroundColor: backgroundColors.background1.value,
+      heading: {
+        level: 2,
+        align: "left",
       },
     },
     analytics: {

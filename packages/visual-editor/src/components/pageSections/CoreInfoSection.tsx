@@ -31,6 +31,7 @@ import {
   HoursTableAtom,
   msg,
   pt,
+  ThemeOptions,
   usePlatformTranslation,
   generateTranslatableConfig,
 } from "@yext/visual-editor";
@@ -56,7 +57,10 @@ export interface CoreInfoSectionProps {
     };
   };
   styles: {
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
     backgroundColor?: BackgroundStyle;
     info: {
       showGetDirectionsLink: boolean;
@@ -187,10 +191,19 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
       backgroundColor: YextField(
         msg("fields.backgroundColor", "Background Color"),
@@ -325,6 +338,14 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     additionalHoursText: string;
   };
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
       className={`flex flex-col md:flex-row justify-between w-full gap-8 ${
@@ -332,7 +353,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           ? "md:[&>section]:w-1/2"
           : "md:[&>section]:w-1/3"
       }`}
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >
       <section
@@ -345,7 +366,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId={data.info.headingText.field}
             constantValueEnabled={data.info.headingText.constantValueEnabled}
           >
-            <Heading level={styles.headingLevel}>{addressHeadingText}</Heading>
+            <div className={`flex ${justifyClass}`}>
+              <Heading level={styles?.heading?.level ?? 2}>
+                {addressHeadingText}
+              </Heading>
+            </div>
           </EntityField>
         )}
         <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
@@ -468,7 +493,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
-              <Heading level={styles.headingLevel}>{hoursHeadingText}</Heading>
+              <Heading level={styles.heading.level}>{hoursHeadingText}</Heading>
             </EntityField>
           )}
           <EntityField
@@ -507,7 +532,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 data.services.headingText.constantValueEnabled
               }
             >
-              <Heading level={styles.headingLevel}>
+              <Heading level={styles.heading.level}>
                 {servicesHeadingText}
               </Heading>
             </EntityField>
@@ -623,7 +648,10 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       },
     },
     styles: {
-      headingLevel: 3,
+      heading: {
+        level: 3,
+        align: "left",
+      },
       backgroundColor: backgroundColors.background1.value,
       info: {
         showGetDirectionsLink: true,
