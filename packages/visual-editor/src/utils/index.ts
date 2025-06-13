@@ -4,7 +4,7 @@ export {
   resolveYextStructField,
 } from "./resolveYextEntityField.ts";
 export {
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
   resolveTranslatableString,
 } from "./resolveTranslatableString.tsx";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";

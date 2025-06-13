@@ -21,7 +21,7 @@ import {
   Body,
   FAQSectionType,
   ComponentFields,
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
   FAQStruct,
 } from "@yext/visual-editor";
 import {
@@ -160,7 +160,10 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                     constantValueEnabled={data.faqs.constantValueEnabled}
                   >
                     <Body>
-                      {resolveTranslatableRTF2(faqItem.answer, i18n.language)}
+                      {resolveTranslatableRichText(
+                        faqItem.answer,
+                        i18n.language
+                      )}
                     </Body>
                   </EntityField>
                 </AccordionContent>

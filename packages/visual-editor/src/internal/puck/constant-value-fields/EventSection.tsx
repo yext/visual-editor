@@ -2,7 +2,7 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   EventSectionType,
   EventStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
@@ -52,7 +52,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRTF2 | undefined>(
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
       {
         key: "description",
         options: {

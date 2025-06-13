@@ -1,4 +1,4 @@
-import { TranslatableRTF2 } from "../types/types.ts";
+import { TranslatableRichText } from "../types/types.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 import { Translation } from "../internal/types/translation.ts";
@@ -7,14 +7,14 @@ import { getDisplayValue } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
 
 /**
- * Generates a translatable RTF2 config
+ * Generates a translatableRichText field config
  * @param label optional label. Takes in translation key and TOptions from react-i18next
  * @param fieldType text or textarea display mode
  */
 export function TranslatableRichTextField<
-  T extends TranslatableRTF2 | undefined = TranslatableRTF2,
+  T extends TranslatableRichText | undefined = TranslatableRichText,
 >(label?: Translation, fieldType?: "text" | "textarea"): CustomField<T> {
-  // TODO - implement RTF2 editor here
+  // TODO - implement RichText editor here
   return {
     type: "custom",
     render: ({ onChange, value }) => {

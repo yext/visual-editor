@@ -14,7 +14,7 @@ export type HeroSectionType = {
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
-  description?: TranslatableRTF2;
+  description?: TranslatableRichText;
   cta?: TranslatableCTA;
 };
 
@@ -25,7 +25,7 @@ export type ProductSectionType = {
 export type ProductStruct = {
   image?: ImageType;
   name?: TranslatableString;
-  description?: TranslatableRTF2;
+  description?: TranslatableRichText;
   category?: TranslatableString;
   cta?: TranslatableCTA;
 };
@@ -38,7 +38,7 @@ export type EventStruct = {
   image?: ImageType;
   title?: TranslatableString;
   dateTime?: string;
-  description?: TranslatableRTF2;
+  description?: TranslatableRichText;
   cta?: TranslatableCTA;
 };
 
@@ -48,7 +48,7 @@ export type FAQSectionType = {
 
 export type FAQStruct = {
   question: TranslatableString;
-  answer: TranslatableRTF2;
+  answer: TranslatableRichText;
 };
 
 export type TestimonialSectionType = {
@@ -56,7 +56,7 @@ export type TestimonialSectionType = {
 };
 
 export type TestimonialStruct = {
-  description?: TranslatableRTF2;
+  description?: TranslatableRichText;
   contributorName?: TranslatableString;
   contributionDate?: string;
 };
@@ -70,7 +70,7 @@ export type InsightStruct = {
   name?: TranslatableString;
   category?: TranslatableString;
   publishTime?: string;
-  description?: TranslatableRTF2;
+  description?: TranslatableRichText;
   cta?: TranslatableCTA;
 };
 
@@ -89,9 +89,11 @@ export type PersonStruct = {
 
 export type TranslatableString = string | Record<string, string>;
 
-export type TranslatableRTF2 = (string | RTF2) | Record<string, string | RTF2>;
+export type TranslatableRichText =
+  | (string | RichText)
+  | Record<string, string | RichText>;
 
-export type RTF2 = {
+export type RichText = {
   html?: string;
   json?: string;
 };
