@@ -193,9 +193,7 @@ const TestimonialSectionWrapper = ({
           constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className={`flex ${justifyClass}`}>
-            <Heading level={styles?.heading?.level ?? 2}>
-              {resolvedHeading}
-            </Heading>
+            <Heading level={styles?.heading?.level}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
@@ -211,7 +209,7 @@ const TestimonialSectionWrapper = ({
                 key={index}
                 testimonial={testimonial}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles?.heading?.level ?? 2}
+                sectionHeadingLevel={styles?.heading?.level}
               />
             ))}
           </div>
