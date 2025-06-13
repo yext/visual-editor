@@ -12,6 +12,7 @@ import {
   VerticalResults,
   AnalyticsProvider,
   PinComponent,
+  useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
 import {
   Matcher,
@@ -30,10 +31,8 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
-  CTA,
   Heading,
   normalizeSlug,
-  PhoneAtom,
   useDocument,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
@@ -44,6 +43,8 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
+import { FaAngleRight } from "react-icons/fa";
+import { formatPhoneNumber } from "./atoms/phone.js";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -54,7 +55,7 @@ const TRANSLATIONS = {
     searchThisArea: "Search This Area",
     useLocator: "Use our locator to find a location near you",
     noResults: "No results found for this area",
-    viewMoreInformation: "View More Information",
+    visitPage: "Visit Page",
     getDirections: "Get Directions",
     currentMapArea: "Current map area",
     currentLocation: "Current Location",
@@ -67,7 +68,7 @@ const TRANSLATIONS = {
     useLocator:
       "Utilisez notre localisateur pour trouver un endroit près de chez vous",
     noResults: "Aucun résultat trouvé pour cette zone",
-    viewMoreInformation: "Voir plus d'informations",
+    visitPage: "Visitez la page",
     getDirections: "Obtenir des directions",
     currentMapArea: "Zone de carte actuelle",
     currentLocation: "Emplacement actuel",
@@ -80,7 +81,7 @@ const TRANSLATIONS = {
     useLocator:
       "Utilice nuestro localizador para encontrar una ubicación cerca de usted",
     noResults: "No se encontraron resultados para esta área",
-    viewMoreInformation: "Ver más información",
+    visitPage: "Visita la página",
     getDirections: "Obtener direcciones",
     currentMapArea: "Área del mapa actual",
     currentLocation: "Ubicación actual",
@@ -93,7 +94,7 @@ const TRANSLATIONS = {
     useLocator:
       "Verwenden Sie unseren Locator, um einen Standort in Ihrer Nähe zu finden",
     noResults: "Keine Ergebnisse für dieses Gebiet gefunden",
-    viewMoreInformation: "Mehr Informationen anzeigen",
+    visitPage: "Seite besuchen",
     getDirections: "Routenplaner",
     currentMapArea: "Aktueller Kartenbereich",
     currentLocation: "Aktueller Standort",
@@ -106,7 +107,7 @@ const TRANSLATIONS = {
     useLocator:
       "Usa il nostro localizzatore per trovare una posizione vicino a te",
     noResults: "Nessun risultato trovato per quest'area",
-    viewMoreInformation: "Visualizza ulteriori informazioni",
+    visitPage: "Visita la pagina",
     getDirections: "Ottieni indicazioni",
     currentMapArea: "Area della mappa corrente",
     currentLocation: "Posizione attuale",
@@ -118,7 +119,7 @@ const TRANSLATIONS = {
     searchThisArea: "このエリアを検索",
     useLocator: "ロケーターを使用して近くの場所を見つける",
     noResults: "このエリアでは結果が見つかりませんでした",
-    viewMoreInformation: "詳細情報を見る",
+    visitPage: "ページを訪問",
     getDirections: "道順を取得",
     currentMapArea: "現在の地図エリア",
     currentLocation: "現在地",
@@ -536,6 +537,16 @@ const LocationCard: CardComponent<Location> = ({
     ? (distance / 1609.344).toFixed(1)
     : undefined;
 
+  const handleGetDirectionsClick = useCardAnalyticsCallback(
+    result,
+    "DRIVING_DIRECTIONS"
+  );
+  const handleVisitPageClick = useCardAnalyticsCallback(result, "VIEW_WEBSITE");
+  const handlePhoneNumberClick = useCardAnalyticsCallback(
+    result,
+    "TAP_TO_CALL"
+  );
+
   return (
     <Background
       background={backgroundColors.background1.value}
@@ -568,16 +579,18 @@ const LocationCard: CardComponent<Location> = ({
             </div>
           )}
           {location.mainPhone && (
-            <PhoneAtom
-              phoneNumber={location.mainPhone}
-              includeHyperlink={true}
-              includeIcon={false}
-              format={
+            <a
+              href={location.mainPhone}
+              onClick={handlePhoneNumberClick}
+              className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
+            >
+              {formatPhoneNumber(
+                location.mainPhone,
                 location.mainPhone.slice(0, 2) === "+1"
                   ? "domestic"
                   : "international"
-              }
-            />
+              )}
+            </a>
           )}
           <div className="flex flex-col gap-1 w-full">
             {location.address && (
@@ -593,30 +606,27 @@ const LocationCard: CardComponent<Location> = ({
               </div>
             )}
             {location.yextDisplayCoordinate && (
-              <CTA
-                label={TRANSLATIONS[locale].getDirections}
-                link={getGoogleMapsLink(
+              <a
+                href={getGoogleMapsLink(
                   location.yextDisplayCoordinate || {
                     latitude: 0,
                     longitude: 0,
                   }
                 )}
-                linkType={"DRIVING_DIRECTIONS"}
-                target={"_blank"}
-                variant="link"
-                className="font-bold text-palette-primary-dark"
-              />
+                onClick={handleGetDirectionsClick}
+                className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
+              >
+                {TRANSLATIONS[locale].getDirections}
+                <FaAngleRight size={"12px"} />
+              </a>
             )}
           </div>
         </div>
-        <CTA
-          label={TRANSLATIONS[locale].viewMoreInformation}
-          link={getPath(location, locale)}
-          linkType={"URL"}
-          className="text-center basis-full py-3 break-words whitespace-normal"
-          target={"_blank"}
-          variant="primary"
-        />
+        <Button asChild className="basis-full" variant="primary">
+          <a href={getPath(location, locale)} onClick={handleVisitPageClick}>
+            {TRANSLATIONS[locale].visitPage}
+          </a>
+        </Button>
       </div>
     </Background>
   );
@@ -629,7 +639,7 @@ const getPath = (location: Location, locale: string) => {
 
   const localePath = locale !== "en" ? `${locale}/` : "";
   const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
+    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
     : `${localePath}${location.id}`;
 
   return normalizeSlug(path);
