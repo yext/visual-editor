@@ -9,8 +9,8 @@ import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { translatableStringConfig } from "../../../puck/config/translatableStringConfig.tsx";
-import { translatableRTF2Config } from "../../../puck/config/translatableRTF2Config.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 
 export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
@@ -41,7 +41,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return translatableStringConfig<TranslatableString | undefined>(
+    return TranslatableRTF2Field<TranslatableString | undefined>(
       {
         key: "name",
         options: {
@@ -53,7 +53,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   }, []);
 
   const categoryField = useMemo(() => {
-    return translatableStringConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "category",
         options: {
@@ -65,7 +65,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return translatableRTF2Config<TranslatableRTF2 | undefined>(
+    return TranslatableRTF2Field<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {

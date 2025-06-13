@@ -7,10 +7,10 @@ import {
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { useMemo } from "react";
-import { translatableStringConfig } from "../../../puck/config/translatableStringConfig.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
-import { translatableRTF2Config } from "@yext/visual-editor";
+import { useMemo } from "react";
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -43,7 +43,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const contributorNameField = useMemo(() => {
-    return translatableStringConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "contributorName",
         options: {
@@ -55,7 +55,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return translatableRTF2Config<TranslatableRTF2 | undefined>(
+    return TranslatableRTF2Field<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {

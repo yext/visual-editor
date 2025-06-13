@@ -5,12 +5,12 @@ import {
   TranslatableRTF2,
   TranslatableString,
 } from "../../../types/types.ts";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { translatableStringConfig } from "../../../puck/config/translatableStringConfig.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
-import { translatableRTF2Config } from "@yext/visual-editor";
 
 export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   {
@@ -40,7 +40,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return translatableStringConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "name",
         options: {
@@ -52,7 +52,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const categoryField = useMemo(() => {
-    return translatableStringConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "category",
         options: {
@@ -64,7 +64,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return translatableRTF2Config<TranslatableRTF2 | undefined>(
+    return TranslatableRTF2Field<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {
