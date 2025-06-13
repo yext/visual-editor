@@ -1,0 +1,4 @@
+starter/localData/** linguist-generated=true
+starter/src/dev.config.ts linguist-generated=true
+packages/visual-editor/locales/** linguist-generated=true
+packages/visual-editor/locales/en/visual-editor.json linguist-generated=false

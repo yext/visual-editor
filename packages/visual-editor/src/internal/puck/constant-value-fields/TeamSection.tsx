@@ -8,7 +8,7 @@ import { translatableCTAFields } from "./CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 
 export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
@@ -38,7 +38,7 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "name",
         options: {
@@ -50,7 +50,7 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   }, []);
 
   const titleField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "title",
         options: {

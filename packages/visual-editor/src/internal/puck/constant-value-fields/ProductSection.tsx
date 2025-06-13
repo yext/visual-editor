@@ -2,12 +2,13 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   ProductSectionType,
   ProductStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
 
@@ -39,7 +40,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "name",
         options: {
@@ -51,7 +52,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const categoryField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "category",
         options: {
@@ -63,7 +64,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableRTF2 | undefined>(
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
       {
         key: "description",
         options: {

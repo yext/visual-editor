@@ -1,7 +1,7 @@
 import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { RTF2, TranslatableRTF2 } from "../../../types/types.ts";
+import { RichText, TranslatableRichText } from "../../../types/types.ts";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useState } from "react";
@@ -95,19 +95,19 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
 };
 
 export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
-  TranslatableRTF2[]
+  TranslatableRichText[]
 > = {
   type: "custom",
   render: ({ onChange, value = [], id }) => {
     const document: any = useDocument();
     const { t: pt } = usePlatformTranslation();
     const locale = document?.locale ?? "en";
-    const [localItems, setLocalItems] = useState<TranslatableRTF2[]>(value);
+    const [localItems, setLocalItems] = useState<TranslatableRichText[]>(value);
 
     const updateItem = (
       index: number,
       locale: string,
-      localeValue: string | RTF2
+      localeValue: string | RichText
     ) => {
       const newItems = [...localItems];
       const currentItem = newItems[index];

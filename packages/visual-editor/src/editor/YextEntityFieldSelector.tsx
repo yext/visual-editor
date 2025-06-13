@@ -9,7 +9,7 @@ import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import {
   TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_RTF2_CONSTANT_CONFIG,
+  TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
@@ -62,7 +62,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_RTF2_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
