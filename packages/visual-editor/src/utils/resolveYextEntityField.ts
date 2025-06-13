@@ -56,11 +56,12 @@ export const resolveYextStructField = <T extends Record<string, any>>(
     ) as T;
   }
 
+  const structValuesWithOverrides = { ...structValues };
   for (const key in entityField.constantValueOverride) {
     if (entityField.constantValueOverride[key]) {
-      structValues[key] = entityField.constantValue?.[key];
+      structValuesWithOverrides[key] = entityField.constantValue?.[key];
     }
   }
 
-  return structValues;
+  return structValuesWithOverrides;
 };
