@@ -148,7 +148,7 @@
   },
   "peerDependencies": {
     "@yext/pages-components": "^1.1.4",
-    "@yext/search-headless-react": "^2.5.0",
+    "@yext/search-headless-react": "^2.5.2",
     "@yext/search-ui-react": "^1.8.11",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
