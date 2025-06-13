@@ -20,3 +20,4 @@ export {
 } from "./YextStructFieldSelector.tsx";
 export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 export { TranslatableStringField } from "./TranslatableStringField.tsx";
+export { TranslatableRTF2Field } from "./TranslatableRTF2Field.tsx";
