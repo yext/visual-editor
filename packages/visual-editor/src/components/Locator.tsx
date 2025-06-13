@@ -257,8 +257,9 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     setSearchState("loading");
   };
 
-  const [userLocation, setUserLocation] =
-    React.useState<[number, number]>(DEFAULT_MAP_CENTER);
+  const [userLocation, setUserLocation] = React.useState<
+    [number, number] | undefined
+  >(undefined);
   React.useEffect(() => {
     getUserLocation()
       .then((location) => {
@@ -378,8 +379,14 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             placeholder={TRANSLATIONS[locale].searchHere}
             ariaLabel={"Search Dropdown Input"}
             customCssClasses={{
-              focusedOption: "bg-gray-200",
-              inputElement: "rounded-md p-4",
+              focusedOption: "bg-gray-200 hover:bg-gray-200",
+              option: "hover:bg-gray-100 px-4 py-3",
+              inputElement: "rounded-md p-4 h-11",
+              currentLocationButton: "h-7 w-7 text-palette-primary-dark",
+            }}
+            showCurrentLocationButton={!!userLocation}
+            geolocationProps={{
+              radius: 25,
             }}
           />
         </div>
@@ -672,11 +679,11 @@ const getTranslatedResultCount = (
 ) => {
   switch (locale) {
     case "en":
-      return `${resultCount} locations near "${filterDisplayName}"`;
+      return `${resultCount} location${resultCount !== 1 ? "s" : ""} near "${filterDisplayName}"`;
     case "fr":
-      return `${resultCount} emplacements près de «${filterDisplayName}»`;
+      return `${resultCount} emplacement${resultCount !== 1 ? "s" : ""} près de «${filterDisplayName}»`;
     case "es":
-      return `${resultCount} ubicaciones cerca de "${filterDisplayName}"`;
+      return `${resultCount} ubicacion${resultCount !== 1 ? "es" : ""} cerca de "${filterDisplayName}"`;
     case "de":
       return `${resultCount} Standorte in der Nähe von "${filterDisplayName}"`;
     case "it":
