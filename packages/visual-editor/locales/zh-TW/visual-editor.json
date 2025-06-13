@@ -47,7 +47,7 @@
   "insights": "見解",
   "loadingMap": "加載地圖...",
   "localGeomodifier": "當地的土工改裝劑",
-  "locationsNear": "{{resultCount}}位置附近“ {{filterDisPlayName}}”",
+  "locationsNear_other": "{{count}}位置附近「{{filterDisplayName}}」",
   "monday": "週一",
   "name": "姓名",
   "newYorkCity": "紐約，紐約，美國",

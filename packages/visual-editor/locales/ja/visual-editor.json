@@ -47,7 +47,7 @@
   "insights": "洞察",
   "loadingMap": "マップの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
-  "locationsNear": "「${{filterDisplayName}}」の近くの${{resultCount}}か所",
+  "locationsNear_other": "「${{filterDisplayName}}」の近くの${{count}}か所",
   "monday": "月曜日",
   "name": "名前",
   "newYorkCity": "ニューヨーク市、ニューヨーク、米国",

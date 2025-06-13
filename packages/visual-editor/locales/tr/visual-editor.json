@@ -47,7 +47,7 @@
   "insights": "İçgörü",
   "loadingMap": "Yükleme haritası ...",
   "localGeomodifier": "Yerel Geomodifikatör",
-  "locationsNear": "{{resultCount}} konum \"{{filterDisplayName}}\" yakınında yer",
+  "locationsNear_other": "{{count}} konum „{{filterDisplayName}}” yakınında",
   "monday": "Pazartesi",
   "name": "İsim",
   "newYorkCity": "New York, New York, Amerika Birleşik Devletleri",

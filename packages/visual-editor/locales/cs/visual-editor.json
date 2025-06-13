@@ -47,7 +47,7 @@
   "insights": "Poznatky",
   "loadingMap": "Načítání mapy ...",
   "localGeomodifier": "Místní geomodifikátor",
-  "locationsNear": "{{resultCount}} umístění poblíž „{{filterDisplayName}}“",
+  "locationsNear": "{{count}} umístění poblíž „{{filterDisplayName}}“",
   "monday": "pondělí",
   "name": "Jméno",
   "newYorkCity": "New York City, New York, Spojené státy",

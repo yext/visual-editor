@@ -47,7 +47,7 @@
   "insights": "见解",
   "loadingMap": "加载地图...",
   "localGeomodifier": "当地的土工改装剂",
-  "locationsNear": "{{resultCount}}位置附近“ {{filterDisPlayName}}”",
+  "locationsNear_other": "{{count}}位置附近“ {{filterDisplayName}}”",
   "monday": "周一",
   "name": "姓名",
   "newYorkCity": "纽约，纽约，美国",
