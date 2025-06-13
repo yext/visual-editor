@@ -15,4 +15,4 @@ export const TRANSLATABLE_STRING_CONSTANT_CONFIG: CustomField<TranslatableString
   TranslatableStringField(undefined, "text");
 
 export const TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG: CustomField<TranslatableRichText> =
-  TranslatableRichTextField(undefined, "text");
+  TranslatableRichTextField();

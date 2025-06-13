@@ -41,7 +41,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "name",
         options: {
@@ -65,15 +65,12 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>(
-      {
-        key: "description",
-        options: {
-          defaultValue: "Description",
-        },
+    return TranslatableRichTextField<TranslatableRichText | undefined>({
+      key: "description",
+      options: {
+        defaultValue: "Description",
       },
-      "textarea"
-    );
+    });
   }, []);
 
   return {
