@@ -1,9 +1,11 @@
 import type { Config } from "tailwindcss";
+import { ComponentsContentPath } from "@yext/search-ui-react";
 
 export default {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
     "!./src/components/puck/registry/**", // exclude the registry
+    ComponentsContentPath,
   ],
   prefix: "ve-",
   theme: {
