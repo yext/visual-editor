@@ -2,14 +2,15 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   TestimonialSectionType,
   TestimonialStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { useMemo } from "react";
-import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { useMemo } from "react";
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -42,7 +43,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const contributorNameField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "contributorName",
         options: {
@@ -54,7 +55,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableRTF2 | undefined>(
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
       {
         key: "description",
         options: {

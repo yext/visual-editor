@@ -18,7 +18,7 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
   resolveTranslatableString,
   TranslatableString,
   msg,
@@ -165,7 +165,7 @@ const ProductCard = ({
               </Body>
             </Background>
           )}
-          {resolveTranslatableRTF2(product.description, i18n.language)}
+          {resolveTranslatableRichText(product.description, i18n.language)}
         </div>
         {product.cta && (
           <CTA
@@ -186,7 +186,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
-  const resolvedHeading = resolveTranslatableRTF2(
+  const resolvedHeading = resolveTranslatableRichText(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );

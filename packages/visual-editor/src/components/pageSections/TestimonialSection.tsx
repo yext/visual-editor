@@ -21,7 +21,7 @@ import {
   resolveTranslatableString,
   msg,
   pt,
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -115,7 +115,7 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8 grow"
       >
-        {resolveTranslatableRTF2(testimonial.description, i18n.language)}
+        {resolveTranslatableRichText(testimonial.description, i18n.language)}
       </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (

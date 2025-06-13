@@ -24,7 +24,7 @@ import {
   msg,
   pt,
   ThemeOptions,
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -169,7 +169,7 @@ const InsightCard = ({
               {resolveTranslatableString(insight.name, i18n.language)}
             </Heading>
           )}
-          {resolveTranslatableRTF2(insight.description, i18n.language)}
+          {resolveTranslatableRichText(insight.description, i18n.language)}
         </div>
         {insight.cta && (
           <CTA

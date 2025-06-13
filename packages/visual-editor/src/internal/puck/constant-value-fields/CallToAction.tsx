@@ -3,7 +3,7 @@ import { ConstantFields } from "./ConstantField.tsx";
 import { pt } from "../../../utils/i18nPlatform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
-import { generateTranslatableConfig } from "../../../utils/generateTranslatableConfig.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 
 const linkTypeOptions = () => {
   return [
@@ -38,7 +38,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const labelField = useMemo(() => {
-      return generateTranslatableConfig<TranslatableString | undefined>(
+      return TranslatableStringField<TranslatableString | undefined>(
         {
           key: "label",
           options: {
@@ -83,7 +83,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
 // Fields for TranslatableCTA with labels
 export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const labelField = useMemo(() => {
-    return generateTranslatableConfig<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString | undefined>(
       {
         key: "label",
         options: {

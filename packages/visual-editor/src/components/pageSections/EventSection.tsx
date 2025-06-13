@@ -21,7 +21,7 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
   resolveTranslatableString,
   TranslatableString,
   msg,
@@ -163,7 +163,7 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {resolveTranslatableRTF2(event.description, i18n.language)}
+        {resolveTranslatableRichText(event.description, i18n.language)}
         {event.cta && (
           <CTA
             eventName={`cta${cardKey}`}
