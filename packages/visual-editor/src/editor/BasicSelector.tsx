@@ -1,8 +1,9 @@
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronsUpDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 import { pt } from "../utils/i18nPlatform.ts";
+import { Button } from "../internal/puck/ui/button.tsx";
 
 type Option<T = any> = {
   label: string;
@@ -10,11 +11,26 @@ type Option<T = any> = {
   color?: string;
 };
 
-export const BasicSelector = (
-  label: string,
-  options: Option[],
-  translateOptions: boolean = true
-): Field => {
+type BasicSelectorProps = {
+  label: string;
+  options: Option[];
+  translateOptions?: boolean;
+  noOptionsPlaceholder?: string;
+  noOptionsMessage?: string;
+};
+
+export const BasicSelector = (props: BasicSelectorProps): Field => {
+  const {
+    label,
+    options,
+    translateOptions = true,
+    noOptionsPlaceholder = pt(
+      "basicSelectorNoOptionsLabel",
+      "No options available"
+    ),
+    noOptionsMessage,
+  } = props;
+
   return {
     type: "custom",
     render: ({
@@ -24,11 +40,22 @@ export const BasicSelector = (
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
-      if (!options || options.length === 0) {
+      if (!options?.length) {
         return (
-          <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-            <p>{pt("basicSelectorNoOptionsLabel", "No options available")}</p>
-          </FieldLabel>
+          <>
+            <FieldLabel label={label} icon={<ChevronDown size={16} />} />
+            <Button
+              variant="outline"
+              className="ve-w-full ve-justify-between ve-rounded-sm"
+              disabled={true}
+            >
+              {noOptionsPlaceholder}
+              <ChevronsUpDown className="ve-ml-2 ve-h-4 ve-w-4 ve-shrink-0 ve-opacity-50" />
+            </Button>
+            {noOptionsMessage && (
+              <p className="ve-text-xs ve-mt-3">{noOptionsMessage}</p>
+            )}
+          </>
         );
       }
 
@@ -67,6 +94,7 @@ export const BasicSelector = (
               )
             }
             options={labelOptions}
+            disabled={!translatedOptions?.length}
           />
         </FieldLabel>
       );

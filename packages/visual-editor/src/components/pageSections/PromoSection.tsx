@@ -40,7 +40,7 @@ export interface PromoSectionProps {
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
+  liveVisibility?: boolean;
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
@@ -88,7 +88,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -175,6 +175,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     data: {
       promo: {
         field: "",
+        constantValueEnabled: true,
         constantValue: {
           image: {
             height: 360,
@@ -189,7 +190,12 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             linkType: "URL",
           },
         },
-        constantValueOverride: {},
+        constantValueOverride: {
+          image: true,
+          title: true,
+          description: true,
+          cta: true,
+        },
       },
     },
     styles: {
@@ -202,14 +208,44 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-  render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <PromoWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
-  ),
+  resolveFields: (data, { lastData }) => {
+    // If set to entity value and no field selected, hide the component.
+    if (
+      !data.props.data.promo.constantValueEnabled &&
+      data.props.data.promo.field === ""
+    ) {
+      data.props.liveVisibility = false;
+      return {
+        ...promoSectionFields,
+        liveVisibility: undefined,
+      };
+    }
+
+    // If no field was selected and then constant value is enabled
+    // or a field is selected, show the component.
+    if (
+      (data.props.data.promo.constantValueEnabled &&
+        !lastData?.props.data.promo.constantValueEnabled &&
+        data.props.data.promo.field === "") ||
+      (lastData?.props.data.promo.field === "" &&
+        data.props.data.promo.field !== "")
+    ) {
+      data.props.liveVisibility = true;
+    }
+
+    // Otherwise, return normal fields.
+    return promoSectionFields;
+  },
+  render: (props) => {
+    return (
+      <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <PromoWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    );
+  },
 };

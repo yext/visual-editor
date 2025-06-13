@@ -39,6 +39,7 @@ import {
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18nPlatform.ts";
+import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 
 const devLogger = new DevLogger();
 
@@ -221,11 +222,14 @@ export const ConstantValueModeToggler = ({
   // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
-    fieldTypeFilter.some(
+    (fieldTypeFilter.some(
       (fieldType) =>
         Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
         Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-    );
+    ) ||
+      fieldTypeFilter.some((fieldType) =>
+        supportedStructEntityFieldTypes.includes(fieldType)
+      ));
 
   return (
     <div className="ve-w-full ve-flex ve-gap-3">
@@ -262,10 +266,11 @@ export const ConstantValueModeToggler = ({
 
 type InputProps<T extends Record<string, any>> = {
   filter: RenderEntityFieldFilter<T>;
-  onChange: (value: any, uiState: any) => void;
+  onChange: (value: any, uiState?: any) => void;
   value: any;
   className?: string;
   disallowTranslation?: boolean;
+  hideSelectAFieldOption?: boolean;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -327,6 +332,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
   className,
+  hideSelectAFieldOption,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
@@ -343,31 +349,56 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
+    const entityFieldOptions = filteredEntityFields
+      .map((entityFieldNameToSchema) => {
+        return {
+          label:
+            entityFieldNameToSchema.displayName ?? entityFieldNameToSchema.name,
+          value: entityFieldNameToSchema.name,
+        };
+      })
+      .sort((entityFieldA, entityFieldB) => {
+        const nameA = entityFieldA.label.toUpperCase();
+        const nameB = entityFieldB.label.toUpperCase();
+        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+      });
+
+    const options = hideSelectAFieldOption
+      ? [...entityFieldOptions]
+      : [
+          {
+            value: "",
+            label: pt("basicSelectorContentLabel", "Select a Content field"),
+          },
+          ...entityFieldOptions,
+        ];
+
+    // If hideSelectAFieldOption, set to the first available field,
+    // or unset if there are no fields available.
+    if (hideSelectAFieldOption && !value.constantValueEnabled) {
+      if (filteredEntityFields.length > 0 && value.field === "") {
+        onChange({
+          ...value,
+          field: filteredEntityFields[0].name,
+        });
+      }
+      if (filteredEntityFields.length === 0 && value.field !== "") {
+        onChange({
+          ...value,
+          field: "",
+        });
+      }
+    }
+
     // TODO: translation concatenation
-    return BasicSelector(
-      templateMetadata.entityTypeDisplayName + " " + pt("field", "Field"),
-      [
-        {
-          value: "",
-          label: pt("basicSelectorContentLabel", "Select a Content field"),
-        },
-        ...filteredEntityFields
-          .map((entityFieldNameToSchema) => {
-            return {
-              label:
-                entityFieldNameToSchema.displayName ??
-                entityFieldNameToSchema.name,
-              value: entityFieldNameToSchema.name,
-            };
-          })
-          .sort((entityFieldA, entityFieldB) => {
-            const nameA = entityFieldA.label.toUpperCase();
-            const nameB = entityFieldB.label.toUpperCase();
-            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-          }),
-      ],
-      false
-    );
+    return BasicSelector({
+      label:
+        templateMetadata.entityTypeDisplayName + " " + pt("field", "Field"),
+      options,
+      translateOptions: false,
+      noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
+      noOptionsMessage: getNoFieldsFoundMessage(filter),
+    });
   }, [entityFields, filter]);
 
   return (
@@ -380,7 +411,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
               field: selectedEntityField,
               constantValue: value?.constantValue ?? "",
               constantValueEnabled: false,
-              constantValueOverride: {},
+              constantValueOverride: value?.constantValueOverride,
             },
             uiState
           );
@@ -389,4 +420,25 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       />
     </div>
   );
+};
+
+const getNoFieldsFoundMessage = (
+  filter: RenderEntityFieldFilter<any>
+): string | undefined => {
+  if (!filter.types?.length || filter.allowList) {
+    return;
+  }
+
+  if (filter.types.includes("type.hero_section")) {
+    return pt(
+      "noHeroFieldsMsg",
+      "To use entity content for this section, add a Hero Section field to your page group's entity type."
+    );
+  }
+  if (filter.types.includes("type.promo_section")) {
+    return pt(
+      "noPromoFieldsMsg",
+      "To use entity content for this section, add a Promo Section field to your page group's entity type."
+    );
+  }
 };
