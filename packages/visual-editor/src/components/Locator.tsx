@@ -180,8 +180,9 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     setSearchState("loading");
   };
 
-  const [userLocation, setUserLocation] =
-    React.useState<[number, number]>(DEFAULT_MAP_CENTER);
+  const [userLocation, setUserLocation] = React.useState<
+    [number, number] | undefined
+  >(undefined);
   React.useEffect(() => {
     getUserLocation()
       .then((location) => {
@@ -304,8 +305,14 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             placeholder={t("searchHere", "Search here...")}
             ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
-              focusedOption: "bg-gray-200",
-              inputElement: "rounded-md p-4",
+              focusedOption: "bg-gray-200 hover:bg-gray-200",
+              option: "hover:bg-gray-100 px-4 py-3",
+              inputElement: "rounded-md p-4 h-11",
+              currentLocationButton: "h-7 w-7 text-palette-primary-dark",
+            }}
+            showCurrentLocationButton={!!userLocation}
+            geolocationProps={{
+              radius: 25,
             }}
           />
         </div>
