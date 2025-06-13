@@ -66,9 +66,13 @@ const tests: ComponentTest[] = [
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
     tests: async (page) => {
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Call To Action")).toBeVisible();
+      expect(page.getByText("Featured Promotion")).toBeVisible();
+      expect(
+        page.getByText(
+          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
+        )
+      ).toBeVisible();
+      expect(page.getByText("Learn More")).toBeVisible();
     },
   },
   {
@@ -77,9 +81,13 @@ const tests: ComponentTest[] = [
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
     tests: async (page) => {
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Call To Action")).toBeVisible();
+      expect(page.getByText("Featured Promotion")).toBeVisible();
+      expect(
+        page.getByText(
+          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
+        )
+      ).toBeVisible();
+      expect(page.getByText("Learn More")).toBeVisible();
     },
   },
   {
