@@ -16,12 +16,12 @@ import {
   TestimonialStruct,
   Timestamp,
   ComponentFields,
-  MaybeRTF,
   TimestampOption,
   TranslatableString,
   resolveTranslatableString,
   msg,
   pt,
+  resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -107,13 +107,15 @@ const TestimonialCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border h-full">
       <Background
         background={backgroundColors.background1.value}
         className="p-8 grow"
       >
-        <MaybeRTF data={testimonial.description} />
+        {resolveTranslatableRichText(testimonial.description, i18n.language)}
       </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (
@@ -125,7 +127,10 @@ const TestimonialCard = ({
                 : "span"
             }
           >
-            {testimonial.contributorName}
+            {resolveTranslatableString(
+              testimonial.contributorName,
+              i18n.language
+            )}
           </Heading>
         )}
         {testimonial.contributionDate && (

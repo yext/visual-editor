@@ -5,10 +5,9 @@ import {
   backgroundColors,
   Background,
   ContentBlockCategory,
-  CardCategory,
-  LayoutBlockCategory,
   YextField,
   VisibilityWrapper,
+  LayoutBlockCategory,
 } from "@yext/visual-editor";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 
@@ -61,11 +60,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
               <DropZone
                 className="flex flex-col w-full"
                 zone={`column-${idx}`}
-                allow={[
-                  ...CardCategory,
-                  ...ContentBlockCategory,
-                  ...LayoutBlockCategory.filter((x) => x !== "Collection"),
-                ]}
+                allow={[...ContentBlockCategory, ...LayoutBlockCategory]}
               />
             </div>
           ))}

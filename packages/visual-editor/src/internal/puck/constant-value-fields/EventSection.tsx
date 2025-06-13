@@ -1,8 +1,17 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { EventSectionType, EventStruct } from "../../../types/types.ts";
-import { ctaFields } from "./CallToAction.tsx";
+import {
+  EventSectionType,
+  EventStruct,
+  TranslatableRichText,
+  TranslatableString,
+} from "../../../types/types.ts";
+import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import React, { useMemo } from "react";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -28,32 +37,57 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 };
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
+  const { t, i18n } = usePlatformTranslation();
+
+  const titleField = useMemo(() => {
+    return TranslatableStringField<TranslatableString | undefined>(
+      {
+        key: "title",
+        options: {
+          defaultValue: "Title",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  const descriptionField = useMemo(() => {
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      {
+        key: "description",
+        options: {
+          defaultValue: "Description",
+        },
+      },
+      "textarea"
+    );
+  }, []);
+
   return {
-    label: pt("arrayField", "Array Field"),
+    label: t("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         type: "object",
-        label: pt("image", "Image"),
+        label: t("image", "Image"),
         objectFields: {
           url: {
-            label: pt("url", "URL"),
+            label: t("url", "URL"),
             type: "text",
           },
         },
       },
-      title: {
-        type: "text",
-        label: pt("title", "Title"),
-      },
+      title: titleField,
       dateTime: DateTimeSelector,
-      description: {
-        type: "textarea",
-        label: pt("description", "Description"),
-      },
-      cta: ctaFields(),
+      description: descriptionField,
+      cta: translatableCTAFields(),
     },
-    getItemSummary: (item, i) =>
-      item.title ? item.title : pt("event", "Event") + " " + ((i ?? 0) + 1),
+    getItemSummary: (item, i): string => {
+      const translation = resolveTranslatableString(item.title, i18n.language);
+      if (translation) {
+        return translation;
+      }
+      return t("event", "Event") + " " + ((i ?? 0) + 1);
+    },
   };
 };

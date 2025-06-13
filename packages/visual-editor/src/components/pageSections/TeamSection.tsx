@@ -23,6 +23,7 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -32,7 +33,10 @@ export interface TeamSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -82,10 +86,19 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -112,6 +125,8 @@ const PersonCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
       <Background background={backgroundColor} className="flex p-8 gap-6">
@@ -134,10 +149,14 @@ const PersonCard = ({
                   : "span"
               }
             >
-              {person.name}
+              {resolveTranslatableString(person.name, i18n.language)}
             </Heading>
           )}
-          {person.title && <Body variant="base">{person.title}</Body>}
+          {person.title && (
+            <Body variant="base">
+              {resolveTranslatableString(person.title, i18n.language)}
+            </Body>
+          )}
         </div>
       </Background>
       <hr className="border" />
@@ -177,7 +196,10 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${key}`}
-                label={person.cta.label}
+                label={resolveTranslatableString(
+                  person.cta.label,
+                  i18n.language
+                )}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
                 variant="link"
@@ -199,19 +221,29 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     i18n.language
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
@@ -227,7 +259,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 key={index}
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -257,7 +289,10 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "teamSection",

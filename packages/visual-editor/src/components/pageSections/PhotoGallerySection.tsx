@@ -31,6 +31,7 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -54,7 +55,10 @@ export interface PhotoGallerySectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
     imageStyle: Omit<ImageWrapperProps, "image">;
   };
   liveVisibility: boolean;
@@ -98,10 +102,19 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
       imageStyle: YextField(msg("fields.imageStyle", "Image Style"), {
         type: "object",
@@ -173,11 +186,17 @@ const PhotoGallerySectionComponent = ({
       height: styles.imageStyle.height,
     }));
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.heading.align];
+
   return (
     <PageSection
       aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
-      className="flex flex-col gap-8 justify-center text-center"
+      className="flex flex-col gap-8 justify-center"
     >
       {sectionHeading && (
         <EntityField
@@ -185,7 +204,9 @@ const PhotoGallerySectionComponent = ({
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <Heading level={styles.headingLevel}>{sectionHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles.heading.level}>{sectionHeading}</Heading>
+          </div>
         </EntityField>
       )}
       {filteredImages && filteredImages.length > 0 && (
@@ -279,7 +300,10 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
       imageStyle: {
         layout: "fixed",
         height: 570,

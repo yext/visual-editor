@@ -20,6 +20,7 @@ import {
   ComponentFields,
   EntityField,
   resolveTranslatableString,
+  resolveTranslatableRichText,
   msg,
   pt,
 } from "@yext/visual-editor";
@@ -139,7 +140,10 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          {resolveTranslatableString(resolvedPromo?.description, i18n.language)}
+          {resolveTranslatableRichText(
+            resolvedPromo?.description,
+            i18n.language
+          )}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
@@ -150,7 +154,10 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             <CTA
               eventName={`cta`}
               variant={styles?.ctaVariant}
-              label={resolvedPromo?.cta.label}
+              label={resolveTranslatableString(
+                resolvedPromo?.cta.label,
+                i18n.language
+              )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}
             />

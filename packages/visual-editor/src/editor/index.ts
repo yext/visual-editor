@@ -2,10 +2,8 @@ export { Editor } from "./Editor.tsx";
 export { EntityField } from "./EntityField.tsx";
 export {
   YextEntityFieldSelector,
-  YextCollectionSubfieldSelector,
   type RenderYextEntityFieldSelectorProps,
   type YextEntityField,
-  type YextCollection,
 } from "./YextEntityFieldSelector.tsx";
 export {
   OptionalNumberField,
@@ -21,3 +19,5 @@ export {
   type YextStructEntityField,
 } from "./YextStructFieldSelector.tsx";
 export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
+export { TranslatableStringField } from "./TranslatableStringField.tsx";
+export { TranslatableRichTextField } from "./TranslatableRichTextField.tsx";

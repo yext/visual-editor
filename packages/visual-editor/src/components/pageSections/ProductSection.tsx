@@ -18,11 +18,12 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  MaybeRTF,
-  TranslatableString,
+  resolveTranslatableRichText,
   resolveTranslatableString,
+  TranslatableString,
   msg,
   pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -39,7 +40,10 @@ export interface ProductSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -85,10 +89,19 @@ const productSectionFields: Fields<ProductSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -115,6 +128,7 @@ const ProductCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -142,7 +156,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {product.name}
+              {resolveTranslatableString(product.name, i18n.language)}
             </Heading>
           )}
           {product.category && (
@@ -150,16 +164,18 @@ const ProductCard = ({
               background={backgroundColors.background5.value}
               className="py-2 px-4 rounded w-fit"
             >
-              <Body>{product.category}</Body>
+              <Body>
+                {resolveTranslatableString(product.category, i18n.language)}
+              </Body>
             </Background>
           )}
-          <MaybeRTF data={product.description} />
+          {resolveTranslatableRichText(product.description, i18n.language)}
         </div>
         {product.cta && (
           <CTA
             eventName={`cta${key}`}
             variant="secondary"
-            label={product.cta.label}
+            label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"
@@ -174,24 +190,34 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
-  const resolvedHeading = resolveTranslatableString(
+  const resolvedHeading = resolveTranslatableRichText(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
@@ -207,7 +233,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 key={index}
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -284,7 +310,10 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background2.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "productSection",

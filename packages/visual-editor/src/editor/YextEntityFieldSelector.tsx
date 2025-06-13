@@ -9,7 +9,8 @@ import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import {
   TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
 import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import {
@@ -47,71 +48,68 @@ export type YextEntityField<T> = {
   field: string;
   constantValue: T;
   constantValueEnabled?: boolean;
-  isTranslatable?: boolean;
-};
-
-export type YextCollection = {
-  items: YextEntityField<Array<any>>;
-  limit: string | number;
+  disallowTranslation?: boolean;
 };
 
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
     filter: RenderEntityFieldFilter<T>;
-    isCollection?: boolean;
     disableConstantValueToggle?: boolean;
-    isTranslatable?: boolean;
+    disallowTranslation?: boolean;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
+  "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
+  "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
-  "type.cta": CTA_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
-  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG, // TODO - add translatable version
+  "type.cta": CTA_CONSTANT_CONFIG,
+  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
+  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
+  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
+  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
+  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
+  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
   return {
-    "type.string": TEXT_LIST_CONSTANT_CONFIG,
+    "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
     "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
   };
 };
 
-const TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_TEXT_CONSTANT_CONFIG,
+const TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<string, Field<any>> = {
+  "type.string": TEXT_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
 };
 
-const TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
-  "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+const LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
+  string,
+  Field<any>
+> = {
+  "type.string": TEXT_LIST_CONSTANT_CONFIG,
+  "type.rich_text_v2": TEXT_LIST_CONSTANT_CONFIG,
 };
 
 export const getConstantConfigFromType = (
   type: EntityFieldTypes,
   isList?: boolean,
-  isTranslatable?: boolean
+  disallowTranslation?: boolean
 ): Field<any> | undefined => {
   if (isList) {
-    if (isTranslatable) {
+    if (disallowTranslation) {
       return (
-        TRANSLATABLE_LIST_TYPE_TO_CONSTANT_CONFIG[type] ??
+        LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG[type] ??
         LIST_TYPE_TO_CONSTANT_CONFIG()[type]
       );
     }
     return LIST_TYPE_TO_CONSTANT_CONFIG()[type];
   }
-  const constantConfig = isTranslatable
-    ? (TRANSLATABLE_TYPE_TO_CONSTANT_CONFIG[type] ??
+  const constantConfig = disallowTranslation
+    ? (TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG[type] ??
       TYPE_TO_CONSTANT_CONFIG[type])
     : TYPE_TO_CONSTANT_CONFIG[type];
   if (!constantConfig) {
@@ -125,12 +123,12 @@ export const getConstantConfigFromType = (
  * Returns the constant type configuration if all types match
  * @param typeFilter
  * @param isList
- * @param isTranslatable
+ * @param disallowTranslation
  */
 const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
   isList: boolean,
-  isTranslatable: boolean
+  disallowTranslation: boolean
 ): Field | undefined => {
   if (!typeFilter) {
     return undefined;
@@ -141,7 +139,7 @@ const returnConstantFieldConfig = (
     const mappedConfiguration = getConstantConfigFromType(
       entityFieldType,
       isList,
-      isTranslatable
+      disallowTranslation
     );
     if (!mappedConfiguration) {
       devLogger.log(`No mapped configuration for ${entityFieldType}`);
@@ -164,11 +162,6 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
-  // set "isTranslatable" to true if it is missing from props
-  if (props.isTranslatable === undefined) {
-    props.isTranslatable = true;
-  }
-
   return {
     type: "custom",
     render: ({ value, onChange }: RenderProps) => {
@@ -186,82 +179,20 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
-            isCollection={!!props.isCollection}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
           />
-          {value?.constantValueEnabled && !props.isCollection && (
+          {value?.constantValueEnabled && (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
               filter={props.filter}
-              isTranslatable={props.isTranslatable}
+              disallowTranslation={props.disallowTranslation}
             />
           )}
           {!value?.constantValueEnabled && (
             <EntityFieldInput<T>
-              className="ve-pt-4"
-              onChange={onChange}
-              value={value}
-              filter={props.filter}
-            />
-          )}
-        </>
-      );
-    },
-  };
-};
-
-/**
- * Allows the user to select an entity subfield from the document and set a constant value.
- */
-export const YextCollectionSubfieldSelector = <
-  T extends Record<string, any>,
-  U,
->(
-  props: RenderYextEntityFieldSelectorProps<T>
-): Field<YextEntityField<U>> => {
-  // If the field is not part of a collection, redirect to the normal entity field selector
-  if (!props.isCollection) {
-    return YextEntityFieldSelector({ ...props });
-  }
-
-  // set "isTranslatable" to true if it is missing from props
-  if (props.isTranslatable === undefined) {
-    props.isTranslatable = true;
-  }
-
-  return {
-    type: "custom",
-    render: ({ value, onChange }: RenderProps) => {
-      const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
-        onChange({
-          field: value?.field ?? "",
-          constantValue: value?.constantValue ?? "",
-          constantValueEnabled: constantValueEnabled,
-        });
-      };
-
-      return (
-        <>
-          <ConstantValueModeToggler
-            fieldTypeFilter={props.filter.types ?? []}
-            constantValueEnabled={value?.constantValueEnabled}
-            toggleConstantValueEnabled={toggleConstantValueEnabled}
-            isCollection={!!props.isCollection}
-            disableConstantValue={props.disableConstantValueToggle}
-            label={pt(props.label)}
-          />
-          {value?.constantValueEnabled ? (
-            <ConstantValueInput<T>
-              onChange={onChange}
-              value={value}
-              filter={props.filter}
-              isTranslatable={props.isTranslatable}
-            />
-          ) : (
-            <EntityFieldInput<T>
-              className="ve-pt-4"
+              className="ve-pt-3"
               onChange={onChange}
               value={value}
               filter={props.filter}
@@ -277,27 +208,24 @@ export const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
   toggleConstantValueEnabled,
-  isCollection,
   disableConstantValue,
   label,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
-  isCollection?: boolean;
   disableConstantValue?: boolean;
   label: string;
 }) => {
   // If disableConstantValue is true, constantValueInputSupported is always false.
-  // Else if isCollection or a supported field type, constantValueInputSupported is true
+  // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
-    (isCollection ||
-      fieldTypeFilter.some(
-        (fieldType) =>
-          Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
-          Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-      ));
+    fieldTypeFilter.some(
+      (fieldType) =>
+        Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
+        Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
+    );
 
   return (
     <div className="ve-w-full ve-flex ve-gap-3">
@@ -337,19 +265,19 @@ type InputProps<T extends Record<string, any>> = {
   onChange: (value: any, uiState: any) => void;
   value: any;
   className?: string;
-  isTranslatable?: boolean;
+  disallowTranslation?: boolean;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
-  isTranslatable,
+  disallowTranslation,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
     !!filter.includeListsOnly,
-    !!isTranslatable
+    !!disallowTranslation
   );
 
   if (!constantFieldConfig) {
@@ -374,7 +302,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
-      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-4" : ""}`}
+      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-3" : ""}`}
     >
       <AutoField
         onChange={(newConstantValue, uiState) =>

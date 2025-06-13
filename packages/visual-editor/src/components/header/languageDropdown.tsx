@@ -1,0 +1,238 @@
+import * as React from "react";
+import { ChevronDown, Globe } from "lucide-react";
+import { themeManagerCn } from "../../utils/cn.ts";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../atoms/dropdown.tsx";
+import {
+  Background,
+  backgroundColors,
+  Body,
+  fetchLocalesToPathsForEntity,
+} from "@yext/visual-editor";
+
+export interface LanguageDropdownProps {
+  className?: string;
+  businessId: string;
+  entityId: string;
+  apiKey: string;
+  contentEndpointId: string;
+  contentDeliveryAPIDomain: string;
+  locales: string[];
+  currentLocale: string;
+}
+
+export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
+  className,
+  businessId,
+  entityId,
+  apiKey,
+  contentEndpointId,
+  contentDeliveryAPIDomain,
+  locales,
+  currentLocale,
+}) => {
+  const scopedLocales = new Set<string>(locales);
+  const [validLocalesToPaths, setValidLocalesToPaths] = React.useState<
+    Record<string, string>
+  >({
+    [currentLocale]: "",
+  });
+  const [selected, setSelected] = React.useState(currentLocale);
+  const [status, setStatus] = React.useState<
+    "UNSET" | "LOADING" | "COMPLETE" | "ERROR"
+  >("UNSET");
+  const [open, setOpen] = React.useState<boolean>(false);
+
+  // on dropdown clicked, compare the actual locales of the entity to the pageset's scoped locales
+  const handleOpenChange = async (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (isOpen && status === "UNSET") {
+      setStatus("LOADING");
+      try {
+        const fetchedLocalesToPaths = await fetchLocalesToPathsForEntity({
+          businessId,
+          apiKey,
+          contentEndpointId,
+          contentDeliveryAPIDomain,
+          entityId,
+        });
+
+        const filtered: Record<string, string> = {};
+
+        for (const [locale, slug] of Object.entries(fetchedLocalesToPaths)) {
+          if (scopedLocales.has(locale)) {
+            filtered[locale] = slug;
+          }
+        }
+
+        if (Object.keys(filtered).length > 1) {
+          setValidLocalesToPaths({
+            [currentLocale]: filtered[currentLocale],
+            ...filtered,
+          });
+        }
+      } catch {
+        // just show the single current locale in the dropdown
+        setValidLocalesToPaths({ [currentLocale]: "" });
+        setStatus("ERROR");
+        console.error("failed to fetch locales for entity");
+      } finally {
+        setStatus("COMPLETE");
+      }
+    }
+  };
+
+  const handleLocaleSelected = (locale: string, path: string) => {
+    if (locale === selected) {
+      return;
+    }
+    setSelected(locale);
+    window.location.href = `/${path}`;
+  };
+
+  return (
+    <Background
+      background={backgroundColors.background1.value}
+      as="div"
+      className={className}
+    >
+      <DropdownMenu open={open} onOpenChange={handleOpenChange}>
+        <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
+          <div className="flex gap-4 items-center">
+            <Globe className="w-4 h-4" />
+            <Body>{getLanguageName(selected)}</Body>
+          </div>
+          <ChevronDown />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-40 rounded-l shadow-lg">
+          {(status === "COMPLETE" || status === "ERROR") &&
+            Object.entries(validLocalesToPaths).map(([locale, path]) => (
+              <Background
+                background={backgroundColors.background1.value}
+                as="div"
+                key={locale}
+              >
+                {locale !== selected && (
+                  <DropdownMenuSeparator className="bg-[#CCCCCC]" />
+                )}
+                <DropdownMenuItem
+                  onSelect={() => handleLocaleSelected(locale, path)}
+                  className={themeManagerCn(
+                    "text-body-fontSize font-body-fontFamily focus:bg-slate-100",
+                    selected === locale ? "font-bold" : "font-body-fontWeight"
+                  )}
+                >
+                  {getLanguageName(locale)}
+                </DropdownMenuItem>
+              </Background>
+            ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </Background>
+  );
+};
+
+// Returns the localized display name of a language given its locale code.
+// For example: "fr" → "Français", "en" → "English", "es" → "Español"
+function getLanguageName(locale: string): string | undefined {
+  try {
+    // Create a DisplayNames instance using the locale itself
+    const displayNames = new Intl.DisplayNames([locale], { type: "language" });
+
+    // Get the localized name of the language
+    const name = displayNames.of(locale);
+    return normalizeLanguageName(name);
+  } catch {
+    console.warn(`Unsupported locale: ${locale}`);
+    return undefined;
+  }
+}
+
+// If first character of language name is Latin letter, capitalize it.
+function normalizeLanguageName(name: string | undefined): string | undefined {
+  if (!name) return undefined;
+
+  // Check if first character is Latin letter
+  if (/^[a-zA-Z]/.test(name.charAt(0))) {
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+
+  // Non-Latin scripts: return as is
+  return name;
+}
+
+export function parseDocumentForLanguageDropdown(
+  document: any
+): LanguageDropdownProps | undefined {
+  const businessId: string = document?.businessId;
+  if (!businessId) {
+    console.warn("Missing businessId! Unable to use language dropdown.");
+    return undefined;
+  }
+
+  const entityId: string = document?.id;
+  if (!entityId) {
+    console.warn("Missing entityId! Unable to use language dropdown.");
+    return undefined;
+  }
+
+  // read API key
+  const apiKey: string = document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+  if (!apiKey) {
+    console.warn(
+      "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to use language dropdown."
+    );
+    return undefined;
+  }
+
+  let contentEndpointId: string = "";
+  let locales: string[] = [];
+  if (document?._pageset) {
+    try {
+      const pagesetJson = JSON.parse(document?._pageset);
+      contentEndpointId =
+        pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
+      locales = pagesetJson?.scope?.locales;
+    } catch (e) {
+      console.error("Failed to parse pageset from document. err=", e);
+      return undefined;
+    }
+  }
+  if (!contentEndpointId) {
+    console.warn("Missing contentEndpointId! Unable to use language dropdown.");
+    return undefined;
+  }
+  if (!locales) {
+    console.warn("Missing locales! Unable to use language dropdown");
+    return undefined;
+  }
+
+  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
+  if (!contentDeliveryAPIDomain) {
+    console.warn(
+      "Missing contentDeliveryAPIDomain! Unable to use language dropdown."
+    );
+    return undefined;
+  }
+
+  const currentLocale = document?.locale;
+  if (!currentLocale) {
+    console.warn("Missing locale! Unable to use language dropdown.");
+    return undefined;
+  }
+
+  return {
+    businessId,
+    entityId,
+    apiKey,
+    contentEndpointId,
+    contentDeliveryAPIDomain,
+    locales,
+    currentLocale,
+  };
+}
