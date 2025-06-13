@@ -50,84 +50,6 @@ const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
-const TRANSLATIONS = {
-  en: {
-    searchThisArea: "Search This Area",
-    useLocator: "Use our locator to find a location near you",
-    noResults: "No results found for this area",
-    visitPage: "Visit Page",
-    getDirections: "Get Directions",
-    currentMapArea: "Current map area",
-    currentLocation: "Current Location",
-    searchHere: "Search here...",
-    findALocation: "Find a Location",
-    newYorkCity: "New York City, New York, United States",
-  },
-  fr: {
-    searchThisArea: "Rechercher cette zone",
-    useLocator:
-      "Utilisez notre localisateur pour trouver un endroit près de chez vous",
-    noResults: "Aucun résultat trouvé pour cette zone",
-    visitPage: "Visitez la page",
-    getDirections: "Obtenir des directions",
-    currentMapArea: "Zone de carte actuelle",
-    currentLocation: "Emplacement actuel",
-    searchHere: "Rechercher ici...",
-    findALocation: "Trouver un emplacement",
-    newYorkCity: "New York, État de New York, États-Unis",
-  },
-  es: {
-    searchThisArea: "Buscar esta área",
-    useLocator:
-      "Utilice nuestro localizador para encontrar una ubicación cerca de usted",
-    noResults: "No se encontraron resultados para esta área",
-    visitPage: "Visita la página",
-    getDirections: "Obtener direcciones",
-    currentMapArea: "Área del mapa actual",
-    currentLocation: "Ubicación actual",
-    searchHere: "Buscar aquí...",
-    findALocation: "Buscar una ubicación",
-    newYorkCity: "Nueva York, Nueva York, Estados Unidos",
-  },
-  de: {
-    searchThisArea: "Diese Fläche durchsuchen",
-    useLocator:
-      "Verwenden Sie unseren Locator, um einen Standort in Ihrer Nähe zu finden",
-    noResults: "Keine Ergebnisse für dieses Gebiet gefunden",
-    visitPage: "Seite besuchen",
-    getDirections: "Routenplaner",
-    currentMapArea: "Aktueller Kartenbereich",
-    currentLocation: "Aktueller Standort",
-    searchHere: "Hier suchen...",
-    findALocation: "Standort finden",
-    newYorkCity: "New York City, New York, Vereinigte Staaten",
-  },
-  it: {
-    searchThisArea: "Cerca in quest'area",
-    useLocator:
-      "Usa il nostro localizzatore per trovare una posizione vicino a te",
-    noResults: "Nessun risultato trovato per quest'area",
-    visitPage: "Visita la pagina",
-    getDirections: "Ottieni indicazioni",
-    currentMapArea: "Area della mappa corrente",
-    currentLocation: "Posizione attuale",
-    searchHere: "Cerca qui...",
-    findALocation: "Trova una posizione",
-    newYorkCity: "New York City, New York, Stati Uniti",
-  },
-  ja: {
-    searchThisArea: "このエリアを検索",
-    useLocator: "ロケーターを使用して近くの場所を見つける",
-    noResults: "このエリアでは結果が見つかりませんでした",
-    visitPage: "ページを訪問",
-    getDirections: "道順を取得",
-    currentMapArea: "現在の地図エリア",
-    currentLocation: "現在地",
-    searchHere: "ここを検索...",
-    findALocation: "場所を探す",
-    newYorkCity: "ニューヨーク市、ニューヨーク州、アメリカ合衆国",
-  },
-};
 
 export type LocatorProps = {
   mapStyle?: string;
@@ -198,9 +120,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
+  const { t } = useTranslation();
   const { mapStyle, entityTypeEnvVar } = props;
   const entityType = getEntityType(entityTypeEnvVar);
-  const locale = getDocumentLocale();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -285,7 +207,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         searchActions.setStaticFilters([
           {
             selected: true,
-            displayName: TRANSLATIONS[locale].newYorkCity,
+            displayName: t(
+              "newYorkCity",
+              "New York City, New York, United States"
+            ),
             filter: {
               kind: "fieldValue",
               fieldId: "builtin.location",
@@ -370,14 +295,14 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div className="w-full ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
-          <Heading level={3}>{TRANSLATIONS[locale].findALocation}</Heading>
+          <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
             searchFields={[
               { fieldApiName: DEFAULT_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
-            placeholder={TRANSLATIONS[locale].searchHere}
-            ariaLabel={"Search Dropdown Input"}
+            placeholder={t("searchHere", "Search here...")}
+            ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
               focusedOption: "bg-gray-200",
               inputElement: "rounded-md p-4",
@@ -387,13 +312,22 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
           {resultCount === 0 &&
             searchState === "not started" &&
-            TRANSLATIONS[locale].useLocator}
+            t(
+              "useOurLocatorToFindALocationNearYou",
+              "Use our locator to find a location near you"
+            )}
           {resultCount === 0 &&
             searchState === "complete" &&
-            TRANSLATIONS[locale].noResults}
+            t("noResultsFoundForThisArea", "No results found for this area")}
           {resultCount > 0 &&
             filterDisplayName &&
-            getTranslatedResultCount(locale, resultCount, filterDisplayName)}
+            t("locationsNear", {
+              resultCount,
+              filterDisplayName,
+              defaultValue:
+                "{{resultCount}} location near {{filterDisplayName}}",
+              plural: '{{resultCount}} locations near "{{filterDisplayName}}"',
+            })}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -414,7 +348,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"
             >
-              {TRANSLATIONS[locale].searchThisArea}
+              {t("searchThisArea", "Search This Area")}
             </Button>
           </div>
         )}
@@ -517,6 +451,7 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
 const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
+  const { t } = useTranslation();
   const locale = getDocumentLocale();
   const location = result.rawData;
   const distance = result.distance;
@@ -609,7 +544,7 @@ const LocationCard: CardComponent<Location> = ({
                 onClick={handleGetDirectionsClick}
                 className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
               >
-                {TRANSLATIONS[locale].getDirections}
+                {t("getDirections", "Get Directions")}
                 <FaAngleRight size={"12px"} />
               </a>
             )}
@@ -617,7 +552,7 @@ const LocationCard: CardComponent<Location> = ({
         </div>
         <Button asChild className="basis-full" variant="primary">
           <a href={getPath(location, locale)} onClick={handleVisitPageClick}>
-            {TRANSLATIONS[locale].visitPage}
+            {t("visitPage", "Visit Page")}
           </a>
         </Button>
       </div>
@@ -656,11 +591,7 @@ const getEntityType = (entityTypeEnvVar?: string) => {
 const getDocumentLocale = () => {
   const entityDocument: any = useDocument();
   const fullLocale = entityDocument.meta?.locale || "en";
-  let locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
-  if (!(locale in TRANSLATIONS)) {
-    locale = "en";
-  }
-  return locale;
+  return fullLocale.split(/[_-]/)[0];
 };
 
 interface Location {
@@ -674,24 +605,3 @@ interface Location {
   timezone: string;
   yextDisplayCoordinate?: Coordinate;
 }
-
-const getTranslatedResultCount = (
-  locale: string,
-  resultCount: number,
-  filterDisplayName: string
-) => {
-  switch (locale) {
-    case "en":
-      return `${resultCount} locations near "${filterDisplayName}"`;
-    case "fr":
-      return `${resultCount} emplacements près de «${filterDisplayName}»`;
-    case "es":
-      return `${resultCount} ubicaciones cerca de "${filterDisplayName}"`;
-    case "de":
-      return `${resultCount} Standorte in der Nähe von "${filterDisplayName}"`;
-    case "it":
-      return `${resultCount} località vicino a "${filterDisplayName}"`;
-    case "ja":
-      return `「${filterDisplayName}」の近くの${resultCount}か所`;
-  }
-};
