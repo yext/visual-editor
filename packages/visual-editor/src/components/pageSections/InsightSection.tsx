@@ -29,6 +29,10 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_DESCRIPTION =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters";
+
 export interface InsightSectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -250,14 +254,64 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Insights",
+        constantValue: { en: "Insights" },
         constantValueEnabled: true,
       },
       insights: {
         field: "",
         constantValue: {
-          insights: [],
+          insights: [
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Article Name" },
+              category: { en: "Category" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              publishTime: "August 2, 2022",
+              cta: {
+                link: "#",
+                label: { en: "Read More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Article Name" },
+              category: { en: "Category" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              publishTime: "August 2, 2022",
+              cta: {
+                link: "#",
+                label: { en: "Read More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Article Name" },
+              category: { en: "Category" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              publishTime: "August 2, 2022",
+              cta: {
+                link: "#",
+                label: { en: "Read More" },
+                linkType: "URL",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
