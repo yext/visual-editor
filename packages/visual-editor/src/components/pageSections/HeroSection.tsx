@@ -49,7 +49,7 @@ export interface HeroSectionProps {
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
+  liveVisibility?: boolean;
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
@@ -332,6 +332,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
       hero: {
         field: "",
+        constantValueEnabled: true,
         constantValue: {
           image: {
             height: 360,
@@ -350,9 +351,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           },
         },
         constantValueOverride: {
-          image: false,
-          primaryCta: false,
-          secondaryCta: false,
+          image: true,
+          primaryCta: true,
+          secondaryCta: true,
         },
       },
     },
@@ -369,10 +370,38 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     },
     liveVisibility: true,
   },
+  resolveFields: (data, { lastData }) => {
+    // If set to entity value and no field selected, hide the component.
+    if (
+      !data.props.data.hero.constantValueEnabled &&
+      data.props.data.hero.field === ""
+    ) {
+      data.props.liveVisibility = false;
+      return {
+        ...heroSectionFields,
+        liveVisibility: undefined,
+      };
+    }
+
+    // If no field was selected and then constant value is enabled
+    // or a field is selected, show the component.
+    if (
+      (data.props.data.hero.constantValueEnabled &&
+        !lastData?.props.data.hero.constantValueEnabled &&
+        data.props.data.hero.field === "") ||
+      (lastData?.props.data.hero.field === "" &&
+        data.props.data.hero.field !== "")
+    ) {
+      data.props.liveVisibility = true;
+    }
+
+    // Otherwise, return normal fields.
+    return heroSectionFields;
+  },
   render: (props) => (
     <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
       <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
+        liveVisibility={!!props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
         <HeroSectionWrapper {...props} />

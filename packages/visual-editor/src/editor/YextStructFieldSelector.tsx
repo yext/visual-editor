@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField } from "@measured/puck";
 import {
   ConstantValueModeToggler,
   EntityFieldInput,
@@ -8,8 +8,10 @@ import {
 import { getSubfieldsFromType } from "../internal/puck/Subfields.ts";
 import "./index.css";
 import { pt } from "../utils/i18nPlatform.ts";
+import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { getFilteredEntityFields } from "../internal/utils/getFilteredEntityFields.ts";
 
-type RenderProps = Parameters<CustomField<any>["render"]>[0];
+type RenderProps = Parameters<CustomField<YextStructEntityField>["render"]>[0];
 
 type EntityFieldTypesFilter = {
   type: StructEntityFieldTypes;
@@ -17,11 +19,16 @@ type EntityFieldTypesFilter = {
 
 // StructEntityFieldTypes contains new struct types that we support overriding individual subfields for
 export type StructEntityFieldTypes = "type.hero_section" | "type.promo_section";
+export const supportedStructEntityFieldTypes = [
+  "type.hero_section",
+  "type.promo_section",
+];
 
 // YextStructEntityField keeps track of which fields we are allowing individual overriding for using constantValueOverride
 export type YextStructEntityField<T extends Record<string, any> = any> = {
   field: string;
   constantValue: T;
+  constantValueEnabled?: boolean;
   constantValueOverride: {
     [K in keyof T]: boolean;
   };
@@ -45,23 +52,60 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
     type: "custom",
     label: props.label,
     render: ({ value, onChange }: RenderProps) => {
+      const entityFields = useEntityFields();
+      const filteredEntityFields = getFilteredEntityFields(
+        entityFields,
+        filter
+      );
+
+      const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
+        // Set all overrides when constantValueEnabled changes.
+        const updateOverrides = Object.fromEntries(
+          Object.keys(value.constantValueOverride).map((key) => [
+            key,
+            constantValueEnabled,
+          ])
+        );
+
+        // Automatically select the first field when constantValue is disabled.
+        let newField = value.field;
+        if (!value.constantValueEnabled && constantValueEnabled) {
+          if (filteredEntityFields.length) {
+            newField = filteredEntityFields[0].name;
+          }
+        }
+
+        onChange({
+          field: newField,
+          constantValue: value.constantValue,
+          constantValueEnabled: constantValueEnabled,
+          constantValueOverride: updateOverrides,
+        });
+      };
+
       return (
-        <FieldLabel
-          label={pt(props.label)}
-          className="ve-inline-block ve-w-full"
-        >
-          <EntityFieldInput<U>
-            onChange={onChange}
-            value={value}
-            filter={filter}
+        <div className="ve-flex ve-flex-col ve-gap-3">
+          <ConstantValueModeToggler
+            fieldTypeFilter={[props.filter.type]}
+            constantValueEnabled={!!value.constantValueEnabled}
+            toggleConstantValueEnabled={toggleConstantValueEnabled}
+            label={pt(props.label)}
           />
+          {!value.constantValueEnabled && (
+            <EntityFieldInput<U>
+              onChange={onChange}
+              value={value}
+              filter={filter}
+              hideSelectAFieldOption={true}
+            />
+          )}
           <SubfieldsInput
             onChange={onChange}
             value={value}
             filter={props.filter}
             disallowTranslation={props.disallowTranslation ?? false}
           />
-        </FieldLabel>
+        </div>
       );
     },
   };
@@ -92,74 +136,69 @@ const SubfieldsInput = ({
   }
 
   return (
-    <FieldLabel
-      label={pt("contentOverrides", "Content Overrides")}
-      className="ve-inline-block ve-w-full ve-pt-3"
-    >
-      {subfields.map(({ field, type, label }, idx: number) => {
-        const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
-          onChange({
-            constantValueOverride: {
-              ...value?.constantValueOverride,
-              [field]: constantValueEnabled,
-            },
-            field: value?.field,
-            constantValue: value?.constantValue,
-          });
-        };
+    <div className="ObjectField">
+      <div className="ObjectField-fieldset">
+        {subfields.map(({ field, type, label }) => {
+          const toggleConstantValueEnabled = (
+            constantValueEnabled: boolean
+          ) => {
+            onChange({
+              constantValueOverride: {
+                ...value?.constantValueOverride,
+                [field]: constantValueEnabled,
+              },
+              field: value?.field,
+              constantValue: value?.constantValue,
+            });
+          };
 
-        const constantConfig = getConstantConfigFromType(
-          type,
-          false,
-          disallowTranslation
-        );
-        if (!constantConfig) {
-          return;
-        }
+          const constantConfig = getConstantConfigFromType(
+            type,
+            false,
+            disallowTranslation
+          );
+          if (!constantConfig) {
+            return;
+          }
 
-        return (
-          <div key={idx} className="ObjectField">
-            <div className="ObjectField-fieldset">
-              <>
+          return (
+            <>
+              <div className="ve-mt-3 first:ve-mt-0">
                 <ConstantValueModeToggler
                   fieldTypeFilter={[type]}
                   constantValueEnabled={value?.constantValueOverride?.[field]}
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
                   label={label}
                 />
-                {value?.constantValueOverride?.[field] && (
-                  <div
-                    className={
-                      constantConfig.type !== "custom" ? "ve-pt-3" : ""
-                    }
-                  >
-                    <AutoField
-                      onChange={(newConstantValue, uiState) =>
-                        onChange(
-                          {
-                            field: value?.field,
-                            constantValue: {
-                              ...value?.constantValue,
-                              [field]: newConstantValue,
-                            },
-                            constantValueOverride: {
-                              ...value?.constantValueOverride,
-                              [field]: true,
-                            },
+              </div>
+              {value?.constantValueOverride?.[field] && (
+                <div>
+                  <AutoField
+                    onChange={(newConstantValue, uiState) =>
+                      onChange(
+                        {
+                          field: value?.field,
+                          constantValue: {
+                            ...value?.constantValue,
+                            [field]: newConstantValue,
                           },
-                          uiState
-                        )
-                      }
-                      value={value.constantValue?.[field]}
-                      field={constantConfig}
-                    />
-                  </div>
-                )}
-              </>
-            </div>
-          </div>
-        );
-      })}
-    </FieldLabel>
+                          constantValueOverride: {
+                            ...value?.constantValueOverride,
+                            [field]: true,
+                          },
+                        },
+                        uiState
+                      )
+                    }
+                    value={value.constantValue?.[field]}
+                    field={constantConfig}
+                  />
+                </div>
+              )}
+            </>
+          );
+        })}
+      </div>
+    </div>
   );
 };
