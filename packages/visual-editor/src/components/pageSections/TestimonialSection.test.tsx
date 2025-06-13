@@ -28,7 +28,7 @@ const testimonialData = {
       contributionDate: "2010-02-02T11:00",
       contributorName: "Sam",
       description: {
-        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>The Galaxy Grill burger is out of this world! It’s savory, satisfying, and simply delicious. From the first bite to the last, this burger delivers a taste experience that’s truly unforgettable. Don’t miss out on this cosmic culinary adventure!</span></p>',
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>The Galaxy Grill burger is out of this world! It\'s savory, satisfying, and simply delicious. From the first bite to the last, this burger delivers a taste experience that\'s truly unforgettable. Don\'t miss out on this cosmic culinary adventure!</span></p>',
       },
     },
     {
@@ -144,6 +144,54 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Featured Testimonials")).toBeVisible();
+      expect(page.getByText("Name")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("Jan 1, 2025")).toBeVisible();
+    },
+  },
+  {
+    name: "version 1 props with constant value",
+    document: { c_testimonials: testimonialData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Featured Testimonials",
+          constantValueEnabled: true,
+        },
+        testimonials: {
+          field: "c_testimonials",
+          constantValue: {
+            testimonials: [
+              {
+                description: "Description",
+                contributorName: "Name",
+                contributionDate: "2025-01-01",
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        cardBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
     tests: async (page) => {
       expect(page.getByText("Featured Testimonials")).toBeVisible();
       expect(page.getByText("Name")).toBeVisible();
