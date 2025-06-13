@@ -11,7 +11,7 @@ import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -52,7 +52,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRTF2Field<TranslatableRTF2 | undefined>(
+    return TranslatableRichTextField<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {

@@ -11,7 +11,7 @@ import React from "react";
  * @param label optional label. Takes in translation key and TOptions from react-i18next
  * @param fieldType text or textarea display mode
  */
-export function TranslatableRTF2Field<
+export function TranslatableRichTextField<
   T extends TranslatableRTF2 | undefined = TranslatableRTF2,
 >(label?: Translation, fieldType?: "text" | "textarea"): CustomField<T> {
   // TODO - implement RTF2 editor here

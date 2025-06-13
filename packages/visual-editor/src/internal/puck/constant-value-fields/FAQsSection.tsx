@@ -4,7 +4,7 @@ import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -45,7 +45,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   }, []);
 
   const answerField = useMemo(() => {
-    return TranslatableRTF2Field(
+    return TranslatableRichTextField(
       {
         key: "answer",
         options: {

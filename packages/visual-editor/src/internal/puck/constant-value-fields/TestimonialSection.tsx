@@ -8,7 +8,7 @@ import {
 import { DateSelector } from "../components/DateSelector.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
 
@@ -55,7 +55,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRTF2Field<TranslatableRTF2 | undefined>(
+    return TranslatableRichTextField<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {

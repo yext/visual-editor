@@ -6,7 +6,7 @@ import {
   TranslatableString,
 } from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRTF2Field } from "../../../editor/TranslatableRTF2Field.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
@@ -64,7 +64,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRTF2Field<TranslatableRTF2 | undefined>(
+    return TranslatableRichTextField<TranslatableRTF2 | undefined>(
       {
         key: "description",
         options: {
