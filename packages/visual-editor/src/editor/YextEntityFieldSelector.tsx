@@ -425,21 +425,17 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 const getNoFieldsFoundMessage = (
   filter: RenderEntityFieldFilter<any>
 ): string | undefined => {
-  if (
-    filter.types?.length &&
-    filter.types.includes("type.hero_section") &&
-    !filter.allowList
-  ) {
+  if (!filter.types?.length || filter.allowList) {
+    return;
+  }
+
+  if (filter.types.includes("type.hero_section")) {
     return pt(
       "noHeroFieldsMsg",
       "To use entity content for this section, add a Hero Section field to your page group's entity type."
     );
   }
-  if (
-    filter.types?.length &&
-    filter.types.includes("type.promo_section") &&
-    !filter.allowList
-  ) {
+  if (filter.types.includes("type.promo_section")) {
     return pt(
       "noPromoFieldsMsg",
       "To use entity content for this section, add a Promo Section field to your page group's entity type."
