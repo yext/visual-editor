@@ -22,6 +22,7 @@ import {
   msg,
   pt,
   resolveTranslatableRichText,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
@@ -33,7 +34,10 @@ export interface TestimonialSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   liveVisibility: boolean;
 }
@@ -79,10 +83,19 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -160,6 +173,14 @@ const TestimonialSectionWrapper = ({
     i18n.language
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -171,8 +192,10 @@ const TestimonialSectionWrapper = ({
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
@@ -188,7 +211,7 @@ const TestimonialSectionWrapper = ({
                 key={index}
                 testimonial={testimonial}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles?.heading?.level ?? 2}
               />
             ))}
           </div>
@@ -205,7 +228,10 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
     styles: {
       backgroundColor: backgroundColors.background2.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     data: {
       heading: {
