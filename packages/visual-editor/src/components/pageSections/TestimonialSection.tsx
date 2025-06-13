@@ -210,14 +210,37 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Featured Testimonials",
+        constantValue: { en: "Featured Testimonials" },
         constantValueEnabled: true,
       },
       testimonials: {
         field: "",
         constantValue: {
-          testimonials: [],
+          testimonials: [
+            {
+              description: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+              contributorName: { en: "Name" },
+              contributionDate: "July 22, 2022",
+            },
+            {
+              description: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+              contributorName: { en: "Name" },
+              contributionDate: "July 22, 2022",
+            },
+            {
+              description: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+              contributorName: { en: "Name" },
+              contributionDate: "July 22, 2022",
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     liveVisibility: true,

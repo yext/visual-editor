@@ -183,14 +183,34 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Frequently Asked Questions",
+        constantValue: { en: "Frequently Asked Questions" },
         constantValueEnabled: true,
       },
       faqs: {
         field: "",
         constantValue: {
-          faqs: [],
+          faqs: [
+            {
+              question: { en: "Question Lorem ipsum dolor sit amet?" },
+              answer: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+            },
+            {
+              question: { en: "Question Lorem ipsum dolor sit amet?" },
+              answer: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+            },
+            {
+              question: { en: "Question Lorem ipsum dolor sit amet?" },
+              answer: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {

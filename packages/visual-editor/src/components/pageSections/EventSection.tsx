@@ -30,6 +30,10 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_DESCRIPTION =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
+
 export interface EventSectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -244,14 +248,61 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Upcoming Events",
+        constantValue: { en: "Upcoming Events" },
         constantValueEnabled: true,
       },
       events: {
         field: "",
         constantValue: {
-          events: [],
+          events: [
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              title: { en: "Event Title" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              dateTime: "2022-12-12T14:00:00",
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              title: { en: "Event Title" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              dateTime: "2022-12-12T14:00:00",
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              title: { en: "Event Title" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              dateTime: "2022-12-12T14:00:00",
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
