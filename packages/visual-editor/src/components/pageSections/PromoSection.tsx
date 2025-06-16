@@ -23,6 +23,8 @@ import {
   resolveTranslatableRichText,
   msg,
   pt,
+  HeadingLevel,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -36,6 +38,10 @@ export interface PromoSectionProps {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
     ctaVariant: CTAProps["variant"];
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -80,6 +86,20 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         type: "radio",
         options: "CTA_VARIANT",
       }),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -98,6 +118,14 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
@@ -128,9 +156,11 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
-            <Heading level={3}>
-              {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
-            </Heading>
+            <div className={`flex ${justifyClass}`}>
+              <Heading level={styles?.heading?.level ?? 3}>
+                {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
+              </Heading>
+            </div>
           </EntityField>
         )}
         <EntityField
@@ -205,6 +235,10 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
       backgroundColor: backgroundColors.background1.value,
       orientation: "left",
       ctaVariant: "primary",
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "promoSection",
