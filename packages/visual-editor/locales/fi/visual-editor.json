@@ -106,6 +106,7 @@
     "data": "Tiedot",
     "dayOfWeekFormat": "Viikonpäivän muoto",
     "description": "Kuvaus",
+    "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
     "emailList": "Sähköpostiluettelo",
     "emails": "Sähköpostit",
     "emailsListLength": "Sähköpostiluettelon pituus",

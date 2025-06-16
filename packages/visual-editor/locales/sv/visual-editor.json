@@ -106,6 +106,7 @@
     "data": "Data",
     "dayOfWeekFormat": "Veckodagsformat",
     "description": "Beskrivning",
+    "directoryRootLinkLabel": "Katalogrotlänketikett",
     "emailList": "E -postlista",
     "emails": "E -postmeddelanden",
     "emailsListLength": "E -postlistor",

@@ -106,6 +106,7 @@
     "data": "Andmed",
     "dayOfWeekFormat": "Nädalapäeva vorming",
     "description": "Kirjeldus",
+    "directoryRootLinkLabel": "Kataloogi juurte lingi silt",
     "emailList": "E -posti nimekiri",
     "emails": "E -kirjad",
     "emailsListLength": "E -kirjade loendi pikkus",

@@ -12,6 +12,9 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
+  data?: {
+    directoryRoot?: string;
+  };
   analytics?: {
     scope?: string;
   };
@@ -66,7 +69,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 // then displays nothing. In the case of a root DM page, there are
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
-export const BreadcrumbsComponent = () => {
+export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
   const { t } = useTranslation();
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
@@ -90,6 +93,7 @@ export const BreadcrumbsComponent = () => {
     >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {
+          const isRoot = idx === 0;
           const isLast = idx === breadcrumbs.length - 1;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
@@ -103,7 +107,9 @@ export const BreadcrumbsComponent = () => {
                 className="text-body-sm-fontSize font-link-fontFamily"
                 alwaysHideCaret={true}
               >
-                <Body variant={"sm"}>{name}</Body>
+                <Body variant={"sm"}>
+                  {isRoot && data?.directoryRoot ? data.directoryRoot : name}
+                </Body>
               </MaybeLink>
               {!isLast && <span className="mx-2">{separator}</span>}
             </li>
@@ -131,7 +137,7 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
           isEditing={props.puck.isEditing}
           iconSize="md"
         >
-          <BreadcrumbsComponent />
+          <BreadcrumbsComponent {...props} />
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     );

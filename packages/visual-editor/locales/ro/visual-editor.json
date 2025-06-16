@@ -106,6 +106,7 @@
     "data": "Date",
     "dayOfWeekFormat": "Format Day of Week",
     "description": "Descriere",
+    "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
     "emailList": "Lista de e -mailuri",
     "emails": "E -mailuri",
     "emailsListLength": "Lista listei de e -mailuri",

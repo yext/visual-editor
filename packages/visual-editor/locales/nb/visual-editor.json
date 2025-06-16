@@ -106,6 +106,7 @@
     "data": "Data",
     "dayOfWeekFormat": "Dag i ukens format",
     "description": "Beskrivelse",
+    "directoryRootLinkLabel": "Directory Root Link Label",
     "emailList": "E -postliste",
     "emails": "E -post",
     "emailsListLength": "E -postlistelengde",

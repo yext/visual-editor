@@ -106,6 +106,7 @@
     "data": "Adat",
     "dayOfWeekFormat": "A hét napi formátuma",
     "description": "Leírás",
+    "directoryRootLinkLabel": "Directory Root Link címke",
     "emailList": "E -mail lista",
     "emails": "E -mailek",
     "emailsListLength": "E -mailek listája hossza",

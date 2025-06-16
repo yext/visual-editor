@@ -8,6 +8,7 @@ import {
   PageSection,
   PhoneAtom,
   msg,
+  YextField,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -18,6 +19,9 @@ import {
 } from "@yext/pages-components";
 
 export interface DirectoryProps {
+  data: {
+    directoryRoot: string;
+  };
   analytics?: {
     scope?: string;
   };
@@ -190,7 +194,7 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = () => {
+const DirectoryComponent = ({ data }: DirectoryProps) => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   let headingText;
@@ -210,7 +214,10 @@ const DirectoryComponent = () => {
 
   return (
     <>
-      <BreadcrumbsComponent />
+      <BreadcrumbsComponent
+        data={{ directoryRoot: data.directoryRoot }}
+        liveVisibility={true}
+      />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
           <Heading level={4}>{document._site.name}</Heading>
@@ -238,14 +245,30 @@ const DirectoryComponent = () => {
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
+  fields: {
+    data: YextField("Data", {
+      type: "object",
+      objectFields: {
+        directoryRoot: YextField(
+          msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+          {
+            type: "text",
+          }
+        ),
+      },
+    }),
+  },
   defaultProps: {
+    data: {
+      directoryRoot: "Directory Root",
+    },
     analytics: {
       scope: "directory",
     },
   },
   render: (props) => (
     <AnalyticsScopeProvider name={props?.analytics?.scope ?? "directory"}>
-      <DirectoryComponent />
+      <DirectoryComponent {...props} />
     </AnalyticsScopeProvider>
   ),
 };

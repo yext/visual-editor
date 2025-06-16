@@ -106,6 +106,7 @@
     "data": "Data",
     "dayOfWeekFormat": "Formát dne týdne",
     "description": "Popis",
+    "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
     "emailList": "Seznam e -mailů",
     "emails": "E -maily",
     "emailsListLength": "Délka seznamu e -mailů",
