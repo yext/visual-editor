@@ -28,6 +28,10 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_DESCRIPTION =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
 export interface ProductSectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -246,14 +250,61 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Featured Products",
+        constantValue: { en: "Featured Products" },
         constantValueEnabled: true,
       },
       products: {
         field: "",
         constantValue: {
-          products: [],
+          products: [
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Product Title" },
+              category: { en: "Category, Pricing, etc" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Product Title" },
+              category: { en: "Category, Pricing, etc" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Product Title" },
+              category: { en: "Category, Pricing, etc" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {

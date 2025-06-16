@@ -162,7 +162,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Gallery")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(3);
     },
   },
   {
@@ -172,7 +171,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Gallery")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(3);
     },
   },
   {

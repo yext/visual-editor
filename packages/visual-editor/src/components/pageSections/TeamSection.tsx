@@ -48,6 +48,8 @@ export interface TeamSectionProps {
   liveVisibility: boolean;
 }
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/80x80";
+
 const TeamSectionFields: Fields<TeamSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
@@ -276,14 +278,64 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Meet Our Team",
+        constantValue: { en: "Meet Our Team" },
         constantValueEnabled: true,
       },
       people: {
         field: "",
         constantValue: {
-          people: [],
+          people: [
+            {
+              name: { en: "First Last" },
+              title: { en: "Associate Agent" },
+              phoneNumber: "(202) 770-6619 ",
+              email: "jkelley@[company].com",
+              cta: {
+                label: { en: "Visit Profile" },
+                link: "#",
+                linkType: "URL",
+              },
+              headshot: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 80,
+                width: 80,
+              },
+            },
+            {
+              name: { en: "First Last" },
+              title: { en: "Associate Agent" },
+              phoneNumber: "(202) 770-6619 ",
+              email: "jkelley@[company].com",
+              cta: {
+                label: { en: "Visit Profile" },
+                link: "#",
+                linkType: "URL",
+              },
+              headshot: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 80,
+                width: 80,
+              },
+            },
+            {
+              name: { en: "First Last" },
+              title: { en: "Associate Agent" },
+              phoneNumber: "(202) 770-6619 ",
+              email: "jkelley@[company].com",
+              cta: {
+                label: { en: "Visit Profile" },
+                link: "#",
+                linkType: "URL",
+              },
+              headshot: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 80,
+                width: 80,
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {

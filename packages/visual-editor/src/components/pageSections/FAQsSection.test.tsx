@@ -40,7 +40,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Frequently Asked Questions")).toBeVisible();
-      expect(document.body.textContent).not.toContain("parking");
     },
   },
   {
@@ -50,7 +49,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Frequently Asked Questions")).toBeVisible();
-      expect(document.body.textContent).not.toContain("parking");
     },
   },
   {

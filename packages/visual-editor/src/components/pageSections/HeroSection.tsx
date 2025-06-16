@@ -319,35 +319,75 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
   defaultProps: {
     data: {
       businessName: {
-        field: "name",
-        constantValue: "Business Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "Business Name",
+        },
       },
       localGeoModifier: {
-        field: "address.city",
-        constantValue: "Geomodifier Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "Geomodifier",
+        },
       },
       hours: {
-        field: "hours",
-        constantValue: {},
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          monday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          tuesday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          wednesday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          thursday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          friday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          saturday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          sunday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+        },
       },
       hero: {
         field: "",
         constantValueEnabled: true,
         constantValue: {
-          image: {
-            height: 360,
-            width: 640,
-            url: PLACEHOLDER_IMAGE_URL,
-          },
           primaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+            },
             link: "#",
             linkType: "URL",
           },
           secondaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+            },
             link: "#",
             linkType: "URL",
+          },
+          image: {
+            url: PLACEHOLDER_IMAGE_URL,
+            height: 360,
+            width: 640,
           },
         },
         constantValueOverride: {

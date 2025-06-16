@@ -125,6 +125,9 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Insights")).toBeVisible();
+      expect(document.body.textContent).toContain(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo."
+      );
     },
   },
   {
@@ -134,7 +137,9 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Insights")).toBeVisible();
-      expect(document.body.textContent).not.toContain("Burger");
+      expect(document.body.textContent).toContain(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo."
+      );
     },
   },
   {

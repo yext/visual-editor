@@ -27,7 +27,7 @@ const tests: ComponentTest[] = [
       expect(document.querySelectorAll("img")[0]).toBeVisible();
       expect(document.querySelectorAll("p").length).toBe(0);
       expect(document.querySelectorAll("h1, h2, h3, h4, h5, h6").length).toBe(
-        0
+        2
       );
     },
   },
@@ -45,8 +45,12 @@ const tests: ComponentTest[] = [
     tests: async (page) => {
       expect(page.getByText("Call to Action").elements().length).toBe(2);
       expect(document.querySelectorAll("img")[0]).toBeVisible();
-      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent("name");
-      expect(document.getElementsByTagName("h1")[0]).toHaveTextContent("city");
+      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent(
+        "Business Name"
+      );
+      expect(document.getElementsByTagName("h1")[0]).toHaveTextContent(
+        "Geomodifier"
+      );
       expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
     },
   },

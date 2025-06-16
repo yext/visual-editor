@@ -117,6 +117,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             image={resolvedPromo.image}
             layout={"auto"}
             aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+            className="h-[200px]"
           />
         </EntityField>
       )}
@@ -182,10 +183,12 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             width: 640,
             url: PLACEHOLDER_IMAGE_URL,
           },
-          title: "Title",
-          description: "Description",
+          title: { en: "Featured Promotion" },
+          description: {
+            en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+          },
           cta: {
-            label: "Call To Action",
+            label: { en: "Learn More" },
             link: "#",
             linkType: "URL",
           },

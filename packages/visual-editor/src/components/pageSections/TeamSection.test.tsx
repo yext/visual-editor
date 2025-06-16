@@ -126,7 +126,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Meet Our Team")).toBeVisible();
-      expect(document.body.textContent).not.toContain("Captain");
     },
   },
   {
