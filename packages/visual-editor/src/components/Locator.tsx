@@ -460,7 +460,6 @@ const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
   const { t } = useTranslation();
-  const locale = getDocumentLocale();
   const location = result.rawData;
   const distance = result.distance;
 
@@ -559,7 +558,7 @@ const LocationCard: CardComponent<Location> = ({
           </div>
         </div>
         <Button asChild className="basis-full" variant="primary">
-          <a href={getPath(location, locale)} onClick={handleVisitPageClick}>
+          <a href={getPath(location)} onClick={handleVisitPageClick}>
             {t("visitPage", "Visit Page")}
           </a>
         </Button>
@@ -568,11 +567,13 @@ const LocationCard: CardComponent<Location> = ({
   );
 };
 
-const getPath = (location: Location, locale: string) => {
+const getPath = (location: Location) => {
   if (location.slug) {
     return location.slug;
   }
 
+  const entityDocument: any = useDocument();
+  const locale = entityDocument.meta?.locale || "en";
   const localePath = locale !== "en" ? `${locale}/` : "";
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
@@ -594,12 +595,6 @@ const getEntityType = (entityTypeEnvVar?: string) => {
   } catch {
     return DEFAULT_ENTITY_TYPE;
   }
-};
-
-const getDocumentLocale = () => {
-  const entityDocument: any = useDocument();
-  const fullLocale = entityDocument.meta?.locale || "en";
-  return fullLocale.split(/[_-]/)[0];
 };
 
 interface Location {
