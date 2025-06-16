@@ -53,7 +53,6 @@ const tests: ComponentTest[] = [
     props: { ...BreadcrumbsSection.defaultProps },
     version: migrationRegistry.length,
     tests: async (page) => {
-      // expect(document.getElementsByTagName("nav")[0]).toBeVisible();
       expect(page.getByText("Directory Root")).toBeVisible();
       expect(page.getByText("US")).toBeVisible();
       expect(page.getByText("NY")).toBeVisible();
@@ -62,7 +61,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 4 non-default props with document data",
+    name: "version 4 with non-default props with document data",
     document: {
       name: "Galaxy Grill",
       dm_directoryParents_63590_locations: [
@@ -94,7 +93,6 @@ const tests: ComponentTest[] = [
     },
     version: 4,
     tests: async (page) => {
-      // expect(document.getElementsByTagName("nav")[0]).toBeVisible();
       expect(page.getByText("Locations Directory")).toBeVisible();
       expect(page.getByText("US")).toBeVisible();
       expect(page.getByText("NY")).toBeVisible();
