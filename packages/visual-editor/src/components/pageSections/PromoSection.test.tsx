@@ -67,7 +67,12 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
+      expect(
+        page.getByText(
+          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
+        )
+      ).toBeVisible();
+      expect(page.getByText("Learn More")).toBeVisible();
     },
   },
   {
@@ -77,7 +82,12 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
+      expect(
+        page.getByText(
+          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
+        )
+      ).toBeVisible();
+      expect(page.getByText("Learn More")).toBeVisible();
     },
   },
   {

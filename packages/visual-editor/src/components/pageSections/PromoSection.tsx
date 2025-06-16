@@ -157,7 +157,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
             <div className={`flex ${justifyClass}`}>
-              <Heading level={styles?.heading?.level ?? 3}>
+              <Heading level={styles.heading.level}>
                 {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
               </Heading>
             </div>
