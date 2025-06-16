@@ -573,7 +573,7 @@ const getPath = (location: Location) => {
   }
 
   const entityDocument: any = useDocument();
-  const locale = entityDocument.meta?.locale || "en";
+  const locale = entityDocument.locale || "en";
   const localePath = locale !== "en" ? `${locale}/` : "";
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
