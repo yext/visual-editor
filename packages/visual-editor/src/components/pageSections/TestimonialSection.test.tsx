@@ -21,21 +21,21 @@ const testimonialData = {
       contributionDate: "2024-04-02T15:23",
       contributorName: "Jane",
       description: {
-        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>This burger is a flavor explosion! The juicy patty, nestled in a soft bun, boasts a perfect sear. Crisp lettuce, ripe tomatoes, and a tangy sauce complete this culinary masterpiece. A must-try for any burger enthusiast!</span></p>',
+        html: `<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>This burger is a flavor explosion! The juicy patty, nestled in a soft bun, boasts a perfect sear. Crisp lettuce, ripe tomatoes, and a tangy sauce complete this culinary masterpiece. A must-try for any burger enthusiast!</span></p>`,
       },
     },
     {
       contributionDate: "2010-02-02T11:00",
       contributorName: "Sam",
       description: {
-        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>The Galaxy Grill burger is out of this world! It’s savory, satisfying, and simply delicious. From the first bite to the last, this burger delivers a taste experience that’s truly unforgettable. Don’t miss out on this cosmic culinary adventure!</span></p>',
+        html: `<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>The Galaxy Grill burger is out of this world! It's savory, satisfying, and simply delicious. From the first bite to the last, this burger delivers a taste experience that's truly unforgettable. Don't miss out on this cosmic culinary adventure!</span></p>`,
       },
     },
     {
       contributionDate: "2024-11-11T17:00",
       contributorName: "John",
       description: {
-        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Absolutely incredible! This burger is pure perfection. Juicy, flavorful, and everything just works together. The bun is soft, the toppings are fresh, and the overall taste is out of this world. A definite must-get!</span></p>',
+        html: `<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Absolutely incredible! This burger is pure perfection. Juicy, flavorful, and everything just works together. The bun is soft, the toppings are fresh, and the overall taste is out of this world. A definite must-get!</span></p>`,
       },
     },
   ],
@@ -49,6 +49,7 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Testimonials")).toBeVisible();
+      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
     },
   },
   {
@@ -58,7 +59,7 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Testimonials")).toBeVisible();
-      expect(document.body.textContent).not.toContain("Jane");
+      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
     },
   },
   {
