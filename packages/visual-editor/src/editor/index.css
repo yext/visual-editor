@@ -63,7 +63,7 @@
   margin-top: 12px;
 }
 
-.RTFTextAreaField {
+.RichTextField {
   border: 1px solid var(--puck-color-grey-09);
   border-radius: 4px;
   font-size: 14px;
@@ -74,10 +74,10 @@
   display: inline-flex;
 }
 
-.RTFTextAreaField:focus {
+.RichTextField:focus {
   outline: 2px solid var(--puck-color-azure-05);
 }
 
-.RTFTextAreaField:hover {
+.RichTextField:hover {
   border-color: var(--puck-color-grey-05);
 }

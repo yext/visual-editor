@@ -47,11 +47,11 @@ export function TranslatableRichTextField<
       );
 
       const handleClick = () => {
-        const messageId = `rtf-${Date.now()}`;
+        const messageId = `RichText-${Date.now()}`;
         setPendingMessageId(messageId);
         openConstantValueEditor({
           payload: {
-            type: "RTF",
+            type: "RichText",
             value: resolvedValue,
             id: messageId,
             fieldName: fieldLabel,
@@ -75,7 +75,7 @@ export function TranslatableRichTextField<
 
       return (
         <FieldLabel label={fieldLabel}>
-          <button className="RTFTextAreaField" onClick={handleClick}>
+          <button className="RichTextField" onClick={handleClick}>
             <div className="ve-line-clamp-3">{resolvedValue}</div>
           </button>
         </FieldLabel>
