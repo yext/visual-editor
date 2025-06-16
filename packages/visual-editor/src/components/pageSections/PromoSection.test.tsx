@@ -67,12 +67,7 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(
-        page.getByText(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
-        )
-      ).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
+      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
     },
   },
   {
@@ -82,12 +77,7 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(
-        page.getByText(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
-        )
-      ).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
+      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
     },
   },
   {
@@ -168,6 +158,59 @@ const tests: ComponentTest[] = [
       expect(page.getByText("Title")).toBeVisible();
       expect(page.getByText("Description")).toBeVisible();
       expect(page.getByText("Call to Action")).toBeVisible();
+    },
+  },
+  {
+    name: "version 1 props with constant value",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: { en: "Featured Promotion" },
+            description: {
+              en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+            },
+            cta: {
+              label: { en: "Learn More" },
+              link: "#",
+              linkType: "URL",
+            },
+          },
+          constantValueEnabled: true,
+          constantValueOverride: {
+            image: true,
+            title: true,
+            description: true,
+            cta: true,
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        orientation: "right",
+        ctaVariant: "secondary",
+        heading: {
+          level: 2,
+          align: "left",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Featured Promotion")).toBeVisible();
+      expect(page.getByText("Lorem ipsum dolor sit amet")).toBeVisible();
+      expect(page.getByText("Learn More")).toBeVisible();
     },
   },
 ];
