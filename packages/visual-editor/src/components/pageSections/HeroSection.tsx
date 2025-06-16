@@ -319,25 +319,52 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
   defaultProps: {
     data: {
       businessName: {
-        field: "name",
+        field: "",
+        constantValueEnabled: true,
         constantValue: "Business Name",
       },
       localGeoModifier: {
-        field: "address.city",
-        constantValue: "Geomodifier Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: "Geomodifier",
       },
       hours: {
-        field: "hours",
-        constantValue: {},
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          monday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          tuesday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          wednesday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          thursday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          friday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          saturday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          sunday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+        },
       },
       hero: {
         field: "",
         constantValue: {
-          image: {
-            height: 360,
-            width: 640,
-            url: PLACEHOLDER_IMAGE_URL,
-          },
           primaryCta: {
             label: "Call To Action",
             link: "#",
@@ -348,11 +375,16 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             link: "#",
             linkType: "URL",
           },
+          image: {
+            url: PLACEHOLDER_IMAGE_URL,
+            height: 360,
+            width: 640,
+          },
         },
         constantValueOverride: {
-          image: false,
-          primaryCta: false,
-          secondaryCta: false,
+          image: true,
+          primaryCta: true,
+          secondaryCta: true,
         },
       },
     },
