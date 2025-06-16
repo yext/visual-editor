@@ -45,15 +45,12 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   }, []);
 
   const answerField = useMemo(() => {
-    return TranslatableRichTextField(
-      {
-        key: "answer",
-        options: {
-          defaultValue: "Answer",
-        },
+    return TranslatableRichTextField({
+      key: "answer",
+      options: {
+        defaultValue: "Answer",
       },
-      "textarea"
-    );
+    });
   }, []);
 
   return {
