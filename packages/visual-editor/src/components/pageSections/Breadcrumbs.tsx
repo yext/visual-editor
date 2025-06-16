@@ -12,8 +12,8 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
-  data?: {
-    directoryRoot?: string;
+  data: {
+    directoryRoot: string;
   };
   analytics?: {
     scope?: string;
@@ -22,6 +22,17 @@ export type BreadcrumbsSectionProps = {
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
+  data: YextField("Data", {
+    type: "object",
+    objectFields: {
+      directoryRoot: YextField(
+        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        {
+          type: "text",
+        }
+      ),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
@@ -107,9 +118,7 @@ export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
                 className="text-body-sm-fontSize font-link-fontFamily"
                 alwaysHideCaret={true}
               >
-                <Body variant={"sm"}>
-                  {isRoot && data?.directoryRoot ? data.directoryRoot : name}
-                </Body>
+                <Body variant={"sm"}>{isRoot ? data.directoryRoot : name}</Body>
               </MaybeLink>
               {!isLast && <span className="mx-2">{separator}</span>}
             </li>
@@ -124,6 +133,9 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,
   defaultProps: {
+    data: {
+      directoryRoot: "Directory Root",
+    },
     analytics: {
       scope: "breadcrumbs",
     },
