@@ -22,7 +22,7 @@ export type BreadcrumbsSectionProps = {
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
       directoryRoot: YextField(

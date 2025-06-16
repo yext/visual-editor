@@ -246,7 +246,7 @@ const DirectoryComponent = ({ data }: DirectoryProps) => {
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
   fields: {
-    data: YextField("Data", {
+    data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
         directoryRoot: YextField(
