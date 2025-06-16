@@ -321,12 +321,16 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       businessName: {
         field: "",
         constantValueEnabled: true,
-        constantValue: "Business Name",
+        constantValue: {
+          en: "Business Name",
+        },
       },
       localGeoModifier: {
         field: "",
         constantValueEnabled: true,
-        constantValue: "Geomodifier",
+        constantValue: {
+          en: "Geomodifier",
+        },
       },
       hours: {
         field: "",
@@ -366,12 +370,16 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         field: "",
         constantValue: {
           primaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+            },
             link: "#",
             linkType: "URL",
           },
           secondaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+            },
             link: "#",
             linkType: "URL",
           },
