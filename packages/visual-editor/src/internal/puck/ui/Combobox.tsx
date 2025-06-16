@@ -24,12 +24,14 @@ type ComboboxProps = {
   defaultValue: ComboboxOption;
   onChange: (value: string) => void;
   options: Array<ComboboxOption>;
+  disabled?: boolean;
 };
 
 export const Combobox = ({
   defaultValue,
   onChange,
   options,
+  disabled,
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
 
@@ -41,6 +43,7 @@ export const Combobox = ({
           role="combobox"
           aria-expanded={open}
           className="ve-w-full ve-justify-between ve-rounded-sm"
+          disabled={disabled}
         >
           {defaultValue ? (
             <div className="ve-flex ve-items-center">

@@ -52,15 +52,12 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>(
-      {
-        key: "description",
-        options: {
-          defaultValue: "Description",
-        },
+    return TranslatableRichTextField<TranslatableRichText | undefined>({
+      key: "description",
+      options: {
+        defaultValue: "Description",
       },
-      "textarea"
-    );
+    });
   }, []);
 
   return {

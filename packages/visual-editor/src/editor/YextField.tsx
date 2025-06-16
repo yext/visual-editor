@@ -137,7 +137,7 @@ export function YextField<T, U>(
       typeof config.options === "string"
         ? ThemeOptions[config.options]
         : config.options;
-    return BasicSelector(fieldName, options as any);
+    return BasicSelector({ label: fieldName, options: options as any });
   }
 
   if (

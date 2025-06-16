@@ -59,4 +59,8 @@ export const addHeadingAlignmentMigration: Migration = {
     action: "updated",
     propTransformation: updateHeadingStructure,
   },
+  TestimonialSection: {
+    action: "updated",
+    propTransformation: updateHeadingStructure,
+  },
 };

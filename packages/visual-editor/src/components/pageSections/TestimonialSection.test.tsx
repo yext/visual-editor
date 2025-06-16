@@ -152,6 +152,54 @@ const tests: ComponentTest[] = [
       expect(page.getByText("Jan 1, 2025")).toBeVisible();
     },
   },
+  {
+    name: "version 1 props with constant value",
+    document: { c_testimonials: testimonialData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Featured Testimonials",
+          constantValueEnabled: true,
+        },
+        testimonials: {
+          field: "c_testimonials",
+          constantValue: {
+            testimonials: [
+              {
+                description: "Description",
+                contributorName: "Name",
+                contributionDate: "2025-01-01",
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        cardBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Featured Testimonials")).toBeVisible();
+      expect(page.getByText("Name")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("Jan 1, 2025")).toBeVisible();
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
