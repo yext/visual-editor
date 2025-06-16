@@ -328,10 +328,14 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             t("noResultsFoundForThisArea", "No results found for this area")}
           {resultCount > 0 &&
             filterDisplayName &&
-            t("locationsNear", {
-              count: resultCount,
-              filterDisplayName,
-            })}
+            t(
+              "locationsNear",
+              `${resultCount} locations near "${filterDisplayName}"`,
+              {
+                count: resultCount,
+                filterDisplayName,
+              }
+            )}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
