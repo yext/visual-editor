@@ -39,14 +39,14 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      msg("name", "Name"),
+      msg("fields.name", "Name"),
       "text"
     );
   }, []);
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      msg("title", "Title"),
+      msg("fields.title", "Title"),
       "text"
     );
   }, []);
@@ -57,10 +57,10 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
     arrayFields: {
       headshot: {
         type: "object",
-        label: t("headshot", "Headshot"),
+        label: t("fields.headshot", "Headshot"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },
@@ -70,7 +70,7 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
       phoneNumber: PHONE_CONSTANT_CONFIG,
       email: {
         type: "text",
-        label: t("email", "Email"),
+        label: t("fields.email", "Email"),
       },
       cta: translatableCTAFields(),
     },

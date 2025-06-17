@@ -118,7 +118,7 @@ export const FontSizeSelector = (
 
       return (
         <FieldLabel
-          label={label ?? pt("FontSize", "Font Size")}
+          label={label ?? pt("fontSize", "Font Size")}
           icon={<ChevronDown size={16} />}
         >
           <Combobox

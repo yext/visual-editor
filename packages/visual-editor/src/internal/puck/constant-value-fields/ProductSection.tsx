@@ -41,21 +41,21 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      msg("name", "Name"),
+      msg("fields.name", "Name"),
       "text"
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      msg("category", "Category"),
+      msg("fields.category", "Category"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
     return TranslatableRichTextField<TranslatableRichText | undefined>(
-      msg("description", "Description")
+      msg("fields.description", "Description")
     );
   }, []);
 
@@ -65,10 +65,10 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: t("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },

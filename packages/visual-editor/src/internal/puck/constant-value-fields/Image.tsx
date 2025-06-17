@@ -11,7 +11,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
       value: value,
       fields: [
         {
-          label: pt("url", "URL"),
+          label: pt("fields.url", "URL"),
           field: "url",
           fieldType: "text",
         },

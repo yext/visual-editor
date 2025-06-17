@@ -11,7 +11,7 @@ export const PHONE_CONSTANT_CONFIG: CustomField<string | undefined> = {
     return (
       <div className="ve-mt-[12px]">
         <FieldLabel
-          label={pt("phoneNumber", "Phone Number")}
+          label={pt("fields.phoneNumber", "Phone Number")}
           icon={<Phone size={16} />}
         >
           <PhoneInputWithCountrySelect

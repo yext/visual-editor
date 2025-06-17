@@ -79,22 +79,22 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
 export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const labelField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      msg("label", "Label"),
+      msg("fields.label", "Label"),
       "text"
     );
   }, []);
 
   return {
     type: "object",
-    label: pt("Call To Action"),
+    label: pt("fields.callToAction", "Call To Action"),
     objectFields: {
       label: labelField,
       link: {
-        label: pt("Link", "Link"),
+        label: pt("fields.link", "Link"),
         type: "text",
       },
       linkType: {
-        label: pt("linkType", "Link Type"),
+        label: pt("fields.linkType", "Link Type"),
         type: "select",
         options: linkTypeOptions(),
       },

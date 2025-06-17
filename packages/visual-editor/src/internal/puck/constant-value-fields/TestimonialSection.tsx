@@ -44,14 +44,14 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
 
   const contributorNameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      msg("contributorName", "Contributor Name"),
+      msg("fields.contributorName", "Contributor Name"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
     return TranslatableRichTextField<TranslatableRichText | undefined>(
-      msg("descriptions", "Description")
+      msg("fields.descriptions", "Description")
     );
   }, []);
 

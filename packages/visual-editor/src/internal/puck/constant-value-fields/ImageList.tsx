@@ -9,15 +9,15 @@ export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<ImageType[]> => {
     arrayFields: {
       url: {
         type: "text",
-        label: pt("url", "URL"),
+        label: pt("fields.url", "URL"),
       },
       height: {
         type: "text",
-        label: pt("height", "height"),
+        label: pt("fields.height", "height"),
       },
       width: {
         type: "text",
-        label: pt("width", "width"),
+        label: pt("fields.width", "width"),
       },
     },
     getItemSummary: (_, i) => pt("photo", "Photo") + " " + i,
