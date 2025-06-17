@@ -1,0 +1,22 @@
+.ve-animate-slide-in-right {
+  animation: ve-slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes ve-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.ve-multiline-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 3.5em;
+  max-height: 4.5em;
+  line-height: 1.2;
+}

@@ -6,7 +6,6 @@ import { usePuck } from "@measured/puck";
 interface TranslatableLexicalEditorProps {
   value: string | RichText;
   onChange: (value: string | RichText) => void;
-  readOnly?: boolean;
   translations?: Record<string, string | RichText>;
   onTranslationChange?: (locale: string, value: string | RichText) => void;
   currentLocale?: string;
@@ -16,7 +15,6 @@ interface TranslatableLexicalEditorProps {
 export function TranslatableLexicalEditor({
   value,
   onChange,
-  readOnly = false,
   translations = {},
   onTranslationChange,
   currentLocale = "en",
@@ -65,7 +63,6 @@ export function TranslatableLexicalEditor({
       <LexicalEditorComponent
         value={getValueForLocale(selectedLocale)}
         onChange={handleEditorChange}
-        readOnly={readOnly}
         showToolbar={isDrawerOpen}
       />
     </div>
