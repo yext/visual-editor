@@ -51,7 +51,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
 
   const descriptionField = useMemo(() => {
     return TranslatableRichTextField<TranslatableRichText | undefined>(
-      msg("fields.descriptions", "Description")
+      msg("fields.description", "Description")
     );
   }, []);
 
