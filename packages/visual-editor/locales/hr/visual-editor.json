@@ -21,6 +21,7 @@
   "date": "Datum",
   "datetime": "Datum/vrijeme",
   "description": "Opis",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E -pošta",
   "emailList": "Popis e -pošte",
   "events": "Događaj",

@@ -21,6 +21,7 @@
   "date": "Tarih",
   "datetime": "Tarih/saat",
   "description": "Tanım",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E -posta",
   "emailList": "E -posta Listesi",
   "events": "Olaylar",

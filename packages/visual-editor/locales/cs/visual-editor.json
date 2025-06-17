@@ -21,6 +21,7 @@
   "date": "Datum",
   "datetime": "Datum/čas",
   "description": "Popis",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E-mail",
   "emailList": "Seznam e -mailů",
   "events": "Události",

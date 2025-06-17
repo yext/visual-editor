@@ -21,6 +21,7 @@
   "date": "Dátum",
   "datetime": "Dátum/čas",
   "description": "Opis",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E -mail",
   "emailList": "Zoznam e -mailov",
   "events": "Udalosti",

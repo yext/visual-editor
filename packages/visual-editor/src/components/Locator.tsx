@@ -472,6 +472,10 @@ const LocationCard: CardComponent<Location> = ({
     ? (distance / 1609.344).toFixed(1)
     : undefined;
 
+  const distanceInKilometers = distance
+    ? (distance / 1000).toFixed(1)
+    : undefined;
+
   const handleGetDirectionsClick = useCardAnalyticsCallback(
     result,
     "DRIVING_DIRECTIONS"
@@ -499,9 +503,12 @@ const LocationCard: CardComponent<Location> = ({
             <Heading className="font-bold text-palette-primary-dark" level={4}>
               {location.name}
             </Heading>
-            {distanceInMiles && (
+            {distance && (
               <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
-                {distanceInMiles + " mi"}
+                {t("distanceInUnit", `${distanceInMiles} mi`, {
+                  distanceInMiles,
+                  distanceInKilometers,
+                })}
               </div>
             )}
           </div>

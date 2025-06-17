@@ -21,6 +21,7 @@
   "date": "日期",
   "datetime": "日期/时间",
   "description": "描述",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "电子邮件",
   "emailList": "电子邮件列表",
   "events": "事件",

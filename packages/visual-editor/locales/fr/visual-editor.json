@@ -21,6 +21,7 @@
   "date": "Date",
   "datetime": "Date / heure",
   "description": "Description",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E-mail",
   "emailList": "Liste de diffusion",
   "events": "Événements",
