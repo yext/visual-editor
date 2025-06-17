@@ -7,6 +7,7 @@ import {
   YextField,
   VisibilityWrapper,
   msg,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -25,11 +26,12 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      directoryRoot: YextField(
-        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+      directoryRoot: TranslatableStringField(
         {
-          type: "text",
-        }
+          key: "fields.directoryRootLinkLabel",
+          options: { defaultValue: "Directory Root Link Label" },
+        },
+        "text"
       ),
     },
   }),

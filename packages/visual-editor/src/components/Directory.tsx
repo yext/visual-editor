@@ -9,6 +9,7 @@ import {
   PhoneAtom,
   msg,
   YextField,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -249,11 +250,12 @@ export const Directory: ComponentConfig<DirectoryProps> = {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        directoryRoot: YextField(
-          msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        directoryRoot: TranslatableStringField(
           {
-            type: "text",
-          }
+            key: "fields.directoryRootLinkLabel",
+            options: { defaultValue: "Directory Root Link Label" },
+          },
+          "text"
         ),
       },
     }),
