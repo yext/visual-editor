@@ -106,6 +106,7 @@
     "data": "Veri",
     "dayOfWeekFormat": "Haftanın Günü Biçimi",
     "description": "Tanım",
+    "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
     "emailList": "E -posta Listesi",
     "emails": "E -postalar",
     "emailsListLength": "E -postalar listesi uzunluğu",

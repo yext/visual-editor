@@ -7,11 +7,17 @@ import {
   YextField,
   VisibilityWrapper,
   msg,
+  TranslatableString,
+  resolveTranslatableString,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
+  data: {
+    directoryRoot?: TranslatableString;
+  };
   analytics?: {
     scope?: string;
   };
@@ -19,6 +25,18 @@ export type BreadcrumbsSectionProps = {
 };
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      directoryRoot: TranslatableStringField<TranslatableString | undefined>(
+        {
+          key: "fields.directoryRootLinkLabel",
+          options: { defaultValue: "Directory Root Link Label" },
+        },
+        "text"
+      ),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
@@ -66,8 +84,8 @@ function isValidDirectoryParents(value: any[]): boolean {
 // then displays nothing. In the case of a root DM page, there are
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
-export const BreadcrumbsComponent = () => {
-  const { t } = useTranslation();
+export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
+  const { t, i18n } = useTranslation();
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
@@ -77,6 +95,10 @@ export const BreadcrumbsComponent = () => {
       (b) => b.name
     );
   }
+  const directoryRoot = resolveTranslatableString(
+    data.directoryRoot,
+    i18n.language
+  );
 
   if (!breadcrumbs?.length) {
     return <PageSection></PageSection>;
@@ -90,6 +112,7 @@ export const BreadcrumbsComponent = () => {
     >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {
+          const isRoot = idx === 0;
           const isLast = idx === breadcrumbs.length - 1;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
@@ -103,7 +126,9 @@ export const BreadcrumbsComponent = () => {
                 className="text-body-sm-fontSize font-link-fontFamily"
                 alwaysHideCaret={true}
               >
-                <Body variant={"sm"}>{name}</Body>
+                <Body variant={"sm"}>
+                  {isRoot && directoryRoot ? directoryRoot : name}
+                </Body>
               </MaybeLink>
               {!isLast && <span className="mx-2">{separator}</span>}
             </li>
@@ -118,6 +143,9 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,
   defaultProps: {
+    data: {
+      directoryRoot: "Directory Root",
+    },
     analytics: {
       scope: "breadcrumbs",
     },
@@ -131,7 +159,7 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
           isEditing={props.puck.isEditing}
           iconSize="md"
         >
-          <BreadcrumbsComponent />
+          <BreadcrumbsComponent {...props} />
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     );

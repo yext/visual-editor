@@ -106,6 +106,7 @@
     "data": "Podaci",
     "dayOfWeekFormat": "Format Dana tjedna",
     "description": "Opis",
+    "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
     "emailList": "Popis e -pošte",
     "emails": "E -mailovi",
     "emailsListLength": "Dužina e -mailova",
