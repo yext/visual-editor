@@ -10,6 +10,7 @@ import {
   msg,
   YextField,
   TranslatableStringField,
+  TranslatableString,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig } from "@measured/puck";
@@ -21,7 +22,7 @@ import {
 
 export interface DirectoryProps {
   data: {
-    directoryRoot: string;
+    directoryRoot?: TranslatableString;
   };
   analytics?: {
     scope?: string;
@@ -250,7 +251,7 @@ export const Directory: ComponentConfig<DirectoryProps> = {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        directoryRoot: TranslatableStringField(
+        directoryRoot: TranslatableStringField<TranslatableString | undefined>(
           {
             key: "fields.directoryRootLinkLabel",
             options: { defaultValue: "Directory Root Link Label" },

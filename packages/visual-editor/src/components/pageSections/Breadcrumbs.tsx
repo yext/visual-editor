@@ -7,6 +7,8 @@ import {
   YextField,
   VisibilityWrapper,
   msg,
+  TranslatableString,
+  resolveTranslatableString,
   TranslatableStringField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -14,7 +16,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
   data: {
-    directoryRoot: string;
+    directoryRoot?: TranslatableString;
   };
   analytics?: {
     scope?: string;
@@ -26,7 +28,7 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      directoryRoot: TranslatableStringField(
+      directoryRoot: TranslatableStringField<TranslatableString | undefined>(
         {
           key: "fields.directoryRootLinkLabel",
           options: { defaultValue: "Directory Root Link Label" },
@@ -84,6 +86,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 // that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
   const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
@@ -93,6 +96,10 @@ export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
       (b) => b.name
     );
   }
+  const directoryRoot = resolveTranslatableString(
+    data.directoryRoot,
+    i18n.language
+  );
 
   if (!breadcrumbs?.length) {
     return <PageSection></PageSection>;
@@ -120,7 +127,9 @@ export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
                 className="text-body-sm-fontSize font-link-fontFamily"
                 alwaysHideCaret={true}
               >
-                <Body variant={"sm"}>{isRoot ? data.directoryRoot : name}</Body>
+                <Body variant={"sm"}>
+                  {isRoot && directoryRoot ? directoryRoot : name}
+                </Body>
               </MaybeLink>
               {!isLast && <span className="mx-2">{separator}</span>}
             </li>
