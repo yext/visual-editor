@@ -22,23 +22,14 @@ export function TranslatableStringField<
         <AutoField
           field={{ type: fieldType ?? "text" }}
           value={getDisplayValue(value, locale)}
-          onChange={(val) => {
-            console.log(
-              val,
-              {
-                ...(typeof value === "object" && !Array.isArray(value)
-                  ? value
-                  : {}),
-              },
-              locale
-            );
+          onChange={(val) =>
             onChange({
               ...(typeof value === "object" && !Array.isArray(value)
                 ? value
                 : {}),
               [locale]: val,
-            } as T);
-          }}
+            } as T)
+          }
         />
       );
 
