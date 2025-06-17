@@ -21,6 +21,7 @@
   "date": "Datum",
   "datetime": "Datum/tid",
   "description": "Beskrivning",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E-post",
   "emailList": "E -postlista",
   "events": "Evenemang",

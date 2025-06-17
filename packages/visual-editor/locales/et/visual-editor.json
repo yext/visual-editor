@@ -21,6 +21,7 @@
   "date": "Kuupäev",
   "datetime": "Kuupäev/kellaaeg",
   "description": "Kirjeldus",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "E -kiri",
   "emailList": "E -posti nimekiri",
   "events": "Sündmused",

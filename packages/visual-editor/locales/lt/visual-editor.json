@@ -21,6 +21,7 @@
   "date": "Data",
   "datetime": "Data/laikas",
   "description": "Aprašymas",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "El. Paštas",
   "emailList": "El. Pašto sąrašas",
   "events": "Įvykiai",

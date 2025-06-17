@@ -21,6 +21,7 @@
   "date": "Päivämäärä",
   "datetime": "Päivämäärä/aika",
   "description": "Kuvaus",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "Sähköposti",
   "emailList": "Sähköpostiluettelo",
   "events": "Tapahtumat",

@@ -21,6 +21,7 @@
   "date": "Dátum",
   "datetime": "Dátum/idő",
   "description": "Leírás",
+  "distanceInUnit": "{{distanceInKilometers}} km",
   "email": "Email",
   "emailList": "E -mail lista",
   "events": "Események",
