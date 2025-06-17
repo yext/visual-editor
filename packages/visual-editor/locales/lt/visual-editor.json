@@ -106,6 +106,7 @@
     "data": "Duomenys",
     "dayOfWeekFormat": "Savaitės dienos formatas",
     "description": "Aprašymas",
+    "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
     "emailList": "El. Pašto sąrašas",
     "emails": "El. Laiškai",
     "emailsListLength": "El. Laiškų sąrašo ilgis",

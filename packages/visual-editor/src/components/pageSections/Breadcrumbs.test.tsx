@@ -26,7 +26,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "default props with document data",
+    name: "version 0 default props with document data",
     document: {
       name: "Galaxy Grill",
       dm_directoryParents_63590_locations: [
@@ -53,7 +53,46 @@ const tests: ComponentTest[] = [
     props: { ...BreadcrumbsSection.defaultProps },
     version: migrationRegistry.length,
     tests: async (page) => {
-      // expect(document.getElementsByTagName("nav")[0]).toBeVisible();
+      expect(page.getByText("Directory Root")).toBeVisible();
+      expect(page.getByText("US")).toBeVisible();
+      expect(page.getByText("NY")).toBeVisible();
+      expect(page.getByText("Brooklyn")).toBeVisible();
+      expect(page.getByText("Galaxy Grill")).toBeVisible();
+    },
+  },
+  {
+    name: "version 4 with non-default props with document data",
+    document: {
+      name: "Galaxy Grill",
+      dm_directoryParents_63590_locations: [
+        { name: "Locations Directory", slug: "en/index.html" },
+        {
+          name: "US",
+          slug: "en/us",
+          dm_addressCountryDisplayName: "United States",
+        },
+        {
+          name: "NY",
+          slug: "en/us/ny",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "New York",
+        },
+        {
+          name: "Brooklyn",
+          slug: "en/us/ny/brooklyn",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "New York",
+        },
+      ],
+    },
+    props: {
+      data: {
+        directoryRoot: "Locations Directory",
+      },
+      liveVisibility: true,
+    },
+    version: 4,
+    tests: async (page) => {
       expect(page.getByText("Locations Directory")).toBeVisible();
       expect(page.getByText("US")).toBeVisible();
       expect(page.getByText("NY")).toBeVisible();

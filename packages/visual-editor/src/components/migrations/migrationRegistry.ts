@@ -2,6 +2,7 @@ import { MigrationRegistry } from "../../utils/migrate.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
 import { adjustStructFields } from "./0003_adjust_struct_fields.ts";
+import { addDirectoryRootPropMigration } from "./0004_add_directory_root_prop.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -12,4 +13,5 @@ export const migrationRegistry: MigrationRegistry = [
   adjustPropObjectsMigration,
   addHeadingAlignmentMigration,
   adjustStructFields,
+  addDirectoryRootPropMigration,
 ];

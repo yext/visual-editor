@@ -106,6 +106,7 @@
     "data": "Dane",
     "dayOfWeekFormat": "Format dnia tygodnia",
     "description": "Opis",
+    "directoryRootLinkLabel": "Director Count Link",
     "emailList": "Lista e -mail",
     "emails": "E -maile",
     "emailsListLength": "Lista e -maili długość",

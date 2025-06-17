@@ -106,6 +106,7 @@
     "data": "Dati",
     "dayOfWeekFormat": "Formato giorno della settimana",
     "description": "Descrizione",
+    "directoryRootLinkLabel": "Etichetta del collegamento root directory",
     "emailList": "Elenco e -mail",
     "emails": "E -mail",
     "emailsListLength": "Email Lunghezza dell'elenco",
