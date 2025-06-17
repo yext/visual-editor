@@ -171,7 +171,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 1 props with constant value",
+    name: "version 4 props with constant value",
     document: { c_promo: promoData },
     props: {
       data: {
@@ -216,7 +216,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 1,
+    version: 4,
     tests: async (page) => {
       expect(page.getByText("Featured Promotion")).toBeVisible();
       expect(page.getByText("Lorem ipsum dolor sit amet")).toBeVisible();
