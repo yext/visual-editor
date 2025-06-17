@@ -7,9 +7,14 @@ import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import { ListItemNode, ListNode } from "@lexical/list";
+import {
+  ListItemNode,
+  ListNode,
+  INSERT_UNORDERED_LIST_COMMAND,
+  INSERT_ORDERED_LIST_COMMAND,
+} from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
-import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { AutoLinkNode, LinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { RichText } from "../types/types.ts";
@@ -23,10 +28,15 @@ import {
   $getSelection,
   $isRangeSelection,
   FORMAT_TEXT_COMMAND,
+  UNDO_COMMAND,
+  REDO_COMMAND,
 } from "lexical";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { Link2, List, ListOrdered, Undo2, Redo2 } from "lucide-react";
+import { $isLinkNode } from "@lexical/link";
+import { $findMatchingParent } from "@lexical/utils";
 
 interface LexicalEditorProps {
   value: string | RichText;
@@ -87,6 +97,26 @@ function ToolbarPlugin() {
     }
   };
 
+  const handleLinkClick = useCallback(() => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        const node = selection.anchor.getNode();
+        const linkParent = $findMatchingParent(node, $isLinkNode);
+        if (linkParent) {
+          // Remove link
+          editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+        } else {
+          // Insert link
+          const url = window.prompt("Enter the URL for the link:");
+          if (url) {
+            editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
+          }
+        }
+      }
+    });
+  }, [editor]);
+
   useEffect(() => {
     editor.registerUpdateListener(({ editorState }) => {
       editorState.read(() => {
@@ -97,6 +127,23 @@ function ToolbarPlugin() {
 
   return (
     <div className="toolbar border-b border-gray-200 p-2 flex gap-2">
+      {/* Undo */}
+      <button
+        onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)}
+        className="p-2 rounded hover:bg-gray-100"
+        title="Undo"
+      >
+        <Undo2 />
+      </button>
+      {/* Redo */}
+      <button
+        onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)}
+        className="p-2 rounded hover:bg-gray-100"
+        title="Redo"
+      >
+        <Redo2 />
+      </button>
+      {/* Bold */}
       <button
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -106,6 +153,7 @@ function ToolbarPlugin() {
       >
         <strong>B</strong>
       </button>
+      {/* Italic */}
       <button
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
@@ -115,6 +163,7 @@ function ToolbarPlugin() {
       >
         <em>I</em>
       </button>
+      {/* Underline */}
       <button
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
@@ -123,6 +172,34 @@ function ToolbarPlugin() {
         title="Underline"
       >
         <u>U</u>
+      </button>
+      {/* Link */}
+      <button
+        onClick={handleLinkClick}
+        className="p-2 rounded hover:bg-gray-100"
+        title="Insert Link"
+      >
+        <Link2 />
+      </button>
+      {/* Bulleted List */}
+      <button
+        onClick={() =>
+          editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
+        }
+        className="p-2 rounded hover:bg-gray-100"
+        title="Bulleted List"
+      >
+        <List />
+      </button>
+      {/* Numbered List */}
+      <button
+        onClick={() =>
+          editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
+        }
+        className="p-2 rounded hover:bg-gray-100"
+        title="Numbered List"
+      >
+        <ListOrdered />
       </button>
     </div>
   );
