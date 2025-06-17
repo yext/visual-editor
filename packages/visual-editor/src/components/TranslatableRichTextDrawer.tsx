@@ -76,6 +76,9 @@ export function TranslatableRichTextDrawer({
             willChange: "transform",
           }}
         >
+          <h2 className="ve-text-2xl ve-font-semibold ve-mb-4">
+            Edit Body Text
+          </h2>
           {/* Local state for the editor, re-initialized on each open */}
           <DrawerEditor
             key={openCount}
