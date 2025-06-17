@@ -1,6 +1,6 @@
 import { AutoField, CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { msg, pt } from "../../../utils/i18nPlatform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -39,12 +39,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   render: ({ onChange, value }) => {
     const labelField = useMemo(() => {
       return TranslatableStringField<TranslatableString | undefined>(
-        {
-          key: "label",
-          options: {
-            defaultValue: "Label",
-          },
-        },
+        msg("label", "Label"),
         "text"
       );
     }, []);
@@ -84,12 +79,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
 export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const labelField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "label",
-        options: {
-          defaultValue: "Label",
-        },
-      },
+      msg("label", "Label"),
       "text"
     );
   }, []);

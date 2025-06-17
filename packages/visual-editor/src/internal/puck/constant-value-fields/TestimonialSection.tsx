@@ -6,7 +6,7 @@ import {
   TranslatableString,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
@@ -44,23 +44,15 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
 
   const contributorNameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "contributorName",
-        options: {
-          defaultValue: "Contributor Name",
-        },
-      },
+      msg("contributorName", "Contributor Name"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>({
-      key: "description",
-      options: {
-        defaultValue: "Description",
-      },
-    });
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("descriptions", "Description")
+    );
   }, []);
 
   return {

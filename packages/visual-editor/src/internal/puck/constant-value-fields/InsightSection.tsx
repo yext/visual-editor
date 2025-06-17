@@ -7,7 +7,7 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
@@ -42,35 +42,22 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "name",
-        options: {
-          defaultValue: "Name",
-        },
-      },
+      msg("name", "Name"),
       "text"
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "category",
-        options: {
-          defaultValue: "Category",
-        },
-      },
+      msg("category", "Category"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>({
-      key: "description",
-      options: {
-        defaultValue: "Description",
-      },
-    });
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("description", "Description")
+    );
   }, []);
 
   return {

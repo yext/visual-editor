@@ -1,37 +1,44 @@
 import { TranslatableString } from "../types/types.ts";
-import { useDocument } from "../hooks/useDocument.tsx";
-import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
-import { Translation } from "../internal/types/translation.ts";
+import { MsgString, pt } from "../utils/i18nPlatform.ts";
 import { AutoField, CustomField, FieldLabel } from "@measured/puck";
 import { getDisplayValue } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Generates a translatable string config
- * @param label optional label. Takes in translation key and TOptions from react-i18next
+ * @param label optional label. Takes in a value from msg.
  * @param fieldType text or textarea display mode
  */
 export function TranslatableStringField<
   T extends TranslatableString | undefined = TranslatableString,
->(label?: Translation, fieldType?: "text" | "textarea"): CustomField<T> {
+>(label?: MsgString, fieldType?: "text" | "textarea"): CustomField<T> {
   return {
     type: "custom",
     render: ({ onChange, value }) => {
-      const document: any = useDocument();
-      const locale = document?.locale ?? "en";
-      const { t } = usePlatformTranslation();
+      const { i18n } = useTranslation();
+      const locale = i18n.language;
       const autoField = (
         <AutoField
           field={{ type: fieldType ?? "text" }}
           value={getDisplayValue(value, locale)}
-          onChange={(val) =>
+          onChange={(val) => {
+            console.log(
+              val,
+              {
+                ...(typeof value === "object" && !Array.isArray(value)
+                  ? value
+                  : {}),
+              },
+              locale
+            );
             onChange({
               ...(typeof value === "object" && !Array.isArray(value)
                 ? value
                 : {}),
               [locale]: val,
-            } as T)
-          }
+            } as T);
+          }}
         />
       );
 
@@ -40,9 +47,7 @@ export function TranslatableStringField<
       }
 
       return (
-        <FieldLabel label={t(label.key, label.options) + ` (${locale})`}>
-          {autoField}
-        </FieldLabel>
+        <FieldLabel label={pt(label) + ` (${locale})`}>{autoField}</FieldLabel>
       );
     },
   };

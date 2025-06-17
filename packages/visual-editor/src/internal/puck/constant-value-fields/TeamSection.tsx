@@ -6,7 +6,7 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
@@ -39,24 +39,14 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "name",
-        options: {
-          defaultValue: "Name",
-        },
-      },
+      msg("name", "Name"),
       "text"
     );
   }, []);
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "title",
-        options: {
-          defaultValue: "Title",
-        },
-      },
+      msg("title", "Title"),
       "text"
     );
   }, []);

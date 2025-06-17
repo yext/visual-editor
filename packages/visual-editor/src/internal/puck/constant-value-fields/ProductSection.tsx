@@ -8,7 +8,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
 
@@ -41,35 +41,22 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "name",
-        options: {
-          defaultValue: "Name",
-        },
-      },
+      msg("name", "Name"),
       "text"
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "category",
-        options: {
-          defaultValue: "Category",
-        },
-      },
+      msg("category", "Category"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>({
-      key: "description",
-      options: {
-        defaultValue: "Description",
-      },
-    });
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("description", "Description")
+    );
   }, []);
 
   return {
