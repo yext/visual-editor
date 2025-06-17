@@ -23,14 +23,18 @@ import {
   YextStructEntityField,
   ComponentFields,
   HoursStatusAtom,
+  TranslatableString,
+  resolveTranslatableString,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface HeroSectionProps {
   data: {
-    businessName: YextEntityField<string>;
-    localGeoModifier: YextEntityField<string>;
+    businessName: YextEntityField<TranslatableString>;
+    localGeoModifier: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
     hero: YextStructEntityField<HeroSectionType>;
   };
@@ -45,93 +49,126 @@ export interface HeroSectionProps {
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
+  liveVisibility?: boolean;
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      businessName: YextField<any, string>("Business Name", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      localGeoModifier: YextField<any, string>("Local GeoModifier", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      hours: YextField("Hours", {
+      businessName: YextField<any, TranslatableString>(
+        msg("fields.businessName", "Business Name"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      localGeoModifier: YextField<any, TranslatableString>(
+        msg("fields.localGeomodifier", "Local GeoModifier"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      hours: YextField(msg("fields.hours", "Hours"), {
         type: "entityField",
         filter: {
           types: ["type.hours"],
         },
       }),
       hero: YextStructFieldSelector({
-        label: "Hero",
+        label: msg("fields.hero", "Hero"),
         filter: {
           type: ComponentFields.HeroSection.type,
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      imageOrientation: YextField("Image Orientation", {
-        type: "radio",
-        options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
-        ],
-      }),
-      businessNameLevel: YextField("Business Name Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      localGeoModifierLevel: YextField("Local GeoModifier Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      primaryCTA: YextField("Primary CTA Variant", {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
-      secondaryCTA: YextField("Secondary CTA Variant", {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      imageOrientation: YextField(
+        msg("fields.imageOrientation", "Image Orientation"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.left", "Left"), value: "left" },
+            { label: msg("fields.options.right", "Right"), value: "right" },
+          ],
+        }
+      ),
+      businessNameLevel: YextField(
+        msg("fields.businessNameHeadingLevel", "Business Name Heading Level"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "HEADING_LEVEL",
+        }
+      ),
+      localGeoModifierLevel: YextField(
+        msg(
+          "fields.localGeomodifierHeadingLevel",
+          "Local GeoModifier Heading Level"
+        ),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "HEADING_LEVEL",
+        }
+      ),
+      primaryCTA: YextField(
+        msg("fields.primaryCTAVariant", "Primary CTA Variant"),
+        {
+          type: "radio",
+          options: "CTA_VARIANT",
+        }
+      ),
+      secondaryCTA: YextField(
+        msg("fields.secondaryCTAVariant", "Secondary CTA Variant"),
+        {
+          type: "radio",
+          options: "CTA_VARIANT",
+        }
+      ),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument() as any;
-  const resolvedBusinessName = resolveYextEntityField<string>(
-    document,
-    data?.businessName
+  const resolvedBusinessName = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data?.businessName),
+    i18n.language
   );
-  const resolvedLocalGeoModifier = resolveYextEntityField<string>(
-    document,
-    data?.localGeoModifier
+  const resolvedLocalGeoModifier = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(
+      document,
+      data?.localGeoModifier
+    ),
+    i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
@@ -167,7 +204,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             {resolvedBusinessName && (
               <EntityField
-                displayName={t("businessName", "Business Name")}
+                displayName={pt("fields.businessName", "Business Name")}
                 fieldId={data?.businessName.field}
                 constantValueEnabled={data?.businessName.constantValueEnabled}
               >
@@ -178,7 +215,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedLocalGeoModifier && (
               <EntityField
-                displayName={t("localGeomodifier", "Local GeoModifier")}
+                displayName={pt("fields.localGeomodifier", "Local GeoModifier")}
                 fieldId={data?.localGeoModifier.field}
                 constantValueEnabled={
                   data?.localGeoModifier.constantValueEnabled
@@ -192,7 +229,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           </section>
           {resolvedHours && (
             <EntityField
-              displayName={t("hours", "Hours")}
+              displayName={pt("fields.hours", "Hours")}
               fieldId={data?.hours.field}
               constantValueEnabled={data?.hours.constantValueEnabled}
             >
@@ -208,7 +245,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             {resolvedHero?.primaryCta?.label && (
               <EntityField
-                displayName={t("primaryCta", "Primary CTA")}
+                displayName={pt("fields.primaryCta", "Primary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.primaryCta
@@ -217,7 +254,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 <CTA
                   eventName={`primaryCta`}
                   variant={styles?.primaryCTA}
-                  label={resolvedHero.primaryCta.label}
+                  label={resolveTranslatableString(
+                    resolvedHero.primaryCta.label,
+                    i18n.language
+                  )}
                   link={resolvedHero.primaryCta.link}
                   linkType={resolvedHero.primaryCta.linkType}
                   className={"py-3"}
@@ -226,7 +266,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             )}
             {resolvedHero?.secondaryCta?.label && (
               <EntityField
-                displayName={t("secondaryCta", "Secondary CTA")}
+                displayName={pt("fields.secondaryCta", "Secondary CTA")}
                 fieldId={data.hero.field}
                 constantValueEnabled={
                   data.hero.constantValueOverride.secondaryCta
@@ -235,7 +275,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 <CTA
                   eventName={`secondaryCta`}
                   variant={styles?.secondaryCTA}
-                  label={resolvedHero.secondaryCta.label}
+                  label={resolveTranslatableString(
+                    resolvedHero.secondaryCta.label,
+                    i18n.language
+                  )}
                   link={resolvedHero.secondaryCta.link}
                   linkType={resolvedHero.secondaryCta.linkType}
                   className={"py-3"}
@@ -247,7 +290,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
       </div>
       {resolvedHero?.image && (
         <EntityField
-          displayName={t("image", "Image")}
+          displayName={pt("fields.image", "Image")}
           fieldId={data.hero.field}
           constantValueEnabled={data.hero.constantValueOverride.image}
         >
@@ -271,45 +314,86 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
 };
 
 export const HeroSection: ComponentConfig<HeroSectionProps> = {
-  label: "Hero Section",
+  label: msg("components.heroSection", "Hero Section"),
   fields: heroSectionFields,
   defaultProps: {
     data: {
       businessName: {
-        field: "name",
-        constantValue: "Business Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "Business Name",
+        },
       },
       localGeoModifier: {
-        field: "address.city",
-        constantValue: "Geomodifier Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "Geomodifier",
+        },
       },
       hours: {
-        field: "hours",
-        constantValue: {},
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          monday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          tuesday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          wednesday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          thursday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          friday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          saturday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+          sunday: {
+            isClosed: false,
+            openIntervals: [{ end: "17:00", start: "10:00" }],
+          },
+        },
       },
       hero: {
         field: "",
+        constantValueEnabled: true,
         constantValue: {
-          image: {
-            height: 360,
-            width: 640,
-            url: PLACEHOLDER_IMAGE_URL,
-          },
           primaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+            },
             link: "#",
             linkType: "URL",
           },
           secondaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+            },
             link: "#",
             linkType: "URL",
           },
+          image: {
+            url: PLACEHOLDER_IMAGE_URL,
+            height: 360,
+            width: 640,
+          },
         },
         constantValueOverride: {
-          image: false,
-          primaryCta: false,
-          secondaryCta: false,
+          image: true,
+          primaryCta: true,
+          secondaryCta: true,
         },
       },
     },
@@ -326,10 +410,38 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     },
     liveVisibility: true,
   },
+  resolveFields: (data, { lastData }) => {
+    // If set to entity value and no field selected, hide the component.
+    if (
+      !data.props.data.hero.constantValueEnabled &&
+      data.props.data.hero.field === ""
+    ) {
+      data.props.liveVisibility = false;
+      return {
+        ...heroSectionFields,
+        liveVisibility: undefined,
+      };
+    }
+
+    // If no field was selected and then constant value is enabled
+    // or a field is selected, show the component.
+    if (
+      (data.props.data.hero.constantValueEnabled &&
+        !lastData?.props.data.hero.constantValueEnabled &&
+        data.props.data.hero.field === "") ||
+      (lastData?.props.data.hero.field === "" &&
+        data.props.data.hero.field !== "")
+    ) {
+      data.props.liveVisibility = true;
+    }
+
+    // Otherwise, return normal fields.
+    return heroSectionFields;
+  },
   render: (props) => (
     <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
       <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
+        liveVisibility={!!props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
         <HeroSectionWrapper {...props} />

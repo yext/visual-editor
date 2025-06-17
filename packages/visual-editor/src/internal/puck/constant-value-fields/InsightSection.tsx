@@ -1,7 +1,17 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { InsightSectionType, InsightStruct } from "../../../types/types.ts";
-import { ctaFields } from "./CallToAction.tsx";
+import {
+  InsightSectionType,
+  InsightStruct,
+  TranslatableRichText,
+  TranslatableString,
+} from "../../../types/types.ts";
+import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
+import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { useMemo } from "react";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 
 export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
   {
@@ -16,7 +26,7 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
       return (
         <div className={"ve-mt-4"}>
           <AutoField
-            field={InsightStructArrayField}
+            field={InsightStructArrayField()}
             value={value.insights}
             onChange={(newValue, uiState) =>
               onChange({ insights: newValue }, uiState)
@@ -27,34 +37,68 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
     },
   };
 
-const InsightStructArrayField: ArrayField<InsightStruct[]> = {
-  label: "Array Field",
-  type: "array",
-  arrayFields: {
-    image: {
-      type: "object",
-      label: "Image",
-      objectFields: {
-        url: {
-          label: "URL",
-          type: "text",
+const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
+  const { t, i18n } = usePlatformTranslation();
+
+  const nameField = useMemo(() => {
+    return TranslatableStringField<TranslatableString | undefined>(
+      {
+        key: "name",
+        options: {
+          defaultValue: "Name",
         },
       },
+      "text"
+    );
+  }, []);
+
+  const categoryField = useMemo(() => {
+    return TranslatableStringField<TranslatableString | undefined>(
+      {
+        key: "category",
+        options: {
+          defaultValue: "Category",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  const descriptionField = useMemo(() => {
+    return TranslatableRichTextField<TranslatableRichText | undefined>({
+      key: "description",
+      options: {
+        defaultValue: "Description",
+      },
+    });
+  }, []);
+
+  return {
+    label: t("arrayField", "Array Field"),
+    type: "array",
+    arrayFields: {
+      image: {
+        type: "object",
+        label: t("image", "Image"),
+        objectFields: {
+          url: {
+            label: t("url", "URL"),
+            type: "text",
+          },
+        },
+      },
+      name: nameField,
+      category: categoryField,
+      publishTime: DateSelector,
+      description: descriptionField,
+      cta: translatableCTAFields(),
     },
-    name: {
-      type: "text",
-      label: "Name",
+    getItemSummary: (item, i) => {
+      const translation = resolveTranslatableString(item.name, i18n.language);
+      if (translation) {
+        return translation;
+      }
+      return t("insight", "Insight") + " " + ((i ?? 0) + 1);
     },
-    category: {
-      type: "text",
-      label: "Category",
-    },
-    publishTime: DateSelector,
-    description: {
-      type: "textarea",
-      label: "Description",
-    },
-    cta: ctaFields,
-  },
-  getItemSummary: (item, i) => item.name ?? "Insight " + ((i ?? 0) + 1),
+  };
 };

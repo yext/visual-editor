@@ -16,67 +16,99 @@ import {
   TestimonialStruct,
   Timestamp,
   ComponentFields,
-  MaybeRTF,
   TimestampOption,
+  TranslatableString,
+  resolveTranslatableString,
+  msg,
+  pt,
+  resolveTranslatableRichText,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export interface TestimonialSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     testimonials: YextEntityField<TestimonialSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   liveVisibility: boolean;
 }
 
 const testimonialSectionFields: Fields<TestimonialSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      testimonials: YextField("Testimonial Section", {
-        type: "entityField",
-        filter: {
-          types: [ComponentFields.TestimonialSection.type],
+      heading: YextField<any, TranslatableString>(
+        msg("fields.headingText", "Heading Text"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      testimonials: YextField(
+        msg("fields.testimonialSection", "Testimonial Section"),
+        {
+          type: "entityField",
+          filter: {
+            types: [ComponentFields.TestimonialSection.type],
+          },
+        }
+      ),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
-    type: "object",
-    objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-    },
-  }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const TestimonialCard = ({
@@ -88,13 +120,15 @@ const TestimonialCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border h-full">
       <Background
         background={backgroundColors.background1.value}
         className="p-8 grow"
       >
-        <MaybeRTF data={testimonial.description} />
+        {resolveTranslatableRichText(testimonial.description, i18n.language)}
       </Background>
       <Background background={backgroundColor} className="p-8">
         {testimonial.contributorName && (
@@ -106,7 +140,10 @@ const TestimonialCard = ({
                 : "span"
             }
           >
-            {testimonial.contributorName}
+            {resolveTranslatableString(
+              testimonial.contributorName,
+              i18n.language
+            )}
           </Heading>
         )}
         {testimonial.contributionDate && (
@@ -125,13 +162,24 @@ const TestimonialSectionWrapper = ({
   data,
   styles,
 }: TestimonialSectionProps) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
     data.testimonials
   );
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
@@ -140,18 +188,18 @@ const TestimonialSectionWrapper = ({
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
       {resolvedTestimonials?.testimonials && (
         <EntityField
-          displayName={t("testimonials", "Testimonials")}
+          displayName={pt("fields.testimonials", "Testimonials")}
           fieldId={data.testimonials.field}
           constantValueEnabled={data.testimonials.constantValueEnabled}
         >
@@ -161,7 +209,7 @@ const TestimonialSectionWrapper = ({
                 key={index}
                 testimonial={testimonial}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles?.heading?.level}
               />
             ))}
           </div>
@@ -172,25 +220,51 @@ const TestimonialSectionWrapper = ({
 };
 
 export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
-  label: "Testimonials Section",
+  label: msg("components.testimonialsSection", "Testimonials Section"),
   fields: testimonialSectionFields,
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     data: {
       heading: {
         field: "",
-        constantValue: "Featured Testimonials",
+        constantValue: { en: "Featured Testimonials" },
         constantValueEnabled: true,
       },
       testimonials: {
         field: "",
         constantValue: {
-          testimonials: [],
+          testimonials: [
+            {
+              description: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+              contributorName: { en: "Name" },
+              contributionDate: "July 22, 2022",
+            },
+            {
+              description: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+              contributorName: { en: "Name" },
+              contributionDate: "July 22, 2022",
+            },
+            {
+              description: {
+                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              },
+              contributorName: { en: "Name" },
+              contributionDate: "July 22, 2022",
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     liveVisibility: true,

@@ -12,6 +12,7 @@ import {
   CommandList,
 } from "./Command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 type ComboboxOption = {
   label: string;
@@ -23,12 +24,14 @@ type ComboboxProps = {
   defaultValue: ComboboxOption;
   onChange: (value: string) => void;
   options: Array<ComboboxOption>;
+  disabled?: boolean;
 };
 
 export const Combobox = ({
   defaultValue,
   onChange,
   options,
+  disabled,
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
 
@@ -40,6 +43,7 @@ export const Combobox = ({
           role="combobox"
           aria-expanded={open}
           className="ve-w-full ve-justify-between ve-rounded-sm"
+          disabled={disabled}
         >
           {defaultValue ? (
             <div className="ve-flex ve-items-center">
@@ -66,9 +70,11 @@ export const Combobox = ({
       </PopoverTrigger>
       <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white">
         <Command>
-          <CommandInput placeholder={`Search`} />
+          <CommandInput placeholder={pt("search", "Search")} />
           <CommandList>
-            <CommandEmpty>{`No matches found.`}</CommandEmpty>
+            <CommandEmpty>
+              {pt("noMatchesFound", "No matches found.")}
+            </CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem

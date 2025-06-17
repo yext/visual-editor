@@ -16,8 +16,15 @@ import {
   Background,
   YextField,
   Image,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 import { FaTimes, FaBars } from "react-icons/fa";
+import {
+  LanguageDropdown,
+  LanguageDropdownProps,
+  parseDocumentForLanguageDropdown,
+} from "./languageDropdown.tsx";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
   image: {
@@ -30,23 +37,35 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
 
 export type HeaderProps = {
   logoWidth?: number;
+  enableLanguageSelector: boolean;
   analytics?: {
     scope?: string;
   };
 };
 
 const headerFields: Fields<HeaderProps> = {
-  logoWidth: YextField("Logo Width", {
+  logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
     type: "number",
     min: 0,
   }),
+  enableLanguageSelector: YextField(
+    msg("fields.enableLanguageSelector", "Enable Language Selector"),
+    {
+      type: "radio",
+      options: [
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+      ],
+    }
+  ),
 };
 
 export const Header: ComponentConfig<HeaderProps> = {
-  label: "Header",
+  label: msg("components.header", "Header"),
   fields: headerFields,
   defaultProps: {
     logoWidth: 80,
+    enableLanguageSelector: false,
     analytics: {
       scope: "header",
     },
@@ -58,22 +77,28 @@ export const Header: ComponentConfig<HeaderProps> = {
   ),
 };
 
-const HeaderComponent: React.FC<HeaderProps> = ({ logoWidth }) => {
-  const document: {
-    _site?: {
-      header?: {
-        links?: CTAType[];
-      };
-      logo?: ComplexImageType;
-    };
-  } = useDocument();
+const HeaderComponent: React.FC<HeaderProps> = ({
+  logoWidth,
+  enableLanguageSelector,
+}) => {
+  const document: any = useDocument();
   const links = document._site?.header?.links ?? [];
   const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
 
-  return <HeaderLayout links={links} logo={logo} logoWidth={logoWidth} />;
+  return (
+    <HeaderLayout
+      links={links}
+      logo={logo}
+      logoWidth={logoWidth}
+      enableLanguageSelector={enableLanguageSelector}
+      languageDropDownProps={parseDocumentForLanguageDropdown(document)}
+    />
+  );
 };
 
 interface HeaderLayoutProps {
+  languageDropDownProps?: LanguageDropdownProps;
+  enableLanguageSelector: boolean;
   links: CTAType[];
   logoLink?: string;
   logo?: ComplexImageType;
@@ -83,7 +108,18 @@ interface HeaderLayoutProps {
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const { logo, logoWidth, logoLink, links } = props;
+  const {
+    logo,
+    logoWidth,
+    logoLink,
+    links,
+    languageDropDownProps,
+    enableLanguageSelector,
+  } = props;
+  const showLanguageSelector =
+    languageDropDownProps &&
+    enableLanguageSelector &&
+    languageDropDownProps.locales?.length > 1;
 
   return (
     <PageSection
@@ -94,17 +130,17 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
       <div className="flex justify-start md:justify-between items-center">
         {logo && (
           <EntityField
-            displayName={t("businessLogo", "Business Logo")}
+            displayName={pt("fields.businessLogo", "Business Logo")}
             fieldId={"site.businessLogo"}
           >
             <HeaderLogo logo={logo} logoLink={logoLink} logoWidth={logoWidth} />
           </EntityField>
         )}
 
-        {links?.length > 0 && (
+        {(links?.length > 0 || showLanguageSelector) && (
           <>
             <EntityField
-              displayName={t("headerLinks", "Header Links")}
+              displayName={pt("fields.headerLinks", "Header Links")}
               fieldId={"site.header.links"}
             >
               <HeaderLinks links={links} />
@@ -112,7 +148,11 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             <button
               className="flex md:hidden ml-auto my-auto"
               onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "Close header menu" : "Open header menu"}
+              aria-label={
+                menuOpen
+                  ? t("closeHeaderMenu", "Close header menu")
+                  : t("openHeaderMenu", "Open header menu")
+              }
             >
               {menuOpen ? (
                 <FaTimes size={"1.5rem"} />
@@ -122,9 +162,21 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             </button>
           </>
         )}
+        {showLanguageSelector && (
+          <LanguageDropdown
+            {...languageDropDownProps}
+            className="hidden md:flex"
+          />
+        )}
       </div>
-      {links?.length > 0 && (
-        <HeaderMobileMenu isOpen={menuOpen} links={links} />
+      {(links?.length > 0 || showLanguageSelector) && (
+        <HeaderMobileMenu
+          isOpen={menuOpen}
+          links={links}
+          languageDropdownProps={
+            showLanguageSelector ? languageDropDownProps : undefined
+          }
+        />
       )}
     </PageSection>
   );
@@ -174,10 +226,11 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
 type HeaderMobileMenuProps = {
   isOpen?: boolean;
   links: CTAType[];
+  languageDropdownProps?: LanguageDropdownProps;
 };
 
 const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
-  const { isOpen, links } = props;
+  const { isOpen, links, languageDropdownProps } = props;
   return (
     <div
       className={
@@ -189,19 +242,27 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
         background={backgroundColors.background1.value}
         className="container"
       >
-        <ul className="flex flex-col p-4 gap-4">
-          {links.map((item: CTAType, idx) => (
-            <li key={item.link}>
-              <CTA
-                link={item.link}
-                label={item.label}
-                linkType={item.linkType}
-                variant="link"
-                eventName={`mobilelink${idx}`}
-              />
-            </li>
-          ))}
-        </ul>
+        {links.length > 0 && (
+          <ul className="flex flex-col p-4 gap-4">
+            {links.map((item: CTAType, idx) => (
+              <li key={item.link}>
+                <CTA
+                  link={item.link}
+                  label={item.label}
+                  linkType={item.linkType}
+                  variant="link"
+                  eventName={`mobilelink${idx}`}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+        {languageDropdownProps && (
+          <LanguageDropdown
+            {...languageDropdownProps}
+            className="p-4 gap-4 w-full"
+          />
+        )}
       </Background>
     </div>
   );

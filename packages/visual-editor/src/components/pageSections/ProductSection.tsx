@@ -18,20 +18,32 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  MaybeRTF,
+  resolveTranslatableRichText,
+  resolveTranslatableString,
+  TranslatableString,
+  msg,
+  pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_DESCRIPTION =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
 export interface ProductSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     products: YextEntityField<ProductSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -40,14 +52,17 @@ export interface ProductSectionProps {
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      products: YextField("Products", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      products: YextField(msg("fields.products", "Products"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.ProductSection.type],
@@ -55,33 +70,51 @@ const productSectionFields: Fields<ProductSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const ProductCard = ({
@@ -95,6 +128,7 @@ const ProductCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -122,7 +156,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {product.name}
+              {resolveTranslatableString(product.name, i18n.language)}
             </Heading>
           )}
           {product.category && (
@@ -130,16 +164,18 @@ const ProductCard = ({
               background={backgroundColors.background5.value}
               className="py-2 px-4 rounded w-fit"
             >
-              <Body>{product.category}</Body>
+              <Body>
+                {resolveTranslatableString(product.category, i18n.language)}
+              </Body>
             </Background>
           )}
-          <MaybeRTF data={product.description} />
+          {resolveTranslatableRichText(product.description, i18n.language)}
         </div>
         {product.cta && (
           <CTA
             eventName={`cta${key}`}
             variant="secondary"
-            label={product.cta.label}
+            label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"
@@ -151,30 +187,43 @@ const ProductCard = ({
 };
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(document, data.products);
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableRichText(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
       {resolvedProducts?.products && (
         <EntityField
-          displayName={t("products", "Products")}
+          displayName={pt("fields.products", "Products")}
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >
@@ -184,7 +233,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 key={index}
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -195,26 +244,76 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
 };
 
 export const ProductSection: ComponentConfig<ProductSectionProps> = {
-  label: "Products Section",
+  label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,
   defaultProps: {
     data: {
       heading: {
         field: "",
-        constantValue: "Featured Products",
+        constantValue: { en: "Featured Products" },
         constantValueEnabled: true,
       },
       products: {
         field: "",
         constantValue: {
-          products: [],
+          products: [
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Product Title" },
+              category: { en: "Category, Pricing, etc" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Product Title" },
+              category: { en: "Category, Pricing, etc" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Product Title" },
+              category: { en: "Category, Pricing, etc" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "productSection",

@@ -10,6 +10,8 @@ import { InitialHistory, usePuck } from "@measured/puck";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
+import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -22,6 +24,7 @@ type ThemeHeaderProps = {
   clearLocalChangesModalOpen: boolean;
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
   totalEntityCount: number;
+  localDev: boolean;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {
@@ -36,6 +39,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     clearLocalChangesModalOpen,
     setClearLocalChangesModalOpen,
     totalEntityCount,
+    localDev,
   } = props;
 
   const {
@@ -128,6 +132,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-left">
         <UIButtonsToggle showLeft={false} />
       </div>
+      {localDev && <LocalDevOverrideButtons />}
       <div className="header-center"></div>
       <div className="actions">
         <Button
@@ -135,7 +140,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           size="icon"
           disabled={!canUndo()}
           onClick={undo}
-          aria-label="Undo"
+          aria-label={pt("undo", "Undo")}
         >
           <RotateCcw className="sm-icon" />
         </Button>
@@ -145,7 +150,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           size="icon"
           disabled={!canRedo()}
           onClick={redo}
-          aria-label="Redo"
+          aria-label={pt("redo", "Redo")}
         >
           <RotateCw className="sm-icon" />
         </Button>
@@ -185,7 +190,10 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
               await onPublishTheme();
             }}
           >
-            {`Update ${totalEntityCount} ${totalEntityCount === 1 ? "Page" : "Pages"}`}
+            {
+              // TODO: translation concatenation
+              `${pt("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
+            }
           </Button>
         )}
       </div>

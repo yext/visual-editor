@@ -14,6 +14,10 @@ import {
   YextField,
   VisibilityWrapper,
   HoursStatusAtom,
+  TranslatableString,
+  resolveTranslatableString,
+  msg,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -22,10 +26,11 @@ import {
   AnalyticsScopeProvider,
 } from "@yext/pages-components";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 
 export interface NearbyLocationsSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     coordinate: YextEntityField<Coordinate>;
     radius: number;
     limit: number;
@@ -33,7 +38,10 @@ export interface NearbyLocationsSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
     cardHeadingLevel: HeadingLevel;
     phoneNumberFormat: "domestic" | "international";
     phoneNumberLink: boolean;
@@ -52,106 +60,148 @@ export interface NearbyLocationsSectionProps {
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      coordinate: YextField<any, Coordinate>("Coordinates", {
-        type: "entityField",
-        filter: { types: ["type.coordinate"] },
-      }),
-      radius: YextField("Radius (Miles)", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.heading", "Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      coordinate: YextField<any, Coordinate>(
+        msg("fields.coordinates", "Coordinates"),
+        {
+          type: "entityField",
+          filter: { types: ["type.coordinate"] },
+        }
+      ),
+      radius: YextField(msg("fields.radiusMiles", "Radius (Miles)"), {
         type: "number",
         min: 0,
       }),
-      limit: YextField("Limit", {
+      limit: YextField(msg("fields.limit", "Limit"), {
         type: "number",
         min: 0,
         max: 50,
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      cardHeadingLevel: YextField("Card Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      phoneNumberFormat: YextField("Phone Number Format", {
-        type: "radio",
-        options: "PHONE_OPTIONS",
-      }),
-      phoneNumberLink: YextField("Include Phone Hyperlink", {
-        type: "radio",
-        options: [
-          { label: "Yes", value: true },
-          { label: "No", value: false },
-        ],
-      }),
-      hours: YextField("Hours", {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          showCurrentStatus: YextField("Show Current Status", {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
+      }),
+      cardHeadingLevel: YextField(
+        msg("fields.cardHeadingLevel", "Card Heading Level"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "HEADING_LEVEL",
+        }
+      ),
+      phoneNumberFormat: YextField(
+        msg("fields.phoneNumberFormat", "Phone Number Format"),
+        {
+          type: "radio",
+          options: "PHONE_OPTIONS",
+        }
+      ),
+      phoneNumberLink: YextField(
+        msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("yes", "Yes"), value: true },
+            { label: msg("no", "No"), value: false },
+          ],
+        }
+      ),
+      hours: YextField(msg("fields.hours", "Hours"), {
+        type: "object",
+        objectFields: {
+          showCurrentStatus: YextField(
+            msg("fields.showCurrentStatus", "Show Current Status"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("yes", "Yes"), value: true },
+                { label: msg("no", "No"), value: false },
+              ],
+            }
+          ),
+          timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
             type: "radio",
             options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
+              { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
+              { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
             ],
           }),
-          timeFormat: YextField("Time Format", {
-            type: "radio",
-            options: [
-              { label: "12-hour", value: "12h" },
-              { label: "24-hour", value: "24h" },
-            ],
-          }),
-          showDayNames: YextField("Show Day Names", {
-            type: "radio",
-            options: [
-              { label: "Yes", value: true },
-              { label: "No", value: false },
-            ],
-          }),
-          dayOfWeekFormat: YextField("Day of Week Format", {
-            type: "radio",
-            options: [
-              { label: "Short", value: "short" },
-              { label: "Long", value: "long" },
-            ],
-          }),
+          showDayNames: YextField(
+            msg("fields.showDayNames", "Show Day Names"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("yes", "Yes"), value: true },
+                { label: msg("no", "No"), value: false },
+              ],
+            }
+          ),
+          dayOfWeekFormat: YextField(
+            msg("fields.dayOfWeekFormat", "Day of Week Format"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.short", "Short"), value: "short" },
+                { label: msg("fields.options.long", "Long"), value: "long" },
+              ],
+            }
+          ),
         },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const LocationCard = ({
@@ -220,11 +270,15 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
+  const { i18n } = useTranslation();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     data?.coordinate
   );
-  const headingText = resolveYextEntityField<string>(document, data?.heading);
+  const headingText = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data?.heading),
+    i18n.language
+  );
 
   // parse variables from document
   const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =
@@ -267,17 +321,20 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     }
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection background={styles?.backgroundColor}>
       <div className="space-y-6">
         {headingText && (
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
-            <Heading
-              level={styles?.headingLevel}
-              className="text-center md:text-left"
-            >
-              {headingText}
-            </Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>{headingText}</Heading>
           </div>
         )}
 
@@ -365,13 +422,13 @@ function parseDocument(
 
 export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
   {
-    label: "Nearby Locations Section",
+    label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),
     fields: nearbyLocationsSectionFields,
     defaultProps: {
       data: {
         heading: {
           field: "",
-          constantValue: "Nearby Locations",
+          constantValue: { en: "Nearby Locations" },
           constantValueEnabled: true,
         },
         coordinate: {
@@ -387,7 +444,10 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
       styles: {
         backgroundColor: backgroundColors.background1.value,
         cardBackgroundColor: backgroundColors.background1.value,
-        headingLevel: 3,
+        heading: {
+          level: 3,
+          align: "left",
+        },
         cardHeadingLevel: 4,
         hours: {
           showCurrentStatus: true,

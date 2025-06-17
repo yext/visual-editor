@@ -19,20 +19,32 @@ import {
   InsightStruct,
   Timestamp,
   ComponentFields,
-  MaybeRTF,
+  resolveTranslatableString,
+  TranslatableString,
+  msg,
+  pt,
+  ThemeOptions,
+  resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_DESCRIPTION =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters";
+
 export interface InsightSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     insights: YextEntityField<InsightSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -41,14 +53,17 @@ export interface InsightSectionProps {
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      insights: YextField("Insight Section", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      insights: YextField(msg("fields.insightSection", "Insight Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.InsightSection.type],
@@ -56,33 +71,51 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const InsightCard = ({
@@ -96,6 +129,8 @@ const InsightCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <Background
       className="rounded h-full flex flex-col"
@@ -117,7 +152,9 @@ const InsightCard = ({
             <div
               className={`flex ${insight.category && insight.publishTime && `gap-4`}`}
             >
-              <Body>{insight.category}</Body>
+              <Body>
+                {resolveTranslatableString(insight.category, i18n.language)}
+              </Body>
               {insight.category && insight.publishTime && <Body>|</Body>}
               {insight.publishTime && (
                 <Timestamp date={insight.publishTime} hideTimeZone={true} />
@@ -133,16 +170,16 @@ const InsightCard = ({
                   : "span"
               }
             >
-              {insight.name}
+              {resolveTranslatableString(insight.name, i18n.language)}
             </Heading>
           )}
-          <MaybeRTF data={insight.description} />
+          {resolveTranslatableRichText(insight.description, i18n.language)}
         </div>
         {insight.cta && (
           <CTA
             eventName={`cta${key}`}
             variant={"link"}
-            label={insight.cta.label}
+            label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
             className="mt-auto"
@@ -154,30 +191,43 @@ const InsightCard = ({
 };
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
-        <div className="text-center">
-          <EntityField
-            displayName={t("headingText", "Heading Text")}
-            fieldId={data.heading.field}
-            constantValueEnabled={data.heading.constantValueEnabled}
-          >
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
-          </EntityField>
-        </div>
+        <EntityField
+          displayName={pt("fields.heading", "Heading")}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
+        >
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
+          </div>
+        </EntityField>
       )}
       {resolvedInsights?.insights && (
         <EntityField
-          displayName={t("insights", "Insights")}
+          displayName={pt("fields.insights", "Insights")}
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
@@ -187,7 +237,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 key={index}
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -198,25 +248,78 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: "Insights Section",
+  label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
-    },
     data: {
       heading: {
         field: "",
-        constantValue: "Insights",
+        constantValue: { en: "Insights" },
         constantValueEnabled: true,
       },
       insights: {
         field: "",
         constantValue: {
-          insights: [],
+          insights: [
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Article Name" },
+              category: { en: "Category" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              publishTime: "August 2, 2022",
+              cta: {
+                link: "#",
+                label: { en: "Read More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Article Name" },
+              category: { en: "Category" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              publishTime: "August 2, 2022",
+              cta: {
+                link: "#",
+                label: { en: "Read More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              name: { en: "Article Name" },
+              category: { en: "Category" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              publishTime: "August 2, 2022",
+              cta: {
+                link: "#",
+                label: { en: "Read More" },
+                linkType: "URL",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
+      },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background2.value,
+      cardBackgroundColor: backgroundColors.background1.value,
+      heading: {
+        level: 2,
+        align: "left",
       },
     },
     analytics: {

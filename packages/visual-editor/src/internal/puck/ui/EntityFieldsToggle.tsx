@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
 import "../../../editor/index.css";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 export const EntityFieldsToggle = () => {
   const tooltipsContext = useEntityTooltips();
@@ -28,11 +29,15 @@ export const EntityFieldsToggle = () => {
               onCheckedChange={toggleTooltips}
               checked={tooltipsVisible}
             />
-            <p className="ve-self-center ve-text-sm">Show Labels</p>
+            <p className="ve-self-center ve-text-sm">
+              {pt("showLabels", "Show Labels")}
+            </p>
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          {tooltipsVisible ? "Hide Labels" : "Show Labels"}
+          {tooltipsVisible
+            ? pt("hideLabels", "Hide Labels")
+            : pt("showLabels", "Show Labels")}
           <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>

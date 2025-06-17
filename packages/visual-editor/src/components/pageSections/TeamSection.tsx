@@ -19,6 +19,11 @@ import {
   TeamSectionType,
   PersonStruct,
   ComponentFields,
+  TranslatableString,
+  resolveTranslatableString,
+  msg,
+  pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -28,10 +33,13 @@ export interface TeamSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     people: YextEntityField<TeamSectionType>;
   };
   analytics?: {
@@ -40,15 +48,20 @@ export interface TeamSectionProps {
   liveVisibility: boolean;
 }
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/80x80";
+
 const TeamSectionFields: Fields<TeamSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading Text", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      people: YextField("Team Section", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.headingText", "Heading Text"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      people: YextField(msg("fields.teamSection", "Team Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.TeamSection.type],
@@ -56,33 +69,51 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const PersonCard = ({
@@ -96,6 +127,8 @@ const PersonCard = ({
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
       <Background background={backgroundColor} className="flex p-8 gap-6">
@@ -118,10 +151,14 @@ const PersonCard = ({
                   : "span"
               }
             >
-              {person.name}
+              {resolveTranslatableString(person.name, i18n.language)}
             </Heading>
           )}
-          {person.title && <Body variant="base">{person.title}</Body>}
+          {person.title && (
+            <Body variant="base">
+              {resolveTranslatableString(person.title, i18n.language)}
+            </Body>
+          )}
         </div>
       </Background>
       <hr className="border" />
@@ -161,7 +198,10 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${key}`}
-                label={person.cta.label}
+                label={resolveTranslatableString(
+                  person.cta.label,
+                  i18n.language
+                )}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
                 variant="link"
@@ -175,30 +215,43 @@ const PersonCard = ({
 };
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedPeople = resolveYextEntityField(document, data.people);
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName={t("team", "Team")}
+          displayName={pt("fields.team", "Team")}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
@@ -208,7 +261,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 key={index}
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -219,26 +272,79 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
 };
 
 export const TeamSection: ComponentConfig<TeamSectionProps> = {
-  label: "Team Section",
+  label: msg("components.teamSection", "Team Section"),
   fields: TeamSectionFields,
   defaultProps: {
     data: {
       heading: {
         field: "",
-        constantValue: "Meet Our Team",
+        constantValue: { en: "Meet Our Team" },
         constantValueEnabled: true,
       },
       people: {
         field: "",
         constantValue: {
-          people: [],
+          people: [
+            {
+              name: { en: "First Last" },
+              title: { en: "Associate Agent" },
+              phoneNumber: "(202) 770-6619 ",
+              email: "jkelley@[company].com",
+              cta: {
+                label: { en: "Visit Profile" },
+                link: "#",
+                linkType: "URL",
+              },
+              headshot: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 80,
+                width: 80,
+              },
+            },
+            {
+              name: { en: "First Last" },
+              title: { en: "Associate Agent" },
+              phoneNumber: "(202) 770-6619 ",
+              email: "jkelley@[company].com",
+              cta: {
+                label: { en: "Visit Profile" },
+                link: "#",
+                linkType: "URL",
+              },
+              headshot: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 80,
+                width: 80,
+              },
+            },
+            {
+              name: { en: "First Last" },
+              title: { en: "Associate Agent" },
+              phoneNumber: "(202) 770-6619 ",
+              email: "jkelley@[company].com",
+              cta: {
+                label: { en: "Visit Profile" },
+                link: "#",
+                linkType: "URL",
+              },
+              headshot: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 80,
+                width: 80,
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "teamSection",

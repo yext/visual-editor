@@ -1,5 +1,10 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
+import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { useMemo } from "react";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -13,7 +18,7 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
     return (
       <div className={"ve-mt-4"}>
         <AutoField
-          field={FAQStructArrayField}
+          field={FAQStructArrayField()}
           value={value.faqs}
           onChange={(newValue, uiState) =>
             onChange({ faqs: newValue }, uiState)
@@ -24,18 +29,46 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   },
 };
 
-const FAQStructArrayField: ArrayField<FAQStruct[]> = {
-  label: "Array Field",
-  type: "array",
-  arrayFields: {
-    question: {
-      type: "text",
-      label: "Question",
+const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
+  const { t, i18n } = usePlatformTranslation();
+
+  const questionField = useMemo(() => {
+    return TranslatableStringField(
+      {
+        key: "question",
+        options: {
+          defaultValue: "Question",
+        },
+      },
+      "text"
+    );
+  }, []);
+
+  const answerField = useMemo(() => {
+    return TranslatableRichTextField({
+      key: "answer",
+      options: {
+        defaultValue: "Answer",
+      },
+    });
+  }, []);
+
+  return {
+    label: pt("arrayField", "Array Field"),
+    type: "array",
+    arrayFields: {
+      question: questionField,
+      answer: answerField,
     },
-    answer: {
-      type: "textarea",
-      label: "Answer",
+    getItemSummary: (item, i): string => {
+      const translation = resolveTranslatableString(
+        item.question,
+        i18n.language
+      );
+      if (translation) {
+        return translation;
+      }
+      return t("faq", "FAQ") + " " + ((i ?? 0) + 1);
     },
-  },
-  getItemSummary: (item, i) => item.question ?? "FAQ " + ((i ?? 0) + 1),
+  };
 };

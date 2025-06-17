@@ -258,6 +258,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       localDev={localDev}
     />
   ) : (
-    <LoadingScreen progress={progress} />
+    <LoadingScreen
+      progress={progress}
+      platformLanguageIsSet={!!templateMetadata?.platformLocale}
+    />
   );
 };

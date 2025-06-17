@@ -19,7 +19,12 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  MaybeRTF,
+  resolveTranslatableString,
+  resolveTranslatableRichText,
+  msg,
+  pt,
+  HeadingLevel,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -33,59 +38,94 @@ export interface PromoSectionProps {
     backgroundColor?: BackgroundStyle;
     orientation: "left" | "right";
     ctaVariant: CTAProps["variant"];
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
+  liveVisibility?: boolean;
 }
 
 const promoSectionFields: Fields<PromoSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
       promo: YextStructFieldSelector({
-        label: "Promo",
+        label: msg("fields.promo", "Promo"),
         filter: {
           type: ComponentFields.PromoSection.type,
         },
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      orientation: YextField("Image Orientation", {
-        type: "radio",
-        options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
-        ],
-      }),
-      ctaVariant: YextField("CTA Variant", {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      orientation: YextField(
+        msg("fields.imageOrientation", "Image Orientation"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.left", "Left"), value: "left" },
+            { label: msg("fields.options.right", "Right"), value: "right" },
+          ],
+        }
+      ),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
+      }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(document, data?.promo);
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
@@ -97,7 +137,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName={t("image", "Image")}
+          displayName={pt("fields.image", "Image")}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
@@ -105,39 +145,50 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             image={resolvedPromo.image}
             layout={"auto"}
             aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+            className="h-[200px]"
           />
         </EntityField>
       )}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
-            displayName={t("title", "Title")}
+            displayName={pt("fields.title", "Title")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
-            <Heading level={3}>{resolvedPromo?.title}</Heading>
+            <div className={`flex ${justifyClass}`}>
+              <Heading level={styles.heading.level}>
+                {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
+              </Heading>
+            </div>
           </EntityField>
         )}
         <EntityField
-          displayName={t("description", "Description")}
+          displayName={pt("fields.description", "Description")}
           fieldId={data.promo.field}
           constantValueEnabled={
             !resolvedPromo?.description ||
             data.promo.constantValueOverride.description
           }
         >
-          <MaybeRTF data={resolvedPromo?.description} />
+          {resolveTranslatableRichText(
+            resolvedPromo?.description,
+            i18n.language
+          )}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
-            displayName={t("callToAction", "Call To Action")}
+            displayName={pt("fields.callToAction", "Call To Action")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
             <CTA
               eventName={`cta`}
               variant={styles?.ctaVariant}
-              label={resolvedPromo?.cta.label}
+              label={resolveTranslatableString(
+                resolvedPromo?.cta.label,
+                i18n.language
+              )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}
             />
@@ -149,47 +200,89 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
 };
 
 export const PromoSection: ComponentConfig<PromoSectionProps> = {
-  label: "Promo Section",
+  label: msg("components.promoSection", "Promo Section"),
   fields: promoSectionFields,
   defaultProps: {
     data: {
       promo: {
         field: "",
+        constantValueEnabled: true,
         constantValue: {
           image: {
             height: 360,
             width: 640,
             url: PLACEHOLDER_IMAGE_URL,
           },
-          title: "Title",
-          description: "Description",
+          title: { en: "Featured Promotion" },
+          description: {
+            en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+          },
           cta: {
-            label: "Call To Action",
+            label: { en: "Learn More" },
             link: "#",
             linkType: "URL",
           },
         },
-        constantValueOverride: {},
+        constantValueOverride: {
+          image: true,
+          title: true,
+          description: true,
+          cta: true,
+        },
       },
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
       orientation: "left",
       ctaVariant: "primary",
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "promoSection",
     },
     liveVisibility: true,
   },
-  render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <PromoWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
-  ),
+  resolveFields: (data, { lastData }) => {
+    // If set to entity value and no field selected, hide the component.
+    if (
+      !data.props.data.promo.constantValueEnabled &&
+      data.props.data.promo.field === ""
+    ) {
+      data.props.liveVisibility = false;
+      return {
+        ...promoSectionFields,
+        liveVisibility: undefined,
+      };
+    }
+
+    // If no field was selected and then constant value is enabled
+    // or a field is selected, show the component.
+    if (
+      (data.props.data.promo.constantValueEnabled &&
+        !lastData?.props.data.promo.constantValueEnabled &&
+        data.props.data.promo.field === "") ||
+      (lastData?.props.data.promo.field === "" &&
+        data.props.data.promo.field !== "")
+    ) {
+      data.props.liveVisibility = true;
+    }
+
+    // Otherwise, return normal fields.
+    return promoSectionFields;
+  },
+  render: (props) => {
+    return (
+      <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <PromoWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    );
+  },
 };

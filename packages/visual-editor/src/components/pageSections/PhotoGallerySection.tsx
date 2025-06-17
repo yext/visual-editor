@@ -27,6 +27,11 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
+  TranslatableString,
+  resolveTranslatableString,
+  msg,
+  pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import {
   resolvedImageFields,
@@ -45,12 +50,15 @@ const DEFAULT_IMAGE = {
 
 export interface PhotoGallerySectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     images: YextEntityField<ImageType[] | ComplexImageType[]>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
     imageStyle: Omit<ImageWrapperProps, "image">;
   };
   liveVisibility: boolean;
@@ -83,20 +91,32 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
-      }),
-      imageStyle: YextField("Image Style", {
+      imageStyle: YextField(msg("fields.imageStyle", "Image Style"), {
         type: "object",
         objectFields: {
           layout: ImageWrapperFields.layout,
@@ -107,40 +127,52 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       }),
     },
   }),
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Heading", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      images: YextField<any, ImageType[] | ComplexImageType[]>("Images", {
-        type: "entityField",
-        filter: {
-          types: ["type.image"],
-          includeListsOnly: true,
-        },
-      }),
+      heading: YextField<any, TranslatableString>(
+        msg("fields.heading", "Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      images: YextField<any, ImageType[] | ComplexImageType[]>(
+        msg("fields.images", "Images"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.image"],
+            includeListsOnly: true,
+          },
+        }
+      ),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 const PhotoGallerySectionComponent = ({
   data,
   styles,
 }: PhotoGallerySectionProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
-  const sectionHeading = resolveYextEntityField(document, data.heading);
+  const sectionHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
 
   const resolvedImages = resolveYextEntityField(document, data.images);
 
@@ -154,19 +186,27 @@ const PhotoGallerySectionComponent = ({
       height: styles.imageStyle.height,
     }));
 
+  const justifyClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[styles.heading.align];
+
   return (
     <PageSection
       aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
-      className="flex flex-col gap-8 justify-center text-center"
+      className="flex flex-col gap-8 justify-center"
     >
       {sectionHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.headingText", "Heading Text")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <Heading level={styles.headingLevel}>{sectionHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles.heading.level}>{sectionHeading}</Heading>
+          </div>
         </EntityField>
       )}
       {filteredImages && filteredImages.length > 0 && (
@@ -184,7 +224,7 @@ const PhotoGallerySectionComponent = ({
           </DynamicChildColors>
           <div className="flex flex-col gap-y-8">
             <EntityField
-              displayName={t("images", "Images")}
+              displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >
@@ -255,12 +295,15 @@ const PhotoGallerySectionComponent = ({
 };
 
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
-  label: "Photo Gallery Section",
+  label: msg("components.photoGallerySection", "Photo Gallery Section"),
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
       imageStyle: {
         layout: "fixed",
         height: 570,
@@ -271,7 +314,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Gallery",
+        constantValue: { en: "Gallery" },
         constantValueEnabled: true,
       },
       images: {

@@ -119,6 +119,9 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Products")).toBeVisible();
+      expect(document.body.textContent).toContain(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      );
     },
   },
   {
@@ -128,7 +131,9 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
     tests: async (page) => {
       expect(page.getByText("Featured Products")).toBeVisible();
-      expect(document.body.textContent).not.toContain("Burger");
+      expect(document.body.textContent).toContain(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      );
     },
   },
   {

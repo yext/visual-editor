@@ -279,6 +279,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       localDev={localDev}
     />
   ) : (
-    <LoadingScreen progress={progress} />
+    <LoadingScreen
+      progress={progress}
+      platformLanguageIsSet={!!templateMetadata?.platformLocale}
+    />
   );
 };

@@ -21,19 +21,31 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  MaybeRTF,
+  resolveTranslatableRichText,
+  resolveTranslatableString,
+  TranslatableString,
+  msg,
+  pt,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_DESCRIPTION =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
+
 export interface EventSectionProps {
   data: {
-    heading: YextEntityField<string>;
+    heading: YextEntityField<TranslatableString>;
     events: YextEntityField<EventSectionType>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   analytics?: {
     scope?: string;
@@ -42,14 +54,17 @@ export interface EventSectionProps {
 }
 
 const eventSectionFields: Fields<EventSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, string>("Section Heading", {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-      events: YextField("Events", {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.sectionHeading", "Section Heading"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
+      events: YextField(msg("fields.events", "Events"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.EventSection.type],
@@ -57,46 +72,65 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
-  styles: YextField("Styles", {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField("Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      cardBackgroundColor: YextField("Card Background Color", {
-        type: "select",
-        hasSearch: true,
-        options: "BACKGROUND_COLOR",
-      }),
-      headingLevel: YextField("Heading Level", {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardBackgroundColor: YextField(
+        msg("fields.cardBackgroundColor", "Card Background Color"),
+        {
+          type: "select",
+          hasSearch: true,
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.headingLevel", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
 const EventCard = ({
-  key,
+  cardKey,
   event,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardKey: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
 }) => {
+  const { i18n } = useTranslation();
   return (
     <Background
       background={backgroundColor}
@@ -123,7 +157,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {event.title}
+            {resolveTranslatableString(event.title, i18n.language)}
           </Heading>
         )}
         {event.dateTime && (
@@ -133,11 +167,11 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        <MaybeRTF data={event.description} />
+        {resolveTranslatableRichText(event.description, i18n.language)}
         {event.cta && (
           <CTA
-            eventName={`cta${key}`}
-            label={event.cta.label}
+            eventName={`cta${cardKey}`}
+            label={resolveTranslatableString(event.cta.label, i18n.language)}
             link={event.cta.link}
             linkType={event.cta.linkType}
             variant="link"
@@ -149,31 +183,44 @@ const EventCard = ({
 };
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const { data, styles } = props;
   const document = useDocument();
   const resolvedEvents = resolveYextEntityField(document, data.events);
-  const resolvedHeading = resolveYextEntityField(document, data.heading);
+  const resolvedHeading = resolveTranslatableString(
+    resolveYextEntityField(document, data.heading),
+    i18n.language
+  );
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={t("headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
       {resolvedEvents?.events && (
         <EntityField
-          displayName={t("events", "Events")}
+          displayName={pt("fields.events", "Events")}
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >
@@ -181,9 +228,10 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
             {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
+                cardKey={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -194,26 +242,76 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
 };
 
 export const EventSection: ComponentConfig<EventSectionProps> = {
-  label: "Events Section",
+  label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
   defaultProps: {
     data: {
       heading: {
         field: "",
-        constantValue: "Upcoming Events",
+        constantValue: { en: "Upcoming Events" },
         constantValueEnabled: true,
       },
       events: {
         field: "",
         constantValue: {
-          events: [],
+          events: [
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              title: { en: "Event Title" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              dateTime: "2022-12-12T14:00:00",
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              title: { en: "Event Title" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              dateTime: "2022-12-12T14:00:00",
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+            {
+              image: {
+                url: PLACEHOLDER_IMAGE_URL,
+                height: 360,
+                width: 640,
+              },
+              title: { en: "Event Title" },
+              description: { en: PLACEHOLDER_DESCRIPTION },
+              dateTime: "2022-12-12T14:00:00",
+              cta: {
+                link: "#",
+                label: { en: "Learn More" },
+                linkType: "URL",
+              },
+            },
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     analytics: {
       scope: "eventSection",

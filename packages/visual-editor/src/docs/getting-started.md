@@ -23,7 +23,7 @@ A Puck component is nothing more than a React component with additional configur
 1. **render** \- a function that returns your React component. This is the bare minimum necessary in order to have the component show up in the Puck left sidebar so the component can be dragged into the edit zone (middle section).
 2. **fields** \- an object that defines the list of props available for the component. These are the user-settable options that show on the Puck right sidebar.
 3. **defaultProps** \- the default values/configuration of the above fields.
-4. **resolveFields** \- a function to dynamically change/set fields based on the value of another field. Right now we’ve been using this for array fields and collection items.
+4. **resolveFields** \- a function to dynamically change/set fields based on the value of another field.
 
 Use [Banner](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/pageSections/Banner.tsx) as an example to get you started.
 

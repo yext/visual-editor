@@ -1,5 +1,6 @@
 import {
   backgroundColors,
+  msg,
   PageSection,
   VisibilityWrapper,
   YextField,
@@ -15,21 +16,24 @@ export type StaticMapSectionProps = {
 };
 
 const staticMapSectionFields: Fields<StaticMapSectionProps> = {
-  data: YextField("Data", {
+  data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      apiKey: YextField("API Key", {
+      apiKey: YextField(msg("fields.apiKey", "API Key"), {
         type: "text",
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 export const StaticMapSectionWrapper = ({ data }: StaticMapSectionProps) => {
@@ -53,7 +57,7 @@ export const StaticMapSectionWrapper = ({ data }: StaticMapSectionProps) => {
 };
 
 export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
-  label: "Static Map Section",
+  label: msg("components.staticMapSection", "Static Map Section"),
   fields: staticMapSectionFields,
   defaultProps: {
     data: {

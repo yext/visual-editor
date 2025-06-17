@@ -12,6 +12,7 @@ import {
 } from "../ui/AlertDialog.tsx";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
+import { pt } from "../../../utils/i18nPlatform.ts";
 
 type ClearLocalChangesButtonProps = {
   disabled: boolean;
@@ -30,22 +31,30 @@ export const ClearLocalChangesButton = ({
     onClearLocalChanges();
     setModalOpen(false);
   };
-
   return (
     <AlertDialog open={modalOpen} onOpenChange={setModalOpen}>
       <AlertDialogTrigger disabled={disabled} asChild>
-        <Button variant="link">Discard Changes</Button>
+        <Button variant="link">
+          {pt("discardChanges.discardChanges", "Discard Changes")}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Discard Changes</AlertDialogTitle>
+          <AlertDialogTitle>
+            {pt("discardChanges.discardChanges", "Discard Changes")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            This action will remove your local changes. It cannot be undone.
+            {pt(
+              "discardChanges.warning",
+              "This action will remove your local changes. It cannot be undone."
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button onClick={handleClearLocalChanges}>Confirm</Button>
+          <AlertDialogCancel>{pt("cancel", "Cancel")}</AlertDialogCancel>
+          <Button onClick={handleClearLocalChanges}>
+            {pt("confirm", "Confirm")}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
