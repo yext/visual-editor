@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TranslatableLexicalEditor } from "./TranslatableLexicalEditor.tsx";
 import { RichText } from "../types/types.ts";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -30,6 +30,14 @@ export function TranslatableRichTextDrawer({
   currentLocale = "en",
   availableLocales = ["en"],
 }: TranslatableRichTextDrawerProps) {
+  const [open, setOpen] = useState(false);
+  const [openCount, setOpenCount] = useState(0);
+
+  // Increment openCount every time the drawer is opened
+  React.useEffect(() => {
+    if (open) setOpenCount((c) => c + 1);
+  }, [open]);
+
   // Render preview (plain text or HTML)
   const renderPreview = () => {
     if (typeof preview === "string" && preview.trim() !== "") {
@@ -46,7 +54,7 @@ export function TranslatableRichTextDrawer({
   };
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <div
           className={`ve-p-2 ve-border ve-rounded ve-cursor-pointer ve-bg-white hover:ve-bg-gray-50 ${styles["ve-multiline-ellipsis"]}`}
@@ -68,21 +76,71 @@ export function TranslatableRichTextDrawer({
             willChange: "transform",
           }}
         >
-          <TranslatableLexicalEditor
+          {/* Local state for the editor, re-initialized on each open */}
+          <DrawerEditor
+            key={openCount}
             value={value}
-            onChange={onChange}
             translations={translations}
+            onChange={onChange}
             onTranslationChange={onTranslationChange}
             currentLocale={currentLocale}
             availableLocales={availableLocales}
+            onClose={() => setOpen(false)}
           />
-          <Dialog.Close asChild>
-            <button className="ve-mt-4 ve-px-4 ve-py-2 ve-bg-gray-200 ve-rounded hover:ve-bg-gray-300">
-              Close
-            </button>
-          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+// DrawerEditor is a local component to manage localValue per open
+function DrawerEditor({
+  value,
+  translations,
+  onChange,
+  onTranslationChange,
+  currentLocale,
+  availableLocales,
+  onClose,
+}: {
+  value: string | RichText;
+  translations: Record<string, string | RichText>;
+  onChange: (value: string | RichText) => void;
+  onTranslationChange?: (locale: string, value: string | RichText) => void;
+  currentLocale: string;
+  availableLocales: string[];
+  onClose: () => void;
+}) {
+  const [localValue, setLocalValue] = useState(value);
+  return (
+    <>
+      <TranslatableLexicalEditor
+        value={localValue}
+        onChange={setLocalValue}
+        translations={translations}
+        onTranslationChange={onTranslationChange}
+        currentLocale={currentLocale}
+        availableLocales={availableLocales}
+      />
+      <div className="ve-flex ve-justify-between ve-mt-6">
+        <button
+          className="ve-px-4 ve-py-2 ve-bg-gray-200 ve-rounded hover:ve-bg-gray-300"
+          type="button"
+          onClick={onClose}
+        >
+          Cancel
+        </button>
+        <button
+          className="ve-px-4 ve-py-2 ve-bg-blue-600 ve-text-white ve-rounded hover:ve-bg-blue-700"
+          type="button"
+          onClick={() => {
+            onChange(localValue);
+            onClose();
+          }}
+        >
+          Save
+        </button>
+      </div>
+    </>
   );
 }
