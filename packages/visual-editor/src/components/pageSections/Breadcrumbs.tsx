@@ -85,8 +85,7 @@ function isValidDirectoryParents(value: any[]): boolean {
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
 export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
-  const { t } = useTranslation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
   let breadcrumbs = getDirectoryParents(document);
