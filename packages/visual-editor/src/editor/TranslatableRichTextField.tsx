@@ -1,15 +1,10 @@
-import { TranslatableRichText } from "../types/types.ts";
+import { TranslatableRichText, RichText } from "../types/types.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
 import { Translation } from "../internal/types/translation.ts";
 import { CustomField, FieldLabel } from "@measured/puck";
-import { getDisplayValue } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
-import {
-  TARGET_ORIGINS,
-  useReceiveMessage,
-  useSendMessageToParent,
-} from "../internal/hooks/useMessage.ts";
+import { TranslatableRichTextDrawer } from "../components/TranslatableRichTextDrawer.tsx";
 
 /**
  * Generates a translatableRichText field config
@@ -24,60 +19,77 @@ export function TranslatableRichTextField<
       const document: { locale: string } = useDocument();
       const locale = document?.locale ?? "en";
       const { t } = usePlatformTranslation();
-      const resolvedValue = getDisplayValue(value, locale);
+      // Compute preview string for the current locale
+      let previewString = "";
+      let valueForEditor: any = "";
+      const isRecord = (v: any): v is Record<string, any> =>
+        typeof v === "object" &&
+        v !== null &&
+        !Array.isArray(v) &&
+        !("html" in v) &&
+        !("json" in v);
+      const isRichText = (v: any): v is { html?: string; json?: string } =>
+        typeof v === "object" && v !== null && ("html" in v || "json" in v);
+      if (isRecord(value)) {
+        const localized = (value as Record<string, any>)[locale];
+        if (isRichText(localized)) {
+          previewString = localized.html || "";
+          valueForEditor = localized;
+        } else if (typeof localized === "string") {
+          previewString = localized;
+          valueForEditor = localized;
+        } else {
+          valueForEditor = "";
+        }
+      } else if (isRichText(value)) {
+        previewString = value.html || "";
+        valueForEditor = value;
+      } else if (typeof value === "string") {
+        previewString = value;
+        valueForEditor = value;
+      }
+
+      // Defensive: always pass a record to the drawer for translations
+      const translations = isRecord(value) ? value : {};
+
+      // Always pass a string or json to the editor
+      let lexicalEditorValue: string = "";
+      if (isRichText(valueForEditor) && valueForEditor.json) {
+        lexicalEditorValue = valueForEditor.json;
+      } else if (typeof valueForEditor === "string") {
+        lexicalEditorValue = valueForEditor;
+      }
+
       const fieldLabel =
         (label && t(label.key, label.options)) + ` (${locale})`;
 
-      const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
-        "constantValueEditorOpened",
-        TARGET_ORIGINS
-      );
-
-      const [pendingMessageId, setPendingMessageId] = React.useState<
-        string | undefined
-      >();
-      useReceiveMessage(
-        "constantValueEditorClosed",
-        TARGET_ORIGINS,
-        (_, payload) => {
-          if (pendingMessageId && pendingMessageId === payload?.id) {
-            handleNewValue(payload.value);
-          }
-        }
-      );
-
-      const handleClick = () => {
-        const messageId = `RichText-${Date.now()}`;
-        setPendingMessageId(messageId);
-        openConstantValueEditor({
-          payload: {
-            type: "RichText",
-            value: resolvedValue,
-            id: messageId,
-            fieldName: fieldLabel,
-          },
-        });
-
-        // localDev
-        if (
-          window.location.href.includes("http://localhost:5173/dev-location")
-        ) {
-          handleNewValue(prompt("Enter text:") ?? "");
-        }
+      // onChange handler: always preserve object structure
+      const handleChange = (newValue: string | RichText) => {
+        const updated: any = { ...translations };
+        updated[locale] = newValue;
+        onChange(updated as T);
       };
 
-      const handleNewValue = (newValue: string) => {
-        onChange({
-          ...(typeof value === "object" && !Array.isArray(value) ? value : {}),
-          [locale]: newValue,
-        } as T);
+      const handleTranslationChange = (
+        translationLocale: string,
+        translationValue: string | RichText
+      ) => {
+        const updated: any = { ...translations };
+        updated[translationLocale] = translationValue;
+        onChange(updated as T);
       };
 
       return (
         <FieldLabel label={fieldLabel}>
-          <button className="RichTextField" onClick={handleClick}>
-            <div className="ve-line-clamp-3">{resolvedValue}</div>
-          </button>
+          <TranslatableRichTextDrawer
+            value={lexicalEditorValue}
+            preview={previewString}
+            onChange={handleChange}
+            translations={translations}
+            onTranslationChange={handleTranslationChange}
+            currentLocale={locale}
+            availableLocales={["en", "es", "fr", "de"]} // You can customize this list based on your needs
+          />
         </FieldLabel>
       );
     },
