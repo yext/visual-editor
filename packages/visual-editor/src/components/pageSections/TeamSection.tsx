@@ -278,7 +278,7 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Meet Our Team" },
+        constantValue: { en: "Meet Our Team", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       people: {
@@ -286,12 +286,12 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
         constantValue: {
           people: [
             {
-              name: { en: "First Last" },
-              title: { en: "Associate Agent" },
+              name: { en: "First Last", hasLocalizedValue: "true" },
+              title: { en: "Associate Agent", hasLocalizedValue: "true" },
               phoneNumber: "(202) 770-6619 ",
               email: "jkelley@[company].com",
               cta: {
-                label: { en: "Visit Profile" },
+                label: { en: "Visit Profile", hasLocalizedValue: "true" },
                 link: "#",
                 linkType: "URL",
               },
@@ -302,12 +302,12 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
               },
             },
             {
-              name: { en: "First Last" },
-              title: { en: "Associate Agent" },
+              name: { en: "First Last", hasLocalizedValue: "true" },
+              title: { en: "Associate Agent", hasLocalizedValue: "true" },
               phoneNumber: "(202) 770-6619 ",
               email: "jkelley@[company].com",
               cta: {
-                label: { en: "Visit Profile" },
+                label: { en: "Visit Profile", hasLocalizedValue: "true" },
                 link: "#",
                 linkType: "URL",
               },
@@ -318,12 +318,12 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
               },
             },
             {
-              name: { en: "First Last" },
-              title: { en: "Associate Agent" },
+              name: { en: "First Last", hasLocalizedValue: "true" },
+              title: { en: "Associate Agent", hasLocalizedValue: "true" },
               phoneNumber: "(202) 770-6619 ",
               email: "jkelley@[company].com",
               cta: {
-                label: { en: "Visit Profile" },
+                label: { en: "Visit Profile", hasLocalizedValue: "true" },
                 link: "#",
                 linkType: "URL",
               },
