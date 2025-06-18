@@ -250,7 +250,7 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Featured Products" },
+        constantValue: { en: "Featured Products", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       products: {
@@ -263,12 +263,18 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
                 height: 360,
                 width: 640,
               },
-              name: { en: "Product Title" },
-              category: { en: "Category, Pricing, etc" },
-              description: { en: PLACEHOLDER_DESCRIPTION },
+              name: { en: "Product Title", hasLocalizedValue: "true" },
+              category: {
+                en: "Category, Pricing, etc",
+                hasLocalizedValue: "true",
+              },
+              description: {
+                en: PLACEHOLDER_DESCRIPTION,
+                hasLocalizedValue: "true",
+              },
               cta: {
                 link: "#",
-                label: { en: "Learn More" },
+                label: { en: "Learn More", hasLocalizedValue: "true" },
                 linkType: "URL",
               },
             },
@@ -278,12 +284,18 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
                 height: 360,
                 width: 640,
               },
-              name: { en: "Product Title" },
-              category: { en: "Category, Pricing, etc" },
-              description: { en: PLACEHOLDER_DESCRIPTION },
+              name: { en: "Product Title", hasLocalizedValue: "true" },
+              category: {
+                en: "Category, Pricing, etc",
+                hasLocalizedValue: "true",
+              },
+              description: {
+                en: PLACEHOLDER_DESCRIPTION,
+                hasLocalizedValue: "true",
+              },
               cta: {
                 link: "#",
-                label: { en: "Learn More" },
+                label: { en: "Learn More", hasLocalizedValue: "true" },
                 linkType: "URL",
               },
             },
@@ -293,12 +305,18 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
                 height: 360,
                 width: 640,
               },
-              name: { en: "Product Title" },
-              category: { en: "Category, Pricing, etc" },
-              description: { en: PLACEHOLDER_DESCRIPTION },
+              name: { en: "Product Title", hasLocalizedValue: "true" },
+              category: {
+                en: "Category, Pricing, etc",
+                hasLocalizedValue: "true",
+              },
+              description: {
+                en: PLACEHOLDER_DESCRIPTION,
+                hasLocalizedValue: "true",
+              },
               cta: {
                 link: "#",
-                label: { en: "Learn More" },
+                label: { en: "Learn More", hasLocalizedValue: "true" },
                 linkType: "URL",
               },
             },

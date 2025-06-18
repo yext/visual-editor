@@ -182,6 +182,7 @@ const SubfieldsInput = ({
                             ...value?.constantValue,
                             [field]: newConstantValue,
                           },
+                          constantValueEnabled: value?.constantValueEnabled,
                           constantValueOverride: {
                             ...value?.constantValueOverride,
                             [field]: true,

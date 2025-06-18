@@ -76,6 +76,7 @@ export function TranslatableRichTextField<
       ) => {
         const updated: any = { ...translations };
         updated[translationLocale] = translationValue;
+        updated.hasLocalizedValue = "true";
         onChange(updated as T);
       };
 

@@ -428,7 +428,7 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
       data: {
         heading: {
           field: "",
-          constantValue: { en: "Nearby Locations" },
+          constantValue: { en: "Nearby Locations", hasLocalizedValue: "true" },
           constantValueEnabled: true,
         },
         coordinate: {
