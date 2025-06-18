@@ -23,8 +23,19 @@ export function TranslatableLexicalEditor({
   const [selectedLocale, setSelectedLocale] = useState(currentLocale);
   const { appState } = usePuck();
   const isDrawerOpen = appState?.ui?.rightSideBarVisible;
+  const prevLocaleRef = React.useRef(selectedLocale);
+  const [editorKey, setEditorKey] = React.useState(0);
+
+  // Update selected locale when currentLocale changes
+  React.useEffect(() => {
+    setSelectedLocale(currentLocale);
+  }, [currentLocale]);
 
   const handleLocaleChange = (locale: string) => {
+    if (locale !== prevLocaleRef.current) {
+      prevLocaleRef.current = locale;
+      setEditorKey((prev) => prev + 1);
+    }
     setSelectedLocale(locale);
   };
 
@@ -37,10 +48,15 @@ export function TranslatableLexicalEditor({
   };
 
   const getValueForLocale = (locale: string) => {
+    // Always check translations first, as it contains the local state
+    if (translations[locale]) {
+      return translations[locale];
+    }
+    // Fallback to the original value for current locale
     if (locale === currentLocale) {
       return value;
     }
-    return translations[locale] || "";
+    return "";
   };
 
   return (
@@ -61,6 +77,7 @@ export function TranslatableLexicalEditor({
         ))}
       </div>
       <LexicalEditorComponent
+        key={`${selectedLocale}-${editorKey}`}
         value={getValueForLocale(selectedLocale)}
         onChange={handleEditorChange}
         showToolbar={isDrawerOpen}

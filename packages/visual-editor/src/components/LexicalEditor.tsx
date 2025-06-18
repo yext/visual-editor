@@ -129,6 +129,21 @@ export function LexicalEditorComponent({
             paragraph.append(text);
             root.append(paragraph);
           }
+        } else if (typeof value === "object" && value !== null) {
+          // Handle RichText object
+          if (value.json) {
+            // Use the JSON property if available
+            editor.setEditorState(editor.parseEditorState(value.json));
+          } else if (value.html) {
+            // If only HTML is available, we need to parse it
+            // For now, fall back to creating a simple text node
+            const root = $getRoot();
+            root.clear();
+            const paragraph = $createParagraphNode();
+            const text = $createTextNode("Content available");
+            paragraph.append(text);
+            root.append(paragraph);
+          }
         }
       } catch {
         // fallback: do nothing

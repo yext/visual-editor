@@ -114,14 +114,97 @@ function DrawerEditor({
   availableLocales: string[];
   onClose: () => void;
 }) {
-  const [localValue, setLocalValue] = useState(value);
+  // Maintain separate local state for each locale
+  const [localValues, setLocalValues] = useState<
+    Record<string, string | RichText>
+  >(() => {
+    const initial: Record<string, string | RichText> = {};
+    // Initialize with current value for current locale
+    initial[currentLocale] = value;
+    // Initialize with existing translations for other locales
+    availableLocales.forEach((locale) => {
+      if (locale !== currentLocale && translations[locale]) {
+        initial[locale] = translations[locale];
+      }
+    });
+    return initial;
+  });
+
+  const handleEditorChange = (newValue: string | RichText) => {
+    // Update local state for the current locale
+    setLocalValues((prev) => {
+      const updated = {
+        ...prev,
+        [currentLocale]: newValue,
+      };
+      return updated;
+    });
+  };
+
+  const handleTranslationChange = (
+    locale: string,
+    newValue: string | RichText
+  ) => {
+    // Update local state for the translation locale
+    setLocalValues((prev) => ({
+      ...prev,
+      [locale]: newValue,
+    }));
+  };
+
+  const handleSave = () => {
+    // Save current locale changes
+    const currentLocaleValue = localValues[currentLocale];
+    if (currentLocaleValue) {
+      // Normalize the values for comparison
+      const normalizeValue = (val: any) => {
+        if (typeof val === "string") return val;
+        if (val && typeof val === "object" && val.json) return val.json;
+        return JSON.stringify(val);
+      };
+
+      const normalizedCurrent = normalizeValue(currentLocaleValue);
+      const normalizedOriginal = normalizeValue(value);
+
+      if (normalizedCurrent !== normalizedOriginal) {
+        onChange(currentLocaleValue);
+      }
+    }
+
+    // Save translation changes
+    availableLocales.forEach((locale) => {
+      if (locale !== currentLocale && localValues[locale]) {
+        const translationValue = localValues[locale];
+        const originalTranslation = translations[locale];
+
+        const normalizeValue = (val: any) => {
+          if (typeof val === "string") return val;
+          if (val && typeof val === "object" && val.json) return val.json;
+          return JSON.stringify(val);
+        };
+
+        const normalizedTranslation = normalizeValue(translationValue);
+        const normalizedOriginal = normalizeValue(originalTranslation);
+
+        if (
+          normalizedTranslation !== normalizedOriginal &&
+          onTranslationChange
+        ) {
+          onTranslationChange(locale, translationValue);
+        }
+      }
+    });
+
+    onClose();
+  };
+
   return (
     <>
       <TranslatableLexicalEditor
-        value={localValue}
-        onChange={setLocalValue}
-        translations={translations}
-        onTranslationChange={onTranslationChange}
+        value={localValues[currentLocale] || value}
+        onChange={handleEditorChange}
+        translations={localValues}
+        onTranslationChange={handleTranslationChange}
         currentLocale={currentLocale}
         availableLocales={availableLocales}
       />
@@ -136,10 +219,7 @@ function DrawerEditor({
         <button
           className="ve-px-4 ve-py-2 ve-bg-blue-600 ve-text-white ve-rounded hover:ve-bg-blue-700"
           type="button"
-          onClick={() => {
-            onChange(localValue);
-            onClose();
-          }}
+          onClick={handleSave}
         >
           Save
         </button>
