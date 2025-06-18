@@ -170,7 +170,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
               <IconButton
                 onClick={() => removeItem(index)}
                 variant="secondary"
-                title={pt("Delete Item")}
+                title={pt("deleteItem", "Delete Item")}
                 type="button"
                 disabled={localItems.length === 1}
               >

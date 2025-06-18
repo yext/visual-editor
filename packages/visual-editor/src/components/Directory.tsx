@@ -22,7 +22,7 @@ import {
 
 export interface DirectoryProps {
   data: {
-    directoryRoot?: TranslatableString;
+    directoryRoot: TranslatableString;
   };
   analytics?: {
     scope?: string;
@@ -251,11 +251,8 @@ export const Directory: ComponentConfig<DirectoryProps> = {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        directoryRoot: TranslatableStringField<TranslatableString | undefined>(
-          {
-            key: "fields.directoryRootLinkLabel",
-            options: { defaultValue: "Directory Root Link Label" },
-          },
+        directoryRoot: TranslatableStringField(
+          msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
           "text"
         ),
       },

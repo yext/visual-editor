@@ -7,7 +7,7 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -41,23 +41,15 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
-      {
-        key: "title",
-        options: {
-          defaultValue: "Title",
-        },
-      },
+      msg("title", "Title"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>({
-      key: "description",
-      options: {
-        defaultValue: "Description",
-      },
-    });
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("fields.description", "Description")
+    );
   }, []);
 
   return {
@@ -66,10 +58,10 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: t("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },

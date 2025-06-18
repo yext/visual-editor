@@ -16,7 +16,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export type BreadcrumbsSectionProps = {
   data: {
-    directoryRoot?: TranslatableString;
+    directoryRoot: TranslatableString;
   };
   analytics?: {
     scope?: string;
@@ -28,11 +28,8 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      directoryRoot: TranslatableStringField<TranslatableString | undefined>(
-        {
-          key: "fields.directoryRootLinkLabel",
-          options: { defaultValue: "Directory Root Link Label" },
-        },
+      directoryRoot: TranslatableStringField(
+        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
         "text"
       ),
     },

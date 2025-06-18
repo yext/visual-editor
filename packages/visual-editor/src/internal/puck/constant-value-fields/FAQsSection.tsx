@@ -1,6 +1,10 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
-import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import {
+  msg,
+  pt,
+  usePlatformTranslation,
+} from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -33,24 +37,11 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const questionField = useMemo(() => {
-    return TranslatableStringField(
-      {
-        key: "question",
-        options: {
-          defaultValue: "Question",
-        },
-      },
-      "text"
-    );
+    return TranslatableStringField(msg("fields.question", "Question"), "text");
   }, []);
 
   const answerField = useMemo(() => {
-    return TranslatableRichTextField({
-      key: "answer",
-      options: {
-        defaultValue: "Answer",
-      },
-    });
+    return TranslatableRichTextField(msg("fields.answer", "Answer"));
   }, []);
 
   return {

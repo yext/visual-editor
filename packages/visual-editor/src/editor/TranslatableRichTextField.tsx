@@ -1,7 +1,5 @@
 import { TranslatableRichText } from "../types/types.ts";
-import { useDocument } from "../hooks/useDocument.tsx";
-import { usePlatformTranslation } from "../utils/i18nPlatform.ts";
-import { Translation } from "../internal/types/translation.ts";
+import { MsgString, pt } from "../utils/i18nPlatform.ts";
 import { CustomField, FieldLabel } from "@measured/puck";
 import { getDisplayValue } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
@@ -10,23 +8,22 @@ import {
   useReceiveMessage,
   useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
+import { useTranslation } from "react-i18next";
 
 /**
  * Generates a translatableRichText field config
- * @param label optional label. Takes in translation key and TOptions from react-i18next
+ * @param label optional label. Takes in a value from msg
  */
 export function TranslatableRichTextField<
   T extends TranslatableRichText | undefined = TranslatableRichText,
->(label?: Translation): CustomField<T> {
+>(label?: MsgString): CustomField<T> {
   return {
     type: "custom",
     render: ({ onChange, value }) => {
-      const document: { locale: string } = useDocument();
-      const locale = document?.locale ?? "en";
-      const { t } = usePlatformTranslation();
+      const { i18n } = useTranslation();
+      const locale = i18n.language;
       const resolvedValue = getDisplayValue(value, locale);
-      const fieldLabel =
-        (label && t(label.key, label.options)) + ` (${locale})`;
+      const fieldLabel = (label && pt(label)) + ` (${locale})`;
 
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
