@@ -1533,7 +1533,7 @@ export const defaultFonts = {
   },
   "Instrument Serif": { italics: true, weights: [400], fallback: "serif" },
   Inter: {
-    italics: true,
+    hasItalic: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
@@ -2125,12 +2125,7 @@ export const defaultFonts = {
   Mina: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Mingzat: { italics: false, weights: [400], fallback: "sans-serif" },
   Miniver: { italics: false, weights: [400], fallback: "sans-serif" },
-  "Miriam Libre": {
-    italics: false,
-    minWeight: 400,
-    maxWeight: 700,
-    fallback: "sans-serif",
-  },
+  "Miriam Libre": { hasItalic: false, weights: [400], fallback: "sans-serif" },
   Mirza: { italics: false, weights: [400, 500, 600, 700], fallback: "serif" },
   "Miss Fajardose": { italics: false, weights: [400], fallback: "cursive" },
   Mitr: {
@@ -4657,7 +4652,7 @@ export const defaultGoogleFontsLinkTags =
   '<link href="https://fonts.googleapis.com/css2?family=IM+Fell+French+Canon+SC:wght@400&family=IM+Fell+Great+Primer:ital,wght@0,400;1,400&family=IM+Fell+Great+Primer+SC:wght@400&family=Ibarra+Real+Nova:ital,wght@0,400..700;1,400..700&family=Iceberg:wght@400&family=Iceland:wght@400&family=Imbue:wght@100..900&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Imperial+Script:wght@400&family=Imprima:wght@400&family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&family=Inconsolata:wght@200..900&family=Inder:wght@400&family=Indie+Flower:wght@400&family=Ingrid+Darling:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Inika:wght@400;700&family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inspiration:wght@400&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Irish+Grover:wght@400&family=Island+Moments:wght@400&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Italiana:wght@400&family=Italianno:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Irish+Grover:wght@400&family=Island+Moments:wght@400&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Italiana:wght@400&family=Italianno:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Itim:wght@400&family=Jacques+Francois:wght@400&family=Jacques+Francois+Shadow:wght@400&family=Jaldi:wght@400;700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Jim+Nightshade:wght@400&family=Joan:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Jockey+One:wght@400&family=Jolly+Lodger:wght@400&family=Jomhuria:wght@400&family=Jomolhari:wght@400&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Joti+One:wght@400&family=Jua:wght@400&family=Judson:ital,wght@0,400;0,700;1,400;1,700&family=Julee:wght@400&family=Julius+Sans+One:wght@400&family=Junge:wght@400&family=Jura:wght@300..700&display=swap" rel="stylesheet">\n' +
@@ -4687,7 +4682,7 @@ export const defaultGoogleFontsLinkTags =
   '<link href="https://fonts.googleapis.com/css2?family=Meddon:wght@400&family=MedievalSharp:wght@400&family=Medula+One:wght@400&family=Meera+Inimai:wght@400&family=Megrim:wght@400&family=Meie+Script:wght@400&family=Meow+Script:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&family=Merriweather:ital,wght@0,300..900;1,300..900&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Metal:wght@400&family=Metal+Mania:wght@400&family=Metamorphous:wght@400&family=Metrophobic:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Michroma:wght@400&family=Milonga:wght@400&family=Miltonian:wght@400&family=Miltonian+Tattoo:wght@400&family=Mina:wght@400;700&family=Mingzat:wght@400&family=Miniver:wght@400&display=swap" rel="stylesheet">\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400..700&family=Mirza:wght@400;500;600;700&family=Miss+Fajardose:wght@400&family=Mitr:wght@200;300;400;500;600;700&family=Mochiy+Pop+One:wght@400&family=Mochiy+Pop+P+One:wght@400&family=Modak:wght@400&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400&family=Mirza:wght@400;500;600;700&family=Miss+Fajardose:wght@400&family=Mitr:wght@200;300;400;500;600;700&family=Mochiy+Pop+One:wght@400&family=Mochiy+Pop+P+One:wght@400&family=Modak:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Modern+Antiqua:wght@400&family=Mogra:wght@400&family=Mohave:ital,wght@0,300..700;1,300..700&family=Moirai+One:wght@400&family=Molengo:wght@400&family=Monda:wght@400..700&family=Monofett:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Monomaniac+One:wght@400&family=Monoton:wght@400&family=Monsieur+La+Doulaise:wght@400&family=Montaga:wght@400&family=Montagu+Slab:wght@100..700&family=MonteCarlo:wght@400&family=Montez:wght@400&display=swap" rel="stylesheet">\n' +
   '<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Moo+Lah+Lah:wght@400&family=Mooli:wght@400&family=Moon+Dance:wght@400&family=Moul:wght@400&family=Moulpali:wght@400&display=swap" rel="stylesheet">\n' +

@@ -44,6 +44,23 @@ const getFontData = async () => {
 };
 
 const parseFontDetails = (font) => {
+  // Temporary overrides for specific Cloudflare Fonts bugs
+  if (font.family === "Inter") {
+    return {
+      hasItalic: false,
+      minWeight: 100,
+      maxWeight: 900,
+      fallback: fallbackFromCategory(font.category),
+    };
+  }
+  if (font.family === "Miriam Libre") {
+    return {
+      hasItalic: false,
+      weights: [400],
+      fallback: fallbackFromCategory(font.category),
+    };
+  }
+
   const variants = font.variants;
 
   const hasItalic = variants.some((v) => v.includes("italic"));
