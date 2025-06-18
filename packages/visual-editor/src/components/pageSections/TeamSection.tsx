@@ -28,23 +28,7 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-
-const defaultPerson: PersonStruct = {
-  name: { en: "First Last", hasLocalizedValue: "true" },
-  title: { en: "Associate Agent", hasLocalizedValue: "true" },
-  phoneNumber: "(202) 770-6619 ",
-  email: "jkelley@[company].com",
-  cta: {
-    label: { en: "Visit Profile", hasLocalizedValue: "true" },
-    link: "#",
-    linkType: "URL",
-  },
-  headshot: {
-    url: "https://placehold.co/80x80",
-    height: 80,
-    width: 80,
-  },
-};
+import { defaultPerson } from "../../internal/puck/constant-value-fields/TeamSection.tsx";
 
 export interface TeamSectionProps {
   styles: {

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { defaultFAQ } from "../../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
   backgroundColors,
   BackgroundStyle,
@@ -30,17 +31,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
-
-const defaultFAQ: FAQStruct = {
-  question: {
-    en: "Question Lorem ipsum dolor sit amet?",
-    hasLocalizedValue: "true",
-  },
-  answer: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    hasLocalizedValue: "true",
-  },
-};
 
 export interface FAQSectionProps {
   data: {

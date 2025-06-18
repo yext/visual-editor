@@ -28,26 +28,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-
-const defaultInsight: InsightStruct = {
-  image: {
-    url: "https://placehold.co/640x360",
-    height: 360,
-    width: 640,
-  },
-  name: { en: "Article Name", hasLocalizedValue: "true" },
-  category: { en: "Category", hasLocalizedValue: "true" },
-  description: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters",
-    hasLocalizedValue: "true",
-  },
-  publishTime: "August 2, 2022",
-  cta: {
-    link: "#",
-    label: { en: "Read More", hasLocalizedValue: "true" },
-    linkType: "URL",
-  },
-};
+import { defaultInsight } from "../../internal/puck/constant-value-fields/InsightSection.tsx";
 
 export interface InsightSectionProps {
   data: {

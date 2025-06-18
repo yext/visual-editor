@@ -25,15 +25,7 @@ import {
   ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
-
-const defaultTestimonial: TestimonialStruct = {
-  description: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    hasLocalizedValue: "true",
-  },
-  contributorName: { en: "Name", hasLocalizedValue: "true" },
-  contributionDate: "July 22, 2022",
-};
+import { defaultTestimonial } from "../../internal/puck/constant-value-fields/TestimonialSection.tsx";
 
 export interface TestimonialSectionProps {
   data: {

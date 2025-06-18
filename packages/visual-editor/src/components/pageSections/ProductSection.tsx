@@ -27,28 +27,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-
-const defaultProduct: ProductStruct = {
-  image: {
-    url: "https://placehold.co/640x360",
-    height: 360,
-    width: 640,
-  },
-  name: { en: "Product Title", hasLocalizedValue: "true" },
-  category: {
-    en: "Category, Pricing, etc",
-    hasLocalizedValue: "true",
-  },
-  description: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    hasLocalizedValue: "true",
-  },
-  cta: {
-    link: "#",
-    label: { en: "Learn More", hasLocalizedValue: "true" },
-    linkType: "URL",
-  },
-};
+import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
 
 export interface ProductSectionProps {
   data: {

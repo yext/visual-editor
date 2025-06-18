@@ -6,6 +6,17 @@ import { resolveTranslatableString } from "../../../utils/resolveTranslatableStr
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
+export const defaultFAQ: FAQStruct = {
+  question: {
+    en: "Question Lorem ipsum dolor sit amet?",
+    hasLocalizedValue: "true",
+  },
+  answer: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+};
+
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
   render: ({
@@ -60,16 +71,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
       question: questionField,
       answer: answerField,
     },
-    defaultItemProps: {
-      question: {
-        en: "Question Lorem ipsum dolor sit amet?",
-        hasLocalizedValue: "true",
-      },
-      answer: {
-        en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        hasLocalizedValue: "true",
-      },
-    },
+    defaultItemProps: defaultFAQ,
     getItemSummary: (item, i): string => {
       const translation = resolveTranslatableString(
         item.question,

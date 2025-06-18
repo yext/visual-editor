@@ -12,6 +12,15 @@ import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextF
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
 
+export const defaultTestimonial: TestimonialStruct = {
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributionDate: "July 22, 2022",
+};
+
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
     type: "custom",
@@ -71,14 +80,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
       contributorName: contributorNameField,
       contributionDate: DateSelector,
     },
-    defaultItemProps: {
-      description: {
-        en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        hasLocalizedValue: "true",
-      },
-      contributorName: { en: "Name", hasLocalizedValue: "true" },
-      contributionDate: "July 22, 2022",
-    },
+    defaultItemProps: defaultTestimonial,
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(
         item.contributorName,
