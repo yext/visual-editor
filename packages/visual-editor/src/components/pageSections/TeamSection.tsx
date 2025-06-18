@@ -29,6 +29,23 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
+const defaultPerson: PersonStruct = {
+  name: { en: "First Last", hasLocalizedValue: "true" },
+  title: { en: "Associate Agent", hasLocalizedValue: "true" },
+  phoneNumber: "(202) 770-6619 ",
+  email: "jkelley@[company].com",
+  cta: {
+    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+  },
+  headshot: {
+    url: "https://placehold.co/80x80",
+    height: 80,
+    width: 80,
+  },
+};
+
 export interface TeamSectionProps {
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -47,8 +64,6 @@ export interface TeamSectionProps {
   };
   liveVisibility: boolean;
 }
-
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/80x80";
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -284,56 +299,7 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       people: {
         field: "",
         constantValue: {
-          people: [
-            {
-              name: { en: "First Last", hasLocalizedValue: "true" },
-              title: { en: "Associate Agent", hasLocalizedValue: "true" },
-              phoneNumber: "(202) 770-6619 ",
-              email: "jkelley@[company].com",
-              cta: {
-                label: { en: "Visit Profile", hasLocalizedValue: "true" },
-                link: "#",
-                linkType: "URL",
-              },
-              headshot: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 80,
-                width: 80,
-              },
-            },
-            {
-              name: { en: "First Last", hasLocalizedValue: "true" },
-              title: { en: "Associate Agent", hasLocalizedValue: "true" },
-              phoneNumber: "(202) 770-6619 ",
-              email: "jkelley@[company].com",
-              cta: {
-                label: { en: "Visit Profile", hasLocalizedValue: "true" },
-                link: "#",
-                linkType: "URL",
-              },
-              headshot: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 80,
-                width: 80,
-              },
-            },
-            {
-              name: { en: "First Last", hasLocalizedValue: "true" },
-              title: { en: "Associate Agent", hasLocalizedValue: "true" },
-              phoneNumber: "(202) 770-6619 ",
-              email: "jkelley@[company].com",
-              cta: {
-                label: { en: "Visit Profile", hasLocalizedValue: "true" },
-                link: "#",
-                linkType: "URL",
-              },
-              headshot: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 80,
-                width: 80,
-              },
-            },
-          ],
+          people: [defaultPerson, defaultPerson, defaultPerson],
         },
         constantValueEnabled: true,
       },

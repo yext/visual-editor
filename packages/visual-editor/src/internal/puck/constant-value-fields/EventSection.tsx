@@ -79,6 +79,24 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       description: descriptionField,
       cta: translatableCTAFields(),
     },
+    defaultItemProps: {
+      image: {
+        url: "https://placehold.co/640x360",
+        height: 360,
+        width: 640,
+      },
+      title: { en: "Event Title", hasLocalizedValue: "true" },
+      description: {
+        en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+        hasLocalizedValue: "true",
+      },
+      dateTime: "2022-12-12T14:00:00",
+      cta: {
+        link: "#",
+        label: { en: "Learn More", hasLocalizedValue: "true" },
+        linkType: "URL",
+      },
+    },
     getItemSummary: (item, i): string => {
       const translation = resolveTranslatableString(item.title, i18n.language);
       if (translation) {

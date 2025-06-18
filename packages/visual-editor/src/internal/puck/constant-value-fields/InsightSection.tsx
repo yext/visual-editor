@@ -93,6 +93,25 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
       description: descriptionField,
       cta: translatableCTAFields(),
     },
+    defaultItemProps: {
+      image: {
+        url: "https://placehold.co/640x360",
+        height: 360,
+        width: 640,
+      },
+      name: { en: "Article Name", hasLocalizedValue: "true" },
+      category: { en: "Category", hasLocalizedValue: "true" },
+      description: {
+        en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters",
+        hasLocalizedValue: "true",
+      },
+      publishTime: "August 2, 2022",
+      cta: {
+        link: "#",
+        label: { en: "Read More", hasLocalizedValue: "true" },
+        linkType: "URL",
+      },
+    },
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

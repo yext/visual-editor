@@ -84,6 +84,22 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
       },
       cta: translatableCTAFields(),
     },
+    defaultItemProps: {
+      name: { en: "First Last", hasLocalizedValue: "true" },
+      title: { en: "Associate Agent", hasLocalizedValue: "true" },
+      phoneNumber: "(202) 770-6619 ",
+      email: "jkelley@[company].com",
+      cta: {
+        label: { en: "Visit Profile", hasLocalizedValue: "true" },
+        link: "#",
+        linkType: "URL",
+      },
+      headshot: {
+        url: "https://placehold.co/80x80",
+        height: 80,
+        width: 80,
+      },
+    },
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

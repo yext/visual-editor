@@ -31,6 +31,17 @@ import {
   AccordionTrigger,
 } from "../atoms/accordion.js";
 
+const defaultFAQ: FAQStruct = {
+  question: {
+    en: "Question Lorem ipsum dolor sit amet?",
+    hasLocalizedValue: "true",
+  },
+  answer: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+};
+
 export interface FAQSectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -192,38 +203,7 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
       faqs: {
         field: "",
         constantValue: {
-          faqs: [
-            {
-              question: {
-                en: "Question Lorem ipsum dolor sit amet?",
-                hasLocalizedValue: "true",
-              },
-              answer: {
-                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                hasLocalizedValue: "true",
-              },
-            },
-            {
-              question: {
-                en: "Question Lorem ipsum dolor sit amet?",
-                hasLocalizedValue: "true",
-              },
-              answer: {
-                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                hasLocalizedValue: "true",
-              },
-            },
-            {
-              question: {
-                en: "Question Lorem ipsum dolor sit amet?",
-                hasLocalizedValue: "true",
-              },
-              answer: {
-                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                hasLocalizedValue: "true",
-              },
-            },
-          ],
+          faqs: [defaultFAQ, defaultFAQ, defaultFAQ],
         },
         constantValueEnabled: true,
       },

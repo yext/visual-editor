@@ -91,6 +91,27 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       description: descriptionField,
       cta: translatableCTAFields(),
     },
+    defaultItemProps: {
+      image: {
+        url: "https://placehold.co/640x360",
+        height: 360,
+        width: 640,
+      },
+      name: { en: "Product Title", hasLocalizedValue: "true" },
+      category: {
+        en: "Category, Pricing, etc",
+        hasLocalizedValue: "true",
+      },
+      description: {
+        en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        hasLocalizedValue: "true",
+      },
+      cta: {
+        link: "#",
+        label: { en: "Learn More", hasLocalizedValue: "true" },
+        linkType: "URL",
+      },
+    },
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

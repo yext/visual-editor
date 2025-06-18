@@ -26,6 +26,15 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 
+const defaultTestimonial: TestimonialStruct = {
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributionDate: "July 22, 2022",
+};
+
 export interface TestimonialSectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
@@ -244,30 +253,9 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
         field: "",
         constantValue: {
           testimonials: [
-            {
-              description: {
-                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                hasLocalizedValue: "true",
-              },
-              contributorName: { en: "Name", hasLocalizedValue: "true" },
-              contributionDate: "July 22, 2022",
-            },
-            {
-              description: {
-                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                hasLocalizedValue: "true",
-              },
-              contributorName: { en: "Name", hasLocalizedValue: "true" },
-              contributionDate: "July 22, 2022",
-            },
-            {
-              description: {
-                en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                hasLocalizedValue: "true",
-              },
-              contributorName: { en: "Name", hasLocalizedValue: "true" },
-              contributionDate: "July 22, 2022",
-            },
+            defaultTestimonial,
+            defaultTestimonial,
+            defaultTestimonial,
           ],
         },
         constantValueEnabled: true,

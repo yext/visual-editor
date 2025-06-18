@@ -30,9 +30,24 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
-const PLACEHOLDER_DESCRIPTION =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
+const defaultEvent: EventStruct = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  title: { en: "Event Title", hasLocalizedValue: "true" },
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    hasLocalizedValue: "true",
+  },
+  dateTime: "2022-12-12T14:00:00",
+  cta: {
+    link: "#",
+    label: { en: "Learn More", hasLocalizedValue: "true" },
+    linkType: "URL",
+  },
+};
 
 export interface EventSectionProps {
   data: {
@@ -254,62 +269,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       events: {
         field: "",
         constantValue: {
-          events: [
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              title: { en: "Event Title", hasLocalizedValue: "true" },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              dateTime: "2022-12-12T14:00:00",
-              cta: {
-                link: "#",
-                label: { en: "Learn More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              title: { en: "Event Title", hasLocalizedValue: "true" },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              dateTime: "2022-12-12T14:00:00",
-              cta: {
-                link: "#",
-                label: { en: "Learn More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              title: { en: "Event Title", hasLocalizedValue: "true" },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              dateTime: "2022-12-12T14:00:00",
-              cta: {
-                link: "#",
-                label: { en: "Learn More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-          ],
+          events: [defaultEvent, defaultEvent, defaultEvent],
         },
         constantValueEnabled: true,
       },
