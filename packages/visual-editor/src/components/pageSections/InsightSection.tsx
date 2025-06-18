@@ -28,10 +28,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
-const PLACEHOLDER_DESCRIPTION =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters";
+import { defaultInsight } from "../../internal/puck/constant-value-fields/InsightSection.tsx";
 
 export interface InsightSectionProps {
   data: {
@@ -260,65 +257,7 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       insights: {
         field: "",
         constantValue: {
-          insights: [
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              name: { en: "Article Name", hasLocalizedValue: "true" },
-              category: { en: "Category", hasLocalizedValue: "true" },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              publishTime: "August 2, 2022",
-              cta: {
-                link: "#",
-                label: { en: "Read More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              name: { en: "Article Name", hasLocalizedValue: "true" },
-              category: { en: "Category", hasLocalizedValue: "true" },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              publishTime: "August 2, 2022",
-              cta: {
-                link: "#",
-                label: { en: "Read More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              name: { en: "Article Name", hasLocalizedValue: "true" },
-              category: { en: "Category", hasLocalizedValue: "true" },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              publishTime: "August 2, 2022",
-              cta: {
-                link: "#",
-                label: { en: "Read More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-          ],
+          insights: [defaultInsight, defaultInsight, defaultInsight],
         },
         constantValueEnabled: true,
       },

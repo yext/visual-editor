@@ -11,6 +11,23 @@ import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 
+export const defaultPerson: PersonStruct = {
+  name: { en: "First Last", hasLocalizedValue: "true" },
+  title: { en: "Associate Agent", hasLocalizedValue: "true" },
+  phoneNumber: "(202) 770-6619 ",
+  email: "jkelley@[company].com",
+  cta: {
+    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+  },
+  headshot: {
+    url: "https://placehold.co/80x80",
+    height: 80,
+    width: 80,
+  },
+};
+
 export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
   type: "custom",
   render: ({
@@ -74,6 +91,7 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
       },
       cta: translatableCTAFields(),
     },
+    defaultItemProps: defaultPerson,
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

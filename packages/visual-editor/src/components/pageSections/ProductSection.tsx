@@ -27,10 +27,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
-const PLACEHOLDER_DESCRIPTION =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
 
 export interface ProductSectionProps {
   data: {
@@ -256,71 +253,7 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       products: {
         field: "",
         constantValue: {
-          products: [
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              name: { en: "Product Title", hasLocalizedValue: "true" },
-              category: {
-                en: "Category, Pricing, etc",
-                hasLocalizedValue: "true",
-              },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              cta: {
-                link: "#",
-                label: { en: "Learn More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              name: { en: "Product Title", hasLocalizedValue: "true" },
-              category: {
-                en: "Category, Pricing, etc",
-                hasLocalizedValue: "true",
-              },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              cta: {
-                link: "#",
-                label: { en: "Learn More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-            {
-              image: {
-                url: PLACEHOLDER_IMAGE_URL,
-                height: 360,
-                width: 640,
-              },
-              name: { en: "Product Title", hasLocalizedValue: "true" },
-              category: {
-                en: "Category, Pricing, etc",
-                hasLocalizedValue: "true",
-              },
-              description: {
-                en: PLACEHOLDER_DESCRIPTION,
-                hasLocalizedValue: "true",
-              },
-              cta: {
-                link: "#",
-                label: { en: "Learn More", hasLocalizedValue: "true" },
-                linkType: "URL",
-              },
-            },
-          ],
+          products: [defaultProduct, defaultProduct, defaultProduct],
         },
         constantValueEnabled: true,
       },
