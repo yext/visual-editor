@@ -314,7 +314,7 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Gallery" },
+        constantValue: { en: "Gallery", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       images: {

@@ -234,7 +234,10 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Featured Testimonials" },
+        constantValue: {
+          en: "Featured Testimonials",
+          hasLocalizedValue: "true",
+        },
         constantValueEnabled: true,
       },
       testimonials: {
@@ -244,22 +247,25 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
             {
               description: {
                 en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                hasLocalizedValue: "true",
               },
-              contributorName: { en: "Name" },
+              contributorName: { en: "Name", hasLocalizedValue: "true" },
               contributionDate: "July 22, 2022",
             },
             {
               description: {
                 en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                hasLocalizedValue: "true",
               },
-              contributorName: { en: "Name" },
+              contributorName: { en: "Name", hasLocalizedValue: "true" },
               contributionDate: "July 22, 2022",
             },
             {
               description: {
                 en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                hasLocalizedValue: "true",
               },
-              contributorName: { en: "Name" },
+              contributorName: { en: "Name", hasLocalizedValue: "true" },
               contributionDate: "July 22, 2022",
             },
           ],

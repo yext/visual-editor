@@ -598,7 +598,10 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       info: {
         headingText: {
           field: "",
-          constantValue: "Information",
+          constantValue: {
+            en: "Information",
+            hasLocalizedValue: "true",
+          },
           constantValueEnabled: true,
         },
         address: {
@@ -616,7 +619,10 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
               field: "mainPhone",
               constantValue: "",
             },
-            label: "Phone",
+            label: {
+              en: "Phone",
+              hasLocalizedValue: "true",
+            },
           },
         ],
         emails: {
@@ -627,7 +633,10 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       hours: {
         headingText: {
           field: "",
-          constantValue: "Hours",
+          constantValue: {
+            en: "Hours",
+            hasLocalizedValue: "true",
+          },
           constantValueEnabled: true,
         },
         hours: {
@@ -638,7 +647,10 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       services: {
         headingText: {
           field: "",
-          constantValue: "Services",
+          constantValue: {
+            en: "Services",
+            hasLocalizedValue: "true",
+          },
           constantValueEnabled: true,
         },
         servicesList: {

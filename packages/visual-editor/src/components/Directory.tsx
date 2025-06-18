@@ -263,7 +263,10 @@ export const Directory: ComponentConfig<DirectoryProps> = {
   },
   defaultProps: {
     data: {
-      directoryRoot: "Directory Root",
+      directoryRoot: {
+        en: "Directory Root",
+        hasLocalizedValue: "true",
+      },
     },
     analytics: {
       scope: "directory",

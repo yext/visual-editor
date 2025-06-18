@@ -213,12 +213,13 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             width: 640,
             url: PLACEHOLDER_IMAGE_URL,
           },
-          title: { en: "Featured Promotion" },
+          title: { en: "Featured Promotion", hasLocalizedValue: "true" },
           description: {
             en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+            hasLocalizedValue: "true",
           },
           cta: {
-            label: { en: "Learn More" },
+            label: { en: "Learn More", hasLocalizedValue: "true" },
             link: "#",
             linkType: "URL",
           },

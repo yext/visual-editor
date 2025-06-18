@@ -110,7 +110,10 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
     data: {
       text: {
         field: "",
-        constantValue: "Banner Text",
+        constantValue: {
+          en: "Banner Text",
+          hasLocalizedValue: "true",
+        },
         constantValueEnabled: true,
       },
     },
