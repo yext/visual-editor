@@ -1,3 +1,9 @@
+#### 0.0.43 (2025-06-18)
+
+##### Bug Fixes
+
+- locator results link (5fb1767e)
+
 #### 0.0.42 (2025-06-18)
 
 ##### Chores
