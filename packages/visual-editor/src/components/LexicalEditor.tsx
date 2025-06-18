@@ -37,6 +37,9 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { Link2, List, ListOrdered, Undo2, Redo2 } from "lucide-react";
 import { $isLinkNode } from "@lexical/link";
 import { $findMatchingParent } from "@lexical/utils";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Pencil } from "lucide-react";
+import React from "react";
 
 interface LexicalEditorProps {
   value: string | RichText;
@@ -82,7 +85,285 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
   return <div className="editor-error-boundary">{children}</div>;
 }
 
-function ToolbarPlugin() {
+export function LexicalEditorComponent({
+  value,
+  onChange,
+  showToolbar = false,
+}: LexicalEditorProps) {
+  const initialConfig = {
+    namespace: "LexicalEditor",
+    theme,
+    onError,
+    nodes: [
+      HeadingNode,
+      QuoteNode,
+      ListItemNode,
+      ListNode,
+      CodeNode,
+      CodeHighlightNode,
+      TableNode,
+      TableCellNode,
+      TableRowNode,
+      AutoLinkNode,
+      LinkNode,
+    ],
+    editorState: (editor: LexicalEditor) => {
+      try {
+        if (typeof value === "string") {
+          // Try to parse as JSON first
+          try {
+            const parsed = JSON.parse(value);
+            if (parsed && typeof parsed === "object" && parsed.root) {
+              editor.setEditorState(editor.parseEditorState(value));
+              return;
+            }
+          } catch {
+            // Not JSON, treat as plain text
+          }
+          // If not JSON, treat as plain text
+          const root = $getRoot();
+          root.clear();
+          if (value.trim() !== "") {
+            const paragraph = $createParagraphNode();
+            const text = $createTextNode(value);
+            paragraph.append(text);
+            root.append(paragraph);
+          }
+        }
+      } catch {
+        // fallback: do nothing
+      }
+    },
+  };
+
+  // Dialog state lifted to parent
+  const [showLinkDialog, setShowLinkDialog] = React.useState(false);
+  const [dialogPosition, setDialogPosition] = React.useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const [linkUrl, setLinkUrl] = React.useState("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [shouldPrefill, setShouldPrefill] = React.useState(false);
+
+  // Handler to open dialog and set position
+  const handleLinkClick = React.useCallback(() => {
+    setShouldPrefill(true);
+    setTimeout(() => {
+      const sel = window.getSelection();
+      const editorContainer = document.querySelector(".editor-container");
+      if (sel && sel.rangeCount > 0 && editorContainer) {
+        const rect = sel.getRangeAt(0).getBoundingClientRect();
+        const editorRect = editorContainer.getBoundingClientRect();
+        if (rect && rect.top !== 0 && rect.left !== 0) {
+          setDialogPosition({
+            top: rect.bottom - editorRect.top + 8, // 8px below, relative to editor
+            left: rect.left - editorRect.left,
+          });
+        } else {
+          setDialogPosition(null);
+        }
+      } else {
+        setDialogPosition(null);
+      }
+    }, 0);
+  }, []);
+
+  // Handler to submit link
+  const handleLinkSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setShowLinkDialog(false);
+    // Use the latest editor instance
+    const editor = (window as any).__latestLexicalEditor;
+    if (editor) {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl || null);
+    }
+    setLinkUrl("");
+  };
+
+  // Prefill logic
+  React.useEffect(() => {
+    if (
+      showLinkDialog &&
+      shouldPrefill &&
+      (window as any).__latestLexicalEditor
+    ) {
+      (window as any).__latestLexicalEditor.getEditorState().read(() => {
+        const selection = $getSelection();
+        if ($isRangeSelection(selection)) {
+          const node = selection.anchor.getNode();
+          const linkNode = $findMatchingParent(node, $isLinkNode);
+          if (linkNode && typeof linkNode.getURL === "function") {
+            const url = linkNode.getURL() || "";
+            setLinkUrl(url || "https://");
+          } else {
+            setLinkUrl("https://");
+          }
+        } else {
+          setLinkUrl("https://");
+        }
+      });
+      setShouldPrefill(false);
+    }
+    if (showLinkDialog && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [showLinkDialog, shouldPrefill]);
+
+  // Pass dialog state/handlers to ToolbarPlugin
+  function ToolbarWithDialogProps(props: any) {
+    return (
+      <ToolbarPlugin
+        {...props}
+        showLinkDialog={showLinkDialog}
+        setShowLinkDialog={setShowLinkDialog}
+        dialogPosition={dialogPosition}
+        setDialogPosition={setDialogPosition}
+        linkUrl={linkUrl}
+        setLinkUrl={setLinkUrl}
+        inputRef={inputRef}
+        handleLinkClick={handleLinkClick}
+        handleLinkSubmit={handleLinkSubmit}
+        shouldPrefill={shouldPrefill}
+        setShouldPrefill={setShouldPrefill}
+      />
+    );
+  }
+
+  // Register the latest editor instance globally for dialog use
+  const editorRef = React.useRef<LexicalEditor | null>(null);
+  React.useEffect(() => {
+    if (editorRef.current) {
+      (window as any).__latestLexicalEditor = editorRef.current;
+    }
+  });
+
+  const handleEditorChange = (
+    editorState: EditorState,
+    editor: LexicalEditor
+  ) => {
+    editorRef.current = editor;
+    editorState.read(() => {
+      const htmlString = $generateHtmlFromNodes(editor);
+      onChange({
+        html: htmlString,
+        json: JSON.stringify(editorState.toJSON()),
+      });
+    });
+  };
+
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+      <div className="editor-container border rounded relative">
+        {showToolbar && <ToolbarWithDialogProps />}
+        {showToolbar && showLinkDialog && (
+          <Dialog.Content
+            style={
+              dialogPosition
+                ? {
+                    position: "absolute",
+                    top: dialogPosition.top,
+                    left: dialogPosition.left,
+                    zIndex: 9999,
+                    background: "#f3f4f6",
+                    borderRadius: "0.5rem",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
+                    padding: "1rem",
+                    minWidth: "320px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }
+                : {
+                    position: "absolute",
+                    top: 48, // Just below the toolbar (toolbar height + margin)
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    zIndex: 9999,
+                    background: "#f3f4f6",
+                    borderRadius: "0.5rem",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
+                    padding: "1rem",
+                    minWidth: "320px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }
+            }
+            onOpenAutoFocus={() => {
+              if (inputRef.current) {
+                inputRef.current.focus();
+                inputRef.current.select();
+              }
+            }}
+          >
+            <form
+              onSubmit={handleLinkSubmit}
+              className="ve-flex ve-items-center ve-w-full"
+            >
+              <input
+                ref={inputRef}
+                type="url"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="https://"
+                className="ve-flex-1 ve-px-3 ve-py-2 ve-rounded ve-bg-white ve-border ve-border-gray-300 focus:ve-outline-none focus:ve-ring-2 focus:ve-ring-blue-500 ve-shadow-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setShowLinkDialog(false);
+                  }
+                }}
+              />
+              <button
+                type="submit"
+                className="ve-ml-2 ve-p-2 ve-bg-transparent ve-rounded hover:ve-bg-gray-200"
+                tabIndex={-1}
+              >
+                <Pencil className="ve-w-4 ve-h-4 ve-text-gray-500" />
+              </button>
+            </form>
+            <Dialog.Close asChild>
+              <button
+                type="button"
+                className="ve-absolute ve-top-2 ve-right-2 ve-p-1 ve-rounded hover:ve-bg-gray-200"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </Dialog.Close>
+          </Dialog.Content>
+        )}
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable className="editor-input min-h-[100px] p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          }
+          placeholder={
+            <div className="editor-placeholder absolute top-2 left-2 text-gray-400 pointer-events-none">
+              Enter some text...
+            </div>
+          }
+          ErrorBoundary={ErrorBoundary}
+        />
+        <OnChangePlugin onChange={handleEditorChange} />
+        <HistoryPlugin />
+        <AutoFocusPlugin />
+        <LinkPlugin />
+        <ListPlugin />
+        <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+      </div>
+    </LexicalComposer>
+  );
+}
+
+// Update ToolbarPlugin to accept dialog props
+function ToolbarPlugin({
+  setShowLinkDialog,
+  handleLinkClick,
+}: {
+  setShowLinkDialog: (open: boolean) => void;
+  handleLinkClick: (editor: any) => void;
+}) {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -97,25 +378,10 @@ function ToolbarPlugin() {
     }
   };
 
-  const handleLinkClick = useCallback(() => {
-    editor.update(() => {
-      const selection = $getSelection();
-      if ($isRangeSelection(selection)) {
-        const node = selection.anchor.getNode();
-        const linkParent = $findMatchingParent(node, $isLinkNode);
-        if (linkParent) {
-          // Remove link
-          editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-        } else {
-          // Insert link
-          const url = window.prompt("Enter the URL for the link:");
-          if (url) {
-            editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
-          }
-        }
-      }
-    });
-  }, [editor]);
+  const handleToolbarLinkClick = useCallback(() => {
+    handleLinkClick(editor);
+    setShowLinkDialog(true);
+  }, [editor, handleLinkClick, setShowLinkDialog]);
 
   useEffect(() => {
     editor.registerUpdateListener(({ editorState }) => {
@@ -175,9 +441,10 @@ function ToolbarPlugin() {
       </button>
       {/* Link */}
       <button
-        onClick={handleLinkClick}
+        onClick={handleToolbarLinkClick}
         className="p-2 rounded hover:bg-gray-100"
         title="Insert Link"
+        type="button"
       >
         <Link2 />
       </button>
@@ -202,95 +469,5 @@ function ToolbarPlugin() {
         <ListOrdered />
       </button>
     </div>
-  );
-}
-
-export function LexicalEditorComponent({
-  value,
-  onChange,
-  showToolbar = false,
-}: LexicalEditorProps) {
-  const initialConfig = {
-    namespace: "LexicalEditor",
-    theme,
-    onError,
-    nodes: [
-      HeadingNode,
-      QuoteNode,
-      ListItemNode,
-      ListNode,
-      CodeNode,
-      CodeHighlightNode,
-      TableNode,
-      TableCellNode,
-      TableRowNode,
-      AutoLinkNode,
-      LinkNode,
-    ],
-    editorState: (editor: LexicalEditor) => {
-      try {
-        if (typeof value === "string") {
-          // Try to parse as JSON first
-          try {
-            const parsed = JSON.parse(value);
-            if (parsed && typeof parsed === "object" && parsed.root) {
-              editor.setEditorState(editor.parseEditorState(value));
-              return;
-            }
-          } catch {
-            // Not JSON, treat as plain text
-          }
-          // If not JSON, treat as plain text
-          const root = $getRoot();
-          root.clear();
-          if (value.trim() !== "") {
-            const paragraph = $createParagraphNode();
-            const text = $createTextNode(value);
-            paragraph.append(text);
-            root.append(paragraph);
-          }
-        }
-      } catch {
-        // fallback: do nothing
-      }
-    },
-  };
-
-  const handleEditorChange = (
-    editorState: EditorState,
-    editor: LexicalEditor
-  ) => {
-    editorState.read(() => {
-      const htmlString = $generateHtmlFromNodes(editor);
-      onChange({
-        html: htmlString,
-        json: JSON.stringify(editorState.toJSON()),
-      });
-    });
-  };
-
-  return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <div className="editor-container border rounded">
-        {showToolbar && <ToolbarPlugin />}
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable className="editor-input min-h-[100px] p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          }
-          placeholder={
-            <div className="editor-placeholder absolute top-2 left-2 text-gray-400 pointer-events-none">
-              Enter some text...
-            </div>
-          }
-          ErrorBoundary={ErrorBoundary}
-        />
-        <OnChangePlugin onChange={handleEditorChange} />
-        <HistoryPlugin />
-        <AutoFocusPlugin />
-        <LinkPlugin />
-        <ListPlugin />
-        <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-      </div>
-    </LexicalComposer>
   );
 }
