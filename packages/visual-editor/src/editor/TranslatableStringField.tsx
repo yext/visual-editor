@@ -22,14 +22,15 @@ export function TranslatableStringField<
         <AutoField
           field={{ type: fieldType ?? "text" }}
           value={getDisplayValue(value, locale)}
-          onChange={(val) =>
-            onChange({
+          onChange={(val) => {
+            return onChange({
               ...(typeof value === "object" && !Array.isArray(value)
                 ? value
                 : {}),
               [locale]: val,
-            } as T)
-          }
+              hasLocalizedValue: "true",
+            } as Record<string, string> as T);
+          }}
         />
       );
 

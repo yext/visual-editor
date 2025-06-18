@@ -67,7 +67,8 @@ export function TranslatableRichTextField<
         onChange({
           ...(typeof value === "object" && !Array.isArray(value) ? value : {}),
           [locale]: newValue,
-        } as T);
+          hasLocalizedValue: "true",
+        } as TranslatableRichText as T);
       };
 
       return (

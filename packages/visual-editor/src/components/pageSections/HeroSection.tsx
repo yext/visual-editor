@@ -323,6 +323,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         constantValueEnabled: true,
         constantValue: {
           en: "Business Name",
+          hasLocalizedValue: "true",
         },
       },
       localGeoModifier: {
@@ -330,6 +331,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         constantValueEnabled: true,
         constantValue: {
           en: "Geomodifier",
+          hasLocalizedValue: "true",
         },
       },
       hours: {
@@ -373,6 +375,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           primaryCta: {
             label: {
               en: "Call To Action",
+              hasLocalizedValue: "true",
             },
             link: "#",
             linkType: "URL",
@@ -380,6 +383,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           secondaryCta: {
             label: {
               en: "Call To Action",
+              hasLocalizedValue: "true",
             },
             link: "#",
             linkType: "URL",

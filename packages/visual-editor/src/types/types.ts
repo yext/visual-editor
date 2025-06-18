@@ -87,7 +87,11 @@ export type PersonStruct = {
   cta?: TranslatableCTA;
 };
 
-export type TranslatableString = string | Record<string, string>;
+type LocalizedValues = {
+  hasLocalizedValue: "true";
+} & Record<string, string>;
+
+export type TranslatableString = string | LocalizedValues;
 
 export type TranslatableRichText =
   | (string | RichText)

@@ -248,7 +248,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Upcoming Events" },
+        constantValue: { en: "Upcoming Events", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       events: {
@@ -261,12 +261,15 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
                 height: 360,
                 width: 640,
               },
-              title: { en: "Event Title" },
-              description: { en: PLACEHOLDER_DESCRIPTION },
+              title: { en: "Event Title", hasLocalizedValue: "true" },
+              description: {
+                en: PLACEHOLDER_DESCRIPTION,
+                hasLocalizedValue: "true",
+              },
               dateTime: "2022-12-12T14:00:00",
               cta: {
                 link: "#",
-                label: { en: "Learn More" },
+                label: { en: "Learn More", hasLocalizedValue: "true" },
                 linkType: "URL",
               },
             },
@@ -276,12 +279,15 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
                 height: 360,
                 width: 640,
               },
-              title: { en: "Event Title" },
-              description: { en: PLACEHOLDER_DESCRIPTION },
+              title: { en: "Event Title", hasLocalizedValue: "true" },
+              description: {
+                en: PLACEHOLDER_DESCRIPTION,
+                hasLocalizedValue: "true",
+              },
               dateTime: "2022-12-12T14:00:00",
               cta: {
                 link: "#",
-                label: { en: "Learn More" },
+                label: { en: "Learn More", hasLocalizedValue: "true" },
                 linkType: "URL",
               },
             },
@@ -291,12 +297,15 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
                 height: 360,
                 width: 640,
               },
-              title: { en: "Event Title" },
-              description: { en: PLACEHOLDER_DESCRIPTION },
+              title: { en: "Event Title", hasLocalizedValue: "true" },
+              description: {
+                en: PLACEHOLDER_DESCRIPTION,
+                hasLocalizedValue: "true",
+              },
               dateTime: "2022-12-12T14:00:00",
               cta: {
                 link: "#",
-                label: { en: "Learn More" },
+                label: { en: "Learn More", hasLocalizedValue: "true" },
                 linkType: "URL",
               },
             },

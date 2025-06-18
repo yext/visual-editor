@@ -141,7 +141,10 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   fields: breadcrumbsSectionFields,
   defaultProps: {
     data: {
-      directoryRoot: "Directory Root",
+      directoryRoot: {
+        en: "Directory Root",
+        hasLocalizedValue: "true",
+      },
     },
     analytics: {
       scope: "breadcrumbs",
