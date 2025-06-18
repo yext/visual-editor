@@ -297,6 +297,11 @@ export function LexicalEditorComponent({
                 inputRef.current.select();
               }
             }}
+            onInteractOutside={(e) => e.stopPropagation()}
+            onPointerDownOutside={(e) => {
+              e.preventDefault();
+              setShowLinkDialog(false);
+            }}
           >
             <form
               onSubmit={handleLinkSubmit}
@@ -323,15 +328,14 @@ export function LexicalEditorComponent({
                 <Pencil className="ve-w-4 ve-h-4 ve-text-gray-500" />
               </button>
             </form>
-            <Dialog.Close asChild>
-              <button
-                type="button"
-                className="ve-absolute ve-top-2 ve-right-2 ve-p-1 ve-rounded hover:ve-bg-gray-200"
-                aria-label="Close"
-              >
-                ×
-              </button>
-            </Dialog.Close>
+            <button
+              type="button"
+              className="ve-absolute ve-top-2 ve-right-2 ve-p-1 ve-rounded hover:ve-bg-gray-200"
+              aria-label="Close"
+              onClick={() => setShowLinkDialog(false)}
+            >
+              ×
+            </button>
           </Dialog.Content>
         )}
         <RichTextPlugin
