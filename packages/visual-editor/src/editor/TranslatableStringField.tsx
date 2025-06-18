@@ -25,15 +25,13 @@ export function TranslatableStringField<
           field={{ type: fieldType ?? "text" }}
           value={getDisplayValue(value, locale)}
           onChange={(val) => {
-            const base =
-              typeof value === "object" && !Array.isArray(value) ? value : {};
-            const result = {
-              ...base,
+            return onChange({
+              ...(typeof value === "object" && !Array.isArray(value)
+                ? value
+                : {}),
               [locale]: val,
               hasLocalizedValue: "true",
-            } as Record<string, string>;
-
-            return onChange(result as T);
+            } as Record<string, string> as T);
           }}
         />
       );
