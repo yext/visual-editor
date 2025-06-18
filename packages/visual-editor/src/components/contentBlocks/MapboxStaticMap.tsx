@@ -33,7 +33,7 @@ const DEFAULT_WIDTH = 1024;
 const DEFAULT_HEIGHT = 300;
 const MIN_HEIGHT = 300;
 const MIN_WIDTH = 100;
-const MAX_SIZE = 2048;
+const MAX_SIZE = 1280;
 
 const getPrimaryColor = (document: any) => {
   if (document?.__?.theme) {
