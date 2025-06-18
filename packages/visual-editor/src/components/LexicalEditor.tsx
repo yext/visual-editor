@@ -357,11 +357,7 @@ export function LexicalEditorComponent({
           contentEditable={
             <ContentEditable className="editor-input min-h-[100px] p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           }
-          placeholder={
-            <div className="editor-placeholder absolute top-2 left-2 text-gray-400 pointer-events-none">
-              Enter some text...
-            </div>
-          }
+          placeholder={null}
           ErrorBoundary={ErrorBoundary}
         />
         <OnChangePlugin onChange={handleEditorChange} />
