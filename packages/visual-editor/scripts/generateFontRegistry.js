@@ -47,7 +47,7 @@ const parseFontDetails = (font) => {
   // Temporary overrides for specific Cloudflare Fonts bugs
   if (font.family === "Inter") {
     return {
-      hasItalic: false,
+      italics: false,
       minWeight: 100,
       maxWeight: 900,
       fallback: fallbackFromCategory(font.category),
@@ -55,7 +55,7 @@ const parseFontDetails = (font) => {
   }
   if (font.family === "Miriam Libre") {
     return {
-      hasItalic: false,
+      italics: false,
       weights: [400],
       fallback: fallbackFromCategory(font.category),
     };

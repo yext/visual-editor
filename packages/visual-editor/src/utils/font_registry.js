@@ -1533,7 +1533,7 @@ export const defaultFonts = {
   },
   "Instrument Serif": { italics: true, weights: [400], fallback: "serif" },
   Inter: {
-    hasItalic: false,
+    italics: false,
     minWeight: 100,
     maxWeight: 900,
     fallback: "sans-serif",
@@ -2125,7 +2125,7 @@ export const defaultFonts = {
   Mina: { italics: false, weights: [400, 700], fallback: "sans-serif" },
   Mingzat: { italics: false, weights: [400], fallback: "sans-serif" },
   Miniver: { italics: false, weights: [400], fallback: "sans-serif" },
-  "Miriam Libre": { hasItalic: false, weights: [400], fallback: "sans-serif" },
+  "Miriam Libre": { italics: false, weights: [400], fallback: "sans-serif" },
   Mirza: { italics: false, weights: [400, 500, 600, 700], fallback: "serif" },
   "Miss Fajardose": { italics: false, weights: [400], fallback: "cursive" },
   Mitr: {
