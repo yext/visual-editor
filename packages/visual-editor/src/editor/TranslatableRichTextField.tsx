@@ -25,6 +25,13 @@ export function TranslatableRichTextField<
       const resolvedValue = getDisplayValue(value, locale);
       const fieldLabel = (label && pt(label)) + ` (${locale})`;
 
+      // Ensure resolvedValue is a string for display
+      const displayValue =
+        typeof resolvedValue === "string" ? resolvedValue : "";
+
+      // Ensure fieldLabel is a string
+      const safeFieldLabel = typeof fieldLabel === "string" ? fieldLabel : "";
+
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
         TARGET_ORIGINS
@@ -113,9 +120,9 @@ export function TranslatableRichTextField<
       };
 
       return (
-        <FieldLabel label={fieldLabel}>
+        <FieldLabel label={safeFieldLabel}>
           <button className="RichTextField" onClick={handleClick}>
-            <div className="ve-line-clamp-3">{resolvedValue}</div>
+            <div className="ve-line-clamp-3">{displayValue}</div>
           </button>
         </FieldLabel>
       );

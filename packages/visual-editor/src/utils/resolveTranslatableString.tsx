@@ -42,21 +42,57 @@ export const resolveTranslatableRichText = (
   translatableRichText?: TranslatableRichText,
   locale: string = "en"
 ): string | React.ReactElement => {
-  if (!translatableRichText) return "";
+  try {
+    if (!translatableRichText) return "";
 
-  if (
-    typeof translatableRichText === "string" ||
-    isRichText(translatableRichText)
-  ) {
-    return toStringOrElement(translatableRichText);
+    if (
+      typeof translatableRichText === "string" ||
+      isRichText(translatableRichText)
+    ) {
+      return toStringOrElement(translatableRichText);
+    }
+
+    // Ensure translatableRichText is an object with the locale property
+    if (
+      typeof translatableRichText === "object" &&
+      translatableRichText !== null
+    ) {
+      const localizedValue = translatableRichText[locale];
+      if (localizedValue) {
+        return toStringOrElement(localizedValue);
+      }
+    }
+
+    return "";
+  } catch (error) {
+    console.warn("Error in resolveTranslatableRichText:", error);
+    return "";
   }
+};
 
-  const localizedValue = translatableRichText[locale];
-  if (localizedValue) {
-    return toStringOrElement(localizedValue);
+/**
+ * Safely renders a TranslatableRichText value, ensuring it never returns an object
+ * @param translatableRichText
+ * @param locale
+ */
+export const safeRenderTranslatableRichText = (
+  translatableRichText?: TranslatableRichText,
+  locale: string = "en"
+): React.ReactElement | string => {
+  try {
+    const result = resolveTranslatableRichText(translatableRichText, locale);
+
+    // If result is already a React element or string, return it
+    if (React.isValidElement(result) || typeof result === "string") {
+      return result;
+    }
+
+    // If result is an object or anything else, return empty string
+    return "";
+  } catch (error) {
+    console.warn("Error rendering TranslatableRichText:", error);
+    return "";
   }
-
-  return "";
 };
 
 /**
@@ -83,14 +119,17 @@ export function getDisplayValue(
     return richTextToString(translatableString);
   }
 
-  const localizedValue: string | RichText = translatableString[locale];
+  // Ensure translatableString is an object with the locale property
+  if (typeof translatableString === "object" && translatableString !== null) {
+    const localizedValue: string | RichText = translatableString[locale];
 
-  if (typeof localizedValue === "string") {
-    return localizedValue;
-  }
+    if (typeof localizedValue === "string") {
+      return localizedValue;
+    }
 
-  if (isRichText(localizedValue)) {
-    return richTextToString(localizedValue);
+    if (isRichText(localizedValue)) {
+      return richTextToString(localizedValue);
+    }
   }
 
   return "";
@@ -118,5 +157,12 @@ function toStringOrElement(
   if (isRichText(value)) {
     return <MaybeRTF data={value} />;
   }
-  return value ?? "";
+
+  // Ensure we only return strings
+  if (typeof value === "string") {
+    return value;
+  }
+
+  // If value is anything else (object, number, etc.), return empty string
+  return "";
 }

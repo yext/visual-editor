@@ -176,7 +176,10 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
               key={locale}
               field={{ type: "text" }}
               id={`${id}-value-${index}`}
-              value={getDisplayValue(item, locale)}
+              value={(() => {
+                const resolvedValue = getDisplayValue(item, locale);
+                return typeof resolvedValue === "string" ? resolvedValue : "";
+              })()}
               onChange={(val) => updateItem(index, locale, val)}
             />
             <div className="ve-flex ve-justify-end">
