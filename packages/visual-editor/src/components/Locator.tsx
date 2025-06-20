@@ -35,6 +35,7 @@ import {
   msg,
   normalizeSlug,
   useDocument,
+  useTemplateProps,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -588,18 +589,19 @@ const LocationCard: CardComponent<Location> = ({
 };
 
 const getPath = (location: Location) => {
+  const { document, relativePrefixToRoot } = useTemplateProps<any>();
+
   if (location.slug) {
-    return location.slug;
+    return `${relativePrefixToRoot ?? ""}${location.slug}`;
   }
 
-  const entityDocument: any = useDocument();
-  const locale = entityDocument.locale || "en";
+  const locale = document.locale || "en";
   const localePath = locale !== "en" ? `${locale}/` : "";
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
     : `${localePath}${location.id}`;
 
-  return normalizeSlug(path);
+  return `${relativePrefixToRoot ?? ""}${normalizeSlug(path)}`;
 };
 
 const getEntityType = (entityTypeEnvVar?: string) => {

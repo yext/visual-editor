@@ -1,3 +1,59 @@
+#### 0.0.43 (2025-06-18)
+
+##### Bug Fixes
+
+- locator results link (5fb1767e)
+
+#### 0.0.42 (2025-06-18)
+
+##### Chores
+
+- upgrade pages and pages-components for local dev (#540) (1a3b54a5)
+- hide translation diffs (#533) (29218359)
+- separate translatableString and RTF2 configs (#531) (aae76f64)
+- remove collections (#523) (fa38702f)
+- add site setting instructions to hybrid development docs (#519) (5660b844)
+
+##### New Features
+
+- update template manifest (#552) (40f9a418)
+- add defaultProps to arrays (#551) (b3b0e90e)
+- add “near me” button and add analytics to locator (#542) (5538429b)
+- add hasLocalizedValue to translation struct (#546) (9301c284)
+- add heading styles for promo section (#541) (bf86a330)
+- add directory root prop (#539) (937101eb)
+- const value defaults for non-core components (#536) (3a012497)
+- add heading align for testimonial component (#537) (4be4bee4)
+- edit constant value rtf fields in drawer (#538) (68880607)
+- add heading alignment prop (#522) (4b0ebcbd)
+- translate Phone label for CoreInfoSection (#527) (58efda1c)
+- add i18n for CTA type and locale labels (#524) (732e2d80)
+- add i18n support in components (#520) (56808e04)
+- add Language Dropdown to Header (#514) (9840a74d)
+- add platform translations part 2 (#521) (01cbd9a7)
+- add platform translations part 1 (#509) (c6dffaec)
+- useDocumentLocale for constant value translations (#518) (e2d2a778)
+- add constant value i18n support (#508) (08256922)
+
+##### Bug Fixes
+
+- limit mapbox size (#550) (0944f985)
+- persist struct constant value (#547) (e8fabc6d)
+- translate "Get Directions" (#526) (a97d81a7)
+- add struct label translation (#525) (c4f25193)
+- allow multiple phones in phone list (#515) (af0e2391)
+
+##### Refactors
+
+- translatable string labels (#543) (ed25db0a)
+- add overrides for specific problem fonts (#548) (fbaa14d0)
+- struct fields (#532) (88fc8a13)
+- remove unsupported fonts (#528) (ad4941f4)
+
+##### Tests
+
+- add i18n Github action check (#504) (ae14f3e5)
+
 #### 0.0.41 (2025-06-05)
 
 ##### Chores
