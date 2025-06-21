@@ -148,7 +148,7 @@ const isDryRun = process.argv.includes("--dry-run");
         const parentVar = parentArray?.getFirstAncestorByKind(
           SyntaxKind.VariableDeclaration
         );
-        if (parentVar && /Options$/.test(parentVar.getName())) return;
+        if (parentVar && parentVar.getName().endsWith("Options")) return;
 
         const raw = initializer.getText().slice(1, -1);
         if (/^\d+$/.test(raw) || /^\d+:\d+$/.test(raw)) return;

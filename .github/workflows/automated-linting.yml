@@ -19,7 +19,7 @@ jobs:
 
       - run: pnpm run lint
         name: Running linter
-        id: eslint
+        id: oxlint
         # As of this comment, there are many linting errors in pages-components.
         # This is a temporary fix to allow the workflow continue providing
         # autofixes while these errors are being addressed.
@@ -44,8 +44,8 @@ jobs:
           script: |
             core.setFailed('Linting/Prettier changes were made. A new commit with autofixes was pushed.')
       - name: Fail job on linting error
-        if: steps.eslint.outcome == 'failure'
+        if: steps.oxlint.outcome == 'failure'
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('ESLint found errors that must be manually fixed. See step: Running linter.')
+            core.setFailed('Oxlint found errors that must be manually fixed. See step: Running linter.')

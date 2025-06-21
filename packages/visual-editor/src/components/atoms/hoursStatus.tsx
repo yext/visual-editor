@@ -122,7 +122,7 @@ function hoursDayOfWeekTemplateOverride(
   }
   const dayOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
-    ...(params.dayOptions ?? {}),
+    ...params.dayOptions,
   };
 
   let dayOfWeek = "";
