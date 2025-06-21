@@ -35,7 +35,7 @@
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
     "test:components": "vitest run ./src/components/**",
     "prettier": "prettier --write --cache .",
-    "lint": "eslint --cache --fix src/ --ignore-pattern 'src/vite-plugin/templates/*'",
+    "lint": "oxlint --fix --ignore-pattern 'src/vite-plugin/templates/*'",
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
@@ -72,8 +72,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
-    "eslint": "^9.8.0",
-    "eslint-plugin-react": "^7.35.0",
     "i18next": "^25.2.1",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
@@ -95,7 +93,7 @@
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
     "*": "prettier --write --cache --ignore-unknown",
-    "*.{ts,js,tsx,jsx}": "eslint --cache --fix src/ --ignore-pattern 'src/vite-plugin/templates/*'"
+    "*.{ts,js,tsx,jsx}": "oxlint --fix --ignore-pattern 'src/vite-plugin/templates/*'"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",
