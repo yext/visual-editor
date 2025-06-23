@@ -398,6 +398,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
       noOptionsMessage: getNoFieldsFoundMessage(filter),
+      icon: null,
     });
   }, [entityFields, filter]);
 
