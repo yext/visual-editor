@@ -15,6 +15,7 @@ type BasicSelectorProps = {
   noOptionsPlaceholder?: string;
   noOptionsMessage?: string;
   disableSearch?: boolean;
+  icon?: React.ReactNode;
 } & (
   | {
       options: ComboboxOption[];
@@ -38,6 +39,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
     ),
     noOptionsMessage,
     disableSearch,
+    icon = <ChevronDown size={16} />,
   } = props;
 
   return {
@@ -70,7 +72,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
       if (noOptions) {
         return (
           <>
-            <FieldLabel label={label} icon={<ChevronDown size={16} />} />
+            <FieldLabel label={label} icon={icon} />
             <Button variant="puckSelect" disabled={true}>
               {noOptionsPlaceholder}
             </Button>
@@ -82,7 +84,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
       }
 
       return (
-        <FieldLabel label={pt(label)} icon={<ChevronDown size={16} />}>
+        <FieldLabel label={pt(label)} icon={icon}>
           <Combobox
             selectedOption={
               serializedOptions.find(
