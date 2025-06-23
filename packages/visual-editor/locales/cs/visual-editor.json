@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Viditelné na živé stránce",
     "width": "šířka"
   },
-  "fontSize": "Velikost písma",
   "findALocation": "Najděte polohu",
+  "fontSize": "Velikost písma",
   "fontSizeDefaultLabel": "Výchozí",
   "fonts": {
     "choose": "Vyberte písmo",
@@ -274,6 +274,7 @@
   "photo": "Fotografie",
   "photoGallerySection": "Sekce fotogalerie",
   "product": "Produkt",
+  "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
   "saturday": "sobota",
   "search": "Vyhledávání",
@@ -281,8 +282,10 @@
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryCta": "Sekundární CTA",
+  "selectAnOption": "Vyberte možnost",
   "servicesSection": "Sekce služeb",
   "showLabels": "Zobrazit štítky",
+  "siteColors": "Barvy webu",
   "spacingDefaultLabel": "Výchozí",
   "staticContent": "Statický obsah",
   "sunday": "neděle",
@@ -298,7 +301,11 @@
       "bg4": "Pozadí 4",
       "bg5": "Pozadí 5",
       "bg6": "Pozadí 6",
-      "bg7": "Pozadí 7"
+      "bg7": "Pozadí 7",
+      "color1": "Barva 1",
+      "color2": "Barva 2",
+      "color3": "Barva 3",
+      "color4": "Barva 4"
     },
     "bodyText": "Text těla",
     "button": "Tlačítko",
@@ -306,6 +313,7 @@
       "colors": "Barvy",
       "primary": "Primární",
       "quaternary": "Kvartérní",
+      "recommendedDescription": "Optimalizujte barevný kontrast pro přístupnost s těmito pozabami.",
       "secondary": "Sekundární",
       "tertiary": "Terciární"
     },

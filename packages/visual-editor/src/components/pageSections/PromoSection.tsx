@@ -68,7 +68,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

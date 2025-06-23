@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Canlı sayfada görünür",
     "width": "Genişlik"
   },
-  "fontSize": "Yazı tipi boyutu",
   "findALocation": "Bir Konum Bul",
+  "fontSize": "Yazı tipi boyutu",
   "fontSizeDefaultLabel": "Varsayılan",
   "fonts": {
     "choose": "Bir yazı tipi seçin",
@@ -274,6 +274,7 @@
   "photo": "Fotoğraf",
   "photoGallerySection": "Fotoğraf Galeri Bölümü",
   "product": "Ürün",
+  "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
   "saturday": "Cumartesi",
   "search": "Aramak",
@@ -281,8 +282,10 @@
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
   "secondaryCta": "İkincil CTA",
+  "selectAnOption": "Bir seçenek seçin",
   "servicesSection": "Hizmetler Bölümü",
   "showLabels": "Etiketleri Göster",
+  "siteColors": "Site Renkleri",
   "spacingDefaultLabel": "Varsayılan",
   "staticContent": "Statik içerik",
   "sunday": "Pazar",
@@ -298,7 +301,11 @@
       "bg4": "Arka Plan 4",
       "bg5": "Arka plan 5",
       "bg6": "Arka Plan 6",
-      "bg7": "Arka plan 7"
+      "bg7": "Arka plan 7",
+      "color1": "Renk 1",
+      "color2": "Renk 2",
+      "color3": "Renk 3",
+      "color4": "Renk 4"
     },
     "bodyText": "Gövde metni",
     "button": "Düğme",
@@ -306,6 +313,7 @@
       "colors": "Renk",
       "primary": "Öncelik",
       "quaternary": "Kuaterner",
+      "recommendedDescription": "Bu arka planlarla erişilebilirlik için renk kontrastını optimize edin.",
       "secondary": "İkincil",
       "tertiary": "Üçüncül"
     },

@@ -1,3 +1,4 @@
+import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
 import { borderRadiusOptions } from "../editor/BorderRadiusSelector.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
@@ -87,25 +88,71 @@ export const backgroundColors: Record<string, BackgroundOption> = {
       textColor: "text-white",
     },
   },
+  color1: {
+    label: msg("theme.bg.color1", "Color 1"),
+    value: {
+      bgColor: "bg-palette-primary",
+      textColor: "text-palette-primary-contrast",
+    },
+  },
+  color2: {
+    label: msg("theme.bg.color2", "Color 2"),
+    value: {
+      bgColor: "bg-palette-secondary",
+      textColor: "text-palette-secondary-contrast",
+    },
+  },
+  color3: {
+    label: msg("theme.bg.color3", "Color 3"),
+    value: {
+      bgColor: "bg-palette-tertiary",
+      textColor: "text-palette-tertiary-contrast",
+    },
+  },
+  color4: {
+    label: msg("theme.bg.color4", "Color 4"),
+    value: {
+      bgColor: "bg-palette-quaternary",
+      textColor: "text-palette-quaternary-contrast",
+    },
+  },
 };
 
 // When used in BasicSelector, the color is displayed in the dropdown.
-const backgroundColorOptions = Object.values(backgroundColors).map(
-  ({ label, value }) => ({
-    label,
-    value,
-    color: value.bgColor,
-  })
-);
-
-const darkBackgroundColorOptions = Object.values({
-  background6: backgroundColors.background6,
-  background7: backgroundColors.background7,
-}).map(({ label, value }) => ({
-  label,
-  value,
-  color: value.bgColor,
-}));
+const backgroundColorOptions: ComboboxOptionGroup[] = [
+  {
+    title: msg("recommendedColors", "Recommended Colors"),
+    description: msg(
+      "theme.colors.recommendedDescription",
+      "Optimize color contrast for accessibility with these backgrounds."
+    ),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("background")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
+  },
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
+  },
+];
 
 // Defines the valid levels for the heading element
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -235,7 +282,6 @@ export const ThemeOptions = {
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
-  DARK_BACKGROUND_COLOR: darkBackgroundColorOptions,
   CTA_VARIANT: ctaVariantOptions,
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,

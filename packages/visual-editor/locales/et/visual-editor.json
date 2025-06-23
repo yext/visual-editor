@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Nähtav live -lehel",
     "width": "laius"
   },
-  "fontSize": "Fondi suurus",
   "findALocation": "Leidke asukoht",
+  "fontSize": "Fondi suurus",
   "fontSizeDefaultLabel": "Täitmata jätmine",
   "fonts": {
     "choose": "Valige font",
@@ -274,6 +274,7 @@
   "photo": "Foto",
   "photoGallerySection": "Fotogalerii sektsioon",
   "product": "Toode",
+  "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
   "saturday": "Laupäev",
   "search": "Otsima",
@@ -281,8 +282,10 @@
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryCta": "Teisene CTA",
+  "selectAnOption": "Valige suvand",
   "servicesSection": "Teenuste sektsioon",
   "showLabels": "Näita silte",
+  "siteColors": "Saidi värvid",
   "spacingDefaultLabel": "Täitmata jätmine",
   "staticContent": "Staatiline sisu",
   "sunday": "Pühapäev",
@@ -298,7 +301,11 @@
       "bg4": "Taust 4",
       "bg5": "5 taust",
       "bg6": "Taust 6",
-      "bg7": "Taust 7"
+      "bg7": "Taust 7",
+      "color1": "Värv 1",
+      "color2": "Värv 2",
+      "color3": "Värv 3",
+      "color4": "Värv 4"
     },
     "bodyText": "Keretekst",
     "button": "Nupp",
@@ -306,6 +313,7 @@
       "colors": "Värvid",
       "primary": "Alg-",
       "quaternary": "Kvaternaarne",
+      "recommendedDescription": "Optimeerige värvikontrastiks nende taustaga juurdepääsetavuse tagamiseks.",
       "secondary": "Teisene",
       "tertiary": "Kolmanda astme"
     },

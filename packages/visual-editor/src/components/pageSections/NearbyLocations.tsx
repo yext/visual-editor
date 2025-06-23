@@ -97,7 +97,6 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -105,7 +104,6 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         msg("fields.cardBackgroundColor", "Card Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

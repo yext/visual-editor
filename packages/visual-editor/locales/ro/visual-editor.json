@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Vizibil pe pagina live",
     "width": "lăţime"
   },
-  "fontSize": "Dimensiunea fontului",
   "findALocation": "Găsiți o locație",
+  "fontSize": "Dimensiunea fontului",
   "fontSizeDefaultLabel": "Implicit",
   "fonts": {
     "choose": "Alegeți un font",
@@ -275,6 +275,7 @@
   "photo": "Fotografie",
   "photoGallerySection": "Secțiunea Galerie foto",
   "product": "Produs",
+  "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
   "saturday": "sâmbătă",
   "search": "Căutare",
@@ -282,8 +283,10 @@
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
   "secondaryCta": "CTA secundară",
+  "selectAnOption": "Selectați o opțiune",
   "servicesSection": "Secțiunea Servicii",
   "showLabels": "Arată etichete",
+  "siteColors": "Culorile site -ului",
   "spacingDefaultLabel": "Implicit",
   "staticContent": "Conținut static",
   "sunday": "duminică",
@@ -299,7 +302,11 @@
       "bg4": "Fundal 4",
       "bg5": "Fundal 5",
       "bg6": "Fundal 6",
-      "bg7": "Fundal 7"
+      "bg7": "Fundal 7",
+      "color1": "Culoare 1",
+      "color2": "Culoare 2",
+      "color3": "Culoare 3",
+      "color4": "Culoare 4"
     },
     "bodyText": "Text corporal",
     "button": "Buton",
@@ -307,6 +314,7 @@
       "colors": "Culori",
       "primary": "Primar",
       "quaternary": "Cuaternar",
+      "recommendedDescription": "Optimizați contrastul de culoare pentru accesibilitate cu aceste fundaluri.",
       "secondary": "Secundar",
       "tertiary": "Terţiar"
     },

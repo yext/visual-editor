@@ -216,8 +216,8 @@
     "visibleOnLivePage": "ライブページに表示されます",
     "width": "幅"
   },
-  "fontSize": "フォントサイズ",
   "findALocation": "場所を見つけます",
+  "fontSize": "フォントサイズ",
   "fontSizeDefaultLabel": "デフォルト",
   "fonts": {
     "choose": "フォントを選択します",
@@ -251,6 +251,7 @@
   "loadingMap": "マップの読み込み...",
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
+  "locationsNear_one": "{{count}}近くの場所「{{filterdisplayname}} \"",
   "locationsNear_other": "「${{filterDisplayName}}」の近くの${{count}}か所",
   "monday": "月曜日",
   "name": "名前",
@@ -273,6 +274,7 @@
   "photo": "写真",
   "photoGallerySection": "フォトギャラリーセクション",
   "product": "製品",
+  "recommendedColors": "推奨される色",
   "redo": "やり直します",
   "saturday": "土曜日",
   "search": "検索",
@@ -280,8 +282,10 @@
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
   "secondaryCta": "二次CTA",
+  "selectAnOption": "オプションを選択します",
   "servicesSection": "サービスセクション",
   "showLabels": "ラベルを表示します",
+  "siteColors": "サイトの色",
   "spacingDefaultLabel": "デフォルト",
   "staticContent": "静的コンテンツ",
   "sunday": "日曜日",
@@ -297,7 +301,11 @@
       "bg4": "背景4",
       "bg5": "背景5",
       "bg6": "背景6",
-      "bg7": "背景7"
+      "bg7": "背景7",
+      "color1": "色1",
+      "color2": "色2",
+      "color3": "色3",
+      "color4": "色4"
     },
     "bodyText": "ボディテキスト",
     "button": "ボタン",
@@ -305,6 +313,7 @@
       "colors": "色",
       "primary": "主要な",
       "quaternary": "第四紀",
+      "recommendedDescription": "これらの背景を使用したアクセシビリティの色のコントラストを最適化します。",
       "secondary": "二次",
       "tertiary": "三次"
     },

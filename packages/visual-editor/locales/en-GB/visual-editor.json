@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Visible on Live Page",
     "width": "width"
   },
-  "fontSize": "Font Size",
   "findALocation": "Find a Location",
+  "fontSize": "Font Size",
   "fontSizeDefaultLabel": "Default",
   "fonts": {
     "choose": "Choose a font",
@@ -274,6 +274,7 @@
   "photo": "Photo",
   "photoGallerySection": "Photo Gallery Section",
   "product": "Product",
+  "recommendedColors": "Recommended Colors",
   "redo": "Redo",
   "saturday": "Saturday",
   "search": "Search",
@@ -281,8 +282,10 @@
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",
   "secondaryCta": "Secondary CTA",
+  "selectAnOption": "Select an option",
   "servicesSection": "Services Section",
   "showLabels": "Show Labels",
+  "siteColors": "Site Colors",
   "spacingDefaultLabel": "Default",
   "staticContent": "Static content",
   "sunday": "Sunday",
@@ -298,7 +301,11 @@
       "bg4": "Background 4",
       "bg5": "Background 5",
       "bg6": "Background 6",
-      "bg7": "Background 7"
+      "bg7": "Background 7",
+      "color1": "Color 1",
+      "color2": "Color 2",
+      "color3": "Color 3",
+      "color4": "Color 4"
     },
     "bodyText": "Body Text",
     "button": "Button",
@@ -306,6 +313,7 @@
       "colors": "Colors",
       "primary": "Primary",
       "quaternary": "Quaternary",
+      "recommendedDescription": "Optimize color contrast for accessibility with these backgrounds.",
       "secondary": "Secondary",
       "tertiary": "Tertiary"
     },

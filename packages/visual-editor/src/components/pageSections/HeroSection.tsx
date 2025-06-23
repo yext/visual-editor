@@ -95,7 +95,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

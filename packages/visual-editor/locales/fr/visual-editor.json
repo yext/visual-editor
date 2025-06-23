@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Visible sur la page en direct",
     "width": "largeur"
   },
-  "fontSize": "Taille de la police",
   "findALocation": "Trouver un emplacement",
+  "fontSize": "Taille de la police",
   "fontSizeDefaultLabel": "Défaut",
   "fonts": {
     "choose": "Choisissez une police",
@@ -274,6 +274,7 @@
   "photo": "Photo",
   "photoGallerySection": "Section de la galerie de photos",
   "product": "Produit",
+  "recommendedColors": "Couleurs recommandées",
   "redo": "Refaire",
   "saturday": "Samedi",
   "search": "Recherche",
@@ -281,8 +282,10 @@
   "searchHere": "Recherche ici ...",
   "searchThisArea": "Recherchez cette zone",
   "secondaryCta": "CTA secondaire",
+  "selectAnOption": "Sélectionnez une option",
   "servicesSection": "Section des services",
   "showLabels": "Montrer les étiquettes",
+  "siteColors": "Couleurs du site",
   "spacingDefaultLabel": "Défaut",
   "staticContent": "Contenu statique",
   "sunday": "Dimanche",
@@ -298,7 +301,11 @@
       "bg4": "Contexte 4",
       "bg5": "Contexte 5",
       "bg6": "Contexte 6",
-      "bg7": "Contexte 7"
+      "bg7": "Contexte 7",
+      "color1": "Couleur 1",
+      "color2": "Couleur 2",
+      "color3": "Couleur 3",
+      "color4": "Couleur 4"
     },
     "bodyText": "Texte du corps",
     "button": "Bouton",
@@ -306,6 +313,7 @@
       "colors": "Couleurs",
       "primary": "Primaire",
       "quaternary": "Quaternaire",
+      "recommendedDescription": "Optimiser le contraste des couleurs pour l'accessibilité avec ces arrière-plans.",
       "secondary": "Secondaire",
       "tertiary": "Tertiaire"
     },

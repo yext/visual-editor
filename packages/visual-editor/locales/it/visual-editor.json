@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Visibile sulla pagina live",
     "width": "larghezza"
   },
-  "fontSize": "Dimensione del carattere",
   "findALocation": "Trova una posizione",
+  "fontSize": "Dimensione del carattere",
   "fontSizeDefaultLabel": "Predefinito",
   "fonts": {
     "choose": "Scegli un carattere",
@@ -274,6 +274,7 @@
   "photo": "Foto",
   "photoGallerySection": "Sezione della galleria fotografica",
   "product": "Prodotto",
+  "recommendedColors": "Colori consigliati",
   "redo": "Rifare",
   "saturday": "Sabato",
   "search": "Ricerca",
@@ -281,8 +282,10 @@
   "searchHere": "Cerca qui ...",
   "searchThisArea": "Cerca in quest'area",
   "secondaryCta": "CTA secondario",
+  "selectAnOption": "Seleziona un'opzione",
   "servicesSection": "Sezione Servizi",
   "showLabels": "Etichette per mostrare",
+  "siteColors": "Colori del sito",
   "spacingDefaultLabel": "Predefinito",
   "staticContent": "Contenuto statico",
   "sunday": "Domenica",
@@ -298,7 +301,11 @@
       "bg4": "Sfondo 4",
       "bg5": "Sfondo 5",
       "bg6": "Sfondo 6",
-      "bg7": "Sfondo 7"
+      "bg7": "Sfondo 7",
+      "color1": "Colore 1",
+      "color2": "Colore 2",
+      "color3": "Colore 3",
+      "color4": "Colore 4"
     },
     "bodyText": "Testo del corpo",
     "button": "Pulsante",
@@ -306,6 +313,7 @@
       "colors": "Colori",
       "primary": "Primario",
       "quaternary": "Quaternario",
+      "recommendedDescription": "Ottimizza il contrasto del colore per l'accessibilità con questi sfondi.",
       "secondary": "Secondario",
       "tertiary": "Terziario"
     },

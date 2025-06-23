@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Auf der Live -Seite sichtbar",
     "width": "Breite"
   },
-  "fontSize": "Schriftgröße",
   "findALocation": "Finden Sie einen Ort",
+  "fontSize": "Schriftgröße",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {
     "choose": "Wählen Sie eine Schriftart",
@@ -274,6 +274,7 @@
   "photo": "Foto",
   "photoGallerySection": "Fotogalerie",
   "product": "Produkt",
+  "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
   "saturday": "Samstag",
   "search": "Suchen",
@@ -281,8 +282,10 @@
   "searchHere": "Suche hier ...",
   "searchThisArea": "Suchen Sie diesen Bereich",
   "secondaryCta": "Sekundäre CTA",
+  "selectAnOption": "Wählen Sie eine Option aus",
   "servicesSection": "Dienstleistungsabschnitt",
   "showLabels": "Etiketten zeigen",
+  "siteColors": "Standortfarben",
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statischer Inhalt",
   "sunday": "Sonntag",
@@ -298,7 +301,11 @@
       "bg4": "Hintergrund 4",
       "bg5": "Hintergrund 5",
       "bg6": "Hintergrund 6",
-      "bg7": "Hintergrund 7"
+      "bg7": "Hintergrund 7",
+      "color1": "Farbe 1",
+      "color2": "Farbe 2",
+      "color3": "Farbe 3",
+      "color4": "Farbe 4"
     },
     "bodyText": "Körpertext",
     "button": "Taste",
@@ -306,6 +313,7 @@
       "colors": "Farben",
       "primary": "Primär",
       "quaternary": "Quartär",
+      "recommendedDescription": "Optimieren Sie den Farbkontrast für die Zugänglichkeit mit diesen Hintergründen.",
       "secondary": "Sekundär",
       "tertiary": "Tertiär"
     },

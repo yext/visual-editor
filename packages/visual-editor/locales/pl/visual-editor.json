@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Widoczne na stronie na żywo",
     "width": "szerokość"
   },
-  "fontSize": "Rozmiar czcionki",
   "findALocation": "Znajdź lokalizację",
+  "fontSize": "Rozmiar czcionki",
   "fontSizeDefaultLabel": "Domyślny",
   "fonts": {
     "choose": "Wybierz czcionkę",
@@ -276,6 +276,7 @@
   "photo": "Zdjęcie",
   "photoGallerySection": "Sekcja galerii zdjęć",
   "product": "Produkt",
+  "recommendedColors": "Zalecane kolory",
   "redo": "Przerobić",
   "saturday": "Sobota",
   "search": "Szukaj",
@@ -283,8 +284,10 @@
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",
   "secondaryCta": "Wtórne CTA",
+  "selectAnOption": "Wybierz opcję",
   "servicesSection": "Sekcja usług",
   "showLabels": "Pokaż etykiety",
+  "siteColors": "Kolory strony",
   "spacingDefaultLabel": "Domyślny",
   "staticContent": "Treść statyczna",
   "sunday": "Niedziela",
@@ -300,7 +303,11 @@
       "bg4": "Tło 4",
       "bg5": "Tło 5",
       "bg6": "Tło 6",
-      "bg7": "Tło 7"
+      "bg7": "Tło 7",
+      "color1": "Kolor 1",
+      "color2": "Kolor 2",
+      "color3": "Kolor 3",
+      "color4": "Kolor 4"
     },
     "bodyText": "Tekst nadwozia",
     "button": "Przycisk",
@@ -308,6 +315,7 @@
       "colors": "Zabarwienie",
       "primary": "Podstawowy",
       "quaternary": "Czwartorzędowy",
+      "recommendedDescription": "Optymalizuj kontrast kolorów dla dostępności z tymi tłem.",
       "secondary": "Wtórny",
       "tertiary": "Trzeciorzędowy"
     },

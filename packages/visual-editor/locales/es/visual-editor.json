@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Visible en la página en vivo",
     "width": "ancho"
   },
-  "fontSize": "Tamaño de fuente",
   "findALocation": "Encuentra una ubicación",
+  "fontSize": "Tamaño de fuente",
   "fontSizeDefaultLabel": "Por defecto",
   "fonts": {
     "choose": "Elija una fuente",
@@ -274,6 +274,7 @@
   "photo": "Foto",
   "photoGallerySection": "Sección de galería de fotos",
   "product": "Producto",
+  "recommendedColors": "Colores recomendados",
   "redo": "Rehacer",
   "saturday": "Sábado",
   "search": "Buscar",
@@ -281,8 +282,10 @@
   "searchHere": "Buscar aquí ...",
   "searchThisArea": "Busca esta área",
   "secondaryCta": "CTA secundario",
+  "selectAnOption": "Seleccione una opción",
   "servicesSection": "Sección de servicios",
   "showLabels": "Espectáculo de etiquetas",
+  "siteColors": "Colores del sitio",
   "spacingDefaultLabel": "Por defecto",
   "staticContent": "Contenido estático",
   "sunday": "Domingo",
@@ -298,7 +301,11 @@
       "bg4": "Antecedentes 4",
       "bg5": "Antecedentes 5",
       "bg6": "Antecedentes 6",
-      "bg7": "Antecedentes 7"
+      "bg7": "Antecedentes 7",
+      "color1": "Color 1",
+      "color2": "Color 2",
+      "color3": "Color 3",
+      "color4": "Color 4"
     },
     "bodyText": "Texto del cuerpo",
     "button": "Botón",
@@ -306,6 +313,7 @@
       "colors": "Bandera",
       "primary": "Primario",
       "quaternary": "Cuaternario",
+      "recommendedDescription": "Optimizar el contraste de color para la accesibilidad con estos fondos.",
       "secondary": "Secundario",
       "tertiary": "Terciario"
     },

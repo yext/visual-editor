@@ -216,8 +216,8 @@
     "visibleOnLivePage": "在现场页面上可见",
     "width": "宽度"
   },
-  "fontSize": "字体大小",
   "findALocation": "找到一个位置",
+  "fontSize": "字体大小",
   "fontSizeDefaultLabel": "默认",
   "fonts": {
     "choose": "选择一个字体",
@@ -251,6 +251,7 @@
   "loadingMap": "加载地图...",
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
+  "locationsNear_one": "{{count}}位置附近“ {{filterDisPlayName}}”",
   "locationsNear_other": "{{count}}位置附近“ {{filterDisplayName}}”",
   "monday": "周一",
   "name": "姓名",
@@ -273,6 +274,7 @@
   "photo": "照片",
   "photoGallerySection": "照片库部分",
   "product": "产品",
+  "recommendedColors": "推荐的颜色",
   "redo": "重做",
   "saturday": "周六",
   "search": "搜索",
@@ -280,8 +282,10 @@
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",
   "secondaryCta": "次级CTA",
+  "selectAnOption": "选择一个选项",
   "servicesSection": "服务部分",
   "showLabels": "显示标签",
+  "siteColors": "站点颜色",
   "spacingDefaultLabel": "默认",
   "staticContent": "静态内容",
   "sunday": "星期日",
@@ -297,7 +301,11 @@
       "bg4": "背景4",
       "bg5": "背景5",
       "bg6": "背景6",
-      "bg7": "背景7"
+      "bg7": "背景7",
+      "color1": "颜色1",
+      "color2": "颜色2",
+      "color3": "颜色3",
+      "color4": "颜色4"
     },
     "bodyText": "正文",
     "button": "按钮",
@@ -305,6 +313,7 @@
       "colors": "颜色",
       "primary": "基本的",
       "quaternary": "第四纪",
+      "recommendedDescription": "优化使用这些背景的可访问性的颜色对比度。",
       "secondary": "次要",
       "tertiary": "第三"
     },

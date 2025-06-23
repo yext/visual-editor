@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Matomas tiesioginiame puslapyje",
     "width": "plotis"
   },
-  "fontSize": "Šrifto dydis",
   "findALocation": "Raskite vietą",
+  "fontSize": "Šrifto dydis",
   "fontSizeDefaultLabel": "Numatytasis",
   "fonts": {
     "choose": "Pasirinkite šriftą",
@@ -276,6 +276,7 @@
   "photo": "Nuotrauka",
   "photoGallerySection": "Nuotraukų galerijos skyrius",
   "product": "Produktas",
+  "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
   "saturday": "Šeštadienis",
   "search": "Ieškoti",
@@ -283,8 +284,10 @@
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",
   "secondaryCta": "Antrinė CTA",
+  "selectAnOption": "Pasirinkite parinktį",
   "servicesSection": "Paslaugų skyrius",
   "showLabels": "Rodyti etiketes",
+  "siteColors": "Svetainės spalvos",
   "spacingDefaultLabel": "Numatytasis",
   "staticContent": "Statinis turinys",
   "sunday": "Sekmadienis",
@@ -300,7 +303,11 @@
       "bg4": "4 fonas",
       "bg5": "5 fonas",
       "bg6": "6 fonas",
-      "bg7": "7 fonas"
+      "bg7": "7 fonas",
+      "color1": "1 spalva",
+      "color2": "2 spalva",
+      "color3": "3 spalva",
+      "color4": "4 spalva"
     },
     "bodyText": "Kūno tekstas",
     "button": "Mygtukas",
@@ -308,6 +315,7 @@
       "colors": "Spalvos",
       "primary": "Pirminis",
       "quaternary": "Kvartero",
+      "recommendedDescription": "Optimizuokite spalvų kontrastą prieinamumui su šiais fonu.",
       "secondary": "Antrinis",
       "tertiary": "Tretinis"
     },

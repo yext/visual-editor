@@ -216,8 +216,8 @@
     "visibleOnLivePage": "Synlig på live -sidan",
     "width": "bredd"
   },
-  "fontSize": "Fontstorlek",
   "findALocation": "Hitta en plats",
+  "fontSize": "Fontstorlek",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {
     "choose": "Välj ett teckensnitt",
@@ -274,6 +274,7 @@
   "photo": "Bild",
   "photoGallerySection": "Fotogalleriavsnitt",
   "product": "Produkt",
+  "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
   "saturday": "Lördag",
   "search": "Söka",
@@ -281,8 +282,10 @@
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",
   "secondaryCta": "Sekundär CTA",
+  "selectAnOption": "Välj ett alternativ",
   "servicesSection": "Serviceavdelning",
   "showLabels": "Visa etiketter",
+  "siteColors": "Platsfärger",
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statiskt innehåll",
   "sunday": "Söndag",
@@ -298,7 +301,11 @@
       "bg4": "Bakgrund 4",
       "bg5": "Bakgrund 5",
       "bg6": "Bakgrund 6",
-      "bg7": "Bakgrund 7"
+      "bg7": "Bakgrund 7",
+      "color1": "Färg 1",
+      "color2": "Färg 2",
+      "color3": "Färg 3",
+      "color4": "Färg 4"
     },
     "bodyText": "Kroppstext",
     "button": "Knapp",
@@ -306,6 +313,7 @@
       "colors": "Färger",
       "primary": "Primär",
       "quaternary": "Kvartär",
+      "recommendedDescription": "Optimera färgkontrasten för tillgänglighet med dessa bakgrunder.",
       "secondary": "Sekundär",
       "tertiary": "Tertiär"
     },
