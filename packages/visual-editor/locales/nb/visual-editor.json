@@ -54,7 +54,8 @@
     "promoSection": "Promo -seksjon",
     "staticMapSection": "Statisk kartseksjon",
     "teamSection": "Team -seksjon",
-    "testimonialsSection": "Vitnesbyrdsseksjon"
+    "testimonialsSection": "Vitnesbyrdsseksjon",
+    "reviews": "Anmeldelser"
   },
   "confirm": "Bekrefte",
   "coordinate": "Koordinere",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
   "wednesday": "onsdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "noReviewsFound": "Ingen anmeldelser tilgjengelig",
+  "recentReviews": "Nyere anmeldelser"
 }

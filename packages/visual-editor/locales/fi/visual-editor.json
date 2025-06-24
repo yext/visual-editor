@@ -54,7 +54,8 @@
     "promoSection": "Promoosio",
     "staticMapSection": "Staattinen karttaosa",
     "teamSection": "Joukkueosasto",
-    "testimonialsSection": "Suositusosasto"
+    "testimonialsSection": "Suositusosasto",
+    "reviews": "Arvostelut"
   },
   "confirm": "Vahvistaa",
   "coordinate": "Koordinoida",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
   "wednesday": "keskiviikko",
-  "yes": "Kyllä"
+  "yes": "Kyllä",
+  "recentReviews": "Viimeaikaiset arvostelut",
+  "noReviewsFound": "Arvosteluja ei ole käytettävissä"
 }

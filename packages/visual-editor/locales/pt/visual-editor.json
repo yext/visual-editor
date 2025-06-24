@@ -54,7 +54,8 @@
     "promoSection": "Seção promocional",
     "staticMapSection": "Seção de mapa estático",
     "teamSection": "Seção de equipe",
-    "testimonialsSection": "Seção de depoimentos"
+    "testimonialsSection": "Seção de depoimentos",
+    "reviews": "Revisões"
   },
   "confirm": "Confirmar",
   "coordinate": "Coordenada",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Use nosso localizador para encontrar um local perto de você",
   "visitPage": "Visite a página",
   "wednesday": "Quarta-feira",
-  "yes": "Sim"
+  "yes": "Sim",
+  "recentReviews": "Revisões recentes",
+  "noReviewsFound": "Nenhuma crítica disponível"
 }

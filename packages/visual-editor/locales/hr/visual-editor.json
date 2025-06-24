@@ -54,7 +54,8 @@
     "promoSection": "Promotivni dio",
     "staticMapSection": "Odjeljak statičke karte",
     "teamSection": "Ekipa",
-    "testimonialsSection": "Odjeljak za svjedočanstvo"
+    "testimonialsSection": "Odjeljak za svjedočanstvo",
+    "reviews": "Recenzije"
   },
   "confirm": "Potvrditi",
   "coordinate": "Koordinata",
@@ -360,5 +361,7 @@
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
   "wednesday": "srijeda",
-  "yes": "Da"
+  "yes": "Da",
+  "noReviewsFound": "Nema dostupnih recenzija",
+  "recentReviews": "Nedavne recenzije"
 }

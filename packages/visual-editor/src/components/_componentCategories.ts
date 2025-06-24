@@ -62,6 +62,7 @@ import { Header, HeaderProps } from "./header/Header.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
+import { Reviews, ReviewsProps } from "./Reviews.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,
@@ -142,6 +143,18 @@ export const LocatorCategoryComponents = {
 export const LocatorCategory = Object.keys(
   LocatorCategoryComponents
 ) as (keyof LocatorCategoryProps)[];
+
+export interface ReviewsCategoryProps {
+  Reviews: ReviewsProps;
+}
+
+export const ReviewsCategoryComponents = {
+  Reviews,
+};
+
+export const ReviewsCategory = Object.keys(
+  ReviewsCategoryComponents
+) as (keyof ReviewsCategoryProps)[];
 
 /** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 

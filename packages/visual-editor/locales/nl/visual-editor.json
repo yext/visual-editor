@@ -54,7 +54,8 @@
     "promoSection": "Promotectie",
     "staticMapSection": "Statische kaartsectie",
     "teamSection": "Teamsectie",
-    "testimonialsSection": "Getuigenissen sectie"
+    "testimonialsSection": "Getuigenissen sectie",
+    "reviews": "Beoordelingen"
   },
   "confirm": "Bevestigen",
   "coordinate": "Coördineren",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Gebruik onze locator om een ​​locatie bij u in de buurt te vinden",
   "visitPage": "Bezoek pagina",
   "wednesday": "Woensdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "noReviewsFound": "Geen beoordelingen beschikbaar",
+  "recentReviews": "Recente beoordelingen"
 }

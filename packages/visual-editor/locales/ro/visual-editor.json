@@ -54,7 +54,8 @@
     "promoSection": "Secțiunea promo",
     "staticMapSection": "Secțiunea hărții statice",
     "teamSection": "Secțiunea echipei",
-    "testimonialsSection": "Secțiunea Mărturii"
+    "testimonialsSection": "Secțiunea Mărturii",
+    "reviews": "Recenzii"
   },
   "confirm": "Confirma",
   "coordinate": "Coordona",
@@ -360,5 +361,7 @@
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
   "wednesday": "miercuri",
-  "yes": "Da"
+  "yes": "Da",
+  "recentReviews": "Recenzii recente",
+  "noReviewsFound": "Nu există recenzii disponibile"
 }

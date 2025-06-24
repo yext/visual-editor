@@ -54,7 +54,8 @@
     "promoSection": "Promo Section",
     "staticMapSection": "Static Map Section",
     "teamSection": "Team Section",
-    "testimonialsSection": "Testimonials Section"
+    "testimonialsSection": "Testimonials Section",
+    "reviews": "Reviews"
   },
   "confirm": "Confirm",
   "coordinate": "Coordinate",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
   "visitPage": "Visit Page",
   "wednesday": "Wednesday",
-  "yes": "Yes"
+  "yes": "Yes",
+  "recentReviews": "Recent Reviews",
+  "noReviewsFound": "No reviews available"
 }

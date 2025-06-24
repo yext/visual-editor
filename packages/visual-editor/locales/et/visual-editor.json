@@ -54,7 +54,8 @@
     "promoSection": "Promo osakond",
     "staticMapSection": "Staatiline kaardiosa",
     "teamSection": "Meeskonnaosa",
-    "testimonialsSection": "Iseloomustuste sektsioon"
+    "testimonialsSection": "Iseloomustuste sektsioon",
+    "reviews": "Ülevaated"
   },
   "confirm": "Kinnitama",
   "coordinate": "Koordinaat",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
   "wednesday": "Kolmapäev",
-  "yes": "Jah"
+  "yes": "Jah",
+  "recentReviews": "Viimased ülevaated",
+  "noReviewsFound": "Ülevaateid pole saadaval"
 }

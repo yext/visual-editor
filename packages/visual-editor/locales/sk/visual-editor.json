@@ -54,7 +54,8 @@
     "promoSection": "Promo sekcia",
     "staticMapSection": "Sekcia statickej mapy",
     "teamSection": "Sekcia tímu",
-    "testimonialsSection": "Sekcia svedectiev"
+    "testimonialsSection": "Sekcia svedectiev",
+    "reviews": "Recenzie"
   },
   "confirm": "Potvrdiť",
   "coordinate": "Koordinovať",
@@ -360,5 +361,7 @@
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
   "wednesday": "Streda",
-  "yes": "Áno"
+  "yes": "Áno",
+  "noReviewsFound": "Nie sú k dispozícii žiadne recenzie",
+  "recentReviews": "Posledné recenzie"
 }

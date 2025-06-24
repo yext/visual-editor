@@ -54,7 +54,8 @@
     "promoSection": "プロモーションセクション",
     "staticMapSection": "静的マップセクション",
     "teamSection": "チームセクション",
-    "testimonialsSection": "証言セクション"
+    "testimonialsSection": "証言セクション",
+    "reviews": "レビュー"
   },
   "confirm": "確認する",
   "coordinate": "座標",
@@ -358,5 +359,8 @@
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
   "wednesday": "水曜日",
-  "yes": "はい"
+  "yes": "はい",
+  "noReviewsFound": "レビューはありません",
+  "locationsNear_one": "{{count}}近くの場所「{{filterdisplayname}} \"",
+  "recentReviews": "最近のレビュー"
 }

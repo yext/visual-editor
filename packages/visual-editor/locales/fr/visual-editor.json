@@ -54,7 +54,8 @@
     "promoSection": "Section promotionnelle",
     "staticMapSection": "Section de carte statique",
     "teamSection": "Section d'équipe",
-    "testimonialsSection": "Section des témoignages"
+    "testimonialsSection": "Section des témoignages",
+    "reviews": "Critiques"
   },
   "confirm": "Confirmer",
   "coordinate": "Coordonner",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Utilisez notre localisateur pour trouver un emplacement près de chez vous",
   "visitPage": "Page de visite",
   "wednesday": "Mercredi",
-  "yes": "Oui"
+  "yes": "Oui",
+  "noReviewsFound": "Aucune critique disponible",
+  "recentReviews": "Revues récentes"
 }

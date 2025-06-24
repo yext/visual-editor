@@ -54,7 +54,8 @@
     "promoSection": "Promo -sektion",
     "staticMapSection": "Statisk kartavsnitt",
     "teamSection": "Lagavdelning",
-    "testimonialsSection": "Vittnesbörd"
+    "testimonialsSection": "Vittnesbörd",
+    "reviews": "Recensioner"
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
   "wednesday": "Onsdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "recentReviews": "Senaste recensioner",
+  "noReviewsFound": "Inga recensioner tillgängliga"
 }

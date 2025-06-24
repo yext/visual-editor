@@ -54,7 +54,8 @@
     "promoSection": "Promosyon bölümü",
     "staticMapSection": "Statik Harita Bölümü",
     "teamSection": "Takım bölümü",
-    "testimonialsSection": "Referans bölümü"
+    "testimonialsSection": "Referans bölümü",
+    "reviews": "İncelemeler"
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
   "wednesday": "Çarşamba",
-  "yes": "Evet"
+  "yes": "Evet",
+  "recentReviews": "Son İncelemeler",
+  "noReviewsFound": "Yorum yok"
 }

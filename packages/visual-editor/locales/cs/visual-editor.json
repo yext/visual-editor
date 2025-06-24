@@ -54,7 +54,8 @@
     "promoSection": "Promo sekce",
     "staticMapSection": "Sekce statické mapy",
     "teamSection": "Týmová sekce",
-    "testimonialsSection": "Sekce posudků"
+    "testimonialsSection": "Sekce posudků",
+    "reviews": "Recenze"
   },
   "confirm": "Potvrdit",
   "coordinate": "Koordinovat",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
   "wednesday": "středa",
-  "yes": "Ano"
+  "yes": "Ano",
+  "recentReviews": "Nedávné recenze",
+  "noReviewsFound": "K dispozici nejsou žádné recenze"
 }

@@ -54,7 +54,8 @@
     "promoSection": "Promo -Abschnitt",
     "staticMapSection": "Statischer Kartenabschnitt",
     "teamSection": "Teamabteilung",
-    "testimonialsSection": "Testimonials Abschnitt"
+    "testimonialsSection": "Testimonials Abschnitt",
+    "reviews": "Bewertungen"
   },
   "confirm": "Bestätigen",
   "coordinate": "Koordinieren",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
   "visitPage": "Besuchen Sie die Seite",
   "wednesday": "Mittwoch",
-  "yes": "Ja"
+  "yes": "Ja",
+  "recentReviews": "Neuere Bewertungen",
+  "noReviewsFound": "Keine Bewertungen verfügbar"
 }

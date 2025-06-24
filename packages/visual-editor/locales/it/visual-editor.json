@@ -54,7 +54,8 @@
     "promoSection": "Sezione promozionale",
     "staticMapSection": "Sezione mappa statica",
     "teamSection": "Sezione della squadra",
-    "testimonialsSection": "Sezione Testimonianze"
+    "testimonialsSection": "Sezione Testimonianze",
+    "reviews": "Recensioni"
   },
   "confirm": "Confermare",
   "coordinate": "Coordinata",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Usa il nostro localizzatore per trovare una posizione vicino a te",
   "visitPage": "Visita pagina",
   "wednesday": "Mercoledì",
-  "yes": "SÌ"
+  "yes": "SÌ",
+  "recentReviews": "Recensioni recenti",
+  "noReviewsFound": "Nessuna recensione disponibile"
 }

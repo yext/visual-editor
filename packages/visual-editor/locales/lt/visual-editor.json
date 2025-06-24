@@ -54,7 +54,8 @@
     "promoSection": "Promo skyrius",
     "staticMapSection": "Statinio žemėlapio skyrius",
     "teamSection": "Komandos skyrius",
-    "testimonialsSection": "Atsakymų skyrius"
+    "testimonialsSection": "Atsakymų skyrius",
+    "reviews": "Apžvalgos"
   },
   "confirm": "Patvirtinti",
   "coordinate": "Koordinatė",
@@ -361,5 +362,7 @@
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
   "wednesday": "Trečiadienis",
-  "yes": "Taip"
+  "yes": "Taip",
+  "recentReviews": "Naujausios apžvalgos",
+  "noReviewsFound": "Nėra apžvalgų"
 }

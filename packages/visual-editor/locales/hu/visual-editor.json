@@ -54,7 +54,8 @@
     "promoSection": "Promóciós szakasz",
     "staticMapSection": "Statikus térképszakasz",
     "teamSection": "Csapatrész",
-    "testimonialsSection": "Beszámolók részlege"
+    "testimonialsSection": "Beszámolók részlege",
+    "reviews": "Áttekintés"
   },
   "confirm": "Megerősít",
   "coordinate": "Koordináta",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
   "wednesday": "szerda",
-  "yes": "Igen"
+  "yes": "Igen",
+  "noReviewsFound": "Nincsenek vélemények",
+  "recentReviews": "Legutóbbi vélemények"
 }

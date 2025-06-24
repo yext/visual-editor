@@ -54,7 +54,8 @@
     "promoSection": "Promo -sektion",
     "staticMapSection": "Statisk kortafsnit",
     "teamSection": "Holdsektion",
-    "testimonialsSection": "Afsnit for vidnesbyrd"
+    "testimonialsSection": "Afsnit for vidnesbyrd",
+    "reviews": "Anmeldelser"
   },
   "confirm": "Bekræfte",
   "coordinate": "Koordinere",
@@ -359,5 +360,7 @@
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
   "wednesday": "onsdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "recentReviews": "Nylige anmeldelser",
+  "noReviewsFound": "Ingen anmeldelser tilgængelige"
 }

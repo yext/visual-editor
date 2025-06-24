@@ -54,7 +54,8 @@
     "promoSection": "促銷部分",
     "staticMapSection": "靜態地圖部分",
     "teamSection": "團隊部分",
-    "testimonialsSection": "推薦部分"
+    "testimonialsSection": "推薦部分",
+    "reviews": "評論"
   },
   "confirm": "確認",
   "coordinate": "協調",
@@ -358,5 +359,8 @@
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
   "wednesday": "週三",
-  "yes": "是的"
+  "yes": "是的",
+  "noReviewsFound": "沒有可用的評論",
+  "locationsNear_one": "{{count}}位置附近“ {{filterDisPlayName}}”",
+  "recentReviews": "最近的評論"
 }
