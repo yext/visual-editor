@@ -60,5 +60,6 @@ module.exports = {
       prefix: "{{",
       suffix: "}}",
     },
+    contextSeparator: "_",
   },
 };
