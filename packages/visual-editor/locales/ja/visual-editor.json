@@ -141,7 +141,7 @@
       "base": "ベース",
       "base_text size": "ベース",
       "center": "中心",
-      "center_direction": "センター",
+      "center_direction": "中心",
       "ctaVariant": {
         "link": "リンク",
         "primary": "主要な",
@@ -160,7 +160,7 @@
       "hour24": "24時間",
       "image": "画像",
       "international": "国際的",
-      "international_phone number": "International",
+      "international_phone number": "国際",
       "large": "大きい",
       "large_text size": "大",
       "left": "左",

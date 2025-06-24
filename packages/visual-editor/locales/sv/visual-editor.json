@@ -141,7 +141,7 @@
       "base": "Bas",
       "base_text size": "Bas",
       "center": "Centrum",
-      "center_direction": "Center",
+      "center_direction": "Centrum",
       "ctaVariant": {
         "link": "Länk",
         "primary": "Primär",
@@ -160,7 +160,7 @@
       "hour24": "24-timmars",
       "image": "Bild",
       "international": "Internationell",
-      "international_phone number": "International",
+      "international_phone number": "Internationellt",
       "large": "Stor",
       "large_text size": "Stor",
       "left": "Vänster",
