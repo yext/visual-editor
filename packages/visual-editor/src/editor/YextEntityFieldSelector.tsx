@@ -40,6 +40,7 @@ import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18nPlatform.ts";
 import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
+import { useTranslation } from "react-i18next";
 
 const devLogger = new DevLogger();
 
@@ -182,6 +183,10 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
+            showLocale={
+              props.filter.types?.includes("type.string") &&
+              !props.disallowTranslation
+            }
           />
           {value?.constantValueEnabled && (
             <ConstantValueInput<T>
@@ -211,12 +216,14 @@ export const ConstantValueModeToggler = ({
   toggleConstantValueEnabled,
   disableConstantValue,
   label,
+  showLocale,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
   toggleConstantValueEnabled: (constantValueEnabled: boolean) => void;
   disableConstantValue?: boolean;
   label: string;
+  showLocale?: boolean;
 }) => {
   // If disableConstantValue is true, constantValueInputSupported is always false.
   // Else if the field type is supported by constant value input, constantValueInputSupported is true
@@ -230,6 +237,8 @@ export const ConstantValueModeToggler = ({
       fieldTypeFilter.some((fieldType) =>
         supportedStructEntityFieldTypes.includes(fieldType)
       ));
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   return (
     <div className="ve-w-full ve-flex ve-gap-3">
@@ -258,7 +267,9 @@ export const ConstantValueModeToggler = ({
         </TooltipProvider>
       )}
       <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
-        {pt(label)}
+        {showLocale && constantValueEnabled
+          ? `${pt(label)} (${locale})`
+          : `${pt(label)}`}
       </p>
     </div>
   );
