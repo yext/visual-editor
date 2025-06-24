@@ -131,6 +131,15 @@ export function YextField<T, U>(
     });
   }
 
+  if (config.type === "select" && config.options === "BACKGROUND_COLOR") {
+    const options = ThemeOptions[config.options];
+    return BasicSelector({
+      label: fieldName,
+      optionGroups: options,
+      disableSearch: true,
+    });
+  }
+
   // use BasicSelector functionality
   if (config.type === "select" && config.hasSearch) {
     const options =

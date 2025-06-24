@@ -76,7 +76,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -84,7 +83,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
         msg("fields.cardBackgroundColor", "Card Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

@@ -38,7 +38,6 @@ export type SectionContainerProps = {
 const sectionContainerFields: Fields<SectionContainerProps> = {
   background: YextField("Background Color", {
     type: "select",
-    hasSearch: true,
     options: "BACKGROUND_COLOR",
   }),
   sectionHeading: YextField("Section Heading", {
