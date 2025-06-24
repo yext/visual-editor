@@ -52,10 +52,11 @@
     "photoGallerySection": "Odjeljak fotogalerije",
     "productsSection": "Odjeljak o proizvodima",
     "promoSection": "Promotivni dio",
+    "reviews": "Recenzije",
+    "reviewsSection": "Odjeljak za preglede",
     "staticMapSection": "Odjeljak statičke karte",
     "teamSection": "Ekipa",
-    "testimonialsSection": "Odjeljak za svjedočanstvo",
-    "reviews": "Recenzije"
+    "testimonialsSection": "Odjeljak za svjedočanstvo"
   },
   "confirm": "Potvrditi",
   "coordinate": "Koordinata",
@@ -272,6 +273,7 @@
   "noMatchesFound": "Nijedna meč nije pronađena.",
   "noPromoFieldsMsg": "Da biste koristili sadržaj entiteta za ovaj odjeljak, dodajte polje promo odjeljka u vrstu entiteta svoje stranice.",
   "noResultsFoundForThisArea": "Nisu pronađeni rezultati za ovo područje",
+  "noReviewsFound": "Nema dostupnih recenzija",
   "open24Hours": "Otvoreno 24 sata",
   "openHeaderMenu": "Izbornik otvorenog zaglavlja",
   "openNow": "Otvori sada",
@@ -284,6 +286,7 @@
   "photo": "Fotografija",
   "photoGallerySection": "Odjeljak fotogalerije",
   "product": "Proizvod",
+  "recentReviews": "Nedavne recenzije",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
   "saturday": "subota",
@@ -377,7 +380,5 @@
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
   "wednesday": "srijeda",
-  "yes": "Da",
-  "noReviewsFound": "Nema dostupnih recenzija",
-  "recentReviews": "Nedavne recenzije"
+  "yes": "Da"
 }

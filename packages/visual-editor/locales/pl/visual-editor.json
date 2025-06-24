@@ -52,10 +52,11 @@
     "photoGallerySection": "Sekcja galerii zdjęć",
     "productsSection": "Sekcja produktów",
     "promoSection": "Sekcja promocyjna",
+    "reviews": "Recenzje",
+    "reviewsSection": "Sekcja recenzji",
     "staticMapSection": "Sekcja mapy statycznej",
     "teamSection": "Sekcja zespołu",
-    "testimonialsSection": "Sekcja referencji",
-    "reviews": "Recenzje"
+    "testimonialsSection": "Sekcja referencji"
   },
   "confirm": "Potwierdzać",
   "coordinate": "Koordynować",
@@ -273,6 +274,7 @@
   "noMatchesFound": "Nie znaleziono dopasowań.",
   "noPromoFieldsMsg": "Aby użyć treści encji w tej sekcji, dodaj pole sekcji promocyjnej do typu jednostki grupy strony.",
   "noResultsFoundForThisArea": "Nie znaleziono wyników dla tego obszaru",
+  "noReviewsFound": "Brak dostępnych recenzji",
   "open24Hours": "Otwarte 24 godziny",
   "openHeaderMenu": "Otwarte menu nagłówka",
   "openNow": "Otwórz teraz",
@@ -285,6 +287,7 @@
   "photo": "Zdjęcie",
   "photoGallerySection": "Sekcja galerii zdjęć",
   "product": "Produkt",
+  "recentReviews": "Ostatnie recenzje",
   "recommendedColors": "Zalecane kolory",
   "redo": "Przerobić",
   "saturday": "Sobota",
@@ -378,7 +381,5 @@
   "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
   "visitPage": "Odwiedź stronę",
   "wednesday": "Środa",
-  "yes": "Tak",
-  "noReviewsFound": "Brak dostępnych recenzji",
-  "recentReviews": "Ostatnie recenzje"
+  "yes": "Tak"
 }

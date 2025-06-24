@@ -52,10 +52,11 @@
     "photoGallerySection": "フォトギャラリーセクション",
     "productsSection": "製品セクション",
     "promoSection": "プロモーションセクション",
+    "reviews": "レビュー",
+    "reviewsSection": "レビューセクション",
     "staticMapSection": "静的マップセクション",
     "teamSection": "チームセクション",
-    "testimonialsSection": "証言セクション",
-    "reviews": "レビュー"
+    "testimonialsSection": "証言セクション"
   },
   "confirm": "確認する",
   "coordinate": "座標",
@@ -260,7 +261,7 @@
   "loadingMap": "マップの読み込み...",
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
-  "locationsNear_one": "{{count}}近くの場所 \"{{filterdisplayname}}\"",
+  "locationsNear_one": "{{count}}近くの場所「{{filterdisplayname}} \"",
   "locationsNear_other": "「${{filterDisplayName}}」の近くの${{count}}か所",
   "monday": "月曜日",
   "name": "名前",
@@ -271,6 +272,7 @@
   "noMatchesFound": "一致が見つかりません。",
   "noPromoFieldsMsg": "このセクションでエンティティコンテンツを使用するには、Page Groupのエンティティタイプにプロモーションセクションフィールドを追加します。",
   "noResultsFoundForThisArea": "この領域の結果は見つかりませんでした",
+  "noReviewsFound": "レビューはありません",
   "open24Hours": "２４時間営業",
   "openHeaderMenu": "ヘッダーを開くメニュー",
   "openNow": "今開いてください",
@@ -283,6 +285,7 @@
   "photo": "写真",
   "photoGallerySection": "フォトギャラリーセクション",
   "product": "製品",
+  "recentReviews": "最近のレビュー",
   "recommendedColors": "推奨される色",
   "redo": "やり直します",
   "saturday": "土曜日",
@@ -376,8 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
   "wednesday": "水曜日",
-  "yes": "はい",
-  "noReviewsFound": "レビューはありません",
-  "locationsNear_one": "{{count}}近くの場所「{{filterdisplayname}} \"",
-  "recentReviews": "最近のレビュー"
+  "yes": "はい"
 }

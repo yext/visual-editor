@@ -52,10 +52,11 @@
     "photoGallerySection": "Fotogalleriavsnitt",
     "productsSection": "Produktsektion",
     "promoSection": "Promo -sektion",
+    "reviews": "Recensioner",
+    "reviewsSection": "Recensionsavsnitt",
     "staticMapSection": "Statisk kartavsnitt",
     "teamSection": "Lagavdelning",
-    "testimonialsSection": "Vittnesbörd",
-    "reviews": "Recensioner"
+    "testimonialsSection": "Vittnesbörd"
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Inga matcher hittades.",
   "noPromoFieldsMsg": "För att använda enhetsinnehåll för det här avsnittet, lägg till ett promo -sektionsfält i din sidgrupps enhetstyp.",
   "noResultsFoundForThisArea": "Inga resultat hittades för detta område",
+  "noReviewsFound": "Inga recensioner tillgängliga",
   "open24Hours": "Öppet 24 timmar",
   "openHeaderMenu": "Öppen rubrikmeny",
   "openNow": "Öppet nu",
@@ -283,6 +285,7 @@
   "photo": "Bild",
   "photoGallerySection": "Fotogalleriavsnitt",
   "product": "Produkt",
+  "recentReviews": "Senaste recensioner",
   "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
   "saturday": "Lördag",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
   "wednesday": "Onsdag",
-  "yes": "Ja",
-  "recentReviews": "Senaste recensioner",
-  "noReviewsFound": "Inga recensioner tillgängliga"
+  "yes": "Ja"
 }

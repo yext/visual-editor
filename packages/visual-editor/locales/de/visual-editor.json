@@ -52,10 +52,11 @@
     "photoGallerySection": "Fotogalerie",
     "productsSection": "Produktabschnitt",
     "promoSection": "Promo -Abschnitt",
+    "reviews": "Bewertungen",
+    "reviewsSection": "Bewertungen Abschnitt",
     "staticMapSection": "Statischer Kartenabschnitt",
     "teamSection": "Teamabteilung",
-    "testimonialsSection": "Testimonials Abschnitt",
-    "reviews": "Bewertungen"
+    "testimonialsSection": "Testimonials Abschnitt"
   },
   "confirm": "Bestätigen",
   "coordinate": "Koordinieren",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Keine Übereinstimmungen gefunden.",
   "noPromoFieldsMsg": "Um Entitätsinhalte für diesen Abschnitt zu verwenden, fügen Sie dem Entitätstyp Ihrer Seitengruppe ein Promo -Bereich hinzu.",
   "noResultsFoundForThisArea": "Keine Ergebnisse für diesen Bereich gefunden",
+  "noReviewsFound": "Keine Bewertungen verfügbar",
   "open24Hours": "24 Stunden geöffnet",
   "openHeaderMenu": "Öffnen Sie das Header -Menü",
   "openNow": "Jetzt öffnen",
@@ -283,6 +285,7 @@
   "photo": "Foto",
   "photoGallerySection": "Fotogalerie",
   "product": "Produkt",
+  "recentReviews": "Neuere Bewertungen",
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
   "saturday": "Samstag",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
   "visitPage": "Besuchen Sie die Seite",
   "wednesday": "Mittwoch",
-  "yes": "Ja",
-  "recentReviews": "Neuere Bewertungen",
-  "noReviewsFound": "Keine Bewertungen verfügbar"
+  "yes": "Ja"
 }

@@ -52,10 +52,11 @@
     "photoGallerySection": "Section de la galerie de photos",
     "productsSection": "Section des produits",
     "promoSection": "Section promotionnelle",
+    "reviews": "Critiques",
+    "reviewsSection": "Section des avis",
     "staticMapSection": "Section de carte statique",
     "teamSection": "Section d'équipe",
-    "testimonialsSection": "Section des témoignages",
-    "reviews": "Critiques"
+    "testimonialsSection": "Section des témoignages"
   },
   "confirm": "Confirmer",
   "coordinate": "Coordonner",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Aucune correspondance trouvée.",
   "noPromoFieldsMsg": "Pour utiliser le contenu de l'entité pour cette section, ajoutez un champ de section promotionnel au type d'entité de votre groupe de pages.",
   "noResultsFoundForThisArea": "Aucun résultat trouvé pour cette zone",
+  "noReviewsFound": "Aucune critique disponible",
   "open24Hours": "Ouvrir 24 heures",
   "openHeaderMenu": "Menu en-tête ouvrir",
   "openNow": "Ouvrir maintenant",
@@ -283,6 +285,7 @@
   "photo": "Photo",
   "photoGallerySection": "Section de la galerie de photos",
   "product": "Produit",
+  "recentReviews": "Revues récentes",
   "recommendedColors": "Couleurs recommandées",
   "redo": "Refaire",
   "saturday": "Samedi",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Utilisez notre localisateur pour trouver un emplacement près de chez vous",
   "visitPage": "Page de visite",
   "wednesday": "Mercredi",
-  "yes": "Oui",
-  "noReviewsFound": "Aucune critique disponible",
-  "recentReviews": "Revues récentes"
+  "yes": "Oui"
 }

@@ -52,10 +52,11 @@
     "photoGallerySection": "Fotogalerii sektsioon",
     "productsSection": "Osade sektsioon",
     "promoSection": "Promo osakond",
+    "reviews": "Ülevaated",
+    "reviewsSection": "Arvustuste jaotis",
     "staticMapSection": "Staatiline kaardiosa",
     "teamSection": "Meeskonnaosa",
-    "testimonialsSection": "Iseloomustuste sektsioon",
-    "reviews": "Ülevaated"
+    "testimonialsSection": "Iseloomustuste sektsioon"
   },
   "confirm": "Kinnitama",
   "coordinate": "Koordinaat",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Matše pole leitud.",
   "noPromoFieldsMsg": "Selle jaotise olemi sisu kasutamiseks lisage oma lehe grupi olemi tüübile promo sektsiooni väli.",
   "noResultsFoundForThisArea": "Selle piirkonna kohta tulemusi ei leitud",
+  "noReviewsFound": "Ülevaateid pole saadaval",
   "open24Hours": "Avatud 24 tundi",
   "openHeaderMenu": "Avatud päisemenüü",
   "openNow": "Nüüd avatud",
@@ -283,6 +285,7 @@
   "photo": "Foto",
   "photoGallerySection": "Fotogalerii sektsioon",
   "product": "Toode",
+  "recentReviews": "Viimased ülevaated",
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
   "saturday": "Laupäev",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
   "wednesday": "Kolmapäev",
-  "yes": "Jah",
-  "recentReviews": "Viimased ülevaated",
-  "noReviewsFound": "Ülevaateid pole saadaval"
+  "yes": "Jah"
 }

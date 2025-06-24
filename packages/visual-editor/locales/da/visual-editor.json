@@ -52,10 +52,11 @@
     "photoGallerySection": "Sektion af fotogalleri",
     "productsSection": "Produktafsnit",
     "promoSection": "Promo -sektion",
+    "reviews": "Anmeldelser",
+    "reviewsSection": "Afsnittet",
     "staticMapSection": "Statisk kortafsnit",
     "teamSection": "Holdsektion",
-    "testimonialsSection": "Afsnit for vidnesbyrd",
-    "reviews": "Anmeldelser"
+    "testimonialsSection": "Afsnit for vidnesbyrd"
   },
   "confirm": "Bekræfte",
   "coordinate": "Koordinere",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Ingen kampe fundet.",
   "noPromoFieldsMsg": "For at bruge enhedsindhold til dette afsnit skal du tilføje et promo -sektionsfelt til din sidegruppes enhedstype.",
   "noResultsFoundForThisArea": "Ingen resultater fundet for dette område",
+  "noReviewsFound": "Ingen anmeldelser tilgængelige",
   "open24Hours": "Åben 24 timer",
   "openHeaderMenu": "Åben header -menu",
   "openNow": "Åben nu",
@@ -283,6 +285,7 @@
   "photo": "Foto",
   "photoGallerySection": "Sektion af fotogalleri",
   "product": "Produkt",
+  "recentReviews": "Nylige anmeldelser",
   "recommendedColors": "Anbefalede farver",
   "redo": "Genindstille",
   "saturday": "lørdag",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
   "wednesday": "onsdag",
-  "yes": "Ja",
-  "recentReviews": "Nylige anmeldelser",
-  "noReviewsFound": "Ingen anmeldelser tilgængelige"
+  "yes": "Ja"
 }

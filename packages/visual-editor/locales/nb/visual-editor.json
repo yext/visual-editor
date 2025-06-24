@@ -52,10 +52,11 @@
     "photoGallerySection": "Seksjon av fotogalleri",
     "productsSection": "Produkter",
     "promoSection": "Promo -seksjon",
+    "reviews": "Anmeldelser",
+    "reviewsSection": "Anmeldelser",
     "staticMapSection": "Statisk kartseksjon",
     "teamSection": "Team -seksjon",
-    "testimonialsSection": "Vitnesbyrdsseksjon",
-    "reviews": "Anmeldelser"
+    "testimonialsSection": "Vitnesbyrdsseksjon"
   },
   "confirm": "Bekrefte",
   "coordinate": "Koordinere",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Ingen kamper funnet.",
   "noPromoFieldsMsg": "For å bruke enhetsinnhold for denne delen, legg til et kampanjeseksjonsfelt til sidegruppens enhetstype.",
   "noResultsFoundForThisArea": "Ingen resultater funnet for dette området",
+  "noReviewsFound": "Ingen anmeldelser tilgjengelig",
   "open24Hours": "Åpent 24 timer",
   "openHeaderMenu": "Åpne headermeny",
   "openNow": "Åpne nå",
@@ -283,6 +285,7 @@
   "photo": "Foto",
   "photoGallerySection": "Seksjon av fotogalleri",
   "product": "Produkt",
+  "recentReviews": "Nyere anmeldelser",
   "recommendedColors": "Anbefalte farger",
   "redo": "Gjøre om",
   "saturday": "lørdag",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
   "wednesday": "onsdag",
-  "yes": "Ja",
-  "noReviewsFound": "Ingen anmeldelser tilgjengelig",
-  "recentReviews": "Nyere anmeldelser"
+  "yes": "Ja"
 }

@@ -52,10 +52,11 @@
     "photoGallerySection": "照片库部分",
     "productsSection": "产品部分",
     "promoSection": "促销部分",
+    "reviews": "评论",
+    "reviewsSection": "评论部分",
     "staticMapSection": "静态地图部分",
     "teamSection": "团队部分",
-    "testimonialsSection": "推荐部分",
-    "reviews": "评论"
+    "testimonialsSection": "推荐部分"
   },
   "confirm": "确认",
   "coordinate": "协调",
@@ -260,7 +261,7 @@
   "loadingMap": "加载地图...",
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
-  "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
+  "locationsNear_one": "{{count}}位置附近“ {{filterDisPlayName}}”",
   "locationsNear_other": "{{count}}位置附近“ {{filterDisplayName}}”",
   "monday": "周一",
   "name": "姓名",
@@ -271,6 +272,7 @@
   "noMatchesFound": "找不到比赛。",
   "noPromoFieldsMsg": "要在本节中使用实体内容，请在页面组的实体类型中添加促销部分字段。",
   "noResultsFoundForThisArea": "该区域找不到结果",
+  "noReviewsFound": "没有可用的评论",
   "open24Hours": "打开24小时",
   "openHeaderMenu": "打开标题菜单",
   "openNow": "现在打开",
@@ -283,6 +285,7 @@
   "photo": "照片",
   "photoGallerySection": "照片库部分",
   "product": "产品",
+  "recentReviews": "最近的评论",
   "recommendedColors": "推荐的颜色",
   "redo": "重做",
   "saturday": "周六",
@@ -376,8 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
   "wednesday": "周三",
-  "yes": "是的",
-  "noReviewsFound": "没有可用的评论",
-  "recentReviews": "最近的评论",
-  "locationsNear_one": "{{count}}位置附近“ {{filterDisPlayName}}”"
+  "yes": "是的"
 }

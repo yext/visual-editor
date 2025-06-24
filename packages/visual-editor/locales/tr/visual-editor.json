@@ -52,10 +52,11 @@
     "photoGallerySection": "Fotoğraf Galeri Bölümü",
     "productsSection": "Ürünler Bölümü",
     "promoSection": "Promosyon bölümü",
+    "reviews": "İncelemeler",
+    "reviewsSection": "İncelemeler Bölümü",
     "staticMapSection": "Statik Harita Bölümü",
     "teamSection": "Takım bölümü",
-    "testimonialsSection": "Referans bölümü",
-    "reviews": "İncelemeler"
+    "testimonialsSection": "Referans bölümü"
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Eşleşme bulunamadı.",
   "noPromoFieldsMsg": "Bu bölüm için varlık içeriğini kullanmak için, sayfa grubunuzun varlık türüne bir promosyon bölümü alanı ekleyin.",
   "noResultsFoundForThisArea": "Bu alan için sonuç bulunamadı",
+  "noReviewsFound": "Yorum yok",
   "open24Hours": "24 saat açın",
   "openHeaderMenu": "Başlık Menüsünü Aç",
   "openNow": "Şimdi aç",
@@ -283,6 +285,7 @@
   "photo": "Fotoğraf",
   "photoGallerySection": "Fotoğraf Galeri Bölümü",
   "product": "Ürün",
+  "recentReviews": "Son İncelemeler",
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
   "saturday": "Cumartesi",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
   "wednesday": "Çarşamba",
-  "yes": "Evet",
-  "recentReviews": "Son İncelemeler",
-  "noReviewsFound": "Yorum yok"
+  "yes": "Evet"
 }

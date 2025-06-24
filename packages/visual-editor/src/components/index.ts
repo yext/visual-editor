@@ -7,6 +7,5 @@ export * from "./migrations/index.ts";
 export * from "./header/index.ts";
 export { Directory, type DirectoryProps } from "./Directory.tsx";
 export { LocatorComponent, type LocatorProps } from "./Locator.tsx";
-export { Reviews, type ReviewsProps } from "./Reviews.tsx";
 export { Footer, type FooterProps } from "./Footer.tsx";
 export { defaultThemeConfig } from "./DefaultThemeConfig.ts";

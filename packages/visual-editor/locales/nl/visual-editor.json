@@ -52,10 +52,11 @@
     "photoGallerySection": "Sectie Fotogalerij",
     "productsSection": "Producten sectie",
     "promoSection": "Promotectie",
+    "reviews": "Beoordelingen",
+    "reviewsSection": "Beoordelingen sectie",
     "staticMapSection": "Statische kaartsectie",
     "teamSection": "Teamsectie",
-    "testimonialsSection": "Getuigenissen sectie",
-    "reviews": "Beoordelingen"
+    "testimonialsSection": "Getuigenissen sectie"
   },
   "confirm": "Bevestigen",
   "coordinate": "Coördineren",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Geen overeenkomsten gevonden.",
   "noPromoFieldsMsg": "Als u entiteitsinhoud voor dit gedeelte kunt gebruiken, voegt u een promo -sectieveld toe aan het entiteitstype van uw paginagroep.",
   "noResultsFoundForThisArea": "Geen resultaten gevonden voor dit gebied",
+  "noReviewsFound": "Geen beoordelingen beschikbaar",
   "open24Hours": "24 uur open",
   "openHeaderMenu": "Open koptekstmenu",
   "openNow": "Nu open",
@@ -283,6 +285,7 @@
   "photo": "Foto",
   "photoGallerySection": "Sectie Fotogalerij",
   "product": "Product",
+  "recentReviews": "Recente beoordelingen",
   "recommendedColors": "Aanbevolen kleuren",
   "redo": "Opnieuw doen",
   "saturday": "Zaterdag",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Gebruik onze locator om een ​​locatie bij u in de buurt te vinden",
   "visitPage": "Bezoek pagina",
   "wednesday": "Woensdag",
-  "yes": "Ja",
-  "noReviewsFound": "Geen beoordelingen beschikbaar",
-  "recentReviews": "Recente beoordelingen"
+  "yes": "Ja"
 }

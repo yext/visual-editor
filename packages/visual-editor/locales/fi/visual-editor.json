@@ -52,10 +52,11 @@
     "photoGallerySection": "Valokuvagalleriaosa",
     "productsSection": "Tuoteosio",
     "promoSection": "Promoosio",
+    "reviews": "Arvostelut",
+    "reviewsSection": "Arvosteluosa",
     "staticMapSection": "Staattinen karttaosa",
     "teamSection": "Joukkueosasto",
-    "testimonialsSection": "Suositusosasto",
-    "reviews": "Arvostelut"
+    "testimonialsSection": "Suositusosasto"
   },
   "confirm": "Vahvistaa",
   "coordinate": "Koordinoida",
@@ -271,6 +272,7 @@
   "noMatchesFound": "Ei otteluita löydy.",
   "noPromoFieldsMsg": "Jos haluat käyttää Entity -sisältöä tähän osaan, lisää promo -osio -kenttä sivuryhmän kokonaisuustyyppiin.",
   "noResultsFoundForThisArea": "Tälle alueelle ei löydy tuloksia",
+  "noReviewsFound": "Arvosteluja ei ole käytettävissä",
   "open24Hours": "Avoinna 24 tuntia",
   "openHeaderMenu": "Avaa otsikkovalikko",
   "openNow": "Avoinna nyt",
@@ -283,6 +285,7 @@
   "photo": "Kuva",
   "photoGallerySection": "Valokuvagalleriaosa",
   "product": "Tuote",
+  "recentReviews": "Viimeaikaiset arvostelut",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
   "saturday": "Lauantai",
@@ -376,7 +379,5 @@
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
   "wednesday": "keskiviikko",
-  "yes": "Kyllä",
-  "recentReviews": "Viimeaikaiset arvostelut",
-  "noReviewsFound": "Arvosteluja ei ole käytettävissä"
+  "yes": "Kyllä"
 }
