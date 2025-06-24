@@ -18,6 +18,8 @@ import {
   resolveTranslatableString,
   msg,
   ThemeOptions,
+  useTemplateProps,
+  MaybeLink,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -212,6 +214,8 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
+  relativePrefixToRoot,
+  slug,
 }: {
   key: number;
   styles: NearbyLocationsSectionProps["styles"];
@@ -220,6 +224,8 @@ const LocationCard = ({
   address: any;
   timezone: string;
   mainPhone: string;
+  relativePrefixToRoot?: string;
+  slug?: string;
 }) => {
   return (
     <Background
@@ -227,7 +233,14 @@ const LocationCard = ({
       className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
       as="section"
     >
-      <Heading level={styles?.cardHeadingLevel}>{name}</Heading>
+      <MaybeLink
+        eventName={`link${key}`}
+        alwaysHideCaret={true}
+        className="mb-2"
+        href={relativePrefixToRoot && slug ? relativePrefixToRoot + slug : slug}
+      >
+        <Heading level={styles?.cardHeadingLevel}>{name}</Heading>
+      </MaybeLink>
       {hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
           <HoursStatusAtom
@@ -271,6 +284,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
   const { i18n } = useTranslation();
+  const { relativePrefixToRoot } = useTemplateProps<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     data?.coordinate
@@ -351,6 +365,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
+                    relativePrefixToRoot={relativePrefixToRoot}
+                    slug={location.slug}
                   />
                 )
               )}

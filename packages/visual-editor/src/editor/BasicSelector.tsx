@@ -17,6 +17,7 @@ type BasicSelectorProps = {
   translateOptions?: boolean;
   noOptionsPlaceholder?: string;
   noOptionsMessage?: string;
+  icon?: React.ReactNode;
 };
 
 export const BasicSelector = (props: BasicSelectorProps): Field => {
@@ -29,6 +30,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
       "No options available"
     ),
     noOptionsMessage,
+    icon = <ChevronDown size={16} />,
   } = props;
 
   return {
@@ -43,7 +45,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
       if (!options?.length) {
         return (
           <>
-            <FieldLabel label={label} icon={<ChevronDown size={16} />} />
+            <FieldLabel label={label} icon={icon} />
             <Button
               variant="outline"
               className="ve-w-full ve-justify-between ve-rounded-sm"
@@ -76,7 +78,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
       );
 
       return (
-        <FieldLabel label={pt(label)} icon={<ChevronDown size={16} />}>
+        <FieldLabel label={pt(label)} icon={icon}>
           <Combobox
             defaultValue={
               labelOptions[
