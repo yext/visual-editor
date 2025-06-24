@@ -241,9 +241,18 @@ const ctaVariantOptions = [
 ];
 
 const alignmentOptions = [
-  { label: msg("fields.options.left", "Left"), value: "left" },
-  { label: msg("fields.options.center", "Center"), value: "center" },
-  { label: msg("fields.options.right", "Right"), value: "right" },
+  {
+    label: msg("fields.options.left", "Left", { context: "direction" }),
+    value: "left",
+  },
+  {
+    label: msg("fields.options.center", "Center", { context: "direction" }),
+    value: "center",
+  },
+  {
+    label: msg("fields.options.right", "Right", { context: "direction" }),
+    value: "right",
+  },
 ];
 
 const justifyContentOptions = [
@@ -253,9 +262,18 @@ const justifyContentOptions = [
 ];
 
 const bodyVariantOptions = [
-  { label: msg("fields.options.small", "Small"), value: "sm" },
-  { label: msg("fields.options.base", "Base"), value: "base" },
-  { label: msg("fields.options.large", "Large"), value: "lg" },
+  {
+    label: msg("fields.options.small", "Small", { context: "text size" }),
+    value: "sm",
+  },
+  {
+    label: msg("fields.options.base", "Base", { context: "text size" }),
+    value: "base",
+  },
+  {
+    label: msg("fields.options.large", "Large", { context: "text size" }),
+    value: "lg",
+  },
 ];
 
 const hoursOptions = [
@@ -270,9 +288,16 @@ const hoursOptions = [
 ];
 
 const phoneOptions = [
-  { label: msg("fields.options.domestic", "Domestic"), value: "domestic" },
   {
-    label: msg("fields.options.international", "International"),
+    label: msg("fields.options.domestic", "Domestic", {
+      context: "phone number",
+    }),
+    value: "domestic",
+  },
+  {
+    label: msg("fields.options.international", "International", {
+      context: "phone number",
+    }),
     value: "international",
   },
 ];

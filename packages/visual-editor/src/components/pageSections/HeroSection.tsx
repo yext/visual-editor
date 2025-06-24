@@ -103,8 +103,18 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("fields.options.left", "Left"), value: "left" },
-            { label: msg("fields.options.right", "Right"), value: "right" },
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
           ],
         }
       ),
