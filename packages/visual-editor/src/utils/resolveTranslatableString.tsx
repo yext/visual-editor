@@ -70,31 +70,6 @@ export const resolveTranslatableRichText = (
   }
 };
 
-/**
- * Safely renders a TranslatableRichText value, ensuring it never returns an object
- * @param translatableRichText
- * @param locale
- */
-export const safeRenderTranslatableRichText = (
-  translatableRichText?: TranslatableRichText,
-  locale: string = "en"
-): React.ReactElement | string => {
-  try {
-    const result = resolveTranslatableRichText(translatableRichText, locale);
-
-    // If result is already a React element or string, return it
-    if (React.isValidElement(result) || typeof result === "string") {
-      return result;
-    }
-
-    // If result is an object or anything else, return empty string
-    return "";
-  } catch (error) {
-    console.warn("Error rendering TranslatableRichText:", error);
-    return "";
-  }
-};
-
 function isRichText(value: unknown): value is RichText {
   return (
     typeof value === "object" &&
