@@ -75,7 +75,6 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -83,7 +82,6 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         msg("fields.cardBackgroundColor", "Card Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

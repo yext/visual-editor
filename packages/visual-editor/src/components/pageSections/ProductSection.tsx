@@ -74,7 +74,6 @@ const productSectionFields: Fields<ProductSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -82,7 +81,6 @@ const productSectionFields: Fields<ProductSectionProps> = {
         msg("fields.cardBackgroundColor", "Card Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

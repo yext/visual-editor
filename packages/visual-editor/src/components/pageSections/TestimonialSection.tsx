@@ -72,7 +72,6 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -80,7 +79,6 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
         msg("fields.cardBackgroundColor", "Card Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
