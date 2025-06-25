@@ -2,7 +2,7 @@ import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RichText, TranslatableRichText } from "../../../types/types.ts";
-import { getDisplayValue } from "../../../utils/resolveTranslatableString.tsx";
+import { safeRenderTranslatableRichText } from "../../../utils/resolveTranslatableString.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useState } from "react";
 
@@ -177,7 +177,10 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
               field={{ type: "text" }}
               id={`${id}-value-${index}`}
               value={(() => {
-                const resolvedValue = getDisplayValue(item, locale);
+                const resolvedValue = safeRenderTranslatableRichText(
+                  item,
+                  locale
+                );
                 return typeof resolvedValue === "string" ? resolvedValue : "";
               })()}
               onChange={(val) => updateItem(index, locale, val)}

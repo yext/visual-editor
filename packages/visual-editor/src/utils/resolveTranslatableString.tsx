@@ -95,50 +95,6 @@ export const safeRenderTranslatableRichText = (
   }
 };
 
-/**
- * Takes a TranslatableString and a locale and returns the value to be displayed in the editor input
- * @param translatableString a TranslatableString
- * @param locale "en" or other locale value
- * @return string to be displayed in the editor input
- */
-export function getDisplayValue(
-  translatableString?: TranslatableRichText,
-  locale?: string
-): string {
-  if (!translatableString) {
-    return "";
-  }
-  if (!locale) {
-    locale = "en";
-  }
-  if (typeof translatableString === "string") {
-    return translatableString;
-  }
-
-  if (isRichText(translatableString)) {
-    return richTextToString(translatableString);
-  }
-
-  // Ensure translatableString is an object with the locale property
-  if (typeof translatableString === "object" && translatableString !== null) {
-    const localizedValue: string | RichText = translatableString[locale];
-
-    if (typeof localizedValue === "string") {
-      return localizedValue;
-    }
-
-    if (isRichText(localizedValue)) {
-      return richTextToString(localizedValue);
-    }
-  }
-
-  return "";
-}
-
-function richTextToString(rtf: RichText): string {
-  return rtf.html || rtf.json || "";
-}
-
 function isRichText(value: unknown): value is RichText {
   return (
     typeof value === "object" &&

@@ -1,7 +1,7 @@
 import { TranslatableRichText, RichText } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18nPlatform.ts";
 import { CustomField, FieldLabel } from "@measured/puck";
-import { getDisplayValue } from "../utils/resolveTranslatableString.tsx";
+import { safeRenderTranslatableRichText } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
 import {
   TARGET_ORIGINS,
@@ -22,12 +22,8 @@ export function TranslatableRichTextField<
     render: ({ onChange, value }) => {
       const { i18n } = useTranslation();
       const locale = i18n.language;
-      const resolvedValue = getDisplayValue(value, locale);
+      const resolvedValue = safeRenderTranslatableRichText(value, locale);
       const fieldLabel = label ? (label && pt(label)) + ` (${locale})` : "";
-
-      // Ensure resolvedValue is a string for display
-      const displayValue =
-        typeof resolvedValue === "string" ? resolvedValue : "";
 
       // Ensure fieldLabel is a string
       const safeFieldLabel = typeof fieldLabel === "string" ? fieldLabel : "";
@@ -122,7 +118,7 @@ export function TranslatableRichTextField<
       return (
         <FieldLabel label={safeFieldLabel}>
           <button className="RichTextField" onClick={handleClick}>
-            <div className="ve-line-clamp-3">{displayValue}</div>
+            <div className="ve-line-clamp-3">{resolvedValue}</div>
           </button>
         </FieldLabel>
       );
