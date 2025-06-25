@@ -52,11 +52,7 @@ export const resolveTranslatableRichText = (
       return toStringOrElement(translatableRichText);
     }
 
-    // Ensure translatableRichText is an object with the locale property
-    if (
-      typeof translatableRichText === "object" &&
-      translatableRichText !== null
-    ) {
+    if (typeof translatableRichText === "object") {
       const localizedValue = translatableRichText[locale];
       if (localizedValue) {
         return toStringOrElement(localizedValue);

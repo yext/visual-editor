@@ -20,14 +20,10 @@ export function TranslatableStringField<
       const locale = i18n.language;
       const resolvedValue = resolveTranslatableString(value, locale);
 
-      // Ensure resolvedValue is a string for AutoField
-      const displayValue =
-        typeof resolvedValue === "string" ? resolvedValue : "";
-
       const autoField = (
         <AutoField
           field={{ type: fieldType ?? "text" }}
-          value={displayValue}
+          value={resolvedValue}
           onChange={(val) => {
             return onChange({
               ...(typeof value === "object" && !Array.isArray(value)
@@ -44,11 +40,9 @@ export function TranslatableStringField<
         return <div className={"ve-pt-3"}>{autoField}</div>;
       }
 
-      const fieldLabel = pt(label) + ` (${locale})`;
-      // Ensure fieldLabel is a string
-      const safeFieldLabel = typeof fieldLabel === "string" ? fieldLabel : "";
-
-      return <FieldLabel label={safeFieldLabel}>{autoField}</FieldLabel>;
+      return (
+        <FieldLabel label={`${pt(label)} (${locale})`}>{autoField}</FieldLabel>
+      );
     },
   };
 }

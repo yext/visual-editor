@@ -23,10 +23,7 @@ export function TranslatableRichTextField<
       const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = resolveTranslatableRichText(value, locale);
-      const fieldLabel = label ? (label && pt(label)) + ` (${locale})` : "";
-
-      // Ensure fieldLabel is a string
-      const safeFieldLabel = typeof fieldLabel === "string" ? fieldLabel : "";
+      const fieldLabel = label ? `${pt(label)} (${locale})` : "";
 
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
@@ -55,36 +52,17 @@ export function TranslatableRichTextField<
       const handleClick = () => {
         const messageId = `RichText-${Date.now()}`;
         setPendingMessageId(messageId);
-
-        // Extract the appropriate value to send to Storm
-        let valueToSend = resolvedValue;
-        if (
-          typeof value === "object" &&
-          value &&
-          !Array.isArray(value) &&
-          locale in value
-        ) {
-          const localeValue = (value as Record<string, any>)[locale];
-          if (
-            typeof localeValue === "object" &&
-            localeValue &&
-            "json" in localeValue
-          ) {
-            // If it's a RichText object, send the JSON
-            valueToSend = localeValue.json || "";
-          } else if (typeof localeValue === "string") {
-            // If it's a string, send as is
-            valueToSend = localeValue;
-          }
-        }
+        const valueForLocale = (value as Record<string, any>)[locale];
 
         openConstantValueEditor({
           payload: {
             type: "RichText",
-            value: valueToSend,
+            value: React.isValidElement(resolvedValue)
+              ? valueForLocale.json
+              : valueForLocale,
             id: messageId,
-            fieldName: safeFieldLabel,
-            locale: locale, // Send the current locale to Storm
+            fieldName: fieldLabel,
+            locale: locale,
           },
         });
 
@@ -116,7 +94,7 @@ export function TranslatableRichTextField<
       };
 
       return (
-        <FieldLabel label={safeFieldLabel}>
+        <FieldLabel label={fieldLabel}>
           <button className="RichTextField" onClick={handleClick}>
             <div className="ve-line-clamp-3">{resolvedValue}</div>
           </button>
