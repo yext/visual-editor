@@ -23,7 +23,7 @@ export function TranslatableRichTextField<
       const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = getDisplayValue(value, locale);
-      const fieldLabel = (label && pt(label)) + ` (${locale})`;
+      const fieldLabel = label ? (label && pt(label)) + ` (${locale})` : "";
 
       // Ensure resolvedValue is a string for display
       const displayValue =
@@ -87,7 +87,7 @@ export function TranslatableRichTextField<
             type: "RichText",
             value: valueToSend,
             id: messageId,
-            fieldName: fieldLabel,
+            fieldName: safeFieldLabel,
             locale: locale, // Send the current locale to Storm
           },
         });
