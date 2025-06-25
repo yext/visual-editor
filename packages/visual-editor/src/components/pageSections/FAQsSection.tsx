@@ -73,7 +73,6 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),

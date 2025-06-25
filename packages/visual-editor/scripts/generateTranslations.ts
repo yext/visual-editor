@@ -23,6 +23,44 @@ type TranslationSegment = [
 /** Structured response from the Google Translate API */
 type GoogleTranslateRawResponse = [TranslationSegment[], unknown, string];
 
+// Context separator used by i18next-scanner
+const CONTEXT_SEPARATOR = "_";
+
+// Unique markers for embedding context into the text for translation
+const CONTEXT_MARKER_START = "[[";
+const CONTEXT_MARKER_END = "]]";
+
+// Google Translate API very rarely removes/adds [ or ]
+// Matches one or more opening "[", then any characters (non-greedy), then one or more closing "]"
+const CONTEXT_EMBED_REGEX = new RegExp(`\\[+.*?\\]+`, "g");
+
+/**
+ * Extracts context from a key if it uses the i18next context separator.
+ */
+function extractContextFromKey(key: string): string | null {
+  const parts = key.split(CONTEXT_SEPARATOR);
+  if (parts.length > 1) {
+    return parts[parts.length - 1];
+  }
+  return null;
+}
+
+/**
+ * Inserts context into text to be translated using unique markers.
+ * Ex. "Left" with context "direction" becomes "Left [[direction]]"
+ */
+function embedContextInText(text: string, context: string): string {
+  return `${text} ${CONTEXT_MARKER_START}${context}${CONTEXT_MARKER_END}`;
+}
+
+/**
+ * Removes embedded context from the translated text using the unique markers.
+ * Ex. "Gauche [[direction]]" becomes "Gauche"
+ */
+function removeEmbeddedContext(text: string): string {
+  return text.replace(CONTEXT_EMBED_REGEX, "").trim();
+}
+
 /**
  * Reads all directories under localesDir and returns them as target languages.
  */
@@ -46,7 +84,9 @@ async function translateText(
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error(`Google Translate API error: ${res.status}`);
+    throw new Error(
+      `Google Translate API error: ${res.status} for text: "${text}"`
+    );
   }
 
   const data = (await res.json()) as GoogleTranslateRawResponse;
@@ -147,6 +187,11 @@ async function translateFile(): Promise<void> {
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
 
   for (const lng of await getTargetLanguages()) {
+    if (lng === defaultLng) {
+      console.log(`Skipping default language [${lng}].`);
+      continue;
+    }
+
     const targetPath = path.join(localesDir, lng, `${ns}.json`);
     const targetJson = flatten(await loadJsonSafe(targetPath));
 
@@ -170,20 +215,35 @@ async function translateFile(): Promise<void> {
     let successCount = 0;
     let failCount = 0;
 
-    const translateTasks = keysToTranslate.map(async (key) => {
-      const english = defaultJson[key];
-      try {
-        const translated = await translateText(english, lng);
-        cache.set(key.trim(), translated);
-        successCount++;
-        console.log(`[${lng}] ${key}: "${english}" → "${translated}"`);
-      } catch (e) {
-        failCount++;
-        console.error(`[${lng}] ❌ Failed to translate key "${key}":`, e);
-      }
-    });
+    // Allow all translations to attempt.
+    // Even if some fail, we still have partial results.
+    await Promise.allSettled(
+      keysToTranslate.map(async (key) => {
+        let english = defaultJson[key];
+        const context = extractContextFromKey(key);
 
-    await Promise.all(translateTasks);
+        // If context exists, embed it for translation
+        if (context) {
+          english = embedContextInText(english, context);
+        }
+
+        try {
+          let translated = await translateText(english, lng);
+          // If context was embedded, remove it from the translated text
+          if (context) {
+            translated = removeEmbeddedContext(translated);
+          }
+          cache.set(key.trim(), translated);
+          successCount++;
+          console.log(
+            `[${lng}] ${key}: "${defaultJson[key]}" -> "${translated}"`
+          );
+        } catch (e) {
+          failCount++;
+          console.error(`[${lng}] ❌ Failed to translate key "${key}":`, e);
+        }
+      })
+    );
 
     const finalJson = unflatten(Object.fromEntries(cache));
     if (!isDryRun) {

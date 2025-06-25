@@ -22,6 +22,7 @@ const buttonVariants = cva(
           "ve-bg-secondary ve-text-secondary-foreground hover:ve-bg-secondary/80",
         ghost: "hover:ve-bg-accent hover:ve-text-accent-foreground",
         link: "ve-text-primary ve-underline-offset-4 hover:ve-underline",
+        puckSelect: "", // puck copycat styles applied in puck.css
       },
       size: {
         default: "ve-h-10 ve-px-4 ve-py-2",
@@ -48,7 +49,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={
+          variant === "puckSelect"
+            ? "puck-select"
+            : cn(buttonVariants({ variant, size, className }))
+        }
         ref={ref}
         {...props}
       />

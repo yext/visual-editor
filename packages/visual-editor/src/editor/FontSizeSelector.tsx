@@ -122,11 +122,11 @@ export const FontSizeSelector = (
           icon={<ChevronDown size={16} />}
         >
           <Combobox
-            defaultValue={
+            selectedOption={
               options.find((option) => option.value === value) ?? options[0]
             }
             onChange={(option: any) => onChange(option)}
-            options={options}
+            optionGroups={[{ options }]}
           />
         </FieldLabel>
       );

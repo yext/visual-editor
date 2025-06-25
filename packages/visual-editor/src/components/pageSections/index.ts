@@ -22,6 +22,7 @@ export {
 } from "./PhotoGallerySection.tsx";
 export { PromoSection, type PromoSectionProps } from "./PromoSection.tsx";
 export { ProductSection, type ProductSectionProps } from "./ProductSection.tsx";
+export { ReviewsSection, type ReviewsSectionProps } from "./ReviewsSection.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,

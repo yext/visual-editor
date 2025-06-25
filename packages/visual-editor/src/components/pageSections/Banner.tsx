@@ -50,8 +50,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
-          options: "DARK_BACKGROUND_COLOR",
+          options: "BACKGROUND_COLOR",
         }
       ),
       textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {

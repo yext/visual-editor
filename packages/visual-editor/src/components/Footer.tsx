@@ -43,7 +43,6 @@ const footerFields: Fields<FooterProps> = {
     msg("fields.backgroundColor", "Background Color"),
     {
       type: "select",
-      hasSearch: true,
       options: "BACKGROUND_COLOR",
     }
   ),
