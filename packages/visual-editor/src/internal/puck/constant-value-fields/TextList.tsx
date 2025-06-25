@@ -178,7 +178,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
               id={`${id}-value-${index}`}
               value={(() => {
                 const resolvedValue = resolveTranslatableRichText(item, locale);
-                return typeof resolvedValue === "string" ? resolvedValue : "";
+                return typeof resolvedValue === "string" ? resolvedValue : item;
               })()}
               onChange={(val) => updateItem(index, locale, val)}
             />
