@@ -34,6 +34,7 @@ import {
   ThemeOptions,
   usePlatformTranslation,
   TranslatableStringField,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -677,12 +678,14 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       },
     },
     analytics: {
-      scope: "coreInfoSection",
+      scope: "core",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? ""}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "core"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

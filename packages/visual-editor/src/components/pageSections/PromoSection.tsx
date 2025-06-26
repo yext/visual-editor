@@ -25,6 +25,7 @@ import {
   pt,
   HeadingLevel,
   ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -285,7 +286,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
+      >
         <VisibilityWrapper
           liveVisibility={!!props.liveVisibility}
           isEditing={props.puck.isEditing}
