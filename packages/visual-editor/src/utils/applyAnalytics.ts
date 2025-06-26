@@ -23,6 +23,11 @@ export const applyAnalytics = (document: Record<string, any>) => {
 // getAnalyticsScopeHash hashes the Puck component
 // id into a 3 digit number represented by a string.
 export const getAnalyticsScopeHash = (puckId: string) => {
+  // The puckId should always be provided but it may be missing in tests
+  if (!puckId) {
+    return "000";
+  }
+
   let hash = 0;
   for (let i = 0; i < puckId.length; i++) {
     const char = puckId.charCodeAt(i);
