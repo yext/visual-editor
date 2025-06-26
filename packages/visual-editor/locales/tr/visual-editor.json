@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
   "wednesday": "Çarşamba",
-  "yes": "Evet"
+  "yes": "Evet",
+  "totalReviews_one": "{{count}} inceleme",
+  "totalReviews_other": "{{count}} inceleme"
 }

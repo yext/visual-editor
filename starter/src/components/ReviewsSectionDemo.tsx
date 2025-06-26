@@ -6,11 +6,11 @@ import { BasicSelector, Heading, msg, PageSection } from "@yext/visual-editor";
 
 const TEMP_ENDPOINT = "<STREAMS API ENDPOINT GOES HERE>";
 
-export type ReviewsSectionProps = {
+export type ReviewsSectionDemoProps = {
   placeHolder?: string;
 };
 
-const reviewsFields: Fields<ReviewsSectionProps> = {
+const reviewsFields: Fields<ReviewsSectionDemoProps> = {
   placeHolder: BasicSelector({
     label: "Placeholder",
     options: [
@@ -20,8 +20,8 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
   }),
 };
 
-const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
-  props: ReviewsSectionProps
+const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
+  props: ReviewsSectionDemoProps,
 ) => {
   const { t } = useTranslation();
   const [totalReviews, setTotalReviews] = React.useState(0);
@@ -35,12 +35,12 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
         if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
           throw new Error(
             "API returned errors: " +
-              JSON.stringify(reviews.response.meta.errors)
+              JSON.stringify(reviews.response.meta.errors),
           );
         }
         setTotalReviews(reviews.response.count || 0);
         setAverageRating(
-          Number(calculateAverageRating(reviews.response.docs || []))
+          Number(calculateAverageRating(reviews.response.docs || [])),
         );
       })
       .catch((error) => {
@@ -111,7 +111,7 @@ const ReviewStars = (props: { rating: number }) => {
             <FaStarHalfAlt key={i} />
           ) : (
             <FaRegStar key={i} />
-          )
+          ),
         )}
     </div>
   );
@@ -143,8 +143,8 @@ const calculateAverageRating = (docs: any[]) => {
   return count > 0 ? (totalRating / count).toFixed(1) : 0;
 };
 
-export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
+export const ReviewsSectionDemo: ComponentConfig<ReviewsSectionDemoProps> = {
   fields: reviewsFields,
-  label: msg("components.reviewsSection", "Reviews Section"),
+  label: msg("components.reviewsSectionDemo", "Reviews Section DEMO"),
   render: (props) => <ReviewsSectionInternal {...props} />,
 };

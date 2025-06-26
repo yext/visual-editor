@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
   "wednesday": "水曜日",
-  "yes": "はい"
+  "yes": "はい",
+  "totalReviews_other": "{{count}}件のレビュー",
+  "totalReviews_one": "{{count}}件のレビュー"
 }

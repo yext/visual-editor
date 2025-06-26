@@ -380,5 +380,8 @@
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
   "wednesday": "miercuri",
-  "yes": "Da"
+  "yes": "Da",
+  "totalReviews_one": "{{count}} recenzie",
+  "totalReviews_few": "{{count}} recenzii",
+  "totalReviews_other": "{{count}} recenzii"
 }

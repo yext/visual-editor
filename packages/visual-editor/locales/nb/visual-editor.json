@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
   "wednesday": "onsdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "totalReviews_one": "{{count}} anmeldelse",
+  "totalReviews_other": "{{count}} anmeldelser"
 }

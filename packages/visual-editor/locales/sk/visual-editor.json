@@ -380,5 +380,8 @@
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
   "wednesday": "Streda",
-  "yes": "Áno"
+  "yes": "Áno",
+  "totalReviews_other": "{{count}} recenzií",
+  "totalReviews_one": "{{count}} recenzia",
+  "totalReviews_few": "{{count}} recenzie"
 }

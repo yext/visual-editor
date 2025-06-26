@@ -380,5 +380,7 @@
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
   "visitPage": "Apmeklējuma lapa",
   "wednesday": "Trešdiena",
-  "yes": "Jā"
+  "yes": "Jā",
+  "totalReviews_one": "{{count}} atsauksme",
+  "totalReviews_other": "{{count}} atsauksmes"
 }

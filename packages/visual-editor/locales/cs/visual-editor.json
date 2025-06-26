@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
   "wednesday": "středa",
-  "yes": "Ano"
+  "yes": "Ano",
+  "totalReviews_other": "{{Count}} recenze",
+  "totalReviews_one": "{{Count}} recenze"
 }

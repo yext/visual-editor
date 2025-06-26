@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Gebruik onze locator om een ​​locatie bij u in de buurt te vinden",
   "visitPage": "Bezoek pagina",
   "wednesday": "Woensdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "totalReviews_one": "{{count}} recensie",
+  "totalReviews_other": "{{count}} recensies"
 }

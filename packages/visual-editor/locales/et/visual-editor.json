@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
   "wednesday": "Kolmapäev",
-  "yes": "Jah"
+  "yes": "Jah",
+  "totalReviews_other": "{{krahv}} arvustust",
+  "totalReviews_one": "{{krahv}} arvustus"
 }

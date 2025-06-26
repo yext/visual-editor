@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
   "wednesday": "周三",
-  "yes": "是的"
+  "yes": "是的",
+  "totalReviews_other": "{{count}}条评论",
+  "totalReviews_one": "{{count}}条评论"
 }

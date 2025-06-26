@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
   "wednesday": "szerda",
-  "yes": "Igen"
+  "yes": "Igen",
+  "totalReviews_other": "{{count}} értékelés",
+  "totalReviews_one": "{{count}} értékelés"
 }

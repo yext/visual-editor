@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
   "wednesday": "週三",
-  "yes": "是的"
+  "yes": "是的",
+  "totalReviews_one": "{{count}}則評論",
+  "totalReviews_other": "{{count}}則評論"
 }

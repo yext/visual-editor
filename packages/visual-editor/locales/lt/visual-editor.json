@@ -381,5 +381,8 @@
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
   "wednesday": "Trečiadienis",
-  "yes": "Taip"
+  "yes": "Taip",
+  "totalReviews_one": "{{count}} apžvalga",
+  "totalReviews_few": "{{count}} apžvalgos",
+  "totalReviews_other": "{{count}} apžvalgų"
 }

@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
   "wednesday": "keskiviikko",
-  "yes": "Kyllä"
+  "yes": "Kyllä",
+  "totalReviews_other": "{{kreivi}} arvostelua",
+  "totalReviews_one": "{{count}} arvostelu"
 }

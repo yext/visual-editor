@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
   "wednesday": "onsdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "totalReviews_other": "{{count}} anmeldelser",
+  "totalReviews_one": "{{count}} anmeldelse"
 }

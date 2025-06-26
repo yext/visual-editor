@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
   "wednesday": "Onsdag",
-  "yes": "Ja"
+  "yes": "Ja",
+  "totalReviews_one": "{{count}} recension",
+  "totalReviews_other": "{{count}} recensioner"
 }

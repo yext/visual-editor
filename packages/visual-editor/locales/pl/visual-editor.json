@@ -381,5 +381,8 @@
   "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
   "visitPage": "Odwiedź stronę",
   "wednesday": "Środa",
-  "yes": "Tak"
+  "yes": "Tak",
+  "totalReviews_one": "{{count}} recenzja",
+  "totalReviews_few": "{{count}} recenzje",
+  "totalReviews_other": "{{count}} recenzji"
 }

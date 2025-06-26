@@ -380,5 +380,7 @@
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
   "wednesday": "srijeda",
-  "yes": "Da"
+  "yes": "Da",
+  "totalReviews_other": "{{count}} recenzija",
+  "totalReviews_one": "{{count}} recenzija"
 }

@@ -378,5 +378,7 @@
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
   "visitPage": "Visit Page",
   "wednesday": "Wednesday",
-  "yes": "Yes"
+  "yes": "Yes",
+  "totalReviews_one": "{{count}} review",
+  "totalReviews_other": "{{count}} reviews"
 }

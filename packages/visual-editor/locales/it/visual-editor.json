@@ -379,5 +379,7 @@
   "useOurLocatorToFindALocationNearYou": "Usa il nostro localizzatore per trovare una posizione vicino a te",
   "visitPage": "Visita pagina",
   "wednesday": "Mercoledì",
-  "yes": "SÌ"
+  "yes": "SÌ",
+  "totalReviews_one": "({{count}} recensione)",
+  "totalReviews_other": "({{count}} recensioni)"
 }
