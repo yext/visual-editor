@@ -34,7 +34,7 @@ export const resolveTranslatableString = (
 };
 
 /**
- * Converts a type TranslatableRichText to a type that can be viewed on the page
+ * Converts a type TranslatableRichText to string or RTF Element
  * @param translatableRichText
  * @param locale
  */
@@ -72,6 +72,48 @@ function isRichText(value: unknown): value is RichText {
     value !== null &&
     ("html" in value || "json" in value)
   );
+}
+
+/**
+ * Takes a TranslatableString and a locale and returns the value as a string
+ * @param translatableString a TranslatableString
+ * @param locale "en" or other locale value
+ * @return string to be displayed in the editor input
+ */
+export function getDisplayValue(
+  translatableString?: TranslatableRichText,
+  locale?: string
+): string {
+  if (!translatableString) {
+    return "";
+  }
+  if (!locale) {
+    locale = "en";
+  }
+
+  if (typeof translatableString === "string") {
+    return translatableString;
+  }
+
+  if (isRichText(translatableString)) {
+    return richTextToString(translatableString);
+  }
+
+  const localizedValue: string | RichText = translatableString[locale];
+
+  if (typeof localizedValue === "string") {
+    return localizedValue;
+  }
+
+  if (isRichText(localizedValue)) {
+    return richTextToString(localizedValue);
+  }
+
+  return "";
+}
+
+function richTextToString(rtf: RichText): string {
+  return rtf.html || rtf.json || "";
 }
 
 /**

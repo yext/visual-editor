@@ -25,14 +25,15 @@ export function TranslatableRichTextField<
       const resolvedValue = resolveTranslatableRichText(value, locale);
       const fieldLabel = label ? `${pt(label)} (${locale})` : "";
 
+      const [pendingMessageId, setPendingMessageId] = React.useState<
+        string | undefined
+      >();
+
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
         TARGET_ORIGINS
       );
 
-      const [pendingMessageId, setPendingMessageId] = React.useState<
-        string | undefined
-      >();
       useReceiveMessage(
         "constantValueEditorClosed",
         TARGET_ORIGINS,
@@ -52,25 +53,31 @@ export function TranslatableRichTextField<
       const handleClick = () => {
         const messageId = `RichText-${Date.now()}`;
         setPendingMessageId(messageId);
-        const valueForLocale = (value as Record<string, any>)[locale];
+        const valueForCurrentLocale =
+          typeof value === "object" && value !== null && !Array.isArray(value)
+            ? (value as Record<string, any>)[locale]
+            : undefined;
+
+        const initialValue = React.isValidElement(resolvedValue)
+          ? valueForCurrentLocale?.json
+          : valueForCurrentLocale;
 
         openConstantValueEditor({
           payload: {
             type: "RichText",
-            value: React.isValidElement(resolvedValue)
-              ? valueForLocale.json
-              : valueForLocale,
+            value: initialValue,
             id: messageId,
             fieldName: fieldLabel,
             locale: locale,
           },
         });
 
-        // localDev
+        // for local development testing
         if (
           window.location.href.includes("http://localhost:5173/dev-location")
         ) {
-          handleNewValue(prompt("Enter text:") ?? "", locale);
+          const userInput = prompt("Enter Rich Text (HTML):");
+          handleNewValue("", locale, userInput ?? "");
         }
       };
 
