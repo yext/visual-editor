@@ -17,7 +17,7 @@ import {
 const TEMP_ENDPOINT = "";
 
 export type ReviewsSectionDemoProps = {
-  backgroundColor?: BackgroundStyle;
+  backgroundColor: BackgroundStyle;
 };
 
 const reviewsFields: Fields<ReviewsSectionDemoProps> = {
@@ -37,32 +37,34 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
   const [averageRating, setAverageRating] = React.useState(0);
   const [reviewDocs, setReviewDocs] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const fetchData = async () => {
-    try {
-      const reviews = await fetchReviews();
-      if (!reviews || !reviews.meta) {
-        throw new Error("Invalid response structure from API");
-      }
-      if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
-        throw new Error(
-          "API returned errors: " +
-            JSON.stringify(reviews.response.meta.errors),
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const reviews = await fetchReviews();
+        if (!reviews || !reviews.meta) {
+          throw new Error("Invalid response structure from API");
+        }
+        if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
+          throw new Error(
+            "API returned errors: " +
+              JSON.stringify(reviews.response.meta.errors),
+          );
+        }
+        const reviewsForEntity = filterReviewsToEntity(
+          reviews.response.docs || [],
         );
+        // TODO: this total/avg logic will change once the data is on the JSON+LD
+        setTotalReviews(reviewsForEntity.length);
+        setAverageRating(Number(calculateAverageRating(reviewsForEntity)));
+        setReviewDocs(reviewsForEntity);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      } finally {
+        setIsLoading(false);
       }
-      const reviewsForEntity = filterReviewsToEntity(
-        reviews.response.docs || [],
-      );
-      // TODO: this total/avg logic will change once the data is on the JSON+LD
-      setTotalReviews(reviewsForEntity.length);
-      setAverageRating(Number(calculateAverageRating(reviewsForEntity)));
-      setReviewDocs(reviewsForEntity);
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  fetchData();
+    };
+    fetchData();
+  }, []);
   const hasDarkBackground = props.backgroundColor?.textColor === "text-white";
   const headerProps: ReviewsHeaderProps = {
     totalReviews,
@@ -101,9 +103,7 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
       </Heading>
       <div className="flex flex-row gap-3 items-center justify-center">
         {isLoading ? (
-          <Body className="text-body-md-fontSize">
-            {t("loadingReviews", "Loading reviews...")}
-          </Body>
+          <Body>{t("loadingReviews", "Loading reviews...")}</Body>
         ) : (
           <>
             <ReviewStarsWithRating
@@ -190,12 +190,10 @@ interface AuthorWithDateProps {
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
   return (
     <div className="flex flex-col gap-2">
-      <Body className="font-bold font-body-fontFamily text-body-lg-fontSize">
+      <Body variant={"lg"} className="font-bold">
         {author}
       </Body>
-      <Body className="font-body-fontFamily text-body-md-fontSize">
-        {formatDate(date)}
-      </Body>
+      <Body>{formatDate(date)}</Body>
     </div>
   );
 };
@@ -280,7 +278,7 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
       {preContentElement}
       <Body
         ref={contentRef}
-        className={`text-body-md-fontSize font-body-fontFamily transition-all duration-200 ${!expanded ? "line-clamp-3" : ""}`}
+        className={`transition-all duration-200 ${!expanded ? "line-clamp-3" : ""}`}
         style={{ overflowWrap: "anywhere" }}
       >
         {content}
@@ -344,13 +342,13 @@ const ShowMoreButton: React.FC<{
   const { t } = useTranslation();
   return (
     <Button
-      className="font-body-fontFamily text-body-md-fontSize underline cursor-pointer inline-flex items-center"
+      className="font-body-fontFamily text-body-md-fontSize underline cursor-pointer inline-flex items-center gap-2"
       onClick={() => setExpanded(!expanded)}
       variant={"link"}
     >
       {expanded ? t("showLess", "Show less") : t("showMore", "Show more")}
       <IoIosArrowDown
-        className={`ml-1 transition-transform ${expanded ? "rotate-180" : ""}`}
+        className={`transition-transform ${expanded ? "rotate-180" : ""}`}
         style={{ textDecoration: "underline" }}
       />
     </Button>
