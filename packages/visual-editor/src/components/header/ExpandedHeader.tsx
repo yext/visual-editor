@@ -375,9 +375,12 @@ const HeaderLinks = ({
     <nav aria-label={`${type} Header Links`}>
       <ul className="flex flex-col md:flex-row gap-4 md:gap-8 py-4 md:py-0">
         {links.map((item, index) => (
-          <li key={index}>
+          <li key={`${type.toLowerCase()}.${index}`}>
             <Link
-              eventName={`${type.toLowerCase()}Link${index}`}
+              eventName={t(
+                `cta.${type.toLowerCase()}.${index}`,
+                `Link ${index + 1}`
+              )}
               cta={{
                 label: item.label,
                 linkType: item.linkType,
@@ -478,8 +481,8 @@ const buildComplexImage = (
   return {
     image: {
       url: safeUrl,
+      width,
       height: width / 2,
-      width: width,
       alternateText: "Logo",
     },
   };
@@ -557,8 +560,8 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         },
       },
       secondaryHeader: {
-        show: true,
-        showLanguageDropdown: true,
+        show: false,
+        showLanguageDropdown: false,
         secondaryLinks: [
           {
             linkType: "URL",
