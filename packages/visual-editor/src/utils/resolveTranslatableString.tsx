@@ -34,7 +34,7 @@ export const resolveTranslatableString = (
 };
 
 /**
- * Converts a type TranslatableRichText to a type that can be viewed on the page
+ * Converts a type TranslatableRichText to string or RTF Element
  * @param translatableRichText
  * @param locale
  */
@@ -42,25 +42,40 @@ export const resolveTranslatableRichText = (
   translatableRichText?: TranslatableRichText,
   locale: string = "en"
 ): string | React.ReactElement => {
-  if (!translatableRichText) return "";
+  try {
+    if (!translatableRichText) return "";
 
-  if (
-    typeof translatableRichText === "string" ||
-    isRichText(translatableRichText)
-  ) {
-    return toStringOrElement(translatableRichText);
+    if (
+      typeof translatableRichText === "string" ||
+      isRichText(translatableRichText)
+    ) {
+      return toStringOrElement(translatableRichText);
+    }
+
+    if (typeof translatableRichText === "object") {
+      const localizedValue = translatableRichText[locale];
+      if (localizedValue) {
+        return toStringOrElement(localizedValue);
+      }
+    }
+
+    return "";
+  } catch (error) {
+    console.warn("Error in resolveTranslatableRichText:", error);
+    return "";
   }
-
-  const localizedValue = translatableRichText[locale];
-  if (localizedValue) {
-    return toStringOrElement(localizedValue);
-  }
-
-  return "";
 };
 
+function isRichText(value: unknown): value is RichText {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("html" in value || "json" in value)
+  );
+}
+
 /**
- * Takes a TranslatableString and a locale and returns the value to be displayed in the editor input
+ * Takes a TranslatableString and a locale and returns the value as a string
  * @param translatableString a TranslatableString
  * @param locale "en" or other locale value
  * @return string to be displayed in the editor input
@@ -75,6 +90,7 @@ export function getDisplayValue(
   if (!locale) {
     locale = "en";
   }
+
   if (typeof translatableString === "string") {
     return translatableString;
   }
@@ -100,14 +116,6 @@ function richTextToString(rtf: RichText): string {
   return rtf.html || rtf.json || "";
 }
 
-function isRichText(value: unknown): value is RichText {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    ("html" in value || "json" in value)
-  );
-}
-
 /**
  * Converts a "string | RichText" type to "string | React.ReactElement" which can be viewed on the page
  * @param value
@@ -118,5 +126,12 @@ function toStringOrElement(
   if (isRichText(value)) {
     return <MaybeRTF data={value} />;
   }
-  return value ?? "";
+
+  // Ensure we only return strings
+  if (typeof value === "string") {
+    return value;
+  }
+
+  // If value is anything else (object, number, etc.), return empty string
+  return "";
 }

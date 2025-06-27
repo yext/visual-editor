@@ -169,7 +169,10 @@ const SubfieldsInput = ({
                   constantValueEnabled={value?.constantValueOverride?.[field]}
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
                   label={label}
-                  showLocale={type === "type.string" && !disallowTranslation}
+                  showLocale={
+                    (type === "type.string" || type === "type.rich_text_v2") &&
+                    !disallowTranslation
+                  }
                 />
               </div>
               {value?.constantValueOverride?.[field] && (

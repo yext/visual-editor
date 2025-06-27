@@ -15,7 +15,7 @@ export const MaybeRTF = ({
   const background = useBackground();
 
   if (!data) {
-    return undefined;
+    return <></>;
   }
 
   if (typeof data === "string") {
@@ -41,4 +41,6 @@ export const MaybeRTF = ({
       return <LexicalRichText serializedAST={JSON.stringify(data.json)} />;
     }
   }
+
+  return <></>;
 };
