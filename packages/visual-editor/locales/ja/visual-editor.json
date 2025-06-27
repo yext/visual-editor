@@ -381,5 +381,9 @@
   "wednesday": "水曜日",
   "yes": "はい",
   "totalReviews_other": "{{count}}件のレビュー",
-  "totalReviews_one": "{{count}}件のレビュー"
+  "totalReviews_one": "{{count}}件のレビュー",
+  "loadingReviews": "レビューの読み込み...",
+  "responseFrom": "{{businessName}}からの応答",
+  "showLess": "少なく表示します",
+  "showMore": "もっと見せてください"
 }

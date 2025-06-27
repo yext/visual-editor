@@ -384,5 +384,9 @@
   "yes": "Tak",
   "totalReviews_one": "{{count}} recenzja",
   "totalReviews_few": "{{count}} recenzje",
-  "totalReviews_other": "{{count}} recenzji"
+  "totalReviews_other": "{{count}} recenzji",
+  "loadingReviews": "Ładowanie recenzji ...",
+  "responseFrom": "Odpowiedź od {{businessName}}",
+  "showLess": "Pokaż mniej",
+  "showMore": "Pokaż więcej"
 }

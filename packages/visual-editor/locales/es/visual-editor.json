@@ -381,5 +381,9 @@
   "wednesday": "Miércoles",
   "yes": "Sí",
   "totalReviews_one": "{{count}} reseña",
-  "totalReviews_other": "{{Count}} reseñas"
+  "totalReviews_other": "{{count}} reseñas",
+  "loadingReviews": "Cargando reseñas ...",
+  "responseFrom": "Respuesta de {{businessName}}",
+  "showLess": "Mostrar menos",
+  "showMore": "Mostrar más"
 }

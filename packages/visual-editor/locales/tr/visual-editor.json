@@ -381,5 +381,9 @@
   "wednesday": "Çarşamba",
   "yes": "Evet",
   "totalReviews_one": "{{count}} inceleme",
-  "totalReviews_other": "{{count}} inceleme"
+  "totalReviews_other": "{{count}} inceleme",
+  "loadingReviews": "Yükleme İncelemeleri ...",
+  "responseFrom": "{{businessName}} 'dan yanıt",
+  "showLess": "Daha az göster",
+  "showMore": "Daha Fazla Göster"
 }

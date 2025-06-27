@@ -380,6 +380,10 @@
   "visitPage": "Külastage leht",
   "wednesday": "Kolmapäev",
   "yes": "Jah",
-  "totalReviews_other": "{{krahv}} arvustust",
-  "totalReviews_one": "{{krahv}} arvustus"
+  "totalReviews_other": "{{count}} arvustust",
+  "totalReviews_one": "{{count}} arvustus",
+  "loadingReviews": "Ülevaadete laadimine ...",
+  "responseFrom": "Vastus {{businessName}}",
+  "showLess": "Näitama vähem",
+  "showMore": "Näidata veel"
 }

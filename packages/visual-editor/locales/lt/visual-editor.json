@@ -384,5 +384,9 @@
   "yes": "Taip",
   "totalReviews_one": "{{count}} apžvalga",
   "totalReviews_few": "{{count}} apžvalgos",
-  "totalReviews_other": "{{count}} apžvalgų"
+  "totalReviews_other": "{{count}} apžvalgų",
+  "loadingReviews": "Įkeliamos apžvalgos ...",
+  "responseFrom": "Atsakymas iš {{businessName}}",
+  "showLess": "Parodyk mažiau",
+  "showMore": "Parodyk daugiau"
 }

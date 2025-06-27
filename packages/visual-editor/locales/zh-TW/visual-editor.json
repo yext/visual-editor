@@ -381,5 +381,9 @@
   "wednesday": "週三",
   "yes": "是的",
   "totalReviews_one": "{{count}}則評論",
-  "totalReviews_other": "{{count}}則評論"
+  "totalReviews_other": "{{count}}則評論",
+  "loadingReviews": "加載評論...",
+  "responseFrom": "{{businessName}}的響應",
+  "showLess": "少顯示",
+  "showMore": "顯示更多"
 }

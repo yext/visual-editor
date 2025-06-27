@@ -382,5 +382,9 @@
   "wednesday": "srijeda",
   "yes": "Da",
   "totalReviews_other": "{{count}} recenzija",
-  "totalReviews_one": "{{count}} recenzija"
+  "totalReviews_one": "{{count}} recenzija",
+  "loadingReviews": "Učitavanje recenzija ...",
+  "responseFrom": "Odgovor od {{businessName}}",
+  "showLess": "Pokazati manje",
+  "showMore": "Pokažite više"
 }

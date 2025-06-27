@@ -381,5 +381,9 @@
   "wednesday": "Woensdag",
   "yes": "Ja",
   "totalReviews_one": "{{count}} recensie",
-  "totalReviews_other": "{{count}} recensies"
+  "totalReviews_other": "{{count}} recensies",
+  "loadingReviews": "Beoordelingen laden ...",
+  "responseFrom": "Reactie van {{businessName}}",
+  "showLess": "Minder laten zien",
+  "showMore": "Laat meer zien"
 }

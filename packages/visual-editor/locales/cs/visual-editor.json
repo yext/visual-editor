@@ -380,6 +380,10 @@
   "visitPage": "Navštivte stránku",
   "wednesday": "středa",
   "yes": "Ano",
-  "totalReviews_other": "{{Count}} recenze",
-  "totalReviews_one": "{{Count}} recenze"
+  "totalReviews_other": "{{count}} recenze",
+  "totalReviews_one": "{{count}} recenze",
+  "loadingReviews": "Načítání recenzí ...",
+  "responseFrom": "Odpověď od {{businessName}}",
+  "showLess": "Ukázat méně",
+  "showMore": "Ukázat více"
 }

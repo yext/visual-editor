@@ -381,5 +381,9 @@
   "wednesday": "szerda",
   "yes": "Igen",
   "totalReviews_other": "{{count}} értékelés",
-  "totalReviews_one": "{{count}} értékelés"
+  "totalReviews_one": "{{count}} értékelés",
+  "loadingReviews": "A vélemények betöltése ...",
+  "responseFrom": "Válasz a {{businessName}} -ból",
+  "showLess": "Mutasson kevesebbet",
+  "showMore": "Mutasson többet"
 }

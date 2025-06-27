@@ -381,5 +381,9 @@
   "wednesday": "onsdag",
   "yes": "Ja",
   "totalReviews_one": "{{count}} anmeldelse",
-  "totalReviews_other": "{{count}} anmeldelser"
+  "totalReviews_other": "{{count}} anmeldelser",
+  "loadingReviews": "Laster inn anmeldelser ...",
+  "responseFrom": "Svar fra {{businessName}}",
+  "showLess": "Vis mindre",
+  "showMore": "Vis mer"
 }

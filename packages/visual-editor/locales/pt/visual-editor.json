@@ -381,5 +381,9 @@
   "wednesday": "Quarta-feira",
   "yes": "Sim",
   "totalReviews_one": "{{count}} avaliação",
-  "totalReviews_other": "{{count}} avaliações"
+  "totalReviews_other": "{{count}} avaliações",
+  "loadingReviews": "Revisões de carregamento ...",
+  "responseFrom": "Resposta de {{businessName}}",
+  "showLess": "Mostre menos",
+  "showMore": "Mostre mais"
 }

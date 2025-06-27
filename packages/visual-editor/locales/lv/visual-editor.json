@@ -382,5 +382,9 @@
   "wednesday": "Trešdiena",
   "yes": "Jā",
   "totalReviews_one": "{{count}} atsauksme",
-  "totalReviews_other": "{{count}} atsauksmes"
+  "totalReviews_other": "{{count}} atsauksmes",
+  "loadingReviews": "Atsauksmju ielāde ...",
+  "responseFrom": "Atbilde no {{businessName}}",
+  "showLess": "Rādīt mazāk",
+  "showMore": "Parādīt vairāk"
 }

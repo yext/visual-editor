@@ -381,5 +381,9 @@
   "wednesday": "onsdag",
   "yes": "Ja",
   "totalReviews_other": "{{count}} anmeldelser",
-  "totalReviews_one": "{{count}} anmeldelse"
+  "totalReviews_one": "{{count}} anmeldelse",
+  "loadingReviews": "Indlæser anmeldelser ...",
+  "responseFrom": "Svar fra {{businessName}}",
+  "showLess": "Vis mindre",
+  "showMore": "Vis mere"
 }

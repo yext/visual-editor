@@ -381,5 +381,9 @@
   "wednesday": "Mercredi",
   "yes": "Oui",
   "totalReviews_other": "{{count}} avis",
-  "totalReviews_one": "{{count}} avis"
+  "totalReviews_one": "{{count}} avis",
+  "loadingReviews": "Chargement des critiques ...",
+  "responseFrom": "Réponse de {{businessName}}",
+  "showLess": "Montrer moins",
+  "showMore": "Montrer plus"
 }

@@ -383,5 +383,9 @@
   "yes": "Da",
   "totalReviews_one": "{{count}} recenzie",
   "totalReviews_few": "{{count}} recenzii",
-  "totalReviews_other": "{{count}} recenzii"
+  "totalReviews_other": "{{count}} recenzii",
+  "loadingReviews": "Încărcarea recenziilor ...",
+  "responseFrom": "Răspuns de la {{businessName}}",
+  "showLess": "Arată mai puțin",
+  "showMore": "Arată mai mult"
 }

@@ -380,6 +380,10 @@
   "visitPage": "Vieraile sivussa",
   "wednesday": "keskiviikko",
   "yes": "Kyllä",
-  "totalReviews_other": "{{kreivi}} arvostelua",
-  "totalReviews_one": "{{count}} arvostelu"
+  "totalReviews_other": "{{count}} arvostelua",
+  "totalReviews_one": "{{count}} arvostelu",
+  "loadingReviews": "Ladataan arvosteluja ...",
+  "responseFrom": "Vastaus {{businessName}}",
+  "showLess": "Näyttää vähemmän",
+  "showMore": "Näyttää enemmän"
 }

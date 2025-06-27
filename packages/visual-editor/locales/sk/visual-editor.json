@@ -383,5 +383,9 @@
   "yes": "Áno",
   "totalReviews_other": "{{count}} recenzií",
   "totalReviews_one": "{{count}} recenzia",
-  "totalReviews_few": "{{count}} recenzie"
+  "totalReviews_few": "{{count}} recenzie",
+  "loadingReviews": "Recenzie načítania ...",
+  "responseFrom": "Odpoveď z {{businessName}}",
+  "showLess": "Vykazovať menej",
+  "showMore": "Ukázať viac"
 }
