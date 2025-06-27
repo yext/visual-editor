@@ -678,13 +678,13 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
       },
     },
     analytics: {
-      scope: "core",
+      scope: "coreInfoSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
     <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "core"}${getAnalyticsScopeHash(props.id)}`}
+      name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
     >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}

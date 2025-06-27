@@ -28,11 +28,10 @@ export const getAnalyticsScopeHash = (puckId: string) => {
     return "000";
   }
 
-  let hash = 0;
+  // DJB2 hash algorithm
+  let hash = 5381;
   for (let i = 0; i < puckId.length; i++) {
-    const char = puckId.charCodeAt(i);
-    hash = (hash << 5) - hash + char; // DJB2-like hash algorithm
-    hash |= 0;
+    hash = ((hash << 5) + hash) ^ puckId.charCodeAt(i);
   }
 
   return String(Math.abs(hash) % 1000).padStart(3, "0");
