@@ -11,6 +11,7 @@ import {
 import {
   Background,
   backgroundColors,
+  BackgroundStyle,
   Body,
   fetchLocalesToPathsForEntity,
 } from "@yext/visual-editor";
@@ -24,6 +25,7 @@ export interface LanguageDropdownProps {
   contentDeliveryAPIDomain: string;
   locales: string[];
   currentLocale: string;
+  background?: BackgroundStyle;
 }
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
@@ -35,6 +37,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   contentDeliveryAPIDomain,
   locales,
   currentLocale,
+  background,
 }) => {
   const scopedLocales = new Set<string>(locales);
   const [validLocalesToPaths, setValidLocalesToPaths] = React.useState<
@@ -97,7 +100,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
 
   return (
     <Background
-      background={backgroundColors.background1.value}
+      background={background || backgroundColors.background1.value}
       as="div"
       className={className}
     >
@@ -113,7 +116,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           {(status === "COMPLETE" || status === "ERROR") &&
             Object.entries(validLocalesToPaths).map(([locale, path]) => (
               <Background
-                background={backgroundColors.background1.value}
+                background={background || backgroundColors.background1.value}
                 as="div"
                 key={locale}
               >
