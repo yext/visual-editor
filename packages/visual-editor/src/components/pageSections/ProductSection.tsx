@@ -24,6 +24,7 @@ import {
   msg,
   pt,
   ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -113,12 +114,12 @@ const productSectionFields: Fields<ProductSectionProps> = {
 };
 
 const ProductCard = ({
-  key,
+  cardNumber,
   product,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardNumber: number;
   product: ProductStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -168,7 +169,7 @@ const ProductCard = ({
         </div>
         {product.cta && (
           <CTA
-            eventName={`cta${key}`}
+            eventName={`cta${cardNumber}`}
             variant="secondary"
             label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
@@ -226,6 +227,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
             {resolvedProducts.products.map((product, index) => (
               <ProductCard
                 key={index}
+                cardNumber={index}
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
@@ -265,12 +267,14 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       },
     },
     analytics: {
-      scope: "productSection",
+      scope: "productsSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "productSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

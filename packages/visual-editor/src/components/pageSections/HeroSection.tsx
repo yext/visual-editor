@@ -27,6 +27,7 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -452,7 +453,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     return heroSectionFields;
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={!!props.liveVisibility}
         isEditing={props.puck.isEditing}
