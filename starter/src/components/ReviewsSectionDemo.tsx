@@ -16,22 +16,22 @@ import {
 
 const TEMP_ENDPOINT = "";
 
-export type ReviewsSectionProps = {
+export type ReviewsSectionDemoProps = {
   backgroundColor: BackgroundStyle;
 };
 
-const reviewsFields: Fields<ReviewsSectionProps> = {
+const reviewsFields: Fields<ReviewsSectionDemoProps> = {
   backgroundColor: YextField(
     msg("fields.backgroundColor", "Background Color"),
     {
       type: "select",
       options: "BACKGROUND_COLOR",
-    }
+    },
   ),
 };
 
-const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
-  props: ReviewsSectionProps
+const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
+  props: ReviewsSectionDemoProps,
 ) => {
   const [totalReviews, setTotalReviews] = React.useState(0);
   const [averageRating, setAverageRating] = React.useState(0);
@@ -47,11 +47,11 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
         if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
           throw new Error(
             "API returned errors: " +
-              JSON.stringify(reviews.response.meta.errors)
+              JSON.stringify(reviews.response.meta.errors),
           );
         }
         const reviewsForEntity = filterReviewsToEntity(
-          reviews.response.docs || []
+          reviews.response.docs || [],
         );
         // TODO: this total/avg logic will change once the data is on the JSON+LD
         setTotalReviews(reviewsForEntity.length);
@@ -266,7 +266,7 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
     if (contentRef.current && !expanded) {
       // Check if the content is truncated
       setIsTruncated(
-        contentRef.current.scrollHeight > contentRef.current.clientHeight
+        contentRef.current.scrollHeight > contentRef.current.clientHeight,
       );
     } else {
       setIsTruncated(false);
@@ -329,7 +329,7 @@ const ReviewStars: React.FC<ReviewStarsProps> = (props) => {
               key={i}
               style={hasDarkBackground ? { display: "none" } : undefined}
             />
-          )
+          ),
         )}
     </div>
   );
@@ -408,8 +408,8 @@ function formatDate(date: Date): string {
   });
 }
 
-export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
+export const ReviewsSectionDemo: ComponentConfig<ReviewsSectionDemoProps> = {
   fields: reviewsFields,
-  label: msg("components.reviewsSection", "Reviews Section"),
+  label: msg("components.reviewsSectionDemo", "Reviews Section DEMO"),
   render: (props) => <ReviewsSectionInternal {...props} />,
 };

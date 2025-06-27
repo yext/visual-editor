@@ -34,6 +34,10 @@ import {
 } from "./pageSections/PhotoGallerySection.tsx";
 import { FAQSection, FAQSectionProps } from "./pageSections/FAQsSection.tsx";
 import {
+  ReviewsSection,
+  ReviewsSectionProps,
+} from "./pageSections/ReviewsSection.tsx";
+import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
@@ -68,35 +72,37 @@ import {
 } from "./pageSections/StaticMapSection.tsx";
 
 export interface PageSectionCategoryProps {
+  BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
-  HeroSection: HeroSectionProps;
-  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
+  EventSection: EventSectionProps;
+  FAQSection: FAQSectionProps;
+  HeroSection: HeroSectionProps;
   InsightSection: InsightSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
-  BannerSection: BannerSectionProps;
+  PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
-  PhotoGallerySection: PhotoGallerySectionProps;
-  TeamSection: TeamSectionProps;
-  FAQSection: FAQSectionProps;
+  ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
+  TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
-  BreadcrumbsSection,
-  HeroSection,
-  CoreInfoSection,
-  NearbyLocationsSection,
   BannerSection,
-  PhotoGallerySection,
-  StaticMapSection,
+  BreadcrumbsSection,
+  CoreInfoSection,
   EventSection,
   FAQSection,
+  HeroSection,
   InsightSection,
+  NearbyLocationsSection,
+  PhotoGallerySection,
   ProductSection,
   PromoSection,
+  ReviewsSection,
+  StaticMapSection,
   TeamSection,
   TestimonialSection,
 };
