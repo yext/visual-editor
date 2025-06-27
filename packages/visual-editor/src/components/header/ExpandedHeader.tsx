@@ -494,8 +494,13 @@ const MobileSection = ({
   background?: BackgroundStyle;
   className?: string;
 }) => (
-  <section className={`px-4 ${className ?? ""}`.trim()}>
-    <Background background={background}>{children}</Background>
+  <section>
+    <Background
+      className={`px-4 ${className ?? ""}`.trim()}
+      background={background}
+    >
+      {children}
+    </Background>
   </section>
 );
 
