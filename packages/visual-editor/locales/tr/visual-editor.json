@@ -259,6 +259,7 @@
     "url": "Url"
   },
   "loadingMap": "Yükleme haritası ...",
+  "loadingReviews": "Yükleme İncelemeleri ...",
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
   "locationsNear_one": "{{count}} konum \"{{filterDisplayName}}\" yakınında",
@@ -288,6 +289,7 @@
   "recentReviews": "Son İncelemeler",
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
+  "responseFrom": "{{businessName}} 'dan yanıt",
   "saturday": "Cumartesi",
   "search": "Aramak",
   "searchDropdownHere": "Arama açılır girişi",
@@ -297,6 +299,8 @@
   "selectAnOption": "Bir seçenek seçin",
   "servicesSection": "Hizmetler Bölümü",
   "showLabels": "Etiketleri Göster",
+  "showLess": "Daha az göster",
+  "showMore": "Daha Fazla Göster",
   "siteColors": "Site Renkleri",
   "spacingDefaultLabel": "Varsayılan",
   "staticContent": "Statik içerik",
@@ -372,6 +376,8 @@
   },
   "thursday": "Perşembe",
   "title": "Başlık",
+  "totalReviews_one": "{{count}} inceleme",
+  "totalReviews_other": "{{count}} inceleme",
   "tuesday": "Salı",
   "undo": "Geri almak",
   "update": "Güncelleme",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
   "wednesday": "Çarşamba",
-  "yes": "Evet",
-  "totalReviews_one": "{{count}} inceleme",
-  "totalReviews_other": "{{count}} inceleme",
-  "loadingReviews": "Yükleme İncelemeleri ...",
-  "responseFrom": "{{businessName}} 'dan yanıt",
-  "showLess": "Daha az göster",
-  "showMore": "Daha Fazla Göster"
+  "yes": "Evet"
 }

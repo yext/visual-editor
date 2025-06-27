@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Carte de chargement ...",
+  "loadingReviews": "Chargement des critiques ...",
   "loadingVE": "Chargement de l'éditeur visuel ...",
   "localGeomodifier": "Géomodificateur local",
   "locationsNear_one": "{{count}} emplacement près de «{{filterDisplayName}}»",
@@ -288,6 +289,7 @@
   "recentReviews": "Revues récentes",
   "recommendedColors": "Couleurs recommandées",
   "redo": "Refaire",
+  "responseFrom": "Réponse de {{businessName}}",
   "saturday": "Samedi",
   "search": "Recherche",
   "searchDropdownHere": "Entrée déroulante de recherche",
@@ -297,6 +299,8 @@
   "selectAnOption": "Sélectionnez une option",
   "servicesSection": "Section des services",
   "showLabels": "Montrer les étiquettes",
+  "showLess": "Montrer moins",
+  "showMore": "Montrer plus",
   "siteColors": "Couleurs du site",
   "spacingDefaultLabel": "Défaut",
   "staticContent": "Contenu statique",
@@ -372,6 +376,8 @@
   },
   "thursday": "Jeudi",
   "title": "Titre",
+  "totalReviews_one": "{{count}} avis",
+  "totalReviews_other": "{{count}} avis",
   "tuesday": "Mardi",
   "undo": "Défaire",
   "update": "Mise à jour",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Utilisez notre localisateur pour trouver un emplacement près de chez vous",
   "visitPage": "Page de visite",
   "wednesday": "Mercredi",
-  "yes": "Oui",
-  "totalReviews_other": "{{count}} avis",
-  "totalReviews_one": "{{count}} avis",
-  "loadingReviews": "Chargement des critiques ...",
-  "responseFrom": "Réponse de {{businessName}}",
-  "showLess": "Montrer moins",
-  "showMore": "Montrer plus"
+  "yes": "Oui"
 }

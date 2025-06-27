@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Indlæsningskort ...",
+  "loadingReviews": "Indlæser anmeldelser ...",
   "loadingVE": "Indlæser visuel redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
   "locationsNear_one": "{{count}} placering nær „{{filterDisplayName}}“",
@@ -288,6 +289,7 @@
   "recentReviews": "Nylige anmeldelser",
   "recommendedColors": "Anbefalede farver",
   "redo": "Genindstille",
+  "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",
   "search": "Søge",
   "searchDropdownHere": "Søg rullelinjet",
@@ -297,6 +299,8 @@
   "selectAnOption": "Vælg en mulighed",
   "servicesSection": "Servicesektion",
   "showLabels": "Vis etiketter",
+  "showLess": "Vis mindre",
+  "showMore": "Vis mere",
   "siteColors": "Webstedsfarver",
   "spacingDefaultLabel": "Misligholdelse",
   "staticContent": "Statisk indhold",
@@ -372,6 +376,8 @@
   },
   "thursday": "torsdag",
   "title": "Titel",
+  "totalReviews_one": "{{count}} anmeldelse",
+  "totalReviews_other": "{{count}} anmeldelser",
   "tuesday": "tirsdag",
   "undo": "Fortryd",
   "update": "Opdatering",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
   "wednesday": "onsdag",
-  "yes": "Ja",
-  "totalReviews_other": "{{count}} anmeldelser",
-  "totalReviews_one": "{{count}} anmeldelse",
-  "loadingReviews": "Indlæser anmeldelser ...",
-  "responseFrom": "Svar fra {{businessName}}",
-  "showLess": "Vis mindre",
-  "showMore": "Vis mere"
+  "yes": "Ja"
 }

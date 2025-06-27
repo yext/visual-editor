@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Ładowanie mapy ...",
+  "loadingReviews": "Ładowanie recenzji ...",
   "loadingVE": "Ładowanie edytora wizualnego ...",
   "localGeomodifier": "Lokalny geomodyfikator",
   "locationsNear_few": "{{count}} lokalizacje w pobliżu „{{filterDisplayName}}”",
@@ -290,6 +291,7 @@
   "recentReviews": "Ostatnie recenzje",
   "recommendedColors": "Zalecane kolory",
   "redo": "Przerobić",
+  "responseFrom": "Odpowiedź od {{businessName}}",
   "saturday": "Sobota",
   "search": "Szukaj",
   "searchDropdownHere": "Wyszukaj wejście rozwijane",
@@ -299,6 +301,8 @@
   "selectAnOption": "Wybierz opcję",
   "servicesSection": "Sekcja usług",
   "showLabels": "Pokaż etykiety",
+  "showLess": "Pokaż mniej",
+  "showMore": "Pokaż więcej",
   "siteColors": "Kolory strony",
   "spacingDefaultLabel": "Domyślny",
   "staticContent": "Treść statyczna",
@@ -374,6 +378,9 @@
   },
   "thursday": "Czwartek",
   "title": "Tytuł",
+  "totalReviews_few": "{{count}} recenzje",
+  "totalReviews_one": "{{count}} recenzja",
+  "totalReviews_other": "{{count}} recenzji",
   "tuesday": "Wtorek",
   "undo": "Anulować",
   "update": "Aktualizacja",
@@ -381,12 +388,5 @@
   "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
   "visitPage": "Odwiedź stronę",
   "wednesday": "Środa",
-  "yes": "Tak",
-  "totalReviews_one": "{{count}} recenzja",
-  "totalReviews_few": "{{count}} recenzje",
-  "totalReviews_other": "{{count}} recenzji",
-  "loadingReviews": "Ładowanie recenzji ...",
-  "responseFrom": "Odpowiedź od {{businessName}}",
-  "showLess": "Pokaż mniej",
-  "showMore": "Pokaż więcej"
+  "yes": "Tak"
 }

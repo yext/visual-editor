@@ -259,6 +259,7 @@
     "url": "Url"
   },
   "loadingMap": "Kaardi laadimine ...",
+  "loadingReviews": "Ülevaadete laadimine ...",
   "loadingVE": "Visuaalse toimetaja laadimine ...",
   "localGeomodifier": "Kohalik geomodifikaator",
   "locationsNear_one": "{{count}} asukoht lähedal „{{filterDisplayName}}”",
@@ -288,6 +289,7 @@
   "recentReviews": "Viimased ülevaated",
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
+  "responseFrom": "Vastus {{businessName}}",
   "saturday": "Laupäev",
   "search": "Otsima",
   "searchDropdownHere": "Otsi rippseant",
@@ -297,6 +299,8 @@
   "selectAnOption": "Valige suvand",
   "servicesSection": "Teenuste sektsioon",
   "showLabels": "Näita silte",
+  "showLess": "Näitama vähem",
+  "showMore": "Näidata veel",
   "siteColors": "Saidi värvid",
   "spacingDefaultLabel": "Täitmata jätmine",
   "staticContent": "Staatiline sisu",
@@ -372,6 +376,8 @@
   },
   "thursday": "Neljapäev",
   "title": "Tiitel",
+  "totalReviews_one": "{{count}} arvustus",
+  "totalReviews_other": "{{count}} arvustust",
   "tuesday": "Teisipäev",
   "undo": "Tühistama",
   "update": "Värskendama",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
   "wednesday": "Kolmapäev",
-  "yes": "Jah",
-  "totalReviews_other": "{{count}} arvustust",
-  "totalReviews_one": "{{count}} arvustus",
-  "loadingReviews": "Ülevaadete laadimine ...",
-  "responseFrom": "Vastus {{businessName}}",
-  "showLess": "Näitama vähem",
-  "showMore": "Näidata veel"
+  "yes": "Jah"
 }

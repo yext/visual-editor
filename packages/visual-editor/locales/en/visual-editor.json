@@ -258,6 +258,7 @@
     "url": "URL"
   },
   "loadingMap": "Loading Map...",
+  "loadingReviews": "Loading reviews...",
   "loadingVE": "Loading Visual Editor...",
   "localGeomodifier": "Local GeoModifier",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
@@ -287,6 +288,7 @@
   "recentReviews": "Recent Reviews",
   "recommendedColors": "Recommended Colors",
   "redo": "Redo",
+  "responseFrom": "Response from {{businessName}}",
   "saturday": "Saturday",
   "search": "Search",
   "searchDropdownHere": "Search Dropdown Input",
@@ -296,6 +298,8 @@
   "selectAnOption": "Select an option",
   "servicesSection": "Services Section",
   "showLabels": "Show Labels",
+  "showLess": "Show less",
+  "showMore": "Show more",
   "siteColors": "Site Colors",
   "spacingDefaultLabel": "Default",
   "staticContent": "Static content",
@@ -371,6 +375,8 @@
   },
   "thursday": "Thursday",
   "title": "Title",
+  "totalReviews_one": "{{count}} review",
+  "totalReviews_other": "{{count}} reviews",
   "tuesday": "Tuesday",
   "undo": "Undo",
   "update": "Update",
@@ -378,11 +384,5 @@
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
   "visitPage": "Visit Page",
   "wednesday": "Wednesday",
-  "yes": "Yes",
-  "totalReviews_one": "{{count}} review",
-  "totalReviews_other": "{{count}} reviews",
-  "loadingReviews": "Loading reviews...",
-  "responseFrom": "Response from {{businessName}}",
-  "showLess": "Show less",
-  "showMore": "Show more"
+  "yes": "Yes"
 }

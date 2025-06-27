@@ -259,6 +259,7 @@
     "url": "Url"
   },
   "loadingMap": "Kartes ielāde ...",
+  "loadingReviews": "Atsauksmju ielāde ...",
   "loadingVE": "Vizuālā redaktora ielāde ...",
   "localGeomodifier": "Vietējais ģeomodifieris",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no „{{filterDisplayName}}”",
@@ -289,6 +290,7 @@
   "recentReviews": "Nesenie pārskati",
   "recommendedColors": "Ieteicamās krāsas",
   "redo": "Pārtaisīt",
+  "responseFrom": "Atbilde no {{businessName}}",
   "saturday": "Sestdiena",
   "search": "Meklēšana",
   "searchDropdownHere": "Meklēt nolaižamās ieejas",
@@ -298,6 +300,8 @@
   "selectAnOption": "Atlasiet opciju",
   "servicesSection": "Pakalpojumu nodaļa",
   "showLabels": "Izrādes etiķetes",
+  "showLess": "Rādīt mazāk",
+  "showMore": "Parādīt vairāk",
   "siteColors": "Vietnes krāsas",
   "spacingDefaultLabel": "Nepildīt",
   "staticContent": "Statisks saturs",
@@ -373,6 +377,8 @@
   },
   "thursday": "Ceturtdiena",
   "title": "Tituls",
+  "totalReviews_one": "{{count}} atsauksme",
+  "totalReviews_other": "{{count}} atsauksmes",
   "tuesday": "Otrdiena",
   "undo": "Atsaukt",
   "update": "Atjaunināt",
@@ -380,11 +386,5 @@
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
   "visitPage": "Apmeklējuma lapa",
   "wednesday": "Trešdiena",
-  "yes": "Jā",
-  "totalReviews_one": "{{count}} atsauksme",
-  "totalReviews_other": "{{count}} atsauksmes",
-  "loadingReviews": "Atsauksmju ielāde ...",
-  "responseFrom": "Atbilde no {{businessName}}",
-  "showLess": "Rādīt mazāk",
-  "showMore": "Parādīt vairāk"
+  "yes": "Jā"
 }

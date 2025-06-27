@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Načítání mapy ...",
+  "loadingReviews": "Načítání recenzí ...",
   "loadingVE": "Načítání vizuálního editoru ...",
   "localGeomodifier": "Místní geomodifikátor",
   "locationsNear_one": "{{count}} umístění poblíž „{{filterDisplayName}}“",
@@ -288,6 +289,7 @@
   "recentReviews": "Nedávné recenze",
   "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
+  "responseFrom": "Odpověď od {{businessName}}",
   "saturday": "sobota",
   "search": "Vyhledávání",
   "searchDropdownHere": "Rozbalovací vstup pro vyhledávání",
@@ -297,6 +299,8 @@
   "selectAnOption": "Vyberte možnost",
   "servicesSection": "Sekce služeb",
   "showLabels": "Zobrazit štítky",
+  "showLess": "Ukázat méně",
+  "showMore": "Ukázat více",
   "siteColors": "Barvy webu",
   "spacingDefaultLabel": "Výchozí",
   "staticContent": "Statický obsah",
@@ -372,6 +376,8 @@
   },
   "thursday": "čtvrtek",
   "title": "Titul",
+  "totalReviews_one": "{{count}} recenze",
+  "totalReviews_other": "{{count}} recenze",
   "tuesday": "úterý",
   "undo": "Undo",
   "update": "Aktualizovat",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
   "wednesday": "středa",
-  "yes": "Ano",
-  "totalReviews_other": "{{count}} recenze",
-  "totalReviews_one": "{{count}} recenze",
-  "loadingReviews": "Načítání recenzí ...",
-  "responseFrom": "Odpověď od {{businessName}}",
-  "showLess": "Ukázat méně",
-  "showMore": "Ukázat více"
+  "yes": "Ano"
 }

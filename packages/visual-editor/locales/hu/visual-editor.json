@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Betöltési térkép ...",
+  "loadingReviews": "A vélemények betöltése ...",
   "loadingVE": "Vizuális szerkesztő betöltése ...",
   "localGeomodifier": "Helyi geomodifier",
   "locationsNear_one": "{{count}} Hely a \"{{filpeDisplayName}} közelében\"",
@@ -288,6 +289,7 @@
   "recentReviews": "Legutóbbi vélemények",
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
+  "responseFrom": "Válasz a {{businessName}} -ból",
   "saturday": "szombat",
   "search": "Keresés",
   "searchDropdownHere": "Keresési legördülő bemenet",
@@ -297,6 +299,8 @@
   "selectAnOption": "Válasszon egy opciót",
   "servicesSection": "Szolgáltatási szakasz",
   "showLabels": "A címkék megjelenítését",
+  "showLess": "Mutasson kevesebbet",
+  "showMore": "Mutasson többet",
   "siteColors": "Helyszínek",
   "spacingDefaultLabel": "Mulasztás",
   "staticContent": "Statikus tartalom",
@@ -372,6 +376,8 @@
   },
   "thursday": "csütörtök",
   "title": "Cím",
+  "totalReviews_one": "{{count}} értékelés",
+  "totalReviews_other": "{{count}} értékelés",
   "tuesday": "kedd",
   "undo": "Visszavonul",
   "update": "Frissít",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
   "wednesday": "szerda",
-  "yes": "Igen",
-  "totalReviews_other": "{{count}} értékelés",
-  "totalReviews_one": "{{count}} értékelés",
-  "loadingReviews": "A vélemények betöltése ...",
-  "responseFrom": "Válasz a {{businessName}} -ból",
-  "showLess": "Mutasson kevesebbet",
-  "showMore": "Mutasson többet"
+  "yes": "Igen"
 }

@@ -259,6 +259,7 @@
     "url": "URL -osoite"
   },
   "loadingMap": "Latauskartta ...",
+  "loadingReviews": "Ladataan arvosteluja ...",
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
@@ -288,6 +289,7 @@
   "recentReviews": "Viimeaikaiset arvostelut",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
+  "responseFrom": "Vastaus {{businessName}}",
   "saturday": "Lauantai",
   "search": "Haku",
   "searchDropdownHere": "Haku avattavasta tulosta",
@@ -297,6 +299,8 @@
   "selectAnOption": "Valitse vaihtoehto",
   "servicesSection": "Palvelusosasto",
   "showLabels": "Näyttötarrat",
+  "showLess": "Näyttää vähemmän",
+  "showMore": "Näyttää enemmän",
   "siteColors": "Sivuston värit",
   "spacingDefaultLabel": "Laiminlyönti",
   "staticContent": "Staattinen sisältö",
@@ -372,6 +376,8 @@
   },
   "thursday": "torstai",
   "title": "Otsikko",
+  "totalReviews_one": "{{count}} arvostelu",
+  "totalReviews_other": "{{count}} arvostelua",
   "tuesday": "tiistai",
   "undo": "Kumota",
   "update": "Päivittää",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
   "wednesday": "keskiviikko",
-  "yes": "Kyllä",
-  "totalReviews_other": "{{count}} arvostelua",
-  "totalReviews_one": "{{count}} arvostelu",
-  "loadingReviews": "Ladataan arvosteluja ...",
-  "responseFrom": "Vastaus {{businessName}}",
-  "showLess": "Näyttää vähemmän",
-  "showMore": "Näyttää enemmän"
+  "yes": "Kyllä"
 }

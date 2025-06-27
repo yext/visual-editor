@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "加载地图...",
+  "loadingReviews": "加载评论...",
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisPlayName}}”",
@@ -288,6 +289,7 @@
   "recentReviews": "最近的评论",
   "recommendedColors": "推荐的颜色",
   "redo": "重做",
+  "responseFrom": "{{businessName}}的响应",
   "saturday": "周六",
   "search": "搜索",
   "searchDropdownHere": "搜索下拉输入",
@@ -297,6 +299,8 @@
   "selectAnOption": "选择一个选项",
   "servicesSection": "服务部分",
   "showLabels": "显示标签",
+  "showLess": "少显示",
+  "showMore": "显示更多",
   "siteColors": "站点颜色",
   "spacingDefaultLabel": "默认",
   "staticContent": "静态内容",
@@ -372,6 +376,8 @@
   },
   "thursday": "周四",
   "title": "标题",
+  "totalReviews_one": "{{count}}条评论",
+  "totalReviews_other": "{{count}}条评论",
   "tuesday": "周二",
   "undo": "撤消",
   "update": "更新",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
   "wednesday": "周三",
-  "yes": "是的",
-  "totalReviews_other": "{{count}}条评论",
-  "totalReviews_one": "{{count}}条评论",
-  "loadingReviews": "加载评论...",
-  "responseFrom": "{{businessName}}的响应",
-  "showLess": "少显示",
-  "showMore": "显示更多"
+  "yes": "是的"
 }

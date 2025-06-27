@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Krovimo žemėlapis ...",
+  "loadingReviews": "Įkeliamos apžvalgos ...",
   "loadingVE": "Įkeliamas vaizdinis redaktorius ...",
   "localGeomodifier": "Vietinis geomodiferis",
   "locationsNear_few": "{{count}} vietos šalia „{{filterDisplayName}}”",
@@ -290,6 +291,7 @@
   "recentReviews": "Naujausios apžvalgos",
   "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
+  "responseFrom": "Atsakymas iš {{businessName}}",
   "saturday": "Šeštadienis",
   "search": "Ieškoti",
   "searchDropdownHere": "Paieškos išskleidžiamasis įvestis",
@@ -299,6 +301,8 @@
   "selectAnOption": "Pasirinkite parinktį",
   "servicesSection": "Paslaugų skyrius",
   "showLabels": "Rodyti etiketes",
+  "showLess": "Parodyk mažiau",
+  "showMore": "Parodyk daugiau",
   "siteColors": "Svetainės spalvos",
   "spacingDefaultLabel": "Numatytasis",
   "staticContent": "Statinis turinys",
@@ -374,6 +378,9 @@
   },
   "thursday": "Ketvirtadienis",
   "title": "Pavadinimas",
+  "totalReviews_few": "{{count}} apžvalgos",
+  "totalReviews_one": "{{count}} apžvalga",
+  "totalReviews_other": "{{count}} apžvalgų",
   "tuesday": "Antradienis",
   "undo": "Anuliuoti",
   "update": "Atnaujinimas",
@@ -381,12 +388,5 @@
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
   "wednesday": "Trečiadienis",
-  "yes": "Taip",
-  "totalReviews_one": "{{count}} apžvalga",
-  "totalReviews_few": "{{count}} apžvalgos",
-  "totalReviews_other": "{{count}} apžvalgų",
-  "loadingReviews": "Įkeliamos apžvalgos ...",
-  "responseFrom": "Atsakymas iš {{businessName}}",
-  "showLess": "Parodyk mažiau",
-  "showMore": "Parodyk daugiau"
+  "yes": "Taip"
 }

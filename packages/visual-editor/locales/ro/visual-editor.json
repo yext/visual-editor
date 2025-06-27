@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Harta de încărcare ...",
+  "loadingReviews": "Încărcarea recenziilor ...",
   "loadingVE": "Încărcarea editorului vizual ...",
   "localGeomodifier": "Geomodificator local",
   "locationsNear_few": "{{count}} locații lângă „{{filterDisplayName}}”",
@@ -289,6 +290,7 @@
   "recentReviews": "Recenzii recente",
   "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
+  "responseFrom": "Răspuns de la {{businessName}}",
   "saturday": "sâmbătă",
   "search": "Căutare",
   "searchDropdownHere": "Căutați intrarea derulantă",
@@ -298,6 +300,8 @@
   "selectAnOption": "Selectați o opțiune",
   "servicesSection": "Secțiunea Servicii",
   "showLabels": "Arată etichete",
+  "showLess": "Arată mai puțin",
+  "showMore": "Arată mai mult",
   "siteColors": "Culorile site -ului",
   "spacingDefaultLabel": "Implicit",
   "staticContent": "Conținut static",
@@ -373,6 +377,9 @@
   },
   "thursday": "joi",
   "title": "Titlu",
+  "totalReviews_few": "{{count}} recenzii",
+  "totalReviews_one": "{{count}} recenzie",
+  "totalReviews_other": "{{count}} recenzii",
   "tuesday": "marţi",
   "undo": "Anula",
   "update": "Actualizare",
@@ -380,12 +387,5 @@
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
   "wednesday": "miercuri",
-  "yes": "Da",
-  "totalReviews_one": "{{count}} recenzie",
-  "totalReviews_few": "{{count}} recenzii",
-  "totalReviews_other": "{{count}} recenzii",
-  "loadingReviews": "Încărcarea recenziilor ...",
-  "responseFrom": "Răspuns de la {{businessName}}",
-  "showLess": "Arată mai puțin",
-  "showMore": "Arată mai mult"
+  "yes": "Da"
 }

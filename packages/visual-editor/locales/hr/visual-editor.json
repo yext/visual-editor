@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Učitavanje karte ...",
+  "loadingReviews": "Učitavanje recenzija ...",
   "loadingVE": "Učitavanje vizualnog uređivača ...",
   "localGeomodifier": "Lokalni geomodifikator",
   "locationsNear_few": "{{count}} lokacije u blizini „{{filterDisplayName}}”",
@@ -289,6 +290,7 @@
   "recentReviews": "Nedavne recenzije",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
+  "responseFrom": "Odgovor od {{businessName}}",
   "saturday": "subota",
   "search": "Pretraživanje",
   "searchDropdownHere": "Pretražite unos pada",
@@ -298,6 +300,8 @@
   "selectAnOption": "Odaberite opciju",
   "servicesSection": "Odjeljak za usluge",
   "showLabels": "Prikaži naljepnice",
+  "showLess": "Pokazati manje",
+  "showMore": "Pokažite više",
   "siteColors": "Boje mjesta",
   "spacingDefaultLabel": "Zadano",
   "staticContent": "Statički sadržaj",
@@ -373,6 +377,8 @@
   },
   "thursday": "četvrtak",
   "title": "Titula",
+  "totalReviews_one": "{{count}} recenzija",
+  "totalReviews_other": "{{count}} recenzija",
   "tuesday": "utorak",
   "undo": "Otkopčati",
   "update": "Ažurirati",
@@ -380,11 +386,5 @@
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
   "wednesday": "srijeda",
-  "yes": "Da",
-  "totalReviews_other": "{{count}} recenzija",
-  "totalReviews_one": "{{count}} recenzija",
-  "loadingReviews": "Učitavanje recenzija ...",
-  "responseFrom": "Odgovor od {{businessName}}",
-  "showLess": "Pokazati manje",
-  "showMore": "Pokažite više"
+  "yes": "Da"
 }

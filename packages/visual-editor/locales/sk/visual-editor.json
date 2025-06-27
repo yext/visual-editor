@@ -259,6 +259,7 @@
     "url": "Adresa URL"
   },
   "loadingMap": "Načítava mapa ...",
+  "loadingReviews": "Recenzie načítania ...",
   "loadingVE": "Načítava sa vizuálny editor ...",
   "localGeomodifier": "Miestny geomodifikátor",
   "locationsNear_few": "{{count}} miesta v blízkosti „{{filterDisplayName}}”",
@@ -289,6 +290,7 @@
   "recentReviews": "Posledné recenzie",
   "recommendedColors": "Odporúčané farby",
   "redo": "Opätovne prekážať",
+  "responseFrom": "Odpoveď z {{businessName}}",
   "saturday": "Sobota",
   "search": "Prehliadka",
   "searchDropdownHere": "Vyhľadajte rozbaľovací vstup",
@@ -298,6 +300,8 @@
   "selectAnOption": "Vyberte možnosť",
   "servicesSection": "Sekcia",
   "showLabels": "Ukazovať štítky",
+  "showLess": "Vykazovať menej",
+  "showMore": "Ukázať viac",
   "siteColors": "Farby stránok",
   "spacingDefaultLabel": "Predvolený",
   "staticContent": "Statický obsah",
@@ -373,6 +377,9 @@
   },
   "thursday": "Štvrtok",
   "title": "Názov",
+  "totalReviews_few": "{{count}} recenzie",
+  "totalReviews_one": "{{count}} recenzia",
+  "totalReviews_other": "{{count}} recenzií",
   "tuesday": "Utorok",
   "undo": "Rozpustiť",
   "update": "Aktualizácia",
@@ -380,12 +387,5 @@
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
   "wednesday": "Streda",
-  "yes": "Áno",
-  "totalReviews_other": "{{count}} recenzií",
-  "totalReviews_one": "{{count}} recenzia",
-  "totalReviews_few": "{{count}} recenzie",
-  "loadingReviews": "Recenzie načítania ...",
-  "responseFrom": "Odpoveď z {{businessName}}",
-  "showLess": "Vykazovať menej",
-  "showMore": "Ukázať viac"
+  "yes": "Áno"
 }

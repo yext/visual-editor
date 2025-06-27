@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "Karte laden ...",
+  "loadingReviews": "Bewertungen laden ...",
   "loadingVE": "Laden visueller Editor ...",
   "localGeomodifier": "Lokaler Geomodifier",
   "locationsNear_one": "{{count}} Ort in der Nähe von „{{filterDisplayName}}”",
@@ -288,6 +289,7 @@
   "recentReviews": "Neuere Bewertungen",
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
+  "responseFrom": "Antwort von {{businessName}}",
   "saturday": "Samstag",
   "search": "Suchen",
   "searchDropdownHere": "Dropdown -Eingabe suchen",
@@ -297,6 +299,8 @@
   "selectAnOption": "Wählen Sie eine Option aus",
   "servicesSection": "Dienstleistungsabschnitt",
   "showLabels": "Etiketten zeigen",
+  "showLess": "Weniger zeigen",
+  "showMore": "Zeigen Sie mehr",
   "siteColors": "Standortfarben",
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statischer Inhalt",
@@ -372,6 +376,8 @@
   },
   "thursday": "Donnerstag",
   "title": "Titel",
+  "totalReviews_one": "{{count}} Bewertung",
+  "totalReviews_other": "{{count}} Bewertungen",
   "tuesday": "Dienstag",
   "undo": "Rückgängig machen",
   "update": "Aktualisieren",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
   "visitPage": "Besuchen Sie die Seite",
   "wednesday": "Mittwoch",
-  "yes": "Ja",
-  "totalReviews_other": "{{count}} Bewertungen",
-  "totalReviews_one": "{{count}} Bewertung",
-  "loadingReviews": "Bewertungen laden ...",
-  "responseFrom": "Antwort von {{businessName}}",
-  "showLess": "Weniger zeigen",
-  "showMore": "Zeigen Sie mehr"
+  "yes": "Ja"
 }

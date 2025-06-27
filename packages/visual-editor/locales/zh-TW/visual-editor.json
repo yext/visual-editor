@@ -259,6 +259,7 @@
     "url": "URL"
   },
   "loadingMap": "加載地圖...",
+  "loadingReviews": "加載評論...",
   "loadingVE": "加載視覺編輯器...",
   "localGeomodifier": "當地的土工改裝劑",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisPlayName}}”",
@@ -288,6 +289,7 @@
   "recentReviews": "最近的評論",
   "recommendedColors": "推薦的顏色",
   "redo": "重做",
+  "responseFrom": "{{businessName}}的響應",
   "saturday": "週六",
   "search": "搜尋",
   "searchDropdownHere": "搜索下拉輸入",
@@ -297,6 +299,8 @@
   "selectAnOption": "選擇一個選項",
   "servicesSection": "服務部分",
   "showLabels": "顯示標籤",
+  "showLess": "少顯示",
+  "showMore": "顯示更多",
   "siteColors": "站點顏色",
   "spacingDefaultLabel": "預設",
   "staticContent": "靜態內容",
@@ -372,6 +376,8 @@
   },
   "thursday": "週四",
   "title": "標題",
+  "totalReviews_one": "{{count}}則評論",
+  "totalReviews_other": "{{count}}則評論",
   "tuesday": "週二",
   "undo": "撤消",
   "update": "更新",
@@ -379,11 +385,5 @@
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
   "wednesday": "週三",
-  "yes": "是的",
-  "totalReviews_one": "{{count}}則評論",
-  "totalReviews_other": "{{count}}則評論",
-  "loadingReviews": "加載評論...",
-  "responseFrom": "{{businessName}}的響應",
-  "showLess": "少顯示",
-  "showMore": "顯示更多"
+  "yes": "是的"
 }
