@@ -138,7 +138,7 @@ const SubfieldsInput = ({
   return (
     <div className="ObjectField">
       <div className="ObjectField-fieldset">
-        {subfields.map(({ field, type, label }) => {
+        {subfields.map(({ field, type, label }, idx) => {
           const toggleConstantValueEnabled = (
             constantValueEnabled: boolean
           ) => {
@@ -162,7 +162,7 @@ const SubfieldsInput = ({
           }
 
           return (
-            <>
+            <React.Fragment key={idx}>
               <div className="ve-mt-3 first:ve-mt-0">
                 <ConstantValueModeToggler
                   fieldTypeFilter={[type]}
@@ -197,7 +197,7 @@ const SubfieldsInput = ({
                   />
                 </div>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>

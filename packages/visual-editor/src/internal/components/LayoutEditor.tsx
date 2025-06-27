@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
+import * as lzstring from "lz-string";
+import {
+  InitialHistory,
+  Config,
+  Data,
+  History,
+  AppState,
+} from "@measured/puck";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
-import { InitialHistory, Config, Data } from "@measured/puck";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -13,7 +20,7 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
-import * as lzstring from "lz-string";
+import { migrate } from "../../utils/migrate.ts";
 
 const devLogger = new DevLogger();
 
@@ -132,7 +139,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Layout Dev Mode - Using layout data from localStorage");
-        const localHistories = JSON.parse(localHistoryArray) as History[];
+        const localHistories = (
+          JSON.parse(localHistoryArray) as History<AppState>[]
+        ).map((history) => ({
+          id: history.id,
+          state: { data: migrate(history.state.data), ui: history.state.ui },
+        }));
         const localHistoryIndex = localHistories.length - 1;
         setPuckInitialHistory({
           // @ts-expect-error https://github.com/measuredco/puck/issues/673
