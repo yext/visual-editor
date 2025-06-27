@@ -5,7 +5,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import * as React from "react";
 import {
   type BackgroundStyle,
-  BasicSelector,
+  Body,
   Button,
   Heading,
   msg,
@@ -73,14 +73,12 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     return <></>;
   }
   return (
-    <PageSection background={props.backgroundColor}>
-      <div className="flex flex-col gap-12">
-        <ReviewsHeader {...headerProps} />
-        <ReviewsList
-          reviews={reviewDocs}
-          hasDarkBackground={hasDarkBackground}
-        />
-      </div>
+    <PageSection
+      className="flex flex-col gap-12"
+      background={props.backgroundColor}
+    >
+      <ReviewsHeader {...headerProps} />
+      <ReviewsList reviews={reviewDocs} hasDarkBackground={hasDarkBackground} />
     </PageSection>
   );
 };
@@ -102,22 +100,22 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
       </Heading>
       <div className="flex flex-row gap-3 items-center justify-center">
         {isLoading ? (
-          <div className="text-body-md-fontSize">
+          <Body className="text-body-md-fontSize">
             {t("loadingReviews", "Loading reviews...")}
-          </div>
+          </Body>
         ) : (
           <>
             <ReviewStarsWithRating
               rating={averageRating}
               hasDarkBackground={hasDarkBackground}
             />
-            <div className="text-body-md-fontSize">
+            <Body className="text-body-md-fontSize">
               {/* TODO(sumo): update script to handle plurals */}(
               {t("totalReviews", `${totalReviews} reviews`, {
                 count: totalReviews,
               })}
               )
-            </div>
+            </Body>
           </>
         )}
       </div>
@@ -191,12 +189,12 @@ interface AuthorWithDateProps {
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
   return (
     <div className="flex flex-col gap-2">
-      <div className="font-bold font-body-fontFamily text-body-lg-fontSize">
+      <Body className="font-bold font-body-fontFamily text-body-lg-fontSize">
         {author}
-      </div>
-      <div className="font-body-fontFamily text-body-md-fontSize">
+      </Body>
+      <Body className="font-body-fontFamily text-body-md-fontSize">
         {formatDate(date)}
-      </div>
+      </Body>
     </div>
   );
 };
@@ -279,13 +277,13 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
   return (
     <div className="flex flex-col gap-2">
       {preContentElement}
-      <div
+      <Body
         ref={contentRef}
         className={`text-body-md-fontSize font-body-fontFamily transition-all duration-200 ${!expanded ? "line-clamp-3" : ""}`}
         style={{ overflowWrap: "anywhere" }}
       >
         {content}
-      </div>
+      </Body>
       {(isTruncated || expanded) && (
         <ShowMoreButton expanded={expanded} setExpanded={setExpanded} />
       )}
@@ -304,9 +302,9 @@ const ReviewStarsWithRating: React.FC<ReviewStarsProps> = ({
 }) => {
   return (
     <>
-      <div className="font-bold font-body-md-fontWeight text-body-md-fontSize">
+      <Body className="font-bold font-body-md-fontWeight text-body-md-fontSize">
         {rating}
-      </div>
+      </Body>
       <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
     </>
   );
