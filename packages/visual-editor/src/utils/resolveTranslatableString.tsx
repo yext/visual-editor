@@ -12,25 +12,17 @@ import React from "react";
  * @param locale
  */
 export const resolveTranslatableString = (
-  translatableString?: TranslatableString,
-  locale?: string
+  translatableString: TranslatableString = "",
+  locale: string = "en"
 ): string => {
-  locale = locale ?? "en";
-  if (!translatableString) {
-    return "";
-  }
-
-  if (typeof translatableString === "string") {
-    return translatableString;
-  }
-
   if (typeof translatableString === "object") {
     if (locale in translatableString) {
       return translatableString[locale];
     }
+    return "";
   }
 
-  return "";
+  return translatableString;
 };
 
 /**
@@ -39,27 +31,20 @@ export const resolveTranslatableString = (
  * @param locale
  */
 export const resolveTranslatableRichText = (
-  translatableRichText?: TranslatableRichText,
+  translatableRichText: TranslatableRichText = "",
   locale: string = "en"
 ): string | React.ReactElement => {
   try {
-    if (!translatableRichText) return "";
+    let value = translatableRichText;
 
     if (
-      typeof translatableRichText === "string" ||
-      isRichText(translatableRichText)
+      typeof translatableRichText !== "string" &&
+      !isRichText(translatableRichText)
     ) {
-      return toStringOrElement(translatableRichText);
+      value = translatableRichText[locale];
     }
 
-    if (typeof translatableRichText === "object") {
-      const localizedValue = translatableRichText[locale];
-      if (localizedValue) {
-        return toStringOrElement(localizedValue);
-      }
-    }
-
-    return "";
+    return toStringOrElement(value);
   } catch (error) {
     console.warn("Error in resolveTranslatableRichText:", error);
     return "";
@@ -81,16 +66,9 @@ function isRichText(value: unknown): value is RichText {
  * @return string to be displayed in the editor input
  */
 export function getDisplayValue(
-  translatableString?: TranslatableRichText,
-  locale?: string
+  translatableString: TranslatableRichText,
+  locale: string = "en"
 ): string {
-  if (!translatableString) {
-    return "";
-  }
-  if (!locale) {
-    locale = "en";
-  }
-
   if (typeof translatableString === "string") {
     return translatableString;
   }
@@ -99,17 +77,13 @@ export function getDisplayValue(
     return richTextToString(translatableString);
   }
 
-  const localizedValue: string | RichText = translatableString[locale];
-
-  if (typeof localizedValue === "string") {
-    return localizedValue;
-  }
+  const localizedValue = translatableString[locale];
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
   }
 
-  return "";
+  return localizedValue;
 }
 
 function richTextToString(rtf: RichText): string {
@@ -126,12 +100,5 @@ function toStringOrElement(
   if (isRichText(value)) {
     return <MaybeRTF data={value} />;
   }
-
-  // Ensure we only return strings
-  if (typeof value === "string") {
-    return value;
-  }
-
-  // If value is anything else (object, number, etc.), return empty string
-  return "";
+  return value;
 }

@@ -39,13 +39,7 @@ export function TranslatableRichTextField<
         TARGET_ORIGINS,
         (_, payload) => {
           if (pendingMessageId && pendingMessageId === payload?.id) {
-            // Handle the new Storm payload structure with locale, rtfJson, and rtfHtml
-            if (payload.locale && payload.rtfJson) {
-              handleNewValue(payload.rtfJson, payload.locale, payload.rtfHtml);
-            } else {
-              // Fallback for backward compatibility
-              handleNewValue(payload.value || "", locale);
-            }
+            handleNewValue(payload.value, payload.locale);
           }
         }
       );
@@ -64,7 +58,7 @@ export function TranslatableRichTextField<
 
         openConstantValueEditor({
           payload: {
-            type: "RichText",
+            type: "RichTextValue", // type: "RichText" is being used in artifact 0.0.8
             value: initialValue,
             id: messageId,
             fieldName: fieldLabel,
@@ -72,30 +66,19 @@ export function TranslatableRichTextField<
           },
         });
 
-        // for local development testing
+        /** Handles local development testing outside of storm */
         if (
           window.location.href.includes("http://localhost:5173/dev-location")
         ) {
           const userInput = prompt("Enter Rich Text (HTML):");
-          handleNewValue("", locale, userInput ?? "");
+          handleNewValue({ json: "", html: userInput ?? "" }, locale);
         }
       };
 
-      const handleNewValue = (
-        newValue: string,
-        targetLocale?: string,
-        rtfHtml?: string
-      ) => {
-        const localeToUpdate = targetLocale || locale;
-
-        // Create a RichText object if we have both JSON and HTML
-        const richTextValue = rtfHtml
-          ? ({ json: newValue, html: rtfHtml } as RichText)
-          : newValue;
-
+      const handleNewValue = (newValue: RichText, localeToUpdate: string) => {
         onChange({
           ...(typeof value === "object" && !Array.isArray(value) ? value : {}),
-          [localeToUpdate]: richTextValue,
+          [localeToUpdate]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableRichText as T);
       };
