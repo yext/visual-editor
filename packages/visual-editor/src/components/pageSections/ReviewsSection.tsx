@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
 import {
+  FaArrowLeft,
+  FaArrowRight,
   FaChevronDown,
   FaStarHalfAlt,
   FaStarHalf,
@@ -20,6 +22,9 @@ import {
 } from "@yext/visual-editor";
 
 const TEMP_ENDPOINT = "";
+const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
+const REVIEWS_PER_PAGE = 5;
+const VISIBLE_PAGE_NUMBERS = 5;
 
 export type ReviewsSectionProps = {
   backgroundColor: BackgroundStyle;
@@ -38,38 +43,77 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
+  const document: any = useDocument();
+  // const entityId = document.uid;
+  const entityId = TEMP_ENTITY_ID; // TODO: remove this line when using in production
+  // const endpointBaseUrl = getReviewsContentEndpoint(document);
+  // if (!endpointBaseUrl) {
+  //   return <></>;
+  // }
+  const endpointBaseUrl = TEMP_ENDPOINT; // TODO: remove this line when using in production
   const [totalReviews, setTotalReviews] = React.useState(0);
   const [averageRating, setAverageRating] = React.useState(0);
   const [reviewDocs, setReviewDocs] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const reviews = await fetchReviews();
-        if (!reviews || !reviews.meta) {
-          throw new Error("Invalid response structure from API");
-        }
-        if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
-          throw new Error(
-            "API returned errors: " +
-              JSON.stringify(reviews.response.meta.errors)
-          );
-        }
-        const reviewsForEntity = filterReviewsToEntity(
-          reviews.response.docs || []
-        );
-        // TODO: this total/avg logic will change once the data is on the JSON+LD
-        setTotalReviews(reviewsForEntity.length);
-        setAverageRating(Number(calculateAverageRating(reviewsForEntity)));
-        setReviewDocs(reviewsForEntity);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      } finally {
-        setIsLoading(false);
+  const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
+  const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
+    {}
+  );
+  const [nextPageToken, setNextPageToken] = React.useState<string | undefined>(
+    undefined
+  );
+
+  const fetchData = async (newPageNumber: number) => {
+    try {
+      const reviews = await fetchReviewsFromApi(
+        entityId,
+        endpointBaseUrl,
+        pageTokens[newPageNumber]
+      );
+      if (!reviews || !reviews.meta) {
+        throw new Error("Invalid response structure from API");
       }
-    };
-    fetchData();
+      if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
+        throw new Error(
+          "API returned errors: " + JSON.stringify(reviews.response.meta.errors)
+        );
+      }
+      setCurrentPageNumber(newPageNumber || 1);
+      const reviewsForEntity = reviews.response.docs || [];
+      setReviewDocs(reviewsForEntity);
+      if (reviews.response.nextPageToken) {
+        setNextPageToken(reviews.response.nextPageToken);
+      }
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    const aggregateRating = getAggregateRating(document);
+    setTotalReviews(aggregateRating?.reviewCount || 0);
+    setAverageRating(
+      aggregateRating?.ratingValue ? Number(aggregateRating.ratingValue) : 0
+    );
+    fetchData(1);
   }, []);
+
+  React.useEffect(() => {
+    console.log("pageTokens", pageTokens);
+    console.log("currentPageNumber", currentPageNumber);
+    if (nextPageToken) {
+      setPageTokens((prev) => ({
+        ...prev,
+        [currentPageNumber + 1]: nextPageToken,
+      }));
+    }
+  }, [nextPageToken]);
+
+  if (!isLoading && totalReviews === 0) {
+    return <></>;
+  }
   const hasDarkBackground = props.backgroundColor?.textColor === "text-white";
   const headerProps: ReviewsHeaderProps = {
     totalReviews,
@@ -77,9 +121,12 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     isLoading,
     hasDarkBackground,
   };
-  if (!isLoading && totalReviews === 0) {
-    return <></>;
-  }
+  const pageScrollerProps: PageScrollerProps = {
+    totalReviews,
+    currentPageNumber,
+    fetchData,
+    hasDarkBackground,
+  };
   return (
     <PageSection
       className="flex flex-col gap-12"
@@ -87,6 +134,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     >
       <ReviewsHeader {...headerProps} />
       <ReviewsList reviews={reviewDocs} hasDarkBackground={hasDarkBackground} />
+      <PageScroller {...pageScrollerProps} />
     </PageSection>
   );
 };
@@ -94,7 +142,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
 interface ReviewsHeaderProps {
   totalReviews: number;
   averageRating: number;
-  isLoading?: boolean;
+  isLoading: boolean;
   hasDarkBackground: boolean;
 }
 
@@ -338,6 +386,47 @@ const ReviewStars: React.FC<ReviewStarsProps> = (props) => {
   );
 };
 
+interface PageScrollerProps {
+  totalReviews: number;
+  currentPageNumber: number;
+  fetchData: (newPageNumber: number) => Promise<any>;
+  hasDarkBackground: boolean;
+}
+
+const PageScroller: React.FC<PageScrollerProps> = ({
+  totalReviews,
+  currentPageNumber,
+  fetchData,
+  hasDarkBackground,
+}) => {
+  const numPages = Math.ceil(totalReviews / REVIEWS_PER_PAGE);
+  if (numPages <= 1) {
+    return <></>;
+  }
+  const selectableButtonClasses = `cursor-pointer ${hasDarkBackground ? "text-white" : "text-palette-primary-dark"}`;
+  const disabledButtonClasses = "opacity-50 cursor-default";
+  return (
+    <Body className="flex flex-row justify-center items-center gap-5">
+      <FaArrowLeft
+        className={`${currentPageNumber === 1 ? disabledButtonClasses : selectableButtonClasses}`}
+        onClick={() => {
+          if (currentPageNumber > 1) {
+            fetchData(currentPageNumber - 1);
+          }
+        }}
+      />
+      <FaArrowRight
+        className={`${currentPageNumber === numPages ? disabledButtonClasses : selectableButtonClasses}`}
+        onClick={() => {
+          if (currentPageNumber < numPages) {
+            fetchData(currentPageNumber + 1);
+          }
+        }}
+      />
+    </Body>
+  );
+};
+
 const ShowMoreButton: React.FC<{
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
@@ -362,8 +451,24 @@ const ShowMoreButton: React.FC<{
  * Fetch reviews for the business.
  * @returns A promise that resolves to the reviews data fetched from the endpoint.
  */
-async function fetchReviews() {
-  const response = await fetch(TEMP_ENDPOINT);
+async function fetchReviewsFromApi(
+  entityId: number,
+  endpointBaseUrl: string,
+  pageToken?: string
+) {
+  const entityIdQueryParam = `entity.uid=${entityId}`;
+  const limitQueryParam = `limit=${REVIEWS_PER_PAGE}`;
+  const sortByQueryParam = `$sortBy__desc=reviewDate`;
+  let url = [
+    endpointBaseUrl,
+    entityIdQueryParam,
+    limitQueryParam,
+    sortByQueryParam,
+  ].join("&");
+  if (pageToken) {
+    url += `&pageToken=${pageToken}`;
+  }
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -371,32 +476,131 @@ async function fetchReviews() {
 }
 
 /**
- * Filters the reviews to only include those that belong to the current entity.
- * @param docs - An array of review documents.
- * @returns An array of review documents that belong to the current entity.
+ * Returns an array of visible page numbers based on the total number of pages and the current page number.
+ * @param numPages - The total number of pages.
+ * @param currentPageNumber - The current page number (1-indexed).
  */
-function filterReviewsToEntity(docs: any[]) {
-  // const uid = (useDocument() as { entity?: { uid?: string } }).entity?.uid;
-  const uid = 25897322;
-  return docs.filter((doc) => {
-    return doc.entity?.uid === uid;
-  });
+function getVisiblePageNumbers(
+  numPages: number,
+  currentPageNumber: number
+): number[] {
+  if (
+    numPages <= VISIBLE_PAGE_NUMBERS ||
+    currentPageNumber <= Math.ceil(VISIBLE_PAGE_NUMBERS / 2)
+  ) {
+    return Array.from(
+      { length: Math.min(numPages, VISIBLE_PAGE_NUMBERS) },
+      (_, i) => i + 1
+    );
+  } else if (
+    numPages - currentPageNumber <=
+    Math.floor(VISIBLE_PAGE_NUMBERS / 2)
+  ) {
+    return Array.from(
+      { length: VISIBLE_PAGE_NUMBERS },
+      (_, i) => numPages - VISIBLE_PAGE_NUMBERS + i + 1
+    );
+  } else {
+    const start = Math.max(
+      1,
+      currentPageNumber - Math.floor(VISIBLE_PAGE_NUMBERS / 2)
+    );
+    return Array.from({ length: VISIBLE_PAGE_NUMBERS }, (_, i) => start + i);
+  }
 }
 
 /**
- * Calculates the average rating from an array of review documents, rounding to the nearest tenth place.
- * @param docs - An array of review documents, each containing a rating field.
+ * Extracts the aggregate rating from the document's schema.
+ * @param document - The document containing the schema.
+ * @returns The aggregate rating object if found, otherwise undefined.
  */
-function calculateAverageRating(docs: any[]) {
-  let totalRating = 0;
-  let count = 0;
-  docs.forEach((doc) => {
-    if (doc.rating) {
-      totalRating += doc.rating;
-      count++;
+function getAggregateRating(document: any) {
+  const el = document?._schema?.["@graph"].find((e: any) => e.aggregateRating);
+  return el?.aggregateRating;
+}
+
+/**
+ * Gets the reviews content endpoint URL for the specified document.
+ * @param document - The document containing the entity page set config
+ * @returns The reviews content endpoint URL or undefined if not found.
+ */
+function getReviewsContentEndpoint(document: any): string | undefined {
+  try {
+    const endpointId = JSON.parse(document?._pageset)?.typeConfig?.entityConfig
+      ?.reviewsEndpointId;
+    const cloudRegion = document._env.YEXT_CLOUD_REGION?.toLowerCase();
+    const environment = document._env.YEXT_ENVIRONMENT?.toLowerCase();
+    const apiKey = document._env.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+    if (!endpointId || !cloudRegion || !environment || !apiKey) {
+      console.error(
+        "Missing required parameters for reviews content endpoint."
+      );
+      return undefined;
     }
-  });
-  return count > 0 ? (totalRating / count).toFixed(1) : 0;
+    return buildReviewsEndpointUrl(
+      endpointId,
+      cloudRegion,
+      environment,
+      apiKey
+    );
+  } catch (error) {
+    console.error("Error parsing reviews content endpoint:", error);
+    return undefined;
+  }
+}
+
+type CloudRegion = "us" | "eu";
+type Environment = "prod" | "sbx" | "qa" | "dev";
+
+/**
+ * Builds the reviews content endpoint URL.
+ * @param endpointId - The ID of the content endpoint with the reviews source.
+ * @param cloudRegion - The cloud region (e.g., "us", "eu").
+ * @param environment - The environment (e.g., "prod", "sbx", "qa", "dev").
+ * @param apiKey - The API key for the reviews content endpoint.
+ * @returns The constructed URL for the reviews content endpoint.
+ */
+function buildReviewsEndpointUrl(
+  endpointId: string,
+  cloudRegion: CloudRegion,
+  environment: Environment,
+  apiKey: string
+): string {
+  switch (cloudRegion) {
+    case "us":
+      switch (environment) {
+        case "prod":
+          return `https://cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+        case "sbx":
+          return `https://sbx-cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+        case "qa":
+          return `https://qa-cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+        case "dev":
+          return `https://streams-dev.yext.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+        default:
+          console.warn(
+            `Unknown environment: ${environment}. Defaulting to prod.`
+          );
+          return `https://cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+      }
+    case "eu":
+      switch (environment) {
+        case "prod":
+          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+        case "qa":
+          return `https://qa-cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+        default:
+          console.warn(
+            `Unknown environment: ${environment}. Defaulting to prod.`
+          );
+          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+      }
+    default:
+      console.warn(
+        `Unknown cloud region: ${cloudRegion}. Defaulting to US prod.`
+      );
+      return `https://cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+  }
 }
 
 /**
