@@ -1,6 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { FaStarHalfAlt, FaStarHalf, FaStar, FaRegStar } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
+import {
+  FaChevronDown,
+  FaStarHalfAlt,
+  FaStarHalf,
+  FaStar,
+  FaRegStar,
+} from "react-icons/fa";
 import { ComponentConfig, Fields } from "@measured/puck";
 import * as React from "react";
 import {
@@ -110,7 +115,7 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
               rating={averageRating}
               hasDarkBackground={hasDarkBackground}
             />
-            <Body className="text-body-md-fontSize">
+            <Body>
               {/* TODO(sumo): update script to handle plurals */}(
               {t("totalReviews", `${totalReviews} reviews`, {
                 count: totalReviews,
@@ -301,9 +306,7 @@ const ReviewStarsWithRating: React.FC<ReviewStarsProps> = ({
 }) => {
   return (
     <>
-      <Body className="font-bold font-body-md-fontWeight text-body-md-fontSize">
-        {rating}
-      </Body>
+      <Body className="font-bold">{rating}</Body>
       <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
     </>
   );
@@ -342,12 +345,12 @@ const ShowMoreButton: React.FC<{
   const { t } = useTranslation();
   return (
     <Button
-      className="font-body-fontFamily text-body-md-fontSize underline cursor-pointer inline-flex items-center gap-2"
+      className="font-body-fontFamily text-body-fontSize underline cursor-pointer inline-flex items-center gap-2"
       onClick={() => setExpanded(!expanded)}
       variant={"link"}
     >
       {expanded ? t("showLess", "Show less") : t("showMore", "Show more")}
-      <IoIosArrowDown
+      <FaChevronDown
         className={`transition-transform ${expanded ? "rotate-180" : ""}`}
         style={{ textDecoration: "underline" }}
       />
