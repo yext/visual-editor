@@ -86,19 +86,21 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   }[styles.textAlignment];
 
   return (
-    <PageSection
-      background={styles.backgroundColor}
-      verticalPadding="sm"
-      className={`flex ${justifyClass} items-center`}
-    >
-      <EntityField
-        displayName={pt("fields.bannerText", "Banner Text")}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
+    resolvedText && (
+      <PageSection
+        background={styles.backgroundColor}
+        verticalPadding="sm"
+        className={`flex ${justifyClass} items-center`}
       >
-        <Body>{resolvedText}</Body>
-      </EntityField>
-    </PageSection>
+        <EntityField
+          displayName={pt("fields.bannerText", "Banner Text")}
+          fieldId={data.text.field}
+          constantValueEnabled={data.text.constantValueEnabled}
+        >
+          <Body>{resolvedText}</Body>
+        </EntityField>
+      </PageSection>
+    )
   );
 };
 
