@@ -85,22 +85,24 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
     right: "justify-end",
   }[styles.textAlignment];
 
+  if (!resolvedText) {
+    return <></>;
+  }
+
   return (
-    resolvedText && (
-      <PageSection
-        background={styles.backgroundColor}
-        verticalPadding="sm"
-        className={`flex ${justifyClass} items-center`}
+    <PageSection
+      background={styles.backgroundColor}
+      verticalPadding="sm"
+      className={`flex ${justifyClass} items-center`}
+    >
+      <EntityField
+        displayName={pt("fields.bannerText", "Banner Text")}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
       >
-        <EntityField
-          displayName={pt("fields.bannerText", "Banner Text")}
-          fieldId={data.text.field}
-          constantValueEnabled={data.text.constantValueEnabled}
-        >
-          <Body>{resolvedText}</Body>
-        </EntityField>
-      </PageSection>
-    )
+        <Body>{resolvedText}</Body>
+      </EntityField>
+    </PageSection>
   );
 };
 
