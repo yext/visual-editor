@@ -85,6 +85,10 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
     right: "justify-end",
   }[styles.textAlignment];
 
+  if (!resolvedText) {
+    return <></>;
+  }
+
   return (
     <PageSection
       background={styles.backgroundColor}
