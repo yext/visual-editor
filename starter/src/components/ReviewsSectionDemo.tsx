@@ -575,7 +575,7 @@ function buildReviewsEndpointUrl(
         case "sbx":
           return `https://sbx-cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
         case "qa":
-          return `https://qa-cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://streams.qa.yext.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
         case "dev":
           return `https://streams-dev.yext.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
         default:

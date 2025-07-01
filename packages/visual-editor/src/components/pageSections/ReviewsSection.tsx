@@ -588,7 +588,7 @@ function buildReviewsEndpointUrl(
         case "prod":
           return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
         case "qa":
-          return `https://qa-cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://streams.qa.yext.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
         default:
           console.warn(
             `Unknown environment: ${environment}. Defaulting to prod.`
