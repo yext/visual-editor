@@ -145,7 +145,6 @@ const ProductCard = ({
           image={product.image}
           aspectRatio={cardImageStyle.aspectRatio}
           width={cardImageStyle.width}
-          className="h-[200px]"
         />
       ) : (
         <div className="sm:h-[200px]" />
