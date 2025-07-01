@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { applyTheme, Document } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
-import { defaultGoogleFontsLinkTags } from "./font_registry.js";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
@@ -14,8 +13,7 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
-      defaultGoogleFontsLinkTags +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+      '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:red !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -40,8 +38,7 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
-      defaultGoogleFontsLinkTags +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+      '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -55,7 +52,32 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme({} as Document, themeConfig);
 
     expect(result).toBe(
-      defaultGoogleFontsLinkTags +
+      '<style id="visual-editor-theme" type="text/css">.components{' +
+        "--colors-palette-text:black !important;" +
+        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
+        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
+        "--borderRadius-border-lg:8px !important;" +
+        "--borderRadius-border-sm:4px !important" +
+        "}</style>"
+    );
+  });
+
+  it("should return font style tag only for fonts in theme", () => {
+    const document: Document = {
+      siteId: 123,
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-button-fontFamily": "'Adamina', serif",
+        }),
+      },
+    };
+
+    const result = applyTheme(document, themeConfig);
+
+    expect(result).toBe(
+      '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+        '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
         '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
@@ -82,8 +104,7 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(document, themeConfig);
 
     expect(result).toBe(
-      defaultGoogleFontsLinkTags +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+      '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -114,8 +135,7 @@ describe("buildCssOverridesStyle", () => {
     });
 
     expect(result).toBe(
-      defaultGoogleFontsLinkTags +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+      '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-primary:#7ED321 !important;" +
         "--colors-palette-primary-contrast:#FFFFFF !important" +
         "}</style>"

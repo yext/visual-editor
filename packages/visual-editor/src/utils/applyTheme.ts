@@ -1,7 +1,12 @@
 import { ThemeData } from "../internal/types/themeData.ts";
 import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
-import { googleFontLinkTags } from "./visualEditorFonts.ts";
+import {
+  constructGoogleFontLinkTags,
+  defaultFonts,
+  extractInUseFontFamilies,
+  googleFontLinkTags,
+} from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
 
@@ -29,8 +34,12 @@ export const applyTheme = (
   const publishedTheme = document?.__?.theme;
   const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
 
+  const fontLinkTags = constructGoogleFontLinkTags(
+    extractInUseFontFamilies(overrides, defaultFonts)
+  );
+
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${googleFontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
+    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
   }
   return base ?? "";
 };
