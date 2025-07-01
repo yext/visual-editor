@@ -99,8 +99,8 @@ const locatorFields: Fields<LocatorProps> = {
     {
       type: "radio",
       options: [
-        { label: msg("yes", "Yes"), value: true },
-        { label: msg("no", "No"), value: false },
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
       ],
     }
   ),
