@@ -3,7 +3,6 @@ import {
   AnalyticsScopeProvider,
   ComplexImageType,
   CTA as CTAType,
-  Link,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -36,7 +35,7 @@ import { FaTimes, FaBars } from "react-icons/fa";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
   image: {
-    url: "https://placehold.co/100X50",
+    url: "https://placehold.co/100x50",
     height: 50,
     width: 100,
     alternateText: "Placeholder Logo",
@@ -246,7 +245,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         {show && (
           <Background
             background={secondaryBackgroundColor}
-            className="flex justify-end gap-6 py-4 px-20"
+            className="flex justify-end gap-6 py-4 px-20 items-center"
           >
             <EntityField
               displayName={pt(
@@ -268,10 +267,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           background={backgroundColor}
           className="flex flex-row justify-between w-full items-center py-6 px-20"
         >
-          <figure className="hidden md:block">
-            <HeaderLogo logo={buildComplexImage(logo, logoWidth)} />
-          </figure>
-          <div className="flex gap-8">
+          <HeaderLogo
+            logo={buildComplexImage(logo, logoWidth)}
+            logoWidth={logoWidth}
+          />
+          <div className="flex gap-8 items-center">
             <EntityField
               displayName={pt(
                 "fields.primaryHeaderLinks",
@@ -319,7 +319,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           className={`md:hidden transition-all duration-300 ease-in-out ${
             isOpen
               ? "max-h-[1000px] opacity-100"
-              : "max-h-0 opacity-0 overflow-hidden"
+              : "max-h-0 opacity-0 overflow-scroll"
           }`}
         >
           <MobileSection background={backgroundColor}>
@@ -332,23 +332,25 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               <HeaderLinks links={links} />
             </EntityField>
           </MobileSection>
-          <MobileSection background={secondaryBackgroundColor} className="pb-4">
-            <EntityField
-              displayName={pt(
-                "fields.secondaryHeaderLinks",
-                "Secondary Header Links"
-              )}
-            >
-              <HeaderLinks links={secondaryLinks} type="Secondary" />
-            </EntityField>
-            {showLanguageDropdown && showLanguageSelector && (
-              <LanguageDropdown
-                background={secondaryBackgroundColor}
-                {...languageDropDownProps}
-                className="flex md:hidden"
-              />
-            )}
-          </MobileSection>
+          {show && (
+            <MobileSection background={secondaryBackgroundColor}>
+              <EntityField
+                displayName={pt(
+                  "fields.secondaryHeaderLinks",
+                  "Secondary Header Links"
+                )}
+              >
+                <HeaderLinks links={secondaryLinks} type="Secondary" />
+              </EntityField>
+            </MobileSection>
+          )}
+          {showLanguageDropdown && showLanguageSelector && (
+            <LanguageDropdown
+              background={secondaryBackgroundColor}
+              {...languageDropDownProps}
+              className="flex md:hidden"
+            />
+          )}
           <MobileSection className="py-4" background={backgroundColor}>
             <HeaderCtas
               document={document}
@@ -373,20 +375,24 @@ const HeaderLinks = ({
 }) => {
   return (
     <nav aria-label={`${type} Header Links`}>
-      <ul className="flex flex-col md:flex-row gap-4 md:gap-8 py-4 md:py-0">
+      <ul className="flex flex-col justify-start md:flex-row flex flex-col md:flex-row gap-0 md:gap-8">
         {links.map((item, index) => (
-          <li key={`${type.toLowerCase()}.${index}`}>
-            <Link
+          <li key={`${type.toLowerCase()}.${index}`} className="py-4 md:py-0">
+            <CTA
+              alwaysHideCaret={false}
+              variant={
+                type === "Primary"
+                  ? "headerFooterMainLink"
+                  : "headerSecondaryLink"
+              }
               eventName={t(
                 `cta.${type.toLowerCase()}.${index}`,
                 `Link ${index + 1}`
               )}
-              cta={{
-                label: item.label,
-                linkType: item.linkType,
-                link: item.link,
-              }}
-              className={`${type === "Primary" ? `text-sm` : `text-xs`}`}
+              label={item.label}
+              linkType={item.linkType}
+              link={item.link}
+              className={`${type === "Primary" ? `text-sm` : `text-xs`} justify-start `}
             />
           </li>
         ))}
@@ -402,11 +408,13 @@ const HeaderLogo = (props: {
 }) => {
   return (
     <MaybeLink href={props.logoLink}>
-      <Image
-        image={props.logo.image}
-        layout="auto"
-        aspectRatio={props.logo.image.width / props.logo.image.height}
-      />
+      <figure style={{ width: `${props.logoWidth}px` }}>
+        <Image
+          image={props.logo.image}
+          layout="auto"
+          aspectRatio={props.logo.image.width / props.logo.image.height}
+        />
+      </figure>
     </MaybeLink>
   );
 };
@@ -432,7 +440,7 @@ const HeaderCtas = (props: {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-2">
       {resolvedPrimaryCta?.label && (
         <EntityField
           displayName={pt("fields.primaryCta", "Primary CTA")}
@@ -593,7 +601,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     },
     styles: {
       primaryHeader: {
-        logoWidth: 0,
+        logoWidth: 100,
         backgroundColor: backgroundColors.background1.value,
         primaryCtaVariant: "primary",
         secondaryCtaVariant: "secondary",

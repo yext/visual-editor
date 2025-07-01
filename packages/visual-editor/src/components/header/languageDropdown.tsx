@@ -10,11 +10,16 @@ import {
 } from "../atoms/dropdown.tsx";
 import {
   Background,
-  backgroundColors,
   BackgroundStyle,
   Body,
   fetchLocalesToPathsForEntity,
 } from "@yext/visual-editor";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../atoms/accordion.tsx";
 
 export interface LanguageDropdownProps {
   className?: string;
@@ -99,43 +104,78 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   return (
-    <Background
-      background={background || backgroundColors.background1.value}
-      as="div"
-      className={className}
-    >
-      <DropdownMenu open={open} onOpenChange={handleOpenChange}>
-        <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
-          <div className="flex gap-4 items-center">
-            <Globe className="w-4 h-4" />
-            <Body>{getLanguageName(selected)}</Body>
-          </div>
-          <ChevronDown />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40 rounded-l shadow-lg">
-          {(status === "COMPLETE" || status === "ERROR") &&
-            Object.entries(validLocalesToPaths).map(([locale, path]) => (
-              <Background
-                background={background || backgroundColors.background1.value}
-                as="div"
-                key={locale}
-              >
-                {locale !== selected && (
-                  <DropdownMenuSeparator className="bg-[#CCCCCC]" />
-                )}
-                <DropdownMenuItem
-                  onSelect={() => handleLocaleSelected(locale, path)}
-                  className={themeManagerCn(
-                    "text-body-fontSize font-body-fontFamily focus:bg-slate-100",
-                    selected === locale ? "font-bold" : "font-body-fontWeight"
+    <Background background={background} as="div" className={className}>
+      <div className="hidden md:block">
+        <DropdownMenu open={open} onOpenChange={handleOpenChange}>
+          <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
+            <div className="flex gap-4 items-center">
+              <Globe className="w-4 h-4" />
+              <Body className="text-xs">{getLanguageName(selected)}</Body>
+            </div>
+            <ChevronDown />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-40 rounded-l shadow-lg "
+          >
+            {(status === "COMPLETE" || status === "ERROR") &&
+              Object.entries(validLocalesToPaths).map(([locale, path]) => (
+                <Background as="div" key={locale}>
+                  {locale !== selected && (
+                    <DropdownMenuSeparator className="bg-[#CCCCCC]" />
                   )}
-                >
-                  {getLanguageName(locale)}
-                </DropdownMenuItem>
-              </Background>
-            ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+                  <DropdownMenuItem
+                    onSelect={() => handleLocaleSelected(locale, path)}
+                    className={themeManagerCn(
+                      "text-body-fontSize font-body-fontFamily bg-white focus:bg-slate-100 py-4 px-6 text-sm",
+                      selected === locale ? "font-bold" : "font-body-fontWeight"
+                    )}
+                  >
+                    {getLanguageName(locale)}
+                  </DropdownMenuItem>
+                </Background>
+              ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="md:hidden block w-full">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full"
+          onValueChange={(value) => handleOpenChange(!!value)}
+        >
+          <AccordionItem value="language-selector">
+            <AccordionTrigger className="group flex w-full items-center justify-between text-sm font-medium text-gray-900 px-4 py-6 md:pb-4 ">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4" />
+                <Body className="text-xs">{getLanguageName(selected)}</Body>
+              </div>
+              <ChevronDown
+                className="transition-transform duration-300 group-data-[state=open]:rotate-180"
+                size={16}
+              />
+            </AccordionTrigger>
+            <AccordionContent className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp bg-white">
+              <div className="flex flex-col pl-6">
+                {(status === "COMPLETE" || status === "ERROR") &&
+                  Object.entries(validLocalesToPaths).map(([locale, path]) => (
+                    <button
+                      key={locale}
+                      onClick={() => handleLocaleSelected(locale, path)}
+                      className={themeManagerCn(
+                        "text-left py-3 px-2 rounded text-sm",
+                        selected === locale ? "font-bold" : "font-normal"
+                      )}
+                    >
+                      {getLanguageName(locale)}
+                    </button>
+                  ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
     </Background>
   );
 };
