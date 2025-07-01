@@ -26,4 +26,5 @@ jobs:
           scopes: |
             components
             deps
+            locator
             util

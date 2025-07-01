@@ -21,7 +21,6 @@ import {
   Result,
   SearchHeadlessProvider,
   SelectableStaticFilter,
-  StaticFilter,
   useSearchActions,
   useSearchState,
 } from "@yext/search-headless-react";
@@ -39,6 +38,7 @@ import {
   useDocument,
   useTemplateProps,
   Toggle,
+  YextField,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -50,7 +50,6 @@ import {
 import { MapPinIcon } from "./MapPinIcon.js";
 import { FaAngleRight } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
-import { YextField } from "../editor";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -95,13 +94,16 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
-  openNowButton: YextField("Include Open Now Button", {
-    type: "radio",
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
+  openNowButton: YextField(
+    msg("fields.options.includeOpenNow", "Include Open Now Button"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("yes", "Yes"), value: true },
+        { label: msg("no", "No"), value: false },
+      ],
+    }
+  ),
 };
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
