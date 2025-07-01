@@ -14,9 +14,10 @@ export const buttonVariants = cva(
         link: "w-fit underline",
         directoryLink:
           "border-b-gray-400 border-b sm:border-transparent w-full sm:w-fit sm:underline py-3",
-        headerFooterMainLink: "font-bold text-link-sm-fontSize hover:underline",
+        headerFooterMainLink:
+          "font-link-fontWeight text-link-sm-fontSize hover:underline hover:cursor-pointer",
         headerSecondaryLink:
-          "font-regular text-link-xs-fontSize hover:underline",
+          "text-link-xs-fontSize hover:underline hover:cursor-pointer",
       },
       hasDarkBackground: {
         true: "",

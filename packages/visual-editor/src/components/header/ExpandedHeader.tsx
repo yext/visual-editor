@@ -2,13 +2,11 @@ import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
-  CTA as CTAType,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
-  useDocument,
   MaybeLink,
   backgroundColors,
   Image,
@@ -18,8 +16,6 @@ import {
   BackgroundStyle,
   CTAProps,
   TranslatableCTA,
-  YextEntityField,
-  resolveYextEntityField,
   pt,
   resolveTranslatableString,
   Background,
@@ -29,7 +25,6 @@ import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.js";
-import { useState } from "react";
 import { t } from "i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
 
@@ -46,14 +41,14 @@ export interface ExpandedHeaderProps {
   data: {
     primaryHeader: {
       logo: string;
-      links: CTAType[];
-      primaryCTA?: YextEntityField<TranslatableCTA>;
-      secondaryCTA?: YextEntityField<TranslatableCTA>;
+      links: TranslatableCTA[];
+      primaryCTA?: TranslatableCTA;
+      secondaryCTA?: TranslatableCTA;
     };
     secondaryHeader: {
       show: boolean;
       showLanguageDropdown: boolean;
-      secondaryLinks: CTAType[];
+      secondaryLinks: TranslatableCTA[];
     };
   };
   styles: {
@@ -87,21 +82,31 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: YextField("Label", { type: "text" }),
-              link: YextField("Link", { type: "text" }),
-              linkType: YextField("Link Type", { type: "text" }),
+              label: YextField(msg("fields.label", "Label"), { type: "text" }),
+              link: YextField(msg("fields.link", "Link"), { type: "text" }),
+              linkType: YextField(msg("fields.linkType", "Link Type"), {
+                type: "text",
+              }),
             },
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
-            type: "entityField",
-            filter: {
-              types: ["type.cta"],
+            type: "object",
+            objectFields: {
+              label: YextField(msg("fields.label", "Label"), { type: "text" }),
+              link: YextField(msg("fields.link", "Link"), { type: "text" }),
+              linkType: YextField(msg("fields.linkType", "Link Type"), {
+                type: "text",
+              }),
             },
           }),
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
-            type: "entityField",
-            filter: {
-              types: ["type.cta"],
+            type: "object",
+            objectFields: {
+              label: YextField(msg("fields.label", "Label"), { type: "text" }),
+              link: YextField(msg("fields.link", "Link"), { type: "text" }),
+              linkType: YextField(msg("fields.linkType", "Link Type"), {
+                type: "text",
+              }),
             },
           }),
         },
@@ -219,14 +224,12 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   data,
   styles,
 }: ExpandedHeaderProps) => {
-  const document = useDocument() as any;
-
   const { primaryHeader, secondaryHeader } = data;
   const {
     primaryHeader: primaryHeaderStyle,
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const { logo, links, primaryCTA, secondaryCTA } = primaryHeader;
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
   const { backgroundColor, logoWidth, primaryCtaVariant, secondaryCtaVariant } =
@@ -267,10 +270,12 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           background={backgroundColor}
           className="flex flex-row justify-between w-full items-center py-6 px-20"
         >
-          <HeaderLogo
-            logo={buildComplexImage(logo, logoWidth)}
-            logoWidth={logoWidth}
-          />
+          <EntityField displayName={pt("fields.logo", "Logo")}>
+            <HeaderLogo
+              logo={buildComplexImage(logo, logoWidth)}
+              logoWidth={logoWidth}
+            />
+          </EntityField>
           <div className="flex gap-8 items-center">
             <EntityField
               displayName={pt(
@@ -370,32 +375,32 @@ const HeaderLinks = ({
   links,
   type = "Primary",
 }: {
-  links: CTAType[];
+  links: TranslatableCTA[];
   type?: "Primary" | "Secondary";
 }) => {
+  const { i18n } = useTranslation();
+
   return (
     <nav aria-label={`${type} Header Links`}>
-      <ul className="flex flex-col justify-start md:flex-row flex flex-col md:flex-row gap-0 md:gap-8">
-        {links.map((item, index) => (
-          <li key={`${type.toLowerCase()}.${index}`} className="py-4 md:py-0">
-            <CTA
-              alwaysHideCaret={false}
-              variant={
-                type === "Primary"
-                  ? "headerFooterMainLink"
-                  : "headerSecondaryLink"
-              }
-              eventName={t(
-                `cta.${type.toLowerCase()}.${index}`,
-                `Link ${index + 1}`
-              )}
-              label={item.label}
-              linkType={item.linkType}
-              link={item.link}
-              className={`${type === "Primary" ? `text-sm` : `text-xs`} justify-start `}
-            />
-          </li>
-        ))}
+      <ul className="flex flex-col justify-start md:flex-row flex flex-col md:flex-row gap-0 md:gap-6">
+        {links.map((item, index) => {
+          return (
+            <li key={`${type.toLowerCase()}.${index}`} className="py-4 md:py-0">
+              <CTA
+                variant={
+                  type === "Primary"
+                    ? "headerFooterMainLink"
+                    : "headerSecondaryLink"
+                }
+                eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
+                label={resolveTranslatableString(item.label, i18n.language)}
+                linkType={item.linkType}
+                link={item.link}
+                className={`justify-start `}
+              />
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
@@ -420,60 +425,40 @@ const HeaderLogo = (props: {
 };
 
 const HeaderCtas = (props: {
-  primaryCTA?: YextEntityField<TranslatableCTA>;
-  secondaryCTA?: YextEntityField<TranslatableCTA>;
+  primaryCTA?: TranslatableCTA;
+  secondaryCTA?: TranslatableCTA;
   primaryVariant: CTAProps["variant"];
   secondaryVariant: CTAProps["variant"];
   document: any;
 }) => {
   const { i18n } = useTranslation();
   const { primaryCTA, secondaryCTA, primaryVariant, secondaryVariant } = props;
-  const resolvedPrimaryCta = primaryCTA
-    ? resolveYextEntityField<TranslatableCTA>(document, primaryCTA)
-    : undefined;
 
-  const resolvedSecondaryCta = secondaryCTA
-    ? resolveYextEntityField(document, secondaryCTA)
-    : undefined;
-  if (!resolvedPrimaryCta && !resolvedSecondaryCta) {
+  if (!primaryCTA && !secondaryCTA) {
     return;
   }
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2">
-      {resolvedPrimaryCta?.label && (
-        <EntityField
-          displayName={pt("fields.primaryCta", "Primary CTA")}
-          fieldId={primaryCTA?.field}
-          constantValueEnabled={primaryCTA?.constantValueEnabled}
-        >
+      {primaryCTA?.label && (
+        <EntityField displayName={pt("fields.primaryCta", "Primary CTA")}>
           <CTA
             eventName={`cta`}
             variant={primaryVariant}
-            label={resolveTranslatableString(
-              resolvedPrimaryCta.label,
-              i18n.language
-            )}
-            link={resolvedPrimaryCta.link}
-            linkType={resolvedPrimaryCta.linkType}
+            label={resolveTranslatableString(primaryCTA?.label, i18n.language)}
+            link={primaryCTA.link}
+            linkType={primaryCTA.linkType}
           />
         </EntityField>
       )}
-      {resolvedSecondaryCta?.label && (
-        <EntityField
-          displayName={pt("fields.secondaryCta", "Secondary CTA")}
-          fieldId={secondaryCTA?.field}
-          constantValueEnabled={secondaryCTA?.constantValueEnabled}
-        >
+      {secondaryCTA?.label && (
+        <EntityField displayName={pt("fields.secondaryCta", "Secondary CTA")}>
           <CTA
             eventName={`cta`}
             variant={secondaryVariant}
-            label={resolveTranslatableString(
-              resolvedSecondaryCta.label,
-              i18n.language
-            )}
-            link={resolvedSecondaryCta.link}
-            linkType={resolvedSecondaryCta.linkType}
+            label={resolveTranslatableString(secondaryCTA.label, i18n.language)}
+            link={secondaryCTA.link}
+            linkType={secondaryCTA.linkType}
           />
         </EntityField>
       )}
@@ -505,14 +490,13 @@ const MobileSection = ({
   background?: BackgroundStyle;
   className?: string;
 }) => (
-  <section>
-    <Background
-      className={`px-4 ${className ?? ""}`.trim()}
-      background={background}
-    >
-      {children}
-    </Background>
-  </section>
+  <Background
+    as="section"
+    className={`px-4 ${className ?? ""}`.trim()}
+    background={background}
+  >
+    {children}
+  </Background>
 );
 
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
@@ -549,22 +533,14 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
           },
         ],
         primaryCTA: {
-          field: "",
-          constantValueEnabled: true,
-          constantValue: {
-            label: { en: "Call to Action", hasLocalizedValue: "true" },
-            link: "#",
-            linkType: "URL",
-          },
+          label: "Call to Action",
+          link: "#",
+          linkType: "URL",
         },
         secondaryCTA: {
-          field: "",
-          constantValueEnabled: true,
-          constantValue: {
-            label: { en: "Call to Action", hasLocalizedValue: "true" },
-            link: "#",
-            linkType: "URL",
-          },
+          label: "Call to Action",
+          link: "#",
+          linkType: "URL",
         },
       },
       secondaryHeader: {

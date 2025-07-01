@@ -86,7 +86,6 @@ export interface PageSectionCategoryProps {
   FAQSection: FAQSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TestimonialSection: TestimonialSectionProps;
-  ExpandedHeader: ExpandedHeaderProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -111,6 +110,7 @@ export const PageSectionCategory = Object.keys(
 ) as (keyof PageSectionCategoryProps)[];
 
 export interface OtherCategoryProps {
+  ExpandedHeader: ExpandedHeaderProps;
   Header: HeaderProps;
   Footer: FooterProps;
 }
