@@ -24,8 +24,16 @@ export const Image: React.FC<ImageProps> = ({
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight = width && aspectRatio ? width / aspectRatio : height;
 
+  // Determine container styles based on whether width is specified
+  const containerStyles = width
+    ? `overflow-hidden` // No w-full when width is specified
+    : `overflow-hidden w-full`; // Use w-full when no width specified
+
   return (
-    <div className={themeManagerCn("overflow-hidden w-full", className)}>
+    <div
+      className={themeManagerCn(containerStyles, className)}
+      style={width ? { width: `${width}px` } : undefined}
+    >
       {aspectRatio ? (
         <ImageComponent
           image={image}
@@ -49,7 +57,7 @@ export const Image: React.FC<ImageProps> = ({
               ? (image.image.alternateText ?? "")
               : (image.alternateText ?? "")
           }
-          className="object-cover"
+          className="object-cover w-full h-full"
         />
       )}
     </div>
