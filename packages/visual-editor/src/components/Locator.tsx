@@ -330,7 +330,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         value: "now",
       },
       selected,
-      displayName: "Open Now",
+      displayName: t("openNow", "Open Now"),
     });
     setIsSelected(isSelected);
     searchActions.setOffset(0);
