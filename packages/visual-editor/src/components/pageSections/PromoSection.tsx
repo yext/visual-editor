@@ -19,13 +19,13 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  resolveTranslatableString,
-  resolveTranslatableRichText,
   msg,
   pt,
   HeadingLevel,
   ThemeOptions,
   getAnalyticsScopeHash,
+  resolveTranslatableString,
+  resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 

@@ -145,9 +145,9 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
-          <Accordion type="single" collapsible>
+          <Accordion>
             {resolvedFAQs?.faqs?.map((faqItem: FAQStruct, index: number) => (
-              <AccordionItem value={index.toString()} key={index}>
+              <AccordionItem key={index}>
                 <AccordionTrigger>
                   <Body>
                     {resolveTranslatableString(faqItem.question, i18n.language)}

@@ -53,8 +53,8 @@ const headerFields: Fields<HeaderProps> = {
     {
       type: "radio",
       options: [
-        { label: "Yes", value: true },
-        { label: "No", value: false },
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
       ],
     }
   ),

@@ -12,69 +12,63 @@ import React from "react";
  * @param locale
  */
 export const resolveTranslatableString = (
-  translatableString?: TranslatableString,
-  locale?: string
+  translatableString: TranslatableString = "",
+  locale: string = "en"
 ): string => {
-  locale = locale ?? "en";
-  if (!translatableString) {
-    return "";
-  }
-
-  if (typeof translatableString === "string") {
-    return translatableString;
-  }
-
   if (typeof translatableString === "object") {
     if (locale in translatableString) {
       return translatableString[locale];
     }
+    return "";
   }
 
-  return "";
+  return translatableString;
 };
 
 /**
- * Converts a type TranslatableRichText to a type that can be viewed on the page
+ * Converts a type TranslatableRichText to string or RTF Element
  * @param translatableRichText
  * @param locale
  */
 export const resolveTranslatableRichText = (
-  translatableRichText?: TranslatableRichText,
+  translatableRichText: TranslatableRichText = "",
   locale: string = "en"
 ): string | React.ReactElement => {
-  if (!translatableRichText) return "";
+  try {
+    let value = translatableRichText;
 
-  if (
-    typeof translatableRichText === "string" ||
-    isRichText(translatableRichText)
-  ) {
-    return toStringOrElement(translatableRichText);
+    if (
+      typeof translatableRichText !== "string" &&
+      !isRichText(translatableRichText)
+    ) {
+      value = translatableRichText[locale];
+    }
+
+    return toStringOrElement(value);
+  } catch (error) {
+    console.warn("Error in resolveTranslatableRichText:", error);
+    return "";
   }
-
-  const localizedValue = translatableRichText[locale];
-  if (localizedValue) {
-    return toStringOrElement(localizedValue);
-  }
-
-  return "";
 };
 
+function isRichText(value: unknown): value is RichText {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("html" in value || "json" in value)
+  );
+}
+
 /**
- * Takes a TranslatableString and a locale and returns the value to be displayed in the editor input
+ * Takes a TranslatableString and a locale and returns the value as a string
  * @param translatableString a TranslatableString
  * @param locale "en" or other locale value
  * @return string to be displayed in the editor input
  */
 export function getDisplayValue(
-  translatableString?: TranslatableRichText,
-  locale?: string
+  translatableString: TranslatableRichText,
+  locale: string = "en"
 ): string {
-  if (!translatableString) {
-    return "";
-  }
-  if (!locale) {
-    locale = "en";
-  }
   if (typeof translatableString === "string") {
     return translatableString;
   }
@@ -83,29 +77,17 @@ export function getDisplayValue(
     return richTextToString(translatableString);
   }
 
-  const localizedValue: string | RichText = translatableString[locale];
-
-  if (typeof localizedValue === "string") {
-    return localizedValue;
-  }
+  const localizedValue = translatableString[locale];
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
   }
 
-  return "";
+  return localizedValue;
 }
 
 function richTextToString(rtf: RichText): string {
   return rtf.html || rtf.json || "";
-}
-
-function isRichText(value: unknown): value is RichText {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    ("html" in value || "json" in value)
-  );
 }
 
 /**
@@ -118,5 +100,5 @@ function toStringOrElement(
   if (isRichText(value)) {
     return <MaybeRTF data={value} />;
   }
-  return value ?? "";
+  return value;
 }

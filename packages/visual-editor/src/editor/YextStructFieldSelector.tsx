@@ -138,7 +138,7 @@ const SubfieldsInput = ({
   return (
     <div className="ObjectField">
       <div className="ObjectField-fieldset">
-        {subfields.map(({ field, type, label }) => {
+        {subfields.map(({ field, type, label }, idx) => {
           const toggleConstantValueEnabled = (
             constantValueEnabled: boolean
           ) => {
@@ -162,14 +162,17 @@ const SubfieldsInput = ({
           }
 
           return (
-            <>
+            <React.Fragment key={idx}>
               <div className="ve-mt-3 first:ve-mt-0">
                 <ConstantValueModeToggler
                   fieldTypeFilter={[type]}
                   constantValueEnabled={value?.constantValueOverride?.[field]}
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
                   label={label}
-                  showLocale={type === "type.string" && !disallowTranslation}
+                  showLocale={
+                    (type === "type.string" || type === "type.rich_text_v2") &&
+                    !disallowTranslation
+                  }
                 />
               </div>
               {value?.constantValueOverride?.[field] && (
@@ -197,7 +200,7 @@ const SubfieldsInput = ({
                   />
                 </div>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
