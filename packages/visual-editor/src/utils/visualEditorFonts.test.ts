@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { ThemeData } from "../internal/types/themeData.ts";
 import {
   extractInUseFontFamilies,
@@ -74,6 +74,17 @@ describe("extractInUseFontFamilies", () => {
     };
 
     expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual(expected);
+  });
+
+  it("should handle fontFamily in theme data not in available fonts", () => {
+    const consoleSpy = vi.spyOn(console, "warn");
+    const themeData: ThemeData = {
+      "--fontFamily-h1-fontFamily": "'Fake Font', sans-serif",
+    };
+    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({});
+    expect(consoleSpy).toHaveBeenLastCalledWith(
+      "The font 'Fake Font' is used in the theme but cannot be found in available fonts."
+    );
   });
 });
 

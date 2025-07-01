@@ -247,6 +247,10 @@ export const extractInUseFontFamilies = (
   for (const fontName of fontFamilies) {
     if (avaliableFonts[fontName]) {
       inUseFonts[fontName] = avaliableFonts[fontName];
+    } else {
+      console.warn(
+        `The font '${fontName}' is used in the theme but cannot be found in available fonts.`
+      );
     }
   }
 
