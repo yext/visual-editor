@@ -531,7 +531,7 @@ function getReviewsContentEndpoint(document: any): string | undefined {
       ?.reviewsEndpointId;
     const cloudRegion = document._env.YEXT_CLOUD_REGION?.toLowerCase();
     const environment = document._env.YEXT_ENVIRONMENT?.toLowerCase();
-    const apiKey = document._env.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+    const apiKey = document._env.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
     if (!endpointId || !cloudRegion || !environment || !apiKey) {
       console.error(
         "Missing required parameters for reviews content endpoint.",
