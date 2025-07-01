@@ -30,6 +30,10 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 export interface EventSectionProps {
   data: {
@@ -43,6 +47,7 @@ export interface EventSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
+    cardImages: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -100,6 +105,10 @@ const eventSectionFields: Fields<EventSectionProps> = {
           }),
         },
       }),
+      cardImages: YextField(msg("fields.cardImages", "Card Images"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -119,11 +128,13 @@ const EventCard = ({
   event,
   backgroundColor,
   sectionHeadingLevel,
+  cardImageStyle,
 }: {
   cardKey: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  cardImageStyle: ImageStylingProps;
 }) => {
   const { i18n } = useTranslation();
   return (
@@ -136,8 +147,8 @@ const EventCard = ({
           <div className="h-full">
             <Image
               image={event.image}
-              layout="auto"
-              aspectRatio={event.image.width / event.image.height}
+              aspectRatio={cardImageStyle.aspectRatio}
+              width={cardImageStyle.width}
             />
           </div>
         )}
@@ -227,6 +238,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
+                cardImageStyle={styles.cardImages}
               />
             ))}
           </div>
@@ -261,6 +273,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
         level: 2,
         align: "left",
       },
+      cardImages: { aspectRatio: 1.78 },
     },
     analytics: {
       scope: "eventSection",

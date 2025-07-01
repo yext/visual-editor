@@ -8,7 +8,6 @@ import { themeManagerCn } from "@yext/visual-editor";
 
 export interface ImageProps {
   image: ImageType | ComplexImageType;
-  layout: "auto" | "fixed";
   aspectRatio?: number;
   width?: number;
   height?: number;
@@ -17,27 +16,29 @@ export interface ImageProps {
 
 export const Image: React.FC<ImageProps> = ({
   image,
-  layout,
   aspectRatio,
   width,
   height,
   className,
 }) => {
+  // Calculate height based on width and aspect ratio if width is provided
+  const calculatedHeight = width && aspectRatio ? width / aspectRatio : height;
+
   return (
     <div className={themeManagerCn("overflow-hidden w-full", className)}>
-      {layout === "auto" && aspectRatio ? (
+      {aspectRatio ? (
         <ImageComponent
           image={image}
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
         />
-      ) : !!width && !!height ? (
+      ) : !!width && !!calculatedHeight ? (
         <ImageComponent
           image={image}
           layout={"fixed"}
           width={width}
-          height={height}
+          height={calculatedHeight}
           className="object-cover"
         />
       ) : (

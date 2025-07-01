@@ -28,6 +28,10 @@ import {
   msg,
   pt,
 } from "@yext/visual-editor";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -45,6 +49,7 @@ export interface HeroSectionProps {
     localGeoModifierLevel: HeadingLevel;
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -151,6 +156,10 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "CTA_VARIANT",
         }
       ),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -310,10 +319,11 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             <Image
               image={resolvedHero?.image}
-              layout="auto"
               aspectRatio={
+                styles.image.aspectRatio ??
                 resolvedHero?.image.width / resolvedHero?.image.height
               }
+              width={styles.image.width}
             />
           </div>
         </EntityField>
@@ -417,6 +427,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       localGeoModifierLevel: 1,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
+      image: {
+        aspectRatio: 1.78, // 16:9 default
+      },
     },
     analytics: {
       scope: "heroSection",

@@ -28,6 +28,10 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 export interface ProductSectionProps {
   data: {
@@ -41,6 +45,7 @@ export interface ProductSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
+    cardImages: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -98,6 +103,10 @@ const productSectionFields: Fields<ProductSectionProps> = {
           }),
         },
       }),
+      cardImages: YextField(msg("fields.cardImages", "Card Images"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -117,11 +126,13 @@ const ProductCard = ({
   product,
   backgroundColor,
   sectionHeadingLevel,
+  cardImageStyle,
 }: {
   key: number;
   product: ProductStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  cardImageStyle: ImageStylingProps;
 }) => {
   const { i18n } = useTranslation();
   return (
@@ -132,8 +143,8 @@ const ProductCard = ({
       {product.image ? (
         <Image
           image={product.image}
-          layout={"auto"}
-          aspectRatio={1.778} // 16:9
+          aspectRatio={cardImageStyle.aspectRatio}
+          width={cardImageStyle.width}
           className="h-[200px]"
         />
       ) : (
@@ -229,6 +240,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 product={product}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
+                cardImageStyle={styles.cardImages}
               />
             ))}
           </div>
@@ -262,6 +274,9 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       heading: {
         level: 2,
         align: "left",
+      },
+      cardImages: {
+        aspectRatio: 1.78,
       },
     },
     analytics: {

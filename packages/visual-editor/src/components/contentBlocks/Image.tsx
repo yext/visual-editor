@@ -15,8 +15,10 @@ import { ComplexImageType, ImageType } from "@yext/pages-components";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
-export interface ImageWrapperProps extends Omit<ImageProps, "image"> {
+export interface ImageWrapperProps {
   image: YextEntityField<ImageType | ComplexImageType>;
+  aspectRatio?: number;
+  width?: number;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
@@ -29,18 +31,7 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
       },
     }
   ),
-  layout: YextField("Layout", {
-    type: "radio",
-    options: [
-      { label: msg("fields.options.auto", "Auto"), value: "auto" },
-      { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
-    ],
-  }),
   width: YextField(msg("fields.options.width", "Width"), {
-    type: "number",
-    min: 0,
-  }),
-  height: YextField(msg("fields.options.height", "Height"), {
     type: "number",
     min: 0,
   }),
@@ -70,10 +61,8 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
 
 const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   image: imageField,
-  layout,
   aspectRatio,
   width,
-  height,
 }) => {
   const { t } = useTranslation();
   const document = useDocument();
@@ -86,6 +75,9 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
     return null;
   }
 
+  // Calculate height based on width and aspect ratio
+  const height = width && aspectRatio ? width / aspectRatio : undefined;
+
   return (
     <EntityField
       displayName={t("image", "Image")}
@@ -94,7 +86,6 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
     >
       <Image
         image={resolvedImage}
-        layout={layout}
         aspectRatio={aspectRatio}
         width={width}
         height={height}
@@ -103,18 +94,11 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   );
 };
 
-export const resolvedImageFields = (layout: "auto" | "fixed") => {
+export const resolvedImageFields = () => {
   return {
     image: ImageWrapperFields["image"],
-    layout: ImageWrapperFields["layout"],
-    ...(layout === "auto"
-      ? {
-          aspectRatio: ImageWrapperFields["aspectRatio"],
-        }
-      : {
-          height: ImageWrapperFields["height"],
-          width: ImageWrapperFields["width"],
-        }),
+    width: ImageWrapperFields["width"],
+    aspectRatio: ImageWrapperFields["aspectRatio"],
   };
 };
 
@@ -131,11 +115,10 @@ export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
       },
       constantValueEnabled: true,
     },
-    layout: "auto",
     aspectRatio: 1.78,
   },
-  resolveFields(data) {
-    return resolvedImageFields(data.props.layout);
+  resolveFields() {
+    return resolvedImageFields();
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };

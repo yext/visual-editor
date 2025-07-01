@@ -29,6 +29,10 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultInsight } from "../../internal/puck/constant-value-fields/InsightSection.tsx";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 export interface InsightSectionProps {
   data: {
@@ -42,6 +46,7 @@ export interface InsightSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
+    cardImages: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -60,7 +65,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
           filter: { types: ["type.string"] },
         }
       ),
-      insights: YextField(msg("fields.insightSection", "Insight Section"), {
+      insights: YextField(msg("fields.insights", "Insights"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.InsightSection.type],
@@ -99,6 +104,10 @@ const insightSectionFields: Fields<InsightSectionProps> = {
           }),
         },
       }),
+      cardImages: YextField(msg("fields.cardImages", "Card Images"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -118,11 +127,13 @@ const InsightCard = ({
   insight,
   backgroundColor,
   sectionHeadingLevel,
+  cardImageStyle,
 }: {
   key: number;
   insight: InsightStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
+  cardImageStyle: ImageStylingProps;
 }) => {
   const { i18n } = useTranslation();
 
@@ -134,8 +145,8 @@ const InsightCard = ({
       {insight.image ? (
         <Image
           image={insight.image}
-          layout="auto"
-          aspectRatio={1.778} // 16:9
+          aspectRatio={cardImageStyle.aspectRatio}
+          width={cardImageStyle.width}
           className="rounded-t-[inherit] h-[200px]"
         />
       ) : (
@@ -173,10 +184,10 @@ const InsightCard = ({
         {insight.cta && (
           <CTA
             eventName={`cta${key}`}
-            variant={"link"}
+            variant="secondary"
             label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
-            linkType={insight.cta.linkType ?? "URL"}
+            linkType={insight.cta.linkType}
             className="mt-auto"
           />
         )}
@@ -189,7 +200,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { i18n } = useTranslation();
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(document, data.insights);
-  const resolvedHeading = resolveTranslatableString(
+  const resolvedHeading = resolveTranslatableRichText(
     resolveYextEntityField(document, data.heading),
     i18n.language
   );
@@ -233,6 +244,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
+                cardImageStyle={styles.cardImages}
               />
             ))}
           </div>
@@ -243,13 +255,13 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 };
 
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
-  label: msg("components.insightsSection", "Insights Section"),
+  label: msg("components.insightSection", "Insight Section"),
   fields: insightSectionFields,
   defaultProps: {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Insights", hasLocalizedValue: "true" },
+        constantValue: { en: "Featured Insights", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       insights: {
@@ -266,6 +278,9 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       heading: {
         level: 2,
         align: "left",
+      },
+      cardImages: {
+        aspectRatio: 1.78,
       },
     },
     analytics: {

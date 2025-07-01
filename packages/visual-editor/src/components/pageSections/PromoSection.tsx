@@ -27,6 +27,10 @@ import {
   ThemeOptions,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -42,6 +46,7 @@ export interface PromoSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -109,6 +114,10 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           }),
         },
       }),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -152,13 +161,16 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         >
           <Image
             image={resolvedPromo.image}
-            layout={"auto"}
-            aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
+            aspectRatio={
+              styles.image.aspectRatio ??
+              resolvedPromo.image.width / resolvedPromo.image.height
+            }
+            width={styles.image.width}
             className="h-[200px]"
           />
         </EntityField>
       )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
+      <div className="flex flex-col gap-6 justify-center">
         {resolvedPromo?.title && (
           <EntityField
             displayName={pt("fields.title", "Title")}
@@ -166,40 +178,28 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             constantValueEnabled={data.promo.constantValueOverride.title}
           >
             <div className={`flex ${justifyClass}`}>
-              <Heading level={styles.heading.level}>
-                {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
+              <Heading level={styles?.heading?.level ?? 2}>
+                {resolveTranslatableString(resolvedPromo.title, i18n.language)}
               </Heading>
             </div>
           </EntityField>
         )}
-        <EntityField
-          displayName={pt("fields.description", "Description")}
-          fieldId={data.promo.field}
-          constantValueEnabled={
-            !resolvedPromo?.description ||
-            data.promo.constantValueOverride.description
-          }
-        >
-          {resolveTranslatableRichText(
-            resolvedPromo?.description,
-            i18n.language
-          )}
-        </EntityField>
-        {resolvedPromo?.cta?.label && (
+        {resolveTranslatableRichText(resolvedPromo?.description, i18n.language)}
+        {resolvedPromo?.cta && (
           <EntityField
-            displayName={pt("fields.callToAction", "Call To Action")}
+            displayName={pt("fields.cta", "CTA")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
             <CTA
-              eventName={`cta`}
+              eventName="cta"
               variant={styles?.ctaVariant}
               label={resolveTranslatableString(
-                resolvedPromo?.cta.label,
+                resolvedPromo.cta.label,
                 i18n.language
               )}
-              link={resolvedPromo?.cta.link}
-              linkType={resolvedPromo?.cta.linkType}
+              link={resolvedPromo.cta.link}
+              linkType={resolvedPromo.cta.linkType}
             />
           </EntityField>
         )}
@@ -217,20 +217,26 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
         field: "",
         constantValueEnabled: true,
         constantValue: {
-          image: {
-            height: 360,
-            width: 640,
-            url: PLACEHOLDER_IMAGE_URL,
+          title: {
+            en: "Promo Title",
+            hasLocalizedValue: "true",
           },
-          title: { en: "Featured Promotion", hasLocalizedValue: "true" },
           description: {
-            en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+            en: "Promo description",
             hasLocalizedValue: "true",
           },
           cta: {
-            label: { en: "Learn More", hasLocalizedValue: "true" },
+            label: {
+              en: "Call To Action",
+              hasLocalizedValue: "true",
+            },
             link: "#",
             linkType: "URL",
+          },
+          image: {
+            url: PLACEHOLDER_IMAGE_URL,
+            height: 360,
+            width: 640,
           },
         },
         constantValueOverride: {
@@ -243,11 +249,14 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
-      orientation: "left",
+      orientation: "right",
       ctaVariant: "primary",
       heading: {
         level: 2,
         align: "left",
+      },
+      image: {
+        aspectRatio: 1.78,
       },
     },
     analytics: {
@@ -255,44 +264,14 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveFields: (data, { lastData }) => {
-    // If set to entity value and no field selected, hide the component.
-    if (
-      !data.props.data.promo.constantValueEnabled &&
-      data.props.data.promo.field === ""
-    ) {
-      data.props.liveVisibility = false;
-      return {
-        ...promoSectionFields,
-        liveVisibility: undefined,
-      };
-    }
-
-    // If no field was selected and then constant value is enabled
-    // or a field is selected, show the component.
-    if (
-      (data.props.data.promo.constantValueEnabled &&
-        !lastData?.props.data.promo.constantValueEnabled &&
-        data.props.data.promo.field === "") ||
-      (lastData?.props.data.promo.field === "" &&
-        data.props.data.promo.field !== "")
-    ) {
-      data.props.liveVisibility = true;
-    }
-
-    // Otherwise, return normal fields.
-    return promoSectionFields;
-  },
-  render: (props) => {
-    return (
-      <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
-        <VisibilityWrapper
-          liveVisibility={!!props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          <PromoWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    );
-  },
+  render: (props) => (
+    <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+      <VisibilityWrapper
+        liveVisibility={!!props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <PromoWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
+  ),
 };

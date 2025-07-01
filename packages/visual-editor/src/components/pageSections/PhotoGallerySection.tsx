@@ -18,7 +18,6 @@ import {
   HeadingLevel,
   Image,
   ImageProps,
-  ImageWrapperProps,
   resolveYextEntityField,
   PageSection,
   themeManagerCn,
@@ -34,9 +33,9 @@ import {
   ThemeOptions,
 } from "@yext/visual-editor";
 import {
-  resolvedImageFields,
-  ImageWrapperFields,
-} from "../contentBlocks/Image.js";
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -59,7 +58,7 @@ export interface PhotoGallerySectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
-    imageStyle: Omit<ImageWrapperProps, "image">;
+    image: ImageStylingProps;
   };
   liveVisibility: boolean;
 }
@@ -91,6 +90,30 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.heading", "Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      images: YextField<any, ImageType[] | ComplexImageType[]>(
+        msg("fields.images", "Images"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.image"],
+            includeListsOnly: true,
+          },
+        }
+      ),
+    },
+  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -115,39 +138,10 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           }),
         },
       }),
-      imageStyle: YextField(msg("fields.imageStyle", "Image Style"), {
+      image: YextField(msg("fields.image", "Image"), {
         type: "object",
-        objectFields: {
-          layout: ImageWrapperFields.layout,
-          aspectRatio: ImageWrapperFields.aspectRatio,
-          height: ImageWrapperFields.height,
-          width: ImageWrapperFields.width,
-        },
+        objectFields: ImageStylingFields,
       }),
-    },
-  }),
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      heading: YextField<any, TranslatableString>(
-        msg("fields.heading", "Heading"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
-      images: YextField<any, ImageType[] | ComplexImageType[]>(
-        msg("fields.images", "Images"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.image"],
-            includeListsOnly: true,
-          },
-        }
-      ),
     },
   }),
   liveVisibility: YextField(
@@ -179,10 +173,8 @@ const PhotoGallerySectionComponent = ({
     .filter((image): image is ImageType | ComplexImageType => !!image)
     .map((image) => ({
       image,
-      layout: styles.imageStyle.layout,
-      aspectRatio: styles.imageStyle.aspectRatio,
-      width: styles.imageStyle.width,
-      height: styles.imageStyle.height,
+      aspectRatio: styles.image.aspectRatio,
+      width: styles.image.width,
     }));
 
   const justifyClass = {
@@ -233,9 +225,7 @@ const PhotoGallerySectionComponent = ({
                     <Slide index={idx} key={idx}>
                       <Image
                         image={image.image}
-                        layout={image.layout}
                         aspectRatio={image.aspectRatio}
-                        height={image.height}
                         width={image.width}
                       />
                     </Slide>
@@ -297,19 +287,6 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   label: msg("components.photoGallerySection", "Photo Gallery Section"),
   fields: photoGallerySectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      heading: {
-        level: 2,
-        align: "left",
-      },
-      imageStyle: {
-        layout: "fixed",
-        height: 570,
-        width: 1000,
-        aspectRatio: 1.78,
-      },
-    },
     data: {
       heading: {
         field: "",
@@ -322,27 +299,17 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
         constantValueEnabled: true,
       },
     },
-    liveVisibility: true,
-  },
-  resolveFields(data, { fields }) {
-    const layout = data.props.styles?.imageStyle?.layout ?? "auto";
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { image, ...rest } = resolvedImageFields(layout);
-    return {
-      ...fields,
-      styles: {
-        ...fields.styles,
-        objectFields: {
-          // @ts-expect-error ts(2339) objectFields exists
-          ...fields.styles.objectFields,
-          imageStyle: {
-            // @ts-expect-error ts(2339) objectFields exists
-            ...fields.styles.objectFields.imageStyle,
-            objectFields: rest,
-          },
-        },
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      heading: {
+        level: 2,
+        align: "left",
       },
-    };
+      image: {
+        aspectRatio: 1.78,
+      },
+    },
+    liveVisibility: true,
   },
   render: (props) => (
     <VisibilityWrapper
