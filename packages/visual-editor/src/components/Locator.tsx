@@ -50,6 +50,7 @@ import {
 import { MapPinIcon } from "./MapPinIcon.js";
 import { FaAngleRight } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { YextField } from "../editor";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -59,6 +60,7 @@ const HOURS_FIELD = "builtin.hours";
 
 export type LocatorProps = {
   mapStyle?: string;
+  openNowButton?: boolean;
   entityTypeEnvVar?: string; // to be set via withPropOverrides
   experienceKeyEnvVar?: string; // to be set via withPropOverrides
 };
@@ -91,6 +93,13 @@ const locatorFields: Fields<LocatorProps> = {
         label: msg("fields.options.navigationNight", "Navigation (Night)"),
         value: "mapbox://styles/mapbox/navigation-night-v1",
       },
+    ],
+  }),
+  openNowButton: YextField("Include Open Now Button", {
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
     ],
   }),
 };
@@ -139,7 +148,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
   const { t } = useTranslation();
-  const { mapStyle, entityTypeEnvVar } = props;
+  const { mapStyle, openNowButton, entityTypeEnvVar } = props;
   const entityType = getEntityType(entityTypeEnvVar);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
@@ -368,13 +377,15 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
               radius: 25,
             }}
           />
-          <Toggle
-            pressed={isSelected}
-            onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-            className="py-2 px-2"
-          >
-            {t("openNow", "Open Now")}
-          </Toggle>
+          {openNowButton && (
+            <Toggle
+              pressed={isSelected}
+              onPressedChange={(pressed) => handleOpenNowClick(pressed)}
+              className="py-2 px-2"
+            >
+              {t("openNow", "Open Now")}
+            </Toggle>
+          )}
         </div>
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
           {resultCount === 0 &&
