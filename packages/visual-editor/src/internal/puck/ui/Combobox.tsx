@@ -54,10 +54,20 @@ export const Combobox = ({
           {selectedOption ? (
             <div className="ve-flex ve-items-center">
               <ColorIndicator color={selectedOption.color} />
-              {selectedOption?.label}
+              <div
+                className="ve-pr-2 ve-truncate ve-text-left"
+                title={selectedOption?.label}
+              >
+                {selectedOption?.label}
+              </div>
             </div>
           ) : (
-            pt("selectAnOption", "Select an option")
+            <div
+              className="ve-pr-2 ve-truncate ve-text-left"
+              title={pt("selectAnOption", "Select an option")}
+            >
+              {pt("selectAnOption", "Select an option")}
+            </div>
           )}
         </Button>
       </PopoverTrigger>
@@ -99,7 +109,9 @@ export const Combobox = ({
                           )}
                         />
                         <ColorIndicator color={option.color} />
-                        {option.label}
+                        <div className="ve-truncate" title={option.label}>
+                          {option.label}
+                        </div>
                       </CommandItem>
                     );
                   })}
