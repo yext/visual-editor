@@ -71,7 +71,7 @@ export const Combobox = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white ve-w-[--radix-popover-trigger-width]">
+      <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white ve-min-w-[--radix-popover-trigger-width]">
         <Command>
           {!disableSearch && (
             <CommandInput placeholder={pt("search", "Search")} />
@@ -87,7 +87,12 @@ export const Combobox = ({
                   key={`group${idx}`}
                 >
                   {group.description && (
-                    <p data-cmdk-group-subheading>{pt(group.description)}</p>
+                    <p
+                      data-cmdk-group-subheading
+                      className="ve-w-[--radix-popover-trigger-width]"
+                    >
+                      {pt(group.description)}
+                    </p>
                   )}
                   {group.options.map((option) => {
                     return (
@@ -109,9 +114,7 @@ export const Combobox = ({
                           )}
                         />
                         <ColorIndicator color={option.color} />
-                        <div className="ve-truncate" title={option.label}>
-                          {option.label}
-                        </div>
+                        {option.label}
                       </CommandItem>
                     );
                   })}
