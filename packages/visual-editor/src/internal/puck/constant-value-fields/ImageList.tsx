@@ -1,10 +1,8 @@
 import { ArrayField } from "@measured/puck";
 import { pt } from "../../../utils/i18nPlatform.ts";
-import { GalleryImageType } from "../../../types/types";
+import { ImageType } from "@yext/pages-components";
 
-export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<
-  GalleryImageType[]
-> => {
+export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<ImageType[]> => {
   return {
     label: "",
     type: "array",

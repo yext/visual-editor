@@ -133,7 +133,11 @@ const PersonCard = ({
           {person.headshot && (
             <Image
               image={person.headshot}
-              aspectRatio={person.headshot.width / person.headshot.height}
+              aspectRatio={
+                person.headshot.width && person.headshot.height
+                  ? person.headshot.width / person.headshot.height
+                  : 1.78
+              }
             />
           )}
         </div>

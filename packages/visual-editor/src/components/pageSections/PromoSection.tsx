@@ -163,7 +163,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             image={resolvedPromo.image}
             aspectRatio={
               styles.image.aspectRatio ??
-              resolvedPromo.image.width / resolvedPromo.image.height
+              (resolvedPromo.image.width && resolvedPromo.image.height
+                ? resolvedPromo.image.width / resolvedPromo.image.height
+                : 1.78)
             }
             width={styles.image.width}
           />
