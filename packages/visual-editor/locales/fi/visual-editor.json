@@ -161,6 +161,7 @@
       "hour12": "12 tunnin",
       "hour24": "24 tunnin",
       "image": "Kuva",
+      "includeOpenNow": "Sisällytä nyt -painike",
       "international": "Kansainvälinen",
       "international_phone number": "Kansainvälinen",
       "large": "Suuri",
