@@ -319,10 +319,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             <Image
               image={resolvedHero?.image}
-              aspectRatio={
-                styles.image.aspectRatio ??
-                resolvedHero?.image.width / resolvedHero?.image.height
-              }
+              aspectRatio={styles.image.aspectRatio}
               width={styles.image.width}
             />
           </div>

@@ -2,7 +2,7 @@ import { Fields } from "@measured/puck";
 import { YextField, msg } from "@yext/visual-editor";
 
 export interface ImageStylingProps {
-  aspectRatio?: number;
+  aspectRatio: number;
   width?: number;
 }
 
