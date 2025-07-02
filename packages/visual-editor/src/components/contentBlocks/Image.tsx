@@ -94,14 +94,6 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   );
 };
 
-export const resolvedImageFields = () => {
-  return {
-    image: ImageWrapperFields["image"],
-    width: ImageWrapperFields["width"],
-    aspectRatio: ImageWrapperFields["aspectRatio"],
-  };
-};
-
 export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
   label: "Image",
   fields: ImageWrapperFields,
@@ -116,9 +108,6 @@ export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
       constantValueEnabled: true,
     },
     aspectRatio: 1.78,
-  },
-  resolveFields() {
-    return resolvedImageFields();
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };
