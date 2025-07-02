@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { applyTheme, Document } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
+import { defaultGoogleFontsLinkTags } from "./font_registry.js";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
@@ -52,7 +53,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme({} as Document, themeConfig);
 
     expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      defaultGoogleFontsLinkTags +
+        '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
