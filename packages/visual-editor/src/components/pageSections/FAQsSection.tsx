@@ -24,6 +24,7 @@ import {
   ComponentFields,
   resolveTranslatableRichText,
   FAQStruct,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -31,6 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
+import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
 export interface FAQSectionProps {
   data: {
@@ -45,6 +47,9 @@ export interface FAQSectionProps {
     };
   };
   liveVisibility: boolean;
+  analytics?: {
+    scope?: string;
+  };
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
@@ -112,6 +117,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     i18n.language
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
+  const analytics = useAnalytics();
 
   const justifyClass = styles?.heading?.align
     ? {
@@ -147,7 +153,26 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
         >
           <Accordion>
             {resolvedFAQs?.faqs?.map((faqItem: FAQStruct, index: number) => (
-              <AccordionItem key={index}>
+              <AccordionItem
+                key={index}
+                data-ya-action={
+                  analytics?.getDebugEnabled() ? "COLLAPSE/EXPAND" : undefined
+                }
+                data-ya-eventname={
+                  analytics?.getDebugEnabled() ? `toggleFAQ${index}` : undefined
+                }
+                onToggle={(e) =>
+                  e.currentTarget.open
+                    ? analytics?.track({
+                        action: "COLLAPSE",
+                        eventName: `toggleFAQ${index}`,
+                      })
+                    : analytics?.track({
+                        action: "EXPAND",
+                        eventName: `toggleFAQ${index}`,
+                      })
+                }
+              >
                 <AccordionTrigger>
                   <Body>
                     {resolveTranslatableString(faqItem.question, i18n.language)}
@@ -205,13 +230,20 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
       },
     },
     liveVisibility: true,
+    analytics: {
+      scope: "faqsSection",
+    },
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <FAQsSectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <FAQsSectionComponent {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

@@ -141,7 +141,7 @@
     "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "@yext/pages-components": "^1.1.4",
+    "@yext/pages-components": "^1.1.9",
     "@yext/search-headless-react": "^2.5.3",
     "@yext/search-ui-react": "^1.8.15",
     "mapbox-gl": "^2.9.2",

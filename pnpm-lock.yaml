@@ -125,8 +125,8 @@ importers:
         specifier: ^5.71.5
         version: 5.74.7(react@18.3.1)
       "@yext/pages-components":
-        specifier: ^1.1.4
-        version: 1.1.5(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)
+        specifier: ^1.1.9
+        version: 1.1.9(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)
       "@yext/search-headless-react":
         specifier: ^2.5.3
         version: 2.5.3(encoding@0.1.13)(react@18.3.1)
@@ -427,8 +427,8 @@ importers:
         specifier: 1.2.4
         version: 1.2.4(@algolia/client-search@5.23.4)(@types/node@20.17.32)(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(vite@5.4.18(@types/node@20.17.32))
       "@yext/pages-components":
-        specifier: ^1.1.7
-        version: 1.1.7(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)
+        specifier: ^1.1.9
+        version: 1.1.9(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)
       "@yext/visual-editor":
         specifier: workspace:*
         version: link:../packages/visual-editor
@@ -4282,20 +4282,10 @@ packages:
         integrity: sha512-k0mlQTnv8+E+vYjaI3goM2hEgtR9sYvUbAjhq3Qie14bT5F/6FQCLf8AUj/NyiZnsUQQe+vCxUZXSxvUSZ/JMA==,
       }
 
-  "@yext/pages-components@1.1.5":
+  "@yext/pages-components@1.1.9":
     resolution:
       {
-        integrity: sha512-/9/E2iCtYOl8T3hRQt4O4lyHzPMsGsAsU1bU7NeYQQvWPdAw+PK5PpRCV2zRqgqe7eLj8YV2U82eOZmxWlQPKA==,
-      }
-    engines: { node: ^18 || ^20 || ^22 }
-    peerDependencies:
-      react: ^17.0.2 || ^18.2.0
-      react-dom: ^17.0.2 || ^18.2.0
-
-  "@yext/pages-components@1.1.7":
-    resolution:
-      {
-        integrity: sha512-f7hdyWD19H2UCNt0dEZ+bGFm/aE3kBwmft5PAfR129kJTca3nrPFJsN4E53YSKCt/ncGj2aANfYluR51N4l6KQ==,
+        integrity: sha512-P+AeGlWsgt3diUCRuKvJ6V4RFNFpD97cRZav2vyTgfYP11djGm2oMnLzZRl0leiTuzRT81mIlKfOm1lgzqyIJA==,
       }
     engines: { node: ^18 || ^20 || ^22 }
     peerDependencies:
@@ -13527,45 +13517,7 @@ snapshots:
     dependencies:
       ulidx: 2.4.1
 
-  "@yext/pages-components@1.1.5(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)":
-    dependencies:
-      "@lexical/code": 0.12.6(lexical@0.12.6)
-      "@lexical/hashtag": 0.12.6(lexical@0.12.6)
-      "@lexical/link": 0.12.6(lexical@0.12.6)
-      "@lexical/list": 0.12.6(lexical@0.12.6)
-      "@lexical/react": 0.12.6(lexical@0.12.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)
-      "@lexical/rich-text": 0.12.6(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@lexical/utils@0.12.6(lexical@0.12.6))(lexical@0.12.6)
-      "@lexical/table": 0.12.6(lexical@0.12.6)
-      "@lexical/utils": 0.12.6(lexical@0.12.6)
-      "@yext/analytics": 1.1.0
-      browser-or-node: 2.1.1
-      classnames: 2.5.1
-      cross-fetch: 4.1.0(encoding@0.1.13)
-      lexical: 0.12.6
-      mdast-util-from-markdown: 1.2.0
-      mdast-util-to-hast: 12.3.0
-      micromark-util-chunked: 1.0.0
-      micromark-util-classify-character: 1.0.0
-      micromark-util-combine-extensions: 1.0.0
-      micromark-util-resolve-all: 1.0.0
-      micromark-util-symbol: 1.0.1
-      micromark-util-types: 1.0.2
-      picocolors: 1.1.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-markdown: 8.0.7(@types/react@18.3.20)(react@18.3.1)
-      remark-rehype: 10.1.0
-      unified: 11.0.4
-      uvu: 0.5.6
-    transitivePeerDependencies:
-      - "@lexical/clipboard"
-      - "@lexical/selection"
-      - "@types/react"
-      - encoding
-      - supports-color
-      - yjs
-
-  "@yext/pages-components@1.1.7(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)":
+  "@yext/pages-components@1.1.9(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.20)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.26)":
     dependencies:
       "@lexical/code": 0.12.6(lexical@0.12.6)
       "@lexical/hashtag": 0.12.6(lexical@0.12.6)
@@ -16621,7 +16573,7 @@ snapshots:
 
   react-error-boundary@3.1.4(react@18.3.1):
     dependencies:
-      "@babel/runtime": 7.27.0
+      "@babel/runtime": 7.27.6
       react: 18.3.1
 
   react-error-boundary@5.0.0(react@18.3.1):
