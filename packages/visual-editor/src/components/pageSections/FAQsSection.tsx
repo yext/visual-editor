@@ -156,19 +156,19 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
               <AccordionItem
                 key={index}
                 data-ya-action={
-                  analytics?.getDebugEnabled() ? "COLLAPSE/EXPAND" : undefined
+                  analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
                 }
                 data-ya-eventname={
                   analytics?.getDebugEnabled() ? `toggleFAQ${index}` : undefined
                 }
                 onToggle={(e) =>
-                  e.currentTarget.open
+                  e.currentTarget.open // the updated state after toggling
                     ? analytics?.track({
-                        action: "COLLAPSE",
+                        action: "EXPAND",
                         eventName: `toggleFAQ${index}`,
                       })
                     : analytics?.track({
-                        action: "EXPAND",
+                        action: "COLLAPSE",
                         eventName: `toggleFAQ${index}`,
                       })
                 }

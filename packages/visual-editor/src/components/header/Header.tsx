@@ -157,7 +157,7 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
                 setMenuOpen(!menuOpen);
               }}
               data-ya-action={
-                analytics?.getDebugEnabled() ? "COLLAPSE/EXPAND" : undefined
+                analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
               }
               data-ya-eventname={
                 analytics?.getDebugEnabled() ? `toggleMobileMenu` : undefined
