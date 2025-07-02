@@ -101,3 +101,6 @@ export type RichText = {
   html?: string;
   json?: string;
 };
+
+// GalleryImageType: for gallery images, only url is allowed
+export type GalleryImageType = { url: string };

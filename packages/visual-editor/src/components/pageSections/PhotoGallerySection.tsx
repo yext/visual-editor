@@ -37,7 +37,7 @@ import {
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { GalleryImageType } from "../../types/types";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 
@@ -50,7 +50,7 @@ const DEFAULT_IMAGE = {
 export interface PhotoGallerySectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
-    images: YextEntityField<ImageType[] | ComplexImageType[]>;
+    images: YextEntityField<GalleryImageType[]>;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -102,7 +102,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           },
         }
       ),
-      images: YextField<any, ImageType[] | ComplexImageType[]>(
+      images: YextField<any, GalleryImageType[]>(
         msg("fields.images", "Images"),
         {
           type: "entityField",
@@ -170,9 +170,13 @@ const PhotoGallerySectionComponent = ({
   const resolvedImages = resolveYextEntityField(document, data.images);
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
-    .filter((image): image is ImageType | ComplexImageType => !!image)
+    .filter((image): image is GalleryImageType => !!image)
     .map((image) => ({
-      image,
+      image: {
+        url: image.url,
+        height: 570,
+        width: 1000,
+      },
       aspectRatio: styles.image.aspectRatio,
       width: styles.image.width,
     }));
@@ -335,7 +339,11 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
       },
       images: {
         field: "",
-        constantValue: [DEFAULT_IMAGE, DEFAULT_IMAGE, DEFAULT_IMAGE],
+        constantValue: [
+          { url: PLACEHOLDER_IMAGE_URL },
+          { url: PLACEHOLDER_IMAGE_URL },
+          { url: PLACEHOLDER_IMAGE_URL },
+        ],
         constantValueEnabled: true,
       },
     },
