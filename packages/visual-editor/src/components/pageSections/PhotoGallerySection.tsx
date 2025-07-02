@@ -187,7 +187,7 @@ const PhotoGallerySectionComponent = ({
     <PageSection
       aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
-      className="flex flex-col gap-8 justify-center"
+      className="flex flex-col gap-8"
     >
       {sectionHeading && (
         <EntityField
@@ -213,7 +213,7 @@ const PhotoGallerySectionComponent = ({
               <FaArrowLeft className="h-10 w-fit" />
             </ButtonBack>
           </DynamicChildColors>
-          <div className="flex flex-col gap-y-8">
+          <div className="flex flex-col gap-y-8 items-center">
             <EntityField
               displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
@@ -223,11 +223,13 @@ const PhotoGallerySectionComponent = ({
                 {filteredImages.map((image, idx) => {
                   return (
                     <Slide index={idx} key={idx}>
-                      <Image
-                        image={image.image}
-                        aspectRatio={image.aspectRatio}
-                        width={image.width}
-                      />
+                      <div className="flex justify-center">
+                        <Image
+                          image={image.image}
+                          aspectRatio={image.aspectRatio}
+                          width={image.width}
+                        />
+                      </div>
                     </Slide>
                   );
                 })}
