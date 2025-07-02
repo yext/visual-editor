@@ -5,10 +5,10 @@ import {
   constructGoogleFontLinkTags,
   defaultFonts,
   extractInUseFontFamilies,
-  googleFontLinkTags,
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
+import { googleFontLinkTags } from "./visualEditorFonts";
 
 export type Document = {
   [key: string]: any;
@@ -27,16 +27,20 @@ const devLogger = new DevLogger();
 export const applyTheme = (
   document: Document,
   themeConfig: ThemeConfig,
-  base?: string
+  base?: string,
+  inEditor?: boolean
 ): string => {
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
   const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
 
-  const fontLinkTags = constructGoogleFontLinkTags(
-    extractInUseFontFamilies(overrides, defaultFonts)
-  );
+  // In the editor inject all the google font tags, else only inject the in-use font tags
+  const fontLinkTags = inEditor
+    ? googleFontLinkTags
+    : constructGoogleFontLinkTags(
+        extractInUseFontFamilies(overrides, defaultFonts)
+      );
 
   if (Object.keys(themeConfig).length > 0) {
     return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
