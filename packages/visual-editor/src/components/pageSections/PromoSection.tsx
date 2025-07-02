@@ -23,6 +23,7 @@ import {
   pt,
   HeadingLevel,
   ThemeOptions,
+  getAnalyticsScopeHash,
   resolveTranslatableString,
   resolveTranslatableRichText,
 } from "@yext/visual-editor";
@@ -285,7 +286,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
+      >
         <VisibilityWrapper
           liveVisibility={!!props.liveVisibility}
           isEditing={props.puck.isEditing}

@@ -53,11 +53,11 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 
 // DirectoryCard is the card used within DirectoryGrid.
 const DirectoryCard = ({
-  key,
+  cardNumber,
   profile,
   relativePrefixToRoot,
 }: {
-  key: number;
+  cardNumber: number;
   profile: any;
   relativePrefixToRoot: string;
 }) => {
@@ -65,7 +65,7 @@ const DirectoryCard = ({
     <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
       <div>
         <MaybeLink
-          eventName={`link${key}`}
+          eventName={`link${cardNumber}`}
           alwaysHideCaret={true}
           className="mb-2"
           href={
@@ -137,6 +137,7 @@ const DirectoryGrid = ({
       {sortedDirectoryChildren?.map((child, idx) => (
         <DirectoryCard
           key={idx}
+          cardNumber={idx}
           profile={child}
           relativePrefixToRoot={relativePrefixToRoot}
         />

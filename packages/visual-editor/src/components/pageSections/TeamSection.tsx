@@ -24,6 +24,7 @@ import {
   msg,
   pt,
   ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -114,12 +115,12 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
 };
 
 const PersonCard = ({
-  key,
+  cardNumber,
   person,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardNumber: number;
   person: PersonStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -166,7 +167,7 @@ const PersonCard = ({
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
             <PhoneAtom
-              eventName={`phone${key}`}
+              eventName={`phone${cardNumber}`}
               phoneNumber={person.phoneNumber}
               includeHyperlink={true}
               includeIcon={true}
@@ -183,7 +184,7 @@ const PersonCard = ({
                 <FaEnvelope />
               </div>
               <CTA
-                eventName={`email${key}`}
+                eventName={`email${cardNumber}`}
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
@@ -194,7 +195,7 @@ const PersonCard = ({
           {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
-                eventName={`cta${key}`}
+                eventName={`cta${cardNumber}`}
                 label={resolveTranslatableString(
                   person.cta.label,
                   i18n.language
@@ -256,6 +257,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
             {resolvedPeople.people.map((person, index) => (
               <PersonCard
                 key={index}
+                cardNumber={index}
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
@@ -300,7 +302,9 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "teamSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
