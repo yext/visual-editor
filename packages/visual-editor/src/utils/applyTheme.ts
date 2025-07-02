@@ -1,9 +1,14 @@
 import { ThemeData } from "../internal/types/themeData.ts";
 import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
-import { googleFontLinkTags } from "./visualEditorFonts.ts";
+import {
+  constructGoogleFontLinkTags,
+  defaultFonts,
+  extractInUseFontFamilies,
+} from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
+import { googleFontLinkTags } from "./visualEditorFonts";
 
 export type Document = {
   [key: string]: any;
@@ -29,8 +34,15 @@ export const applyTheme = (
   const publishedTheme = document?.__?.theme;
   const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
 
+  // In the editor with no published theme, inject all the google font tags, else only inject the in-use font tags
+  const fontLinkTags = !publishedTheme
+    ? googleFontLinkTags
+    : constructGoogleFontLinkTags(
+        extractInUseFontFamilies(overrides, defaultFonts)
+      );
+
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${googleFontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
+    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
   }
   return base ?? "";
 };
