@@ -18,11 +18,11 @@ export const Image: React.FC<ImageProps> = ({
   image,
   aspectRatio,
   width,
-  height,
   className,
 }) => {
   // Calculate height based on width and aspect ratio if width is provided
-  const calculatedHeight = width && aspectRatio ? width / aspectRatio : height;
+  const calculatedHeight =
+    width && aspectRatio ? width / aspectRatio : undefined;
 
   // Determine container styles based on whether width is specified
   const containerStyles = width

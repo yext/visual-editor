@@ -43,62 +43,6 @@ export const updateImageStylingMigration: Migration = {
     }),
   },
 
-  // Update ProductSection - add cardImages styling
-  ProductSection: {
-    action: "updated",
-    propTransformation: ({ styles, ...props }) => ({
-      ...props,
-      styles: {
-        ...styles,
-        cardImages: {
-          aspectRatio: 1.78, // Default 16:9
-        },
-      },
-    }),
-  },
-
-  // Update EventSection - add cardImages styling
-  EventSection: {
-    action: "updated",
-    propTransformation: ({ styles, ...props }) => ({
-      ...props,
-      styles: {
-        ...styles,
-        cardImages: {
-          aspectRatio: 1.78, // Default 16:9
-        },
-      },
-    }),
-  },
-
-  // Update InsightSection - add cardImages styling
-  InsightSection: {
-    action: "updated",
-    propTransformation: ({ styles, ...props }) => ({
-      ...props,
-      styles: {
-        ...styles,
-        cardImages: {
-          aspectRatio: 1.78, // Default 16:9
-        },
-      },
-    }),
-  },
-
-  // Update TeamSection - add cardImages styling
-  TeamSection: {
-    action: "updated",
-    propTransformation: ({ styles, ...props }) => ({
-      ...props,
-      styles: {
-        ...styles,
-        cardImages: {
-          aspectRatio: 1.0, // Default square for headshots
-        },
-      },
-    }),
-  },
-
   // Update PromoSection - add image styling
   PromoSection: {
     action: "updated",

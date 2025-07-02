@@ -29,16 +29,8 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultPerson } from "../../internal/puck/constant-value-fields/TeamSection.tsx";
-import {
-  ImageStylingFields,
-  ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
 
 export interface TeamSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    people: YextEntityField<TeamSectionType>;
-  };
   styles: {
     backgroundColor?: BackgroundStyle;
     cardBackgroundColor?: BackgroundStyle;
@@ -46,7 +38,10 @@ export interface TeamSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
-    cardImages: ImageStylingProps;
+  };
+  data: {
+    heading: YextEntityField<TranslatableString>;
+    people: YextEntityField<TeamSectionType>;
   };
   analytics?: {
     scope?: string;
@@ -54,18 +49,18 @@ export interface TeamSectionProps {
   liveVisibility: boolean;
 }
 
-const teamSectionFields: Fields<TeamSectionProps> = {
+const TeamSectionFields: Fields<TeamSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
       heading: YextField<any, TranslatableString>(
-        msg("fields.sectionHeading", "Section Heading"),
+        msg("fields.headingText", "Heading Text"),
         {
           type: "entityField",
           filter: { types: ["type.string"] },
         }
       ),
-      people: YextField(msg("fields.people", "People"), {
+      people: YextField(msg("fields.teamSection", "Team Section"), {
         type: "entityField",
         filter: {
           types: [ComponentFields.TeamSection.type],
@@ -104,10 +99,6 @@ const teamSectionFields: Fields<TeamSectionProps> = {
           }),
         },
       }),
-      cardImages: YextField(msg("fields.cardImages", "Card Images"), {
-        type: "object",
-        objectFields: ImageStylingFields,
-      }),
     },
   }),
   liveVisibility: YextField(
@@ -127,13 +118,11 @@ const PersonCard = ({
   person,
   backgroundColor,
   sectionHeadingLevel,
-  cardImageStyle,
 }: {
   key: number;
   person: PersonStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
-  cardImageStyle: ImageStylingProps;
 }) => {
   const { i18n } = useTranslation();
 
@@ -144,8 +133,7 @@ const PersonCard = ({
           {person.headshot && (
             <Image
               image={person.headshot}
-              aspectRatio={cardImageStyle.aspectRatio}
-              width={cardImageStyle.width}
+              aspectRatio={person.headshot.width / person.headshot.height}
             />
           )}
         </div>
@@ -170,46 +158,54 @@ const PersonCard = ({
         </div>
       </Background>
       <hr className="border" />
-      <div className="p-8 gap-4 flex flex-col">
-        {person.phoneNumber && (
-          <PhoneAtom
-            eventName={`phone${key}`}
-            phoneNumber={person.phoneNumber}
-            includeHyperlink={true}
-            includeIcon={true}
-            format={
-              person.phoneNumber.slice(0, 2) === "+1"
-                ? "domestic"
-                : "international"
-            }
-          />
-        )}
-        {person.email && (
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
-              <FaEnvelope />
+      <Background
+        background={backgroundColors.background1.value}
+        className="p-8"
+      >
+        <div className="flex flex-col gap-4">
+          {person.phoneNumber && (
+            <PhoneAtom
+              eventName={`phone${key}`}
+              phoneNumber={person.phoneNumber}
+              includeHyperlink={true}
+              includeIcon={true}
+              format={
+                person.phoneNumber.slice(0, 2) === "+1"
+                  ? "domestic"
+                  : "international"
+              }
+            />
+          )}
+          {person.email && (
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
+                <FaEnvelope />
+              </div>
+              <CTA
+                eventName={`email${key}`}
+                link={person.email}
+                label={person.email}
+                linkType="EMAIL"
+                variant="link"
+              />
             </div>
-            <CTA
-              eventName={`email${key}`}
-              link={person.email}
-              label={person.email}
-              linkType="EMAIL"
-              variant="link"
-            />
-          </div>
-        )}
-        {person.cta && (
-          <div className="flex justify-start gap-2">
-            <CTA
-              eventName={`cta${key}`}
-              label={resolveTranslatableString(person.cta.label, i18n.language)}
-              link={person.cta.link}
-              linkType={person.cta.linkType}
-              variant="link"
-            />
-          </div>
-        )}
-      </div>
+          )}
+          {person.cta && (
+            <div className="flex justify-start gap-2">
+              <CTA
+                eventName={`cta${key}`}
+                label={resolveTranslatableString(
+                  person.cta.label,
+                  i18n.language
+                )}
+                link={person.cta.link}
+                linkType={person.cta.linkType}
+                variant="link"
+              />
+            </div>
+          )}
+        </div>
+      </Background>
     </div>
   );
 };
@@ -251,18 +247,17 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
       )}
       {resolvedPeople?.people && (
         <EntityField
-          displayName={pt("fields.people", "People")}
+          displayName={pt("fields.team", "Team")}
           fieldId={data.people.field}
           constantValueEnabled={data.people.constantValueEnabled}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
             {resolvedPeople.people.map((person, index) => (
               <PersonCard
                 key={index}
                 person={person}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
-                cardImageStyle={styles.cardImages}
               />
             ))}
           </div>
@@ -274,12 +269,12 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
 
 export const TeamSection: ComponentConfig<TeamSectionProps> = {
   label: msg("components.teamSection", "Team Section"),
-  fields: teamSectionFields,
+  fields: TeamSectionFields,
   defaultProps: {
     data: {
       heading: {
         field: "",
-        constantValue: { en: "Our Team", hasLocalizedValue: "true" },
+        constantValue: { en: "Meet Our Team", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       people: {
@@ -291,14 +286,11 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       },
     },
     styles: {
-      backgroundColor: backgroundColors.background2.value,
+      backgroundColor: backgroundColors.background3.value,
       cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
-      },
-      cardImages: {
-        aspectRatio: 1.0,
       },
     },
     analytics: {
