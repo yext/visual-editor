@@ -27,16 +27,15 @@ const devLogger = new DevLogger();
 export const applyTheme = (
   document: Document,
   themeConfig: ThemeConfig,
-  base?: string,
-  inEditor?: boolean
+  base?: string
 ): string => {
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
   const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
 
-  // In the editor inject all the google font tags, else only inject the in-use font tags
-  const fontLinkTags = inEditor
+  // In the editor with no published theme, inject all the google font tags, else only inject the in-use font tags
+  const fontLinkTags = !publishedTheme
     ? googleFontLinkTags
     : constructGoogleFontLinkTags(
         extractInUseFontFamilies(overrides, defaultFonts)
