@@ -38,13 +38,16 @@ import {
 } from "../contentBlocks/ImageStyling.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { GalleryImageType } from "../../types/types";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 
 export interface PhotoGallerySectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
-    images: YextEntityField<ImageType[] | ComplexImageType[]>;
+    images: YextEntityField<
+      ImageType[] | ComplexImageType[] | GalleryImageType[]
+    >;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -96,16 +99,16 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           },
         }
       ),
-      images: YextField<any, ImageType[] | ComplexImageType[]>(
-        msg("fields.images", "Images"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.image"],
-            includeListsOnly: true,
-          },
-        }
-      ),
+      images: YextField<
+        any,
+        ImageType[] | ComplexImageType[] | GalleryImageType[]
+      >(msg("fields.images", "Images"), {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+          includeListsOnly: true,
+        },
+      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -164,9 +167,16 @@ const PhotoGallerySectionComponent = ({
   const resolvedImages = resolveYextEntityField(document, data.images);
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
-    .filter((image): image is ImageType | ComplexImageType => !!image)
+    .filter(
+      (image): image is ImageType | ComplexImageType | GalleryImageType =>
+        !!image
+    )
     .map((image) => ({
-      image,
+      image: {
+        ...image,
+        height: "height" in image && image.height ? image.height : 570,
+        width: "width" in image && image.width ? image.width : 1000,
+      },
       aspectRatio: styles.image.aspectRatio,
       width: styles.image.width,
     }));

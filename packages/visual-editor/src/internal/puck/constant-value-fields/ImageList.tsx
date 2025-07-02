@@ -1,8 +1,10 @@
 import { ArrayField } from "@measured/puck";
 import { pt } from "../../../utils/i18nPlatform.ts";
-import { ImageType } from "@yext/pages-components";
+import { GalleryImageType } from "../../../types/types";
 
-export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<ImageType[]> => {
+export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<
+  GalleryImageType[]
+> => {
   return {
     label: "",
     type: "array",
@@ -11,7 +13,6 @@ export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<ImageType[]> => {
         type: "text",
         label: pt("fields.url", "URL"),
       },
-      // height and width are set programmatically for type safety, not shown in UI
     },
     getItemSummary: (_, i) => pt("photo", "Photo") + " " + i,
   };
