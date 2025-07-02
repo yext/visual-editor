@@ -50,7 +50,7 @@
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.2.1",
     "@yext/pages": "1.2.4",
-    "@yext/pages-components": "^1.1.7",
+    "@yext/pages-components": "^1.1.9",
     "@yext/visual-editor": "workspace:*",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.32",
