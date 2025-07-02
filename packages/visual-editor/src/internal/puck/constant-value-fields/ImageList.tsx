@@ -11,6 +11,7 @@ export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<ImageType[]> => {
         type: "text",
         label: pt("fields.url", "URL"),
       },
+      // height and width are set programmatically for type safety, not shown in UI
     },
     getItemSummary: (_, i) => pt("photo", "Photo") + " " + i,
   };
