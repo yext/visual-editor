@@ -36,7 +36,7 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
       intervalTranslations={{
         isClosed: t("closed", "Closed"),
         open24Hours: t("open24Hours", "Open 24 Hours"),
-        reopenDate: t("reopenData", "Reopen Date"),
+        reopenDate: t("reopenDate", "Reopen Date"),
         timeFormatLocale: i18n.language,
       }}
       className={themeManagerCn(
