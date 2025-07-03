@@ -22,13 +22,13 @@ import {
   PageSection,
 } from "@yext/visual-editor";
 import {
-  FaXTwitter,
-  FaFacebookF,
+  FaFacebook,
   FaInstagram,
-  FaPinterestP,
   FaLinkedinIn,
   FaYoutube,
-} from "react-icons/fa6";
+  FaPinterest,
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100X50";
@@ -651,7 +651,7 @@ const FooterIcons = ({
     },
     {
       link: facebookLink,
-      icon: <FaFacebookF className="h-6 w-6 md:h-5 md:w-5" />,
+      icon: <FaFacebook className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Facebook",
       valid: isValid.facebook.test(facebookLink),
     },
@@ -663,7 +663,7 @@ const FooterIcons = ({
     },
     {
       link: pinterestLink,
-      icon: <FaPinterestP className="h-6 w-6 md:h-5 md:w-5" />,
+      icon: <FaPinterest className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Pinterest",
       valid: isValid.pinterest.test(pinterestLink),
     },
@@ -687,7 +687,7 @@ const FooterIcons = ({
 
   return (
     <EntityField displayName={pt("fields.socialLinks", "Social Links")}>
-      <div className="flex gap-6 items-center justify-center md:justify-start border">
+      <div className="flex gap-6 items-center justify-center md:justify-start">
         {filteredIcons.map(({ link, icon, label }, index) => (
           <Link
             key={index}
