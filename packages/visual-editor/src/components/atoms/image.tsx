@@ -10,7 +10,6 @@ export interface ImageProps {
   image: ImageType | ComplexImageType;
   aspectRatio?: number;
   width?: number;
-  height?: number;
   className?: string;
 }
 
