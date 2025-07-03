@@ -27,22 +27,22 @@ const REVIEWS_PER_PAGE = 5;
 const VISIBLE_PAGE_NUMBERS = 5;
 const REVIEWS_ENDPOINT_ID = "visualEditorReviews";
 
-export type ReviewsSectionProps = {
+export type ReviewsSectionDemoProps = {
   backgroundColor: BackgroundStyle;
 };
 
-const reviewsFields: Fields<ReviewsSectionProps> = {
+const reviewsFields: Fields<ReviewsSectionDemoProps> = {
   backgroundColor: YextField(
     msg("fields.backgroundColor", "Background Color"),
     {
       type: "select",
       options: "BACKGROUND_COLOR",
-    }
+    },
   ),
 };
 
-const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
-  props: ReviewsSectionProps
+const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
+  props: ReviewsSectionDemoProps,
 ) => {
   const document: any = useDocument();
   // const entityId = document.uid;
@@ -58,10 +58,10 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   const [isLoading, setIsLoading] = React.useState(true);
   const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
-    {}
+    {},
   );
   const [nextPageToken, setNextPageToken] = React.useState<string | undefined>(
-    undefined
+    undefined,
   );
 
   const fetchData = async (newPageNumber: number) => {
@@ -69,14 +69,15 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
       const reviews = await fetchReviewsFromApi(
         entityId,
         endpointBaseUrl,
-        pageTokens[newPageNumber]
+        pageTokens[newPageNumber],
       );
       if (!reviews || !reviews.meta) {
         throw new Error("Invalid response structure from API");
       }
       if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
         throw new Error(
-          "API returned errors: " + JSON.stringify(reviews.response.meta.errors)
+          "API returned errors: " +
+            JSON.stringify(reviews.response.meta.errors),
         );
       }
       setCurrentPageNumber(newPageNumber || 1);
@@ -96,7 +97,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     const aggregateRating = getAggregateRating(document);
     setTotalReviews(aggregateRating?.reviewCount || 0);
     setAverageRating(
-      aggregateRating?.ratingValue ? Number(aggregateRating.ratingValue) : 0
+      aggregateRating?.ratingValue ? Number(aggregateRating.ratingValue) : 0,
     );
     fetchData(1);
   }, []);
@@ -318,7 +319,7 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
     if (contentRef.current && !expanded) {
       // Check if the content is truncated
       setIsTruncated(
-        contentRef.current.scrollHeight > contentRef.current.clientHeight
+        contentRef.current.scrollHeight > contentRef.current.clientHeight,
       );
     } else {
       setIsTruncated(false);
@@ -379,7 +380,7 @@ const ReviewStars: React.FC<ReviewStarsProps> = (props) => {
               key={i}
               style={hasDarkBackground ? { display: "none" } : undefined}
             />
-          )
+          ),
         )}
     </div>
   );
@@ -453,7 +454,7 @@ const ShowMoreButton: React.FC<{
 async function fetchReviewsFromApi(
   entityId: number,
   endpointBaseUrl: string,
-  pageToken?: string
+  pageToken?: string,
 ) {
   const entityIdQueryParam = `entity.uid=${entityId}`;
   const limitQueryParam = `limit=${REVIEWS_PER_PAGE}`;
@@ -513,7 +514,7 @@ type Environment = "prod" | "sbx" | "qa" | "dev";
 function buildReviewsEndpointUrl(
   cloudRegion: CloudRegion,
   environment: Environment,
-  apiKey: string
+  apiKey: string,
 ): string {
   switch (cloudRegion) {
     case "us":
@@ -528,7 +529,7 @@ function buildReviewsEndpointUrl(
           return `https://streams-dev.yext.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         default:
           console.warn(
-            `Unknown environment: ${environment}. Defaulting to prod.`
+            `Unknown environment: ${environment}. Defaulting to prod.`,
           );
           return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
       }
@@ -540,13 +541,13 @@ function buildReviewsEndpointUrl(
           return `https://qa-cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         default:
           console.warn(
-            `Unknown environment: ${environment}. Defaulting to prod.`
+            `Unknown environment: ${environment}. Defaulting to prod.`,
           );
           return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
       }
     default:
       console.warn(
-        `Unknown cloud region: ${cloudRegion}. Defaulting to US prod.`
+        `Unknown cloud region: ${cloudRegion}. Defaulting to US prod.`,
       );
       return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
   }
@@ -564,8 +565,8 @@ function formatDate(date: Date): string {
   });
 }
 
-export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
+export const ReviewsSectionDemo: ComponentConfig<ReviewsSectionDemoProps> = {
   fields: reviewsFields,
-  label: msg("components.reviewsSection", "Reviews Section"),
+  label: msg("components.reviewsSectionDemo", "Reviews Section DEMO"),
   render: (props) => <ReviewsSectionInternal {...props} />,
 };
