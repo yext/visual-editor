@@ -25,6 +25,7 @@ const TEMP_ENDPOINT = "";
 const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
 const VISIBLE_PAGE_NUMBERS = 5;
+const REVIEWS_ENDPOINT_ID = "visualEditorReviews";
 
 export type ReviewsSectionProps = {
   backgroundColor: BackgroundStyle;
@@ -101,8 +102,6 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   }, []);
 
   React.useEffect(() => {
-    console.log("pageTokens", pageTokens);
-    console.log("currentPageNumber", currentPageNumber);
     if (nextPageToken) {
       setPageTokens((prev) => ({
         ...prev,
@@ -476,40 +475,6 @@ async function fetchReviewsFromApi(
 }
 
 /**
- * Returns an array of visible page numbers based on the total number of pages and the current page number.
- * @param numPages - The total number of pages.
- * @param currentPageNumber - The current page number (1-indexed).
- */
-function getVisiblePageNumbers(
-  numPages: number,
-  currentPageNumber: number
-): number[] {
-  if (
-    numPages <= VISIBLE_PAGE_NUMBERS ||
-    currentPageNumber <= Math.ceil(VISIBLE_PAGE_NUMBERS / 2)
-  ) {
-    return Array.from(
-      { length: Math.min(numPages, VISIBLE_PAGE_NUMBERS) },
-      (_, i) => i + 1
-    );
-  } else if (
-    numPages - currentPageNumber <=
-    Math.floor(VISIBLE_PAGE_NUMBERS / 2)
-  ) {
-    return Array.from(
-      { length: VISIBLE_PAGE_NUMBERS },
-      (_, i) => numPages - VISIBLE_PAGE_NUMBERS + i + 1
-    );
-  } else {
-    const start = Math.max(
-      1,
-      currentPageNumber - Math.floor(VISIBLE_PAGE_NUMBERS / 2)
-    );
-    return Array.from({ length: VISIBLE_PAGE_NUMBERS }, (_, i) => start + i);
-  }
-}
-
-/**
  * Extracts the aggregate rating from the document's schema.
  * @param document - The document containing the schema.
  * @returns The aggregate rating object if found, otherwise undefined.
@@ -525,28 +490,14 @@ function getAggregateRating(document: any) {
  * @returns The reviews content endpoint URL or undefined if not found.
  */
 function getReviewsContentEndpoint(document: any): string | undefined {
-  try {
-    const endpointId = JSON.parse(document?._pageset)?.typeConfig?.entityConfig
-      ?.reviewsEndpointId;
-    const cloudRegion = document._env.YEXT_CLOUD_REGION?.toLowerCase();
-    const environment = document._env.YEXT_ENVIRONMENT?.toLowerCase();
-    const apiKey = document._env.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
-    if (!endpointId || !cloudRegion || !environment || !apiKey) {
-      console.error(
-        "Missing required parameters for reviews content endpoint."
-      );
-      return undefined;
-    }
-    return buildReviewsEndpointUrl(
-      endpointId,
-      cloudRegion,
-      environment,
-      apiKey
-    );
-  } catch (error) {
-    console.error("Error parsing reviews content endpoint:", error);
+  const cloudRegion = document._env.YEXT_CLOUD_REGION?.toLowerCase();
+  const environment = document._env.YEXT_ENVIRONMENT?.toLowerCase();
+  const apiKey = document._env.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  if (!cloudRegion || !environment || !apiKey) {
+    console.error("Missing required parameters for reviews content endpoint.");
     return undefined;
   }
+  return buildReviewsEndpointUrl(cloudRegion, environment, apiKey);
 }
 
 type CloudRegion = "us" | "eu";
@@ -554,14 +505,12 @@ type Environment = "prod" | "sbx" | "qa" | "dev";
 
 /**
  * Builds the reviews content endpoint URL.
- * @param endpointId - The ID of the content endpoint with the reviews source.
  * @param cloudRegion - The cloud region (e.g., "us", "eu").
  * @param environment - The environment (e.g., "prod", "sbx", "qa", "dev").
  * @param apiKey - The API key for the reviews content endpoint.
  * @returns The constructed URL for the reviews content endpoint.
  */
 function buildReviewsEndpointUrl(
-  endpointId: string,
   cloudRegion: CloudRegion,
   environment: Environment,
   apiKey: string
@@ -570,36 +519,36 @@ function buildReviewsEndpointUrl(
     case "us":
       switch (environment) {
         case "prod":
-          return `https://cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         case "sbx":
-          return `https://sbx-cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://sbx-cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         case "qa":
-          return `https://qa-cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://streams.qa.yext.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         case "dev":
-          return `https://streams-dev.yext.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://streams-dev.yext.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         default:
           console.warn(
             `Unknown environment: ${environment}. Defaulting to prod.`
           );
-          return `https://cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
       }
     case "eu":
       switch (environment) {
         case "prod":
-          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         case "qa":
-          return `https://streams.qa.yext.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://qa-cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
         default:
           console.warn(
             `Unknown environment: ${environment}. Defaulting to prod.`
           );
-          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
       }
     default:
       console.warn(
         `Unknown cloud region: ${cloudRegion}. Defaulting to US prod.`
       );
-      return `https://cdn.yextapis.com/v2/accounts/me/content/${endpointId}?api_key=${apiKey}`;
+      return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
   }
 }
 
