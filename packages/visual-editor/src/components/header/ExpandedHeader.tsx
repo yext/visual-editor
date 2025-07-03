@@ -18,15 +18,14 @@ import {
   TranslatableCTA,
   pt,
   resolveTranslatableString,
-  Background,
+  PageSection,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
+import { FaTimes, FaBars } from "react-icons/fa";
 import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
-} from "./languageDropdown.js";
-import { t } from "i18next";
-import { FaTimes, FaBars } from "react-icons/fa";
+} from "./languageDropdown.tsx";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
   image: {
@@ -138,9 +137,13 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: YextField("Label", { type: "text" }),
-                  link: YextField("Link", { type: "text" }),
-                  linkType: YextField("Link Type", { type: "text" }),
+                  label: YextField(msg("fields.label", "Label"), {
+                    type: "text",
+                  }),
+                  link: YextField(msg("fields.link", "Link"), { type: "text" }),
+                  linkType: YextField(msg("fields.linkType", "Link Type"), {
+                    type: "text",
+                  }),
                 },
               }
             ),
@@ -229,7 +232,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     primaryHeader: primaryHeaderStyle,
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
+  const { t } = useTranslation();
   const { logo, links, primaryCTA, secondaryCTA } = primaryHeader;
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
   const { backgroundColor, logoWidth, primaryCtaVariant, secondaryCtaVariant } =
@@ -238,17 +241,19 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const languageDropDownProps = parseDocumentForLanguageDropdown(document);
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
+  const [isOpen, setIsOpen] = React.useState<boolean>(true);
 
   return (
     <>
       <div
         className="hidden md:flex flex-col"
-        aria-label={t("expandedHeader", "Expanded Header")}
+        aria-label={t("expandedHeaderDesktop", "Expanded Header Desktop")}
       >
         {show && (
-          <Background
+          <PageSection
+            verticalPadding={"sm"}
             background={secondaryBackgroundColor}
-            className="flex justify-end gap-6 py-4 px-20 items-center"
+            className="flex justify-end gap-6 items-center"
           >
             <EntityField
               displayName={pt(
@@ -264,13 +269,14 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
                 className="hidden md:flex"
               />
             )}
-          </Background>
+          </PageSection>
         )}
-        <Background
+        <PageSection
+          verticalPadding={"header"}
           background={backgroundColor}
-          className="flex flex-row justify-between w-full items-center py-6 px-20"
+          className="flex flex-row justify-between w-full items-center"
         >
-          <EntityField displayName={pt("fields.logo", "Logo")}>
+          <EntityField displayName={pt("fields.logoUrl", "Logo")}>
             <HeaderLogo
               logo={buildComplexImage(logo, logoWidth)}
               logoWidth={logoWidth}
@@ -293,11 +299,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               secondaryVariant={secondaryCtaVariant}
             />
           </div>
-        </Background>
+        </PageSection>
       </div>
       <div
         className="flex md:hidden items-center justify-between px-4 py-2"
-        aria-label={t("expandedHeader", "Expanded Header")}
+        aria-label={t("expandedHeaderMobile", "Expanded Header Mobile")}
       >
         <HeaderLogo
           logo={buildComplexImage(logo, logoWidth)}
@@ -327,7 +333,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               : "max-h-0 opacity-0 overflow-scroll"
           }`}
         >
-          <MobileSection background={backgroundColor}>
+          <PageSection verticalPadding={"sm"} background={backgroundColor}>
             <EntityField
               displayName={pt(
                 "fields.primaryHeaderLinks",
@@ -336,9 +342,12 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             >
               <HeaderLinks links={links} />
             </EntityField>
-          </MobileSection>
+          </PageSection>
           {show && (
-            <MobileSection background={secondaryBackgroundColor}>
+            <PageSection
+              verticalPadding={"sm"}
+              background={secondaryBackgroundColor}
+            >
               <EntityField
                 displayName={pt(
                   "fields.secondaryHeaderLinks",
@@ -347,16 +356,17 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               >
                 <HeaderLinks links={secondaryLinks} type="Secondary" />
               </EntityField>
-            </MobileSection>
+              {showLanguageDropdown && showLanguageSelector && (
+                <LanguageDropdown
+                  background={secondaryBackgroundColor}
+                  {...languageDropDownProps}
+                  className="flex md:hidden"
+                />
+              )}
+            </PageSection>
           )}
-          {showLanguageDropdown && showLanguageSelector && (
-            <LanguageDropdown
-              background={secondaryBackgroundColor}
-              {...languageDropDownProps}
-              className="flex md:hidden"
-            />
-          )}
-          <MobileSection className="py-4" background={backgroundColor}>
+
+          <PageSection verticalPadding={"sm"} background={backgroundColor}>
             <HeaderCtas
               document={document}
               primaryCTA={primaryCTA}
@@ -364,7 +374,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               primaryVariant={primaryCtaVariant}
               secondaryVariant={secondaryCtaVariant}
             />
-          </MobileSection>
+          </PageSection>
         </div>
       )}
     </>
@@ -481,26 +491,9 @@ const buildComplexImage = (
   };
 };
 
-const MobileSection = ({
-  children,
-  background,
-  className,
-}: {
-  children: React.ReactNode;
-  background?: BackgroundStyle;
-  className?: string;
-}) => (
-  <Background
-    as="section"
-    className={`px-4 ${className ?? ""}`.trim()}
-    background={background}
-  >
-    {children}
-  </Background>
-);
-
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   label: msg("components.expandedHeader", "Expanded Header"),
+  fields: expandedHeaderSectionFields,
   defaultProps: {
     data: {
       primaryHeader: {
@@ -592,7 +585,55 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     },
     liveVisibility: true,
   },
-  fields: expandedHeaderSectionFields,
+  resolveFields: (_data, { fields }) => {
+    const showSecondaryHeader = _data.props.data.secondaryHeader?.show;
+
+    const dataFields = {
+      // @ts-expect-error ts(2339) objectFields exists ts(2339) objectFields exists
+      ...fields.data.objectFields,
+    };
+
+    const stylesFields = {
+      // @ts-expect-error ts(2339) objectFields exists ts(2339) objectFields exists
+      ...fields.styles.objectFields,
+    };
+
+    const primaryHeaderFields = {
+      ...dataFields.primaryHeader.objectFields,
+    };
+
+    const secondaryHeaderFields = {
+      ...dataFields.secondaryHeader.objectFields,
+    };
+
+    if (!showSecondaryHeader) {
+      delete secondaryHeaderFields.showLanguageDropdown;
+      delete secondaryHeaderFields.secondaryLinks;
+      delete stylesFields.secondaryHeader;
+    }
+
+    return {
+      ...fields,
+      data: {
+        ...fields.data,
+        objectFields: {
+          ...dataFields,
+          primaryHeader: {
+            ...dataFields.primaryHeader,
+            objectFields: primaryHeaderFields,
+          },
+          secondaryHeader: {
+            ...dataFields.secondaryHeader,
+            objectFields: secondaryHeaderFields,
+          },
+        },
+      },
+      styles: {
+        ...fields.styles,
+        objectFields: stylesFields,
+      },
+    };
+  },
   render: (props) => (
     <AnalyticsScopeProvider name={props.analytics?.scope ?? "expandedHeader"}>
       <VisibilityWrapper

@@ -165,7 +165,6 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     registryDependencies: [
       "cta",
-      "background",
       "image",
       "maybeLink",
       "pageSection",
