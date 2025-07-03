@@ -75,21 +75,13 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
     return null;
   }
 
-  // Calculate height based on width and aspect ratio
-  const height = width && aspectRatio ? width / aspectRatio : undefined;
-
   return (
     <EntityField
       displayName={t("image", "Image")}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >
-      <Image
-        image={resolvedImage}
-        aspectRatio={aspectRatio}
-        width={width}
-        height={height}
-      />
+      <Image image={resolvedImage} aspectRatio={aspectRatio} width={width} />
     </EntityField>
   );
 };
