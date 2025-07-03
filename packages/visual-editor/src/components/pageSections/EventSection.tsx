@@ -137,8 +137,11 @@ const EventCard = ({
           <div className="h-full">
             <Image
               image={event.image}
-              layout="auto"
-              aspectRatio={event.image.width / event.image.height}
+              aspectRatio={
+                event.image.width && event.image.height
+                  ? event.image.width / event.image.height
+                  : 1.78
+              }
             />
           </div>
         )}

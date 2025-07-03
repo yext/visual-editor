@@ -133,7 +133,6 @@ const ProductCard = ({
       {product.image ? (
         <Image
           image={product.image}
-          layout={"auto"}
           aspectRatio={1.778} // 16:9
           className="h-[200px]"
         />

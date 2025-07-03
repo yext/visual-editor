@@ -192,7 +192,6 @@ const HeaderLogo = (props: {
       <div className="flex mr-2" style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
-          layout="auto"
           aspectRatio={props.logo.image.width / props.logo.image.height}
         />
       </div>
