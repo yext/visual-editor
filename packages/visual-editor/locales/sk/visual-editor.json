@@ -161,6 +161,7 @@
       "hour12": "12-hodinový",
       "hour24": "24-hodinový",
       "image": "Obraz",
+      "includeOpenNow": "Zahrňte tlačidlo Otvorené teraz",
       "international": "Medzinárodný",
       "international_phone number": "Medzinárodné",
       "large": "Veľký",

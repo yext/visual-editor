@@ -25,6 +25,7 @@ import {
   pt,
   ThemeOptions,
   resolveTranslatableRichText,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -114,12 +115,12 @@ const insightSectionFields: Fields<InsightSectionProps> = {
 };
 
 const InsightCard = ({
-  key,
+  cardNumber,
   insight,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardNumber: number;
   insight: InsightStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -172,7 +173,7 @@ const InsightCard = ({
         </div>
         {insight.cta && (
           <CTA
-            eventName={`cta${key}`}
+            eventName={`cta${cardNumber}`}
             variant={"link"}
             label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
@@ -230,6 +231,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
             {resolvedInsights.insights.map((insight, index) => (
               <InsightCard
                 key={index}
+                cardNumber={index}
                 insight={insight}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
@@ -269,12 +271,14 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       },
     },
     analytics: {
-      scope: "insightSection",
+      scope: "insightsSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "insightSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

@@ -161,6 +161,7 @@
       "hour12": "12 órás",
       "hour24": "24 órás",
       "image": "Kép",
+      "includeOpenNow": "Tartalmazza a NYUTATÁS gombot",
       "international": "Nemzetközi",
       "international_phone number": "Nemzetközi",
       "large": "Nagy",

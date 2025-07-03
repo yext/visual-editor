@@ -160,6 +160,7 @@
       "hour12": "12-hour",
       "hour24": "24-hour",
       "image": "Image",
+      "includeOpenNow": "Include Open Now Button",
       "international": "International",
       "international_phone number": "International",
       "large": "Large",

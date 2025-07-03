@@ -161,6 +161,7 @@
       "hour12": "12-timers",
       "hour24": "24-timer",
       "image": "Billede",
+      "includeOpenNow": "Inkluder åbent nu -knap",
       "international": "International",
       "international_phone number": "International",
       "large": "Stor",

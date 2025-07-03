@@ -143,8 +143,8 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("yes", "Yes"), value: true },
-            { label: msg("no", "No"), value: false },
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
           ],
         }
       ),
@@ -156,8 +156,8 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
             {
               type: "radio",
               options: [
-                { label: msg("yes", "Yes"), value: true },
-                { label: msg("no", "No"), value: false },
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
               ],
             }
           ),
@@ -173,8 +173,8 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
             {
               type: "radio",
               options: [
-                { label: msg("yes", "Yes"), value: true },
-                { label: msg("no", "No"), value: false },
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
               ],
             }
           ),
@@ -205,7 +205,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
 };
 
 const LocationCard = ({
-  key,
+  cardNumber,
   styles,
   name,
   hours,
@@ -215,7 +215,7 @@ const LocationCard = ({
   relativePrefixToRoot,
   slug,
 }: {
-  key: number;
+  cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
   name: string;
   hours: any;
@@ -232,7 +232,7 @@ const LocationCard = ({
       as="section"
     >
       <MaybeLink
-        eventName={`link${key}`}
+        eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
         className="mb-2"
         href={relativePrefixToRoot && slug ? relativePrefixToRoot + slug : slug}
@@ -252,7 +252,7 @@ const LocationCard = ({
       )}
       {mainPhone && (
         <PhoneAtom
-          eventName={`phone${key}`}
+          eventName={`phone${cardNumber}`}
           phoneNumber={mainPhone}
           format={styles?.phoneNumberFormat}
           includeHyperlink={styles?.phoneNumberLink}
@@ -357,6 +357,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                 (location: any, index: number) => (
                   <LocationCard
                     key={index}
+                    cardNumber={index}
                     styles={styles}
                     name={location.name}
                     address={location.address}

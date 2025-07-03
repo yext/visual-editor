@@ -27,6 +27,7 @@ import {
   msg,
   pt,
   ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -115,12 +116,12 @@ const eventSectionFields: Fields<EventSectionProps> = {
 };
 
 const EventCard = ({
-  cardKey,
+  cardNumber,
   event,
   backgroundColor,
   sectionHeadingLevel,
 }: {
-  cardKey: number;
+  cardNumber: number;
   event: EventStruct;
   backgroundColor?: BackgroundStyle;
   sectionHeadingLevel: HeadingLevel;
@@ -165,7 +166,7 @@ const EventCard = ({
         {resolveTranslatableRichText(event.description, i18n.language)}
         {event.cta && (
           <CTA
-            eventName={`cta${cardKey}`}
+            eventName={`cta${cardNumber}`}
             label={resolveTranslatableString(event.cta.label, i18n.language)}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -223,7 +224,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
             {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
-                cardKey={index}
+                cardNumber={index}
                 event={event}
                 backgroundColor={styles.cardBackgroundColor}
                 sectionHeadingLevel={styles.heading.level}
@@ -263,12 +264,14 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       },
     },
     analytics: {
-      scope: "eventSection",
+      scope: "eventsSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "eventSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
