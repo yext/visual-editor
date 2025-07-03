@@ -167,7 +167,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
         },
       }),
       secondaryFooter: YextField(
-        msg("fields.secondaryFooter", "Secondary Footer"),
+        msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
         {
           type: "object",
           objectFields: {
