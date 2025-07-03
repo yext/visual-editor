@@ -13,6 +13,7 @@ const pageSectionVariants = cva("", {
       default: "py-pageSection-verticalPadding",
       header: "py-2 sm:py-6",
       footer: "py-8 sm:py-20",
+      footer_secondary: "py-8 sm:py-10",
     },
   },
   defaultVariants: {

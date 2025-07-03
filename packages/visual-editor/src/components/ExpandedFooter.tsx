@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
-  CTA as CTAType,
   Link,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -16,14 +15,12 @@ import {
   VisibilityWrapper,
   BackgroundStyle,
   pt,
-  Background,
   Body,
+  CTA,
+  TranslatableCTA,
   resolveTranslatableString,
-  usePlatformTranslation,
+  PageSection,
 } from "@yext/visual-editor";
-import { useState } from "react";
-import { t } from "i18next";
-import { FaTimes, FaBars } from "react-icons/fa";
 import {
   FaXTwitter,
   FaFacebookF,
@@ -32,6 +29,7 @@ import {
   FaLinkedinIn,
   FaYoutube,
 } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100X50";
 const PLACEHOLDER_UTILITY_IMAGES: string = "https://placehold.co/60X60";
@@ -48,13 +46,13 @@ export interface ExpandedFooterProps {
       youtubeLink: string;
       utilityImages: { url: string }[];
       expandedFooter: boolean;
-      footerLinks: CTAType[] | undefined;
-      expandedFooterItems: { label: string; links: CTAType[] }[] | undefined;
+      footerLinks: TranslatableCTA[];
+      expandedFooterItems: { label: string; links: TranslatableCTA[] }[];
     };
     secondaryFooter: {
       show: boolean;
       copyrightMessage: string;
-      secondaryFooterLinks: CTAType[];
+      secondaryFooterLinks: TranslatableCTA[];
     };
   };
   styles: {
@@ -139,9 +137,15 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
                   arrayFields: {
-                    label: YextField("Label", { type: "text" }),
-                    link: YextField("Link", { type: "text" }),
-                    linkType: YextField("Link Type", { type: "text" }),
+                    label: YextField(msg("fields.label", "Label"), {
+                      type: "text",
+                    }),
+                    link: YextField(msg("fields.link", "Link"), {
+                      type: "text",
+                    }),
+                    linkType: YextField(msg("fields.linkType", "Link Type"), {
+                      type: "text",
+                    }),
                   },
                 }),
               },
@@ -150,9 +154,15 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
             type: "array",
             arrayFields: {
-              label: YextField("Label", { type: "text" }),
-              link: YextField("Link", { type: "text" }),
-              linkType: YextField("Link Type", { type: "text" }),
+              label: YextField(msg("fields.label", "Label"), {
+                type: "text",
+              }),
+              link: YextField(msg("fields.link", "Link"), {
+                type: "text",
+              }),
+              linkType: YextField(msg("fields.linkType", "Link Type"), {
+                type: "text",
+              }),
             },
           }),
         },
@@ -180,23 +190,15 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: YextField("Label", { type: "text" }),
-                  link: YextField("Link", { type: "text" }),
-                  linkType: YextField("Link Type", { type: "text" }),
-                },
-                getItemSummary: (_, index?: number): string => {
-                  const { i18n } = usePlatformTranslation();
-                  if (typeof index === "number") {
-                    const translation = resolveTranslatableString(
-                      `Link ${index + 1}`,
-                      i18n.language
-                    );
-                    if (translation) {
-                      return translation;
-                    }
-                    return pt("link", "Link");
-                  }
-                  return pt("link", "Link");
+                  label: YextField(msg("fields.label", "Label"), {
+                    type: "text",
+                  }),
+                  link: YextField(msg("fields.link", "Link"), {
+                    type: "text",
+                  }),
+                  linkType: YextField(msg("fields.linkType", "Link Type"), {
+                    type: "text",
+                  }),
                 },
               }
             ),
@@ -294,7 +296,6 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
     primaryFooter: primaryFooterStyle,
     secondaryFooter: secondaryFooterStyle,
   } = styles;
-  const [isOpen, setIsOpen] = useState<boolean>(true);
   const {
     logo,
     footerLinks,
@@ -315,22 +316,27 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
     utilityImages: utilityImagesStyle,
   } = primaryFooterStyle;
   const { backgroundColor: secondaryBackgroundColor } = secondaryFooterStyle;
+  const { t } = useTranslation();
 
   return (
     <>
       <div
         className="hidden md:flex flex-col"
-        aria-label={t("expandedFooter", "Expanded Footer")}
+        aria-label={t("expandedFooterDesktop", "Expanded Footer Desktop")}
       >
-        <Background
+        <PageSection
+          as="footer"
+          verticalPadding={"footer"}
           background={backgroundColor}
-          className={`flex flex-row justify-start w-full items-center p-20 gap-10`}
+          className={`flex flex-row justify-start w-full items-start gap-10`}
         >
           <div className="flex flex-col gap-8">
-            <FooterLogo
-              logo={buildComplexLogoImage(logo, logoWidth)}
-              logoWidth={logoWidth}
-            />
+            <EntityField displayName={pt("fields.logo", "Logo")}>
+              <FooterLogo
+                logo={buildComplexLogoImage(logo, logoWidth)}
+                logoWidth={logoWidth}
+              />
+            </EntityField>
             <FooterIcons
               xLink={xLink}
               facebookLink={facebookLink}
@@ -340,25 +346,32 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               youtubeLink={youtubeLink}
             />
             {utilityImages && (
-              <div className="grid grid-cols-3 gap-8">
-                {utilityImages.map((item, index) => (
-                  <FooterLogo
-                    key={index}
-                    logo={buildComplexUtilityImage(item.url, logoWidth)}
-                    logoWidth={utilityImagesStyle}
-                  />
-                ))}
-              </div>
+              <EntityField
+                displayName={pt("fields.utilityImages", "Utility Images")}
+              >
+                <div className="grid grid-cols-3 gap-8">
+                  {utilityImages.map((item, index) => (
+                    <FooterLogo
+                      key={index}
+                      logo={buildComplexUtilityImage(item.url, logoWidth)}
+                      logoWidth={utilityImagesStyle}
+                    />
+                  ))}
+                </div>
+              </EntityField>
             )}
           </div>
-          {expandedFooter && expandedFooterItems ? (
-            <div className="grid grid-cols-1 md:grid-cols-4 w-full justify-between">
+          {expandedFooter ? (
+            <div
+              aria-label={pt("footerLinks", "Footer Links")}
+              className="grid grid-cols-1 md:grid-cols-4 w-full text-center"
+            >
               {expandedFooterItems.map((item, index) => (
                 <EntityField
                   key={index}
                   displayName={pt(
-                    "fields.expandedFooterItems",
-                    "Expanded Footer Items"
+                    "fields.expandedFooterLinks",
+                    "Expanded Footer Links"
                   )}
                 >
                   <ExpandedFooterLinks label={item.label} links={item.links} />
@@ -366,19 +379,21 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               ))}
             </div>
           ) : (
-            <div className="flex w-full justify-between">
+            <div className="w-full">
               <EntityField
-                displayName={pt("fields.footerLinks", "Primary Footer Links")}
+                displayName={pt("fields.footerLinks", "Footer Links")}
               >
-                <FooterLinks links={footerLinks} />
+                <FooterLinks links={footerLinks} type="Primary" />
               </EntityField>
             </div>
           )}
-        </Background>
+        </PageSection>
         {show && (
-          <Background
+          <PageSection
+            as="footer"
+            verticalPadding={"footer_secondary"}
             background={secondaryBackgroundColor}
-            className={`space-y-5 px-20 py-10`}
+            className={`space-y-5`}
           >
             <EntityField
               displayName={pt(
@@ -389,76 +404,100 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               <FooterLinks links={secondaryFooterLinks} type="Secondary" />
             </EntityField>
             {copyrightMessage && (
-              <Body className="text-xs">{copyrightMessage}</Body>
+              <EntityField
+                displayName={pt("fields.copyrightMessage", "Copyright Message")}
+              >
+                <Body className="text-xs">{copyrightMessage}</Body>
+              </EntityField>
             )}
-          </Background>
+          </PageSection>
         )}
       </div>
       <div
-        className="flex md:hidden items-center justify-between px-4 py-2"
-        aria-label={t("expandedFooter", "Expanded Footer")}
+        id="mobile-footer-menu"
+        className={`md:hidden block`}
+        aria-label={t("expandedFooterMobile", "Expanded Footer Mobile")}
       >
-        <FooterLogo
-          logo={buildComplexLogoImage(logo, logoWidth)}
-          logoWidth={logoWidth}
-        />
-
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={
-            isOpen
-              ? t("closeFooterMenu", "Close menu")
-              : t("openFooterMenu", "Open menu")
-          }
-          aria-expanded={isOpen}
-          aria-controls="mobile-footer-menu"
-          className="text-xl"
+        <PageSection
+          as="footer"
+          background={backgroundColor}
+          verticalPadding={"footer"}
+          className="flex flex-col gap-8"
         >
-          {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
-        </button>
-      </div>
-      {isOpen && (
-        <div
-          id="mobile-footer-menu"
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isOpen
-              ? "max-h-[1000px] opacity-100"
-              : "max-h-0 opacity-0 overflow-hidden"
-          }`}
-        >
-          <MobileSection background={backgroundColor}>
-            <EntityField
-              displayName={pt("fields.footerLinks", "Primary Footer Links")}
-            >
-              <FooterLinks links={footerLinks} />
-            </EntityField>
-            <FooterIcons
-              xLink={xLink}
-              facebookLink={facebookLink}
-              instagramLink={instagramLink}
-              pinterestLink={pinterestLink}
-              linkedInLink={linkedInLink}
-              youtubeLink={youtubeLink}
-              // utilityImages={utilityImages}
-              // count={utilityImagesCount}
+          <EntityField displayName={pt("fields.logo", "Logo")}>
+            <FooterLogo
+              logo={buildComplexLogoImage(logo, logoWidth)}
+              logoWidth={logoWidth}
             />
-          </MobileSection>
-          <MobileSection background={secondaryBackgroundColor} className="pb-4">
-            <EntityField
-              displayName={pt(
-                "fields.secondaryFooterLinks",
-                "Secondary Footer Links"
-              )}
-            >
-              <FooterLinks links={secondaryFooterLinks} type="Secondary" />
-            </EntityField>
+          </EntityField>
 
-            {copyrightMessage && (
-              <div className="text-xs text-center mt-2">{copyrightMessage}</div>
+          {expandedFooter ? (
+            <div className="grid grid-cols-1 w-full gap-6">
+              {expandedFooterItems.map((item, index) => (
+                <EntityField
+                  key={index}
+                  displayName={pt(
+                    "fields.expandedFooterLinks",
+                    "Expanded Footer Links"
+                  )}
+                >
+                  <ExpandedFooterLinks label={item.label} links={item.links} />
+                </EntityField>
+              ))}
+            </div>
+          ) : (
+            <EntityField displayName={pt("fields.footerLinks", "Footer Links")}>
+              <FooterLinks links={footerLinks} type="Primary" />
+            </EntityField>
+          )}
+          <FooterIcons
+            xLink={xLink}
+            facebookLink={facebookLink}
+            instagramLink={instagramLink}
+            pinterestLink={pinterestLink}
+            linkedInLink={linkedInLink}
+            youtubeLink={youtubeLink}
+          />
+          {utilityImages && (
+            <EntityField
+              displayName={pt("fields.utilityImages", "Utility Images")}
+            >
+              <div className="grid grid-cols-3 gap-8">
+                {utilityImages.map((item, index) => (
+                  <FooterLogo
+                    key={index}
+                    logo={buildComplexUtilityImage(item.url, logoWidth)}
+                    logoWidth={utilityImagesStyle}
+                  />
+                ))}
+              </div>
+            </EntityField>
+          )}
+        </PageSection>
+        <PageSection
+          as="footer"
+          className="flex flex-col gap-5"
+          background={secondaryBackgroundColor}
+          verticalPadding={"footer_secondary"}
+        >
+          <EntityField
+            displayName={pt(
+              "fields.secondaryFooterLinks",
+              "Secondary Footer Links"
             )}
-          </MobileSection>
-        </div>
-      )}
+          >
+            <FooterLinks links={secondaryFooterLinks} type="Secondary" />
+          </EntityField>
+
+          {copyrightMessage && (
+            <EntityField
+              displayName={pt("fields.copyrightMessage", "Copyright Message")}
+            >
+              <Body className="text-xs text-center">{copyrightMessage}</Body>
+            </EntityField>
+          )}
+        </PageSection>
+      </div>
     </>
   );
 };
@@ -467,64 +506,64 @@ const FooterLinks = ({
   links,
   type = "Primary",
 }: {
-  links: CTAType[];
+  links: TranslatableCTA[];
   type?: "Primary" | "Secondary";
 }) => {
+  const { i18n } = useTranslation();
+
   return (
-    <nav aria-label={`${type} Footer Links`}>
-      <ul
-        className={`flex flex-col ${type === "Primary" ? `md:flex-col` : `md:flex-row md:gap-8`} gap-4  py-4 md:py-0`}
-      >
-        {links.map((item, index) => (
-          <li key={index}>
-            <Link
-              eventName={`${type.toLowerCase()}FooterLink${index}`}
-              cta={{
-                label: item.label,
-                linkType: item.linkType,
-                link: item.link,
-              }}
-              className={`text-sm`}
+    <ul
+      className={`w-full ${type === "Secondary" ? "gap-4 flex flex-col md:flex-row" : "grid grid-cols-1 md:grid-cols-5 gap-6"}`}
+    >
+      {links.map((item, index) => {
+        return (
+          <li key={`${type.toLowerCase()}.${index}`}>
+            <CTA
+              variant={
+                type === "Primary"
+                  ? "headerFooterMainLink"
+                  : "headerSecondaryLink"
+              }
+              eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
+              label={resolveTranslatableString(item.label, i18n.language)}
+              linkType={item.linkType}
+              link={item.link}
+              className={`justify-center md:justify-start`}
             />
           </li>
-        ))}
-      </ul>
-    </nav>
+        );
+      })}
+    </ul>
   );
 };
 
 const ExpandedFooterLinks = ({
   links,
-  type = "Primary",
   label,
 }: {
-  links: CTAType[];
-  type?: "Primary" | "Secondary";
+  links: TranslatableCTA[];
   label: string;
 }) => {
+  const { i18n } = useTranslation();
+
   return (
-    <nav aria-label={`${type} Footer Links`}>
-      <ul
-        className={`flex flex-col ${type === "Primary" ? `md:flex-col` : `md:flex-row md:gap-8`} gap-4  py-4 md:py-0`}
-      >
-        <li>
-          <Body variant={"sm"}>{label}</Body>
+    <ul className={`flex flex-col items-center md:items-start gap-4`}>
+      <li>
+        <Body>{label}</Body>
+      </li>
+      {links.map((item, index) => (
+        <li key={index}>
+          <CTA
+            variant={"headerFooterMainLink"}
+            eventName={`cta${index}-Link-${index + 1}`}
+            label={resolveTranslatableString(item.label, i18n.language)}
+            linkType={item.linkType}
+            link={item.link}
+            className={`justify-start `}
+          />
         </li>
-        {links.map((item, index) => (
-          <li key={index}>
-            <Link
-              eventName={`${type.toLowerCase()}FooterLink${index}`}
-              cta={{
-                label: item.label,
-                linkType: item.linkType,
-                link: item.link,
-              }}
-              className={`text-sm`}
-            />
-          </li>
-        ))}
-      </ul>
-    </nav>
+      ))}
+    </ul>
   );
 };
 
@@ -535,7 +574,10 @@ const FooterLogo = (props: {
 }) => {
   return (
     <MaybeLink href={props.logoLink}>
-      <div className="flex mr-2" style={{ width: `${props.logoWidth}px` }}>
+      <div
+        className="mx-auto md:ml-0"
+        style={{ width: `${props.logoWidth}px` }}
+      >
         <Image
           image={props.logo.image}
           layout="auto"
@@ -574,24 +616,6 @@ const buildComplexUtilityImage = (
   };
 };
 
-const MobileSection = ({
-  children,
-  background,
-  className,
-}: {
-  children: React.ReactNode;
-  background?: BackgroundStyle;
-  className?: string;
-}) => (
-  <section>
-    <Background
-      className={`px-4 ${className ?? ""}`.trim()}
-      background={background}
-    >
-      {children}
-    </Background>
-  </section>
-);
 const FooterIcons = ({
   xLink,
   facebookLink,
@@ -607,21 +631,65 @@ const FooterIcons = ({
   linkedInLink: string;
   youtubeLink: string;
 }) => {
+  const isValid = {
+    x: /^https:\/\/x\.com\/[A-Za-z0-9_]{1,15}$/,
+    facebook: /^https:\/\/(www\.)?facebook\.com\/[A-Za-z0-9.-]+$/,
+    instagram: /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/,
+    pinterest: /^https:\/\/(www\.)?pinterest\.com\/[A-Za-z0-9_-]+\/?$/,
+    linkedin:
+      /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9-%_]+\/?$/,
+    youtube:
+      /^https:\/\/(www\.)?youtube\.com\/(channel|user|c)\/[A-Za-z0-9_-]+\/?$|^https:\/\/youtu\.be\/[A-Za-z0-9_-]+$/,
+  };
+
   const icons = [
-    { link: xLink, icon: <FaXTwitter />, label: "X (Twitter)" },
-    { link: facebookLink, icon: <FaFacebookF />, label: "Facebook" },
-    { link: instagramLink, icon: <FaInstagram />, label: "Instagram" },
-    { link: pinterestLink, icon: <FaPinterestP />, label: "Pinterest" },
-    { link: linkedInLink, icon: <FaLinkedinIn />, label: "LinkedIn" },
-    { link: youtubeLink, icon: <FaYoutube />, label: "YouTube" },
+    {
+      link: xLink,
+      icon: <FaXTwitter className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "X (Twitter)",
+      valid: isValid.x.test(xLink),
+    },
+    {
+      link: facebookLink,
+      icon: <FaFacebookF className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "Facebook",
+      valid: isValid.facebook.test(facebookLink),
+    },
+    {
+      link: instagramLink,
+      icon: <FaInstagram className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "Instagram",
+      valid: isValid.instagram.test(instagramLink),
+    },
+    {
+      link: pinterestLink,
+      icon: <FaPinterestP className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "Pinterest",
+      valid: isValid.pinterest.test(pinterestLink),
+    },
+    {
+      link: linkedInLink,
+      icon: <FaLinkedinIn className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "LinkedIn",
+      valid: isValid.linkedin.test(linkedInLink),
+    },
+    {
+      link: youtubeLink,
+      icon: <FaYoutube className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "YouTube",
+      valid: isValid.youtube.test(youtubeLink),
+    },
   ];
 
+  const filteredIcons = icons.filter((icon) => icon.valid);
+
+  if (filteredIcons.length === 0) return null;
+
   return (
-    <div className="flex gap-6 items-center">
-      {icons
-        // .filter(({ link }) => !!link)
-        .map(({ link, icon, label }, index) => (
-          <a
+    <EntityField displayName={pt("fields.socialLinks", "Social Links")}>
+      <div className="flex gap-6 items-center justify-center md:justify-start border">
+        {filteredIcons.map(({ link, icon, label }, index) => (
+          <Link
             key={index}
             href={link}
             target="_blank"
@@ -630,11 +698,13 @@ const FooterIcons = ({
             className="text-xl hover:opacity-80 transition-opacity"
           >
             {icon}
-          </a>
+          </Link>
         ))}
-    </div>
+      </div>
+    </EntityField>
   );
 };
+
 export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   label: msg("components.expandedFooter", "Expanded Footer"),
   fields: expandedFooterSectionFields,
@@ -646,27 +716,27 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         footerLinks: [
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
         ],
@@ -680,66 +750,125 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
           { url: PLACEHOLDER_UTILITY_IMAGES },
           { url: PLACEHOLDER_UTILITY_IMAGES },
           { url: PLACEHOLDER_UTILITY_IMAGES },
-          { url: PLACEHOLDER_UTILITY_IMAGES },
         ],
         expandedFooter: false,
         expandedFooterItems: [
           {
-            label: "Label 1",
+            label: "Footer Label",
             links: [
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
             ],
           },
           {
-            label: "Label 2",
+            label: "Footer Label",
             links: [
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
                 link: "#",
               },
               {
                 linkType: "URL",
-                label: "Main Footer Link",
+                label: "Footer Link",
+                link: "#",
+              },
+            ],
+          },
+          {
+            label: "Footer Label",
+            links: [
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+            ],
+          },
+          {
+            label: "Footer Label",
+            links: [
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
+                link: "#",
+              },
+              {
+                linkType: "URL",
+                label: "Footer Link",
                 link: "#",
               },
             ],
@@ -752,27 +881,27 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         secondaryFooterLinks: [
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Footer Link",
+            label: "Footer Link",
             link: "#",
           },
         ],
@@ -797,10 +926,23 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   },
   resolveFields: (_data, { fields }) => {
     const expanded = _data.props.data.primaryFooter.expandedFooter;
+    const showSecondaryFooter = _data.props.data.secondaryFooter.show;
 
     const primaryFooterFields = {
       // @ts-expect-error ts(2339) objectFields exists
       ...fields.data.objectFields.primaryFooter.objectFields,
+    };
+    const secondaryFooterFields = {
+      // @ts-expect-error ts(2339) objectFields exists
+      ...fields.data.objectFields.secondaryFooter.objectFields,
+    };
+    const stylesFields = {
+      // @ts-expect-error ts(2339) objectFields exists
+      ...fields.styles.objectFields,
+    };
+    const secondaryFooterStyles = {
+      // @ts-expect-error ts(2339) objectFields exists
+      ...fields.styles.objectFields.secondaryFooter.objectFields,
     };
 
     if (expanded) {
@@ -809,19 +951,40 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       delete primaryFooterFields.expandedFooterItems;
     }
 
+    if (!showSecondaryFooter) {
+      delete secondaryFooterFields.secondaryFooterLinks;
+      delete secondaryFooterFields.copyrightMessage;
+      delete stylesFields.secondaryFooter;
+    } else {
+      stylesFields.secondaryFooter = {
+        // @ts-expect-error ts(2339) objectFields exists ts(2339) objectFields exists
+        ...fields.styles.objectFields.secondaryFooter,
+        objectFields: secondaryFooterStyles,
+      };
+    }
+
     return {
       ...fields,
       data: {
         ...fields.data,
         objectFields: {
-          // @ts-expect-error ts(2339) objectFields exists
+          // @ts-expect-error ts(2339) objectFields exists ts(2339) objectFields exists
           ...fields.data.objectFields,
           primaryFooter: {
             // @ts-expect-error ts(2339) objectFields exists
             ...fields.data.objectFields.primaryFooter,
             objectFields: primaryFooterFields,
           },
+          secondaryFooter: {
+            // @ts-expect-error ts(2339) objectFields exists
+            ...fields.data.objectFields.secondaryFooter,
+            objectFields: secondaryFooterFields,
+          },
         },
+      },
+      styles: {
+        ...fields.styles,
+        objectFields: stylesFields,
       },
     };
   },
