@@ -32,7 +32,6 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100X50";
-const PLACEHOLDER_UTILITY_IMAGES: string = "https://placehold.co/60X60";
 
 export interface ExpandedFooterProps {
   data: {
@@ -345,7 +344,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               linkedInLink={linkedInLink}
               youtubeLink={youtubeLink}
             />
-            {utilityImages && (
+            {utilityImages && utilityImages.length >= 1 && (
               <EntityField
                 displayName={pt("fields.utilityImages", "Utility Images")}
               >
@@ -458,7 +457,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
             linkedInLink={linkedInLink}
             youtubeLink={youtubeLink}
           />
-          {utilityImages && (
+          {utilityImages && utilityImages.length >= 1 && (
             <EntityField
               displayName={pt("fields.utilityImages", "Utility Images")}
             >
@@ -746,11 +745,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         pinterestLink: "",
         linkedInLink: "",
         youtubeLink: "",
-        utilityImages: [
-          { url: PLACEHOLDER_UTILITY_IMAGES },
-          { url: PLACEHOLDER_UTILITY_IMAGES },
-          { url: PLACEHOLDER_UTILITY_IMAGES },
-        ],
+        utilityImages: [],
         expandedFooter: false,
         expandedFooterItems: [
           {
