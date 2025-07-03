@@ -293,8 +293,20 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   );
 
   // parse variables from document
-  const { businessId, apiKey, contentEndpointId, contentDeliveryAPIDomain } =
-    parseDocument(document, contentEndpointIdEnvVar);
+  const {
+    businessId,
+    apiKey,
+    contentEndpointId,
+    contentDeliveryAPIDomain,
+  }: {
+    businessId: string;
+    apiKey: string;
+    contentEndpointId: string;
+    contentDeliveryAPIDomain: string;
+  } = React.useMemo(
+    () => parseDocument(document, contentEndpointIdEnvVar),
+    [document, contentEndpointIdEnvVar]
+  );
 
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
