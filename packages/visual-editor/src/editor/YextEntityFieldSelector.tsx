@@ -41,6 +41,9 @@ import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18nPlatform.ts";
 import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
+import { Combobox, ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
+import { SquarePlus } from "lucide-react";
+import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 
 const devLogger = new DevLogger();
 
@@ -295,12 +298,75 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
+  const entityFields = useEntityFields();
+  const entityFieldOptions = React.useMemo(() => {
+    const { entityFieldOptions } = getEntityFieldOptions(entityFields, filter);
+    return entityFieldOptions;
+  }, [entityFields, filter]);
+
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   if (!constantFieldConfig) {
     return;
   }
 
-  return constantFieldConfig.type === "custom" ? (
+  const isStringField = filter.types?.includes("type.string");
+
+  const handleFieldSelect = (fieldName: string) => {
+    if (!fieldName) return;
+    const currentLocaleVal = value?.constantValue?.[locale] ?? "";
+    const newLocaleVal = `${currentLocaleVal}[[${fieldName}]]`;
+    onChange(
+      {
+        field: value?.field ?? "",
+        constantValue: {
+          ...value?.constantValue,
+          [locale]: newLocaleVal,
+        },
+        constantValueEnabled: true,
+      },
+      undefined
+    );
+  };
+
+  // If this is a string field, we render our own custom input.
+  // Otherwise, we fall back to the default AutoField for other types (images, CTAs, etc.).
+  const fieldEditor = isStringField ? (
+    <div className="ve-relative ve-w-full ve-pt-3">
+      <input
+        type="text"
+        className="ve-w-full ve-text-gray-700 ve-text-md ve-rounded ve-border ve-border-gray-300 ve-p-2 ve-pr-10" // Add padding-right for the button
+        value={value?.constantValue?.[locale] ?? ""}
+        onChange={(e) => {
+          onChange({
+            field: value?.field ?? "",
+            constantValue: {
+              ...value?.constantValue,
+              [locale]: e.target.value,
+            },
+            constantValueEnabled: true,
+          });
+        }}
+      />
+      <div className="ve-relative ve-left-56 -ve-top-[1.1rem] -ve-translate-y-1/2">
+        <Combobox
+          selectedOption={{ label: "", value: "" }}
+          onChange={handleFieldSelect}
+          optionGroups={[{ options: entityFieldOptions }]}
+          customTrigger={
+            <button
+              type="button"
+              className="ve-text-gray-600 hover:ve-text-gray-700"
+              aria-label="Add entity field"
+            >
+              <SquarePlus size={20} />
+            </button>
+          }
+        />
+      </div>
+    </div>
+  ) : (
     <AutoField
       onChange={(newConstantValue, uiState) =>
         onChange(
@@ -315,27 +381,56 @@ export const ConstantValueInput = <T extends Record<string, any>>({
       value={value?.constantValue}
       field={constantFieldConfig}
     />
+  );
+
+  return constantFieldConfig.type === "custom" ? (
+    fieldEditor
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
-      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-3" : ""}`}
+      className={`ve-inline-block w-full ${
+        constantFieldConfig.label ? "ve-pt-3" : ""
+      }`}
     >
-      <AutoField
-        onChange={(newConstantValue, uiState) =>
-          onChange(
-            {
-              field: value?.field ?? "",
-              constantValue: newConstantValue,
-              constantValueEnabled: true,
-            },
-            uiState
-          )
-        }
-        value={value?.constantValue}
-        field={constantFieldConfig}
-      />
+      {fieldEditor}
     </FieldLabel>
   );
+};
+
+const getEntityFieldOptions = (
+  entityFields: StreamFields | null,
+  filter: RenderEntityFieldFilter<any>
+): {
+  filteredEntityFields: YextSchemaField[];
+  entityFieldOptions: ComboboxOption[];
+} => {
+  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
+
+  // If there are no direct children, return the parent field if it is a list
+  if (filter.directChildrenOf && filteredEntityFields.length === 0) {
+    filteredEntityFields = getFilteredEntityFields(entityFields, {
+      allowList: [filter.directChildrenOf],
+      types: filter.types,
+      includeListsOnly: true,
+    });
+  }
+
+  return {
+    filteredEntityFields: filteredEntityFields,
+    entityFieldOptions: filteredEntityFields
+      .map((entityFieldNameToSchema) => {
+        return {
+          label:
+            entityFieldNameToSchema.displayName ?? entityFieldNameToSchema.name,
+          value: entityFieldNameToSchema.name,
+        };
+      })
+      .sort((entityFieldA, entityFieldB) => {
+        const nameA = entityFieldA.label.toUpperCase();
+        const nameB = entityFieldB.label.toUpperCase();
+        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+      }),
+  };
 };
 
 export const EntityFieldInput = <T extends Record<string, any>>({
@@ -349,30 +444,10 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const templateMetadata = useTemplateMetadata();
 
   const basicSelectorField = React.useMemo(() => {
-    let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
-
-    // If there are no direct children, return the parent field if it is a list
-    if (filter.directChildrenOf && filteredEntityFields.length === 0) {
-      filteredEntityFields = getFilteredEntityFields(entityFields, {
-        allowList: [filter.directChildrenOf],
-        types: filter.types,
-        includeListsOnly: true,
-      });
-    }
-
-    const entityFieldOptions = filteredEntityFields
-      .map((entityFieldNameToSchema) => {
-        return {
-          label:
-            entityFieldNameToSchema.displayName ?? entityFieldNameToSchema.name,
-          value: entityFieldNameToSchema.name,
-        };
-      })
-      .sort((entityFieldA, entityFieldB) => {
-        const nameA = entityFieldA.label.toUpperCase();
-        const nameB = entityFieldB.label.toUpperCase();
-        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-      });
+    const { filteredEntityFields, entityFieldOptions } = getEntityFieldOptions(
+      entityFields,
+      filter
+    );
 
     const options = hideSelectAFieldOption
       ? [...entityFieldOptions]

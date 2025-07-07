@@ -31,6 +31,7 @@ type ComboboxProps = {
   optionGroups: Array<ComboboxOptionGroup>;
   disabled?: boolean;
   disableSearch?: boolean;
+  customTrigger?: React.ReactNode; // Add this line
 };
 
 export const Combobox = ({
@@ -39,37 +40,42 @@ export const Combobox = ({
   optionGroups,
   disabled,
   disableSearch,
+  customTrigger, // Add this line
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="puckSelect"
-          role="combobox"
-          aria-expanded={open}
-          disabled={disabled}
-        >
-          {selectedOption ? (
-            <div className="ve-flex ve-items-center">
-              <ColorIndicator color={selectedOption.color} />
+        {customTrigger ? ( // And this block
+          customTrigger
+        ) : (
+          <Button
+            variant="puckSelect"
+            role="combobox"
+            aria-expanded={open}
+            disabled={disabled}
+          >
+            {selectedOption ? (
+              <div className="ve-flex ve-items-center">
+                <ColorIndicator color={selectedOption.color} />
+                <div
+                  className="ve-pr-2 ve-truncate ve-text-left"
+                  title={selectedOption?.label}
+                >
+                  {selectedOption?.label}
+                </div>
+              </div>
+            ) : (
               <div
                 className="ve-pr-2 ve-truncate ve-text-left"
-                title={selectedOption?.label}
+                title={pt("selectAnOption", "Select an option")}
               >
-                {selectedOption?.label}
+                {pt("selectAnOption", "Select an option")}
               </div>
-            </div>
-          ) : (
-            <div
-              className="ve-pr-2 ve-truncate ve-text-left"
-              title={pt("selectAnOption", "Select an option")}
-            >
-              {pt("selectAnOption", "Select an option")}
-            </div>
-          )}
-        </Button>
+            )}
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white ve-min-w-[--radix-popover-trigger-width]">
         <Command>
