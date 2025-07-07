@@ -16,3 +16,4 @@ export {
   type TimestampProps,
   TimestampOption,
 } from "./timestamp.tsx";
+export { Toggle } from "./toggle.tsx";

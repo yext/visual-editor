@@ -161,6 +161,7 @@
       "hour12": "12-tunnine",
       "hour24": "24-tunnine",
       "image": "Pilt",
+      "includeOpenNow": "Lisage avatud nupp",
       "international": "Rahvusvaheline",
       "international_phone number": "Rahvusvaheline",
       "large": "Suur",

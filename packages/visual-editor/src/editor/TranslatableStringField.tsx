@@ -1,7 +1,7 @@
 import { TranslatableString } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18nPlatform.ts";
 import { AutoField, CustomField, FieldLabel } from "@measured/puck";
-import { getDisplayValue } from "../utils/resolveTranslatableString.tsx";
+import { resolveTranslatableString } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,10 +18,12 @@ export function TranslatableStringField<
     render: ({ onChange, value }) => {
       const { i18n } = useTranslation();
       const locale = i18n.language;
+      const resolvedValue = resolveTranslatableString(value, locale);
+
       const autoField = (
         <AutoField
           field={{ type: fieldType ?? "text" }}
-          value={getDisplayValue(value, locale)}
+          value={resolvedValue}
           onChange={(val) => {
             return onChange({
               ...(typeof value === "object" && !Array.isArray(value)
@@ -39,7 +41,7 @@ export function TranslatableStringField<
       }
 
       return (
-        <FieldLabel label={pt(label) + ` (${locale})`}>{autoField}</FieldLabel>
+        <FieldLabel label={`${pt(label)} (${locale})`}>{autoField}</FieldLabel>
       );
     },
   };

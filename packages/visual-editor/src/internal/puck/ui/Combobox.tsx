@@ -54,14 +54,24 @@ export const Combobox = ({
           {selectedOption ? (
             <div className="ve-flex ve-items-center">
               <ColorIndicator color={selectedOption.color} />
-              {selectedOption?.label}
+              <div
+                className="ve-pr-2 ve-truncate ve-text-left"
+                title={selectedOption?.label}
+              >
+                {selectedOption?.label}
+              </div>
             </div>
           ) : (
-            pt("selectAnOption", "Select an option")
+            <div
+              className="ve-pr-2 ve-truncate ve-text-left"
+              title={pt("selectAnOption", "Select an option")}
+            >
+              {pt("selectAnOption", "Select an option")}
+            </div>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white ve-w-[--radix-popover-trigger-width]">
+      <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white ve-min-w-[--radix-popover-trigger-width]">
         <Command>
           {!disableSearch && (
             <CommandInput placeholder={pt("search", "Search")} />
@@ -77,7 +87,12 @@ export const Combobox = ({
                   key={`group${idx}`}
                 >
                   {group.description && (
-                    <p data-cmdk-group-subheading>{pt(group.description)}</p>
+                    <p
+                      data-cmdk-group-subheading
+                      className="ve-w-[--radix-popover-trigger-width]"
+                    >
+                      {pt(group.description)}
+                    </p>
                   )}
                   {group.options.map((option) => {
                     return (
