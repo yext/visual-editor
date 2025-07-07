@@ -24,7 +24,6 @@ import {
 const TEMP_ENDPOINT = "";
 const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
-const VISIBLE_PAGE_NUMBERS = 5;
 const REVIEWS_ENDPOINT_ID = "visualEditorReviews";
 
 export type ReviewsSectionDemoProps = {
@@ -45,13 +44,8 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
   props: ReviewsSectionDemoProps,
 ) => {
   const document: any = useDocument();
-  // const entityId = document.uid;
-  const entityId = TEMP_ENTITY_ID; // TODO: remove this line when using in production
-  // const endpointBaseUrl = getReviewsContentEndpoint(document);
-  // if (!endpointBaseUrl) {
-  //   return <></>;
-  // }
-  const endpointBaseUrl = TEMP_ENDPOINT; // TODO: remove this line when using in production
+  const entityId = TEMP_ENTITY_ID; // TODO: change to document.uid when using in production
+  const endpointBaseUrl = TEMP_ENDPOINT; // TODO: use getReviewsContentEndpoint and check existence
   const [totalReviews, setTotalReviews] = React.useState(0);
   const [averageRating, setAverageRating] = React.useState(0);
   const [reviewDocs, setReviewDocs] = React.useState<any[]>([]);
@@ -60,9 +54,9 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
     {},
   );
-  const [nextPageToken, setNextPageToken] = React.useState<string | undefined>(
-    undefined,
-  );
+  const [nextPageToken, setNextPageToken] = React.useState<
+    string | undefined
+  >();
 
   const fetchData = async (newPageNumber: number) => {
     try {
@@ -114,19 +108,23 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionDemoProps> = (
   if (!isLoading && totalReviews === 0) {
     return <></>;
   }
+
   const hasDarkBackground = props.backgroundColor?.textColor === "text-white";
+
   const headerProps: ReviewsHeaderProps = {
     totalReviews,
     averageRating,
     isLoading,
     hasDarkBackground,
   };
+
   const pageScrollerProps: PageScrollerProps = {
     totalReviews,
     currentPageNumber,
     fetchData,
     hasDarkBackground,
   };
+
   return (
     <PageSection
       className="flex flex-col gap-12"
@@ -210,16 +208,19 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
     ...(review.content && { content: review.content }),
     hasDarkBackground,
   };
-  const businessResponse =
-    Array.isArray(review.comments) && review.comments.length > 0
-      ? review.comments[0].content
-      : undefined;
-  const businessName = (useDocument() as { name?: string }).name || "";
-  const businessResponseData: BusinessResponseProps = {
-    businessName,
-    content: businessResponse,
-    date: new Date(review.businessResponse?.date || Date.now()),
-  };
+
+  let businessResponseData = undefined;
+  if (Array.isArray(review.comments) && review.comments.length > 0) {
+    const businessResponseContent = review.comments[0].content;
+    const businessResponseDate = review.comments[0].commentDate;
+    const businessName = (useDocument() as { name?: string }).name || "";
+    businessResponseData = {
+      businessName,
+      content: businessResponseContent,
+      ...(businessResponseDate && { date: new Date(businessResponseDate) }),
+    };
+  }
+
   return (
     <>
       <div className="border-t border-gray-400 flex flex-col md:flex-row gap-2 p-4">
@@ -228,7 +229,9 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
         </div>
         <div className="w-full md:w-2/3 flex flex-col gap-8">
           <ReviewContent {...reviewContentData} />
-          {businessResponse && <BusinessResponse {...businessResponseData} />}
+          {businessResponseData && (
+            <BusinessResponse {...businessResponseData} />
+          )}
         </div>
       </div>
     </>
@@ -237,7 +240,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
 
 interface AuthorWithDateProps {
   author: string;
-  date: Date;
+  date?: Date;
 }
 
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
@@ -246,7 +249,7 @@ const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
       <Body variant={"lg"} className="font-bold">
         {author}
       </Body>
-      <Body>{formatDate(date)}</Body>
+      {date && <Body>{formatDate(date)}</Body>}
     </div>
   );
 };
@@ -278,7 +281,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
 interface BusinessResponseProps {
   businessName: string;
   content: string;
-  date: Date;
+  date?: Date;
 }
 
 const BusinessResponse: React.FC<BusinessResponseProps> = ({
@@ -291,7 +294,7 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
     author: t("responseFrom", `Response from ${businessName}`, {
       businessName,
     }),
-    date: date,
+    ...(date && { date }),
   };
   const authorWithDate = <AuthorWithDate {...authorData} />;
 
@@ -456,17 +459,12 @@ async function fetchReviewsFromApi(
   endpointBaseUrl: string,
   pageToken?: string,
 ) {
-  const entityIdQueryParam = `entity.uid=${entityId}`;
-  const limitQueryParam = `limit=${REVIEWS_PER_PAGE}`;
-  const sortByQueryParam = `$sortBy__desc=reviewDate`;
-  let url = [
-    endpointBaseUrl,
-    entityIdQueryParam,
-    limitQueryParam,
-    sortByQueryParam,
-  ].join("&");
+  const url = new URL(endpointBaseUrl);
+  url.searchParams.set("entity.uid", String(entityId));
+  url.searchParams.set("limit", String(REVIEWS_PER_PAGE));
+  url.searchParams.set("$sortBy__desc", "reviewDate");
   if (pageToken) {
-    url += `&pageToken=${pageToken}`;
+    url.searchParams.set("pageToken", pageToken);
   }
   const response = await fetch(url);
   if (!response.ok) {

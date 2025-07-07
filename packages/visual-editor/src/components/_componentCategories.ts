@@ -34,10 +34,6 @@ import {
 } from "./pageSections/PhotoGallerySection.tsx";
 import { FAQSection, FAQSectionProps } from "./pageSections/FAQsSection.tsx";
 import {
-  ReviewsSection,
-  ReviewsSectionProps,
-} from "./pageSections/ReviewsSection.tsx";
-import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
@@ -83,7 +79,6 @@ export interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
-  ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
@@ -101,7 +96,6 @@ export const PageSectionCategoryComponents = {
   PhotoGallerySection,
   ProductSection,
   PromoSection,
-  ReviewsSection,
   StaticMapSection,
   TeamSection,
   TestimonialSection,
