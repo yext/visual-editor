@@ -28,6 +28,10 @@ import {
   resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -43,6 +47,7 @@ export interface PromoSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -110,6 +115,10 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           }),
         },
       }),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -153,9 +162,13 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         >
           <Image
             image={resolvedPromo.image}
-            layout={"auto"}
-            aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
-            className="h-[200px]"
+            aspectRatio={
+              styles.image.aspectRatio ??
+              (resolvedPromo.image.width && resolvedPromo.image.height
+                ? resolvedPromo.image.width / resolvedPromo.image.height
+                : 1.78)
+            }
+            width={styles.image.width || 640}
           />
         </EntityField>
       )}
@@ -249,6 +262,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
       heading: {
         level: 2,
         align: "left",
+      },
+      image: {
+        aspectRatio: 1.78,
       },
     },
     analytics: {

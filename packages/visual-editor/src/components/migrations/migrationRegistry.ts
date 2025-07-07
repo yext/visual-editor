@@ -4,6 +4,7 @@ import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
 import { adjustStructFields } from "./0003_adjust_struct_fields.ts";
 import { addDirectoryRootPropMigration } from "./0004_add_directory_root_prop.ts";
 import { addPromoHeadingStylesMigration } from "./0005_add_promo_heading_styles.ts";
+import { updateImageStylingMigration } from "./0006_update_image_styling.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -16,4 +17,5 @@ export const migrationRegistry: MigrationRegistry = [
   adjustStructFields,
   addDirectoryRootPropMigration,
   addPromoHeadingStylesMigration,
+  updateImageStylingMigration,
 ];
