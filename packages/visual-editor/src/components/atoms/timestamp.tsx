@@ -27,6 +27,9 @@ export type TimestampProps = {
   endDate?: string; // ISO 8601 from KG like "YYYY-MM-DDTHH:MM"
   timeZone?: string;
   hideTimeZone?: boolean;
+  locale?: string;
+  dateFormatOverride?: Omit<Intl.DateTimeFormatOptions, "timeZone">;
+  dateTimeFormatOverride?: Omit<Intl.DateTimeFormatOptions, "timeZone">;
 };
 
 type TimestampFormatterPropsType = {
@@ -35,6 +38,9 @@ type TimestampFormatterPropsType = {
   endDate?: Date;
   timeZone?: string;
   hideTimeZone?: boolean;
+  locale?: string;
+  dateFormatOverride?: Omit<Intl.DateTimeFormatOptions, "timeZone">;
+  dateTimeFormatOverride?: Omit<Intl.DateTimeFormatOptions, "timeZone">;
 };
 
 export function timestampFormatter({
@@ -43,9 +49,14 @@ export function timestampFormatter({
   endDate,
   timeZone,
   hideTimeZone,
+  locale,
+  dateFormatOverride,
+  dateTimeFormatOverride,
 }: TimestampFormatterPropsType): string {
-  let dateFormat = format1;
-  let dateTimeFormat = format2;
+  let dateFormat = dateFormatOverride ? { ...dateFormatOverride } : format1;
+  let dateTimeFormat = dateTimeFormatOverride
+    ? { ...dateTimeFormatOverride }
+    : format2;
 
   if (timeZone) {
     dateFormat = { ...dateFormat, timeZone };
@@ -56,8 +67,9 @@ export function timestampFormatter({
     dateTimeFormat = { ...dateTimeFormat, timeZoneName: undefined };
   }
 
-  const dateFormatter = new Intl.DateTimeFormat("en-US", dateFormat);
-  const timeFormatter = new Intl.DateTimeFormat("en-US", {
+  const localesArgument = locale ? [locale, "en-US"] : "en-US";
+  const dateFormatter = new Intl.DateTimeFormat(localesArgument, dateFormat);
+  const timeFormatter = new Intl.DateTimeFormat(localesArgument, {
     hour: "numeric",
     minute: "numeric",
     ...(timeZone && { timeZone }),
@@ -68,9 +80,11 @@ export function timestampFormatter({
     case TimestampOption.DATE:
       return dateFormatter.format(date);
     case TimestampOption.DATE_TIME:
-      return new Intl.DateTimeFormat("en-US", dateTimeFormat).format(date);
+      return new Intl.DateTimeFormat(localesArgument, dateTimeFormat).format(
+        date
+      );
     case TimestampOption.DATE_RANGE:
-      return new Intl.DateTimeFormat("en-US", dateFormat).formatRange(
+      return new Intl.DateTimeFormat(localesArgument, dateFormat).formatRange(
         date,
         endDate!
       );
@@ -96,6 +110,9 @@ export function Timestamp({
   endDate = "",
   timeZone,
   hideTimeZone = false,
+  locale,
+  dateFormatOverride,
+  dateTimeFormatOverride,
 }: TimestampProps): JSX.Element {
   let timestamp;
   try {
@@ -114,6 +131,9 @@ export function Timestamp({
       endDate: formattedEndDate,
       timeZone,
       hideTimeZone,
+      locale,
+      dateFormatOverride,
+      dateTimeFormatOverride,
     });
   } catch (e) {
     console.warn("error formatting timestamp:", e);
