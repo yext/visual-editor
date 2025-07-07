@@ -19,6 +19,7 @@ import {
   pt,
   resolveTranslatableString,
   PageSection,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -26,15 +27,9 @@ import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
+import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 
-const PLACEHOLDER_IMAGE: ComplexImageType = {
-  image: {
-    url: "https://placehold.co/100x50",
-    height: 50,
-    width: 100,
-    alternateText: "Placeholder Logo",
-  },
-};
+const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 
 export interface ExpandedHeaderProps {
   data: {
@@ -81,11 +76,18 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: YextField(msg("fields.label", "Label"), { type: "text" }),
-              link: YextField(msg("fields.link", "Link"), { type: "text" }),
-              linkType: YextField(msg("fields.linkType", "Link Type"), {
+              label: TranslatableStringField(
+                msg("fields.label", "Label"),
+                "text"
+              ),
+              link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
+              linkType: {
+                label: pt("fields.linkType", "Link Type"),
+                type: "select",
+                options: linkTypeOptions(),
+              },
             },
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
@@ -137,13 +139,18 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: YextField(msg("fields.label", "Label"), {
+                  label: TranslatableStringField(
+                    msg("fields.label", "Label"),
+                    "text"
+                  ),
+                  link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
-                  link: YextField(msg("fields.link", "Link"), { type: "text" }),
-                  linkType: YextField(msg("fields.linkType", "Link Type"), {
-                    type: "text",
-                  }),
+                  linkType: {
+                    label: pt("fields.linkType", "Link Type"),
+                    type: "select",
+                    options: linkTypeOptions(),
+                  },
                 },
               }
             ),
@@ -160,7 +167,7 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
         objectFields: {
           logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
             type: "number",
-            min: 0,
+            min: 100,
           }),
           backgroundColor: YextField(
             msg("fields.backgroundColor", "Background Color"),
@@ -241,7 +248,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const languageDropDownProps = parseDocumentForLanguageDropdown(document);
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
     <>
@@ -256,6 +263,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             className="flex justify-end gap-6 items-center"
           >
             <EntityField
+              constantValueEnabled
               displayName={pt(
                 "fields.secondaryHeaderLinks",
                 "Secondary Header Links"
@@ -276,7 +284,10 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           background={backgroundColor}
           className="flex flex-row justify-between w-full items-center"
         >
-          <EntityField displayName={pt("fields.logoUrl", "Logo")}>
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.logoUrl", "Logo")}
+          >
             <HeaderLogo
               logo={buildComplexImage(logo, logoWidth)}
               logoWidth={logoWidth}
@@ -284,6 +295,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           </EntityField>
           <div className="flex gap-8 items-center">
             <EntityField
+              constantValueEnabled
               displayName={pt(
                 "fields.primaryHeaderLinks",
                 "Primary Header Links"
@@ -313,9 +325,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={
-            isOpen
-              ? t("closeHeaderMenu", "Close menu")
-              : t("openHeaderMenu", "Open menu")
+            isOpen ? t("closeMenu", "Close menu") : t("openMenu", "Open menu")
           }
           aria-expanded={isOpen}
           aria-controls="mobile-menu"
@@ -335,6 +345,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         >
           <PageSection verticalPadding={"sm"} background={backgroundColor}>
             <EntityField
+              constantValueEnabled
               displayName={pt(
                 "fields.primaryHeaderLinks",
                 "Primary Header Links"
@@ -349,6 +360,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               background={secondaryBackgroundColor}
             >
               <EntityField
+                constantValueEnabled
                 displayName={pt(
                   "fields.secondaryHeaderLinks",
                   "Secondary Header Links"
@@ -400,7 +412,7 @@ const HeaderLinks = ({
                 variant={
                   type === "Primary"
                     ? "headerFooterMainLink"
-                    : "headerSecondaryLink"
+                    : "headerFooterSecondaryLink"
                 }
                 eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
                 label={resolveTranslatableString(item.label, i18n.language)}
@@ -451,9 +463,12 @@ const HeaderCtas = (props: {
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2">
       {primaryCTA?.label && (
-        <EntityField displayName={pt("fields.primaryCta", "Primary CTA")}>
+        <EntityField
+          constantValueEnabled
+          displayName={pt("fields.primaryCta", "Primary CTA")}
+        >
           <CTA
-            eventName={`cta`}
+            eventName={`primaryCta`}
             variant={primaryVariant}
             label={resolveTranslatableString(primaryCTA?.label, i18n.language)}
             link={primaryCTA.link}
@@ -462,9 +477,12 @@ const HeaderCtas = (props: {
         </EntityField>
       )}
       {secondaryCTA?.label && (
-        <EntityField displayName={pt("fields.secondaryCta", "Secondary CTA")}>
+        <EntityField
+          constantValueEnabled
+          displayName={pt("fields.secondaryCta", "Secondary CTA")}
+        >
           <CTA
-            eventName={`cta`}
+            eventName={`secondaryCta`}
             variant={secondaryVariant}
             label={resolveTranslatableString(secondaryCTA.label, i18n.language)}
             link={secondaryCTA.link}
@@ -480,7 +498,7 @@ const buildComplexImage = (
   url: string | undefined,
   width: number
 ): ComplexImageType => {
-  const safeUrl = url || PLACEHOLDER_IMAGE.image.url;
+  const safeUrl = url || PLACEHOLDER_IMAGE;
   return {
     image: {
       url: safeUrl,
@@ -497,7 +515,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   defaultProps: {
     data: {
       primaryHeader: {
-        logo: PLACEHOLDER_IMAGE.image.url,
+        logo: PLACEHOLDER_IMAGE,
         links: [
           {
             linkType: "URL",
