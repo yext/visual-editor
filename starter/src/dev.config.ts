@@ -88,7 +88,7 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
-          name: "dm_directoryParents_default_directory",
+          name: "dm_directoryParents_defaultdirectory",
           fullObject: true,
         },
         {
