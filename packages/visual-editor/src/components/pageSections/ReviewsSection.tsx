@@ -17,14 +17,22 @@ import {
   Heading,
   msg,
   PageSection,
+  Timestamp,
+  TimestampOption,
   useDocument,
   YextField,
 } from "@yext/visual-editor";
 
-const TEMP_ENDPOINT = "";
+const TEMP_ENDPOINT =
+  "https://streams.yext.com/v2/accounts/me/api/deepakReviews?api_key=366d48670224d36841909bc3a11b6d25&v=20221010";
 const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
 const REVIEWS_ENDPOINT_ID = "visualEditorReviews";
+const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+};
 
 export type ReviewsSectionProps = {
   backgroundColor: BackgroundStyle;
@@ -200,7 +208,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
 }) => {
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
-    date: new Date(review.reviewDate),
+    date: review.reviewDate,
   };
   const reviewContentData: ReviewContentProps = {
     rating: review.rating,
@@ -216,7 +224,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
     businessResponseData = {
       businessName,
       content: businessResponseContent,
-      ...(businessResponseDate && { date: new Date(businessResponseDate) }),
+      date: businessResponseDate,
     };
   }
 
@@ -239,16 +247,26 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
 
 interface AuthorWithDateProps {
   author: string;
-  date?: Date;
+  date?: string;
 }
 
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
+  const document: any = useDocument();
   return (
     <div className="flex flex-col gap-2">
       <Body variant={"lg"} className="font-bold">
         {author}
       </Body>
-      {date && <Body>{formatDate(date)}</Body>}
+      {date && (
+        <Timestamp
+          date={date}
+          option={TimestampOption.DATE}
+          hideTimeZone={true}
+          timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+          locale={"es"}
+          dateFormatOverride={DATE_FORMAT}
+        />
+      )}
     </div>
   );
 };
@@ -280,7 +298,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
 interface BusinessResponseProps {
   businessName: string;
   content: string;
-  date?: Date;
+  date?: string;
 }
 
 const BusinessResponse: React.FC<BusinessResponseProps> = ({
@@ -548,18 +566,6 @@ function buildReviewsEndpointUrl(
       );
       return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
   }
-}
-
-/**
- * Returns a formatted date string in the format "Month Day, Year".
- * @param date - A Date object to format.
- */
-function formatDate(date: Date): string {
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 }
 
 export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
