@@ -138,10 +138,11 @@ describe("FAQSection", async () => {
     "$viewport.name $name",
     async ({
       document,
+      name,
       props,
       interactions,
       version,
-      viewport: { width, height },
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -167,13 +168,17 @@ describe("FAQSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      await page.screenshot({
+        path: `../screenshots/FAQsSection/[${viewportName}] ${name}.png`,
+      });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await page.screenshot();
+        await page.screenshot({
+          path: `../screenshots/FAQsSection/[${viewportName}] ${name} (after interactions).png`,
+        });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
