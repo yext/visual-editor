@@ -8,36 +8,44 @@ import { themeManagerCn } from "@yext/visual-editor";
 
 export interface ImageProps {
   image: ImageType | ComplexImageType;
-  layout: "auto" | "fixed";
   aspectRatio?: number;
   width?: number;
-  height?: number;
   className?: string;
 }
 
 export const Image: React.FC<ImageProps> = ({
   image,
-  layout,
   aspectRatio,
   width,
-  height,
   className,
 }) => {
+  // Calculate height based on width and aspect ratio if width is provided
+  const calculatedHeight =
+    width && aspectRatio ? width / aspectRatio : undefined;
+
+  // Determine container styles based on whether width is specified
+  const containerStyles = width
+    ? `overflow-hidden` // No w-full when width is specified
+    : `overflow-hidden w-full`; // Use w-full when no width specified
+
   return (
-    <div className={themeManagerCn("overflow-hidden w-full", className)}>
-      {layout === "auto" && aspectRatio ? (
+    <div
+      className={themeManagerCn(containerStyles, className)}
+      style={width ? { width: `${width}px` } : undefined}
+    >
+      {aspectRatio ? (
         <ImageComponent
           image={image}
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
         />
-      ) : !!width && !!height ? (
+      ) : !!width && !!calculatedHeight ? (
         <ImageComponent
           image={image}
           layout={"fixed"}
           width={width}
-          height={height}
+          height={calculatedHeight}
           className="object-cover"
         />
       ) : (
@@ -48,7 +56,7 @@ export const Image: React.FC<ImageProps> = ({
               ? (image.image.alternateText ?? "")
               : (image.alternateText ?? "")
           }
-          className="object-cover"
+          className="object-cover w-full h-full"
         />
       )}
     </div>

@@ -135,7 +135,6 @@ const InsightCard = ({
       {insight.image ? (
         <Image
           image={insight.image}
-          layout="auto"
           aspectRatio={1.778} // 16:9
           className="rounded-t-[inherit] h-[200px]"
         />
