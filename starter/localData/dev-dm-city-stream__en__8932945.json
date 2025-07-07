@@ -1,0 +1,256 @@
+{
+  "__": {
+    "entityPageSet": {},
+    "name": "dev-location"
+  },
+  "_schema": {
+    "@graph": [
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "description": "Directory of locations",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "US",
+                "addressLocality": "Arlington",
+                "addressRegion": "VA",
+                "postalCode": "22209",
+                "streetAddress": "1101 Wilson Blvd"
+              },
+              "name": "Galaxy Grill"
+            },
+            "position": 1
+          }
+        ],
+        "name": "Arlington",
+        "numberOfItems": 1
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "All Locations",
+            "position": 1
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/index.html",
+              "@type": "Thing"
+            },
+            "name": "Location Pages Directory",
+            "position": 2
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us",
+              "@type": "Thing"
+            },
+            "name": "US",
+            "position": 3
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/va",
+              "@type": "Thing"
+            },
+            "name": "VA",
+            "position": 4
+          },
+          {
+            "@type": "ListItem",
+            "item": {
+              "@id": "yawningly-long-trout.pgsdemo.com/us/va/arlington",
+              "@type": "Thing"
+            },
+            "name": "Arlington",
+            "position": 5
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "description": "Browse locations in Arlington",
+        "isPartOf": {
+          "@type": "WebSite"
+        },
+        "name": "Arlington",
+        "url": "yawningly-long-trout.pgsdemo.com/us/va/arlington"
+      }
+    ]
+  },
+  "_site": {
+    "copyrightMessage": "© 2025 Yext",
+    "favicon": {
+      "height": 1152,
+      "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
+      "width": 1152
+    },
+    "name": "Example Business",
+    "siteName": "Example Business Pages",
+    "footer": {
+      "links": [
+        {
+          "label": "Privacy Policy",
+          "link": "https://www.yext.com/privacy-policy",
+          "linkType": "URL"
+        },
+        { "label": "Contact Us", "link": "sumo@yext.com", "linkType": "EMAIL" }
+      ]
+    },
+    "header": {
+      "links": [
+        { "label": "Home", "link": "index.html", "linkType": "OTHER" },
+        { "label": "More Info", "link": "https://yext.com", "linkType": "URL" },
+        { "label": "Call Us", "link": "+12125550110", "linkType": "PHONE" }
+      ]
+    },
+    "id": "site-63590",
+    "instagramHandle": "yextinc",
+    "logo": {
+      "image": {
+        "alternateText": "The Galaxy Grill Logo",
+        "height": 1152,
+        "url": "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
+        "width": 1152
+      }
+    },
+    "meta": { "entityType": { "id": "site", "uid": 29107 }, "locale": "en" },
+    "uid": 8932936,
+    "youTubeChannelUrl": "https://www.youtube.com/c/yext"
+  },
+  "businessId": 1000152098,
+  "dm_childEntityIds": ["8725530"],
+  "dm_directoryChildren": [
+    {
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "1101 Wilson Blvd",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "monday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "saturday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "sunday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "thursday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
+      },
+      "mainPhone": "+12025551010",
+      "name": "Galaxy Grill",
+      "timezone": "America/New_York",
+      "slug": "#"
+    },
+    {
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "2101 Wilson Blvd",
+        "line2": "Suite 101",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "mainPhone": "+12025551010",
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "monday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "saturday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "sunday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "thursday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
+      },
+      "name": "Galaxy Grill To Go",
+      "timezone": "America/New_York",
+      "slug": "#"
+    },
+    {
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "3101 Wilson Blvd",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "mainPhone": "+12025551010",
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "monday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "saturday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "sunday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "thursday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
+      },
+      "name": "Galaxy Grill 2",
+      "timezone": "America/New_York",
+      "slug": "#"
+    },
+    {
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "4101 Wilson Blvd",
+        "line2": "Suite 101",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "mainPhone": "+12025551010",
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "monday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "saturday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "sunday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "thursday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
+      },
+      "name": "Galaxy Grill 3",
+      "timezone": "America/New_York",
+      "slug": "#"
+    }
+  ],
+  "dm_directoryManagerId": "63590-locations",
+  "dm_directoryParents_63590_locations": [
+    { "name": "Locations Directory", "slug": "en/index.html" },
+    {
+      "name": "US",
+      "slug": "en/us",
+      "dm_addressCountryDisplayName": "United States"
+    },
+    {
+      "name": "VA",
+      "slug": "us/va",
+      "dm_addressCountryDisplayName": "United States",
+      "dm_addressRegionDisplayName": "Virginia"
+    }
+  ],
+  "dm_addressCountryDisplayName": "United States",
+  "dm_addressRegionDisplayName": "Virginia",
+  "id": "dm-city-arlington",
+  "locale": "en",
+  "meta": { "entityType": { "id": "dm_city", "uid": 60737 }, "locale": "en" },
+  "name": "Arlington",
+  "siteDomain": "",
+  "siteId": 63590,
+  "siteInternalHostName": "",
+  "slug": "us/va/arlington",
+  "uid": 8932945
+}
