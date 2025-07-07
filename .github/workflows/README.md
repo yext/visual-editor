@@ -44,7 +44,8 @@ The workflow sends a `dev-release-created` event to the `YextSolutions/pages-vis
   "branch_name": "pr-123",
   "pr_title": "Feature: Add new component",
   "pr_url": "https://github.com/yext/visual-editor/pull/123",
-  "author": "username"
+  "author": "username",
+  "package_url": "https://pkg.pr.new/yext/visual-editor@123"
 }
 ```
 
