@@ -71,6 +71,9 @@ export type ComponentTest = {
 export type ComponentTestWithViewport = ComponentTest &
   Required<Pick<ComponentTest, "viewport">>;
 
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 // Shared Test Data
 export const testSite = {
   header: {

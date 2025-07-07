@@ -4,6 +4,7 @@ import {
   axe,
   ComponentTest,
   transformTests,
+  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -213,6 +214,7 @@ describe("TestimonialSection", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(100);
       await page.screenshot({
         path: `../screenshots/TestimonialSection/[${viewportName}] ${name}.png`,
       });

@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   testHours,
   transformTests,
 } from "./testing/componentTests.setup.ts";
@@ -225,6 +226,7 @@ describe("Directory", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(100);
       await page.screenshot({
         path: `./screenshots/Directory/[${viewportName}] ${name}.png`,
       });

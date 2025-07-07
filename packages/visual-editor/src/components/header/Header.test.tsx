@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   testSite,
   transformTests,
   viewports,
@@ -122,6 +123,7 @@ describe("Header", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(100);
       await page.screenshot({
         path: `../screenshots/Header/[${viewportName}] ${name}.png`,
       });

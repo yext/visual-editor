@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, act } from "@testing-library/react";
@@ -79,6 +80,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await q1.click();
         await q2.click();
+        await delay(200);
       });
     },
   },
@@ -120,6 +122,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await q1.click();
         await q2.click();
+        await delay(200);
       });
     },
   },
@@ -168,6 +171,7 @@ describe("FAQSection", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(100);
       await page.screenshot({
         path: `../screenshots/FAQsSection/[${viewportName}] ${name}.png`,
       });
