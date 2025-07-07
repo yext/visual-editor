@@ -12,34 +12,15 @@ import {
   DirectoryCategoryProps,
 } from "@yext/visual-editor";
 
-import {
-  ReviewsSectionDemo,
-  ReviewsSectionDemoProps,
-} from "./components/ReviewsSectionDemo";
-
-interface LocalDemoProps {
-  ReviewsSectionDemo: ReviewsSectionDemoProps;
-}
-
-const LocalDemoCategoryComponents = {
-  ReviewsSectionDemo,
-};
-
-const LocalDemoCategory = Object.keys(
-  LocalDemoCategoryComponents,
-) as (keyof LocalDemoProps)[];
-
 interface MainProps
   extends PageSectionCategoryProps,
     DirectoryCategoryProps,
-    OtherCategoryProps,
-    LocalDemoProps {}
+    OtherCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
-  ...LocalDemoCategoryComponents,
 };
 
 // All the available components for locations
@@ -53,10 +34,6 @@ export const mainConfig: Config<MainProps> = {
     directory: {
       title: "Directory",
       components: DirectoryCategory,
-    },
-    localDemo: {
-      title: "Local Demo",
-      components: LocalDemoCategory,
     },
   },
   root: {

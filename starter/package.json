@@ -42,7 +42,6 @@
     "@yext/search-ui-react": "^1.8.15",
     "@yext/search-headless-react": "^2.5.3",
     "@types/mapbox-gl": "^2.7.5",
-    "react-i18next": "^15.5.2",
     "mapbox-gl": "^2.9.2"
   },
   "devDependencies": {
