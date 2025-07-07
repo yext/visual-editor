@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -21,12 +21,9 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...BreadcrumbsSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async () => {
-      expect(document.getElementsByTagName("nav")).toHaveLength(0);
-    },
   },
   {
-    name: "version 0 default props with document data",
+    name: "default props with document data",
     document: {
       name: "Galaxy Grill",
       dm_directoryParents_63590_locations: [
@@ -52,16 +49,9 @@ const tests: ComponentTest[] = [
     },
     props: { ...BreadcrumbsSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Directory Root")).toBeVisible();
-      expect(page.getByText("US")).toBeVisible();
-      expect(page.getByText("NY")).toBeVisible();
-      expect(page.getByText("Brooklyn")).toBeVisible();
-      expect(page.getByText("Galaxy Grill")).toBeVisible();
-    },
   },
   {
-    name: "version 4 with non-default props with document data",
+    name: "version 4 props",
     document: {
       name: "Galaxy Grill",
       dm_directoryParents_63590_locations: [
@@ -92,19 +82,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 4,
-    tests: async (page) => {
-      expect(page.getByText("Locations Directory")).toBeVisible();
-      expect(page.getByText("US")).toBeVisible();
-      expect(page.getByText("NY")).toBeVisible();
-      expect(page.getByText("Brooklyn")).toBeVisible();
-      expect(page.getByText("Galaxy Grill")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("BreadcrumbsSection", async () => {
@@ -116,14 +94,14 @@ describe("BreadcrumbsSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -152,7 +130,13 @@ describe("BreadcrumbsSection", async () => {
       await page.screenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

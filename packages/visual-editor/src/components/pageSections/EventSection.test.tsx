@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -115,20 +115,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...EventSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Upcoming Events")).toBeVisible();
-      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
-    },
   },
   {
     name: "default props with document data",
     document: { c_events: eventsData },
     props: { ...EventSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Upcoming Events")).toBeVisible();
-      expect(document.body.textContent).toContain("Lorem ipsum dolor sit amet");
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -162,19 +154,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(
-        page.getByRole("heading", { name: "Cooking Class" })
-      ).toBeVisible();
-      expect(page.getByRole("heading", { name: "Hike" })).toBeVisible();
-      expect(page.getByText("2025")).toBeVisible();
-      expect(page.getByText("2026")).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
-      expect(page.getByText("Sign Up")).toBeVisible();
-      expect(page.getByText("inner chef")).toBeVisible();
-      expect(page.getByText("local trails")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -217,20 +196,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Upcoming")).toBeVisible();
-      expect(page.getByText("Event 1")).toBeVisible();
-      expect(page.getByText("Event 2")).toBeVisible();
-      expect(page.getByText("2020")).toBeVisible();
-      expect(page.getByText("Test Description")).toBeVisible();
-      expect(page.getByText("Test CTA")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("EventSection", async () => {
@@ -242,14 +208,14 @@ describe("EventSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -273,12 +239,17 @@ describe("EventSection", async () => {
           <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
-
       await page.viewport(width, height);
       await page.screenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

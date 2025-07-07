@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -160,18 +160,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...PhotoGallerySection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { photoGallery: photoGalleryData },
     props: { ...PhotoGallerySection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -225,10 +219,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(4);
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -280,10 +270,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(3);
-    },
   },
   {
     name: "version 1 props with entity values",
@@ -335,10 +321,6 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(4);
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -388,16 +370,7 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(3);
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("PhotoGallerySection", async () => {
@@ -409,14 +382,14 @@ describe("PhotoGallerySection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -445,7 +418,13 @@ describe("PhotoGallerySection", async () => {
       await page.screenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

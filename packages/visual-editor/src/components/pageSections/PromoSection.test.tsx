@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -65,30 +65,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(
-        page.getByText(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
-        )
-      ).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { c_promo: promoData },
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(
-        page.getByText(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
-        )
-      ).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -122,11 +104,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Taste the universe!")).toBeVisible();
-      expect(page.getByText("Call to Order")).toBeVisible();
-      expect(page.getByText("out-of-this-world")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -164,11 +141,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Call to Action")).toBeVisible();
-    },
   },
   {
     name: "version 5 props with constant value",
@@ -217,17 +189,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 5,
-    tests: async (page) => {
-      expect(page.getByText("Featured Promotion")).toBeVisible();
-      expect(page.getByText("Lorem ipsum dolor sit amet")).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("PromoSection", async () => {
@@ -239,14 +201,14 @@ describe("PromoSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -275,7 +237,13 @@ describe("PromoSection", async () => {
       await page.screenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

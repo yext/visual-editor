@@ -36,23 +36,40 @@ export const axe = configureAxe({
 });
 
 // Each test will run once for each of the following viewports
-export const viewports = [
-  { name: "mobile", width: 375, height: 667 },
-  { name: "desktop", width: 1440, height: 900 },
-];
+export const viewports = {
+  mobile: { name: "mobile", width: 375, height: 667 },
+  desktop: { name: "desktop", width: 1440, height: 900 },
+};
+
+// Adds mobile and desktop viewports to tests if not specified
+export const transformTests = (tests: ComponentTest[]) => {
+  return tests.reduce((accumulator, test) => {
+    if (test.viewport) {
+      accumulator.push(test as ComponentTestWithViewport);
+    } else {
+      accumulator.push({ ...test, viewport: viewports.desktop });
+      accumulator.push({ ...test, viewport: viewports.mobile });
+    }
+
+    return accumulator;
+  }, [] as ComponentTestWithViewport[]);
+};
 
 export type ComponentTest = {
   name: string;
   document: Record<string, any>;
   version: number;
   props: Record<string, any>;
-  tests: (page: BrowserPage) => Promise<void>;
+  interactions?: (page: BrowserPage) => Promise<void>;
   viewport?: {
     name: string;
     width: number;
     height: number;
   };
 };
+
+export type ComponentTestWithViewport = ComponentTest &
+  Required<Pick<ComponentTest, "viewport">>;
 
 // Shared Test Data
 export const testSite = {

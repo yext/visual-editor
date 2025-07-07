@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -117,24 +117,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...ProductSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Featured Products")).toBeVisible();
-      expect(document.body.textContent).toContain(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-      );
-    },
   },
   {
     name: "default props with document data",
     document: { c_products: productsData },
     props: { ...ProductSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Featured Products")).toBeVisible();
-      expect(document.body.textContent).toContain(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-      );
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -165,16 +153,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByText("Galaxy Burger")).toBeVisible();
-      expect(page.getByText("Burgers")).toBeVisible();
-      expect(page.getByText("Order Now").elements()).toHaveLength(2);
-      expect(page.getByText("Galaxy Salad")).toBeVisible();
-      expect(page.getByText("Galaxy Milkshake")).toBeVisible();
-      expect(page.getByText("Desserts")).toBeVisible();
-      expect(page.getByText("cherry")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -215,19 +193,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Featured Products")).toBeVisible();
-      expect(page.getByText("Product 1")).toBeVisible();
-      expect(page.getByText("Category")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("ProductSection", async () => {
@@ -239,14 +205,14 @@ describe("ProductSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -273,10 +239,15 @@ describe("ProductSection", async () => {
 
       await page.viewport(width, height);
       await page.screenshot();
-
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

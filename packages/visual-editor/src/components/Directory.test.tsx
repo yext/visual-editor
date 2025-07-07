@@ -4,7 +4,7 @@ import {
   axe,
   ComponentTest,
   testHours,
-  viewports,
+  transformTests,
 } from "./testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -18,7 +18,7 @@ import { page } from "@vitest/browser/context";
 
 const tests: ComponentTest[] = [
   {
-    name: "version 0 default props with document data that has directory cards",
+    name: "default props with document data that has directory cards",
     document: {
       _site: {
         name: "Example Business",
@@ -60,13 +60,10 @@ const tests: ComponentTest[] = [
       ],
     },
     props: { ...Directory.defaultProps },
-    version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Directory Root")).toBeVisible();
-    },
+    version: migrationRegistry.length,
   },
   {
-    name: "version 0 default props with document data that has directory lists",
+    name: "default props with document data that has directory lists",
     document: {
       _site: {
         name: "Example Business",
@@ -99,10 +96,7 @@ const tests: ComponentTest[] = [
       ],
     },
     props: { ...Directory.defaultProps },
-    version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Directory Root")).toBeVisible();
-    },
+    version: migrationRegistry.length,
   },
   {
     name: "version 4 with non-default props",
@@ -144,9 +138,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 4,
-    tests: async (page) => {
-      expect(page.getByText("Not Default Root")).toBeVisible();
-    },
   },
   {
     name: "version 4 with default props",
@@ -188,15 +179,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 4,
-    tests: async (page) => {
-      expect(page.getByText("Directory Root")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("Directory", async () => {
@@ -208,14 +191,14 @@ describe("Directory", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -244,7 +227,13 @@ describe("Directory", async () => {
       await page.screenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

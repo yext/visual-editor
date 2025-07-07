@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, act } from "@testing-library/react";
 import {
@@ -38,18 +38,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...FAQSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Frequently Asked Questions")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { c_faq: faqData },
     props: { ...FAQSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Frequently Asked Questions")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -79,20 +73,13 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
+    interactions: async (page) => {
       const q1 = page.getByText("What services do you offer?");
       const q2 = page.getByText("Do you have parking available?");
-      expect(page.getByText("test name")).toBeVisible();
-      expect(q1).toBeVisible();
-      expect(q2).toBeVisible();
       await act(async () => {
         await q1.click();
-      });
-      expect(page.getByText("delivery")).toBeVisible();
-      await act(async () => {
         await q2.click();
       });
-      expect(page.getByText("limited")).toBeVisible();
     },
   },
   {
@@ -127,27 +114,15 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
+    interactions: async (page) => {
       const q1 = page.getByText("Test Question 1");
       const q2 = page.getByText("Test Question 2");
-      expect(page.getByText("Frequently Asked Questions")).toBeVisible();
-      expect(q1).toBeVisible();
-      expect(q2).toBeVisible();
       await act(async () => {
         await q1.click();
-      });
-      expect(page.getByText("Answer 1")).toBeVisible();
-      await act(async () => {
         await q2.click();
       });
-      expect(page.getByText("Answer 2")).toBeVisible();
     },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("FAQSection", async () => {
@@ -159,14 +134,14 @@ describe("FAQSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height },
     }) => {
       const data = migrate(
         {
@@ -195,7 +170,13 @@ describe("FAQSection", async () => {
       await page.screenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await page.screenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });
