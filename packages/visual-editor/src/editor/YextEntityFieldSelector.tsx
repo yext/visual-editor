@@ -336,7 +336,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     <div className="ve-relative ve-w-full ve-pt-3">
       <input
         type="text"
-        className="ve-w-full ve-text-gray-700 ve-text-md ve-rounded ve-border ve-border-gray-300 ve-p-2 ve-pr-10" // Add padding-right for the button
+        className="ve-w-full ve-text-gray-700 ve-text-sm ve-rounded ve-border ve-border-gray-300 ve-p-2 ve-pr-10" // Add padding-right for the button
         value={value?.constantValue?.[locale] ?? ""}
         onChange={(e) => {
           onChange({
@@ -349,7 +349,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           });
         }}
       />
-      <div className="ve-relative ve-left-56 -ve-top-[1.1rem] -ve-translate-y-1/2">
+      <div className="ve-relative ve-left-56 -ve-top-4 -ve-translate-y-1/2">
         <Combobox
           selectedOption={{ label: "", value: "" }}
           onChange={handleFieldSelect}
@@ -357,7 +357,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           customTrigger={
             <button
               type="button"
-              className="ve-text-gray-600 hover:ve-text-gray-700"
+              className="ve-text-gray-700 hover:ve-text-gray-800"
               aria-label="Add entity field"
             >
               <SquarePlus size={20} />
