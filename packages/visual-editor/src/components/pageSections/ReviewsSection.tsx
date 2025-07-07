@@ -8,12 +8,14 @@ import {
   FaStar,
   FaRegStar,
 } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 import { ComponentConfig, Fields } from "@measured/puck";
 import * as React from "react";
 import {
   type BackgroundStyle,
   Body,
   Button,
+  fetchReviewsForEntity,
   Heading,
   msg,
   PageSection,
@@ -23,11 +25,8 @@ import {
   YextField,
 } from "@yext/visual-editor";
 
-const TEMP_ENDPOINT =
-  "https://streams.yext.com/v2/accounts/me/api/deepakReviews?api_key=366d48670224d36841909bc3a11b6d25&v=20221010";
 const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
-const REVIEWS_ENDPOINT_ID = "visualEditorReviews";
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   month: "long",
   day: "numeric",
@@ -52,12 +51,14 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
   const document: any = useDocument();
-  const entityId = TEMP_ENTITY_ID; // TODO: change to document.uid when using in production
-  const endpointBaseUrl = TEMP_ENDPOINT; // TODO: use getReviewsContentEndpoint and check existence
-  const [totalReviews, setTotalReviews] = React.useState(0);
-  const [averageRating, setAverageRating] = React.useState(0);
-  const [reviewDocs, setReviewDocs] = React.useState<any[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const businessId: number = Number(document?.businessId);
+  const contentDeliveryAPIDomain = "ignored"; // TODO: document?._yext?.contentDeliveryAPIDomain;
+  const entityId = TEMP_ENTITY_ID; // TODO: document?.uid
+  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  if (!businessId || !contentDeliveryAPIDomain || !entityId || !apiKey) {
+    console.error("Missing required parameters for reviews content endpoint.");
+    return <></>;
+  }
   const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
     {}
@@ -66,42 +67,50 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     string | undefined
   >();
 
-  const fetchData = async (newPageNumber: number) => {
-    try {
-      const reviews = await fetchReviewsFromApi(
+  const {
+    data: reviews,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [
+      "reviews",
+      entityId,
+      currentPageNumber,
+      pageTokens[currentPageNumber],
+    ],
+    queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      return fetchReviewsForEntity({
+        businessId,
+        apiKey,
+        contentDeliveryAPIDomain,
         entityId,
-        endpointBaseUrl,
-        pageTokens[newPageNumber]
-      );
-      if (!reviews || !reviews.meta) {
-        throw new Error("Invalid response structure from API");
-      }
-      if (reviews?.meta?.errors && reviews.meta.errors.length > 0) {
-        throw new Error(
-          "API returned errors: " + JSON.stringify(reviews.response.meta.errors)
-        );
-      }
-      setCurrentPageNumber(newPageNumber || 1);
-      const reviewsForEntity = reviews.response.docs || [];
-      setReviewDocs(reviewsForEntity);
-      if (reviews.response.nextPageToken) {
-        setNextPageToken(reviews.response.nextPageToken);
-      }
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        limit: REVIEWS_PER_PAGE,
+        pageToken: pageTokens[currentPageNumber],
+      });
+    },
+    enabled:
+      !!businessId && !!apiKey && !!contentDeliveryAPIDomain && !!entityId,
+  });
 
   React.useEffect(() => {
-    const aggregateRating = getAggregateRating(document);
-    setTotalReviews(aggregateRating?.reviewCount || 0);
-    setAverageRating(
-      aggregateRating?.ratingValue ? Number(aggregateRating.ratingValue) : 0
-    );
-    fetchData(1);
-  }, []);
+    if (reviews?.response?.nextPageToken) {
+      setPageTokens((prev) => ({
+        ...prev,
+        [currentPageNumber + 1]: reviews.response.nextPageToken,
+      }));
+      setNextPageToken(reviews.response.nextPageToken);
+    }
+  }, [reviews, currentPageNumber]);
+
+  const aggregateRating = getAggregateRating(document);
+  const totalReviews = aggregateRating?.reviewCount || 0;
+  const averageRating = Number(aggregateRating?.ratingValue) || 0;
+
+  if (error) {
+    console.error("Error fetching reviews:", error);
+    return <></>;
+  }
 
   React.useEffect(() => {
     if (nextPageToken) {
@@ -128,7 +137,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   const pageScrollerProps: PageScrollerProps = {
     totalReviews,
     currentPageNumber,
-    fetchData,
+    fetchData: setCurrentPageNumber,
     hasDarkBackground,
   };
 
@@ -138,8 +147,15 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
       background={props.backgroundColor}
     >
       <ReviewsHeader {...headerProps} />
-      <ReviewsList reviews={reviewDocs} hasDarkBackground={hasDarkBackground} />
-      <PageScroller {...pageScrollerProps} />
+      {reviews && (
+        <>
+          <ReviewsList
+            reviews={reviews?.response?.docs}
+            hasDarkBackground={hasDarkBackground}
+          />
+          <PageScroller {...pageScrollerProps} />
+        </>
+      )}
     </PageSection>
   );
 };
@@ -186,7 +202,7 @@ const ReviewsList: React.FC<{ reviews: any[]; hasDarkBackground: boolean }> = ({
   reviews,
   hasDarkBackground,
 }) => {
-  if (reviews.length === 0) {
+  if (!reviews) {
     return <></>; // No reviews to display while loading
   }
   return (
@@ -216,7 +232,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
     hasDarkBackground,
   };
 
-  let businessResponseData = undefined;
+  let businessResponseData: BusinessResponseProps | undefined = undefined;
   if (Array.isArray(review.comments) && review.comments.length > 0) {
     const businessResponseContent = review.comments[0].content;
     const businessResponseDate = review.comments[0].commentDate;
@@ -247,7 +263,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
 
 interface AuthorWithDateProps {
   author: string;
-  date?: string;
+  date: string;
 }
 
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
@@ -257,16 +273,14 @@ const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
       <Body variant={"lg"} className="font-bold">
         {author}
       </Body>
-      {date && (
-        <Timestamp
-          date={date}
-          option={TimestampOption.DATE}
-          hideTimeZone={true}
-          timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
-          locale={"es"}
-          dateFormatOverride={DATE_FORMAT}
-        />
-      )}
+      <Timestamp
+        date={date}
+        option={TimestampOption.DATE}
+        hideTimeZone={true}
+        timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+        locale={document?.locale}
+        dateFormatOverride={DATE_FORMAT}
+      />
     </div>
   );
 };
@@ -298,7 +312,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
 interface BusinessResponseProps {
   businessName: string;
   content: string;
-  date?: string;
+  date: string;
 }
 
 const BusinessResponse: React.FC<BusinessResponseProps> = ({
@@ -311,7 +325,7 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
     author: t("responseFrom", `Response from ${businessName}`, {
       businessName,
     }),
-    ...(date && { date }),
+    date,
   };
   const authorWithDate = <AuthorWithDate {...authorData} />;
 
@@ -409,7 +423,7 @@ const ReviewStars: React.FC<ReviewStarsProps> = (props) => {
 interface PageScrollerProps {
   totalReviews: number;
   currentPageNumber: number;
-  fetchData: (newPageNumber: number) => Promise<any>;
+  fetchData: (newPageNumber: number) => void;
   hasDarkBackground: boolean;
 }
 
@@ -468,104 +482,13 @@ const ShowMoreButton: React.FC<{
 };
 
 /**
- * Fetch reviews for the business.
- * @returns A promise that resolves to the reviews data fetched from the endpoint.
- */
-async function fetchReviewsFromApi(
-  entityId: number,
-  endpointBaseUrl: string,
-  pageToken?: string
-) {
-  const url = new URL(endpointBaseUrl);
-  url.searchParams.set("entity.uid", String(entityId));
-  url.searchParams.set("limit", String(REVIEWS_PER_PAGE));
-  url.searchParams.set("$sortBy__desc", "reviewDate");
-  if (pageToken) {
-    url.searchParams.set("pageToken", pageToken);
-  }
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
-}
-
-/**
  * Extracts the aggregate rating from the document's schema.
  * @param document - The document containing the schema.
  * @returns The aggregate rating object if found, otherwise undefined.
  */
 function getAggregateRating(document: any) {
-  const el = document?._schema?.["@graph"].find((e: any) => e.aggregateRating);
-  return el?.aggregateRating;
-}
-
-/**
- * Gets the reviews content endpoint URL for the specified document.
- * @param document - The document containing the entity page set config
- * @returns The reviews content endpoint URL or undefined if not found.
- */
-function getReviewsContentEndpoint(document: any): string | undefined {
-  const cloudRegion = document._env.YEXT_CLOUD_REGION?.toLowerCase();
-  const environment = document._env.YEXT_ENVIRONMENT?.toLowerCase();
-  const apiKey = document._env.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
-  if (!cloudRegion || !environment || !apiKey) {
-    console.error("Missing required parameters for reviews content endpoint.");
-    return undefined;
-  }
-  return buildReviewsEndpointUrl(cloudRegion, environment, apiKey);
-}
-
-type CloudRegion = "us" | "eu";
-type Environment = "prod" | "sbx" | "qa" | "dev";
-
-/**
- * Builds the reviews content endpoint URL.
- * @param cloudRegion - The cloud region (e.g., "us", "eu").
- * @param environment - The environment (e.g., "prod", "sbx", "qa", "dev").
- * @param apiKey - The API key for the reviews content endpoint.
- * @returns The constructed URL for the reviews content endpoint.
- */
-function buildReviewsEndpointUrl(
-  cloudRegion: CloudRegion,
-  environment: Environment,
-  apiKey: string
-): string {
-  switch (cloudRegion) {
-    case "us":
-      switch (environment) {
-        case "prod":
-          return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-        case "sbx":
-          return `https://sbx-cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-        case "qa":
-          return `https://streams.qa.yext.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-        case "dev":
-          return `https://streams-dev.yext.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-        default:
-          console.warn(
-            `Unknown environment: ${environment}. Defaulting to prod.`
-          );
-          return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-      }
-    case "eu":
-      switch (environment) {
-        case "prod":
-          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-        case "qa":
-          return `https://qa-cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-        default:
-          console.warn(
-            `Unknown environment: ${environment}. Defaulting to prod.`
-          );
-          return `https://cdn.eu.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-      }
-    default:
-      console.warn(
-        `Unknown cloud region: ${cloudRegion}. Defaulting to US prod.`
-      );
-      return `https://cdn.yextapis.com/v2/accounts/me/content/${REVIEWS_ENDPOINT_ID}?api_key=${apiKey}`;
-  }
+  return document?._schema?.["@graph"].find((e: any) => e.aggregateRating)
+    ?.aggregateRating;
 }
 
 export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
