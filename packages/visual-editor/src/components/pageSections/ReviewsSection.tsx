@@ -78,17 +78,15 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
       currentPageNumber,
       pageTokens[currentPageNumber],
     ],
-    queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      return fetchReviewsForEntity({
+    queryFn: async () =>
+      fetchReviewsForEntity({
         businessId,
         apiKey,
         contentDeliveryAPIDomain,
         entityId,
         limit: REVIEWS_PER_PAGE,
         pageToken: pageTokens[currentPageNumber],
-      });
-    },
+      }),
     enabled:
       !!businessId && !!apiKey && !!contentDeliveryAPIDomain && !!entityId,
   });
