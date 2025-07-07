@@ -167,7 +167,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
                 ? resolvedPromo.image.width / resolvedPromo.image.height
                 : 1.78)
             }
-            width={styles.image.width}
+            width={styles.image.width || 640}
           />
         </EntityField>
       )}

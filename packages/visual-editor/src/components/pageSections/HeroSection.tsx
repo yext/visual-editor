@@ -320,7 +320,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             <Image
               image={resolvedHero?.image}
               aspectRatio={styles.image.aspectRatio}
-              width={styles.image.width}
+              width={styles.image.width || 640}
             />
           </div>
         </EntityField>

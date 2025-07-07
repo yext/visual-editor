@@ -178,7 +178,7 @@ const PhotoGallerySectionComponent = ({
         width: "width" in image && image.width ? image.width : 1000,
       },
       aspectRatio: styles.image.aspectRatio,
-      width: styles.image.width,
+      width: styles.image.width || 1000,
     }));
 
   const justifyClass = {
@@ -206,77 +206,76 @@ const PhotoGallerySectionComponent = ({
       )}
       {filteredImages && filteredImages.length > 0 && (
         <CarouselProvider
-          className="flex flex-col md:flex-row justify-center gap-8"
+          className="flex flex-col gap-8"
           naturalSlideWidth={100}
           naturalSlideHeight={100}
           totalSlides={filteredImages.length}
           isIntrinsicHeight={true}
         >
-          <div
-            className="hidden md:inline-flex items-center gap-2 mx-auto"
-            style={{
-              width: styles.image.width
-                ? `${styles.image.width + 96}px`
-                : undefined,
-              maxWidth: "100%",
-            }}
-          >
-            <DynamicChildColors category="arrow">
-              <ButtonBack className="my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
-                <FaArrowLeft className="h-10 w-fit" />
-              </ButtonBack>
-            </DynamicChildColors>
-            <div className="flex flex-col gap-y-8 items-center w-auto">
-              <EntityField
-                displayName={pt("fields.images", "Images")}
-                fieldId={data.images.field}
-                constantValueEnabled={data.images.constantValueEnabled}
-              >
-                <Slider
-                  className="w-auto"
-                  style={
-                    styles.image.width ? { width: styles.image.width } : {}
-                  }
+          <div className="hidden md:flex justify-center w-full">
+            <div
+              className="flex items-center gap-2"
+              style={{
+                width: `${(styles.image.width || 1000) + 96}px`,
+                maxWidth: "100%",
+                minWidth: "fit-content",
+              }}
+            >
+              <DynamicChildColors category="arrow">
+                <ButtonBack className="my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
+                  <FaArrowLeft className="h-10 w-fit" />
+                </ButtonBack>
+              </DynamicChildColors>
+              <div className="flex flex-col gap-y-8 items-center w-auto">
+                <EntityField
+                  displayName={pt("fields.images", "Images")}
+                  fieldId={data.images.field}
+                  constantValueEnabled={data.images.constantValueEnabled}
                 >
-                  {filteredImages.map((image, idx) => {
+                  <Slider
+                    className="w-auto"
+                    style={{ width: styles.image.width || 1000 }}
+                  >
+                    {filteredImages.map((image, idx) => {
+                      return (
+                        <Slide index={idx} key={idx}>
+                          <div className="flex justify-center">
+                            <Image
+                              image={image.image}
+                              aspectRatio={image.aspectRatio}
+                              width={image.width}
+                            />
+                          </div>
+                        </Slide>
+                      );
+                    })}
+                  </Slider>
+                </EntityField>
+                <div className="hidden md:flex justify-center">
+                  {filteredImages.map((_, idx) => {
+                    const afterStyles =
+                      "after:content-[' '] after:py-2 after:block";
                     return (
-                      <Slide index={idx} key={idx}>
-                        <div className="flex justify-center">
-                          <Image
-                            image={image.image}
-                            aspectRatio={image.aspectRatio}
-                            width={image.width}
-                          />
-                        </div>
-                      </Slide>
+                      <div key={idx} className="w-16 flex justify-center">
+                        <DynamicChildColors category="slide">
+                          <Dot
+                            slide={idx}
+                            className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
+                          ></Dot>
+                        </DynamicChildColors>
+                      </div>
                     );
                   })}
-                </Slider>
-              </EntityField>
-              <div className="hidden md:flex justify-center">
-                {filteredImages.map((_, idx) => {
-                  const afterStyles =
-                    "after:content-[' '] after:py-2 after:block";
-                  return (
-                    <div key={idx} className="w-16 flex justify-center">
-                      <DynamicChildColors category="slide">
-                        <Dot
-                          slide={idx}
-                          className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
-                        ></Dot>
-                      </DynamicChildColors>
-                    </div>
-                  );
-                })}
+                </div>
               </div>
+              <DynamicChildColors category="arrow">
+                <ButtonNext className="pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
+                  <FaArrowRight className="h-10 w-fit" />
+                </ButtonNext>
+              </DynamicChildColors>
             </div>
-            <DynamicChildColors category="arrow">
-              <ButtonNext className="pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
-                <FaArrowRight className="h-10 w-fit" />
-              </ButtonNext>
-            </DynamicChildColors>
           </div>
-          <div className="flex flex-col gap-y-8 items-center md:hidden">
+          <div className="flex flex-col gap-y-8 items-center justify-center md:hidden">
             <EntityField
               displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
