@@ -448,9 +448,7 @@ const PageScroller: React.FC<PageScrollerProps> = ({
     <Body className="flex flex-row justify-center items-center gap-5">
       <FaArrowLeft
         className={`${currentPageNumber === 1 ? disabledButtonClasses : selectableButtonClasses}`}
-        data-ya-action={
-          analytics?.getDebugEnabled() ? "EXPAND/PAGINATE" : undefined
-        }
+        data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
         data-ya-eventname={
           analytics?.getDebugEnabled() ? "previousPage" : undefined
         }
@@ -463,9 +461,7 @@ const PageScroller: React.FC<PageScrollerProps> = ({
       />
       <FaArrowRight
         className={`${currentPageNumber === numPages ? disabledButtonClasses : selectableButtonClasses}`}
-        data-ya-action={
-          analytics?.getDebugEnabled() ? "EXPAND/PAGINATE" : undefined
-        }
+        data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
         data-ya-eventname={
           analytics?.getDebugEnabled() ? "nextPage" : undefined
         }
@@ -493,21 +489,27 @@ const ShowMoreButton: React.FC<{
       onClick={() => {
         expanded // the existing state before toggling
           ? analytics?.track({
-              action: "EXPAND",
-              eventName: `${analyticsName}-showMore`,
+              action: "COLLAPSE",
+              eventName: `${analyticsName}-showLess`,
             })
           : analytics?.track({
-              action: "COLLAPSE",
+              action: "EXPAND",
               eventName: `${analyticsName}-showMore`,
             });
         setExpanded(!expanded);
       }}
       variant={"link"}
       data-ya-action={
-        analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
+        analytics?.getDebugEnabled()
+          ? expanded
+            ? "COLLAPSE"
+            : "EXPAND"
+          : undefined
       }
       data-ya-eventname={
-        analytics?.getDebugEnabled() ? `${analyticsName}-showMore` : undefined
+        analytics?.getDebugEnabled()
+          ? `${analyticsName}-${expanded ? "showLess" : "showMore"}`
+          : undefined
       }
     >
       {expanded ? t("showLess", "Show less") : t("showMore", "Show more")}
