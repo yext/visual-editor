@@ -978,7 +978,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
     if (expanded) {
       delete primaryFooterFields.footerLinks;
     } else {
-      delete primaryFooterFields.expandedFooterItems;
+      delete primaryFooterFields.expandedFooterLinks;
     }
 
     if (!showSecondaryFooter) {
