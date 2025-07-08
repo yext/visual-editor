@@ -1,6 +1,19 @@
 import { Migration } from "../../utils/migrate.ts";
+import { backgroundColors } from "../../utils/themeConfigOptions";
 
 export const addCardStylesMigration: Migration = {
+  Directory: {
+    action: "updated",
+    propTransformation: (props) => ({
+      styles: {
+        cards: {
+          backgroundColor: backgroundColors.background1.value,
+          headingLevel: 3,
+        },
+      },
+      ...props,
+    }),
+  },
   EventSection: {
     action: "updated",
     propTransformation: ({ styles, ...props }) => {

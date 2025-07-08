@@ -157,7 +157,7 @@ const tests: ComponentTest[] = [
           bgColor: "bg-palette-primary-light",
           textColor: "text-black",
         },
-        headingLevel: 2,
+        headingLevel: 5,
       },
       liveVisibility: true,
     },
