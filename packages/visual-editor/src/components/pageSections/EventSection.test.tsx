@@ -198,6 +198,114 @@ const tests: ComponentTest[] = [
     },
     version: 0,
   },
+  {
+    name: "version 7 props with entity values",
+    document: { c_events: eventsData, name: "Test Name" },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Upcoming Events",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        events: {
+          field: "c_events",
+          constantValue: { events: [{}] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 3,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 4,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("Test Name")).toBeVisible();
+      expect(
+        page.getByRole("heading", { name: "Cooking Class" })
+      ).toBeVisible();
+      expect(page.getByRole("heading", { name: "Hike" })).toBeVisible();
+      expect(page.getByText("2025")).toBeVisible();
+      expect(page.getByText("2026")).toBeVisible();
+      expect(page.getByText("Learn More")).toBeVisible();
+      expect(page.getByText("Sign Up")).toBeVisible();
+      expect(page.getByText("inner chef")).toBeVisible();
+      expect(page.getByText("local trails")).toBeVisible();
+    },
+  },
+  {
+    name: "version 7 props with constant value",
+    document: { c_events: eventsData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Upcoming",
+          constantValueEnabled: true,
+        },
+        events: {
+          field: "c_exampleEvents",
+          constantValue: {
+            events: [
+              { title: "Event 1" },
+              {
+                image: { url: "https://placehold.co/600x400" },
+                title: "Event 2",
+                dateTime: "2020-02-02T10:10",
+                description: "Test Description",
+                cta: { label: "Test CTA", link: "https://yext.com" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 3,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 4,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("Upcoming")).toBeVisible();
+      expect(page.getByText("Event 1")).toBeVisible();
+      expect(page.getByText("Event 2")).toBeVisible();
+      expect(page.getByText("2020")).toBeVisible();
+      expect(page.getByText("Test Description")).toBeVisible();
+      expect(page.getByText("Test CTA")).toBeVisible();
+    },
+  },
 ];
 
 describe("EventSection", async () => {

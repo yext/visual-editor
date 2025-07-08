@@ -4,6 +4,7 @@ import {
   AnalyticsScopeProvider,
   CTA as CTAType,
   ComplexImageType,
+  useAnalytics,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -108,6 +109,7 @@ interface HeaderLayoutProps {
 const HeaderLayout = (props: HeaderLayoutProps) => {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const analytics = useAnalytics();
   const {
     logo,
     logoWidth,
@@ -147,7 +149,19 @@ const HeaderLayout = (props: HeaderLayoutProps) => {
             </EntityField>
             <button
               className="flex md:hidden ml-auto my-auto"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => {
+                analytics?.track({
+                  action: menuOpen ? "COLLAPSE" : "EXPAND",
+                  eventName: "toggleMobileMenu",
+                });
+                setMenuOpen(!menuOpen);
+              }}
+              data-ya-action={
+                analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
+              }
+              data-ya-eventname={
+                analytics?.getDebugEnabled() ? `toggleMobileMenu` : undefined
+              }
               aria-label={
                 menuOpen
                   ? t("closeHeaderMenu", "Close header menu")
@@ -192,7 +206,6 @@ const HeaderLogo = (props: {
       <div className="flex mr-2" style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
-          layout="auto"
           aspectRatio={props.logo.image.width / props.logo.image.height}
         />
       </div>
@@ -207,7 +220,7 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
         {props.links
           .filter((item) => !!item?.link)
           .map((item, idx) => (
-            <li key={item.link}>
+            <li key={item.link + idx}>
               <CTA
                 label={item.label}
                 link={item.link}

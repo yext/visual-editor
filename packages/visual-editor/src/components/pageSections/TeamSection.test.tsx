@@ -198,6 +198,112 @@ const tests: ComponentTest[] = [
     },
     version: 0,
   },
+  {
+    name: "version 7 props with entity values",
+    document: { c_team: teamData, name: "Test Name" },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Meet Our Team",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        people: {
+          field: "c_team",
+          constantValue: { people: [] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-secondary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("Captain Cosmo")).toBeVisible();
+      expect(page.getByText("Chef Nova")).toBeVisible();
+      expect(page.getByText("Admiral Aster")).toBeVisible();
+      expect(page.getByText("Founder & CEO")).toBeVisible();
+      expect(page.getByText("Culinary Director")).toBeVisible();
+      expect(page.getByText("Operations Manager")).toBeVisible();
+      expect(page.getByText("Email Me").elements()).toHaveLength(2);
+      expect(page.getByText("(800) 555-1010")).toBeVisible();
+      expect(page.getByText("+52 800 555 1010")).toBeVisible();
+    },
+  },
+  {
+    name: "version 7 props with constant value",
+    document: { c_team: teamData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Meet Our Team",
+          constantValueEnabled: true,
+          constantValueOverride: {},
+        },
+        people: {
+          field: "c_team",
+          constantValue: {
+            people: [
+              {
+                name: "Name",
+                title: "Title",
+                phoneNumber: "8888888888",
+                email: "email",
+                cta: { label: "CTA" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-secondary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("Meet Our Team")).toBeVisible();
+      expect(page.getByText("Name")).toBeVisible();
+      expect(page.getByText("Title")).toBeVisible();
+      expect(page.getByText("8888888888")).toBeVisible();
+      expect(page.getByText("email")).toBeVisible();
+      expect(page.getByText("CTA")).toBeVisible();
+    },
+  },
 ];
 
 describe("TeamSection", async () => {
