@@ -99,7 +99,6 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        hi
         {resolvedText}
       </EntityField>
     </PageSection>
