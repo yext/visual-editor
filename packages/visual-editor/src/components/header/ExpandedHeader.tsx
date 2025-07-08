@@ -20,6 +20,7 @@ import {
   resolveTranslatableString,
   PageSection,
   TranslatableStringField,
+  ImageWrapperProps,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -34,6 +35,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import { ImageWrapperFields } from "../contentBlocks/Image.tsx";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 
@@ -54,6 +56,7 @@ export interface ExpandedHeaderProps {
   styles: {
     primaryHeader: {
       logoWidth: number;
+      aspectRatio: ImageWrapperProps["aspectRatio"];
       backgroundColor?: BackgroundStyle;
       primaryCtaVariant: CTAProps["variant"];
       secondaryCtaVariant: CTAProps["variant"];
@@ -187,6 +190,14 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
             type: "number",
           }),
+          aspectRatio:
+            ImageWrapperFields.aspectRatio ??
+            YextField(
+              msg("fields.aspectRatioForLogo", "Aspect Ratio for Logo"),
+              {
+                type: "number",
+              }
+            ),
           backgroundColor: YextField(
             msg("fields.backgroundColor", "Background Color"),
             {
@@ -253,8 +264,13 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const { t } = useTranslation();
   const { logo, links, primaryCTA, secondaryCTA } = primaryHeader;
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
-  const { backgroundColor, logoWidth, primaryCtaVariant, secondaryCtaVariant } =
-    primaryHeaderStyle;
+  const {
+    backgroundColor,
+    logoWidth,
+    primaryCtaVariant,
+    secondaryCtaVariant,
+    aspectRatio,
+  } = primaryHeaderStyle;
   const { backgroundColor: secondaryBackgroundColor } = secondaryHeaderStyle;
   const languageDropDownProps = parseDocumentForLanguageDropdown(document);
   const showLanguageSelector =
@@ -300,6 +316,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             displayName={pt("fields.logoUrl", "Logo")}
           >
             <HeaderLogo
+              aspectRatio={aspectRatio}
               logo={buildComplexImage(logo, logoWidth)}
               logoWidth={logoWidth}
             />
@@ -329,6 +346,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         aria-label={t("expandedHeaderMobile", "Expanded Header Mobile")}
       >
         <HeaderLogo
+          aspectRatio={aspectRatio}
           logo={buildComplexImage(logo, logoWidth)}
           logoWidth={logoWidth}
         />
@@ -476,6 +494,7 @@ const HeaderLinks = ({
 };
 
 const HeaderLogo = (props: {
+  aspectRatio: any;
   logo: ComplexImageType;
   logoLink?: string;
   logoWidth?: number;
@@ -486,7 +505,10 @@ const HeaderLogo = (props: {
         <Image
           image={props.logo.image}
           layout="auto"
-          aspectRatio={props.logo.image.width / props.logo.image.height}
+          aspectRatio={
+            props.aspectRatio ||
+            props.logo.image.width / props.logo.image.height
+          }
         />
       </figure>
     </MaybeLink>
@@ -636,6 +658,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     styles: {
       primaryHeader: {
         logoWidth: 100,
+        aspectRatio: 2,
         backgroundColor: backgroundColors.background1.value,
         primaryCtaVariant: "primary",
         secondaryCtaVariant: "secondary",
