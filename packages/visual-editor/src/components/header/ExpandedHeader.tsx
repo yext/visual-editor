@@ -28,6 +28,12 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 
@@ -93,21 +99,35 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
             objectFields: {
-              label: YextField(msg("fields.label", "Label"), { type: "text" }),
-              link: YextField(msg("fields.link", "Link"), { type: "text" }),
-              linkType: YextField(msg("fields.linkType", "Link Type"), {
+              label: TranslatableStringField(
+                msg("fields.label", "Label"),
+                "text"
+              ),
+              link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
+              linkType: {
+                label: pt("fields.linkType", "Link Type"),
+                type: "select",
+                options: linkTypeOptions(),
+              },
             },
           }),
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
-              label: YextField(msg("fields.label", "Label"), { type: "text" }),
-              link: YextField(msg("fields.link", "Link"), { type: "text" }),
-              linkType: YextField(msg("fields.linkType", "Link Type"), {
+              label: TranslatableStringField(
+                msg("fields.label", "Label"),
+                "text"
+              ),
+              link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
+              linkType: {
+                label: pt("fields.linkType", "Link Type"),
+                type: "select",
+                options: linkTypeOptions(),
+              },
             },
           }),
         },
@@ -167,7 +187,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
         objectFields: {
           logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
             type: "number",
-            min: 100,
           }),
           backgroundColor: YextField(
             msg("fields.backgroundColor", "Background Color"),
@@ -401,28 +420,64 @@ const HeaderLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
+  const MAX_VISIBLE = 5;
+  const isSecondary = type === "Secondary";
+
+  const renderLink = (
+    item: TranslatableCTA,
+    index: number,
+    ctaType: string
+  ) => (
+    <CTA
+      variant={
+        type === "Primary"
+          ? "headerFooterMainLink"
+          : "headerFooterSecondaryLink"
+      }
+      eventName={`cta.${ctaType}.${index}`}
+      label={resolveTranslatableString(item.label, i18n.language)}
+      linkType={item.linkType}
+      link={item.link}
+      className="justify-start w-full text-left"
+    />
+  );
 
   return (
     <nav aria-label={`${type} Header Links`}>
-      <ul className="flex flex-col justify-start md:flex-row flex flex-col md:flex-row gap-0 md:gap-6">
+      <ul className="flex flex-col md:flex-row gap-0 md:gap-6 items-center">
         {links.map((item, index) => {
+          const isOverflowed = isSecondary && index >= MAX_VISIBLE;
           return (
-            <li key={`${type.toLowerCase()}.${index}`} className="py-4 md:py-0">
-              <CTA
-                variant={
-                  type === "Primary"
-                    ? "headerFooterMainLink"
-                    : "headerFooterSecondaryLink"
-                }
-                eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
-                label={resolveTranslatableString(item.label, i18n.language)}
-                linkType={item.linkType}
-                link={item.link}
-                className={`justify-start `}
-              />
+            <li
+              key={`${type.toLowerCase()}.${index}`}
+              className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
+            >
+              {renderLink(item, index, type.toLowerCase())}
             </li>
           );
         })}
+
+        {isSecondary && links.length > MAX_VISIBLE && (
+          <li className="hidden md:block py-4 md:py-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
+                <div className="flex gap-4 items-center">
+                  <FaBars />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
+                {links.slice(MAX_VISIBLE).map((item, index) => (
+                  <DropdownMenuItem
+                    key={`overflow-${index}`}
+                    className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
+                  >
+                    {renderLink(item, index + MAX_VISIBLE, "overflow")}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </li>
+        )}
       </ul>
     </nav>
   );
@@ -461,7 +516,7 @@ const HeaderCtas = (props: {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-2">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-2 items-center">
       {primaryCTA?.label && (
         <EntityField
           constantValueEnabled
@@ -519,37 +574,37 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         links: [
           {
             linkType: "URL",
-            label: "Main Header Link",
+            label: { en: "Main Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Header Link",
+            label: { en: "Main Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Header Link",
+            label: { en: "Main Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Header Link",
+            label: { en: "Main Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Main Header Link",
+            label: { en: "Main Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
         ],
         primaryCTA: {
-          label: "Call to Action",
+          label: { en: "Call to Action", hasLocalizedValue: "true" },
           link: "#",
           linkType: "URL",
         },
         secondaryCTA: {
-          label: "Call to Action",
+          label: { en: "Call to Action", hasLocalizedValue: "true" },
           link: "#",
           linkType: "URL",
         },
@@ -560,27 +615,27 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         secondaryLinks: [
           {
             linkType: "URL",
-            label: "Secondary Header Link",
+            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Secondary Header Link",
+            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Secondary Header Link",
+            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Secondary Header Link",
+            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Secondary Header Link",
+            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
         ],
