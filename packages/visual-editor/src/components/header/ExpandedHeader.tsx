@@ -24,17 +24,18 @@ import {
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
-import {
-  LanguageDropdown,
-  parseDocumentForLanguageDropdown,
-} from "./languageDropdown.tsx";
-import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import {
+  LanguageDropdown,
+  parseDocumentForLanguageDropdown,
+} from "./languageDropdown.tsx";
+import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import { ImageWrapperFields } from "../contentBlocks/Image.tsx";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
@@ -454,7 +455,7 @@ const HeaderLinks = ({
 
   return (
     <nav aria-label={`${type} Header Links`}>
-      <ul className="flex flex-col md:flex-row gap-0 md:gap-6 items-center">
+      <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
         {links.map((item, index) => {
           const isOverflowed = isSecondary && index >= MAX_VISIBLE;
           return (
@@ -470,7 +471,7 @@ const HeaderLinks = ({
         {isSecondary && links.length > MAX_VISIBLE && (
           <li className="hidden md:block py-4 md:py-0">
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
+              <DropdownMenuTrigger className="flex flex-row md:items-center gap-4 justify-between w-full">
                 <div className="flex gap-4 items-center">
                   <FaBars />
                 </div>
@@ -530,7 +531,7 @@ const HeaderCtas = (props: {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-2 items-center">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
       {primaryCTA?.label && (
         <EntityField
           constantValueEnabled
