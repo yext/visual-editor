@@ -130,10 +130,12 @@ const ProductCard = ({
   cardNumber,
   product,
   cardStyles,
+  sectionHeadingLevel,
 }: {
   cardNumber: number;
   product: ProductStruct;
   cardStyles: ProductSectionProps["styles"]["cards"];
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
   return (
@@ -153,7 +155,15 @@ const ProductCard = ({
       <div className="p-8 gap-8 flex flex-col flex-grow">
         <div className="gap-4 flex flex-col">
           {product.name && (
-            <Heading level={cardStyles.headingLevel} className="mb-2">
+            <Heading
+              level={cardStyles.headingLevel}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+              className="mb-2"
+            >
               {resolveTranslatableString(product.name, i18n.language)}
             </Heading>
           )}
@@ -230,6 +240,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 cardNumber={index}
                 product={product}
                 cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>

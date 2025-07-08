@@ -75,7 +75,7 @@ const tests: ComponentTest[] = [
           bgColor: "bg-palette-primary-dark",
           textColor: "text-white",
         },
-        headingLevel: 4,
+        headingLevel: 6,
       },
       data: {
         heading: {
@@ -283,7 +283,7 @@ const tests: ComponentTest[] = [
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
-          headingLevel: 3,
+          headingLevel: 4,
         },
       },
       liveVisibility: true,

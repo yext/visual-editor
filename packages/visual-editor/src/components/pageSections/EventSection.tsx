@@ -132,10 +132,12 @@ const EventCard = ({
   cardNumber,
   event,
   cardStyles,
+  sectionHeadingLevel,
 }: {
   cardNumber: number;
   event: EventStruct;
   cardStyles: EventSectionProps["styles"]["cards"];
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
   return (
@@ -159,7 +161,14 @@ const EventCard = ({
       </div>
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
-          <Heading level={cardStyles.headingLevel}>
+          <Heading
+            level={cardStyles.headingLevel}
+            semanticLevelOverride={
+              sectionHeadingLevel < 6
+                ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                : "span"
+            }
+          >
             {resolveTranslatableString(event.title, i18n.language)}
           </Heading>
         )}
@@ -234,6 +243,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 cardNumber={index}
                 event={event}
                 cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>

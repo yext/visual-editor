@@ -241,7 +241,16 @@ const LocationCard = ({
         className="mb-2"
         href={relativePrefixToRoot && slug ? relativePrefixToRoot + slug : slug}
       >
-        <Heading level={styles?.cards.headingLevel}>{name}</Heading>
+        <Heading
+          level={styles?.cards.headingLevel}
+          semanticLevelOverride={
+            styles.heading.level < 6
+              ? ((styles.heading.level + 1) as HeadingLevel)
+              : "span"
+          }
+        >
+          {name}
+        </Heading>
       </MaybeLink>
       {hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">

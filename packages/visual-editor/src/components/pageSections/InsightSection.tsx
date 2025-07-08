@@ -131,10 +131,12 @@ const InsightCard = ({
   cardNumber,
   insight,
   cardStyles,
+  sectionHeadingLevel,
 }: {
   cardNumber: number;
   insight: InsightStruct;
   cardStyles: InsightSectionProps["styles"]["cards"];
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
 
@@ -168,7 +170,14 @@ const InsightCard = ({
             </div>
           )}
           {insight.name && (
-            <Heading level={cardStyles.headingLevel}>
+            <Heading
+              level={cardStyles.headingLevel}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
               {resolveTranslatableString(insight.name, i18n.language)}
             </Heading>
           )}
@@ -237,6 +246,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 cardNumber={index}
                 insight={insight}
                 cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>

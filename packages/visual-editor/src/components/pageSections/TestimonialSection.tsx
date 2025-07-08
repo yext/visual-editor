@@ -126,9 +126,11 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
 const TestimonialCard = ({
   testimonial,
   cardStyles,
+  sectionHeadingLevel,
 }: {
   testimonial: TestimonialStruct;
   cardStyles: TestimonialSectionProps["styles"]["cards"];
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
 
@@ -142,7 +144,14 @@ const TestimonialCard = ({
       </Background>
       <Background background={cardStyles.backgroundColor} className="p-8">
         {testimonial.contributorName && (
-          <Heading level={cardStyles.headingLevel}>
+          <Heading
+            level={cardStyles.headingLevel}
+            semanticLevelOverride={
+              sectionHeadingLevel < 6
+                ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                : "span"
+            }
+          >
             {resolveTranslatableString(
               testimonial.contributorName,
               i18n.language
@@ -212,6 +221,7 @@ const TestimonialSectionWrapper = ({
                 key={index}
                 testimonial={testimonial}
                 cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>

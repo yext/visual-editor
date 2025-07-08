@@ -131,10 +131,12 @@ const PersonCard = ({
   cardNumber,
   person,
   cardStyles,
+  sectionHeadingLevel,
 }: {
   cardNumber: number;
   person: PersonStruct;
   cardStyles: TeamSectionProps["styles"]["cards"];
+  sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
 
@@ -158,7 +160,14 @@ const PersonCard = ({
         </div>
         <div className="flex flex-col justify-center gap-1">
           {person.name && (
-            <Heading level={cardStyles.headingLevel}>
+            <Heading
+              level={cardStyles.headingLevel}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
               {resolveTranslatableString(person.name, i18n.language)}
             </Heading>
           )}
@@ -270,6 +279,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 cardNumber={index}
                 person={person}
                 cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>

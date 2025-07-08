@@ -122,7 +122,9 @@ const DirectoryCard = ({
               : profile.slug
           }
         >
-          <Heading level={cardStyles.headingLevel}>{profile.name}</Heading>
+          <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
+            {profile.name}
+          </Heading>
         </MaybeLink>
         {profile.hours && (
           <div className="font-semibold font-body-fontFamily text-body-fontSize">
