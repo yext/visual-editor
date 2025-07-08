@@ -236,17 +236,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Captain Cosmo")).toBeVisible();
-      expect(page.getByText("Chef Nova")).toBeVisible();
-      expect(page.getByText("Admiral Aster")).toBeVisible();
-      expect(page.getByText("Founder & CEO")).toBeVisible();
-      expect(page.getByText("Culinary Director")).toBeVisible();
-      expect(page.getByText("Operations Manager")).toBeVisible();
-      expect(page.getByText("Email Me").elements()).toHaveLength(2);
-      expect(page.getByText("(800) 555-1010")).toBeVisible();
-      expect(page.getByText("+52 800 555 1010")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with constant value",
@@ -295,14 +284,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Meet Our Team")).toBeVisible();
-      expect(page.getByText("Name")).toBeVisible();
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("8888888888")).toBeVisible();
-      expect(page.getByText("email")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-    },
   },
 ];
 

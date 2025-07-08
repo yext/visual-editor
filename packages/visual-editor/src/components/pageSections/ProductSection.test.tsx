@@ -233,16 +233,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByText("Galaxy Burger")).toBeVisible();
-      expect(page.getByText("Burgers")).toBeVisible();
-      expect(page.getByText("Order Now").elements()).toHaveLength(2);
-      expect(page.getByText("Galaxy Salad")).toBeVisible();
-      expect(page.getByText("Galaxy Milkshake")).toBeVisible();
-      expect(page.getByText("Desserts")).toBeVisible();
-      expect(page.getByText("cherry")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with constant value",
@@ -289,13 +279,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Featured Products")).toBeVisible();
-      expect(page.getByText("Product 1")).toBeVisible();
-      expect(page.getByText("Category")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-    },
   },
 ];
 

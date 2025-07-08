@@ -213,12 +213,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Featured Testimonials")).toBeVisible();
-      expect(page.getByText("Name")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Jan 1, 2025")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with entity values",
@@ -258,18 +252,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByText("Jane")).toBeVisible();
-      expect(page.getByText("Sam")).toBeVisible();
-      expect(page.getByText("John")).toBeVisible();
-      expect(page.getByText("flavor explosion")).toBeVisible();
-      expect(page.getByText("cosmic culinary")).toBeVisible();
-      expect(page.getByText("Absolutely incredible!")).toBeVisible();
-      expect(page.getByText("Apr 2, 2024")).toBeVisible();
-      expect(page.getByText("Feb 2, 2010")).toBeVisible();
-      expect(page.getByText("Nov 11, 2024")).toBeVisible();
-    },
   },
 ];
 

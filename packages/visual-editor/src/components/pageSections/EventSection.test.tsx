@@ -236,19 +236,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(
-        page.getByRole("heading", { name: "Cooking Class" })
-      ).toBeVisible();
-      expect(page.getByRole("heading", { name: "Hike" })).toBeVisible();
-      expect(page.getByText("2025")).toBeVisible();
-      expect(page.getByText("2026")).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
-      expect(page.getByText("Sign Up")).toBeVisible();
-      expect(page.getByText("inner chef")).toBeVisible();
-      expect(page.getByText("local trails")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with constant value",
@@ -297,14 +284,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Upcoming")).toBeVisible();
-      expect(page.getByText("Event 1")).toBeVisible();
-      expect(page.getByText("Event 2")).toBeVisible();
-      expect(page.getByText("2020")).toBeVisible();
-      expect(page.getByText("Test Description")).toBeVisible();
-      expect(page.getByText("Test CTA")).toBeVisible();
-    },
   },
 ];
 

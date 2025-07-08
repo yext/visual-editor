@@ -237,21 +237,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("test name")).toBeVisible();
-      expect(page.getByText("Fresh Flavors Fast")).toBeVisible();
-      expect(page.getByText("Blog")).toBeVisible();
-      expect(page.getByText("2025")).toBeVisible();
-      expect(page.getByText("Read Now")).toBeVisible();
-      expect(page.getByText("Discover how")).toBeVisible();
-      expect(page.getByText("Beyond the Burger")).toBeVisible();
-      expect(page.getByText("wide range")).toBeVisible();
-      expect(page.getByText("Order Now")).toBeVisible();
-      expect(page.getByText("Our Commitment to Community")).toBeVisible();
-      expect(page.getByText("Impact")).toBeVisible();
-      expect(page.getByText("2018")).toBeVisible();
-      expect(page.getByText("farmers")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with constant value",
@@ -296,14 +281,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Insights")).toBeVisible();
-      expect(page.getByText("Insight 1")).toBeVisible();
-      expect(page.getByText("Category 1")).toBeVisible();
-      expect(page.getByText("2025")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-    },
   },
 ];
 

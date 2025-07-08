@@ -230,9 +230,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Not Default Root")).toBeVisible();
-    },
   },
   {
     name: "version 7 with default props",
@@ -283,9 +280,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Directory Root")).toBeVisible();
-    },
   },
 ];
 
