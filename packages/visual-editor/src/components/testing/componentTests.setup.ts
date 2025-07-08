@@ -21,7 +21,7 @@ expect.extend({
     if (numDiffPixels > 0) {
       return {
         pass: false,
-        message: () => "Screenshots did not match",
+        message: () => `Screenshots differed by ${numDiffPixels} pixels`,
       };
     }
 

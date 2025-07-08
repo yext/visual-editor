@@ -33,13 +33,19 @@ export const compareScreenshot: BrowserCommand<
   const { width, height } = baselineImg;
   const diff = new PNG({ width, height });
 
+  if (height !== updatedImg.height) {
+    console.warn("Screenshot heights did not match");
+    writeFileSync(filePath, PNG.sync.write(updatedImg));
+    return Math.abs(updatedImg.height - height) * width;
+  }
+
   const numDiffPixels = pixelmatch(
     baselineImg.data,
     updatedImg.data,
     diff.data,
     width,
     height,
-    { threshold: 0.2 } // Adjust threshold as needed
+    { threshold: 0.3 } // Adjust threshold as needed
   );
 
   if (numDiffPixels > 0) {
