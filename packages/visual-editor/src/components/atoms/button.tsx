@@ -16,7 +16,7 @@ export const buttonVariants = cva(
           "border-b-gray-400 border-b sm:border-transparent w-full sm:w-fit sm:underline py-3",
         headerFooterMainLink:
           "font-link-fontWeight text-link-sm-fontSize hover:underline hover:cursor-pointer",
-        headerSecondaryLink:
+        headerFooterSecondaryLink:
           "text-link-xs-fontSize hover:underline hover:cursor-pointer",
       },
       hasDarkBackground: {
@@ -38,7 +38,7 @@ export const buttonVariants = cva(
           "font-link-fontFamily text-link-fontSize font-link-fontWeight tracking-link-letterSpacing ",
       },
       {
-        variant: ["headerFooterMainLink", "headerSecondaryLink"],
+        variant: ["headerFooterMainLink", "headerFooterSecondaryLink"],
         className:
           "no-underline font-link-fontFamily tracking-link-letterSpacing",
       },
@@ -57,7 +57,7 @@ export const buttonVariants = cva(
           "link",
           "directoryLink",
           "headerFooterMainLink",
-          "headerSecondaryLink",
+          "headerFooterSecondaryLink",
         ],
         hasDarkBackground: false,
         className: "text-palette-primary-dark",
@@ -68,7 +68,7 @@ export const buttonVariants = cva(
           "link",
           "directoryLink",
           "headerFooterMainLink",
-          "headerSecondaryLink",
+          "headerFooterSecondaryLink",
         ],
         className: "text-white",
       },

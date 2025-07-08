@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
-  Link,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -20,6 +19,8 @@ import {
   TranslatableCTA,
   resolveTranslatableString,
   PageSection,
+  TranslatableStringField,
+  TranslatableString,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -30,8 +31,9 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import { linkTypeOptions } from "../internal/puck/constant-value-fields/CallToAction.tsx";
 
-const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100X50";
+const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
 export interface ExpandedFooterProps {
   data: {
@@ -46,11 +48,14 @@ export interface ExpandedFooterProps {
       utilityImages: { url: string }[];
       expandedFooter: boolean;
       footerLinks: TranslatableCTA[];
-      expandedFooterItems: { label: string; links: TranslatableCTA[] }[];
+      expandedFooterLinks: {
+        label: TranslatableString;
+        links: TranslatableCTA[];
+      }[];
     };
     secondaryFooter: {
       show: boolean;
-      copyrightMessage: string;
+      copyrightMessage: TranslatableString;
       secondaryFooterLinks: TranslatableCTA[];
     };
   };
@@ -59,7 +64,7 @@ export interface ExpandedFooterProps {
       backgroundColor?: BackgroundStyle;
       linksAlignment: "left" | "right";
       logoWidth: number;
-      utilityImages: number;
+      utilityImagesWidth: number;
     };
     secondaryFooter: {
       backgroundColor?: BackgroundStyle;
@@ -125,8 +130,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               ],
             }
           ),
-          expandedFooterItems: YextField(
-            msg("fields.expandedFooterItems", "Expanded Footer Items"),
+          expandedFooterLinks: YextField(
+            msg("fields.expandedFooterLinks", "Expanded Footer Links"),
             {
               type: "array",
               arrayFields: {
@@ -136,15 +141,18 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
                   arrayFields: {
-                    label: YextField(msg("fields.label", "Label"), {
-                      type: "text",
-                    }),
+                    label: TranslatableStringField(
+                      msg("fields.label", "Label"),
+                      "text"
+                    ),
                     link: YextField(msg("fields.link", "Link"), {
                       type: "text",
                     }),
-                    linkType: YextField(msg("fields.linkType", "Link Type"), {
-                      type: "text",
-                    }),
+                    linkType: {
+                      label: pt("fields.linkType", "Link Type"),
+                      type: "select",
+                      options: linkTypeOptions(),
+                    },
                   },
                 }),
               },
@@ -153,15 +161,18 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
             type: "array",
             arrayFields: {
-              label: YextField(msg("fields.label", "Label"), {
-                type: "text",
-              }),
+              label: TranslatableStringField(
+                msg("fields.label", "Label"),
+                "text"
+              ),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
-              linkType: YextField(msg("fields.linkType", "Link Type"), {
-                type: "text",
-              }),
+              linkType: {
+                label: pt("fields.linkType", "Link Type"),
+                type: "select",
+                options: linkTypeOptions(),
+              },
             },
           }),
         },
@@ -178,26 +189,27 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 { label: msg("fields.options.no", "No"), value: false },
               ],
             }),
-            copyrightMessage: YextField(
+            copyrightMessage: TranslatableStringField(
               msg("fields.copyrightMessage", "Copyright Message"),
-              {
-                type: "text",
-              }
+              "text"
             ),
             secondaryFooterLinks: YextField(
               msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
               {
                 type: "array",
                 arrayFields: {
-                  label: YextField(msg("fields.label", "Label"), {
-                    type: "text",
-                  }),
+                  label: TranslatableStringField(
+                    msg("fields.label", "Label"),
+                    "text"
+                  ),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
-                  linkType: YextField(msg("fields.linkType", "Link Type"), {
-                    type: "text",
-                  }),
+                  linkType: {
+                    label: pt("fields.linkType", "Link Type"),
+                    type: "select",
+                    options: linkTypeOptions(),
+                  },
                 },
               }
             ),
@@ -230,15 +242,15 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               ],
             }
           ),
-          logoWidth: YextField(msg("fields.logoWidth", "Logo"), {
+          logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
             type: "number",
-            min: 0,
+            min: 100,
           }),
-          utilityImages: YextField(
-            msg("fields.utilityImages", "Utility Images"),
+          utilityImagesWidth: YextField(
+            msg("fields.utilityImagesWidth", "Utility Images Width"),
             {
               type: "number",
-              min: 0,
+              min: 60,
             }
           ),
         },
@@ -305,24 +317,21 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
     linkedInLink,
     youtubeLink,
     utilityImages,
-    expandedFooterItems,
+    expandedFooterLinks,
     expandedFooter,
   } = primaryFooter;
   const { show, copyrightMessage, secondaryFooterLinks } = secondaryFooter;
-  const {
-    backgroundColor,
-    logoWidth,
-    utilityImages: utilityImagesStyle,
-  } = primaryFooterStyle;
+  const { backgroundColor, logoWidth, utilityImagesWidth } = primaryFooterStyle;
   const { backgroundColor: secondaryBackgroundColor } = secondaryFooterStyle;
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   return (
     <>
       <div
-        className="hidden md:flex flex-col"
+        className="hidden md:flex flex-col min-h-screen"
         aria-label={t("expandedFooterDesktop", "Expanded Footer Desktop")}
       >
+        <div className="flex-1" />
         <PageSection
           as="footer"
           verticalPadding={"footer"}
@@ -330,7 +339,10 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
           className={`flex flex-row justify-start w-full items-start gap-10`}
         >
           <div className="flex flex-col gap-8">
-            <EntityField displayName={pt("fields.logo", "Logo")}>
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.logo", "Logo")}
+            >
               <FooterLogo
                 logo={buildComplexLogoImage(logo, logoWidth)}
                 logoWidth={logoWidth}
@@ -346,6 +358,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
             />
             {utilityImages && utilityImages.length >= 1 && (
               <EntityField
+                constantValueEnabled
                 displayName={pt("fields.utilityImages", "Utility Images")}
               >
                 <div className="grid grid-cols-3 gap-8">
@@ -353,7 +366,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
                     <FooterLogo
                       key={index}
                       logo={buildComplexUtilityImage(item.url, logoWidth)}
-                      logoWidth={utilityImagesStyle}
+                      logoWidth={utilityImagesWidth}
                     />
                   ))}
                 </div>
@@ -365,21 +378,26 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               aria-label={pt("footerLinks", "Footer Links")}
               className="grid grid-cols-1 md:grid-cols-4 w-full text-center"
             >
-              {expandedFooterItems.map((item, index) => (
+              {expandedFooterLinks.map((item, index) => (
                 <EntityField
+                  constantValueEnabled
                   key={index}
                   displayName={pt(
                     "fields.expandedFooterLinks",
                     "Expanded Footer Links"
                   )}
                 >
-                  <ExpandedFooterLinks label={item.label} links={item.links} />
+                  <ExpandedFooterLinks
+                    label={resolveTranslatableString(item.label, i18n.language)}
+                    links={item.links}
+                  />
                 </EntityField>
               ))}
             </div>
           ) : (
             <div className="w-full">
               <EntityField
+                constantValueEnabled
                 displayName={pt("fields.footerLinks", "Footer Links")}
               >
                 <FooterLinks links={footerLinks} type="Primary" />
@@ -390,11 +408,12 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
         {show && (
           <PageSection
             as="footer"
-            verticalPadding={"footer_secondary"}
+            verticalPadding={"footerSecondary"}
             background={secondaryBackgroundColor}
             className={`space-y-5`}
           >
             <EntityField
+              constantValueEnabled
               displayName={pt(
                 "fields.secondaryFooterLinks",
                 "Secondary Footer Links"
@@ -404,9 +423,12 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
             </EntityField>
             {copyrightMessage && (
               <EntityField
+                constantValueEnabled
                 displayName={pt("fields.copyrightMessage", "Copyright Message")}
               >
-                <Body className="text-xs">{copyrightMessage}</Body>
+                <Body variant="xs">
+                  {resolveTranslatableString(copyrightMessage, i18n.language)}
+                </Body>
               </EntityField>
             )}
           </PageSection>
@@ -414,16 +436,20 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
       </div>
       <div
         id="mobile-footer-menu"
-        className={`md:hidden block`}
+        className={`md:hidden flex flex-col min-h-screen`}
         aria-label={t("expandedFooterMobile", "Expanded Footer Mobile")}
       >
+        <div className="flex-1" />
         <PageSection
           as="footer"
           background={backgroundColor}
           verticalPadding={"footer"}
           className="flex flex-col gap-8"
         >
-          <EntityField displayName={pt("fields.logo", "Logo")}>
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.logo", "Logo")}
+          >
             <FooterLogo
               logo={buildComplexLogoImage(logo, logoWidth)}
               logoWidth={logoWidth}
@@ -432,20 +458,27 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
 
           {expandedFooter ? (
             <div className="grid grid-cols-1 w-full gap-6">
-              {expandedFooterItems.map((item, index) => (
+              {expandedFooterLinks.map((item, index) => (
                 <EntityField
+                  constantValueEnabled
                   key={index}
                   displayName={pt(
                     "fields.expandedFooterLinks",
                     "Expanded Footer Links"
                   )}
                 >
-                  <ExpandedFooterLinks label={item.label} links={item.links} />
+                  <ExpandedFooterLinks
+                    label={resolveTranslatableString(item.label, i18n.language)}
+                    links={item.links}
+                  />
                 </EntityField>
               ))}
             </div>
           ) : (
-            <EntityField displayName={pt("fields.footerLinks", "Footer Links")}>
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.footerLinks", "Footer Links")}
+            >
               <FooterLinks links={footerLinks} type="Primary" />
             </EntityField>
           )}
@@ -459,6 +492,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
           />
           {utilityImages && utilityImages.length >= 1 && (
             <EntityField
+              constantValueEnabled
               displayName={pt("fields.utilityImages", "Utility Images")}
             >
               <div className="grid grid-cols-3 gap-8">
@@ -466,36 +500,42 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
                   <FooterLogo
                     key={index}
                     logo={buildComplexUtilityImage(item.url, logoWidth)}
-                    logoWidth={utilityImagesStyle}
+                    logoWidth={utilityImagesWidth}
                   />
                 ))}
               </div>
             </EntityField>
           )}
         </PageSection>
-        <PageSection
-          as="footer"
-          className="flex flex-col gap-5"
-          background={secondaryBackgroundColor}
-          verticalPadding={"footer_secondary"}
-        >
-          <EntityField
-            displayName={pt(
-              "fields.secondaryFooterLinks",
-              "Secondary Footer Links"
-            )}
+        {show && (
+          <PageSection
+            as="footer"
+            className="flex flex-col gap-5"
+            background={secondaryBackgroundColor}
+            verticalPadding={"footerSecondary"}
           >
-            <FooterLinks links={secondaryFooterLinks} type="Secondary" />
-          </EntityField>
-
-          {copyrightMessage && (
             <EntityField
-              displayName={pt("fields.copyrightMessage", "Copyright Message")}
+              constantValueEnabled
+              displayName={pt(
+                "fields.secondaryFooterLinks",
+                "Secondary Footer Links"
+              )}
             >
-              <Body className="text-xs text-center">{copyrightMessage}</Body>
+              <FooterLinks links={secondaryFooterLinks} type="Secondary" />
             </EntityField>
-          )}
-        </PageSection>
+
+            {copyrightMessage && (
+              <EntityField
+                constantValueEnabled
+                displayName={pt("fields.copyrightMessage", "Copyright Message")}
+              >
+                <Body variant="xs" className="text-center">
+                  {resolveTranslatableString(copyrightMessage, i18n.language)}
+                </Body>
+              </EntityField>
+            )}
+          </PageSection>
+        )}
       </div>
     </>
   );
@@ -521,7 +561,7 @@ const FooterLinks = ({
               variant={
                 type === "Primary"
                   ? "headerFooterMainLink"
-                  : "headerSecondaryLink"
+                  : "headerFooterSecondaryLink"
               }
               eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
               label={resolveTranslatableString(item.label, i18n.language)}
@@ -630,74 +670,86 @@ const FooterIcons = ({
   linkedInLink: string;
   youtubeLink: string;
 }) => {
-  const isValid = {
-    x: /^https:\/\/x\.com\/[A-Za-z0-9_]{1,15}$/,
-    facebook: /^https:\/\/(www\.)?facebook\.com\/[A-Za-z0-9.-]+$/,
-    instagram: /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/,
-    pinterest: /^https:\/\/(www\.)?pinterest\.com\/[A-Za-z0-9_-]+\/?$/,
-    linkedin:
-      /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9-%_]+\/?$/,
-    youtube:
-      /^https:\/\/(www\.)?youtube\.com\/(channel|user|c)\/[A-Za-z0-9_-]+\/?$|^https:\/\/youtu\.be\/[A-Za-z0-9_-]+$/,
-  };
+  const { t } = useTranslation();
 
   const icons = [
     {
       link: xLink,
       icon: <FaXTwitter className="h-6 w-6 md:h-5 md:w-5" />,
       label: "X (Twitter)",
-      valid: isValid.x.test(xLink),
+      prefix: "",
+      valid: /^https:\/\/x\.com\/[A-Za-z0-9_]{1,15}$/.test(xLink),
     },
     {
       link: facebookLink,
       icon: <FaFacebook className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Facebook",
-      valid: isValid.facebook.test(facebookLink),
+      prefix: "",
+      valid: /^https:\/\/(www\.)?facebook\.com\/[A-Za-z0-9.-]+$/.test(
+        facebookLink
+      ),
     },
     {
       link: instagramLink,
       icon: <FaInstagram className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Instagram",
-      valid: isValid.instagram.test(instagramLink),
+      prefix: "",
+      valid: /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/.test(
+        instagramLink
+      ),
     },
     {
       link: pinterestLink,
       icon: <FaPinterest className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Pinterest",
-      valid: isValid.pinterest.test(pinterestLink),
+      prefix: "",
+      valid: /^https:\/\/(www\.)?pinterest\.com\/[A-Za-z0-9_-]+\/?$/.test(
+        pinterestLink
+      ),
     },
     {
       link: linkedInLink,
       icon: <FaLinkedinIn className="h-6 w-6 md:h-5 md:w-5" />,
       label: "LinkedIn",
-      valid: isValid.linkedin.test(linkedInLink),
+      prefix: "",
+      valid:
+        /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9-%_]+\/?$/.test(
+          linkedInLink
+        ),
     },
     {
       link: youtubeLink,
       icon: <FaYoutube className="h-6 w-6 md:h-5 md:w-5" />,
       label: "YouTube",
-      valid: isValid.youtube.test(youtubeLink),
+      prefix: "",
+      valid:
+        /^https:\/\/(www\.)?youtube\.com\/(channel|user|c)\/[A-Za-z0-9_-]+$|^https:\/\/youtu\.be\/[A-Za-z0-9_-]+$/.test(
+          youtubeLink
+        ),
     },
   ];
 
-  const filteredIcons = icons.filter((icon) => icon.valid);
+  const filteredIcons = icons.filter(({ valid }) => valid);
 
   if (filteredIcons.length === 0) return null;
 
   return (
-    <EntityField displayName={pt("fields.socialLinks", "Social Links")}>
+    <EntityField
+      constantValueEnabled
+      displayName={pt("fields.socialLinks", "Social Links")}
+    >
       <div className="flex gap-6 items-center justify-center md:justify-start">
         {filteredIcons.map(({ link, icon, label }, index) => (
-          <Link
+          <CTA
             key={index}
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={label}
-            className="text-xl hover:opacity-80 transition-opacity"
-          >
-            {icon}
-          </Link>
+            label={icon}
+            link={link}
+            linkType="URL"
+            variant="link"
+            eventName={`socialLink.${label.toLowerCase()}`}
+            ariaLabel={`${label} ${t("link", "link")}`}
+            alwaysHideCaret={true}
+          />
         ))}
       </div>
     </EntityField>
@@ -707,7 +759,6 @@ const FooterIcons = ({
 export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   label: msg("components.expandedFooter", "Expanded Footer"),
   fields: expandedFooterSectionFields,
-
   defaultProps: {
     data: {
       primaryFooter: {
@@ -715,27 +766,27 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         footerLinks: [
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
         ],
@@ -747,33 +798,33 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         youtubeLink: "",
         utilityImages: [],
         expandedFooter: false,
-        expandedFooterItems: [
+        expandedFooterLinks: [
           {
             label: "Footer Label",
             links: [
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
             ],
@@ -782,58 +833,28 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
             label: "Footer Label",
             links: [
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
-                link: "#",
-              },
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              {
-                linkType: "URL",
-                label: "Footer Link",
-                link: "#",
-              },
-              {
-                linkType: "URL",
-                label: "Footer Link",
-                link: "#",
-              },
-              {
-                linkType: "URL",
-                label: "Footer Link",
-                link: "#",
-              },
-              {
-                linkType: "URL",
-                label: "Footer Link",
-                link: "#",
-              },
-              {
-                linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
             ],
@@ -842,28 +863,58 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
             label: "Footer Label",
             links: [
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
                 link: "#",
               },
               {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
                 linkType: "URL",
-                label: "Footer Link",
+                link: "#",
+              },
+            ],
+          },
+          {
+            label: "Footer Label",
+            links: [
+              {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
+                linkType: "URL",
+                link: "#",
+              },
+              {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
+                linkType: "URL",
+                link: "#",
+              },
+              {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
+                linkType: "URL",
+                link: "#",
+              },
+              {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
+                linkType: "URL",
+                link: "#",
+              },
+              {
+                label: { en: "Footer Link", hasLocalizedValue: "true" },
+                linkType: "URL",
                 link: "#",
               },
             ],
@@ -872,31 +923,31 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       },
       secondaryFooter: {
         show: false,
-        copyrightMessage: "",
+        copyrightMessage: { en: "", hasLocalizedValue: "true" },
         secondaryFooterLinks: [
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
           {
             linkType: "URL",
-            label: "Footer Link",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
         ],
@@ -907,7 +958,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         logoWidth: 100,
         backgroundColor: backgroundColors.background6.value,
         linksAlignment: "left",
-        utilityImages: 60,
+        utilityImagesWidth: 60,
       },
       secondaryFooter: {
         backgroundColor: backgroundColors.background2.value,
