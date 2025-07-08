@@ -236,6 +236,109 @@ const tests: ComponentTest[] = [
       expect(page.getByText("Description")).toBeVisible();
     },
   },
+  {
+    name: "version 7 props with entity values",
+    document: { c_insights: insightsData, name: "test name" },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: { insights: [] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("test name")).toBeVisible();
+      expect(page.getByText("Fresh Flavors Fast")).toBeVisible();
+      expect(page.getByText("Blog")).toBeVisible();
+      expect(page.getByText("2025")).toBeVisible();
+      expect(page.getByText("Read Now")).toBeVisible();
+      expect(page.getByText("Discover how")).toBeVisible();
+      expect(page.getByText("Beyond the Burger")).toBeVisible();
+      expect(page.getByText("wide range")).toBeVisible();
+      expect(page.getByText("Order Now")).toBeVisible();
+      expect(page.getByText("Our Commitment to Community")).toBeVisible();
+      expect(page.getByText("Impact")).toBeVisible();
+      expect(page.getByText("2018")).toBeVisible();
+      expect(page.getByText("farmers")).toBeVisible();
+    },
+  },
+  {
+    name: "version 7 props with constant value",
+    document: { c_insights: insightsData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: true,
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: {
+            insights: [
+              {
+                name: "Insight 1",
+                category: "Category 1",
+                publishTime: "2025-05-14",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          headingLevel: 4,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("Insights")).toBeVisible();
+      expect(page.getByText("Insight 1")).toBeVisible();
+      expect(page.getByText("Category 1")).toBeVisible();
+      expect(page.getByText("2025")).toBeVisible();
+      expect(page.getByText("CTA")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
