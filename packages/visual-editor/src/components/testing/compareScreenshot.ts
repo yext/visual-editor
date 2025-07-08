@@ -51,6 +51,7 @@ export const compareScreenshot: BrowserCommand<
   );
 
   if (numDiffPixels > 0) {
+    // save the updated screenshot
     writeFileSync(filePath, PNG.sync.write(updatedImg));
   }
 

@@ -211,7 +211,7 @@ describe("HeroSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(1000);
+      await delay(500);
 
       await expect(`HeroSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);

@@ -237,7 +237,7 @@ describe("PromoSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(1000);
+      await delay(500);
 
       await expect(
         `PromoSection/[${viewportName}] ${name}`

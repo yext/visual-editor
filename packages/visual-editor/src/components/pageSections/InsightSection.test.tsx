@@ -248,7 +248,7 @@ describe("InsightSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(1000);
+      await delay(500);
 
       await expect(
         `InsightSection/[${viewportName}] ${name}`

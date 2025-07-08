@@ -54,9 +54,8 @@ jobs:
 
       - name: Run component tests (Node 20 only)
         id: run_component_tests
-        # This 'if' condition makes the step run ONLY when node-version is 20.x
         if: matrix.node-version == '20.x'
-        continue-on-error: true # Allow the step to fail without stopping the workflow
+        continue-on-error: true
         run: |
           set +e
           pnpm run test:components
@@ -65,7 +64,6 @@ jobs:
           echo "test_exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
       - name: Detect new/modified screenshots
         id: check_screenshots
-        # This 'if' condition ensures this step runs ONLY if component tests were attempted
         if: matrix.node-version == '20.x'
         run: |
           SCREENSHOTS_DIR="src/components/testing/screenshots" 
@@ -79,7 +77,6 @@ jobs:
           fi
 
       - name: Commit new screenshots and Fail if found
-        # This 'if' condition ensures this step runs ONLY if component tests were attempted
         if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
         run: |
           echo "New or changed screenshots detected, or tests failed. Committing screenshots."
