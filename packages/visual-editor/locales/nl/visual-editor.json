@@ -83,6 +83,7 @@
     "apiKey": "API -sleutel",
     "backgroundColor": "Achtergrondkleur",
     "bannerText": "Banner Tekst",
+    "breadcrumbsBackgroundColor": "Breadcrumbs Achtergrondkleur",
     "businessLogo": "Bedrijfslogo",
     "businessName": "Bedrijfsnaam",
     "businessNameHeadingLevel": "Hoofdniveau bedrijfsniveau",

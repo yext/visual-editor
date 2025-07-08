@@ -83,6 +83,7 @@
     "apiKey": "Klíč API",
     "backgroundColor": "Barva pozadí",
     "bannerText": "Text banneru",
+    "breadcrumbsBackgroundColor": "Barva na pozadí",
     "businessLogo": "Obchodní logo",
     "businessName": "Obchodní jméno",
     "businessNameHeadingLevel": "Úroveň nadpisu obchodního názvu",

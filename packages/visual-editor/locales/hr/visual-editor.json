@@ -83,6 +83,7 @@
     "apiKey": "API ključ",
     "backgroundColor": "Boja pozadine",
     "bannerText": "Tekst natpisa",
+    "breadcrumbsBackgroundColor": "Krušne mrvice boja pozadine",
     "businessLogo": "Poslovni logotip",
     "businessName": "Naziv tvrtke",
     "businessNameHeadingLevel": "Naziv tvrtke Naziv",

@@ -83,6 +83,7 @@
     "apiKey": "API Kľúč",
     "backgroundColor": "Farba pozadia",
     "bannerText": "Text",
+    "breadcrumbsBackgroundColor": "Strúhanka",
     "businessLogo": "Obchodné logo",
     "businessName": "Obchodné meno",
     "businessNameHeadingLevel": "Meno podniku na úroveň nadpisu",

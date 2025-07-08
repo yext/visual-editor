@@ -11,9 +11,12 @@ import {
   YextField,
   TranslatableStringField,
   TranslatableString,
+  BackgroundStyle,
+  Background,
+  BreadcrumbsSectionProps,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AnalyticsScopeProvider,
@@ -24,10 +27,48 @@ export interface DirectoryProps {
   data: {
     directoryRoot: TranslatableString;
   };
+  styles: {
+    backgroundColor?: BackgroundStyle;
+    breadcrumbsBackgroundColor?: BackgroundStyle;
+  };
   analytics?: {
     scope?: string;
   };
 }
+
+const directoryFields: Fields<DirectoryProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      directoryRoot: TranslatableStringField(
+        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        "text"
+      ),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      breadcrumbsBackgroundColor: YextField(
+        msg(
+          "fields.breadcrumbsBackgroundColor",
+          "Breadcrumbs Background Color"
+        ),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+    },
+  }),
+};
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -197,7 +238,7 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = ({ data }: DirectoryProps) => {
+const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   let headingText;
@@ -216,10 +257,11 @@ const DirectoryComponent = ({ data }: DirectoryProps) => {
   }
 
   return (
-    <>
+    <Background background={styles.backgroundColor}>
       <BreadcrumbsComponent
         data={{ directoryRoot: data.directoryRoot }}
         liveVisibility={true}
+        styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
       />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
@@ -242,7 +284,7 @@ const DirectoryComponent = ({ data }: DirectoryProps) => {
             level={document?.meta?.entityType?.id}
           />
         )}
-    </>
+    </Background>
   );
 };
 
@@ -258,6 +300,28 @@ export const Directory: ComponentConfig<DirectoryProps> = {
         ),
       },
     }),
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        backgroundColor: YextField(
+          msg("fields.backgroundColor", "Background Color"),
+          {
+            type: "select",
+            options: "BACKGROUND_COLOR",
+          }
+        ),
+        breadcrumbsBackgroundColor: YextField(
+          msg(
+            "fields.breadcrumbsBackgroundColor",
+            "Breadcrumbs Background Color"
+          ),
+          {
+            type: "select",
+            options: "BACKGROUND_COLOR",
+          }
+        ),
+      },
+    }),
   },
   defaultProps: {
     data: {
@@ -265,6 +329,10 @@ export const Directory: ComponentConfig<DirectoryProps> = {
         en: "Directory Root",
         hasLocalizedValue: "true",
       },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      breadcrumbsBackgroundColor: backgroundColors.background1.value,
     },
     analytics: {
       scope: "directory",

@@ -83,6 +83,7 @@
     "apiKey": "API鍵",
     "backgroundColor": "背景顏色",
     "bannerText": "橫幅文字",
+    "breadcrumbsBackgroundColor": "麵包屑背景顏色",
     "businessLogo": "業務徽標",
     "businessName": "業務名稱",
     "businessNameHeadingLevel": "企業名稱標題級別",

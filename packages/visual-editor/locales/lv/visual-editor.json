@@ -83,6 +83,7 @@
     "apiKey": "API atslēga",
     "backgroundColor": "Fona krāsa",
     "bannerText": "Reklāmkarogu teksts",
+    "breadcrumbsBackgroundColor": "Rīvmaizes fona krāsa",
     "businessLogo": "Biznesa logotips",
     "businessName": "Uzņēmuma nosaukums",
     "businessNameHeadingLevel": "Uzņēmuma nosaukuma virsraksta līmenis",

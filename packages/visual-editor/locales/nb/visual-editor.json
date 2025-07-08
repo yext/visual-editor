@@ -83,6 +83,7 @@
     "apiKey": "API -nøkkel",
     "backgroundColor": "Bakgrunnsfarge",
     "bannerText": "Bannertekst",
+    "breadcrumbsBackgroundColor": "Brødsmuler bakgrunnsfarge",
     "businessLogo": "Forretningslogo",
     "businessName": "Forretningsnavn",
     "businessNameHeadingLevel": "Bedriftsnavnet overskriftsnivå",

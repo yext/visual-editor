@@ -83,6 +83,7 @@
     "apiKey": "API Key",
     "backgroundColor": "Background Color",
     "bannerText": "Banner Text",
+    "breadcrumbsBackgroundColor": "Breadcrumbs Background Color",
     "businessLogo": "Business Logo",
     "businessName": "Business Name",
     "businessNameHeadingLevel": "Business Name Heading Level",
