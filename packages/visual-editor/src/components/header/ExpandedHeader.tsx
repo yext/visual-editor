@@ -57,7 +57,6 @@ export interface ExpandedHeaderProps {
       backgroundColor?: BackgroundStyle;
       primaryCtaVariant: CTAProps["variant"];
       secondaryCtaVariant: CTAProps["variant"];
-      align: "left" | "right";
     };
     secondaryHeader: {
       backgroundColor?: BackgroundStyle;
@@ -210,13 +209,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               options: "CTA_VARIANT",
             }
           ),
-          align: YextField(msg("fields.align", "Align"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.left", "Left"), value: "left" },
-              { label: msg("fields.options.right", "Right"), value: "right" },
-            ],
-          }),
         },
       }),
       secondaryHeader: YextField(
@@ -647,7 +639,6 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         backgroundColor: backgroundColors.background1.value,
         primaryCtaVariant: "primary",
         secondaryCtaVariant: "secondary",
-        align: "left",
       },
       secondaryHeader: {
         backgroundColor: backgroundColors.background2.value,
