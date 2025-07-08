@@ -75,7 +75,7 @@ const tests: ComponentTest[] = [
           bgColor: "bg-palette-primary-dark",
           textColor: "text-white",
         },
-        headingLevel: 6,
+        headingLevel: 4,
       },
       data: {
         heading: {
@@ -193,6 +193,57 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 1,
+    tests: async (page) => {
+      expect(page.getByText("Featured Testimonials")).toBeVisible();
+      expect(page.getByText("Name")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("Jan 1, 2025")).toBeVisible();
+    },
+  },
+  {
+    name: "version 7 props with constant value",
+    document: { c_testimonials: testimonialData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Featured Testimonials",
+          constantValueEnabled: true,
+        },
+        testimonials: {
+          field: "c_testimonials",
+          constantValue: {
+            testimonials: [
+              {
+                description: "Description",
+                contributorName: "Name",
+                contributionDate: "2025-01-01",
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
     tests: async (page) => {
       expect(page.getByText("Featured Testimonials")).toBeVisible();
       expect(page.getByText("Name")).toBeVisible();

@@ -37,10 +37,13 @@ export interface ProductSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
     };
   };
   analytics?: {
@@ -78,17 +81,10 @@ const productSectionFields: Fields<ProductSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -97,6 +93,23 @@ const productSectionFields: Fields<ProductSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -116,19 +129,17 @@ const productSectionFields: Fields<ProductSectionProps> = {
 const ProductCard = ({
   cardNumber,
   product,
-  backgroundColor,
-  sectionHeadingLevel,
+  cardStyles,
 }: {
   cardNumber: number;
   product: ProductStruct;
-  backgroundColor?: BackgroundStyle;
-  sectionHeadingLevel: HeadingLevel;
+  cardStyles: ProductSectionProps["styles"]["cards"];
 }) => {
   const { i18n } = useTranslation();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
-      background={backgroundColor}
+      background={cardStyles.backgroundColor}
     >
       {product.image ? (
         <Image
@@ -142,15 +153,7 @@ const ProductCard = ({
       <div className="p-8 gap-8 flex flex-col flex-grow">
         <div className="gap-4 flex flex-col">
           {product.name && (
-            <Heading
-              level={3}
-              semanticLevelOverride={
-                sectionHeadingLevel < 6
-                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
-                  : "span"
-              }
-              className="mb-2"
-            >
+            <Heading level={cardStyles.headingLevel} className="mb-2">
               {resolveTranslatableString(product.name, i18n.language)}
             </Heading>
           )}
@@ -210,9 +213,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
           constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className={`flex ${justifyClass}`}>
-            <Heading level={styles?.heading?.level ?? 2}>
-              {resolvedHeading}
-            </Heading>
+            <Heading level={styles?.heading?.level}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
@@ -228,8 +229,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 key={index}
                 cardNumber={index}
                 product={product}
-                backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.heading.level}
+                cardStyles={styles.cards}
               />
             ))}
           </div>
@@ -259,10 +259,13 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
       },
     },
     analytics: {

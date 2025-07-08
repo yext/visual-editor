@@ -34,10 +34,13 @@ export interface TestimonialSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
     };
   };
   liveVisibility: boolean;
@@ -75,17 +78,10 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -94,6 +90,23 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -112,12 +125,10 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
 
 const TestimonialCard = ({
   testimonial,
-  backgroundColor,
-  sectionHeadingLevel,
+  cardStyles,
 }: {
   testimonial: TestimonialStruct;
-  backgroundColor?: BackgroundStyle;
-  sectionHeadingLevel: HeadingLevel;
+  cardStyles: TestimonialSectionProps["styles"]["cards"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -129,16 +140,9 @@ const TestimonialCard = ({
       >
         {resolveTranslatableRichText(testimonial.description, i18n.language)}
       </Background>
-      <Background background={backgroundColor} className="p-8">
+      <Background background={cardStyles.backgroundColor} className="p-8">
         {testimonial.contributorName && (
-          <Heading
-            level={3}
-            semanticLevelOverride={
-              sectionHeadingLevel < 6
-                ? ((sectionHeadingLevel + 1) as HeadingLevel)
-                : "span"
-            }
-          >
+          <Heading level={cardStyles.headingLevel}>
             {resolveTranslatableString(
               testimonial.contributorName,
               i18n.language
@@ -207,8 +211,7 @@ const TestimonialSectionWrapper = ({
               <TestimonialCard
                 key={index}
                 testimonial={testimonial}
-                backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles?.heading?.level}
+                cardStyles={styles.cards}
               />
             ))}
           </div>
@@ -224,10 +227,13 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
       },
     },
     data: {

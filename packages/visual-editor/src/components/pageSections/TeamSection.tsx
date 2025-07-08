@@ -32,17 +32,20 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultPerson } from "../../internal/puck/constant-value-fields/TeamSection.tsx";
 
 export interface TeamSectionProps {
+  data: {
+    heading: YextEntityField<TranslatableString>;
+    people: YextEntityField<TeamSectionType>;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
-  };
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    people: YextEntityField<TeamSectionType>;
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
   };
   analytics?: {
     scope?: string;
@@ -79,17 +82,10 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -98,6 +94,23 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -117,19 +130,20 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
 const PersonCard = ({
   cardNumber,
   person,
-  backgroundColor,
-  sectionHeadingLevel,
+  cardStyles,
 }: {
   cardNumber: number;
   person: PersonStruct;
-  backgroundColor?: BackgroundStyle;
-  sectionHeadingLevel: HeadingLevel;
+  cardStyles: TeamSectionProps["styles"]["cards"];
 }) => {
   const { i18n } = useTranslation();
 
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
-      <Background background={backgroundColor} className="flex p-8 gap-6">
+      <Background
+        background={cardStyles.backgroundColor}
+        className="flex p-8 gap-6"
+      >
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {person.headshot && (
             <Image
@@ -144,14 +158,7 @@ const PersonCard = ({
         </div>
         <div className="flex flex-col justify-center gap-1">
           {person.name && (
-            <Heading
-              level={3}
-              semanticLevelOverride={
-                sectionHeadingLevel < 6
-                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
-                  : "span"
-              }
-            >
+            <Heading level={cardStyles.headingLevel}>
               {resolveTranslatableString(person.name, i18n.language)}
             </Heading>
           )}
@@ -262,8 +269,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 key={index}
                 cardNumber={index}
                 person={person}
-                backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.heading.level}
+                cardStyles={styles.cards}
               />
             ))}
           </div>
@@ -293,10 +299,13 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
       },
     },
     analytics: {

@@ -25,7 +25,7 @@ const productsData = {
         linkType: "OTHER",
       },
       description: {
-        html: '\u003ch1 dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"\u003e\u003cspan\u003eOur signature burger! A juicy beef patty topped with melted cheese, crisp lettuce, ripe tomato, and our special Galaxy sauce, all served on a toasted sesame seed bun.\u003c/span\u003e\u003c/p\u003e',
+        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our signature burger! A juicy beef patty topped with melted cheese, crisp lettuce, ripe tomato, and our special Galaxy sauce, all served on a toasted sesame seed bun.</span></p>',
       },
       image: {
         height: 2048,
@@ -160,7 +160,7 @@ const tests: ComponentTest[] = [
           textColor: "text-white",
         },
         cardBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-        headingLevel: 6,
+        headingLevel: 5,
       },
       liveVisibility: true,
     },
@@ -215,6 +215,108 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
+    tests: async (page) => {
+      expect(page.getByText("Featured Products")).toBeVisible();
+      expect(page.getByText("Product 1")).toBeVisible();
+      expect(page.getByText("Category")).toBeVisible();
+      expect(page.getByText("Description")).toBeVisible();
+      expect(page.getByText("CTA")).toBeVisible();
+    },
+  },
+  {
+    name: "version 7 props with entity values",
+    document: { c_products: productsData, name: "Test Name" },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Featured Products",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        products: {
+          field: "c_products",
+          constantValue: { products: [] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+    tests: async (page) => {
+      expect(page.getByText("Test Name")).toBeVisible();
+      expect(page.getByText("Galaxy Burger")).toBeVisible();
+      expect(page.getByText("Burgers")).toBeVisible();
+      expect(page.getByText("Order Now").elements()).toHaveLength(2);
+      expect(page.getByText("Galaxy Salad")).toBeVisible();
+      expect(page.getByText("Galaxy Milkshake")).toBeVisible();
+      expect(page.getByText("Desserts")).toBeVisible();
+      expect(page.getByText("cherry")).toBeVisible();
+    },
+  },
+  {
+    name: "version 7 props with constant value",
+    document: { c_products: productsData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Featured Products",
+          constantValueEnabled: true,
+        },
+        products: {
+          field: "c_products",
+          constantValue: {
+            products: [
+              {
+                name: "Product 1",
+                category: "Category",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
     tests: async (page) => {
       expect(page.getByText("Featured Products")).toBeVisible();
       expect(page.getByText("Product 1")).toBeVisible();
