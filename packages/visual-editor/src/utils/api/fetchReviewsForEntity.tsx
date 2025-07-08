@@ -36,11 +36,8 @@ export const fetchReviewsForEntity = async ({
   }
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(response.statusText);
   }
-  const data = await response.json();
-  if (data?.meta?.errors && data.meta.errors.length > 0) {
-    throw new Error("API returned errors: " + JSON.stringify(data.meta.errors));
-  }
-  return data;
+
+  return await response.json();
 };

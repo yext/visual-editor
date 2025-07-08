@@ -51,26 +51,25 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
   const document: any = useDocument();
+  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  if (!apiKey) {
+    console.warn(
+      "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
+    );
+    return <></>;
+  }
   const businessId: number = Number(document?.businessId);
   const contentDeliveryAPIDomain = "ignored"; // TODO: document?._yext?.contentDeliveryAPIDomain;
   const entityId = TEMP_ENTITY_ID; // TODO: document?.uid
-  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
-  if (!businessId || !contentDeliveryAPIDomain || !entityId || !apiKey) {
-    console.error("Missing required parameters for reviews content endpoint.");
-    return <></>;
-  }
   const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
     {}
   );
-  const [nextPageToken, setNextPageToken] = React.useState<
-    string | undefined
-  >();
 
   const {
     data: reviews,
+    status: reviewsStatus,
     isLoading,
-    error,
   } = useQuery({
     queryKey: [
       "reviews",
@@ -97,7 +96,6 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
         ...prev,
         [currentPageNumber + 1]: reviews.response.nextPageToken,
       }));
-      setNextPageToken(reviews.response.nextPageToken);
     }
   }, [reviews, currentPageNumber]);
 
@@ -105,21 +103,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   const totalReviews = aggregateRating?.reviewCount || 0;
   const averageRating = Number(aggregateRating?.ratingValue) || 0;
 
-  if (error) {
-    console.error("Error fetching reviews:", error);
-    return <></>;
-  }
-
-  React.useEffect(() => {
-    if (nextPageToken) {
-      setPageTokens((prev) => ({
-        ...prev,
-        [currentPageNumber + 1]: nextPageToken,
-      }));
-    }
-  }, [nextPageToken]);
-
-  if (!isLoading && totalReviews === 0) {
+  if (reviewsStatus !== "success" || (!isLoading && totalReviews === 0)) {
     return <></>;
   }
 
