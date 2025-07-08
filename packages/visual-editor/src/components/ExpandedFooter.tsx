@@ -3,7 +3,7 @@ import {
   AnalyticsScopeProvider,
   ComplexImageType,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
   EntityField,
   MaybeLink,
@@ -21,6 +21,8 @@ import {
   PageSection,
   TranslatableStringField,
   TranslatableString,
+  ImageWrapperProps,
+  Background,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -32,6 +34,7 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { linkTypeOptions } from "../internal/puck/constant-value-fields/CallToAction.tsx";
+import { ImageWrapperFields } from "./contentBlocks/Image.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
@@ -45,7 +48,7 @@ export interface ExpandedFooterProps {
       pinterestLink: string;
       linkedInLink: string;
       youtubeLink: string;
-      utilityImages: { url: string }[];
+      utilityImages: { url: string; linkTarget?: string }[];
       expandedFooter: boolean;
       footerLinks: TranslatableCTA[];
       expandedFooterLinks: {
@@ -63,8 +66,14 @@ export interface ExpandedFooterProps {
     primaryFooter: {
       backgroundColor?: BackgroundStyle;
       linksAlignment: "left" | "right";
-      logoWidth: number;
-      utilityImagesWidth: number;
+      logoStyles: {
+        logoWidth: number;
+        aspectRatioForLogo: ImageWrapperProps["aspectRatio"];
+      };
+      utilityImagesStyles: {
+        utilityImagesWidth: number;
+        aspectRatioForUtilityImages: ImageWrapperProps["aspectRatio"];
+      };
     };
     secondaryFooter: {
       backgroundColor?: BackgroundStyle;
@@ -116,7 +125,12 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                url: YextField("Image URL", { type: "text" }),
+                url: YextField(msg("fields.imageUrl", "Image URL"), {
+                  type: "text",
+                }),
+                linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
+                  type: "text",
+                }),
               },
             }
           ),
@@ -242,15 +256,45 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               ],
             }
           ),
-          logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
-            type: "number",
-            min: 100,
+          logoStyles: YextField(msg("fields.logoStyles", "Logo Styles"), {
+            type: "object",
+            objectFields: {
+              logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
+                type: "number",
+              }),
+              aspectRatioForLogo:
+                ImageWrapperFields.aspectRatio ??
+                YextField(
+                  msg("fields.aspectRatioForLogo", "Aspect Ratio for Logo"),
+                  {
+                    type: "number",
+                  }
+                ),
+            },
           }),
-          utilityImagesWidth: YextField(
-            msg("fields.utilityImagesWidth", "Utility Images Width"),
+          utilityImagesStyles: YextField(
+            msg("fields.utilityImagesStyles", "Utility Images Styles"),
             {
-              type: "number",
-              min: 60,
+              type: "object",
+              objectFields: {
+                utilityImagesWidth: YextField(
+                  msg("fields.utilityImagesWidth", "Utility Images Width"),
+                  {
+                    type: "number",
+                  }
+                ),
+                aspectRatioForUtilityImages:
+                  ImageWrapperFields.aspectRatio ??
+                  YextField(
+                    msg(
+                      "fields.aspectRatioForUtilityImages",
+                      "Aspect Ratio for Utility Images"
+                    ),
+                    {
+                      type: "number",
+                    }
+                  ),
+              },
             }
           ),
         },
@@ -298,10 +342,11 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
   ),
 };
 
-const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
+const ExpandedFooterWrapper = ({
   data,
   styles,
-}: ExpandedFooterProps) => {
+  puck,
+}: WithId<WithPuckProps<ExpandedFooterProps>>) => {
   const { primaryFooter, secondaryFooter } = data;
   const {
     primaryFooter: primaryFooterStyle,
@@ -321,33 +366,38 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
     expandedFooter,
   } = primaryFooter;
   const { show, copyrightMessage, secondaryFooterLinks } = secondaryFooter;
-  const { backgroundColor, logoWidth, utilityImagesWidth } = primaryFooterStyle;
-  const { backgroundColor: secondaryBackgroundColor } = secondaryFooterStyle;
-  const { i18n, t } = useTranslation();
+  const {
+    linksAlignment: primaryLinksAlignment,
+    backgroundColor,
+    logoStyles: { logoWidth, aspectRatioForLogo },
+    utilityImagesStyles: { utilityImagesWidth, aspectRatioForUtilityImages },
+  } = primaryFooterStyle;
+  const {
+    backgroundColor: secondaryBackgroundColor,
+    linksAlignment: secondaryLinksAlignment,
+  } = secondaryFooterStyle;
+  const { i18n } = useTranslation();
 
   return (
-    <>
-      <div
-        className="hidden md:flex flex-col min-h-screen"
-        aria-label={t("expandedFooterDesktop", "Expanded Footer Desktop")}
+    <Background className="mt-auto" ref={puck.dragRef}>
+      <PageSection
+        as="footer"
+        verticalPadding={"footer"}
+        background={backgroundColor}
+        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`}  md:justify-start w-full md:items-start  gap-8 md:gap-10`}
       >
-        <div className="flex-1" />
-        <PageSection
-          as="footer"
-          verticalPadding={"footer"}
-          background={backgroundColor}
-          className={`flex flex-row justify-start w-full items-start gap-10`}
-        >
-          <div className="flex flex-col gap-8">
-            <EntityField
-              constantValueEnabled
-              displayName={pt("fields.logo", "Logo")}
-            >
-              <FooterLogo
-                logo={buildComplexLogoImage(logo, logoWidth)}
-                logoWidth={logoWidth}
-              />
-            </EntityField>
+        <div className="flex flex-col gap-10 md:gap-8">
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.logo", "Logo")}
+          >
+            <FooterLogo
+              aspectRatio={aspectRatioForLogo}
+              logo={buildComplexLogoImage(logo, logoWidth)}
+              logoWidth={logoWidth}
+            />
+          </EntityField>
+          <div className="hidden md:block space-y-8">
             <FooterIcons
               xLink={xLink}
               facebookLink={facebookLink}
@@ -364,6 +414,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
                 <div className="grid grid-cols-3 gap-8">
                   {utilityImages.map((item, index) => (
                     <FooterLogo
+                      aspectRatio={aspectRatioForUtilityImages}
                       key={index}
                       logo={buildComplexUtilityImage(item.url, logoWidth)}
                       logoWidth={utilityImagesWidth}
@@ -373,115 +424,36 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               </EntityField>
             )}
           </div>
-          {expandedFooter ? (
-            <div
-              aria-label={pt("footerLinks", "Footer Links")}
-              className="grid grid-cols-1 md:grid-cols-4 w-full text-center"
-            >
-              {expandedFooterLinks.map((item, index) => (
-                <EntityField
-                  constantValueEnabled
-                  key={index}
-                  displayName={pt(
-                    "fields.expandedFooterLinks",
-                    "Expanded Footer Links"
-                  )}
-                >
-                  <ExpandedFooterLinks
-                    label={resolveTranslatableString(item.label, i18n.language)}
-                    links={item.links}
-                  />
-                </EntityField>
-              ))}
-            </div>
-          ) : (
-            <div className="w-full">
+        </div>
+        {expandedFooter ? (
+          <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6 md:gap-0">
+            {expandedFooterLinks.map((item, index) => (
               <EntityField
                 constantValueEnabled
-                displayName={pt("fields.footerLinks", "Footer Links")}
+                key={index}
+                displayName={pt(
+                  "fields.expandedFooterLinks",
+                  "Expanded Footer Links"
+                )}
               >
-                <FooterLinks links={footerLinks} type="Primary" />
+                <ExpandedFooterLinks
+                  label={resolveTranslatableString(item.label, i18n.language)}
+                  links={item.links}
+                />
               </EntityField>
-            </div>
-          )}
-        </PageSection>
-        {show && (
-          <PageSection
-            as="footer"
-            verticalPadding={"footerSecondary"}
-            background={secondaryBackgroundColor}
-            className={`space-y-5`}
-          >
-            <EntityField
-              constantValueEnabled
-              displayName={pt(
-                "fields.secondaryFooterLinks",
-                "Secondary Footer Links"
-              )}
-            >
-              <FooterLinks links={secondaryFooterLinks} type="Secondary" />
-            </EntityField>
-            {copyrightMessage && (
-              <EntityField
-                constantValueEnabled
-                displayName={pt("fields.copyrightMessage", "Copyright Message")}
-              >
-                <Body variant="xs">
-                  {resolveTranslatableString(copyrightMessage, i18n.language)}
-                </Body>
-              </EntityField>
-            )}
-          </PageSection>
-        )}
-      </div>
-      <div
-        id="mobile-footer-menu"
-        className={`md:hidden flex flex-col min-h-screen`}
-        aria-label={t("expandedFooterMobile", "Expanded Footer Mobile")}
-      >
-        <div className="flex-1" />
-        <PageSection
-          as="footer"
-          background={backgroundColor}
-          verticalPadding={"footer"}
-          className="flex flex-col gap-8"
-        >
-          <EntityField
-            constantValueEnabled
-            displayName={pt("fields.logo", "Logo")}
-          >
-            <FooterLogo
-              logo={buildComplexLogoImage(logo, logoWidth)}
-              logoWidth={logoWidth}
-            />
-          </EntityField>
-
-          {expandedFooter ? (
-            <div className="grid grid-cols-1 w-full gap-6">
-              {expandedFooterLinks.map((item, index) => (
-                <EntityField
-                  constantValueEnabled
-                  key={index}
-                  displayName={pt(
-                    "fields.expandedFooterLinks",
-                    "Expanded Footer Links"
-                  )}
-                >
-                  <ExpandedFooterLinks
-                    label={resolveTranslatableString(item.label, i18n.language)}
-                    links={item.links}
-                  />
-                </EntityField>
-              ))}
-            </div>
-          ) : (
+            ))}
+          </div>
+        ) : (
+          <div className="w-full">
             <EntityField
               constantValueEnabled
               displayName={pt("fields.footerLinks", "Footer Links")}
             >
               <FooterLinks links={footerLinks} type="Primary" />
             </EntityField>
-          )}
+          </div>
+        )}
+        <div className="md:hidden block space-y-10">
           <FooterIcons
             xLink={xLink}
             facebookLink={facebookLink}
@@ -498,6 +470,7 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               <div className="grid grid-cols-3 gap-8">
                 {utilityImages.map((item, index) => (
                   <FooterLogo
+                    aspectRatio={aspectRatioForUtilityImages}
                     key={index}
                     logo={buildComplexUtilityImage(item.url, logoWidth)}
                     logoWidth={utilityImagesWidth}
@@ -506,38 +479,37 @@ const ExpandedFooterWrapper: React.FC<ExpandedFooterProps> = ({
               </div>
             </EntityField>
           )}
-        </PageSection>
-        {show && (
-          <PageSection
-            as="footer"
-            className="flex flex-col gap-5"
-            background={secondaryBackgroundColor}
-            verticalPadding={"footerSecondary"}
+        </div>
+      </PageSection>
+      {show && (
+        <PageSection
+          as="footer"
+          verticalPadding={"footerSecondary"}
+          background={secondaryBackgroundColor}
+          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
+        >
+          <EntityField
+            constantValueEnabled
+            displayName={pt(
+              "fields.secondaryFooterLinks",
+              "Secondary Footer Links"
+            )}
           >
+            <FooterLinks links={secondaryFooterLinks} type="Secondary" />
+          </EntityField>
+          {copyrightMessage && (
             <EntityField
               constantValueEnabled
-              displayName={pt(
-                "fields.secondaryFooterLinks",
-                "Secondary Footer Links"
-              )}
+              displayName={pt("fields.copyrightMessage", "Copyright Message")}
             >
-              <FooterLinks links={secondaryFooterLinks} type="Secondary" />
+              <Body variant="xs" className="text-center md:text-left">
+                {resolveTranslatableString(copyrightMessage, i18n.language)}
+              </Body>
             </EntityField>
-
-            {copyrightMessage && (
-              <EntityField
-                constantValueEnabled
-                displayName={pt("fields.copyrightMessage", "Copyright Message")}
-              >
-                <Body variant="xs" className="text-center">
-                  {resolveTranslatableString(copyrightMessage, i18n.language)}
-                </Body>
-              </EntityField>
-            )}
-          </PageSection>
-        )}
-      </div>
-    </>
+          )}
+        </PageSection>
+      )}
+    </Background>
   );
 };
 
@@ -610,9 +582,10 @@ const FooterLogo = (props: {
   logo: ComplexImageType;
   logoLink?: string;
   logoWidth?: number;
+  aspectRatio: any;
 }) => {
   return (
-    <MaybeLink href={props.logoLink}>
+    <MaybeLink href={props.logoLink} alwaysHideCaret={true}>
       <div
         className="mx-auto md:ml-0"
         style={{ width: `${props.logoWidth}px` }}
@@ -620,7 +593,10 @@ const FooterLogo = (props: {
         <Image
           image={props.logo.image}
           layout="auto"
-          aspectRatio={props.logo.image.width / props.logo.image.height}
+          aspectRatio={
+            props.aspectRatio ||
+            props.logo.image.width / props.logo.image.height
+          }
         />
       </div>
     </MaybeLink>
@@ -955,10 +931,16 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
     },
     styles: {
       primaryFooter: {
-        logoWidth: 100,
+        logoStyles: {
+          logoWidth: 100,
+          aspectRatioForLogo: 1.78,
+        },
+        utilityImagesStyles: {
+          utilityImagesWidth: 60,
+          aspectRatioForUtilityImages: 1,
+        },
         backgroundColor: backgroundColors.background6.value,
-        linksAlignment: "left",
-        utilityImagesWidth: 60,
+        linksAlignment: "right",
       },
       secondaryFooter: {
         backgroundColor: backgroundColors.background2.value,
@@ -1034,6 +1016,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       },
     };
   },
+  inline: true,
   render: (props) => (
     <AnalyticsScopeProvider name={props.analytics?.scope ?? "expandedFooter"}>
       <VisibilityWrapper
