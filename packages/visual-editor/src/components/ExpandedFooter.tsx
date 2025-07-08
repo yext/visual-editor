@@ -468,14 +468,16 @@ const ExpandedFooterWrapper = ({
               displayName={pt("fields.utilityImages", "Utility Images")}
             >
               <div className="grid grid-cols-3 gap-8">
-                {utilityImages.map((item, index) => (
-                  <FooterLogo
-                    aspectRatio={aspectRatioForUtilityImages}
-                    key={index}
-                    logo={buildComplexUtilityImage(item.url, logoWidth)}
-                    logoWidth={utilityImagesWidth}
-                  />
-                ))}
+                <div className="col-span-3 flex justify-center">
+                  {utilityImages.map((item, index) => (
+                    <FooterLogo
+                      aspectRatio={aspectRatioForUtilityImages}
+                      key={index}
+                      logo={buildComplexUtilityImage(item.url, logoWidth)}
+                      logoWidth={utilityImagesWidth}
+                    />
+                  ))}
+                </div>
               </div>
             </EntityField>
           )}
