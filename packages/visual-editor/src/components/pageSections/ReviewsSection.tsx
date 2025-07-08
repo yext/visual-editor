@@ -299,7 +299,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
   const expandableContentData = {
     content: content,
     preContentElement: reviewStars,
-    analyticsEventName: `review${index}`,
+    analyticsName: `review${index}`,
   };
   return <ExpandableContent {...expandableContentData} />;
 };
@@ -329,7 +329,7 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
   const expandableContentData = {
     content: content,
     preContentElement: authorWithDate,
-    analyticsEventName: `businessResponse${index}`,
+    analyticsName: `businessResponse${index}`,
   };
   return <ExpandableContent {...expandableContentData} />;
 };
@@ -337,13 +337,13 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
 interface ExpandableContentProps {
   content: string;
   preContentElement?: React.ReactNode;
-  analyticsEventName: string;
+  analyticsName: string;
 }
 
 const ExpandableContent: React.FC<ExpandableContentProps> = ({
   content,
   preContentElement,
-  analyticsEventName,
+  analyticsName,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [isTruncated, setIsTruncated] = React.useState(false);
@@ -374,7 +374,7 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
         <ShowMoreButton
           expanded={expanded}
           setExpanded={setExpanded}
-          analyticsEventName={analyticsEventName}
+          analyticsName={analyticsName}
         />
       )}
     </div>
@@ -483,8 +483,8 @@ const PageScroller: React.FC<PageScrollerProps> = ({
 const ShowMoreButton: React.FC<{
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
-  analyticsEventName: string;
-}> = ({ expanded, setExpanded, analyticsEventName }) => {
+  analyticsName: string;
+}> = ({ expanded, setExpanded, analyticsName }) => {
   const { t } = useTranslation();
   const analytics = useAnalytics();
   return (
@@ -494,11 +494,11 @@ const ShowMoreButton: React.FC<{
         expanded // the existing state before toggling
           ? analytics?.track({
               action: "EXPAND",
-              eventName: analyticsEventName,
+              eventName: `${analyticsName}-showMore`,
             })
           : analytics?.track({
               action: "COLLAPSE",
-              eventName: analyticsEventName,
+              eventName: `${analyticsName}-showMore`,
             });
         setExpanded(!expanded);
       }}
@@ -507,7 +507,7 @@ const ShowMoreButton: React.FC<{
         analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
       }
       data-ya-eventname={
-        analytics?.getDebugEnabled() ? analyticsEventName : undefined
+        analytics?.getDebugEnabled() ? `${analyticsName}-showMore` : undefined
       }
     >
       {expanded ? t("showLess", "Show less") : t("showMore", "Show more")}
