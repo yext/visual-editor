@@ -84,7 +84,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
