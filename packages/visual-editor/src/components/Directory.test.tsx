@@ -1,5 +1,5 @@
 import * as React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   axe,
   ComponentTest,
@@ -219,6 +219,7 @@ describe("Directory", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -226,6 +227,7 @@ describe("Directory", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(1000);
 
       await expect(`Directory/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);

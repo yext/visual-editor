@@ -4,7 +4,7 @@ import { defaultThemeConfig, applyTheme } from "@yext/visual-editor";
 import "./componentTests.css";
 // Enabled expect().toHaveNoViolations()
 import "jest-axe/extend-expect";
-import { expect } from "vitest";
+import { expect, vi } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
 
 expect.extend({
@@ -32,18 +32,18 @@ expect.extend({
   },
 });
 
-// Applies the theme variables
+// Applies the theme variables and mocks the date
 beforeEach(() => {
+  // July 1, 2025 Noon (month is 0-indexed)
+  vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
+
   const tag = document.createElement("style");
   const themeTags = applyTheme({}, defaultThemeConfig);
 
-  // we only need to load Open Sans for the tests
+  // don't load fonts
   const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);
   if (match && match[0]) {
-    const theme = `<link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-      ${match[0]}`;
+    const theme = match[0];
 
     document.head.appendChild(tag);
     tag.outerHTML = theme;

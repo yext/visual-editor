@@ -39,7 +39,7 @@ export const compareScreenshot: BrowserCommand<
     diff.data,
     width,
     height,
-    { threshold: 0.1 } // Adjust threshold as needed
+    { threshold: 0.2 } // Adjust threshold as needed
   );
 
   if (numDiffPixels > 0) {

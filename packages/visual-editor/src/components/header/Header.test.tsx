@@ -116,6 +116,7 @@ describe("Header", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -123,6 +124,7 @@ describe("Header", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(1000);
 
       await expect(`Header/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);

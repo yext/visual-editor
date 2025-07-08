@@ -1,5 +1,5 @@
 import * as React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   axe,
   ComponentTest,
@@ -410,6 +410,7 @@ describe("PhotoGallerySection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -417,6 +418,7 @@ describe("PhotoGallerySection", async () => {
       );
 
       await page.viewport(width, height);
+      await delay(1000);
 
       await expect(
         `PhotoGallerySection/[${viewportName}] ${name}`
