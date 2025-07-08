@@ -34,7 +34,9 @@ export const compareScreenshot: BrowserCommand<
   const diff = new PNG({ width, height });
 
   if (height !== updatedImg.height) {
-    console.warn("Screenshot heights did not match");
+    console.warn(
+      `Screenshot heights did not match (existing ${height}, updated ${height})`
+    );
     writeFileSync(filePath, PNG.sync.write(updatedImg));
     return Math.abs(updatedImg.height - height) * width;
   }
@@ -45,7 +47,7 @@ export const compareScreenshot: BrowserCommand<
     diff.data,
     width,
     height,
-    { threshold: 0.3 } // Adjust threshold as needed
+    { threshold: 0.25 } // the per-pixel color difference threshold
   );
 
   if (numDiffPixels > 0) {

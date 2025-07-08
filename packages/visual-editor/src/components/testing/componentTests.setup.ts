@@ -7,6 +7,29 @@ import "jest-axe/extend-expect";
 import { expect, vi } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
 
+// Applies the theme variables and mocks the date
+beforeEach(() => {
+  // July 1, 2025 Noon (month is 0-indexed)
+  vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
+
+  const tag = document.createElement("style");
+  const themeTags = applyTheme({}, defaultThemeConfig);
+
+  // don't load fonts
+  const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);
+  if (match && match[0]) {
+    const theme = match[0];
+
+    document.head.appendChild(tag);
+    tag.outerHTML = theme;
+  } else {
+    console.error("failed to apply theme");
+  }
+});
+
+// Adds the toMatchScreenshot method to vitest's expect.
+// This portion is run in the browser environment while
+// compareScreenshot is run in the node environment.
 expect.extend({
   async toMatchScreenshot(screenshotName: string) {
     const updatedScreenshotData = await page.screenshot({
@@ -30,26 +53,6 @@ expect.extend({
       message: () => "Screenshots matched",
     };
   },
-});
-
-// Applies the theme variables and mocks the date
-beforeEach(() => {
-  // July 1, 2025 Noon (month is 0-indexed)
-  vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
-
-  const tag = document.createElement("style");
-  const themeTags = applyTheme({}, defaultThemeConfig);
-
-  // don't load fonts
-  const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);
-  if (match && match[0]) {
-    const theme = match[0];
-
-    document.head.appendChild(tag);
-    tag.outerHTML = theme;
-  } else {
-    console.error("failed to apply theme");
-  }
 });
 
 // jest-axe disabled color contrast checks by default because they are
