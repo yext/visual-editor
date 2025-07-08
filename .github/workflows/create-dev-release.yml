@@ -2,7 +2,7 @@ name: "Create Dev Release"
 
 on:
   pull_request:
-    types: [labeled]
+    types: [labeled, synchronize]
 
 jobs:
   create-dev-release:
@@ -35,7 +35,7 @@ jobs:
         run: pnpm run build
 
       - name: "Publish temporary version with pkg.pr.new"
-        run: npx pkg-pr-new publish --pnpm
+        run: pnpx pkg-pr-new publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
