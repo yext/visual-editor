@@ -4,7 +4,33 @@ import { defaultThemeConfig, applyTheme } from "@yext/visual-editor";
 import "./componentTests.css";
 // Enabled expect().toHaveNoViolations()
 import "jest-axe/extend-expect";
-import { BrowserPage } from "@vitest/browser/context";
+import { expect } from "vitest";
+import { BrowserPage, commands, page } from "@vitest/browser/context";
+
+expect.extend({
+  async toMatchScreenshot(screenshotName: string) {
+    const updatedScreenshotData = await page.screenshot({
+      save: false,
+    });
+
+    const numDiffPixels = await commands.compareScreenshot(
+      screenshotName,
+      updatedScreenshotData
+    );
+
+    if (numDiffPixels > 0) {
+      return {
+        pass: false,
+        message: () => "Screenshots did not match",
+      };
+    }
+
+    return {
+      pass: true,
+      message: () => "Screenshots matched",
+    };
+  },
+});
 
 // Applies the theme variables
 beforeEach(() => {

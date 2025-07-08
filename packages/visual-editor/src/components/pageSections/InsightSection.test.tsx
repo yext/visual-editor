@@ -247,18 +247,18 @@ describe("InsightSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(100);
-      await page.screenshot({
-        path: `../screenshots/InsightSection/[${viewportName}] ${name}.png`,
-      });
+
+      await expect(
+        `InsightSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await page.screenshot({
-          path: `../screenshots/InsightSection/[${viewportName}] ${name} (after interactions).png`,
-        });
+        await expect(
+          `InsightSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

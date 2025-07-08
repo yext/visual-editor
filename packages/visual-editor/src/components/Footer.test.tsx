@@ -86,18 +86,16 @@ describe("Footer", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(100);
-      await page.screenshot({
-        path: `./screenshots/Footer/[${viewportName}] ${name}.png`,
-      });
+
+      await expect(`Footer/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await page.screenshot({
-          path: `./screenshots/Footer/[${viewportName}] ${name} (after interactions).png`,
-        });
+        await expect(
+          `Footer/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

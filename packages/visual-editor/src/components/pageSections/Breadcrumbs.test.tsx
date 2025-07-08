@@ -129,18 +129,16 @@ describe("BreadcrumbsSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(100);
-      await page.screenshot({
-        path: `../screenshots/Breadcrumbs/[${viewportName}] ${name}.png`,
-      });
+
+      await expect(`Breadcrumbs/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await page.screenshot({
-          path: `../screenshots/Breadcrumbs/[${viewportName}] ${name} (after interactions).png`,
-        });
+        await expect(
+          `Breadcrumbs/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

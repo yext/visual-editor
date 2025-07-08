@@ -123,18 +123,16 @@ describe("Header", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(100);
-      await page.screenshot({
-        path: `../screenshots/Header/[${viewportName}] ${name}.png`,
-      });
+
+      await expect(`Header/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await page.screenshot({
-          path: `../screenshots/Header/[${viewportName}] ${name} (after interactions).png`,
-        });
+        await expect(
+          `Header/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

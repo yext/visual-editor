@@ -242,18 +242,18 @@ describe("EventSection", async () => {
         </VisualEditorProvider>
       );
       await page.viewport(width, height);
-      await delay(100);
-      await page.screenshot({
-        path: `../screenshots/EventSection/[${viewportName}] ${name}.png`,
-      });
+
+      await expect(
+        `EventSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await page.screenshot({
-          path: `../screenshots/EventSection/[${viewportName}] ${name} (after interactions).png`,
-        });
+        await expect(
+          `EventSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
