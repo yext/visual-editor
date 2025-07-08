@@ -15,7 +15,6 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
-import { vi } from "vitest";
 
 const tests: ComponentTest[] = [
   {
