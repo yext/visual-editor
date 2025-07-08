@@ -19,6 +19,7 @@ import {
   Heading,
   msg,
   PageSection,
+  ReviewStars,
   Timestamp,
   TimestampOption,
   useDocument,
@@ -51,7 +52,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
   const document: any = useDocument();
-  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  const apiKey = "ef20396a434aa6e9965e6d3e53888db0"; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
@@ -161,19 +162,11 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
         {isLoading ? (
           <Body>{t("loadingReviews", "Loading reviews...")}</Body>
         ) : (
-          <>
-            <ReviewStarsWithRating
-              rating={averageRating}
-              hasDarkBackground={hasDarkBackground}
-            />
-            <Body>
-              {/* TODO(sumo): update script to handle plurals */}(
-              {t("totalReviews", `${totalReviews} reviews`, {
-                count: totalReviews,
-              })}
-              )
-            </Body>
-          </>
+          <ReviewStars
+            rating={averageRating}
+            hasDarkBackground={hasDarkBackground}
+            totalReviews={totalReviews}
+          />
         )}
       </div>
     </div>
@@ -355,49 +348,6 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
       {(isTruncated || expanded) && (
         <ShowMoreButton expanded={expanded} setExpanded={setExpanded} />
       )}
-    </div>
-  );
-};
-
-interface ReviewStarsProps {
-  rating: number;
-  hasDarkBackground: boolean;
-}
-
-const ReviewStarsWithRating: React.FC<ReviewStarsProps> = ({
-  rating,
-  hasDarkBackground,
-}) => {
-  return (
-    <>
-      <Body className="font-bold">{rating}</Body>
-      <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
-    </>
-  );
-};
-
-const ReviewStars: React.FC<ReviewStarsProps> = (props) => {
-  const { rating, hasDarkBackground } = props;
-  const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
-  const starColor = hasDarkBackground
-    ? "text-white"
-    : "text-palette-primary-dark";
-  return (
-    <div className={`flex items-center gap-0.5 ${starColor}`}>
-      {new Array(5)
-        .fill(null)
-        .map((_, i) =>
-          rating - i >= 0.75 ? (
-            <FaStar key={i} />
-          ) : rating - i >= 0.25 ? (
-            <HalfStar key={i} />
-          ) : (
-            <FaRegStar
-              key={i}
-              style={hasDarkBackground ? { display: "none" } : undefined}
-            />
-          )
-        )}
     </div>
   );
 };
