@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "Apuohjelmien kuvasuhde",
     "backgroundColor": "Taustaväri",
     "bannerText": "Banneriteksti",
+    "breadcrumbsBackgroundColor": "Leivänmurujen taustaväri",
     "businessLogo": "Liikealue",
     "businessName": "Liiketoiminnan nimi",
     "businessNameHeadingLevel": "Yrityksen nimi otsikkotaso",

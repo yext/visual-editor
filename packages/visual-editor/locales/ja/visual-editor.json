@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "ユーティリティ画像のアスペクト比",
     "backgroundColor": "背景色",
     "bannerText": "バナーテキスト",
+    "breadcrumbsBackgroundColor": "パン粉の背景色",
     "businessLogo": "ビジネスロゴ",
     "businessName": "ビジネス名",
     "businessNameHeadingLevel": "ビジネス名の見出しレベル",

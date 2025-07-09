@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "Relación de aspecto para imágenes de servicios públicos",
     "backgroundColor": "Color de fondo",
     "bannerText": "Texto banner",
+    "breadcrumbsBackgroundColor": "Color de fondo de pan rallado",
     "businessLogo": "Logotipo comercial",
     "businessName": "Nombre comercial",
     "businessNameHeadingLevel": "Nivel de encabezado de nombre comercial",

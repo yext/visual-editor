@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "A segédprogramok képaránya",
     "backgroundColor": "Háttérszín",
     "bannerText": "Szalaghirdetés",
+    "breadcrumbsBackgroundColor": "Breadcrumbs háttér színe",
     "businessLogo": "Üzleti logó",
     "businessName": "Üzleti név",
     "businessNameHeadingLevel": "Üzleti név címsor szintje",

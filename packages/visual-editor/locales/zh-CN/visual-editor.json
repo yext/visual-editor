@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "实用程序图像的纵横比",
     "backgroundColor": "背景颜色",
     "bannerText": "横幅文字",
+    "breadcrumbsBackgroundColor": "面包屑背景颜色",
     "businessLogo": "业务徽标",
     "businessName": "业务名称",
     "businessNameHeadingLevel": "企业名称标题级别",

@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "Proporcjonalny współczynnik obrazów użytkowych",
     "backgroundColor": "Kolor tła",
     "bannerText": "Tekst banerowy",
+    "breadcrumbsBackgroundColor": "Kolor tła bułki tła",
     "businessLogo": "Logo biznesowe",
     "businessName": "Nazwa firmy",
     "businessNameHeadingLevel": "Poziom nagłówka nazwy firmy",

@@ -1,5 +1,5 @@
 import { Migration } from "../../utils/migrate.ts";
-import { backgroundColors } from "../../utils/themeConfigOptions";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 export const addCardStylesMigration: Migration = {
   Directory: {

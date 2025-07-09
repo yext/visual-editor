@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "Seitenverhältnis für Versorgungsbilder",
     "backgroundColor": "Hintergrundfarbe",
     "bannerText": "Bannertext",
+    "breadcrumbsBackgroundColor": "Breadcrumbs Hintergrundfarbe",
     "businessLogo": "Geschäftslogo",
     "businessName": "Firmenname",
     "businessNameHeadingLevel": "Firmenname Überschrift Level",

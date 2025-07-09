@@ -91,6 +91,7 @@
     "aspectRatioForUtilityImages": "Ratio d'aspect pour les images utilitaires",
     "backgroundColor": "Couleur de fond",
     "bannerText": "Texte de bannière",
+    "breadcrumbsBackgroundColor": "Couleur de fond de chapelure",
     "businessLogo": "Logo d'entreprise",
     "businessName": "Nom d'entreprise",
     "businessNameHeadingLevel": "Nom de l'entreprise",
