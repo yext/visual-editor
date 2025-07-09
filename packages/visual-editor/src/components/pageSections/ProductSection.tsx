@@ -24,6 +24,7 @@ import {
   msg,
   pt,
   ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -36,10 +37,13 @@ export interface ProductSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
     };
   };
   analytics?: {
@@ -74,22 +78,13 @@ const productSectionFields: Fields<ProductSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -98,6 +93,23 @@ const productSectionFields: Fields<ProductSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -115,26 +127,25 @@ const productSectionFields: Fields<ProductSectionProps> = {
 };
 
 const ProductCard = ({
-  key,
+  cardNumber,
   product,
-  backgroundColor,
+  cardStyles,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardNumber: number;
   product: ProductStruct;
-  backgroundColor?: BackgroundStyle;
+  cardStyles: ProductSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
-      background={backgroundColor}
+      background={cardStyles.backgroundColor}
     >
       {product.image ? (
         <Image
           image={product.image}
-          layout={"auto"}
           aspectRatio={1.778} // 16:9
           className="h-[200px]"
         />
@@ -145,7 +156,7 @@ const ProductCard = ({
         <div className="gap-4 flex flex-col">
           {product.name && (
             <Heading
-              level={3}
+              level={cardStyles.headingLevel}
               semanticLevelOverride={
                 sectionHeadingLevel < 6
                   ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -170,7 +181,7 @@ const ProductCard = ({
         </div>
         {product.cta && (
           <CTA
-            eventName={`cta${key}`}
+            eventName={`cta${cardNumber}`}
             variant="secondary"
             label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
@@ -212,9 +223,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
           constantValueEnabled={data.heading.constantValueEnabled}
         >
           <div className={`flex ${justifyClass}`}>
-            <Heading level={styles?.heading?.level ?? 2}>
-              {resolvedHeading}
-            </Heading>
+            <Heading level={styles?.heading?.level}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
@@ -228,8 +237,9 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
             {resolvedProducts.products.map((product, index) => (
               <ProductCard
                 key={index}
+                cardNumber={index}
                 product={product}
-                backgroundColor={styles.cardBackgroundColor}
+                cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
               />
             ))}
@@ -260,19 +270,24 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
       },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+      },
     },
     analytics: {
-      scope: "productSection",
+      scope: "productsSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "productSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

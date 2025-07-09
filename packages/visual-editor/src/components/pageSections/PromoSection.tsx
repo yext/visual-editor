@@ -19,14 +19,19 @@ import {
   resolveYextStructField,
   ComponentFields,
   EntityField,
-  resolveTranslatableString,
-  resolveTranslatableRichText,
   msg,
   pt,
   HeadingLevel,
   ThemeOptions,
+  getAnalyticsScopeHash,
+  resolveTranslatableString,
+  resolveTranslatableRichText,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -42,6 +47,7 @@ export interface PromoSectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -68,7 +74,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -77,8 +82,18 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("fields.options.left", "Left"), value: "left" },
-            { label: msg("fields.options.right", "Right"), value: "right" },
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
           ],
         }
       ),
@@ -89,7 +104,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -99,6 +114,10 @@ const promoSectionFields: Fields<PromoSectionProps> = {
             options: ThemeOptions.ALIGNMENT,
           }),
         },
+      }),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
       }),
     },
   }),
@@ -143,9 +162,13 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         >
           <Image
             image={resolvedPromo.image}
-            layout={"auto"}
-            aspectRatio={resolvedPromo.image.width / resolvedPromo.image.height}
-            className="h-[200px]"
+            aspectRatio={
+              styles.image.aspectRatio ??
+              (resolvedPromo.image.width && resolvedPromo.image.height
+                ? resolvedPromo.image.width / resolvedPromo.image.height
+                : 1.78)
+            }
+            width={styles.image.width || 640}
           />
         </EntityField>
       )}
@@ -240,6 +263,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
         level: 2,
         align: "left",
       },
+      image: {
+        aspectRatio: 1.78,
+      },
     },
     analytics: {
       scope: "promoSection",
@@ -276,7 +302,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider name={props.analytics?.scope ?? "promoSection"}>
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
+      >
         <VisibilityWrapper
           liveVisibility={!!props.liveVisibility}
           isEditing={props.puck.isEditing}

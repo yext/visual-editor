@@ -56,6 +56,11 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   >("UNSET");
   const [open, setOpen] = React.useState<boolean>(false);
 
+  // In Editor if locale changes, have selected change as well.
+  React.useEffect(() => {
+    setSelected(currentLocale);
+  }, [currentLocale]);
+
   // on dropdown clicked, compare the actual locales of the entity to the pageset's scoped locales
   const handleOpenChange = async (isOpen: boolean) => {
     setOpen(isOpen);

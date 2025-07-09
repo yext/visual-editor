@@ -356,8 +356,8 @@ export const defaultThemeConfig: ThemeConfig = {
         type: "select",
         plugin: "display",
         options: [
-          { label: msg("yes", "Yes"), value: "block" },
-          { label: msg("no", "No"), value: "none" },
+          { label: msg("fields.options.yes", "Yes"), value: "block" },
+          { label: msg("fields.options.no", "No"), value: "none" },
         ],
         default: "block",
       },

@@ -34,6 +34,7 @@ import {
   ThemeOptions,
   usePlatformTranslation,
   TranslatableStringField,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -194,7 +195,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -209,7 +210,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -683,7 +683,9 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? ""}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
