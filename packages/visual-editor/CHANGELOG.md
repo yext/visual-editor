@@ -1,3 +1,17 @@
+#### 0.0.45 (2025-07-09)
+
+##### Chores
+
+- clean up header/footer image styling (#598) (701050f3)
+
+##### New Features
+
+- non-link analytics for ReviewsSection (#586) (c8cd28af)
+
+##### Bug Fixes
+
+- language dropdown fails page generation (#596) (1ab4d398)
+
 #### 0.0.44 (2025-07-09)
 
 ##### Chores
