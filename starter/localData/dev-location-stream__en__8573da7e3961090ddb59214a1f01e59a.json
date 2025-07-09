@@ -3,11 +3,6 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
-  "_yext": {
-    "contentDeliveryAPIDomain": "https://cdn.yextapis.com",
-    "managementAPIDomain": "https://api.yext.com",
-    "platformDomain": "https://www.yext.com"
-  },
   "_schema": {
     "@graph": [
       {
