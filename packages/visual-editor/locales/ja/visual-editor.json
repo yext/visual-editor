@@ -306,7 +306,6 @@
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
   "locationsNear_one": "{{count}}近くの場所「{{filterdisplayname}} \"",
-  "locationsNear_one": "{{count}}近くの場所「{{filterdisplayname}} \"",
   "locationsNear_other": "「{{filterDisplayName}}」の近くの${{count}}か所",
   "monday": "月曜日",
   "name": "名前",
