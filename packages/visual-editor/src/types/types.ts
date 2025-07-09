@@ -101,3 +101,10 @@ export type RichText = {
   html?: string;
   json?: string;
 };
+
+export type GalleryImageType = {
+  url: string;
+  alternateText?: string;
+  height?: number;
+  width?: number;
+};

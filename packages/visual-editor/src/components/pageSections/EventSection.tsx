@@ -27,6 +27,7 @@ import {
   msg,
   pt,
   ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -38,10 +39,13 @@ export interface EventSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
     };
   };
   analytics?: {
@@ -76,22 +80,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -100,6 +95,23 @@ const eventSectionFields: Fields<EventSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -117,20 +129,20 @@ const eventSectionFields: Fields<EventSectionProps> = {
 };
 
 const EventCard = ({
-  cardKey,
+  cardNumber,
   event,
-  backgroundColor,
+  cardStyles,
   sectionHeadingLevel,
 }: {
-  cardKey: number;
+  cardNumber: number;
   event: EventStruct;
-  backgroundColor?: BackgroundStyle;
+  cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
   return (
     <Background
-      background={backgroundColor}
+      background={cardStyles.backgroundColor}
       className={`flex flex-col md:flex-row rounded-lg overflow-hidden h-fit md:h-64`}
     >
       <div className="lg:w-[45%] w-full h-full">
@@ -138,8 +150,11 @@ const EventCard = ({
           <div className="h-full">
             <Image
               image={event.image}
-              layout="auto"
-              aspectRatio={event.image.width / event.image.height}
+              aspectRatio={
+                event.image.width && event.image.height
+                  ? event.image.width / event.image.height
+                  : 1.78
+              }
             />
           </div>
         )}
@@ -147,7 +162,7 @@ const EventCard = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
           <Heading
-            level={6}
+            level={cardStyles.headingLevel}
             semanticLevelOverride={
               sectionHeadingLevel < 6
                 ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -167,7 +182,7 @@ const EventCard = ({
         {resolveTranslatableRichText(event.description, i18n.language)}
         {event.cta && (
           <CTA
-            eventName={`cta${cardKey}`}
+            eventName={`cta${cardNumber}`}
             label={resolveTranslatableString(event.cta.label, i18n.language)}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -225,9 +240,9 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
             {resolvedEvents.events.map((event, index) => (
               <EventCard
                 key={index}
-                cardKey={index}
+                cardNumber={index}
                 event={event}
-                backgroundColor={styles.cardBackgroundColor}
+                cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
               />
             ))}
@@ -258,19 +273,24 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
       },
+      cards: {
+        headingLevel: 3,
+        backgroundColor: backgroundColors.background1.value,
+      },
     },
     analytics: {
-      scope: "eventSection",
+      scope: "eventsSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "eventSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

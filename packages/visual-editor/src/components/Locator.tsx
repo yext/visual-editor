@@ -1,27 +1,29 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
+  AnalyticsProvider,
   CardComponent,
   CardProps,
   Coordinate,
+  executeSearch,
   FilterSearch,
   getUserLocation,
   MapboxMap,
   OnDragHandler,
   OnSelectParams,
-  VerticalResults,
-  AnalyticsProvider,
   PinComponent,
   useCardAnalyticsCallback,
+  VerticalResults,
+  SearchI18nextProvider,
 } from "@yext/search-ui-react";
 import {
   Matcher,
   provideHeadless,
+  Result,
   SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
-  Result,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
@@ -36,6 +38,8 @@ import {
   normalizeSlug,
   useDocument,
   useTemplateProps,
+  Toggle,
+  YextField,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -52,9 +56,11 @@ const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
+const HOURS_FIELD = "builtin.hours";
 
 export type LocatorProps = {
   mapStyle?: string;
+  openNowButton?: boolean;
   entityTypeEnvVar?: string; // to be set via withPropOverrides
   experienceKeyEnvVar?: string; // to be set via withPropOverrides
 };
@@ -89,6 +95,16 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
+  openNowButton: YextField(
+    msg("fields.options.includeOpenNow", "Include Open Now Button"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
 };
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
@@ -124,9 +140,11 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
   searcher.setSessionTrackingEnabled(true);
   return (
     <SearchHeadlessProvider searcher={searcher}>
-      <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
-        <LocatorInternal {...props} />
-      </AnalyticsProvider>
+      <SearchI18nextProvider searcher={searcher}>
+        <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+          <LocatorInternal {...props} />
+        </AnalyticsProvider>
+      </SearchI18nextProvider>
     </SearchHeadlessProvider>
   );
 };
@@ -135,7 +153,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
   const { t } = useTranslation();
-  const { mapStyle, entityTypeEnvVar } = props;
+  const { mapStyle, openNowButton, entityTypeEnvVar } = props;
   const entityType = getEntityType(entityTypeEnvVar);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
@@ -305,6 +323,41 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     markerOptionsOverride: markerOptionsOverride,
   };
 
+  const [isSelected, setIsSelected] = React.useState(false);
+  const handleOpenNowClick = (selected: boolean) => {
+    searchActions.setFilterOption({
+      filter: {
+        kind: "fieldValue",
+        fieldId: HOURS_FIELD,
+        matcher: Matcher.OpenAt,
+        value: "now",
+      },
+      selected,
+      displayName: t("openNow", "Open Now"),
+    });
+    setIsSelected(isSelected);
+    searchActions.setOffset(0);
+    searchActions.resetFacets();
+    executeSearch(searchActions);
+  };
+
+  const searchFilters = useSearchState((state) => state.filters);
+  // If something else causes the filters to update, check if the hours filter is still present
+  // - toggle off the Open Now toggle if not.
+  React.useEffect(() => {
+    setIsSelected(
+      searchFilters.static
+        ? !!searchFilters.static.find((staticFilter) => {
+            return (
+              staticFilter.filter.kind === "fieldValue" &&
+              staticFilter.filter.fieldId === HOURS_FIELD &&
+              staticFilter.selected === true
+            );
+          })
+        : false
+    );
+  }, [searchFilters]);
+
   return (
     <div className="components flex ve-h-screen ve-w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -329,6 +382,15 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
               radius: 25,
             }}
           />
+          {openNowButton && (
+            <Toggle
+              pressed={isSelected}
+              onPressedChange={(pressed) => handleOpenNowClick(pressed)}
+              className="py-2 px-2"
+            >
+              {t("openNow", "Open Now")}
+            </Toggle>
+          )}
         </div>
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
           {resultCount === 0 &&

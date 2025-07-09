@@ -73,35 +73,35 @@ import {
 import { ExpandedFooter, ExpandedFooterProps } from "./ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
+  BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
-  HeroSection: HeroSectionProps;
-  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
+  EventSection: EventSectionProps;
+  FAQSection: FAQSectionProps;
+  HeroSection: HeroSectionProps;
   InsightSection: InsightSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
-  BannerSection: BannerSectionProps;
+  PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
-  PhotoGallerySection: PhotoGallerySectionProps;
-  TeamSection: TeamSectionProps;
-  FAQSection: FAQSectionProps;
   StaticMapSection: StaticMapSectionProps;
+  TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
-  BreadcrumbsSection,
-  HeroSection,
-  CoreInfoSection,
-  NearbyLocationsSection,
   BannerSection,
-  PhotoGallerySection,
-  StaticMapSection,
+  BreadcrumbsSection,
+  CoreInfoSection,
   EventSection,
   FAQSection,
+  HeroSection,
   InsightSection,
+  NearbyLocationsSection,
+  PhotoGallerySection,
   ProductSection,
   PromoSection,
+  StaticMapSection,
   TeamSection,
   TestimonialSection,
 };

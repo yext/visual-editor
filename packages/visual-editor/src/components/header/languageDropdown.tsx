@@ -19,7 +19,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../atoms/accordion.tsx";
+} from "@radix-ui/react-accordion";
 
 export interface LanguageDropdownProps {
   className?: string;
@@ -55,6 +55,11 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
     "UNSET" | "LOADING" | "COMPLETE" | "ERROR"
   >("UNSET");
   const [open, setOpen] = React.useState<boolean>(false);
+
+  // In Editor if locale changes, have selected change as well.
+  React.useEffect(() => {
+    setSelected(currentLocale);
+  }, [currentLocale]);
 
   // on dropdown clicked, compare the actual locales of the entity to the pageset's scoped locales
   const handleOpenChange = async (isOpen: boolean) => {

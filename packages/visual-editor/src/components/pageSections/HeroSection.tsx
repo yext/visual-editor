@@ -27,7 +27,12 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -45,6 +50,7 @@ export interface HeroSectionProps {
     localGeoModifierLevel: HeadingLevel;
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -95,7 +101,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -104,8 +109,18 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("fields.options.left", "Left"), value: "left" },
-            { label: msg("fields.options.right", "Right"), value: "right" },
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
           ],
         }
       ),
@@ -142,6 +157,10 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "CTA_VARIANT",
         }
       ),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -301,10 +320,8 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             <Image
               image={resolvedHero?.image}
-              layout="auto"
-              aspectRatio={
-                resolvedHero?.image.width / resolvedHero?.image.height
-              }
+              aspectRatio={styles.image.aspectRatio}
+              width={styles.image.width || 640}
             />
           </div>
         </EntityField>
@@ -408,6 +425,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       localGeoModifierLevel: 1,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
+      image: {
+        aspectRatio: 1.78, // 16:9 default
+      },
     },
     analytics: {
       scope: "heroSection",
@@ -443,7 +463,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     return heroSectionFields;
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={!!props.liveVisibility}
         isEditing={props.puck.isEditing}

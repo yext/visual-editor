@@ -25,6 +25,7 @@ import {
   pt,
   ThemeOptions,
   resolveTranslatableRichText,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -37,10 +38,13 @@ export interface InsightSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
     };
   };
   analytics?: {
@@ -75,22 +79,13 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -99,6 +94,23 @@ const insightSectionFields: Fields<InsightSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -116,14 +128,14 @@ const insightSectionFields: Fields<InsightSectionProps> = {
 };
 
 const InsightCard = ({
-  key,
+  cardNumber,
   insight,
-  backgroundColor,
+  cardStyles,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardNumber: number;
   insight: InsightStruct;
-  backgroundColor?: BackgroundStyle;
+  cardStyles: InsightSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
@@ -131,12 +143,11 @@ const InsightCard = ({
   return (
     <Background
       className="rounded h-full flex flex-col"
-      background={backgroundColor}
+      background={cardStyles.backgroundColor}
     >
       {insight.image ? (
         <Image
           image={insight.image}
-          layout="auto"
           aspectRatio={1.778} // 16:9
           className="rounded-t-[inherit] h-[200px]"
         />
@@ -160,7 +171,7 @@ const InsightCard = ({
           )}
           {insight.name && (
             <Heading
-              level={3}
+              level={cardStyles.headingLevel}
               semanticLevelOverride={
                 sectionHeadingLevel < 6
                   ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -174,7 +185,7 @@ const InsightCard = ({
         </div>
         {insight.cta && (
           <CTA
-            eventName={`cta${key}`}
+            eventName={`cta${cardNumber}`}
             variant={"link"}
             label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
@@ -232,8 +243,9 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
             {resolvedInsights.insights.map((insight, index) => (
               <InsightCard
                 key={index}
+                cardNumber={index}
                 insight={insight}
-                backgroundColor={styles.cardBackgroundColor}
+                cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
               />
             ))}
@@ -264,19 +276,24 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
-        level: 2,
+        level: 3,
         align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 4,
       },
     },
     analytics: {
-      scope: "insightSection",
+      scope: "insightsSection",
     },
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "insightSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

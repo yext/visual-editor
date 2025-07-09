@@ -25,7 +25,7 @@ export const defaultInsight: InsightStruct = {
     en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters",
     hasLocalizedValue: "true",
   },
-  publishTime: "August 2, 2022",
+  publishTime: "2022-08-02",
   cta: {
     link: "#",
     label: { en: "Read More", hasLocalizedValue: "true" },

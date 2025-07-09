@@ -16,6 +16,11 @@
           "postalCode": "11211",
           "streetAddress": "288 Grand St"
         },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.2",
+          "reviewCount": "7"
+        },
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "itemListElement": [

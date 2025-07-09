@@ -2,6 +2,7 @@ import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "./applyTheme.ts";
 import { StyleSelectOption } from "./themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "./i18nPlatform.ts";
+import { ThemeData } from "../internal/types/themeData.ts";
 
 export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
@@ -41,7 +42,7 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * Note: Google does not return font file URLs if the params
  * fall outside of the font's supported values
  */
-const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
+export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
   const preconnectTags =
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
@@ -90,7 +91,7 @@ const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     linkTags.push(`${prefix}${params}&${postfix}`);
   }
 
-  return preconnectTags + linkTags.join("\n");
+  return linkTags.length ? preconnectTags + linkTags.join("\n") : "";
 };
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
@@ -216,4 +217,42 @@ const filterFontWeights = (
         Number(weight.value) >= font.minWeight
     );
   }
+};
+
+// Returns FontRegistry only containing fonts used in ThemeData
+export const extractInUseFontFamilies = (
+  data: ThemeData,
+  avaliableFonts: FontRegistry
+): FontRegistry => {
+  const fontFamilies = new Set<string>();
+
+  // Iterate over all the keys in the theme data to find font names.
+  for (const key in data) {
+    // searches for keys with "fontFamily" like "--fontFamily-h1-fontFamily"
+    if (typeof key === "string" && key.includes("fontFamily")) {
+      const value = data[key];
+      // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
+      // parses fontName from the value
+      if (typeof value === "string" && value.length > 0) {
+        const firstFont = value.split(",")[0];
+        const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+        fontFamilies.add(cleanedFontName);
+      }
+    }
+  }
+
+  const inUseFonts: FontRegistry = {};
+
+  // For each unique font family found, look it up in the avaliableFonts map.
+  for (const fontName of fontFamilies) {
+    if (avaliableFonts[fontName]) {
+      inUseFonts[fontName] = avaliableFonts[fontName];
+    } else {
+      console.warn(
+        `The font '${fontName}' is used in the theme but cannot be found in available fonts.`
+      );
+    }
+  }
+
+  return inUseFonts;
 };

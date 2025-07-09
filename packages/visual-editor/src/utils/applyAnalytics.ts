@@ -19,3 +19,20 @@ export const applyAnalytics = (document: Record<string, any>) => {
     </script>`;
   }
 };
+
+// getAnalyticsScopeHash hashes the Puck component
+// id into a 3 digit number represented by a string.
+export const getAnalyticsScopeHash = (puckId: string) => {
+  // The puckId should always be provided but it may be missing in tests
+  if (!puckId) {
+    return "000";
+  }
+
+  // DJB2 hash algorithm
+  let hash = 5381;
+  for (let i = 0; i < puckId.length; i++) {
+    hash = ((hash << 5) + hash) ^ puckId.charCodeAt(i);
+  }
+
+  return String(Math.abs(hash) % 1000).padStart(3, "0");
+};

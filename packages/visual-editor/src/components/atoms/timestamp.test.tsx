@@ -8,6 +8,37 @@ describe("timestampFormatter", () => {
     expect(result).toBe("Jan 1, 2024");
   });
 
+  it("formats DATE with override present", () => {
+    const date = new Date("2024-01-01T00:00:00");
+    const override: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    const result = timestampFormatter({
+      date,
+      option: TimestampOption.DATE,
+      dateFormatOverride: override,
+    });
+    expect(result).toBe("January 1, 2024");
+  });
+
+  it("formats DATE with locale and override", () => {
+    const date = new Date("2025-06-27T00:00:00");
+    const override: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    const result = timestampFormatter({
+      date,
+      option: TimestampOption.DATE,
+      locale: "es",
+      dateFormatOverride: override,
+    });
+    expect(result).toBe("27 de junio de 2025");
+  });
+
   it("formats DATE_TIME", () => {
     const date = new Date("2024-01-01T08:00:00");
     const result = timestampFormatter({

@@ -24,6 +24,7 @@ import {
   ComponentFields,
   resolveTranslatableRichText,
   FAQStruct,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -31,6 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
+import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
 export interface FAQSectionProps {
   data: {
@@ -45,6 +47,9 @@ export interface FAQSectionProps {
     };
   };
   liveVisibility: boolean;
+  analytics?: {
+    scope?: string;
+  };
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
@@ -73,14 +78,13 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -113,6 +117,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     i18n.language
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
+  const analytics = useAnalytics();
 
   const justifyClass = styles?.heading?.align
     ? {
@@ -146,9 +151,28 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
-          <Accordion type="single" collapsible>
+          <Accordion>
             {resolvedFAQs?.faqs?.map((faqItem: FAQStruct, index: number) => (
-              <AccordionItem value={index.toString()} key={index}>
+              <AccordionItem
+                key={index}
+                data-ya-action={
+                  analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
+                }
+                data-ya-eventname={
+                  analytics?.getDebugEnabled() ? `toggleFAQ${index}` : undefined
+                }
+                onToggle={(e) =>
+                  e.currentTarget.open // the updated state after toggling
+                    ? analytics?.track({
+                        action: "EXPAND",
+                        eventName: `toggleFAQ${index}`,
+                      })
+                    : analytics?.track({
+                        action: "COLLAPSE",
+                        eventName: `toggleFAQ${index}`,
+                      })
+                }
+              >
                 <AccordionTrigger>
                   <Body>
                     {resolveTranslatableString(faqItem.question, i18n.language)}
@@ -206,13 +230,20 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
       },
     },
     liveVisibility: true,
+    analytics: {
+      scope: "faqsSection",
+    },
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <FAQsSectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <FAQsSectionComponent {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

@@ -25,11 +25,12 @@ export {
   type BackgroundStyle,
   type HeadingLevel,
 } from "./themeConfigOptions.ts";
-export { applyAnalytics } from "./applyAnalytics.ts";
+export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
+export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export {
   createSearchHeadlessConfig,
   createSearchAnalyticsConfig,
