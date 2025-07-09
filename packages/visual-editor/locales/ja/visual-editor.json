@@ -1,5 +1,6 @@
 {
   "Link": "リンク",
+  "addEntityField": "エンティティフィールドを追加します",
   "address": "住所",
   "addressInput": {
     "city": "市",

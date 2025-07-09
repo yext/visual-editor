@@ -1,5 +1,6 @@
 {
   "Link": "Link",
+  "addEntityField": "Voeg een entiteitsveld toe",
   "address": "Adres",
   "addressInput": {
     "city": "Stad",

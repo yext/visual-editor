@@ -1,5 +1,6 @@
 {
   "Link": "Link",
+  "addEntityField": "Lisage olemiväli",
   "address": "Aadress",
   "addressInput": {
     "city": "Linn",

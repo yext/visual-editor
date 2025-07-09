@@ -1,5 +1,6 @@
 {
   "Link": "Link",
+  "addEntityField": "Dodajte polje entiteta",
   "address": "Adresa",
   "addressInput": {
     "city": "Grad",

@@ -1,5 +1,6 @@
 {
   "Link": "Saite",
+  "addEntityField": "Pievienojiet entītijas lauku",
   "address": "Uzruna",
   "addressInput": {
     "city": "Pilsēta",

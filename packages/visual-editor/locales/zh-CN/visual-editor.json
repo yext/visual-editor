@@ -1,5 +1,6 @@
 {
   "Link": "关联",
+  "addEntityField": "添加实体字段",
   "address": "地址",
   "addressInput": {
     "city": "城市",
