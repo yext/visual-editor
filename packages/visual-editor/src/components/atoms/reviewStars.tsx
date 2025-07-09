@@ -59,10 +59,13 @@ export const ReviewStars = (props: ReviewStarsProps) => {
  * @param document - The document containing the schema.
  * @returns The aggregate rating object if found, otherwise undefined.
  */
-export function getAggregateRating(document: any): AggregateRating | undefined {
+export function getAggregateRating(document: any): AggregateRating {
   const reviews = document?.ref_reviewsAgg;
-  if (!Array.isArray(reviews) || reviews.length === 0) {
-    return;
+  if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
+    return {
+      rating: 0,
+      totalReviews: 0,
+    };
   }
 
   let totalRating = 0;
@@ -77,7 +80,10 @@ export function getAggregateRating(document: any): AggregateRating | undefined {
   }
 
   if (totalReviews === 0) {
-    return;
+    return {
+      rating: 0,
+      totalReviews: 0,
+    };
   }
 
   return {
