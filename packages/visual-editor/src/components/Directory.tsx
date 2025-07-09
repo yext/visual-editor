@@ -13,7 +13,7 @@ import {
   TranslatableString,
   BackgroundStyle,
   Background,
-  BreadcrumbsSectionProps,
+  HeadingLevel,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -30,6 +30,10 @@ export interface DirectoryProps {
   styles: {
     backgroundColor?: BackgroundStyle;
     breadcrumbsBackgroundColor?: BackgroundStyle;
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
   };
   analytics?: {
     scope?: string;
@@ -66,6 +70,23 @@ const directoryFields: Fields<DirectoryProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
+      }),
     },
   }),
 };
@@ -97,13 +118,18 @@ const DirectoryCard = ({
   cardNumber,
   profile,
   relativePrefixToRoot,
+  cardStyles,
 }: {
   cardNumber: number;
   profile: any;
   relativePrefixToRoot: string;
+  cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
   return (
-    <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
+    <Background
+      className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
+      background={cardStyles.backgroundColor}
+    >
       <div>
         <MaybeLink
           eventName={`link${cardNumber}`}
@@ -115,7 +141,7 @@ const DirectoryCard = ({
               : profile.slug
           }
         >
-          <Heading level={4} semanticLevelOverride={3}>
+          <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}
           </Heading>
         </MaybeLink>
@@ -150,7 +176,7 @@ const DirectoryCard = ({
           />
         </div>
       )}
-    </div>
+    </Background>
   );
 };
 
@@ -158,9 +184,11 @@ const DirectoryCard = ({
 const DirectoryGrid = ({
   directoryChildren,
   relativePrefixToRoot,
+  cardStyles,
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
+  cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -181,6 +209,7 @@ const DirectoryGrid = ({
           cardNumber={idx}
           profile={child}
           relativePrefixToRoot={relativePrefixToRoot}
+          cardStyles={cardStyles}
         />
       ))}
     </PageSection>
@@ -274,6 +303,7 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot}
+            cardStyles={styles.cards}
           />
         )}
       {document.dm_directoryChildren &&
@@ -290,39 +320,7 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
-  fields: {
-    data: YextField(msg("fields.data", "Data"), {
-      type: "object",
-      objectFields: {
-        directoryRoot: TranslatableStringField(
-          msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-          "text"
-        ),
-      },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
-      type: "object",
-      objectFields: {
-        backgroundColor: YextField(
-          msg("fields.backgroundColor", "Background Color"),
-          {
-            type: "select",
-            options: "BACKGROUND_COLOR",
-          }
-        ),
-        breadcrumbsBackgroundColor: YextField(
-          msg(
-            "fields.breadcrumbsBackgroundColor",
-            "Breadcrumbs Background Color"
-          ),
-          {
-            type: "select",
-            options: "BACKGROUND_COLOR",
-          }
-        ),
-      },
-    }),
-  },
+  fields: directoryFields,
   defaultProps: {
     data: {
       directoryRoot: {
@@ -333,6 +331,10 @@ export const Directory: ComponentConfig<DirectoryProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
       breadcrumbsBackgroundColor: backgroundColors.background1.value,
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+      },
     },
     analytics: {
       scope: "directory",
