@@ -12,9 +12,7 @@ export const borderRadiusOptions = [
   { label: "MD", value: "md", px: "6" },
   { label: "LG", value: "lg", px: "8" },
   { label: "XL", value: "xl", px: "12" },
-  { label: "2XL", value: "2xl", px: "16" },
-  { label: "3XL", value: "3xl", px: "24" },
-  { label: "Full", value: "full", px: "9999" },
+  { label: "Pill", value: "pill", px: "10000" },
 ];
 
 export const convertToPixels = (borderRadius: string): number => {
