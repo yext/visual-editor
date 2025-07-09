@@ -17,4 +17,4 @@ export {
   TimestampOption,
 } from "./timestamp.tsx";
 export { Toggle } from "./toggle.tsx";
-export { ReviewStars, type ReviewStarsProps } from "./reviewstars.tsx";
+export { ReviewStars, type ReviewStarsProps } from "./reviewStars.tsx";

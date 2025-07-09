@@ -106,6 +106,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
             transform,
             level,
           }),
+          Tag === "span" && "block",
           className
         )}
         ref={ref}

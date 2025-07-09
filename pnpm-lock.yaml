@@ -347,6 +347,9 @@ importers:
       "@radix-ui/react-alert-dialog":
         specifier: ^1.0.5
         version: 1.1.11(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-dropdown-menu":
+        specifier: ^2.1.15
+        version: 2.1.15(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@radix-ui/react-progress":
         specifier: ^1.0.3
         version: 1.1.4(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -362,9 +365,6 @@ importers:
       "@radix-ui/react-tooltip":
         specifier: ^1.1.2
         version: 1.2.4(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      "@tanstack/react-query":
-        specifier: ^4.35.0
-        version: 4.40.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@types/mapbox-gl":
         specifier: ^2.7.5
         version: 2.7.21
@@ -372,11 +372,11 @@ importers:
         specifier: ^20.12.3
         version: 20.17.32
       "@yext/search-headless-react":
-        specifier: ^2.5.3
+        specifier: ^2.5.2
         version: 2.5.3(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: ^1.8.15
-        version: 1.8.15(@types/react@18.3.20)(@yext/search-headless-react@2.5.3(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))
+        specifier: ^1.8.13
+        version: 1.9.0(@types/react@18.3.20)(@yext/search-headless-react@2.5.3(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))(typescript@5.8.3)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -386,6 +386,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      i18next:
+        specifier: ^25.2.1
+        version: 25.2.1(typescript@5.8.3)
       lucide-react:
         specifier: ^0.378.0
         version: 0.378.0(react@18.3.1)
@@ -413,9 +416,6 @@ importers:
       tailwind-merge:
         specifier: ^2.3.0
         version: 2.6.0
-      tailwindcss-animate:
-        specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))
     devDependencies:
       "@tailwindcss/typography":
         specifier: ^0.5.13
@@ -3596,32 +3596,11 @@ packages:
     peerDependencies:
       tailwindcss: ">=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1"
 
-  "@tanstack/query-core@4.40.0":
-    resolution:
-      {
-        integrity: sha512-7MJTtZkCSuehMC7IxMOCGsLvHS3jHx4WjveSrGsG1Nc1UQLjaFwwkpLA2LmPfvOAxnH4mszMOBFD6LlZE+aB+Q==,
-      }
-
   "@tanstack/query-core@5.74.7":
     resolution:
       {
         integrity: sha512-X3StkN/Y6KGHndTjJf8H8th7AX4bKfbRpiVhVqevf0QWlxl6DhyJ0TYG3R0LARa/+xqDwzU9mA4pbJxzPCI29A==,
       }
-
-  "@tanstack/react-query@4.40.1":
-    resolution:
-      {
-        integrity: sha512-mgD07S5N8e5v81CArKDWrHE4LM7HxZ9k/KLeD3+NUD9WimGZgKIqojUZf/rXkfAMYZU9p0Chzj2jOXm7xpgHHQ==,
-      }
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-native: "*"
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
 
   "@tanstack/react-query@5.74.7":
     resolution:
@@ -4351,16 +4330,6 @@ packages:
       {
         integrity: sha512-GezFq+f7r4pfFlAJ6V8VGgend14IGbM5/pfrsxroqenwLudV+6MdK5B8xcWjAwbCPX/InvswSd6aR/koDO3h0g==,
       }
-
-  "@yext/search-ui-react@1.8.15":
-    resolution:
-      {
-        integrity: sha512-Z4L1pwK3ezYxyKFoqIxnf1QG1WiYRPnJ2npliF9FM29nIL36TK0WveEjflnbyfnBUXDeQt4Ot0IQjOAV+qjiqQ==,
-      }
-    peerDependencies:
-      "@yext/search-headless-react": ^2.5.3
-      react: ^16.14 || ^17 || ^18
-      react-dom: ^16.14 || ^17 || ^18
 
   "@yext/search-ui-react@1.9.0":
     resolution:
@@ -9971,14 +9940,6 @@ packages:
         integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==,
       }
 
-  tailwindcss-animate@1.0.7:
-    resolution:
-      {
-        integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==,
-      }
-    peerDependencies:
-      tailwindcss: ">=3.0.0 || insiders"
-
   tailwindcss@3.4.17:
     resolution:
       {
@@ -13137,17 +13098,7 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3))
 
-  "@tanstack/query-core@4.40.0": {}
-
   "@tanstack/query-core@5.74.7": {}
-
-  "@tanstack/react-query@4.40.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
-    dependencies:
-      "@tanstack/query-core": 4.40.0
-      react: 18.3.1
-      use-sync-external-store: 1.5.0(react@18.3.1)
-    optionalDependencies:
-      react-dom: 18.3.1(react@18.3.1)
 
   "@tanstack/react-query@5.74.7(react@18.3.1)":
     dependencies:
@@ -13705,35 +13656,6 @@ snapshots:
       - encoding
       - react
       - react-redux
-
-  "@yext/search-ui-react@1.8.15(@types/react@18.3.20)(@yext/search-headless-react@2.5.3(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))":
-    dependencies:
-      "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))
-      "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))
-      "@tailwindcss/typography": 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))
-      "@yext/analytics": 0.6.8(encoding@0.1.13)
-      "@yext/search-headless-react": 2.5.3(encoding@0.1.13)(react@18.3.1)
-      classnames: 2.5.1
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      mapbox-gl: 2.15.0
-      prop-types: 15.8.1
-      react: 18.3.1
-      react-collapsed: 4.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-dom: 18.3.1(react@18.3.1)
-      react-markdown: 6.0.3(@types/react@18.3.20)(react@18.3.1)
-      recent-searches: 1.0.5
-      rehype-raw: 5.1.0
-      rehype-sanitize: 4.0.0
-      remark-gfm: 1.0.0
-      tailwind-merge: 1.14.0
-      use-isomorphic-layout-effect: 1.2.0(@types/react@18.3.20)(react@18.3.1)
-    transitivePeerDependencies:
-      - "@types/react"
-      - encoding
-      - supports-color
-      - tailwindcss
 
   "@yext/search-ui-react@1.9.0(@types/react@18.3.20)(@yext/search-headless-react@2.5.3(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)))(typescript@5.8.3)":
     dependencies:
@@ -17374,10 +17296,6 @@ snapshots:
   tailwind-merge@1.14.0: {}
 
   tailwind-merge@2.6.0: {}
-
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3))):
-    dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3))
 
   tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.32)(typescript@5.8.3)):
     dependencies:
