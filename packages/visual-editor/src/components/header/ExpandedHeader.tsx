@@ -79,7 +79,7 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       primaryHeader: YextField(msg("fields.primaryHeader", "Primary Header"), {
         type: "object",
         objectFields: {
-          logo: YextField(msg("fields.logoUrl", "Logo"), {
+          logo: YextField(msg("fields.logo", "Logo"), {
             type: "text",
           }),
           links: YextField(msg("fields.links", "Links"), {
@@ -314,7 +314,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         >
           <EntityField
             constantValueEnabled
-            displayName={pt("fields.logoUrl", "Logo")}
+            displayName={pt("fields.logo", "Logo")}
           >
             <HeaderLogo
               aspectRatio={aspectRatio}

@@ -170,7 +170,7 @@ export const ui: Registry["items"] = [
       "pageSection",
       "VisibilityWrapper",
     ],
-    files: [{ path: "ExpandedHeader.tsx", type: "registry:ui" }],
+    files: [{ path: "header/ExpandedHeader.tsx", type: "registry:ui" }],
   },
   {
     name: "FAQsSection",
