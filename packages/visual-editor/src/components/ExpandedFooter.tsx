@@ -67,14 +67,8 @@ export interface ExpandedFooterProps {
     primaryFooter: {
       backgroundColor?: BackgroundStyle;
       linksAlignment: "left" | "right";
-      logoStyles: {
-        logoWidth: number;
-        aspectRatioForLogo: ImageStylingProps["aspectRatio"];
-      };
-      utilityImagesStyles: {
-        utilityImagesWidth: number;
-        aspectRatioForUtilityImages: ImageStylingProps["aspectRatio"];
-      };
+      logo: ImageStylingProps;
+      utilityImages: ImageStylingProps;
     };
     secondaryFooter: {
       backgroundColor?: BackgroundStyle;
@@ -269,28 +263,15 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               ],
             }
           ),
-          logoStyles: YextField(msg("fields.logoStyles", "Logo Styles"), {
+          logo: YextField(msg("fields.logo", "Logo"), {
             type: "object",
-            objectFields: {
-              logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
-                type: "number",
-              }),
-              aspectRatioForLogo: ImageStylingFields.aspectRatio,
-            },
+            objectFields: ImageStylingFields,
           }),
-          utilityImagesStyles: YextField(
-            msg("fields.utilityImagesStyles", "Utility Images Styles"),
+          utilityImages: YextField(
+            msg("fields.utilityImages", "Utility Images"),
             {
               type: "object",
-              objectFields: {
-                utilityImagesWidth: YextField(
-                  msg("fields.utilityImagesWidth", "Utility Images Width"),
-                  {
-                    type: "number",
-                  }
-                ),
-                aspectRatioForUtilityImages: ImageStylingFields.aspectRatio,
-              },
+              objectFields: ImageStylingFields,
             }
           ),
         },
@@ -362,8 +343,11 @@ const ExpandedFooterWrapper = ({
   const {
     linksAlignment: primaryLinksAlignment,
     backgroundColor,
-    logoStyles: { logoWidth, aspectRatioForLogo },
-    utilityImagesStyles: { utilityImagesWidth, aspectRatioForUtilityImages },
+    logo: { width: logoWidth, aspectRatio: aspectRatioForLogo },
+    utilityImages: {
+      width: utilityImagesWidth,
+      aspectRatio: aspectRatioForUtilityImages,
+    },
   } = primaryFooterStyle;
   const {
     backgroundColor: secondaryBackgroundColor,
@@ -386,8 +370,8 @@ const ExpandedFooterWrapper = ({
           >
             <FooterLogo
               aspectRatio={aspectRatioForLogo}
-              logo={buildComplexLogoImage(logo, logoWidth)}
-              logoWidth={logoWidth}
+              logo={buildComplexLogoImage(logo, logoWidth || 100)}
+              logoWidth={logoWidth || 100}
             />
           </EntityField>
           <div className="hidden md:block space-y-8">
@@ -409,8 +393,11 @@ const ExpandedFooterWrapper = ({
                     <FooterLogo
                       aspectRatio={aspectRatioForUtilityImages}
                       key={index}
-                      logo={buildComplexUtilityImage(item.url, logoWidth)}
-                      logoWidth={utilityImagesWidth}
+                      logo={buildComplexUtilityImage(
+                        item.url,
+                        utilityImagesWidth || 60
+                      )}
+                      logoWidth={utilityImagesWidth || 60}
                     />
                   ))}
                 </div>
@@ -466,8 +453,11 @@ const ExpandedFooterWrapper = ({
                     <FooterLogo
                       aspectRatio={aspectRatioForUtilityImages}
                       key={index}
-                      logo={buildComplexUtilityImage(item.url, logoWidth)}
-                      logoWidth={utilityImagesWidth}
+                      logo={buildComplexUtilityImage(
+                        item.url,
+                        logoWidth || 100
+                      )}
+                      logoWidth={utilityImagesWidth || 100}
                     />
                   ))}
                 </div>
@@ -925,13 +915,13 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
     },
     styles: {
       primaryFooter: {
-        logoStyles: {
-          logoWidth: 100,
-          aspectRatioForLogo: 1.78,
+        logo: {
+          width: 0,
+          aspectRatio: 1.78,
         },
-        utilityImagesStyles: {
-          utilityImagesWidth: 60,
-          aspectRatioForUtilityImages: 1,
+        utilityImages: {
+          width: 0,
+          aspectRatio: 1,
         },
         backgroundColor: backgroundColors.background6.value,
         linksAlignment: "right",

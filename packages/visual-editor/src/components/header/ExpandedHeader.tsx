@@ -37,6 +37,10 @@ import {
 } from "./languageDropdown.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import { ImageWrapperFields } from "../contentBlocks/Image.tsx";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.tsx";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 
@@ -56,8 +60,7 @@ export interface ExpandedHeaderProps {
   };
   styles: {
     primaryHeader: {
-      logoWidth: number;
-      aspectRatio: ImageWrapperProps["aspectRatio"];
+      logo: ImageStylingProps;
       backgroundColor?: BackgroundStyle;
       primaryCtaVariant: CTAProps["variant"];
       secondaryCtaVariant: CTAProps["variant"];
@@ -187,17 +190,10 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       primaryHeader: YextField(msg("fields.primaryHeader", "Primary Header"), {
         type: "object",
         objectFields: {
-          logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
-            type: "number",
+          logo: YextField(msg("fields.logo", "Logo"), {
+            type: "object",
+            objectFields: ImageStylingFields,
           }),
-          aspectRatio:
-            ImageWrapperFields.aspectRatio ??
-            YextField(
-              msg("fields.aspectRatioForLogo", "Aspect Ratio for Logo"),
-              {
-                type: "number",
-              }
-            ),
           backgroundColor: YextField(
             msg("fields.backgroundColor", "Background Color"),
             {
@@ -256,10 +252,9 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
   const {
     backgroundColor,
-    logoWidth,
+    logo: logoStyle,
     primaryCtaVariant,
     secondaryCtaVariant,
-    aspectRatio,
   } = primaryHeaderStyle;
   const { backgroundColor: secondaryBackgroundColor } = secondaryHeaderStyle;
   const languageDropDownProps = parseDocumentForLanguageDropdown(document);
@@ -270,7 +265,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   return (
     <>
       <div
-        className="hidden md:flex flex-col"
+        className="hidden md:flex flex-col justify-center"
         aria-label={t("expandedHeaderDesktop", "Expanded Header Desktop")}
       >
         {show && (
@@ -299,16 +294,16 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         <PageSection
           verticalPadding={"header"}
           background={backgroundColor}
-          className="flex flex-row justify-between w-full items-center"
+          className="flex flex-row items-center justify-center w-full gap-8"
         >
           <EntityField
             constantValueEnabled
             displayName={pt("fields.logoUrl", "Logo")}
           >
             <HeaderLogo
-              aspectRatio={aspectRatio}
-              logo={buildComplexImage(logo, logoWidth)}
-              logoWidth={logoWidth}
+              logo={buildComplexImage(logo, logoStyle.width || 100)}
+              logoWidth={logoStyle.width || 100}
+              aspectRatio={logoStyle.aspectRatio}
             />
           </EntityField>
           <div className="flex gap-8 items-center">
@@ -336,9 +331,9 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         aria-label={t("expandedHeaderMobile", "Expanded Header Mobile")}
       >
         <HeaderLogo
-          aspectRatio={aspectRatio}
-          logo={buildComplexImage(logo, logoWidth)}
-          logoWidth={logoWidth}
+          logo={buildComplexImage(logo, logoStyle.width || 100)}
+          logoWidth={logoStyle.width || 100}
+          aspectRatio={logoStyle.aspectRatio}
         />
 
         <button
@@ -484,13 +479,12 @@ const HeaderLinks = ({
 };
 
 const HeaderLogo = (props: {
-  aspectRatio: any;
   logo: ComplexImageType;
-  logoLink?: string;
   logoWidth?: number;
+  aspectRatio?: number;
 }) => {
   return (
-    <MaybeLink href={props.logoLink}>
+    <MaybeLink href={props.logo.image.url} alwaysHideCaret={true}>
       <figure style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
@@ -646,8 +640,10 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     },
     styles: {
       primaryHeader: {
-        logoWidth: 100,
-        aspectRatio: 2,
+        logo: {
+          width: 0,
+          aspectRatio: 2,
+        },
         backgroundColor: backgroundColors.background1.value,
         primaryCtaVariant: "primary",
         secondaryCtaVariant: "secondary",
