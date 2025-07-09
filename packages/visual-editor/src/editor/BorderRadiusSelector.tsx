@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import React from "react";
+import { ChevronDown } from "lucide-react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
-import { ChevronDown } from "lucide-react";
-import { msg } from "../utils";
+import { msg } from "../utils/i18nPlatform.ts";
 
 export const borderRadiusOptions = [
   { label: "None", value: "none", px: "0" },
