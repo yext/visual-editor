@@ -84,6 +84,7 @@
     "aspectRatioForLogo": "Beeldverhouding voor logo",
     "backgroundColor": "Achtergrondkleur",
     "bannerText": "Banner Tekst",
+    "breadcrumbsBackgroundColor": "Breadcrumbs Achtergrondkleur",
     "businessLogo": "Bedrijfslogo",
     "businessName": "Bedrijfsnaam",
     "businessNameHeadingLevel": "Hoofdniveau bedrijfsniveau",

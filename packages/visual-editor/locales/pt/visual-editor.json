@@ -84,6 +84,7 @@
     "aspectRatioForLogo": "Proporção de aspecto para o logotipo",
     "backgroundColor": "Cor de fundo",
     "bannerText": "Texto do banner",
+    "breadcrumbsBackgroundColor": "Cor de pão cor de fundo",
     "businessLogo": "Logotipo de negócios",
     "businessName": "Nome comercial",
     "businessNameHeadingLevel": "Nome do nome da empresa Nível de cabeçalho",

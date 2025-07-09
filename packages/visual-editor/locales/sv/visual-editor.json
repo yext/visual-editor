@@ -84,6 +84,7 @@
     "aspectRatioForLogo": "Bildförhållande för logotyp",
     "backgroundColor": "Bakgrundsfärg",
     "bannerText": "Bannertext",
+    "breadcrumbsBackgroundColor": "Brödsmulor bakgrundsfärg",
     "businessLogo": "Affärslogotyp",
     "businessName": "Företagsnamn",
     "businessNameHeadingLevel": "Företagsnamn för rubriknivå",

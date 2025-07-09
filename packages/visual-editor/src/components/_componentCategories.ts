@@ -113,15 +113,11 @@ export const PageSectionCategory = Object.keys(
 export interface OtherCategoryProps {
   ExpandedHeader: ExpandedHeaderProps;
   ExpandedFooter: ExpandedFooterProps;
-  Header: HeaderProps;
-  Footer: FooterProps;
 }
 
 export const OtherCategoryComponents = {
   ExpandedHeader,
   ExpandedFooter,
-  Header,
-  Footer,
 };
 
 export const OtherCategory = Object.keys(
@@ -151,6 +147,20 @@ export const LocatorCategoryComponents = {
 export const LocatorCategory = Object.keys(
   LocatorCategoryComponents
 ) as (keyof LocatorCategoryProps)[];
+
+export interface DeprecatedCategoryProps {
+  Header: HeaderProps;
+  Footer: FooterProps;
+}
+
+export const DeprecatedCategoryComponents = {
+  Header,
+  Footer,
+};
+
+export const DeprecatedCategory = Object.keys(
+  DeprecatedCategoryComponents
+) as (keyof DeprecatedCategoryProps)[];
 
 /** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 

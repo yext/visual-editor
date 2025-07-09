@@ -84,6 +84,7 @@
     "aspectRatioForLogo": "Seitenverhältnis für Logo",
     "backgroundColor": "Hintergrundfarbe",
     "bannerText": "Bannertext",
+    "breadcrumbsBackgroundColor": "Breadcrumbs Hintergrundfarbe",
     "businessLogo": "Geschäftslogo",
     "businessName": "Firmenname",
     "businessNameHeadingLevel": "Firmenname Überschrift Level",

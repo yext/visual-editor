@@ -11,9 +11,9 @@ import {
   YextField,
   TranslatableStringField,
   TranslatableString,
-  HeadingLevel,
   BackgroundStyle,
   Background,
+  HeadingLevel,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -28,6 +28,8 @@ export interface DirectoryProps {
     directoryRoot: TranslatableString;
   };
   styles: {
+    backgroundColor?: BackgroundStyle;
+    breadcrumbsBackgroundColor?: BackgroundStyle;
     cards: {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
@@ -51,6 +53,23 @@ const directoryFields: Fields<DirectoryProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      breadcrumbsBackgroundColor: YextField(
+        msg(
+          "fields.breadcrumbsBackgroundColor",
+          "Breadcrumbs Background Color"
+        ),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
       cards: YextField(msg("fields.cards", "Cards"), {
         type: "object",
         objectFields: {
@@ -267,10 +286,11 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   }
 
   return (
-    <>
+    <Background background={styles.backgroundColor}>
       <BreadcrumbsComponent
         data={{ directoryRoot: data.directoryRoot }}
         liveVisibility={true}
+        styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
       />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
@@ -294,7 +314,7 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
             level={document?.meta?.entityType?.id}
           />
         )}
-    </>
+    </Background>
   );
 };
 
@@ -309,6 +329,8 @@ export const Directory: ComponentConfig<DirectoryProps> = {
       },
     },
     styles: {
+      backgroundColor: backgroundColors.background1.value,
+      breadcrumbsBackgroundColor: backgroundColors.background1.value,
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,

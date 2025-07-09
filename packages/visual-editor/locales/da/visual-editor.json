@@ -84,6 +84,7 @@
     "aspectRatioForLogo": "Aspektforhold for logo",
     "backgroundColor": "Baggrundsfarve",
     "bannerText": "Bannertekst",
+    "breadcrumbsBackgroundColor": "Brødkrummer baggrundsfarve",
     "businessLogo": "Forretningslogo",
     "businessName": "Forretningsnavn",
     "businessNameHeadingLevel": "Forretningsnavneoverskrift niveau",
