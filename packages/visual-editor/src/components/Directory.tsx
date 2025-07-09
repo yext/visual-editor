@@ -11,9 +11,12 @@ import {
   YextField,
   TranslatableStringField,
   TranslatableString,
+  HeadingLevel,
+  BackgroundStyle,
+  Background,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AnalyticsScopeProvider,
@@ -24,10 +27,50 @@ export interface DirectoryProps {
   data: {
     directoryRoot: TranslatableString;
   };
+  styles: {
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
+  };
   analytics?: {
     scope?: string;
   };
 }
+
+const directoryFields: Fields<DirectoryProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      directoryRoot: TranslatableStringField(
+        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        "text"
+      ),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
+      }),
+    },
+  }),
+};
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -56,13 +99,18 @@ const DirectoryCard = ({
   cardNumber,
   profile,
   relativePrefixToRoot,
+  cardStyles,
 }: {
   cardNumber: number;
   profile: any;
   relativePrefixToRoot: string;
+  cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
   return (
-    <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
+    <Background
+      className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
+      background={cardStyles.backgroundColor}
+    >
       <div>
         <MaybeLink
           eventName={`link${cardNumber}`}
@@ -74,7 +122,7 @@ const DirectoryCard = ({
               : profile.slug
           }
         >
-          <Heading level={4} semanticLevelOverride={3}>
+          <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}
           </Heading>
         </MaybeLink>
@@ -109,7 +157,7 @@ const DirectoryCard = ({
           />
         </div>
       )}
-    </div>
+    </Background>
   );
 };
 
@@ -117,9 +165,11 @@ const DirectoryCard = ({
 const DirectoryGrid = ({
   directoryChildren,
   relativePrefixToRoot,
+  cardStyles,
 }: {
   directoryChildren: any[];
   relativePrefixToRoot: string;
+  cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -140,6 +190,7 @@ const DirectoryGrid = ({
           cardNumber={idx}
           profile={child}
           relativePrefixToRoot={relativePrefixToRoot}
+          cardStyles={cardStyles}
         />
       ))}
     </PageSection>
@@ -197,7 +248,7 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = ({ data }: DirectoryProps) => {
+const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   let headingText;
@@ -232,6 +283,7 @@ const DirectoryComponent = ({ data }: DirectoryProps) => {
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot}
+            cardStyles={styles.cards}
           />
         )}
       {document.dm_directoryChildren &&
@@ -248,22 +300,18 @@ const DirectoryComponent = ({ data }: DirectoryProps) => {
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
-  fields: {
-    data: YextField(msg("fields.data", "Data"), {
-      type: "object",
-      objectFields: {
-        directoryRoot: TranslatableStringField(
-          msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-          "text"
-        ),
-      },
-    }),
-  },
+  fields: directoryFields,
   defaultProps: {
     data: {
       directoryRoot: {
         en: "Directory Root",
         hasLocalizedValue: "true",
+      },
+    },
+    styles: {
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
       },
     },
     analytics: {
