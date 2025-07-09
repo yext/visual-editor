@@ -28,6 +28,7 @@ import {
   msg,
   pt,
   getAnalyticsScopeHash,
+  ReviewStars,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -199,6 +200,13 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     timezone: string;
   };
 
+  // parse aggregateRating
+  const aggregateRating = document?._schema?.["@graph"]?.find(
+    (e: any) => e.aggregateRating
+  )?.aggregateRating;
+  const totalReviews = Number(aggregateRating?.reviewCount) || 0;
+  const averageRating = Number(aggregateRating?.ratingValue) || 0;
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -254,6 +262,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             >
               <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
+          )}
+          {totalReviews && (
+            <ReviewStars
+              rating={averageRating}
+              hasDarkBackground={
+                styles.backgroundColor?.textColor === "text-white"
+              }
+              totalReviews={totalReviews}
+            />
           )}
         </header>
         {(resolvedHero?.primaryCta?.label ||

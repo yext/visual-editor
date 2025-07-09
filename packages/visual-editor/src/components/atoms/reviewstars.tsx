@@ -18,7 +18,7 @@ export const ReviewStars = (props: ReviewStarsProps) => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="flex items-center gap-1">
       <Body className="font-bold">{rating}</Body>
       <div className={`flex items-center gap-0.5 ${starColor}`}>
         {new Array(5)
@@ -37,7 +37,7 @@ export const ReviewStars = (props: ReviewStarsProps) => {
           )}
       </div>
       {totalReviews && (
-        <Body>
+        <Body className="ml-1">
           {/* TODO: update script to handle plurals */}(
           {t("totalReviews", `${totalReviews} reviews`, {
             count: totalReviews,
@@ -45,6 +45,6 @@ export const ReviewStars = (props: ReviewStarsProps) => {
           )
         </Body>
       )}
-    </>
+    </div>
   );
 };
