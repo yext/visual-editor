@@ -16,15 +16,13 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: "Sanitize PR number for branch name"
+      - name: "Extract Branch Name"
         id: identifiers
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
           BRANCH_NAME="pr-$PR_NUMBER"
-          SANITIZED_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed -e 's/\//-/g' -e 's/[^a-zA-Z0-9-]//g')
           echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          echo "sanitized_branch_name=$SANITIZED_BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: "Notify Starter Repo to delete branch"
         uses: peter-evans/repository-dispatch@v3
@@ -36,7 +34,6 @@ jobs:
             {
               "pr_number": "${{ steps.identifiers.outputs.pr_number }}",
               "branch_name": "${{ steps.identifiers.outputs.branch_name }}",
-              "sanitized_branch_name": "${{ steps.identifiers.outputs.sanitized_branch_name }}",
               "pr_title": "${{ github.event.pull_request.title }}",
               "pr_url": "${{ github.event.pull_request.html_url }}",
               "author": "${{ github.event.pull_request.user.login }}",
