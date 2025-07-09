@@ -314,8 +314,8 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             displayName={pt("fields.logoUrl", "Logo")}
           >
             <HeaderLogo
-              logo={buildComplexImage(logo, logoStyle.width || 100)}
-              logoWidth={logoStyle.width || 100}
+              logo={buildComplexImage(logo, logoStyle.width ?? 200)}
+              logoWidth={logoStyle.width ?? 200}
               aspectRatio={logoStyle.aspectRatio}
             />
           </EntityField>
@@ -586,7 +586,6 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
           defaultMainLink,
           defaultMainLink,
           defaultMainLink,
-          defaultMainLink,
         ],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -614,7 +613,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     styles: {
       primaryHeader: {
         logo: {
-          width: 200,
+          width: undefined,
           aspectRatio: 2,
         },
         backgroundColor: backgroundColors.background1.value,
