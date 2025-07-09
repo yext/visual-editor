@@ -108,7 +108,7 @@ const DirectoryCard = ({
 }) => {
   return (
     <Background
-      className="rounded h-full flex flex-col"
+      className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
       background={cardStyles.backgroundColor}
     >
       <div>
