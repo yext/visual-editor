@@ -16,14 +16,6 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: "Extract Branch Name"
-        id: identifiers
-        run: |
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          BRANCH_NAME="pr-$PR_NUMBER"
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-
       - name: "Notify Starter Repo to delete branch"
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -32,11 +24,11 @@ jobs:
           event-type: dev-release-cleanup
           client-payload: >
             {
-              "pr_number": "${{ steps.identifiers.outputs.pr_number }}",
-              "branch_name": "${{ steps.identifiers.outputs.branch_name }}",
+              "pr_number": "${{ github.event.pull_request.number }}",
+              "branch_name": "pr-${{ github.event.pull_request.number }}",
               "pr_title": "${{ github.event.pull_request.title }}",
               "pr_url": "${{ github.event.pull_request.html_url }}",
               "author": "${{ github.event.pull_request.user.login }}",
               "action": "${{ github.event.action }}",
-              "package_url": "https://pkg.pr.new/yext/visual-editor@${{ steps.identifiers.outputs.pr_number }}"
+              "package_url": "https://pkg.pr.new/yext/visual-editor@${{ github.event.pull_request.number }}"
             }
