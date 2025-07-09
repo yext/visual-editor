@@ -52,7 +52,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
   const document: any = useDocument();
-  const apiKey = "ef20396a434aa6e9965e6d3e53888db0"; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
