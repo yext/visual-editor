@@ -12,10 +12,12 @@ import { useQuery } from "@tanstack/react-query";
 import { ComponentConfig, Fields } from "@measured/puck";
 import * as React from "react";
 import {
+  backgroundColors,
   type BackgroundStyle,
   Body,
   Button,
   fetchReviewsForEntity,
+  getAnalyticsScopeHash,
   Heading,
   msg,
   PageSection,
@@ -25,6 +27,7 @@ import {
   useDocument,
   YextField,
 } from "@yext/visual-editor";
+import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
 const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
@@ -36,6 +39,9 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
 
 export type ReviewsSectionProps = {
   backgroundColor: BackgroundStyle;
+  analytics?: {
+    scope?: string;
+  };
 };
 
 const reviewsFields: Fields<ReviewsSectionProps> = {
@@ -185,6 +191,7 @@ const ReviewsList: React.FC<{ reviews: any[]; hasDarkBackground: boolean }> = ({
       {reviews.map((review, index) => (
         <Review
           key={`review-${index}`}
+          index={index}
           review={review}
           hasDarkBackground={hasDarkBackground}
         />
@@ -193,10 +200,11 @@ const ReviewsList: React.FC<{ reviews: any[]; hasDarkBackground: boolean }> = ({
   );
 };
 
-const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
-  review,
-  hasDarkBackground,
-}) => {
+const Review: React.FC<{
+  review: any;
+  hasDarkBackground: boolean;
+  index: number;
+}> = ({ review, hasDarkBackground, index }) => {
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
     date: review.reviewDate,
@@ -205,6 +213,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
     rating: review.rating,
     ...(review.content && { content: review.content }),
     hasDarkBackground,
+    index,
   };
 
   let businessResponseData: BusinessResponseProps | undefined = undefined;
@@ -216,6 +225,7 @@ const Review: React.FC<{ review: any; hasDarkBackground: boolean }> = ({
       businessName,
       content: businessResponseContent,
       date: businessResponseDate,
+      index,
     };
   }
 
@@ -264,12 +274,14 @@ interface ReviewContentProps {
   rating: number;
   content?: string;
   hasDarkBackground: boolean;
+  index: number;
 }
 
 const ReviewContent: React.FC<ReviewContentProps> = ({
   rating,
   content,
   hasDarkBackground,
+  index,
 }) => {
   const reviewStars = (
     <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
@@ -280,6 +292,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
   const expandableContentData = {
     content: content,
     preContentElement: reviewStars,
+    analyticsName: `review${index}`,
   };
   return <ExpandableContent {...expandableContentData} />;
 };
@@ -288,12 +301,14 @@ interface BusinessResponseProps {
   businessName: string;
   content: string;
   date: string;
+  index: number;
 }
 
 const BusinessResponse: React.FC<BusinessResponseProps> = ({
   businessName,
   content,
   date,
+  index,
 }) => {
   const { t } = useTranslation();
   const authorData: AuthorWithDateProps = {
@@ -307,6 +322,7 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
   const expandableContentData = {
     content: content,
     preContentElement: authorWithDate,
+    analyticsName: `businessResponse${index}`,
   };
   return <ExpandableContent {...expandableContentData} />;
 };
@@ -314,11 +330,13 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
 interface ExpandableContentProps {
   content: string;
   preContentElement?: React.ReactNode;
+  analyticsName: string;
 }
 
 const ExpandableContent: React.FC<ExpandableContentProps> = ({
   content,
   preContentElement,
+  analyticsName,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [isTruncated, setIsTruncated] = React.useState(false);
@@ -346,7 +364,11 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
         {content}
       </Body>
       {(isTruncated || expanded) && (
-        <ShowMoreButton expanded={expanded} setExpanded={setExpanded} />
+        <ShowMoreButton
+          expanded={expanded}
+          setExpanded={setExpanded}
+          analyticsName={analyticsName}
+        />
       )}
     </div>
   );
@@ -365,6 +387,7 @@ const PageScroller: React.FC<PageScrollerProps> = ({
   fetchData,
   hasDarkBackground,
 }) => {
+  const analytics = useAnalytics();
   const numPages = Math.ceil(totalReviews / REVIEWS_PER_PAGE);
   if (numPages <= 1) {
     return <></>;
@@ -375,17 +398,27 @@ const PageScroller: React.FC<PageScrollerProps> = ({
     <Body className="flex flex-row justify-center items-center gap-5">
       <FaArrowLeft
         className={`${currentPageNumber === 1 ? disabledButtonClasses : selectableButtonClasses}`}
+        data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
+        data-ya-eventname={
+          analytics?.getDebugEnabled() ? "previousPage" : undefined
+        }
         onClick={() => {
           if (currentPageNumber > 1) {
             fetchData(currentPageNumber - 1);
+            analytics?.track({ eventName: "previousPage", action: "PAGINATE" });
           }
         }}
       />
       <FaArrowRight
         className={`${currentPageNumber === numPages ? disabledButtonClasses : selectableButtonClasses}`}
+        data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
+        data-ya-eventname={
+          analytics?.getDebugEnabled() ? "nextPage" : undefined
+        }
         onClick={() => {
           if (currentPageNumber < numPages) {
             fetchData(currentPageNumber + 1);
+            analytics?.track({ eventName: "nextPage", action: "PAGINATE" });
           }
         }}
       />
@@ -396,13 +429,38 @@ const PageScroller: React.FC<PageScrollerProps> = ({
 const ShowMoreButton: React.FC<{
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
-}> = ({ expanded, setExpanded }) => {
+  analyticsName: string;
+}> = ({ expanded, setExpanded, analyticsName }) => {
   const { t } = useTranslation();
+  const analytics = useAnalytics();
   return (
     <Button
       className="font-body-fontFamily text-body-fontSize underline cursor-pointer inline-flex items-center gap-2"
-      onClick={() => setExpanded(!expanded)}
+      onClick={() => {
+        expanded // the existing state before toggling
+          ? analytics?.track({
+              action: "COLLAPSE",
+              eventName: `${analyticsName}-showLess`,
+            })
+          : analytics?.track({
+              action: "EXPAND",
+              eventName: `${analyticsName}-showMore`,
+            });
+        setExpanded(!expanded);
+      }}
       variant={"link"}
+      data-ya-action={
+        analytics?.getDebugEnabled()
+          ? expanded
+            ? "COLLAPSE"
+            : "EXPAND"
+          : undefined
+      }
+      data-ya-eventname={
+        analytics?.getDebugEnabled()
+          ? `${analyticsName}-${expanded ? "showLess" : "showMore"}`
+          : undefined
+      }
     >
       {expanded ? t("showLess", "Show less") : t("showMore", "Show more")}
       <FaChevronDown
@@ -426,5 +484,17 @@ function getAggregateRating(document: any) {
 export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
   fields: reviewsFields,
   label: msg("components.reviewsSection", "Reviews Section"),
-  render: (props) => <ReviewsSectionInternal {...props} />,
+  defaultProps: {
+    backgroundColor: backgroundColors.background1.value,
+    analytics: {
+      scope: "reviewsSection",
+    },
+  },
+  render: (props) => (
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
+      <ReviewsSectionInternal {...props} />
+    </AnalyticsScopeProvider>
+  ),
 };
