@@ -370,6 +370,7 @@
       "color4": "Farve 4"
     },
     "bodyText": "Kropstekst",
+    "borderRadius": "Grænseadius",
     "button": "Knap",
     "colors": {
       "colors": "Farver",
@@ -407,6 +408,10 @@
     },
     "links": "Links",
     "pageSection": "Sideafsnit",
+    "radius": {
+      "pill": "Pille",
+      "pill_shape": "Pille"
+    },
     "textTransform": {
       "capitalize": "Kapitalisere",
       "lowercase": "Små bogstaver",

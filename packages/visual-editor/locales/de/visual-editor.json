@@ -370,6 +370,7 @@
       "color4": "Farbe 4"
     },
     "bodyText": "Körpertext",
+    "borderRadius": "Grenzradius",
     "button": "Taste",
     "colors": {
       "colors": "Farben",
@@ -407,6 +408,10 @@
     },
     "links": "Links",
     "pageSection": "Seitenabschnitt",
+    "radius": {
+      "pill": "Pille",
+      "pill_shape": "Pille"
+    },
     "textTransform": {
       "capitalize": "Profitieren",
       "lowercase": "Kleinbuchstaben",

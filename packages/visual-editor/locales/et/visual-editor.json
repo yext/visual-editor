@@ -370,6 +370,7 @@
       "color4": "Värv 4"
     },
     "bodyText": "Keretekst",
+    "borderRadius": "Piiriraadius",
     "button": "Nupp",
     "colors": {
       "colors": "Värvid",
@@ -407,6 +408,10 @@
     },
     "links": "Lingid",
     "pageSection": "Leheosa",
+    "radius": {
+      "pill": "Pill",
+      "pill_shape": "Pill"
+    },
     "textTransform": {
       "capitalize": "Suurtähendama",
       "lowercase": "Väikekapp",

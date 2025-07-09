@@ -372,6 +372,7 @@
       "color4": "4 spalva"
     },
     "bodyText": "Kūno tekstas",
+    "borderRadius": "Pasienio spindulys",
     "button": "Mygtukas",
     "colors": {
       "colors": "Spalvos",
@@ -409,6 +410,10 @@
     },
     "links": "Nuorodos",
     "pageSection": "Puslapio skyrius",
+    "radius": {
+      "pill": "Piliulė",
+      "pill_shape": "Piliulė"
+    },
     "textTransform": {
       "capitalize": "Kapitalizuoti",
       "lowercase": "Mažosios raidės",

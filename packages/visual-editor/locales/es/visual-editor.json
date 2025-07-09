@@ -370,6 +370,7 @@
       "color4": "Color 4"
     },
     "bodyText": "Texto del cuerpo",
+    "borderRadius": "Radio fronterizo",
     "button": "Botón",
     "colors": {
       "colors": "Bandera",
@@ -407,6 +408,10 @@
     },
     "links": "Campo de golf",
     "pageSection": "Sección de la página",
+    "radius": {
+      "pill": "Píldora",
+      "pill_shape": "Píldora"
+    },
     "textTransform": {
       "capitalize": "Capitalizar",
       "lowercase": "Minúscula",

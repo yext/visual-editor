@@ -29,7 +29,7 @@ export const buttonVariants = cva(
         variant: ["primary", "secondary"],
         className:
           "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing rounded-button-borderRadius " +
-          "hover:underline focus:underline active:underline sm:w-fit w-full px-6 py-3 border-solid",
+          "hover:underline focus:underline active:underline sm:w-fit w-full px-6 py-3 border-2 border-solid",
       },
       {
         variant: ["link", "directoryLink"],

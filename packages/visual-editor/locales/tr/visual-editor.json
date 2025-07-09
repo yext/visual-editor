@@ -370,6 +370,7 @@
       "color4": "Renk 4"
     },
     "bodyText": "Gövde metni",
+    "borderRadius": "Sınır yarıçapı",
     "button": "Düğme",
     "colors": {
       "colors": "Renk",
@@ -407,6 +408,10 @@
     },
     "links": "Bağlar",
     "pageSection": "Sayfa bölümü",
+    "radius": {
+      "pill": "Hap",
+      "pill_shape": "Hap"
+    },
     "textTransform": {
       "capitalize": "Baştan çıkarmak",
       "lowercase": "Küçük harf",

@@ -371,6 +371,7 @@
       "color4": "4. krāsa"
     },
     "bodyText": "Ķermeņa teksts",
+    "borderRadius": "Robežas rādiuss",
     "button": "Pogas",
     "colors": {
       "colors": "Krāsas",
@@ -408,6 +409,10 @@
     },
     "links": "Saites",
     "pageSection": "Lapas sadaļa",
+    "radius": {
+      "pill": "Tablete",
+      "pill_shape": "Tabletes"
+    },
     "textTransform": {
       "capitalize": "Izmantot lielo burtu",
       "lowercase": "Mazie burti",

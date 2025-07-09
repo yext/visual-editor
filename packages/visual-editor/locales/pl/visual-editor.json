@@ -372,6 +372,7 @@
       "color4": "Kolor 4"
     },
     "bodyText": "Tekst nadwozia",
+    "borderRadius": "Promień graniczny",
     "button": "Przycisk",
     "colors": {
       "colors": "Zabarwienie",
@@ -409,6 +410,10 @@
     },
     "links": "Spinki do mankietów",
     "pageSection": "Sekcja strony",
+    "radius": {
+      "pill": "Pigułka",
+      "pill_shape": "Pigułka"
+    },
     "textTransform": {
       "capitalize": "Skapitalizować",
       "lowercase": "Małe litery",

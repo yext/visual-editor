@@ -370,6 +370,7 @@
       "color4": "Väri 4"
     },
     "bodyText": "Kehon teksti",
+    "borderRadius": "Reunasäde",
     "button": "Painike",
     "colors": {
       "colors": "Värit",
@@ -407,6 +408,10 @@
     },
     "links": "Linkit",
     "pageSection": "Sivuosio",
+    "radius": {
+      "pill": "Pilleri",
+      "pill_shape": "Pilleri"
+    },
     "textTransform": {
       "capitalize": "Päällekkäistä",
       "lowercase": "Pienet kirjaimet",

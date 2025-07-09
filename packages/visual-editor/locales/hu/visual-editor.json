@@ -370,6 +370,7 @@
       "color4": "4. szín"
     },
     "bodyText": "Testszöveg",
+    "borderRadius": "Sorrendi sugár",
     "button": "Gomb",
     "colors": {
       "colors": "Színek",
@@ -407,6 +408,10 @@
     },
     "links": "Linkek",
     "pageSection": "Oldal szakasz",
+    "radius": {
+      "pill": "Tabletta",
+      "pill_shape": "Tabletta"
+    },
     "textTransform": {
       "capitalize": "Nagyít",
       "lowercase": "Kisbetűs",

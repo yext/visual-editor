@@ -371,6 +371,7 @@
       "color4": "Farba 4"
     },
     "bodyText": "Text tela",
+    "borderRadius": "Okrajový polomer",
     "button": "Tlačidlo",
     "colors": {
       "colors": "Farby",
@@ -408,6 +409,10 @@
     },
     "links": "Odkazy",
     "pageSection": "Sekcia",
+    "radius": {
+      "pill": "Tabletka",
+      "pill_shape": "Tabletka"
+    },
     "textTransform": {
       "capitalize": "Zarábať",
       "lowercase": "Malé písmená",

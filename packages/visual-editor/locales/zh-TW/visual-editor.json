@@ -370,6 +370,7 @@
       "color4": "顏色4"
     },
     "bodyText": "正文",
+    "borderRadius": "邊界半徑",
     "button": "按鈕",
     "colors": {
       "colors": "顏色",
@@ -407,6 +408,10 @@
     },
     "links": "鏈接",
     "pageSection": "頁面部分",
+    "radius": {
+      "pill": "丸",
+      "pill_shape": "藥丸"
+    },
     "textTransform": {
       "capitalize": "大寫",
       "lowercase": "小寫",

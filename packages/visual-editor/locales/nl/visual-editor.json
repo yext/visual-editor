@@ -370,6 +370,7 @@
       "color4": "Kleur 4"
     },
     "bodyText": "Lijftekst",
+    "borderRadius": "Randradius",
     "button": "Knop",
     "colors": {
       "colors": "Kleuren",
@@ -407,6 +408,10 @@
     },
     "links": "Links",
     "pageSection": "Paginagectie",
+    "radius": {
+      "pill": "Pil",
+      "pill_shape": "Pil"
+    },
     "textTransform": {
       "capitalize": "Hoofd",
       "lowercase": "Kleine letters",

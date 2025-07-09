@@ -370,6 +370,7 @@
       "color4": "Couleur 4"
     },
     "bodyText": "Texte du corps",
+    "borderRadius": "Rayon de frontière",
     "button": "Bouton",
     "colors": {
       "colors": "Couleurs",
@@ -407,6 +408,10 @@
     },
     "links": "Links",
     "pageSection": "Section de page",
+    "radius": {
+      "pill": "Pilule",
+      "pill_shape": "Pilule"
+    },
     "textTransform": {
       "capitalize": "Capitaliser",
       "lowercase": "Minuscule",

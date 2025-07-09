@@ -371,6 +371,7 @@
       "color4": "Culoare 4"
     },
     "bodyText": "Text corporal",
+    "borderRadius": "Raza de frontieră",
     "button": "Buton",
     "colors": {
       "colors": "Culori",
@@ -408,6 +409,10 @@
     },
     "links": "Link -uri",
     "pageSection": "Secțiunea Pagina",
+    "radius": {
+      "pill": "Pastilă",
+      "pill_shape": "Pastilă"
+    },
     "textTransform": {
       "capitalize": "Valorifica",
       "lowercase": "Minuscule",

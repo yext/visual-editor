@@ -371,6 +371,7 @@
       "color4": "Boja 4"
     },
     "bodyText": "Tekst tijela",
+    "borderRadius": "Polumjer",
     "button": "Gumb",
     "colors": {
       "colors": "Boja",
@@ -408,6 +409,10 @@
     },
     "links": "Veze",
     "pageSection": "Odjeljak",
+    "radius": {
+      "pill": "Pilula",
+      "pill_shape": "Tableta"
+    },
     "textTransform": {
       "capitalize": "Iskoristiti",
       "lowercase": "Malim slovima",

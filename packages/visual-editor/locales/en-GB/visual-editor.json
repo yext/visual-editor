@@ -370,6 +370,7 @@
       "color4": "Color 4"
     },
     "bodyText": "Body Text",
+    "borderRadius": "Border Radius",
     "button": "Button",
     "colors": {
       "colors": "Colors",
@@ -407,6 +408,10 @@
     },
     "links": "Links",
     "pageSection": "Page Section",
+    "radius": {
+      "pill": "Pill",
+      "pill_shape": "Pill"
+    },
     "textTransform": {
       "capitalize": "Capitalize",
       "lowercase": "Lowercase",

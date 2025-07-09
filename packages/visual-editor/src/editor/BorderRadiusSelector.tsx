@@ -4,6 +4,7 @@ import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
+import { msg } from "../utils";
 
 export const borderRadiusOptions = [
   { label: "None", value: "none", px: "0" },
@@ -12,7 +13,11 @@ export const borderRadiusOptions = [
   { label: "MD", value: "md", px: "6" },
   { label: "LG", value: "lg", px: "8" },
   { label: "XL", value: "xl", px: "12" },
-  { label: "Pill", value: "pill", px: "10000" },
+  {
+    label: msg("theme.radius.pill", "Pill", { context: "shape" }),
+    value: "pill",
+    px: "10000",
+  },
 ];
 
 export const convertToPixels = (borderRadius: string): number => {

@@ -370,6 +370,7 @@
       "color4": "Färg 4"
     },
     "bodyText": "Kroppstext",
+    "borderRadius": "Gränsradie",
     "button": "Knapp",
     "colors": {
       "colors": "Färger",
@@ -407,6 +408,10 @@
     },
     "links": "Länkar",
     "pageSection": "Sidavsnitt",
+    "radius": {
+      "pill": "Piller",
+      "pill_shape": "Piller"
+    },
     "textTransform": {
       "capitalize": "Kapitalisera",
       "lowercase": "Gemen",

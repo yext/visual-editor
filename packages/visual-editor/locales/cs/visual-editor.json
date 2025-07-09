@@ -370,6 +370,7 @@
       "color4": "Barva 4"
     },
     "bodyText": "Text těla",
+    "borderRadius": "Poloměr hranic",
     "button": "Tlačítko",
     "colors": {
       "colors": "Barvy",
@@ -407,6 +408,10 @@
     },
     "links": "Odkazy",
     "pageSection": "Sekce stránky",
+    "radius": {
+      "pill": "Pilulka",
+      "pill_shape": "Pilulka"
+    },
     "textTransform": {
       "capitalize": "Kapitalizovat",
       "lowercase": "Malá písmena",
