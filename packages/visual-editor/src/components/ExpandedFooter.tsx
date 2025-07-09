@@ -93,7 +93,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       primaryFooter: YextField(msg("fields.primaryFooter", "Primary Footer"), {
         type: "object",
         objectFields: {
-          logo: YextField(msg("fields.logoUrl", "Logo"), {
+          logo: YextField(msg("fields.logo", "Logo"), {
             type: "text",
           }),
           xLink: YextField(msg("fields.xLink", "X Link"), {
@@ -128,9 +128,12 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 url: YextField(msg("fields.imageUrl", "Image URL"), {
                   type: "text",
                 }),
-                linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
-                  type: "text",
-                }),
+                linkTarget: YextField(
+                  msg("fields.destinationURL", "Destination URL"),
+                  {
+                    type: "text",
+                  }
+                ),
               },
             }
           ),
@@ -251,8 +254,18 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "radio",
               options: [
-                { label: msg("fields.options.left", "Left"), value: "left" },
-                { label: msg("fields.options.right", "Right"), value: "right" },
+                {
+                  label: msg("fields.options.left", "Left", {
+                    context: "direction",
+                  }),
+                  value: "left",
+                },
+                {
+                  label: msg("fields.options.right", "Right", {
+                    context: "direction",
+                  }),
+                  value: "right",
+                },
               ],
             }
           ),
@@ -317,9 +330,16 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               {
                 type: "radio",
                 options: [
-                  { label: msg("fields.options.left", "Left"), value: "left" },
                   {
-                    label: msg("fields.options.right", "Right"),
+                    label: msg("fields.options.left", "Left", {
+                      context: "direction",
+                    }),
+                    value: "left",
+                  },
+                  {
+                    label: msg("fields.options.right", "Right", {
+                      context: "direction",
+                    }),
                     value: "right",
                   },
                 ],

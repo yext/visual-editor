@@ -170,6 +170,7 @@ export const ui: Registry["items"] = [
       "pageSection",
       "VisibilityWrapper",
       "body",
+      "background",
     ],
     files: [{ path: "ExpandedFooter.tsx", type: "registry:ui" }],
   },
