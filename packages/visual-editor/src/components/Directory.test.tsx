@@ -298,6 +298,128 @@ const tests: ComponentTest[] = [
       expect(page.getByText("Directory Root")).toBeVisible();
     },
   },
+  {
+    name: "version 8 with non-default props",
+    document: {
+      _site: {
+        name: "Example Business",
+      },
+      meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+      dm_childEntityIds: ["8932945"],
+      dm_directoryChildren: [
+        {
+          name: "Arlington",
+          slug: "us/va/arlington",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "Virginia",
+        },
+      ],
+      dm_directoryManagerId: "63590-locations",
+      dm_directoryParents_63590_locations: [
+        {
+          name: "Locations Directory",
+          slug: "en/index.html",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "Virginia",
+        },
+        {
+          name: "US",
+          slug: "en/us",
+          dm_addressCountryDisplayName: "United States",
+        },
+      ],
+    },
+    props: {
+      data: {
+        directoryRoot: "Not Default Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+    tests: async (page) => {
+      expect(page.getByText("Not Default Root")).toBeVisible();
+    },
+  },
+  {
+    name: "version 8 with default props",
+    document: {
+      _site: {
+        name: "Example Business",
+      },
+      meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+      dm_childEntityIds: ["8932945"],
+      dm_directoryChildren: [
+        {
+          name: "Arlington",
+          slug: "us/va/arlington",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "Virginia",
+        },
+      ],
+      dm_directoryManagerId: "63590-locations",
+      dm_directoryParents_63590_locations: [
+        {
+          name: "Locations Directory",
+          slug: "en/index.html",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "Virginia",
+        },
+        {
+          name: "US",
+          slug: "en/us",
+          dm_addressCountryDisplayName: "United States",
+        },
+      ],
+    },
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+    tests: async (page) => {
+      expect(page.getByText("Directory Root")).toBeVisible();
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
