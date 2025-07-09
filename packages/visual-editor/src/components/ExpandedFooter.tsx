@@ -35,6 +35,10 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { linkTypeOptions } from "../internal/puck/constant-value-fields/CallToAction.tsx";
 import { ImageWrapperFields } from "./contentBlocks/Image.tsx";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "./contentBlocks/ImageStyling.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
@@ -68,11 +72,11 @@ export interface ExpandedFooterProps {
       linksAlignment: "left" | "right";
       logoStyles: {
         logoWidth: number;
-        aspectRatioForLogo: ImageWrapperProps["aspectRatio"];
+        aspectRatioForLogo: ImageStylingProps["aspectRatio"];
       };
       utilityImagesStyles: {
         utilityImagesWidth: number;
-        aspectRatioForUtilityImages: ImageWrapperProps["aspectRatio"];
+        aspectRatioForUtilityImages: ImageStylingProps["aspectRatio"];
       };
     };
     secondaryFooter: {
@@ -275,14 +279,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
                 type: "number",
               }),
-              aspectRatioForLogo:
-                ImageWrapperFields.aspectRatio ??
-                YextField(
-                  msg("fields.aspectRatioForLogo", "Aspect Ratio for Logo"),
-                  {
-                    type: "number",
-                  }
-                ),
+              aspectRatioForLogo: ImageStylingFields.aspectRatio,
             },
           }),
           utilityImagesStyles: YextField(
@@ -296,17 +293,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                     type: "number",
                   }
                 ),
-                aspectRatioForUtilityImages:
-                  ImageWrapperFields.aspectRatio ??
-                  YextField(
-                    msg(
-                      "fields.aspectRatioForUtilityImages",
-                      "Aspect Ratio for Utility Images"
-                    ),
-                    {
-                      type: "number",
-                    }
-                  ),
+                aspectRatioForUtilityImages: ImageStylingFields.aspectRatio,
               },
             }
           ),
