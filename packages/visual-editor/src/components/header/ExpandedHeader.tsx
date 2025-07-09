@@ -314,7 +314,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         >
           <EntityField
             constantValueEnabled
-            displayName={pt("fields.logo", "Logo")}
+            displayName={pt("fields.logoUrl", "Logo")}
           >
             <HeaderLogo
               aspectRatio={aspectRatio}
@@ -505,7 +505,6 @@ const HeaderLogo = (props: {
       <figure style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
-          layout="auto"
           aspectRatio={
             props.aspectRatio ||
             props.logo.image.width / props.logo.image.height

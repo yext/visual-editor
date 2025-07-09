@@ -19,7 +19,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../atoms/accordion.tsx";
+} from "@radix-ui/react-accordion";
 
 export interface LanguageDropdownProps {
   className?: string;
