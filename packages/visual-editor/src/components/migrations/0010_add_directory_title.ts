@@ -1,7 +1,7 @@
 import { Migration } from "../../utils/migrate.ts";
 
 export const addDirectoryTitleMigration: Migration = {
-  HeroSection: {
+  Directory: {
     action: "updated",
     propTransformation: (props) => {
       return {
