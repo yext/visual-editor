@@ -14,6 +14,9 @@ import {
   BackgroundStyle,
   Background,
   HeadingLevel,
+  resolveYextEntityField,
+  YextEntityField,
+  resolveTranslatableString,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -25,6 +28,7 @@ import {
 
 export interface DirectoryProps {
   data: {
+    title: YextEntityField<TranslatableString>;
     directoryRoot: TranslatableString;
   };
   styles: {
@@ -44,6 +48,12 @@ const directoryFields: Fields<DirectoryProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
+      title: YextField<any, TranslatableString>(msg("fields.title", "Title"), {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
         "text"
@@ -270,20 +280,9 @@ const DirectoryList = ({
 const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
-  let headingText;
-  switch (document?.meta?.entityType?.id) {
-    case "dm_root":
-      headingText = "All Locations";
-      break;
-    case "dm_country":
-      headingText = document.dm_addressCountryDisplayName ?? document.name;
-      break;
-    case "dm_region":
-      headingText = document.dm_addressRegionDisplayName ?? document.name;
-      break;
-    case "dm_city":
-      headingText = document.name;
-  }
+  const title = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(document, data.title)
+  );
 
   return (
     <Background background={styles.backgroundColor}>
@@ -296,7 +295,7 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
         {document._site.name && (
           <Heading level={4}>{document._site.name}</Heading>
         )}
-        {headingText && <Heading level={2}>{headingText}</Heading>}
+        {title && <Heading level={2}>{title}</Heading>}
       </PageSection>
       {document.dm_directoryChildren &&
         isDirectoryGrid(document.dm_directoryChildren) && (
@@ -323,6 +322,14 @@ export const Directory: ComponentConfig<DirectoryProps> = {
   fields: directoryFields,
   defaultProps: {
     data: {
+      title: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "[[name]]",
+          hasLocalizedValue: "true",
+        },
+      },
       directoryRoot: {
         en: "Directory Root",
         hasLocalizedValue: "true",
