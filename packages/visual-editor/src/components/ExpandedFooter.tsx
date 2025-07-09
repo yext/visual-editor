@@ -10,7 +10,6 @@ import {
   Image,
   msg,
   YextField,
-  VisibilityWrapper,
   BackgroundStyle,
   pt,
   Body,

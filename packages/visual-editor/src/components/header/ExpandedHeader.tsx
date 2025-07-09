@@ -12,7 +12,6 @@ import {
   Image,
   msg,
   YextField,
-  VisibilityWrapper,
   BackgroundStyle,
   CTAProps,
   TranslatableCTA,
@@ -21,6 +20,7 @@ import {
   PageSection,
   TranslatableStringField,
   ImageWrapperProps,
+  useDocument,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -252,6 +252,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
   const { t } = useTranslation();
+  const document = useDocument();
   const { logo, links, primaryCTA, secondaryCTA } = primaryHeader;
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
   const {
