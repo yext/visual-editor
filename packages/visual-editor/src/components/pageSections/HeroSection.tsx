@@ -43,6 +43,7 @@ export interface HeroSectionProps {
     localGeoModifier: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
     hero: YextStructEntityField<HeroSectionType>;
+    showAverageReview: boolean;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -93,6 +94,16 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           type: ComponentFields.HeroSection.type,
         },
       }),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
+        }
+      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -263,7 +274,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
           )}
-          {totalReviews && (
+          {totalReviews && data.showAverageReview && (
             <ReviewStars
               rating={averageRating}
               hasDarkBackground={
@@ -434,6 +445,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           secondaryCta: true,
         },
       },
+      showAverageReview: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
