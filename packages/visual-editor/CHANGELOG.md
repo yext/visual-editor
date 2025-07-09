@@ -1,3 +1,52 @@
+#### 0.0.44 (2025-07-09)
+
+##### Chores
+
+- update default layout data for expanded header and footer (#594) (0d50bec9)
+- deprecate header and footer (#592) (4af3c076)
+- upgrade search-ui-react for more translations (#581) (458148f7)
+- swap from eslint to oxlint (#553) (358fcd61)
+
+##### New Features
+
+- add backgroundColor to Breadcrumbs and Directory (#585) (51d301b4)
+- expanded header and footer (#593) (5d78f64c)
+- set up workflow to create a new dev release (#580) (3fcadbbc)
+- reviews component (#564) (12b08b42)
+- add non-link analytics to FAQ section and mobile header (#574) (a00a972c)
+- add image styling props (#573) (012471ac)
+- add Open Now button to locator (#569) (3a70acd7)
+- add rtf functionality (#560) (81fe991d)
+- make banner text RTF (#567) (9f75e959)
+- hide banner if missing data (#566) (a617291f)
+- add reviews component skeleton (#561) (cfa011ad)
+- update i18n for context (#559) (0fba9813)
+- add links to nearby location cards (#554) (dc968be3)
+- **components:** add card styles (#583) (cc454c8d)
+
+##### Bug Fixes
+
+- display heading spans as block (#590) (e290f4f4)
+- update hero/promo images on mobile (#588) (017d0ba5)
+- re-add directory card border (#587) (25fe6d37)
+- set default button font to font-normal (#584) (22eef1aa)
+- default_directory to defaultdirectory in starter (#579) (bdec50cb)
+- truncate strings in BasicSelector (#572) (6251f611)
+- nearbyLocations warning spam (#576) (9895d54e)
+- reduce fonts imported into generated pages (#571) (a1ccd2fe)
+- update faq to work without js (#565) (64db6d6e)
+- react warnings and proxied dev migrations (#563) (278bedef)
+- default language dropdown value in Editor (#557) (a71a90d7)
+- add missing locale labels (#555) (222e08a3)
+- **components:** added missing i18n to header (#570) (06f517eb)
+
+##### Refactors
+
+- update hoursTable translations (#575) (ca7b88f2)
+- adjust analytics (#562) (7ae1756e)
+- background color selector (#558) (d43d7417)
+- remove chevron from entity field selector (#556) (d49ea059)
+
 #### 0.0.43 (2025-06-18)
 
 ##### Bug Fixes
