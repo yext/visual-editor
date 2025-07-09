@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
 import {
@@ -119,26 +118,19 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
             </div>
             <ChevronDown />
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-40 rounded-l shadow-lg "
-          >
+          <DropdownMenuContent align="end" className="w-40 rounded p-0">
             {(status === "COMPLETE" || status === "ERROR") &&
               Object.entries(validLocalesToPaths).map(([locale, path]) => (
-                <Background as="div" key={locale}>
-                  {locale !== selected && (
-                    <DropdownMenuSeparator className="bg-[#CCCCCC]" />
+                <DropdownMenuItem
+                  onSelect={() => handleLocaleSelected(locale, path)}
+                  className={themeManagerCn(
+                    "components font-body-fontFamily font-normal bg-white py-4 px-6 text-body-sm-fontSize",
+                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] cursor-pointer data-[highlighted]:outline-none data-[highlighted]:shadow-none",
+                    selected === locale && "font-bold"
                   )}
-                  <DropdownMenuItem
-                    onSelect={() => handleLocaleSelected(locale, path)}
-                    className={themeManagerCn(
-                      "text-body-fontSize font-body-fontFamily bg-white focus:bg-slate-100 py-4 px-6 text-body-sm-fontSize",
-                      selected === locale && "font-body-fontWeight"
-                    )}
-                  >
-                    {getLanguageName(locale)}
-                  </DropdownMenuItem>
-                </Background>
+                >
+                  {getLanguageName(locale)}
+                </DropdownMenuItem>
               ))}
           </DropdownMenuContent>
         </DropdownMenu>

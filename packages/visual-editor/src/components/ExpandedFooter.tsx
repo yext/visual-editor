@@ -37,6 +37,11 @@ import {
 } from "./contentBlocks/ImageStyling.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
+const defaultFooterLink = {
+  linkType: "URL" as const,
+  label: { en: "Footer Link", hasLocalizedValue: "true" as const },
+  link: "#",
+};
 
 export interface ExpandedFooterProps {
   data: {
@@ -170,6 +175,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                       options: linkTypeOptions(),
                     },
                   },
+                  defaultItemProps: defaultFooterLink,
                 }),
               },
             }
@@ -190,6 +196,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 options: linkTypeOptions(),
               },
             },
+            defaultItemProps: defaultFooterLink,
           }),
         },
       }),
@@ -227,6 +234,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                     options: linkTypeOptions(),
                   },
                 },
+                defaultItemProps: defaultFooterLink,
               }
             ),
           },
@@ -733,31 +741,11 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       primaryFooter: {
         logo: PLACEHOLDER_LOGO_IMAGE,
         footerLinks: [
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
+          defaultFooterLink,
+          defaultFooterLink,
+          defaultFooterLink,
+          defaultFooterLink,
+          defaultFooterLink,
         ],
         xLink: "",
         facebookLink: "",
@@ -771,121 +759,41 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
           {
             label: "Footer Label",
             links: [
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
             ],
           },
           {
             label: "Footer Label",
             links: [
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
             ],
           },
           {
             label: "Footer Label",
             links: [
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
             ],
           },
           {
             label: "Footer Label",
             links: [
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
-              {
-                label: { en: "Footer Link", hasLocalizedValue: "true" },
-                linkType: "URL",
-                link: "#",
-              },
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
+              defaultFooterLink,
             ],
           },
         ],
@@ -894,31 +802,11 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         show: false,
         copyrightMessage: { en: "", hasLocalizedValue: "true" },
         secondaryFooterLinks: [
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
+          defaultFooterLink,
+          defaultFooterLink,
+          defaultFooterLink,
+          defaultFooterLink,
+          defaultFooterLink,
         ],
       },
     },

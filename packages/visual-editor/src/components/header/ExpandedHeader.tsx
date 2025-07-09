@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
+  LinkType,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -24,7 +25,6 @@ import {
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +39,16 @@ import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallT
 import { ImageWrapperFields } from "../contentBlocks/Image.tsx";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
+const defaultMainLink = {
+  linkType: "URL" as const,
+  label: { en: "Main Header Link", hasLocalizedValue: "true" as const },
+  link: "#",
+};
+const defaultSecondaryLink = {
+  linkType: "URL" as const,
+  label: { en: "Secondary Header Link", hasLocalizedValue: "true" as const },
+  link: "#",
+};
 
 export interface ExpandedHeaderProps {
   data: {
@@ -97,6 +107,7 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
                 options: linkTypeOptions(),
               },
             },
+            defaultItemProps: defaultMainLink,
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
@@ -174,6 +185,7 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
                     options: linkTypeOptions(),
                   },
                 },
+                defaultItemProps: defaultSecondaryLink,
               }
             ),
           },
@@ -576,31 +588,11 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
       primaryHeader: {
         logo: PLACEHOLDER_IMAGE,
         links: [
-          {
-            linkType: "URL",
-            label: { en: "Main Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Main Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Main Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Main Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Main Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
+          defaultMainLink,
+          defaultMainLink,
+          defaultMainLink,
+          defaultMainLink,
+          defaultMainLink,
         ],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -617,31 +609,11 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         show: false,
         showLanguageDropdown: false,
         secondaryLinks: [
-          {
-            linkType: "URL",
-            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Secondary Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
+          defaultSecondaryLink,
+          defaultSecondaryLink,
+          defaultSecondaryLink,
+          defaultSecondaryLink,
+          defaultSecondaryLink,
         ],
       },
     },
