@@ -59,6 +59,10 @@ import {
 import { Phone, PhoneProps } from "./contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "./contentBlocks/TextList.tsx";
 import { Header, HeaderProps } from "./header/Header.tsx";
+import {
+  ExpandedHeader,
+  ExpandedHeaderProps,
+} from "./header/ExpandedHeader.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
@@ -66,6 +70,7 @@ import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
+import { ExpandedFooter, ExpandedFooterProps } from "./ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -106,13 +111,13 @@ export const PageSectionCategory = Object.keys(
 ) as (keyof PageSectionCategoryProps)[];
 
 export interface OtherCategoryProps {
-  Header: HeaderProps;
-  Footer: FooterProps;
+  ExpandedHeader: ExpandedHeaderProps;
+  ExpandedFooter: ExpandedFooterProps;
 }
 
 export const OtherCategoryComponents = {
-  Header,
-  Footer,
+  ExpandedHeader,
+  ExpandedFooter,
 };
 
 export const OtherCategory = Object.keys(
@@ -142,6 +147,20 @@ export const LocatorCategoryComponents = {
 export const LocatorCategory = Object.keys(
   LocatorCategoryComponents
 ) as (keyof LocatorCategoryProps)[];
+
+export interface DeprecatedCategoryProps {
+  Header: HeaderProps;
+  Footer: FooterProps;
+}
+
+export const DeprecatedCategoryComponents = {
+  Header,
+  Footer,
+};
+
+export const DeprecatedCategory = Object.keys(
+  DeprecatedCategoryComponents
+) as (keyof DeprecatedCategoryProps)[];
 
 /** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 
