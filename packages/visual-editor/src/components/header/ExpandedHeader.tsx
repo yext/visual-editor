@@ -265,7 +265,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   return (
     <>
       <div
-        className="hidden md:flex flex-col justify-center"
+        className="hidden md:flex flex-col"
         aria-label={t("expandedHeaderDesktop", "Expanded Header Desktop")}
       >
         {show && (
@@ -294,7 +294,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         <PageSection
           verticalPadding={"header"}
           background={backgroundColor}
-          className="flex flex-row items-center justify-center w-full gap-8"
+          className="flex flex-row justify-between w-full items-center gap-8"
         >
           <EntityField
             constantValueEnabled
