@@ -26,18 +26,6 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           echo "sanitized_branch_name=$SANITIZED_BRANCH_NAME" >> $GITHUB_OUTPUT
 
-      - name: "Setup Node.js"
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: "Remove npm distribution tag"
-        run: npm dist rm yext/visual-editor ${{ steps.identifiers.outputs.sanitized_branch_name }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        continue-on-error: true
-
       - name: "Notify Starter Repo to delete branch"
         uses: peter-evans/repository-dispatch@v3
         with:
