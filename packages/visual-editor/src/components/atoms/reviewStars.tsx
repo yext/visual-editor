@@ -3,6 +3,11 @@ import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
 import { Body } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
+export type AggregateRating = {
+  rating: number;
+  totalReviews: number;
+};
+
 export type ReviewStarsProps = {
   rating: number;
   hasDarkBackground: boolean;
@@ -48,3 +53,35 @@ export const ReviewStars = (props: ReviewStarsProps) => {
     </div>
   );
 };
+
+/**
+ * Extracts the aggregate rating from the document's schema.
+ * @param document - The document containing the schema.
+ * @returns The aggregate rating object if found, otherwise undefined.
+ */
+export function getAggregateRating(document: any): AggregateRating | undefined {
+  const reviews = document?.ref_reviewsAgg;
+  if (!Array.isArray(reviews) || reviews.length === 0) {
+    return;
+  }
+
+  let totalRating = 0;
+  let totalReviews = 0;
+
+  for (const review of reviews) {
+    const { averageRating, reviewCount } = review;
+    if (typeof averageRating === "number" && typeof reviewCount === "number") {
+      totalRating += averageRating * reviewCount;
+      totalReviews += reviewCount;
+    }
+  }
+
+  if (totalReviews === 0) {
+    return;
+  }
+
+  return {
+    rating: parseFloat((totalRating / totalReviews).toFixed(2)),
+    totalReviews: totalReviews,
+  };
+}

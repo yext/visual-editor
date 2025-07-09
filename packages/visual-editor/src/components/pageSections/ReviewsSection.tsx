@@ -1,13 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  FaArrowLeft,
-  FaArrowRight,
-  FaChevronDown,
-  FaStarHalfAlt,
-  FaStarHalf,
-  FaStar,
-  FaRegStar,
-} from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ComponentConfig, Fields } from "@measured/puck";
 import * as React from "react";
@@ -17,6 +9,7 @@ import {
   Body,
   Button,
   fetchReviewsForEntity,
+  getAggregateRating,
   getAnalyticsScopeHash,
   Heading,
   msg,
@@ -107,8 +100,8 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   }, [reviews, currentPageNumber]);
 
   const aggregateRating = getAggregateRating(document);
-  const totalReviews = aggregateRating?.reviewCount || 0;
-  const averageRating = Number(aggregateRating?.ratingValue) || 0;
+  const totalReviews = aggregateRating?.totalReviews || 0;
+  const averageRating = aggregateRating?.rating || 0;
 
   if (reviewsStatus !== "success" || (!isLoading && totalReviews === 0)) {
     return <></>;
@@ -470,16 +463,6 @@ const ShowMoreButton: React.FC<{
     </Button>
   );
 };
-
-/**
- * Extracts the aggregate rating from the document's schema.
- * @param document - The document containing the schema.
- * @returns The aggregate rating object if found, otherwise undefined.
- */
-function getAggregateRating(document: any) {
-  return document?._schema?.["@graph"].find((e: any) => e.aggregateRating)
-    ?.aggregateRating;
-}
 
 export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
   fields: reviewsFields,

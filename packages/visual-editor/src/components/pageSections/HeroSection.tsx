@@ -29,6 +29,7 @@ import {
   pt,
   getAnalyticsScopeHash,
   ReviewStars,
+  getAggregateRating,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -211,12 +212,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     timezone: string;
   };
 
-  // parse aggregateRating
-  const aggregateRating = document?._schema?.["@graph"]?.find(
-    (e: any) => e.aggregateRating
-  )?.aggregateRating;
-  const totalReviews = Number(aggregateRating?.reviewCount) || 0;
-  const averageRating = Number(aggregateRating?.ratingValue) || 0;
+  const aggregateRating = getAggregateRating(document);
+  const totalReviews = aggregateRating?.totalReviews ?? 0;
+  const averageRating = aggregateRating?.rating ?? 0;
 
   return (
     <PageSection
