@@ -488,7 +488,7 @@ const ExpandedFooterWrapper = ({
           as="footer"
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
-          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
+          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:flex-row-reverse md:justify-between"}`}
         >
           <EntityField
             constantValueEnabled
