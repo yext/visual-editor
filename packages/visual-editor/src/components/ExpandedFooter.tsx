@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
@@ -21,7 +20,6 @@ import {
   PageSection,
   TranslatableStringField,
   TranslatableString,
-  ImageWrapperProps,
   Background,
 } from "@yext/visual-editor";
 import {
@@ -34,7 +32,6 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { linkTypeOptions } from "../internal/puck/constant-value-fields/CallToAction.tsx";
-import { ImageWrapperFields } from "./contentBlocks/Image.tsx";
 import {
   ImageStylingFields,
   ImageStylingProps,
