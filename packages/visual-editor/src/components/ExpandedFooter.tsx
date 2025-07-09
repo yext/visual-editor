@@ -84,7 +84,6 @@ export interface ExpandedFooterProps {
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
 }
 
 const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
@@ -334,16 +333,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       ),
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
 };
 
 const ExpandedFooterWrapper = ({
@@ -955,7 +944,6 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
     analytics: {
       scope: "expandedFooter",
     },
-    liveVisibility: true,
   },
   resolveFields: (_data, { fields }) => {
     const expanded = _data.props.data.primaryFooter.expandedFooter;
@@ -1024,12 +1012,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   inline: true,
   render: (props) => (
     <AnalyticsScopeProvider name={props.analytics?.scope ?? "expandedFooter"}>
-      <VisibilityWrapper
-        liveVisibility={!!props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <ExpandedFooterWrapper {...props} />
-      </VisibilityWrapper>
+      <ExpandedFooterWrapper {...props} />
     </AnalyticsScopeProvider>
   ),
 };
