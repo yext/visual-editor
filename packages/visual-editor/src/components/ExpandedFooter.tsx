@@ -614,7 +614,6 @@ const FooterLogo = (props: {
       >
         <Image
           image={props.logo.image}
-          layout="auto"
           aspectRatio={
             props.aspectRatio ||
             props.logo.image.width / props.logo.image.height
