@@ -31,7 +31,7 @@ type ComboboxProps = {
   optionGroups: Array<ComboboxOptionGroup>;
   disabled?: boolean;
   disableSearch?: boolean;
-  customTrigger?: React.ReactNode; // Add this line
+  customTrigger?: React.ReactNode;
 };
 
 export const Combobox = ({
@@ -40,14 +40,14 @@ export const Combobox = ({
   optionGroups,
   disabled,
   disableSearch,
-  customTrigger, // Add this line
+  customTrigger,
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        {customTrigger ? ( // And this block
+        {customTrigger ? (
           customTrigger
         ) : (
           <Button
