@@ -370,6 +370,7 @@
       "color4": "Väri 4"
     },
     "bodyText": "Kehon teksti",
+    "borderRadius": "Reunasäde",
     "button": "Painike",
     "colors": {
       "colors": "Värit",
@@ -401,11 +402,15 @@
       "semibold": "Puoliväli (600)",
       "thin": "Ohut (100)"
     },
+    "image": "Kuva",
     "includeCaret": "Sisällytä caret",
     "letterSpacing": {
       "letterSpacing": "Kirjeväli"
     },
     "links": "Linkit",
+    "options": {
+      "circle": "Ympyrä"
+    },
     "pageSection": "Sivuosio",
     "textTransform": {
       "capitalize": "Päällekkäistä",

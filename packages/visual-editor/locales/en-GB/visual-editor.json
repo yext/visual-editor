@@ -370,6 +370,7 @@
       "color4": "Color 4"
     },
     "bodyText": "Body Text",
+    "borderRadius": "Border Radius",
     "button": "Button",
     "colors": {
       "colors": "Colors",
@@ -401,11 +402,15 @@
       "semibold": "Semibold (600)",
       "thin": "Thin (100)"
     },
+    "image": "Image",
     "includeCaret": "Include Caret",
     "letterSpacing": {
       "letterSpacing": "Letter Spacing"
     },
     "links": "Links",
+    "options": {
+      "circle": "Circle"
+    },
     "pageSection": "Page Section",
     "textTransform": {
       "capitalize": "Capitalize",

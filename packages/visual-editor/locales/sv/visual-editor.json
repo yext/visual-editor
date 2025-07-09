@@ -370,6 +370,7 @@
       "color4": "Färg 4"
     },
     "bodyText": "Kroppstext",
+    "borderRadius": "Gränsradie",
     "button": "Knapp",
     "colors": {
       "colors": "Färger",
@@ -401,11 +402,15 @@
       "semibold": "Semibold (600)",
       "thin": "Tunn (100)"
     },
+    "image": "Bild",
     "includeCaret": "Inkludera caret",
     "letterSpacing": {
       "letterSpacing": "Brevavstånd"
     },
     "links": "Länkar",
+    "options": {
+      "circle": "Cirkel"
+    },
     "pageSection": "Sidavsnitt",
     "textTransform": {
       "capitalize": "Kapitalisera",

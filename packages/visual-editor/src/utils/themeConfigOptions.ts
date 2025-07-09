@@ -1,5 +1,9 @@
 import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
-import { borderRadiusOptions } from "../editor/BorderRadiusSelector.tsx";
+import {
+  BorderRadiusOption,
+  buttonBorderRadiusOptions,
+  imageBorderRadiusOptions,
+} from "../editor/BorderRadiusSelector.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
 import { msg } from "./i18nPlatform.ts";
@@ -13,7 +17,7 @@ const getFontSizeOptions = (includeLargeSizes = true) => {
   });
 };
 
-const getBorderRadiusOptions = () => {
+const getBorderRadiusOptions = (borderRadiusOptions: BorderRadiusOption[]) => {
   return borderRadiusOptions.map((option) => {
     return {
       label: option.label + ` (${option.px}px)`,
@@ -314,7 +318,8 @@ export const ThemeOptions = {
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
-  BORDER_RADIUS: getBorderRadiusOptions,
+  BUTTON_BORDER_RADIUS: getBorderRadiusOptions(buttonBorderRadiusOptions),
+  IMAGE_BORDER_RADIUS: getBorderRadiusOptions(imageBorderRadiusOptions),
   SPACING: getSpacingOptions,
   FONT_SIZE: getFontSizeOptions,
   HOURS_OPTIONS: hoursOptions,

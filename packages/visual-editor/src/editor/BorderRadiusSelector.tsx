@@ -1,11 +1,18 @@
 import { useTranslation } from "react-i18next";
 import React from "react";
+import { ChevronDown } from "lucide-react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
-import { ChevronDown } from "lucide-react";
+import { msg } from "../utils/i18nPlatform.ts";
 
-export const borderRadiusOptions = [
+export type BorderRadiusOption = {
+  label: string;
+  value: string;
+  px: string;
+};
+
+export const buttonBorderRadiusOptions: BorderRadiusOption[] = [
   { label: "None", value: "none", px: "0" },
   { label: "XS", value: "xs", px: "2" },
   { label: "SM", value: "sm", px: "4" },
@@ -15,6 +22,23 @@ export const borderRadiusOptions = [
   { label: "2XL", value: "2xl", px: "16" },
   { label: "3XL", value: "3xl", px: "24" },
   { label: "Full", value: "full", px: "9999" },
+];
+
+export const imageBorderRadiusOptions: BorderRadiusOption[] = [
+  { label: "None", value: "none", px: "0" },
+  { label: "XS", value: "xs", px: "2" },
+  { label: "SM", value: "sm", px: "4" },
+  { label: "MD", value: "md", px: "6" },
+  { label: "LG", value: "lg", px: "8" },
+  { label: "XL", value: "xl", px: "12" },
+  { label: "2XL", value: "2xl", px: "16" },
+  { label: "3XL", value: "3xl", px: "24" },
+  { label: "4XL", value: "3xl", px: "32" },
+  {
+    label: msg("theme.options.circle", "Circle"),
+    value: "circle",
+    px: "10000",
+  },
 ];
 
 export const convertToPixels = (borderRadius: string): number => {
@@ -65,12 +89,6 @@ export const getCustomBorderRadius = (
   return 0;
 };
 
-type BorderRadiusOption = {
-  label: string;
-  value: string;
-  px: string;
-};
-
 export const convertDefaultBorderRadiusToOptions = (
   borderRadius: BorderRadiusOption[],
   tailwindConfig: TailwindConfig
@@ -90,7 +108,10 @@ export const convertDefaultBorderRadiusToOptions = (
   });
 };
 
-export const BorderRadiusSelector = (label?: string): Field => {
+export const BorderRadiusSelector = (
+  label?: string,
+  borderRadiusOptions?: BorderRadiusOption[]
+): Field => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {
@@ -114,7 +135,7 @@ export const BorderRadiusSelector = (label?: string): Field => {
                     value: "default",
                     px: "",
                   },
-                  ...borderRadiusOptions,
+                  ...(borderRadiusOptions ?? buttonBorderRadiusOptions),
                 ],
                 tailwindConfig
               ),
