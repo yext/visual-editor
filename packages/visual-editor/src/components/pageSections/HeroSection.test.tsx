@@ -203,6 +203,92 @@ const tests: ComponentTest[] = [
       expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
     },
   },
+  {
+    name: "version 9 props using constant values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Constant Name",
+          constantValueEnabled: true,
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier Name",
+          constantValueEnabled: true,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Call To Action 1",
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: "Call To Action 2",
+              link: "#",
+              linkType: "URL",
+            },
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        imageOrientation: "right",
+        businessNameLevel: 6,
+        localGeoModifierLevel: 3,
+        primaryCTA: "secondary",
+        secondaryCTA: "primary",
+        image: {
+          width: 500,
+          aspectRatio: 1.0,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 9,
+    tests: async (page) => {
+      expect(page.getByText("Call to Action 1")).toBeVisible();
+      expect(page.getByText("Call to Action 2")).toBeVisible();
+      expect(document.querySelectorAll("img")[0]).toBeVisible();
+      expect(document.getElementsByTagName("h6")[0]).toHaveTextContent(
+        "Constant Name"
+      );
+      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent(
+        "Geomodifier Name"
+      );
+      expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
+    },
+  },
 ];
 
 const testsWithViewports: ComponentTest[] = [
