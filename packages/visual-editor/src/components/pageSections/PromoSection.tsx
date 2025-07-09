@@ -169,6 +169,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
                 : 1.78)
             }
             width={styles.image.width || 640}
+            className="max-w-full sm:max-w-initial"
           />
         </EntityField>
       )}
