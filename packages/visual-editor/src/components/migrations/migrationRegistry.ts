@@ -20,6 +20,6 @@ export const migrationRegistry: MigrationRegistry = [
   addDirectoryRootPropMigration,
   addPromoHeadingStylesMigration,
   updateImageStylingMigration,
-  addBreadcrumbsDirectoryBackgroundMigration,
   addCardStylesMigration,
+  addBreadcrumbsDirectoryBackgroundMigration,
 ];
