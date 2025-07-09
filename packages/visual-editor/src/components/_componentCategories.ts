@@ -59,6 +59,10 @@ import {
 import { Phone, PhoneProps } from "./contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "./contentBlocks/TextList.tsx";
 import { Header, HeaderProps } from "./header/Header.tsx";
+import {
+  ExpandedHeader,
+  ExpandedHeaderProps,
+} from "./header/ExpandedHeader.tsx";
 import { Footer, FooterProps } from "./Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
@@ -66,6 +70,7 @@ import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
+import { ExpandedFooter, ExpandedFooterProps } from "./ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -105,9 +110,15 @@ export const PageSectionCategory = Object.keys(
   PageSectionCategoryComponents
 ) as (keyof PageSectionCategoryProps)[];
 
-export interface OtherCategoryProps {}
+export interface OtherCategoryProps {
+  ExpandedHeader: ExpandedHeaderProps;
+  ExpandedFooter: ExpandedFooterProps;
+}
 
-export const OtherCategoryComponents = {};
+export const OtherCategoryComponents = {
+  ExpandedHeader,
+  ExpandedFooter,
+};
 
 export const OtherCategory = Object.keys(
   OtherCategoryComponents

@@ -196,8 +196,11 @@ export const defaultThemeTailwindExtensions = {
     },
   },
   fontSize: {
+    "body-xs-fontSize": "calc(var(--fontSize-body-fontSize) - 4px)",
     "body-sm-fontSize": "calc(var(--fontSize-body-fontSize) - 2px)",
     "body-lg-fontSize": "calc(var(--fontSize-body-fontSize) + 2px)",
+    "link-xs-fontSize": "calc(var(--fontSize-link-fontSize) - 4px)",
+    "link-sm-fontSize": "calc(var(--fontSize-link-fontSize) - 2px)",
     "3xl": "32px",
     "4xl": "40px",
   },
