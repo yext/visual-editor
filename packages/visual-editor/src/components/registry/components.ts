@@ -161,6 +161,20 @@ export const ui: Registry["items"] = [
     files: [{ path: "pageSections/EventSection.tsx", type: "registry:ui" }],
   },
   {
+    name: "ExpandedFooter",
+    type: "registry:ui",
+    registryDependencies: [
+      "cta",
+      "image",
+      "maybeLink",
+      "pageSection",
+      "VisibilityWrapper",
+      "body",
+      "background",
+    ],
+    files: [{ path: "ExpandedFooter.tsx", type: "registry:ui" }],
+  },
+  {
     name: "ExpandedHeader",
     type: "registry:ui",
     registryDependencies: [

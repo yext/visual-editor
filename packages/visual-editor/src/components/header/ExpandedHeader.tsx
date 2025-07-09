@@ -69,7 +69,6 @@ export interface ExpandedHeaderProps {
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
 }
 
 const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
@@ -241,16 +240,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       ),
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
 };
 
 const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
@@ -670,7 +659,6 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     analytics: {
       scope: "expandedHeader",
     },
-    liveVisibility: true,
   },
   resolveFields: (_data, { fields }) => {
     const showSecondaryHeader = _data.props.data.secondaryHeader?.show;
@@ -723,12 +711,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   },
   render: (props) => (
     <AnalyticsScopeProvider name={props.analytics?.scope ?? "expandedHeader"}>
-      <VisibilityWrapper
-        liveVisibility={!!props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <ExpandedHeaderWrapper {...props} />
-      </VisibilityWrapper>
+      <ExpandedHeaderWrapper {...props} />
     </AnalyticsScopeProvider>
   ),
 };

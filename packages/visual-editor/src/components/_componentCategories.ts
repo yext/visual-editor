@@ -70,6 +70,7 @@ import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
+import { ExpandedFooter, ExpandedFooterProps } from "./ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -111,12 +112,14 @@ export const PageSectionCategory = Object.keys(
 
 export interface OtherCategoryProps {
   ExpandedHeader: ExpandedHeaderProps;
+  ExpandedFooter: ExpandedFooterProps;
   Header: HeaderProps;
   Footer: FooterProps;
 }
 
 export const OtherCategoryComponents = {
   ExpandedHeader,
+  ExpandedFooter,
   Header,
   Footer,
 };
