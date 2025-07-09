@@ -589,11 +589,6 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
             label: { en: "Main Header Link", hasLocalizedValue: "true" },
             link: "#",
           },
-          {
-            linkType: "URL",
-            label: { en: "Main Header Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
         ],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -641,7 +636,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     styles: {
       primaryHeader: {
         logo: {
-          width: 0,
+          width: 200,
           aspectRatio: 2,
         },
         backgroundColor: backgroundColors.background1.value,
