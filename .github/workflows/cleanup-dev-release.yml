@@ -1,0 +1,57 @@
+name: "Cleanup Dev Release"
+
+on:
+  pull_request:
+    types: [unlabeled, closed]
+
+jobs:
+  cleanup:
+    # Only run when the 'create-dev-release' label is removed or PR is closed
+    if: |
+      (github.event.action == 'unlabeled' && github.event.label.name == 'create-dev-release') ||
+      (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'create-dev-release'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: "Sanitize PR number for branch name"
+        id: identifiers
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          BRANCH_NAME="pr-$PR_NUMBER"
+          SANITIZED_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed -e 's/\//-/g' -e 's/[^a-zA-Z0-9-]//g')
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "sanitized_branch_name=$SANITIZED_BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: "Remove npm distribution tag"
+        run: npm dist rm yext/visual-editor ${{ steps.identifiers.outputs.sanitized_branch_name }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: true
+
+      - name: "Notify Starter Repo to delete branch"
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.WEBSITE_REPO_PAT }}
+          repository: YextSolutions/pages-visual-editor-starter
+          event-type: dev-release-cleanup
+          client-payload: >
+            {
+              "pr_number": "${{ steps.identifiers.outputs.pr_number }}",
+              "branch_name": "${{ steps.identifiers.outputs.branch_name }}",
+              "sanitized_branch_name": "${{ steps.identifiers.outputs.sanitized_branch_name }}",
+              "pr_title": "${{ github.event.pull_request.title }}",
+              "pr_url": "${{ github.event.pull_request.html_url }}",
+              "author": "${{ github.event.pull_request.user.login }}",
+              "action": "${{ github.event.action }}",
+              "package_url": "https://pkg.pr.new/yext/visual-editor@${{ steps.identifiers.outputs.pr_number }}"
+            }
