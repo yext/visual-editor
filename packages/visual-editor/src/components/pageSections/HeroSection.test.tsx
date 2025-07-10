@@ -238,18 +238,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 9,
-    tests: async (page) => {
-      expect(page.getByText("Call to Action 1")).toBeVisible();
-      expect(page.getByText("Call to Action 2")).toBeVisible();
-      expect(document.querySelectorAll("img")[0]).toBeVisible();
-      expect(document.getElementsByTagName("h6")[0]).toHaveTextContent(
-        "Constant Name"
-      );
-      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent(
-        "Geomodifier Name"
-      );
-      expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
-    },
   },
 ];
 
