@@ -14,6 +14,70 @@ export const resolveYextEntityField = <T>(
     return undefined;
   }
 
+  // If constant value is enabled, and the value is an object (for localized strings),
+  // we need to resolve any embedded fields in the string for the current locale.
+  if (
+    entityField.constantValueEnabled &&
+    entityField.constantValue &&
+    typeof entityField.constantValue === "object"
+  ) {
+    // Add an index signature to help TypeScript understand the type
+    const constantValueObj = entityField.constantValue as {
+      [key: string]: any;
+    };
+
+    const locale = document?.locale as string | undefined;
+
+    // If we don't have a locale or the constant value for the locale is not a string, we can't resolve.
+    if (!locale || typeof constantValueObj[locale] !== "string") {
+      return entityField.constantValue as T;
+    }
+
+    const constantValueForLocale = constantValueObj[locale];
+    const embeddedFieldRegex = /\[\[(.*?)\]\]/g;
+
+    const resolvedString = constantValueForLocale.replace(
+      embeddedFieldRegex,
+      (match, fieldName) => {
+        const trimmedFieldName = fieldName.trim();
+        if (!trimmedFieldName) {
+          return "";
+        }
+
+        // Construct a temporary YextEntityField for the embedded field and resolve it.
+        const embeddedEntityField: YextEntityField<unknown> = {
+          field: trimmedFieldName,
+          constantValue: undefined,
+          constantValueEnabled: false,
+        };
+
+        const resolvedValue = resolveYextEntityField(
+          document,
+          embeddedEntityField
+        );
+
+        if (resolvedValue === undefined || resolvedValue === null) {
+          // If an embedded field can't be resolved, replace it with an empty string.
+          return "";
+        }
+
+        // If the resolved value is an object, stringify it.
+        if (typeof resolvedValue === "object") {
+          return JSON.stringify(resolvedValue);
+        }
+
+        return String(resolvedValue);
+      }
+    );
+
+    // Return a new object with the resolved value for the current locale.
+    const resolvedConstantValue = {
+      ...entityField.constantValue,
+      [locale]: resolvedString,
+    };
+    return resolvedConstantValue as T;
+  }
+
   if (entityField.constantValueEnabled || !entityField.field) {
     return entityField.constantValue as T;
   }
