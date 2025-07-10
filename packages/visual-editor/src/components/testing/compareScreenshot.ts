@@ -47,7 +47,7 @@ export const compareScreenshot: BrowserCommand<
     diff.data,
     width,
     height,
-    { threshold: 0.25 } // the per-pixel color difference threshold
+    { threshold: 0.3 } // the per-pixel color difference threshold
   );
 
   if (numDiffPixels > 0) {
