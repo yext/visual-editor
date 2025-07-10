@@ -28,6 +28,8 @@ import {
   msg,
   pt,
   getAnalyticsScopeHash,
+  ReviewStars,
+  getAggregateRating,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -42,6 +44,7 @@ export interface HeroSectionProps {
     localGeoModifier: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
     hero: YextStructEntityField<HeroSectionType>;
+    showAverageReview: boolean;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -92,6 +95,16 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           type: ComponentFields.HeroSection.type,
         },
       }),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
+        }
+      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -199,6 +212,8 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     timezone: string;
   };
 
+  const { averageRating, reviewCount } = getAggregateRating(document);
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -254,6 +269,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             >
               <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
+          )}
+          {reviewCount > 0 && data.showAverageReview && (
+            <ReviewStars
+              averageRating={averageRating}
+              hasDarkBackground={
+                styles.backgroundColor?.textColor === "text-white"
+              }
+              reviewCount={reviewCount}
+            />
           )}
         </header>
         {(resolvedHero?.primaryCta?.label ||
@@ -322,7 +346,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               image={resolvedHero?.image}
               aspectRatio={styles.image.aspectRatio}
               width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial"
+              className="max-w-full sm:max-w-initial rounded-image-borderRadius"
             />
           </div>
         </EntityField>
@@ -353,38 +377,8 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         },
       },
       hours: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          monday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          tuesday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          wednesday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          thursday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          friday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          saturday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          sunday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-        },
+        field: "hours",
+        constantValue: {},
       },
       hero: {
         field: "",
@@ -418,6 +412,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           secondaryCta: true,
         },
       },
+      showAverageReview: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,

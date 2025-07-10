@@ -27,6 +27,7 @@ import {
   FaLinkedinIn,
   FaYoutube,
   FaPinterest,
+  FaTiktok,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
@@ -37,6 +38,13 @@ import {
 } from "./contentBlocks/ImageStyling.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
+
+const defaultExpandedFooterLinks = {
+  linkType: "URL" as const,
+  label: { en: "Footer Link", hasLocalizedValue: "true" as const },
+  links: [],
+};
+
 const defaultFooterLink = {
   linkType: "URL" as const,
   label: { en: "Footer Link", hasLocalizedValue: "true" as const },
@@ -47,12 +55,13 @@ export interface ExpandedFooterProps {
   data: {
     primaryFooter: {
       logo: string;
-      xLink: string;
       facebookLink: string;
       instagramLink: string;
-      pinterestLink: string;
       linkedInLink: string;
+      pinterestLink: string;
+      tiktokLink: string;
       youtubeLink: string;
+      xLink: string;
       utilityImages: { url: string; linkTarget?: string }[];
       expandedFooter: boolean;
       footerLinks: TranslatableCTA[];
@@ -94,9 +103,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           logo: YextField(msg("fields.logo", "Logo"), {
             type: "text",
           }),
-          xLink: YextField(msg("fields.xLink", "X Link"), {
-            type: "text",
-          }),
           facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
             type: "text",
           }),
@@ -106,13 +112,19 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               type: "text",
             }
           ),
+          linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+            type: "text",
+          }),
           pinterestLink: YextField(
             msg("fields.pinterestLink", "Pinterest Link"),
             {
               type: "text",
             }
           ),
-          linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+          tiktokLink: YextField(msg("fields.tiktokLink", "Tiktok Link"), {
+            type: "text",
+          }),
+          xLink: YextField(msg("fields.xLink", "X Link"), {
             type: "text",
           }),
           youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
@@ -172,6 +184,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   defaultItemProps: defaultFooterLink,
                 }),
               },
+              defaultItemProps: defaultExpandedFooterLinks,
             }
           ),
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
@@ -342,6 +355,7 @@ const ExpandedFooterWrapper = ({
     pinterestLink,
     linkedInLink,
     youtubeLink,
+    tiktokLink,
     utilityImages,
     expandedFooterLinks,
     expandedFooter,
@@ -368,9 +382,11 @@ const ExpandedFooterWrapper = ({
         as="footer"
         verticalPadding={"footer"}
         background={backgroundColor}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`}  md:justify-start w-full md:items-start  gap-8 md:gap-10`}
+        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
-        <div className="flex flex-col gap-10 md:gap-8">
+        <div
+          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
+        >
           <EntityField
             constantValueEnabled
             displayName={pt("fields.logo", "Logo")}
@@ -389,6 +405,7 @@ const ExpandedFooterWrapper = ({
               pinterestLink={pinterestLink}
               linkedInLink={linkedInLink}
               youtubeLink={youtubeLink}
+              tiktokLink={tiktokLink}
             />
             {utilityImages && utilityImages.length >= 1 && (
               <EntityField
@@ -413,23 +430,23 @@ const ExpandedFooterWrapper = ({
           </div>
         </div>
         {expandedFooter ? (
-          <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6 md:gap-0">
-            {expandedFooterLinks.map((item, index) => (
-              <EntityField
-                constantValueEnabled
-                key={index}
-                displayName={pt(
-                  "fields.expandedFooterLinks",
-                  "Expanded Footer Links"
-                )}
-              >
+          <EntityField
+            constantValueEnabled
+            displayName={pt(
+              "fields.expandedFooterLinks",
+              "Expanded Footer Links"
+            )}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
+              {expandedFooterLinks.map((item, index) => (
                 <ExpandedFooterLinks
                   label={resolveTranslatableString(item.label, i18n.language)}
                   links={item.links}
+                  key={index}
                 />
-              </EntityField>
-            ))}
-          </div>
+              ))}
+            </div>
+          </EntityField>
         ) : (
           <div className="w-full">
             <EntityField
@@ -448,6 +465,7 @@ const ExpandedFooterWrapper = ({
             pinterestLink={pinterestLink}
             linkedInLink={linkedInLink}
             youtubeLink={youtubeLink}
+            tiktokLink={tiktokLink}
           />
           {utilityImages && utilityImages.length >= 1 && (
             <EntityField
@@ -478,7 +496,7 @@ const ExpandedFooterWrapper = ({
           as="footer"
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
-          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:flex-row-reverse md:justify-between"}`}
+          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
         >
           <EntityField
             constantValueEnabled
@@ -531,7 +549,7 @@ const FooterLinks = ({
               label={resolveTranslatableString(item.label, i18n.language)}
               linkType={item.linkType}
               link={item.link}
-              className={`justify-center md:justify-start`}
+              className="justify-center md:justify-start block break-words whitespace-normal"
             />
           </li>
         );
@@ -550,19 +568,19 @@ const ExpandedFooterLinks = ({
   const { i18n } = useTranslation();
 
   return (
-    <ul className={`flex flex-col items-center md:items-start gap-4`}>
-      <li>
-        <Body>{label}</Body>
+    <ul className={`flex flex-col items-center md:items-start gap-4 w-full`}>
+      <li className="w-full">
+        <Body className="break-words">{label}</Body>
       </li>
       {links.map((item, index) => (
-        <li key={index}>
+        <li key={index} className="w-full">
           <CTA
             variant={"headerFooterMainLink"}
             eventName={`cta${index}-Link-${index + 1}`}
             label={resolveTranslatableString(item.label, i18n.language)}
             linkType={item.linkType}
             link={item.link}
-            className={`justify-start `}
+            className={"justify-start block break-words whitespace-normal"}
           />
         </li>
       ))}
@@ -578,10 +596,7 @@ const FooterLogo = (props: {
 }) => {
   return (
     <MaybeLink href={props.logoLink} alwaysHideCaret={true}>
-      <div
-        className="mx-auto md:ml-0"
-        style={{ width: `${props.logoWidth}px` }}
-      >
+      <div style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
           aspectRatio={
@@ -629,6 +644,7 @@ const FooterIcons = ({
   pinterestLink,
   linkedInLink,
   youtubeLink,
+  tiktokLink,
 }: {
   xLink: string;
   facebookLink: string;
@@ -636,6 +652,7 @@ const FooterIcons = ({
   pinterestLink: string;
   linkedInLink: string;
   youtubeLink: string;
+  tiktokLink: string;
 }) => {
   const { t } = useTranslation();
 
@@ -694,6 +711,13 @@ const FooterIcons = ({
           youtubeLink
         ),
     },
+    {
+      link: tiktokLink,
+      icon: <FaTiktok className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "Tiktok",
+      prefix: "",
+      valid: /^https:\/\/(www\.)?tiktok\.com\/@[\w.-]+\/?$/.test(tiktokLink),
+    },
   ];
 
   const filteredIcons = icons.filter(({ valid }) => valid);
@@ -716,6 +740,7 @@ const FooterIcons = ({
             eventName={`socialLink.${label.toLowerCase()}`}
             ariaLabel={`${label} ${t("link", "link")}`}
             alwaysHideCaret={true}
+            className="block break-words whitespace-normal"
           />
         ))}
       </div>
@@ -743,6 +768,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         pinterestLink: "",
         linkedInLink: "",
         youtubeLink: "",
+        tiktokLink: "",
         utilityImages: [],
         expandedFooter: false,
         expandedFooterLinks: [
