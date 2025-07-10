@@ -14,7 +14,7 @@ on:
 jobs:
   unit_tests:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:latest
+    container: mcr.microsoft.com/playwright:v1.54.0
     defaults:
       run:
         working-directory: ./packages/${{ inputs.package }}
@@ -77,6 +77,7 @@ jobs:
         if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
         run: |
           echo "New or changed screenshots detected, or tests failed. Committing screenshots."
+          pwd
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
