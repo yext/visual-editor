@@ -302,7 +302,7 @@ export const defaultThemeConfig: ThemeConfig = {
         type: "select",
         plugin: "borderRadius",
         options: ThemeOptions.BUTTON_BORDER_RADIUS,
-        default: "0px",
+        default: "4px",
       },
       textTransform: {
         label: msg("theme.textTransform.textTransform", "Text Transform"),
