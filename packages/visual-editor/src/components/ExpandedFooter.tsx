@@ -376,7 +376,7 @@ const ExpandedFooterWrapper = ({
         as="footer"
         verticalPadding={"footer"}
         background={backgroundColor}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`}  md:justify-start w-full md:items-start  gap-8 md:gap-10`}
+        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
         <div className="flex flex-col gap-10 md:gap-8">
           <EntityField
@@ -486,7 +486,7 @@ const ExpandedFooterWrapper = ({
           as="footer"
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
-          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:flex-row-reverse md:justify-between"}`}
+          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
         >
           <EntityField
             constantValueEnabled
