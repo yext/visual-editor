@@ -414,6 +414,10 @@
       "pill": "Hap"
     },
     "pageSection": "Sayfa bölümü",
+    "radius": {
+      "pill": "Hap",
+      "pill_shape": "Hap"
+    },
     "textTransform": {
       "capitalize": "Baştan çıkarmak",
       "lowercase": "Küçük harf",

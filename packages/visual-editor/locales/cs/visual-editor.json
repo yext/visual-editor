@@ -414,6 +414,10 @@
       "pill": "Pilulka"
     },
     "pageSection": "Sekce stránky",
+    "radius": {
+      "pill": "Pilulka",
+      "pill_shape": "Pilulka"
+    },
     "textTransform": {
       "capitalize": "Kapitalizovat",
       "lowercase": "Malá písmena",

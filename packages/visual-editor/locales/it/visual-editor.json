@@ -414,6 +414,10 @@
       "pill": "Pillola"
     },
     "pageSection": "Sezione Pagina",
+    "radius": {
+      "pill": "Pillola",
+      "pill_shape": "Pillola"
+    },
     "textTransform": {
       "capitalize": "Capitalizzare",
       "lowercase": "Minuscolo",

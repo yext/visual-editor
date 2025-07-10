@@ -414,6 +414,10 @@
       "pill": "Tabletta"
     },
     "pageSection": "Oldal szakasz",
+    "radius": {
+      "pill": "Tabletta",
+      "pill_shape": "Tabletta"
+    },
     "textTransform": {
       "capitalize": "Nagyít",
       "lowercase": "Kisbetűs",

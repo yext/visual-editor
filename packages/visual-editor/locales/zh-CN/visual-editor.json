@@ -414,6 +414,10 @@
       "pill": "丸"
     },
     "pageSection": "页面部分",
+    "radius": {
+      "pill": "丸",
+      "pill_shape": "药丸"
+    },
     "textTransform": {
       "capitalize": "大写",
       "lowercase": "小写",

@@ -414,6 +414,10 @@
       "pill": "ピル"
     },
     "pageSection": "ページセクション",
+    "radius": {
+      "pill": "ピル",
+      "pill_shape": "ピル"
+    },
     "textTransform": {
       "capitalize": "大文字になります",
       "lowercase": "小文字",

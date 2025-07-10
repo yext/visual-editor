@@ -414,6 +414,10 @@
       "pill": "Pille"
     },
     "pageSection": "Seitenabschnitt",
+    "radius": {
+      "pill": "Pille",
+      "pill_shape": "Pille"
+    },
     "textTransform": {
       "capitalize": "Profitieren",
       "lowercase": "Kleinbuchstaben",

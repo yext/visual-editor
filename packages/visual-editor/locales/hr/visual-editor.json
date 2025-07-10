@@ -415,6 +415,10 @@
       "pill": "Pilula"
     },
     "pageSection": "Odjeljak",
+    "radius": {
+      "pill": "Pilula",
+      "pill_shape": "Tableta"
+    },
     "textTransform": {
       "capitalize": "Iskoristiti",
       "lowercase": "Malim slovima",
