@@ -322,26 +322,22 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 
   const entityFieldOptionsWithResolvedValue = React.useMemo(() => {
-    const { filteredEntityFields, entityFieldOptions } = getEntityFieldOptions(
-      entityFields,
-      filter
-    );
-    return entityFieldOptions.map((option) => {
+    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    return filteredEntityFields.map((field) => {
       const fieldToResolve: YextEntityField<unknown> = {
-        field: option.value,
+        field: field.name,
         constantValue: undefined,
         constantValueEnabled: false,
       };
       const resolvedField = resolveYextEntityField(document, fieldToResolve);
       return {
-        ...option,
+        label: field.displayName ?? field.name,
+        value: field.name,
         resolvedValue:
           typeof resolvedField === "object"
             ? JSON.stringify(resolvedField)
             : resolvedField,
-        displayName:
-          filteredEntityFields.find((field) => field.name === option.value)
-            ?.displayName ?? option.value,
+        displayName: field.displayName ?? field.name,
       };
     });
   }, [entityFields, filter, document]);
@@ -501,13 +497,10 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 };
 
-const getEntityFieldOptions = (
+const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: RenderEntityFieldFilter<any>
-): {
-  filteredEntityFields: YextSchemaField[];
-  entityFieldOptions: ComboboxOption[];
-} => {
+): YextSchemaField[] => {
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
 
   // If there are no direct children, return the parent field if it is a list
@@ -519,22 +512,11 @@ const getEntityFieldOptions = (
     });
   }
 
-  return {
-    filteredEntityFields: filteredEntityFields,
-    entityFieldOptions: filteredEntityFields
-      .map((entityFieldNameToSchema) => {
-        return {
-          label:
-            entityFieldNameToSchema.displayName ?? entityFieldNameToSchema.name,
-          value: entityFieldNameToSchema.name,
-        };
-      })
-      .sort((entityFieldA, entityFieldB) => {
-        const nameA = entityFieldA.label.toUpperCase();
-        const nameB = entityFieldB.label.toUpperCase();
-        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-      }),
-  };
+  return filteredEntityFields.sort((entityFieldA, entityFieldB) => {
+    const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
+    const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
+    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  });
 };
 
 export const EntityFieldInput = <T extends Record<string, any>>({
@@ -548,10 +530,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const templateMetadata = useTemplateMetadata();
 
   const basicSelectorField = React.useMemo(() => {
-    const { filteredEntityFields, entityFieldOptions } = getEntityFieldOptions(
-      entityFields,
-      filter
-    );
+    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    const entityFieldOptions = filteredEntityFields.map((field) => ({
+      label: field.displayName ?? field.name,
+      value: field.name,
+    }));
 
     const options = hideSelectAFieldOption
       ? [...entityFieldOptions]

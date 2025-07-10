@@ -10507,1078 +10507,1099 @@ export const devTemplateStream = {
     createTime: "2025-01-14T19:48:49Z",
     updateTime: "2025-01-14T19:48:49Z",
   },
-};
-
-export const devDisplayNames = {
-  accessHours: "Access Hours",
-  "accessHours.friday": "Access Hours \u003e Friday",
-  "accessHours.friday.isClosed": "Access Hours \u003e Friday \u003e Is Closed",
-  "accessHours.friday.openIntervals":
-    "Access Hours \u003e Friday \u003e Open Intervals",
-  "accessHours.friday.openIntervals.end":
-    "Access Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "accessHours.friday.openIntervals.start":
-    "Access Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "accessHours.holidayHours": "Access Hours \u003e Holiday Hours",
-  "accessHours.holidayHours.date":
-    "Access Hours \u003e Holiday Hours \u003e Date",
-  "accessHours.holidayHours.isClosed":
-    "Access Hours \u003e Holiday Hours \u003e Is Closed",
-  "accessHours.holidayHours.isRegularHours":
-    "Access Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "accessHours.holidayHours.openIntervals":
-    "Access Hours \u003e Holiday Hours \u003e Open Intervals",
-  "accessHours.holidayHours.openIntervals.end":
-    "Access Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "accessHours.holidayHours.openIntervals.start":
-    "Access Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "accessHours.monday": "Access Hours \u003e Monday",
-  "accessHours.monday.isClosed": "Access Hours \u003e Monday \u003e Is Closed",
-  "accessHours.monday.openIntervals":
-    "Access Hours \u003e Monday \u003e Open Intervals",
-  "accessHours.monday.openIntervals.end":
-    "Access Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "accessHours.monday.openIntervals.start":
-    "Access Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "accessHours.reopenDate": "Access Hours \u003e Reopen Date",
-  "accessHours.saturday": "Access Hours \u003e Saturday",
-  "accessHours.saturday.isClosed":
-    "Access Hours \u003e Saturday \u003e Is Closed",
-  "accessHours.saturday.openIntervals":
-    "Access Hours \u003e Saturday \u003e Open Intervals",
-  "accessHours.saturday.openIntervals.end":
-    "Access Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "accessHours.saturday.openIntervals.start":
-    "Access Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "accessHours.sunday": "Access Hours \u003e Sunday",
-  "accessHours.sunday.isClosed": "Access Hours \u003e Sunday \u003e Is Closed",
-  "accessHours.sunday.openIntervals":
-    "Access Hours \u003e Sunday \u003e Open Intervals",
-  "accessHours.sunday.openIntervals.end":
-    "Access Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "accessHours.sunday.openIntervals.start":
-    "Access Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "accessHours.thursday": "Access Hours \u003e Thursday",
-  "accessHours.thursday.isClosed":
-    "Access Hours \u003e Thursday \u003e Is Closed",
-  "accessHours.thursday.openIntervals":
-    "Access Hours \u003e Thursday \u003e Open Intervals",
-  "accessHours.thursday.openIntervals.end":
-    "Access Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "accessHours.thursday.openIntervals.start":
-    "Access Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "accessHours.tuesday": "Access Hours \u003e Tuesday",
-  "accessHours.tuesday.isClosed":
-    "Access Hours \u003e Tuesday \u003e Is Closed",
-  "accessHours.tuesday.openIntervals":
-    "Access Hours \u003e Tuesday \u003e Open Intervals",
-  "accessHours.tuesday.openIntervals.end":
-    "Access Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "accessHours.tuesday.openIntervals.start":
-    "Access Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "accessHours.wednesday": "Access Hours \u003e Wednesday",
-  "accessHours.wednesday.isClosed":
-    "Access Hours \u003e Wednesday \u003e Is Closed",
-  "accessHours.wednesday.openIntervals":
-    "Access Hours \u003e Wednesday \u003e Open Intervals",
-  "accessHours.wednesday.openIntervals.end":
-    "Access Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "accessHours.wednesday.openIntervals.start":
-    "Access Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  additionalHoursText: "Additional Hours Text",
-  address: "Address",
-  "address.city": "Address \u003e City",
-  "address.countryCode": "Address \u003e Country Code",
-  "address.extraDescription": "Address \u003e Extra Description",
-  "address.line1": "Address \u003e Line 1",
-  "address.line2": "Address \u003e Line 2",
-  "address.line3": "Address \u003e Line 3",
-  "address.postalCode": "Address \u003e Postal Code",
-  "address.region": "Address \u003e Region",
-  "address.sublocality": "Address \u003e Sublocality",
-  addressHidden: "Address Hidden",
-  alternatePhone: "Alternate Phone",
-  androidAppUrl: "Android App URL",
-  appleActionLinks: "Apple Action Links",
-  "appleActionLinks.appName": "Apple Action Links \u003e App Name",
-  "appleActionLinks.appStoreUrl": "Apple Action Links \u003e App Store URL",
-  "appleActionLinks.category": "Apple Action Links \u003e Category",
-  "appleActionLinks.quickLinkUrl": "Apple Action Links \u003e Quick Link",
-  appleBusinessDescription: "Apple Business Description",
-  appleBusinessId: "Apple Brand ID",
-  appleCompanyId: "Apple Company ID",
-  appleCoverPhoto: "Apple Cover Photo",
-  associations: "Associations",
-  bingParentLocation: "Bing Parent Location",
-  bingRelationshipType: "Bing Relationship Type",
-  bingWebsiteOverride: "Bing Website Override",
-  bios: "Staff Bios",
-  "bios.ids": "Staff Bios \u003e Ids",
-  "bios.label": "Staff Bios \u003e Label",
-  blackOwnedBusiness: "Black-Owned Business",
-  brands: "Brands",
-  brunchHours: "Brunch Hours",
-  "brunchHours.friday": "Brunch Hours \u003e Friday",
-  "brunchHours.friday.isClosed": "Brunch Hours \u003e Friday \u003e Is Closed",
-  "brunchHours.friday.openIntervals":
-    "Brunch Hours \u003e Friday \u003e Open Intervals",
-  "brunchHours.friday.openIntervals.end":
-    "Brunch Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "brunchHours.friday.openIntervals.start":
-    "Brunch Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "brunchHours.holidayHours": "Brunch Hours \u003e Holiday Hours",
-  "brunchHours.holidayHours.date":
-    "Brunch Hours \u003e Holiday Hours \u003e Date",
-  "brunchHours.holidayHours.isClosed":
-    "Brunch Hours \u003e Holiday Hours \u003e Is Closed",
-  "brunchHours.holidayHours.isRegularHours":
-    "Brunch Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "brunchHours.holidayHours.openIntervals":
-    "Brunch Hours \u003e Holiday Hours \u003e Open Intervals",
-  "brunchHours.holidayHours.openIntervals.end":
-    "Brunch Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "brunchHours.holidayHours.openIntervals.start":
-    "Brunch Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "brunchHours.monday": "Brunch Hours \u003e Monday",
-  "brunchHours.monday.isClosed": "Brunch Hours \u003e Monday \u003e Is Closed",
-  "brunchHours.monday.openIntervals":
-    "Brunch Hours \u003e Monday \u003e Open Intervals",
-  "brunchHours.monday.openIntervals.end":
-    "Brunch Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "brunchHours.monday.openIntervals.start":
-    "Brunch Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "brunchHours.reopenDate": "Brunch Hours \u003e Reopen Date",
-  "brunchHours.saturday": "Brunch Hours \u003e Saturday",
-  "brunchHours.saturday.isClosed":
-    "Brunch Hours \u003e Saturday \u003e Is Closed",
-  "brunchHours.saturday.openIntervals":
-    "Brunch Hours \u003e Saturday \u003e Open Intervals",
-  "brunchHours.saturday.openIntervals.end":
-    "Brunch Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "brunchHours.saturday.openIntervals.start":
-    "Brunch Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "brunchHours.sunday": "Brunch Hours \u003e Sunday",
-  "brunchHours.sunday.isClosed": "Brunch Hours \u003e Sunday \u003e Is Closed",
-  "brunchHours.sunday.openIntervals":
-    "Brunch Hours \u003e Sunday \u003e Open Intervals",
-  "brunchHours.sunday.openIntervals.end":
-    "Brunch Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "brunchHours.sunday.openIntervals.start":
-    "Brunch Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "brunchHours.thursday": "Brunch Hours \u003e Thursday",
-  "brunchHours.thursday.isClosed":
-    "Brunch Hours \u003e Thursday \u003e Is Closed",
-  "brunchHours.thursday.openIntervals":
-    "Brunch Hours \u003e Thursday \u003e Open Intervals",
-  "brunchHours.thursday.openIntervals.end":
-    "Brunch Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "brunchHours.thursday.openIntervals.start":
-    "Brunch Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "brunchHours.tuesday": "Brunch Hours \u003e Tuesday",
-  "brunchHours.tuesday.isClosed":
-    "Brunch Hours \u003e Tuesday \u003e Is Closed",
-  "brunchHours.tuesday.openIntervals":
-    "Brunch Hours \u003e Tuesday \u003e Open Intervals",
-  "brunchHours.tuesday.openIntervals.end":
-    "Brunch Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "brunchHours.tuesday.openIntervals.start":
-    "Brunch Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "brunchHours.wednesday": "Brunch Hours \u003e Wednesday",
-  "brunchHours.wednesday.isClosed":
-    "Brunch Hours \u003e Wednesday \u003e Is Closed",
-  "brunchHours.wednesday.openIntervals":
-    "Brunch Hours \u003e Wednesday \u003e Open Intervals",
-  "brunchHours.wednesday.openIntervals.end":
-    "Brunch Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "brunchHours.wednesday.openIntervals.start":
-    "Brunch Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  c_deliveryPromo: "Delivery Promo",
-  "c_deliveryPromo.cta": "Delivery Promo \u003e cta",
-  "c_deliveryPromo.cta.link": "Delivery Promo \u003e cta \u003e Link",
-  "c_deliveryPromo.cta.name": "Delivery Promo \u003e cta \u003e Name",
-  "c_deliveryPromo.description": "Delivery Promo \u003e Description",
-  "c_deliveryPromo.image": "Delivery Promo \u003e Image",
-  "c_deliveryPromo.title": "Delivery Promo \u003e Title",
-  c_faqSection: "FAQ Section",
-  "c_faqSection.linkedFAQs": "FAQ Section \u003e Linked FAQs",
-  "c_faqSection.sectionTitle": "FAQ Section \u003e Section Title",
-  c_hero: "Hero",
-  "c_hero.cta1": "Hero \u003e cta1",
-  "c_hero.cta1.link": "Hero \u003e cta1 \u003e Link",
-  "c_hero.cta1.name": "Hero \u003e cta1 \u003e Name",
-  "c_hero.cta2": "Hero \u003e cta2",
-  "c_hero.cta2.link": "Hero \u003e cta2 \u003e Link",
-  "c_hero.cta2.name": "Hero \u003e cta2 \u003e Name",
-  "c_hero.image": "Hero \u003e Image",
-  c_productSection: "Product Section",
-  "c_productSection.linkedProducts": "Product Section \u003e linkedProducts",
-  "c_productSection.sectionTitle": "Product Section \u003e Section Title",
-  cityCoordinate: "City Lat/Long",
-  "cityCoordinate.latitude": "City Lat/Long \u003e Latitude",
-  "cityCoordinate.longitude": "City Lat/Long \u003e Longitude",
-  closed: "Closed",
-  covid19InformationUrl: "COVID-19 Information URL",
-  covidMessaging: "COVID Messaging",
-  deliverListingsWithoutGeocode: "Deliver Listings Without Geocode",
-  deliveryHours: "Delivery Hours",
-  "deliveryHours.friday": "Delivery Hours \u003e Friday",
-  "deliveryHours.friday.isClosed":
-    "Delivery Hours \u003e Friday \u003e Is Closed",
-  "deliveryHours.friday.openIntervals":
-    "Delivery Hours \u003e Friday \u003e Open Intervals",
-  "deliveryHours.friday.openIntervals.end":
-    "Delivery Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "deliveryHours.friday.openIntervals.start":
-    "Delivery Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "deliveryHours.holidayHours": "Delivery Hours \u003e Holiday Hours",
-  "deliveryHours.holidayHours.date":
-    "Delivery Hours \u003e Holiday Hours \u003e Date",
-  "deliveryHours.holidayHours.isClosed":
-    "Delivery Hours \u003e Holiday Hours \u003e Is Closed",
-  "deliveryHours.holidayHours.isRegularHours":
-    "Delivery Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "deliveryHours.holidayHours.openIntervals":
-    "Delivery Hours \u003e Holiday Hours \u003e Open Intervals",
-  "deliveryHours.holidayHours.openIntervals.end":
-    "Delivery Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "deliveryHours.holidayHours.openIntervals.start":
-    "Delivery Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "deliveryHours.monday": "Delivery Hours \u003e Monday",
-  "deliveryHours.monday.isClosed":
-    "Delivery Hours \u003e Monday \u003e Is Closed",
-  "deliveryHours.monday.openIntervals":
-    "Delivery Hours \u003e Monday \u003e Open Intervals",
-  "deliveryHours.monday.openIntervals.end":
-    "Delivery Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "deliveryHours.monday.openIntervals.start":
-    "Delivery Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "deliveryHours.reopenDate": "Delivery Hours \u003e Reopen Date",
-  "deliveryHours.saturday": "Delivery Hours \u003e Saturday",
-  "deliveryHours.saturday.isClosed":
-    "Delivery Hours \u003e Saturday \u003e Is Closed",
-  "deliveryHours.saturday.openIntervals":
-    "Delivery Hours \u003e Saturday \u003e Open Intervals",
-  "deliveryHours.saturday.openIntervals.end":
-    "Delivery Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "deliveryHours.saturday.openIntervals.start":
-    "Delivery Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "deliveryHours.sunday": "Delivery Hours \u003e Sunday",
-  "deliveryHours.sunday.isClosed":
-    "Delivery Hours \u003e Sunday \u003e Is Closed",
-  "deliveryHours.sunday.openIntervals":
-    "Delivery Hours \u003e Sunday \u003e Open Intervals",
-  "deliveryHours.sunday.openIntervals.end":
-    "Delivery Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "deliveryHours.sunday.openIntervals.start":
-    "Delivery Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "deliveryHours.thursday": "Delivery Hours \u003e Thursday",
-  "deliveryHours.thursday.isClosed":
-    "Delivery Hours \u003e Thursday \u003e Is Closed",
-  "deliveryHours.thursday.openIntervals":
-    "Delivery Hours \u003e Thursday \u003e Open Intervals",
-  "deliveryHours.thursday.openIntervals.end":
-    "Delivery Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "deliveryHours.thursday.openIntervals.start":
-    "Delivery Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "deliveryHours.tuesday": "Delivery Hours \u003e Tuesday",
-  "deliveryHours.tuesday.isClosed":
-    "Delivery Hours \u003e Tuesday \u003e Is Closed",
-  "deliveryHours.tuesday.openIntervals":
-    "Delivery Hours \u003e Tuesday \u003e Open Intervals",
-  "deliveryHours.tuesday.openIntervals.end":
-    "Delivery Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "deliveryHours.tuesday.openIntervals.start":
-    "Delivery Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "deliveryHours.wednesday": "Delivery Hours \u003e Wednesday",
-  "deliveryHours.wednesday.isClosed":
-    "Delivery Hours \u003e Wednesday \u003e Is Closed",
-  "deliveryHours.wednesday.openIntervals":
-    "Delivery Hours \u003e Wednesday \u003e Open Intervals",
-  "deliveryHours.wednesday.openIntervals.end":
-    "Delivery Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "deliveryHours.wednesday.openIntervals.start":
-    "Delivery Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  deliveryUrl: "Delivery URL",
-  description: "Description",
-  dineInHours: "Dine-in Hours",
-  "dineInHours.friday": "Dine-in Hours \u003e Friday",
-  "dineInHours.friday.isClosed": "Dine-in Hours \u003e Friday \u003e Is Closed",
-  "dineInHours.friday.openIntervals":
-    "Dine-in Hours \u003e Friday \u003e Open Intervals",
-  "dineInHours.friday.openIntervals.end":
-    "Dine-in Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "dineInHours.friday.openIntervals.start":
-    "Dine-in Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "dineInHours.holidayHours": "Dine-in Hours \u003e Holiday Hours",
-  "dineInHours.holidayHours.date":
-    "Dine-in Hours \u003e Holiday Hours \u003e Date",
-  "dineInHours.holidayHours.isClosed":
-    "Dine-in Hours \u003e Holiday Hours \u003e Is Closed",
-  "dineInHours.holidayHours.isRegularHours":
-    "Dine-in Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "dineInHours.holidayHours.openIntervals":
-    "Dine-in Hours \u003e Holiday Hours \u003e Open Intervals",
-  "dineInHours.holidayHours.openIntervals.end":
-    "Dine-in Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "dineInHours.holidayHours.openIntervals.start":
-    "Dine-in Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "dineInHours.monday": "Dine-in Hours \u003e Monday",
-  "dineInHours.monday.isClosed": "Dine-in Hours \u003e Monday \u003e Is Closed",
-  "dineInHours.monday.openIntervals":
-    "Dine-in Hours \u003e Monday \u003e Open Intervals",
-  "dineInHours.monday.openIntervals.end":
-    "Dine-in Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "dineInHours.monday.openIntervals.start":
-    "Dine-in Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "dineInHours.reopenDate": "Dine-in Hours \u003e Reopen Date",
-  "dineInHours.saturday": "Dine-in Hours \u003e Saturday",
-  "dineInHours.saturday.isClosed":
-    "Dine-in Hours \u003e Saturday \u003e Is Closed",
-  "dineInHours.saturday.openIntervals":
-    "Dine-in Hours \u003e Saturday \u003e Open Intervals",
-  "dineInHours.saturday.openIntervals.end":
-    "Dine-in Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "dineInHours.saturday.openIntervals.start":
-    "Dine-in Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "dineInHours.sunday": "Dine-in Hours \u003e Sunday",
-  "dineInHours.sunday.isClosed": "Dine-in Hours \u003e Sunday \u003e Is Closed",
-  "dineInHours.sunday.openIntervals":
-    "Dine-in Hours \u003e Sunday \u003e Open Intervals",
-  "dineInHours.sunday.openIntervals.end":
-    "Dine-in Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "dineInHours.sunday.openIntervals.start":
-    "Dine-in Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "dineInHours.thursday": "Dine-in Hours \u003e Thursday",
-  "dineInHours.thursday.isClosed":
-    "Dine-in Hours \u003e Thursday \u003e Is Closed",
-  "dineInHours.thursday.openIntervals":
-    "Dine-in Hours \u003e Thursday \u003e Open Intervals",
-  "dineInHours.thursday.openIntervals.end":
-    "Dine-in Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "dineInHours.thursday.openIntervals.start":
-    "Dine-in Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "dineInHours.tuesday": "Dine-in Hours \u003e Tuesday",
-  "dineInHours.tuesday.isClosed":
-    "Dine-in Hours \u003e Tuesday \u003e Is Closed",
-  "dineInHours.tuesday.openIntervals":
-    "Dine-in Hours \u003e Tuesday \u003e Open Intervals",
-  "dineInHours.tuesday.openIntervals.end":
-    "Dine-in Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "dineInHours.tuesday.openIntervals.start":
-    "Dine-in Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "dineInHours.wednesday": "Dine-in Hours \u003e Wednesday",
-  "dineInHours.wednesday.isClosed":
-    "Dine-in Hours \u003e Wednesday \u003e Is Closed",
-  "dineInHours.wednesday.openIntervals":
-    "Dine-in Hours \u003e Wednesday \u003e Open Intervals",
-  "dineInHours.wednesday.openIntervals.end":
-    "Dine-in Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "dineInHours.wednesday.openIntervals.start":
-    "Dine-in Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  displayCoordinate: "Display Lat/Long",
-  "displayCoordinate.latitude": "Display Lat/Long \u003e Latitude",
-  "displayCoordinate.longitude": "Display Lat/Long \u003e Longitude",
-  driveThroughHours: "Drive-Through Hours",
-  "driveThroughHours.friday": "Drive-Through Hours \u003e Friday",
-  "driveThroughHours.friday.isClosed":
-    "Drive-Through Hours \u003e Friday \u003e Is Closed",
-  "driveThroughHours.friday.openIntervals":
-    "Drive-Through Hours \u003e Friday \u003e Open Intervals",
-  "driveThroughHours.friday.openIntervals.end":
-    "Drive-Through Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "driveThroughHours.friday.openIntervals.start":
-    "Drive-Through Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "driveThroughHours.holidayHours": "Drive-Through Hours \u003e Holiday Hours",
-  "driveThroughHours.holidayHours.date":
-    "Drive-Through Hours \u003e Holiday Hours \u003e Date",
-  "driveThroughHours.holidayHours.isClosed":
-    "Drive-Through Hours \u003e Holiday Hours \u003e Is Closed",
-  "driveThroughHours.holidayHours.isRegularHours":
-    "Drive-Through Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "driveThroughHours.holidayHours.openIntervals":
-    "Drive-Through Hours \u003e Holiday Hours \u003e Open Intervals",
-  "driveThroughHours.holidayHours.openIntervals.end":
-    "Drive-Through Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "driveThroughHours.holidayHours.openIntervals.start":
-    "Drive-Through Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "driveThroughHours.monday": "Drive-Through Hours \u003e Monday",
-  "driveThroughHours.monday.isClosed":
-    "Drive-Through Hours \u003e Monday \u003e Is Closed",
-  "driveThroughHours.monday.openIntervals":
-    "Drive-Through Hours \u003e Monday \u003e Open Intervals",
-  "driveThroughHours.monday.openIntervals.end":
-    "Drive-Through Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "driveThroughHours.monday.openIntervals.start":
-    "Drive-Through Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "driveThroughHours.reopenDate": "Drive-Through Hours \u003e Reopen Date",
-  "driveThroughHours.saturday": "Drive-Through Hours \u003e Saturday",
-  "driveThroughHours.saturday.isClosed":
-    "Drive-Through Hours \u003e Saturday \u003e Is Closed",
-  "driveThroughHours.saturday.openIntervals":
-    "Drive-Through Hours \u003e Saturday \u003e Open Intervals",
-  "driveThroughHours.saturday.openIntervals.end":
-    "Drive-Through Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "driveThroughHours.saturday.openIntervals.start":
-    "Drive-Through Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "driveThroughHours.sunday": "Drive-Through Hours \u003e Sunday",
-  "driveThroughHours.sunday.isClosed":
-    "Drive-Through Hours \u003e Sunday \u003e Is Closed",
-  "driveThroughHours.sunday.openIntervals":
-    "Drive-Through Hours \u003e Sunday \u003e Open Intervals",
-  "driveThroughHours.sunday.openIntervals.end":
-    "Drive-Through Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "driveThroughHours.sunday.openIntervals.start":
-    "Drive-Through Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "driveThroughHours.thursday": "Drive-Through Hours \u003e Thursday",
-  "driveThroughHours.thursday.isClosed":
-    "Drive-Through Hours \u003e Thursday \u003e Is Closed",
-  "driveThroughHours.thursday.openIntervals":
-    "Drive-Through Hours \u003e Thursday \u003e Open Intervals",
-  "driveThroughHours.thursday.openIntervals.end":
-    "Drive-Through Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "driveThroughHours.thursday.openIntervals.start":
-    "Drive-Through Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "driveThroughHours.tuesday": "Drive-Through Hours \u003e Tuesday",
-  "driveThroughHours.tuesday.isClosed":
-    "Drive-Through Hours \u003e Tuesday \u003e Is Closed",
-  "driveThroughHours.tuesday.openIntervals":
-    "Drive-Through Hours \u003e Tuesday \u003e Open Intervals",
-  "driveThroughHours.tuesday.openIntervals.end":
-    "Drive-Through Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "driveThroughHours.tuesday.openIntervals.start":
-    "Drive-Through Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "driveThroughHours.wednesday": "Drive-Through Hours \u003e Wednesday",
-  "driveThroughHours.wednesday.isClosed":
-    "Drive-Through Hours \u003e Wednesday \u003e Is Closed",
-  "driveThroughHours.wednesday.openIntervals":
-    "Drive-Through Hours \u003e Wednesday \u003e Open Intervals",
-  "driveThroughHours.wednesday.openIntervals.end":
-    "Drive-Through Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "driveThroughHours.wednesday.openIntervals.start":
-    "Drive-Through Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  dropoffCoordinate: "Dropoff Lat/Long",
-  "dropoffCoordinate.latitude": "Dropoff Lat/Long \u003e Latitude",
-  "dropoffCoordinate.longitude": "Dropoff Lat/Long \u003e Longitude",
-  emails: "Emails",
-  entityId: "Entity ID",
-  facebookPageUrl: "Facebook Page URL",
-  facebookWebsiteOverride: "Facebook Website Override",
-  fax: "Fax Number",
-  featuredMessage: "Featured Message",
-  "featuredMessage.description": "Featured Message \u003e Description",
-  "featuredMessage.url": "Featured Message \u003e URL",
-  fullyVaccinatedStaff: "Fully Vaccinated Staff",
-  geocodedCoordinate: "Geocoded Lat/Long",
-  "geocodedCoordinate.latitude": "Geocoded Lat/Long \u003e Latitude",
-  "geocodedCoordinate.longitude": "Geocoded Lat/Long \u003e Longitude",
-  geomodifier: "Geomodifier",
-  googleWebsiteOverride: "Google Website Override",
-  happyHours: "Happy Hours",
-  "happyHours.friday": "Happy Hours \u003e Friday",
-  "happyHours.friday.isClosed": "Happy Hours \u003e Friday \u003e Is Closed",
-  "happyHours.friday.openIntervals":
-    "Happy Hours \u003e Friday \u003e Open Intervals",
-  "happyHours.friday.openIntervals.end":
-    "Happy Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "happyHours.friday.openIntervals.start":
-    "Happy Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "happyHours.holidayHours": "Happy Hours \u003e Holiday Hours",
-  "happyHours.holidayHours.date":
-    "Happy Hours \u003e Holiday Hours \u003e Date",
-  "happyHours.holidayHours.isClosed":
-    "Happy Hours \u003e Holiday Hours \u003e Is Closed",
-  "happyHours.holidayHours.isRegularHours":
-    "Happy Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "happyHours.holidayHours.openIntervals":
-    "Happy Hours \u003e Holiday Hours \u003e Open Intervals",
-  "happyHours.holidayHours.openIntervals.end":
-    "Happy Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "happyHours.holidayHours.openIntervals.start":
-    "Happy Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "happyHours.monday": "Happy Hours \u003e Monday",
-  "happyHours.monday.isClosed": "Happy Hours \u003e Monday \u003e Is Closed",
-  "happyHours.monday.openIntervals":
-    "Happy Hours \u003e Monday \u003e Open Intervals",
-  "happyHours.monday.openIntervals.end":
-    "Happy Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "happyHours.monday.openIntervals.start":
-    "Happy Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "happyHours.reopenDate": "Happy Hours \u003e Reopen Date",
-  "happyHours.saturday": "Happy Hours \u003e Saturday",
-  "happyHours.saturday.isClosed":
-    "Happy Hours \u003e Saturday \u003e Is Closed",
-  "happyHours.saturday.openIntervals":
-    "Happy Hours \u003e Saturday \u003e Open Intervals",
-  "happyHours.saturday.openIntervals.end":
-    "Happy Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "happyHours.saturday.openIntervals.start":
-    "Happy Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "happyHours.sunday": "Happy Hours \u003e Sunday",
-  "happyHours.sunday.isClosed": "Happy Hours \u003e Sunday \u003e Is Closed",
-  "happyHours.sunday.openIntervals":
-    "Happy Hours \u003e Sunday \u003e Open Intervals",
-  "happyHours.sunday.openIntervals.end":
-    "Happy Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "happyHours.sunday.openIntervals.start":
-    "Happy Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "happyHours.thursday": "Happy Hours \u003e Thursday",
-  "happyHours.thursday.isClosed":
-    "Happy Hours \u003e Thursday \u003e Is Closed",
-  "happyHours.thursday.openIntervals":
-    "Happy Hours \u003e Thursday \u003e Open Intervals",
-  "happyHours.thursday.openIntervals.end":
-    "Happy Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "happyHours.thursday.openIntervals.start":
-    "Happy Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "happyHours.tuesday": "Happy Hours \u003e Tuesday",
-  "happyHours.tuesday.isClosed": "Happy Hours \u003e Tuesday \u003e Is Closed",
-  "happyHours.tuesday.openIntervals":
-    "Happy Hours \u003e Tuesday \u003e Open Intervals",
-  "happyHours.tuesday.openIntervals.end":
-    "Happy Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "happyHours.tuesday.openIntervals.start":
-    "Happy Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "happyHours.wednesday": "Happy Hours \u003e Wednesday",
-  "happyHours.wednesday.isClosed":
-    "Happy Hours \u003e Wednesday \u003e Is Closed",
-  "happyHours.wednesday.openIntervals":
-    "Happy Hours \u003e Wednesday \u003e Open Intervals",
-  "happyHours.wednesday.openIntervals.end":
-    "Happy Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "happyHours.wednesday.openIntervals.start":
-    "Happy Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  holidayHoursConversationEnabled: "Holiday Hours Confirmation",
-  hours: "Hours",
-  "hours.friday": "Hours \u003e Friday",
-  "hours.friday.isClosed": "Hours \u003e Friday \u003e Is Closed",
-  "hours.friday.openIntervals": "Hours \u003e Friday \u003e Open Intervals",
-  "hours.friday.openIntervals.end":
-    "Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "hours.friday.openIntervals.start":
-    "Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "hours.holidayHours": "Hours \u003e Holiday Hours",
-  "hours.holidayHours.date": "Hours \u003e Holiday Hours \u003e Date",
-  "hours.holidayHours.isClosed": "Hours \u003e Holiday Hours \u003e Is Closed",
-  "hours.holidayHours.isRegularHours":
-    "Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "hours.holidayHours.openIntervals":
-    "Hours \u003e Holiday Hours \u003e Open Intervals",
-  "hours.holidayHours.openIntervals.end":
-    "Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "hours.holidayHours.openIntervals.start":
-    "Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "hours.monday": "Hours \u003e Monday",
-  "hours.monday.isClosed": "Hours \u003e Monday \u003e Is Closed",
-  "hours.monday.openIntervals": "Hours \u003e Monday \u003e Open Intervals",
-  "hours.monday.openIntervals.end":
-    "Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "hours.monday.openIntervals.start":
-    "Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "hours.reopenDate": "Hours \u003e Reopen Date",
-  "hours.saturday": "Hours \u003e Saturday",
-  "hours.saturday.isClosed": "Hours \u003e Saturday \u003e Is Closed",
-  "hours.saturday.openIntervals": "Hours \u003e Saturday \u003e Open Intervals",
-  "hours.saturday.openIntervals.end":
-    "Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "hours.saturday.openIntervals.start":
-    "Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "hours.sunday": "Hours \u003e Sunday",
-  "hours.sunday.isClosed": "Hours \u003e Sunday \u003e Is Closed",
-  "hours.sunday.openIntervals": "Hours \u003e Sunday \u003e Open Intervals",
-  "hours.sunday.openIntervals.end":
-    "Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "hours.sunday.openIntervals.start":
-    "Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "hours.thursday": "Hours \u003e Thursday",
-  "hours.thursday.isClosed": "Hours \u003e Thursday \u003e Is Closed",
-  "hours.thursday.openIntervals": "Hours \u003e Thursday \u003e Open Intervals",
-  "hours.thursday.openIntervals.end":
-    "Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "hours.thursday.openIntervals.start":
-    "Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "hours.tuesday": "Hours \u003e Tuesday",
-  "hours.tuesday.isClosed": "Hours \u003e Tuesday \u003e Is Closed",
-  "hours.tuesday.openIntervals": "Hours \u003e Tuesday \u003e Open Intervals",
-  "hours.tuesday.openIntervals.end":
-    "Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "hours.tuesday.openIntervals.start":
-    "Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "hours.wednesday": "Hours \u003e Wednesday",
-  "hours.wednesday.isClosed": "Hours \u003e Wednesday \u003e Is Closed",
-  "hours.wednesday.openIntervals":
-    "Hours \u003e Wednesday \u003e Open Intervals",
-  "hours.wednesday.openIntervals.end":
-    "Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "hours.wednesday.openIntervals.start":
-    "Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  instagramHandle: "Instagram Handle",
-  iosAppUrl: "iOS App URL",
-  isoRegionCode: "ISO Region Code",
-  keywords: "Keywords",
-  kitchenHours: "Kitchen Hours",
-  "kitchenHours.friday": "Kitchen Hours \u003e Friday",
-  "kitchenHours.friday.isClosed":
-    "Kitchen Hours \u003e Friday \u003e Is Closed",
-  "kitchenHours.friday.openIntervals":
-    "Kitchen Hours \u003e Friday \u003e Open Intervals",
-  "kitchenHours.friday.openIntervals.end":
-    "Kitchen Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "kitchenHours.friday.openIntervals.start":
-    "Kitchen Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "kitchenHours.holidayHours": "Kitchen Hours \u003e Holiday Hours",
-  "kitchenHours.holidayHours.date":
-    "Kitchen Hours \u003e Holiday Hours \u003e Date",
-  "kitchenHours.holidayHours.isClosed":
-    "Kitchen Hours \u003e Holiday Hours \u003e Is Closed",
-  "kitchenHours.holidayHours.isRegularHours":
-    "Kitchen Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "kitchenHours.holidayHours.openIntervals":
-    "Kitchen Hours \u003e Holiday Hours \u003e Open Intervals",
-  "kitchenHours.holidayHours.openIntervals.end":
-    "Kitchen Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "kitchenHours.holidayHours.openIntervals.start":
-    "Kitchen Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "kitchenHours.monday": "Kitchen Hours \u003e Monday",
-  "kitchenHours.monday.isClosed":
-    "Kitchen Hours \u003e Monday \u003e Is Closed",
-  "kitchenHours.monday.openIntervals":
-    "Kitchen Hours \u003e Monday \u003e Open Intervals",
-  "kitchenHours.monday.openIntervals.end":
-    "Kitchen Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "kitchenHours.monday.openIntervals.start":
-    "Kitchen Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "kitchenHours.reopenDate": "Kitchen Hours \u003e Reopen Date",
-  "kitchenHours.saturday": "Kitchen Hours \u003e Saturday",
-  "kitchenHours.saturday.isClosed":
-    "Kitchen Hours \u003e Saturday \u003e Is Closed",
-  "kitchenHours.saturday.openIntervals":
-    "Kitchen Hours \u003e Saturday \u003e Open Intervals",
-  "kitchenHours.saturday.openIntervals.end":
-    "Kitchen Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "kitchenHours.saturday.openIntervals.start":
-    "Kitchen Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "kitchenHours.sunday": "Kitchen Hours \u003e Sunday",
-  "kitchenHours.sunday.isClosed":
-    "Kitchen Hours \u003e Sunday \u003e Is Closed",
-  "kitchenHours.sunday.openIntervals":
-    "Kitchen Hours \u003e Sunday \u003e Open Intervals",
-  "kitchenHours.sunday.openIntervals.end":
-    "Kitchen Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "kitchenHours.sunday.openIntervals.start":
-    "Kitchen Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "kitchenHours.thursday": "Kitchen Hours \u003e Thursday",
-  "kitchenHours.thursday.isClosed":
-    "Kitchen Hours \u003e Thursday \u003e Is Closed",
-  "kitchenHours.thursday.openIntervals":
-    "Kitchen Hours \u003e Thursday \u003e Open Intervals",
-  "kitchenHours.thursday.openIntervals.end":
-    "Kitchen Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "kitchenHours.thursday.openIntervals.start":
-    "Kitchen Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "kitchenHours.tuesday": "Kitchen Hours \u003e Tuesday",
-  "kitchenHours.tuesday.isClosed":
-    "Kitchen Hours \u003e Tuesday \u003e Is Closed",
-  "kitchenHours.tuesday.openIntervals":
-    "Kitchen Hours \u003e Tuesday \u003e Open Intervals",
-  "kitchenHours.tuesday.openIntervals.end":
-    "Kitchen Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "kitchenHours.tuesday.openIntervals.start":
-    "Kitchen Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "kitchenHours.wednesday": "Kitchen Hours \u003e Wednesday",
-  "kitchenHours.wednesday.isClosed":
-    "Kitchen Hours \u003e Wednesday \u003e Is Closed",
-  "kitchenHours.wednesday.openIntervals":
-    "Kitchen Hours \u003e Wednesday \u003e Open Intervals",
-  "kitchenHours.wednesday.openIntervals.end":
-    "Kitchen Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "kitchenHours.wednesday.openIntervals.start":
-    "Kitchen Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  labels: "Labels",
-  landingPageUrl: "Landing Page URL",
-  languages: "Languages",
-  linkedInUrl: "LinkedIn URL",
-  localPhone: "Local Phone",
-  logo: "Business Logo",
-  mainPhone: "Main Phone",
-  menuUrl: "Menu URL",
-  "menuUrl.displayUrl": "Menu URL \u003e Display URL",
-  "menuUrl.preferDisplayUrl": "Menu URL \u003e Prefer Display URL",
-  "menuUrl.url": "Menu URL \u003e URL",
-  menus: "Menus",
-  "menus.ids": "Menus \u003e Ids",
-  "menus.label": "Menus \u003e Label",
-  mobilePhone: "Mobile Phone",
-  name: "Name",
-  neighborhood: "Neighborhood",
-  nudgeEnabled: "Knowledge Nudge",
-  onlineServiceHours: "Online Service Hours",
-  "onlineServiceHours.friday": "Online Service Hours \u003e Friday",
-  "onlineServiceHours.friday.isClosed":
-    "Online Service Hours \u003e Friday \u003e Is Closed",
-  "onlineServiceHours.friday.openIntervals":
-    "Online Service Hours \u003e Friday \u003e Open Intervals",
-  "onlineServiceHours.friday.openIntervals.end":
-    "Online Service Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.friday.openIntervals.start":
-    "Online Service Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.holidayHours":
-    "Online Service Hours \u003e Holiday Hours",
-  "onlineServiceHours.holidayHours.date":
-    "Online Service Hours \u003e Holiday Hours \u003e Date",
-  "onlineServiceHours.holidayHours.isClosed":
-    "Online Service Hours \u003e Holiday Hours \u003e Is Closed",
-  "onlineServiceHours.holidayHours.isRegularHours":
-    "Online Service Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "onlineServiceHours.holidayHours.openIntervals":
-    "Online Service Hours \u003e Holiday Hours \u003e Open Intervals",
-  "onlineServiceHours.holidayHours.openIntervals.end":
-    "Online Service Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "onlineServiceHours.holidayHours.openIntervals.start":
-    "Online Service Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.monday": "Online Service Hours \u003e Monday",
-  "onlineServiceHours.monday.isClosed":
-    "Online Service Hours \u003e Monday \u003e Is Closed",
-  "onlineServiceHours.monday.openIntervals":
-    "Online Service Hours \u003e Monday \u003e Open Intervals",
-  "onlineServiceHours.monday.openIntervals.end":
-    "Online Service Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.monday.openIntervals.start":
-    "Online Service Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.reopenDate": "Online Service Hours \u003e Reopen Date",
-  "onlineServiceHours.saturday": "Online Service Hours \u003e Saturday",
-  "onlineServiceHours.saturday.isClosed":
-    "Online Service Hours \u003e Saturday \u003e Is Closed",
-  "onlineServiceHours.saturday.openIntervals":
-    "Online Service Hours \u003e Saturday \u003e Open Intervals",
-  "onlineServiceHours.saturday.openIntervals.end":
-    "Online Service Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.saturday.openIntervals.start":
-    "Online Service Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.sunday": "Online Service Hours \u003e Sunday",
-  "onlineServiceHours.sunday.isClosed":
-    "Online Service Hours \u003e Sunday \u003e Is Closed",
-  "onlineServiceHours.sunday.openIntervals":
-    "Online Service Hours \u003e Sunday \u003e Open Intervals",
-  "onlineServiceHours.sunday.openIntervals.end":
-    "Online Service Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.sunday.openIntervals.start":
-    "Online Service Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.thursday": "Online Service Hours \u003e Thursday",
-  "onlineServiceHours.thursday.isClosed":
-    "Online Service Hours \u003e Thursday \u003e Is Closed",
-  "onlineServiceHours.thursday.openIntervals":
-    "Online Service Hours \u003e Thursday \u003e Open Intervals",
-  "onlineServiceHours.thursday.openIntervals.end":
-    "Online Service Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.thursday.openIntervals.start":
-    "Online Service Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.tuesday": "Online Service Hours \u003e Tuesday",
-  "onlineServiceHours.tuesday.isClosed":
-    "Online Service Hours \u003e Tuesday \u003e Is Closed",
-  "onlineServiceHours.tuesday.openIntervals":
-    "Online Service Hours \u003e Tuesday \u003e Open Intervals",
-  "onlineServiceHours.tuesday.openIntervals.end":
-    "Online Service Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.tuesday.openIntervals.start":
-    "Online Service Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "onlineServiceHours.wednesday": "Online Service Hours \u003e Wednesday",
-  "onlineServiceHours.wednesday.isClosed":
-    "Online Service Hours \u003e Wednesday \u003e Is Closed",
-  "onlineServiceHours.wednesday.openIntervals":
-    "Online Service Hours \u003e Wednesday \u003e Open Intervals",
-  "onlineServiceHours.wednesday.openIntervals.end":
-    "Online Service Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "onlineServiceHours.wednesday.openIntervals.start":
-    "Online Service Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  orderUrl: "Order URL",
-  "orderUrl.displayUrl": "Order URL \u003e Display URL",
-  "orderUrl.preferDisplayUrl": "Order URL \u003e Prefer Display URL",
-  "orderUrl.url": "Order URL \u003e URL",
-  paymentOptions: "Payment Options",
-  phoneticName: "Phonetic Name",
-  photoGallery: "Photo Gallery",
-  pickupAndDeliveryServices: "Pickup and Delivery Services",
-  pickupCoordinate: "Pickup Lat/Long",
-  "pickupCoordinate.latitude": "Pickup Lat/Long \u003e Latitude",
-  "pickupCoordinate.longitude": "Pickup Lat/Long \u003e Longitude",
-  pickupHours: "Pickup Hours",
-  "pickupHours.friday": "Pickup Hours \u003e Friday",
-  "pickupHours.friday.isClosed": "Pickup Hours \u003e Friday \u003e Is Closed",
-  "pickupHours.friday.openIntervals":
-    "Pickup Hours \u003e Friday \u003e Open Intervals",
-  "pickupHours.friday.openIntervals.end":
-    "Pickup Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "pickupHours.friday.openIntervals.start":
-    "Pickup Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "pickupHours.holidayHours": "Pickup Hours \u003e Holiday Hours",
-  "pickupHours.holidayHours.date":
-    "Pickup Hours \u003e Holiday Hours \u003e Date",
-  "pickupHours.holidayHours.isClosed":
-    "Pickup Hours \u003e Holiday Hours \u003e Is Closed",
-  "pickupHours.holidayHours.isRegularHours":
-    "Pickup Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "pickupHours.holidayHours.openIntervals":
-    "Pickup Hours \u003e Holiday Hours \u003e Open Intervals",
-  "pickupHours.holidayHours.openIntervals.end":
-    "Pickup Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "pickupHours.holidayHours.openIntervals.start":
-    "Pickup Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "pickupHours.monday": "Pickup Hours \u003e Monday",
-  "pickupHours.monday.isClosed": "Pickup Hours \u003e Monday \u003e Is Closed",
-  "pickupHours.monday.openIntervals":
-    "Pickup Hours \u003e Monday \u003e Open Intervals",
-  "pickupHours.monday.openIntervals.end":
-    "Pickup Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "pickupHours.monday.openIntervals.start":
-    "Pickup Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "pickupHours.reopenDate": "Pickup Hours \u003e Reopen Date",
-  "pickupHours.saturday": "Pickup Hours \u003e Saturday",
-  "pickupHours.saturday.isClosed":
-    "Pickup Hours \u003e Saturday \u003e Is Closed",
-  "pickupHours.saturday.openIntervals":
-    "Pickup Hours \u003e Saturday \u003e Open Intervals",
-  "pickupHours.saturday.openIntervals.end":
-    "Pickup Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "pickupHours.saturday.openIntervals.start":
-    "Pickup Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "pickupHours.sunday": "Pickup Hours \u003e Sunday",
-  "pickupHours.sunday.isClosed": "Pickup Hours \u003e Sunday \u003e Is Closed",
-  "pickupHours.sunday.openIntervals":
-    "Pickup Hours \u003e Sunday \u003e Open Intervals",
-  "pickupHours.sunday.openIntervals.end":
-    "Pickup Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "pickupHours.sunday.openIntervals.start":
-    "Pickup Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "pickupHours.thursday": "Pickup Hours \u003e Thursday",
-  "pickupHours.thursday.isClosed":
-    "Pickup Hours \u003e Thursday \u003e Is Closed",
-  "pickupHours.thursday.openIntervals":
-    "Pickup Hours \u003e Thursday \u003e Open Intervals",
-  "pickupHours.thursday.openIntervals.end":
-    "Pickup Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "pickupHours.thursday.openIntervals.start":
-    "Pickup Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "pickupHours.tuesday": "Pickup Hours \u003e Tuesday",
-  "pickupHours.tuesday.isClosed":
-    "Pickup Hours \u003e Tuesday \u003e Is Closed",
-  "pickupHours.tuesday.openIntervals":
-    "Pickup Hours \u003e Tuesday \u003e Open Intervals",
-  "pickupHours.tuesday.openIntervals.end":
-    "Pickup Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "pickupHours.tuesday.openIntervals.start":
-    "Pickup Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "pickupHours.wednesday": "Pickup Hours \u003e Wednesday",
-  "pickupHours.wednesday.isClosed":
-    "Pickup Hours \u003e Wednesday \u003e Is Closed",
-  "pickupHours.wednesday.openIntervals":
-    "Pickup Hours \u003e Wednesday \u003e Open Intervals",
-  "pickupHours.wednesday.openIntervals.end":
-    "Pickup Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "pickupHours.wednesday.openIntervals.start":
-    "Pickup Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  pinterestUrl: "Pinterest URL",
-  priceRange: "Price Range",
-  primaryConversationContact: "Primary Contact",
-  productLists: "Product Lists",
-  "productLists.ids": "Product Lists \u003e Ids",
-  "productLists.label": "Product Lists \u003e Label",
-  products: "Products",
-  proofOfVaccinationRequired: "Proof of Vaccination Required",
-  reservationUrl: "Reservation URL",
-  "reservationUrl.displayUrl": "Reservation URL \u003e Display URL",
-  "reservationUrl.preferDisplayUrl":
-    "Reservation URL \u003e Prefer Display URL",
-  "reservationUrl.url": "Reservation URL \u003e URL",
-  reviewResponseConversationEnabled: "Review Response",
-  routableCoordinate: "Routable Lat/Long",
-  "routableCoordinate.latitude": "Routable Lat/Long \u003e Latitude",
-  "routableCoordinate.longitude": "Routable Lat/Long \u003e Longitude",
-  seniorHours: "Senior Hours",
-  "seniorHours.friday": "Senior Hours \u003e Friday",
-  "seniorHours.friday.isClosed": "Senior Hours \u003e Friday \u003e Is Closed",
-  "seniorHours.friday.openIntervals":
-    "Senior Hours \u003e Friday \u003e Open Intervals",
-  "seniorHours.friday.openIntervals.end":
-    "Senior Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "seniorHours.friday.openIntervals.start":
-    "Senior Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "seniorHours.holidayHours": "Senior Hours \u003e Holiday Hours",
-  "seniorHours.holidayHours.date":
-    "Senior Hours \u003e Holiday Hours \u003e Date",
-  "seniorHours.holidayHours.isClosed":
-    "Senior Hours \u003e Holiday Hours \u003e Is Closed",
-  "seniorHours.holidayHours.isRegularHours":
-    "Senior Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "seniorHours.holidayHours.openIntervals":
-    "Senior Hours \u003e Holiday Hours \u003e Open Intervals",
-  "seniorHours.holidayHours.openIntervals.end":
-    "Senior Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "seniorHours.holidayHours.openIntervals.start":
-    "Senior Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "seniorHours.monday": "Senior Hours \u003e Monday",
-  "seniorHours.monday.isClosed": "Senior Hours \u003e Monday \u003e Is Closed",
-  "seniorHours.monday.openIntervals":
-    "Senior Hours \u003e Monday \u003e Open Intervals",
-  "seniorHours.monday.openIntervals.end":
-    "Senior Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "seniorHours.monday.openIntervals.start":
-    "Senior Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "seniorHours.reopenDate": "Senior Hours \u003e Reopen Date",
-  "seniorHours.saturday": "Senior Hours \u003e Saturday",
-  "seniorHours.saturday.isClosed":
-    "Senior Hours \u003e Saturday \u003e Is Closed",
-  "seniorHours.saturday.openIntervals":
-    "Senior Hours \u003e Saturday \u003e Open Intervals",
-  "seniorHours.saturday.openIntervals.end":
-    "Senior Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "seniorHours.saturday.openIntervals.start":
-    "Senior Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "seniorHours.sunday": "Senior Hours \u003e Sunday",
-  "seniorHours.sunday.isClosed": "Senior Hours \u003e Sunday \u003e Is Closed",
-  "seniorHours.sunday.openIntervals":
-    "Senior Hours \u003e Sunday \u003e Open Intervals",
-  "seniorHours.sunday.openIntervals.end":
-    "Senior Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "seniorHours.sunday.openIntervals.start":
-    "Senior Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "seniorHours.thursday": "Senior Hours \u003e Thursday",
-  "seniorHours.thursday.isClosed":
-    "Senior Hours \u003e Thursday \u003e Is Closed",
-  "seniorHours.thursday.openIntervals":
-    "Senior Hours \u003e Thursday \u003e Open Intervals",
-  "seniorHours.thursday.openIntervals.end":
-    "Senior Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "seniorHours.thursday.openIntervals.start":
-    "Senior Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "seniorHours.tuesday": "Senior Hours \u003e Tuesday",
-  "seniorHours.tuesday.isClosed":
-    "Senior Hours \u003e Tuesday \u003e Is Closed",
-  "seniorHours.tuesday.openIntervals":
-    "Senior Hours \u003e Tuesday \u003e Open Intervals",
-  "seniorHours.tuesday.openIntervals.end":
-    "Senior Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "seniorHours.tuesday.openIntervals.start":
-    "Senior Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "seniorHours.wednesday": "Senior Hours \u003e Wednesday",
-  "seniorHours.wednesday.isClosed":
-    "Senior Hours \u003e Wednesday \u003e Is Closed",
-  "seniorHours.wednesday.openIntervals":
-    "Senior Hours \u003e Wednesday \u003e Open Intervals",
-  "seniorHours.wednesday.openIntervals.end":
-    "Senior Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "seniorHours.wednesday.openIntervals.start":
-    "Senior Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  services: "Services",
-  slug: "Slug",
-  specialities: "Specialties",
-  takeoutHours: "Takeout Hours",
-  "takeoutHours.friday": "Takeout Hours \u003e Friday",
-  "takeoutHours.friday.isClosed":
-    "Takeout Hours \u003e Friday \u003e Is Closed",
-  "takeoutHours.friday.openIntervals":
-    "Takeout Hours \u003e Friday \u003e Open Intervals",
-  "takeoutHours.friday.openIntervals.end":
-    "Takeout Hours \u003e Friday \u003e Open Intervals \u003e End",
-  "takeoutHours.friday.openIntervals.start":
-    "Takeout Hours \u003e Friday \u003e Open Intervals \u003e Start",
-  "takeoutHours.holidayHours": "Takeout Hours \u003e Holiday Hours",
-  "takeoutHours.holidayHours.date":
-    "Takeout Hours \u003e Holiday Hours \u003e Date",
-  "takeoutHours.holidayHours.isClosed":
-    "Takeout Hours \u003e Holiday Hours \u003e Is Closed",
-  "takeoutHours.holidayHours.isRegularHours":
-    "Takeout Hours \u003e Holiday Hours \u003e Is Regular Hours",
-  "takeoutHours.holidayHours.openIntervals":
-    "Takeout Hours \u003e Holiday Hours \u003e Open Intervals",
-  "takeoutHours.holidayHours.openIntervals.end":
-    "Takeout Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
-  "takeoutHours.holidayHours.openIntervals.start":
-    "Takeout Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
-  "takeoutHours.monday": "Takeout Hours \u003e Monday",
-  "takeoutHours.monday.isClosed":
-    "Takeout Hours \u003e Monday \u003e Is Closed",
-  "takeoutHours.monday.openIntervals":
-    "Takeout Hours \u003e Monday \u003e Open Intervals",
-  "takeoutHours.monday.openIntervals.end":
-    "Takeout Hours \u003e Monday \u003e Open Intervals \u003e End",
-  "takeoutHours.monday.openIntervals.start":
-    "Takeout Hours \u003e Monday \u003e Open Intervals \u003e Start",
-  "takeoutHours.reopenDate": "Takeout Hours \u003e Reopen Date",
-  "takeoutHours.saturday": "Takeout Hours \u003e Saturday",
-  "takeoutHours.saturday.isClosed":
-    "Takeout Hours \u003e Saturday \u003e Is Closed",
-  "takeoutHours.saturday.openIntervals":
-    "Takeout Hours \u003e Saturday \u003e Open Intervals",
-  "takeoutHours.saturday.openIntervals.end":
-    "Takeout Hours \u003e Saturday \u003e Open Intervals \u003e End",
-  "takeoutHours.saturday.openIntervals.start":
-    "Takeout Hours \u003e Saturday \u003e Open Intervals \u003e Start",
-  "takeoutHours.sunday": "Takeout Hours \u003e Sunday",
-  "takeoutHours.sunday.isClosed":
-    "Takeout Hours \u003e Sunday \u003e Is Closed",
-  "takeoutHours.sunday.openIntervals":
-    "Takeout Hours \u003e Sunday \u003e Open Intervals",
-  "takeoutHours.sunday.openIntervals.end":
-    "Takeout Hours \u003e Sunday \u003e Open Intervals \u003e End",
-  "takeoutHours.sunday.openIntervals.start":
-    "Takeout Hours \u003e Sunday \u003e Open Intervals \u003e Start",
-  "takeoutHours.thursday": "Takeout Hours \u003e Thursday",
-  "takeoutHours.thursday.isClosed":
-    "Takeout Hours \u003e Thursday \u003e Is Closed",
-  "takeoutHours.thursday.openIntervals":
-    "Takeout Hours \u003e Thursday \u003e Open Intervals",
-  "takeoutHours.thursday.openIntervals.end":
-    "Takeout Hours \u003e Thursday \u003e Open Intervals \u003e End",
-  "takeoutHours.thursday.openIntervals.start":
-    "Takeout Hours \u003e Thursday \u003e Open Intervals \u003e Start",
-  "takeoutHours.tuesday": "Takeout Hours \u003e Tuesday",
-  "takeoutHours.tuesday.isClosed":
-    "Takeout Hours \u003e Tuesday \u003e Is Closed",
-  "takeoutHours.tuesday.openIntervals":
-    "Takeout Hours \u003e Tuesday \u003e Open Intervals",
-  "takeoutHours.tuesday.openIntervals.end":
-    "Takeout Hours \u003e Tuesday \u003e Open Intervals \u003e End",
-  "takeoutHours.tuesday.openIntervals.start":
-    "Takeout Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
-  "takeoutHours.wednesday": "Takeout Hours \u003e Wednesday",
-  "takeoutHours.wednesday.isClosed":
-    "Takeout Hours \u003e Wednesday \u003e Is Closed",
-  "takeoutHours.wednesday.openIntervals":
-    "Takeout Hours \u003e Wednesday \u003e Open Intervals",
-  "takeoutHours.wednesday.openIntervals.end":
-    "Takeout Hours \u003e Wednesday \u003e Open Intervals \u003e End",
-  "takeoutHours.wednesday.openIntervals.start":
-    "Takeout Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
-  tikTokUrl: "TikTok URL",
-  timezone: "Time Zone",
-  tollFreePhone: "Toll-Free Phone",
-  ttyPhone: "TTY Number",
-  twitterHandle: "X Handle",
-  videos: "Videos",
-  walkableCoordinate: "Walkable Lat/Long",
-  "walkableCoordinate.latitude": "Walkable Lat/Long \u003e Latitude",
-  "walkableCoordinate.longitude": "Walkable Lat/Long \u003e Longitude",
-  websiteUrl: "Website URL",
-  "websiteUrl.displayUrl": "Website URL \u003e Display URL",
-  "websiteUrl.preferDisplayUrl": "Website URL \u003e Prefer Display URL",
-  "websiteUrl.url": "Website URL \u003e URL",
-  what3WordsAddress: "what3words Address",
-  yearEstablished: "Year Established",
-  yelpWebsiteOverride: "Yelp Website Override",
-  yextDisplayCoordinate: "Yext Display Lat/Long",
-  "yextDisplayCoordinate.latitude": "Yext Display Lat/Long \u003e Latitude",
-  "yextDisplayCoordinate.longitude": "Yext Display Lat/Long \u003e Longitude",
-  yextDropoffCoordinate: "Yext Dropoff Lat/Long",
-  "yextDropoffCoordinate.latitude": "Yext Dropoff Lat/Long \u003e Latitude",
-  "yextDropoffCoordinate.longitude": "Yext Dropoff Lat/Long \u003e Longitude",
-  yextPickupCoordinate: "Yext Pickup Lat/Long",
-  "yextPickupCoordinate.latitude": "Yext Pickup Lat/Long \u003e Latitude",
-  "yextPickupCoordinate.longitude": "Yext Pickup Lat/Long \u003e Longitude",
-  yextRoutableCoordinate: "Yext Routable Lat/Long",
-  "yextRoutableCoordinate.latitude": "Yext Routable Lat/Long \u003e Latitude",
-  "yextRoutableCoordinate.longitude": "Yext Routable Lat/Long \u003e Longitude",
-  yextWalkableCoordinate: "Yext Walkable Lat/Long",
-  "yextWalkableCoordinate.latitude": "Yext Walkable Lat/Long \u003e Latitude",
-  "yextWalkableCoordinate.longitude": "Yext Walkable Lat/Long \u003e Longitude",
-  youTubeChannelUrl: "YouTube Channel URL",
+  apiNamesToDisplayNames: {
+    accessHours: "Access Hours",
+    "accessHours.friday": "Access Hours \u003e Friday",
+    "accessHours.friday.isClosed":
+      "Access Hours \u003e Friday \u003e Is Closed",
+    "accessHours.friday.openIntervals":
+      "Access Hours \u003e Friday \u003e Open Intervals",
+    "accessHours.friday.openIntervals.end":
+      "Access Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "accessHours.friday.openIntervals.start":
+      "Access Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "accessHours.holidayHours": "Access Hours \u003e Holiday Hours",
+    "accessHours.holidayHours.date":
+      "Access Hours \u003e Holiday Hours \u003e Date",
+    "accessHours.holidayHours.isClosed":
+      "Access Hours \u003e Holiday Hours \u003e Is Closed",
+    "accessHours.holidayHours.isRegularHours":
+      "Access Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "accessHours.holidayHours.openIntervals":
+      "Access Hours \u003e Holiday Hours \u003e Open Intervals",
+    "accessHours.holidayHours.openIntervals.end":
+      "Access Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "accessHours.holidayHours.openIntervals.start":
+      "Access Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "accessHours.monday": "Access Hours \u003e Monday",
+    "accessHours.monday.isClosed":
+      "Access Hours \u003e Monday \u003e Is Closed",
+    "accessHours.monday.openIntervals":
+      "Access Hours \u003e Monday \u003e Open Intervals",
+    "accessHours.monday.openIntervals.end":
+      "Access Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "accessHours.monday.openIntervals.start":
+      "Access Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "accessHours.reopenDate": "Access Hours \u003e Reopen Date",
+    "accessHours.saturday": "Access Hours \u003e Saturday",
+    "accessHours.saturday.isClosed":
+      "Access Hours \u003e Saturday \u003e Is Closed",
+    "accessHours.saturday.openIntervals":
+      "Access Hours \u003e Saturday \u003e Open Intervals",
+    "accessHours.saturday.openIntervals.end":
+      "Access Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "accessHours.saturday.openIntervals.start":
+      "Access Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "accessHours.sunday": "Access Hours \u003e Sunday",
+    "accessHours.sunday.isClosed":
+      "Access Hours \u003e Sunday \u003e Is Closed",
+    "accessHours.sunday.openIntervals":
+      "Access Hours \u003e Sunday \u003e Open Intervals",
+    "accessHours.sunday.openIntervals.end":
+      "Access Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "accessHours.sunday.openIntervals.start":
+      "Access Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "accessHours.thursday": "Access Hours \u003e Thursday",
+    "accessHours.thursday.isClosed":
+      "Access Hours \u003e Thursday \u003e Is Closed",
+    "accessHours.thursday.openIntervals":
+      "Access Hours \u003e Thursday \u003e Open Intervals",
+    "accessHours.thursday.openIntervals.end":
+      "Access Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "accessHours.thursday.openIntervals.start":
+      "Access Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "accessHours.tuesday": "Access Hours \u003e Tuesday",
+    "accessHours.tuesday.isClosed":
+      "Access Hours \u003e Tuesday \u003e Is Closed",
+    "accessHours.tuesday.openIntervals":
+      "Access Hours \u003e Tuesday \u003e Open Intervals",
+    "accessHours.tuesday.openIntervals.end":
+      "Access Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "accessHours.tuesday.openIntervals.start":
+      "Access Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "accessHours.wednesday": "Access Hours \u003e Wednesday",
+    "accessHours.wednesday.isClosed":
+      "Access Hours \u003e Wednesday \u003e Is Closed",
+    "accessHours.wednesday.openIntervals":
+      "Access Hours \u003e Wednesday \u003e Open Intervals",
+    "accessHours.wednesday.openIntervals.end":
+      "Access Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "accessHours.wednesday.openIntervals.start":
+      "Access Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    additionalHoursText: "Additional Hours Text",
+    address: "Address",
+    "address.city": "Address \u003e City",
+    "address.countryCode": "Address \u003e Country Code",
+    "address.extraDescription": "Address \u003e Extra Description",
+    "address.line1": "Address \u003e Line 1",
+    "address.line2": "Address \u003e Line 2",
+    "address.line3": "Address \u003e Line 3",
+    "address.postalCode": "Address \u003e Postal Code",
+    "address.region": "Address \u003e Region",
+    "address.sublocality": "Address \u003e Sublocality",
+    addressHidden: "Address Hidden",
+    alternatePhone: "Alternate Phone",
+    androidAppUrl: "Android App URL",
+    appleActionLinks: "Apple Action Links",
+    "appleActionLinks.appName": "Apple Action Links \u003e App Name",
+    "appleActionLinks.appStoreUrl": "Apple Action Links \u003e App Store URL",
+    "appleActionLinks.category": "Apple Action Links \u003e Category",
+    "appleActionLinks.quickLinkUrl": "Apple Action Links \u003e Quick Link",
+    appleBusinessDescription: "Apple Business Description",
+    appleBusinessId: "Apple Brand ID",
+    appleCompanyId: "Apple Company ID",
+    appleCoverPhoto: "Apple Cover Photo",
+    associations: "Associations",
+    bingParentLocation: "Bing Parent Location",
+    bingRelationshipType: "Bing Relationship Type",
+    bingWebsiteOverride: "Bing Website Override",
+    bios: "Staff Bios",
+    "bios.ids": "Staff Bios \u003e Ids",
+    "bios.label": "Staff Bios \u003e Label",
+    blackOwnedBusiness: "Black-Owned Business",
+    brands: "Brands",
+    brunchHours: "Brunch Hours",
+    "brunchHours.friday": "Brunch Hours \u003e Friday",
+    "brunchHours.friday.isClosed":
+      "Brunch Hours \u003e Friday \u003e Is Closed",
+    "brunchHours.friday.openIntervals":
+      "Brunch Hours \u003e Friday \u003e Open Intervals",
+    "brunchHours.friday.openIntervals.end":
+      "Brunch Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "brunchHours.friday.openIntervals.start":
+      "Brunch Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "brunchHours.holidayHours": "Brunch Hours \u003e Holiday Hours",
+    "brunchHours.holidayHours.date":
+      "Brunch Hours \u003e Holiday Hours \u003e Date",
+    "brunchHours.holidayHours.isClosed":
+      "Brunch Hours \u003e Holiday Hours \u003e Is Closed",
+    "brunchHours.holidayHours.isRegularHours":
+      "Brunch Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "brunchHours.holidayHours.openIntervals":
+      "Brunch Hours \u003e Holiday Hours \u003e Open Intervals",
+    "brunchHours.holidayHours.openIntervals.end":
+      "Brunch Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "brunchHours.holidayHours.openIntervals.start":
+      "Brunch Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "brunchHours.monday": "Brunch Hours \u003e Monday",
+    "brunchHours.monday.isClosed":
+      "Brunch Hours \u003e Monday \u003e Is Closed",
+    "brunchHours.monday.openIntervals":
+      "Brunch Hours \u003e Monday \u003e Open Intervals",
+    "brunchHours.monday.openIntervals.end":
+      "Brunch Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "brunchHours.monday.openIntervals.start":
+      "Brunch Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "brunchHours.reopenDate": "Brunch Hours \u003e Reopen Date",
+    "brunchHours.saturday": "Brunch Hours \u003e Saturday",
+    "brunchHours.saturday.isClosed":
+      "Brunch Hours \u003e Saturday \u003e Is Closed",
+    "brunchHours.saturday.openIntervals":
+      "Brunch Hours \u003e Saturday \u003e Open Intervals",
+    "brunchHours.saturday.openIntervals.end":
+      "Brunch Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "brunchHours.saturday.openIntervals.start":
+      "Brunch Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "brunchHours.sunday": "Brunch Hours \u003e Sunday",
+    "brunchHours.sunday.isClosed":
+      "Brunch Hours \u003e Sunday \u003e Is Closed",
+    "brunchHours.sunday.openIntervals":
+      "Brunch Hours \u003e Sunday \u003e Open Intervals",
+    "brunchHours.sunday.openIntervals.end":
+      "Brunch Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "brunchHours.sunday.openIntervals.start":
+      "Brunch Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "brunchHours.thursday": "Brunch Hours \u003e Thursday",
+    "brunchHours.thursday.isClosed":
+      "Brunch Hours \u003e Thursday \u003e Is Closed",
+    "brunchHours.thursday.openIntervals":
+      "Brunch Hours \u003e Thursday \u003e Open Intervals",
+    "brunchHours.thursday.openIntervals.end":
+      "Brunch Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "brunchHours.thursday.openIntervals.start":
+      "Brunch Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "brunchHours.tuesday": "Brunch Hours \u003e Tuesday",
+    "brunchHours.tuesday.isClosed":
+      "Brunch Hours \u003e Tuesday \u003e Is Closed",
+    "brunchHours.tuesday.openIntervals":
+      "Brunch Hours \u003e Tuesday \u003e Open Intervals",
+    "brunchHours.tuesday.openIntervals.end":
+      "Brunch Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "brunchHours.tuesday.openIntervals.start":
+      "Brunch Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "brunchHours.wednesday": "Brunch Hours \u003e Wednesday",
+    "brunchHours.wednesday.isClosed":
+      "Brunch Hours \u003e Wednesday \u003e Is Closed",
+    "brunchHours.wednesday.openIntervals":
+      "Brunch Hours \u003e Wednesday \u003e Open Intervals",
+    "brunchHours.wednesday.openIntervals.end":
+      "Brunch Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "brunchHours.wednesday.openIntervals.start":
+      "Brunch Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    c_deliveryPromo: "Delivery Promo",
+    "c_deliveryPromo.cta": "Delivery Promo \u003e cta",
+    "c_deliveryPromo.cta.link": "Delivery Promo \u003e cta \u003e Link",
+    "c_deliveryPromo.cta.name": "Delivery Promo \u003e cta \u003e Name",
+    "c_deliveryPromo.description": "Delivery Promo \u003e Description",
+    "c_deliveryPromo.image": "Delivery Promo \u003e Image",
+    "c_deliveryPromo.title": "Delivery Promo \u003e Title",
+    c_faqSection: "FAQ Section",
+    "c_faqSection.linkedFAQs": "FAQ Section \u003e Linked FAQs",
+    "c_faqSection.sectionTitle": "FAQ Section \u003e Section Title",
+    c_hero: "Hero",
+    "c_hero.cta1": "Hero \u003e cta1",
+    "c_hero.cta1.link": "Hero \u003e cta1 \u003e Link",
+    "c_hero.cta1.name": "Hero \u003e cta1 \u003e Name",
+    "c_hero.cta2": "Hero \u003e cta2",
+    "c_hero.cta2.link": "Hero \u003e cta2 \u003e Link",
+    "c_hero.cta2.name": "Hero \u003e cta2 \u003e Name",
+    "c_hero.image": "Hero \u003e Image",
+    c_productSection: "Product Section",
+    "c_productSection.linkedProducts": "Product Section \u003e linkedProducts",
+    "c_productSection.sectionTitle": "Product Section \u003e Section Title",
+    cityCoordinate: "City Lat/Long",
+    "cityCoordinate.latitude": "City Lat/Long \u003e Latitude",
+    "cityCoordinate.longitude": "City Lat/Long \u003e Longitude",
+    closed: "Closed",
+    covid19InformationUrl: "COVID-19 Information URL",
+    covidMessaging: "COVID Messaging",
+    deliverListingsWithoutGeocode: "Deliver Listings Without Geocode",
+    deliveryHours: "Delivery Hours",
+    "deliveryHours.friday": "Delivery Hours \u003e Friday",
+    "deliveryHours.friday.isClosed":
+      "Delivery Hours \u003e Friday \u003e Is Closed",
+    "deliveryHours.friday.openIntervals":
+      "Delivery Hours \u003e Friday \u003e Open Intervals",
+    "deliveryHours.friday.openIntervals.end":
+      "Delivery Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "deliveryHours.friday.openIntervals.start":
+      "Delivery Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "deliveryHours.holidayHours": "Delivery Hours \u003e Holiday Hours",
+    "deliveryHours.holidayHours.date":
+      "Delivery Hours \u003e Holiday Hours \u003e Date",
+    "deliveryHours.holidayHours.isClosed":
+      "Delivery Hours \u003e Holiday Hours \u003e Is Closed",
+    "deliveryHours.holidayHours.isRegularHours":
+      "Delivery Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "deliveryHours.holidayHours.openIntervals":
+      "Delivery Hours \u003e Holiday Hours \u003e Open Intervals",
+    "deliveryHours.holidayHours.openIntervals.end":
+      "Delivery Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "deliveryHours.holidayHours.openIntervals.start":
+      "Delivery Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "deliveryHours.monday": "Delivery Hours \u003e Monday",
+    "deliveryHours.monday.isClosed":
+      "Delivery Hours \u003e Monday \u003e Is Closed",
+    "deliveryHours.monday.openIntervals":
+      "Delivery Hours \u003e Monday \u003e Open Intervals",
+    "deliveryHours.monday.openIntervals.end":
+      "Delivery Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "deliveryHours.monday.openIntervals.start":
+      "Delivery Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "deliveryHours.reopenDate": "Delivery Hours \u003e Reopen Date",
+    "deliveryHours.saturday": "Delivery Hours \u003e Saturday",
+    "deliveryHours.saturday.isClosed":
+      "Delivery Hours \u003e Saturday \u003e Is Closed",
+    "deliveryHours.saturday.openIntervals":
+      "Delivery Hours \u003e Saturday \u003e Open Intervals",
+    "deliveryHours.saturday.openIntervals.end":
+      "Delivery Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "deliveryHours.saturday.openIntervals.start":
+      "Delivery Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "deliveryHours.sunday": "Delivery Hours \u003e Sunday",
+    "deliveryHours.sunday.isClosed":
+      "Delivery Hours \u003e Sunday \u003e Is Closed",
+    "deliveryHours.sunday.openIntervals":
+      "Delivery Hours \u003e Sunday \u003e Open Intervals",
+    "deliveryHours.sunday.openIntervals.end":
+      "Delivery Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "deliveryHours.sunday.openIntervals.start":
+      "Delivery Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "deliveryHours.thursday": "Delivery Hours \u003e Thursday",
+    "deliveryHours.thursday.isClosed":
+      "Delivery Hours \u003e Thursday \u003e Is Closed",
+    "deliveryHours.thursday.openIntervals":
+      "Delivery Hours \u003e Thursday \u003e Open Intervals",
+    "deliveryHours.thursday.openIntervals.end":
+      "Delivery Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "deliveryHours.thursday.openIntervals.start":
+      "Delivery Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "deliveryHours.tuesday": "Delivery Hours \u003e Tuesday",
+    "deliveryHours.tuesday.isClosed":
+      "Delivery Hours \u003e Tuesday \u003e Is Closed",
+    "deliveryHours.tuesday.openIntervals":
+      "Delivery Hours \u003e Tuesday \u003e Open Intervals",
+    "deliveryHours.tuesday.openIntervals.end":
+      "Delivery Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "deliveryHours.tuesday.openIntervals.start":
+      "Delivery Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "deliveryHours.wednesday": "Delivery Hours \u003e Wednesday",
+    "deliveryHours.wednesday.isClosed":
+      "Delivery Hours \u003e Wednesday \u003e Is Closed",
+    "deliveryHours.wednesday.openIntervals":
+      "Delivery Hours \u003e Wednesday \u003e Open Intervals",
+    "deliveryHours.wednesday.openIntervals.end":
+      "Delivery Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "deliveryHours.wednesday.openIntervals.start":
+      "Delivery Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    deliveryUrl: "Delivery URL",
+    description: "Description",
+    dineInHours: "Dine-in Hours",
+    "dineInHours.friday": "Dine-in Hours \u003e Friday",
+    "dineInHours.friday.isClosed":
+      "Dine-in Hours \u003e Friday \u003e Is Closed",
+    "dineInHours.friday.openIntervals":
+      "Dine-in Hours \u003e Friday \u003e Open Intervals",
+    "dineInHours.friday.openIntervals.end":
+      "Dine-in Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "dineInHours.friday.openIntervals.start":
+      "Dine-in Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "dineInHours.holidayHours": "Dine-in Hours \u003e Holiday Hours",
+    "dineInHours.holidayHours.date":
+      "Dine-in Hours \u003e Holiday Hours \u003e Date",
+    "dineInHours.holidayHours.isClosed":
+      "Dine-in Hours \u003e Holiday Hours \u003e Is Closed",
+    "dineInHours.holidayHours.isRegularHours":
+      "Dine-in Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "dineInHours.holidayHours.openIntervals":
+      "Dine-in Hours \u003e Holiday Hours \u003e Open Intervals",
+    "dineInHours.holidayHours.openIntervals.end":
+      "Dine-in Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "dineInHours.holidayHours.openIntervals.start":
+      "Dine-in Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "dineInHours.monday": "Dine-in Hours \u003e Monday",
+    "dineInHours.monday.isClosed":
+      "Dine-in Hours \u003e Monday \u003e Is Closed",
+    "dineInHours.monday.openIntervals":
+      "Dine-in Hours \u003e Monday \u003e Open Intervals",
+    "dineInHours.monday.openIntervals.end":
+      "Dine-in Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "dineInHours.monday.openIntervals.start":
+      "Dine-in Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "dineInHours.reopenDate": "Dine-in Hours \u003e Reopen Date",
+    "dineInHours.saturday": "Dine-in Hours \u003e Saturday",
+    "dineInHours.saturday.isClosed":
+      "Dine-in Hours \u003e Saturday \u003e Is Closed",
+    "dineInHours.saturday.openIntervals":
+      "Dine-in Hours \u003e Saturday \u003e Open Intervals",
+    "dineInHours.saturday.openIntervals.end":
+      "Dine-in Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "dineInHours.saturday.openIntervals.start":
+      "Dine-in Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "dineInHours.sunday": "Dine-in Hours \u003e Sunday",
+    "dineInHours.sunday.isClosed":
+      "Dine-in Hours \u003e Sunday \u003e Is Closed",
+    "dineInHours.sunday.openIntervals":
+      "Dine-in Hours \u003e Sunday \u003e Open Intervals",
+    "dineInHours.sunday.openIntervals.end":
+      "Dine-in Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "dineInHours.sunday.openIntervals.start":
+      "Dine-in Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "dineInHours.thursday": "Dine-in Hours \u003e Thursday",
+    "dineInHours.thursday.isClosed":
+      "Dine-in Hours \u003e Thursday \u003e Is Closed",
+    "dineInHours.thursday.openIntervals":
+      "Dine-in Hours \u003e Thursday \u003e Open Intervals",
+    "dineInHours.thursday.openIntervals.end":
+      "Dine-in Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "dineInHours.thursday.openIntervals.start":
+      "Dine-in Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "dineInHours.tuesday": "Dine-in Hours \u003e Tuesday",
+    "dineInHours.tuesday.isClosed":
+      "Dine-in Hours \u003e Tuesday \u003e Is Closed",
+    "dineInHours.tuesday.openIntervals":
+      "Dine-in Hours \u003e Tuesday \u003e Open Intervals",
+    "dineInHours.tuesday.openIntervals.end":
+      "Dine-in Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "dineInHours.tuesday.openIntervals.start":
+      "Dine-in Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "dineInHours.wednesday": "Dine-in Hours \u003e Wednesday",
+    "dineInHours.wednesday.isClosed":
+      "Dine-in Hours \u003e Wednesday \u003e Is Closed",
+    "dineInHours.wednesday.openIntervals":
+      "Dine-in Hours \u003e Wednesday \u003e Open Intervals",
+    "dineInHours.wednesday.openIntervals.end":
+      "Dine-in Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "dineInHours.wednesday.openIntervals.start":
+      "Dine-in Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    displayCoordinate: "Display Lat/Long",
+    "displayCoordinate.latitude": "Display Lat/Long \u003e Latitude",
+    "displayCoordinate.longitude": "Display Lat/Long \u003e Longitude",
+    driveThroughHours: "Drive-Through Hours",
+    "driveThroughHours.friday": "Drive-Through Hours \u003e Friday",
+    "driveThroughHours.friday.isClosed":
+      "Drive-Through Hours \u003e Friday \u003e Is Closed",
+    "driveThroughHours.friday.openIntervals":
+      "Drive-Through Hours \u003e Friday \u003e Open Intervals",
+    "driveThroughHours.friday.openIntervals.end":
+      "Drive-Through Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "driveThroughHours.friday.openIntervals.start":
+      "Drive-Through Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "driveThroughHours.holidayHours":
+      "Drive-Through Hours \u003e Holiday Hours",
+    "driveThroughHours.holidayHours.date":
+      "Drive-Through Hours \u003e Holiday Hours \u003e Date",
+    "driveThroughHours.holidayHours.isClosed":
+      "Drive-Through Hours \u003e Holiday Hours \u003e Is Closed",
+    "driveThroughHours.holidayHours.isRegularHours":
+      "Drive-Through Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "driveThroughHours.holidayHours.openIntervals":
+      "Drive-Through Hours \u003e Holiday Hours \u003e Open Intervals",
+    "driveThroughHours.holidayHours.openIntervals.end":
+      "Drive-Through Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "driveThroughHours.holidayHours.openIntervals.start":
+      "Drive-Through Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "driveThroughHours.monday": "Drive-Through Hours \u003e Monday",
+    "driveThroughHours.monday.isClosed":
+      "Drive-Through Hours \u003e Monday \u003e Is Closed",
+    "driveThroughHours.monday.openIntervals":
+      "Drive-Through Hours \u003e Monday \u003e Open Intervals",
+    "driveThroughHours.monday.openIntervals.end":
+      "Drive-Through Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "driveThroughHours.monday.openIntervals.start":
+      "Drive-Through Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "driveThroughHours.reopenDate": "Drive-Through Hours \u003e Reopen Date",
+    "driveThroughHours.saturday": "Drive-Through Hours \u003e Saturday",
+    "driveThroughHours.saturday.isClosed":
+      "Drive-Through Hours \u003e Saturday \u003e Is Closed",
+    "driveThroughHours.saturday.openIntervals":
+      "Drive-Through Hours \u003e Saturday \u003e Open Intervals",
+    "driveThroughHours.saturday.openIntervals.end":
+      "Drive-Through Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "driveThroughHours.saturday.openIntervals.start":
+      "Drive-Through Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "driveThroughHours.sunday": "Drive-Through Hours \u003e Sunday",
+    "driveThroughHours.sunday.isClosed":
+      "Drive-Through Hours \u003e Sunday \u003e Is Closed",
+    "driveThroughHours.sunday.openIntervals":
+      "Drive-Through Hours \u003e Sunday \u003e Open Intervals",
+    "driveThroughHours.sunday.openIntervals.end":
+      "Drive-Through Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "driveThroughHours.sunday.openIntervals.start":
+      "Drive-Through Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "driveThroughHours.thursday": "Drive-Through Hours \u003e Thursday",
+    "driveThroughHours.thursday.isClosed":
+      "Drive-Through Hours \u003e Thursday \u003e Is Closed",
+    "driveThroughHours.thursday.openIntervals":
+      "Drive-Through Hours \u003e Thursday \u003e Open Intervals",
+    "driveThroughHours.thursday.openIntervals.end":
+      "Drive-Through Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "driveThroughHours.thursday.openIntervals.start":
+      "Drive-Through Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "driveThroughHours.tuesday": "Drive-Through Hours \u003e Tuesday",
+    "driveThroughHours.tuesday.isClosed":
+      "Drive-Through Hours \u003e Tuesday \u003e Is Closed",
+    "driveThroughHours.tuesday.openIntervals":
+      "Drive-Through Hours \u003e Tuesday \u003e Open Intervals",
+    "driveThroughHours.tuesday.openIntervals.end":
+      "Drive-Through Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "driveThroughHours.tuesday.openIntervals.start":
+      "Drive-Through Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "driveThroughHours.wednesday": "Drive-Through Hours \u003e Wednesday",
+    "driveThroughHours.wednesday.isClosed":
+      "Drive-Through Hours \u003e Wednesday \u003e Is Closed",
+    "driveThroughHours.wednesday.openIntervals":
+      "Drive-Through Hours \u003e Wednesday \u003e Open Intervals",
+    "driveThroughHours.wednesday.openIntervals.end":
+      "Drive-Through Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "driveThroughHours.wednesday.openIntervals.start":
+      "Drive-Through Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    dropoffCoordinate: "Dropoff Lat/Long",
+    "dropoffCoordinate.latitude": "Dropoff Lat/Long \u003e Latitude",
+    "dropoffCoordinate.longitude": "Dropoff Lat/Long \u003e Longitude",
+    emails: "Emails",
+    entityId: "Entity ID",
+    facebookPageUrl: "Facebook Page URL",
+    facebookWebsiteOverride: "Facebook Website Override",
+    fax: "Fax Number",
+    featuredMessage: "Featured Message",
+    "featuredMessage.description": "Featured Message \u003e Description",
+    "featuredMessage.url": "Featured Message \u003e URL",
+    fullyVaccinatedStaff: "Fully Vaccinated Staff",
+    geocodedCoordinate: "Geocoded Lat/Long",
+    "geocodedCoordinate.latitude": "Geocoded Lat/Long \u003e Latitude",
+    "geocodedCoordinate.longitude": "Geocoded Lat/Long \u003e Longitude",
+    geomodifier: "Geomodifier",
+    googleWebsiteOverride: "Google Website Override",
+    happyHours: "Happy Hours",
+    "happyHours.friday": "Happy Hours \u003e Friday",
+    "happyHours.friday.isClosed": "Happy Hours \u003e Friday \u003e Is Closed",
+    "happyHours.friday.openIntervals":
+      "Happy Hours \u003e Friday \u003e Open Intervals",
+    "happyHours.friday.openIntervals.end":
+      "Happy Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "happyHours.friday.openIntervals.start":
+      "Happy Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "happyHours.holidayHours": "Happy Hours \u003e Holiday Hours",
+    "happyHours.holidayHours.date":
+      "Happy Hours \u003e Holiday Hours \u003e Date",
+    "happyHours.holidayHours.isClosed":
+      "Happy Hours \u003e Holiday Hours \u003e Is Closed",
+    "happyHours.holidayHours.isRegularHours":
+      "Happy Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "happyHours.holidayHours.openIntervals":
+      "Happy Hours \u003e Holiday Hours \u003e Open Intervals",
+    "happyHours.holidayHours.openIntervals.end":
+      "Happy Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "happyHours.holidayHours.openIntervals.start":
+      "Happy Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "happyHours.monday": "Happy Hours \u003e Monday",
+    "happyHours.monday.isClosed": "Happy Hours \u003e Monday \u003e Is Closed",
+    "happyHours.monday.openIntervals":
+      "Happy Hours \u003e Monday \u003e Open Intervals",
+    "happyHours.monday.openIntervals.end":
+      "Happy Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "happyHours.monday.openIntervals.start":
+      "Happy Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "happyHours.reopenDate": "Happy Hours \u003e Reopen Date",
+    "happyHours.saturday": "Happy Hours \u003e Saturday",
+    "happyHours.saturday.isClosed":
+      "Happy Hours \u003e Saturday \u003e Is Closed",
+    "happyHours.saturday.openIntervals":
+      "Happy Hours \u003e Saturday \u003e Open Intervals",
+    "happyHours.saturday.openIntervals.end":
+      "Happy Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "happyHours.saturday.openIntervals.start":
+      "Happy Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "happyHours.sunday": "Happy Hours \u003e Sunday",
+    "happyHours.sunday.isClosed": "Happy Hours \u003e Sunday \u003e Is Closed",
+    "happyHours.sunday.openIntervals":
+      "Happy Hours \u003e Sunday \u003e Open Intervals",
+    "happyHours.sunday.openIntervals.end":
+      "Happy Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "happyHours.sunday.openIntervals.start":
+      "Happy Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "happyHours.thursday": "Happy Hours \u003e Thursday",
+    "happyHours.thursday.isClosed":
+      "Happy Hours \u003e Thursday \u003e Is Closed",
+    "happyHours.thursday.openIntervals":
+      "Happy Hours \u003e Thursday \u003e Open Intervals",
+    "happyHours.thursday.openIntervals.end":
+      "Happy Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "happyHours.thursday.openIntervals.start":
+      "Happy Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "happyHours.tuesday": "Happy Hours \u003e Tuesday",
+    "happyHours.tuesday.isClosed":
+      "Happy Hours \u003e Tuesday \u003e Is Closed",
+    "happyHours.tuesday.openIntervals":
+      "Happy Hours \u003e Tuesday \u003e Open Intervals",
+    "happyHours.tuesday.openIntervals.end":
+      "Happy Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "happyHours.tuesday.openIntervals.start":
+      "Happy Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "happyHours.wednesday": "Happy Hours \u003e Wednesday",
+    "happyHours.wednesday.isClosed":
+      "Happy Hours \u003e Wednesday \u003e Is Closed",
+    "happyHours.wednesday.openIntervals":
+      "Happy Hours \u003e Wednesday \u003e Open Intervals",
+    "happyHours.wednesday.openIntervals.end":
+      "Happy Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "happyHours.wednesday.openIntervals.start":
+      "Happy Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    holidayHoursConversationEnabled: "Holiday Hours Confirmation",
+    hours: "Hours",
+    "hours.friday": "Hours \u003e Friday",
+    "hours.friday.isClosed": "Hours \u003e Friday \u003e Is Closed",
+    "hours.friday.openIntervals": "Hours \u003e Friday \u003e Open Intervals",
+    "hours.friday.openIntervals.end":
+      "Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "hours.friday.openIntervals.start":
+      "Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "hours.holidayHours": "Hours \u003e Holiday Hours",
+    "hours.holidayHours.date": "Hours \u003e Holiday Hours \u003e Date",
+    "hours.holidayHours.isClosed":
+      "Hours \u003e Holiday Hours \u003e Is Closed",
+    "hours.holidayHours.isRegularHours":
+      "Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "hours.holidayHours.openIntervals":
+      "Hours \u003e Holiday Hours \u003e Open Intervals",
+    "hours.holidayHours.openIntervals.end":
+      "Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "hours.holidayHours.openIntervals.start":
+      "Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "hours.monday": "Hours \u003e Monday",
+    "hours.monday.isClosed": "Hours \u003e Monday \u003e Is Closed",
+    "hours.monday.openIntervals": "Hours \u003e Monday \u003e Open Intervals",
+    "hours.monday.openIntervals.end":
+      "Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "hours.monday.openIntervals.start":
+      "Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "hours.reopenDate": "Hours \u003e Reopen Date",
+    "hours.saturday": "Hours \u003e Saturday",
+    "hours.saturday.isClosed": "Hours \u003e Saturday \u003e Is Closed",
+    "hours.saturday.openIntervals":
+      "Hours \u003e Saturday \u003e Open Intervals",
+    "hours.saturday.openIntervals.end":
+      "Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "hours.saturday.openIntervals.start":
+      "Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "hours.sunday": "Hours \u003e Sunday",
+    "hours.sunday.isClosed": "Hours \u003e Sunday \u003e Is Closed",
+    "hours.sunday.openIntervals": "Hours \u003e Sunday \u003e Open Intervals",
+    "hours.sunday.openIntervals.end":
+      "Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "hours.sunday.openIntervals.start":
+      "Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "hours.thursday": "Hours \u003e Thursday",
+    "hours.thursday.isClosed": "Hours \u003e Thursday \u003e Is Closed",
+    "hours.thursday.openIntervals":
+      "Hours \u003e Thursday \u003e Open Intervals",
+    "hours.thursday.openIntervals.end":
+      "Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "hours.thursday.openIntervals.start":
+      "Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "hours.tuesday": "Hours \u003e Tuesday",
+    "hours.tuesday.isClosed": "Hours \u003e Tuesday \u003e Is Closed",
+    "hours.tuesday.openIntervals": "Hours \u003e Tuesday \u003e Open Intervals",
+    "hours.tuesday.openIntervals.end":
+      "Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "hours.tuesday.openIntervals.start":
+      "Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "hours.wednesday": "Hours \u003e Wednesday",
+    "hours.wednesday.isClosed": "Hours \u003e Wednesday \u003e Is Closed",
+    "hours.wednesday.openIntervals":
+      "Hours \u003e Wednesday \u003e Open Intervals",
+    "hours.wednesday.openIntervals.end":
+      "Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "hours.wednesday.openIntervals.start":
+      "Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    instagramHandle: "Instagram Handle",
+    iosAppUrl: "iOS App URL",
+    isoRegionCode: "ISO Region Code",
+    keywords: "Keywords",
+    kitchenHours: "Kitchen Hours",
+    "kitchenHours.friday": "Kitchen Hours \u003e Friday",
+    "kitchenHours.friday.isClosed":
+      "Kitchen Hours \u003e Friday \u003e Is Closed",
+    "kitchenHours.friday.openIntervals":
+      "Kitchen Hours \u003e Friday \u003e Open Intervals",
+    "kitchenHours.friday.openIntervals.end":
+      "Kitchen Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "kitchenHours.friday.openIntervals.start":
+      "Kitchen Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "kitchenHours.holidayHours": "Kitchen Hours \u003e Holiday Hours",
+    "kitchenHours.holidayHours.date":
+      "Kitchen Hours \u003e Holiday Hours \u003e Date",
+    "kitchenHours.holidayHours.isClosed":
+      "Kitchen Hours \u003e Holiday Hours \u003e Is Closed",
+    "kitchenHours.holidayHours.isRegularHours":
+      "Kitchen Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "kitchenHours.holidayHours.openIntervals":
+      "Kitchen Hours \u003e Holiday Hours \u003e Open Intervals",
+    "kitchenHours.holidayHours.openIntervals.end":
+      "Kitchen Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "kitchenHours.holidayHours.openIntervals.start":
+      "Kitchen Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "kitchenHours.monday": "Kitchen Hours \u003e Monday",
+    "kitchenHours.monday.isClosed":
+      "Kitchen Hours \u003e Monday \u003e Is Closed",
+    "kitchenHours.monday.openIntervals":
+      "Kitchen Hours \u003e Monday \u003e Open Intervals",
+    "kitchenHours.monday.openIntervals.end":
+      "Kitchen Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "kitchenHours.monday.openIntervals.start":
+      "Kitchen Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "kitchenHours.reopenDate": "Kitchen Hours \u003e Reopen Date",
+    "kitchenHours.saturday": "Kitchen Hours \u003e Saturday",
+    "kitchenHours.saturday.isClosed":
+      "Kitchen Hours \u003e Saturday \u003e Is Closed",
+    "kitchenHours.saturday.openIntervals":
+      "Kitchen Hours \u003e Saturday \u003e Open Intervals",
+    "kitchenHours.saturday.openIntervals.end":
+      "Kitchen Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "kitchenHours.saturday.openIntervals.start":
+      "Kitchen Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "kitchenHours.sunday": "Kitchen Hours \u003e Sunday",
+    "kitchenHours.sunday.isClosed":
+      "Kitchen Hours \u003e Sunday \u003e Is Closed",
+    "kitchenHours.sunday.openIntervals":
+      "Kitchen Hours \u003e Sunday \u003e Open Intervals",
+    "kitchenHours.sunday.openIntervals.end":
+      "Kitchen Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "kitchenHours.sunday.openIntervals.start":
+      "Kitchen Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "kitchenHours.thursday": "Kitchen Hours \u003e Thursday",
+    "kitchenHours.thursday.isClosed":
+      "Kitchen Hours \u003e Thursday \u003e Is Closed",
+    "kitchenHours.thursday.openIntervals":
+      "Kitchen Hours \u003e Thursday \u003e Open Intervals",
+    "kitchenHours.thursday.openIntervals.end":
+      "Kitchen Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "kitchenHours.thursday.openIntervals.start":
+      "Kitchen Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "kitchenHours.tuesday": "Kitchen Hours \u003e Tuesday",
+    "kitchenHours.tuesday.isClosed":
+      "Kitchen Hours \u003e Tuesday \u003e Is Closed",
+    "kitchenHours.tuesday.openIntervals":
+      "Kitchen Hours \u003e Tuesday \u003e Open Intervals",
+    "kitchenHours.tuesday.openIntervals.end":
+      "Kitchen Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "kitchenHours.tuesday.openIntervals.start":
+      "Kitchen Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "kitchenHours.wednesday": "Kitchen Hours \u003e Wednesday",
+    "kitchenHours.wednesday.isClosed":
+      "Kitchen Hours \u003e Wednesday \u003e Is Closed",
+    "kitchenHours.wednesday.openIntervals":
+      "Kitchen Hours \u003e Wednesday \u003e Open Intervals",
+    "kitchenHours.wednesday.openIntervals.end":
+      "Kitchen Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "kitchenHours.wednesday.openIntervals.start":
+      "Kitchen Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    labels: "Labels",
+    landingPageUrl: "Landing Page URL",
+    languages: "Languages",
+    linkedInUrl: "LinkedIn URL",
+    localPhone: "Local Phone",
+    logo: "Business Logo",
+    mainPhone: "Main Phone",
+    menuUrl: "Menu URL",
+    "menuUrl.displayUrl": "Menu URL \u003e Display URL",
+    "menuUrl.preferDisplayUrl": "Menu URL \u003e Prefer Display URL",
+    "menuUrl.url": "Menu URL \u003e URL",
+    menus: "Menus",
+    "menus.ids": "Menus \u003e Ids",
+    "menus.label": "Menus \u003e Label",
+    mobilePhone: "Mobile Phone",
+    name: "Name",
+    neighborhood: "Neighborhood",
+    nudgeEnabled: "Knowledge Nudge",
+    onlineServiceHours: "Online Service Hours",
+    "onlineServiceHours.friday": "Online Service Hours \u003e Friday",
+    "onlineServiceHours.friday.isClosed":
+      "Online Service Hours \u003e Friday \u003e Is Closed",
+    "onlineServiceHours.friday.openIntervals":
+      "Online Service Hours \u003e Friday \u003e Open Intervals",
+    "onlineServiceHours.friday.openIntervals.end":
+      "Online Service Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.friday.openIntervals.start":
+      "Online Service Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.holidayHours":
+      "Online Service Hours \u003e Holiday Hours",
+    "onlineServiceHours.holidayHours.date":
+      "Online Service Hours \u003e Holiday Hours \u003e Date",
+    "onlineServiceHours.holidayHours.isClosed":
+      "Online Service Hours \u003e Holiday Hours \u003e Is Closed",
+    "onlineServiceHours.holidayHours.isRegularHours":
+      "Online Service Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "onlineServiceHours.holidayHours.openIntervals":
+      "Online Service Hours \u003e Holiday Hours \u003e Open Intervals",
+    "onlineServiceHours.holidayHours.openIntervals.end":
+      "Online Service Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "onlineServiceHours.holidayHours.openIntervals.start":
+      "Online Service Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.monday": "Online Service Hours \u003e Monday",
+    "onlineServiceHours.monday.isClosed":
+      "Online Service Hours \u003e Monday \u003e Is Closed",
+    "onlineServiceHours.monday.openIntervals":
+      "Online Service Hours \u003e Monday \u003e Open Intervals",
+    "onlineServiceHours.monday.openIntervals.end":
+      "Online Service Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.monday.openIntervals.start":
+      "Online Service Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.reopenDate": "Online Service Hours \u003e Reopen Date",
+    "onlineServiceHours.saturday": "Online Service Hours \u003e Saturday",
+    "onlineServiceHours.saturday.isClosed":
+      "Online Service Hours \u003e Saturday \u003e Is Closed",
+    "onlineServiceHours.saturday.openIntervals":
+      "Online Service Hours \u003e Saturday \u003e Open Intervals",
+    "onlineServiceHours.saturday.openIntervals.end":
+      "Online Service Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.saturday.openIntervals.start":
+      "Online Service Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.sunday": "Online Service Hours \u003e Sunday",
+    "onlineServiceHours.sunday.isClosed":
+      "Online Service Hours \u003e Sunday \u003e Is Closed",
+    "onlineServiceHours.sunday.openIntervals":
+      "Online Service Hours \u003e Sunday \u003e Open Intervals",
+    "onlineServiceHours.sunday.openIntervals.end":
+      "Online Service Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.sunday.openIntervals.start":
+      "Online Service Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.thursday": "Online Service Hours \u003e Thursday",
+    "onlineServiceHours.thursday.isClosed":
+      "Online Service Hours \u003e Thursday \u003e Is Closed",
+    "onlineServiceHours.thursday.openIntervals":
+      "Online Service Hours \u003e Thursday \u003e Open Intervals",
+    "onlineServiceHours.thursday.openIntervals.end":
+      "Online Service Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.thursday.openIntervals.start":
+      "Online Service Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.tuesday": "Online Service Hours \u003e Tuesday",
+    "onlineServiceHours.tuesday.isClosed":
+      "Online Service Hours \u003e Tuesday \u003e Is Closed",
+    "onlineServiceHours.tuesday.openIntervals":
+      "Online Service Hours \u003e Tuesday \u003e Open Intervals",
+    "onlineServiceHours.tuesday.openIntervals.end":
+      "Online Service Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.tuesday.openIntervals.start":
+      "Online Service Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "onlineServiceHours.wednesday": "Online Service Hours \u003e Wednesday",
+    "onlineServiceHours.wednesday.isClosed":
+      "Online Service Hours \u003e Wednesday \u003e Is Closed",
+    "onlineServiceHours.wednesday.openIntervals":
+      "Online Service Hours \u003e Wednesday \u003e Open Intervals",
+    "onlineServiceHours.wednesday.openIntervals.end":
+      "Online Service Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "onlineServiceHours.wednesday.openIntervals.start":
+      "Online Service Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    orderUrl: "Order URL",
+    "orderUrl.displayUrl": "Order URL \u003e Display URL",
+    "orderUrl.preferDisplayUrl": "Order URL \u003e Prefer Display URL",
+    "orderUrl.url": "Order URL \u003e URL",
+    paymentOptions: "Payment Options",
+    phoneticName: "Phonetic Name",
+    photoGallery: "Photo Gallery",
+    pickupAndDeliveryServices: "Pickup and Delivery Services",
+    pickupCoordinate: "Pickup Lat/Long",
+    "pickupCoordinate.latitude": "Pickup Lat/Long \u003e Latitude",
+    "pickupCoordinate.longitude": "Pickup Lat/Long \u003e Longitude",
+    pickupHours: "Pickup Hours",
+    "pickupHours.friday": "Pickup Hours \u003e Friday",
+    "pickupHours.friday.isClosed":
+      "Pickup Hours \u003e Friday \u003e Is Closed",
+    "pickupHours.friday.openIntervals":
+      "Pickup Hours \u003e Friday \u003e Open Intervals",
+    "pickupHours.friday.openIntervals.end":
+      "Pickup Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "pickupHours.friday.openIntervals.start":
+      "Pickup Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "pickupHours.holidayHours": "Pickup Hours \u003e Holiday Hours",
+    "pickupHours.holidayHours.date":
+      "Pickup Hours \u003e Holiday Hours \u003e Date",
+    "pickupHours.holidayHours.isClosed":
+      "Pickup Hours \u003e Holiday Hours \u003e Is Closed",
+    "pickupHours.holidayHours.isRegularHours":
+      "Pickup Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "pickupHours.holidayHours.openIntervals":
+      "Pickup Hours \u003e Holiday Hours \u003e Open Intervals",
+    "pickupHours.holidayHours.openIntervals.end":
+      "Pickup Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "pickupHours.holidayHours.openIntervals.start":
+      "Pickup Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "pickupHours.monday": "Pickup Hours \u003e Monday",
+    "pickupHours.monday.isClosed":
+      "Pickup Hours \u003e Monday \u003e Is Closed",
+    "pickupHours.monday.openIntervals":
+      "Pickup Hours \u003e Monday \u003e Open Intervals",
+    "pickupHours.monday.openIntervals.end":
+      "Pickup Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "pickupHours.monday.openIntervals.start":
+      "Pickup Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "pickupHours.reopenDate": "Pickup Hours \u003e Reopen Date",
+    "pickupHours.saturday": "Pickup Hours \u003e Saturday",
+    "pickupHours.saturday.isClosed":
+      "Pickup Hours \u003e Saturday \u003e Is Closed",
+    "pickupHours.saturday.openIntervals":
+      "Pickup Hours \u003e Saturday \u003e Open Intervals",
+    "pickupHours.saturday.openIntervals.end":
+      "Pickup Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "pickupHours.saturday.openIntervals.start":
+      "Pickup Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "pickupHours.sunday": "Pickup Hours \u003e Sunday",
+    "pickupHours.sunday.isClosed":
+      "Pickup Hours \u003e Sunday \u003e Is Closed",
+    "pickupHours.sunday.openIntervals":
+      "Pickup Hours \u003e Sunday \u003e Open Intervals",
+    "pickupHours.sunday.openIntervals.end":
+      "Pickup Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "pickupHours.sunday.openIntervals.start":
+      "Pickup Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "pickupHours.thursday": "Pickup Hours \u003e Thursday",
+    "pickupHours.thursday.isClosed":
+      "Pickup Hours \u003e Thursday \u003e Is Closed",
+    "pickupHours.thursday.openIntervals":
+      "Pickup Hours \u003e Thursday \u003e Open Intervals",
+    "pickupHours.thursday.openIntervals.end":
+      "Pickup Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "pickupHours.thursday.openIntervals.start":
+      "Pickup Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "pickupHours.tuesday": "Pickup Hours \u003e Tuesday",
+    "pickupHours.tuesday.isClosed":
+      "Pickup Hours \u003e Tuesday \u003e Is Closed",
+    "pickupHours.tuesday.openIntervals":
+      "Pickup Hours \u003e Tuesday \u003e Open Intervals",
+    "pickupHours.tuesday.openIntervals.end":
+      "Pickup Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "pickupHours.tuesday.openIntervals.start":
+      "Pickup Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "pickupHours.wednesday": "Pickup Hours \u003e Wednesday",
+    "pickupHours.wednesday.isClosed":
+      "Pickup Hours \u003e Wednesday \u003e Is Closed",
+    "pickupHours.wednesday.openIntervals":
+      "Pickup Hours \u003e Wednesday \u003e Open Intervals",
+    "pickupHours.wednesday.openIntervals.end":
+      "Pickup Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "pickupHours.wednesday.openIntervals.start":
+      "Pickup Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    pinterestUrl: "Pinterest URL",
+    priceRange: "Price Range",
+    primaryConversationContact: "Primary Contact",
+    productLists: "Product Lists",
+    "productLists.ids": "Product Lists \u003e Ids",
+    "productLists.label": "Product Lists \u003e Label",
+    products: "Products",
+    proofOfVaccinationRequired: "Proof of Vaccination Required",
+    reservationUrl: "Reservation URL",
+    "reservationUrl.displayUrl": "Reservation URL \u003e Display URL",
+    "reservationUrl.preferDisplayUrl":
+      "Reservation URL \u003e Prefer Display URL",
+    "reservationUrl.url": "Reservation URL \u003e URL",
+    reviewResponseConversationEnabled: "Review Response",
+    routableCoordinate: "Routable Lat/Long",
+    "routableCoordinate.latitude": "Routable Lat/Long \u003e Latitude",
+    "routableCoordinate.longitude": "Routable Lat/Long \u003e Longitude",
+    seniorHours: "Senior Hours",
+    "seniorHours.friday": "Senior Hours \u003e Friday",
+    "seniorHours.friday.isClosed":
+      "Senior Hours \u003e Friday \u003e Is Closed",
+    "seniorHours.friday.openIntervals":
+      "Senior Hours \u003e Friday \u003e Open Intervals",
+    "seniorHours.friday.openIntervals.end":
+      "Senior Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "seniorHours.friday.openIntervals.start":
+      "Senior Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "seniorHours.holidayHours": "Senior Hours \u003e Holiday Hours",
+    "seniorHours.holidayHours.date":
+      "Senior Hours \u003e Holiday Hours \u003e Date",
+    "seniorHours.holidayHours.isClosed":
+      "Senior Hours \u003e Holiday Hours \u003e Is Closed",
+    "seniorHours.holidayHours.isRegularHours":
+      "Senior Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "seniorHours.holidayHours.openIntervals":
+      "Senior Hours \u003e Holiday Hours \u003e Open Intervals",
+    "seniorHours.holidayHours.openIntervals.end":
+      "Senior Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "seniorHours.holidayHours.openIntervals.start":
+      "Senior Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "seniorHours.monday": "Senior Hours \u003e Monday",
+    "seniorHours.monday.isClosed":
+      "Senior Hours \u003e Monday \u003e Is Closed",
+    "seniorHours.monday.openIntervals":
+      "Senior Hours \u003e Monday \u003e Open Intervals",
+    "seniorHours.monday.openIntervals.end":
+      "Senior Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "seniorHours.monday.openIntervals.start":
+      "Senior Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "seniorHours.reopenDate": "Senior Hours \u003e Reopen Date",
+    "seniorHours.saturday": "Senior Hours \u003e Saturday",
+    "seniorHours.saturday.isClosed":
+      "Senior Hours \u003e Saturday \u003e Is Closed",
+    "seniorHours.saturday.openIntervals":
+      "Senior Hours \u003e Saturday \u003e Open Intervals",
+    "seniorHours.saturday.openIntervals.end":
+      "Senior Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "seniorHours.saturday.openIntervals.start":
+      "Senior Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "seniorHours.sunday": "Senior Hours \u003e Sunday",
+    "seniorHours.sunday.isClosed":
+      "Senior Hours \u003e Sunday \u003e Is Closed",
+    "seniorHours.sunday.openIntervals":
+      "Senior Hours \u003e Sunday \u003e Open Intervals",
+    "seniorHours.sunday.openIntervals.end":
+      "Senior Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "seniorHours.sunday.openIntervals.start":
+      "Senior Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "seniorHours.thursday": "Senior Hours \u003e Thursday",
+    "seniorHours.thursday.isClosed":
+      "Senior Hours \u003e Thursday \u003e Is Closed",
+    "seniorHours.thursday.openIntervals":
+      "Senior Hours \u003e Thursday \u003e Open Intervals",
+    "seniorHours.thursday.openIntervals.end":
+      "Senior Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "seniorHours.thursday.openIntervals.start":
+      "Senior Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "seniorHours.tuesday": "Senior Hours \u003e Tuesday",
+    "seniorHours.tuesday.isClosed":
+      "Senior Hours \u003e Tuesday \u003e Is Closed",
+    "seniorHours.tuesday.openIntervals":
+      "Senior Hours \u003e Tuesday \u003e Open Intervals",
+    "seniorHours.tuesday.openIntervals.end":
+      "Senior Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "seniorHours.tuesday.openIntervals.start":
+      "Senior Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "seniorHours.wednesday": "Senior Hours \u003e Wednesday",
+    "seniorHours.wednesday.isClosed":
+      "Senior Hours \u003e Wednesday \u003e Is Closed",
+    "seniorHours.wednesday.openIntervals":
+      "Senior Hours \u003e Wednesday \u003e Open Intervals",
+    "seniorHours.wednesday.openIntervals.end":
+      "Senior Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "seniorHours.wednesday.openIntervals.start":
+      "Senior Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    services: "Services",
+    slug: "Slug",
+    specialities: "Specialties",
+    takeoutHours: "Takeout Hours",
+    "takeoutHours.friday": "Takeout Hours \u003e Friday",
+    "takeoutHours.friday.isClosed":
+      "Takeout Hours \u003e Friday \u003e Is Closed",
+    "takeoutHours.friday.openIntervals":
+      "Takeout Hours \u003e Friday \u003e Open Intervals",
+    "takeoutHours.friday.openIntervals.end":
+      "Takeout Hours \u003e Friday \u003e Open Intervals \u003e End",
+    "takeoutHours.friday.openIntervals.start":
+      "Takeout Hours \u003e Friday \u003e Open Intervals \u003e Start",
+    "takeoutHours.holidayHours": "Takeout Hours \u003e Holiday Hours",
+    "takeoutHours.holidayHours.date":
+      "Takeout Hours \u003e Holiday Hours \u003e Date",
+    "takeoutHours.holidayHours.isClosed":
+      "Takeout Hours \u003e Holiday Hours \u003e Is Closed",
+    "takeoutHours.holidayHours.isRegularHours":
+      "Takeout Hours \u003e Holiday Hours \u003e Is Regular Hours",
+    "takeoutHours.holidayHours.openIntervals":
+      "Takeout Hours \u003e Holiday Hours \u003e Open Intervals",
+    "takeoutHours.holidayHours.openIntervals.end":
+      "Takeout Hours \u003e Holiday Hours \u003e Open Intervals \u003e End",
+    "takeoutHours.holidayHours.openIntervals.start":
+      "Takeout Hours \u003e Holiday Hours \u003e Open Intervals \u003e Start",
+    "takeoutHours.monday": "Takeout Hours \u003e Monday",
+    "takeoutHours.monday.isClosed":
+      "Takeout Hours \u003e Monday \u003e Is Closed",
+    "takeoutHours.monday.openIntervals":
+      "Takeout Hours \u003e Monday \u003e Open Intervals",
+    "takeoutHours.monday.openIntervals.end":
+      "Takeout Hours \u003e Monday \u003e Open Intervals \u003e End",
+    "takeoutHours.monday.openIntervals.start":
+      "Takeout Hours \u003e Monday \u003e Open Intervals \u003e Start",
+    "takeoutHours.reopenDate": "Takeout Hours \u003e Reopen Date",
+    "takeoutHours.saturday": "Takeout Hours \u003e Saturday",
+    "takeoutHours.saturday.isClosed":
+      "Takeout Hours \u003e Saturday \u003e Is Closed",
+    "takeoutHours.saturday.openIntervals":
+      "Takeout Hours \u003e Saturday \u003e Open Intervals",
+    "takeoutHours.saturday.openIntervals.end":
+      "Takeout Hours \u003e Saturday \u003e Open Intervals \u003e End",
+    "takeoutHours.saturday.openIntervals.start":
+      "Takeout Hours \u003e Saturday \u003e Open Intervals \u003e Start",
+    "takeoutHours.sunday": "Takeout Hours \u003e Sunday",
+    "takeoutHours.sunday.isClosed":
+      "Takeout Hours \u003e Sunday \u003e Is Closed",
+    "takeoutHours.sunday.openIntervals":
+      "Takeout Hours \u003e Sunday \u003e Open Intervals",
+    "takeoutHours.sunday.openIntervals.end":
+      "Takeout Hours \u003e Sunday \u003e Open Intervals \u003e End",
+    "takeoutHours.sunday.openIntervals.start":
+      "Takeout Hours \u003e Sunday \u003e Open Intervals \u003e Start",
+    "takeoutHours.thursday": "Takeout Hours \u003e Thursday",
+    "takeoutHours.thursday.isClosed":
+      "Takeout Hours \u003e Thursday \u003e Is Closed",
+    "takeoutHours.thursday.openIntervals":
+      "Takeout Hours \u003e Thursday \u003e Open Intervals",
+    "takeoutHours.thursday.openIntervals.end":
+      "Takeout Hours \u003e Thursday \u003e Open Intervals \u003e End",
+    "takeoutHours.thursday.openIntervals.start":
+      "Takeout Hours \u003e Thursday \u003e Open Intervals \u003e Start",
+    "takeoutHours.tuesday": "Takeout Hours \u003e Tuesday",
+    "takeoutHours.tuesday.isClosed":
+      "Takeout Hours \u003e Tuesday \u003e Is Closed",
+    "takeoutHours.tuesday.openIntervals":
+      "Takeout Hours \u003e Tuesday \u003e Open Intervals",
+    "takeoutHours.tuesday.openIntervals.end":
+      "Takeout Hours \u003e Tuesday \u003e Open Intervals \u003e End",
+    "takeoutHours.tuesday.openIntervals.start":
+      "Takeout Hours \u003e Tuesday \u003e Open Intervals \u003e Start",
+    "takeoutHours.wednesday": "Takeout Hours \u003e Wednesday",
+    "takeoutHours.wednesday.isClosed":
+      "Takeout Hours \u003e Wednesday \u003e Is Closed",
+    "takeoutHours.wednesday.openIntervals":
+      "Takeout Hours \u003e Wednesday \u003e Open Intervals",
+    "takeoutHours.wednesday.openIntervals.end":
+      "Takeout Hours \u003e Wednesday \u003e Open Intervals \u003e End",
+    "takeoutHours.wednesday.openIntervals.start":
+      "Takeout Hours \u003e Wednesday \u003e Open Intervals \u003e Start",
+    tikTokUrl: "TikTok URL",
+    timezone: "Time Zone",
+    tollFreePhone: "Toll-Free Phone",
+    ttyPhone: "TTY Number",
+    twitterHandle: "X Handle",
+    videos: "Videos",
+    walkableCoordinate: "Walkable Lat/Long",
+    "walkableCoordinate.latitude": "Walkable Lat/Long \u003e Latitude",
+    "walkableCoordinate.longitude": "Walkable Lat/Long \u003e Longitude",
+    websiteUrl: "Website URL",
+    "websiteUrl.displayUrl": "Website URL \u003e Display URL",
+    "websiteUrl.preferDisplayUrl": "Website URL \u003e Prefer Display URL",
+    "websiteUrl.url": "Website URL \u003e URL",
+    what3WordsAddress: "what3words Address",
+    yearEstablished: "Year Established",
+    yelpWebsiteOverride: "Yelp Website Override",
+    yextDisplayCoordinate: "Yext Display Lat/Long",
+    "yextDisplayCoordinate.latitude": "Yext Display Lat/Long \u003e Latitude",
+    "yextDisplayCoordinate.longitude": "Yext Display Lat/Long \u003e Longitude",
+    yextDropoffCoordinate: "Yext Dropoff Lat/Long",
+    "yextDropoffCoordinate.latitude": "Yext Dropoff Lat/Long \u003e Latitude",
+    "yextDropoffCoordinate.longitude": "Yext Dropoff Lat/Long \u003e Longitude",
+    yextPickupCoordinate: "Yext Pickup Lat/Long",
+    "yextPickupCoordinate.latitude": "Yext Pickup Lat/Long \u003e Latitude",
+    "yextPickupCoordinate.longitude": "Yext Pickup Lat/Long \u003e Longitude",
+    yextRoutableCoordinate: "Yext Routable Lat/Long",
+    "yextRoutableCoordinate.latitude": "Yext Routable Lat/Long \u003e Latitude",
+    "yextRoutableCoordinate.longitude":
+      "Yext Routable Lat/Long \u003e Longitude",
+    yextWalkableCoordinate: "Yext Walkable Lat/Long",
+    "yextWalkableCoordinate.latitude": "Yext Walkable Lat/Long \u003e Latitude",
+    "yextWalkableCoordinate.longitude":
+      "Yext Walkable Lat/Long \u003e Longitude",
+    youTubeChannelUrl: "YouTube Channel URL",
+  },
 };
