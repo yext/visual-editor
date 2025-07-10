@@ -26,6 +26,9 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
 
+      - name: Mark repository as safe
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4.0.2
         with:
