@@ -27,6 +27,7 @@ import {
   FaLinkedinIn,
   FaYoutube,
   FaPinterest,
+  FaTiktok,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
@@ -54,12 +55,13 @@ export interface ExpandedFooterProps {
   data: {
     primaryFooter: {
       logo: string;
-      xLink: string;
       facebookLink: string;
       instagramLink: string;
-      pinterestLink: string;
       linkedInLink: string;
+      pinterestLink: string;
+      tiktokLink: string;
       youtubeLink: string;
+      xLink: string;
       utilityImages: { url: string; linkTarget?: string }[];
       expandedFooter: boolean;
       footerLinks: TranslatableCTA[];
@@ -101,9 +103,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           logo: YextField(msg("fields.logo", "Logo"), {
             type: "text",
           }),
-          xLink: YextField(msg("fields.xLink", "X Link"), {
-            type: "text",
-          }),
           facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
             type: "text",
           }),
@@ -113,13 +112,19 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               type: "text",
             }
           ),
+          linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+            type: "text",
+          }),
           pinterestLink: YextField(
             msg("fields.pinterestLink", "Pinterest Link"),
             {
               type: "text",
             }
           ),
-          linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+          tiktokLink: YextField(msg("fields.tiktokLink", "Tiktok Link"), {
+            type: "text",
+          }),
+          xLink: YextField(msg("fields.xLink", "X Link"), {
             type: "text",
           }),
           youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
@@ -350,6 +355,7 @@ const ExpandedFooterWrapper = ({
     pinterestLink,
     linkedInLink,
     youtubeLink,
+    tiktokLink,
     utilityImages,
     expandedFooterLinks,
     expandedFooter,
@@ -397,6 +403,7 @@ const ExpandedFooterWrapper = ({
               pinterestLink={pinterestLink}
               linkedInLink={linkedInLink}
               youtubeLink={youtubeLink}
+              tiktokLink={tiktokLink}
             />
             {utilityImages && utilityImages.length >= 1 && (
               <EntityField
@@ -456,6 +463,7 @@ const ExpandedFooterWrapper = ({
             pinterestLink={pinterestLink}
             linkedInLink={linkedInLink}
             youtubeLink={youtubeLink}
+            tiktokLink={tiktokLink}
           />
           {utilityImages && utilityImages.length >= 1 && (
             <EntityField
@@ -637,6 +645,7 @@ const FooterIcons = ({
   pinterestLink,
   linkedInLink,
   youtubeLink,
+  tiktokLink,
 }: {
   xLink: string;
   facebookLink: string;
@@ -644,6 +653,7 @@ const FooterIcons = ({
   pinterestLink: string;
   linkedInLink: string;
   youtubeLink: string;
+  tiktokLink: string;
 }) => {
   const { t } = useTranslation();
 
@@ -702,6 +712,13 @@ const FooterIcons = ({
           youtubeLink
         ),
     },
+    {
+      link: tiktokLink,
+      icon: <FaTiktok className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "Tiktok",
+      prefix: "",
+      valid: /^https:\/\/(www\.)?tiktok\.com\/@[\w.-]+\/?$/.test(tiktokLink),
+    },
   ];
 
   const filteredIcons = icons.filter(({ valid }) => valid);
@@ -752,6 +769,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         pinterestLink: "",
         linkedInLink: "",
         youtubeLink: "",
+        tiktokLink: "",
         utilityImages: [],
         expandedFooter: false,
         expandedFooterLinks: [
