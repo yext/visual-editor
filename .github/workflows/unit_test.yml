@@ -15,9 +15,6 @@ jobs:
   unit_tests:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.54.0
-    defaults:
-      run:
-        working-directory: ./packages/${{ inputs.package }}
     strategy:
       matrix:
         node-version: [18.x, 20.x]
@@ -28,7 +25,6 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
-          path: visual-editor
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4.0.2
@@ -39,6 +35,7 @@ jobs:
 
       - name: Install deps
         run: pnpm i --frozen-lockfile --ignore-scripts
+        working-directory: ./packages/${{ inputs.package }}
 
       - name: Download build artifact
         uses: actions/download-artifact@v4.1.7
@@ -48,11 +45,13 @@ jobs:
 
       - name: Run editor tests
         run: pnpm run test:editor
+        working-directory: ./packages/${{ inputs.package }}
 
       - name: Run component tests (Node 20 only)
         id: run_component_tests
         if: matrix.node-version == '20.x'
         continue-on-error: true
+        working-directory: ./packages/${{ inputs.package }}
         run: |
           set +e
           pnpm run test:components
@@ -62,6 +61,7 @@ jobs:
       - name: Detect new/modified screenshots
         id: check_screenshots
         if: matrix.node-version == '20.x'
+        working-directory: ./packages/${{ inputs.package }}
         run: |
           SCREENSHOTS_DIR="src/components/testing/screenshots" 
           echo "Checking for new/modified screenshots in ${SCREENSHOTS_DIR}..."
@@ -75,6 +75,7 @@ jobs:
 
       - name: Commit new screenshots and Fail if found
         if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
+        working-directory: ./packages/${{ inputs.package }}
         run: |
           pwd
           cd ../..
