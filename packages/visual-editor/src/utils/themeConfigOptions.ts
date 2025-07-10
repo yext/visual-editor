@@ -16,7 +16,11 @@ const getFontSizeOptions = (includeLargeSizes = true) => {
 const getBorderRadiusOptions = () => {
   return borderRadiusOptions.map((option) => {
     return {
-      label: option.label + (option.px.length < 4 ? ` (${option.px}px)` : ""),
+      label:
+        option.label +
+        (option.value !== "pill" && option.value !== "circle"
+          ? ` (${option.px}px)`
+          : ""),
       value: `${option.px}px`,
     };
   });
