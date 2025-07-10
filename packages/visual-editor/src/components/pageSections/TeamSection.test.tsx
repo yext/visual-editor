@@ -3,7 +3,8 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
+  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -115,18 +116,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...TeamSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Meet Our Team")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { c_team: teamData },
     props: { ...TeamSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Meet Our Team")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -160,17 +155,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Captain Cosmo")).toBeVisible();
-      expect(page.getByText("Chef Nova")).toBeVisible();
-      expect(page.getByText("Admiral Aster")).toBeVisible();
-      expect(page.getByText("Founder & CEO")).toBeVisible();
-      expect(page.getByText("Culinary Director")).toBeVisible();
-      expect(page.getByText("Operations Manager")).toBeVisible();
-      expect(page.getByText("Email Me").elements()).toHaveLength(2);
-      expect(page.getByText("(800) 555-1010")).toBeVisible();
-      expect(page.getByText("+52 800 555 1010")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -213,14 +197,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Meet Our Team")).toBeVisible();
-      expect(page.getByText("Name")).toBeVisible();
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("8888888888")).toBeVisible();
-      expect(page.getByText("email")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with entity values",
@@ -260,17 +236,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Captain Cosmo")).toBeVisible();
-      expect(page.getByText("Chef Nova")).toBeVisible();
-      expect(page.getByText("Admiral Aster")).toBeVisible();
-      expect(page.getByText("Founder & CEO")).toBeVisible();
-      expect(page.getByText("Culinary Director")).toBeVisible();
-      expect(page.getByText("Operations Manager")).toBeVisible();
-      expect(page.getByText("Email Me").elements()).toHaveLength(2);
-      expect(page.getByText("(800) 555-1010")).toBeVisible();
-      expect(page.getByText("+52 800 555 1010")).toBeVisible();
-    },
   },
   {
     name: "version 7 props with constant value",
@@ -319,20 +284,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 7,
-    tests: async (page) => {
-      expect(page.getByText("Meet Our Team")).toBeVisible();
-      expect(page.getByText("Name")).toBeVisible();
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("8888888888")).toBeVisible();
-      expect(page.getByText("email")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("TeamSection", async () => {
@@ -344,14 +296,15 @@ describe("TeamSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -370,6 +323,7 @@ describe("TeamSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -377,10 +331,20 @@ describe("TeamSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      await delay(500);
+
+      await expect(`TeamSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `TeamSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

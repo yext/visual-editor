@@ -3,7 +3,8 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
+  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -160,18 +161,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...PhotoGallerySection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { photoGallery: photoGalleryData },
     props: { ...PhotoGallerySection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -225,10 +220,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(4);
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -280,10 +271,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(3);
-    },
   },
   {
     name: "version 1 props with entity values",
@@ -335,10 +322,6 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("Test Name")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(4);
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -388,16 +371,7 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("Gallery")).toBeVisible();
-      expect(page.getByRole("option").elements()).toHaveLength(3);
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("PhotoGallerySection", async () => {
@@ -409,14 +383,15 @@ describe("PhotoGallerySection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -435,6 +410,7 @@ describe("PhotoGallerySection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -442,10 +418,22 @@ describe("PhotoGallerySection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      await delay(500);
+
+      await expect(
+        `PhotoGallerySection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `PhotoGallerySection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

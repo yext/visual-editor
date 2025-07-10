@@ -1,12 +1,86 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, testSite, viewports } from "../testing/componentTests.setup.ts";
+import {
+  axe,
+  ComponentTest,
+  delay,
+  testSite,
+  transformTests,
+  viewports,
+} from "../testing/componentTests.setup.ts";
 import { act, render as reactRender, screen } from "@testing-library/react";
-import { Header, VisualEditorProvider } from "@yext/visual-editor";
+import {
+  Header,
+  migrate,
+  migrationRegistry,
+  VisualEditorProvider,
+} from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
-import { page, userEvent } from "@vitest/browser/context";
+import { page } from "@vitest/browser/context";
 
-describe.each(viewports)("Header $name", async ({ name, width, height }) => {
+const tests: ComponentTest[] = [
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...Header.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props with document data",
+    document: { _site: testSite },
+    props: { ...Header.defaultProps },
+    version: migrationRegistry.length,
+    viewport: viewports.desktop,
+  },
+  {
+    name: "default props with document data",
+    document: { _site: testSite },
+    props: { ...Header.defaultProps },
+    version: migrationRegistry.length,
+    viewport: viewports.mobile,
+    interactions: async (page) => {
+      const button = page.getByRole("button");
+      await act(async () => {
+        await button.click();
+      });
+    },
+  },
+
+  {
+    name: "version 2 props",
+    document: { _site: testSite },
+    props: {
+      logoWidth: 80,
+      enableLanguageSelector: false,
+      analytics: {
+        scope: "header",
+      },
+    },
+    version: 2,
+    viewport: viewports.desktop,
+  },
+  {
+    name: "version 2 props",
+    document: { _site: testSite },
+    props: {
+      logoWidth: 80,
+      enableLanguageSelector: false,
+      analytics: {
+        scope: "header",
+      },
+    },
+    version: 2,
+    viewport: viewports.mobile,
+    interactions: async (page) => {
+      const button = page.getByRole("button");
+      await act(async () => {
+        await button.click();
+      });
+    },
+  },
+];
+
+describe("Header", async () => {
   const puckConfig: Config = {
     components: { Header },
     root: {
@@ -15,115 +89,55 @@ describe.each(viewports)("Header $name", async ({ name, width, height }) => {
       },
     },
   };
-
-  it("should pass wcag with default empty document", async () => {
-    const { container } = reactRender(
-      <VisualEditorProvider templateProps={{ document: {} }}>
-        <Render
-          config={puckConfig}
-          data={{
-            content: [
-              {
-                type: "Header",
-                props: { id: "abc", ...Header.defaultProps },
-              },
-            ],
-          }}
-        />
-      </VisualEditorProvider>
-    );
-
-    await page.viewport(width, height);
-    await page.screenshot();
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  if (name === "mobile") {
-    it("should pass wcag with a closed mobile menu", async () => {
-      const { container } = reactRender(
-        <VisualEditorProvider
-          templateProps={{
-            document: { _site: testSite },
-          }}
-        >
-          <Render
-            config={puckConfig}
-            data={{
-              content: [
-                {
-                  type: "Header",
-                  props: { id: "abc", ...Header.defaultProps },
-                },
-              ],
-            }}
-          />
-        </VisualEditorProvider>
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
+    async ({
+      document,
+      name,
+      props,
+      interactions,
+      version,
+      viewport: { width, height, name: viewportName },
+    }) => {
+      const data = migrate(
+        {
+          root: {
+            props: {
+              version,
+            },
+          },
+          content: [
+            {
+              type: "Header",
+              props: props,
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig
       );
 
-      await page.screenshot();
-      await page.viewport(width, height);
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it("should pass wcag with a open mobile menu", async () => {
-      const user = userEvent.setup();
       const { container } = reactRender(
-        <VisualEditorProvider
-          templateProps={{
-            document: { _site: testSite },
-          }}
-        >
-          <Render
-            config={puckConfig}
-            data={{
-              content: [
-                {
-                  type: "Header",
-                  props: { id: "abc", ...Header.defaultProps },
-                },
-              ],
-            }}
-          />
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
 
       await page.viewport(width, height);
-      await act(async () => {
-        await user.click(screen.getByLabelText("Open header menu"));
-      });
-      await page.screenshot();
+      await delay(500);
 
+      await expect(`Header/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-    });
-  } else {
-    it("should pass wcag on a desktop screen size", async () => {
-      const { container } = reactRender(
-        <VisualEditorProvider
-          templateProps={{
-            document: { _site: testSite },
-          }}
-        >
-          <Render
-            config={puckConfig}
-            data={{
-              content: [
-                {
-                  type: "Header",
-                  props: { id: "abc", ...Header.defaultProps },
-                },
-              ],
-            }}
-          />
-        </VisualEditorProvider>
-      );
 
-      await page.screenshot();
-      await page.viewport(width, height);
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-  }
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `Header/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
+    }
+  );
 });
