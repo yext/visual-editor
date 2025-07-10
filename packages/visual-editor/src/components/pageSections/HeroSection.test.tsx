@@ -32,6 +32,13 @@ const tests: ComponentTest[] = [
         city: "city",
       },
       hours: testHours,
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: { ...HeroSection.defaultProps },
     version: migrationRegistry.length,
@@ -53,6 +60,13 @@ const tests: ComponentTest[] = [
           linkType: "URL",
         },
       },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: {
       data: {
@@ -113,6 +127,13 @@ const tests: ComponentTest[] = [
           linkType: "URL",
         },
       },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: {
       data: {
@@ -164,6 +185,87 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
+  },
+  {
+    name: "version 9 props using constant values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Constant Name",
+          constantValueEnabled: true,
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier Name",
+          constantValueEnabled: true,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Call To Action 1",
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: "Call To Action 2",
+              link: "#",
+              linkType: "URL",
+            },
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        imageOrientation: "right",
+        businessNameLevel: 6,
+        localGeoModifierLevel: 3,
+        primaryCTA: "secondary",
+        secondaryCTA: "primary",
+        image: {
+          width: 500,
+          aspectRatio: 1.0,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 9,
   },
 ];
 
