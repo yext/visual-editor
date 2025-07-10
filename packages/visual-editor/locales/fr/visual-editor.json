@@ -370,6 +370,7 @@
       "color4": "Couleur 4"
     },
     "bodyText": "Texte du corps",
+    "borderRadius": "Rayon de frontière",
     "button": "Bouton",
     "colors": {
       "colors": "Couleurs",
@@ -401,12 +402,22 @@
       "semibold": "Semibold (600)",
       "thin": "Mince (100)"
     },
+    "image": "Image",
     "includeCaret": "Inclure le care-",
     "letterSpacing": {
       "letterSpacing": "Espacement des lettres"
     },
     "links": "Links",
+    "options": {
+      "circle": "Cercle",
+      "none": "Aucun",
+      "pill": "Pilule"
+    },
     "pageSection": "Section de page",
+    "radius": {
+      "pill": "Pilule",
+      "pill_shape": "Pilule"
+    },
     "textTransform": {
       "capitalize": "Capitaliser",
       "lowercase": "Minuscule",

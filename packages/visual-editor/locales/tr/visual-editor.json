@@ -370,6 +370,7 @@
       "color4": "Renk 4"
     },
     "bodyText": "Gövde metni",
+    "borderRadius": "Sınır yarıçapı",
     "button": "Düğme",
     "colors": {
       "colors": "Renk",
@@ -401,12 +402,22 @@
       "semibold": "Semibold (600)",
       "thin": "İnce (100)"
     },
+    "image": "İmaj",
     "includeCaret": "Caret dahil",
     "letterSpacing": {
       "letterSpacing": "Mektup aralığı"
     },
     "links": "Bağlar",
+    "options": {
+      "circle": "Daire",
+      "none": "Hiçbiri",
+      "pill": "Hap"
+    },
     "pageSection": "Sayfa bölümü",
+    "radius": {
+      "pill": "Hap",
+      "pill_shape": "Hap"
+    },
     "textTransform": {
       "capitalize": "Baştan çıkarmak",
       "lowercase": "Küçük harf",

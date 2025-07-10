@@ -370,6 +370,7 @@
       "color4": "顏色4"
     },
     "bodyText": "正文",
+    "borderRadius": "邊界半徑",
     "button": "按鈕",
     "colors": {
       "colors": "顏色",
@@ -401,12 +402,22 @@
       "semibold": "Semibold（600）",
       "thin": "薄（100）"
     },
+    "image": "圖像",
     "includeCaret": "包括商店",
     "letterSpacing": {
       "letterSpacing": "字母間距"
     },
     "links": "鏈接",
+    "options": {
+      "circle": "圓圈",
+      "none": "沒有任何",
+      "pill": "丸"
+    },
     "pageSection": "頁面部分",
+    "radius": {
+      "pill": "丸",
+      "pill_shape": "藥丸"
+    },
     "textTransform": {
       "capitalize": "大寫",
       "lowercase": "小寫",

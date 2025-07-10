@@ -371,6 +371,7 @@
       "color4": "Boja 4"
     },
     "bodyText": "Tekst tijela",
+    "borderRadius": "Polumjer",
     "button": "Gumb",
     "colors": {
       "colors": "Boja",
@@ -402,12 +403,22 @@
       "semibold": "Polubold (600)",
       "thin": "Tanko (100)"
     },
+    "image": "Slika",
     "includeCaret": "Uključite Caret",
     "letterSpacing": {
       "letterSpacing": "Razmak slova"
     },
     "links": "Veze",
+    "options": {
+      "circle": "Krug",
+      "none": "Nijedan",
+      "pill": "Pilula"
+    },
     "pageSection": "Odjeljak",
+    "radius": {
+      "pill": "Pilula",
+      "pill_shape": "Tableta"
+    },
     "textTransform": {
       "capitalize": "Iskoristiti",
       "lowercase": "Malim slovima",

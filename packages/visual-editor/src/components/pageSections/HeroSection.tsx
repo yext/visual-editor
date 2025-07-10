@@ -322,7 +322,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               image={resolvedHero?.image}
               aspectRatio={styles.image.aspectRatio}
               width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial"
+              className="max-w-full sm:max-w-initial rounded-image-borderRadius"
             />
           </div>
         </EntityField>
@@ -353,38 +353,8 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         },
       },
       hours: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          monday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          tuesday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          wednesday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          thursday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          friday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          saturday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          sunday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-        },
+        field: "hours",
+        constantValue: {},
       },
       hero: {
         field: "",

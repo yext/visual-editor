@@ -372,6 +372,7 @@
       "color4": "4 spalva"
     },
     "bodyText": "Kūno tekstas",
+    "borderRadius": "Pasienio spindulys",
     "button": "Mygtukas",
     "colors": {
       "colors": "Spalvos",
@@ -403,12 +404,22 @@
       "semibold": "Pusiau (600)",
       "thin": "Plonas (100)"
     },
+    "image": "Vaizdas",
     "includeCaret": "Įtraukite Caret",
     "letterSpacing": {
       "letterSpacing": "Tarpas tarp raidžių"
     },
     "links": "Nuorodos",
+    "options": {
+      "circle": "Ratas",
+      "none": "Nėra",
+      "pill": "Piliulė"
+    },
     "pageSection": "Puslapio skyrius",
+    "radius": {
+      "pill": "Piliulė",
+      "pill_shape": "Piliulė"
+    },
     "textTransform": {
       "capitalize": "Kapitalizuoti",
       "lowercase": "Mažosios raidės",

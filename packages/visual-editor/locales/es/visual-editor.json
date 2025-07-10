@@ -370,6 +370,7 @@
       "color4": "Color 4"
     },
     "bodyText": "Texto del cuerpo",
+    "borderRadius": "Radio fronterizo",
     "button": "Botón",
     "colors": {
       "colors": "Bandera",
@@ -401,12 +402,22 @@
       "semibold": "Semibold (600)",
       "thin": "Delgado (100)"
     },
+    "image": "Imagen",
     "includeCaret": "Incluir caret",
     "letterSpacing": {
       "letterSpacing": "Espaciado de letras"
     },
     "links": "Campo de golf",
+    "options": {
+      "circle": "Círculo",
+      "none": "Ninguno",
+      "pill": "Píldora"
+    },
     "pageSection": "Sección de la página",
+    "radius": {
+      "pill": "Píldora",
+      "pill_shape": "Píldora"
+    },
     "textTransform": {
       "capitalize": "Capitalizar",
       "lowercase": "Minúscula",

@@ -372,6 +372,7 @@
       "color4": "Kolor 4"
     },
     "bodyText": "Tekst nadwozia",
+    "borderRadius": "Promień graniczny",
     "button": "Przycisk",
     "colors": {
       "colors": "Zabarwienie",
@@ -403,12 +404,22 @@
       "semibold": "Semibold (600)",
       "thin": "Cienki (100)"
     },
+    "image": "Obraz",
     "includeCaret": "Uwzględnij CareT",
     "letterSpacing": {
       "letterSpacing": "Odstępy listu"
     },
     "links": "Spinki do mankietów",
+    "options": {
+      "circle": "Koło",
+      "none": "Nic",
+      "pill": "Pigułka"
+    },
     "pageSection": "Sekcja strony",
+    "radius": {
+      "pill": "Pigułka",
+      "pill_shape": "Pigułka"
+    },
     "textTransform": {
       "capitalize": "Skapitalizować",
       "lowercase": "Małe litery",
