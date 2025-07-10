@@ -32,6 +32,13 @@ const tests: ComponentTest[] = [
         city: "city",
       },
       hours: testHours,
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: { ...HeroSection.defaultProps },
     version: migrationRegistry.length,
@@ -53,6 +60,13 @@ const tests: ComponentTest[] = [
           linkType: "URL",
         },
       },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: {
       data: {
@@ -113,6 +127,13 @@ const tests: ComponentTest[] = [
           linkType: "URL",
         },
       },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: {
       data: {
@@ -182,6 +203,13 @@ const tests: ComponentTest[] = [
           linkType: "URL",
         },
       },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
     },
     props: {
       data: {
