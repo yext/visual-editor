@@ -402,11 +402,17 @@
       "semibold": "Semibold (600)",
       "thin": "Thin (100)"
     },
+    "image": "Image",
     "includeCaret": "Include Caret",
     "letterSpacing": {
       "letterSpacing": "Letter Spacing"
     },
     "links": "Links",
+    "options": {
+      "circle": "Circle",
+      "none": "None",
+      "pill": "Pill"
+    },
     "pageSection": "Page Section",
     "radius": {
       "pill": "Pill",

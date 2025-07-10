@@ -301,7 +301,7 @@ export const defaultThemeConfig: ThemeConfig = {
         label: msg("theme.borderRadius", "Border Radius"),
         type: "select",
         plugin: "borderRadius",
-        options: ThemeOptions.BORDER_RADIUS,
+        options: ThemeOptions.BUTTON_BORDER_RADIUS,
         default: "0px",
       },
       textTransform: {
@@ -367,6 +367,18 @@ export const defaultThemeConfig: ThemeConfig = {
           { label: msg("fields.options.no", "No"), value: "none" },
         ],
         default: "block",
+      },
+    },
+  },
+  image: {
+    label: msg("theme.image", "Image"),
+    styles: {
+      borderRadius: {
+        label: msg("theme.borderRadius", "Border Radius"),
+        type: "select",
+        plugin: "borderRadius",
+        options: ThemeOptions.IMAGE_BORDER_RADIUS,
+        default: "0px",
       },
     },
   },

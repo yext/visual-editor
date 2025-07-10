@@ -402,11 +402,17 @@
       "semibold": "Félbold (600)",
       "thin": "Vékony (100)"
     },
+    "image": "Kép",
     "includeCaret": "Tartalmazza a Caret -t",
     "letterSpacing": {
       "letterSpacing": "Levél távolság"
     },
     "links": "Linkek",
+    "options": {
+      "circle": "Kör",
+      "none": "Egyik sem",
+      "pill": "Tabletta"
+    },
     "pageSection": "Oldal szakasz",
     "radius": {
       "pill": "Tabletta",

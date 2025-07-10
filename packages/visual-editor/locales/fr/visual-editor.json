@@ -402,11 +402,17 @@
       "semibold": "Semibold (600)",
       "thin": "Mince (100)"
     },
+    "image": "Image",
     "includeCaret": "Inclure le care-",
     "letterSpacing": {
       "letterSpacing": "Espacement des lettres"
     },
     "links": "Links",
+    "options": {
+      "circle": "Cercle",
+      "none": "Aucun",
+      "pill": "Pilule"
+    },
     "pageSection": "Section de page",
     "radius": {
       "pill": "Pilule",

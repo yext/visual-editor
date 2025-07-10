@@ -403,11 +403,17 @@
       "semibold": "Semibolds (600)",
       "thin": "Plāns (100)"
     },
+    "image": "Attēls",
     "includeCaret": "Iekļaujiet Caret",
     "letterSpacing": {
       "letterSpacing": "Burtu atstatums"
     },
     "links": "Saites",
+    "options": {
+      "circle": "Riņķot",
+      "none": "Neviens",
+      "pill": "Tablete"
+    },
     "pageSection": "Lapas sadaļa",
     "radius": {
       "pill": "Tablete",

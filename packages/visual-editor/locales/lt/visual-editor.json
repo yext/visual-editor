@@ -404,11 +404,17 @@
       "semibold": "Pusiau (600)",
       "thin": "Plonas (100)"
     },
+    "image": "Vaizdas",
     "includeCaret": "Įtraukite Caret",
     "letterSpacing": {
       "letterSpacing": "Tarpas tarp raidžių"
     },
     "links": "Nuorodos",
+    "options": {
+      "circle": "Ratas",
+      "none": "Nėra",
+      "pill": "Piliulė"
+    },
     "pageSection": "Puslapio skyrius",
     "radius": {
       "pill": "Piliulė",

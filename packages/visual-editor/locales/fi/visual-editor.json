@@ -402,11 +402,17 @@
       "semibold": "Puoliväli (600)",
       "thin": "Ohut (100)"
     },
+    "image": "Kuva",
     "includeCaret": "Sisällytä caret",
     "letterSpacing": {
       "letterSpacing": "Kirjeväli"
     },
     "links": "Linkit",
+    "options": {
+      "circle": "Ympyrä",
+      "none": "Ei yhtään",
+      "pill": "Pilleri"
+    },
     "pageSection": "Sivuosio",
     "radius": {
       "pill": "Pilleri",

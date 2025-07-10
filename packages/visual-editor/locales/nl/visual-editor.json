@@ -402,11 +402,17 @@
       "semibold": "Semibold (600)",
       "thin": "Dun (100)"
     },
+    "image": "Afbeelding",
     "includeCaret": "Bevat Caret",
     "letterSpacing": {
       "letterSpacing": "Letterafstand"
     },
     "links": "Links",
+    "options": {
+      "circle": "Cirkel",
+      "none": "Geen",
+      "pill": "Pil"
+    },
     "pageSection": "Paginagectie",
     "radius": {
       "pill": "Pil",

@@ -402,11 +402,17 @@
       "semibold": "セミボルド（600）",
       "thin": "薄い（100）"
     },
+    "image": "画像",
     "includeCaret": "CARETを含めます",
     "letterSpacing": {
       "letterSpacing": "文字間隔"
     },
     "links": "リンク",
+    "options": {
+      "circle": "丸",
+      "none": "なし",
+      "pill": "ピル"
+    },
     "pageSection": "ページセクション",
     "radius": {
       "pill": "ピル",

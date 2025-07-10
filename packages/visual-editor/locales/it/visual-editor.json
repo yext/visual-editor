@@ -402,11 +402,17 @@
       "semibold": "Semibold (600)",
       "thin": "Sottile (100)"
     },
+    "image": "Immagine",
     "includeCaret": "Includi il CULET",
     "letterSpacing": {
       "letterSpacing": "Spaziatura delle lettere"
     },
     "links": "Link",
+    "options": {
+      "circle": "Cerchio",
+      "none": "Nessuno",
+      "pill": "Pillola"
+    },
     "pageSection": "Sezione Pagina",
     "radius": {
       "pill": "Pillola",

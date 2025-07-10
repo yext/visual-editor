@@ -404,11 +404,17 @@
       "semibold": "Semibold (600)",
       "thin": "Cienki (100)"
     },
+    "image": "Obraz",
     "includeCaret": "Uwzględnij CareT",
     "letterSpacing": {
       "letterSpacing": "Odstępy listu"
     },
     "links": "Spinki do mankietów",
+    "options": {
+      "circle": "Koło",
+      "none": "Nic",
+      "pill": "Pigułka"
+    },
     "pageSection": "Sekcja strony",
     "radius": {
       "pill": "Pigułka",

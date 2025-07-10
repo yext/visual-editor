@@ -403,11 +403,17 @@
       "semibold": "Semibold (600)",
       "thin": "Tenký (100)"
     },
+    "image": "Predstavovať",
     "includeCaret": "Zahrnúť karet",
     "letterSpacing": {
       "letterSpacing": "Rozloženie listov"
     },
     "links": "Odkazy",
+    "options": {
+      "circle": "Kruh",
+      "none": "Žiadny",
+      "pill": "Tabletka"
+    },
     "pageSection": "Sekcia",
     "radius": {
       "pill": "Tabletka",

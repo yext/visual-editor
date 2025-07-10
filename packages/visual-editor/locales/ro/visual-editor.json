@@ -403,11 +403,17 @@
       "semibold": "Semibold (600)",
       "thin": "Subțire (100)"
     },
+    "image": "Imagine",
     "includeCaret": "Include îngrijire",
     "letterSpacing": {
       "letterSpacing": "Distanțare a scrisorilor"
     },
     "links": "Link -uri",
+    "options": {
+      "circle": "Cerc",
+      "none": "Nici unul",
+      "pill": "Pastilă"
+    },
     "pageSection": "Secțiunea Pagina",
     "radius": {
       "pill": "Pastilă",
