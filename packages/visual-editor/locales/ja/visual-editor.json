@@ -370,6 +370,7 @@
       "color4": "色4"
     },
     "bodyText": "ボディテキスト",
+    "borderRadius": "境界半径",
     "button": "ボタン",
     "colors": {
       "colors": "色",
@@ -401,11 +402,17 @@
       "semibold": "セミボルド（600）",
       "thin": "薄い（100）"
     },
+    "image": "画像",
     "includeCaret": "CARETを含めます",
     "letterSpacing": {
       "letterSpacing": "文字間隔"
     },
     "links": "リンク",
+    "options": {
+      "circle": "丸",
+      "none": "なし",
+      "pill": "ピル"
+    },
     "pageSection": "ページセクション",
     "textTransform": {
       "capitalize": "大文字になります",

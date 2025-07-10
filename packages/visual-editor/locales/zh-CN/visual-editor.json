@@ -370,6 +370,7 @@
       "color4": "颜色4"
     },
     "bodyText": "正文",
+    "borderRadius": "边界半径",
     "button": "按钮",
     "colors": {
       "colors": "颜色",
@@ -401,11 +402,17 @@
       "semibold": "Semibold（600）",
       "thin": "薄（100）"
     },
+    "image": "图像",
     "includeCaret": "包括商店",
     "letterSpacing": {
       "letterSpacing": "字母间距"
     },
     "links": "链接",
+    "options": {
+      "circle": "圆圈",
+      "none": "没有任何",
+      "pill": "丸"
+    },
     "pageSection": "页面部分",
     "textTransform": {
       "capitalize": "大写",

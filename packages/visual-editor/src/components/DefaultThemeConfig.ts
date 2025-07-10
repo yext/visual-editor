@@ -363,4 +363,16 @@ export const defaultThemeConfig: ThemeConfig = {
       },
     },
   },
+  image: {
+    label: msg("theme.image", "Image"),
+    styles: {
+      borderRadius: {
+        label: msg("theme.borderRadius", "Border Radius"),
+        type: "select",
+        plugin: "borderRadius",
+        options: ThemeOptions.IMAGE_BORDER_RADIUS,
+        default: "0px",
+      },
+    },
+  },
 };

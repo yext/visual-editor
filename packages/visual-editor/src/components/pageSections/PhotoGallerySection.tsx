@@ -244,6 +244,7 @@ const PhotoGallerySectionComponent = ({
                               image={image.image}
                               aspectRatio={image.aspectRatio}
                               width={image.width}
+                              className="rounded-image-borderRadius"
                             />
                           </div>
                         </Slide>

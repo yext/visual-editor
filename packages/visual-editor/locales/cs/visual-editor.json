@@ -370,6 +370,7 @@
       "color4": "Barva 4"
     },
     "bodyText": "Text těla",
+    "borderRadius": "Poloměr hranic",
     "button": "Tlačítko",
     "colors": {
       "colors": "Barvy",
@@ -401,11 +402,17 @@
       "semibold": "Semibold (600)",
       "thin": "Tenký (100)"
     },
+    "image": "Obraz",
     "includeCaret": "Zahrnout Caret",
     "letterSpacing": {
       "letterSpacing": "Rozestup dopisů"
     },
     "links": "Odkazy",
+    "options": {
+      "circle": "Kruh",
+      "none": "Žádný",
+      "pill": "Pilulka"
+    },
     "pageSection": "Sekce stránky",
     "textTransform": {
       "capitalize": "Kapitalizovat",
