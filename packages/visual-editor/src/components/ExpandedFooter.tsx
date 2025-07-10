@@ -421,23 +421,23 @@ const ExpandedFooterWrapper = ({
           </div>
         </div>
         {expandedFooter ? (
-          <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6 md:gap-0">
-            {expandedFooterLinks.map((item, index) => (
-              <EntityField
-                constantValueEnabled
-                key={index}
-                displayName={pt(
-                  "fields.expandedFooterLinks",
-                  "Expanded Footer Links"
-                )}
-              >
+          <EntityField
+            constantValueEnabled
+            displayName={pt(
+              "fields.expandedFooterLinks",
+              "Expanded Footer Links"
+            )}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
+              {expandedFooterLinks.map((item, index) => (
                 <ExpandedFooterLinks
                   label={resolveTranslatableString(item.label, i18n.language)}
                   links={item.links}
+                  key={index}
                 />
-              </EntityField>
-            ))}
-          </div>
+              ))}
+            </div>
+          </EntityField>
         ) : (
           <div className="w-full">
             <EntityField
@@ -539,7 +539,7 @@ const FooterLinks = ({
               label={resolveTranslatableString(item.label, i18n.language)}
               linkType={item.linkType}
               link={item.link}
-              className={`justify-center md:justify-start`}
+              className="justify-center md:justify-start block break-words whitespace-normal"
             />
           </li>
         );
@@ -558,19 +558,19 @@ const ExpandedFooterLinks = ({
   const { i18n } = useTranslation();
 
   return (
-    <ul className={`flex flex-col items-center md:items-start gap-4`}>
-      <li>
-        <Body>{label}</Body>
+    <ul className={`flex flex-col items-center md:items-start gap-4 w-full`}>
+      <li className="w-full">
+        <Body className="break-words">{label}</Body>
       </li>
       {links.map((item, index) => (
-        <li key={index}>
+        <li key={index} className="w-full">
           <CTA
             variant={"headerFooterMainLink"}
             eventName={`cta${index}-Link-${index + 1}`}
             label={resolveTranslatableString(item.label, i18n.language)}
             linkType={item.linkType}
             link={item.link}
-            className={`justify-start `}
+            className={"justify-start block break-words whitespace-normal"}
           />
         </li>
       ))}
@@ -724,6 +724,7 @@ const FooterIcons = ({
             eventName={`socialLink.${label.toLowerCase()}`}
             ariaLabel={`${label} ${t("link", "link")}`}
             alwaysHideCaret={true}
+            className="block break-words whitespace-normal"
           />
         ))}
       </div>
