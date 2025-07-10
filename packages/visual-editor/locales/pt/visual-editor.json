@@ -391,6 +391,10 @@
       "pill": "Pílula"
     },
     "pageSection": "Seção de página",
+    "radius": {
+      "pill": "Pílula",
+      "pill_shape": "Pílula"
+    },
     "textTransform": {
       "capitalize": "Capitalizar",
       "lowercase": "Minúsculo",

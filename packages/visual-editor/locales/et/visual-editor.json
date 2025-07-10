@@ -391,6 +391,10 @@
       "pill": "Pill"
     },
     "pageSection": "Leheosa",
+    "radius": {
+      "pill": "Pill",
+      "pill_shape": "Pill"
+    },
     "textTransform": {
       "capitalize": "Suurtähendama",
       "lowercase": "Väikekapp",

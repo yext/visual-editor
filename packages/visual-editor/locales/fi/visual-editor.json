@@ -391,6 +391,10 @@
       "pill": "Pilleri"
     },
     "pageSection": "Sivuosio",
+    "radius": {
+      "pill": "Pilleri",
+      "pill_shape": "Pilleri"
+    },
     "textTransform": {
       "capitalize": "Päällekkäistä",
       "lowercase": "Pienet kirjaimet",

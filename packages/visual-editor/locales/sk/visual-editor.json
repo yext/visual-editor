@@ -391,6 +391,10 @@
       "pill": "Tabletka"
     },
     "pageSection": "Sekcia",
+    "radius": {
+      "pill": "Tabletka",
+      "pill_shape": "Tabletka"
+    },
     "textTransform": {
       "capitalize": "Zarábať",
       "lowercase": "Malé písmená",

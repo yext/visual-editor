@@ -391,6 +391,10 @@
       "pill": "Pille"
     },
     "pageSection": "Sideafsnit",
+    "radius": {
+      "pill": "Pille",
+      "pill_shape": "Pille"
+    },
     "textTransform": {
       "capitalize": "Kapitalisere",
       "lowercase": "Små bogstaver",

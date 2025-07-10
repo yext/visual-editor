@@ -391,6 +391,10 @@
       "pill": "Pil"
     },
     "pageSection": "Paginagectie",
+    "radius": {
+      "pill": "Pil",
+      "pill_shape": "Pil"
+    },
     "textTransform": {
       "capitalize": "Hoofd",
       "lowercase": "Kleine letters",

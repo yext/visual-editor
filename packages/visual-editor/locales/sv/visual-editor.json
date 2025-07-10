@@ -391,6 +391,10 @@
       "pill": "Piller"
     },
     "pageSection": "Sidavsnitt",
+    "radius": {
+      "pill": "Piller",
+      "pill_shape": "Piller"
+    },
     "textTransform": {
       "capitalize": "Kapitalisera",
       "lowercase": "Gemen",

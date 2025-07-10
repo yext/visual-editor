@@ -391,6 +391,10 @@
       "pill": "Piliulė"
     },
     "pageSection": "Puslapio skyrius",
+    "radius": {
+      "pill": "Piliulė",
+      "pill_shape": "Piliulė"
+    },
     "textTransform": {
       "capitalize": "Kapitalizuoti",
       "lowercase": "Mažosios raidės",

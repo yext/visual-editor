@@ -391,6 +391,10 @@
       "pill": "Pill"
     },
     "pageSection": "Page Section",
+    "radius": {
+      "pill": "Pill",
+      "pill_shape": "Pill"
+    },
     "textTransform": {
       "capitalize": "Capitalize",
       "lowercase": "Lowercase",

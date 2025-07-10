@@ -391,6 +391,10 @@
       "pill": "Pigułka"
     },
     "pageSection": "Sekcja strony",
+    "radius": {
+      "pill": "Pigułka",
+      "pill_shape": "Pigułka"
+    },
     "textTransform": {
       "capitalize": "Skapitalizować",
       "lowercase": "Małe litery",

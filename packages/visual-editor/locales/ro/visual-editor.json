@@ -391,6 +391,10 @@
       "pill": "Pastilă"
     },
     "pageSection": "Secțiunea Pagina",
+    "radius": {
+      "pill": "Pastilă",
+      "pill_shape": "Pastilă"
+    },
     "textTransform": {
       "capitalize": "Valorifica",
       "lowercase": "Minuscule",

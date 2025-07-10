@@ -391,6 +391,10 @@
       "pill": "Tablete"
     },
     "pageSection": "Lapas sadaļa",
+    "radius": {
+      "pill": "Tablete",
+      "pill_shape": "Tabletes"
+    },
     "textTransform": {
       "capitalize": "Izmantot lielo burtu",
       "lowercase": "Mazie burti",
