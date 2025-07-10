@@ -322,7 +322,10 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 
   const entityFieldOptionsWithResolvedValue = React.useMemo(() => {
-    const { entityFieldOptions } = getEntityFieldOptions(entityFields, filter);
+    const { filteredEntityFields, entityFieldOptions } = getEntityFieldOptions(
+      entityFields,
+      filter
+    );
     return entityFieldOptions.map((option) => {
       const fieldToResolve: YextEntityField<unknown> = {
         field: option.value,
@@ -336,6 +339,9 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           typeof resolvedField === "object"
             ? JSON.stringify(resolvedField)
             : resolvedField,
+        displayName:
+          filteredEntityFields.find((field) => field.name === option.value)
+            ?.displayName ?? option.value,
       };
     });
   }, [entityFields, filter, document]);
@@ -442,7 +448,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
                 <CommandGroup>
                   {entityFieldOptionsWithResolvedValue.map((option) => (
                     <CommandItem
-                      key={option.value}
+                      key={option.displayName}
                       value={option.value}
                       onSelect={() => handleFieldSelect(option.value)}
                       className="ve-cursor-pointer ve-px-10 ve-py-3"

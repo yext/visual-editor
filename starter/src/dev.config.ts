@@ -7938,6 +7938,7 @@ export const devTemplateStream = {
         },
         {
           name: "additionalHoursText",
+          displayName: "Additional Hours Text",
           definition: {
             name: "additionalHoursText",
             registryId: "location.additional_hours_text",
@@ -7949,6 +7950,7 @@ export const devTemplateStream = {
         },
         {
           name: "address",
+          displayName: "Address",
           definition: {
             name: "address",
             registryId: "location.address",
@@ -7961,6 +7963,7 @@ export const devTemplateStream = {
             fields: [
               {
                 name: "line1",
+                displayName: "Address > Line 1",
                 definition: {
                   name: "line1",
                   typeRegistryId: "type.string",
@@ -7971,6 +7974,7 @@ export const devTemplateStream = {
               },
               {
                 name: "line2",
+                displayName: "Address > Line 2",
                 definition: {
                   name: "line2",
                   typeRegistryId: "type.string",
@@ -8001,6 +8005,7 @@ export const devTemplateStream = {
               },
               {
                 name: "city",
+                displayName: "Address > City",
                 definition: {
                   name: "city",
                   typeRegistryId: "type.string",
@@ -8731,6 +8736,7 @@ export const devTemplateStream = {
         },
         {
           name: "name",
+          displayName: "Name",
           definition: {
             name: "name",
             registryId: "location.business_name",
