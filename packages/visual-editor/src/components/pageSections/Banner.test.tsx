@@ -119,6 +119,7 @@ const tests: ComponentTest[] = [
         text: {
           field: "name",
           constantValue: "",
+          constantValueEnabled: true,
         },
       },
       styles: {

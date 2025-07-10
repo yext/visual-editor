@@ -127,7 +127,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 0 props with no values",
+    name: "version 0 props with no faqs",
     document: {},
     props: {
       data: {

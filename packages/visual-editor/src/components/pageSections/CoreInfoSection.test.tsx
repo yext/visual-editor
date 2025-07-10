@@ -614,8 +614,8 @@ const tests: ComponentTest[] = [
             field: "emails",
           },
           headingText: {
-            constantValue: "Information",
-            constantValueEnabled: false,
+            constantValue: "",
+            constantValueEnabled: true,
             constantValueOverride: {},
             field: "id",
           },

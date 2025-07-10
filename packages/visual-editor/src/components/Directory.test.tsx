@@ -35,6 +35,7 @@ const cityDocument = {
       hours: testHours,
       name: "Galaxy Grill Rosslyn",
       timezone: "America/New_York",
+      slug: "arlington",
     },
     {
       address: {
