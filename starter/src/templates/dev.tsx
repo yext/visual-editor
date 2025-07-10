@@ -19,7 +19,7 @@ import {
   applyHeaderScript,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
-import { devTemplateStream } from "../dev.config";
+import { devDisplayNames, devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
 
@@ -111,6 +111,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
+  const displayNames = devDisplayNames as Record<string, string>;
 
   return (
     <div>
@@ -127,7 +128,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
       <div>
         <VisualEditorProvider
           templateProps={props}
-          entityFields={{ fields: entityFields }}
+          entityFields={{ fields: entityFields, displayNames: displayNames }}
           tailwindConfig={tailwindConfig}
         >
           <Editor
