@@ -64,7 +64,6 @@ jobs:
         working-directory: ./packages/${{ inputs.package }}
         run: |
           pwd
-          set -o pipefail
           git status
           SCREENSHOTS_DIR="src/components/testing/screenshots" 
           echo "Checking for new/modified screenshots in ${SCREENSHOTS_DIR}..."
