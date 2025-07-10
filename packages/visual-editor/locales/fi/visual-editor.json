@@ -409,7 +409,9 @@
     },
     "links": "Linkit",
     "options": {
-      "circle": "Ympyrä"
+      "circle": "Ympyrä",
+      "none": "Ei yhtään",
+      "pill": "Pilleri"
     },
     "pageSection": "Sivuosio",
     "textTransform": {

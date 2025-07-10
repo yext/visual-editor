@@ -409,7 +409,9 @@
     },
     "links": "Lingid",
     "options": {
-      "circle": "Ring"
+      "circle": "Ring",
+      "none": "Mitte ükski",
+      "pill": "Pill"
     },
     "pageSection": "Leheosa",
     "textTransform": {

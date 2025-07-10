@@ -409,7 +409,9 @@
     },
     "links": "Campo de golf",
     "options": {
-      "circle": "Círculo"
+      "circle": "Círculo",
+      "none": "Ninguno",
+      "pill": "Píldora"
     },
     "pageSection": "Sección de la página",
     "textTransform": {

@@ -411,7 +411,9 @@
     },
     "links": "Spinki do mankietów",
     "options": {
-      "circle": "Koło"
+      "circle": "Koło",
+      "none": "Nic",
+      "pill": "Pigułka"
     },
     "pageSection": "Sekcja strony",
     "textTransform": {

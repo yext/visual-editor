@@ -409,7 +409,9 @@
     },
     "links": "Links",
     "options": {
-      "circle": "Cirkel"
+      "circle": "Cirkel",
+      "none": "Ingen",
+      "pill": "Pille"
     },
     "pageSection": "Sideafsnit",
     "textTransform": {

@@ -409,7 +409,9 @@
     },
     "links": "鏈接",
     "options": {
-      "circle": "圓圈"
+      "circle": "圓圈",
+      "none": "沒有任何",
+      "pill": "丸"
     },
     "pageSection": "頁面部分",
     "textTransform": {

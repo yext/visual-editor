@@ -409,7 +409,9 @@
     },
     "links": "Links",
     "options": {
-      "circle": "Cirkel"
+      "circle": "Cirkel",
+      "none": "Geen",
+      "pill": "Pil"
     },
     "pageSection": "Paginagectie",
     "textTransform": {

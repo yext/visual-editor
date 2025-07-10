@@ -409,7 +409,9 @@
     },
     "links": "Länkar",
     "options": {
-      "circle": "Cirkel"
+      "circle": "Cirkel",
+      "none": "Ingen",
+      "pill": "Piller"
     },
     "pageSection": "Sidavsnitt",
     "textTransform": {

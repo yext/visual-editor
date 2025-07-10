@@ -409,7 +409,9 @@
     },
     "links": "Link",
     "options": {
-      "circle": "Cerchio"
+      "circle": "Cerchio",
+      "none": "Nessuno",
+      "pill": "Pillola"
     },
     "pageSection": "Sezione Pagina",
     "textTransform": {

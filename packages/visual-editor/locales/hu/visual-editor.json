@@ -409,7 +409,9 @@
     },
     "links": "Linkek",
     "options": {
-      "circle": "Kör"
+      "circle": "Kör",
+      "none": "Egyik sem",
+      "pill": "Tabletta"
     },
     "pageSection": "Oldal szakasz",
     "textTransform": {

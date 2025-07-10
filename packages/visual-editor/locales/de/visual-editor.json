@@ -409,7 +409,9 @@
     },
     "links": "Links",
     "options": {
-      "circle": "Kreis"
+      "circle": "Kreis",
+      "none": "Keiner",
+      "pill": "Pille"
     },
     "pageSection": "Seitenabschnitt",
     "textTransform": {

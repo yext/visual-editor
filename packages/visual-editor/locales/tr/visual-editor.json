@@ -409,7 +409,9 @@
     },
     "links": "Bağlar",
     "options": {
-      "circle": "Daire"
+      "circle": "Daire",
+      "none": "Hiçbiri",
+      "pill": "Hap"
     },
     "pageSection": "Sayfa bölümü",
     "textTransform": {

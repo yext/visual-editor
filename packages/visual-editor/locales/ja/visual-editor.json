@@ -409,7 +409,9 @@
     },
     "links": "リンク",
     "options": {
-      "circle": "丸"
+      "circle": "丸",
+      "none": "なし",
+      "pill": "ピル"
     },
     "pageSection": "ページセクション",
     "textTransform": {

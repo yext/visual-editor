@@ -411,7 +411,9 @@
     },
     "links": "Nuorodos",
     "options": {
-      "circle": "Ratas"
+      "circle": "Ratas",
+      "none": "Nėra",
+      "pill": "Piliulė"
     },
     "pageSection": "Puslapio skyrius",
     "textTransform": {

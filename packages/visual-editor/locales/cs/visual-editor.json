@@ -409,7 +409,9 @@
     },
     "links": "Odkazy",
     "options": {
-      "circle": "Kruh"
+      "circle": "Kruh",
+      "none": "Žádný",
+      "pill": "Pilulka"
     },
     "pageSection": "Sekce stránky",
     "textTransform": {

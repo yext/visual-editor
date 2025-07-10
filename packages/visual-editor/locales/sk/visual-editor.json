@@ -410,7 +410,9 @@
     },
     "links": "Odkazy",
     "options": {
-      "circle": "Kruh"
+      "circle": "Kruh",
+      "none": "Žiadny",
+      "pill": "Tabletka"
     },
     "pageSection": "Sekcia",
     "textTransform": {

@@ -409,7 +409,9 @@
     },
     "links": "Lenker",
     "options": {
-      "circle": "Sirkel"
+      "circle": "Sirkel",
+      "none": "Ingen",
+      "pill": "Pille"
     },
     "pageSection": "Sideseksjon",
     "textTransform": {

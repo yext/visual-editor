@@ -409,7 +409,9 @@
     },
     "links": "链接",
     "options": {
-      "circle": "圆圈"
+      "circle": "圆圈",
+      "none": "没有任何",
+      "pill": "丸"
     },
     "pageSection": "页面部分",
     "textTransform": {
