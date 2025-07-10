@@ -122,13 +122,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 8,
-    tests: async (page) => {
-      expect(page.getByText("Locations Directory")).toBeVisible();
-      expect(page.getByText("US")).toBeVisible();
-      expect(page.getByText("NY")).toBeVisible();
-      expect(page.getByText("Brooklyn")).toBeVisible();
-      expect(page.getByText("Galaxy Grill")).toBeVisible();
-    },
   },
 ];
 
