@@ -36,7 +36,6 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
-import { ImageWrapperFields } from "../contentBlocks/Image.tsx";
 import {
   ImageStylingFields,
   ImageStylingProps,
@@ -274,6 +273,12 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const showMobileMenu =
+    (primaryCTA?.label && primaryCTA?.link) ||
+    (secondaryCTA?.label && secondaryCTA?.link) ||
+    links.some((l) => l.label && l.link) ||
+    (show &&
+      (secondaryLinks.some((l) => l.label && l.link) || showLanguageDropdown));
 
   return (
     <>
@@ -354,17 +359,21 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             aspectRatio={logoStyle.aspectRatio}
           />
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label={
-              isOpen ? t("closeMenu", "Close menu") : t("openMenu", "Open menu")
-            }
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            className="text-xl"
-          >
-            {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
-          </button>
+          {showMobileMenu && (
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={
+                isOpen
+                  ? t("closeMenu", "Close menu")
+                  : t("openMenu", "Open menu")
+              }
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              className="text-xl"
+            >
+              {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
+            </button>
+          )}
         </PageSection>
       </div>
       {isOpen && (
@@ -459,17 +468,19 @@ const HeaderLinks = ({
   return (
     <nav aria-label={`${type} Header Links`}>
       <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
-        {links.map((item, index) => {
-          const isOverflowed = isSecondary && index >= MAX_VISIBLE;
-          return (
-            <li
-              key={`${type.toLowerCase()}.${index}`}
-              className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
-            >
-              {renderLink(item, index, type.toLowerCase())}
-            </li>
-          );
-        })}
+        {links
+          .filter((item) => !!item?.link)
+          .map((item, index) => {
+            const isOverflowed = isSecondary && index >= MAX_VISIBLE;
+            return (
+              <li
+                key={`${type.toLowerCase()}.${index}`}
+                className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
+              >
+                {renderLink(item, index, type.toLowerCase())}
+              </li>
+            );
+          })}
 
         {isSecondary && links.length > MAX_VISIBLE && (
           <li className="hidden md:block py-4 md:py-0">
@@ -480,14 +491,17 @@ const HeaderLinks = ({
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
-                {links.slice(MAX_VISIBLE).map((item, index) => (
-                  <DropdownMenuItem
-                    key={`overflow-${index}`}
-                    className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
-                  >
-                    {renderLink(item, index + MAX_VISIBLE, "overflow")}
-                  </DropdownMenuItem>
-                ))}
+                {links
+                  .filter((item) => !!item?.link)
+                  .slice(MAX_VISIBLE)
+                  .map((item, index) => (
+                    <DropdownMenuItem
+                      key={`overflow-${index}`}
+                      className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
+                    >
+                      {renderLink(item, index + MAX_VISIBLE, "overflow")}
+                    </DropdownMenuItem>
+                  ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </li>
@@ -533,7 +547,7 @@ const HeaderCtas = (props: {
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-      {primaryCTA?.label && (
+      {primaryCTA?.label && primaryCTA?.link && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.primaryCta", "Primary CTA")}
@@ -547,7 +561,7 @@ const HeaderCtas = (props: {
           />
         </EntityField>
       )}
-      {secondaryCTA?.label && (
+      {secondaryCTA?.label && primaryCTA?.link && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.secondaryCta", "Secondary CTA")}
