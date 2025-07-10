@@ -75,12 +75,9 @@ jobs:
 
       - name: Commit new screenshots and Fail if found
         if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
-        working-directory: ./packages/${{ inputs.package }}
         run: |
           pwd
-          cd ../..
           echo "New or changed screenshots detected, or tests failed. Committing screenshots."
-          pwd
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
