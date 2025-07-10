@@ -212,7 +212,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     timezone: string;
   };
 
-  const { totalReviews, rating } = getAggregateRating(document);
+  const { averageRating, reviewCount } = getAggregateRating(document);
 
   return (
     <PageSection
@@ -270,13 +270,13 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
           )}
-          {totalReviews > 0 && data.showAverageReview && (
+          {reviewCount > 0 && data.showAverageReview && (
             <ReviewStars
-              rating={rating}
+              averageRating={averageRating}
               hasDarkBackground={
                 styles.backgroundColor?.textColor === "text-white"
               }
-              totalReviews={totalReviews}
+              reviewCount={reviewCount}
             />
           )}
         </header>

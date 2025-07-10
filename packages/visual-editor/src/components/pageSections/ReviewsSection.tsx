@@ -99,23 +99,23 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     }
   }, [reviews, currentPageNumber]);
 
-  const { totalReviews, rating } = getAggregateRating(document);
+  const { averageRating, reviewCount } = getAggregateRating(document);
 
-  if (reviewsStatus !== "success" || (!isLoading && totalReviews === 0)) {
+  if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
     return <></>;
   }
 
   const hasDarkBackground = props.backgroundColor?.textColor === "text-white";
 
   const headerProps: ReviewsHeaderProps = {
-    totalReviews,
-    rating,
+    averageRating,
+    reviewCount,
     isLoading,
     hasDarkBackground,
   };
 
   const pageScrollerProps: PageScrollerProps = {
-    totalReviews,
+    reviewCount,
     currentPageNumber,
     fetchData: setCurrentPageNumber,
     hasDarkBackground,
@@ -141,14 +141,14 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
 };
 
 interface ReviewsHeaderProps {
-  totalReviews: number;
-  rating: number;
+  averageRating: number;
+  reviewCount: number;
   isLoading: boolean;
   hasDarkBackground: boolean;
 }
 
 const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
-  const { totalReviews, rating, isLoading, hasDarkBackground } = props;
+  const { averageRating, reviewCount, isLoading, hasDarkBackground } = props;
   const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-3">
@@ -160,9 +160,9 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
           <Body>{t("loadingReviews", "Loading reviews...")}</Body>
         ) : (
           <ReviewStars
-            rating={rating}
+            averageRating={averageRating}
             hasDarkBackground={hasDarkBackground}
-            totalReviews={totalReviews}
+            reviewCount={reviewCount}
           />
         )}
       </div>
@@ -275,7 +275,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
   index,
 }) => {
   const reviewStars = (
-    <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
+    <ReviewStars averageRating={rating} hasDarkBackground={hasDarkBackground} />
   );
   if (!content) {
     return <div className="flex flex-col gap-2">{reviewStars}</div>;
@@ -366,20 +366,20 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
 };
 
 interface PageScrollerProps {
-  totalReviews: number;
+  reviewCount: number;
   currentPageNumber: number;
   fetchData: (newPageNumber: number) => void;
   hasDarkBackground: boolean;
 }
 
 const PageScroller: React.FC<PageScrollerProps> = ({
-  totalReviews,
+  reviewCount,
   currentPageNumber,
   fetchData,
   hasDarkBackground,
 }) => {
   const analytics = useAnalytics();
-  const numPages = Math.ceil(totalReviews / REVIEWS_PER_PAGE);
+  const numPages = Math.ceil(reviewCount / REVIEWS_PER_PAGE);
   if (numPages <= 1) {
     return <></>;
   }

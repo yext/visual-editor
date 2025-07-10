@@ -4,18 +4,18 @@ import { Body } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export type AggregateRating = {
-  rating: number;
-  totalReviews: number;
+  averageRating: number;
+  reviewCount: number;
 };
 
 export type ReviewStarsProps = {
-  rating: number;
+  averageRating: number;
   hasDarkBackground: boolean;
-  totalReviews?: number;
+  reviewCount?: number;
 };
 
 export const ReviewStars = (props: ReviewStarsProps) => {
-  const { rating, hasDarkBackground, totalReviews } = props;
+  const { averageRating, hasDarkBackground, reviewCount } = props;
   const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
   const starColor = hasDarkBackground
     ? "text-white"
@@ -24,14 +24,14 @@ export const ReviewStars = (props: ReviewStarsProps) => {
 
   return (
     <div className="flex items-center gap-1">
-      <Body className="font-bold">{rating}</Body>
+      <Body className="font-bold">{averageRating}</Body>
       <div className={`flex items-center gap-0.5 ${starColor}`}>
         {new Array(5)
           .fill(null)
           .map((_, i) =>
-            rating - i >= 0.75 ? (
+            averageRating - i >= 0.75 ? (
               <FaStar key={i} />
-            ) : rating - i >= 0.25 ? (
+            ) : averageRating - i >= 0.25 ? (
               <HalfStar key={i} />
             ) : (
               <FaRegStar
@@ -41,11 +41,11 @@ export const ReviewStars = (props: ReviewStarsProps) => {
             )
           )}
       </div>
-      {totalReviews && (
+      {reviewCount && (
         <Body className="ml-1">
           {/* TODO: update script to handle plurals */}(
-          {t("totalReviews", `${totalReviews} reviews`, {
-            count: totalReviews,
+          {t("totalReviews", `${reviewCount} reviews`, {
+            count: reviewCount,
           })}
           )
         </Body>
@@ -61,33 +61,27 @@ export const ReviewStars = (props: ReviewStarsProps) => {
  */
 export function getAggregateRating(document: any): AggregateRating {
   const reviews = document?.ref_reviewsAgg;
-  if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
+  if (!Array.isArray(reviews))
     return {
-      rating: 0,
-      totalReviews: 0,
+      averageRating: 0,
+      reviewCount: 0,
     };
-  }
 
-  let totalRating = 0;
-  let totalReviews = 0;
+  const firstPartyReview = reviews.find(
+    (r) =>
+      r.publisher === "FIRSTPARTY" &&
+      typeof r.averageRating === "number" &&
+      typeof r.reviewCount === "number"
+  );
 
-  for (const review of reviews) {
-    const { averageRating, reviewCount } = review;
-    if (typeof averageRating === "number" && typeof reviewCount === "number") {
-      totalRating += averageRating * reviewCount;
-      totalReviews += reviewCount;
-    }
-  }
-
-  if (totalReviews === 0) {
+  if (!firstPartyReview)
     return {
-      rating: 0,
-      totalReviews: 0,
+      averageRating: 0,
+      reviewCount: 0,
     };
-  }
 
   return {
-    rating: parseFloat((totalRating / totalReviews).toFixed(2)),
-    totalReviews: totalReviews,
+    averageRating: firstPartyReview.averageRating,
+    reviewCount: firstPartyReview.reviewCount,
   };
 }
