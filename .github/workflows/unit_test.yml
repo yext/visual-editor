@@ -28,6 +28,7 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
+          path: visual-editor
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
