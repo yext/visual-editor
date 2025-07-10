@@ -4,7 +4,8 @@ import {
   axe,
   ComponentTest,
   testHours,
-  viewports,
+  transformTests,
+  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -22,14 +23,6 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...HeroSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Call to Action").elements().length).toBe(2);
-      expect(document.querySelectorAll("img")[0]).toBeVisible();
-      expect(document.querySelectorAll("p").length).toBe(0);
-      expect(document.querySelectorAll("h1, h2, h3, h4, h5, h6").length).toBe(
-        2
-      );
-    },
   },
   {
     name: "default props with data",
@@ -42,17 +35,6 @@ const tests: ComponentTest[] = [
     },
     props: { ...HeroSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Call to Action").elements().length).toBe(2);
-      expect(document.querySelectorAll("img")[0]).toBeVisible();
-      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent(
-        "Business Name"
-      );
-      expect(document.getElementsByTagName("h1")[0]).toHaveTextContent(
-        "Geomodifier"
-      );
-      expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
-    },
   },
   {
     name: "version 0 props using entity values",
@@ -113,14 +95,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Get Directions")).toBeVisible();
-      expect(page.getByText("Learn More")).toBeVisible();
-      expect(document.querySelectorAll("img")[0]).toBeVisible();
-      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent("name");
-      expect(document.getElementsByTagName("h1")[0]).toHaveTextContent("city");
-      expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
-    },
   },
   {
     name: "version 0 props using constant values",
@@ -190,18 +164,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Call to Action 1")).toBeVisible();
-      expect(page.getByText("Call to Action 2")).toBeVisible();
-      expect(document.querySelectorAll("img")[0]).toBeVisible();
-      expect(document.getElementsByTagName("h6")[0]).toHaveTextContent(
-        "Constant Name"
-      );
-      expect(document.getElementsByTagName("h3")[0]).toHaveTextContent(
-        "Geomodifier Name"
-      );
-      expect(document.getElementsByClassName("HoursStatus")[0]).toBeVisible();
-    },
   },
   {
     name: "version 9 props using constant values",
@@ -291,11 +253,6 @@ const tests: ComponentTest[] = [
   },
 ];
 
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
-];
-
 describe("HeroSection", async () => {
   const puckConfig: Config = {
     components: { HeroSection },
@@ -305,14 +262,15 @@ describe("HeroSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -331,6 +289,7 @@ describe("HeroSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -338,10 +297,20 @@ describe("HeroSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      await delay(500);
+
+      await expect(`HeroSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `HeroSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

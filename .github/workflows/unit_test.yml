@@ -2,6 +2,9 @@ name: Run unit tests
 
 on:
   workflow_call:
+    secrets:
+      BOT_REPO_SCOPED_TOKEN:
+        required: true
     inputs:
       package:
         description: The name of the package to test
@@ -20,6 +23,10 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4.1.6
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4.0.2
@@ -33,6 +40,7 @@ jobs:
         run: pnpm i --frozen-lockfile --ignore-scripts
 
       - name: Install Playwright Browsers
+        if: matrix.node-version == '20.x'
         run: npx playwright install chromium --with-deps
 
       - name: Download build artifact
@@ -41,5 +49,54 @@ jobs:
           name: build-output-${{ matrix.node-version }}
           path: "./packages/${{ inputs.package }}/dist"
 
-      - name: Run tests
-        run: pnpm run test
+      - name: Run editor tests
+        run: pnpm run test:editor
+
+      - name: Run component tests (Node 20 only)
+        id: run_component_tests
+        if: matrix.node-version == '20.x'
+        continue-on-error: true
+        run: |
+          set +e
+          pnpm run test:components
+          EXIT_CODE=$?
+          set -e
+          echo "test_exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+      - name: Detect new/modified screenshots
+        id: check_screenshots
+        if: matrix.node-version == '20.x'
+        run: |
+          SCREENSHOTS_DIR="src/components/testing/screenshots" 
+          echo "Checking for new/modified screenshots in ${SCREENSHOTS_DIR}..."
+          NEW_OR_MODIFIED_FILES=$(git status --porcelain "${SCREENSHOTS_DIR}" | wc -l)
+          echo "Found ${NEW_OR_MODIFIED_FILES} new or modified screenshot files."
+          if [ "$NEW_OR_MODIFIED_FILES" -gt 0 ]; then
+            echo "new_screenshots_found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "new_screenshots_found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit new screenshots and Fail if found
+        if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
+        run: |
+          echo "New or changed screenshots detected, or tests failed. Committing screenshots."
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add src/components/testing/screenshots
+
+          if ! git diff --cached --exit-code --quiet; then
+            git commit -m "Update component screenshots for ${{ inputs.package }}"
+            git push
+            echo "Successfully committed and pushed new/updated screenshots."
+          else
+            echo "No new screenshot changes to commit after all. This might indicate a test failure without new screenshots."
+          fi
+
+          if [ "${{ steps.run_component_tests.outputs.test_exit_code }}" != "0" ]; then
+            echo "Component tests failed."
+            exit 1
+          elif [ "${{ steps.check_screenshots.outputs.new_screenshots_found }}" == "true" ]; then
+            echo "New or modified screenshots detected."
+            exit 1
+          fi

@@ -26,3 +26,5 @@ jobs:
     uses: ./.github/workflows/unit_test.yml
     with:
       package: "visual-editor"
+    secrets:
+      BOT_REPO_SCOPED_TOKEN: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}

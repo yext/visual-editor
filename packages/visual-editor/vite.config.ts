@@ -3,6 +3,7 @@ import { LibraryFormats, defineConfig } from "vite";
 import path from "node:path";
 import type { Plugin } from "vite";
 import { exec } from "node:child_process";
+import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts";
 
 export default defineConfig(() => ({
   plugins: [react(), dts()],
@@ -45,6 +46,10 @@ export default defineConfig(() => ({
       instances: [{ browser: "chromium" }],
       provider: "playwright",
       headless: true,
+      screenshotFailures: false,
+      commands: {
+        compareScreenshot,
+      },
     },
   },
 }));
