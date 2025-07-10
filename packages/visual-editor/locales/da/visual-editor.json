@@ -347,6 +347,7 @@
       "color4": "Farve 4"
     },
     "bodyText": "Kropstekst",
+    "borderRadius": "Grænseadius",
     "button": "Knap",
     "colors": {
       "colors": "Farver",
@@ -378,11 +379,17 @@
       "semibold": "Semibold (600)",
       "thin": "Tynd (100)"
     },
+    "image": "Billede",
     "includeCaret": "Inkluder Caret",
     "letterSpacing": {
       "letterSpacing": "Brevafstand"
     },
     "links": "Links",
+    "options": {
+      "circle": "Cirkel",
+      "none": "Ingen",
+      "pill": "Pille"
+    },
     "pageSection": "Sideafsnit",
     "textTransform": {
       "capitalize": "Kapitalisere",

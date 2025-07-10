@@ -347,6 +347,7 @@
       "color4": "4. krāsa"
     },
     "bodyText": "Ķermeņa teksts",
+    "borderRadius": "Robežas rādiuss",
     "button": "Pogas",
     "colors": {
       "colors": "Krāsas",
@@ -378,11 +379,17 @@
       "semibold": "Semibolds (600)",
       "thin": "Plāns (100)"
     },
+    "image": "Attēls",
     "includeCaret": "Iekļaujiet Caret",
     "letterSpacing": {
       "letterSpacing": "Burtu atstatums"
     },
     "links": "Saites",
+    "options": {
+      "circle": "Riņķot",
+      "none": "Neviens",
+      "pill": "Tablete"
+    },
     "pageSection": "Lapas sadaļa",
     "textTransform": {
       "capitalize": "Izmantot lielo burtu",

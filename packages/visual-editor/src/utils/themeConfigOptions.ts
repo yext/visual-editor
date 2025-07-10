@@ -1,20 +1,10 @@
 import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
-import { borderRadiusOptions } from "../editor/BorderRadiusSelector.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
 import { msg } from "./i18nPlatform.ts";
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {
-    return {
-      label: option.label + ` (${option.px}px)`,
-      value: `${option.px}px`,
-    };
-  });
-};
-
-const getBorderRadiusOptions = () => {
-  return borderRadiusOptions.map((option) => {
     return {
       label: option.label + ` (${option.px}px)`,
       value: `${option.px}px`,
@@ -231,6 +221,37 @@ const textTransformOptions = [
   },
 ];
 
+type BorderRadiusOption = {
+  label: string;
+  value: string;
+};
+
+const buttonBorderRadiusOptions: BorderRadiusOption[] = [
+  { label: msg("theme.options.none", "None"), value: "0px" },
+  { label: "XS (2px)", value: "2px" },
+  { label: "SM (4px)", value: "4px" },
+  { label: "MD (6px)", value: "6px" },
+  { label: "LG (8px)", value: "8px" },
+  { label: "XL (12px)", value: "12px" },
+  { label: msg("theme.options.pill", "Pill"), value: "9999px" },
+];
+
+const imageBorderRadiusOptions: BorderRadiusOption[] = [
+  { label: msg("theme.options.none", "None"), value: "0px" },
+  { label: "XS (2px)", value: "2px" },
+  { label: "SM (4px)", value: "4px" },
+  { label: "MD (6px)", value: "6px" },
+  { label: "LG (8px)", value: "8px" },
+  { label: "XL (12px)", value: "12px" },
+  { label: "2XL (16px)", value: "16px" },
+  { label: "3XL (24px)", value: "24px" },
+  { label: "4XL (32px)", value: "32px" },
+  {
+    label: msg("theme.options.circle", "Circle"),
+    value: "9999px",
+  },
+];
+
 const ctaVariantOptions = [
   {
     label: msg("fields.options.ctaVariant.primary", "Primary"),
@@ -314,7 +335,8 @@ export const ThemeOptions = {
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
-  BORDER_RADIUS: getBorderRadiusOptions,
+  BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,
+  IMAGE_BORDER_RADIUS: imageBorderRadiusOptions,
   SPACING: getSpacingOptions,
   FONT_SIZE: getFontSizeOptions,
   HOURS_OPTIONS: hoursOptions,

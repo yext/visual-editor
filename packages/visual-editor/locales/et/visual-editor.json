@@ -347,6 +347,7 @@
       "color4": "Värv 4"
     },
     "bodyText": "Keretekst",
+    "borderRadius": "Piiriraadius",
     "button": "Nupp",
     "colors": {
       "colors": "Värvid",
@@ -378,11 +379,17 @@
       "semibold": "Poolbold (600)",
       "thin": "Õhuke (100)"
     },
+    "image": "Pilt",
     "includeCaret": "Kaasake Caret",
     "letterSpacing": {
       "letterSpacing": "Kirjavahemik"
     },
     "links": "Lingid",
+    "options": {
+      "circle": "Ring",
+      "none": "Mitte ükski",
+      "pill": "Pill"
+    },
     "pageSection": "Leheosa",
     "textTransform": {
       "capitalize": "Suurtähendama",

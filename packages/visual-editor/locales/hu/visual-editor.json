@@ -347,6 +347,7 @@
       "color4": "4. szín"
     },
     "bodyText": "Testszöveg",
+    "borderRadius": "Sorrendi sugár",
     "button": "Gomb",
     "colors": {
       "colors": "Színek",
@@ -378,11 +379,17 @@
       "semibold": "Félbold (600)",
       "thin": "Vékony (100)"
     },
+    "image": "Kép",
     "includeCaret": "Tartalmazza a Caret -t",
     "letterSpacing": {
       "letterSpacing": "Levél távolság"
     },
     "links": "Linkek",
+    "options": {
+      "circle": "Kör",
+      "none": "Egyik sem",
+      "pill": "Tabletta"
+    },
     "pageSection": "Oldal szakasz",
     "textTransform": {
       "capitalize": "Nagyít",

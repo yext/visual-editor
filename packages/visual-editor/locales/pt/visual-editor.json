@@ -347,6 +347,7 @@
       "color4": "Cor 4"
     },
     "bodyText": "Texto corporal",
+    "borderRadius": "Raio de fronteira",
     "button": "Botão",
     "colors": {
       "colors": "Cores",
@@ -378,11 +379,17 @@
       "semibold": "Semibold (600)",
       "thin": "Thin (100)"
     },
+    "image": "Imagem",
     "includeCaret": "Inclua Caret",
     "letterSpacing": {
       "letterSpacing": "Espaçamento de carta"
     },
     "links": "Links",
+    "options": {
+      "circle": "Círculo",
+      "none": "Nenhum",
+      "pill": "Pílula"
+    },
     "pageSection": "Seção de página",
     "textTransform": {
       "capitalize": "Capitalizar",

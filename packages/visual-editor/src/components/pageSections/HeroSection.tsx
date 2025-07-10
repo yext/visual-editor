@@ -346,7 +346,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               image={resolvedHero?.image}
               aspectRatio={styles.image.aspectRatio}
               width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial"
+              className="max-w-full sm:max-w-initial rounded-image-borderRadius"
             />
           </div>
         </EntityField>

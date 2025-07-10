@@ -347,6 +347,7 @@
       "color4": "Culoare 4"
     },
     "bodyText": "Text corporal",
+    "borderRadius": "Raza de frontieră",
     "button": "Buton",
     "colors": {
       "colors": "Culori",
@@ -378,11 +379,17 @@
       "semibold": "Semibold (600)",
       "thin": "Subțire (100)"
     },
+    "image": "Imagine",
     "includeCaret": "Include îngrijire",
     "letterSpacing": {
       "letterSpacing": "Distanțare a scrisorilor"
     },
     "links": "Link -uri",
+    "options": {
+      "circle": "Cerc",
+      "none": "Nici unul",
+      "pill": "Pastilă"
+    },
     "pageSection": "Secțiunea Pagina",
     "textTransform": {
       "capitalize": "Valorifica",

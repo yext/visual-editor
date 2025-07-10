@@ -37,6 +37,13 @@ import {
 } from "./contentBlocks/ImageStyling.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
+
+const defaultExpandedFooterLinks = {
+  linkType: "URL" as const,
+  label: { en: "Footer Link", hasLocalizedValue: "true" as const },
+  links: [],
+};
+
 const defaultFooterLink = {
   linkType: "URL" as const,
   label: { en: "Footer Link", hasLocalizedValue: "true" as const },
@@ -172,6 +179,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   defaultItemProps: defaultFooterLink,
                 }),
               },
+              defaultItemProps: defaultExpandedFooterLinks,
             }
           ),
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
