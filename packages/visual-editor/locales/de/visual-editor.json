@@ -370,6 +370,7 @@
       "color4": "Farbe 4"
     },
     "bodyText": "Körpertext",
+    "borderRadius": "Grenzradius",
     "button": "Taste",
     "colors": {
       "colors": "Farben",
@@ -401,11 +402,17 @@
       "semibold": "Halbkalte (600)",
       "thin": "Dünn (100)"
     },
+    "image": "Bild",
     "includeCaret": "Pflege einbeziehen",
     "letterSpacing": {
       "letterSpacing": "Briefabstand"
     },
     "links": "Links",
+    "options": {
+      "circle": "Kreis",
+      "none": "Keiner",
+      "pill": "Pille"
+    },
     "pageSection": "Seitenabschnitt",
     "textTransform": {
       "capitalize": "Profitieren",
