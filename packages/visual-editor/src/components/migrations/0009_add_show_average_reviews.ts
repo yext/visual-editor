@@ -8,7 +8,7 @@ export const addShowAverageReviewMigration: Migration = {
         ...props,
         data: {
           ...props.data,
-          showAverageReview: props.data?.showAverageReview ?? true,
+          showAverageReview: props.data?.showAverageReview ?? false,
         },
       };
     },
