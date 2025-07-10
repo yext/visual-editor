@@ -109,6 +109,29 @@ const tests: ComponentTest[] = [
     },
     version: 1,
   },
+  {
+    name: "version 1 props with blank value",
+    document: {
+      name: "test",
+    },
+    props: {
+      data: {
+        text: {
+          field: "name",
+          constantValue: "",
+        },
+      },
+      styles: {
+        textAlignment: "center",
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
+  },
 ];
 
 describe("BannerSection", async () => {

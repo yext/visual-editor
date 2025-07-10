@@ -126,6 +126,36 @@ const tests: ComponentTest[] = [
       });
     },
   },
+  {
+    name: "version 0 props with no values",
+    document: {},
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Frequently Asked Questions",
+          constantValueEnabled: true,
+          constantValueOverride: {},
+        },
+        faqs: {
+          field: "c_faq",
+          constantValue: {
+            faqs: [],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-black",
+        },
+        headingLevel: 4,
+      },
+      liveVisibility: true,
+    },
+    version: 0,
+  },
 ];
 
 describe("FAQSection", async () => {
