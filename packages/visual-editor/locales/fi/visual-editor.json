@@ -248,6 +248,8 @@
     "showDayNames": "Näytä päivänimet",
     "showGetDirectionsLink": "Näytä get directions -linkki",
     "showLanguageDropdown": "Näytä kieli avattava",
+    "showPrimaryCTA": "Näytä ensisijainen CTA",
+    "showSecondaryCTA": "Näytä toissijainen CTA",
     "socialLinks": "Sosiaaliset yhteydet",
     "startOfTheWeek": "Viikon alku",
     "styles": "Tyylit",

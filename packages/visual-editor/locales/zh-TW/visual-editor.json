@@ -248,6 +248,8 @@
     "showDayNames": "展示日名",
     "showGetDirectionsLink": "顯示獲取說明鏈接",
     "showLanguageDropdown": "顯示語言下拉",
+    "showPrimaryCTA": "顯示主要CTA",
+    "showSecondaryCTA": "顯示次要CTA",
     "socialLinks": "社會聯繫",
     "startOfTheWeek": "一周開始",
     "styles": "樣式",
