@@ -444,7 +444,7 @@ describe("CoreInfoSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(500);
+      await delay(600);
 
       await expect(
         `CoreInfoSection/[${viewportName}] ${name}`

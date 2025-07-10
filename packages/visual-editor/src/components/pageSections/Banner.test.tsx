@@ -155,7 +155,7 @@ describe("BannerSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(500);
+      await delay(600);
 
       await expect(
         `BannerSection/[${viewportName}] ${name}`
