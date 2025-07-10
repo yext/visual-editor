@@ -331,7 +331,7 @@ describe("TeamSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(500);
+      await delay(600);
 
       await expect(`TeamSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
