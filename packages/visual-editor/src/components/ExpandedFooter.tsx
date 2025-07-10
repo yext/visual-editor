@@ -376,9 +376,11 @@ const ExpandedFooterWrapper = ({
         as="footer"
         verticalPadding={"footer"}
         background={backgroundColor}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`}  md:justify-start w-full md:items-start  gap-8 md:gap-10`}
+        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`}  md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
-        <div className="flex flex-col gap-10 md:gap-8">
+        <div
+          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
+        >
           <EntityField
             constantValueEnabled
             displayName={pt("fields.logo", "Logo")}
@@ -586,10 +588,7 @@ const FooterLogo = (props: {
 }) => {
   return (
     <MaybeLink href={props.logoLink} alwaysHideCaret={true}>
-      <div
-        className="mx-auto md:ml-0"
-        style={{ width: `${props.logoWidth}px` }}
-      >
+      <div className="border" style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
           aspectRatio={
