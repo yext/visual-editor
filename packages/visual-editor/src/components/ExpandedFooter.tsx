@@ -27,6 +27,7 @@ import {
   FaLinkedinIn,
   FaYoutube,
   FaPinterest,
+  FaTiktok,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
@@ -54,12 +55,13 @@ export interface ExpandedFooterProps {
   data: {
     primaryFooter: {
       logo: string;
-      xLink: string;
       facebookLink: string;
       instagramLink: string;
-      pinterestLink: string;
       linkedInLink: string;
+      pinterestLink: string;
+      tiktokLink: string;
       youtubeLink: string;
+      xLink: string;
       utilityImages: { url: string; linkTarget?: string }[];
       expandedFooter: boolean;
       footerLinks: TranslatableCTA[];
@@ -101,9 +103,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           logo: YextField(msg("fields.logo", "Logo"), {
             type: "text",
           }),
-          xLink: YextField(msg("fields.xLink", "X Link"), {
-            type: "text",
-          }),
           facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
             type: "text",
           }),
@@ -113,13 +112,19 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               type: "text",
             }
           ),
+          linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+            type: "text",
+          }),
           pinterestLink: YextField(
             msg("fields.pinterestLink", "Pinterest Link"),
             {
               type: "text",
             }
           ),
-          linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+          tiktokLink: YextField(msg("fields.tiktokLink", "Tiktok Link"), {
+            type: "text",
+          }),
+          xLink: YextField(msg("fields.xLink", "X Link"), {
             type: "text",
           }),
           youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
@@ -350,6 +355,7 @@ const ExpandedFooterWrapper = ({
     pinterestLink,
     linkedInLink,
     youtubeLink,
+    tiktokLink,
     utilityImages,
     expandedFooterLinks,
     expandedFooter,
@@ -376,9 +382,11 @@ const ExpandedFooterWrapper = ({
         as="footer"
         verticalPadding={"footer"}
         background={backgroundColor}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`}  md:justify-start w-full md:items-start  gap-8 md:gap-10`}
+        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
-        <div className="flex flex-col gap-10 md:gap-8">
+        <div
+          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
+        >
           <EntityField
             constantValueEnabled
             displayName={pt("fields.logo", "Logo")}
@@ -397,6 +405,7 @@ const ExpandedFooterWrapper = ({
               pinterestLink={pinterestLink}
               linkedInLink={linkedInLink}
               youtubeLink={youtubeLink}
+              tiktokLink={tiktokLink}
             />
             {utilityImages && utilityImages.length >= 1 && (
               <EntityField
@@ -456,6 +465,7 @@ const ExpandedFooterWrapper = ({
             pinterestLink={pinterestLink}
             linkedInLink={linkedInLink}
             youtubeLink={youtubeLink}
+            tiktokLink={tiktokLink}
           />
           {utilityImages && utilityImages.length >= 1 && (
             <EntityField
@@ -486,7 +496,7 @@ const ExpandedFooterWrapper = ({
           as="footer"
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
-          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:flex-row-reverse md:justify-between"}`}
+          className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
         >
           <EntityField
             constantValueEnabled
@@ -586,10 +596,7 @@ const FooterLogo = (props: {
 }) => {
   return (
     <MaybeLink href={props.logoLink} alwaysHideCaret={true}>
-      <div
-        className="mx-auto md:ml-0"
-        style={{ width: `${props.logoWidth}px` }}
-      >
+      <div style={{ width: `${props.logoWidth}px` }}>
         <Image
           image={props.logo.image}
           aspectRatio={
@@ -637,6 +644,7 @@ const FooterIcons = ({
   pinterestLink,
   linkedInLink,
   youtubeLink,
+  tiktokLink,
 }: {
   xLink: string;
   facebookLink: string;
@@ -644,6 +652,7 @@ const FooterIcons = ({
   pinterestLink: string;
   linkedInLink: string;
   youtubeLink: string;
+  tiktokLink: string;
 }) => {
   const { t } = useTranslation();
 
@@ -702,6 +711,13 @@ const FooterIcons = ({
           youtubeLink
         ),
     },
+    {
+      link: tiktokLink,
+      icon: <FaTiktok className="h-6 w-6 md:h-5 md:w-5" />,
+      label: "Tiktok",
+      prefix: "",
+      valid: /^https:\/\/(www\.)?tiktok\.com\/@[\w.-]+\/?$/.test(tiktokLink),
+    },
   ];
 
   const filteredIcons = icons.filter(({ valid }) => valid);
@@ -752,6 +768,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         pinterestLink: "",
         linkedInLink: "",
         youtubeLink: "",
+        tiktokLink: "",
         utilityImages: [],
         expandedFooter: false,
         expandedFooterLinks: [
