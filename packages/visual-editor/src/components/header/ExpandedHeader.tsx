@@ -340,26 +340,32 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         </PageSection>
       </div>
       <div
-        className="flex md:hidden items-center justify-between px-4 py-2"
+        className="flex md:hidden flex-col"
         aria-label={t("expandedHeaderMobile", "Expanded Header Mobile")}
       >
-        <HeaderLogo
-          logo={buildComplexImage(logo, logoStyle.width || 100)}
-          logoWidth={logoStyle.width || 100}
-          aspectRatio={logoStyle.aspectRatio}
-        />
-
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={
-            isOpen ? t("closeMenu", "Close menu") : t("openMenu", "Open menu")
-          }
-          aria-expanded={isOpen}
-          aria-controls="mobile-menu"
-          className="text-xl"
+        <PageSection
+          verticalPadding={"header"}
+          background={backgroundColor}
+          className="flex items-center justify-between"
         >
-          {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
-        </button>
+          <HeaderLogo
+            logo={buildComplexImage(logo, logoStyle.width || 100)}
+            logoWidth={logoStyle.width || 100}
+            aspectRatio={logoStyle.aspectRatio}
+          />
+
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={
+              isOpen ? t("closeMenu", "Close menu") : t("openMenu", "Open menu")
+            }
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            className="text-xl"
+          >
+            {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
+          </button>
+        </PageSection>
       </div>
       {isOpen && (
         <div
