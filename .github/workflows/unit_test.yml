@@ -78,6 +78,10 @@ jobs:
 
       - name: Commit new screenshots and Fail if found
         if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
+        env:
+          PACKAGE_INPUT: ${{ inputs.package }}
+          TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}
+          NEW_SCREENSHOTS_FOUND: ${{ steps.check_screenshots.outputs.new_screenshots_found }}
         run: |
           echo "New or changed screenshots detected, or tests failed. Committing screenshots."
           git config user.name "github-actions[bot]"
@@ -86,17 +90,17 @@ jobs:
           git add src/components/testing/screenshots
 
           if ! git diff --cached --exit-code --quiet; then
-            git commit -m "Update component screenshots for ${{ inputs.package }}"
+            git commit -m "Update component screenshots for $PACKAGE_INPUT"
             git push
             echo "Successfully committed and pushed new/updated screenshots."
           else
-            echo "No new screenshot changes to commit after all. This might indicate a test failure without new screenshots."
+            echo "No new screenshot changes to commit after all. This might indicate a non-screenshot component test failure in a previous step."
           fi
 
-          if [ "${{ steps.run_component_tests.outputs.test_exit_code }}" != "0" ]; then
+          if [ "$TEST_EXIT_CODE"  != "0" ]; then
             echo "Component tests failed."
             exit 1
-          elif [ "${{ steps.check_screenshots.outputs.new_screenshots_found }}" == "true" ]; then
+          elif [ "$NEW_SCREENSHOTS_FOUND" == "true" ]; then
             echo "New or modified screenshots detected."
             exit 1
           fi
