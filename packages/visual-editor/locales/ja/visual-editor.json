@@ -234,6 +234,8 @@
     "showDayNames": "日名を表示します",
     "showGetDirectionsLink": "表示する方向リンクを表示します",
     "showLanguageDropdown": "言語ドロップダウンを表示します",
+    "showPrimaryCTA": "プライマリCTAを表示します",
+    "showSecondaryCTA": "二次CTAを表示します",
     "socialLinks": "ソーシャルリンク",
     "startOfTheWeek": "今週の始まり",
     "styles": "スタイル",
