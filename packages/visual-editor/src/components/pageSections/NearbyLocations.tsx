@@ -354,6 +354,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
           radiusMi: data?.radius,
           limit: data?.limit,
           locale: i18n.language,
+          currentLocationId: document.id,
         });
       },
       enabled:

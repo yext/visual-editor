@@ -10,6 +10,7 @@ export const fetchNearbyLocations = async ({
   radiusMi,
   limit,
   locale,
+  currentLocationId,
 }: {
   businessId: string;
   apiKey: string;
@@ -20,6 +21,7 @@ export const fetchNearbyLocations = async ({
   radiusMi: number;
   limit: number;
   locale: string;
+  currentLocationId: string;
 }): Promise<Record<string, any>> => {
   const url = new URL(
     `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
@@ -31,6 +33,7 @@ export const fetchNearbyLocations = async ({
     `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
   );
   url.searchParams.append("meta.locale", locale);
+  url.searchParams.append("id__neq", currentLocationId);
   if (limit) {
     url.searchParams.append("limit", limit.toString());
   }
