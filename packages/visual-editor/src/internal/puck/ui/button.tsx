@@ -5,7 +5,7 @@ import { cn } from "../../../utils/cn.ts";
 
 const buttonVariants = cva(
   "ve-inline-flex ve-items-center ve-justify-center ve-whitespace-nowrap ve-rounded-full ve-text-sm" +
-    " ve-font-medium ve-ring-offset-background ve-transition-colors focus-visible:ve-outline-none" +
+    " ve-font-normal ve-ring-offset-background ve-transition-colors focus-visible:ve-outline-none" +
     " focus-visible:ve-ring-2 focus-visible:ve-ring-ring focus-visible:ve-ring-offset-2" +
     " disabled:ve-pointer-events-none disabled:ve-opacity-50",
   {
@@ -20,8 +20,9 @@ const buttonVariants = cva(
           " hover:ve-text-accent-foreground",
         secondary:
           "ve-bg-secondary ve-text-secondary-foreground hover:ve-bg-secondary/80",
-        ghost: "hover:ve-bg-accent hover:ve-text-accent-foreground",
-        link: "ve-text-primary ve-underline-offset-4 hover:ve-underline",
+        ghost:
+          "hover:ve-bg-accent hover:ve-text-accent-foreground ve-font-medium",
+        link: "ve-text-primary ve-underline-offset-4 hover:ve-underline ve-font-medium",
         puckSelect: "", // puck copycat styles applied in puck.css
       },
       size: {

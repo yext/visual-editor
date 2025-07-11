@@ -18,7 +18,6 @@ import {
   HeadingLevel,
   Image,
   ImageProps,
-  ImageWrapperProps,
   resolveYextEntityField,
   PageSection,
   themeManagerCn,
@@ -34,24 +33,21 @@ import {
   ThemeOptions,
 } from "@yext/visual-editor";
 import {
-  resolvedImageFields,
-  ImageWrapperFields,
-} from "../contentBlocks/Image.js";
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { GalleryImageType } from "../../types/types";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
-
-const DEFAULT_IMAGE = {
-  height: 570,
-  width: 1000,
-  url: PLACEHOLDER_IMAGE_URL,
-};
 
 export interface PhotoGallerySectionProps {
   data: {
     heading: YextEntityField<TranslatableString>;
-    images: YextEntityField<ImageType[] | ComplexImageType[]>;
+    images: YextEntityField<
+      ImageType[] | ComplexImageType[] | GalleryImageType[]
+    >;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -59,7 +55,7 @@ export interface PhotoGallerySectionProps {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
-    imageStyle: Omit<ImageWrapperProps, "image">;
+    image: ImageStylingProps;
   };
   liveVisibility: boolean;
 }
@@ -91,6 +87,30 @@ const DynamicChildColors = ({
 };
 
 const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      heading: YextField<any, TranslatableString>(
+        msg("fields.heading", "Heading"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      images: YextField<
+        any,
+        ImageType[] | ComplexImageType[] | GalleryImageType[]
+      >(msg("fields.images", "Images"), {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+          includeListsOnly: true,
+        },
+      }),
+    },
+  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -104,7 +124,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -115,39 +135,10 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           }),
         },
       }),
-      imageStyle: YextField(msg("fields.imageStyle", "Image Style"), {
+      image: YextField(msg("fields.image", "Image"), {
         type: "object",
-        objectFields: {
-          layout: ImageWrapperFields.layout,
-          aspectRatio: ImageWrapperFields.aspectRatio,
-          height: ImageWrapperFields.height,
-          width: ImageWrapperFields.width,
-        },
+        objectFields: ImageStylingFields,
       }),
-    },
-  }),
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      heading: YextField<any, TranslatableString>(
-        msg("fields.heading", "Heading"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
-      images: YextField<any, ImageType[] | ComplexImageType[]>(
-        msg("fields.images", "Images"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.image"],
-            includeListsOnly: true,
-          },
-        }
-      ),
     },
   }),
   liveVisibility: YextField(
@@ -176,13 +167,18 @@ const PhotoGallerySectionComponent = ({
   const resolvedImages = resolveYextEntityField(document, data.images);
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
-    .filter((image): image is ImageType | ComplexImageType => !!image)
+    .filter(
+      (image): image is ImageType | ComplexImageType | GalleryImageType =>
+        !!image
+    )
     .map((image) => ({
-      image,
-      layout: styles.imageStyle.layout,
-      aspectRatio: styles.imageStyle.aspectRatio,
-      width: styles.imageStyle.width,
-      height: styles.imageStyle.height,
+      image: {
+        ...image,
+        height: "height" in image && image.height ? image.height : 570,
+        width: "width" in image && image.width ? image.width : 1000,
+      },
+      aspectRatio: styles.image.aspectRatio,
+      width: styles.image.width || 1000,
     }));
 
   const justifyClass = {
@@ -195,7 +191,7 @@ const PhotoGallerySectionComponent = ({
     <PageSection
       aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
-      className="flex flex-col gap-8 justify-center"
+      className="flex flex-col gap-8"
     >
       {sectionHeading && (
         <EntityField
@@ -210,18 +206,77 @@ const PhotoGallerySectionComponent = ({
       )}
       {filteredImages && filteredImages.length > 0 && (
         <CarouselProvider
-          className="flex flex-col md:flex-row justify-center gap-8"
+          className="flex flex-col gap-8"
           naturalSlideWidth={100}
           naturalSlideHeight={100}
           totalSlides={filteredImages.length}
           isIntrinsicHeight={true}
         >
-          <DynamicChildColors category="arrow">
-            <ButtonBack className="hidden md:block my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
-              <FaArrowLeft className="h-10 w-fit" />
-            </ButtonBack>
-          </DynamicChildColors>
-          <div className="flex flex-col gap-y-8">
+          <div className="hidden md:flex justify-center w-full">
+            <div
+              className="flex items-center gap-2"
+              style={{
+                width: `${(styles.image.width || 1000) + 96}px`,
+                maxWidth: "100%",
+                minWidth: "fit-content",
+              }}
+            >
+              <DynamicChildColors category="arrow">
+                <ButtonBack className="my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
+                  <FaArrowLeft className="h-10 w-fit" />
+                </ButtonBack>
+              </DynamicChildColors>
+              <div className="flex flex-col gap-y-8 items-center w-auto">
+                <EntityField
+                  displayName={pt("fields.images", "Images")}
+                  fieldId={data.images.field}
+                  constantValueEnabled={data.images.constantValueEnabled}
+                >
+                  <Slider
+                    className="w-auto"
+                    style={{ width: styles.image.width || 1000 }}
+                  >
+                    {filteredImages.map((image, idx) => {
+                      return (
+                        <Slide index={idx} key={idx}>
+                          <div className="flex justify-center">
+                            <Image
+                              image={image.image}
+                              aspectRatio={image.aspectRatio}
+                              width={image.width}
+                              className="rounded-image-borderRadius"
+                            />
+                          </div>
+                        </Slide>
+                      );
+                    })}
+                  </Slider>
+                </EntityField>
+                <div className="hidden md:flex justify-center">
+                  {filteredImages.map((_, idx) => {
+                    const afterStyles =
+                      "after:content-[' '] after:py-2 after:block";
+                    return (
+                      <div key={idx} className="w-16 flex justify-center">
+                        <DynamicChildColors category="slide">
+                          <Dot
+                            slide={idx}
+                            className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
+                          ></Dot>
+                        </DynamicChildColors>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <DynamicChildColors category="arrow">
+                <ButtonNext className="pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
+                  <FaArrowRight className="h-10 w-fit" />
+                </ButtonNext>
+              </DynamicChildColors>
+            </div>
+          </div>
+          <div className="flex flex-col gap-y-8 items-center justify-center md:hidden">
             <EntityField
               displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
@@ -231,19 +286,19 @@ const PhotoGallerySectionComponent = ({
                 {filteredImages.map((image, idx) => {
                   return (
                     <Slide index={idx} key={idx}>
-                      <Image
-                        image={image.image}
-                        layout={image.layout}
-                        aspectRatio={image.aspectRatio}
-                        height={image.height}
-                        width={image.width}
-                      />
+                      <div className="flex justify-center">
+                        <Image
+                          image={image.image}
+                          aspectRatio={image.aspectRatio}
+                          width={image.width}
+                        />
+                      </div>
                     </Slide>
                   );
                 })}
               </Slider>
             </EntityField>
-            <div className="flex justify-between items-center px-4 md:hidden gap-6 w-full">
+            <div className="flex justify-between items-center px-4 gap-6 w-full">
               <DynamicChildColors category="arrow">
                 <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
                   <FaArrowLeft className="h-6 w-fit" />
@@ -265,28 +320,7 @@ const PhotoGallerySectionComponent = ({
                 </ButtonNext>
               </DynamicChildColors>
             </div>
-            <div className="hidden md:flex justify-center">
-              {filteredImages.map((_, idx) => {
-                const afterStyles =
-                  "after:content-[' '] after:py-2 after:block";
-                return (
-                  <div key={idx} className="w-16 flex justify-center">
-                    <DynamicChildColors category="slide">
-                      <Dot
-                        slide={idx}
-                        className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
-                      ></Dot>
-                    </DynamicChildColors>
-                  </div>
-                );
-              })}
-            </div>
           </div>
-          <DynamicChildColors category="arrow">
-            <ButtonNext className="hidden md:block pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
-              <FaArrowRight className="h-10 w-fit" />
-            </ButtonNext>
-          </DynamicChildColors>
         </CarouselProvider>
       )}
     </PageSection>
@@ -297,19 +331,6 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   label: msg("components.photoGallerySection", "Photo Gallery Section"),
   fields: photoGallerySectionFields,
   defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      heading: {
-        level: 2,
-        align: "left",
-      },
-      imageStyle: {
-        layout: "fixed",
-        height: 570,
-        width: 1000,
-        aspectRatio: 1.78,
-      },
-    },
     data: {
       heading: {
         field: "",
@@ -318,31 +339,25 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
       },
       images: {
         field: "",
-        constantValue: [DEFAULT_IMAGE, DEFAULT_IMAGE, DEFAULT_IMAGE],
+        constantValue: [
+          { url: PLACEHOLDER_IMAGE_URL },
+          { url: PLACEHOLDER_IMAGE_URL },
+          { url: PLACEHOLDER_IMAGE_URL },
+        ],
         constantValueEnabled: true,
       },
     },
-    liveVisibility: true,
-  },
-  resolveFields(data, { fields }) {
-    const layout = data.props.styles?.imageStyle?.layout ?? "auto";
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { image, ...rest } = resolvedImageFields(layout);
-    return {
-      ...fields,
-      styles: {
-        ...fields.styles,
-        objectFields: {
-          // @ts-expect-error ts(2339) objectFields exists
-          ...fields.styles.objectFields,
-          imageStyle: {
-            // @ts-expect-error ts(2339) objectFields exists
-            ...fields.styles.objectFields.imageStyle,
-            objectFields: rest,
-          },
-        },
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      heading: {
+        level: 2,
+        align: "left",
       },
-    };
+      image: {
+        aspectRatio: 1.78,
+      },
+    },
+    liveVisibility: true,
   },
   render: (props) => (
     <VisibilityWrapper

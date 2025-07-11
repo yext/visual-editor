@@ -5,7 +5,7 @@ import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 
-const linkTypeOptions = () => {
+export const linkTypeOptions = () => {
   return [
     {
       label: pt("linkTypes.url", "URL"),

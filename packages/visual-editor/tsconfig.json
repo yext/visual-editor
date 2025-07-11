@@ -24,6 +24,11 @@
       "@yext/visual-editor": ["./src/index.ts"]
     }
   },
-  "include": ["src", "index.d.ts", ".eslintrc.json"],
+  "include": [
+    "src",
+    "index.d.ts",
+    ".eslintrc.json",
+    "src/components/testing/componentTests.d.ts"
+  ],
   "exclude": ["node_modules", "src/vite-plugin/templates/*"]
 }

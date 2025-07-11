@@ -14,6 +14,7 @@ import {
   PinComponent,
   useCardAnalyticsCallback,
   VerticalResults,
+  SearchI18nextProvider,
 } from "@yext/search-ui-react";
 import {
   Matcher,
@@ -139,9 +140,11 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
   searcher.setSessionTrackingEnabled(true);
   return (
     <SearchHeadlessProvider searcher={searcher}>
-      <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
-        <LocatorInternal {...props} />
-      </AnalyticsProvider>
+      <SearchI18nextProvider searcher={searcher}>
+        <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+          <LocatorInternal {...props} />
+        </AnalyticsProvider>
+      </SearchI18nextProvider>
     </SearchHeadlessProvider>
   );
 };

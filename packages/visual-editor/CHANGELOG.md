@@ -1,3 +1,91 @@
+#### 0.0.46 (2025-07-10)
+
+##### Chores
+
+- update default layout data again (#600) (0860c140)
+- add component screenshot tests (#578) (cb824451)
+
+##### New Features
+
+- add ReviewStars atom to Hero (#589) (f077fd19)
+- add workflow to clean up dev release branches (#591) (cfeb3252)
+- add borderRadius selector (#597) (098ea85a)
+- add theme Image section with BorderRadius (#599) (ddcb733c)
+
+##### Bug Fixes
+
+- logo alignment WRT links alignment (#607) (8b3b664a)
+- copyright message alignment based on secondary links alignment (#609) (c1626ae7)
+- added tiktok link (#608) (c7019eea)
+- text wrapping for footer links (#606) (d8f065e9)
+- show header background color on mobile (#605) (22081d25)
+- hero hours (#602) (6c6b549c)
+- add defaultItemProps for Expanded Footer Links (#604) (a8a45a30)
+- test updates for recently added tests (#601) (75fff8ae)
+
+#### 0.0.45 (2025-07-09)
+
+##### Chores
+
+- clean up header/footer image styling (#598) (701050f3)
+
+##### New Features
+
+- non-link analytics for ReviewsSection (#586) (c8cd28af)
+
+##### Bug Fixes
+
+- language dropdown fails page generation (#596) (1ab4d398)
+
+#### 0.0.44 (2025-07-09)
+
+##### Chores
+
+- update default layout data for expanded header and footer (#594) (0d50bec9)
+- deprecate header and footer (#592) (4af3c076)
+- upgrade search-ui-react for more translations (#581) (458148f7)
+- swap from eslint to oxlint (#553) (358fcd61)
+
+##### New Features
+
+- add backgroundColor to Breadcrumbs and Directory (#585) (51d301b4)
+- expanded header and footer (#593) (5d78f64c)
+- set up workflow to create a new dev release (#580) (3fcadbbc)
+- reviews component (#564) (12b08b42)
+- add non-link analytics to FAQ section and mobile header (#574) (a00a972c)
+- add image styling props (#573) (012471ac)
+- add Open Now button to locator (#569) (3a70acd7)
+- add rtf functionality (#560) (81fe991d)
+- make banner text RTF (#567) (9f75e959)
+- hide banner if missing data (#566) (a617291f)
+- add reviews component skeleton (#561) (cfa011ad)
+- update i18n for context (#559) (0fba9813)
+- add links to nearby location cards (#554) (dc968be3)
+- **components:** add card styles (#583) (cc454c8d)
+
+##### Bug Fixes
+
+- display heading spans as block (#590) (e290f4f4)
+- update hero/promo images on mobile (#588) (017d0ba5)
+- re-add directory card border (#587) (25fe6d37)
+- set default button font to font-normal (#584) (22eef1aa)
+- default_directory to defaultdirectory in starter (#579) (bdec50cb)
+- truncate strings in BasicSelector (#572) (6251f611)
+- nearbyLocations warning spam (#576) (9895d54e)
+- reduce fonts imported into generated pages (#571) (a1ccd2fe)
+- update faq to work without js (#565) (64db6d6e)
+- react warnings and proxied dev migrations (#563) (278bedef)
+- default language dropdown value in Editor (#557) (a71a90d7)
+- add missing locale labels (#555) (222e08a3)
+- **components:** added missing i18n to header (#570) (06f517eb)
+
+##### Refactors
+
+- update hoursTable translations (#575) (ca7b88f2)
+- adjust analytics (#562) (7ae1756e)
+- background color selector (#558) (d43d7417)
+- remove chevron from entity field selector (#556) (d49ea059)
+
 #### 0.0.43 (2025-06-18)
 
 ##### Bug Fixes

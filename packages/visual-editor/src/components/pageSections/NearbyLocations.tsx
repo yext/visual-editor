@@ -39,12 +39,14 @@ export interface NearbyLocationsSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
     };
-    cardHeadingLevel: HeadingLevel;
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
     phoneNumberFormat: "domestic" | "international";
     phoneNumberLink: boolean;
     hours: {
@@ -102,17 +104,10 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -123,14 +118,23 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
           }),
         },
       }),
-      cardHeadingLevel: YextField(
-        msg("fields.cardHeadingLevel", "Card Heading Level"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "HEADING_LEVEL",
-        }
-      ),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
+      }),
       phoneNumberFormat: YextField(
         msg("fields.phoneNumberFormat", "Phone Number Format"),
         {
@@ -227,7 +231,7 @@ const LocationCard = ({
 }) => {
   return (
     <Background
-      background={styles?.cardBackgroundColor}
+      background={styles?.cards.backgroundColor}
       className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
       as="section"
     >
@@ -237,7 +241,16 @@ const LocationCard = ({
         className="mb-2"
         href={relativePrefixToRoot && slug ? relativePrefixToRoot + slug : slug}
       >
-        <Heading level={styles?.cardHeadingLevel}>{name}</Heading>
+        <Heading
+          level={styles?.cards.headingLevel}
+          semanticLevelOverride={
+            styles.heading.level < 6
+              ? ((styles.heading.level + 1) as HeadingLevel)
+              : "span"
+          }
+        >
+          {name}
+        </Heading>
       </MaybeLink>
       {hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
@@ -470,12 +483,14 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
       },
       styles: {
         backgroundColor: backgroundColors.background1.value,
-        cardBackgroundColor: backgroundColors.background1.value,
         heading: {
-          level: 3,
+          level: 2,
           align: "left",
         },
-        cardHeadingLevel: 4,
+        cards: {
+          backgroundColor: backgroundColors.background1.value,
+          headingLevel: 3,
+        },
         hours: {
           showCurrentStatus: true,
           timeFormat: "12h",

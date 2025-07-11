@@ -28,7 +28,13 @@ import {
   msg,
   pt,
   getAnalyticsScopeHash,
+  ReviewStars,
+  getAggregateRating,
 } from "@yext/visual-editor";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -38,6 +44,7 @@ export interface HeroSectionProps {
     localGeoModifier: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
     hero: YextStructEntityField<HeroSectionType>;
+    showAverageReview: boolean;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -46,6 +53,7 @@ export interface HeroSectionProps {
     localGeoModifierLevel: HeadingLevel;
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
@@ -87,6 +95,16 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           type: ComponentFields.HeroSection.type,
         },
       }),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
+        }
+      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -152,6 +170,10 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "CTA_VARIANT",
         }
       ),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -189,6 +211,8 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { timezone } = document as {
     timezone: string;
   };
+
+  const { averageRating, reviewCount } = getAggregateRating(document);
 
   return (
     <PageSection
@@ -245,6 +269,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             >
               <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
+          )}
+          {reviewCount > 0 && data.showAverageReview && (
+            <ReviewStars
+              averageRating={averageRating}
+              hasDarkBackground={
+                styles.backgroundColor?.textColor === "text-white"
+              }
+              reviewCount={reviewCount}
+            />
           )}
         </header>
         {(resolvedHero?.primaryCta?.label ||
@@ -311,10 +344,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             <Image
               image={resolvedHero?.image}
-              layout="auto"
-              aspectRatio={
-                resolvedHero?.image.width / resolvedHero?.image.height
-              }
+              aspectRatio={styles.image.aspectRatio}
+              width={styles.image.width || 640}
+              className="max-w-full sm:max-w-initial rounded-image-borderRadius"
             />
           </div>
         </EntityField>
@@ -345,38 +377,8 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         },
       },
       hours: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          monday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          tuesday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          wednesday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          thursday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          friday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          saturday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-          sunday: {
-            isClosed: false,
-            openIntervals: [{ end: "17:00", start: "10:00" }],
-          },
-        },
+        field: "hours",
+        constantValue: {},
       },
       hero: {
         field: "",
@@ -410,6 +412,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           secondaryCta: true,
         },
       },
+      showAverageReview: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
@@ -418,6 +421,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       localGeoModifierLevel: 1,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
+      image: {
+        aspectRatio: 1.78, // 16:9 default
+      },
     },
     analytics: {
       scope: "heroSection",
