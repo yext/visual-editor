@@ -170,7 +170,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   arrayFields: {
                     label: TranslatableStringField(
                       msg("fields.label", "Label"),
-                      "text"
+                      { types: ["type.string"] }
                     ),
                     link: YextField(msg("fields.link", "Link"), {
                       type: "text",
@@ -190,10 +190,9 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -221,17 +220,16 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             }),
             copyrightMessage: TranslatableStringField(
               msg("fields.copyrightMessage", "Copyright Message"),
-              "text"
+              { types: ["type.string"] }
             ),
             secondaryFooterLinks: YextField(
               msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(
-                    msg("fields.label", "Label"),
-                    "text"
-                  ),
+                  label: TranslatableStringField(msg("fields.label", "Label"), {
+                    types: ["type.string"],
+                  }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
