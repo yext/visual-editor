@@ -30,7 +30,7 @@ export const fetchNearbyLocations = async ({
     "yextDisplayCoordinate__geo",
     `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
   );
-  url.searchParams.append("languages", locale);
+  url.searchParams.append("meta.locale", locale);
   if (limit) {
     url.searchParams.append("limit", limit.toString());
   }
