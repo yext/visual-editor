@@ -235,6 +235,8 @@
     "showDayNames": "展示日名",
     "showGetDirectionsLink": "显示获取说明链接",
     "showLanguageDropdown": "显示语言下拉",
+    "showPrimaryCTA": "显示主要CTA",
+    "showSecondaryCTA": "显示次要CTA",
     "socialLinks": "社会联系",
     "startOfTheWeek": "一周开始",
     "styles": "样式",
