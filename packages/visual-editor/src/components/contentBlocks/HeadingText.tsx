@@ -32,7 +32,7 @@ const HeadingTextWrapper = React.forwardRef<
     >
       <Heading ref={ref} {...headingProps}>
         {resolveTranslatableString(
-          resolveYextEntityField(document, text),
+          resolveYextEntityField(document, text, i18n.language),
           i18n.language
         )}
       </Heading>

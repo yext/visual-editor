@@ -175,13 +175,15 @@ const TestimonialSectionWrapper = ({
   styles,
 }: TestimonialSectionProps) => {
   const { i18n } = useTranslation();
+  const locale = i18n.language;
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
-    data.testimonials
+    data.testimonials,
+    locale
   );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(document, data.heading, locale),
     i18n.language
   );
 

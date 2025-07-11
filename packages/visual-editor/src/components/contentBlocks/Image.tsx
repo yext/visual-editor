@@ -64,11 +64,12 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   aspectRatio,
   width,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
     document,
-    imageField
+    imageField,
+    i18n.language
   );
 
   if (!resolvedImage) {

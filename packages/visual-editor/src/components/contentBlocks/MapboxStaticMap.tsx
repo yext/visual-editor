@@ -133,14 +133,15 @@ export const MapboxStaticMapComponent = ({
   zoom = 14,
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument<any>();
 
   const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
-    coordinateField
+    coordinateField,
+    i18n.language
   );
 
   if (!coordinate) {
