@@ -14,6 +14,7 @@ import {
   BackgroundStyle,
   Background,
   HeadingLevel,
+  getLocationPath,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -22,6 +23,7 @@ import {
   AnalyticsScopeProvider,
   HoursStatus,
 } from "@yext/pages-components";
+import { useTranslation } from "react-i18next";
 
 export interface DirectoryProps {
   data: {
@@ -117,14 +119,15 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 const DirectoryCard = ({
   cardNumber,
   profile,
-  relativePrefixToRoot,
   cardStyles,
 }: {
   cardNumber: number;
   profile: any;
-  relativePrefixToRoot: string;
   cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
+  const { relativePrefixToRoot } = useTemplateProps();
+  const { i18n } = useTranslation();
+
   return (
     <Background
       className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
@@ -135,11 +138,7 @@ const DirectoryCard = ({
           eventName={`link${cardNumber}`}
           alwaysHideCaret={true}
           className="mb-2"
-          href={
-            relativePrefixToRoot && profile.slug
-              ? relativePrefixToRoot + profile.slug
-              : profile.slug
-          }
+          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
         >
           <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}
@@ -183,11 +182,9 @@ const DirectoryCard = ({
 // DirectoryGrid uses PageSection's theme config for styling.
 const DirectoryGrid = ({
   directoryChildren,
-  relativePrefixToRoot,
   cardStyles,
 }: {
   directoryChildren: any[];
-  relativePrefixToRoot: string;
   cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
@@ -208,7 +205,6 @@ const DirectoryGrid = ({
           key={idx}
           cardNumber={idx}
           profile={child}
-          relativePrefixToRoot={relativePrefixToRoot}
           cardStyles={cardStyles}
         />
       ))}
@@ -302,7 +298,6 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
         isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
-            relativePrefixToRoot={relativePrefixToRoot}
             cardStyles={styles.cards}
           />
         )}

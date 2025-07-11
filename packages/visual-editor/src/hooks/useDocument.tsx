@@ -2,7 +2,9 @@ import * as React from "react";
 
 const TemplatePropsContext = React.createContext<any | undefined>(undefined);
 
-const useTemplateProps = <T,>(): T => {
+const useTemplateProps = <
+  T = { document: Record<string, any>; relativePrefixToRoot?: string },
+>(): T => {
   const context = React.useContext(TemplatePropsContext);
   if (!context) {
     throw new Error(
