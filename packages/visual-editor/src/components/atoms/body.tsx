@@ -8,6 +8,7 @@ export const bodyVariants = cva(
   {
     variants: {
       variant: {
+        xs: "text-body-xs-fontSize",
         sm: "text-body-sm-fontSize",
         base: "text-body-fontSize",
         lg: "text-body-lg-fontSize",

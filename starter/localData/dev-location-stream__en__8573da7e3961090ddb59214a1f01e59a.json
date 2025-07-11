@@ -16,6 +16,11 @@
           "postalCode": "11211",
           "streetAddress": "288 Grand St"
         },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.2",
+          "reviewCount": "7"
+        },
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "itemListElement": [
@@ -895,6 +900,13 @@
   "emails": ["test@test.com", "test1@test.com"],
   "name": "Galaxy Grill",
   "services": ["Delivery", "Catering", "Carry Out", "Dine In"],
+  "ref_reviewsAgg": [
+    {
+      "averageRating": 4.1,
+      "publisher": "FIRSTPARTY",
+      "reviewCount": 26
+    }
+  ],
   "siteDomain": "",
   "siteId": 0,
   "mainPhone": "+12222222222",

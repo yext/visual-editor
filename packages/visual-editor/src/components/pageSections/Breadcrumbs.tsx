@@ -10,6 +10,8 @@ import {
   TranslatableString,
   resolveTranslatableString,
   TranslatableStringField,
+  BackgroundStyle,
+  backgroundColors,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -17,6 +19,9 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 export type BreadcrumbsSectionProps = {
   data: {
     directoryRoot: TranslatableString;
+  };
+  styles: {
+    backgroundColor?: BackgroundStyle;
   };
   analytics?: {
     scope?: string;
@@ -31,6 +36,18 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
         "text"
+      ),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
       ),
     },
   }),
@@ -81,7 +98,10 @@ function isValidDirectoryParents(value: any[]): boolean {
 // then displays nothing. In the case of a root DM page, there are
 // no dm_directoryParents but there are dm_directoryChildren so
 // that root entity's name will be in the breadcrumbs.
-export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
+export const BreadcrumbsComponent = ({
+  data,
+  styles,
+}: BreadcrumbsSectionProps) => {
   const { t, i18n } = useTranslation();
   const separator = "/";
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
@@ -106,6 +126,7 @@ export const BreadcrumbsComponent = ({ data }: BreadcrumbsSectionProps) => {
       as={"nav"}
       verticalPadding="sm"
       aria-label={t("breadcrumb", "Breadcrumb")}
+      background={styles?.backgroundColor}
     >
       <ol className="flex flex-wrap">
         {breadcrumbs.map(({ name, slug }, idx) => {
@@ -145,6 +166,9 @@ export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
         en: "Directory Root",
         hasLocalizedValue: "true",
       },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
     },
     analytics: {
       scope: "breadcrumbs",

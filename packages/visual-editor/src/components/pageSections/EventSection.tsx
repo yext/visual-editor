@@ -39,10 +39,13 @@ export interface EventSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
     heading: {
       level: HeadingLevel;
       align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
     };
   };
   analytics?: {
@@ -80,17 +83,10 @@ const eventSectionFields: Fields<EventSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
       heading: YextField(msg("fields.heading", "Heading"), {
         type: "object",
         objectFields: {
-          level: YextField(msg("fields.headingLevel", "Level"), {
+          level: YextField(msg("fields.level", "Level"), {
             type: "select",
             hasSearch: true,
             options: "HEADING_LEVEL",
@@ -99,6 +95,23 @@ const eventSectionFields: Fields<EventSectionProps> = {
             type: "radio",
             options: ThemeOptions.ALIGNMENT,
           }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
         },
       }),
     },
@@ -118,18 +131,18 @@ const eventSectionFields: Fields<EventSectionProps> = {
 const EventCard = ({
   cardNumber,
   event,
-  backgroundColor,
+  cardStyles,
   sectionHeadingLevel,
 }: {
   cardNumber: number;
   event: EventStruct;
-  backgroundColor?: BackgroundStyle;
+  cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
   return (
     <Background
-      background={backgroundColor}
+      background={cardStyles.backgroundColor}
       className={`flex flex-col md:flex-row rounded-lg overflow-hidden h-fit md:h-64`}
     >
       <div className="lg:w-[45%] w-full h-full">
@@ -137,8 +150,11 @@ const EventCard = ({
           <div className="h-full">
             <Image
               image={event.image}
-              layout="auto"
-              aspectRatio={event.image.width / event.image.height}
+              aspectRatio={
+                event.image.width && event.image.height
+                  ? event.image.width / event.image.height
+                  : 1.78
+              }
             />
           </div>
         )}
@@ -146,7 +162,7 @@ const EventCard = ({
       <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
         {event.title && (
           <Heading
-            level={6}
+            level={cardStyles.headingLevel}
             semanticLevelOverride={
               sectionHeadingLevel < 6
                 ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -227,7 +243,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 key={index}
                 cardNumber={index}
                 event={event}
-                backgroundColor={styles.cardBackgroundColor}
+                cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
               />
             ))}
@@ -258,10 +274,13 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
       heading: {
         level: 2,
         align: "left",
+      },
+      cards: {
+        headingLevel: 3,
+        backgroundColor: backgroundColors.background1.value,
       },
     },
     analytics: {

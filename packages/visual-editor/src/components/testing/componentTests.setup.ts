@@ -4,26 +4,55 @@ import { defaultThemeConfig, applyTheme } from "@yext/visual-editor";
 import "./componentTests.css";
 // Enabled expect().toHaveNoViolations()
 import "jest-axe/extend-expect";
-import { BrowserPage } from "@vitest/browser/context";
+import { expect, vi } from "vitest";
+import { BrowserPage, commands, page } from "@vitest/browser/context";
 
-// Applies the theme variables
+// Applies the theme variables and mocks the date
 beforeEach(() => {
+  // July 1, 2025 Noon (month is 0-indexed)
+  vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
+
   const tag = document.createElement("style");
   const themeTags = applyTheme({}, defaultThemeConfig);
 
-  // we only need to load Open Sans for the tests
+  // don't load fonts
   const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);
   if (match && match[0]) {
-    const theme = `<link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-      ${match[0]}`;
+    const theme = match[0];
 
     document.head.appendChild(tag);
     tag.outerHTML = theme;
   } else {
     console.error("failed to apply theme");
   }
+});
+
+// Adds the toMatchScreenshot method to vitest's expect.
+// This portion is run in the browser environment while
+// compareScreenshot is run in the node environment.
+expect.extend({
+  async toMatchScreenshot(screenshotName: string) {
+    const updatedScreenshotData = await page.screenshot({
+      save: false,
+    });
+
+    const numDiffPixels = await commands.compareScreenshot(
+      screenshotName,
+      updatedScreenshotData
+    );
+
+    if (numDiffPixels > 0) {
+      return {
+        pass: false,
+        message: () => `Screenshots differed by ${numDiffPixels} pixels`,
+      };
+    }
+
+    return {
+      pass: true,
+      message: () => "Screenshots matched",
+    };
+  },
 });
 
 // jest-axe disabled color contrast checks by default because they are
@@ -36,23 +65,43 @@ export const axe = configureAxe({
 });
 
 // Each test will run once for each of the following viewports
-export const viewports = [
-  { name: "mobile", width: 375, height: 667 },
-  { name: "desktop", width: 1440, height: 900 },
-];
+export const viewports = {
+  mobile: { name: "mobile", width: 375, height: 667 },
+  desktop: { name: "desktop", width: 1440, height: 900 },
+};
+
+// Adds mobile and desktop viewports to tests if not specified
+export const transformTests = (tests: ComponentTest[]) => {
+  return tests.reduce((accumulator, test) => {
+    if (test.viewport) {
+      accumulator.push(test as ComponentTestWithViewport);
+    } else {
+      accumulator.push({ ...test, viewport: viewports.desktop });
+      accumulator.push({ ...test, viewport: viewports.mobile });
+    }
+
+    return accumulator;
+  }, [] as ComponentTestWithViewport[]);
+};
 
 export type ComponentTest = {
   name: string;
   document: Record<string, any>;
   version: number;
   props: Record<string, any>;
-  tests: (page: BrowserPage) => Promise<void>;
+  interactions?: (page: BrowserPage) => Promise<void>;
   viewport?: {
     name: string;
     width: number;
     height: number;
   };
 };
+
+export type ComponentTestWithViewport = ComponentTest &
+  Required<Pick<ComponentTest, "viewport">>;
+
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 // Shared Test Data
 export const testSite = {

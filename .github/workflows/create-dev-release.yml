@@ -1,0 +1,57 @@
+name: "Create Dev Release"
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+jobs:
+  create-dev-release:
+    # Only run for the 'create-dev-release' label
+    if: github.event.label.name == 'create-dev-release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: "Checkout PR code"
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: "Install pnpm"
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: "Install dependencies"
+        run: pnpm i --frozen-lockfile --ignore-scripts
+
+      - name: "Build package"
+        run: pnpm run build
+
+      - name: "Publish temporary version with pkg.pr.new"
+        run: pnpx pkg-pr-new publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: "Notify Starter Repo"
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.WEBSITE_REPO_PAT }}
+          repository: YextSolutions/pages-visual-editor-starter
+          event-type: dev-release-created
+          client-payload: >
+            {
+              "pr_number": "${{ github.event.pull_request.number }}",
+              "branch_name": "pr-${{ github.event.pull_request.number }}",
+              "pr_title": "${{ github.event.pull_request.title }}",
+              "pr_url": "${{ github.event.pull_request.html_url }}",
+              "author": "${{ github.event.pull_request.user.login }}",
+              "package_url": "https://pkg.pr.new/yext/visual-editor@${{ github.event.pull_request.number }}"
+            }

@@ -3,7 +3,8 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
+  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -21,9 +22,6 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...BannerSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Banner Text")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -44,9 +42,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Constant Text")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -66,9 +61,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("test")).toBeVisible();
-    },
   },
   {
     name: "version 1 props with entity values",
@@ -93,9 +85,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("Constant Text")).toBeVisible();
-    },
   },
   {
     name: "version 1 props with constant value",
@@ -119,15 +108,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("test")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("BannerSection", async () => {
@@ -139,14 +120,15 @@ describe("BannerSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
+      name,
       document,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -165,6 +147,7 @@ describe("BannerSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -172,10 +155,22 @@ describe("BannerSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      await delay(600);
+
+      await expect(
+        `BannerSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `BannerSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });
