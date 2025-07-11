@@ -254,7 +254,7 @@ export const Directory: ComponentConfig<DirectoryProps> = {
       objectFields: {
         directoryRoot: TranslatableStringField(
           msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-          "text"
+          { types: ["type.string"] }
         ),
       },
     }),

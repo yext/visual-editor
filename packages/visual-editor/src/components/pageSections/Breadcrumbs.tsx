@@ -30,7 +30,7 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
     objectFields: {
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        "text"
+        { types: ["type.string"] }
       ),
     },
   }),

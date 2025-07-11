@@ -41,24 +41,8 @@ import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18nPlatform.ts";
 import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
-import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
-import { SquarePlus } from "lucide-react";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
-import { useDocument } from "../hooks/useDocument.tsx";
-import { resolveYextEntityField } from "../utils/resolveYextEntityField.ts";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInputRounded,
-  CommandItem,
-  CommandList,
-} from "../internal/puck/ui/Command.tsx";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../internal/puck/ui/Popover.tsx";
+import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 
 const devLogger = new DevLogger();
 
@@ -313,35 +297,6 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
-  const entityFields = useEntityFields();
-  const document = useDocument();
-
-  const [open, setOpen] = React.useState(false);
-  const [cursorPosition, setCursorPosition] = React.useState<number | null>(
-    null
-  );
-
-  const entityFieldOptionsWithResolvedValue = React.useMemo(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
-    return filteredEntityFields.map((field) => {
-      const fieldToResolve: YextEntityField<unknown> = {
-        field: field.name,
-        constantValue: undefined,
-        constantValueEnabled: false,
-      };
-      const resolvedField = resolveYextEntityField(document, fieldToResolve);
-      return {
-        label: field.displayName ?? field.name,
-        value: field.name,
-        resolvedValue:
-          typeof resolvedField === "object"
-            ? JSON.stringify(resolvedField)
-            : resolvedField,
-        displayName: field.displayName ?? field.name,
-      };
-    });
-  }, [entityFields, filter, document]);
-
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
@@ -351,120 +306,22 @@ export const ConstantValueInput = <T extends Record<string, any>>({
 
   const isStringField = filter.types?.includes("type.string");
 
-  // When the user selects a field from the dropdown, we insert it into the input.
-  // If the cursor is inside an existing embedded field, we insert it at the end of
-  // that field.
-  const handleFieldSelect = (fieldName: string) => {
-    setOpen(false);
-    if (!fieldName) return;
-    const currentLocaleVal = value?.constantValue?.[locale] ?? "";
-    const textToInsert = `[[${fieldName}]]`;
-    let insertionPoint = cursorPosition ?? currentLocaleVal.length;
-
-    // Regex to find all instances of [[...]]
-    const embeddedFieldRegex = /\[\[.*?\]\]/g;
-
-    // Find if the cursor is inside any existing embedded field.
-    let match;
-    while ((match = embeddedFieldRegex.exec(currentLocaleVal)) !== null) {
-      const startIndex = match.index;
-      const endIndex = startIndex + match[0].length;
-
-      if (
-        cursorPosition !== null &&
-        cursorPosition > startIndex &&
-        cursorPosition < endIndex
-      ) {
-        // If cursor is inside an existing field, move the insertion point to the end of it.
-        insertionPoint = endIndex;
-        break;
-      }
-    }
-
-    // Create the new input value by inserting the new field at the insertion point.
-    const newLocaleVal = [
-      currentLocaleVal.slice(0, insertionPoint),
-      textToInsert,
-      currentLocaleVal.slice(insertionPoint),
-    ].join("");
-    onChange(
-      {
-        field: value?.field ?? "",
-        constantValue: {
-          ...value?.constantValue,
-          [locale]: newLocaleVal,
-        },
-        constantValueEnabled: true,
-      },
-      undefined
-    );
-    setCursorPosition(insertionPoint + textToInsert.length);
-  };
-
-  // If this is a string field, we render our own custom input.
-  // Otherwise, we fall back to the default AutoField for other types (images, CTAs, etc.).
   const fieldEditor = isStringField ? (
-    <div className="ve-relative ve-w-full ve-pt-3">
-      <input
-        type="text"
-        className="ve-w-full ve-text-gray-700 ve-text-sm ve-rounded ve-border ve-border-gray-300 ve-p-2 ve-pr-10" // Add padding-right for the button
+    <div className="ve-pt-3">
+      <EmbeddedFieldStringInput
         value={value?.constantValue?.[locale] ?? ""}
-        onClick={(e) => setCursorPosition(e.currentTarget.selectionStart)}
-        onKeyUp={(e) => setCursorPosition(e.currentTarget.selectionStart)}
-        onSelect={(e) => setCursorPosition(e.currentTarget.selectionStart)}
-        onChange={(e) => {
+        onChange={(newInputValue) => {
           onChange({
             field: value?.field ?? "",
             constantValue: {
               ...value?.constantValue,
-              [locale]: e.target.value,
+              [locale]: newInputValue,
             },
             constantValueEnabled: true,
           });
         }}
+        filter={filter}
       />
-      <div className="ve-relative ve-left-56 -ve-top-4 -ve-translate-y-1/2">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              className="ve-cursor-pointer ve-text-gray-700 hover:ve-text-gray-800"
-              aria-label={pt("addEntityField", "Add entity field")}
-            >
-              <SquarePlus size={20} />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="ve-w-[300px] ve-p-0 ve-bg-opacity-100 ve-bg-white">
-            <Command>
-              <CommandInputRounded placeholder={pt("search", "Search")} />
-              <CommandList>
-                <CommandEmpty>
-                  {pt("noMatchesFound", "No matches found.")}
-                </CommandEmpty>
-                <CommandGroup>
-                  {entityFieldOptionsWithResolvedValue.map((option) => (
-                    <CommandItem
-                      key={option.displayName}
-                      value={option.value}
-                      onSelect={() => handleFieldSelect(option.value)}
-                      className="ve-cursor-pointer ve-px-10 ve-py-3"
-                    >
-                      <div>
-                        <div>{option.label}</div>
-                        {option.resolvedValue && (
-                          <div className="ve-text-xs ve-text-gray-500">
-                            {option.resolvedValue.toString()}
-                          </div>
-                        )}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      </div>
     </div>
   ) : (
     <AutoField
@@ -497,7 +354,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 };
 
-const getFieldsForSelector = (
+export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: RenderEntityFieldFilter<any>
 ): YextSchemaField[] => {
