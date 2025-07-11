@@ -9,6 +9,7 @@ import { addCardStylesMigration } from "./0007_add_card_styles.ts";
 import { addBreadcrumbsDirectoryBackgroundMigration } from "./0008_add_breadcrumbs_directory_background.ts";
 import { addShowAverageReviewMigration } from "./0009_add_show_average_reviews.ts";
 import { updateExpandedHeaderStylesMigration } from "./0010_update_expanded_header_styles.ts";
+import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -26,4 +27,5 @@ export const migrationRegistry: MigrationRegistry = [
   addBreadcrumbsDirectoryBackgroundMigration,
   addShowAverageReviewMigration,
   updateExpandedHeaderStylesMigration,
+  addDirectoryTitleMigration,
 ];
