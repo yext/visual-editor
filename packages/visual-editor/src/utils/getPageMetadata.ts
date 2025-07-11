@@ -18,8 +18,7 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
   }
   const metaData: RootConfig = {};
   Object.keys(root).forEach((key: string) => {
-    metaData[key] =
-      resolveYextEntityField(document, undefined, root[key]) ?? "";
+    metaData[key] = resolveYextEntityField(document, root[key]) ?? "";
   });
   return metaData;
 }

@@ -140,8 +140,8 @@ export const MapboxStaticMapComponent = ({
 
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
-    i18n.language,
-    coordinateField
+    coordinateField,
+    i18n.language
   );
 
   if (!coordinate) {

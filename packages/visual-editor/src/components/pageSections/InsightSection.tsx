@@ -204,11 +204,11 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const document = useDocument();
   const resolvedInsights = resolveYextEntityField(
     document,
-    locale,
-    data.insights
+    data.insights,
+    locale
   );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, locale, data.heading),
+    resolveYextEntityField(document, data.heading, locale),
     i18n.language
   );
 

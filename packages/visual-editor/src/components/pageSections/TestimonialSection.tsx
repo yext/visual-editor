@@ -179,11 +179,11 @@ const TestimonialSectionWrapper = ({
   const document = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
     document,
-    locale,
-    data.testimonials
+    data.testimonials,
+    locale
   );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, locale, data.heading),
+    resolveYextEntityField(document, data.heading, locale),
     i18n.language
   );
 

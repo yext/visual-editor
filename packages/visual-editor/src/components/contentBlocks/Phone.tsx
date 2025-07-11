@@ -45,8 +45,8 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   const document = useDocument();
   const resolvedPhone = resolveYextEntityField<string>(
     document,
-    i18n.language,
-    phone
+    phone,
+    i18n.language
   );
 
   if (!resolvedPhone) {

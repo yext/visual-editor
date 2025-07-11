@@ -41,7 +41,7 @@ const AddressComponent = ({
 }: AddressProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
-  const address = resolveYextEntityField(document, i18n.language, addressField);
+  const address = resolveYextEntityField(document, addressField, i18n.language);
   const coordinates = getDirections(
     address as AddressType,
     undefined,

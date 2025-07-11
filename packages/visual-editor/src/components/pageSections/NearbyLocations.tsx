@@ -299,11 +299,11 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   const { relativePrefixToRoot } = useTemplateProps<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
-    locale,
-    data?.coordinate
+    data?.coordinate,
+    locale
   );
   const headingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, locale, data?.heading),
+    resolveYextEntityField<TranslatableString>(document, data?.heading, locale),
     locale
   );
 

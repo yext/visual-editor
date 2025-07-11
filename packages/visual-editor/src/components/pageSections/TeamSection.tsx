@@ -235,9 +235,9 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const document = useDocument();
-  const resolvedPeople = resolveYextEntityField(document, locale, data.people);
+  const resolvedPeople = resolveYextEntityField(document, data.people, locale);
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, locale, data.heading),
+    resolveYextEntityField(document, data.heading, locale),
     i18n.language
   );
 

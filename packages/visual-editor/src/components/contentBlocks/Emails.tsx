@@ -45,8 +45,8 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   const document = useDocument();
   let resolvedEmailList = resolveYextEntityField(
     document,
-    i18n.language,
-    emailListField
+    emailListField,
+    i18n.language
   );
   if (!resolvedEmailList) {
     return;

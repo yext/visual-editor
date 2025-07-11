@@ -38,8 +38,8 @@ const GetDirectionsComponent = ({
   const document = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
-    i18n.language,
-    coordinateField
+    coordinateField,
+    i18n.language
   );
   if (!coordinate) {
     console.warn("yextDisplayCoordinate is not present in the stream");

@@ -75,7 +75,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const locale = i18n.language;
   const document = useDocument();
   const resolvedText = resolveTranslatableRichText(
-    resolveYextEntityField<TranslatableRichText>(document, locale, data.text),
+    resolveYextEntityField<TranslatableRichText>(document, data.text, locale),
     locale
   );
 

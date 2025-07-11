@@ -138,8 +138,8 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const document = useDocument();
   const resolvedPromo = resolveYextStructField(
     document,
-    i18n.language,
-    data?.promo
+    data?.promo,
+    i18n.language
   );
 
   const justifyClass = styles?.heading?.align

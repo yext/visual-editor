@@ -200,11 +200,11 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const document = useDocument();
   const resolvedProducts = resolveYextEntityField(
     document,
-    locale,
-    data.products
+    data.products,
+    locale
   );
   const resolvedHeading = resolveTranslatableRichText(
-    resolveYextEntityField(document, locale, data.heading),
+    resolveYextEntityField(document, data.heading, locale),
     i18n.language
   );
 

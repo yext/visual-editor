@@ -161,11 +161,11 @@ const PhotoGallerySectionComponent = ({
   const locale = i18n.language;
   const document = useDocument();
   const sectionHeading = resolveTranslatableString(
-    resolveYextEntityField(document, locale, data.heading),
+    resolveYextEntityField(document, data.heading, locale),
     i18n.language
   );
 
-  const resolvedImages = resolveYextEntityField(document, locale, data.images);
+  const resolvedImages = resolveYextEntityField(document, data.images, locale);
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
     .filter(

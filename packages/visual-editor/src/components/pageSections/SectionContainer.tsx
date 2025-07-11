@@ -80,8 +80,8 @@ const SectionContainerComponent = (
   const resolvedHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
       document,
-      locale,
-      sectionHeading.text
+      sectionHeading.text,
+      locale
     ),
     locale
   );

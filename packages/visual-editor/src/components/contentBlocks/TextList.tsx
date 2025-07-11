@@ -32,8 +32,8 @@ const TextListComponent: React.FC<TextListProps> = ({
   const document = useDocument();
   let resolvedTextList = resolveYextEntityField(
     document,
-    i18n.language,
-    textListField
+    textListField,
+    i18n.language
   );
 
   // When constantValueEnabled is true but no constant values have been set yet, show defaults

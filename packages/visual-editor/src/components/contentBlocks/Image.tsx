@@ -68,8 +68,8 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   const document = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
     document,
-    i18n.language,
-    imageField
+    imageField,
+    i18n.language
   );
 
   if (!resolvedImage) {
