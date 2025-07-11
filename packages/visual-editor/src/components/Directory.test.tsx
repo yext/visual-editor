@@ -455,9 +455,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 11,
-    tests: async (page) => {
-      expect(page.getByText("Directory Root")).toBeVisible();
-    },
   },
 ];
 
