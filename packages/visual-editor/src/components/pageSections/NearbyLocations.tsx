@@ -317,11 +317,13 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   // parse variables from document
   const {
     businessId,
+    entityId,
     apiKey,
     contentEndpointId,
     contentDeliveryAPIDomain,
   }: {
     businessId: string;
+    entityId: string;
     apiKey: string;
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
@@ -335,6 +337,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
       queryKey: [
         "NearbyLocations",
         businessId,
+        entityId,
         apiKey,
         contentEndpointId,
         contentDeliveryAPIDomain,
@@ -346,6 +349,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
       queryFn: async () => {
         return await fetchNearbyLocations({
           businessId: businessId,
+          entityId: entityId,
           apiKey: apiKey,
           contentEndpointId: contentEndpointId,
           contentDeliveryAPIDomain: contentDeliveryAPIDomain,
@@ -354,11 +358,11 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
           radiusMi: data?.radius,
           limit: data?.limit,
           locale: i18n.language,
-          currentLocationId: document.id,
         });
       },
       enabled:
         !!businessId &&
+        !!entityId &&
         !!apiKey &&
         !!contentEndpointId &&
         !!contentDeliveryAPIDomain &&
@@ -418,6 +422,7 @@ function parseDocument(
   contentEndpointIdEnvVar?: string
 ): {
   businessId: string;
+  entityId: string;
   apiKey: string;
   contentEndpointId: string;
   contentDeliveryAPIDomain: string;
@@ -426,6 +431,12 @@ function parseDocument(
   const businessId: string = document?.businessId;
   if (!businessId) {
     console.warn("Missing businessId! Unable to fetch nearby locations.");
+  }
+
+  // read entityId
+  const entityId: string = document?.id;
+  if (!entityId) {
+    console.warn("Missing entityId! Unable to fetch nearby locations.");
   }
 
   // read API key
@@ -465,6 +476,7 @@ function parseDocument(
 
   return {
     businessId: businessId,
+    entityId: entityId,
     apiKey: apiKey,
     contentEndpointId: contentEndpointId,
     contentDeliveryAPIDomain: contentDeliveryAPIDomain,
