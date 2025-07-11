@@ -34,10 +34,11 @@ const GetDirectionsComponent = ({
   variant,
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
+    i18n.language,
     coordinateField
   );
   if (!coordinate) {

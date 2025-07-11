@@ -291,39 +291,50 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const document = useDocument();
   const addressHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.info.headingText),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      document,
+      locale,
+      data.info.headingText
+    ),
+    locale
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
     document,
+    locale,
     data.info.address
   );
   const resolvedEmails = resolveYextEntityField<string[]>(
     document,
+    locale,
     data.info.emails
   );
   const hoursHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
       document,
+      locale,
       data.hours.headingText
     ),
     i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
+    locale,
     data.hours.hours
   );
   const servicesHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
       document,
+      locale,
       data.services.headingText
     ),
     i18n.language
   );
   const servicesList = resolveYextEntityField<TranslatableString[]>(
     document,
+    locale,
     data.services.servicesList
   )?.map((translatableString: TranslatableString) =>
     resolveTranslatableString(translatableString, i18n.language)
@@ -407,6 +418,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             {data.info.phoneNumbers.map((item, idx) => {
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
+                locale,
                 item.number
               );
               if (!resolvedNumber) {

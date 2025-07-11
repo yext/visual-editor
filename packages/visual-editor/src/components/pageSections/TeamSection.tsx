@@ -214,10 +214,11 @@ const PersonCard = ({
 
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const { i18n } = useTranslation();
+  const locale = i18n.language;
   const document = useDocument();
-  const resolvedPeople = resolveYextEntityField(document, data.people);
+  const resolvedPeople = resolveYextEntityField(document, locale, data.people);
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(document, locale, data.heading),
     i18n.language
   );
 

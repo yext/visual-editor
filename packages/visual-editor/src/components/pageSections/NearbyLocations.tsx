@@ -282,14 +282,16 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
   const { relativePrefixToRoot } = useTemplateProps<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
+    locale,
     data?.coordinate
   );
   const headingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(document, locale, data?.heading),
+    locale
   );
 
   // parse variables from document

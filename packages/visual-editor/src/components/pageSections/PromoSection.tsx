@@ -127,7 +127,11 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
   const document = useDocument();
-  const resolvedPromo = resolveYextStructField(document, data?.promo);
+  const resolvedPromo = resolveYextStructField(
+    document,
+    i18n.language,
+    data?.promo
+  );
 
   const justifyClass = styles?.heading?.align
     ? {

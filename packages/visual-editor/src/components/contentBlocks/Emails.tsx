@@ -41,9 +41,13 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   includeHyperlink,
   listLength,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const document = useDocument();
-  let resolvedEmailList = resolveYextEntityField(document, emailListField);
+  let resolvedEmailList = resolveYextEntityField(
+    document,
+    i18n.language,
+    emailListField
+  );
   if (!resolvedEmailList) {
     return;
   } else if (!Array.isArray(resolvedEmailList)) {

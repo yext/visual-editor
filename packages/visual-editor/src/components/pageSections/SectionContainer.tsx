@@ -75,10 +75,15 @@ const SectionContainerComponent = (
   const { background, sectionHeading } = props;
   const document = useDocument();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   const resolvedHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, sectionHeading.text),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      document,
+      locale,
+      sectionHeading.text
+    ),
+    locale
   );
 
   const justifyClass = {

@@ -180,11 +180,12 @@ const EventCard = ({
 
 const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   const { i18n } = useTranslation();
+  const locale = i18n.language;
   const { data, styles } = props;
   const document = useDocument();
-  const resolvedEvents = resolveYextEntityField(document, data.events);
+  const resolvedEvents = resolveYextEntityField(document, locale, data.events);
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(document, locale, data.heading),
     i18n.language
   );
 

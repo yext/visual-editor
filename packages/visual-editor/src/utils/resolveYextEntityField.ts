@@ -3,6 +3,7 @@ import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
 export const resolveYextEntityField = <T>(
   document: any,
+  locale: string | undefined,
   entityField: YextEntityField<T>
 ): T | undefined => {
   if (
@@ -19,7 +20,8 @@ export const resolveYextEntityField = <T>(
   if (entityField.constantValueEnabled && entityField.constantValue) {
     return resolveEmbeddedFieldsRecursively(
       entityField.constantValue,
-      document
+      document,
+      locale
     ) as T;
   }
 
@@ -59,7 +61,8 @@ export const resolveYextEntityField = <T>(
  */
 const resolveEmbeddedFieldsInString = (
   stringToResolve: string,
-  document: any
+  document: any,
+  locale: string | undefined
 ): string => {
   const embeddedFieldRegex = /\[\[(\S+?)\]\]/g;
   return stringToResolve.replace(embeddedFieldRegex, (match, fieldName) => {
@@ -75,7 +78,11 @@ const resolveEmbeddedFieldsInString = (
       constantValueEnabled: false,
     };
 
-    const resolvedValue = resolveYextEntityField(document, embeddedEntityField);
+    const resolvedValue = resolveYextEntityField(
+      document,
+      locale,
+      embeddedEntityField
+    );
 
     if (resolvedValue === undefined || resolvedValue === null) {
       // If an embedded field can't be resolved, replace it with an empty string.
@@ -98,7 +105,11 @@ const resolveEmbeddedFieldsInString = (
  * @param document The entity document to use for resolving fields.
  * @returns The data with embedded fields resolved.
  */
-const resolveEmbeddedFieldsRecursively = (data: any, document: any): any => {
+const resolveEmbeddedFieldsRecursively = (
+  data: any,
+  document: any,
+  locale: string | undefined
+): any => {
   // If data is not an object (e.g., string, number, boolean), return it as is.
   if (typeof data !== "object" || data === null) {
     return data;
@@ -106,10 +117,10 @@ const resolveEmbeddedFieldsRecursively = (data: any, document: any): any => {
 
   // Handle arrays by recursively calling this function on each item.
   if (Array.isArray(data)) {
-    return data.map((item) => resolveEmbeddedFieldsRecursively(item, document));
+    return data.map((item) =>
+      resolveEmbeddedFieldsRecursively(item, document, locale)
+    );
   }
-
-  const locale = document?.locale as string | undefined;
 
   // First, check if the object itself is a translatable shape that needs resolution.
   if (data.hasLocalizedValue === "true" && locale && data[locale]) {
@@ -117,7 +128,8 @@ const resolveEmbeddedFieldsRecursively = (data: any, document: any): any => {
     if (typeof data[locale] === "string") {
       const resolvedString = resolveEmbeddedFieldsInString(
         data[locale],
-        document
+        document,
+        locale
       );
       return { ...data, [locale]: resolvedString };
     }
@@ -130,7 +142,8 @@ const resolveEmbeddedFieldsRecursively = (data: any, document: any): any => {
     ) {
       const resolvedHtml = resolveEmbeddedFieldsInString(
         data[locale].html,
-        document
+        document,
+        locale
       );
       return {
         ...data,
@@ -142,26 +155,31 @@ const resolveEmbeddedFieldsRecursively = (data: any, document: any): any => {
   // If it's a generic object, recursively call this function on all its values.
   const newData: { [key: string]: any } = {};
   for (const key in data) {
-    newData[key] = resolveEmbeddedFieldsRecursively(data[key], document);
+    newData[key] = resolveEmbeddedFieldsRecursively(
+      data[key],
+      document,
+      locale
+    );
   }
   return newData;
 };
 
 export const resolveYextStructField = <T extends Record<string, any>>(
   document: any,
+  locale: string | undefined,
   entityField: YextStructEntityField<T>
 ): T | undefined => {
   // If the entire struct is a constant value, resolveYextEntityField will recursively
   // resolve all embedded fields within it. We can just return that result.
   if (entityField.constantValueEnabled) {
-    return resolveYextEntityField(document, entityField);
+    return resolveYextEntityField(document, locale, entityField);
   }
 
   // Otherwise, the struct is based on an entity field, with some properties
   // potentially being overridden by constant values.
 
   // 1. Get the base struct from the entity field path.
-  const baseStructFromEntity = resolveYextEntityField(document, {
+  const baseStructFromEntity = resolveYextEntityField(document, locale, {
     ...entityField,
     // Temporarily disable constant value to ensure we get the entity field value.
     constantValueEnabled: false,
@@ -170,7 +188,8 @@ export const resolveYextStructField = <T extends Record<string, any>>(
   // 2. Resolve any embedded fields that might exist in the constant values.
   const resolvedConstantValues = resolveEmbeddedFieldsRecursively(
     entityField.constantValue,
-    document
+    document,
+    locale
   );
 
   // 3. Start with the base entity value and merge in the overrides.

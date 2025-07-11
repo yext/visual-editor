@@ -184,10 +184,15 @@ const ProductCard = ({
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
+  const locale = i18n.language;
   const document = useDocument();
-  const resolvedProducts = resolveYextEntityField(document, data.products);
+  const resolvedProducts = resolveYextEntityField(
+    document,
+    locale,
+    data.products
+  );
   const resolvedHeading = resolveTranslatableRichText(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(document, locale, data.heading),
     i18n.language
   );
 

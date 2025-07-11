@@ -168,23 +168,30 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const document = useDocument() as any;
   const resolvedBusinessName = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.businessName),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      document,
+      locale,
+      data?.businessName
+    ),
+    locale
   );
   const resolvedLocalGeoModifier = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
       document,
+      locale,
       data?.localGeoModifier
     ),
-    i18n.language
+    locale
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
+    locale,
     data?.hours
   );
-  const resolvedHero = resolveYextStructField(document, data?.hero);
+  const resolvedHero = resolveYextStructField(document, locale, data?.hero);
 
   const { timezone } = document as {
     timezone: string;
