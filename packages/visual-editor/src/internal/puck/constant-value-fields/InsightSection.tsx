@@ -63,14 +63,14 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("name", "Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("category", "Category"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 

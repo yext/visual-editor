@@ -64,14 +64,14 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.name", "Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.category", "Category"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 

@@ -38,6 +38,31 @@ const CommandInput = React.forwardRef<
 
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 
+const CommandInputRounded = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Input>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
+>(({ className, ...props }, ref) => (
+  <div className="ve-px-4">
+    <div className="ve-py-4 ve-border-b">
+      <div className="ve-border ve-rounded-xl">
+        <div className="ve-flex ve-items-center ve-px-3">
+          <Search className="ve-mr-2 ve-h-4 ve-w-4 ve-shrink-0 ve-opacity-50" />
+          <CommandPrimitive.Input
+            ref={ref}
+            className={cn(
+              "ve-flex ve-h-10 ve-w-full ve-rounded-sm ve-bg-transparent ve-py-3 ve-text-sm ve-outline-none placeholder:ve-text-muted-foreground disabled:ve-cursor-not-allowed disabled:ve-opacity-50",
+              className
+            )}
+            {...props}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+));
+
+CommandInputRounded.displayName = CommandPrimitive.Input.displayName;
+
 const CommandList = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>
@@ -132,6 +157,7 @@ CommandShortcut.displayName = "CommandShortcut";
 export {
   Command,
   CommandInput,
+  CommandInputRounded,
   CommandList,
   CommandEmpty,
   CommandGroup,

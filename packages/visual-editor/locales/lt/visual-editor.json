@@ -1,5 +1,6 @@
 {
   "Link": "Nuoroda",
+  "addEntityField": "Pridėti subjekto lauką",
   "address": "Adresas",
   "addressInput": {
     "city": "Miestas",

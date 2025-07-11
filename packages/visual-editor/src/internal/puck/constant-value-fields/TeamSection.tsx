@@ -57,14 +57,14 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.name", "Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.title", "Title"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 

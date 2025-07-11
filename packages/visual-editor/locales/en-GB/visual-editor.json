@@ -1,5 +1,6 @@
 {
   "Link": "Link",
+  "addEntityField": "Add entity field",
   "address": "Address",
   "addressInput": {
     "city": "City",

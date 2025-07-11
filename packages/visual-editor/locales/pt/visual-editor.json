@@ -1,5 +1,6 @@
 {
   "Link": "Link",
+  "addEntityField": "Adicione o campo da entidade",
   "address": "Endereço",
   "addressInput": {
     "city": "Cidade",

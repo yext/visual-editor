@@ -96,10 +96,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -114,10 +113,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -141,10 +139,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -195,10 +192,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(
-                    msg("fields.label", "Label"),
-                    "text"
-                  ),
+                  label: TranslatableStringField(msg("fields.label", "Label"), {
+                    types: ["type.string"],
+                  }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),

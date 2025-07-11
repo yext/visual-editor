@@ -1,5 +1,6 @@
 {
   "Link": "Linkki",
+  "addEntityField": "Lisää entiteettikenttä",
   "address": "Osoite",
   "addressInput": {
     "city": "Kaupunki",

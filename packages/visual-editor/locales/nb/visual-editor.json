@@ -1,5 +1,6 @@
 {
   "Link": "Lenke",
+  "addEntityField": "Legg til enhetsfelt",
   "address": "Adresse",
   "addressInput": {
     "city": "By",

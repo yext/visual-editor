@@ -40,7 +40,7 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
     const labelField = useMemo(() => {
       return TranslatableStringField<TranslatableString | undefined>(
         msg("label", "Label"),
-        "text"
+        { types: ["type.string"] }
       );
     }, []);
 
@@ -80,7 +80,7 @@ export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const labelField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.label", "Label"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 

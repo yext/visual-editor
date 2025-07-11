@@ -1,5 +1,6 @@
 {
   "Link": "Odkaz",
+  "addEntityField": "Přidat pole entity",
   "address": "Adresa",
   "addressInput": {
     "city": "Město",

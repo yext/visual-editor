@@ -48,7 +48,9 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const questionField = useMemo(() => {
-    return TranslatableStringField(msg("fields.question", "Question"), "text");
+    return TranslatableStringField(msg("fields.question", "Question"), {
+      types: ["type.string"],
+    });
   }, []);
 
   const answerField = useMemo(() => {

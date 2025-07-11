@@ -1,5 +1,6 @@
 {
   "Link": "Link",
+  "addEntityField": "Adja hozzá az entitás mezőt",
   "address": "Cím",
   "addressInput": {
     "city": "Város",
