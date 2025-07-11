@@ -7,7 +7,7 @@ import {
   extractInUseFontFamilies,
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
-import { hexToHSL } from "./colors.ts";
+import { isDarkColor } from "./colors.ts";
 import { googleFontLinkTags } from "./visualEditorFonts";
 
 export type Document = {
@@ -64,6 +64,7 @@ const internalApplyTheme = (
 
   const themeValuesToApply = {
     ...mergedThemeValues,
+    ...colorScheme,
     ...generateContrastingColors(mergedThemeValues),
   };
 
@@ -86,16 +87,30 @@ const internalApplyTheme = (
 const generateContrastingColors = (themeData: ThemeData) => {
   const contrastingColors: Record<string, string> = {};
   Object.entries(themeData).forEach(([cssVariableName, value]) => {
-    if (cssVariableName.includes("--colors")) {
-      const hsl = hexToHSL(value);
-      if (hsl && hsl[2] >= 50) {
-        contrastingColors[cssVariableName + "-contrast"] = "#000000";
-      } else if (hsl) {
+    if (cssVariableName.includes("--colors") && value.startsWith("#")) {
+      if (isDarkColor(value)) {
         contrastingColors[cssVariableName + "-contrast"] = "#FFFFFF";
+      } else {
+        contrastingColors[cssVariableName + "-contrast"] = "#000000";
       }
     }
   });
   return contrastingColors;
+};
+
+const colorScheme = {
+  "--colors-palette-primary-light":
+    "hsl(from var(--colors-palette-primary) h s 98)",
+  "--colors-palette-secondary-light":
+    "hsl(from var(--colors-palette-secondary) h s 98)",
+  "--colors-palette-tertiary-light":
+    "hsl(from var(--colors-palette-tertiary) h s 98)",
+  "--colors-palette-quaternary-light":
+    "hsl(from var(--colors-palette-quaternary) h s 98)",
+  "--colors-palette-primary-dark":
+    "hsl(from var(--colors-palette-primary) h s 20)",
+  "--colors-palette-secondary-dark":
+    "hsl(from var(--colors-palette-secondary) h s 20)",
 };
 
 export const updateThemeInEditor = async (

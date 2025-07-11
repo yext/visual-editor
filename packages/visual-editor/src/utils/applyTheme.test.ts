@@ -3,6 +3,14 @@ import { applyTheme, Document } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { defaultGoogleFontsLinkTags } from "./font_registry.js";
 
+const paletteVariables =
+  "--colors-palette-primary-light:hsl(from var(--colors-palette-primary) h s 98) !important;" +
+  "--colors-palette-secondary-light:hsl(from var(--colors-palette-secondary) h s 98) !important;" +
+  "--colors-palette-tertiary-light:hsl(from var(--colors-palette-tertiary) h s 98) !important;" +
+  "--colors-palette-quaternary-light:hsl(from var(--colors-palette-quaternary) h s 98) !important;" +
+  "--colors-palette-primary-dark:hsl(from var(--colors-palette-primary) h s 20) !important;" +
+  "--colors-palette-secondary-dark:hsl(from var(--colors-palette-secondary) h s 20) !important";
+
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
     const document: Document = {
@@ -19,7 +27,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
+        "--borderRadius-border-sm:4px !important;" +
+        paletteVariables +
         "}</style>"
     );
   });
@@ -44,7 +53,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:20px !important;" +
-        "--borderRadius-border-sm:4px !important" +
+        "--borderRadius-border-sm:4px !important;" +
+        paletteVariables +
         "}</style>"
     );
   });
@@ -59,7 +69,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
+        "--borderRadius-border-sm:4px !important;" +
+        paletteVariables +
         "}</style>"
     );
   });
@@ -85,7 +96,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
+        "--borderRadius-border-sm:4px !important;" +
+        paletteVariables +
         "}</style>"
     );
   });
@@ -111,7 +123,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
+        "--borderRadius-border-sm:4px !important;" +
+        paletteVariables +
         "}</style>"
     );
   });
@@ -139,6 +152,8 @@ describe("buildCssOverridesStyle", () => {
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-primary:#7ED321 !important;" +
+        paletteVariables +
+        ";" +
         "--colors-palette-primary-contrast:#FFFFFF !important" +
         "}</style>"
     );

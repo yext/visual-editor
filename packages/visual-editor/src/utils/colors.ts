@@ -1,3 +1,5 @@
+import { BackgroundStyle } from "./themeConfigOptions";
+
 /**
  * hexToRGB converts a hex color to rgb
  * @param H hex string beginning with '#'
@@ -156,4 +158,42 @@ export const getContrastingColor = (
 
   // If neither is sufficiently contrasting, or there was an error, fallback to black
   return `#000000`;
+};
+
+/**
+ * isDarkColor converts a hex color to hsl and determines
+ * if it is closer to white or black.
+ */
+export const isDarkColor = (hex: string): boolean => {
+  const hsl = hexToHSL(hex);
+  return Boolean(hsl && hsl[2] < 50);
+};
+
+/**
+ * isDarkBackground takes a BackgroundStyle, looks up the corresponding
+ * color css variable, and determines if it is closer to white or black,
+ */
+export const isDarkBackground = (background?: BackgroundStyle): boolean => {
+  try {
+    if (!background || !window.document) {
+      return false;
+    }
+
+    // Manually set values (palette colors)
+    if (background.textColor === "text-white") {
+      return true;
+    }
+    if (background.textColor === "text-black") {
+      return false;
+    }
+
+    // Dynamically set values (brand colors)
+    const bgValue = window
+      .getComputedStyle(window.document.getElementsByClassName("components")[0])
+      .getPropertyValue(background.bgColor.replace("bg-", "--colors-"));
+
+    return isDarkColor(bgValue);
+  } catch {
+    return false;
+  }
 };

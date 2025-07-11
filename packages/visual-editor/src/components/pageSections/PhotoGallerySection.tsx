@@ -31,6 +31,7 @@ import {
   msg,
   pt,
   ThemeOptions,
+  isDarkBackground,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -70,7 +71,7 @@ const DynamicChildColors = ({
   category,
 }: DynamicChildColorsProps) => {
   const background = useBackground();
-  const hasDarkBackground = background?.textColor === "text-white";
+  const hasDarkBackground = isDarkBackground(background);
 
   const dynamicClasses =
     category === "slide"

@@ -1,7 +1,11 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn, useBackground } from "@yext/visual-editor";
+import {
+  isDarkBackground,
+  themeManagerCn,
+  useBackground,
+} from "@yext/visual-editor";
 
 export const buttonVariants = cva(
   "components h-fit flex items-center justify-center whitespace-nowrap",
@@ -90,8 +94,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const background = useBackground();
-    const hasDarkBackground =
-      background && background.textColor === "text-white";
+    const hasDarkBackground = isDarkBackground(background);
 
     return (
       <Comp

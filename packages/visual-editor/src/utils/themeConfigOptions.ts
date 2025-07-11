@@ -161,15 +161,12 @@ const headingLevelOptions: { label: string; value: HeadingLevel }[] = [
 // to use in the tailwind.config.ts in conjunction with themeResolver and the theme.config
 export const defaultThemeTailwindExtensions = {
   colors: {
-    "palette-primary-light": "hsl(from var(--colors-palette-primary) h s 98)",
-    "palette-secondary-light":
-      "hsl(from var(--colors-palette-secondary) h s 98)",
-    "palette-tertiary-light": "hsl(from var(--colors-palette-tertiary) h s 98)",
-    "palette-quaternary-light":
-      "hsl(from var(--colors-palette-quaternary) h s 98)",
-    "palette-primary-dark": "hsl(from var(--colors-palette-primary) h s 20)",
-    "palette-secondary-dark":
-      "hsl(from var(--colors-palette-secondary) h s 20)",
+    "palette-primary-light": "var(--colors-palette-primary-light)",
+    "palette-secondary-light": "var(--colors-palette-secondary-light)",
+    "palette-tertiary-light": "var(--colors-palette-tertiary-light)",
+    "palette-quaternary-light": "var(--colors-palette-quaternary-light)",
+    "palette-primary-dark": "var(--colors-palette-primary-dark)",
+    "palette-secondary-dark": "var(--colors-palette-secondary-dark)",
     "palette-primary-contrast": "var(--colors-palette-primary-contrast)",
     "palette-secondary-contrast": "var(--colors-palette-secondary-contrast)",
     "palette-tertiary-contrast": "var(--colors-palette-tertiary-contrast)",

@@ -49,3 +49,4 @@ export {
   msg,
   pt,
 } from "./i18nPlatform.ts";
+export { isDarkBackground } from "./colors.ts";
