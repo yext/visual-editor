@@ -398,7 +398,7 @@ const tests: ComponentTest[] = [
     version: 8,
   },
   {
-    name: "version 10 with default props",
+    name: "version 11 with default props",
     document: {
       _site: {
         name: "Example Business",
@@ -454,7 +454,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 10,
+    version: 11,
     tests: async (page) => {
       expect(page.getByText("Directory Root")).toBeVisible();
     },
