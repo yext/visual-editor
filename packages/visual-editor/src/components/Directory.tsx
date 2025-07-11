@@ -23,6 +23,7 @@ import {
   AnalyticsScopeProvider,
   HoursStatus,
 } from "@yext/pages-components";
+import { useTranslation } from "react-i18next";
 
 export interface DirectoryProps {
   data: {
@@ -124,7 +125,8 @@ const DirectoryCard = ({
   profile: any;
   cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
-  const { document, relativePrefixToRoot } = useTemplateProps();
+  const { relativePrefixToRoot } = useTemplateProps();
+  const { i18n } = useTranslation();
 
   return (
     <Background
@@ -136,7 +138,7 @@ const DirectoryCard = ({
           eventName={`link${cardNumber}`}
           alwaysHideCaret={true}
           className="mb-2"
-          href={getLocationPath(profile, document, relativePrefixToRoot)}
+          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
         >
           <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}

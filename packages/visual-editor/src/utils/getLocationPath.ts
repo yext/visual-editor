@@ -9,7 +9,7 @@ interface LocationDocument extends Record<string, any> {
 
 export const getLocationPath = (
   location: LocationDocument,
-  document: Record<string, any>,
+  locale: string,
   relativePrefixToRoot: string | undefined
 ): string | undefined => {
   if (!location || (!location.slug && !location.address && !location.id)) {
@@ -19,8 +19,6 @@ export const getLocationPath = (
   if (location.slug) {
     return `${relativePrefixToRoot ?? ""}${location.slug}`;
   }
-
-  const locale = document.locale;
 
   const localePath = locale !== "en" ? `${locale}/` : "";
   const path = location.address

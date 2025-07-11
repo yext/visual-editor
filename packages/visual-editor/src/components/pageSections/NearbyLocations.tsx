@@ -232,7 +232,8 @@ const LocationCard = ({
   id: string;
   slug?: string;
 }) => {
-  const { document, relativePrefixToRoot } = useTemplateProps();
+  const { relativePrefixToRoot } = useTemplateProps();
+  const { i18n } = useTranslation();
 
   return (
     <Background
@@ -246,7 +247,7 @@ const LocationCard = ({
         className="mb-2"
         href={getLocationPath(
           { address, slug, id },
-          document,
+          i18n.language,
           relativePrefixToRoot
         )}
       >
@@ -352,6 +353,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
           longitude: coordinate?.longitude || 0,
           radiusMi: data?.radius,
           limit: data?.limit,
+          locale: i18n.language,
         });
       },
       enabled:

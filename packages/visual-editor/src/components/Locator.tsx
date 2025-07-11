@@ -535,7 +535,7 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
 const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { document, relativePrefixToRoot } = useTemplateProps();
 
   const location = result.rawData;
@@ -644,7 +644,11 @@ const LocationCard: CardComponent<Location> = ({
         </div>
         <Button asChild className="basis-full" variant="primary">
           <a
-            href={getLocationPath(location, document, relativePrefixToRoot)}
+            href={getLocationPath(
+              location,
+              i18n.language,
+              relativePrefixToRoot
+            )}
             onClick={handleVisitPageClick}
           >
             {t("visitPage", "Visit Page")}

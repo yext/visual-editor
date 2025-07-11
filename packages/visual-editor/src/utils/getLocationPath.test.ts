@@ -4,27 +4,15 @@ import { getLocationPath } from "./getLocationPath.ts";
 describe("getLocationPath", () => {
   it("returns slug paths", () => {
     expect(
-      getLocationPath(
-        { slug: "my-slug", id: "location1" },
-        { locale: "en" },
-        ""
-      )
+      getLocationPath({ slug: "my-slug", id: "location1" }, "en", "")
     ).toBe("my-slug");
 
     expect(
-      getLocationPath(
-        { slug: "my-slug", id: "location1" },
-        { locale: "es" },
-        ""
-      )
+      getLocationPath({ slug: "my-slug", id: "location1" }, "es", "")
     ).toBe("my-slug");
 
     expect(
-      getLocationPath(
-        { slug: "my-slug", id: "location1" },
-        { locale: "en" },
-        "../../"
-      )
+      getLocationPath({ slug: "my-slug", id: "location1" }, "en", "../../")
     ).toBe("../../my-slug");
   });
 
@@ -41,7 +29,7 @@ describe("getLocationPath", () => {
           },
           id: "location1",
         },
-        { locale: "en" },
+        "en",
         ""
       )
     ).toBe("va/arlington/1101-wilson-blvd-location1");
@@ -58,7 +46,7 @@ describe("getLocationPath", () => {
           },
           id: "location1",
         },
-        { locale: "es" },
+        "es",
         ""
       )
     ).toBe("es/va/arlington/1101-wilson-blvd-location1");
@@ -75,24 +63,20 @@ describe("getLocationPath", () => {
           },
           id: "location1",
         },
-        { locale: "en" },
+        "en",
         "../"
       )
     ).toBe("../va/arlington/1101-wilson-blvd-location1");
   });
 
   it("returns id-based paths", () => {
-    expect(getLocationPath({ id: "location1" }, { locale: "en" }, "")).toBe(
-      "location1"
-    );
+    expect(getLocationPath({ id: "location1" }, "en", "")).toBe("location1");
 
-    expect(getLocationPath({ id: "location1" }, { locale: "es" }, "")).toBe(
-      "es/location1"
-    );
+    expect(getLocationPath({ id: "location1" }, "es", "")).toBe("es/location1");
 
-    expect(
-      getLocationPath({ id: "location1" }, { locale: "en" }, "../../../")
-    ).toBe("../../../location1");
+    expect(getLocationPath({ id: "location1" }, "en", "../../../")).toBe(
+      "../../../location1"
+    );
   });
 
   it("handles empty values", () => {
