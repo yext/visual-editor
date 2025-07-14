@@ -592,7 +592,7 @@ const HeaderCtas = (props: {
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-      {showPrimaryCTA && primaryCTA?.label && (
+      {showPrimaryCTA && primaryCTA?.link && primaryCTA?.label && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.primaryCta", "Primary CTA")}
@@ -606,7 +606,7 @@ const HeaderCtas = (props: {
           />
         </EntityField>
       )}
-      {showSecondaryCTA && secondaryCTA?.label && (
+      {showSecondaryCTA && primaryCTA?.link && secondaryCTA?.label && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.secondaryCta", "Secondary CTA")}
