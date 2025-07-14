@@ -1,13 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  FaArrowLeft,
-  FaArrowRight,
-  FaChevronDown,
-  FaStarHalfAlt,
-  FaStarHalf,
-  FaStar,
-  FaRegStar,
-} from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ComponentConfig, Fields } from "@measured/puck";
 import * as React from "react";
@@ -17,10 +9,12 @@ import {
   Body,
   Button,
   fetchReviewsForEntity,
+  getAggregateRating,
   getAnalyticsScopeHash,
   Heading,
   msg,
   PageSection,
+  ReviewStars,
   Timestamp,
   TimestampOption,
   useDocument,
@@ -28,7 +22,6 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
-const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   month: "long",
@@ -57,7 +50,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
   const document: any = useDocument();
-  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  const apiKey = document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
@@ -65,8 +58,8 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     return <></>;
   }
   const businessId: number = Number(document?.businessId);
-  const contentDeliveryAPIDomain = "ignored"; // TODO: document?._yext?.contentDeliveryAPIDomain;
-  const entityId = TEMP_ENTITY_ID; // TODO: document?.uid
+  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
+  const entityId = document?.uid;
   const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
     {}
@@ -105,25 +98,23 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     }
   }, [reviews, currentPageNumber]);
 
-  const aggregateRating = getAggregateRating(document);
-  const totalReviews = aggregateRating?.reviewCount || 0;
-  const averageRating = Number(aggregateRating?.ratingValue) || 0;
+  const { averageRating, reviewCount } = getAggregateRating(document);
 
-  if (reviewsStatus !== "success" || (!isLoading && totalReviews === 0)) {
+  if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
     return <></>;
   }
 
   const hasDarkBackground = props.backgroundColor?.textColor === "text-white";
 
   const headerProps: ReviewsHeaderProps = {
-    totalReviews,
     averageRating,
+    reviewCount,
     isLoading,
     hasDarkBackground,
   };
 
   const pageScrollerProps: PageScrollerProps = {
-    totalReviews,
+    reviewCount,
     currentPageNumber,
     fetchData: setCurrentPageNumber,
     hasDarkBackground,
@@ -149,14 +140,14 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
 };
 
 interface ReviewsHeaderProps {
-  totalReviews: number;
   averageRating: number;
+  reviewCount: number;
   isLoading: boolean;
   hasDarkBackground: boolean;
 }
 
 const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
-  const { totalReviews, averageRating, isLoading, hasDarkBackground } = props;
+  const { averageRating, reviewCount, isLoading, hasDarkBackground } = props;
   const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-3">
@@ -167,19 +158,11 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
         {isLoading ? (
           <Body>{t("loadingReviews", "Loading reviews...")}</Body>
         ) : (
-          <>
-            <ReviewStarsWithRating
-              rating={averageRating}
-              hasDarkBackground={hasDarkBackground}
-            />
-            <Body>
-              {/* TODO(sumo): update script to handle plurals */}(
-              {t("totalReviews", `${totalReviews} reviews`, {
-                count: totalReviews,
-              })}
-              )
-            </Body>
-          </>
+          <ReviewStars
+            averageRating={averageRating}
+            hasDarkBackground={hasDarkBackground}
+            reviewCount={reviewCount}
+          />
         )}
       </div>
     </div>
@@ -291,7 +274,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
   index,
 }) => {
   const reviewStars = (
-    <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
+    <ReviewStars averageRating={rating} hasDarkBackground={hasDarkBackground} />
   );
   if (!content) {
     return <div className="flex flex-col gap-2">{reviewStars}</div>;
@@ -381,64 +364,21 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
   );
 };
 
-interface ReviewStarsProps {
-  rating: number;
-  hasDarkBackground: boolean;
-}
-
-const ReviewStarsWithRating: React.FC<ReviewStarsProps> = ({
-  rating,
-  hasDarkBackground,
-}) => {
-  return (
-    <>
-      <Body className="font-bold">{rating}</Body>
-      <ReviewStars rating={rating} hasDarkBackground={hasDarkBackground} />
-    </>
-  );
-};
-
-const ReviewStars: React.FC<ReviewStarsProps> = (props) => {
-  const { rating, hasDarkBackground } = props;
-  const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
-  const starColor = hasDarkBackground
-    ? "text-white"
-    : "text-palette-primary-dark";
-  return (
-    <div className={`flex items-center gap-0.5 ${starColor}`}>
-      {new Array(5)
-        .fill(null)
-        .map((_, i) =>
-          rating - i >= 0.75 ? (
-            <FaStar key={i} />
-          ) : rating - i >= 0.25 ? (
-            <HalfStar key={i} />
-          ) : (
-            <FaRegStar
-              key={i}
-              style={hasDarkBackground ? { display: "none" } : undefined}
-            />
-          )
-        )}
-    </div>
-  );
-};
-
 interface PageScrollerProps {
-  totalReviews: number;
+  reviewCount: number;
   currentPageNumber: number;
   fetchData: (newPageNumber: number) => void;
   hasDarkBackground: boolean;
 }
 
 const PageScroller: React.FC<PageScrollerProps> = ({
-  totalReviews,
+  reviewCount,
   currentPageNumber,
   fetchData,
   hasDarkBackground,
 }) => {
   const analytics = useAnalytics();
-  const numPages = Math.ceil(totalReviews / REVIEWS_PER_PAGE);
+  const numPages = Math.ceil(reviewCount / REVIEWS_PER_PAGE);
   if (numPages <= 1) {
     return <></>;
   }
@@ -520,16 +460,6 @@ const ShowMoreButton: React.FC<{
     </Button>
   );
 };
-
-/**
- * Extracts the aggregate rating from the document's schema.
- * @param document - The document containing the schema.
- * @returns The aggregate rating object if found, otherwise undefined.
- */
-function getAggregateRating(document: any) {
-  return document?._schema?.["@graph"].find((e: any) => e.aggregateRating)
-    ?.aggregateRating;
-}
 
 export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
   fields: reviewsFields,

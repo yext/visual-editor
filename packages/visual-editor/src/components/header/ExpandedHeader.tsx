@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
-  LinkType,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -20,7 +19,6 @@ import {
   resolveTranslatableString,
   PageSection,
   TranslatableStringField,
-  ImageWrapperProps,
   useDocument,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
@@ -36,7 +34,6 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
-import { ImageWrapperFields } from "../contentBlocks/Image.tsx";
 import {
   ImageStylingFields,
   ImageStylingProps,
@@ -60,7 +57,9 @@ export interface ExpandedHeaderProps {
       logo: string;
       links: TranslatableCTA[];
       primaryCTA?: TranslatableCTA;
+      showPrimaryCTA: boolean;
       secondaryCTA?: TranslatableCTA;
+      showSecondaryCTA: boolean;
     };
     secondaryHeader: {
       show: boolean;
@@ -129,6 +128,16 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               },
             },
           }),
+          showPrimaryCTA: YextField(
+            msg("fields.showPrimaryCTA", "Show Primary CTA"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.show", "Show"), value: true },
+                { label: msg("fields.options.hide", "Hide"), value: false },
+              ],
+            }
+          ),
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
@@ -146,8 +155,19 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               },
             },
           }),
+          showSecondaryCTA: YextField(
+            msg("fields.showSecondaryCTA", "Show Secondary CTA"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.show", "Show"), value: true },
+                { label: msg("fields.options.hide", "Hide"), value: false },
+              ],
+            }
+          ),
         },
       }),
+
       secondaryHeader: YextField(
         msg("fields.secondaryHeader", "Secondary Header"),
         {
@@ -261,7 +281,14 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   } = styles;
   const { t } = useTranslation();
   const document = useDocument();
-  const { logo, links, primaryCTA, secondaryCTA } = primaryHeader;
+  const {
+    logo,
+    links,
+    primaryCTA,
+    secondaryCTA,
+    showPrimaryCTA,
+    showSecondaryCTA,
+  } = primaryHeader;
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
   const {
     backgroundColor,
@@ -274,6 +301,12 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const showMobileMenu =
+    (primaryCTA?.label && primaryCTA?.link) ||
+    (secondaryCTA?.label && secondaryCTA?.link) ||
+    links.some((l) => l.label && l.link) ||
+    (show &&
+      (secondaryLinks.some((l) => l.label && l.link) || showLanguageDropdown));
 
   return (
     <>
@@ -329,13 +362,17 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             >
               <HeaderLinks links={links} />
             </EntityField>
-            <HeaderCtas
-              document={document}
-              primaryCTA={primaryCTA}
-              secondaryCTA={secondaryCTA}
-              primaryVariant={primaryCtaVariant}
-              secondaryVariant={secondaryCtaVariant}
-            />
+            {(showPrimaryCTA || showSecondaryCTA) && (
+              <HeaderCtas
+                document={document}
+                primaryCTA={primaryCTA}
+                secondaryCTA={secondaryCTA}
+                primaryVariant={primaryCtaVariant}
+                secondaryVariant={secondaryCtaVariant}
+                showPrimaryCTA={showPrimaryCTA}
+                showSecondaryCTA={showSecondaryCTA}
+              />
+            )}
           </div>
         </PageSection>
       </div>
@@ -354,17 +391,21 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             aspectRatio={logoStyle.aspectRatio}
           />
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label={
-              isOpen ? t("closeMenu", "Close menu") : t("openMenu", "Open menu")
-            }
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            className="text-xl"
-          >
-            {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
-          </button>
+          {showMobileMenu && (
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={
+                isOpen
+                  ? t("closeMenu", "Close menu")
+                  : t("openMenu", "Open menu")
+              }
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              className="text-xl"
+            >
+              {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
+            </button>
+          )}
         </PageSection>
       </div>
       {isOpen && (
@@ -411,15 +452,19 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             </PageSection>
           )}
 
-          <PageSection verticalPadding={"sm"} background={backgroundColor}>
-            <HeaderCtas
-              document={document}
-              primaryCTA={primaryCTA}
-              secondaryCTA={secondaryCTA}
-              primaryVariant={primaryCtaVariant}
-              secondaryVariant={secondaryCtaVariant}
-            />
-          </PageSection>
+          {(showPrimaryCTA || showSecondaryCTA) && (
+            <PageSection verticalPadding={"sm"} background={backgroundColor}>
+              <HeaderCtas
+                document={document}
+                primaryCTA={primaryCTA}
+                secondaryCTA={secondaryCTA}
+                primaryVariant={primaryCtaVariant}
+                secondaryVariant={secondaryCtaVariant}
+                showPrimaryCTA={showPrimaryCTA}
+                showSecondaryCTA={showSecondaryCTA}
+              />
+            </PageSection>
+          )}
         </div>
       )}
     </>
@@ -459,17 +504,19 @@ const HeaderLinks = ({
   return (
     <nav aria-label={`${type} Header Links`}>
       <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
-        {links.map((item, index) => {
-          const isOverflowed = isSecondary && index >= MAX_VISIBLE;
-          return (
-            <li
-              key={`${type.toLowerCase()}.${index}`}
-              className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
-            >
-              {renderLink(item, index, type.toLowerCase())}
-            </li>
-          );
-        })}
+        {links
+          .filter((item) => !!item?.link)
+          .map((item, index) => {
+            const isOverflowed = isSecondary && index >= MAX_VISIBLE;
+            return (
+              <li
+                key={`${type.toLowerCase()}.${index}`}
+                className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
+              >
+                {renderLink(item, index, type.toLowerCase())}
+              </li>
+            );
+          })}
 
         {isSecondary && links.length > MAX_VISIBLE && (
           <li className="hidden md:block py-4 md:py-0">
@@ -480,14 +527,17 @@ const HeaderLinks = ({
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
-                {links.slice(MAX_VISIBLE).map((item, index) => (
-                  <DropdownMenuItem
-                    key={`overflow-${index}`}
-                    className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
-                  >
-                    {renderLink(item, index + MAX_VISIBLE, "overflow")}
-                  </DropdownMenuItem>
-                ))}
+                {links
+                  .filter((item) => !!item?.link)
+                  .slice(MAX_VISIBLE)
+                  .map((item, index) => (
+                    <DropdownMenuItem
+                      key={`overflow-${index}`}
+                      className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
+                    >
+                      {renderLink(item, index + MAX_VISIBLE, "overflow")}
+                    </DropdownMenuItem>
+                  ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </li>
@@ -523,9 +573,18 @@ const HeaderCtas = (props: {
   primaryVariant: CTAProps["variant"];
   secondaryVariant: CTAProps["variant"];
   document: any;
+  showPrimaryCTA: boolean;
+  showSecondaryCTA: boolean;
 }) => {
   const { i18n } = useTranslation();
-  const { primaryCTA, secondaryCTA, primaryVariant, secondaryVariant } = props;
+  const {
+    primaryCTA,
+    secondaryCTA,
+    primaryVariant,
+    secondaryVariant,
+    showPrimaryCTA,
+    showSecondaryCTA,
+  } = props;
 
   if (!primaryCTA && !secondaryCTA) {
     return;
@@ -533,7 +592,7 @@ const HeaderCtas = (props: {
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-      {primaryCTA?.label && (
+      {showPrimaryCTA && primaryCTA?.link && primaryCTA?.label && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.primaryCta", "Primary CTA")}
@@ -547,7 +606,7 @@ const HeaderCtas = (props: {
           />
         </EntityField>
       )}
-      {secondaryCTA?.label && (
+      {showSecondaryCTA && secondaryCTA?.link && secondaryCTA?.label && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.secondaryCta", "Secondary CTA")}
@@ -598,11 +657,13 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
           link: "#",
           linkType: "URL",
         },
+        showPrimaryCTA: true,
         secondaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
           link: "#",
           linkType: "URL",
         },
+        showSecondaryCTA: true,
       },
       secondaryHeader: {
         show: false,

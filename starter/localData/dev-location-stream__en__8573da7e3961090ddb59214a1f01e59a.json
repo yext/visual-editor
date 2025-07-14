@@ -900,6 +900,13 @@
   "emails": ["test@test.com", "test1@test.com"],
   "name": "Galaxy Grill",
   "services": ["Delivery", "Catering", "Carry Out", "Dine In"],
+  "ref_reviewsAgg": [
+    {
+      "averageRating": 4.1,
+      "publisher": "FIRSTPARTY",
+      "reviewCount": 26
+    }
+  ],
   "siteDomain": "",
   "siteId": 0,
   "mainPhone": "+12222222222",

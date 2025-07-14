@@ -1,3 +1,39 @@
+#### 0.0.47 (2025-07-11)
+
+##### New Features
+
+- document data in reviews component (#611) (d8cf5e94)
+
+##### Bug Fixes
+
+- use shared getPath for Directory/Locator/NearbyLocations links (#615) (b8df0d80)
+- hide/show props for Header CTAs (#610) (c907e70b)
+
+#### 0.0.46 (2025-07-10)
+
+##### Chores
+
+- update default layout data again (#600) (0860c140)
+- add component screenshot tests (#578) (cb824451)
+
+##### New Features
+
+- add ReviewStars atom to Hero (#589) (f077fd19)
+- add workflow to clean up dev release branches (#591) (cfeb3252)
+- add borderRadius selector (#597) (098ea85a)
+- add theme Image section with BorderRadius (#599) (ddcb733c)
+
+##### Bug Fixes
+
+- logo alignment WRT links alignment (#607) (8b3b664a)
+- copyright message alignment based on secondary links alignment (#609) (c1626ae7)
+- added tiktok link (#608) (c7019eea)
+- text wrapping for footer links (#606) (d8f065e9)
+- show header background color on mobile (#605) (22081d25)
+- hero hours (#602) (6c6b549c)
+- add defaultItemProps for Expanded Footer Links (#604) (a8a45a30)
+- test updates for recently added tests (#601) (75fff8ae)
+
 #### 0.0.45 (2025-07-09)
 
 ##### Chores
