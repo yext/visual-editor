@@ -22,6 +22,7 @@ import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18nPlatform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const devLogger = new DevLogger();
 
@@ -60,6 +61,7 @@ export const InternalLayoutEditor = ({
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
+  const { t } = useTranslation();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -291,13 +293,16 @@ export const InternalLayoutEditor = ({
             const additionalActions = (
               <>
                 <ActionBar.Action
-                  label={"Copy to Clipboard"}
+                  label={t("actions.copyToClipboard", "Copy to Clipboard")}
                   onClick={() => copyToClipboard(selectedComponent)}
                 >
                   <ClipboardCopyIcon size={16} />
                 </ActionBar.Action>
                 <ActionBar.Action
-                  label={"Paste from Clipboard"}
+                  label={t(
+                    "actions.pasteFromClipboard",
+                    "Paste from Clipboard"
+                  )}
                   onClick={async () =>
                     await pasteFromClipboard(
                       dispatch,

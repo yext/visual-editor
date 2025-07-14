@@ -1,5 +1,9 @@
 {
   "Link": "Saite",
+  "actions": {
+    "copyToClipboard": "Kopēt uz starpliktuvi",
+    "pasteFromClipboard": "Paste no starpliktuves"
+  },
   "address": "Uzruna",
   "addressInput": {
     "city": "Pilsēta",

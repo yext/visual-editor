@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Cópia para a área de transferência",
+    "pasteFromClipboard": "Colar da área de transferência"
+  },
   "address": "Endereço",
   "addressInput": {
     "city": "Cidade",
