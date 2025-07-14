@@ -31,7 +31,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type                                                           | Description                                   | Default              |
 | :----------------------- | :------------------------------------------------------------- | :-------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color of the section.          | `Background Color 6` |
+| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color of the section.          | `Background Color 6` |
 | `styles.textAlignment`   | `'left' \| 'right' \| 'center'`                                | The horizontal alignment of the text content. | `'center'`           |
 
 #### Visibility Props
@@ -70,7 +70,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type                                                           | Description                          | Default              |
 | :----------------------- | :------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color of the section. | `Background Color 1` |
+| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color of the section. | `Background Color 1` |
 
 #### Visibility Props
 
@@ -117,7 +117,7 @@ This object contains properties for customizing the component's appearance.
 | :------------------------------------- | :------------------------------------------------------------- | :--------------------------------------------------------------------------- | :------------------- |
 | `styles.heading.level`                 | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for column titles.                                    | `3`                  |
 | `styles.heading.align`                 | `'left' \| 'center' \| 'right'`                                | The text alignment for all column headings.                                  | `'left'`             |
-| `styles.backgroundColor`               | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color of the section.                                         | `Background Color 1` |
+| `styles.backgroundColor`               | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color of the section.                                         | `Background Color 1` |
 | `styles.info.showGetDirectionsLink`    | `boolean`                                                      | If `true`, displays a "Get Directions" link with the address.                | `true`               |
 | `styles.info.phoneFormat`              | `'domestic' \| 'international'`                                | The formatting to apply to phone numbers.                                    | `'domestic'`         |
 | `styles.info.includePhoneHyperlink`    | `boolean`                                                      | If `true`, wraps phone numbers in a clickable `tel:` hyperlink.              | `true`               |
@@ -162,10 +162,10 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                                | Type                                                           | Description                                                             | Default              |
 | :---------------------------------- | :------------------------------------------------------------- | :---------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`            | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The main background color for the directory page content.               | `Background Color 1` |
-| `styles.breadcrumbsBackgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | A specific background color for the breadcrumbs navigation bar.         | `Background Color 1` |
+| `styles.backgroundColor`            | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The main background color for the directory page content.               | `Background Color 1` |
+| `styles.breadcrumbsBackgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | A specific background color for the breadcrumbs navigation bar.         | `Background Color 1` |
 | `styles.cards.headingLevel`         | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the title on each individual directory card. | `3`                  |
-| `styles.cards.backgroundColor`      | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for each individual directory card.                | `Background Color 1` |
+| `styles.cards.backgroundColor`      | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for each individual directory card.                | `Background Color 1` |
 
 ## Events Section
 
@@ -196,11 +196,11 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                           | Type                                                           | Description                                                               | Default              |
 | :----------------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color of the section.                                      | `Background Color 3` |
+| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color of the section.                                      | `Background Color 3` |
 | `styles.heading.level`         | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level (e.g., `2` for `<h2>`) for the main section title. | `2`                  |
 | `styles.heading.align`         | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                          | `'left'`             |
 | `styles.cards.headingLevel`    | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the title _within_ each individual event card. | `3`                  |
-| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for each individual event card.                      | `Background Color 1` |
+| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for each individual event card.                      | `Background Color 1` |
 
 #### Visibility Props
 
@@ -209,6 +209,119 @@ This property controls the component's visibility on the live page.
 | Prop             | Type      | Description                                                                    | Default |
 | :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
 | `liveVisibility` | `boolean` | If `true`, the component is visible on the live page; if `false`, it's hidden. | `true`  |
+
+## Expanded Footer
+
+![Expanded Footer component](./screenshots/expandedFooter.png)
+
+The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
+
+Avaliable on Location templates.
+
+---
+
+### Props
+
+The component's props are organized into categories for data, styling, and analytics, with sub-sections for the Primary and Secondary footers.
+
+#### Data Props
+
+This object contains all the content for both footer tiers.
+
+##### Primary Footer
+
+| Prop                                     | Type      | Description                                                                                                     | Default                        |
+| :--------------------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------- | :----------------------------- |
+| `data.primaryFooter.logo`                | `string`  | The URL for the logo image displayed in the footer.                                                             | Placeholder image              |
+| `data.primaryFooter.[social]Link`        | `string`  | A series of individual props for social media profile URLs (e.g., `facebookLink`, `xLink`).                     | `""` (empty string)            |
+| `data.primaryFooter.utilityImages`       | `Array`   | A list of secondary images, each with an optional destination URL (e.g., for partner logos).                    | Empty array                    |
+| `data.primaryFooter.expandedFooter`      | `boolean` | If `true`, displays the multi-column `expandedFooterLinks`. If `false`, displays the simple `footerLinks`.      | `false`                        |
+| `data.primaryFooter.footerLinks`         | `Array`   | A simple list of links for the standard, non-expanded footer layout.                                            | 5 placeholder links            |
+| `data.primaryFooter.expandedFooterLinks` | `Array`   | A list of link columns for the expanded "mega-footer" layout. Each item has a column label and a list of links. | 4 columns of placeholder links |
+
+##### Secondary Footer
+
+| Prop                                        | Type                 | Description                                                               | Default             |
+| :------------------------------------------ | :------------------- | :------------------------------------------------------------------------ | :------------------ |
+| `data.secondaryFooter.show`                 | `boolean`            | If `true`, the entire secondary footer (sub-footer bar) is displayed.     | `false`             |
+| `data.secondaryFooter.copyrightMessage`     | `TranslatableString` | The copyright message or legal text displayed in the sub-footer.          | `""` (empty string) |
+| `data.secondaryFooter.secondaryFooterLinks` | `Array`              | The list of links displayed in the sub-footer (e.g., for Privacy Policy). | 5 placeholder links |
+
+#### Style Props
+
+This object contains properties for customizing the appearance of both footer tiers.
+
+##### Primary Footer
+
+| Prop                                   | Type                                                           | Description                                                         | Default                 |
+| :------------------------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------ | :---------------------- |
+| `styles.primaryFooter.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the main primary footer area.              | `Background Color 6`    |
+| `styles.primaryFooter.linksAlignment`  | `'left' \| 'right'`                                            | The horizontal alignment of the link columns in the primary footer. | `'right'`               |
+| `styles.primaryFooter.logo`            | `object`                                                       | Styling options for the logo, such as width and aspect ratio.       | `{ aspectRatio: 1.78 }` |
+| `styles.primaryFooter.utilityImages`   | `object`                                                       | Styling options for the utility images.                             | `{ aspectRatio: 1 }`    |
+
+##### Secondary Footer
+
+| Prop                                     | Type                                                           | Description                                                     | Default              |
+| :--------------------------------------- | :------------------------------------------------------------- | :-------------------------------------------------------------- | :------------------- |
+| `styles.secondaryFooter.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the secondary footer (sub-footer bar). | `Background Color 2` |
+| `styles.secondaryFooter.linksAlignment`  | `'left' \| 'right'`                                            | The horizontal alignment of the links in the sub-footer.        | `'left'`             |
+
+## Expanded Header
+
+![Expanded Header component](./screenshots/expandedHeader.png)
+
+The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector.
+
+Avaliable on Location templates.
+
+---
+
+### Props
+
+The component's props are organized into categories for data and styling, with sub-sections for the Primary and Secondary headers.
+
+#### Data Props
+
+This object contains all the content for both header tiers.
+
+##### Primary Header
+
+| Prop                                  | Type      | Description                                                        | Default              |
+| :------------------------------------ | :-------- | :----------------------------------------------------------------- | :------------------- |
+| `data.primaryHeader.logo`             | `string`  | The URL for the main logo image.                                   | Placeholder image    |
+| `data.primaryHeader.links`            | `Array`   | The list of main navigation links.                                 | 4 placeholder links  |
+| `data.primaryHeader.primaryCTA`       | `object`  | The content (label, link) for the main call-to-action button.      | "Call to Action" CTA |
+| `data.primaryHeader.showPrimaryCTA`   | `boolean` | If `true`, the primary CTA button is displayed.                    | `true`               |
+| `data.primaryHeader.secondaryCTA`     | `object`  | The content (label, link) for the secondary call-to-action button. | "Call to Action" CTA |
+| `data.primaryHeader.showSecondaryCTA` | `boolean` | If `true`, the secondary CTA button is displayed.                  | `true`               |
+
+##### Secondary Header
+
+| Prop                                        | Type      | Description                                                            | Default             |
+| :------------------------------------------ | :-------- | :--------------------------------------------------------------------- | :------------------ |
+| `data.secondaryHeader.show`                 | `boolean` | If `true`, the entire secondary header (top bar) is displayed.         | `false`             |
+| `data.secondaryHeader.showLanguageDropdown` | `boolean` | If `true`, the language selector is displayed in the secondary header. | `false`             |
+| `data.secondaryHeader.secondaryLinks`       | `Array`   | The list of utility links displayed in the secondary header.           | 5 placeholder links |
+
+#### Style Props
+
+This object contains properties for customizing the appearance of both header tiers.
+
+##### Primary Header
+
+| Prop                                       | Type                                                           | Description                                           | Default              |
+| :----------------------------------------- | :------------------------------------------------------------- | :---------------------------------------------------- | :------------------- |
+| `styles.primaryHeader.logo`                | `object`                                                       | Styling options for the logo, such as aspect ratio.   | `{ aspectRatio: 2 }` |
+| `styles.primaryHeader.backgroundColor`     | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the main primary header bar. | `Background Color 1` |
+| `styles.primaryHeader.primaryCtaVariant`   | [`ctaVariant`](../utils/README.md#ctavariantoptions)           | The visual style for the primary CTA button.          | `'primary'`          |
+| `styles.primaryHeader.secondaryCtaVariant` | [`ctaVariant`](../utils/README.md#ctavariantoptions)           | The visual style for the secondary CTA button.        | `'secondary'`        |
+
+##### Secondary Header
+
+| Prop                                     | Type                                                           | Description                                              | Default              |
+| :--------------------------------------- | :------------------------------------------------------------- | :------------------------------------------------------- | :------------------- |
+| `styles.secondaryHeader.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the secondary header (top bar). | `Background Color 2` |
 
 ## FAQ Section
 
@@ -239,7 +352,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type                                                           | Description                                                               | Default              |
 | :----------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section.                              | `Background Color 2` |
+| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section.                              | `Background Color 2` |
 | `styles.heading.level`   | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level (e.g., `2` for `<h2>`) for the main section title. | `2`                  |
 | `styles.heading.align`   | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                          | `'left'`             |
 
@@ -250,6 +363,45 @@ This property controls the component's visibility on the live page.
 | Prop             | Type      | Description                                                                    | Default |
 | :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
 | `liveVisibility` | `boolean` | If `true`, the component is visible on the live page; if `false`, it's hidden. | `true`  |
+
+## Footer
+
+![Footer component](./screenshots/footer.png)
+
+The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component.
+
+Avaliable on Directory and Locator templates.
+
+---
+
+### Props
+
+#### Style Props
+
+This property controls the appearance of the footer.
+
+| Prop              | Type                                                           | Description                                         | Default              |
+| :---------------- | :------------------------------------------------------------- | :-------------------------------------------------- | :------------------- |
+| `backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire footer section. | `Background Color 1` |
+
+## Header
+
+![Header component](./screenshots/header.png)
+
+The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component.
+
+Avaliable on Directory and Locator templates.
+
+---
+
+### Props
+
+These props control the content and features of the header.
+
+| Prop                     | Type                | Description                                                       | Default |
+| :----------------------- | :------------------ | :---------------------------------------------------------------- | :------ |
+| `logoWidth`              | `number` (optional) | The display width of the site logo in pixels.                     | `80`    |
+| `enableLanguageSelector` | `boolean`           | If `true`, displays the language selector dropdown in the header. | `false` |
 
 ## Hero Section
 
@@ -283,12 +435,12 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                           | Type                                                           | Description                                                       | Default                 |
 | :----------------------------- | :------------------------------------------------------------- | :---------------------------------------------------------------- | :---------------------- |
-| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section.                      | `Background Color 1`    |
+| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section.                      | `Background Color 1`    |
 | `styles.imageOrientation`      | `'left' \| 'right'`                                            | Positions the image to the left or right of the text content.     | `'right'`               |
 | `styles.businessNameLevel`     | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the business name.                     | `3`                     |
 | `styles.localGeoModifierLevel` | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the local geo-modifier.                | `1`                     |
-| `styles.primaryCTA`            | [`ctaVariant`](../utils/README.md#ctaVariantOptions)           | The visual style variant for the primary call-to-action button.   | `'primary'`             |
-| `styles.secondaryCTA`          | [`ctaVariant`](../utils/README.md#ctaVariantOptions)           | The visual style variant for the secondary call-to-action button. | `'secondary'`           |
+| `styles.primaryCTA`            | [`ctaVariant`](../utils/README.md#ctavariantoptions)           | The visual style variant for the primary call-to-action button.   | `'primary'`             |
+| `styles.secondaryCTA`          | [`ctaVariant`](../utils/README.md#ctavariantoptions)           | The visual style variant for the secondary call-to-action button. | `'secondary'`           |
 | `styles.image`                 | `object`                                                       | Styling options for the hero image, such as aspect ratio.         | `{ aspectRatio: 1.78 }` |
 
 #### Visibility Props
@@ -373,11 +525,11 @@ This object contains extensive properties for customizing the component's appear
 
 | Prop                             | Type                                                           | Description                                                               | Default              |
 | :------------------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor`         | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section.                              | `Background Color 1` |
+| `styles.backgroundColor`         | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section.                              | `Background Color 1` |
 | `styles.heading.level`           | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the main section title.                        | `2`                  |
 | `styles.heading.align`           | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                          | `'left'`             |
 | `styles.cards.headingLevel`      | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the name on each location card.                | `3`                  |
-| `styles.cards.backgroundColor`   | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for each individual location card.                   | `Background Color 1` |
+| `styles.cards.backgroundColor`   | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for each individual location card.                   | `Background Color 1` |
 | `styles.phoneNumberFormat`       | `'domestic' \| 'international'`                                | The display format for phone numbers on the cards.                        | `'domestic'`         |
 | `styles.phoneNumberLink`         | `boolean`                                                      | If `true`, wraps phone numbers in a clickable `tel:` hyperlink.           | `false`              |
 | `styles.hours.showCurrentStatus` | `boolean`                                                      | If `true`, shows the current "Open" or "Closed" status for each location. | `true`               |
@@ -422,7 +574,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type                                                           | Description                                                               | Default                 |
 | :----------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------ | :---------------------- |
-| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section, selected from the theme.     | `Background Color 1`    |
+| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section, selected from the theme.     | `Background Color 1`    |
 | `styles.heading.level`   | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level (e.g., `2` for `<h2>`) for the main section title. | `2`                     |
 | `styles.heading.align`   | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                          | `'left'`                |
 | `styles.image`           | `object`                                                       | Styling options for the gallery images, such as aspect ratio.             | `{ aspectRatio: 1.78 }` |
@@ -464,11 +616,11 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                           | Type                                                           | Description                                                               | Default              |
 | :----------------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section.                              | `Background Color 2` |
+| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section.                              | `Background Color 2` |
 | `styles.heading.level`         | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level (e.g., `2` for `<h2>`) for the main section title. | `2`                  |
 | `styles.heading.align`         | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                          | `'left'`             |
 | `styles.cards.headingLevel`    | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the name on each individual product card.      | `3`                  |
-| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for each individual product card.                    | `Background Color 1` |
+| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for each individual product card.                    | `Background Color 1` |
 
 #### Visibility Props
 
@@ -506,9 +658,9 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type                                                           | Description                                                   | Default                 |
 | :----------------------- | :------------------------------------------------------------- | :------------------------------------------------------------ | :---------------------- |
-| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section.                  | `Background Color 1`    |
+| `styles.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section.                  | `Background Color 1`    |
 | `styles.orientation`     | `'left' \| 'right'`                                            | Positions the image to the left or right of the text content. | `'left'`                |
-| `styles.ctaVariant`      | [`ctaVariant`](../utils/README.md#ctaVariantOptions)           | The visual style variant for the call-to-action button.       | `'primary'`             |
+| `styles.ctaVariant`      | [`ctaVariant`](../utils/README.md#ctavariantoptions)           | The visual style variant for the call-to-action button.       | `'primary'`             |
 | `styles.heading.level`   | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the promo's title.                 | `2`                     |
 | `styles.heading.align`   | `'left' \| 'center' \| 'right'`                                | The text alignment for the promo's title and description.     | `'left'`                |
 | `styles.image`           | `object`                                                       | Styling options for the promo image, such as aspect ratio.    | `{ aspectRatio: 1.78 }` |
@@ -580,11 +732,11 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                           | Type                                                           | Description                                                               | Default              |
 | :----------------------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section.                              | `Background Color 3` |
+| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section.                              | `Background Color 3` |
 | `styles.heading.level`         | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level (e.g., `2` for `<h2>`) for the main section title. | `2`                  |
 | `styles.heading.align`         | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                          | `'left'`             |
 | `styles.cards.headingLevel`    | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the name on each individual person card.       | `3`                  |
-| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for each individual person card.                     | `Background Color 1` |
+| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for each individual person card.                     | `Background Color 1` |
 
 #### Visibility Props
 
@@ -623,11 +775,11 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                           | Type                                                           | Description                                                                       | Default              |
 | :----------------------------- | :------------------------------------------------------------- | :-------------------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for the entire section, selected from the theme.             | `Background Color 2` |
+| `styles.backgroundColor`       | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for the entire section, selected from the theme.             | `Background Color 2` |
 | `styles.heading.level`         | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level (e.g., `2` for `<h2>`) for the main section title.         | `2`                  |
 | `styles.heading.align`         | `'left' \| 'center' \| 'right'`                                | The text alignment for the main section heading.                                  | `'left'`             |
 | `styles.cards.headingLevel`    | [`headingLevel`](../utils/README.md#headingLevelOptions)       | The HTML heading level for the author's name on each individual testimonial card. | `3`                  |
-| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundColorOptions) | The background color for each individual testimonial card.                        | `Background Color 1` |
+| `styles.cards.backgroundColor` | [`backgroundColor`](../utils/README.md#backgroundcoloroptions) | The background color for each individual testimonial card.                        | `Background Color 1` |
 
 #### Visibility Props
 
