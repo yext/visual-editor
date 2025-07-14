@@ -1,5 +1,5 @@
 ---
-title: Components
+title: Internal Components
 outline: deep
 ---
 

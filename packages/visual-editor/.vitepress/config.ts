@@ -113,9 +113,8 @@ export default defineConfig({
     },
     nav: [
       { text: "Guides", link: "/docs/getting-started" },
-      { text: "Docs", link: "/components/editor/README" },
+      { text: "Docs", link: "/editor/README" },
     ],
-
     sidebar: [
       {
         text: "Guides",
@@ -128,7 +127,6 @@ export default defineConfig({
         items: generateSidebarItems(),
       },
     ],
-
     socialLinks: [
       { icon: "github", link: "https://github.com/yext/visual-editor" },
     ],
