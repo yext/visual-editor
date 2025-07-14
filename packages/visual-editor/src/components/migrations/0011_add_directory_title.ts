@@ -8,7 +8,7 @@ export const addDirectoryTitleMigration: Migration = {
         ...props,
         data: {
           ...props.data,
-          title: props.data?.title ?? "[[name]]",
+          title: "[[name]]",
         },
       };
     },
