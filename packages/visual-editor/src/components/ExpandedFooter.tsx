@@ -665,64 +665,45 @@ const FooterIcons = ({
       link: xLink,
       icon: <FaXTwitter className="h-6 w-6 md:h-5 md:w-5" />,
       label: "X (Twitter)",
-      valid:
-        /^https:\/\/(www\.)?(x\.com|twitter\.com)\/[A-Za-z0-9_]+\/?(?:\?.*)?$/.test(
-          xLink
-        ),
+      valid: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/.test(xLink),
     },
     {
       link: facebookLink,
       icon: <FaFacebook className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Facebook",
-      valid:
-        /^https:\/\/(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?(?:\?.*)?$/.test(
-          facebookLink
-        ),
+      valid: /^https:\/\/(www\.)?facebook\.com\/.+/.test(facebookLink),
     },
     {
       link: instagramLink,
       icon: <FaInstagram className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Instagram",
-      valid:
-        /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9_.-]+\/?(?:\?.*)?$/.test(
-          instagramLink
-        ),
+      valid: /^https:\/\/(www\.)?instagram\.com\/.+/.test(instagramLink),
     },
     {
       link: pinterestLink,
       icon: <FaPinterest className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Pinterest",
-      valid:
-        /^https:\/\/(www\.)?pinterest\.com\/[A-Za-z0-9_/.-]+\/?(?:\?.*)?$/.test(
-          pinterestLink
-        ),
+      valid: /^https:\/\/(www\.)?pinterest\.com\/.+/.test(pinterestLink),
     },
     {
       link: linkedInLink,
       icon: <FaLinkedinIn className="h-6 w-6 md:h-5 md:w-5" />,
       label: "LinkedIn",
-      valid:
-        /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9-%_]+\/?(?:\?.*)?$/.test(
-          linkedInLink
-        ),
+      valid: /^https:\/\/(www\.)?linkedin\.com\/.+/.test(linkedInLink),
     },
     {
       link: youtubeLink,
       icon: <FaYoutube className="h-6 w-6 md:h-5 md:w-5" />,
       label: "YouTube",
       valid:
-        /^https:\/\/(www\.)?youtube\.com\/(channel|user|c)\/[A-Za-z0-9_-]+\/?(?:\?.*)?$|^https:\/\/youtu\.be\/[A-Za-z0-9_-]+(?:\?.*)?$/.test(
-          youtubeLink
-        ),
+        /^https:\/\/(www\.)?youtube\.com\/.+/.test(youtubeLink) ||
+        /^https:\/\/youtu\.be\/.+/.test(youtubeLink),
     },
     {
       link: tiktokLink,
       icon: <FaTiktok className="h-6 w-6 md:h-5 md:w-5" />,
       label: "TikTok",
-      valid:
-        /^https:\/\/(www\.)?tiktok\.com\/@?[A-Za-z0-9_.-]+\/?(?:\?.*)?$/.test(
-          tiktokLink
-        ),
+      valid: /^https:\/\/(www\.)?tiktok\.com\/.+/.test(tiktokLink),
     },
   ];
 
