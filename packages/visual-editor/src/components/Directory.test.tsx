@@ -17,6 +17,82 @@ import {
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
+const rootDocument = {
+  _site: {
+    name: "Example Business",
+  },
+  meta: { entityType: { id: "dm_root", uid: 123 }, locale: "en" },
+  dm_childEntityIds: ["998877"],
+  dm_directoryChildren: [
+    {
+      name: "United States",
+      slug: "us",
+      dm_addressCountryDisplayName: "United States",
+    },
+    {
+      name: "Mexico",
+      slug: "mx",
+      dm_addressCountryDisplayName: "Mexico",
+    },
+    {
+      name: "Canada",
+      slug: "ca",
+      dm_addressCountryDisplayName: "Canada",
+    },
+    {
+      name: "France",
+      slug: "fr",
+      dm_addressCountryDisplayName: "France",
+    },
+  ],
+  dm_directoryManagerId: "63590-locations",
+  slug: "en/index.html",
+};
+
+const countryDocument = {
+  _site: {
+    name: "Example Business",
+  },
+  meta: { entityType: { id: "dm_country", uid: 123 }, locale: "en" },
+  dm_addressCountryDisplayName: "United States",
+  dm_childEntityIds: ["123456"],
+  dm_directoryChildren: [
+    {
+      name: "Virginia",
+      slug: "us/va",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Washington DC",
+      slug: "us/dc",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Washington DC",
+    },
+    {
+      name: "New York",
+      slug: "us/ny",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "New York",
+    },
+    {
+      name: "California",
+      slug: "us/ca",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "California",
+    },
+  ],
+  dm_directoryManagerId: "63590-locations",
+  dm_directoryParents_63590_locations: [
+    {
+      name: "Locations Directory",
+      slug: "en/index.html",
+      dm_addressCountryDisplayName: "United States",
+    },
+  ],
+  slug: "us",
+};
+
 const regionDocument = {
   _site: {
     name: "Example Business",
@@ -56,8 +132,6 @@ const regionDocument = {
     {
       name: "Locations Directory",
       slug: "en/index.html",
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
     },
     {
       name: "US",
@@ -65,6 +139,7 @@ const regionDocument = {
       dm_addressCountryDisplayName: "United States",
     },
   ],
+  slug: "us/va",
 };
 
 const cityDocument = {
@@ -144,6 +219,7 @@ const cityDocument = {
       dm_addressRegionDisplayName: "Virginia",
     },
   ],
+  slug: "us/va/arlington",
 };
 
 const tests: ComponentTest[] = [
@@ -154,13 +230,25 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "default props - directory cards - document data",
-    document: cityDocument,
+    name: "default props - root - document data",
+    document: rootDocument,
     props: { ...Directory.defaultProps },
     version: migrationRegistry.length,
   },
   {
-    name: "default props - directory list - document data",
+    name: "default props - country - document data",
+    document: countryDocument,
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props - region - document data",
+    document: regionDocument,
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props - city list - document data",
     document: cityDocument,
     props: { ...Directory.defaultProps },
     version: migrationRegistry.length,
@@ -315,8 +403,8 @@ const tests: ComponentTest[] = [
     version: 8,
   },
   {
-    name: "version 8 - directory list - default props",
-    document: regionDocument,
+    name: "version 8 - root - default props",
+    document: rootDocument,
     props: {
       data: {
         directoryRoot: "Directory Root",
@@ -343,7 +431,63 @@ const tests: ComponentTest[] = [
     version: 8,
   },
   {
-    name: "version 8 - directory card - default props",
+    name: "version 8 - country - default props",
+    document: countryDocument,
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - region - default props",
+    document: countryDocument,
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - city - default props",
     document: cityDocument,
     props: {
       data: {
