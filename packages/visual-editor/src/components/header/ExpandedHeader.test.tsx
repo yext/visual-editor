@@ -97,7 +97,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: migrationRegistry.length,
+    version: 10,
     interactions: async (page) => {
       const mobileMenuButton = page.getByLabelText("Open menu");
       await act(async () => {
@@ -150,7 +150,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: migrationRegistry.length,
+    version: 10,
   },
   {
     name: "version 10 props - secondary header",
@@ -202,7 +202,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: migrationRegistry.length,
+    version: 10,
     interactions: async (page) => {
       const mobileMenuButton = page.getByLabelText("Open menu");
       await act(async () => {
