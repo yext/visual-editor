@@ -139,8 +139,8 @@ const tests: ComponentTest[] = [
     },
     version: 10,
     interactions: async (page) => {
-      const q1 = page.getByText("Test Question 1");
-      const q2 = page.getByText("Test Question 2");
+      const q1 = page.getByText("Question Lorem ipsum dolor sit amet?").nth(0);
+      const q2 = page.getByText("Question Lorem ipsum dolor sit amet?").nth(1);
       await act(async () => {
         await q1.click();
         await q2.click();
@@ -156,7 +156,7 @@ const tests: ComponentTest[] = [
         heading: {
           field: "",
           constantValue: {
-            en: "s",
+            en: "",
             hasLocalizedValue: "true",
           },
           constantValueEnabled: true,
