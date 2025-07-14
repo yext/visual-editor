@@ -4,7 +4,7 @@ export const updateImageStylingMigration: Migration = {
   // Update ImageWrapper component
   ImageWrapper: {
     action: "updated",
-    propTransformation: ({ layout, height, ...props }) => ({
+    propTransformation: ({ ...props }) => ({
       ...props,
       // Remove layout and height, keep aspectRatio and width
     }),
