@@ -5,7 +5,6 @@ import {
   ComponentTest,
   delay,
   transformTests,
-  viewports,
 } from "../testing/componentTests.setup.ts";
 import { act, render as reactRender, screen } from "@testing-library/react";
 import {
@@ -43,7 +42,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 1 props",
+    name: "version 10 props",
     document: {},
     props: {
       data: {
@@ -65,6 +64,8 @@ const tests: ComponentTest[] = [
             link: "#",
             linkType: "URL",
           },
+          showPrimaryCTA: true,
+          showSecondaryCTA: true,
         },
         secondaryHeader: {
           show: false,
@@ -105,7 +106,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 1 props - no data",
+    name: "version 10 props - no data",
     document: {},
     props: {
       data: {
@@ -122,6 +123,8 @@ const tests: ComponentTest[] = [
             link: "",
             linkType: "URL",
           },
+          showPrimaryCTA: true,
+          showSecondaryCTA: true,
         },
         secondaryHeader: {
           show: false,
@@ -150,7 +153,7 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 1 props - secondary header",
+    name: "version 10 props - secondary header",
     document: {},
     props: {
       data: {
@@ -167,6 +170,8 @@ const tests: ComponentTest[] = [
             link: "#",
             linkType: "URL",
           },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
         },
         secondaryHeader: {
           show: true,
