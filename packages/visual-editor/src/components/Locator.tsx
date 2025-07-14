@@ -35,11 +35,11 @@ import {
   createSearchHeadlessConfig,
   Heading,
   msg,
-  normalizeSlug,
   useDocument,
-  useTemplateProps,
   Toggle,
   YextField,
+  getLocationPath,
+  useTemplateProps,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -535,7 +535,9 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
 const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { document, relativePrefixToRoot } = useTemplateProps();
+
   const location = result.rawData;
   const distance = result.distance;
 
@@ -641,29 +643,20 @@ const LocationCard: CardComponent<Location> = ({
           </div>
         </div>
         <Button asChild className="basis-full" variant="primary">
-          <a href={getPath(location)} onClick={handleVisitPageClick}>
+          <a
+            href={getLocationPath(
+              location,
+              i18n.language,
+              relativePrefixToRoot
+            )}
+            onClick={handleVisitPageClick}
+          >
             {t("visitPage", "Visit Page")}
           </a>
         </Button>
       </div>
     </Background>
   );
-};
-
-const getPath = (location: Location) => {
-  const { document, relativePrefixToRoot } = useTemplateProps<any>();
-
-  if (location.slug) {
-    return `${relativePrefixToRoot ?? ""}${location.slug}`;
-  }
-
-  const locale = document.locale || "en";
-  const localePath = locale !== "en" ? `${locale}/` : "";
-  const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
-    : `${localePath}${location.id}`;
-
-  return `${relativePrefixToRoot ?? ""}${normalizeSlug(path)}`;
 };
 
 const getEntityType = (entityTypeEnvVar?: string) => {

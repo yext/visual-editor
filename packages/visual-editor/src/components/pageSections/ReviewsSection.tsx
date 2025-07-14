@@ -22,7 +22,6 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
-const TEMP_ENTITY_ID = 25897322; // Hardcoded for demo purposes, replace with actual entity ID logic
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   month: "long",
@@ -51,7 +50,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
   const document: any = useDocument();
-  const apiKey = ""; // TODO: document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  const apiKey = document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
@@ -59,8 +58,8 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     return <></>;
   }
   const businessId: number = Number(document?.businessId);
-  const contentDeliveryAPIDomain = "ignored"; // TODO: document?._yext?.contentDeliveryAPIDomain;
-  const entityId = TEMP_ENTITY_ID; // TODO: document?.uid
+  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
+  const entityId = document?.uid;
   const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
     {}

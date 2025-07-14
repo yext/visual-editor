@@ -1,3 +1,14 @@
+#### 0.0.47 (2025-07-11)
+
+##### New Features
+
+- document data in reviews component (#611) (d8cf5e94)
+
+##### Bug Fixes
+
+- use shared getPath for Directory/Locator/NearbyLocations links (#615) (b8df0d80)
+- hide/show props for Header CTAs (#610) (c907e70b)
+
 #### 0.0.46 (2025-07-10)
 
 ##### Chores
