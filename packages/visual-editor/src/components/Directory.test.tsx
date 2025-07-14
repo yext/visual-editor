@@ -17,6 +17,56 @@ import {
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
+const regionDocument = {
+  _site: {
+    name: "Example Business",
+  },
+  meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
+  dm_addressCountryDisplayName: "United States",
+  dm_addressRegionDisplayName: "Virginia",
+  dm_childEntityIds: ["8932945"],
+  dm_directoryChildren: [
+    {
+      name: "Arlington",
+      slug: "us/va/arlington",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Fairfax",
+      slug: "us/va/fairfax",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Alexandria",
+      slug: "us/va/alexandria",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Falls Church",
+      slug: "us/va/fallschurch",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+  ],
+  dm_directoryManagerId: "63590-locations",
+  dm_directoryParents_63590_locations: [
+    {
+      name: "Locations Directory",
+      slug: "en/index.html",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "US",
+      slug: "en/us",
+      dm_addressCountryDisplayName: "United States",
+    },
+  ],
+};
+
 const cityDocument = {
   _site: {
     name: "Example Business",
@@ -92,56 +142,6 @@ const cityDocument = {
       slug: "us/va",
       dm_addressCountryDisplayName: "United States",
       dm_addressRegionDisplayName: "Virginia",
-    },
-  ],
-};
-
-const regionDocument = {
-  _site: {
-    name: "Example Business",
-  },
-  meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
-  dm_addressCountryDisplayName: "United States",
-  dm_addressRegionDisplayName: "Virginia",
-  dm_childEntityIds: ["8932945"],
-  dm_directoryChildren: [
-    {
-      name: "Arlington",
-      slug: "us/va/arlington",
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-    },
-    {
-      name: "Fairfax",
-      slug: "us/va/fairfax",
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-    },
-    {
-      name: "Alexandria",
-      slug: "us/va/alexandria",
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-    },
-    {
-      name: "Falls Church",
-      slug: "us/va/fallschurch",
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-    },
-  ],
-  dm_directoryManagerId: "63590-locations",
-  dm_directoryParents_63590_locations: [
-    {
-      name: "Locations Directory",
-      slug: "en/index.html",
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-    },
-    {
-      name: "US",
-      slug: "en/us",
-      dm_addressCountryDisplayName: "United States",
     },
   ],
 };

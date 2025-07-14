@@ -292,8 +292,6 @@ describe("TestimonialSection", async () => {
         puckConfig
       );
 
-      console.log(data);
-
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
