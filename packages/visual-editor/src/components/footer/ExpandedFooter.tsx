@@ -36,7 +36,6 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.tsx";
-import { t } from "i18next";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
