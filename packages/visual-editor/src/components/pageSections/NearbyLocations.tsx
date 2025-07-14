@@ -18,14 +18,17 @@ import {
   resolveTranslatableString,
   msg,
   ThemeOptions,
-  useTemplateProps,
   MaybeLink,
+  getLocationPath,
+  useTemplateProps,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
   Address,
   Coordinate,
   AnalyticsScopeProvider,
+  HoursType,
+  AddressType,
 } from "@yext/pages-components";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
@@ -216,19 +219,22 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
-  relativePrefixToRoot,
+  id,
   slug,
 }: {
   cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
   name: string;
-  hours: any;
-  address: any;
+  hours: HoursType;
+  address: AddressType;
   timezone: string;
   mainPhone: string;
-  relativePrefixToRoot?: string;
+  id: string;
   slug?: string;
 }) => {
+  const { relativePrefixToRoot } = useTemplateProps();
+  const { i18n } = useTranslation();
+
   return (
     <Background
       background={styles?.cards.backgroundColor}
@@ -239,7 +245,11 @@ const LocationCard = ({
         eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
         className="mb-2"
-        href={relativePrefixToRoot && slug ? relativePrefixToRoot + slug : slug}
+        href={getLocationPath(
+          { address, slug, id },
+          i18n.language,
+          relativePrefixToRoot
+        )}
       >
         <Heading
           level={styles?.cards.headingLevel}
@@ -295,7 +305,6 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
 }: NearbyLocationsSectionProps) => {
   const document = useDocument<any>();
   const { i18n } = useTranslation();
-  const { relativePrefixToRoot } = useTemplateProps<any>();
   const coordinate = resolveYextEntityField<Coordinate>(
     document,
     data?.coordinate
@@ -308,11 +317,13 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   // parse variables from document
   const {
     businessId,
+    entityId,
     apiKey,
     contentEndpointId,
     contentDeliveryAPIDomain,
   }: {
     businessId: string;
+    entityId: string;
     apiKey: string;
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
@@ -326,6 +337,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
       queryKey: [
         "NearbyLocations",
         businessId,
+        entityId,
         apiKey,
         contentEndpointId,
         contentDeliveryAPIDomain,
@@ -337,6 +349,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
       queryFn: async () => {
         return await fetchNearbyLocations({
           businessId: businessId,
+          entityId: entityId,
           apiKey: apiKey,
           contentEndpointId: contentEndpointId,
           contentDeliveryAPIDomain: contentDeliveryAPIDomain,
@@ -344,10 +357,12 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
           longitude: coordinate?.longitude || 0,
           radiusMi: data?.radius,
           limit: data?.limit,
+          locale: i18n.language,
         });
       },
       enabled:
         !!businessId &&
+        !!entityId &&
         !!apiKey &&
         !!contentEndpointId &&
         !!contentDeliveryAPIDomain &&
@@ -384,12 +399,12 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     key={index}
                     cardNumber={index}
                     styles={styles}
+                    id={location.id}
                     name={location.name}
                     address={location.address}
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
-                    relativePrefixToRoot={relativePrefixToRoot}
                     slug={location.slug}
                   />
                 )
@@ -407,6 +422,7 @@ function parseDocument(
   contentEndpointIdEnvVar?: string
 ): {
   businessId: string;
+  entityId: string;
   apiKey: string;
   contentEndpointId: string;
   contentDeliveryAPIDomain: string;
@@ -415,6 +431,12 @@ function parseDocument(
   const businessId: string = document?.businessId;
   if (!businessId) {
     console.warn("Missing businessId! Unable to fetch nearby locations.");
+  }
+
+  // read entityId
+  const entityId: string = document?.id;
+  if (!entityId) {
+    console.warn("Missing entityId! Unable to fetch nearby locations.");
   }
 
   // read API key
@@ -454,6 +476,7 @@ function parseDocument(
 
   return {
     businessId: businessId,
+    entityId: entityId,
     apiKey: apiKey,
     contentEndpointId: contentEndpointId,
     contentDeliveryAPIDomain: contentDeliveryAPIDomain,

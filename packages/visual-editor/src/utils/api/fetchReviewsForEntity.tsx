@@ -22,10 +22,9 @@ export const fetchReviewsForEntity = async ({
   limit,
   pageToken,
 }: FetchReviewsParams) => {
-  // const url = new URL(`${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${REVIEWS_ENDPOINT_ID}`);
-  const TEMP_ENDPOINT =
-    "https://streams.yext.com/v2/accounts/me/api/deepakReviews"; // TODO: remove
-  const url = new URL(TEMP_ENDPOINT);
+  const url = new URL(
+    `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${REVIEWS_ENDPOINT_ID}`
+  );
   url.searchParams.append("api_key", apiKey);
   url.searchParams.append("v", V_PARAM);
   url.searchParams.append("entity.uid", String(entityId));
