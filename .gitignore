@@ -4,6 +4,7 @@ node_modules/
 .eslintcache
 storybook-static
 jstest
+.pnpm-store
 
 # Logs
 logs
