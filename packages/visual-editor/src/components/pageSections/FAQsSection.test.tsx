@@ -33,6 +33,17 @@ const faqData = {
   ],
 };
 
+const version10DefaultFAQ = {
+  question: {
+    en: "Question Lorem ipsum dolor sit amet?",
+    hasLocalizedValue: "true",
+  },
+  answer: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -47,21 +58,17 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 0 props with entity values",
+    name: "version 10 props with entity values",
     document: { c_faq: faqData, name: "test name" },
     props: {
       data: {
         heading: {
           field: "name",
-          constantValue: "Frequently Asked Questions",
-          constantValueEnabled: false,
-          constantValueOverride: {},
+          constantValue: {},
         },
         faqs: {
           field: "c_faq",
-          constantValue: { faqs: [] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
+          constantValue: {},
         },
       },
       styles: {
@@ -69,11 +76,17 @@ const tests: ComponentTest[] = [
           bgColor: "bg-palette-primary-light",
           textColor: "text-black",
         },
-        headingLevel: 2,
+        heading: {
+          level: 2,
+          align: "left",
+        },
       },
       liveVisibility: true,
+      analytics: {
+        scope: "faqsSection",
+      },
     },
-    version: 0,
+    version: 10,
     interactions: async (page) => {
       const q1 = page.getByText("What services do you offer?");
       const q2 = page.getByText("Do you have parking available?");
@@ -85,22 +98,25 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 0 props with constant value",
+    name: "version 10 props with constant value",
     document: { c_faq: faqData },
     props: {
       data: {
         heading: {
-          field: "name",
-          constantValue: "Frequently Asked Questions",
+          field: "",
+          constantValue: {
+            en: "Frequently Asked Questions",
+            hasLocalizedValue: "true",
+          },
           constantValueEnabled: true,
-          constantValueOverride: {},
         },
         faqs: {
-          field: "c_faq",
+          field: "",
           constantValue: {
             faqs: [
-              { question: "Test Question 1", answer: "Answer 1" },
-              { question: "Test Question 2", answer: "Answer 2" },
+              version10DefaultFAQ,
+              version10DefaultFAQ,
+              version10DefaultFAQ,
             ],
           },
           constantValueEnabled: true,
@@ -108,14 +124,20 @@ const tests: ComponentTest[] = [
       },
       styles: {
         backgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
         },
-        headingLevel: 5,
+        heading: {
+          level: 4,
+          align: "right",
+        },
       },
       liveVisibility: true,
+      analytics: {
+        scope: "faqsSection",
+      },
     },
-    version: 0,
+    version: 10,
     interactions: async (page) => {
       const q1 = page.getByText("Test Question 1");
       const q2 = page.getByText("Test Question 2");
@@ -127,18 +149,20 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 0 props with no faqs",
+    name: "version 10 props with no data",
     document: {},
     props: {
       data: {
         heading: {
-          field: "name",
-          constantValue: "Frequently Asked Questions",
+          field: "",
+          constantValue: {
+            en: "s",
+            hasLocalizedValue: "true",
+          },
           constantValueEnabled: true,
-          constantValueOverride: {},
         },
         faqs: {
-          field: "c_faq",
+          field: "",
           constantValue: {
             faqs: [],
           },
@@ -147,14 +171,20 @@ const tests: ComponentTest[] = [
       },
       styles: {
         backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
+          bgColor: "bg-palette-primary-light",
           textColor: "text-black",
         },
-        headingLevel: 4,
+        heading: {
+          level: 2,
+          align: "left",
+        },
       },
       liveVisibility: true,
+      analytics: {
+        scope: "faqsSection",
+      },
     },
-    version: 0,
+    version: 10,
   },
 ];
 
