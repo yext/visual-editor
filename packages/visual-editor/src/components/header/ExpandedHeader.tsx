@@ -606,7 +606,7 @@ const HeaderCtas = (props: {
           />
         </EntityField>
       )}
-      {showSecondaryCTA && primaryCTA?.link && secondaryCTA?.label && (
+      {showSecondaryCTA && secondaryCTA?.link && secondaryCTA?.label && (
         <EntityField
           constantValueEnabled
           displayName={pt("fields.secondaryCta", "Secondary CTA")}
