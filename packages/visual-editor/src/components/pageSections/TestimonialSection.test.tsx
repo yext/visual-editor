@@ -299,7 +299,7 @@ describe("TestimonialSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
+      await delay(300);
 
       await expect(
         `TestimonialSection/[${viewportName}] ${name}`

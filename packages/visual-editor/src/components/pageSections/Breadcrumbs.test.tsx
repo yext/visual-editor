@@ -169,7 +169,7 @@ describe("BreadcrumbsSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
+      await delay(300);
 
       await expect(`Breadcrumbs/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
