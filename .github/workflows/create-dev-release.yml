@@ -45,7 +45,7 @@ jobs:
       - name: "Notify Starter Repo"
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
+          token: ${{ secrets.WEBSITE_REPO_PAT }}
           repository: YextSolutions/pages-visual-editor-starter
           event-type: dev-release-created
           client-payload: >
