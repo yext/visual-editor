@@ -4,7 +4,6 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
@@ -17,12 +16,6 @@ import { page } from "@vitest/browser/context";
 import { ExpandedFooter } from "./ExpandedFooter.tsx";
 
 const version10PlaceholderImage: string = "https://placehold.co/100";
-
-const version10ExpandedFooterLinks = {
-  linkType: "URL" as const,
-  label: { en: "Footer Link", hasLocalizedValue: "true" as const },
-  links: [],
-};
 
 const version10FooterLink = {
   linkType: "URL" as const,
