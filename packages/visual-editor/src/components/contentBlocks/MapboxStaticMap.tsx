@@ -161,6 +161,7 @@ export const MapboxStaticMapComponent = ({
     >
       <img
         ref={imgRef}
+        alt={t("map", "Map")}
         className="components w-full h-full object-cover"
         src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=${apiKey}`}
       />
