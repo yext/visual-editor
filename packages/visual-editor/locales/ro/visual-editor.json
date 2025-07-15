@@ -1,5 +1,9 @@
 {
   "Link": "Legătură",
+  "actions": {
+    "copyToClipboard": "Copiați în clipboard",
+    "pasteFromClipboard": "Lipiți din clipboard"
+  },
   "address": "Adresa",
   "addressInput": {
     "city": "Oraş",

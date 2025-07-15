@@ -1,5 +1,9 @@
 {
   "Link": "Lenke",
+  "actions": {
+    "copyToClipboard": "Kopier til utklippstavlen",
+    "pasteFromClipboard": "Lim inn fra utklippstavlen"
+  },
   "address": "Adresse",
   "addressInput": {
     "city": "By",

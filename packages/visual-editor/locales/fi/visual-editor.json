@@ -1,5 +1,9 @@
 {
   "Link": "Linkki",
+  "actions": {
+    "copyToClipboard": "Kopioi leikepöydälle",
+    "pasteFromClipboard": "Liittää leikepöydältä"
+  },
   "address": "Osoite",
   "addressInput": {
     "city": "Kaupunki",

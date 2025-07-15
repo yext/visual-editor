@@ -1,5 +1,9 @@
 {
   "Link": "Collegamento",
+  "actions": {
+    "copyToClipboard": "Copia negli appunti",
+    "pasteFromClipboard": "Incolla dagli appunti"
+  },
   "address": "Indirizzo",
   "addressInput": {
     "city": "Città",

@@ -31,11 +31,11 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
-import { linkTypeOptions } from "../internal/puck/constant-value-fields/CallToAction.tsx";
+import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "./contentBlocks/ImageStyling.tsx";
+} from "../contentBlocks/ImageStyling.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
@@ -377,9 +377,8 @@ const ExpandedFooterWrapper = ({
   const { i18n } = useTranslation();
 
   return (
-    <Background className="mt-auto" ref={puck.dragRef}>
+    <Background className="mt-auto" ref={puck.dragRef} as="footer">
       <PageSection
-        as="footer"
         verticalPadding={"footer"}
         background={backgroundColor}
         className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
@@ -495,7 +494,6 @@ const ExpandedFooterWrapper = ({
       </PageSection>
       {show && (
         <PageSection
-          as="footer"
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
           className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}

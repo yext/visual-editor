@@ -40,6 +40,14 @@ export default defineConfig(() => ({
   test: {
     globals: true,
     environment: "jsdom",
+    env: {
+      COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY:
+        process.env.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+      COMPONENT_TESTS_MAPBOX_API_KEY:
+        process.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+      COMPONENT_TESTS_SEARCH_API_KEY:
+        process.env.COMPONENT_TESTS_SEARCH_API_KEY,
+    },
     css: true,
     browser: {
       enabled: true,

@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Kopirajte u međuspremnik",
+    "pasteFromClipboard": "Zalijepi iz međuspremnika"
+  },
   "address": "Adresa",
   "addressInput": {
     "city": "Grad",

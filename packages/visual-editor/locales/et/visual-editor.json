@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Kopeeri lõikelauale",
+    "pasteFromClipboard": "Pasta lõikelaualt"
+  },
   "address": "Aadress",
   "addressInput": {
     "city": "Linn",
