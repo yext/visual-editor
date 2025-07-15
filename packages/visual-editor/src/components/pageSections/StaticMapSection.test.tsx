@@ -23,7 +23,7 @@ const tests: ComponentTest[] = [
       ...StaticMapSection.defaultProps,
       data: {
         ...StaticMapSection.defaultProps?.data,
-        apiKey: import.meta.env.COMPONENT_TESTS_STATIC_MAP_KEY,
+        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
       },
     },
     version: migrationRegistry.length,
@@ -51,7 +51,7 @@ const tests: ComponentTest[] = [
       ...StaticMapSection.defaultProps,
       data: {
         ...StaticMapSection.defaultProps?.data,
-        apiKey: import.meta.env.COMPONENT_TESTS_STATIC_MAP_KEY,
+        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
       },
     },
     version: migrationRegistry.length,
@@ -61,7 +61,7 @@ const tests: ComponentTest[] = [
     document: {},
     props: {
       data: {
-        apiKey: import.meta.env.COMPONENT_TESTS_STATIC_MAP_KEY,
+        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
       },
       liveVisibility: true,
     },
@@ -93,7 +93,7 @@ const tests: ComponentTest[] = [
     },
     props: {
       data: {
-        apiKey: import.meta.env.COMPONENT_TESTS_STATIC_MAP_KEY,
+        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
       },
       liveVisibility: true,
     },

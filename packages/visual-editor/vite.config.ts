@@ -49,8 +49,8 @@ export default defineConfig(() => ({
         process.env.COMPONENT_TESTS_SEARCH_API_KEY,
       COMPONENT_TESTS_REVIEWS_APP_API_KEY:
         process.env.COMPONENT_TESTS_REVIEWS_APP_API_KEY,
-      COMPONENT_TESTS_STATIC_MAP_KEY:
-        process.env.COMPONENT_TESTS_STATIC_MAP_KEY,
+      COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY:
+        process.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
     },
     css: true,
     browser: {
