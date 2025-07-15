@@ -11,6 +11,8 @@ export interface ImageProps {
   aspectRatio?: number;
   width?: number;
   className?: string;
+  role?: string;
+  "aria-label"?: string;
 }
 
 export const Image: React.FC<ImageProps> = ({
@@ -18,6 +20,8 @@ export const Image: React.FC<ImageProps> = ({
   aspectRatio,
   width,
   className,
+  role,
+  "aria-label": ariaLabel,
 }) => {
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
@@ -29,36 +33,40 @@ export const Image: React.FC<ImageProps> = ({
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
   return (
-    <div
-      className={themeManagerCn(containerStyles, className)}
-      style={width ? { width: `${width}px` } : undefined}
-    >
-      {aspectRatio ? (
-        <ImageComponent
-          image={image}
-          layout={"aspect"}
-          aspectRatio={aspectRatio}
-          className="object-cover w-full h-full"
-        />
-      ) : !!width && !!calculatedHeight ? (
-        <ImageComponent
-          image={image}
-          layout={"fixed"}
-          width={width}
-          height={calculatedHeight}
-          className="object-cover"
-        />
-      ) : (
-        <img
-          src={isComplexImageType(image) ? image.image.url : image.url}
-          alt={
-            isComplexImageType(image)
-              ? (image.image.alternateText ?? "")
-              : (image.alternateText ?? "")
-          }
-          className="object-cover w-full h-full"
-        />
-      )}
+    <div className="w-full">
+      <div
+        className={themeManagerCn(containerStyles, className)}
+        style={width ? { width: `${width}px` } : undefined}
+        role={role}
+        aria-label={ariaLabel}
+      >
+        {aspectRatio ? (
+          <ImageComponent
+            image={image}
+            layout={"aspect"}
+            aspectRatio={aspectRatio}
+            className="object-cover w-full h-full"
+          />
+        ) : !!width && !!calculatedHeight ? (
+          <ImageComponent
+            image={image}
+            layout={"fixed"}
+            width={width}
+            height={calculatedHeight}
+            className="object-cover"
+          />
+        ) : (
+          <img
+            src={isComplexImageType(image) ? image.image.url : image.url}
+            alt={
+              isComplexImageType(image)
+                ? (image.image.alternateText ?? "")
+                : (image.alternateText ?? "")
+            }
+            className="object-cover w-full h-full"
+          />
+        )}
+      </div>
     </div>
   );
 };
