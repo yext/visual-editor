@@ -61,6 +61,9 @@ jobs:
         working-directory: ./packages/${{ inputs.package }}
         run: |
           set +e
+          COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY=$COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY \ 
+          COMPONENT_TESTS_MAPBOX_API_KEY=$COMPONENT_TESTS_MAPBOX_API_KEY \
+          COMPONENT_TESTS_SEARCH_API_KEY=$COMPONENT_TESTS_SEARCH_API_KEY \
           pnpm run test:components
           EXIT_CODE=$?
           set -e
