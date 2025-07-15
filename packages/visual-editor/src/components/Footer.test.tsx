@@ -87,7 +87,6 @@ describe("Footer", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(300);
 
       await expect(`Footer/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
