@@ -6,7 +6,7 @@ import {
   transformTests,
   delay,
 } from "../testing/componentTests.setup.ts";
-import { act, render as reactRender } from "@testing-library/react";
+import { render as reactRender } from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
