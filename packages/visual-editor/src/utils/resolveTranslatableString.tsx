@@ -1,5 +1,6 @@
 import {
   MaybeRTF,
+  normalizeLocale,
   RichText,
   TranslatableRichText,
   TranslatableString,
@@ -15,9 +16,10 @@ export const resolveTranslatableString = (
   translatableString: TranslatableString = "",
   locale: string = "en"
 ): string => {
+  const normalizedLocale = normalizeLocale(locale);
   if (typeof translatableString === "object") {
-    if (locale in translatableString) {
-      return translatableString[locale];
+    if (normalizedLocale in translatableString) {
+      return translatableString[normalizedLocale];
     }
     return "";
   }
@@ -34,6 +36,7 @@ export const resolveTranslatableRichText = (
   translatableRichText: TranslatableRichText = "",
   locale: string = "en"
 ): string | React.ReactElement => {
+  const normalizedLocale = normalizeLocale(locale);
   try {
     let value = translatableRichText;
 
@@ -41,7 +44,7 @@ export const resolveTranslatableRichText = (
       typeof translatableRichText !== "string" &&
       !isRichText(translatableRichText)
     ) {
-      value = translatableRichText[locale];
+      value = translatableRichText[normalizedLocale];
     }
 
     return toStringOrElement(value);
@@ -69,6 +72,7 @@ export function getDisplayValue(
   translatableString: TranslatableRichText,
   locale: string = "en"
 ): string {
+  const normalizedLocale = normalizeLocale(locale);
   if (typeof translatableString === "string") {
     return translatableString;
   }
@@ -77,7 +81,7 @@ export function getDisplayValue(
     return richTextToString(translatableString);
   }
 
-  const localizedValue = translatableString[locale];
+  const localizedValue = translatableString[normalizedLocale];
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);

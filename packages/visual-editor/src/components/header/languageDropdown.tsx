@@ -12,6 +12,8 @@ import {
   BackgroundStyle,
   Body,
   fetchLocalesToPathsForEntity,
+  normalizeLocale,
+  normalizeLocales,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -43,13 +45,19 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   currentLocale,
   background,
 }) => {
-  const scopedLocales = new Set<string>(locales);
+  const normalizedLocales = normalizeLocales(locales) ?? [];
+  const normalizedCurrentLocale = normalizeLocale(currentLocale);
+  const scopedLocales = new Set<string>(normalizedLocales);
   const [validLocalesToPaths, setValidLocalesToPaths] = React.useState<
     Record<string, string>
   >({
-    [currentLocale]: "",
+    [normalizedCurrentLocale]: "",
   });
-  const [selected, setSelected] = React.useState(currentLocale);
+  const [selected, _setSelected] = React.useState(currentLocale);
+  const setSelected = React.useCallback(
+    (value: string) => _setSelected(normalizeLocale(value)),
+    [_setSelected]
+  );
   const [status, setStatus] = React.useState<
     "UNSET" | "LOADING" | "COMPLETE" | "ERROR"
   >("UNSET");
@@ -84,13 +92,13 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
 
         if (Object.keys(filtered).length > 1) {
           setValidLocalesToPaths({
-            [currentLocale]: filtered[currentLocale],
+            [normalizedCurrentLocale]: filtered[currentLocale],
             ...filtered,
           });
         }
       } catch {
         // just show the single current locale in the dropdown
-        setValidLocalesToPaths({ [currentLocale]: "" });
+        setValidLocalesToPaths({ [normalizedCurrentLocale]: "" });
         setStatus("ERROR");
         console.error("failed to fetch locales for entity");
       } finally {
@@ -100,7 +108,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   const handleLocaleSelected = (locale: string, path: string) => {
-    if (locale === selected) {
+    if (normalizeLocale(locale) === normalizeLocale(selected)) {
       return;
     }
     setSelected(locale);
@@ -231,13 +239,13 @@ export function parseDocumentForLanguageDropdown(
   }
 
   let contentEndpointId: string = "";
-  let locales: string[] = [];
+  let locales: string[] | undefined = undefined;
   if (document?._pageset) {
     try {
       const pagesetJson = JSON.parse(document?._pageset);
       contentEndpointId =
         pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
-      locales = pagesetJson?.scope?.locales;
+      locales = normalizeLocales(pagesetJson?.scope?.locales);
     } catch (e) {
       console.error("Failed to parse pageset from document. err=", e);
       return undefined;
