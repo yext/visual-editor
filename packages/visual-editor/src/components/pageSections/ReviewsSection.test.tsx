@@ -159,7 +159,7 @@ describe("ReviewsSection", async () => {
       await page.viewport(width, height);
       if (!name.includes("empty document")) {
         await waitFor(() => {
-          screen.getAllByText("June 29, 2025");
+          screen.getAllByText("Kyle D");
         });
       }
 
