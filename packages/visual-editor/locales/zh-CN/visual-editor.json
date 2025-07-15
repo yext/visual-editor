@@ -1,5 +1,9 @@
 {
   "Link": "关联",
+  "actions": {
+    "copyToClipboard": "复制到剪贴板",
+    "pasteFromClipboard": "从剪贴板粘贴"
+  },
   "address": "地址",
   "addressInput": {
     "city": "城市",

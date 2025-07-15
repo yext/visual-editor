@@ -5,6 +5,12 @@ on:
     secrets:
       BOT_REPO_SCOPED_TOKEN:
         required: true
+      COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY:
+        required: true
+      COMPONENT_TESTS_MAPBOX_API_KEY:
+        required: true
+      COMPONENT_TESTS_SEARCH_API_KEY:
+        required: true
     inputs:
       package:
         description: The name of the package to test
@@ -54,9 +60,16 @@ jobs:
         id: run_component_tests
         if: matrix.node-version == '20.x'
         continue-on-error: true
+        env:
+          COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY: ${{secrets.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY}}
+          COMPONENT_TESTS_MAPBOX_API_KEY: ${{secrets.COMPONENT_TESTS_MAPBOX_API_KEY}}
+          COMPONENT_TESTS_SEARCH_API_KEY: ${{secrets.COMPONENT_TESTS_SEARCH_API_KEY}}
         working-directory: ./packages/${{ inputs.package }}
         run: |
           set +e
+          COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY=$COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY \ 
+          COMPONENT_TESTS_MAPBOX_API_KEY=$COMPONENT_TESTS_MAPBOX_API_KEY \
+          COMPONENT_TESTS_SEARCH_API_KEY=$COMPONENT_TESTS_SEARCH_API_KEY \
           pnpm run test:components
           EXIT_CODE=$?
           set -e
@@ -87,7 +100,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add packages/${{ inputs.package }}/src/components/testing/screenshots
+          git add "packages/$PACKAGE_INPUT/src/components/testing/screenshots"
 
           if ! git diff --cached --exit-code --quiet; then
             git commit -m "Update component screenshots for $PACKAGE_INPUT"

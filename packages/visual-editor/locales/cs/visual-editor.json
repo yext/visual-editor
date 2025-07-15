@@ -1,5 +1,9 @@
 {
   "Link": "Odkaz",
+  "actions": {
+    "copyToClipboard": "Kopírovat do schránky",
+    "pasteFromClipboard": "Vložit ze schránky"
+  },
   "address": "Adresa",
   "addressInput": {
     "city": "Město",

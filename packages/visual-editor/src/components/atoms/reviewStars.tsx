@@ -27,7 +27,7 @@ export const ReviewStars = (props: ReviewStarsProps) => {
     <div className="flex items-center gap-3">
       <Body className="font-bold">{roundedAverageRating}</Body>
       <div className={`flex items-center gap-0.5 ${starColor}`}>
-        {new Array(5)
+        {Array.from({ length: 5 })
           .fill(null)
           .map((_, i) =>
             averageRating - i >= 0.75 ? (

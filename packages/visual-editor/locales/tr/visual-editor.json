@@ -1,5 +1,9 @@
 {
   "Link": "Bağlantı",
+  "actions": {
+    "copyToClipboard": "Panoya Kopyala",
+    "pasteFromClipboard": "Panodan Yapıştır"
+  },
   "address": "Adres",
   "addressInput": {
     "city": "Şehir",

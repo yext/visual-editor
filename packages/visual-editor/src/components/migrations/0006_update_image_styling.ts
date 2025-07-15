@@ -4,6 +4,7 @@ export const updateImageStylingMigration: Migration = {
   // Update ImageWrapper component
   ImageWrapper: {
     action: "updated",
+    // oxlint-disable-next-line no-unused-vars
     propTransformation: ({ layout, height, ...props }) => ({
       ...props,
       // Remove layout and height, keep aspectRatio and width

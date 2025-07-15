@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Kopieer naar klembord",
+    "pasteFromClipboard": "Plak van klembord"
+  },
   "address": "Adres",
   "addressInput": {
     "city": "Stad",

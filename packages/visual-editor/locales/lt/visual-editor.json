@@ -1,5 +1,9 @@
 {
   "Link": "Nuoroda",
+  "actions": {
+    "copyToClipboard": "Kopijuokite į mainų sritį",
+    "pasteFromClipboard": "Įklijuokite iš mainų srities"
+  },
   "address": "Adresas",
   "addressInput": {
     "city": "Miestas",

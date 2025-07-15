@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Másolja a vágólapra",
+    "pasteFromClipboard": "Beilleszteni a vágólapról"
+  },
   "address": "Cím",
   "addressInput": {
     "city": "Város",
