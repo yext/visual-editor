@@ -13,7 +13,7 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
-import { ExpandedFooter } from "./ExpandedFooter.tsx";
+import { ExpandedFooter, validPatterns } from "./ExpandedFooter.tsx";
 
 const version10PlaceholderImage: string = "https://placehold.co/100";
 
@@ -278,6 +278,34 @@ const tests: ComponentTest[] = [
   },
 ];
 
+const socialLinkTestCases = [
+  {
+    name: "valid social links",
+    links: {
+      xLink: "https://x.com/yext",
+      facebookLink: "https://facebook.com/yext",
+      instagramLink: "https://instagram.com/yext",
+      pinterestLink: "https://pinterest.com/yext",
+      linkedInLink: "https://linkedin.com/in/yext",
+      youtubeLink: "https://youtube.com/c/yext",
+      tiktokLink: "https://tiktok.com/@yext",
+    },
+    expected: true,
+  },
+  {
+    name: "invalid social links",
+    links: {
+      xLink: "http://x.com/",
+      facebookLink: "facebook.com/",
+      instagramLink: "not-a-link",
+      pinterestLink: "pinterest.com/yext",
+      linkedInLink: "linkedin.com/yext",
+      youtubeLink: "https://youtube.com/",
+      tiktokLink: "https://tiktok.com/",
+    },
+    expected: false,
+  },
+];
 describe("ExpandedFooter", async () => {
   const puckConfig: Config = {
     components: { ExpandedFooter },
@@ -340,6 +368,15 @@ describe("ExpandedFooter", async () => {
         ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
+      }
+    }
+  );
+  it.each(socialLinkTestCases)(
+    "should validate $name",
+    ({ links, expected }) => {
+      for (const [key, regex] of Object.entries(validPatterns)) {
+        const result = regex.test(links[key as keyof typeof links] || "");
+        expect(result).toBe(expected);
       }
     }
   );
