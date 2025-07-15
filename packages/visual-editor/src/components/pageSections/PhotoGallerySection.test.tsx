@@ -155,12 +155,12 @@ const photoGalleryData = [
 ];
 
 const tests: ComponentTest[] = [
-  // {
-  //   name: "default props with empty document",
-  //   document: {},
-  //   props: { ...PhotoGallerySection.defaultProps },
-  //   version: migrationRegistry.length,
-  // },
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...PhotoGallerySection.defaultProps },
+    version: migrationRegistry.length,
+  },
   {
     name: "default props with document data",
     document: { photoGallery: photoGalleryData },
