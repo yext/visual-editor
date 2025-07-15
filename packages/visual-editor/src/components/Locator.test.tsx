@@ -109,7 +109,7 @@ const tests: ComponentTest[] = [
       }),
     },
     props: {
-      mapStyle: "mapbox://styles/mapbox/navigation-night-v1",
+      mapStyle: "mapbox://styles/mapbox/dark-v11",
       openNowButton: true,
     },
     version: migrationRegistry.length,

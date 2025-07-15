@@ -5,7 +5,6 @@ import {
   ComponentTest,
   testHours,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -444,7 +443,6 @@ describe("CoreInfoSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
 
       await expect(
         `CoreInfoSection/[${viewportName}] ${name}`
