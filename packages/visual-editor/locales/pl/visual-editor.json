@@ -1,5 +1,9 @@
 {
   "Link": "Połączyć",
+  "actions": {
+    "copyToClipboard": "Kopiuj do schowka",
+    "pasteFromClipboard": "Wklej ze schowka"
+  },
   "address": "Adres",
   "addressInput": {
     "city": "Miasto",

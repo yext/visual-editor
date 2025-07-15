@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Kopieren Sie in die Zwischenablage",
+    "pasteFromClipboard": "Einfügen aus der Zwischenablage"
+  },
   "address": "Adresse",
   "addressInput": {
     "city": "Stadt",

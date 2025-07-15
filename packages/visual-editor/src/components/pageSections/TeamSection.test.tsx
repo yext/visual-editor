@@ -4,9 +4,8 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   TeamSection,
   migrate,
@@ -331,7 +330,10 @@ describe("TeamSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
 
       await expect(`TeamSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);

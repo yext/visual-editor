@@ -1,5 +1,9 @@
 {
   "Link": "Lien",
+  "actions": {
+    "copyToClipboard": "Copier dans le presse-papiers",
+    "pasteFromClipboard": "Coller du presse-papiers"
+  },
   "address": "Adresse",
   "addressInput": {
     "city": "Ville",

@@ -1,5 +1,9 @@
 {
   "Link": "リンク",
+  "actions": {
+    "copyToClipboard": "クリップボードにコピーします",
+    "pasteFromClipboard": "クリップボードから貼り付けます"
+  },
   "address": "住所",
   "addressInput": {
     "city": "市",

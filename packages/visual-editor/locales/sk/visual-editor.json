@@ -1,5 +1,9 @@
 {
   "Link": "Prepojiť",
+  "actions": {
+    "copyToClipboard": "Kopírovať do schránky",
+    "pasteFromClipboard": "Pasta zo schránky"
+  },
   "address": "Osloviť",
   "addressInput": {
     "city": "Mesto",

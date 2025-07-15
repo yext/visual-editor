@@ -19,7 +19,7 @@ export const compareScreenshot: BrowserCommand<
   try {
     baselineBuffer = readFileSync(filePath);
     baselineImg = PNG.sync.read(baselineBuffer);
-  } catch (error) {
+  } catch (_) {
     // If baseline doesn't exist, save new screenshot as baseline
     mkdirSync(path.dirname(filePath), { recursive: true });
     writeFileSync(filePath, PNG.sync.write(updatedImg));
