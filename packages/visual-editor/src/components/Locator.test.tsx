@@ -4,9 +4,13 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "./testing/componentTests.setup.ts";
-import { act, render as reactRender } from "@testing-library/react";
+import {
+  act,
+  render as reactRender,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
@@ -167,11 +171,31 @@ describe("Locator", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(500);
+
+      // Unless testing empty state, wait for search to load
+      if (!name.includes("empty document")) {
+        await waitFor(() => {
+          screen.getAllByText("Galaxy Grill");
+        });
+      }
+
+      // Hide the distance to each location because it is based on the test runner's IP address
+      await act(async () => {
+        const allDivs = container.querySelectorAll("div");
+        allDivs.forEach((div) => {
+          if (div.textContent?.includes("mi") && !div.children.length) {
+            div.style.backgroundColor = "black";
+          }
+        });
+      });
 
       await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
-      console.warn("WCAG Violations:", results.violations);
+      if (results.violations.length) {
+        console.error("WCAG Violations:", results.violations);
+      }
+      // TODO: Re-enable WCAG test
+      // expect(results).toHaveNoViolations()
 
       if (interactions) {
         await interactions(page);
@@ -179,7 +203,9 @@ describe("Locator", async () => {
           `Locator/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results = await axe(container);
-        console.warn("WCAG Violations:", results.violations);
+        if (results.violations.length) {
+          console.error("WCAG Violations:", results.violations);
+        }
       }
     }
   );
