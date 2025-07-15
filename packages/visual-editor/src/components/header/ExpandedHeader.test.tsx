@@ -6,7 +6,7 @@ import {
   delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
-import { act, render as reactRender, screen } from "@testing-library/react";
+import { act, render as reactRender } from "@testing-library/react";
 import {
   backgroundColors,
   ExpandedHeader,

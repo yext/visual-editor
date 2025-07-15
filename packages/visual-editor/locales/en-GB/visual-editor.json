@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Copy to Clipboard",
+    "pasteFromClipboard": "Paste from Clipboard"
+  },
   "address": "Address",
   "addressInput": {
     "city": "City",

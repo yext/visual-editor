@@ -1,5 +1,9 @@
 {
   "Link": "Länk",
+  "actions": {
+    "copyToClipboard": "Kopiera till Urklipp",
+    "pasteFromClipboard": "Klistra in från urklipp"
+  },
   "address": "Adress",
   "addressInput": {
     "city": "Stad",

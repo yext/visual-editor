@@ -1,5 +1,9 @@
 {
   "Link": "Forbindelse",
+  "actions": {
+    "copyToClipboard": "Kopier til udklipsholder",
+    "pasteFromClipboard": "Indsæt fra udklipsholder"
+  },
   "address": "Adresse",
   "addressInput": {
     "city": "By",

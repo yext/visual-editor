@@ -1,5 +1,9 @@
 {
   "Link": "Enlace",
+  "actions": {
+    "copyToClipboard": "Copiar al portapapeles",
+    "pasteFromClipboard": "Pegar del portapapeles"
+  },
   "address": "DIRECCIÓN",
   "addressInput": {
     "city": "Ciudad",
