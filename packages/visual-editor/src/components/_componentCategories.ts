@@ -67,14 +67,17 @@ import {
   ExpandedHeader,
   ExpandedHeaderProps,
 } from "./header/ExpandedHeader.tsx";
-import { Footer, FooterProps } from "./Footer.tsx";
+import { Footer, FooterProps } from "./footer/Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
-import { ExpandedFooter, ExpandedFooterProps } from "./ExpandedFooter.tsx";
+import {
+  ExpandedFooter,
+  ExpandedFooterProps,
+} from "./footer/ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
