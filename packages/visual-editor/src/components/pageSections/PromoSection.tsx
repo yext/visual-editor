@@ -163,12 +163,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           <div className="w-full">
             <Image
               image={resolvedPromo.image}
-              aspectRatio={
-                styles.image.aspectRatio ??
-                (resolvedPromo.image.width && resolvedPromo.image.height
-                  ? resolvedPromo.image.width / resolvedPromo.image.height
-                  : 1.78)
-              }
+              aspectRatio={styles.image.aspectRatio ?? 1.78}
               width={styles.image.width || 640}
               className="max-w-full sm:max-w-initial rounded-image-borderRadius"
             />

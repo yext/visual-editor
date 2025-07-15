@@ -50,11 +50,11 @@ export const EntityField = ({
   }
 
   return (
-    <span>
+    <div>
       <TooltipProvider>
         <Tooltip open={!!tooltipContent && tooltipsVisible}>
           <TooltipTrigger asChild>
-            <span
+            <div
               className={
                 tooltipsVisible
                   ? "ve-outline-2 ve-outline-dotted" +
@@ -63,7 +63,7 @@ export const EntityField = ({
               }
             >
               <MemoizedChildren>{children}</MemoizedChildren>
-            </span>
+            </div>
           </TooltipTrigger>
           <TooltipContent
             zoomWithViewport
@@ -77,7 +77,7 @@ export const EntityField = ({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </span>
+    </div>
   );
 };
 
