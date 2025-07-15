@@ -5,7 +5,6 @@ import {
   ComponentTest,
   testHours,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {

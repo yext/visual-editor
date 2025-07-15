@@ -4,7 +4,6 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {

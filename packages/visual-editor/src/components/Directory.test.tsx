@@ -3,7 +3,6 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  delay,
   testHours,
   transformTests,
 } from "./testing/componentTests.setup.ts";
