@@ -51,6 +51,16 @@ const defaultFooterLink = {
   link: "#",
 };
 
+export const validPatterns: Record<string, RegExp> = {
+  xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,
+  facebookLink: /^https:\/\/(www\.)?facebook\.com\/.+/,
+  instagramLink: /^https:\/\/(www\.)?instagram\.com\/.+/,
+  pinterestLink: /^https:\/\/(www\.)?pinterest\.com\/.+/,
+  linkedInLink: /^https:\/\/(www\.)?linkedin\.com\/.+/,
+  youtubeLink: /^(https:\/\/(www\.)?youtube\.com\/.+|https:\/\/youtu\.be\/.+)$/,
+  tiktokLink: /^https:\/\/(www\.)?tiktok\.com\/.+/,
+};
+
 export interface ExpandedFooterProps {
   data: {
     primaryFooter: {
@@ -386,16 +396,18 @@ const ExpandedFooterWrapper = ({
         <div
           className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
         >
-          <EntityField
-            constantValueEnabled
-            displayName={pt("fields.logo", "Logo")}
-          >
-            <FooterLogo
-              aspectRatio={aspectRatioForLogo}
-              logo={buildComplexLogoImage(logo, logoWidth || 100)}
-              logoWidth={logoWidth || 100}
-            />
-          </EntityField>
+          {logo && (
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.logo", "Logo")}
+            >
+              <FooterLogo
+                aspectRatio={aspectRatioForLogo}
+                logo={buildComplexLogoImage(logo, logoWidth || 100)}
+                logoWidth={logoWidth || 100}
+              />
+            </EntityField>
+          )}
           <div className="hidden md:block space-y-8">
             <FooterIcons
               xLink={xLink}
@@ -496,15 +508,17 @@ const ExpandedFooterWrapper = ({
           background={secondaryBackgroundColor}
           className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
         >
-          <EntityField
-            constantValueEnabled
-            displayName={pt(
-              "fields.secondaryFooterLinks",
-              "Secondary Footer Links"
-            )}
-          >
-            <FooterLinks links={secondaryFooterLinks} type="Secondary" />
-          </EntityField>
+          {secondaryFooterLinks?.length >= 1 && (
+            <EntityField
+              constantValueEnabled
+              displayName={pt(
+                "fields.secondaryFooterLinks",
+                "Secondary Footer Links"
+              )}
+            >
+              <FooterLinks links={secondaryFooterLinks} type="Secondary" />
+            </EntityField>
+          )}
           {copyrightMessage && (
             <EntityField
               constantValueEnabled
@@ -659,62 +673,43 @@ const FooterIcons = ({
       link: xLink,
       icon: <FaXTwitter className="h-6 w-6 md:h-5 md:w-5" />,
       label: "X (Twitter)",
-      prefix: "",
-      valid: /^https:\/\/x\.com\/[A-Za-z0-9_]{1,15}$/.test(xLink),
+      valid: validPatterns.xLink.test(xLink),
     },
     {
       link: facebookLink,
       icon: <FaFacebook className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Facebook",
-      prefix: "",
-      valid: /^https:\/\/(www\.)?facebook\.com\/[A-Za-z0-9.-]+$/.test(
-        facebookLink
-      ),
+      valid: validPatterns.facebookLink.test(facebookLink),
     },
     {
       link: instagramLink,
       icon: <FaInstagram className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Instagram",
-      prefix: "",
-      valid: /^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/.test(
-        instagramLink
-      ),
+      valid: validPatterns.instagramLink.test(instagramLink),
     },
     {
       link: pinterestLink,
       icon: <FaPinterest className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Pinterest",
-      prefix: "",
-      valid: /^https:\/\/(www\.)?pinterest\.com\/[A-Za-z0-9_-]+\/?$/.test(
-        pinterestLink
-      ),
+      valid: validPatterns.pinterestLink.test(pinterestLink),
     },
     {
       link: linkedInLink,
       icon: <FaLinkedinIn className="h-6 w-6 md:h-5 md:w-5" />,
       label: "LinkedIn",
-      prefix: "",
-      valid:
-        /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9-%_]+\/?$/.test(
-          linkedInLink
-        ),
+      valid: validPatterns.linkedInLink.test(linkedInLink),
     },
     {
       link: youtubeLink,
       icon: <FaYoutube className="h-6 w-6 md:h-5 md:w-5" />,
       label: "YouTube",
-      prefix: "",
-      valid:
-        /^https:\/\/(www\.)?youtube\.com\/(channel|user|c)\/[A-Za-z0-9_-]+$|^https:\/\/youtu\.be\/[A-Za-z0-9_-]+$/.test(
-          youtubeLink
-        ),
+      valid: validPatterns.youtubeLink.test(youtubeLink),
     },
     {
       link: tiktokLink,
       icon: <FaTiktok className="h-6 w-6 md:h-5 md:w-5" />,
-      label: "Tiktok",
-      prefix: "",
-      valid: /^https:\/\/(www\.)?tiktok\.com\/@[\w.-]+\/?$/.test(tiktokLink),
+      label: "TikTok",
+      valid: validPatterns.tiktokLink.test(tiktokLink),
     },
   ];
 
@@ -737,7 +732,7 @@ const FooterIcons = ({
             variant="link"
             eventName={`socialLink.${label.toLowerCase()}`}
             ariaLabel={`${label} ${t("link", "link")}`}
-            alwaysHideCaret={true}
+            alwaysHideCaret
             className="block break-words whitespace-normal"
           />
         ))}
