@@ -53,7 +53,7 @@ const tests: ComponentTest[] = [
   {
     name: "default props with no nearby locations",
     document: {
-      id: "1101-wilson-blvd",
+      id: "7751-bird-rd",
       businessId: "4174974",
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
@@ -149,7 +149,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 with no nearby locations",
     document: {
-      id: "1101-wilson-blvd",
+      id: "7751-bird-rd",
       businessId: "4174974",
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
@@ -193,8 +193,8 @@ const tests: ComponentTest[] = [
         },
         cards: {
           backgroundColor: {
-            bgColor: "bg-palette-tertiary-light",
-            textColor: "text-black",
+            bgColor: "bg-palette-tertiary-dark",
+            textColor: "text-white",
           },
           headingLevel: 5,
         },
