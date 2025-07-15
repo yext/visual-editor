@@ -11,8 +11,6 @@ export interface ImageProps {
   aspectRatio?: number;
   width?: number;
   className?: string;
-  role?: string;
-  "aria-label"?: string;
 }
 
 export const Image: React.FC<ImageProps> = ({
@@ -20,8 +18,6 @@ export const Image: React.FC<ImageProps> = ({
   aspectRatio,
   width,
   className,
-  role,
-  "aria-label": ariaLabel,
 }) => {
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
@@ -37,8 +33,6 @@ export const Image: React.FC<ImageProps> = ({
       <div
         className={themeManagerCn(containerStyles, className)}
         style={width ? { width: `${width}px` } : undefined}
-        role={role}
-        aria-label={ariaLabel}
       >
         {aspectRatio ? (
           <ImageComponent

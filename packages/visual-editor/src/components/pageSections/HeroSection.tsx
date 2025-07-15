@@ -337,14 +337,14 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           fieldId={data.hero.field}
           constantValueEnabled={data.hero.constantValueOverride.image}
         >
-          <Image
-            image={resolvedHero?.image}
-            aspectRatio={styles.image.aspectRatio}
-            width={styles.image.width || 640}
-            className="max-w-full sm:max-w-initial rounded-image-borderRadius"
-            role="region"
-            aria-label={t("heroImage", "Hero Image")}
-          />
+          <div role="region" aria-label={t("heroImage", "Hero Image")}>
+            <Image
+              image={resolvedHero?.image}
+              aspectRatio={styles.image.aspectRatio}
+              width={styles.image.width || 640}
+              className="max-w-full sm:max-w-initial rounded-image-borderRadius"
+            />
+          </div>
         </EntityField>
       )}
     </PageSection>
