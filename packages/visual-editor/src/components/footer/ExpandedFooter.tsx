@@ -51,6 +51,16 @@ const defaultFooterLink = {
   link: "#",
 };
 
+export const validPatterns: Record<string, RegExp> = {
+  xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,
+  facebookLink: /^https:\/\/(www\.)?facebook\.com\/.+/,
+  instagramLink: /^https:\/\/(www\.)?instagram\.com\/.+/,
+  pinterestLink: /^https:\/\/(www\.)?pinterest\.com\/.+/,
+  linkedInLink: /^https:\/\/(www\.)?linkedin\.com\/.+/,
+  youtubeLink: /^(https:\/\/(www\.)?youtube\.com\/.+|https:\/\/youtu\.be\/.+)$/,
+  tiktokLink: /^https:\/\/(www\.)?tiktok\.com\/.+/,
+};
+
 export interface ExpandedFooterProps {
   data: {
     primaryFooter: {
@@ -663,45 +673,43 @@ const FooterIcons = ({
       link: xLink,
       icon: <FaXTwitter className="h-6 w-6 md:h-5 md:w-5" />,
       label: "X (Twitter)",
-      valid: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/.test(xLink),
+      valid: validPatterns.xLink.test(xLink),
     },
     {
       link: facebookLink,
       icon: <FaFacebook className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Facebook",
-      valid: /^https:\/\/(www\.)?facebook\.com\/.+/.test(facebookLink),
+      valid: validPatterns.facebookLink.test(facebookLink),
     },
     {
       link: instagramLink,
       icon: <FaInstagram className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Instagram",
-      valid: /^https:\/\/(www\.)?instagram\.com\/.+/.test(instagramLink),
+      valid: validPatterns.instagramLink.test(instagramLink),
     },
     {
       link: pinterestLink,
       icon: <FaPinterest className="h-6 w-6 md:h-5 md:w-5" />,
       label: "Pinterest",
-      valid: /^https:\/\/(www\.)?pinterest\.com\/.+/.test(pinterestLink),
+      valid: validPatterns.pinterestLink.test(pinterestLink),
     },
     {
       link: linkedInLink,
       icon: <FaLinkedinIn className="h-6 w-6 md:h-5 md:w-5" />,
       label: "LinkedIn",
-      valid: /^https:\/\/(www\.)?linkedin\.com\/.+/.test(linkedInLink),
+      valid: validPatterns.linkedInLink.test(linkedInLink),
     },
     {
       link: youtubeLink,
       icon: <FaYoutube className="h-6 w-6 md:h-5 md:w-5" />,
       label: "YouTube",
-      valid:
-        /^https:\/\/(www\.)?youtube\.com\/.+/.test(youtubeLink) ||
-        /^https:\/\/youtu\.be\/.+/.test(youtubeLink),
+      valid: validPatterns.youtubeLink.test(youtubeLink),
     },
     {
       link: tiktokLink,
       icon: <FaTiktok className="h-6 w-6 md:h-5 md:w-5" />,
       label: "TikTok",
-      valid: /^https:\/\/(www\.)?tiktok\.com\/.+/.test(tiktokLink),
+      valid: validPatterns.tiktokLink.test(tiktokLink),
     },
   ];
 
