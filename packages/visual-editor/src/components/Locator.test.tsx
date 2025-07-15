@@ -185,6 +185,7 @@ describe("Locator", async () => {
         allDivs.forEach((div) => {
           if (div.textContent?.includes("mi") && !div.children.length) {
             div.style.backgroundColor = "black";
+            div.style.width = "8em";
           }
         });
       });
