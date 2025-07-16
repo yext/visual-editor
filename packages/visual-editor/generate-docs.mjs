@@ -221,7 +221,7 @@ function generateMarkdown() {
   );
 
   // Start with the VitePress frontmatter.
-  let markdown = `---\ntitle: Pre-Built Components\noutline: 2\n---\n\n`;
+  let markdown = `---\ntitle: Components\noutline: 2\n---\n\n`;
 
   // Iterate over all exports to find the component configurations.
   for (const apiMember of entryPoint.members) {

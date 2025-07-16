@@ -42,15 +42,18 @@ describe("generateCssVariablesFromPuckFields", () => {
         },
       }
     );
-    expect(result).toEqual({ "--colors-palette-primary": "green" });
+    expect(result).toEqual({
+      "--colors-palette-primary": "green",
+      "--colors-palette-primary-contrast": "#000000",
+    });
   });
 
   test("generates css variables from nested Puck fields", () => {
     const result = generateCssVariablesFromPuckFields(
       {
         primary: {
-          default: "green",
-          foreground: "blue",
+          default: "#00FF00",
+          foreground: "#003300",
         },
       },
       "palette",
@@ -77,8 +80,10 @@ describe("generateCssVariablesFromPuckFields", () => {
       }
     );
     expect(result).toEqual({
-      "--colors-palette-primary-default": "green",
-      "--colors-palette-primary-foreground": "blue",
+      "--colors-palette-primary-default": "#00FF00",
+      "--colors-palette-primary-foreground": "#003300",
+      "--colors-palette-primary-default-contrast": "#000000",
+      "--colors-palette-primary-foreground-contrast": "#FFFFFF",
     });
   });
 });

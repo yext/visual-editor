@@ -1,5 +1,5 @@
 ---
-title: Pre-Built Components
+title: Components
 outline: 2
 ---
 
@@ -115,7 +115,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card. Avaliable on Directory templates.
 
-![Preview of the Directory component](../components/testing/screenshots/Directory/%5Bdesktop%5D%20default%20props%20with%20document%20data%20that%20has%20directory%20cards.png)
+![Preview of the Directory component](../components/testing/screenshots/Directory/%5Bdesktop%5D%20default%20props%20-%20city%20list%20-%20document%20data.png)
 
 ### Props
 
