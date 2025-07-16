@@ -1,5 +1,4 @@
 import { Migration } from "../../utils/migrate.ts";
-
 export const updateExpandedHeaderStylesMigration: Migration = {
   ExpandedHeader: {
     action: "updated",
@@ -8,8 +7,11 @@ export const updateExpandedHeaderStylesMigration: Migration = {
         ...props,
         data: {
           ...props.data,
-          showPrimaryCTA: true,
-          showSecondaryCTA: true,
+          primaryHeader: {
+            ...props.data.primaryHeader,
+            showPrimaryCTA: true,
+            showSecondaryCTA: true,
+          },
         },
       };
     },
