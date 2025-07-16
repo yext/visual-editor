@@ -48,11 +48,13 @@ export interface CoreInfoData {
     }>;
     emails: YextEntityField<string[]>;
   };
+
   /** Content for the "Hours" column. */
   hours: {
     headingText: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
   };
+
   /** Content for the "Services" column. */
   services: {
     headingText: YextEntityField<TranslatableString>;

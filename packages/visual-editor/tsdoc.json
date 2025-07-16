@@ -6,14 +6,9 @@
       "tagName": "@propCategory",
       "syntaxKind": "block",
       "allowMultiple": true
-    },
-    {
-      "tagName": "@fakeTag",
-      "syntaxKind": "block"
     }
   ],
   "supportForTags": {
-    "@propCategory": true,
-    "@fakeTag": true
+    "@propCategory": true
   }
 }
