@@ -1,7 +1,9 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import { BackgroundStyle } from "../utils/themeConfigOptions.ts";
 
-const BackgroundContext = createContext<BackgroundStyle | undefined>(undefined);
+const BackgroundContext = createContext<Required<BackgroundStyle> | undefined>(
+  undefined
+);
 
 export const useBackground = () => {
   if (!BackgroundContext) {
@@ -17,7 +19,7 @@ export const BackgroundProvider = ({
   value,
 }: {
   children: ReactNode;
-  value: BackgroundStyle;
+  value: Required<BackgroundStyle>;
 }) => {
   return (
     <BackgroundContext.Provider value={value}>
