@@ -40,6 +40,9 @@ jobs:
       - name: Generate Documentation
         run: pnpm run generate-component-docs
 
+      - name: Running prettier
+        run: pnpm run prettier
+
       - name: Commit Documentation Changes
         id: commit_docs
         uses: EndBug/add-and-commit@v9
