@@ -55,5 +55,5 @@ jobs:
               "pr_title": "${{ github.event.pull_request.title }}",
               "pr_url": "${{ github.event.pull_request.html_url }}",
               "author": "${{ github.event.pull_request.user.login }}",
-              "package_url": "https://pkg.pr.new/yext/visual-editor@${{ github.event.pull_request.number }}"
+              "package_url": "https://pkg.pr.new/yext/@yext/visual-editor@${{ github.event.pull_request.number }}"
             }
