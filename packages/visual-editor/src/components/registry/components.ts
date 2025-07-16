@@ -172,7 +172,7 @@ export const ui: Registry["items"] = [
       "body",
       "background",
     ],
-    files: [{ path: "ExpandedFooter.tsx", type: "registry:ui" }],
+    files: [{ path: "footer/ExpandedFooter.tsx", type: "registry:ui" }],
   },
   {
     name: "ExpandedHeader",
@@ -209,7 +209,7 @@ export const ui: Registry["items"] = [
     name: "Footer",
     type: "registry:ui",
     registryDependencies: ["body", "cta", "pageSection"],
-    files: [{ path: "Footer.tsx", type: "registry:ui" }],
+    files: [{ path: "footer/Footer.tsx", type: "registry:ui" }],
   },
   {
     name: "GetDirections",
@@ -232,7 +232,7 @@ export const ui: Registry["items"] = [
     name: "Header",
     type: "registry:ui",
     registryDependencies: ["cta", "background", "maybeLink", "pageSection"],
-    files: [{ path: "Header.tsx", type: "registry:ui" }],
+    files: [{ path: "header/Header.tsx", type: "registry:ui" }],
   },
   {
     name: "HeadingText",
@@ -276,7 +276,7 @@ export const ui: Registry["items"] = [
       "visibilityWrapper",
       "maybeRTF",
     ],
-    files: [{ path: "pageSection/InsightSection.tsx", type: "registry:ui" }],
+    files: [{ path: "pageSections/InsightSection.tsx", type: "registry:ui" }],
   },
   {
     name: "Image",
@@ -347,7 +347,7 @@ export const ui: Registry["items"] = [
       "image",
       "visibilityWrapper",
     ],
-    files: [{ path: "pageSections/Promo.tsx", type: "registry:ui" }],
+    files: [{ path: "pageSections/PromoSection.tsx", type: "registry:ui" }],
   },
   {
     name: "SectionContainer",
