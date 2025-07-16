@@ -129,9 +129,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 history: { setHistories },
               } = getPuck();
               onClearLocalChanges();
-              setHistories([
-                { id: "root", state: { data: histories[0].state.data } },
-              ]);
+              setHistories([{ ...histories[0] }]);
             }}
           />
           {!isDevMode && (
