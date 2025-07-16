@@ -96,7 +96,6 @@ export const useCommonMessageReceivers = (
   });
 
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
-    payload = normalizeLocalesInObject(payload);
     const data = JSON.parse(payload.layoutData) as Data;
     devLogger.logData("LAYOUT_DATA", data);
     const migratedData = migrate(data, migrationRegistry, puckConfig);
@@ -109,7 +108,6 @@ export const useCommonMessageReceivers = (
   });
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
-    payload = normalizeLocalesInObject(payload);
     const payloadString = payload as unknown as string;
     const themeData = payloadString ? JSON.parse(payloadString) : {};
     devLogger.logData("THEME_DATA", themeData);
