@@ -16,7 +16,8 @@ export function normalizeLocale(locale: string): string {
         return part; // variant or other
       }
     })
-    .join("-");
+    .join("-")
+    .trim();
 }
 
 /**
