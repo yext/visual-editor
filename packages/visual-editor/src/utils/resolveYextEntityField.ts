@@ -17,7 +17,10 @@ export const resolveYextEntityField = <T>(
 
   // If constant value is enabled, recursively find and resolve any embedded
   // fields in translatable strings within the constant value.
-  if (entityField.constantValueEnabled && entityField.constantValue) {
+  if (
+    entityField.constantValueEnabled &&
+    entityField.constantValue !== undefined
+  ) {
     return resolveEmbeddedFieldsRecursively(
       entityField.constantValue,
       document,
