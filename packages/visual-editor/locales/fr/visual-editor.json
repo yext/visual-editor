@@ -298,6 +298,7 @@
   "loadingVE": "Chargement de l'éditeur visuel ...",
   "localGeomodifier": "Géomodificateur local",
   "locationsNear_one": "{{count}} Emplacement près de \"{{filterDisplayName}}\"",
+  "map": "Carte",
   "monday": "Lundi",
   "name": "Nom",
   "newYorkCity": "New York, New York, États-Unis",
