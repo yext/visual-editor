@@ -94,9 +94,92 @@ describe("normalizeLocale", () => {
     expect(normalizeLocalesInObject(doc)).toEqual(normalized);
   });
 
-  it("normalize object edge cases", () => {
-    expect(normalizeLocalesInObject(undefined)).toEqual(undefined);
-    expect(normalizeLocalesInObject(1)).toEqual(1);
-    expect(normalizeLocalesInObject(pageSet)).toEqual(normalizedPageSet);
+  it("normalizes top-level locales array", () => {
+    const input = {
+      locales: ["en_us", "fr_ca", "zh_hans-HK"],
+    };
+    const expected = {
+      locales: ["en-US", "fr-CA", "zh-Hans-HK"],
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(expected);
+  });
+
+  it("normalizes nested locale inside array of objects", () => {
+    const input = {
+      widgets: [
+        { name: "A", locale: "es_mx" },
+        { name: "B", locale: "de_de" },
+      ],
+    };
+    const expected = {
+      widgets: [
+        { name: "A", locale: "es-MX" },
+        { name: "B", locale: "de-DE" },
+      ],
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(expected);
+  });
+
+  it("does not modify large numeric strings", () => {
+    const input = {
+      id: "846759736121983207",
+      uid: "12345678901234567890",
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(input);
+  });
+
+  it("skips malformed JSON strings", () => {
+    const input = {
+      brokenJson: '{"locale": "en_us"', // missing closing }
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(input);
+  });
+
+  it("leaves plain strings untouched", () => {
+    const input = {
+      title: "Welcome to Montréal!",
+      note: "locale is en_us but not a key",
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(input);
+  });
+
+  it("normalizes deeply nested locale fields", () => {
+    const input = {
+      meta: {
+        config: {
+          settings: {
+            fallback: {
+              locale: "pt_br",
+            },
+          },
+        },
+      },
+    };
+    const expected = {
+      meta: {
+        config: {
+          settings: {
+            fallback: {
+              locale: "pt-BR",
+            },
+          },
+        },
+      },
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(expected);
+  });
+
+  it("handles null and undefined safely", () => {
+    const input = {
+      locale: null,
+      locales: undefined,
+      misc: false,
+    };
+    const expected = {
+      locale: null,
+      locales: undefined,
+      misc: false,
+    };
+    expect(normalizeLocalesInObject(input)).toEqual(expected);
   });
 });

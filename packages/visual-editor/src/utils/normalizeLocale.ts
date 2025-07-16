@@ -1,6 +1,5 @@
 /**
- * Transforms a locale into BCP-47 language format, ex "zh-Hans-HK"
- * @param locale
+ * Transforms a locale into BCP-47 language format, e.g., "zh-Hans-HK"
  */
 export function normalizeLocale(locale: string): string {
   return locale
@@ -21,8 +20,7 @@ export function normalizeLocale(locale: string): string {
 }
 
 /**
- * Transforms all locales in object into a BCP-47 language format, ex "zh-Hans-HK"
- * @param obj
+ * Safely transforms all "locale" and "locales" fields in an object to BCP-47 format.
  */
 export function normalizeLocalesInObject(obj: any): any {
   if (Array.isArray(obj)) {
@@ -33,22 +31,24 @@ export function normalizeLocalesInObject(obj: any): any {
       if (key === "locale" && typeof value === "string") {
         result[key] = normalizeLocale(value);
       } else if (key === "locales" && Array.isArray(value)) {
-        result[key] = value.map(normalizeLocale);
-      } else if (typeof value === "string") {
-        // try parsing as JSON and normalize any locales inside
+        result[key] = value.map((v) =>
+          typeof v === "string" ? normalizeLocale(v) : v
+        );
+      } else if (typeof value === "string" && looksLikeJson(value)) {
         result[key] = tryNormalizeLocalesInString(value);
       } else {
         result[key] = normalizeLocalesInObject(value);
       }
     }
     return result;
-  } else if (obj && typeof obj === "string") {
-    return tryNormalizeLocalesInString(obj);
   } else {
     return obj;
   }
 }
 
+/**
+ * Returns parsed JSON or undefined.
+ */
 function tryParseJSON(str: string): any | undefined {
   try {
     return JSON.parse(str);
@@ -57,12 +57,25 @@ function tryParseJSON(str: string): any | undefined {
   }
 }
 
+/**
+ * Normalizes any locales inside a JSON string, if it's an object or array.
+ */
 function tryNormalizeLocalesInString(str: string): string {
   const parsed = tryParseJSON(str);
-  if (!parsed) {
-    return str;
+  if (parsed && (Array.isArray(parsed) || typeof parsed === "object")) {
+    const normalized = normalizeLocalesInObject(parsed);
+    return JSON.stringify(normalized);
   }
+  return str;
+}
 
-  const normalized = normalizeLocalesInObject(parsed);
-  return JSON.stringify(normalized);
+/**
+ * Returns true if a string looks like a JSON object or array.
+ */
+function looksLikeJson(str: string): boolean {
+  const trimmed = str.trim();
+  return (
+    (trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+    (trimmed.startsWith("[") && trimmed.endsWith("]"))
+  );
 }
