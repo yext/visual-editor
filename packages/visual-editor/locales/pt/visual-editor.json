@@ -1,5 +1,10 @@
 {
   "Link": "Link",
+
+  "actions": {
+    "copyToClipboard": "Cópia para a área de transferência",
+    "pasteFromClipboard": "Colar da área de transferência"
+  },
   "addEntityField": "Adicione o campo da entidade",
   "address": "Endereço",
   "addressInput": {
@@ -295,6 +300,7 @@
   "loadingVE": "Carregando Editor Visual ...",
   "localGeomodifier": "Geomodificador local",
   "locationsNear_one": "{{count}} localização próxima a \"{{filterDisplayName}}\"",
+  "map": "Mapa",
   "monday": "Segunda-feira",
   "name": "Nome",
   "newYorkCity": "Nova York, Nova York, Estados Unidos",

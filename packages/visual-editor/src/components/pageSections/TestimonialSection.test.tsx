@@ -4,7 +4,6 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -299,7 +298,6 @@ describe("TestimonialSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
 
       await expect(
         `TestimonialSection/[${viewportName}] ${name}`

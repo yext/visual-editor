@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Kopieer naar klembord",
+    "pasteFromClipboard": "Plak van klembord"
+  },
   "addEntityField": "Voeg een entiteitsveld toe",
   "address": "Adres",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Visuele editor laden ...",
   "localGeomodifier": "Lokale geomodifier",
   "locationsNear_one": "{{count}} locatie nabij \"{{filterdisplayName}}\"",
+  "map": "Kaart",
   "monday": "Maandag",
   "name": "Naam",
   "newYorkCity": "New York City, New York, Verenigde Staten",

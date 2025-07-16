@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Másolja a vágólapra",
+    "pasteFromClipboard": "Beilleszteni a vágólapról"
+  },
   "addEntityField": "Adja hozzá az entitás mezőt",
   "address": "Cím",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Vizuális szerkesztő betöltése ...",
   "localGeomodifier": "Helyi geomodifier",
   "locationsNear_one": "{{count}} A hely közelében \"{{filtDisPlayName}}\"",
+  "map": "Térkép",
   "monday": "hétfő",
   "name": "Név",
   "newYorkCity": "New York City, New York, Egyesült Államok",

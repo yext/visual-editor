@@ -1,5 +1,9 @@
 {
   "Link": "リンク",
+  "actions": {
+    "copyToClipboard": "クリップボードにコピーします",
+    "pasteFromClipboard": "クリップボードから貼り付けます"
+  },
   "addEntityField": "エンティティフィールドを追加します",
   "address": "住所",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
   "locationsNear_one": "{{count}}近くの場所 \"{{filterdisplayname}}\"",
+  "map": "地図",
   "monday": "月曜日",
   "name": "名前",
   "newYorkCity": "ニューヨーク市、ニューヨーク、米国",

@@ -1,5 +1,9 @@
 {
   "Link": "Prepojiť",
+  "actions": {
+    "copyToClipboard": "Kopírovať do schránky",
+    "pasteFromClipboard": "Pasta zo schránky"
+  },
   "addEntityField": "Pridať pole entity",
   "address": "Osloviť",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Načítava sa vizuálny editor ...",
   "localGeomodifier": "Miestny geomodifikátor",
   "locationsNear_one": "{{count}} Umiestnenie blízko \"{{FilterDisplayName}}\"",
+  "map": "Mapovať",
   "monday": "Pondelok",
   "name": "Menovať",
   "newYorkCity": "New York, New York, Spojené štáty americké",

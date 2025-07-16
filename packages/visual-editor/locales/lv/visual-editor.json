@@ -1,5 +1,9 @@
 {
   "Link": "Saite",
+  "actions": {
+    "copyToClipboard": "Kopēt uz starpliktuvi",
+    "pasteFromClipboard": "Paste no starpliktuves"
+  },
   "addEntityField": "Pievienojiet entītijas lauku",
   "address": "Uzruna",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Vizuālā redaktora ielāde ...",
   "localGeomodifier": "Vietējais ģeomodifieris",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no \"{{FilterDisplayName}}\"",
+  "map": "Karte",
   "monday": "Pirmdiena",
   "name": "Nosaukt",
   "newYorkCity": "Ņujorka, Ņujorka, Amerikas Savienotās Valstis",

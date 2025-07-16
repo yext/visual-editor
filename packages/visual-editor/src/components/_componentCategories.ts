@@ -34,6 +34,10 @@ import {
 } from "./pageSections/PhotoGallerySection.tsx";
 import { FAQSection, FAQSectionProps } from "./pageSections/FAQsSection.tsx";
 import {
+  ReviewsSection,
+  ReviewsSectionProps,
+} from "./pageSections/ReviewsSection.tsx";
+import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
@@ -63,14 +67,17 @@ import {
   ExpandedHeader,
   ExpandedHeaderProps,
 } from "./header/ExpandedHeader.tsx";
-import { Footer, FooterProps } from "./Footer.tsx";
+import { Footer, FooterProps } from "./footer/Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
-import { ExpandedFooter, ExpandedFooterProps } from "./ExpandedFooter.tsx";
+import {
+  ExpandedFooter,
+  ExpandedFooterProps,
+} from "./footer/ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -84,6 +91,7 @@ export interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
+  ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
@@ -101,6 +109,7 @@ export const PageSectionCategoryComponents = {
   PhotoGallerySection,
   ProductSection,
   PromoSection,
+  ReviewsSection,
   StaticMapSection,
   TeamSection,
   TestimonialSection,

@@ -1,5 +1,9 @@
 {
   "Link": "Legătură",
+  "actions": {
+    "copyToClipboard": "Copiați în clipboard",
+    "pasteFromClipboard": "Lipiți din clipboard"
+  },
   "addEntityField": "Adăugați câmpul entității",
   "address": "Adresa",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Încărcarea editorului vizual ...",
   "localGeomodifier": "Geomodificator local",
   "locationsNear_one": "{{count}} locație lângă \"{{FilterDisplayName}}\"",
+  "map": "Hartă",
   "monday": "luni",
   "name": "Nume",
   "newYorkCity": "New York City, New York, Statele Unite",

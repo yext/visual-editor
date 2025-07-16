@@ -5,6 +5,16 @@ on:
     secrets:
       BOT_REPO_SCOPED_TOKEN:
         required: true
+      COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY:
+        required: true
+      COMPONENT_TESTS_MAPBOX_API_KEY:
+        required: true
+      COMPONENT_TESTS_SEARCH_API_KEY:
+        required: true
+      COMPONENT_TESTS_REVIEWS_APP_API_KEY:
+        required: true
+      COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY:
+        required: true
     inputs:
       package:
         description: The name of the package to test
@@ -14,9 +24,7 @@ on:
 jobs:
   unit_tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./packages/${{ inputs.package }}
+    container: mcr.microsoft.com/playwright:v1.54.0
     strategy:
       matrix:
         node-version: [18.x, 20.x]
@@ -28,20 +36,19 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
 
+      - name: Mark repository as safe
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4.0.2
         with:
           node-version: ${{ matrix.node-version }}
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
       - name: Install deps
         run: pnpm i --frozen-lockfile --ignore-scripts
-
-      - name: Install Playwright Browsers
-        if: matrix.node-version == '20.x'
-        run: npx playwright install chromium --with-deps
+        working-directory: ./packages/${{ inputs.package }}
 
       - name: Download build artifact
         uses: actions/download-artifact@v4.1.7
@@ -51,13 +58,26 @@ jobs:
 
       - name: Run editor tests
         run: pnpm run test:editor
+        working-directory: ./packages/${{ inputs.package }}
 
       - name: Run component tests (Node 20 only)
         id: run_component_tests
         if: matrix.node-version == '20.x'
         continue-on-error: true
+        env:
+          COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY: ${{secrets.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY}}
+          COMPONENT_TESTS_MAPBOX_API_KEY: ${{secrets.COMPONENT_TESTS_MAPBOX_API_KEY}}
+          COMPONENT_TESTS_SEARCH_API_KEY: ${{secrets.COMPONENT_TESTS_SEARCH_API_KEY}}
+          COMPONENT_TESTS_REVIEWS_APP_API_KEY: ${{secrets.COMPONENT_TESTS_REVIEWS_APP_API_KEY}}
+          COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY: ${{secrets.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY}}
+        working-directory: ./packages/${{ inputs.package }}
         run: |
           set +e
+          COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY=$COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY \ 
+          COMPONENT_TESTS_MAPBOX_API_KEY=$COMPONENT_TESTS_MAPBOX_API_KEY \
+          COMPONENT_TESTS_SEARCH_API_KEY=$COMPONENT_TESTS_SEARCH_API_KEY \
+          COMPONENT_TESTS_REVIEWS_APP_API_KEY=$COMPONENT_TESTS_REVIEWS_APP_API_KEY \
+          COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY=$COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY \
           pnpm run test:components
           EXIT_CODE=$?
           set -e
@@ -65,6 +85,7 @@ jobs:
       - name: Detect new/modified screenshots
         id: check_screenshots
         if: matrix.node-version == '20.x'
+        working-directory: ./packages/${{ inputs.package }}
         run: |
           SCREENSHOTS_DIR="src/components/testing/screenshots" 
           echo "Checking for new/modified screenshots in ${SCREENSHOTS_DIR}..."
@@ -78,25 +99,29 @@ jobs:
 
       - name: Commit new screenshots and Fail if found
         if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
+        env:
+          PACKAGE_INPUT: ${{ inputs.package }}
+          TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}
+          NEW_SCREENSHOTS_FOUND: ${{ steps.check_screenshots.outputs.new_screenshots_found }}
         run: |
           echo "New or changed screenshots detected, or tests failed. Committing screenshots."
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add src/components/testing/screenshots
+          git add "packages/$PACKAGE_INPUT/src/components/testing/screenshots"
 
           if ! git diff --cached --exit-code --quiet; then
-            git commit -m "Update component screenshots for ${{ inputs.package }}"
+            git commit -m "Update component screenshots for $PACKAGE_INPUT"
             git push
             echo "Successfully committed and pushed new/updated screenshots."
           else
-            echo "No new screenshot changes to commit after all. This might indicate a test failure without new screenshots."
+            echo "No new screenshot changes to commit after all. This might indicate a non-screenshot component test failure in a previous step."
           fi
 
-          if [ "${{ steps.run_component_tests.outputs.test_exit_code }}" != "0" ]; then
+          if [ "$TEST_EXIT_CODE"  != "0" ]; then
             echo "Component tests failed."
             exit 1
-          elif [ "${{ steps.check_screenshots.outputs.new_screenshots_found }}" == "true" ]; then
+          elif [ "$NEW_SCREENSHOTS_FOUND" == "true" ]; then
             echo "New or modified screenshots detected."
             exit 1
           fi

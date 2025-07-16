@@ -1,5 +1,9 @@
 {
   "Link": "Enlace",
+  "actions": {
+    "copyToClipboard": "Copiar al portapapeles",
+    "pasteFromClipboard": "Pegar del portapapeles"
+  },
   "addEntityField": "Agregar campo de entidad",
   "address": "DIRECCIÓN",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Cargando editor visual ...",
   "localGeomodifier": "Geomodificador local",
   "locationsNear_one": "{{count}} ubicación cerca de \"{{filterDisplayName}}\"",
+  "map": "Mapa",
   "monday": "Lunes",
   "name": "Nombre",
   "newYorkCity": "Ciudad de Nueva York, Nueva York, Estados Unidos",

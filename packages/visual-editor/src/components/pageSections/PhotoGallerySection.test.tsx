@@ -4,9 +4,8 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   PhotoGallerySection,
   migrate,
@@ -418,7 +417,11 @@ describe("PhotoGallerySection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        // The gallery only loads the first iamge
+        expect(images[0].complete).toBe(true);
+      });
 
       await expect(
         `PhotoGallerySection/[${viewportName}] ${name}`

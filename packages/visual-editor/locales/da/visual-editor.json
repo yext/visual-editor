@@ -1,5 +1,9 @@
 {
   "Link": "Forbindelse",
+  "actions": {
+    "copyToClipboard": "Kopier til udklipsholder",
+    "pasteFromClipboard": "Indsæt fra udklipsholder"
+  },
   "addEntityField": "Tilføj entitetsfelt",
   "address": "Adresse",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Indlæser visuel redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
   "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{FilterDisPlaYname}}\"",
+  "map": "Kort",
   "monday": "mandag",
   "name": "Navn",
   "newYorkCity": "New York City, New York, USA",

@@ -1,5 +1,9 @@
 {
   "Link": "关联",
+  "actions": {
+    "copyToClipboard": "复制到剪贴板",
+    "pasteFromClipboard": "从剪贴板粘贴"
+  },
   "addEntityField": "添加实体字段",
   "address": "地址",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
+  "map": "地图",
   "monday": "周一",
   "name": "姓名",
   "newYorkCity": "纽约，纽约，美国",

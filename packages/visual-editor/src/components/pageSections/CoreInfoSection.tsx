@@ -290,40 +290,51 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const document = useDocument();
   const addressHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.info.headingText),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      document,
+      data.info.headingText,
+      locale
+    ),
+    locale
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
     document,
-    data.info.address
+    data.info.address,
+    locale
   );
   const resolvedEmails = resolveYextEntityField<string[]>(
     document,
-    data.info.emails
+    data.info.emails,
+    locale
   );
   const hoursHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
       document,
-      data.hours.headingText
+      data.hours.headingText,
+      locale
     ),
     i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
     document,
-    data.hours.hours
+    data.hours.hours,
+    locale
   );
   const servicesHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
       document,
-      data.services.headingText
+      data.services.headingText,
+      locale
     ),
     i18n.language
   );
   const servicesList = resolveYextEntityField<TranslatableString[]>(
     document,
-    data.services.servicesList
+    data.services.servicesList,
+    locale
   )?.map((translatableString: TranslatableString) =>
     resolveTranslatableString(translatableString, i18n.language)
   );
@@ -406,7 +417,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             {data.info.phoneNumbers.map((item, idx) => {
               const resolvedNumber = resolveYextEntityField<string>(
                 document,
-                item.number
+                item.number,
+                locale
               );
               if (!resolvedNumber) {
                 return;

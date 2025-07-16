@@ -1,5 +1,9 @@
 {
   "Link": "Odkaz",
+  "actions": {
+    "copyToClipboard": "Kopírovat do schránky",
+    "pasteFromClipboard": "Vložit ze schránky"
+  },
   "addEntityField": "Přidat pole entity",
   "address": "Adresa",
   "addressInput": {
@@ -295,6 +299,7 @@
   "loadingVE": "Načítání vizuálního editoru ...",
   "localGeomodifier": "Místní geomodifikátor",
   "locationsNear_one": "{{Count}} umístění poblíž \"{{FilterDisplayName}}\"",
+  "map": "Mapa",
   "monday": "pondělí",
   "name": "Jméno",
   "newYorkCity": "New York City, New York, Spojené státy",
