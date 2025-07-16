@@ -16,23 +16,28 @@ jobs:
     permissions:
       contents: write
 
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4.0.2
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: ${{ matrix.node-version }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: "Install dependencies"
+        run: pnpm i --frozen-lockfile --ignore-scripts
 
       - name: Generate Documentation
-        run: npm run generate-component-docs
+        run: pnpm run generate-component-docs
 
       - name: Commit and Push Documentation Changes
         run: |
