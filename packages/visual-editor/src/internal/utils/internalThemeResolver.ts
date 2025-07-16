@@ -1,3 +1,4 @@
+import { getContrastingColor } from "../../utils/colors.ts";
 import { ThemeConfig, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ThemeData } from "../types/themeData.ts";
 
@@ -69,6 +70,11 @@ export const generateCssVariablesFromPuckFields = (
       if (style.type === "number") {
         result[`--${style.plugin}-${themeSectionKey}-${styleKey}`] =
           fields[styleKey] + "px";
+      } else if (style.type === "color") {
+        result[`--${style.plugin}-${themeSectionKey}-${styleKey}`] =
+          fields[styleKey];
+        result[`--${style.plugin}-${themeSectionKey}-${styleKey}-contrast`] =
+          getContrastingColor(fields[styleKey], 12, 400);
       } else {
         result[`--${style.plugin}-${themeSectionKey}-${styleKey}`] =
           fields[styleKey];
@@ -79,6 +85,12 @@ export const generateCssVariablesFromPuckFields = (
         if (substyle.type === "number") {
           result[`--${style.plugin}-${themeSectionKey}-${styleKey}-${subkey}`] =
             fields[styleKey][subkey] + "px";
+        } else if (substyle.type === "color") {
+          result[`--${style.plugin}-${themeSectionKey}-${styleKey}-${subkey}`] =
+            fields[styleKey][subkey];
+          result[
+            `--${style.plugin}-${themeSectionKey}-${styleKey}-${subkey}-contrast`
+          ] = getContrastingColor(fields[styleKey][subkey], 12, 400);
         } else {
           result[`--${style.plugin}-${themeSectionKey}-${styleKey}-${subkey}`] =
             fields[styleKey][subkey];
