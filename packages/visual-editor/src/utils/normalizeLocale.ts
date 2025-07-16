@@ -1,8 +1,8 @@
 /**
  * Transforms a locale into BCP-47 language format, e.g., "zh-Hans-HK"
  */
-export function normalizeLocale(locale: string): string {
-  return locale
+export const normalizeLocale = (locale: string): string =>
+  locale
     .replace(/_/g, "-") // convert underscores to hyphens
     .split("-")
     .map((part, index) => {
@@ -18,7 +18,6 @@ export function normalizeLocale(locale: string): string {
     })
     .join("-")
     .trim();
-}
 
 /**
  * Safely transforms all "locale" and "locales" fields in an object to BCP-47 format.
