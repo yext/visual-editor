@@ -351,8 +351,8 @@ importers:
         specifier: ^7.10.1
         version: 7.17.5(react@18.3.1)
       "@measured/puck":
-        specifier: 0.19.1
-        version: 0.19.1(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
+        specifier: 0.19.3
+        version: 0.19.3(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
       "@radix-ui/react-accordion":
         specifier: ^1.2.0
         version: 1.2.8(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2240,14 +2240,6 @@ packages:
         integrity: sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==,
       }
     engines: { node: ">=6.0.0" }
-
-  "@measured/puck@0.19.1":
-    resolution:
-      {
-        integrity: sha512-DFFmDFZTCyTmm0LAtqesrBvH6VdjMaFI4POIfPlBmZKIpZVXKldhzpEyePfh5O0n6MRsaGPlf345c5FBXIyglA==,
-      }
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
 
   "@measured/puck@0.19.3":
     resolution:
@@ -12195,25 +12187,6 @@ snapshots:
       "@mapbox/point-geometry": 0.1.0
 
   "@mapbox/whoots-js@3.1.0": {}
-
-  "@measured/puck@0.19.1(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))":
-    dependencies:
-      "@dnd-kit/helpers": 0.1.18
-      "@dnd-kit/react": 0.1.18(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      deep-diff: 1.0.2
-      fast-deep-equal: 3.1.3
-      flat: 5.0.2
-      object-hash: 3.0.0
-      react: 18.3.1
-      react-hotkeys-hook: 4.6.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      use-debounce: 9.0.4(react@18.3.1)
-      uuid: 9.0.1
-      zustand: 5.0.3(@types/react@18.3.20)(immer@9.0.21)(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
-    transitivePeerDependencies:
-      - "@types/react"
-      - immer
-      - react-dom
-      - use-sync-external-store
 
   "@measured/puck@0.19.3(@types/react@18.3.20)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))":
     dependencies:

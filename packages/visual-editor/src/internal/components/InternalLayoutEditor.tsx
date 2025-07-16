@@ -6,8 +6,8 @@ import {
   InitialHistory,
   AppState,
   ActionBar,
-  usePuck,
   ComponentData,
+  createUsePuck,
   PuckAction,
 } from "@measured/puck";
 import React from "react";
@@ -24,6 +24,7 @@ import { msg, pt, usePlatformTranslation } from "../../utils/i18nPlatform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 
 const devLogger = new DevLogger();
+const usePuck = createUsePuck();
 
 type InternalLayoutEditorProps = {
   puckConfig: Config;
@@ -161,6 +162,7 @@ export const InternalLayoutEditor = ({
     try {
       const rawClipboardText = await navigator.clipboard.readText();
       const pastedData = JSON.parse(rawClipboardText);
+
       if (
         !pastedData.props ||
         !pastedData.type ||
@@ -169,11 +171,11 @@ export const InternalLayoutEditor = ({
         alert("Failed to paste: Invalid component data.");
         return;
       }
-      // Update the component data in the specified zone
+
       dispatch({
-        type: "set",
-        state: (prevState) => {
-          const newContent = [...prevState.data.content];
+        type: "setData",
+        data: (prevData) => {
+          const newContent = [...prevData.content];
           if (
             selectedComponentIndex !== undefined &&
             newContent[selectedComponentIndex]
@@ -187,11 +189,8 @@ export const InternalLayoutEditor = ({
             };
           }
           return {
-            ...prevState,
-            data: {
-              ...prevState.data,
-              content: newContent,
-            },
+            ...prevData,
+            content: newContent,
           };
         },
       });
@@ -280,15 +279,15 @@ export const InternalLayoutEditor = ({
             textarea: TranslatePuckFieldLabels,
           },
           actionBar: ({ children, label }) => {
-            const { appState, dispatch } = usePuck();
-            const selectedComponentIndex = appState.ui.itemSelector?.index;
-            const selectedZone = appState.ui.itemSelector?.zone;
-            const selectedComponent = appState.data.content.find(
-              (_item, index) =>
-                index === selectedComponentIndex &&
-                selectedZone === "default-zone"
+            const dispatch = usePuck((s) => s.dispatch);
+            const selectedComponentIndex = usePuck(
+              (s) => s.appState.ui.itemSelector?.index
             );
-            const selectedComponentType = selectedComponent?.type;
+            const content = usePuck((s) => s.appState.data.content);
+            const selectedComponent =
+              selectedComponentIndex !== undefined
+                ? content[selectedComponentIndex]
+                : undefined;
 
             const additionalActions = (
               <>
@@ -307,7 +306,7 @@ export const InternalLayoutEditor = ({
                     await pasteFromClipboard(
                       dispatch,
                       selectedComponentIndex,
-                      selectedComponentType
+                      selectedComponent?.type
                     )
                   }
                 >

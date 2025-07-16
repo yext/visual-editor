@@ -53,13 +53,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   const getPuck = useGetPuck();
 
   const histories = usePuck((s) => s.history.histories);
-  const data = usePuck((s) => s.appState.data);
   const index = usePuck((s) => s.history.index);
   const hasFuture = usePuck((s) => s.history.hasFuture);
   const hasPast = usePuck((s) => s.history.hasPast);
-
-  console.log(histories, index, hasFuture, hasPast);
-  console.log(data);
 
   useEffect(() => {
     onHistoryChange(histories, index);
