@@ -34,6 +34,9 @@ jobs:
       - name: Install deps
         run: pnpm i --frozen-lockfile --ignore-scripts
 
+      - name: Build
+        run: pnpm run build
+
       - name: Generate Documentation
         run: pnpm run generate-component-docs
 
