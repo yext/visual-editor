@@ -1,0 +1,49 @@
+name: Autogenerate Component Docs
+on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  generate-docs:
+    name: Generate & Commit Docs
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/visual-editor
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Documentation
+        run: npm run generate-component-docs
+
+      - name: Commit and Push Documentation Changes
+        run: |
+          DOCS_FILE="src/docs/components.md"
+
+          # Check if the docs file has actually changed
+          if [[ -n $(git status --porcelain $DOCS_FILE) ]]; then
+            echo "✅ Documentation has changed. Committing and pushing..."
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add $DOCS_FILE
+            git commit -m "docs: auto-generate component documentation"
+            git push
+          fi
