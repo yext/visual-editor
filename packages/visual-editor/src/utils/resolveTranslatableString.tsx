@@ -5,6 +5,7 @@ import {
   TranslatableString,
 } from "@yext/visual-editor";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Converts a type TranslatableString to a string
@@ -34,6 +35,7 @@ export const resolveTranslatableRichText = (
   translatableRichText: TranslatableRichText = "",
   locale: string = "en"
 ): string | React.ReactElement => {
+  const { i18n } = useTranslation();
   try {
     let value = translatableRichText;
 

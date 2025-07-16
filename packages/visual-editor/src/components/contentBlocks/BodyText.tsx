@@ -43,7 +43,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
       >
         <Body ref={ref} {...bodyProps}>
           {resolveTranslatableString(
-            resolveYextEntityField(document, text),
+            resolveYextEntityField(document, text, i18n.language),
             i18n.language
           )}
         </Body>
