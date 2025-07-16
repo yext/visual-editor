@@ -51,3 +51,10 @@ jobs:
           message: "docs: auto-generate component documentation"
           push: true
           default_author: github_actions
+
+      - name: Fail job if push changes
+        if: steps.commit_docs.outputs.pushed == 'true'
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Docs were updated automatically.')
