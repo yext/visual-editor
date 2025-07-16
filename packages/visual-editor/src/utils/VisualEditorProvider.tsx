@@ -33,16 +33,21 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   children,
 }: VisualEditorProviderProps<T>) => {
   const queryClient = new QueryClient();
-  templateProps = normalizeLocalesInObject(templateProps);
+  const normalizedTemplateProps = React.useMemo(
+    () => normalizeLocalesInObject(templateProps),
+    [templateProps]
+  );
 
-  if (templateProps?.document?.locale) {
-    i18nComponentsInstance.changeLanguage(templateProps.document.locale);
+  if (normalizedTemplateProps?.document?.locale) {
+    i18nComponentsInstance.changeLanguage(
+      normalizedTemplateProps.document.locale
+    );
   }
 
   return (
     <I18nextProvider i18n={i18nComponentsInstance}>
       <QueryClientProvider client={queryClient}>
-        <TemplatePropsContext.Provider value={templateProps}>
+        <TemplatePropsContext.Provider value={normalizedTemplateProps}>
           <EntityFieldsContext.Provider value={entityFields}>
             <TailwindConfigContext.Provider value={tailwindConfig}>
               {children}
