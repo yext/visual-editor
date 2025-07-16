@@ -16,6 +16,11 @@ jobs:
     secrets:
       BOT_REPO_SCOPED_TOKEN: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
 
+  autogenerate_docs:
+    uses: ./.github/workflows/autogenerate-docs.yml
+    secrets:
+      BOT_REPO_SCOPED_TOKEN: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
+
   call_build:
     uses: ./.github/workflows/build.yml
     with:

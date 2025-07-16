@@ -1,54 +1,47 @@
-name: Autogenerate Component Docs
-on: pull_request
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+name: Generate Component Docs
+on:
+  workflow_call:
+    secrets:
+      BOT_REPO_SCOPED_TOKEN:
+        required: true
 
 jobs:
   generate-docs:
     name: Generate & Commit Docs
     runs-on: ubuntu-latest
+
     defaults:
       run:
-        working-directory: packages/visual-editor
+        working-directory: "./packages/visual-editor"
 
     permissions:
       contents: write
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.0.2
+      - uses: actions/setup-node@v4.0.2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20.x
+          registry-url: "https://registry.npmjs.org"
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: "Install dependencies"
-        run: pnpm i --frozen-lockfile --ignore-scripts
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Generate Documentation
         run: pnpm run generate-component-docs
 
-      - name: Commit and Push Documentation Changes
-        run: |
-          DOCS_FILE="src/docs/components.md"
-
-          # Check if the docs file has actually changed
-          if [[ -n $(git status --porcelain $DOCS_FILE) ]]; then
-            echo "✅ Documentation has changed. Committing and pushing..."
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add $DOCS_FILE
-            git commit -m "docs: auto-generate component documentation"
-            git push
-          fi
+      - name: Commit Documentation Changes
+        id: commit_docs
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "packages/visual-editor/src/docs/components.md"
+          message: "docs: auto-generate component documentation"
+          push: true
