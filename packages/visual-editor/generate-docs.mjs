@@ -12,7 +12,10 @@ const SCREENSHOTS_BASE_DIR = path.join(
 );
 
 function renderTsDocNode(docNode) {
-  if (!docNode) return "";
+  if (!docNode) {
+    return "";
+  }
+
   switch (docNode.kind) {
     case "PlainText":
       return docNode.text;
@@ -26,12 +29,16 @@ function renderTsDocNode(docNode) {
 }
 
 function getSummary(apiItem) {
-  if (!apiItem?.tsdocComment) return "";
+  if (!apiItem?.tsdocComment) {
+    return "";
+  }
   return renderTsDocNode(apiItem.tsdocComment.summarySection).trim();
 }
 
 function getCustomTagValue(apiItem, tagName) {
-  if (!apiItem?.tsdocComment) return "";
+  if (!apiItem?.tsdocComment) {
+    return "";
+  }
   const block = apiItem.tsdocComment.customBlocks.find(
     (b) => b.blockTag.tagName.toUpperCase() === tagName.toUpperCase()
   );
@@ -52,7 +59,9 @@ function formatType(apiProperty) {
 function getComponentImageMarkdown(componentName) {
   const screenshotsDir = path.join(SCREENSHOTS_BASE_DIR, componentName);
 
-  if (!fs.existsSync(screenshotsDir)) return "";
+  if (!fs.existsSync(screenshotsDir)) {
+    return "";
+  }
 
   try {
     const files = fs.readdirSync(screenshotsDir);
@@ -118,7 +127,6 @@ function generatePropsTableMarkdown(propsTypeName, allInterfaces) {
       const propType = formatType(prop);
       const subInterface = allInterfaces.get(propType.replace(/\[|\]/g, ""));
 
-      // ✅ KEY CHANGE: Check if the prop's type is an interface we should expand.
       // We check for a subInterface that doesn't end in 'Props' to avoid expanding the main component props interface itself.
       if (subInterface && !subInterface.name.endsWith("Props")) {
         // It's an expandable interface like 'BannerSectionData'. Loop through its members.

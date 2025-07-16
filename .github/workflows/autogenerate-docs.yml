@@ -34,12 +34,8 @@ jobs:
       - name: Install deps
         run: pnpm i --frozen-lockfile --ignore-scripts
 
-      - name: Create build-output artifact
-        uses: actions/upload-artifact@v4.3.3
-        with:
-          name: build-output-20.x
-          path: "./dist"
-          overwrite: true
+      - name: Build
+        run: pnpm run build
 
       - name: Generate Documentation
         run: pnpm run generate-component-docs
