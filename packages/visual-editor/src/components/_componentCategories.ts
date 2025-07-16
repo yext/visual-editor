@@ -34,6 +34,10 @@ import {
 } from "./pageSections/PhotoGallerySection.tsx";
 import { FAQSection, FAQSectionProps } from "./pageSections/FAQsSection.tsx";
 import {
+  ReviewsSection,
+  ReviewsSectionProps,
+} from "./pageSections/ReviewsSection.tsx";
+import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "./pageSections/TestimonialSection.tsx";
@@ -59,44 +63,54 @@ import {
 import { Phone, PhoneProps } from "./contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "./contentBlocks/TextList.tsx";
 import { Header, HeaderProps } from "./header/Header.tsx";
-import { Footer, FooterProps } from "./Footer.tsx";
+import {
+  ExpandedHeader,
+  ExpandedHeaderProps,
+} from "./header/ExpandedHeader.tsx";
+import { Footer, FooterProps } from "./footer/Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,
 } from "./pageSections/StaticMapSection.tsx";
+import {
+  ExpandedFooter,
+  ExpandedFooterProps,
+} from "./footer/ExpandedFooter.tsx";
 
 export interface PageSectionCategoryProps {
+  BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
-  HeroSection: HeroSectionProps;
-  EventSection: EventSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
+  EventSection: EventSectionProps;
+  FAQSection: FAQSectionProps;
+  HeroSection: HeroSectionProps;
   InsightSection: InsightSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
-  BannerSection: BannerSectionProps;
+  PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
-  PhotoGallerySection: PhotoGallerySectionProps;
-  TeamSection: TeamSectionProps;
-  FAQSection: FAQSectionProps;
+  ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
+  TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
-  BreadcrumbsSection,
-  HeroSection,
-  CoreInfoSection,
-  NearbyLocationsSection,
   BannerSection,
-  PhotoGallerySection,
-  StaticMapSection,
+  BreadcrumbsSection,
+  CoreInfoSection,
   EventSection,
   FAQSection,
+  HeroSection,
   InsightSection,
+  NearbyLocationsSection,
+  PhotoGallerySection,
   ProductSection,
   PromoSection,
+  ReviewsSection,
+  StaticMapSection,
   TeamSection,
   TestimonialSection,
 };
@@ -106,13 +120,13 @@ export const PageSectionCategory = Object.keys(
 ) as (keyof PageSectionCategoryProps)[];
 
 export interface OtherCategoryProps {
-  Header: HeaderProps;
-  Footer: FooterProps;
+  ExpandedHeader: ExpandedHeaderProps;
+  ExpandedFooter: ExpandedFooterProps;
 }
 
 export const OtherCategoryComponents = {
-  Header,
-  Footer,
+  ExpandedHeader,
+  ExpandedFooter,
 };
 
 export const OtherCategory = Object.keys(
@@ -142,6 +156,20 @@ export const LocatorCategoryComponents = {
 export const LocatorCategory = Object.keys(
   LocatorCategoryComponents
 ) as (keyof LocatorCategoryProps)[];
+
+export interface DeprecatedCategoryProps {
+  Header: HeaderProps;
+  Footer: FooterProps;
+}
+
+export const DeprecatedCategoryComponents = {
+  Header,
+  Footer,
+};
+
+export const DeprecatedCategory = Object.keys(
+  DeprecatedCategoryComponents
+) as (keyof DeprecatedCategoryProps)[];
 
 /** THE CATEGORIES BELOW ARE NO LONGER SUPPORTED */
 

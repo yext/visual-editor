@@ -3,6 +3,7 @@ import { LibraryFormats, defineConfig } from "vite";
 import path from "node:path";
 import type { Plugin } from "vite";
 import { exec } from "node:child_process";
+import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts";
 
 export default defineConfig(() => ({
   plugins: [react(), dts()],
@@ -39,12 +40,28 @@ export default defineConfig(() => ({
   test: {
     globals: true,
     environment: "jsdom",
+    env: {
+      COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY:
+        process.env.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+      COMPONENT_TESTS_MAPBOX_API_KEY:
+        process.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+      COMPONENT_TESTS_SEARCH_API_KEY:
+        process.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      COMPONENT_TESTS_REVIEWS_APP_API_KEY:
+        process.env.COMPONENT_TESTS_REVIEWS_APP_API_KEY,
+      COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY:
+        process.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
+    },
     css: true,
     browser: {
       enabled: true,
       instances: [{ browser: "chromium" }],
       provider: "playwright",
       headless: true,
+      screenshotFailures: false,
+      commands: {
+        compareScreenshot,
+      },
     },
   },
 }));

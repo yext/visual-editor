@@ -46,17 +46,22 @@ export const resolveYextStructField = <T extends Record<string, any>>(
   document: any,
   entityField: YextStructEntityField<T>
 ): T | undefined => {
-  const values = resolveYextEntityField(document, entityField);
-  if (typeof values === "undefined") {
-    return undefined;
+  let structValues = resolveYextEntityField(document, entityField);
+  if (!structValues) {
+    structValues = Object.fromEntries(
+      Object.keys(entityField.constantValueOverride).map(([key]) => [
+        key,
+        undefined,
+      ])
+    ) as T;
   }
 
-  const overridenValues = { ...values }; // shallow copy of values
+  const structValuesWithOverrides = { ...structValues };
   for (const key in entityField.constantValueOverride) {
-    if (entityField.constantValueOverride[key] && !!overridenValues?.[key]) {
-      overridenValues[key] = entityField.constantValue?.[key];
+    if (entityField.constantValueOverride[key]) {
+      structValuesWithOverrides[key] = entityField.constantValue?.[key];
     }
   }
 
-  return overridenValues;
+  return structValuesWithOverrides;
 };

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-
+import { Check } from "lucide-react";
 import { cn } from "../../../utils/cn.ts";
 import { Button } from "./button.tsx";
 import {
@@ -14,22 +13,32 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
 import { pt } from "../../../utils/i18nPlatform.ts";
 
-type ComboboxOption = {
+export type ComboboxOption = {
   label: string;
   value: any;
   color?: string; // ex. "bg-palette-primary-light"
 };
 
+export type ComboboxOptionGroup = {
+  title?: string;
+  description?: string;
+  options: ComboboxOption[];
+};
+
 type ComboboxProps = {
-  defaultValue: ComboboxOption;
+  selectedOption: ComboboxOption;
   onChange: (value: string) => void;
-  options: Array<ComboboxOption>;
+  optionGroups: Array<ComboboxOptionGroup>;
+  disabled?: boolean;
+  disableSearch?: boolean;
 };
 
 export const Combobox = ({
-  defaultValue,
+  selectedOption,
   onChange,
-  options,
+  optionGroups,
+  disabled,
+  disableSearch,
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
 
@@ -37,75 +46,98 @@ export const Combobox = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="puckSelect"
           role="combobox"
           aria-expanded={open}
-          className="ve-w-full ve-justify-between ve-rounded-sm"
+          disabled={disabled}
         >
-          {defaultValue ? (
+          {selectedOption ? (
             <div className="ve-flex ve-items-center">
-              {defaultValue.color && (
-                <div
-                  className={cn(
-                    "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2 components",
-                    options.find(
-                      (option) => option.value === defaultValue.value
-                    )?.color
-                  )}
-                />
-              )}
-              {
-                options.find((option) => option.value === defaultValue.value)
-                  ?.label
-              }
+              <ColorIndicator color={selectedOption.color} />
+              <div
+                className="ve-pr-2 ve-truncate ve-text-left"
+                title={selectedOption?.label}
+              >
+                {selectedOption?.label}
+              </div>
             </div>
           ) : (
-            `Select an option`
+            <div
+              className="ve-pr-2 ve-truncate ve-text-left"
+              title={pt("selectAnOption", "Select an option")}
+            >
+              {pt("selectAnOption", "Select an option")}
+            </div>
           )}
-          <ChevronsUpDown className="ve-ml-2 ve-h-4 ve-w-4 ve-shrink-0 ve-opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white">
+      <PopoverContent className="ve-w-full ve-p-0 ve-bg-opacity-100 ve-bg-white ve-min-w-[--radix-popover-trigger-width]">
         <Command>
-          <CommandInput placeholder={pt("search", "Search")} />
+          {!disableSearch && (
+            <CommandInput placeholder={pt("search", "Search")} />
+          )}
           <CommandList>
             <CommandEmpty>
               {pt("noMatchesFound", "No matches found.")}
             </CommandEmpty>
-            <CommandGroup>
-              {options.map((option) => (
-                <CommandItem
-                  className="cursor-pointer"
-                  key={option.label}
-                  value={option.value.toString()}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue);
-                    setOpen(false);
-                  }}
+            {optionGroups.map((group, idx) => {
+              return (
+                <CommandGroup
+                  heading={group.title && pt(group.title)}
+                  key={`group${idx}`}
                 >
-                  <Check
-                    className={cn(
-                      "ve-mr-2 ve-h-4 ve-w-4",
-                      defaultValue.value === option.value
-                        ? "ve-opacity-100"
-                        : "ve-opacity-0"
-                    )}
-                  />
-                  {option.color && (
-                    <div
-                      className={cn(
-                        "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2 components",
-                        option.color
-                      )}
-                    />
+                  {group.description && (
+                    <p
+                      data-cmdk-group-subheading
+                      className="ve-w-[--radix-popover-trigger-width]"
+                    >
+                      {pt(group.description)}
+                    </p>
                   )}
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
+                  {group.options.map((option) => {
+                    return (
+                      <CommandItem
+                        className="ve-cursor-pointer"
+                        key={option.label}
+                        value={option.value}
+                        onSelect={() => {
+                          onChange(option.value);
+                          setOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "ve-mr-2 ve-h-4 ve-w-4",
+                            selectedOption.value === option.value
+                              ? "ve-opacity-100"
+                              : "ve-opacity-0"
+                          )}
+                        />
+                        <ColorIndicator color={option.color} />
+                        {option.label}
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              );
+            })}
           </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
+  );
+};
+
+const ColorIndicator = ({ color }: { color?: string }) => {
+  if (!color) {
+    return;
+  }
+  return (
+    <div
+      className={cn(
+        "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2 components",
+        color
+      )}
+    />
   );
 };

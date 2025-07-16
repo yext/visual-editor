@@ -1,19 +1,10 @@
-import { borderRadiusOptions } from "../editor/BorderRadiusSelector.tsx";
+import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
 import { msg } from "./i18nPlatform.ts";
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {
-    return {
-      label: option.label + ` (${option.px}px)`,
-      value: `${option.px}px`,
-    };
-  });
-};
-
-const getBorderRadiusOptions = () => {
-  return borderRadiusOptions.map((option) => {
     return {
       label: option.label + ` (${option.px}px)`,
       value: `${option.px}px`,
@@ -87,25 +78,71 @@ export const backgroundColors: Record<string, BackgroundOption> = {
       textColor: "text-white",
     },
   },
+  color1: {
+    label: msg("theme.bg.color1", "Color 1"),
+    value: {
+      bgColor: "bg-palette-primary",
+      textColor: "text-palette-primary-contrast",
+    },
+  },
+  color2: {
+    label: msg("theme.bg.color2", "Color 2"),
+    value: {
+      bgColor: "bg-palette-secondary",
+      textColor: "text-palette-secondary-contrast",
+    },
+  },
+  color3: {
+    label: msg("theme.bg.color3", "Color 3"),
+    value: {
+      bgColor: "bg-palette-tertiary",
+      textColor: "text-palette-tertiary-contrast",
+    },
+  },
+  color4: {
+    label: msg("theme.bg.color4", "Color 4"),
+    value: {
+      bgColor: "bg-palette-quaternary",
+      textColor: "text-palette-quaternary-contrast",
+    },
+  },
 };
 
 // When used in BasicSelector, the color is displayed in the dropdown.
-const backgroundColorOptions = Object.values(backgroundColors).map(
-  ({ label, value }) => ({
-    label,
-    value,
-    color: value.bgColor,
-  })
-);
-
-const darkBackgroundColorOptions = Object.values({
-  background6: backgroundColors.background6,
-  background7: backgroundColors.background7,
-}).map(({ label, value }) => ({
-  label,
-  value,
-  color: value.bgColor,
-}));
+const backgroundColorOptions: ComboboxOptionGroup[] = [
+  {
+    title: msg("recommendedColors", "Recommended Colors"),
+    description: msg(
+      "theme.colors.recommendedDescription",
+      "Optimize color contrast for accessibility with these backgrounds."
+    ),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("background")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
+  },
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
+  },
+];
 
 // Defines the valid levels for the heading element
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -149,8 +186,11 @@ export const defaultThemeTailwindExtensions = {
     },
   },
   fontSize: {
+    "body-xs-fontSize": "calc(var(--fontSize-body-fontSize) - 4px)",
     "body-sm-fontSize": "calc(var(--fontSize-body-fontSize) - 2px)",
     "body-lg-fontSize": "calc(var(--fontSize-body-fontSize) + 2px)",
+    "link-xs-fontSize": "calc(var(--fontSize-link-fontSize) - 4px)",
+    "link-sm-fontSize": "calc(var(--fontSize-link-fontSize) - 2px)",
     "3xl": "32px",
     "4xl": "40px",
   },
@@ -181,6 +221,37 @@ const textTransformOptions = [
   },
 ];
 
+type BorderRadiusOption = {
+  label: string;
+  value: string;
+};
+
+const buttonBorderRadiusOptions: BorderRadiusOption[] = [
+  { label: msg("theme.options.none", "None"), value: "0px" },
+  { label: "XS (2px)", value: "2px" },
+  { label: "SM (4px)", value: "4px" },
+  { label: "MD (6px)", value: "6px" },
+  { label: "LG (8px)", value: "8px" },
+  { label: "XL (12px)", value: "12px" },
+  { label: msg("theme.options.pill", "Pill"), value: "9999px" },
+];
+
+const imageBorderRadiusOptions: BorderRadiusOption[] = [
+  { label: msg("theme.options.none", "None"), value: "0px" },
+  { label: "XS (2px)", value: "2px" },
+  { label: "SM (4px)", value: "4px" },
+  { label: "MD (6px)", value: "6px" },
+  { label: "LG (8px)", value: "8px" },
+  { label: "XL (12px)", value: "12px" },
+  { label: "2XL (16px)", value: "16px" },
+  { label: "3XL (24px)", value: "24px" },
+  { label: "4XL (32px)", value: "32px" },
+  {
+    label: msg("theme.options.circle", "Circle"),
+    value: "9999px",
+  },
+];
+
 const ctaVariantOptions = [
   {
     label: msg("fields.options.ctaVariant.primary", "Primary"),
@@ -194,9 +265,18 @@ const ctaVariantOptions = [
 ];
 
 const alignmentOptions = [
-  { label: msg("fields.options.left", "Left"), value: "left" },
-  { label: msg("fields.options.center", "Center"), value: "center" },
-  { label: msg("fields.options.right", "Right"), value: "right" },
+  {
+    label: msg("fields.options.left", "Left", { context: "direction" }),
+    value: "left",
+  },
+  {
+    label: msg("fields.options.center", "Center", { context: "direction" }),
+    value: "center",
+  },
+  {
+    label: msg("fields.options.right", "Right", { context: "direction" }),
+    value: "right",
+  },
 ];
 
 const justifyContentOptions = [
@@ -206,9 +286,18 @@ const justifyContentOptions = [
 ];
 
 const bodyVariantOptions = [
-  { label: msg("fields.options.small", "Small"), value: "sm" },
-  { label: msg("fields.options.base", "Base"), value: "base" },
-  { label: msg("fields.options.large", "Large"), value: "lg" },
+  {
+    label: msg("fields.options.small", "Small", { context: "text size" }),
+    value: "sm",
+  },
+  {
+    label: msg("fields.options.base", "Base", { context: "text size" }),
+    value: "base",
+  },
+  {
+    label: msg("fields.options.large", "Large", { context: "text size" }),
+    value: "lg",
+  },
 ];
 
 const hoursOptions = [
@@ -223,9 +312,16 @@ const hoursOptions = [
 ];
 
 const phoneOptions = [
-  { label: msg("fields.options.domestic", "Domestic"), value: "domestic" },
   {
-    label: msg("fields.options.international", "International"),
+    label: msg("fields.options.domestic", "Domestic", {
+      context: "phone number",
+    }),
+    value: "domestic",
+  },
+  {
+    label: msg("fields.options.international", "International", {
+      context: "phone number",
+    }),
     value: "international",
   },
 ];
@@ -235,12 +331,12 @@ export const ThemeOptions = {
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
-  DARK_BACKGROUND_COLOR: darkBackgroundColorOptions,
   CTA_VARIANT: ctaVariantOptions,
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
-  BORDER_RADIUS: getBorderRadiusOptions,
+  BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,
+  IMAGE_BORDER_RADIUS: imageBorderRadiusOptions,
   SPACING: getSpacingOptions,
   FONT_SIZE: getFontSizeOptions,
   HOURS_OPTIONS: hoursOptions,

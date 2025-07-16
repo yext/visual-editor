@@ -1,11 +1,11 @@
 import { AutoField, CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { msg, pt } from "../../../utils/i18nPlatform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 
-const linkTypeOptions = () => {
+export const linkTypeOptions = () => {
   return [
     {
       label: pt("linkTypes.url", "URL"),
@@ -38,13 +38,8 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const labelField = useMemo(() => {
-      return generateTranslatableConstantConfig<TranslatableString | undefined>(
-        {
-          key: "label",
-          options: {
-            defaultValue: "Label",
-          },
-        },
+      return TranslatableStringField<TranslatableString | undefined>(
+        msg("label", "Label"),
         "text"
       );
     }, []);
@@ -83,28 +78,23 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
 // Fields for TranslatableCTA with labels
 export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const labelField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "label",
-        options: {
-          defaultValue: "Label",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.label", "Label"),
       "text"
     );
   }, []);
 
   return {
     type: "object",
-    label: pt("Call To Action"),
+    label: pt("fields.callToAction", "Call To Action"),
     objectFields: {
       label: labelField,
       link: {
-        label: pt("Link", "Link"),
+        label: pt("fields.link", "Link"),
         type: "text",
       },
       linkType: {
-        label: pt("linkType", "Link Type"),
+        label: pt("fields.linkType", "Link Type"),
         type: "select",
         options: linkTypeOptions(),
       },

@@ -2,15 +2,35 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   EventSectionType,
   EventStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import React, { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+
+export const defaultEvent: EventStruct = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  title: { en: "Event Title", hasLocalizedValue: "true" },
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    hasLocalizedValue: "true",
+  },
+  dateTime: "2022-12-12T14:00:00",
+  cta: {
+    link: "#",
+    label: { en: "Learn More", hasLocalizedValue: "true" },
+    linkType: "URL",
+  },
+};
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -39,26 +59,15 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const titleField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "title",
-        options: {
-          defaultValue: "Title",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("title", "Title"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
-      {
-        key: "description",
-        options: {
-          defaultValue: "Description",
-        },
-      },
-      "textarea"
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("fields.description", "Description")
     );
   }, []);
 
@@ -68,10 +77,10 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: t("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },
@@ -81,6 +90,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       description: descriptionField,
       cta: translatableCTAFields(),
     },
+    defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {
       const translation = resolveTranslatableString(item.title, i18n.language);
       if (translation) {

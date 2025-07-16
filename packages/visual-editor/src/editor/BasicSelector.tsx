@@ -1,20 +1,47 @@
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { ChevronDown } from "lucide-react";
-import { Combobox } from "../internal/puck/ui/Combobox.tsx";
+import {
+  Combobox,
+  ComboboxOption,
+  ComboboxOptionGroup,
+} from "../internal/puck/ui/Combobox.tsx";
 import { pt } from "../utils/i18nPlatform.ts";
+import { Button } from "../internal/puck/ui/button.tsx";
 
-type Option<T = any> = {
+type BasicSelectorProps = {
   label: string;
-  value: T;
-  color?: string;
-};
+  translateOptions?: boolean;
+  noOptionsPlaceholder?: string;
+  noOptionsMessage?: string;
+  disableSearch?: boolean;
+  icon?: React.ReactNode;
+} & (
+  | {
+      options: ComboboxOption[];
+      optionGroups?: never;
+    }
+  | {
+      options?: never;
+      optionGroups: ComboboxOptionGroup[];
+    }
+);
 
-export const BasicSelector = (
-  label: string,
-  options: Option[],
-  translateOptions: boolean = true
-): Field => {
+export const BasicSelector = (props: BasicSelectorProps): Field => {
+  const {
+    label,
+    options = [],
+    optionGroups = [{ options }],
+    translateOptions = true,
+    noOptionsPlaceholder = pt(
+      "basicSelectorNoOptionsLabel",
+      "No options available"
+    ),
+    noOptionsMessage,
+    disableSearch,
+    icon = <ChevronDown size={16} />,
+  } = props;
+
   return {
     type: "custom",
     render: ({
@@ -24,49 +51,50 @@ export const BasicSelector = (
       value: any;
       onChange: (selectedOption: any) => void;
     }) => {
-      if (!options || options.length === 0) {
+      const translatedOptionGroups = translateOptions
+        ? optionGroups.map((group) => {
+            return {
+              title: group.title && pt(group.title),
+              description: group.description && pt(group.description),
+              options: group.options.map((option) => ({
+                ...option,
+                label: pt(option.label),
+              })),
+            };
+          })
+        : optionGroups;
+      const serializedOptions = translatedOptionGroups.reduce(
+        (prev, group) => prev.concat(group.options),
+        [] as ComboboxOption[]
+      );
+      const noOptions = serializedOptions.length === 0;
+
+      if (noOptions) {
         return (
-          <FieldLabel label={label} icon={<ChevronDown size={16} />}>
-            <p>{pt("basicSelectorNoOptionsLabel", "No options available")}</p>
-          </FieldLabel>
+          <>
+            <FieldLabel label={label} icon={icon} />
+            <Button variant="puckSelect" disabled={true}>
+              {noOptionsPlaceholder}
+            </Button>
+            {noOptionsMessage && (
+              <p className="ve-text-xs ve-mt-3">{noOptionsMessage}</p>
+            )}
+          </>
         );
       }
 
-      const translatedOptions = translateOptions
-        ? options.map((o) => ({
-            ...o,
-            label: pt(o.label),
-          }))
-        : options;
-
-      // The values that we pass into the Combobox should match the labels
-      // so that the search functionality works as expected.
-      const labelOptions: Option<string>[] = translatedOptions.map(
-        (option) => ({
-          ...option,
-          value: option.label,
-        })
-      );
-
       return (
-        <FieldLabel label={pt(label)} icon={<ChevronDown size={16} />}>
+        <FieldLabel label={pt(label)} icon={icon}>
           <Combobox
-            defaultValue={
-              labelOptions[
-                translatedOptions.findIndex(
-                  (option) =>
-                    JSON.stringify(option.value) === JSON.stringify(value)
-                )
-              ] ?? labelOptions[0]
+            selectedOption={
+              serializedOptions.find(
+                (v) => JSON.stringify(v.value) === JSON.stringify(value)
+              ) ?? serializedOptions[0]
             }
-            onChange={(selectedOption) =>
-              onChange(
-                translatedOptions.find(
-                  (option) => option.label === selectedOption
-                )?.value ?? options[0].value
-              )
-            }
-            options={labelOptions}
+            onChange={onChange}
+            optionGroups={translatedOptionGroups}
+            disabled={noOptions}
+            disableSearch={disableSearch}
           />
         </FieldLabel>
       );

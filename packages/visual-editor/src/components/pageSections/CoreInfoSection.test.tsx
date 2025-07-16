@@ -4,7 +4,7 @@ import {
   axe,
   ComponentTest,
   testHours,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -32,12 +32,6 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...CoreInfoSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Information")).toBeVisible();
-      expect(document.body.textContent).not.toContain("Hours");
-      expect(document.body.textContent).not.toContain("Services");
-      expect(document.body.textContent).not.toContain("Phone");
-    },
   },
   {
     name: "default props with document data",
@@ -50,16 +44,6 @@ const tests: ComponentTest[] = [
     },
     props: { ...CoreInfoSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Information")).toBeVisible();
-      expect(page.getByText("Hours")).toBeVisible();
-      expect(page.getByText("Services")).toBeVisible();
-      expect(page.getByText("288 Grand St")).toBeVisible();
-      expect(page.getByText("(800) 555-1010")).toBeVisible();
-      expect(page.getByText("sumo@yext.com")).toBeVisible();
-      expect(page.getByText("Wednesday")).toBeVisible();
-      expect(page.getByText("Delivery")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -127,16 +111,6 @@ const tests: ComponentTest[] = [
       },
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("test-id")).toBeVisible();
-      expect(page.getByText("Galaxy Grill")).toBeVisible();
-      expect(page.getByText("test-description")).toBeVisible();
-      expect(page.getByText("288 Grand St")).toBeVisible();
-      expect(page.getByText("(800) 555-1010")).toBeVisible();
-      expect(page.getByText("sumo@yext.com")).toBeVisible();
-      expect(page.getByText("Wednesday")).toBeVisible();
-      expect(page.getByText("Delivery")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -232,16 +206,6 @@ const tests: ComponentTest[] = [
       },
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Information")).toBeVisible();
-      expect(page.getByText("hours")).toBeVisible();
-      expect(page.getByText("Services")).toBeVisible();
-      expect(page.getByText("Arlington")).toBeVisible();
-      expect(page.getByText("Cell")).toBeVisible();
-      expect(page.getByText("email2@yext.com")).toBeVisible();
-      expect(page.getByText("Monday - Sunday")).toBeVisible();
-      expect(page.getByText("Repair")).toBeVisible();
-    },
   },
   {
     name: "version 1 props with entity values",
@@ -332,16 +296,6 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("test-id")).toBeVisible();
-      expect(page.getByText("Galaxy Grill")).toBeVisible();
-      expect(page.getByText("test-description")).toBeVisible();
-      expect(page.getByText("288 Grand St")).toBeVisible();
-      expect(page.getByText("(800) 555-1010")).toBeVisible();
-      expect(page.getByText("sumo@yext.com")).toBeVisible();
-      expect(page.getByText("Wednesday")).toBeVisible();
-      expect(page.getByText("Delivery")).toBeVisible();
-    },
   },
   {
     name: "version 1 props with constant value",
@@ -442,22 +396,7 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
-    tests: async (page) => {
-      expect(page.getByText("Information")).toBeVisible();
-      expect(page.getByText("hours")).toBeVisible();
-      expect(page.getByText("Services")).toBeVisible();
-      expect(page.getByText("Arlington")).toBeVisible();
-      expect(page.getByText("Cell")).toBeVisible();
-      expect(page.getByText("email2@yext.com")).toBeVisible();
-      expect(page.getByText("Monday - Sunday")).toBeVisible();
-      expect(page.getByText("Repair")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
 ];
 
 describe("CoreInfoSection", async () => {
@@ -469,14 +408,15 @@ describe("CoreInfoSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -495,6 +435,7 @@ describe("CoreInfoSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -502,10 +443,21 @@ describe("CoreInfoSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+
+      await expect(
+        `CoreInfoSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `CoreInfoSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

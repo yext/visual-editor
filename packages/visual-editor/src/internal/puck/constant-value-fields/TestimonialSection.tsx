@@ -2,14 +2,24 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   TestimonialSectionType,
   TestimonialStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
-import { resolveTranslatableString } from "@yext/visual-editor";
+
+export const defaultTestimonial: TestimonialStruct = {
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributionDate: "July 22, 2022",
+};
 
 export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
   {
@@ -42,26 +52,15 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const contributorNameField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "contributorName",
-        options: {
-          defaultValue: "Contributor Name",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.contributorName", "Contributor Name"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
-      {
-        key: "description",
-        options: {
-          defaultValue: "Description",
-        },
-      },
-      "text"
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("fields.description", "Description")
     );
   }, []);
 
@@ -73,6 +72,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
       contributorName: contributorNameField,
       contributionDate: DateSelector,
     },
+    defaultItemProps: defaultTestimonial,
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(
         item.contributorName,

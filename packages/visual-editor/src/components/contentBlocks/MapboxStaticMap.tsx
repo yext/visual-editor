@@ -33,7 +33,7 @@ const DEFAULT_WIDTH = 1024;
 const DEFAULT_HEIGHT = 300;
 const MIN_HEIGHT = 300;
 const MIN_WIDTH = 100;
-const MAX_SIZE = 2048;
+const MAX_SIZE = 1280;
 
 const getPrimaryColor = (document: any) => {
   if (document?.__?.theme) {
@@ -161,6 +161,7 @@ export const MapboxStaticMapComponent = ({
     >
       <img
         ref={imgRef}
+        alt={t("map", "Map")}
         className="components w-full h-full object-cover"
         src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=${apiKey}`}
       />

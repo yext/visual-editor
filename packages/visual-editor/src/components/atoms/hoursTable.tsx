@@ -1,14 +1,12 @@
-import {
-  HoursTable,
-  HoursTableDayData,
-  HoursTableProps,
-} from "@yext/pages-components";
-import { useCallback } from "react";
+import { HoursTable, HoursTableProps } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { themeManagerCn } from "@yext/visual-editor";
 
 export interface HoursTableAtomProps
-  extends Omit<HoursTableProps, "dayOfWeekNames" | "intervalStringsBuilderFn"> {
+  extends Omit<
+    HoursTableProps,
+    "dayOfWeekNames" | "intervalStringsBuilderFn" | "intervalTranslations"
+  > {
   className?: string;
 }
 
@@ -27,43 +25,6 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
     sunday: t("sunday", "Sunday"),
   };
 
-  // Based on defaultIntervalStringsBuilder in pages-components
-  // https://github.com/yext/js/blob/e7f702c0b06b6adff25cfa05ce4fb920f1cda1c4/packages/pages-components/src/components/hours/hoursTable.tsx#L75
-  const intervalStringsBuilder = useCallback(
-    (dayData: HoursTableDayData, timeOptions?: Intl.DateTimeFormatOptions) => {
-      const intervalStrings: string[] = [];
-      const isOpen24h =
-        dayData.intervals.length > 0 && dayData.intervals[0].is24h();
-      if (dayData.intervals.length === 0) {
-        intervalStrings.push(t("closed", "Closed"));
-      } else if (isOpen24h) {
-        intervalStrings.push(t("open24Hours", "Open 24 Hours"));
-      } else {
-        dayData.intervals.forEach((interval) => {
-          try {
-            const startTime = interval.getStartTime(
-              i18n.language.replace("_", "-"),
-              timeOptions
-            );
-            const endTime = interval.getEndTime(
-              i18n.language.replace("_", "-"),
-              timeOptions
-            );
-            intervalStrings.push(`${startTime} - ${endTime}`);
-          } catch {
-            console.warn(
-              "Could not format hours for locale",
-              i18n.language.replace("_", "-")
-            );
-            intervalStrings.push("");
-          }
-        });
-      }
-      return intervalStrings;
-    },
-    [t, i18n.language]
-  );
-
   return (
     <HoursTable
       hours={hours}
@@ -71,7 +32,12 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
       startOfWeek={startOfWeek}
       collapseDays={collapseDays}
       timeOptions={timeOptions}
-      intervalStringsBuilderFn={intervalStringsBuilder}
+      intervalTranslations={{
+        isClosed: t("closed", "Closed"),
+        open24Hours: t("open24Hours", "Open 24 Hours"),
+        reopenDate: t("reopenDate", "Reopen Date"),
+        timeFormatLocale: i18n.language,
+      }}
       className={themeManagerCn(
         "text-body-fontSize font-body-fontWeight font-body-fontFamily",
         className

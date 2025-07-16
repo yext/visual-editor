@@ -21,9 +21,11 @@ import {
   resolveTranslatableString,
   msg,
   pt,
-  resolveTranslatableRTF2,
+  resolveTranslatableRichText,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { defaultTestimonial } from "../../internal/puck/constant-value-fields/TestimonialSection.tsx";
 
 export interface TestimonialSectionProps {
   data: {
@@ -32,8 +34,14 @@ export interface TestimonialSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
   };
   liveVisibility: boolean;
 }
@@ -67,22 +75,39 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.level", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
       }),
     },
   }),
@@ -100,11 +125,11 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
 
 const TestimonialCard = ({
   testimonial,
-  backgroundColor,
+  cardStyles,
   sectionHeadingLevel,
 }: {
   testimonial: TestimonialStruct;
-  backgroundColor?: BackgroundStyle;
+  cardStyles: TestimonialSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
@@ -115,12 +140,12 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8 grow"
       >
-        {resolveTranslatableRTF2(testimonial.description, i18n.language)}
+        {resolveTranslatableRichText(testimonial.description, i18n.language)}
       </Background>
-      <Background background={backgroundColor} className="p-8">
+      <Background background={cardStyles.backgroundColor} className="p-8">
         {testimonial.contributorName && (
           <Heading
-            level={3}
+            level={cardStyles.headingLevel}
             semanticLevelOverride={
               sectionHeadingLevel < 6
                 ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -160,6 +185,14 @@ const TestimonialSectionWrapper = ({
     i18n.language
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -171,8 +204,8 @@ const TestimonialSectionWrapper = ({
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level}>{resolvedHeading}</Heading>
           </div>
         </EntityField>
       )}
@@ -187,8 +220,8 @@ const TestimonialSectionWrapper = ({
               <TestimonialCard
                 key={index}
                 testimonial={testimonial}
-                backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -204,20 +237,34 @@ export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+      },
     },
     data: {
       heading: {
         field: "",
-        constantValue: "Featured Testimonials",
+        constantValue: {
+          en: "Featured Testimonials",
+          hasLocalizedValue: "true",
+        },
         constantValueEnabled: true,
       },
       testimonials: {
         field: "",
         constantValue: {
-          testimonials: [],
+          testimonials: [
+            defaultTestimonial,
+            defaultTestimonial,
+            defaultTestimonial,
+          ],
         },
+        constantValueEnabled: true,
       },
     },
     liveVisibility: true,

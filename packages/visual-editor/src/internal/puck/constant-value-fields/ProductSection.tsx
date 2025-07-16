@@ -2,14 +2,37 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   ProductSectionType,
   ProductStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
+
+export const defaultProduct: ProductStruct = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  name: { en: "Product Title", hasLocalizedValue: "true" },
+  category: {
+    en: "Category, Pricing, etc",
+    hasLocalizedValue: "true",
+  },
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    hasLocalizedValue: "true",
+  },
+  cta: {
+    link: "#",
+    label: { en: "Learn More", hasLocalizedValue: "true" },
+    linkType: "URL",
+  },
+};
 
 export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   {
@@ -39,38 +62,22 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "name",
-        options: {
-          defaultValue: "Name",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.name", "Name"),
       "text"
     );
   }, []);
 
   const categoryField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "category",
-        options: {
-          defaultValue: "Category",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.category", "Category"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
-      {
-        key: "description",
-        options: {
-          defaultValue: "Description",
-        },
-      },
-      "textarea"
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("fields.description", "Description")
     );
   }, []);
 
@@ -80,10 +87,10 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: t("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },
@@ -93,6 +100,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       description: descriptionField,
       cta: translatableCTAFields(),
     },
+    defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

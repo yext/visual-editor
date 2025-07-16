@@ -23,20 +23,29 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  ThemeOptions,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import { defaultPerson } from "../../internal/puck/constant-value-fields/TeamSection.tsx";
 
 export interface TeamSectionProps {
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    cardBackgroundColor?: BackgroundStyle;
-    headingLevel: HeadingLevel;
-  };
   data: {
     heading: YextEntityField<TranslatableString>;
     people: YextEntityField<TeamSectionType>;
+  };
+  styles: {
+    backgroundColor?: BackgroundStyle;
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
   };
   analytics?: {
     scope?: string;
@@ -70,22 +79,39 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
-      cardBackgroundColor: YextField(
-        msg("fields.cardBackgroundColor", "Card Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.level", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
+      }),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
       }),
     },
   }),
@@ -102,34 +128,40 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
 };
 
 const PersonCard = ({
-  key,
+  cardNumber,
   person,
-  backgroundColor,
+  cardStyles,
   sectionHeadingLevel,
 }: {
-  key: number;
+  cardNumber: number;
   person: PersonStruct;
-  backgroundColor?: BackgroundStyle;
+  cardStyles: TeamSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
 }) => {
   const { i18n } = useTranslation();
 
   return (
     <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
-      <Background background={backgroundColor} className="flex p-8 gap-6">
+      <Background
+        background={cardStyles.backgroundColor}
+        className="flex p-8 gap-6"
+      >
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {person.headshot && (
             <Image
               image={person.headshot}
-              layout="auto"
-              aspectRatio={person.headshot.width / person.headshot.height}
+              aspectRatio={
+                person.headshot.width && person.headshot.height
+                  ? person.headshot.width / person.headshot.height
+                  : 1.78
+              }
             />
           )}
         </div>
         <div className="flex flex-col justify-center gap-1">
           {person.name && (
             <Heading
-              level={3}
+              level={cardStyles.headingLevel}
               semanticLevelOverride={
                 sectionHeadingLevel < 6
                   ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -154,7 +186,7 @@ const PersonCard = ({
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
             <PhoneAtom
-              eventName={`phone${key}`}
+              eventName={`phone${cardNumber}`}
               phoneNumber={person.phoneNumber}
               includeHyperlink={true}
               includeIcon={true}
@@ -171,7 +203,7 @@ const PersonCard = ({
                 <FaEnvelope />
               </div>
               <CTA
-                eventName={`email${key}`}
+                eventName={`email${cardNumber}`}
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
@@ -182,7 +214,7 @@ const PersonCard = ({
           {person.cta && (
             <div className="flex justify-start gap-2">
               <CTA
-                eventName={`cta${key}`}
+                eventName={`cta${cardNumber}`}
                 label={resolveTranslatableString(
                   person.cta.label,
                   i18n.language
@@ -208,19 +240,29 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
     i18n.language
   );
 
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
+
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
+          displayName={pt("fields.heading", "Heading")}
           fieldId={data.heading.field}
           constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <div className="text-center">
-            <Heading level={styles.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
           </div>
         </EntityField>
       )}
@@ -234,9 +276,10 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
             {resolvedPeople.people.map((person, index) => (
               <PersonCard
                 key={index}
+                cardNumber={index}
                 person={person}
-                backgroundColor={styles.cardBackgroundColor}
-                sectionHeadingLevel={styles.headingLevel}
+                cardStyles={styles.cards}
+                sectionHeadingLevel={styles.heading.level}
               />
             ))}
           </div>
@@ -253,20 +296,27 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Meet Our Team",
+        constantValue: { en: "Meet Our Team", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
       people: {
         field: "",
         constantValue: {
-          people: [],
+          people: [defaultPerson, defaultPerson, defaultPerson],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
-      cardBackgroundColor: backgroundColors.background1.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+      },
     },
     analytics: {
       scope: "teamSection",
@@ -274,7 +324,9 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "teamSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

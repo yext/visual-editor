@@ -30,7 +30,7 @@ const PROMO_SECTION_SUBFIELD: SubFieldProps = [
   { field: "title", type: "type.string", label: msg("fields.title", "Title") },
   {
     field: "description",
-    type: "type.string",
+    type: "type.rich_text_v2",
     label: msg("fields.description", "Description"),
   },
   { field: "cta", type: "type.cta", label: msg("fields.cta", "CTA") },

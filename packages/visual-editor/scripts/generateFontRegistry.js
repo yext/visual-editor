@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import prettier from "prettier";
+import { allowedFonts } from "./allowedFonts.js";
 
 const GOOGLE_FONTS_API_KEY = process.argv[2]; // Replace with your Google Fonts API key
 if (!GOOGLE_FONTS_API_KEY) {
@@ -18,16 +19,6 @@ const OUTPUT_FILE = path.join(
   "utils",
   "font_registry.js"
 );
-
-const BLACKLIST_NAMES = [
-  "Wingdings",
-  "Wingdings 2",
-  "Wingdings 3",
-  "Webdings",
-  "Symbol",
-  "Zapf Dingbats",
-  "Marlett",
-];
 
 const fallbackFromCategory = (category) => {
   switch (category) {
@@ -53,6 +44,23 @@ const getFontData = async () => {
 };
 
 const parseFontDetails = (font) => {
+  // Temporary overrides for specific Cloudflare Fonts bugs
+  if (font.family === "Inter") {
+    return {
+      italics: false,
+      minWeight: 100,
+      maxWeight: 900,
+      fallback: fallbackFromCategory(font.category),
+    };
+  }
+  if (font.family === "Miriam Libre") {
+    return {
+      italics: false,
+      weights: [400],
+      fallback: fallbackFromCategory(font.category),
+    };
+  }
+
   const variants = font.variants;
 
   const hasItalic = variants.some((v) => v.includes("italic"));
@@ -101,12 +109,8 @@ const buildFontRegistry = async () => {
       continue;
     }
 
-    // Blacklist nonsense fonts by exact name (case insensitive)
-    if (
-      BLACKLIST_NAMES.some(
-        (name) => font.family.toLowerCase() === name.toLowerCase()
-      )
-    ) {
+    // Allow fonts by exact name
+    if (!allowedFonts.includes(font.family)) {
       continue;
     }
 

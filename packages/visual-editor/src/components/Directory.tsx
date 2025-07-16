@@ -8,20 +8,90 @@ import {
   PageSection,
   PhoneAtom,
   msg,
+  YextField,
+  TranslatableStringField,
+  TranslatableString,
+  BackgroundStyle,
+  Background,
+  HeadingLevel,
+  getLocationPath,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AnalyticsScopeProvider,
   HoursStatus,
 } from "@yext/pages-components";
+import { useTranslation } from "react-i18next";
 
 export interface DirectoryProps {
+  data: {
+    directoryRoot: TranslatableString;
+  };
+  styles: {
+    backgroundColor?: BackgroundStyle;
+    breadcrumbsBackgroundColor?: BackgroundStyle;
+    cards: {
+      headingLevel: HeadingLevel;
+      backgroundColor?: BackgroundStyle;
+    };
+  };
   analytics?: {
     scope?: string;
   };
 }
+
+const directoryFields: Fields<DirectoryProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      directoryRoot: TranslatableStringField(
+        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        "text"
+      ),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      breadcrumbsBackgroundColor: YextField(
+        msg(
+          "fields.breadcrumbsBackgroundColor",
+          "Breadcrumbs Background Color"
+        ),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      cards: YextField(msg("fields.cards", "Cards"), {
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          backgroundColor: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
+      }),
+    },
+  }),
+};
 
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
@@ -47,28 +117,30 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 
 // DirectoryCard is the card used within DirectoryGrid.
 const DirectoryCard = ({
-  key,
+  cardNumber,
   profile,
-  relativePrefixToRoot,
+  cardStyles,
 }: {
-  key: number;
+  cardNumber: number;
   profile: any;
-  relativePrefixToRoot: string;
+  cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
+  const { relativePrefixToRoot } = useTemplateProps();
+  const { i18n } = useTranslation();
+
   return (
-    <div className="flex flex-col p-8 border border-gray-400 rounded h-full gap-4">
+    <Background
+      className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
+      background={cardStyles.backgroundColor}
+    >
       <div>
         <MaybeLink
-          eventName={`link${key}`}
+          eventName={`link${cardNumber}`}
           alwaysHideCaret={true}
           className="mb-2"
-          href={
-            relativePrefixToRoot && profile.slug
-              ? relativePrefixToRoot + profile.slug
-              : profile.slug
-          }
+          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
         >
-          <Heading level={4} semanticLevelOverride={3}>
+          <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}
           </Heading>
         </MaybeLink>
@@ -103,17 +175,17 @@ const DirectoryCard = ({
           />
         </div>
       )}
-    </div>
+    </Background>
   );
 };
 
 // DirectoryGrid uses PageSection's theme config for styling.
 const DirectoryGrid = ({
   directoryChildren,
-  relativePrefixToRoot,
+  cardStyles,
 }: {
   directoryChildren: any[];
-  relativePrefixToRoot: string;
+  cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -131,8 +203,9 @@ const DirectoryGrid = ({
       {sortedDirectoryChildren?.map((child, idx) => (
         <DirectoryCard
           key={idx}
+          cardNumber={idx}
           profile={child}
-          relativePrefixToRoot={relativePrefixToRoot}
+          cardStyles={cardStyles}
         />
       ))}
     </PageSection>
@@ -190,7 +263,7 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = () => {
+const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   let headingText;
@@ -209,8 +282,12 @@ const DirectoryComponent = () => {
   }
 
   return (
-    <>
-      <BreadcrumbsComponent />
+    <Background background={styles.backgroundColor}>
+      <BreadcrumbsComponent
+        data={{ directoryRoot: data.directoryRoot }}
+        liveVisibility={true}
+        styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
+      />
       <PageSection className="flex flex-col items-center gap-2">
         {document._site.name && (
           <Heading level={4}>{document._site.name}</Heading>
@@ -221,7 +298,7 @@ const DirectoryComponent = () => {
         isDirectoryGrid(document.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={document.dm_directoryChildren}
-            relativePrefixToRoot={relativePrefixToRoot}
+            cardStyles={styles.cards}
           />
         )}
       {document.dm_directoryChildren &&
@@ -232,20 +309,35 @@ const DirectoryComponent = () => {
             level={document?.meta?.entityType?.id}
           />
         )}
-    </>
+    </Background>
   );
 };
 
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
+  fields: directoryFields,
   defaultProps: {
+    data: {
+      directoryRoot: {
+        en: "Directory Root",
+        hasLocalizedValue: "true",
+      },
+    },
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      breadcrumbsBackgroundColor: backgroundColors.background1.value,
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+      },
+    },
     analytics: {
       scope: "directory",
     },
   },
   render: (props) => (
     <AnalyticsScopeProvider name={props?.analytics?.scope ?? "directory"}>
-      <DirectoryComponent />
+      <DirectoryComponent {...props} />
     </AnalyticsScopeProvider>
   ),
 };

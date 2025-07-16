@@ -14,6 +14,10 @@ export const buttonVariants = cva(
         link: "w-fit underline",
         directoryLink:
           "border-b-gray-400 border-b sm:border-transparent w-full sm:w-fit sm:underline py-3",
+        headerFooterMainLink:
+          "font-link-fontWeight text-link-sm-fontSize hover:underline hover:cursor-pointer",
+        headerFooterSecondaryLink:
+          "text-link-xs-fontSize hover:underline hover:cursor-pointer",
       },
       hasDarkBackground: {
         true: "",
@@ -24,8 +28,8 @@ export const buttonVariants = cva(
       {
         variant: ["primary", "secondary"],
         className:
-          "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing " +
-          "hover:underline focus:underline active:underline sm:w-fit w-full px-6 py-3 border-2 border-solid rounded",
+          "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing rounded-button-borderRadius " +
+          "hover:underline focus:underline active:underline sm:w-fit w-full px-6 py-3 border-2 border-solid",
       },
       {
         variant: ["link", "directoryLink"],
@@ -34,23 +38,38 @@ export const buttonVariants = cva(
           "font-link-fontFamily text-link-fontSize font-link-fontWeight tracking-link-letterSpacing ",
       },
       {
-        hasDarkBackground: false,
+        variant: ["headerFooterMainLink", "headerFooterSecondaryLink"],
+        className:
+          "no-underline font-link-fontFamily tracking-link-letterSpacing",
+      },
+      {
         variant: "secondary",
+        hasDarkBackground: false,
         className: "text-palette-primary-dark border-palette-primary-dark",
       },
       {
-        hasDarkBackground: true,
         variant: "secondary",
+        hasDarkBackground: true,
         className: "text-white border-white",
       },
       {
+        variant: [
+          "link",
+          "directoryLink",
+          "headerFooterMainLink",
+          "headerFooterSecondaryLink",
+        ],
         hasDarkBackground: false,
-        variant: ["link", "directoryLink"],
         className: "text-palette-primary-dark",
       },
       {
         hasDarkBackground: true,
-        variant: ["link", "directoryLink"],
+        variant: [
+          "link",
+          "directoryLink",
+          "headerFooterMainLink",
+          "headerFooterSecondaryLink",
+        ],
         className: "text-white",
       },
     ],
@@ -83,10 +102,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
           // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
-          textTransform:
-            variant === "link"
-              ? "var(--textTransform-link-textTransform)"
-              : "var(--textTransform-button-textTransform)",
+          textTransform: variant?.toLowerCase().includes("link")
+            ? "var(--textTransform-link-textTransform)"
+            : "var(--textTransform-button-textTransform)",
         }}
         ref={ref}
         {...props}

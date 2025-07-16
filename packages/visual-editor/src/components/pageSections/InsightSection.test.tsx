@@ -3,9 +3,9 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   InsightSection,
   migrate,
@@ -123,19 +123,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...InsightSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Insights")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { c_insights: insightsData, name: "test name" },
     props: { ...InsightSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Insights")).toBeVisible();
-      expect(document.body.textContent).not.toContain("Burger");
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -166,21 +159,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("test name")).toBeVisible();
-      expect(page.getByText("Fresh Flavors Fast")).toBeVisible();
-      expect(page.getByText("Blog")).toBeVisible();
-      expect(page.getByText("2025")).toBeVisible();
-      expect(page.getByText("Read Now")).toBeVisible();
-      expect(page.getByText("Discover how")).toBeVisible();
-      expect(page.getByText("Beyond the Burger")).toBeVisible();
-      expect(page.getByText("wide range")).toBeVisible();
-      expect(page.getByText("Order Now")).toBeVisible();
-      expect(page.getByText("Our Commitment to Community")).toBeVisible();
-      expect(page.getByText("Impact")).toBeVisible();
-      expect(page.getByText("2018")).toBeVisible();
-      expect(page.getByText("farmers")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -222,20 +200,87 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Insights")).toBeVisible();
-      expect(page.getByText("Insight 1")).toBeVisible();
-      expect(page.getByText("Category 1")).toBeVisible();
-      expect(page.getByText("2025")).toBeVisible();
-      expect(page.getByText("CTA")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+  {
+    name: "version 7 props with entity values",
+    document: { c_insights: insightsData, name: "test name" },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: { insights: [] },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+  },
+  {
+    name: "version 7 props with constant value",
+    document: { c_insights: insightsData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: true,
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: {
+            insights: [
+              {
+                name: "Insight 1",
+                category: "Category 1",
+                publishTime: "2025-05-14",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          headingLevel: 4,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+  },
 ];
 
 describe("InsightSection", async () => {
@@ -247,14 +292,15 @@ describe("InsightSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -273,6 +319,7 @@ describe("InsightSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -280,10 +327,25 @@ describe("InsightSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
+
+      await expect(
+        `InsightSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `InsightSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

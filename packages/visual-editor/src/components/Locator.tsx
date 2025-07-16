@@ -1,26 +1,29 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
+  AnalyticsProvider,
   CardComponent,
   CardProps,
   Coordinate,
+  executeSearch,
   FilterSearch,
   getUserLocation,
   MapboxMap,
   OnDragHandler,
   OnSelectParams,
-  VerticalResults,
-  AnalyticsProvider,
   PinComponent,
+  useCardAnalyticsCallback,
+  VerticalResults,
+  SearchI18nextProvider,
 } from "@yext/search-ui-react";
 import {
   Matcher,
   provideHeadless,
+  Result,
   SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
-  Result,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
@@ -30,14 +33,15 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
-  CTA,
   Heading,
   msg,
-  normalizeSlug,
-  PhoneAtom,
   useDocument,
+  Toggle,
+  YextField,
+  getLocationPath,
+  useTemplateProps,
 } from "@yext/visual-editor";
-import { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
+import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
   Address,
   AddressType,
@@ -45,123 +49,62 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
+import { FaAngleRight } from "react-icons/fa";
+import { formatPhoneNumber } from "./atoms/phone.js";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
-const TRANSLATIONS = {
-  en: {
-    searchThisArea: "Search This Area",
-    useLocator: "Use our locator to find a location near you",
-    noResults: "No results found for this area",
-    viewMoreInformation: "View More Information",
-    getDirections: "Get Directions",
-    currentMapArea: "Current map area",
-    currentLocation: "Current Location",
-    searchHere: "Search here...",
-    findALocation: "Find a Location",
-    newYorkCity: "New York City, New York, United States",
-  },
-  fr: {
-    searchThisArea: "Rechercher cette zone",
-    useLocator:
-      "Utilisez notre localisateur pour trouver un endroit près de chez vous",
-    noResults: "Aucun résultat trouvé pour cette zone",
-    viewMoreInformation: "Voir plus d'informations",
-    getDirections: "Obtenir des directions",
-    currentMapArea: "Zone de carte actuelle",
-    currentLocation: "Emplacement actuel",
-    searchHere: "Rechercher ici...",
-    findALocation: "Trouver un emplacement",
-    newYorkCity: "New York, État de New York, États-Unis",
-  },
-  es: {
-    searchThisArea: "Buscar esta área",
-    useLocator:
-      "Utilice nuestro localizador para encontrar una ubicación cerca de usted",
-    noResults: "No se encontraron resultados para esta área",
-    viewMoreInformation: "Ver más información",
-    getDirections: "Obtener direcciones",
-    currentMapArea: "Área del mapa actual",
-    currentLocation: "Ubicación actual",
-    searchHere: "Buscar aquí...",
-    findALocation: "Buscar una ubicación",
-    newYorkCity: "Nueva York, Nueva York, Estados Unidos",
-  },
-  de: {
-    searchThisArea: "Diese Fläche durchsuchen",
-    useLocator:
-      "Verwenden Sie unseren Locator, um einen Standort in Ihrer Nähe zu finden",
-    noResults: "Keine Ergebnisse für dieses Gebiet gefunden",
-    viewMoreInformation: "Mehr Informationen anzeigen",
-    getDirections: "Routenplaner",
-    currentMapArea: "Aktueller Kartenbereich",
-    currentLocation: "Aktueller Standort",
-    searchHere: "Hier suchen...",
-    findALocation: "Standort finden",
-    newYorkCity: "New York City, New York, Vereinigte Staaten",
-  },
-  it: {
-    searchThisArea: "Cerca in quest'area",
-    useLocator:
-      "Usa il nostro localizzatore per trovare una posizione vicino a te",
-    noResults: "Nessun risultato trovato per quest'area",
-    viewMoreInformation: "Visualizza ulteriori informazioni",
-    getDirections: "Ottieni indicazioni",
-    currentMapArea: "Area della mappa corrente",
-    currentLocation: "Posizione attuale",
-    searchHere: "Cerca qui...",
-    findALocation: "Trova una posizione",
-    newYorkCity: "New York City, New York, Stati Uniti",
-  },
-  ja: {
-    searchThisArea: "このエリアを検索",
-    useLocator: "ロケーターを使用して近くの場所を見つける",
-    noResults: "このエリアでは結果が見つかりませんでした",
-    viewMoreInformation: "詳細情報を見る",
-    getDirections: "道順を取得",
-    currentMapArea: "現在の地図エリア",
-    currentLocation: "現在地",
-    searchHere: "ここを検索...",
-    findALocation: "場所を探す",
-    newYorkCity: "ニューヨーク市、ニューヨーク州、アメリカ合衆国",
-  },
-};
+const HOURS_FIELD = "builtin.hours";
 
 export type LocatorProps = {
   mapStyle?: string;
+  openNowButton?: boolean;
   entityTypeEnvVar?: string; // to be set via withPropOverrides
   experienceKeyEnvVar?: string; // to be set via withPropOverrides
 };
 
 const locatorFields: Fields<LocatorProps> = {
-  mapStyle: BasicSelector(msg("fields.mapStyle", "Map Style"), [
+  mapStyle: BasicSelector({
+    label: msg("fields.mapStyle", "Map Style"),
+    options: [
+      {
+        label: msg("fields.options.default", "Default"),
+        value: "mapbox://styles/mapbox/streets-v12",
+      },
+      {
+        label: msg("fields.options.satellite", "Satellite"),
+        value: "mapbox://styles/mapbox/satellite-streets-v12",
+      },
+      {
+        label: msg("fields.options.light", "Light"),
+        value: "mapbox://styles/mapbox/light-v11",
+      },
+      {
+        label: msg("fields.options.dark", "Dark"),
+        value: "mapbox://styles/mapbox/dark-v11",
+      },
+      {
+        label: msg("fields.options.navigationDay", "Navigation (Day)"),
+        value: "mapbox://styles/mapbox/navigation-day-v1",
+      },
+      {
+        label: msg("fields.options.navigationNight", "Navigation (Night)"),
+        value: "mapbox://styles/mapbox/navigation-night-v1",
+      },
+    ],
+  }),
+  openNowButton: YextField(
+    msg("fields.options.includeOpenNow", "Include Open Now Button"),
     {
-      label: msg("fields.options.default", "Default"),
-      value: "mapbox://styles/mapbox/streets-v12",
-    },
-    {
-      label: msg("fields.options.satellite", "Satellite"),
-      value: "mapbox://styles/mapbox/satellite-streets-v12",
-    },
-    {
-      label: msg("fields.options.light", "Light"),
-      value: "mapbox://styles/mapbox/light-v11",
-    },
-    {
-      label: msg("fields.options.dark", "Dark"),
-      value: "mapbox://styles/mapbox/dark-v11",
-    },
-    {
-      label: msg("fields.options.navigationDay", "Navigation (Day)"),
-      value: "mapbox://styles/mapbox/navigation-day-v1",
-    },
-    {
-      label: msg("fields.options.navigationNight", "Navigation (Night)"),
-      value: "mapbox://styles/mapbox/navigation-night-v1",
-    },
-  ]),
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
 };
 
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
@@ -194,11 +137,14 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
     );
     return <></>;
   }
+  searcher.setSessionTrackingEnabled(true);
   return (
     <SearchHeadlessProvider searcher={searcher}>
-      <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
-        <LocatorInternal {...props} />
-      </AnalyticsProvider>
+      <SearchI18nextProvider searcher={searcher}>
+        <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+          <LocatorInternal {...props} />
+        </AnalyticsProvider>
+      </SearchI18nextProvider>
     </SearchHeadlessProvider>
   );
 };
@@ -206,9 +152,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal: React.FC<LocatorProps> = (props) => {
-  const { mapStyle, entityTypeEnvVar } = props;
+  const { t } = useTranslation();
+  const { mapStyle, openNowButton, entityTypeEnvVar } = props;
   const entityType = getEntityType(entityTypeEnvVar);
-  const locale = getDocumentLocale();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -266,8 +212,9 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     setSearchState("loading");
   };
 
-  const [userLocation, setUserLocation] =
-    React.useState<[number, number]>(DEFAULT_MAP_CENTER);
+  const [userLocation, setUserLocation] = React.useState<
+    [number, number] | undefined
+  >(undefined);
   React.useEffect(() => {
     getUserLocation()
       .then((location) => {
@@ -293,7 +240,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         searchActions.setStaticFilters([
           {
             selected: true,
-            displayName: TRANSLATIONS[locale].newYorkCity,
+            displayName: t(
+              "newYorkCity",
+              "New York City, New York, United States"
+            ),
             filter: {
               kind: "fieldValue",
               fieldId: "builtin.location",
@@ -359,42 +309,109 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
     [resultsContainer]
   );
 
+  const markerOptionsOverride = React.useCallback((selected: boolean) => {
+    return {
+      offset: new mapboxgl.Point(0, selected ? -21 : -14),
+    } as MarkerOptions;
+  }, []);
+
   const mapProps: MapProps = {
     ...(userLocation && { centerCoords: userLocation }),
     ...(mapStyle && { mapStyle }),
     onDragHandler: handleDrag,
     scrollToResult: scrollToResult,
+    markerOptionsOverride: markerOptionsOverride,
   };
+
+  const [isSelected, setIsSelected] = React.useState(false);
+  const handleOpenNowClick = (selected: boolean) => {
+    searchActions.setFilterOption({
+      filter: {
+        kind: "fieldValue",
+        fieldId: HOURS_FIELD,
+        matcher: Matcher.OpenAt,
+        value: "now",
+      },
+      selected,
+      displayName: t("openNow", "Open Now"),
+    });
+    setIsSelected(isSelected);
+    searchActions.setOffset(0);
+    searchActions.resetFacets();
+    executeSearch(searchActions);
+  };
+
+  const searchFilters = useSearchState((state) => state.filters);
+  // If something else causes the filters to update, check if the hours filter is still present
+  // - toggle off the Open Now toggle if not.
+  React.useEffect(() => {
+    setIsSelected(
+      searchFilters.static
+        ? !!searchFilters.static.find((staticFilter) => {
+            return (
+              staticFilter.filter.kind === "fieldValue" &&
+              staticFilter.filter.fieldId === HOURS_FIELD &&
+              staticFilter.selected === true
+            );
+          })
+        : false
+    );
+  }, [searchFilters]);
 
   return (
     <div className="components flex ve-h-screen ve-w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div className="w-full ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
-          <Heading level={3}>{TRANSLATIONS[locale].findALocation}</Heading>
+          <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
             searchFields={[
               { fieldApiName: DEFAULT_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
-            placeholder={TRANSLATIONS[locale].searchHere}
-            ariaLabel={"Search Dropdown Input"}
+            placeholder={t("searchHere", "Search here...")}
+            ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
-              focusedOption: "bg-gray-200",
-              inputElement: "rounded-md p-4",
+              focusedOption: "bg-gray-200 hover:bg-gray-200",
+              option: "hover:bg-gray-100 px-4 py-3",
+              inputElement: "rounded-md p-4 h-11",
+              currentLocationButton: "h-7 w-7 text-palette-primary-dark",
+            }}
+            showCurrentLocationButton={!!userLocation}
+            geolocationProps={{
+              radius: 25,
             }}
           />
+          {openNowButton && (
+            <Toggle
+              pressed={isSelected}
+              onPressedChange={(pressed) => handleOpenNowClick(pressed)}
+              className="py-2 px-2"
+            >
+              {t("openNow", "Open Now")}
+            </Toggle>
+          )}
         </div>
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
           {resultCount === 0 &&
             searchState === "not started" &&
-            TRANSLATIONS[locale].useLocator}
+            t(
+              "useOurLocatorToFindALocationNearYou",
+              "Use our locator to find a location near you"
+            )}
           {resultCount === 0 &&
             searchState === "complete" &&
-            TRANSLATIONS[locale].noResults}
+            t("noResultsFoundForThisArea", "No results found for this area")}
           {resultCount > 0 &&
             filterDisplayName &&
-            `${resultCount} locations near "${filterDisplayName}"`}
+            t(
+              "locationsNear",
+              `${resultCount} locations near "${filterDisplayName}"`,
+              {
+                count: resultCount,
+                filterDisplayName,
+              }
+            )}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -415,7 +432,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"
             >
-              {TRANSLATIONS[locale].searchThisArea}
+              {t("searchThisArea", "Search This Area")}
             </Button>
           </div>
         )}
@@ -518,7 +535,9 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
 const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
-  const locale = getDocumentLocale();
+  const { t, i18n } = useTranslation();
+  const { relativePrefixToRoot } = useTemplateProps();
+
   const location = result.rawData;
   const distance = result.distance;
 
@@ -531,6 +550,20 @@ const LocationCard: CardComponent<Location> = ({
     ? (distance / 1609.344).toFixed(1)
     : undefined;
 
+  const distanceInKilometers = distance
+    ? (distance / 1000).toFixed(1)
+    : undefined;
+
+  const handleGetDirectionsClick = useCardAnalyticsCallback(
+    result,
+    "DRIVING_DIRECTIONS"
+  );
+  const handleVisitPageClick = useCardAnalyticsCallback(result, "VIEW_WEBSITE");
+  const handlePhoneNumberClick = useCardAnalyticsCallback(
+    result,
+    "TAP_TO_CALL"
+  );
+
   return (
     <Background
       background={backgroundColors.background1.value}
@@ -542,15 +575,18 @@ const LocationCard: CardComponent<Location> = ({
       >
         {result.index}
       </Background>
-      <div className="flex flex-wrap gap-6">
+      <div className="flex flex-wrap gap-6 w-full">
         <div className="w-full flex flex-col gap-4">
           <div className="flex flex-row justify-between items-center">
             <Heading className="font-bold text-palette-primary-dark" level={4}>
               {location.name}
             </Heading>
-            {distanceInMiles && (
+            {distance && (
               <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
-                {distanceInMiles + " mi"}
+                {t("distanceInUnit", `${distanceInMiles} mi`, {
+                  distanceInMiles,
+                  distanceInKilometers,
+                })}
               </div>
             )}
           </div>
@@ -563,16 +599,18 @@ const LocationCard: CardComponent<Location> = ({
             </div>
           )}
           {location.mainPhone && (
-            <PhoneAtom
-              phoneNumber={location.mainPhone}
-              includeHyperlink={true}
-              includeIcon={false}
-              format={
+            <a
+              href={location.mainPhone}
+              onClick={handlePhoneNumberClick}
+              className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
+            >
+              {formatPhoneNumber(
+                location.mainPhone,
                 location.mainPhone.slice(0, 2) === "+1"
                   ? "domestic"
                   : "international"
-              }
-            />
+              )}
+            </a>
           )}
           <div className="flex flex-col gap-1 w-full">
             {location.address && (
@@ -588,46 +626,37 @@ const LocationCard: CardComponent<Location> = ({
               </div>
             )}
             {location.yextDisplayCoordinate && (
-              <CTA
-                label={TRANSLATIONS[locale].getDirections}
-                link={getGoogleMapsLink(
+              <a
+                href={getGoogleMapsLink(
                   location.yextDisplayCoordinate || {
                     latitude: 0,
                     longitude: 0,
                   }
                 )}
-                linkType={"DRIVING_DIRECTIONS"}
-                target={"_blank"}
-                variant="link"
-                className="font-bold text-palette-primary-dark"
-              />
+                onClick={handleGetDirectionsClick}
+                className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
+              >
+                {t("getDirections", "Get Directions")}
+                <FaAngleRight size={"12px"} />
+              </a>
             )}
           </div>
         </div>
-        <CTA
-          label={TRANSLATIONS[locale].viewMoreInformation}
-          link={getPath(location, locale)}
-          linkType={"URL"}
-          className="text-center basis-full py-3 break-words whitespace-normal"
-          target={"_blank"}
-          variant="primary"
-        />
+        <Button asChild className="basis-full" variant="primary">
+          <a
+            href={getLocationPath(
+              location,
+              i18n.language,
+              relativePrefixToRoot
+            )}
+            onClick={handleVisitPageClick}
+          >
+            {t("visitPage", "Visit Page")}
+          </a>
+        </Button>
       </div>
     </Background>
   );
-};
-
-const getPath = (location: Location, locale: string) => {
-  if (location.slug) {
-    return location.slug;
-  }
-
-  const localePath = locale !== "en" ? `${locale}/` : "";
-  const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
-    : `${localePath}${location.id}`;
-
-  return normalizeSlug(path);
 };
 
 const getEntityType = (entityTypeEnvVar?: string) => {
@@ -643,16 +672,6 @@ const getEntityType = (entityTypeEnvVar?: string) => {
   } catch {
     return DEFAULT_ENTITY_TYPE;
   }
-};
-
-const getDocumentLocale = () => {
-  const entityDocument: any = useDocument();
-  const fullLocale = entityDocument.meta?.locale || "en";
-  let locale: keyof typeof TRANSLATIONS = fullLocale.split(/[_-]/)[0];
-  if (!(locale in TRANSLATIONS)) {
-    locale = "en";
-  }
-  return locale;
 };
 
 interface Location {

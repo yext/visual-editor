@@ -102,7 +102,6 @@ export interface layoutProps extends VariantProps<typeof layoutVariants> {
 export const layoutFields: Fields<layoutProps> = {
   backgroundColor: YextField("Background Color", {
     type: "select",
-    hasSearch: true,
     options: "BACKGROUND_COLOR",
   }),
   gap: SpacingSelector("Gap", "gap", false),

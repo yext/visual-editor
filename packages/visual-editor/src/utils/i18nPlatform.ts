@@ -33,14 +33,20 @@ const usePlatformTranslation = () => {
   return useTranslation(NAMESPACE, { i18n: i18nPlatformInstance });
 };
 
+export type MsgString = string & { __brand: "i18nPlatform" };
+
 /**
  * msg marks strings for translation in config JSON such
  * as Puck fields or the theme config. The TOptions are
  * stringified in the config and dynamically replaced
  * upon render.
  */
-const msg = (key: string, defaultValue: string, options?: TOptions): string => {
-  return JSON.stringify({ key, defaultValue, options });
+const msg = (
+  key: string,
+  defaultValue: string,
+  options?: TOptions
+): MsgString => {
+  return JSON.stringify({ key, defaultValue, options }) as MsgString;
 };
 
 /**
@@ -49,7 +55,7 @@ const msg = (key: string, defaultValue: string, options?: TOptions): string => {
  * have been stringified by msg.
  */
 const pt = (
-  keyOrEncodedValue: string,
+  keyOrEncodedValue: string | MsgString,
   optionsOrDefault?: string | TOptions,
   options?: TOptions
 ): string => {

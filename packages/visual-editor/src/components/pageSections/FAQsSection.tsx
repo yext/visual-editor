@@ -1,26 +1,30 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
+import React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { defaultFAQ } from "../../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
-  useDocument,
-  resolveYextEntityField,
-  YextEntityField,
-  Body,
-  HeadingProps,
-  BackgroundStyle,
-  PageSection,
-  Heading,
   backgroundColors,
+  BackgroundStyle,
+  EntityField,
+  Heading,
+  HeadingLevel,
+  resolveYextEntityField,
+  PageSection,
+  useDocument,
+  YextEntityField,
   YextField,
   VisibilityWrapper,
-  EntityField,
-  FAQSectionType,
-  ComponentFields,
   TranslatableString,
   resolveTranslatableString,
   msg,
   pt,
-  resolveTranslatableRTF2,
+  ThemeOptions,
+  Body,
+  FAQSectionType,
+  ComponentFields,
+  resolveTranslatableRichText,
+  FAQStruct,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -28,6 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../atoms/accordion.js";
+import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
 export interface FAQSectionProps {
   data: {
@@ -36,9 +41,15 @@ export interface FAQSectionProps {
   };
   styles: {
     backgroundColor?: BackgroundStyle;
-    headingLevel: HeadingProps["level"];
+    heading: {
+      level: HeadingLevel;
+      align: "left" | "center" | "right";
+    };
   };
   liveVisibility: boolean;
+  analytics?: {
+    scope?: string;
+  };
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
@@ -49,9 +60,7 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         msg("fields.sectionHeading", "Section Heading"),
         {
           type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
+          filter: { types: ["type.string"] },
         }
       ),
       faqs: YextField(msg("fields.faqs", "FAQs"), {
@@ -69,14 +78,22 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
-      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
-        options: "HEADING_LEVEL",
+      heading: YextField(msg("fields.heading", "Heading"), {
+        type: "object",
+        objectFields: {
+          level: YextField(msg("fields.level", "Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          align: YextField(msg("fields.headingAlign", "Heading Align"), {
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          }),
+        },
       }),
     },
   }),
@@ -100,6 +117,15 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     i18n.language
   );
   const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
+  const analytics = useAnalytics();
+
+  const justifyClass = styles?.heading?.align
+    ? {
+        left: "justify-start",
+        center: "justify-center",
+        right: "justify-end",
+      }[styles.heading.align]
+    : "justify-start";
 
   return (
     <PageSection
@@ -108,11 +134,15 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
     >
       {resolvedHeading && (
         <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
-          fieldId={data?.heading.field}
-          constantValueEnabled={data?.heading.constantValueEnabled}
+          displayName={pt("fields.heading", "Heading")}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
         >
-          <Heading level={styles?.headingLevel}>{resolvedHeading}</Heading>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles?.heading?.level ?? 2}>
+              {resolvedHeading}
+            </Heading>
+          </div>
         </EntityField>
       )}
       {resolvedFAQs?.faqs && resolvedFAQs.faqs?.length > 0 && (
@@ -121,16 +151,46 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
           fieldId={data?.faqs.field}
           constantValueEnabled={data?.faqs.constantValueEnabled}
         >
-          <Accordion type="single" collapsible>
-            {resolvedFAQs?.faqs?.map((faqItem, index) => (
-              <AccordionItem value={index.toString()} key={index}>
+          <Accordion>
+            {resolvedFAQs?.faqs?.map((faqItem: FAQStruct, index: number) => (
+              <AccordionItem
+                key={index}
+                data-ya-action={
+                  analytics?.getDebugEnabled() ? "EXPAND/COLLAPSE" : undefined
+                }
+                data-ya-eventname={
+                  analytics?.getDebugEnabled() ? `toggleFAQ${index}` : undefined
+                }
+                onToggle={(e) =>
+                  e.currentTarget.open // the updated state after toggling
+                    ? analytics?.track({
+                        action: "EXPAND",
+                        eventName: `toggleFAQ${index}`,
+                      })
+                    : analytics?.track({
+                        action: "COLLAPSE",
+                        eventName: `toggleFAQ${index}`,
+                      })
+                }
+              >
                 <AccordionTrigger>
-                  <Body variant="lg" className="font-bold text-left">
+                  <Body>
                     {resolveTranslatableString(faqItem.question, i18n.language)}
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
-                  {resolveTranslatableRTF2(faqItem.answer, i18n.language)}
+                  <EntityField
+                    displayName={pt("fields.answer", "Answer")}
+                    fieldId={data.faqs.field}
+                    constantValueEnabled={data.faqs.constantValueEnabled}
+                  >
+                    <Body>
+                      {resolveTranslatableRichText(
+                        faqItem.answer,
+                        i18n.language
+                      )}
+                    </Body>
+                  </EntityField>
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -148,28 +208,42 @@ export const FAQSection: ComponentConfig<FAQSectionProps> = {
     data: {
       heading: {
         field: "",
-        constantValue: "Frequently Asked Questions",
+        constantValue: {
+          en: "Frequently Asked Questions",
+          hasLocalizedValue: "true",
+        },
         constantValueEnabled: true,
       },
       faqs: {
         field: "",
         constantValue: {
-          faqs: [],
+          faqs: [defaultFAQ, defaultFAQ, defaultFAQ],
         },
+        constantValueEnabled: true,
       },
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
-      headingLevel: 2,
+      heading: {
+        level: 2,
+        align: "left",
+      },
     },
     liveVisibility: true,
+    analytics: {
+      scope: "faqsSection",
+    },
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <FAQsSectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <FAQsSectionComponent {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

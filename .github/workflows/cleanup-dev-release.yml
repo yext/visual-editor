@@ -1,0 +1,30 @@
+name: "Cleanup Dev Release"
+
+on:
+  pull_request:
+    types: [unlabeled, closed]
+
+jobs:
+  cleanup:
+    # Only run when the 'create-dev-release' label is removed or PR is closed
+    if: |
+      (github.event.action == 'unlabeled' && github.event.label.name == 'create-dev-release') ||
+      (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'create-dev-release'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: "Notify Starter Repo to delete branch"
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.WEBSITE_REPO_PAT }}
+          repository: YextSolutions/pages-visual-editor-starter
+          event-type: dev-release-cleanup
+          client-payload: >
+            {
+              "pr_number": "${{ github.event.pull_request.number }}",
+              "branch_name": "pr-${{ github.event.pull_request.number }}",
+              "pr_title": "${{ github.event.pull_request.title }}",
+            }

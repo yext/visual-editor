@@ -5,15 +5,20 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
 import {
   Background,
-  backgroundColors,
+  BackgroundStyle,
   Body,
   fetchLocalesToPathsForEntity,
 } from "@yext/visual-editor";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@radix-ui/react-accordion";
 
 export interface LanguageDropdownProps {
   className?: string;
@@ -24,6 +29,7 @@ export interface LanguageDropdownProps {
   contentDeliveryAPIDomain: string;
   locales: string[];
   currentLocale: string;
+  background?: BackgroundStyle;
 }
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
@@ -35,6 +41,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   contentDeliveryAPIDomain,
   locales,
   currentLocale,
+  background,
 }) => {
   const scopedLocales = new Set<string>(locales);
   const [validLocalesToPaths, setValidLocalesToPaths] = React.useState<
@@ -47,6 +54,11 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
     "UNSET" | "LOADING" | "COMPLETE" | "ERROR"
   >("UNSET");
   const [open, setOpen] = React.useState<boolean>(false);
+
+  // In Editor if locale changes, have selected change as well.
+  React.useEffect(() => {
+    setSelected(currentLocale);
+  }, [currentLocale]);
 
   // on dropdown clicked, compare the actual locales of the entity to the pageset's scoped locales
   const handleOpenChange = async (isOpen: boolean) => {
@@ -96,43 +108,71 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   return (
-    <Background
-      background={backgroundColors.background1.value}
-      as="div"
-      className={className}
-    >
-      <DropdownMenu open={open} onOpenChange={handleOpenChange}>
-        <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
-          <div className="flex gap-4 items-center">
-            <Globe className="w-4 h-4" />
-            <Body>{getLanguageName(selected)}</Body>
-          </div>
-          <ChevronDown />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40 rounded-l shadow-lg">
-          {(status === "COMPLETE" || status === "ERROR") &&
-            Object.entries(validLocalesToPaths).map(([locale, path]) => (
-              <Background
-                background={backgroundColors.background1.value}
-                as="div"
-                key={locale}
-              >
-                {locale !== selected && (
-                  <DropdownMenuSeparator className="bg-[#CCCCCC]" />
-                )}
+    <Background background={background} as="div" className={className}>
+      <div className="hidden md:block">
+        <DropdownMenu open={open} onOpenChange={handleOpenChange}>
+          <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
+            <div className="flex gap-4 items-center">
+              <Globe className="w-4 h-4" />
+              <Body variant="xs">{getLanguageName(selected)}</Body>
+            </div>
+            <ChevronDown />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40 rounded p-0">
+            {(status === "COMPLETE" || status === "ERROR") &&
+              Object.entries(validLocalesToPaths).map(([locale, path]) => (
                 <DropdownMenuItem
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
-                    "text-body-fontSize font-body-fontFamily focus:bg-slate-100",
-                    selected === locale ? "font-bold" : "font-body-fontWeight"
+                    "components font-body-fontFamily font-normal bg-white py-4 px-6 text-body-sm-fontSize",
+                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] cursor-pointer data-[highlighted]:outline-none data-[highlighted]:shadow-none",
+                    selected === locale && "font-bold"
                   )}
                 >
                   {getLanguageName(locale)}
                 </DropdownMenuItem>
-              </Background>
-            ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+              ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="md:hidden block w-full">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full"
+          onValueChange={(value) => handleOpenChange(!!value)}
+        >
+          <AccordionItem value="language-selector">
+            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 px-4 py-6 md:pb-4 ">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4" />
+                <Body variant="xs">{getLanguageName(selected)}</Body>
+              </div>
+              <ChevronDown
+                className="transition-transform duration-300 group-data-[state=open]:rotate-180"
+                size={16}
+              />
+            </AccordionTrigger>
+            <AccordionContent className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp bg-white">
+              <div className="flex flex-col pl-6">
+                {(status === "COMPLETE" || status === "ERROR") &&
+                  Object.entries(validLocalesToPaths).map(([locale, path]) => (
+                    <button
+                      key={locale}
+                      onClick={() => handleLocaleSelected(locale, path)}
+                      className={themeManagerCn(
+                        "text-left py-3 px-2 rounded text-body-sm-fontSize",
+                        selected === locale && "font-body-fontWeight"
+                      )}
+                    >
+                      {getLanguageName(locale)}
+                    </button>
+                  ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
     </Background>
   );
 };

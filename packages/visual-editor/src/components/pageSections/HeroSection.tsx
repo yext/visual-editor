@@ -27,7 +27,14 @@ import {
   resolveTranslatableString,
   msg,
   pt,
+  getAnalyticsScopeHash,
+  ReviewStars,
+  getAggregateRating,
 } from "@yext/visual-editor";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -37,6 +44,7 @@ export interface HeroSectionProps {
     localGeoModifier: YextEntityField<TranslatableString>;
     hours: YextEntityField<HoursType>;
     hero: YextStructEntityField<HeroSectionType>;
+    showAverageReview: boolean;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -45,11 +53,12 @@ export interface HeroSectionProps {
     localGeoModifierLevel: HeadingLevel;
     primaryCTA: CTAProps["variant"];
     secondaryCTA: CTAProps["variant"];
+    image: ImageStylingProps;
   };
   analytics?: {
     scope?: string;
   };
-  liveVisibility: boolean;
+  liveVisibility?: boolean;
 }
 
 const heroSectionFields: Fields<HeroSectionProps> = {
@@ -86,6 +95,16 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           type: ComponentFields.HeroSection.type,
         },
       }),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
+        }
+      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -95,7 +114,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
           options: "BACKGROUND_COLOR",
         }
       ),
@@ -104,8 +122,18 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("fields.options.left", "Left"), value: "left" },
-            { label: msg("fields.options.right", "Right"), value: "right" },
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
           ],
         }
       ),
@@ -142,6 +170,10 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "CTA_VARIANT",
         }
       ),
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -179,6 +211,8 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { timezone } = document as {
     timezone: string;
   };
+
+  const { averageRating, reviewCount } = getAggregateRating(document);
 
   return (
     <PageSection
@@ -235,6 +269,15 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             >
               <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
             </EntityField>
+          )}
+          {reviewCount > 0 && data.showAverageReview && (
+            <ReviewStars
+              averageRating={averageRating}
+              hasDarkBackground={
+                styles.backgroundColor?.textColor === "text-white"
+              }
+              reviewCount={reviewCount}
+            />
           )}
         </header>
         {(resolvedHero?.primaryCta?.label ||
@@ -301,10 +344,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           >
             <Image
               image={resolvedHero?.image}
-              layout="auto"
-              aspectRatio={
-                resolvedHero?.image.width / resolvedHero?.image.height
-              }
+              aspectRatio={styles.image.aspectRatio}
+              width={styles.image.width || 640}
+              className="max-w-full sm:max-w-initial rounded-image-borderRadius"
             />
           </div>
         </EntityField>
@@ -319,12 +361,20 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
   defaultProps: {
     data: {
       businessName: {
-        field: "name",
-        constantValue: "Business Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "Business Name",
+          hasLocalizedValue: "true",
+        },
       },
       localGeoModifier: {
-        field: "address.city",
-        constantValue: "Geomodifier Name",
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "Geomodifier",
+          hasLocalizedValue: "true",
+        },
       },
       hours: {
         field: "hours",
@@ -332,29 +382,37 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
       hero: {
         field: "",
+        constantValueEnabled: true,
         constantValue: {
-          image: {
-            height: 360,
-            width: 640,
-            url: PLACEHOLDER_IMAGE_URL,
-          },
           primaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+              hasLocalizedValue: "true",
+            },
             link: "#",
             linkType: "URL",
           },
           secondaryCta: {
-            label: "Call To Action",
+            label: {
+              en: "Call To Action",
+              hasLocalizedValue: "true",
+            },
             link: "#",
             linkType: "URL",
           },
+          image: {
+            url: PLACEHOLDER_IMAGE_URL,
+            height: 360,
+            width: 640,
+          },
         },
         constantValueOverride: {
-          image: false,
-          primaryCta: false,
-          secondaryCta: false,
+          image: true,
+          primaryCta: true,
+          secondaryCta: true,
         },
       },
+      showAverageReview: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
@@ -363,16 +421,49 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       localGeoModifierLevel: 1,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
+      image: {
+        aspectRatio: 1.78, // 16:9 default
+      },
     },
     analytics: {
       scope: "heroSection",
     },
     liveVisibility: true,
   },
+  resolveFields: (data, { lastData }) => {
+    // If set to entity value and no field selected, hide the component.
+    if (
+      !data.props.data.hero.constantValueEnabled &&
+      data.props.data.hero.field === ""
+    ) {
+      data.props.liveVisibility = false;
+      return {
+        ...heroSectionFields,
+        liveVisibility: undefined,
+      };
+    }
+
+    // If no field was selected and then constant value is enabled
+    // or a field is selected, show the component.
+    if (
+      (data.props.data.hero.constantValueEnabled &&
+        !lastData?.props.data.hero.constantValueEnabled &&
+        data.props.data.hero.field === "") ||
+      (lastData?.props.data.hero.field === "" &&
+        data.props.data.hero.field !== "")
+    ) {
+      data.props.liveVisibility = true;
+    }
+
+    // Otherwise, return normal fields.
+    return heroSectionFields;
+  },
   render: (props) => (
-    <AnalyticsScopeProvider name={props.analytics?.scope ?? "heroSection"}>
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
       <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
+        liveVisibility={!!props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
         <HeroSectionWrapper {...props} />

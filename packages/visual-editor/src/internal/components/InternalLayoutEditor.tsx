@@ -5,6 +5,10 @@ import {
   type History,
   InitialHistory,
   AppState,
+  ActionBar,
+  usePuck,
+  ComponentData,
+  PuckAction,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -17,6 +21,7 @@ import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.ts
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18nPlatform.ts";
+import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 
 const devLogger = new DevLogger();
 
@@ -136,6 +141,65 @@ export const InternalLayoutEditor = ({
     }
   };
 
+  const copyToClipboard = (data: ComponentData<any, string> | undefined) => {
+    if (!data) {
+      return;
+    }
+
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+  };
+
+  const pasteFromClipboard = async (
+    dispatch: (action: PuckAction) => void,
+    selectedComponentIndex: number | undefined,
+    selectedComponentType: string | undefined
+  ) => {
+    if (selectedComponentIndex === undefined) {
+      return;
+    }
+
+    try {
+      const rawClipboardText = await navigator.clipboard.readText();
+      const pastedData = JSON.parse(rawClipboardText);
+      if (
+        !pastedData.props ||
+        !pastedData.type ||
+        pastedData.type !== selectedComponentType
+      ) {
+        alert("Failed to paste: Invalid component data.");
+        return;
+      }
+      // Update the component data in the specified zone
+      dispatch({
+        type: "set",
+        state: (prevState) => {
+          const newContent = [...prevState.data.content];
+          if (
+            selectedComponentIndex !== undefined &&
+            newContent[selectedComponentIndex]
+          ) {
+            newContent[selectedComponentIndex] = {
+              ...newContent[selectedComponentIndex],
+              props: {
+                ...pastedData.props,
+                id: newContent[selectedComponentIndex].props.id, // Preserve original props.id
+              },
+            };
+          }
+          return {
+            ...prevState,
+            data: {
+              ...prevState.data,
+              content: newContent,
+            },
+          };
+        },
+      });
+    } catch (_) {
+      alert("Failed to paste: Invalid component data.");
+    }
+  };
+
   const translatedPuckConfigWithRootFields = React.useMemo(() => {
     const translatedComponents: Config["components"] = {};
     Object.entries(puckConfig.components).forEach(
@@ -214,6 +278,52 @@ export const InternalLayoutEditor = ({
             select: TranslatePuckFieldLabels,
             text: TranslatePuckFieldLabels,
             textarea: TranslatePuckFieldLabels,
+          },
+          actionBar: ({ children, label }) => {
+            const { appState, dispatch } = usePuck();
+            const selectedComponentIndex = appState.ui.itemSelector?.index;
+            const selectedZone = appState.ui.itemSelector?.zone;
+            const selectedComponent = appState.data.content.find(
+              (_item, index) =>
+                index === selectedComponentIndex &&
+                selectedZone === "default-zone"
+            );
+            const selectedComponentType = selectedComponent?.type;
+
+            const additionalActions = (
+              <>
+                <ActionBar.Action
+                  label={pt("actions.copyToClipboard", "Copy to Clipboard")}
+                  onClick={() => copyToClipboard(selectedComponent)}
+                >
+                  <ClipboardCopyIcon size={16} />
+                </ActionBar.Action>
+                <ActionBar.Action
+                  label={pt(
+                    "actions.pasteFromClipboard",
+                    "Paste from Clipboard"
+                  )}
+                  onClick={async () =>
+                    await pasteFromClipboard(
+                      dispatch,
+                      selectedComponentIndex,
+                      selectedComponentType
+                    )
+                  }
+                >
+                  <ClipboardPasteIcon size={16} />
+                </ActionBar.Action>
+              </>
+            );
+
+            return (
+              <ActionBar label={label}>
+                <ActionBar.Group>
+                  {additionalActions}
+                  {children}
+                </ActionBar.Group>
+              </ActionBar>
+            );
           },
         }}
       />

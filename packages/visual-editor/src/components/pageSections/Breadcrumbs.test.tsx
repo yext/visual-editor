@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -21,9 +21,6 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...BreadcrumbsSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async () => {
-      expect(document.getElementsByTagName("nav")).toHaveLength(0);
-    },
   },
   {
     name: "default props with document data",
@@ -52,20 +49,79 @@ const tests: ComponentTest[] = [
     },
     props: { ...BreadcrumbsSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      // expect(document.getElementsByTagName("nav")[0]).toBeVisible();
-      expect(page.getByText("Locations Directory")).toBeVisible();
-      expect(page.getByText("US")).toBeVisible();
-      expect(page.getByText("NY")).toBeVisible();
-      expect(page.getByText("Brooklyn")).toBeVisible();
-      expect(page.getByText("Galaxy Grill")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+  {
+    name: "version 4 props",
+    document: {
+      name: "Galaxy Grill",
+      dm_directoryParents_63590_locations: [
+        { name: "Locations Directory", slug: "en/index.html" },
+        {
+          name: "US",
+          slug: "en/us",
+          dm_addressCountryDisplayName: "United States",
+        },
+        {
+          name: "NY",
+          slug: "en/us/ny",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "New York",
+        },
+        {
+          name: "Brooklyn",
+          slug: "en/us/ny/brooklyn",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "New York",
+        },
+      ],
+    },
+    props: {
+      data: {
+        directoryRoot: "Locations Directory",
+      },
+      liveVisibility: true,
+    },
+    version: 4,
+  },
+  {
+    name: "version 8 with non-default props with document data",
+    document: {
+      name: "Galaxy Grill",
+      dm_directoryParents_63590_locations: [
+        { name: "Locations Directory", slug: "en/index.html" },
+        {
+          name: "US",
+          slug: "en/us",
+          dm_addressCountryDisplayName: "United States",
+        },
+        {
+          name: "NY",
+          slug: "en/us/ny",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "New York",
+        },
+        {
+          name: "Brooklyn",
+          slug: "en/us/ny/brooklyn",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "New York",
+        },
+      ],
+    },
+    props: {
+      data: {
+        directoryRoot: "Locations Directory",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
 ];
 
 describe("BreadcrumbsSection", async () => {
@@ -77,14 +133,15 @@ describe("BreadcrumbsSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -103,6 +160,7 @@ describe("BreadcrumbsSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -110,10 +168,19 @@ describe("BreadcrumbsSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+
+      await expect(`Breadcrumbs/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `Breadcrumbs/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

@@ -2,15 +2,36 @@ import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import {
   InsightSectionType,
   InsightStruct,
-  TranslatableRTF2,
+  TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
-import { resolveTranslatableString } from "@yext/visual-editor";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+
+export const defaultInsight: InsightStruct = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  name: { en: "Article Name", hasLocalizedValue: "true" },
+  category: { en: "Category", hasLocalizedValue: "true" },
+  description: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters",
+    hasLocalizedValue: "true",
+  },
+  publishTime: "2022-08-02",
+  cta: {
+    link: "#",
+    label: { en: "Read More", hasLocalizedValue: "true" },
+    linkType: "URL",
+  },
+};
 
 export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
   {
@@ -40,38 +61,22 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "name",
-        options: {
-          defaultValue: "Name",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("name", "Name"),
       "text"
     );
   }, []);
 
   const categoryField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "category",
-        options: {
-          defaultValue: "Category",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("category", "Category"),
       "text"
     );
   }, []);
 
   const descriptionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2 | undefined>(
-      {
-        key: "description",
-        options: {
-          defaultValue: "Description",
-        },
-      },
-      "textarea"
+    return TranslatableRichTextField<TranslatableRichText | undefined>(
+      msg("fields.description", "Description")
     );
   }, []);
 
@@ -81,10 +86,10 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
     arrayFields: {
       image: {
         type: "object",
-        label: t("image", "Image"),
+        label: t("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },
@@ -95,6 +100,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
       description: descriptionField,
       cta: translatableCTAFields(),
     },
+    defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

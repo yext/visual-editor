@@ -6,10 +6,27 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
-import { resolveTranslatableString } from "@yext/visual-editor";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+
+export const defaultPerson: PersonStruct = {
+  name: { en: "First Last", hasLocalizedValue: "true" },
+  title: { en: "Associate Agent", hasLocalizedValue: "true" },
+  phoneNumber: "(202) 770-6619 ",
+  email: "jkelley@[company].com",
+  cta: {
+    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+  },
+  headshot: {
+    url: "https://placehold.co/80x80",
+    height: 80,
+    width: 80,
+  },
+};
 
 export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
   type: "custom",
@@ -38,25 +55,15 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const nameField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "name",
-        options: {
-          defaultValue: "Name",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.name", "Name"),
       "text"
     );
   }, []);
 
   const titleField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString | undefined>(
-      {
-        key: "title",
-        options: {
-          defaultValue: "Title",
-        },
-      },
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.title", "Title"),
       "text"
     );
   }, []);
@@ -67,10 +74,10 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
     arrayFields: {
       headshot: {
         type: "object",
-        label: t("headshot", "Headshot"),
+        label: t("fields.headshot", "Headshot"),
         objectFields: {
           url: {
-            label: t("url", "URL"),
+            label: t("fields.url", "URL"),
             type: "text",
           },
         },
@@ -80,10 +87,11 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
       phoneNumber: PHONE_CONSTANT_CONFIG,
       email: {
         type: "text",
-        label: t("email", "Email"),
+        label: t("fields.email", "Email"),
       },
       cta: translatableCTAFields(),
     },
+    defaultItemProps: defaultPerson,
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(item.name, i18n.language);
       if (translation) {

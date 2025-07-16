@@ -74,7 +74,9 @@ const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      "ve-overflow-hidden ve-p-1 ve-text-foreground [&_[cmdk-group-heading]]:ve-px-2 [&_[cmdk-group-heading]]:ve-py-1.5 [&_[cmdk-group-heading]]:ve-text-xs [&_[cmdk-group-heading]]:ve-font-medium [&_[cmdk-group-heading]]:ve-text-muted-foreground",
+      "ve-overflow-hidden ve-p-1 ve-text-foreground" +
+        " [&_[cmdk-group-heading]]:ve-px-2 [&_[cmdk-group-heading]]:ve-pt-1.5 [&_[cmdk-group-heading]]:ve-pb-0 [&_[cmdk-group-heading]]:ve-text-sm [&_[cmdk-group-heading]]:ve-font-medium [&_[cmdk-group-heading]]:ve-text-muted-foreground" +
+        " [&_[data-cmdk-group-subheading]]:ve-px-2 [&_[data-cmdk-group-subheading]]:ve-pt-0 [&_[data-cmdk-group-subheading]]:ve-pb-1.5 [&_[data-cmdk-group-subheading]]:ve-text-xs [&_[data-cmdk-group-subheading]]:ve-font-normal [&_[data-cmdk-group-subheading]]:ve-text-muted-foreground",
       className
     )}
     {...props}

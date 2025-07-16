@@ -297,6 +297,13 @@ export const defaultThemeConfig: ThemeConfig = {
         options: fontWeightOptions("--fontFamily-button-fontFamily"),
         default: "400",
       },
+      borderRadius: {
+        label: msg("theme.borderRadius", "Border Radius"),
+        type: "select",
+        plugin: "borderRadius",
+        options: ThemeOptions.BUTTON_BORDER_RADIUS,
+        default: "4px",
+      },
       textTransform: {
         label: msg("theme.textTransform.textTransform", "Text Transform"),
         type: "select",
@@ -356,10 +363,22 @@ export const defaultThemeConfig: ThemeConfig = {
         type: "select",
         plugin: "display",
         options: [
-          { label: msg("yes", "Yes"), value: "block" },
-          { label: msg("no", "No"), value: "none" },
+          { label: msg("fields.options.yes", "Yes"), value: "block" },
+          { label: msg("fields.options.no", "No"), value: "none" },
         ],
         default: "block",
+      },
+    },
+  },
+  image: {
+    label: msg("theme.image", "Image"),
+    styles: {
+      borderRadius: {
+        label: msg("theme.borderRadius", "Border Radius"),
+        type: "select",
+        plugin: "borderRadius",
+        options: ThemeOptions.IMAGE_BORDER_RADIUS,
+        default: "0px",
       },
     },
   },

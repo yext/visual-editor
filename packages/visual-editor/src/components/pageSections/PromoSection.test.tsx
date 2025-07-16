@@ -3,9 +3,9 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  viewports,
+  transformTests,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   PromoSection,
   migrate,
@@ -65,22 +65,12 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Call To Action")).toBeVisible();
-    },
   },
   {
     name: "default props with document data",
     document: { c_promo: promoData },
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
-    tests: async (page) => {
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Call To Action")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with entity values",
@@ -114,11 +104,6 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Taste the universe!")).toBeVisible();
-      expect(page.getByText("Call to Order")).toBeVisible();
-      expect(page.getByText("out-of-this-world")).toBeVisible();
-    },
   },
   {
     name: "version 0 props with constant value",
@@ -156,17 +141,55 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 0,
-    tests: async (page) => {
-      expect(page.getByText("Title")).toBeVisible();
-      expect(page.getByText("Description")).toBeVisible();
-      expect(page.getByText("Call to Action")).toBeVisible();
-    },
   },
-];
-
-const testsWithViewports: ComponentTest[] = [
-  ...tests.map((t) => ({ ...t, viewport: viewports[0] })),
-  ...tests.map((t) => ({ ...t, viewport: viewports[1] })),
+  {
+    name: "version 5 props with constant value",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: { en: "Featured Promotion" },
+            description: {
+              en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+            },
+            cta: {
+              label: { en: "Learn More" },
+              link: "#",
+              linkType: "URL",
+            },
+          },
+          constantValueEnabled: true,
+          constantValueOverride: {
+            image: true,
+            title: true,
+            description: true,
+            cta: true,
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        orientation: "right",
+        ctaVariant: "secondary",
+        heading: {
+          level: 2,
+          align: "left",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 5,
+  },
 ];
 
 describe("PromoSection", async () => {
@@ -178,14 +201,15 @@ describe("PromoSection", async () => {
       },
     },
   };
-  it.each(testsWithViewports)(
-    "renders $name $viewport.name",
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
     async ({
       document,
+      name,
       props,
-      tests,
+      interactions,
       version,
-      viewport: { width, height } = viewports[0],
+      viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
         {
@@ -204,6 +228,7 @@ describe("PromoSection", async () => {
         migrationRegistry,
         puckConfig
       );
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render config={puckConfig} data={data} />
@@ -211,10 +236,25 @@ describe("PromoSection", async () => {
       );
 
       await page.viewport(width, height);
-      await page.screenshot();
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
+
+      await expect(
+        `PromoSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-      await tests(page);
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `PromoSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
     }
   );
 });

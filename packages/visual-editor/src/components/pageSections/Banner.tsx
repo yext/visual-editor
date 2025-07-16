@@ -4,13 +4,12 @@ import {
   YextEntityField,
   resolveYextEntityField,
   useDocument,
-  Body,
   PageSection,
   YextField,
   VisibilityWrapper,
   EntityField,
-  TranslatableString,
-  resolveTranslatableString,
+  TranslatableRichText,
+  resolveTranslatableRichText,
   msg,
   pt,
 } from "@yext/visual-editor";
@@ -26,7 +25,7 @@ export type BannerSectionProps = {
     textAlignment: "left" | "right" | "center";
   };
   data: {
-    text: YextEntityField<TranslatableString>;
+    text: YextEntityField<TranslatableRichText>;
   };
   liveVisibility: boolean;
 };
@@ -35,7 +34,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {
+      text: YextField<any, TranslatableRichText>(msg("fields.text", "Text"), {
         type: "entityField",
         filter: {
           types: ["type.string"],
@@ -50,8 +49,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
-          hasSearch: true,
-          options: "DARK_BACKGROUND_COLOR",
+          options: "BACKGROUND_COLOR",
         }
       ),
       textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
@@ -75,8 +73,8 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const { i18n } = useTranslation();
   const document = useDocument();
-  const resolvedText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.text),
+  const resolvedText = resolveTranslatableRichText(
+    resolveYextEntityField<TranslatableRichText>(document, data.text),
     i18n.language
   );
 
@@ -85,6 +83,10 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
     center: "justify-center",
     right: "justify-end",
   }[styles.textAlignment];
+
+  if (!resolvedText) {
+    return <></>;
+  }
 
   return (
     <PageSection
@@ -97,7 +99,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        <Body>{resolvedText}</Body>
+        {resolvedText}
       </EntityField>
     </PageSection>
   );
@@ -110,7 +112,10 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
     data: {
       text: {
         field: "",
-        constantValue: "Banner Text",
+        constantValue: {
+          en: "Banner Text",
+          hasLocalizedValue: "true",
+        },
         constantValueEnabled: true,
       },
     },

@@ -1,14 +1,25 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
+import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
 import {
-  FAQSectionType,
-  FAQStruct,
-  TranslatableRTF2,
-  TranslatableString,
-} from "../../../types/types.ts";
-import { pt, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+  msg,
+  pt,
+  usePlatformTranslation,
+} from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { generateTranslatableConstantConfig } from "./Text.tsx";
-import { resolveTranslatableString } from "@yext/visual-editor";
+import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+
+export const defaultFAQ: FAQStruct = {
+  question: {
+    en: "Question Lorem ipsum dolor sit amet?",
+    hasLocalizedValue: "true",
+  },
+  answer: {
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    hasLocalizedValue: "true",
+  },
+};
 
 export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
   type: "custom",
@@ -37,27 +48,11 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
 
   const questionField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableString>(
-      {
-        key: "question",
-        options: {
-          defaultValue: "Question",
-        },
-      },
-      "text"
-    );
+    return TranslatableStringField(msg("fields.question", "Question"), "text");
   }, []);
 
   const answerField = useMemo(() => {
-    return generateTranslatableConstantConfig<TranslatableRTF2>(
-      {
-        key: "answer",
-        options: {
-          defaultValue: "Answer",
-        },
-      },
-      "textarea"
-    );
+    return TranslatableRichTextField(msg("fields.answer", "Answer"));
   }, []);
 
   return {
@@ -67,6 +62,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
       question: questionField,
       answer: answerField,
     },
+    defaultItemProps: defaultFAQ,
     getItemSummary: (item, i): string => {
       const translation = resolveTranslatableString(
         item.question,
