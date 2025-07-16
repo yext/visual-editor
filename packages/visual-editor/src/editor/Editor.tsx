@@ -18,6 +18,7 @@ import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18nPlatform.ts";
+import { normalizeLocale } from "../utils/normalizeLocale.ts";
 
 const devLogger = new DevLogger();
 
@@ -106,7 +107,9 @@ export const Editor = ({
 
   useEffect(() => {
     if (templateMetadata?.platformLocale) {
-      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
+      i18nPlatformInstance.changeLanguage(
+        normalizeLocale(templateMetadata?.platformLocale)
+      );
     }
   }, [templateMetadata?.platformLocale]);
 

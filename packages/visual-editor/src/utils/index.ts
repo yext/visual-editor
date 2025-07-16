@@ -50,4 +50,7 @@ export {
   pt,
 } from "./i18nPlatform.ts";
 export { getLocationPath } from "./getLocationPath.ts";
-export { normalizeLocale, normalizeLocales } from "./normalizeLocale.ts";
+export {
+  normalizeLocale,
+  normalizeLocalesInObject,
+} from "./normalizeLocale.ts";

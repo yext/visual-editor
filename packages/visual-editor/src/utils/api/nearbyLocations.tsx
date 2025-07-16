@@ -1,5 +1,3 @@
-import { normalizeLocale } from "../normalizeLocale.ts";
-
 const V_PARAM = "20250407";
 
 export const fetchNearbyLocations = async ({
@@ -34,7 +32,7 @@ export const fetchNearbyLocations = async ({
     "yextDisplayCoordinate__geo",
     `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
   );
-  url.searchParams.append("meta.locale", normalizeLocale(locale));
+  url.searchParams.append("meta.locale", locale);
   url.searchParams.append("id__neq", entityId);
   if (limit) {
     url.searchParams.append("limit", limit.toString());

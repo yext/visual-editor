@@ -64,7 +64,7 @@ export const config = {
       "c_deliveryPromo",
     ],
     localization: {
-      locales: ["en"],
+      locales: ["en", "zh_hans_hk", "fr-CA"],
     },
   },
   additionalProperties: {
