@@ -50,4 +50,4 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('THIRD-PARTY-NOTICES were updated. A new commit was pushed.')
+            core.setFailed('Docs were updated automatically.')
