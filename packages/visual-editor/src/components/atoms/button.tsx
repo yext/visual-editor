@@ -90,13 +90,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const background = useBackground();
-    const hasDarkBackground =
-      background && background.textColor === "text-white";
+    const hasDarkBackground = background?.isDarkBackground;
 
     return (
       <Comp
         className={themeManagerCn(
-          buttonVariants({ variant, hasDarkBackground }),
+          buttonVariants({
+            variant,
+            hasDarkBackground,
+          }),
           className
         )}
         // textTransform has to be applied via styles because there is no custom tailwind utility

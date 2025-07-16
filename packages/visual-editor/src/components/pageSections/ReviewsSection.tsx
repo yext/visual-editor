@@ -17,6 +17,7 @@ import {
   ReviewStars,
   Timestamp,
   TimestampOption,
+  useBackground,
   useDocument,
   YextField,
 } from "@yext/visual-editor";
@@ -104,20 +105,16 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     return <></>;
   }
 
-  const hasDarkBackground = props.backgroundColor?.textColor === "text-white";
-
   const headerProps: ReviewsHeaderProps = {
     averageRating,
     reviewCount,
     isLoading,
-    hasDarkBackground,
   };
 
   const pageScrollerProps: PageScrollerProps = {
     reviewCount,
     currentPageNumber,
     fetchData: setCurrentPageNumber,
-    hasDarkBackground,
   };
 
   return (
@@ -128,10 +125,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
       <ReviewsHeader {...headerProps} />
       {reviews && (
         <>
-          <ReviewsList
-            reviews={reviews?.response?.docs}
-            hasDarkBackground={hasDarkBackground}
-          />
+          <ReviewsList reviews={reviews?.response?.docs} />
           <PageScroller {...pageScrollerProps} />
         </>
       )}
@@ -143,11 +137,10 @@ interface ReviewsHeaderProps {
   averageRating: number;
   reviewCount: number;
   isLoading: boolean;
-  hasDarkBackground: boolean;
 }
 
 const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
-  const { averageRating, reviewCount, isLoading, hasDarkBackground } = props;
+  const { averageRating, reviewCount, isLoading } = props;
   const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-3">
@@ -160,7 +153,6 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
         ) : (
           <ReviewStars
             averageRating={averageRating}
-            hasDarkBackground={hasDarkBackground}
             reviewCount={reviewCount}
           />
         )}
@@ -169,22 +161,14 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
   );
 };
 
-const ReviewsList: React.FC<{ reviews: any[]; hasDarkBackground: boolean }> = ({
-  reviews,
-  hasDarkBackground,
-}) => {
+const ReviewsList: React.FC<{ reviews: any[] }> = ({ reviews }) => {
   if (!reviews) {
     return <></>; // No reviews to display while loading
   }
   return (
     <div className="flex flex-col gap-4">
       {reviews.map((review, index) => (
-        <Review
-          key={`review-${index}`}
-          index={index}
-          review={review}
-          hasDarkBackground={hasDarkBackground}
-        />
+        <Review key={`review-${index}`} index={index} review={review} />
       ))}
     </div>
   );
@@ -192,9 +176,8 @@ const ReviewsList: React.FC<{ reviews: any[]; hasDarkBackground: boolean }> = ({
 
 const Review: React.FC<{
   review: any;
-  hasDarkBackground: boolean;
   index: number;
-}> = ({ review, hasDarkBackground, index }) => {
+}> = ({ review, index }) => {
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
     date: review.reviewDate,
@@ -202,7 +185,6 @@ const Review: React.FC<{
   const reviewContentData: ReviewContentProps = {
     rating: review.rating,
     ...(review.content && { content: review.content }),
-    hasDarkBackground,
     index,
   };
 
@@ -263,19 +245,15 @@ const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
 interface ReviewContentProps {
   rating: number;
   content?: string;
-  hasDarkBackground: boolean;
   index: number;
 }
 
 const ReviewContent: React.FC<ReviewContentProps> = ({
   rating,
   content,
-  hasDarkBackground,
   index,
 }) => {
-  const reviewStars = (
-    <ReviewStars averageRating={rating} hasDarkBackground={hasDarkBackground} />
-  );
+  const reviewStars = <ReviewStars averageRating={rating} />;
   if (!content) {
     return <div className="flex flex-col gap-2">{reviewStars}</div>;
   }
@@ -368,16 +346,16 @@ interface PageScrollerProps {
   reviewCount: number;
   currentPageNumber: number;
   fetchData: (newPageNumber: number) => void;
-  hasDarkBackground: boolean;
 }
 
 const PageScroller: React.FC<PageScrollerProps> = ({
   reviewCount,
   currentPageNumber,
   fetchData,
-  hasDarkBackground,
 }) => {
   const analytics = useAnalytics();
+  const background = useBackground();
+  const hasDarkBackground = background?.isDarkBackground ?? false;
   const numPages = Math.ceil(reviewCount / REVIEWS_PER_PAGE);
   if (numPages <= 1) {
     return <></>;

@@ -273,9 +273,6 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           {reviewCount > 0 && data.showAverageReview && (
             <ReviewStars
               averageRating={averageRating}
-              hasDarkBackground={
-                styles.backgroundColor?.textColor === "text-white"
-              }
               reviewCount={reviewCount}
             />
           )}

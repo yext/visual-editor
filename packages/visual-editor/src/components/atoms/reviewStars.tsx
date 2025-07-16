@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
-import { Body } from "@yext/visual-editor";
+import { Body, useBackground } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export type AggregateRating = {
@@ -10,12 +10,13 @@ export type AggregateRating = {
 
 export type ReviewStarsProps = {
   averageRating: number;
-  hasDarkBackground: boolean;
   reviewCount?: number;
 };
 
 export const ReviewStars = (props: ReviewStarsProps) => {
-  const { averageRating, hasDarkBackground, reviewCount } = props;
+  const { averageRating, reviewCount } = props;
+  const background = useBackground();
+  const hasDarkBackground = background?.isDarkBackground ?? false;
   const roundedAverageRating = Math.round(averageRating * 10) / 10;
   const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
   const starColor = hasDarkBackground
