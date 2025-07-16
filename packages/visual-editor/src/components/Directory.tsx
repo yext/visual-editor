@@ -289,7 +289,7 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
         styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
       />
       <PageSection className="flex flex-col items-center gap-2">
-        {document._site.name && (
+        {document._site?.name && (
           <Heading level={4}>{document._site.name}</Heading>
         )}
         {headingText && <Heading level={2}>{headingText}</Heading>}
