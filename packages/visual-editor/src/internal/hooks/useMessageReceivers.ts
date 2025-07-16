@@ -11,7 +11,6 @@ import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
-import { normalizeLocalesInObject } from "@yext/visual-editor";
 
 const devLogger = new DevLogger();
 
@@ -84,7 +83,6 @@ export const useCommonMessageReceivers = (
   }
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    payload = normalizeLocalesInObject(payload);
     const puckConfig = componentRegistry.get(payload.templateId);
     setPuckConfig(puckConfig);
     const templateMetadata = payload as TemplateMetadata;
