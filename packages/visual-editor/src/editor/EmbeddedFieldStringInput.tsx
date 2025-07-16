@@ -34,7 +34,6 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
   filter: RenderEntityFieldFilter<T>;
 }) => {
   const entityFields = useEntityFields();
-  const document = useDocument();
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
     null
@@ -187,7 +186,7 @@ const CommandItemWithResolvedValue = ({
     <CommandItem
       value={option.value}
       onSelect={onSelect}
-      className="ve-cursor-pointer ve-px-10 ve-py-3"
+      className="ve-cursor-pointer ve-px-5 ve-py-3"
       title={option.label}
     >
       <div>
