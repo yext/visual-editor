@@ -11,6 +11,7 @@ import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { normalizeLocalesInObject } from "@yext/visual-editor";
 
 const devLogger = new DevLogger();
 
@@ -26,7 +27,12 @@ export const useCommonMessageReceivers = (
   }, []);
 
   // Base Template Info
-  const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
+  const [templateMetadata, _setTemplateMetadata] = useState<TemplateMetadata>();
+  const setTemplateMetadata = React.useCallback(
+    (value: TemplateMetadata) =>
+      _setTemplateMetadata(normalizeLocalesInObject(value)),
+    [_setTemplateMetadata]
+  );
   const [puckConfig, setPuckConfig] = useState<Config>();
 
   // Layout from Content

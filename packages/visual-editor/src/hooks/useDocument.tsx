@@ -1,5 +1,4 @@
 import * as React from "react";
-import { normalizeLocalesInObject } from "../utils/normalizeLocale.ts";
 
 const TemplatePropsContext = React.createContext<any | undefined>(undefined);
 
@@ -13,12 +12,7 @@ const useTemplateProps = <
     );
   }
 
-  const normalized = React.useMemo(
-    () => normalizeLocalesInObject(context),
-    [context]
-  );
-
-  return normalized as T;
+  return context as T;
 };
 
 const useDocument = <T,>(): T => {
@@ -30,12 +24,7 @@ const useDocument = <T,>(): T => {
     throw new Error("document does not exist on TemplateProps");
   }
 
-  const normalized = React.useMemo(
-    () => normalizeLocalesInObject(context.document),
-    [context.document]
-  );
-
-  return normalized as T;
+  return context.document as T;
 };
 
 export { useDocument, useTemplateProps, TemplatePropsContext };

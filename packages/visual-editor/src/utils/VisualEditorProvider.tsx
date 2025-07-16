@@ -7,7 +7,7 @@ import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nextProvider } from "react-i18next";
 import { i18nComponentsInstance } from "./i18nComponents.ts";
-import { normalizeLocale } from "./normalizeLocale.ts";
+import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 
 type AllOrNothing<T extends Record<string, any>> =
   | T
@@ -33,11 +33,10 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   children,
 }: VisualEditorProviderProps<T>) => {
   const queryClient = new QueryClient();
+  templateProps = normalizeLocalesInObject(templateProps);
 
   if (templateProps?.document?.locale) {
-    i18nComponentsInstance.changeLanguage(
-      normalizeLocale(templateProps.document.locale)
-    );
+    i18nComponentsInstance.changeLanguage(templateProps.document.locale);
   }
 
   return (

@@ -57,7 +57,9 @@ function tryParseJSON(str: string): any | undefined {
 
 function tryNormalizeLocalesInString(str: string): string {
   const parsed = tryParseJSON(str);
-  if (!parsed) return str;
+  if (!parsed) {
+    return str;
+  }
 
   const normalized = normalizeLocalesInObject(parsed);
   return JSON.stringify(normalized);
