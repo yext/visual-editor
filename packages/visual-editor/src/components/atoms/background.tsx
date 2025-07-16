@@ -17,8 +17,8 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
     const document = useDocument<{ __: { theme: string } }>();
     const Component = as ?? "div";
     const selectedBackground = background ?? backgroundColors.background1.value;
-    let publishedTheme: Record<string, string> | undefined = undefined;
-    let cssVariables: string | undefined = undefined;
+    let publishedTheme: Record<string, string> | undefined;
+    let cssVariables: string | undefined;
 
     // In the editor, we must get the colors from the CSS variables because
     // that is where they are updated. However, during page generation, we must

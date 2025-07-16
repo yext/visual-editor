@@ -90,14 +90,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const background = useBackground();
-    const hasDarkBackground = background?.isDarkBackground;
 
     return (
       <Comp
         className={themeManagerCn(
           buttonVariants({
             variant,
-            hasDarkBackground,
+            hasDarkBackground: background?.isDarkBackground,
           }),
           className
         )}
