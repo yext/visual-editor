@@ -660,7 +660,7 @@ const buildComplexImage = (
 };
 
 /**
- * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
+ * The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector.
  * Avaliable on Location templates.
  */
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
