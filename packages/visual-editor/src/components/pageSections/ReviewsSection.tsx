@@ -355,12 +355,13 @@ const PageScroller: React.FC<PageScrollerProps> = ({
 }) => {
   const analytics = useAnalytics();
   const background = useBackground();
-  const hasDarkBackground = background?.isDarkBackground ?? false;
   const numPages = Math.ceil(reviewCount / REVIEWS_PER_PAGE);
+
   if (numPages <= 1) {
     return <></>;
   }
-  const selectableButtonClasses = `cursor-pointer ${hasDarkBackground ? "text-white" : "text-palette-primary-dark"}`;
+
+  const selectableButtonClasses = `cursor-pointer ${background?.isDarkBackground ? "text-white" : "text-palette-primary-dark"}`;
   const disabledButtonClasses = "opacity-50 cursor-default";
   return (
     <Body className="flex flex-row justify-center items-center gap-5">

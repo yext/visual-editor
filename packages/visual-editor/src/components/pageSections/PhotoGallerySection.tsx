@@ -70,7 +70,7 @@ const DynamicChildColors = ({
   category,
 }: DynamicChildColorsProps) => {
   const background = useBackground();
-  const hasDarkBackground = background?.isDarkBackground ?? false;
+  const hasDarkBackground = background?.isDarkBackground;
 
   const dynamicClasses =
     category === "slide"
