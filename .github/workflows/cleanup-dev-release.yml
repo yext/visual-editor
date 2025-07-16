@@ -26,5 +26,5 @@ jobs:
             {
               "pr_number": "${{ github.event.pull_request.number }}",
               "branch_name": "pr-${{ github.event.pull_request.number }}",
-              "pr_title": "${{ github.event.pull_request.title }}",
+              "pr_title": "${{ github.event.pull_request.title }}"
             }
