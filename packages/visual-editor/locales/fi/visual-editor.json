@@ -298,6 +298,7 @@
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterdisplayName}}\"",
+  "map": "Kartta",
   "monday": "maanantai",
   "name": "Nimi",
   "newYorkCity": "New York City, New York, Yhdysvallat",
