@@ -14,7 +14,7 @@ export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
   ({ className, background, as, children, ...props }, ref) => {
-    const document = useDocument<{ __: { theme: string } }>();
+    const document = useDocument();
     const Component = as ?? "div";
     const selectedBackground = background ?? backgroundColors.background1.value;
     let publishedTheme: Record<string, string> | undefined;
@@ -32,7 +32,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
         "visual-editor-theme"
       ) as HTMLStyleElement;
       cssVariables = styleTag?.innerText ?? "";
-    } else {
+    } else if (document?.__?.theme) {
       try {
         publishedTheme = JSON.parse(document.__.theme) as Record<
           string,
