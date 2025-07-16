@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { normalizeLocale, normalizeLocalesInObject } from "./normalizeLocale";
 
+const pageSet =
+  '{"name":"accounts/123/sites/456/pagesets/location-pages","uid":"019765a4-b3fd-7d4b-a78c-e3f196eb444c","codeTemplate":"main","assignments":["global"],"createTime":"2025-06-12T19:36:22Z","updateTime":"2025-07-15T16:05:51Z","scope":{"locales":["en","fr_ca","zH_hAnS-Hk"],"entityTypes":["location"]},"defaultLayout":"accounts/123/sites/456/layouts/location-pages-default-layout","displayName":"Location Pages","writebackUrlField":"pgs_locationPages_locationPages_ea8a0_Url","type":"ENTITY","typeConfig":{"entityConfig":{"rootDirectory":"accounts/123/sites/456/pagesets/location-pages-directory-root","directoryManagerId":"123456","locator":"accounts/123/sites/456/pagesets/location-pages-locator","contentEndpointId":"location-pagesContent"}}}';
+const normalizedPageSet =
+  '{"name":"accounts/123/sites/456/pagesets/location-pages","uid":"019765a4-b3fd-7d4b-a78c-e3f196eb444c","codeTemplate":"main","assignments":["global"],"createTime":"2025-06-12T19:36:22Z","updateTime":"2025-07-15T16:05:51Z","scope":{"locales":["en","fr-CA","zh-Hans-HK"],"entityTypes":["location"]},"defaultLayout":"accounts/123/sites/456/layouts/location-pages-default-layout","displayName":"Location Pages","writebackUrlField":"pgs_locationPages_locationPages_ea8a0_Url","type":"ENTITY","typeConfig":{"entityConfig":{"rootDirectory":"accounts/123/sites/456/pagesets/location-pages-directory-root","directoryManagerId":"123456","locator":"accounts/123/sites/456/pagesets/location-pages-locator","contentEndpointId":"location-pagesContent"}}}';
+
 describe("normalizeLocale", () => {
   it("lowercases language code", () => {
     expect(normalizeLocale("EN")).toBe("en");
@@ -47,8 +52,7 @@ describe("normalizeLocale", () => {
         YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
         YEXT_CLOUD_REGION: "US",
       },
-      _pageset:
-        '{"name":"accounts/123/sites/456/pagesets/location-pages","uid":"019765a4-b3fd-7d4b-a78c-e3f196eb444c","codeTemplate":"main","assignments":["global"],"createTime":"2025-06-12T19:36:22Z","updateTime":"2025-07-15T16:05:51Z","scope":{"locales":["en","fr_ca","zH_hAnS-Hk"],"entityTypes":["location"]},"defaultLayout":"accounts/123/sites/456/layouts/location-pages-default-layout","displayName":"Location Pages","writebackUrlField":"pgs_locationPages_locationPages_ea8a0_Url","type":"ENTITY","typeConfig":{"entityConfig":{"rootDirectory":"accounts/123/sites/456/pagesets/location-pages-directory-root","directoryManagerId":"123456","locator":"accounts/123/sites/456/pagesets/location-pages-locator","contentEndpointId":"location-pagesContent"}}}',
+      _pageset: pageSet,
       _schema: {
         "@graph": [
           {
@@ -70,8 +74,7 @@ describe("normalizeLocale", () => {
         YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
         YEXT_CLOUD_REGION: "US",
       },
-      _pageset:
-        '{"name":"accounts/123/sites/456/pagesets/location-pages","uid":"019765a4-b3fd-7d4b-a78c-e3f196eb444c","codeTemplate":"main","assignments":["global"],"createTime":"2025-06-12T19:36:22Z","updateTime":"2025-07-15T16:05:51Z","scope":{"locales":["en","fr-CA","zh-Hans-HK"],"entityTypes":["location"]},"defaultLayout":"accounts/123/sites/456/layouts/location-pages-default-layout","displayName":"Location Pages","writebackUrlField":"pgs_locationPages_locationPages_ea8a0_Url","type":"ENTITY","typeConfig":{"entityConfig":{"rootDirectory":"accounts/123/sites/456/pagesets/location-pages-directory-root","directoryManagerId":"123456","locator":"accounts/123/sites/456/pagesets/location-pages-locator","contentEndpointId":"location-pagesContent"}}}',
+      _pageset: normalizedPageSet,
       _schema: {
         "@graph": [
           {
@@ -89,5 +92,11 @@ describe("normalizeLocale", () => {
       locale: "en-US",
     };
     expect(normalizeLocalesInObject(doc)).toEqual(normalized);
+  });
+
+  it("normalize object edge cases", () => {
+    expect(normalizeLocalesInObject(undefined)).toEqual(undefined);
+    expect(normalizeLocalesInObject(1)).toEqual(1);
+    expect(normalizeLocalesInObject(pageSet)).toEqual(normalizedPageSet);
   });
 });

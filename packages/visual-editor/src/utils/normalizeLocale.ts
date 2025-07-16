@@ -42,6 +42,8 @@ export function normalizeLocalesInObject(obj: any): any {
       }
     }
     return result;
+  } else if (obj && typeof obj === "string") {
+    return tryNormalizeLocalesInString(obj);
   } else {
     return obj;
   }

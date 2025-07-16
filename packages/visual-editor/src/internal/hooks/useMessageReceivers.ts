@@ -27,12 +27,7 @@ export const useCommonMessageReceivers = (
   }, []);
 
   // Base Template Info
-  const [templateMetadata, _setTemplateMetadata] = useState<TemplateMetadata>();
-  const setTemplateMetadata = React.useCallback(
-    (value: TemplateMetadata) =>
-      _setTemplateMetadata(normalizeLocalesInObject(value)),
-    [_setTemplateMetadata]
-  );
+  const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
   const [puckConfig, setPuckConfig] = useState<Config>();
 
   // Layout from Content
@@ -89,6 +84,7 @@ export const useCommonMessageReceivers = (
   }
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
+    payload = normalizeLocalesInObject(payload);
     const puckConfig = componentRegistry.get(payload.templateId);
     setPuckConfig(puckConfig);
     const templateMetadata = payload as TemplateMetadata;
@@ -100,6 +96,7 @@ export const useCommonMessageReceivers = (
   });
 
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
+    payload = normalizeLocalesInObject(payload);
     const data = JSON.parse(payload.layoutData) as Data;
     devLogger.logData("LAYOUT_DATA", data);
     const migratedData = migrate(data, migrationRegistry, puckConfig);
@@ -112,6 +109,7 @@ export const useCommonMessageReceivers = (
   });
 
   useReceiveMessage("getThemeData", TARGET_ORIGINS, (send, payload) => {
+    payload = normalizeLocalesInObject(payload);
     const payloadString = payload as unknown as string;
     const themeData = payloadString ? JSON.parse(payloadString) : {};
     devLogger.logData("THEME_DATA", themeData);
