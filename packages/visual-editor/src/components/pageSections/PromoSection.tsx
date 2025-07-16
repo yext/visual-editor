@@ -35,23 +35,67 @@ import {
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
+export interface PromoData {
+  /**
+   * The source for the promotional content, including an image, title, description, and a call-to-action.
+   * @defaultValue Placeholder content for a featured promotion.
+   */
+  promo: YextStructEntityField<PromoSectionType>;
+}
+
+export interface PromoStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /**
+   * Positions the image to the left or right of the text content.
+   * @defaultValue 'left'
+   */
+  orientation: "left" | "right";
+
+  /**
+   * The visual style variant for the call-to-action button.
+   * @defaultValue 'primary'
+   */
+  ctaVariant: CTAProps["variant"];
+
+  /** Styling for the promo's title. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
+  };
+
+  /**
+   * Styling options for the promo image, such as aspect ratio.
+   */
+  image: ImageStylingProps;
+}
+
 export interface PromoSectionProps {
-  data: {
-    promo: YextStructEntityField<PromoSectionType>;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    orientation: "left" | "right";
-    ctaVariant: CTAProps["variant"];
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    image: ImageStylingProps;
-  };
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: PromoData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: PromoStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility?: boolean;
 }
 
@@ -220,6 +264,10 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   );
 };
 
+/**
+ * The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements.
+ * Avaliable on Location templates.
+ */
 export const PromoSection: ComponentConfig<PromoSectionProps> = {
   label: msg("components.promoSection", "Promo Section"),
   fields: promoSectionFields,

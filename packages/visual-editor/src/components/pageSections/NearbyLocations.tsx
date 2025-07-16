@@ -33,37 +33,98 @@ import {
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-export interface NearbyLocationsSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    coordinate: YextEntityField<Coordinate>;
-    radius: number;
-    limit: number;
+export interface NearbyLocationsData {
+  /**
+   * The main heading for the entire section.
+   * @defaultValue "Nearby Locations" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The central coordinate (`latitude`, `longitude`) to search from.
+   * @defaultValue 'yextDisplayCoordinate' field
+   */
+  coordinate: YextEntityField<Coordinate>;
+
+  /**
+   * The search radius in miles.
+   * @defaultValue 10
+   */
+  radius: number;
+
+  /**
+   * The maximum number of locations to find and display.
+   * @defaultValue 3
+   */
+  limit: number;
+}
+
+export interface NearbyLocationsStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for the individual location cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
-    phoneNumberFormat: "domestic" | "international";
-    phoneNumberLink: boolean;
-    hours: {
-      showCurrentStatus: boolean;
-      timeFormat?: "12h" | "24h";
-      dayOfWeekFormat?: "short" | "long";
-      showDayNames?: boolean;
-    };
   };
+
+  /**
+   * The display format for phone numbers on the cards.
+   * @defaultValue 'domestic'
+   */
+  phoneNumberFormat: "domestic" | "international";
+
+  /**
+   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
+   * @defaultValue false
+   */
+  phoneNumberLink: boolean;
+
+  /** Styling for the hours display on each card. */
+  hours: {
+    showCurrentStatus: boolean;
+    timeFormat?: "12h" | "24h";
+    dayOfWeekFormat?: "short" | "long";
+    showDayNames?: boolean;
+  };
+}
+
+export interface NearbyLocationsSectionProps {
+  /**
+   * This object defines the search parameters for finding nearby locations.
+   * @propCategory Data Props
+   */
+  data: NearbyLocationsData;
+
+  /**
+   * This object contains extensive properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: NearbyLocationsStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
-  contentEndpointIdEnvVar?: string; // to be set via withPropOverrides
+
+  /**  @internal */
+  contentEndpointIdEnvVar?: string;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -483,6 +544,10 @@ function parseDocument(
   };
 }
 
+/**
+ * The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours.
+ * Avaliable on Location templates.
+ */
 export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
   {
     label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),

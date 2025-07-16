@@ -9,6 +9,7 @@
     "allowJs": true,
     "checkJs": true,
     "declaration": true,
+    "removeComments": false,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
     "isolatedModules": true,

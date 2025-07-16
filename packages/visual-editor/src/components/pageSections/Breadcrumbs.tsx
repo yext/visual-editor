@@ -16,18 +16,51 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
-export type BreadcrumbsSectionProps = {
-  data: {
-    directoryRoot: TranslatableString;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-  };
+export interface BreadcrumbsData {
+  /**
+   * The display label for the first link in the breadcrumb trail (the top-level directory page).
+   * @defaultValue "Directory Root"
+   */
+  directoryRoot: TranslatableString;
+}
+
+export interface BreadcrumbsStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+}
+
+/**
+ * @public Defines the complete set of properties for the BreadcrumbsSection component.
+ */
+export interface BreadcrumbsSectionProps {
+  /**
+   * This object contains the content used by the component.
+   * @propCategory Data Props
+   */
+  data: BreadcrumbsData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: BreadcrumbsStyles;
+
+  /**
+   * @internal
+   */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
-};
+}
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -157,6 +190,10 @@ export const BreadcrumbsComponent = ({
   );
 };
 
+/**
+ * The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site.
+ * Avaliable on Location templates.
+ */
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,

@@ -51,33 +51,53 @@ const defaultSecondaryLink = {
   link: "#",
 };
 
+export interface ExpandedHeaderData {
+  /** Content for the main primary header bar. */
+  primaryHeader: {
+    logo: string;
+    links: TranslatableCTA[];
+    primaryCTA?: TranslatableCTA;
+    showPrimaryCTA: boolean;
+    secondaryCTA?: TranslatableCTA;
+    showSecondaryCTA: boolean;
+  };
+
+  /** Content for the secondary header (top bar). */
+  secondaryHeader: {
+    show: boolean;
+    showLanguageDropdown: boolean;
+    secondaryLinks: TranslatableCTA[];
+  };
+}
+
+export interface ExpandedHeaderStyles {
+  /** Styling for the main, primary header bar. */
+  primaryHeader: {
+    logo: ImageStylingProps;
+    backgroundColor?: BackgroundStyle;
+    primaryCtaVariant: CTAProps["variant"];
+    secondaryCtaVariant: CTAProps["variant"];
+  };
+  /** Styling for the secondary header (top bar). */
+  secondaryHeader: {
+    backgroundColor?: BackgroundStyle;
+  };
+}
+
 export interface ExpandedHeaderProps {
-  data: {
-    primaryHeader: {
-      logo: string;
-      links: TranslatableCTA[];
-      primaryCTA?: TranslatableCTA;
-      showPrimaryCTA: boolean;
-      secondaryCTA?: TranslatableCTA;
-      showSecondaryCTA: boolean;
-    };
-    secondaryHeader: {
-      show: boolean;
-      showLanguageDropdown: boolean;
-      secondaryLinks: TranslatableCTA[];
-    };
-  };
-  styles: {
-    primaryHeader: {
-      logo: ImageStylingProps;
-      backgroundColor?: BackgroundStyle;
-      primaryCtaVariant: CTAProps["variant"];
-      secondaryCtaVariant: CTAProps["variant"];
-    };
-    secondaryHeader: {
-      backgroundColor?: BackgroundStyle;
-    };
-  };
+  /**
+   * This object contains all the content for both header tiers.
+   * @propCategory Data Props
+   */
+  data: ExpandedHeaderData;
+
+  /**
+   * This object contains properties for customizing the appearance of both header tiers.
+   * @propCategory Style Props
+   */
+  styles: ExpandedHeaderStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
@@ -639,6 +659,10 @@ const buildComplexImage = (
   };
 };
 
+/**
+ * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
+ * Avaliable on Location templates.
+ */
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   label: msg("components.expandedHeader", "Expanded Header"),
   fields: expandedHeaderSectionFields,

@@ -61,43 +61,62 @@ export const validPatterns: Record<string, RegExp> = {
   tiktokLink: /^https:\/\/(www\.)?tiktok\.com\/.+/,
 };
 
+export interface ExpandedFooterData {
+  /** Content for the primary footer bar. */
+  primaryFooter: {
+    logo: string;
+    facebookLink: string;
+    instagramLink: string;
+    linkedInLink: string;
+    pinterestLink: string;
+    tiktokLink: string;
+    youtubeLink: string;
+    xLink: string;
+    utilityImages: { url: string; linkTarget?: string }[];
+    expandedFooter: boolean;
+    footerLinks: TranslatableCTA[];
+    expandedFooterLinks: {
+      label: TranslatableString;
+      links: TranslatableCTA[];
+    }[];
+  };
+  /** Content for the secondary header bar. */
+  secondaryFooter: {
+    show: boolean;
+    copyrightMessage: TranslatableString;
+    secondaryFooterLinks: TranslatableCTA[];
+  };
+}
+
+export interface ExpandedFooterStyles {
+  /** Styling for the primary footer bar. */
+  primaryFooter: {
+    backgroundColor?: BackgroundStyle;
+    linksAlignment: "left" | "right";
+    logo: ImageStylingProps;
+    utilityImages: ImageStylingProps;
+  };
+  /** Styling for the secondary footer bar. */
+  secondaryFooter: {
+    backgroundColor?: BackgroundStyle;
+    linksAlignment: "left" | "right";
+  };
+}
+
 export interface ExpandedFooterProps {
-  data: {
-    primaryFooter: {
-      logo: string;
-      facebookLink: string;
-      instagramLink: string;
-      linkedInLink: string;
-      pinterestLink: string;
-      tiktokLink: string;
-      youtubeLink: string;
-      xLink: string;
-      utilityImages: { url: string; linkTarget?: string }[];
-      expandedFooter: boolean;
-      footerLinks: TranslatableCTA[];
-      expandedFooterLinks: {
-        label: TranslatableString;
-        links: TranslatableCTA[];
-      }[];
-    };
-    secondaryFooter: {
-      show: boolean;
-      copyrightMessage: TranslatableString;
-      secondaryFooterLinks: TranslatableCTA[];
-    };
-  };
-  styles: {
-    primaryFooter: {
-      backgroundColor?: BackgroundStyle;
-      linksAlignment: "left" | "right";
-      logo: ImageStylingProps;
-      utilityImages: ImageStylingProps;
-    };
-    secondaryFooter: {
-      backgroundColor?: BackgroundStyle;
-      linksAlignment: "left" | "right";
-    };
-  };
+  /**
+   * This object contains all the content for both footer tiers.
+   * @propCategory Data Props
+   */
+  data: ExpandedFooterData;
+
+  /**
+   * This object contains properties for customizing the appearance of both footer tiers.
+   * @propCategory Style Props
+   */
+  styles: ExpandedFooterStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };

@@ -37,47 +37,80 @@ import {
   getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 
+export interface CoreInfoData {
+  /** Content for the "Information" column. */
+  info: {
+    headingText: YextEntityField<TranslatableString>;
+    address: YextEntityField<AddressType>;
+    phoneNumbers: Array<{
+      number: YextEntityField<string>;
+      label: TranslatableString;
+    }>;
+    emails: YextEntityField<string[]>;
+  };
+  /** Content for the "Hours" column. */
+  hours: {
+    headingText: YextEntityField<TranslatableString>;
+    hours: YextEntityField<HoursType>;
+  };
+  /** Content for the "Services" column. */
+  services: {
+    headingText: YextEntityField<TranslatableString>;
+    servicesList: YextEntityField<TranslatableString[]>;
+  };
+}
+
+export interface CoreInfoStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue `Background Color 1`
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for all column headings. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
+  };
+
+  /** Styling for the "Information" column. */
+  info: {
+    showGetDirectionsLink: boolean;
+    phoneFormat: "domestic" | "international";
+    includePhoneHyperlink: boolean;
+    emailsListLength?: number;
+  };
+
+  /** Styling for the "Hours" column. */
+  hours: {
+    startOfWeek: keyof DayOfWeekNames | "today";
+    collapseDays: boolean;
+    showAdditionalHoursText: boolean;
+  };
+}
+
 export interface CoreInfoSectionProps {
-  data: {
-    info: {
-      headingText: YextEntityField<TranslatableString>;
-      address: YextEntityField<AddressType>;
-      phoneNumbers: Array<{
-        number: YextEntityField<string>;
-        label: TranslatableString;
-      }>;
-      emails: YextEntityField<string[]>;
-    };
-    hours: {
-      headingText: YextEntityField<TranslatableString>;
-      hours: YextEntityField<HoursType>;
-    };
-    services: {
-      headingText: YextEntityField<TranslatableString>;
-      servicesList: YextEntityField<TranslatableString[]>;
-    };
-  };
-  styles: {
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    backgroundColor?: BackgroundStyle;
-    info: {
-      showGetDirectionsLink: boolean;
-      phoneFormat: "domestic" | "international";
-      includePhoneHyperlink: boolean;
-      emailsListLength?: number;
-    };
-    hours: {
-      startOfWeek: keyof DayOfWeekNames | "today";
-      collapseDays: boolean;
-      showAdditionalHoursText: boolean;
-    };
-  };
+  /**
+   * This object contains all the content to be displayed within the three columns.
+   * @propCategory Data Props
+   */
+  data: CoreInfoData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: CoreInfoStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -289,6 +322,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   ),
 };
 
+/**
+ * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
+ * Avaliable on Location templates.
+ */
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
@@ -558,6 +595,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   );
 };
 
+/**
+ * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
+ * Avaliable on Location templates.
+ */
 export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
   label: msg("components.coreInfoSection", "Core Info Section"),
   fields: coreInfoSectionFields,

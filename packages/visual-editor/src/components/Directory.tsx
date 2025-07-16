@@ -25,18 +25,50 @@ import {
 } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 
-export interface DirectoryProps {
-  data: {
-    directoryRoot: TranslatableString;
-  };
-  styles: {
+export interface DirectoryData {
+  /**
+   * The display label for the root link in the breadcrumbs navigation.
+   * @defaultValue "Directory Root" (constant)
+   */
+  directoryRoot: TranslatableString;
+}
+
+export interface DirectoryStyles {
+  /**
+   * The main background color for the directory page content.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /**
+   * A specific background color for the breadcrumbs navigation bar.
+   * @defaultValue Background Color 1
+   */
+  breadcrumbsBackgroundColor?: BackgroundStyle;
+
+  /**
+   * Style properties for directory cards.
+   */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    breadcrumbsBackgroundColor?: BackgroundStyle;
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
   };
+}
+
+export interface DirectoryProps {
+  /**
+   * This object contains the content used by the component.
+   * @propCategory Data Props
+   */
+  data: DirectoryData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: DirectoryStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
@@ -313,6 +345,10 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   );
 };
 
+/**
+ * The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card.
+ * Avaliable on Directory templates.
+ */
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
