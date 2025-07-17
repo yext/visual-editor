@@ -22,7 +22,11 @@ for (const path in modules) {
 }
 
 i18nComponentsInstance.use(initReactI18next).init({
-  fallbackLng: "en",
+  fallbackLng: {
+    "zh-Hans": ["zh"],
+    "zh-Hant": ["zh-TW"],
+    default: ["en"],
+  },
   ns: [NAMESPACE],
   defaultNS: NAMESPACE,
   interpolation: { escapeValue: false },
