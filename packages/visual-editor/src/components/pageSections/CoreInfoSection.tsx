@@ -35,6 +35,7 @@ import {
   usePlatformTranslation,
   TranslatableStringField,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -74,6 +75,7 @@ export interface CoreInfoSectionProps {
       collapseDays: boolean;
       showAdditionalHoursText: boolean;
     };
+    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
@@ -274,6 +276,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           ),
         },
       }),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -408,7 +414,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              variant="link"
+              variant={styles.ctaVariant}
             />
           )}
         </div>
@@ -485,7 +491,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                       link={email}
                       label={email}
                       linkType="EMAIL"
-                      variant="link"
+                      variant={styles.ctaVariant}
                     />
                   </li>
                 ))}
@@ -687,6 +693,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         collapseDays: false,
         showAdditionalHoursText: true,
       },
+      ctaVariant: "link",
     },
     analytics: {
       scope: "coreInfoSection",

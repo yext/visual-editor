@@ -28,6 +28,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -47,6 +48,7 @@ export interface EventSectionProps {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
     };
+    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
@@ -114,6 +116,10 @@ const eventSectionFields: Fields<EventSectionProps> = {
           ),
         },
       }),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -133,11 +139,13 @@ const EventCard = ({
   event,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   event: EventStruct;
   cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
   return (
@@ -186,7 +194,7 @@ const EventCard = ({
             label={resolveTranslatableString(event.cta.label, i18n.language)}
             link={event.cta.link}
             linkType={event.cta.linkType}
-            variant="link"
+            variant={ctaVariant}
           />
         )}
       </div>
@@ -245,6 +253,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.ctaVariant}
               />
             ))}
           </div>
@@ -282,6 +291,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
       },
+      ctaVariant: "link",
     },
     analytics: {
       scope: "eventsSection",

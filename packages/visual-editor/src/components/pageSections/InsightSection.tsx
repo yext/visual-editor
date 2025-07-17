@@ -26,6 +26,7 @@ import {
   ThemeOptions,
   resolveTranslatableRichText,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -46,11 +47,13 @@ export interface InsightSectionProps {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
     };
+    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
+  ctaVariant?: CTAProps["variant"];
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
@@ -113,6 +116,10 @@ const insightSectionFields: Fields<InsightSectionProps> = {
           ),
         },
       }),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -132,11 +139,13 @@ const InsightCard = ({
   insight,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   insight: InsightStruct;
   cardStyles: InsightSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -186,7 +195,7 @@ const InsightCard = ({
         {insight.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            variant={"link"}
+            variant={ctaVariant}
             label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
@@ -252,6 +261,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 insight={insight}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.ctaVariant}
               />
             ))}
           </div>
@@ -289,6 +299,7 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 4,
       },
+      ctaVariant: "link",
     },
     analytics: {
       scope: "insightsSection",

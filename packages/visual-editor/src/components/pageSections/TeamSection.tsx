@@ -25,6 +25,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -46,11 +47,13 @@ export interface TeamSectionProps {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
     };
+    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
   };
   liveVisibility: boolean;
+  ctaVariant?: CTAProps["variant"];
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {
@@ -113,6 +116,10 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
           ),
         },
       }),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -132,11 +139,13 @@ const PersonCard = ({
   person,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   person: PersonStruct;
   cardStyles: TeamSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -221,7 +230,7 @@ const PersonCard = ({
                 )}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
-                variant="link"
+                variant={ctaVariant}
               />
             </div>
           )}
@@ -281,6 +290,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 person={person}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.ctaVariant}
               />
             ))}
           </div>
@@ -318,6 +328,7 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
       },
+      ctaVariant: "link",
     },
     analytics: {
       scope: "teamSection",
