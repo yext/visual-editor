@@ -276,7 +276,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
   const { t } = useTranslation();
-  const document = useDocument();
+  const { document } = useDocument();
   const {
     logo,
     links,
@@ -360,7 +360,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             </EntityField>
             {(showPrimaryCTA || showSecondaryCTA) && (
               <HeaderCtas
-                document={document}
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
                 primaryVariant={primaryCtaVariant}
@@ -451,7 +450,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           {(showPrimaryCTA || showSecondaryCTA) && (
             <PageSection verticalPadding={"sm"} background={backgroundColor}>
               <HeaderCtas
-                document={document}
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
                 primaryVariant={primaryCtaVariant}
@@ -569,11 +567,11 @@ const HeaderCtas = (props: {
   secondaryCTA?: TranslatableCTA;
   primaryVariant: CTAProps["variant"];
   secondaryVariant: CTAProps["variant"];
-  document: any;
   showPrimaryCTA: boolean;
   showSecondaryCTA: boolean;
 }) => {
   const { i18n } = useTranslation();
+  const { document } = useDocument();
   const {
     primaryCTA,
     secondaryCTA,
