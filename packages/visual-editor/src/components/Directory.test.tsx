@@ -522,6 +522,7 @@ const tests: ComponentTest[] = [
       _site: {
         name: "Example Business",
       },
+      name: "VA",
       meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
       dm_addressCountryDisplayName: "United States",
       dm_addressRegionDisplayName: "Virginia",
