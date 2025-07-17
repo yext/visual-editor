@@ -47,8 +47,8 @@ export interface EventSectionProps {
     cards: {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
+      ctaVariant: CTAProps["variant"];
     };
-    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
@@ -114,11 +114,11 @@ const eventSectionFields: Fields<EventSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
-      }),
-      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-        type: "radio",
-        options: "CTA_VARIANT",
       }),
     },
   }),
@@ -253,7 +253,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
-                ctaVariant={styles.ctaVariant}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -290,8 +290,8 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       cards: {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
+        ctaVariant: "primary",
       },
-      ctaVariant: "primary",
     },
     analytics: {
       scope: "eventsSection",

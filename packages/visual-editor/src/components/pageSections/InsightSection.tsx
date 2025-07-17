@@ -46,8 +46,8 @@ export interface InsightSectionProps {
     cards: {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
+      ctaVariant: CTAProps["variant"];
     };
-    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
@@ -114,11 +114,11 @@ const insightSectionFields: Fields<InsightSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
-      }),
-      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-        type: "radio",
-        options: "CTA_VARIANT",
       }),
     },
   }),
@@ -261,7 +261,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 insight={insight}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
-                ctaVariant={styles.ctaVariant}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -298,8 +298,8 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 4,
+        ctaVariant: "primary",
       },
-      ctaVariant: "primary",
     },
     analytics: {
       scope: "insightsSection",

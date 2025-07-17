@@ -46,8 +46,8 @@ export interface TeamSectionProps {
     cards: {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
+      ctaVariant: CTAProps["variant"];
     };
-    ctaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
@@ -114,11 +114,11 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
-      }),
-      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-        type: "radio",
-        options: "CTA_VARIANT",
       }),
     },
   }),
@@ -290,7 +290,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 person={person}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
-                ctaVariant={styles.ctaVariant}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -327,8 +327,8 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
+        ctaVariant: "primary",
       },
-      ctaVariant: "primary",
     },
     analytics: {
       scope: "teamSection",
