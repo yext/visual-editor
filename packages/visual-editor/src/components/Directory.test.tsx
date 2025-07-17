@@ -20,6 +20,7 @@ const rootDocument = {
   _site: {
     name: "Example Business",
   },
+  name: "Location Directory",
   meta: { entityType: { id: "dm_root", uid: 123 }, locale: "en" },
   dm_childEntityIds: ["998877"],
   dm_directoryChildren: [
@@ -52,6 +53,7 @@ const countryDocument = {
   _site: {
     name: "Example Business",
   },
+  name: "US",
   meta: { entityType: { id: "dm_country", uid: 123 }, locale: "en" },
   dm_addressCountryDisplayName: "United States",
   dm_childEntityIds: ["123456"],
@@ -96,6 +98,7 @@ const regionDocument = {
   _site: {
     name: "Example Business",
   },
+  name: "VA",
   meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
   dm_addressCountryDisplayName: "United States",
   dm_addressRegionDisplayName: "Virginia",
