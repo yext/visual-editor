@@ -54,7 +54,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const contributorNameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.contributorName", "Contributor Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 

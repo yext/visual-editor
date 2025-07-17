@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopieren Sie in die Zwischenablage",
     "pasteFromClipboard": "Einfügen aus der Zwischenablage"
   },
+  "addEntityField": "Entitätsfeld hinzufügen",
   "address": "Adresse",
   "addressInput": {
     "city": "Stadt",

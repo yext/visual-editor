@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopijuokite į mainų sritį",
     "pasteFromClipboard": "Įklijuokite iš mainų srities"
   },
+  "addEntityField": "Pridėti subjekto lauką",
   "address": "Adresas",
   "addressInput": {
     "city": "Miestas",

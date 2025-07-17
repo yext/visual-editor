@@ -58,7 +58,7 @@ const directoryFields: Fields<DirectoryProps> = {
       }),
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        "text"
+        { types: ["type.string"] }
       ),
     },
   }),

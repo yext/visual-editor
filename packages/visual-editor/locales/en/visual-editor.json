@@ -4,6 +4,7 @@
     "copyToClipboard": "Copy to Clipboard",
     "pasteFromClipboard": "Paste from Clipboard"
   },
+  "addEntityField": "Add entity field",
   "address": "Address",
   "addressInput": {
     "city": "City",

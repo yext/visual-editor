@@ -61,7 +61,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("title", "Title"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
