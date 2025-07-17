@@ -11,6 +11,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultTestimonial: TestimonialStruct = {
   description: {
@@ -50,6 +51,7 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
 
 const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const { document } = useDocument();
 
   const contributorNameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -76,7 +78,8 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(
         item.contributorName,
-        i18n.language
+        i18n.language,
+        document
       );
       if (translation) {
         return translation;

@@ -62,12 +62,12 @@ export const resolveYextEntityField = <T>(
  * @param document The entity document to use for resolving fields.
  * @returns The string with embedded fields replaced by their resolved values.
  */
-const resolveEmbeddedFieldsInString = (
+export const resolveEmbeddedFieldsInString = (
   stringToResolve: string,
   document: any,
   locale?: string
 ): string => {
-  const embeddedFieldRegex = /\[\[([a-zA-Z0-9.]+)\]\]/g;
+  const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
   return stringToResolve.replace(embeddedFieldRegex, (match, fieldName) => {
     const trimmedFieldName = fieldName.trim();
     if (!trimmedFieldName) {

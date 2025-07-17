@@ -57,7 +57,7 @@ const TextListComponent: React.FC<TextListProps> = ({
         <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
           {resolvedTextList.map((text, index) => (
             <li key={index} className="mb-2">
-              {resolveTranslatableString(text, i18n.language)}
+              {resolveTranslatableString(text, i18n.language, document)}
             </li>
           ))}
         </ul>

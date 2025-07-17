@@ -20,6 +20,7 @@ import {
   TranslatableStringField,
   TranslatableString,
   Background,
+  useDocument,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -383,6 +384,7 @@ const ExpandedFooterWrapper = ({
     linksAlignment: secondaryLinksAlignment,
   } = secondaryFooterStyle;
   const { i18n } = useTranslation();
+  const { document } = useDocument();
 
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
@@ -449,7 +451,11 @@ const ExpandedFooterWrapper = ({
             <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
               {expandedFooterLinks.map((item, index) => (
                 <ExpandedFooterLinks
-                  label={resolveTranslatableString(item.label, i18n.language)}
+                  label={resolveTranslatableString(
+                    item.label,
+                    i18n.language,
+                    document
+                  )}
                   links={item.links}
                   key={index}
                 />
@@ -523,7 +529,11 @@ const ExpandedFooterWrapper = ({
               displayName={pt("fields.copyrightMessage", "Copyright Message")}
             >
               <Body variant="xs" className="text-center md:text-left">
-                {resolveTranslatableString(copyrightMessage, i18n.language)}
+                {resolveTranslatableString(
+                  copyrightMessage,
+                  i18n.language,
+                  document
+                )}
               </Body>
             </EntityField>
           )}
@@ -556,7 +566,11 @@ const FooterLinks = ({
                   : "headerFooterSecondaryLink"
               }
               eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
-              label={resolveTranslatableString(item.label, i18n.language)}
+              label={resolveTranslatableString(
+                item.label,
+                i18n.language,
+                document
+              )}
               linkType={item.linkType}
               link={item.link}
               className="justify-center md:justify-start block break-words whitespace-normal"
@@ -587,7 +601,11 @@ const ExpandedFooterLinks = ({
           <CTA
             variant={"headerFooterMainLink"}
             eventName={`cta${index}-Link-${index + 1}`}
-            label={resolveTranslatableString(item.label, i18n.language)}
+            label={resolveTranslatableString(
+              item.label,
+              i18n.language,
+              document
+            )}
             linkType={item.linkType}
             link={item.link}
             className={"justify-start block break-words whitespace-normal"}

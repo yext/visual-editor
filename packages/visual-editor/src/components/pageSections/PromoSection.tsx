@@ -183,7 +183,11 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           >
             <div className={`flex ${justifyClass}`}>
               <Heading level={styles.heading.level}>
-                {resolveTranslatableString(resolvedPromo?.title, i18n.language)}
+                {resolveTranslatableString(
+                  resolvedPromo?.title,
+                  i18n.language,
+                  document
+                )}
               </Heading>
             </div>
           </EntityField>
@@ -212,7 +216,8 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               variant={styles?.ctaVariant}
               label={resolveTranslatableString(
                 resolvedPromo?.cta.label,
-                i18n.language
+                i18n.language,
+                document
               )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}

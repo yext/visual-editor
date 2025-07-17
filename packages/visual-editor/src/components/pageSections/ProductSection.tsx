@@ -146,6 +146,7 @@ const ProductCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const { document } = useDocument();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -172,7 +173,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {resolveTranslatableString(product.name, i18n.language)}
+              {resolveTranslatableString(product.name, i18n.language, document)}
             </Heading>
           )}
           {product.category && (
@@ -181,7 +182,11 @@ const ProductCard = ({
               className="py-2 px-4 rounded w-fit"
             >
               <Body>
-                {resolveTranslatableString(product.category, i18n.language)}
+                {resolveTranslatableString(
+                  product.category,
+                  i18n.language,
+                  document
+                )}
               </Body>
             </Background>
           )}
@@ -191,7 +196,11 @@ const ProductCard = ({
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveTranslatableString(product.cta.label, i18n.language)}
+            label={resolveTranslatableString(
+              product.cta.label,
+              i18n.language,
+              document
+            )}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"

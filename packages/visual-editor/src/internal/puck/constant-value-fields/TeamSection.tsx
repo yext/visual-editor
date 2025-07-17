@@ -10,6 +10,7 @@ import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultPerson: PersonStruct = {
   name: { en: "First Last", hasLocalizedValue: "true" },
@@ -53,6 +54,7 @@ export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
 
 const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const { document } = useDocument();
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -93,7 +95,11 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
     },
     defaultItemProps: defaultPerson,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(item.name, i18n.language);
+      const translation = resolveTranslatableString(
+        item.name,
+        i18n.language,
+        document
+      );
       if (translation) {
         return translation;
       }

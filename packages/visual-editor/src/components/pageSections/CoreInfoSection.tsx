@@ -124,7 +124,8 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               const { i18n } = usePlatformTranslation();
               const translation = resolveTranslatableString(
                 item.label,
-                i18n.language
+                i18n.language,
+                document
               );
               if (translation) {
                 return translation;
@@ -342,7 +343,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     data.services.servicesList,
     locale
   )?.map((translatableString: TranslatableString) =>
-    resolveTranslatableString(translatableString, i18n.language)
+    resolveTranslatableString(translatableString, i18n.language, document)
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
@@ -432,7 +433,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
               const phoneLabel = resolveTranslatableString(
                 item.label,
-                i18n.language
+                i18n.language,
+                document
               );
 
               return (

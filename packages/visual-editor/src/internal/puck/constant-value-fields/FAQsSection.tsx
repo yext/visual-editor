@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultFAQ: FAQStruct = {
   question: {
@@ -46,6 +47,7 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
 
 const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const { document } = useDocument();
 
   const questionField = useMemo(() => {
     return TranslatableStringField(msg("fields.question", "Question"), {
@@ -68,7 +70,8 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
     getItemSummary: (item, i): string => {
       const translation = resolveTranslatableString(
         item.question,
-        i18n.language
+        i18n.language,
+        document
       );
       if (translation) {
         return translation;
