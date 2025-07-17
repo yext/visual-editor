@@ -274,10 +274,16 @@ const DirectoryList = ({
 };
 
 const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
+  const { i18n } = useTranslation();
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
   const title = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.title)
+    resolveYextEntityField<TranslatableString>(
+      document,
+      data.title,
+      i18n.language
+    ),
+    i18n.language
   );
 
   return (
