@@ -5,7 +5,7 @@ import {
   TranslatableString,
 } from "@yext/visual-editor";
 import React from "react";
-import { resolveEmbeddedFieldsRecursively } from "./resolveYextEntityField";
+import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
 
 /**
  * Converts a type TranslatableString to a string
@@ -31,7 +31,7 @@ export const resolveTranslatableString = (
 
   // If the document is provided, resolve any embedded fields in the string.
   return document
-    ? resolveEmbeddedFieldsRecursively(resolvedString, document, locale)
+    ? resolveEmbeddedFieldsInString(resolvedString, document, locale)
     : resolvedString;
 };
 
