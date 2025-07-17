@@ -4,6 +4,7 @@
     "copyToClipboard": "Copier dans le presse-papiers",
     "pasteFromClipboard": "Coller du presse-papiers"
   },
+  "addEntityField": "Ajouter un champ d'entité",
   "address": "Adresse",
   "addressInput": {
     "city": "Ville",

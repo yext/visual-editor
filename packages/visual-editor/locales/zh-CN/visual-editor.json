@@ -4,6 +4,7 @@
     "copyToClipboard": "复制到剪贴板",
     "pasteFromClipboard": "从剪贴板粘贴"
   },
+  "addEntityField": "添加实体字段",
   "address": "地址",
   "addressInput": {
     "city": "城市",
