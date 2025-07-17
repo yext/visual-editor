@@ -1,3 +1,10 @@
+#### 0.0.49 (2025-07-17)
+
+##### Bug Fixes
+
+- use old constant value input for string lists (#647) (3fe13904)
+- useDocument instead of document args (#646) (9e45112c)
+
 #### 0.0.48 (2025-07-17)
 
 ##### Chores
