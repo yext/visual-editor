@@ -551,6 +551,7 @@ const FooterLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
+  const { document } = useDocument();
 
   return (
     <ul
@@ -590,6 +591,7 @@ const ExpandedFooterLinks = ({
   label: string;
 }) => {
   const { i18n } = useTranslation();
+  const { document } = useDocument();
 
   return (
     <ul className={`flex flex-col items-center md:items-start gap-4 w-full`}>
