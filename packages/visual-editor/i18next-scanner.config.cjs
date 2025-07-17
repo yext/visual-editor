@@ -45,7 +45,7 @@ module.exports = {
       "sk",
       "sv",
       "tr",
-      "zh-CN",
+      "zh",
       "zh-TW",
     ],
     defaultLng: "en",
