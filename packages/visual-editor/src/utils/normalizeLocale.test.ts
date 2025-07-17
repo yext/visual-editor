@@ -180,6 +180,7 @@ describe("normalizeLocale", () => {
       locales: undefined,
       misc: false,
     };
+    expect(normalizeLocalesInObject(undefined)).toEqual(undefined);
     expect(normalizeLocalesInObject(input)).toEqual(expected);
   });
 });

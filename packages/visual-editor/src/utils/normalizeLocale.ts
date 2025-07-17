@@ -23,6 +23,9 @@ export const normalizeLocale = (locale: string): string =>
  * Safely transforms all "locale" and "locales" fields in an object to BCP-47 format.
  */
 export function normalizeLocalesInObject(obj: any): any {
+  if (obj === undefined) {
+    return;
+  }
   if (Array.isArray(obj)) {
     return obj.map(normalizeLocalesInObject);
   } else if (obj && typeof obj === "object") {
