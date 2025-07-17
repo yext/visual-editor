@@ -1,6 +1,6 @@
 import { TranslatableString } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18nPlatform.ts";
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@measured/puck";
 import { resolveTranslatableString } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
