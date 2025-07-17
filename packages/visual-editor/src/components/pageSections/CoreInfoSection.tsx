@@ -491,7 +491,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                       link={email}
                       label={email}
                       linkType="EMAIL"
-                      variant={styles.ctaVariant}
+                      variant="link"
                     />
                   </li>
                 ))}
