@@ -12,6 +12,7 @@ import { resolveTranslatableString } from "../../../utils/resolveTranslatableStr
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultEvent: EventStruct = {
   image: {
@@ -57,6 +58,7 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const { document } = useDocument();
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -92,7 +94,11 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {
-      const translation = resolveTranslatableString(item.title, i18n.language);
+      const translation = resolveTranslatableString(
+        item.title,
+        i18n.language,
+        document
+      );
       if (translation) {
         return translation;
       }

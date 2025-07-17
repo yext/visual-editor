@@ -108,11 +108,16 @@ const resolveEmbeddedFieldsInString = (
  * @param document The entity document to use for resolving fields.
  * @returns The data with embedded fields resolved.
  */
-const resolveEmbeddedFieldsRecursively = (
+export const resolveEmbeddedFieldsRecursively = (
   data: any,
   document: any,
   locale?: string
 ): any => {
+  // If data is a string, resolve any embedded fields in it.
+  if (typeof data === "string") {
+    return resolveEmbeddedFieldsInString(data, document, locale);
+  }
+
   // If data is not an object (e.g., string, number, boolean), return it as is.
   if (typeof data !== "object" || data === null) {
     return data;

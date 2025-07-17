@@ -148,6 +148,7 @@ const EventCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const { document } = useDocument();
   return (
     <Background
       background={cardStyles.backgroundColor}
@@ -177,7 +178,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(event.title, i18n.language)}
+            {resolveTranslatableString(event.title, i18n.language, document)}
           </Heading>
         )}
         {event.dateTime && (
@@ -191,7 +192,11 @@ const EventCard = ({
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={resolveTranslatableString(event.cta.label, i18n.language)}
+            label={resolveTranslatableString(
+              event.cta.label,
+              i18n.language,
+              document
+            )}
             link={event.cta.link}
             linkType={event.cta.linkType}
             variant={ctaVariant}

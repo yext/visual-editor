@@ -475,6 +475,7 @@ const HeaderLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
+  const { document } = useDocument();
   const MAX_VISIBLE = 5;
   const isSecondary = type === "Secondary";
 
@@ -490,7 +491,7 @@ const HeaderLinks = ({
           : "headerFooterSecondaryLink"
       }
       eventName={`cta.${ctaType}.${index}`}
-      label={resolveTranslatableString(item.label, i18n.language)}
+      label={resolveTranslatableString(item.label, i18n.language, document)}
       linkType={item.linkType}
       link={item.link}
       className="justify-start w-full text-left"
@@ -596,7 +597,11 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`primaryCta`}
             variant={primaryVariant}
-            label={resolveTranslatableString(primaryCTA?.label, i18n.language)}
+            label={resolveTranslatableString(
+              primaryCTA?.label,
+              i18n.language,
+              document
+            )}
             link={primaryCTA.link}
             linkType={primaryCTA.linkType}
           />
@@ -610,7 +615,11 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`secondaryCta`}
             variant={secondaryVariant}
-            label={resolveTranslatableString(secondaryCTA.label, i18n.language)}
+            label={resolveTranslatableString(
+              secondaryCTA.label,
+              i18n.language,
+              document
+            )}
             link={secondaryCTA.link}
             linkType={secondaryCTA.linkType}
           />
