@@ -67,7 +67,7 @@ export const resolveEmbeddedFieldsInString = (
   document: any,
   locale?: string
 ): string => {
-  const embeddedFieldRegex = /\[\[([a-zA-Z0-9.]+)\]\]/g;
+  const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
   return stringToResolve.replace(embeddedFieldRegex, (match, fieldName) => {
     const trimmedFieldName = fieldName.trim();
     if (!trimmedFieldName) {
