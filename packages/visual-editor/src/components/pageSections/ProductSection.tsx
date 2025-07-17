@@ -146,7 +146,7 @@ const ProductCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"

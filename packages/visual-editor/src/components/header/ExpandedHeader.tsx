@@ -276,7 +276,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
   const { t } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
   const {
     logo,
     links,
@@ -473,7 +473,7 @@ const HeaderLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
   const MAX_VISIBLE = 5;
   const isSecondary = type === "Secondary";
 
@@ -571,7 +571,7 @@ const HeaderCtas = (props: {
   showSecondaryCTA: boolean;
 }) => {
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
   const {
     primaryCTA,
     secondaryCTA,
