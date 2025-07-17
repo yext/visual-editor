@@ -384,7 +384,7 @@ const ExpandedFooterWrapper = ({
     linksAlignment: secondaryLinksAlignment,
   } = secondaryFooterStyle;
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
 
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
@@ -551,7 +551,7 @@ const FooterLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
 
   return (
     <ul
@@ -591,7 +591,7 @@ const ExpandedFooterLinks = ({
   label: string;
 }) => {
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
 
   return (
     <ul className={`flex flex-col items-center md:items-start gap-4 w-full`}>

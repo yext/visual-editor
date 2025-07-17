@@ -148,7 +148,7 @@ const EventCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
   return (
     <Background
       background={cardStyles.backgroundColor}

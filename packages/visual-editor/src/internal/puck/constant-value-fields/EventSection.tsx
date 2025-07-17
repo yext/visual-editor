@@ -58,7 +58,7 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
-  const { document } = useDocument();
+  const document = useDocument();
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
