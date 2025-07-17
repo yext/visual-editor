@@ -299,7 +299,7 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 4,
       },
-      ctaVariant: "link",
+      ctaVariant: "primary",
     },
     analytics: {
       scope: "insightsSection",

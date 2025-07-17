@@ -291,7 +291,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
       },
-      ctaVariant: "link",
+      ctaVariant: "primary",
     },
     analytics: {
       scope: "eventsSection",
