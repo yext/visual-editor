@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Kopirajte u međuspremnik",
+    "pasteFromClipboard": "Zalijepi iz međuspremnika"
+  },
   "address": "Adresa",
   "addressInput": {
     "city": "Grad",
@@ -294,6 +298,7 @@
   "loadingVE": "Učitavanje vizualnog uređivača ...",
   "localGeomodifier": "Lokalni geomodifikator",
   "locationsNear_one": "{{count}} Lokacija u blizini \"{{filterDisplayName}}\"",
+  "map": "Karta",
   "monday": "ponedjeljak",
   "name": "Ime",
   "newYorkCity": "New York City, New York, Sjedinjene Države",

@@ -1,5 +1,9 @@
 {
   "Link": "Collegamento",
+  "actions": {
+    "copyToClipboard": "Copia negli appunti",
+    "pasteFromClipboard": "Incolla dagli appunti"
+  },
   "address": "Indirizzo",
   "addressInput": {
     "city": "Città",
@@ -294,6 +298,7 @@
   "loadingVE": "Caricamento dell'editor visivo ...",
   "localGeomodifier": "Geomodificatore locale",
   "locationsNear_one": "{{count}} posizione vicino a \"{{FilterDisplayName}}\"",
+  "map": "Mappa",
   "monday": "Lunedi",
   "name": "Nome",
   "newYorkCity": "New York City, New York, Stati Uniti",

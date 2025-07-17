@@ -5,7 +5,7 @@ export * from "./layoutBlocks/index.ts";
 export * from "./pageSections/index.ts";
 export * from "./migrations/index.ts";
 export * from "./header/index.ts";
+export * from "./footer/index.ts";
 export { Directory, type DirectoryProps } from "./Directory.tsx";
 export { LocatorComponent, type LocatorProps } from "./Locator.tsx";
-export { Footer, type FooterProps } from "./Footer.tsx";
 export { defaultThemeConfig } from "./DefaultThemeConfig.ts";

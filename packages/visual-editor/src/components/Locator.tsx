@@ -536,7 +536,7 @@ const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
   const { t, i18n } = useTranslation();
-  const { document, relativePrefixToRoot } = useTemplateProps();
+  const { relativePrefixToRoot } = useTemplateProps();
 
   const location = result.rawData;
   const distance = result.distance;

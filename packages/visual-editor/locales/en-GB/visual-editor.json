@@ -1,5 +1,9 @@
 {
   "Link": "Link",
+  "actions": {
+    "copyToClipboard": "Copy to Clipboard",
+    "pasteFromClipboard": "Paste from Clipboard"
+  },
   "address": "Address",
   "addressInput": {
     "city": "City",
@@ -294,6 +298,7 @@
   "loadingVE": "Loading Visual Editor...",
   "localGeomodifier": "Local GeoModifier",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
+  "map": "Map",
   "monday": "Monday",
   "name": "Name",
   "newYorkCity": "New York City, New York, United States",

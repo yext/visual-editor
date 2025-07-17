@@ -24,6 +24,7 @@ const getSpacingOptions = () => {
 export type BackgroundStyle = {
   bgColor: string;
   textColor: string;
+  isDarkBackground?: boolean;
 };
 
 type BackgroundOption = {

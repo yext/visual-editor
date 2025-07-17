@@ -1,5 +1,9 @@
 {
   "Link": "Länk",
+  "actions": {
+    "copyToClipboard": "Kopiera till Urklipp",
+    "pasteFromClipboard": "Klistra in från urklipp"
+  },
   "address": "Adress",
   "addressInput": {
     "city": "Stad",
@@ -294,6 +298,7 @@
   "loadingVE": "Laddar visuell redaktör ...",
   "localGeomodifier": "Lokal geomodifierare",
   "locationsNear_one": "{{greve}} Plats nära \"{{filterDisplayName}}\"",
+  "map": "Karta",
   "monday": "Måndag",
   "name": "Namn",
   "newYorkCity": "New York City, New York, USA",

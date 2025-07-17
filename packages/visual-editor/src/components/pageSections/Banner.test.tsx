@@ -4,7 +4,6 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
@@ -109,6 +108,30 @@ const tests: ComponentTest[] = [
     },
     version: 1,
   },
+  {
+    name: "version 1 props with blank value",
+    document: {
+      name: "test",
+    },
+    props: {
+      data: {
+        text: {
+          field: "name",
+          constantValue: "",
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        textAlignment: "center",
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 1,
+  },
 ];
 
 describe("BannerSection", async () => {
@@ -155,7 +178,6 @@ describe("BannerSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(600);
 
       await expect(
         `BannerSection/[${viewportName}] ${name}`

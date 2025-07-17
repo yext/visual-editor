@@ -1,5 +1,9 @@
 {
   "Link": "Nuoroda",
+  "actions": {
+    "copyToClipboard": "Kopijuokite į mainų sritį",
+    "pasteFromClipboard": "Įklijuokite iš mainų srities"
+  },
   "address": "Adresas",
   "addressInput": {
     "city": "Miestas",
@@ -294,6 +298,7 @@
   "loadingVE": "Įkeliamas vaizdinis redaktorius ...",
   "localGeomodifier": "Vietinis geomodiferis",
   "locationsNear_one": "{{count}} vieta prie \"{{FilterDisplayName}}\"",
+  "map": "Žemėlapis",
   "monday": "Pirmadienis",
   "name": "Vardas",
   "newYorkCity": "Niujorko miestas, Niujorkas, JAV",

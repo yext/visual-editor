@@ -1,5 +1,9 @@
 {
   "Link": "Bağlantı",
+  "actions": {
+    "copyToClipboard": "Panoya Kopyala",
+    "pasteFromClipboard": "Panodan Yapıştır"
+  },
   "address": "Adres",
   "addressInput": {
     "city": "Şehir",
@@ -294,6 +298,7 @@
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
   "locationsNear_one": "{{count}} konum \"{{filtreDisplayName}}\" yakınında yer",
+  "map": "Harita",
   "monday": "Pazartesi",
   "name": "İsim",
   "newYorkCity": "New York, New York, Amerika Birleşik Devletleri",
