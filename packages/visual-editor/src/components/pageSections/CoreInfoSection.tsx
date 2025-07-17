@@ -75,7 +75,8 @@ export interface CoreInfoSectionProps {
       collapseDays: boolean;
       showAdditionalHoursText: boolean;
     };
-    ctaVariant: CTAProps["variant"];
+    emailCtaVariant: CTAProps["variant"];
+    directionsCtaVariant: CTAProps["variant"];
   };
   analytics?: {
     scope?: string;
@@ -276,10 +277,20 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           ),
         },
       }),
-      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
+      emailCtaVariant: YextField(
+        msg("fields.emailCtaVariant", "Email CTA Variant"),
+        {
+          type: "radio",
+          options: "CTA_VARIANT",
+        }
+      ),
+      directionsCtaVariant: YextField(
+        msg("fields.directionsCtaVariant", "Directions CTA Variant"),
+        {
+          type: "radio",
+          options: "CTA_VARIANT",
+        }
+      ),
     },
   }),
   liveVisibility: YextField(
@@ -414,7 +425,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              variant={styles.ctaVariant}
+              variant={styles.directionsCtaVariant}
             />
           )}
         </div>
@@ -491,7 +502,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                       link={email}
                       label={email}
                       linkType="EMAIL"
-                      variant="link"
+                      variant={styles.emailCtaVariant}
                     />
                   </li>
                 ))}
@@ -693,7 +704,8 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         collapseDays: false,
         showAdditionalHoursText: true,
       },
-      ctaVariant: "link",
+      emailCtaVariant: "link",
+      directionsCtaVariant: "primary",
     },
     analytics: {
       scope: "coreInfoSection",

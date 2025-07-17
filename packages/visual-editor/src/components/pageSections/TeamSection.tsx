@@ -47,6 +47,7 @@ export interface TeamSectionProps {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
     };
+    emailCtaVariant: CTAProps["variant"];
     ctaVariant: CTAProps["variant"];
   };
   analytics?: {
@@ -116,6 +117,13 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
           ),
         },
       }),
+      emailCtaVariant: YextField(
+        msg("fields.emailCtaVariant", "Email CTA Variant"),
+        {
+          type: "radio",
+          options: "CTA_VARIANT",
+        }
+      ),
       ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
@@ -140,12 +148,14 @@ const PersonCard = ({
   cardStyles,
   sectionHeadingLevel,
   ctaVariant,
+  emailCtaVariant,
 }: {
   cardNumber: number;
   person: PersonStruct;
   cardStyles: TeamSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
   ctaVariant: CTAProps["variant"];
+  emailCtaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -216,7 +226,7 @@ const PersonCard = ({
                 link={person.email}
                 label={person.email}
                 linkType="EMAIL"
-                variant="link"
+                variant={emailCtaVariant}
               />
             </div>
           )}
@@ -291,6 +301,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
                 ctaVariant={styles.ctaVariant}
+                emailCtaVariant={styles.emailCtaVariant}
               />
             ))}
           </div>
@@ -328,7 +339,8 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
       },
-      ctaVariant: "link",
+      emailCtaVariant: "link",
+      ctaVariant: "primary",
     },
     analytics: {
       scope: "teamSection",
