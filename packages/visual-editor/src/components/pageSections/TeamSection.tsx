@@ -53,7 +53,6 @@ export interface TeamSectionProps {
     scope?: string;
   };
   liveVisibility: boolean;
-  ctaVariant?: CTAProps["variant"];
 }
 
 const TeamSectionFields: Fields<TeamSectionProps> = {

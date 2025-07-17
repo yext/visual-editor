@@ -53,7 +53,6 @@ export interface InsightSectionProps {
     scope?: string;
   };
   liveVisibility: boolean;
-  ctaVariant?: CTAProps["variant"];
 }
 
 const insightSectionFields: Fields<InsightSectionProps> = {
