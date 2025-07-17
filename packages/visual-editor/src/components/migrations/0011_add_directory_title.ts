@@ -8,7 +8,14 @@ export const addDirectoryTitleMigration: Migration = {
         ...props,
         data: {
           ...props.data,
-          title: "[[name]]",
+          title: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              en: "[[name]]",
+              hasLocalizedValue: "true",
+            },
+          },
         },
       };
     },

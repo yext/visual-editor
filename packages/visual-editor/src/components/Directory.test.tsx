@@ -552,7 +552,14 @@ const tests: ComponentTest[] = [
     },
     props: {
       data: {
-        title: "[[name]]",
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "[[name]]",
+            hasLocalizedValue: "true",
+          },
+        },
         directoryRoot: "Directory Root",
       },
       styles: {
