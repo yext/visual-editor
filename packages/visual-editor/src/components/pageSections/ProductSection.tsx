@@ -25,6 +25,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -44,6 +45,7 @@ export interface ProductSectionProps {
     cards: {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
+      ctaVariant: CTAProps["variant"];
     };
   };
   analytics?: {
@@ -110,6 +112,10 @@ const productSectionFields: Fields<ProductSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -131,11 +137,13 @@ const ProductCard = ({
   product,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   product: ProductStruct;
   cardStyles: ProductSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
   return (
@@ -182,7 +190,7 @@ const ProductCard = ({
         {product.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            variant="secondary"
+            variant={ctaVariant}
             label={resolveTranslatableString(product.cta.label, i18n.language)}
             link={product.cta.link}
             linkType={product.cta.linkType}
@@ -246,6 +254,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 product={product}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -282,6 +291,7 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
+        ctaVariant: "primary",
       },
     },
     analytics: {

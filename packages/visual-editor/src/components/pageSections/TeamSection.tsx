@@ -25,6 +25,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -45,6 +46,7 @@ export interface TeamSectionProps {
     cards: {
       headingLevel: HeadingLevel;
       backgroundColor?: BackgroundStyle;
+      ctaVariant: CTAProps["variant"];
     };
   };
   analytics?: {
@@ -111,6 +113,10 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -132,11 +138,13 @@ const PersonCard = ({
   person,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   person: PersonStruct;
   cardStyles: TeamSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -221,7 +229,7 @@ const PersonCard = ({
                 )}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
-                variant="link"
+                variant={ctaVariant}
               />
             </div>
           )}
@@ -281,6 +289,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
                 person={person}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -317,6 +326,7 @@ export const TeamSection: ComponentConfig<TeamSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
+        ctaVariant: "primary",
       },
     },
     analytics: {

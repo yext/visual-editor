@@ -35,6 +35,7 @@ import {
   usePlatformTranslation,
   TranslatableStringField,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 
 export interface CoreInfoSectionProps {
@@ -68,6 +69,7 @@ export interface CoreInfoSectionProps {
       phoneFormat: "domestic" | "international";
       includePhoneHyperlink: boolean;
       emailsListLength?: number;
+      ctaVariant: CTAProps["variant"];
     };
     hours: {
       startOfWeek: keyof DayOfWeekNames | "today";
@@ -239,6 +241,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               ],
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
@@ -408,7 +414,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              variant="link"
+              variant={styles.info.ctaVariant}
             />
           )}
         </div>
@@ -681,6 +687,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         phoneFormat: "domestic",
         includePhoneHyperlink: true,
         emailsListLength: 1,
+        ctaVariant: "link",
       },
       hours: {
         startOfWeek: "today",
