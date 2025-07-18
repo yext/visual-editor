@@ -94,12 +94,12 @@ This object contains all the content to be displayed within the three columns.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                                                         | Description                           | Default |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                                                            | The background color of the section.  |         |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                                             | Styling for all column headings.      |         |
-| `styles.hours`           | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; }`                                 | Styling for the "Hours" column.       |         |
-| `styles.info`            | `{ showGetDirectionsLink: boolean; phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; emailsListLength?: number; }` | Styling for the "Information" column. |         |
+| Prop                     | Type                                                                                                                                                                          | Description                           | Default |
+| :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                                                                                                             | The background color of the section.  |         |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                                                                              | Styling for all column headings.      |         |
+| `styles.hours`           | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; }`                                                                  | Styling for the "Hours" column.       |         |
+| `styles.info`            | `{ showGetDirectionsLink: boolean; phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; emailsListLength?: number; ctaVariant: CTAProps["variant"]; }` | Styling for the "Information" column. |         |
 
 #### Other Props
 
@@ -123,9 +123,10 @@ The Directory Page component serves as a navigational hub, displaying a list of 
 
 This object contains the content used by the component.
 
-| Prop                 | Type                 | Description                                                        | Default                       |
-| :------------------- | :------------------- | :----------------------------------------------------------------- | :---------------------------- |
-| `data.directoryRoot` | `TranslatableString` | The display label for the root link in the breadcrumbs navigation. | `"Directory Root" (constant)` |
+| Prop                 | Type                                  | Description                                                        | Default                                       |
+| :------------------- | :------------------------------------ | :----------------------------------------------------------------- | :-------------------------------------------- |
+| `data.directoryRoot` | `TranslatableString`                  | The display label for the root link in the breadcrumbs navigation. | `"Directory Root" (constant)`                 |
+| `data.title`         | `YextEntityField<TranslatableString>` | The title for the Directory Section.                               | `"[[name]]" (constant using embedded fields)` |
 
 #### Style Props
 
@@ -160,11 +161,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                 | Description                          | Default              |
-| :----------------------- | :------------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                    | The background color of the section. | `Background Color 3` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Styling for all the cards.           |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`     | Styling for the heading.             |                      |
+| Prop                     | Type                                                                                                  | Description                          | Default              |
+| :----------------------- | :---------------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                                     | The background color of the section. | `Background Color 3` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAProps["variant"]; }` | Styling for all the cards.           |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                      | Styling for the heading.             |                      |
 
 #### Other Props
 
@@ -366,11 +367,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                 | Description                                                           | Default              |
-| :----------------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                    | The background color for the entire section, selected from the theme. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Styling for the individual insight cards.                             |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`     | Styling for the main section heading.                                 |                      |
+| Prop                     | Type                                                                                                  | Description                                                           | Default              |
+| :----------------------- | :---------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                                     | The background color for the entire section, selected from the theme. | `Background Color 2` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAProps["variant"]; }` | Styling for the individual insight cards.                             |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                      | Styling for the main section heading.                                 |                      |
 
 #### Other Props
 
@@ -499,11 +500,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                 | Description                                  | Default              |
-| :----------------------- | :------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                    | The background color for the entire section. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Styling for the individual product cards.    |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`     | Styling for the main section heading.        |                      |
+| Prop                     | Type                                                                                                  | Description                                  | Default              |
+| :----------------------- | :---------------------------------------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                                     | The background color for the entire section. | `Background Color 2` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAProps["variant"]; }` | Styling for the individual product cards.    |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                      | Styling for the main section heading.        |                      |
 
 #### Other Props
 
