@@ -1,11 +1,14 @@
 export * from "./atoms/index.ts";
 export * from "./_componentCategories.ts";
-export * from "./contentBlocks/index.ts";
-export * from "./layoutBlocks/index.ts";
 export * from "./pageSections/index.ts";
 export * from "./migrations/index.ts";
 export * from "./header/index.ts";
 export * from "./footer/index.ts";
-export { Directory, type DirectoryProps } from "./Directory.tsx";
+export {
+  Directory,
+  type DirectoryProps,
+  type DirectoryData,
+  type DirectoryStyles,
+} from "./Directory.tsx";
 export { LocatorComponent, type LocatorProps } from "./Locator.tsx";
 export { defaultThemeConfig } from "./DefaultThemeConfig.ts";

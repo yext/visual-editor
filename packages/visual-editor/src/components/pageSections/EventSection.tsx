@@ -28,29 +28,68 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
 
-export interface EventSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    events: YextEntityField<EventSectionType>;
+export interface EventData {
+  /**
+   * The main heading for the entire events section.
+   * @defaultValue "Upcoming Events" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The source of event data, which can be linked to a Yext field or provided as a constant value.
+   * @defaultValue A list of 3 placeholder events.
+   */
+  events: YextEntityField<EventSectionType>;
+}
+
+export interface EventStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 3
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for all the cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
+    ctaVariant: CTAProps["variant"];
   };
+}
+
+export interface EventSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: EventData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: EventStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -112,6 +151,10 @@ const eventSectionFields: Fields<EventSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -133,13 +176,16 @@ const EventCard = ({
   event,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   event: EventStruct;
   cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const document = useDocument();
   return (
     <Background
       background={cardStyles.backgroundColor}
@@ -169,7 +215,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(event.title, i18n.language)}
+            {resolveTranslatableString(event.title, i18n.language, document)}
           </Heading>
         )}
         {event.dateTime && (
@@ -183,10 +229,14 @@ const EventCard = ({
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={resolveTranslatableString(event.cta.label, i18n.language)}
+            label={resolveTranslatableString(
+              event.cta.label,
+              i18n.language,
+              document
+            )}
             link={event.cta.link}
             linkType={event.cta.linkType}
-            variant="link"
+            variant={ctaVariant}
           />
         )}
       </div>
@@ -245,6 +295,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -254,6 +305,10 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   );
 };
 
+/**
+ * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
+ * Avaliable on Location templates.
+ */
 export const EventSection: ComponentConfig<EventSectionProps> = {
   label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
@@ -281,6 +336,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       cards: {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
+        ctaVariant: "primary",
       },
     },
     analytics: {

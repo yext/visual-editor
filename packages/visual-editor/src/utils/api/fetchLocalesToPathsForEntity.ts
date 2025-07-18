@@ -1,4 +1,5 @@
 import { normalizeSlug } from "../slugifier.ts";
+import { normalizeLocale } from "../normalizeLocale.ts";
 
 const V_PARAM = "20250407";
 
@@ -34,7 +35,7 @@ export const fetchLocalesToPathsForEntity = async ({
     const json = await response.json();
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale && getPath(profile)) {
-        localeToPath[profile.meta.locale] = getPath(profile);
+        localeToPath[normalizeLocale(profile.meta.locale)] = getPath(profile);
       }
     }
   } catch (e) {

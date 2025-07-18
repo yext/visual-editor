@@ -5,25 +5,34 @@ import {
   TranslatableString,
 } from "@yext/visual-editor";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
 
 /**
  * Converts a type TranslatableString to a string
  * @param translatableString
  * @param locale
+ * @param document
  */
 export const resolveTranslatableString = (
   translatableString: TranslatableString = "",
-  locale: string = "en"
+  locale: string = "en",
+  document?: any
 ): string => {
+  let resolvedString;
   if (typeof translatableString === "object") {
     if (locale in translatableString) {
-      return translatableString[locale];
+      resolvedString = translatableString[locale];
+    } else {
+      return "";
     }
-    return "";
+  } else {
+    resolvedString = translatableString;
   }
 
-  return translatableString;
+  // If the document is provided, resolve any embedded fields in the string.
+  return document
+    ? resolveEmbeddedFieldsInString(resolvedString, document, locale)
+    : resolvedString;
 };
 
 /**
@@ -35,7 +44,6 @@ export const resolveTranslatableRichText = (
   translatableRichText: TranslatableRichText = "",
   locale: string = "en"
 ): string | React.ReactElement => {
-  const { i18n } = useTranslation();
   try {
     let value = translatableRichText;
 

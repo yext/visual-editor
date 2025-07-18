@@ -64,7 +64,7 @@ export const config = {
       "c_deliveryPromo",
     ],
     localization: {
-      locales: ["en"],
+      locales: ["en", "zh_hans_hk", "fr-CA"],
     },
   },
   additionalProperties: {
@@ -111,6 +111,10 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
+  const displayNames = devTemplateStream.apiNamesToDisplayNames as Record<
+    string,
+    string
+  >;
 
   return (
     <div>
@@ -127,7 +131,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
       <div>
         <VisualEditorProvider
           templateProps={props}
-          entityFields={{ fields: entityFields }}
+          entityFields={{ fields: entityFields, displayNames: displayNames }}
           tailwindConfig={tailwindConfig}
         >
           <Editor

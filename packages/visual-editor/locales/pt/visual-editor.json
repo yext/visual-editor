@@ -4,6 +4,7 @@
     "copyToClipboard": "Cópia para a área de transferência",
     "pasteFromClipboard": "Colar da área de transferência"
   },
+  "addEntityField": "Adicione o campo da entidade",
   "address": "Endereço",
   "addressInput": {
     "city": "Cidade",
