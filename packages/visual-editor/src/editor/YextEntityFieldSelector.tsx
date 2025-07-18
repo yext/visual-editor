@@ -304,9 +304,10 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     return;
   }
 
-  const isStringField = filter.types?.includes("type.string");
+  const isSingleStringField =
+    filter.types?.includes("type.string") && !filter.includeListsOnly;
 
-  const fieldEditor = isStringField ? (
+  const fieldEditor = isSingleStringField ? (
     <div className="ve-pt-3">
       <EmbeddedFieldStringInput
         value={value?.constantValue?.[locale] ?? ""}

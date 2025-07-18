@@ -58,12 +58,25 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
 
-export type LocatorProps = {
+export interface LocatorProps {
+  /**
+   * The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
+   * @defaultValue 'mapbox://styles/mapbox/streets-v12'
+   */
   mapStyle?: string;
+
+  /**
+   * If 'true', displays a button to filter for locations that are currently open.
+   * @defaultValue false
+   */
   openNowButton?: boolean;
-  entityTypeEnvVar?: string; // to be set via withPropOverrides
-  experienceKeyEnvVar?: string; // to be set via withPropOverrides
-};
+
+  /** @internal to be set via withPropOverrides */
+  entityTypeEnvVar?: string;
+
+  /** @internal to be set via withPropOverrides */
+  experienceKeyEnvVar?: string;
+}
 
 const locatorFields: Fields<LocatorProps> = {
   mapStyle: BasicSelector({
@@ -107,6 +120,9 @@ const locatorFields: Fields<LocatorProps> = {
   ),
 };
 
+/**
+ * Avaliable on Locator templates.
+ */
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
   label: msg("components.locator", "Locator"),

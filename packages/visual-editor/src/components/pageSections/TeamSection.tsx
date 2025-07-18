@@ -32,26 +32,62 @@ import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultPerson } from "../../internal/puck/constant-value-fields/TeamSection.tsx";
 
-export interface TeamSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    people: YextEntityField<TeamSectionType>;
+export interface TeamData {
+  /**
+   * The main heading for the entire team section.
+   * @defaultValue "Meet Our Team" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The source of the team member data, which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder people.
+   */
+  people: YextEntityField<TeamSectionType>;
+}
+
+export interface TeamStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 3
+   */
+  backgroundColor?: BackgroundStyle;
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for the individual people cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-      ctaVariant: CTAProps["variant"];
-    };
+    ctaVariant: CTAProps["variant"];
   };
+}
+
+export interface TeamSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: TeamData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: TeamStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -299,6 +335,10 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   );
 };
 
+/**
+ * The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card.
+ * Avaliable on Location templates.
+ */
 export const TeamSection: ComponentConfig<TeamSectionProps> = {
   label: msg("components.teamSection", "Team Section"),
   fields: TeamSectionFields,
