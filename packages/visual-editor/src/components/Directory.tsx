@@ -29,7 +29,12 @@ import {
 import { useTranslation } from "react-i18next";
 
 export interface DirectoryData {
+  /**
+   * The title for the Directory Section.
+   * @defaultValue "[[name]]" (constant using embedded fields)
+   */
   title: YextEntityField<TranslatableString>;
+
   /**
    * The display label for the root link in the breadcrumbs navigation.
    * @defaultValue "Directory Root" (constant)
