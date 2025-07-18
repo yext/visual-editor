@@ -1,3 +1,9 @@
+#### 0.0.50 (2025-07-18)
+
+##### Bug Fixes
+
+- replace const { document } = useDocument(); (#648) (3455b317)
+
 #### 0.0.49 (2025-07-17)
 
 ##### Bug Fixes
