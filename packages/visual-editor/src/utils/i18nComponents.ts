@@ -21,6 +21,7 @@ for (const path in modules) {
   }
 }
 
+// these fallbacks occur BEFORE fallbackLng
 type Fallback = {
   from: string;
   to: string;
