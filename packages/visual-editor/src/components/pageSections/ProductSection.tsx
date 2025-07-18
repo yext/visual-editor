@@ -31,26 +31,62 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
 
-export interface ProductSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    products: YextEntityField<ProductSectionType>;
+export interface ProductData {
+  /**
+   * The main heading for the entire products section.
+   * @defaultValue "Featured Products" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+  /**
+   * The source of the product data, which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder products.
+   */
+  products: YextEntityField<ProductSectionType>;
+}
+
+export interface ProductStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 2
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for the individual product cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-      ctaVariant: CTAProps["variant"];
-    };
+    ctaVariant: CTAProps["variant"];
   };
+}
+
+export interface ProductSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: ProductData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: ProductStyles;
+
+  /** @internal  */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -273,6 +309,10 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   );
 };
 
+/**
+ * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
+ * Avaliable on Location templates.
+ */
 export const ProductSection: ComponentConfig<ProductSectionProps> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,

@@ -42,21 +42,56 @@ import { GalleryImageType } from "../../types/types";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 
+export interface PhotoGalleryData {
+  /**
+   * The main heading for the photo gallery.
+   * @defaultValue "Gallery" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The source of the image data, which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder images.
+   */
+  images: YextEntityField<
+    ImageType[] | ComplexImageType[] | GalleryImageType[]
+  >;
+}
+
+export interface PhotoGalleryStyles {
+  /**
+   * The background color for the entire section, selected from the theme.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
+  };
+
+  /** Styling options for the gallery images, such as aspect ratio. */
+  image: ImageStylingProps;
+}
+
 export interface PhotoGallerySectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    images: YextEntityField<
-      ImageType[] | ComplexImageType[] | GalleryImageType[]
-    >;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    image: ImageStylingProps;
-  };
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: PhotoGalleryData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: PhotoGalleryStyles;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -328,6 +363,10 @@ const PhotoGallerySectionComponent = ({
   );
 };
 
+/**
+ * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
+ * Avaliable on Location templates.
+ */
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   label: msg("components.photoGallerySection", "Photo Gallery Section"),
   fields: photoGallerySectionFields,

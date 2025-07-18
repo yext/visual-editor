@@ -51,33 +51,53 @@ const defaultSecondaryLink = {
   link: "#",
 };
 
+export interface ExpandedHeaderData {
+  /** Content for the main primary header bar. */
+  primaryHeader: {
+    logo: string;
+    links: TranslatableCTA[];
+    primaryCTA?: TranslatableCTA;
+    showPrimaryCTA: boolean;
+    secondaryCTA?: TranslatableCTA;
+    showSecondaryCTA: boolean;
+  };
+
+  /** Content for the secondary header (top bar). */
+  secondaryHeader: {
+    show: boolean;
+    showLanguageDropdown: boolean;
+    secondaryLinks: TranslatableCTA[];
+  };
+}
+
+export interface ExpandedHeaderStyles {
+  /** Styling for the main, primary header bar. */
+  primaryHeader: {
+    logo: ImageStylingProps;
+    backgroundColor?: BackgroundStyle;
+    primaryCtaVariant: CTAProps["variant"];
+    secondaryCtaVariant: CTAProps["variant"];
+  };
+  /** Styling for the secondary header (top bar). */
+  secondaryHeader: {
+    backgroundColor?: BackgroundStyle;
+  };
+}
+
 export interface ExpandedHeaderProps {
-  data: {
-    primaryHeader: {
-      logo: string;
-      links: TranslatableCTA[];
-      primaryCTA?: TranslatableCTA;
-      showPrimaryCTA: boolean;
-      secondaryCTA?: TranslatableCTA;
-      showSecondaryCTA: boolean;
-    };
-    secondaryHeader: {
-      show: boolean;
-      showLanguageDropdown: boolean;
-      secondaryLinks: TranslatableCTA[];
-    };
-  };
-  styles: {
-    primaryHeader: {
-      logo: ImageStylingProps;
-      backgroundColor?: BackgroundStyle;
-      primaryCtaVariant: CTAProps["variant"];
-      secondaryCtaVariant: CTAProps["variant"];
-    };
-    secondaryHeader: {
-      backgroundColor?: BackgroundStyle;
-    };
-  };
+  /**
+   * This object contains all the content for both header tiers.
+   * @propCategory Data Props
+   */
+  data: ExpandedHeaderData;
+
+  /**
+   * This object contains properties for customizing the appearance of both header tiers.
+   * @propCategory Style Props
+   */
+  styles: ExpandedHeaderStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
@@ -642,6 +662,10 @@ const buildComplexImage = (
   };
 };
 
+/**
+ * The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector.
+ * Avaliable on Location templates.
+ */
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   label: msg("components.expandedHeader", "Expanded Header"),
   fields: expandedHeaderSectionFields,
