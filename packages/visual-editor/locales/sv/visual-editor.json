@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopiera till Urklipp",
     "pasteFromClipboard": "Klistra in från urklipp"
   },
+  "addEntityField": "Lägg till enhetsfält",
   "address": "Adress",
   "addressInput": {
     "city": "Stad",

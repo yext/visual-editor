@@ -26,6 +26,7 @@ import {
   ThemeOptions,
   resolveTranslatableRichText,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -62,6 +63,7 @@ export interface InsightStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
+    ctaVariant: CTAProps["variant"];
   };
 }
 
@@ -148,6 +150,10 @@ const insightSectionFields: Fields<InsightSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -169,11 +175,13 @@ const InsightCard = ({
   insight,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   insight: InsightStruct;
   cardStyles: InsightSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -223,7 +231,7 @@ const InsightCard = ({
         {insight.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            variant={"link"}
+            variant={ctaVariant}
             label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
@@ -289,6 +297,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 insight={insight}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -329,6 +338,7 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 4,
+        ctaVariant: "primary",
       },
     },
     analytics: {

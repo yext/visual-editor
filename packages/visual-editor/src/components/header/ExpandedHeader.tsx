@@ -116,10 +116,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -134,10 +133,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -161,10 +159,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -215,10 +212,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(
-                    msg("fields.label", "Label"),
-                    "text"
-                  ),
+                  label: TranslatableStringField(msg("fields.label", "Label"), {
+                    types: ["type.string"],
+                  }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
@@ -384,7 +380,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             </EntityField>
             {(showPrimaryCTA || showSecondaryCTA) && (
               <HeaderCtas
-                document={document}
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
                 primaryVariant={primaryCtaVariant}
@@ -475,7 +470,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           {(showPrimaryCTA || showSecondaryCTA) && (
             <PageSection verticalPadding={"sm"} background={backgroundColor}>
               <HeaderCtas
-                document={document}
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
                 primaryVariant={primaryCtaVariant}
@@ -499,6 +493,7 @@ const HeaderLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
+  const document = useDocument();
   const MAX_VISIBLE = 5;
   const isSecondary = type === "Secondary";
 
@@ -514,7 +509,7 @@ const HeaderLinks = ({
           : "headerFooterSecondaryLink"
       }
       eventName={`cta.${ctaType}.${index}`}
-      label={resolveTranslatableString(item.label, i18n.language)}
+      label={resolveTranslatableString(item.label, i18n.language, document)}
       linkType={item.linkType}
       link={item.link}
       className="justify-start w-full text-left"
@@ -592,11 +587,11 @@ const HeaderCtas = (props: {
   secondaryCTA?: TranslatableCTA;
   primaryVariant: CTAProps["variant"];
   secondaryVariant: CTAProps["variant"];
-  document: any;
   showPrimaryCTA: boolean;
   showSecondaryCTA: boolean;
 }) => {
   const { i18n } = useTranslation();
+  const document = useDocument();
   const {
     primaryCTA,
     secondaryCTA,
@@ -620,7 +615,11 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`primaryCta`}
             variant={primaryVariant}
-            label={resolveTranslatableString(primaryCTA?.label, i18n.language)}
+            label={resolveTranslatableString(
+              primaryCTA?.label,
+              i18n.language,
+              document
+            )}
             link={primaryCTA.link}
             linkType={primaryCTA.linkType}
           />
@@ -634,7 +633,11 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`secondaryCta`}
             variant={secondaryVariant}
-            label={resolveTranslatableString(secondaryCTA.label, i18n.language)}
+            label={resolveTranslatableString(
+              secondaryCTA.label,
+              i18n.language,
+              document
+            )}
             link={secondaryCTA.link}
             linkType={secondaryCTA.linkType}
           />

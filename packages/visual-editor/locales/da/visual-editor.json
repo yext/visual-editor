@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopier til udklipsholder",
     "pasteFromClipboard": "Indsæt fra udklipsholder"
   },
+  "addEntityField": "Tilføj entitetsfelt",
   "address": "Adresse",
   "addressInput": {
     "city": "By",

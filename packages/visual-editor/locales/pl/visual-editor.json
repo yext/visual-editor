@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopiuj do schowka",
     "pasteFromClipboard": "Wklej ze schowka"
   },
+  "addEntityField": "Dodaj pole jednostki",
   "address": "Adres",
   "addressInput": {
     "city": "Miasto",

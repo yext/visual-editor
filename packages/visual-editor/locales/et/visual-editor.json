@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopeeri lõikelauale",
     "pasteFromClipboard": "Pasta lõikelaualt"
   },
+  "addEntityField": "Lisage olemiväli",
   "address": "Aadress",
   "addressInput": {
     "city": "Linn",

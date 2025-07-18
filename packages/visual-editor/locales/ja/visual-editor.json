@@ -4,6 +4,7 @@
     "copyToClipboard": "クリップボードにコピーします",
     "pasteFromClipboard": "クリップボードから貼り付けます"
   },
+  "addEntityField": "エンティティフィールドを追加します",
   "address": "住所",
   "addressInput": {
     "city": "市",

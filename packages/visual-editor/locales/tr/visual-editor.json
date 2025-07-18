@@ -4,6 +4,7 @@
     "copyToClipboard": "Panoya Kopyala",
     "pasteFromClipboard": "Panodan Yapıştır"
   },
+  "addEntityField": "Varlık alanı ekle",
   "address": "Adres",
   "addressInput": {
     "city": "Şehir",

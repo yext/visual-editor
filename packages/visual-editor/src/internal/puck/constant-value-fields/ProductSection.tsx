@@ -11,6 +11,7 @@ import { translatableCTAFields } from "./CallToAction.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultProduct: ProductStruct = {
   image: {
@@ -60,18 +61,19 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
 
 const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const document = useDocument();
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.name", "Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.category", "Category"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
@@ -102,7 +104,11 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     },
     defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(item.name, i18n.language);
+      const translation = resolveTranslatableString(
+        item.name,
+        i18n.language,
+        document
+      );
       if (translation) {
         return translation;
       }

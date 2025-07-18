@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopioi leikepöydälle",
     "pasteFromClipboard": "Liittää leikepöydältä"
   },
+  "addEntityField": "Lisää entiteettikenttä",
   "address": "Osoite",
   "addressInput": {
     "city": "Kaupunki",

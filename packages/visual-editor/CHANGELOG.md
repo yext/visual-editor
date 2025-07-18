@@ -1,3 +1,57 @@
+#### 0.0.50 (2025-07-18)
+
+##### Bug Fixes
+
+- replace const { document } = useDocument(); (#648) (3455b317)
+
+#### 0.0.49 (2025-07-17)
+
+##### Bug Fixes
+
+- use old constant value input for string lists (#647) (3fe13904)
+- useDocument instead of document args (#646) (9e45112c)
+
+#### 0.0.48 (2025-07-17)
+
+##### Chores
+
+- fix issues caused by merges (#635) (b4708a00)
+- more Directory and PageSection tests (#612) (1a6ecd8a)
+- add tests for static map and reviews (#628) (fba1f5a1)
+- wait for image load in component tests (#620) (99e4859c)
+- add tests for NearbyLocations and Locator (#624) (be8f6faa)
+- fix unit test action vulnerability 2 (#625) (bbe6cbcf)
+- expanded footer tests (#621) (73519086)
+- tests for ExpandedHeader (#613) (971c015f)
+- unit test action vulnerability (#617) (edf80bf8)
+
+##### New Features
+
+- add Title prop to Directory component (#595) (06391873)
+- add variant for all CTA's (#639) (570e3153)
+- normalize locales (#630) (ac8ea89b)
+- add entity field embedding to constant fields (#582) (1662f1d5)
+- resolve embedded fields in constant values (#614) (82512790)
+- copy/paste component data (#618) (3839963d)
+
+##### Bug Fixes
+
+- pass the correct document to resolveTranslatableString (#643) (7896e887)
+- resolved embedded fields in resolveTranslatableString (#642) (0e15252f)
+- change "zh-CN" to "zh" (#638) (15cf4de9)
+- lint and i18n (#640) (4b8419e8)
+- expanded header migration (#627) (42324170)
+- cleanup release json error (#633) (c102580c)
+- install pkg.pr.new package (#629) (f6b94e94)
+- dark background handling for brand colors (#631) (ecf51494)
+- minor UI fixes and updated social validations in ExpandedFooter (#619) (6ccf7db8)
+- image rendering on live page (#623) (e12cca9d)
+
+##### Refactors
+
+- run component tests on playwright docker image (#603) (4c8540ed)
+- filter current location from nearbyLocations (#616) (edc62161)
+
 #### 0.0.47 (2025-07-11)
 
 ##### New Features

@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopirajte u međuspremnik",
     "pasteFromClipboard": "Zalijepi iz međuspremnika"
   },
+  "addEntityField": "Dodajte polje entiteta",
   "address": "Adresa",
   "addressInput": {
     "city": "Grad",

@@ -28,6 +28,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -63,6 +64,7 @@ export interface EventStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
+    ctaVariant: CTAProps["variant"];
   };
 }
 
@@ -149,6 +151,10 @@ const eventSectionFields: Fields<EventSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -170,13 +176,16 @@ const EventCard = ({
   event,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   event: EventStruct;
   cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const document = useDocument();
   return (
     <Background
       background={cardStyles.backgroundColor}
@@ -206,7 +215,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(event.title, i18n.language)}
+            {resolveTranslatableString(event.title, i18n.language, document)}
           </Heading>
         )}
         {event.dateTime && (
@@ -220,10 +229,14 @@ const EventCard = ({
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={resolveTranslatableString(event.cta.label, i18n.language)}
+            label={resolveTranslatableString(
+              event.cta.label,
+              i18n.language,
+              document
+            )}
             link={event.cta.link}
             linkType={event.cta.linkType}
-            variant="link"
+            variant={ctaVariant}
           />
         )}
       </div>
@@ -282,6 +295,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 event={event}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -322,6 +336,7 @@ export const EventSection: ComponentConfig<EventSectionProps> = {
       cards: {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
+        ctaVariant: "primary",
       },
     },
     analytics: {

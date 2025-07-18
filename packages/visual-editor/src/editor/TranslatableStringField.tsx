@@ -1,18 +1,20 @@
 import { TranslatableString } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18nPlatform.ts";
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@measured/puck";
 import { resolveTranslatableString } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 
 /**
  * Generates a translatable string config
  * @param label optional label. Takes in a value from msg.
- * @param fieldType text or textarea display mode
+ * @param filter optional filter for the entity fields that can be embedded.
  */
 export function TranslatableStringField<
   T extends TranslatableString | undefined = TranslatableString,
->(label?: MsgString, fieldType?: "text" | "textarea"): CustomField<T> {
+>(label?: MsgString, filter?: RenderEntityFieldFilter<any>): CustomField<T> {
   return {
     type: "custom",
     render: ({ onChange, value }) => {
@@ -20,9 +22,8 @@ export function TranslatableStringField<
       const locale = i18n.language;
       const resolvedValue = resolveTranslatableString(value, locale);
 
-      const autoField = (
-        <AutoField
-          field={{ type: fieldType ?? "text" }}
+      const fieldEditor = (
+        <EmbeddedFieldStringInput
           value={resolvedValue}
           onChange={(val) => {
             return onChange({
@@ -33,15 +34,18 @@ export function TranslatableStringField<
               hasLocalizedValue: "true",
             } as Record<string, string> as T);
           }}
+          filter={filter ?? { types: ["type.string"] }}
         />
       );
 
       if (!label) {
-        return <div className={"ve-pt-3"}>{autoField}</div>;
+        return <div className={"ve-pt-3"}>{fieldEditor}</div>;
       }
 
       return (
-        <FieldLabel label={`${pt(label)} (${locale})`}>{autoField}</FieldLabel>
+        <FieldLabel label={`${pt(label)} (${locale})`}>
+          {fieldEditor}
+        </FieldLabel>
       );
     },
   };

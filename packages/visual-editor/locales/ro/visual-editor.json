@@ -4,6 +4,7 @@
     "copyToClipboard": "Copiați în clipboard",
     "pasteFromClipboard": "Lipiți din clipboard"
   },
+  "addEntityField": "Adăugați câmpul entității",
   "address": "Adresa",
   "addressInput": {
     "city": "Oraş",

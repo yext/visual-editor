@@ -4,6 +4,7 @@
     "copyToClipboard": "Copia negli appunti",
     "pasteFromClipboard": "Incolla dagli appunti"
   },
+  "addEntityField": "Aggiungi campo di entità",
   "address": "Indirizzo",
   "addressInput": {
     "city": "Città",

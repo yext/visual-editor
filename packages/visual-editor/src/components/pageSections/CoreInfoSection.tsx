@@ -35,6 +35,7 @@ import {
   usePlatformTranslation,
   TranslatableStringField,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 
 export interface CoreInfoData {
@@ -81,6 +82,7 @@ export interface CoreInfoStyles {
     phoneFormat: "domestic" | "international";
     includePhoneHyperlink: boolean;
     emailsListLength?: number;
+    ctaVariant: CTAProps["variant"];
   };
 
   /** Styling for the "Hours" column. */
@@ -149,16 +151,16 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
             },
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
               const translation = resolveTranslatableString(
                 item.label,
-                i18n.language
+                i18n.language,
+                document
               );
               if (translation) {
                 return translation;
@@ -275,6 +277,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               ],
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
@@ -376,7 +382,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     data.services.servicesList,
     locale
   )?.map((translatableString: TranslatableString) =>
-    resolveTranslatableString(translatableString, i18n.language)
+    resolveTranslatableString(translatableString, i18n.language, document)
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
@@ -448,7 +454,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              variant="link"
+              variant={styles.info.ctaVariant}
             />
           )}
         </div>
@@ -466,7 +472,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
               const phoneLabel = resolveTranslatableString(
                 item.label,
-                i18n.language
+                i18n.language,
+                document
               );
 
               return (
@@ -725,6 +732,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         phoneFormat: "domestic",
         includePhoneHyperlink: true,
         emailsListLength: 1,
+        ctaVariant: "link",
       },
       hours: {
         startOfWeek: "today",

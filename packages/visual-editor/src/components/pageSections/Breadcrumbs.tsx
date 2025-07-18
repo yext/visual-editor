@@ -68,7 +68,7 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
     objectFields: {
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        "text"
+        { types: ["type.string"] }
       ),
     },
   }),
@@ -147,7 +147,8 @@ export const BreadcrumbsComponent = ({
   }
   const directoryRoot = resolveTranslatableString(
     data.directoryRoot,
-    i18n.language
+    i18n.language,
+    document
   );
 
   if (!breadcrumbs?.length) {

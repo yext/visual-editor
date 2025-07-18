@@ -25,6 +25,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -60,6 +61,7 @@ export interface ProductStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
+    ctaVariant: CTAProps["variant"];
   };
 }
 
@@ -146,6 +148,10 @@ const productSectionFields: Fields<ProductSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -167,13 +173,16 @@ const ProductCard = ({
   product,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   product: ProductStruct;
   cardStyles: ProductSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const document = useDocument();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -200,7 +209,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {resolveTranslatableString(product.name, i18n.language)}
+              {resolveTranslatableString(product.name, i18n.language, document)}
             </Heading>
           )}
           {product.category && (
@@ -209,7 +218,11 @@ const ProductCard = ({
               className="py-2 px-4 rounded w-fit"
             >
               <Body>
-                {resolveTranslatableString(product.category, i18n.language)}
+                {resolveTranslatableString(
+                  product.category,
+                  i18n.language,
+                  document
+                )}
               </Body>
             </Background>
           )}
@@ -218,8 +231,12 @@ const ProductCard = ({
         {product.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            variant="secondary"
-            label={resolveTranslatableString(product.cta.label, i18n.language)}
+            variant={ctaVariant}
+            label={resolveTranslatableString(
+              product.cta.label,
+              i18n.language,
+              document
+            )}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"
@@ -282,6 +299,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 product={product}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -322,6 +340,7 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
+        ctaVariant: "primary",
       },
     },
     analytics: {

@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopírovať do schránky",
     "pasteFromClipboard": "Pasta zo schránky"
   },
+  "addEntityField": "Pridať pole entity",
   "address": "Osloviť",
   "addressInput": {
     "city": "Mesto",
