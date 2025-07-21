@@ -26,6 +26,7 @@ type Fallback = {
   from: string;
   to: string;
 };
+
 const fallbacks: Fallback[] = [
   {
     from: "zh-Hans",
@@ -36,6 +37,7 @@ const fallbacks: Fallback[] = [
     to: "zh-TW",
   },
 ];
+
 fallbacks.forEach(({ from, to }: Fallback) => {
   if (!!resources[from]) {
     return;
