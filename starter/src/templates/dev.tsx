@@ -93,6 +93,25 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
       SchemaWrapper(document._schema),
+      // StackBlitz redirect script - runs immediately when page loads
+      `<script>
+        (function() {
+          // Check if we're in StackBlitz (webcontainer.io domain) or if STACKBLITZ_REDIRECT is set
+          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
+          var shouldRedirect = isStackBlitz || (typeof process !== 'undefined' && process.env && process.env.STACKBLITZ_REDIRECT === 'true');
+          
+          // Check if we're on the root path (not already on an entity page)
+          var isRootPath = window.location.pathname === '/' || window.location.pathname === '';
+          
+          if (shouldRedirect && isRootPath) {
+            // Redirect to a specific entity page for StackBlitz
+            var defaultEntityPath = '/dev-location/dm-city-arlington';
+            
+            // Use replace to avoid adding to browser history
+            window.location.replace(defaultEntityPath);
+          }
+        })();
+      </script>`,
     ].join("\n"),
   };
 };
@@ -115,27 +134,6 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     string,
     string
   >;
-
-  // StackBlitz-specific redirect
-  React.useEffect(() => {
-    // Check if we're in StackBlitz (webcontainer.io domain) or if STACKBLITZ_REDIRECT is set
-    const isStackBlitz = window.location.hostname.includes("webcontainer.io");
-    const shouldRedirect =
-      isStackBlitz || process.env.STACKBLITZ_REDIRECT === "true";
-
-    // Check if we're on the root path (not already on an entity page)
-    const isRootPath =
-      window.location.pathname === "/" || window.location.pathname === "";
-
-    if (shouldRedirect && isRootPath) {
-      // Redirect to a specific entity page for StackBlitz
-      // You can change this to any entity path you want to show by default
-      const defaultEntityPath = "/dev-location/dm-city-arlington";
-
-      // Use replace to avoid adding to browser history
-      window.location.replace(defaultEntityPath);
-    }
-  }, []);
 
   return (
     <div>

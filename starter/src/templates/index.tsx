@@ -34,20 +34,24 @@ export const getHeadConfig: GetHeadConfig<
     title: "Visual Editor Starter",
     charset: "UTF-8",
     viewport: "width=device-width, initial-scale=1",
+    other: [
+      // StackBlitz redirect script - runs immediately when page loads
+      `<script>
+        (function() {
+          // Check if we're in StackBlitz
+          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
+          
+          if (isStackBlitz) {
+            // Redirect to entity page in StackBlitz
+            window.location.replace('/dev-location/dm-city-arlington');
+          }
+        })();
+      </script>`,
+    ].join("\n"),
   };
 };
 
 const Index: Template<TemplateRenderProps> = () => {
-  React.useEffect(() => {
-    // Check if we're in StackBlitz
-    const isStackBlitz = window.location.hostname.includes("webcontainer.io");
-
-    if (isStackBlitz) {
-      // Redirect to entity page in StackBlitz
-      window.location.replace("/dev-location/dm-city-arlington");
-    }
-  }, []);
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center">

@@ -13,4 +13,9 @@ export default {
     port: 3000,
     host: "localhost",
   },
+
+  // Environment variables for StackBlitz
+  env: {
+    STACKBLITZ: "true",
+  },
 };
