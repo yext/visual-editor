@@ -6,7 +6,7 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";

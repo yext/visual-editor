@@ -4,7 +4,7 @@ import { ThemeConfig } from "../../../../utils/themeResolver.ts";
 import { OnThemeChangeFunc, ThemeHistories } from "../../../types/themeData.ts";
 import "@measured/puck/dist/index.css";
 import { ThemeFieldsSidebar } from "./ThemeFieldsSidebar.tsx";
-import { pt } from "../../../../utils/i18nPlatform.ts";
+import { pt } from "../../../../utils/i18n/platform.ts";
 
 type ThemeEditorRightSidebarProps = {
   themeHistoriesRef: React.MutableRefObject<ThemeHistories | undefined>;

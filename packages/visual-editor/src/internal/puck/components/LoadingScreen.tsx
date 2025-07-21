@@ -2,7 +2,7 @@ import { Progress } from "../ui/Progress.tsx";
 import React from "react";
 import "../ui/puck.css";
 import "../../../editor/index.css";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export type LoadingScreenProps = {
   progress: number;

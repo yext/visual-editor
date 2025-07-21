@@ -1,13 +1,13 @@
 import i18next, { TOptions } from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { applyI18nFallbacks, defaultI18nFallbacks } from "./i18nFallbacks.ts";
+import { applyI18nFallbacks, defaultI18nFallbacks } from "./fallbacks.ts";
 
 const NAMESPACE = "visual-editor";
 
 const i18nPlatformInstance = i18next.createInstance();
 
 const resources: Record<string, any> = {};
-const modules = import.meta.glob("../../locales/*/visual-editor.json", {
+const modules = import.meta.glob("../../../locales/*/visual-editor.json", {
   eager: true,
 });
 const translationRegex = new RegExp(`locales/([^/]+)/${NAMESPACE}\\.json$`);
