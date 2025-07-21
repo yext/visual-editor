@@ -1,5 +1,6 @@
 import i18next, { TOptions } from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
+import { applyI18nFallbacks } from "./i18nComponents.ts";
 
 const NAMESPACE = "visual-editor";
 
@@ -20,6 +21,8 @@ for (const path in modules) {
     };
   }
 }
+
+applyI18nFallbacks(resources);
 
 i18nPlatformInstance.use(initReactI18next).init({
   fallbackLng: "en",
