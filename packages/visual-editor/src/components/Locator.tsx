@@ -197,6 +197,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             lat: mapCenter.lat,
             lng: mapCenter.lng,
             radius: mapBounds.getNorthEast().distanceTo(mapCenter),
+            name: t("customSearchArea", "Custom Search Area"),
           },
           matcher: Matcher.Near,
         },
@@ -246,6 +247,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
                 lat: location.coords.latitude,
                 lng: location.coords.longitude,
                 radius: DEFAULT_RADIUS_METERS,
+                name: t("currentLocation", "Current Location"),
               },
               matcher: Matcher.Near,
             },
@@ -267,8 +269,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
                 lat: DEFAULT_MAP_CENTER[1],
                 lng: DEFAULT_MAP_CENTER[0],
                 radius: DEFAULT_RADIUS_METERS,
-                // TODO (kgerner): add name property once Search SDK updated
-                // name: "New York City, New York, NY",
+                name: t(
+                  "newYorkCity",
+                  "New York City, New York, United States"
+                ),
               },
               matcher: Matcher.Near,
             },
