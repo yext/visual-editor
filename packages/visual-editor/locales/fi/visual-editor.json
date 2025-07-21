@@ -69,6 +69,8 @@
   "coordinate": "Koordinoida",
   "coreInfoSection": "Ydintiedot -osio",
   "cta": "CTA",
+  "currentLocation": "Nykyinen sijainti",
+  "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
   "dateAndTime": "Päivämäärä ja aika",
   "deleteItem": "Poista kohde",
