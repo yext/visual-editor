@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import { applyI18nFallbacks, defaultI18nFallbacks } from "./i18nFallbacks.ts";
 
 const NAMESPACE = "visual-editor";
 
@@ -21,42 +22,7 @@ for (const path in modules) {
   }
 }
 
-/**
- * Applies language fallbacks to i18n resources
- * ex: "zh-Hans" to "zh" and "zh-Hant" to "zh-TW"
- *
- * These fallbacks occur BEFORE fallbackLng in
- * i18n configuration
- * @param resources
- */
-export const applyI18nFallbacks = (resources: Record<string, any>) => {
-  type Fallback = {
-    from: string;
-    to: string;
-  };
-
-  const fallbacks: Fallback[] = [
-    {
-      from: "zh-Hans",
-      to: "zh",
-    },
-    {
-      from: "zh-Hant",
-      to: "zh-TW",
-    },
-  ];
-
-  fallbacks.forEach(({ from, to }: Fallback) => {
-    if (!!resources[from]) {
-      return;
-    }
-    if (!resources[to]) {
-      return;
-    }
-    resources[from] = resources[to];
-  });
-};
-applyI18nFallbacks(resources);
+applyI18nFallbacks(resources, defaultI18nFallbacks);
 
 i18nComponentsInstance.use(initReactI18next).init({
   fallbackLng: "en",
