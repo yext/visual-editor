@@ -3,11 +3,10 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   useDocument,
-  resolveYextEntityField,
+  resolveComponentData,
   EntityField,
   YextEntityField,
   Image,
-  ImageProps,
   YextField,
   msg,
 } from "@yext/visual-editor";
@@ -66,10 +65,10 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
-  const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
-    document,
+  const resolvedImage = resolveComponentData(
     imageField,
-    i18n.language
+    i18n.language,
+    document
   );
 
   if (!resolvedImage) {

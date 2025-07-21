@@ -9,11 +9,11 @@ import {
 import "@yext/pages-components/style.css";
 import {
   useDocument,
-  resolveYextEntityField,
   EntityField,
   YextEntityField,
   CTA,
   YextField,
+  resolveComponentData,
 } from "@yext/visual-editor";
 
 export type AddressProps = {
@@ -41,7 +41,7 @@ const AddressComponent = ({
 }: AddressProps) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
-  const address = resolveYextEntityField(document, addressField, i18n.language);
+  const address = resolveComponentData(addressField, i18n.language, document);
   const coordinates = getDirections(
     address as AddressType,
     undefined,

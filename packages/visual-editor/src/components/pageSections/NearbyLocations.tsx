@@ -1,6 +1,5 @@
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  resolveYextEntityField,
   useDocument,
   YextEntityField,
   Heading,
@@ -15,12 +14,12 @@ import {
   VisibilityWrapper,
   HoursStatusAtom,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   ThemeOptions,
   MaybeLink,
   getLocationPath,
   useTemplateProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -368,15 +367,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  const coordinate = resolveYextEntityField<Coordinate>(
-    document,
-    data?.coordinate,
-    locale
-  );
-  const headingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading, locale),
-    locale
-  );
+  const coordinate = resolveComponentData(data?.coordinate, locale, document);
+  const headingText = resolveComponentData(data?.heading, locale, document);
 
   // parse variables from document
   const {

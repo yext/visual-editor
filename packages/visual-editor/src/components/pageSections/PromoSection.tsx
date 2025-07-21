@@ -24,8 +24,7 @@ import {
   HeadingLevel,
   ThemeOptions,
   getAnalyticsScopeHash,
-  resolveTranslatableString,
-  resolveTranslatableRichText,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
@@ -227,7 +226,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           >
             <div className={`flex ${justifyClass}`}>
               <Heading level={styles.heading.level}>
-                {resolveTranslatableString(
+                {resolveComponentData(
                   resolvedPromo?.title,
                   i18n.language,
                   document
@@ -244,10 +243,12 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             data.promo.constantValueOverride.description
           }
         >
-          {resolveTranslatableRichText(
-            resolvedPromo?.description,
-            i18n.language
-          )}
+          {resolvedPromo?.description &&
+            resolveComponentData(
+              resolvedPromo?.description,
+              i18n.language,
+              document
+            )}
         </EntityField>
         {resolvedPromo?.cta?.label && (
           <EntityField
@@ -258,7 +259,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             <CTA
               eventName={`cta`}
               variant={styles?.ctaVariant}
-              label={resolveTranslatableString(
+              label={resolveComponentData(
                 resolvedPromo?.cta.label,
                 i18n.language,
                 document

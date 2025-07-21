@@ -8,7 +8,7 @@ import {
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
@@ -94,11 +94,9 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {
-      const translation = resolveTranslatableString(
-        item.title,
-        i18n.language,
-        document
-      );
+      const translation =
+        item?.title &&
+        resolveComponentData(item.title, i18n.language, document);
       if (translation) {
         return translation;
       }

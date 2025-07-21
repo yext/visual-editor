@@ -3,9 +3,110 @@ import {
   RichText,
   TranslatableRichText,
   TranslatableString,
+  YextEntityField,
 } from "@yext/visual-editor";
 import React from "react";
-import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
+import {
+  resolveEmbeddedFieldsRecursively,
+  resolveEmbeddedFieldsInString,
+  resolveYextEntityField,
+} from "./resolveYextEntityField";
+
+/**
+ * The primary function for resolving all component data. It handles entity
+ * fields, constant values, embedded fields, and translatable types.
+ *
+ * @param data The field configuration object from component props OR a direct translatable value.
+ * @param locale The current language locale (e.g., "en").
+ * @param document The entity document. If not provided, embedded fields will not be resolved.
+ * @returns The fully resolved data for the component.
+ */
+// --- Overload Signatures ---
+// 1. Handles TranslatableString directly or via a YextEntityField
+export function resolveComponentData(
+  data: TranslatableString | YextEntityField<TranslatableString>,
+  locale: string,
+  document?: any
+): string;
+
+// 2. Handles TranslatableRichText directly or via a YextEntityField
+export function resolveComponentData(
+  data: TranslatableRichText | YextEntityField<TranslatableRichText>,
+  locale: string,
+  document?: any
+): string | React.ReactElement;
+
+// 3. Handles a generic YextEntityField
+export function resolveComponentData<T>(
+  data: YextEntityField<T>,
+  locale: string,
+  document?: any
+): T | undefined;
+
+// --- Implementation ---
+export function resolveComponentData<T>(
+  data: YextEntityField<T> | TranslatableString | TranslatableRichText,
+  locale: string,
+  document?: any
+): any {
+  let rawValue;
+
+  // If a document is provided, we can attempt full resolution.
+  if (document) {
+    if (isYextEntityField(data)) {
+      rawValue = resolveYextEntityField(document, data, locale);
+    } else {
+      // It's a direct TranslatableString or TranslatableRichText.
+      rawValue = resolveEmbeddedFieldsRecursively(data, document, locale);
+    }
+  } else {
+    // No document, so we can't resolve entity fields or embedded fields.
+    // If it's a YextEntityField, we can only use its constant value.
+    rawValue = isYextEntityField(data) ? data.constantValue : data;
+  }
+
+  // Fully resolve the resulting value, converting any translatable
+  // objects into their final string or React element form.
+  return fullyResolveValue(rawValue, locale);
+}
+
+/**
+ * Recursively traverses a value and resolves any translatable types
+ * (TranslatableString, TranslatableRichText) to their final form.
+ */
+const fullyResolveValue = (
+  value: any,
+  locale: string
+): any | string | React.ReactElement => {
+  // If the value is already a React element, return it immediately.
+  if (React.isValidElement(value)) {
+    return value;
+  }
+
+  if (typeof value !== "object" || value === null) {
+    return value;
+  }
+
+  // Handle TranslatableString
+  if (value.hasLocalizedValue === "true" && typeof value[locale] === "string") {
+    return value[locale];
+  }
+
+  // Handle TranslatableRichText
+  if (value.hasLocalizedValue === "true" && isRichText(value[locale])) {
+    return toStringOrElement(value[locale]);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => fullyResolveValue(item, locale));
+  }
+
+  const newValue: { [key: string]: any } = {};
+  for (const key in value) {
+    newValue[key] = fullyResolveValue(value[key], locale);
+  }
+  return newValue;
+};
 
 /**
  * Converts a type TranslatableString to a string
@@ -111,4 +212,18 @@ function toStringOrElement(
     return <MaybeRTF data={value} />;
   }
   return value;
+}
+
+/**
+ * Check if the input is a YextEntityField
+ * @param value
+ * @returns
+ */
+function isYextEntityField(value: any): value is YextEntityField<unknown> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "field" in value &&
+    "constantValue" in value
+  );
 }

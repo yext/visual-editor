@@ -14,10 +14,9 @@ import {
   BackgroundStyle,
   Background,
   HeadingLevel,
-  resolveYextEntityField,
   YextEntityField,
-  resolveTranslatableString,
   getLocationPath,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -314,14 +313,7 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   const { i18n } = useTranslation();
   const { document, relativePrefixToRoot } = useTemplateProps<any>();
 
-  const title = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      document,
-      data.title,
-      i18n.language
-    ),
-    i18n.language
-  );
+  const title = resolveComponentData(data.title, i18n.language, document);
 
   return (
     <Background background={styles.backgroundColor}>

@@ -9,7 +9,7 @@ import { DateSelector } from "../components/DateSelector.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 
@@ -76,11 +76,9 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
     },
     defaultItemProps: defaultTestimonial,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(
-        item.contributorName,
-        i18n.language,
-        document
-      );
+      const translation =
+        item?.contributorName &&
+        resolveComponentData(item.contributorName, i18n.language, document);
       if (translation) {
         return translation;
       }

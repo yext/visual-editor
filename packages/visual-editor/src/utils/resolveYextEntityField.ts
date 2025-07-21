@@ -108,7 +108,7 @@ export const resolveEmbeddedFieldsInString = (
  * @param document The entity document to use for resolving fields.
  * @returns The data with embedded fields resolved.
  */
-const resolveEmbeddedFieldsRecursively = (
+export const resolveEmbeddedFieldsRecursively = (
   data: any,
   document: any,
   locale?: string

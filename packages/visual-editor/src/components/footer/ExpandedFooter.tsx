@@ -15,12 +15,12 @@ import {
   Body,
   CTA,
   TranslatableCTA,
-  resolveTranslatableString,
   PageSection,
   TranslatableStringField,
   TranslatableString,
   Background,
   useDocument,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -470,7 +470,7 @@ const ExpandedFooterWrapper = ({
             <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
               {expandedFooterLinks.map((item, index) => (
                 <ExpandedFooterLinks
-                  label={resolveTranslatableString(
+                  label={resolveComponentData(
                     item.label,
                     i18n.language,
                     document
@@ -548,7 +548,7 @@ const ExpandedFooterWrapper = ({
               displayName={pt("fields.copyrightMessage", "Copyright Message")}
             >
               <Body variant="xs" className="text-center md:text-left">
-                {resolveTranslatableString(
+                {resolveComponentData(
                   copyrightMessage,
                   i18n.language,
                   document
@@ -586,11 +586,7 @@ const FooterLinks = ({
                   : "headerFooterSecondaryLink"
               }
               eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
-              label={resolveTranslatableString(
-                item.label,
-                i18n.language,
-                document
-              )}
+              label={resolveComponentData(item.label, i18n.language, document)}
               linkType={item.linkType}
               link={item.link}
               className="justify-center md:justify-start block break-words whitespace-normal"
@@ -622,11 +618,7 @@ const ExpandedFooterLinks = ({
           <CTA
             variant={"headerFooterMainLink"}
             eventName={`cta${index}-Link-${index + 1}`}
-            label={resolveTranslatableString(
-              item.label,
-              i18n.language,
-              document
-            )}
+            label={resolveComponentData(item.label, i18n.language, document)}
             linkType={item.linkType}
             link={item.link}
             className={"justify-start block break-words whitespace-normal"}

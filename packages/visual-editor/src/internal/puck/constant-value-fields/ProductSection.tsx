@@ -9,7 +9,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 
@@ -104,11 +104,8 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     },
     defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(
-        item.name,
-        i18n.language,
-        document
-      );
+      const translation =
+        item?.name && resolveComponentData(item.name, i18n.language, document);
       if (translation) {
         return translation;
       }

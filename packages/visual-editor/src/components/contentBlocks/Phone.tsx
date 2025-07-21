@@ -3,7 +3,7 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   useDocument,
-  resolveYextEntityField,
+  resolveComponentData,
   EntityField,
   YextEntityField,
   PhoneAtom,
@@ -43,11 +43,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const document = useDocument();
-  const resolvedPhone = resolveYextEntityField<string>(
-    document,
-    phone,
-    i18n.language
-  );
+  const resolvedPhone = resolveComponentData(phone, i18n.language, document);
 
   if (!resolvedPhone) {
     return;

@@ -8,7 +8,6 @@ import {
   YextField,
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   Heading,
   EntityField,
@@ -21,14 +20,13 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  resolveTranslatableRichText,
-  resolveTranslatableString,
   TranslatableString,
   msg,
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
   CTAProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -215,7 +213,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(event.title, i18n.language, document)}
+            {resolveComponentData(event.title, i18n.language, document)}
           </Heading>
         )}
         {event.dateTime && (
@@ -225,11 +223,12 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {resolveTranslatableRichText(event.description, i18n.language)}
+        {event.description &&
+          resolveComponentData(event.description, i18n.language)}
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={resolveTranslatableString(
+            label={resolveComponentData(
               event.cta.label,
               i18n.language,
               document
@@ -249,11 +248,8 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   const locale = i18n.language;
   const { data, styles } = props;
   const document = useDocument();
-  const resolvedEvents = resolveYextEntityField(document, data.events, locale);
-  const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading, locale),
-    i18n.language
-  );
+  const resolvedEvents = resolveComponentData(data.events, locale, document);
+  const resolvedHeading = resolveComponentData(data.heading, locale, document);
 
   const justifyClass = styles?.heading?.align
     ? {

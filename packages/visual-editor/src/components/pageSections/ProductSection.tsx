@@ -6,7 +6,6 @@ import {
   YextField,
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   Body,
   Heading,
@@ -18,14 +17,13 @@ import {
   ProductSectionType,
   ProductStruct,
   ComponentFields,
-  resolveTranslatableRichText,
-  resolveTranslatableString,
   TranslatableString,
   msg,
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
   CTAProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -209,7 +207,7 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {resolveTranslatableString(product.name, i18n.language, document)}
+              {resolveComponentData(product.name, i18n.language, document)}
             </Heading>
           )}
           {product.category && (
@@ -218,7 +216,7 @@ const ProductCard = ({
               className="py-2 px-4 rounded w-fit"
             >
               <Body>
-                {resolveTranslatableString(
+                {resolveComponentData(
                   product.category,
                   i18n.language,
                   document
@@ -226,13 +224,14 @@ const ProductCard = ({
               </Body>
             </Background>
           )}
-          {resolveTranslatableRichText(product.description, i18n.language)}
+          {product?.description &&
+            resolveComponentData(product.description, i18n.language)}
         </div>
         {product.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveTranslatableString(
+            label={resolveComponentData(
               product.cta.label,
               i18n.language,
               document
@@ -251,15 +250,12 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const document = useDocument();
-  const resolvedProducts = resolveYextEntityField(
-    document,
+  const resolvedProducts = resolveComponentData(
     data.products,
-    locale
+    locale,
+    document
   );
-  const resolvedHeading = resolveTranslatableRichText(
-    resolveYextEntityField(document, data.heading, locale),
-    i18n.language
-  );
+  const resolvedHeading = resolveComponentData(data.heading, locale, document);
 
   const justifyClass = styles?.heading?.align
     ? {

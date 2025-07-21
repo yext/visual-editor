@@ -6,7 +6,6 @@ import {
   YextField,
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   Body,
   Heading,
@@ -19,14 +18,13 @@ import {
   InsightStruct,
   Timestamp,
   ComponentFields,
-  resolveTranslatableString,
   TranslatableString,
   msg,
   pt,
   ThemeOptions,
-  resolveTranslatableRichText,
   getAnalyticsScopeHash,
   CTAProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -205,9 +203,11 @@ const InsightCard = ({
             <div
               className={`flex ${insight.category && insight.publishTime && `gap-4`}`}
             >
-              <Body>
-                {resolveTranslatableString(insight.category, i18n.language)}
-              </Body>
+              {insight.category && (
+                <Body>
+                  {resolveComponentData(insight.category, i18n.language)}
+                </Body>
+              )}
               {insight.category && insight.publishTime && <Body>|</Body>}
               {insight.publishTime && (
                 <Timestamp date={insight.publishTime} hideTimeZone={true} />
@@ -223,16 +223,17 @@ const InsightCard = ({
                   : "span"
               }
             >
-              {resolveTranslatableString(insight.name, i18n.language)}
+              {resolveComponentData(insight.name, i18n.language)}
             </Heading>
           )}
-          {resolveTranslatableRichText(insight.description, i18n.language)}
+          {insight.description &&
+            resolveComponentData(insight.description, i18n.language)}
         </div>
         {insight.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveTranslatableString(insight.cta.label, i18n.language)}
+            label={resolveComponentData(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
             className="mt-auto"
@@ -247,15 +248,12 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const document = useDocument();
-  const resolvedInsights = resolveYextEntityField(
-    document,
+  const resolvedInsights = resolveComponentData(
     data.insights,
-    locale
+    locale,
+    document
   );
-  const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading, locale),
-    i18n.language
-  );
+  const resolvedHeading = resolveComponentData(data.heading, locale, document);
 
   const justifyClass = styles?.heading?.align
     ? {

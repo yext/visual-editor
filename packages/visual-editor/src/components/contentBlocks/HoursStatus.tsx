@@ -4,7 +4,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { HoursType } from "@yext/pages-components";
 import {
   useDocument,
-  resolveYextEntityField,
+  resolveComponentData,
   EntityField,
   YextEntityField,
   YextField,
@@ -67,7 +67,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 }) => {
   const document = useDocument();
   const { t, i18n } = useTranslation();
-  const hours = resolveYextEntityField(document, hoursField, i18n.language);
+  const hours = resolveComponentData(hoursField, i18n.language, document);
 
   if (!hours) {
     return null;

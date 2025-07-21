@@ -16,10 +16,10 @@ import {
   CTAProps,
   TranslatableCTA,
   pt,
-  resolveTranslatableString,
   PageSection,
   TranslatableStringField,
   useDocument,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -509,7 +509,7 @@ const HeaderLinks = ({
           : "headerFooterSecondaryLink"
       }
       eventName={`cta.${ctaType}.${index}`}
-      label={resolveTranslatableString(item.label, i18n.language, document)}
+      label={resolveComponentData(item.label, i18n.language, document)}
       linkType={item.linkType}
       link={item.link}
       className="justify-start w-full text-left"
@@ -615,7 +615,7 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`primaryCta`}
             variant={primaryVariant}
-            label={resolveTranslatableString(
+            label={resolveComponentData(
               primaryCTA?.label,
               i18n.language,
               document
@@ -633,7 +633,7 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`secondaryCta`}
             variant={secondaryVariant}
-            label={resolveTranslatableString(
+            label={resolveComponentData(
               secondaryCTA.label,
               i18n.language,
               document

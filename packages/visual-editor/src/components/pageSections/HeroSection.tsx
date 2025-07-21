@@ -5,7 +5,6 @@ import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
   useDocument,
-  resolveYextEntityField,
   EntityField,
   YextEntityField,
   Image,
@@ -18,18 +17,17 @@ import {
   YextField,
   VisibilityWrapper,
   CTAProps,
-  resolveYextStructField,
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
   HoursStatusAtom,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   pt,
   getAnalyticsScopeHash,
   ReviewStars,
   getAggregateRating,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -269,28 +267,18 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const document = useDocument() as any;
-  const resolvedBusinessName = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      document,
-      data?.businessName,
-      locale
-    ),
-    locale
+  const resolvedBusinessName = resolveComponentData(
+    data?.businessName,
+    locale,
+    document
   );
-  const resolvedLocalGeoModifier = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      document,
-      data?.localGeoModifier,
-      locale
-    ),
-    locale
+  const resolvedLocalGeoModifier = resolveComponentData(
+    data?.localGeoModifier,
+    locale,
+    document
   );
-  const resolvedHours = resolveYextEntityField<HoursType>(
-    document,
-    data?.hours,
-    locale
-  );
-  const resolvedHero = resolveYextStructField(document, data?.hero, locale);
+  const resolvedHours = resolveComponentData(data?.hours, locale, document);
+  const resolvedHero = resolveComponentData(data?.hero, locale, document);
 
   const { timezone } = document as {
     timezone: string;
@@ -378,7 +366,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 <CTA
                   eventName={`primaryCta`}
                   variant={styles?.primaryCTA}
-                  label={resolveTranslatableString(
+                  label={resolveComponentData(
                     resolvedHero.primaryCta.label,
                     i18n.language
                   )}
@@ -399,7 +387,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 <CTA
                   eventName={`secondaryCta`}
                   variant={styles?.secondaryCTA}
-                  label={resolveTranslatableString(
+                  label={resolveComponentData(
                     resolvedHero.secondaryCta.label,
                     i18n.language
                   )}

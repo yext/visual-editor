@@ -8,10 +8,10 @@ import {
   VisibilityWrapper,
   msg,
   TranslatableString,
-  resolveTranslatableString,
   TranslatableStringField,
   BackgroundStyle,
   backgroundColors,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -145,7 +145,7 @@ export const BreadcrumbsComponent = ({
       (b) => b.name
     );
   }
-  const directoryRoot = resolveTranslatableString(
+  const directoryRoot = resolveComponentData(
     data.directoryRoot,
     i18n.language,
     document

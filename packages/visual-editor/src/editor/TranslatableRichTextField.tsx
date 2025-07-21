@@ -1,7 +1,7 @@
 import { TranslatableRichText, RichText } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18nPlatform.ts";
 import { CustomField, FieldLabel } from "@measured/puck";
-import { resolveTranslatableRichText } from "../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../utils/resolveTranslatableString.tsx";
 import React from "react";
 import {
   TARGET_ORIGINS,
@@ -22,7 +22,7 @@ export function TranslatableRichTextField<
     render: ({ onChange, value }) => {
       const { i18n } = useTranslation();
       const locale = i18n.language;
-      const resolvedValue = resolveTranslatableRichText(value, locale);
+      const resolvedValue = value && resolveComponentData(value, locale);
       const fieldLabel = label ? `${pt(label)} (${locale})` : "";
 
       const [pendingMessageId, setPendingMessageId] = React.useState<
