@@ -263,6 +263,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.2
         version: 10.4.21(postcss@8.5.6)
+      awesome-phonenumber:
+        specifier: ^7.5.0
+        version: 7.5.0
       axe-core:
         specifier: ^4.10.3
         version: 4.10.3
@@ -290,9 +293,6 @@ importers:
       jsdom:
         specifier: ^24.1.1
         version: 24.1.3
-      libphonenumber-js:
-        specifier: ^1.11.19
-        version: 1.12.10
       lint-staged:
         specifier: ^15.2.7
         version: 15.5.2
@@ -4763,6 +4763,13 @@ packages:
         integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==,
       }
     engines: { node: ">= 0.4" }
+
+  awesome-phonenumber@7.5.0:
+    resolution:
+      {
+        integrity: sha512-qWQHCiMHMNVyUsICiCcaPJAYbGL4E4kGnIxnrwkS3YCwcPa8VtQCo11HGKY8AbUpXJloDG10c9Bulhw3xYkC/g==,
+      }
+    engines: { node: ">=18" }
 
   axe-core@3.5.6:
     resolution:
@@ -14468,6 +14475,8 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
+
+  awesome-phonenumber@7.5.0: {}
 
   axe-core@3.5.6: {}
 
