@@ -113,6 +113,11 @@ export const resolveEmbeddedFieldsRecursively = (
   document: any,
   locale?: string
 ): any => {
+  // If data is a string, resolve any embedded fields within it.
+  if (typeof data === "string") {
+    return resolveEmbeddedFieldsInString(data, document, locale);
+  }
+
   // If data is not an object (e.g., string, number, boolean), return it as is.
   if (typeof data !== "object" || data === null) {
     return data;
@@ -126,32 +131,38 @@ export const resolveEmbeddedFieldsRecursively = (
   }
 
   // First, check if the object itself is a translatable shape that needs resolution.
-  if (data.hasLocalizedValue === "true" && locale && data[locale]) {
-    // Handle TranslatableString
-    if (typeof data[locale] === "string") {
-      const resolvedString = resolveEmbeddedFieldsInString(
-        data[locale],
-        document,
-        locale
-      );
-      return { ...data, [locale]: resolvedString };
-    }
+  if (data.hasLocalizedValue === "true") {
+    if (locale && data[locale]) {
+      // Handle TranslatableString
+      if (typeof data[locale] === "string") {
+        const resolvedString = resolveEmbeddedFieldsInString(
+          data[locale],
+          document,
+          locale
+        );
+        return { ...data, [locale]: resolvedString };
+      }
 
-    // Handle TranslatableRichText
-    if (
-      typeof data[locale] === "object" &&
-      data[locale] !== null &&
-      typeof data[locale].html === "string"
-    ) {
-      const resolvedHtml = resolveEmbeddedFieldsInString(
-        data[locale].html,
-        document,
-        locale
-      );
-      return {
-        ...data,
-        [locale]: { ...data[locale], html: resolvedHtml },
-      };
+      // Handle TranslatableRichText
+      if (
+        typeof data[locale] === "object" &&
+        data[locale] !== null &&
+        typeof data[locale].html === "string"
+      ) {
+        const resolvedHtml = resolveEmbeddedFieldsInString(
+          data[locale].html,
+          document,
+          locale
+        );
+        return {
+          ...data,
+          [locale]: { ...data[locale], html: resolvedHtml },
+        };
+      }
+    } else {
+      // If it's a translatable string but missing the locale,
+      // we return an empty string.
+      return "";
     }
   }
 

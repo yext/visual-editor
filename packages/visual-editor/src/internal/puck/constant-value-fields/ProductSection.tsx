@@ -9,7 +9,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useMemo } from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 

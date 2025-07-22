@@ -8,7 +8,7 @@ import {
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
-import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";

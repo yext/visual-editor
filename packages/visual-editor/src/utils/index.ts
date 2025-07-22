@@ -3,11 +3,7 @@ export {
   resolveYextEntityField,
   resolveYextStructField,
 } from "./resolveYextEntityField.ts";
-export {
-  resolveTranslatableRichText,
-  resolveTranslatableString,
-  resolveComponentData,
-} from "./resolveTranslatableString.tsx";
+export { resolveComponentData } from "./resolveComponentData.tsx";
 export { themeResolver, type ThemeConfig } from "./themeResolver.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export {

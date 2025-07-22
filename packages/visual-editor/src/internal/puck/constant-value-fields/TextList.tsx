@@ -2,7 +2,7 @@ import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RichText, TranslatableRichText } from "../../../types/types.ts";
-import { getDisplayValue } from "../../../utils/resolveTranslatableString.tsx";
+import { getDisplayValue } from "../../../utils/resolveComponentData.tsx";
 import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useState } from "react";
 

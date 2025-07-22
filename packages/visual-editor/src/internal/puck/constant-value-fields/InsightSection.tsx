@@ -11,7 +11,7 @@ import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultInsight: InsightStruct = {

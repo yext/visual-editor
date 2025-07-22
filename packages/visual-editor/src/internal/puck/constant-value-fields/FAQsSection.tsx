@@ -6,7 +6,7 @@ import {
   usePlatformTranslation,
 } from "../../../utils/i18nPlatform.ts";
 import { useMemo } from "react";
-import { resolveComponentData } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
