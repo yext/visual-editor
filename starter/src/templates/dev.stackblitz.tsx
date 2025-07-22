@@ -8,7 +8,7 @@ import {
   TemplateProps,
   TemplateRenderProps,
 } from "@yext/pages";
-import { componentRegistry } from "../ve.config";
+import { componentRegistry } from "../ve.config.simple";
 import {
   applyTheme,
   Editor,
@@ -19,12 +19,11 @@ import {
   applyHeaderScript,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
-import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
 
 export const config = {
-  name: "dev-location",
+  name: "dev-location-stackblitz",
   stream: {
     $id: "dev-location-stream",
     filter: {
@@ -36,35 +35,11 @@ export const config = {
       "meta",
       "slug",
       "name",
-      "hours",
-      "dineInHours",
-      "driveThroughHours",
       "address",
       "yextDisplayCoordinate",
-      "c_productSection.sectionTitle",
-      "c_productSection.linkedProducts.name",
-      "c_productSection.linkedProducts.c_productPromo",
-      "c_productSection.linkedProducts.c_description",
-      "c_productSection.linkedProducts.c_coverPhoto",
-      "c_productSection.linkedProducts.c_productCTA",
-      "c_hero",
-      "c_faqSection.linkedFAQs.question",
-      "c_faqSection.linkedFAQs.answerV2",
-      "dm_directoryParents_defaultdirectory.slug",
-      "dm_directoryParents_defaultdirectory.name",
-      "dm_directoryChildren.name",
-      "dm_directoryChildren.address",
-      "dm_directoryChildren.slug",
-      "dm_directoryChildren.hours",
-      "dm_directoryChildren.timezone",
-      "additionalHoursText",
-      "mainPhone",
-      "emails",
-      "services",
-      "c_deliveryPromo",
     ],
     localization: {
-      locales: ["en", "zh_hans_hk", "fr-CA"],
+      locales: ["en"],
     },
   },
   additionalProperties: {
@@ -110,47 +85,34 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
           }
         })();
       </script>`,
-      // StackBlitz redirect script - runs immediately when page loads
-      `<script>
-        (function() {
-          // Check if we're in StackBlitz (webcontainer.io domain) or if STACKBLITZ_REDIRECT is set
-          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
-          var shouldRedirect = isStackBlitz || (typeof process !== 'undefined' && process.env && process.env.STACKBLITZ_REDIRECT === 'true');
-          
-          // Check if we're on the root path (not already on an entity page)
-          var isRootPath = window.location.pathname === '/' || window.location.pathname === '';
-          
-          if (shouldRedirect && isRootPath) {
-            // Redirect to a specific entity page for StackBlitz
-            var defaultEntityPath = '/dev-location/dm-city-arlington';
-            
-            // Use replace to avoid adding to browser history
-            window.location.replace(defaultEntityPath);
-          }
-        })();
-      </script>`,
     ].join("\n"),
   };
 };
 
-export const getPath: GetPath<TemplateProps> = ({ document }) => {
-  const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  return document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${
-        document.address.line1
-      }-${document.id.toString()}`
-    : `${localePath}${document.id.toString()}`;
+export const getPath: GetPath<TemplateProps> = () => {
+  return "dev-location";
 };
 
-const Dev: Template<TemplateRenderProps> = (props) => {
+const DevStackBlitz: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
   const { document } = props;
-  const entityFields = devTemplateStream.stream.schema
-    .fields as unknown as YextSchemaField[];
-  const displayNames = devTemplateStream.apiNamesToDisplayNames as Record<
-    string,
-    string
-  >;
+
+  // Simplified entity fields for StackBlitz
+  const entityFields = [
+    {
+      name: "name",
+      displayName: "Name",
+    },
+    {
+      name: "address",
+      displayName: "Address",
+    },
+  ] as YextSchemaField[];
+
+  const displayNames = {
+    name: "Name",
+    address: "Address",
+  };
 
   return (
     <div>
@@ -183,4 +145,4 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   );
 };
 
-export default Dev;
+export default DevStackBlitz;

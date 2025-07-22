@@ -35,6 +35,23 @@ export const getHeadConfig: GetHeadConfig<
     charset: "UTF-8",
     viewport: "width=device-width, initial-scale=1",
     other: [
+      // Prevent Vite client script loading in StackBlitz
+      `<script>
+        (function() {
+          // Check if we're in StackBlitz
+          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
+          
+          if (isStackBlitz) {
+            // Prevent Vite client script from loading
+            window.__VITE_CLIENT_SCRIPT__ = false;
+            
+            // Override any Vite client loading attempts
+            if (window.__vite_is_import) {
+              window.__vite_is_import = function() { return false; };
+            }
+          }
+        })();
+      </script>`,
       // StackBlitz redirect script - runs immediately when page loads
       `<script>
         (function() {
@@ -42,7 +59,7 @@ export const getHeadConfig: GetHeadConfig<
           var isStackBlitz = window.location.hostname.includes('webcontainer.io');
           
           if (isStackBlitz) {
-            // Redirect to entity page in StackBlitz
+            // Redirect to StackBlitz-optimized entity page
             window.location.replace('/dev-location/dm-city-arlington');
           }
         })();
