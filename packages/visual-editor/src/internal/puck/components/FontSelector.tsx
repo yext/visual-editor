@@ -3,7 +3,7 @@ import { FieldLabel } from "@measured/puck";
 import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import "../ui/puck.css";
 import { ChevronDown, Search } from "lucide-react";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type FontSelectorProps = {
   label: string;
