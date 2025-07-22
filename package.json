@@ -64,5 +64,10 @@
         "vite": "^5.3.5"
       }
     }
+  },
+  "stackblitz": {
+    "installDependencies": true,
+    "startCommand": "pnpm run dev:lightweight",
+    "installCommand": "pnpm install"
   }
 }
