@@ -30,11 +30,38 @@ export const getPath: GetPath<TemplateProps> = () => {
 export const getHeadConfig: GetHeadConfig<
   TemplateRenderProps
 > = (): HeadConfig => {
+  // Check if we're in StackBlitz
+  const isStackBlitz =
+    typeof window !== "undefined" &&
+    window.location?.hostname?.includes("webcontainer.io");
+
   return {
     title: "Visual Editor Starter",
     charset: "UTF-8",
     viewport: "width=device-width, initial-scale=1",
+    tags: isStackBlitz
+      ? [
+          // Meta refresh redirect for StackBlitz (backup method)
+          {
+            type: "meta",
+            attributes: {
+              "http-equiv": "refresh",
+              content: "0;url=/dev-location/dm-city-arlington",
+            },
+          },
+        ]
+      : [],
     other: [
+      // IMMEDIATE StackBlitz redirect - must be first!
+      `<script>
+        (function() {
+          // Check if we're in StackBlitz and redirect immediately
+          if (window.location.hostname.includes('webcontainer.io')) {
+            window.location.replace('/dev-location/dm-city-arlington');
+            return; // Stop execution
+          }
+        })();
+      </script>`,
       // Prevent Vite client script loading in StackBlitz
       `<script>
         (function() {
@@ -74,18 +101,6 @@ export const getHeadConfig: GetHeadConfig<
               get: function() { return null; },
               configurable: true
             });
-          }
-        })();
-      </script>`,
-      // StackBlitz redirect script - runs immediately when page loads
-      `<script>
-        (function() {
-          // Check if we're in StackBlitz
-          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
-          
-          if (isStackBlitz) {
-            // Redirect to entity page in StackBlitz
-            window.location.replace('/dev-location/dm-city-arlington');
           }
         })();
       </script>`,
