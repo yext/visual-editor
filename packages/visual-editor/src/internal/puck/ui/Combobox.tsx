@@ -11,7 +11,7 @@ import {
   CommandList,
 } from "./Command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export type ComboboxOption = {
   label: string;

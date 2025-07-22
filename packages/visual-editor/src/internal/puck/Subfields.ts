@@ -1,4 +1,4 @@
-import { msg } from "../../utils/i18nPlatform.ts";
+import { msg } from "../../utils/i18n/platform.ts";
 import { StructEntityFieldTypes } from "../../editor/YextStructFieldSelector.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { EntityFieldTypes } from "../utils/getFilteredEntityFields.ts";

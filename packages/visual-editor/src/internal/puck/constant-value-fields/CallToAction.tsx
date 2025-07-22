@@ -1,6 +1,6 @@
 import { AutoField, CustomField, Field } from "@measured/puck";
 import { ConstantFields } from "./ConstantField.tsx";
-import { msg, pt } from "../../../utils/i18nPlatform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";

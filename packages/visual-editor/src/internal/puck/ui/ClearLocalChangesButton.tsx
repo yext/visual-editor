@@ -12,7 +12,7 @@ import {
 } from "../ui/AlertDialog.tsx";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type ClearLocalChangesButtonProps = {
   disabled: boolean;

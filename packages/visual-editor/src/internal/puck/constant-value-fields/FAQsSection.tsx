@@ -4,7 +4,7 @@ import {
   msg,
   pt,
   usePlatformTranslation,
-} from "../../../utils/i18nPlatform.ts";
+} from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";

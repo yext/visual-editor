@@ -1,12 +1,13 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import { applyI18nFallbacks, defaultI18nFallbacks } from "./fallbacks";
 
 const NAMESPACE = "visual-editor";
 
 const i18nComponentsInstance = i18next.createInstance();
 
 const resources: Record<string, any> = {};
-const modules = import.meta.glob("../../locales/*/visual-editor.json", {
+const modules = import.meta.glob("../../../locales/*/visual-editor.json", {
   eager: true,
 });
 const translationRegex = new RegExp(`locales/([^/]+)/${NAMESPACE}\\.json$`);
@@ -21,32 +22,7 @@ for (const path in modules) {
   }
 }
 
-// these fallbacks occur BEFORE fallbackLng
-type Fallback = {
-  from: string;
-  to: string;
-};
-
-const fallbacks: Fallback[] = [
-  {
-    from: "zh-Hans",
-    to: "zh",
-  },
-  {
-    from: "zh-Hant",
-    to: "zh-TW",
-  },
-];
-
-fallbacks.forEach(({ from, to }: Fallback) => {
-  if (!!resources[from]) {
-    return;
-  }
-  if (!resources[to]) {
-    return;
-  }
-  resources[from] = resources[to];
-});
+applyI18nFallbacks(resources, defaultI18nFallbacks);
 
 i18nComponentsInstance.use(initReactI18next).init({
   fallbackLng: "en",

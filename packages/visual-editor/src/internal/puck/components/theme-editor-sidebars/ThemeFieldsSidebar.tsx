@@ -11,7 +11,7 @@ import {
   constructThemePuckValues,
 } from "../../../utils/constructThemePuckFields.ts";
 import { generateCssVariablesFromPuckFields } from "../../../utils/internalThemeResolver.ts";
-import { pt } from "../../../../utils/i18nPlatform.ts";
+import { pt } from "../../../../utils/i18n/platform.ts";
 
 type ThemeFieldsSidebarProps = {
   themeConfig: ThemeConfig;
