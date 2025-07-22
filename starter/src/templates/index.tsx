@@ -44,11 +44,36 @@ export const getHeadConfig: GetHeadConfig<
           if (isStackBlitz) {
             // Prevent Vite client script from loading
             window.__VITE_CLIENT_SCRIPT__ = false;
+            window.__VITE_IS_IMPORT__ = false;
+            window.__VITE_HMR__ = false;
             
             // Override any Vite client loading attempts
             if (window.__vite_is_import) {
               window.__vite_is_import = function() { return false; };
             }
+            
+            // Block WebSocket connections
+            var originalWebSocket = window.WebSocket;
+            window.WebSocket = function(url, protocols) {
+              // Block Vite HMR WebSocket connections
+              if (url && (url.includes('24678') || url.includes('vite') || url.includes('hmr'))) {
+                console.log('Blocked Vite WebSocket connection:', url);
+                return {
+                  readyState: 3, // CLOSED
+                  send: function() {},
+                  close: function() {},
+                  addEventListener: function() {},
+                  removeEventListener: function() {},
+                };
+              }
+              return new originalWebSocket(url, protocols);
+            };
+            
+            // Prevent automatic Vite client injection
+            Object.defineProperty(document, 'currentScript', {
+              get: function() { return null; },
+              configurable: true
+            });
           }
         })();
       </script>`,
