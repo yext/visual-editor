@@ -27,7 +27,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   const { title, description } = getPageMetadata(document);
-  const faviconUrl = document?._site?.favicon?.url;
+  const faviconUrl = document?._favicon;
 
   return {
     title: title,

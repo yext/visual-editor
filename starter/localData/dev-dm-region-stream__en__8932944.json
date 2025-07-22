@@ -3,6 +3,7 @@
     "entityPageSet": {},
     "name": "dev-location"
   },
+  "_favicon": "https://www.yext.com/favicon.ico",
   "_schema": {
     "@graph": [
       {
