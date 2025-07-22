@@ -84,8 +84,8 @@ export const getHeadConfig: GetHeadConfig<
           var isStackBlitz = window.location.hostname.includes('webcontainer.io');
           
           if (isStackBlitz) {
-            // Redirect to StackBlitz-optimized entity page
-            window.location.replace('/dev-location-stackblitz/dm-city-arlington');
+            // Redirect to entity page in StackBlitz
+            window.location.replace('/dev-location/dm-city-arlington');
           }
         })();
       </script>`,

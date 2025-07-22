@@ -147,7 +147,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
           
           if (shouldRedirect && isRootPath) {
             // Redirect to a specific entity page for StackBlitz
-            var defaultEntityPath = '/dev-location-stackblitz/dm-city-arlington';
+            var defaultEntityPath = '/dev-location/dm-city-arlington';
             
             // Use replace to avoid adding to browser history
             window.location.replace(defaultEntityPath);
