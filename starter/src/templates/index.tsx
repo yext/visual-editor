@@ -60,7 +60,7 @@ export const getHeadConfig: GetHeadConfig<
           
           if (isStackBlitz) {
             // Redirect to StackBlitz-optimized entity page
-            window.location.replace('/dev-location/dm-city-arlington');
+            window.location.replace('/dev-location-stackblitz/dm-city-arlington');
           }
         })();
       </script>`,

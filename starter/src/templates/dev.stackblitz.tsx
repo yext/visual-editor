@@ -25,7 +25,7 @@ import { SchemaWrapper } from "@yext/pages-components";
 export const config = {
   name: "dev-location-stackblitz",
   stream: {
-    $id: "dev-location-stream",
+    $id: "dev-location-stackblitz-stream",
     filter: {
       entityTypes: ["location"],
     },
@@ -90,7 +90,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
 };
 
 export const getPath: GetPath<TemplateProps> = () => {
-  return "dev-location";
+  return "dev-location-stackblitz";
 };
 
 const DevStackBlitz: Template<TemplateRenderProps> = (props) => {
