@@ -7,7 +7,7 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { getSubfieldsFromType } from "../internal/puck/Subfields.ts";
 import "./index.css";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { getFilteredEntityFields } from "../internal/utils/getFilteredEntityFields.ts";
 

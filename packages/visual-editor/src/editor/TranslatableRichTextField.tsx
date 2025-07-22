@@ -1,5 +1,5 @@
 import { TranslatableRichText, RichText } from "../types/types.ts";
-import { MsgString, pt } from "../utils/i18nPlatform.ts";
+import { MsgString, pt } from "../utils/i18n/platform.ts";
 import { CustomField, FieldLabel } from "@measured/puck";
 import { resolveTranslatableRichText } from "../utils/resolveTranslatableString.tsx";
 import React from "react";

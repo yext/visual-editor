@@ -13,12 +13,12 @@ import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { i18nComponentsInstance } from "../../../utils/i18nComponents.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
   pt,
-} from "../../../utils/i18nPlatform.ts";
+} from "../../../utils/i18n/platform.ts";
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;

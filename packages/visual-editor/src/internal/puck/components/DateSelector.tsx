@@ -1,6 +1,6 @@
 import { CustomField, FieldLabel } from "@measured/puck";
 import { Calendar } from "lucide-react";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export const DateSelector: CustomField<string | undefined> = {
   type: "custom",
