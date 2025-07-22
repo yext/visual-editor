@@ -75,17 +75,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
           var isStackBlitz = window.location.hostname.includes('webcontainer.io');
           
           if (isStackBlitz) {
-            // Prevent Vite client script from loading
-            window.__VITE_CLIENT_SCRIPT__ = false;
-            window.__VITE_IS_IMPORT__ = false;
-            window.__VITE_HMR__ = false;
-            
-            // Override any Vite client loading attempts
-            if (window.__vite_is_import) {
-              window.__vite_is_import = function() { return false; };
-            }
-            
-            // Block WebSocket connections
+            // Block WebSocket connections for Vite HMR
             var originalWebSocket = window.WebSocket;
             window.WebSocket = function(url, protocols) {
               // Block Vite HMR WebSocket connections
@@ -101,12 +91,6 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
               }
               return new originalWebSocket(url, protocols);
             };
-            
-            // Prevent automatic Vite client injection
-            Object.defineProperty(document, 'currentScript', {
-              get: function() { return null; },
-              configurable: true
-            });
           }
         })();
       </script>`,

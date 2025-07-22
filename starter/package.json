@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "cd .. && pnpm build && cd ./starter && pages dev --local --no-prod-url --noInit",
-    "dev:lightweight": "STACKBLITZ=true NODE_OPTIONS='--max-old-space-size=512' pages dev --local --no-prod-url --noInit",
+    "dev:stackblitz": "STACKBLITZ=true pages dev --local --no-prod-url --noInit",
     "prod": "pages prod",
     "build": "pages build",
     "components": "REGISTRY_URL=https://reliably-numerous-kit.pgsdemo.com/components npx shadcn add"
@@ -71,6 +71,6 @@
   },
   "stackblitz": {
     "installDependencies": false,
-    "startCommand": "pnpm install && pnpm run dev:lightweight"
+    "startCommand": "pnpm install && pnpm run dev:stackblitz"
   }
 }
