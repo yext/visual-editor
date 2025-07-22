@@ -18,4 +18,7 @@ export default {
   env: {
     STACKBLITZ: "true",
   },
+
+  installCommand: "pnpm install",
+  startCommand: "pnpm run dev:lightweight",
 };
