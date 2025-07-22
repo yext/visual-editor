@@ -70,8 +70,7 @@
     }
   },
   "stackblitz": {
-    "installDependencies": true,
-    "startCommand": "pnpm run dev:lightweight",
-    "installCommand": "pnpm install"
+    "installDependencies": false,
+    "startCommand": "pnpm install && pnpm run dev:lightweight"
   }
 }
