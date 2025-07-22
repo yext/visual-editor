@@ -516,9 +516,7 @@ function parseDocument(
   if (document?._pageset) {
     try {
       const pagesetJson = JSON.parse(document?._pageset);
-      contentEndpointId =
-        pagesetJson?.contentEndpointId ??
-        pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
+      contentEndpointId = pagesetJson?.config?.contentEndpointId;
     } catch (e) {
       console.error("Failed to parse pageset from document. err=", e);
     }
