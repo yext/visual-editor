@@ -3,7 +3,7 @@ import { Phone } from "lucide-react";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "../ui/puck.css";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export const PHONE_CONSTANT_CONFIG: CustomField<string | undefined> = {
   type: "custom",

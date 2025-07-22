@@ -3,7 +3,7 @@ import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 
 export const spacingOptions = [
   { label: "0", value: "0", px: "0" },

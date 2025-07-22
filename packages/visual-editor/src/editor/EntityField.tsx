@@ -6,7 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../internal/puck/ui/Tooltip.tsx";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 import React from "react";
 
 const MemoizedChildren = React.memo(function MemoizedChildren({

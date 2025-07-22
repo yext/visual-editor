@@ -1,7 +1,7 @@
 import { FaPhone } from "react-icons/fa";
 import { CTA, Body } from "../index.ts";
 import * as React from "react";
-import parsePhoneNumber from "libphonenumber-js";
+import { parsePhoneNumber } from "awesome-phonenumber";
 import { BackgroundStyle } from "@yext/visual-editor";
 
 export type PhoneAtomProps = {
@@ -59,11 +59,11 @@ export const formatPhoneNumber = (
   format: string = "domestic"
 ): string => {
   const parsedPhoneNumber = parsePhoneNumber(phoneNumberString);
-  if (!parsedPhoneNumber) {
+  if (!parsedPhoneNumber.valid || parsedPhoneNumber.number === undefined) {
     return phoneNumberString;
   }
 
   return format === "international"
-    ? parsedPhoneNumber.formatInternational()
-    : parsedPhoneNumber.formatNational();
+    ? parsedPhoneNumber.number.international
+    : parsedPhoneNumber.number.national;
 };

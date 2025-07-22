@@ -1,7 +1,7 @@
 import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
-import { msg } from "./i18nPlatform.ts";
+import { msg } from "./i18n/platform.ts";
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {

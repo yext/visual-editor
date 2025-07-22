@@ -6,7 +6,7 @@ import {
   ComboboxOption,
   ComboboxOptionGroup,
 } from "../internal/puck/ui/Combobox.tsx";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 import { Button } from "../internal/puck/ui/button.tsx";
 
 type BasicSelectorProps = {

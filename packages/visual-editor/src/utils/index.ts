@@ -1,3 +1,4 @@
+export * from "./i18n/index.ts";
 export { applyTheme } from "./applyTheme.ts";
 export {
   resolveYextEntityField,
@@ -42,11 +43,4 @@ export {
   migrate,
 } from "./migrate.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
-export { i18nComponentsInstance } from "./i18nComponents.ts";
-export {
-  i18nPlatformInstance,
-  usePlatformTranslation,
-  msg,
-  pt,
-} from "./i18nPlatform.ts";
 export { getLocationPath } from "./getLocationPath.ts";

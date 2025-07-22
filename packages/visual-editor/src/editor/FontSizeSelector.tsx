@@ -4,7 +4,7 @@ import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 
 export const fontSizeOptions = (includeLargeSizes = true) => {
   const fontSizeOptions = [
