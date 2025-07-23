@@ -67,14 +67,14 @@ export function resolveComponentData<T>(
 
   // Fully resolve the resulting value, converting any translatable
   // objects into their final string or React element form.
-  return fullyResolveValue(rawValue, locale);
+  return resolveTranslatableType(rawValue, locale);
 }
 
 /**
  * Recursively traverses a value and resolves any translatable types
  * (TranslatableString, TranslatableRichText) to their final form.
  */
-const fullyResolveValue = (
+const resolveTranslatableType = (
   value: any,
   locale: string
 ): any | string | React.ReactElement => {
@@ -98,12 +98,13 @@ const fullyResolveValue = (
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => fullyResolveValue(item, locale));
+    return value.map((item) => resolveTranslatableType(item, locale));
   }
 
+  // If it's an object, recursively resolve each property.
   const newValue: { [key: string]: any } = {};
   for (const key in value) {
-    newValue[key] = fullyResolveValue(value[key], locale);
+    newValue[key] = resolveTranslatableType(value[key], locale);
   }
   return newValue;
 };
@@ -171,24 +172,24 @@ function isRichText(value: unknown): value is RichText {
 }
 
 /**
- * Takes a TranslatableString and a locale and returns the value as a string
- * @param translatableString a TranslatableString
+ * Takes a TranslatableString or TranslatableRichText and a locale and returns the value as a string
+ * @param translatableText a TranslatableRichText
  * @param locale "en" or other locale value
  * @return string to be displayed in the editor input
  */
 export function getDisplayValue(
-  translatableString: TranslatableRichText,
+  translatableText: TranslatableString | TranslatableRichText,
   locale: string = "en"
 ): string {
-  if (typeof translatableString === "string") {
-    return translatableString;
+  if (typeof translatableText === "string") {
+    return translatableText;
   }
 
-  if (isRichText(translatableString)) {
-    return richTextToString(translatableString);
+  if (isRichText(translatableText)) {
+    return richTextToString(translatableText);
   }
 
-  const localizedValue = translatableString[locale];
+  const localizedValue = translatableText[locale];
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
