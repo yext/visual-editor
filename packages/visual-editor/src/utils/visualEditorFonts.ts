@@ -1,7 +1,7 @@
 import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "./applyTheme.ts";
 import { StyleSelectOption } from "./themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
-import { msg } from "./i18nPlatform.ts";
+import { msg } from "./i18n/platform.ts";
 import { ThemeData } from "../internal/types/themeData.ts";
 
 export type FontRegistry = Record<string, FontSpecification>;

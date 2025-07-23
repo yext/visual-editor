@@ -1,7 +1,7 @@
 import { CustomField } from "@measured/puck";
 import { ImageType } from "@yext/pages-components";
 import { ConstantFields } from "./ConstantField.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
   type: "custom",

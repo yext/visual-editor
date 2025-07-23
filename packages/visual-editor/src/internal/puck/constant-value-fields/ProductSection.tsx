@@ -8,7 +8,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { translatableCTAFields } from "./CallToAction.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useMemo } from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";

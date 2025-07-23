@@ -38,7 +38,7 @@ import {
 } from "../internal/puck/ui/Tooltip.tsx";
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";

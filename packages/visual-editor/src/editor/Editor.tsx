@@ -17,7 +17,7 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import { i18nPlatformInstance } from "../utils/i18nPlatform.ts";
+import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
 
 const devLogger = new DevLogger();
 
