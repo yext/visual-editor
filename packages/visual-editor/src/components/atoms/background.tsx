@@ -14,7 +14,7 @@ export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
   ({ className, background, as, children, ...props }, ref) => {
-    const document = useDocument();
+    const streamDocument = useDocument();
     const Component = as ?? "div";
     const selectedBackground = background ?? backgroundColors.background1.value;
     let publishedTheme: Record<string, string> | undefined;
@@ -22,7 +22,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
 
     // In the editor, we must get the colors from the CSS variables because
     // that is where they are updated. However, during page generation, we must
-    // we must get the colors from document.__.theme because the CSS variables do not exist.
+    // we must get the colors from streamDocument.__.theme because the CSS variables do not exist.
     // On the hydrated live page, either will work; this uses the CSS variables.
     if (
       typeof window !== "undefined" &&
@@ -32,9 +32,9 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
         "visual-editor-theme"
       ) as HTMLStyleElement;
       cssVariables = styleTag?.innerText ?? "";
-    } else if (document?.__?.theme) {
+    } else if (streamDocument?.__?.theme) {
       try {
-        publishedTheme = JSON.parse(document.__.theme) as Record<
+        publishedTheme = JSON.parse(streamDocument.__.theme) as Record<
           string,
           string
         >;

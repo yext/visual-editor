@@ -296,7 +296,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
   const { t } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const {
     logo,
     links,
@@ -313,7 +313,8 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryCtaVariant,
   } = primaryHeaderStyle;
   const { backgroundColor: secondaryBackgroundColor } = secondaryHeaderStyle;
-  const languageDropDownProps = parseDocumentForLanguageDropdown(document);
+  const languageDropDownProps =
+    parseDocumentForLanguageDropdown(streamDocument);
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -493,7 +494,7 @@ const HeaderLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const MAX_VISIBLE = 5;
   const isSecondary = type === "Secondary";
 
@@ -509,7 +510,11 @@ const HeaderLinks = ({
           : "headerFooterSecondaryLink"
       }
       eventName={`cta.${ctaType}.${index}`}
-      label={resolveTranslatableString(item.label, i18n.language, document)}
+      label={resolveTranslatableString(
+        item.label,
+        i18n.language,
+        streamDocument
+      )}
       linkType={item.linkType}
       link={item.link}
       className="justify-start w-full text-left"
@@ -591,7 +596,7 @@ const HeaderCtas = (props: {
   showSecondaryCTA: boolean;
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const {
     primaryCTA,
     secondaryCTA,
@@ -618,7 +623,7 @@ const HeaderCtas = (props: {
             label={resolveTranslatableString(
               primaryCTA?.label,
               i18n.language,
-              document
+              streamDocument
             )}
             link={primaryCTA.link}
             linkType={primaryCTA.linkType}
@@ -636,7 +641,7 @@ const HeaderCtas = (props: {
             label={resolveTranslatableString(
               secondaryCTA.label,
               i18n.language,
-              document
+              streamDocument
             )}
             link={secondaryCTA.link}
             linkType={secondaryCTA.linkType}

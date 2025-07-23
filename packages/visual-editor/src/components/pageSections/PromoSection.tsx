@@ -179,9 +179,9 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
-    document,
+    streamDocument,
     data?.promo,
     i18n.language
   );
@@ -198,7 +198,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     <PageSection
       background={styles.backgroundColor}
       className={themeManagerCn(
-        "flex flex-col md:flex-row md:gap-8",
+        "flex flex-col md:flex-row md:gap-16",
         styles.orientation === "right" && "md:flex-row-reverse"
       )}
     >
@@ -218,7 +218,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </div>
         </EntityField>
       )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
             displayName={pt("fields.title", "Title")}
@@ -230,7 +230,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
                 {resolveTranslatableString(
                   resolvedPromo?.title,
                   i18n.language,
-                  document
+                  streamDocument
                 )}
               </Heading>
             </div>
@@ -261,7 +261,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               label={resolveTranslatableString(
                 resolvedPromo?.cta.label,
                 i18n.language,
-                document
+                streamDocument
               )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}

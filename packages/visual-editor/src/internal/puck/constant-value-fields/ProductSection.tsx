@@ -61,7 +61,7 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
 
 const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -107,7 +107,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       const translation = resolveTranslatableString(
         item.name,
         i18n.language,
-        document
+        streamDocument
       );
       if (translation) {
         return translation;

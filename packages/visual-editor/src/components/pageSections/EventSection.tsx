@@ -185,7 +185,7 @@ const EventCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   return (
     <Background
       background={cardStyles.backgroundColor}
@@ -215,7 +215,11 @@ const EventCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(event.title, i18n.language, document)}
+            {resolveTranslatableString(
+              event.title,
+              i18n.language,
+              streamDocument
+            )}
           </Heading>
         )}
         {event.dateTime && (
@@ -232,7 +236,7 @@ const EventCard = ({
             label={resolveTranslatableString(
               event.cta.label,
               i18n.language,
-              document
+              streamDocument
             )}
             link={event.cta.link}
             linkType={event.cta.linkType}
@@ -248,10 +252,14 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const { data, styles } = props;
-  const document = useDocument();
-  const resolvedEvents = resolveYextEntityField(document, data.events, locale);
+  const streamDocument = useDocument();
+  const resolvedEvents = resolveYextEntityField(
+    streamDocument,
+    data.events,
+    locale
+  );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading, locale),
+    resolveYextEntityField(streamDocument, data.heading, locale),
     i18n.language
   );
 

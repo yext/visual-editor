@@ -162,7 +162,7 @@ const CommandItemWithResolvedValue = ({
   onSelect: () => void;
   isOpen: boolean;
 }) => {
-  const document = useDocument();
+  const streamDocument = useDocument();
   const [resolvedValue, setResolvedValue] = React.useState<
     string | undefined
   >();
@@ -175,12 +175,12 @@ const CommandItemWithResolvedValue = ({
         constantValue: undefined,
         constantValueEnabled: false,
       };
-      const resolved = resolveYextEntityField(document, fieldToResolve);
+      const resolved = resolveYextEntityField(streamDocument, fieldToResolve);
       const finalValue =
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
-  }, [isOpen, option.value, document, resolvedValue]);
+  }, [isOpen, option.value, streamDocument, resolvedValue]);
 
   return (
     <CommandItem

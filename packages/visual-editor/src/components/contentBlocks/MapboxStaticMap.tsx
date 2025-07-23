@@ -9,6 +9,7 @@ import {
   YextField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { StreamDocument } from "../../utils/applyTheme";
 
 type Size = { width: number; height: number };
 
@@ -35,10 +36,10 @@ const MIN_HEIGHT = 300;
 const MIN_WIDTH = 100;
 const MAX_SIZE = 1280;
 
-const getPrimaryColor = (document: any) => {
-  if (document?.__?.theme) {
+const getPrimaryColor = (streamDocument: StreamDocument) => {
+  if (streamDocument?.__?.theme) {
     return (
-      JSON.parse(document?.__?.theme)
+      JSON.parse(streamDocument?.__?.theme)
         ?.["--colors-palette-primary"]?.trim()
         ?.replace("#", "") ?? "000000"
     );
@@ -134,12 +135,12 @@ export const MapboxStaticMapComponent = ({
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument<any>();
+  const streamDocument = useDocument<any>();
 
   const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
   const coordinate = resolveYextEntityField<Coordinate>(
-    document,
+    streamDocument,
     coordinateField,
     i18n.language
   );
@@ -152,7 +153,7 @@ export const MapboxStaticMapComponent = ({
     return <></>;
   }
 
-  const marker = `pin-l+${getPrimaryColor(document)}(${coordinate.longitude},${coordinate.latitude})`;
+  const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
   return (
     <EntityField

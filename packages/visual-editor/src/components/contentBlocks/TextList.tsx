@@ -29,9 +29,9 @@ const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   let resolvedTextList = resolveYextEntityField(
-    document,
+    streamDocument,
     textListField,
     i18n.language
   );
@@ -57,7 +57,7 @@ const TextListComponent: React.FC<TextListProps> = ({
         <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
           {resolvedTextList.map((text, index) => (
             <li key={index} className="mb-2">
-              {resolveTranslatableString(text, i18n.language, document)}
+              {resolveTranslatableString(text, i18n.language, streamDocument)}
             </li>
           ))}
         </ul>
