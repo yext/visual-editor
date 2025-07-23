@@ -1,0 +1,31 @@
+/* Conditional padding rules for GridSection atoms */
+
+/* Apply standard padding to all atoms that are not the first child in a column */
+.grid-column-dropzone > *:not(:first-child) {
+  padding-top: 1rem; /* pt-4 */
+}
+
+/* Apply extra padding to HeadingText components that are not the first child */
+.grid-column-dropzone > *:not(:first-child)[data-component-type="HeadingText"] {
+  padding-top: 2rem; /* pt-8 */
+}
+
+/* Alternative approach using class-based targeting for HeadingText */
+.grid-column-dropzone > *:not(:first-child).heading-text-component {
+  padding-top: 2rem; /* pt-8 */
+}
+
+/* Target HeadingText components by their rendered HTML structure */
+.grid-column-dropzone > *:not(:first-child) h1,
+.grid-column-dropzone > *:not(:first-child) h2,
+.grid-column-dropzone > *:not(:first-child) h3,
+.grid-column-dropzone > *:not(:first-child) h4,
+.grid-column-dropzone > *:not(:first-child) h5,
+.grid-column-dropzone > *:not(:first-child) h6 {
+  padding-top: 2rem; /* pt-8 */
+}
+
+/* Ensure the first atom in each column has no top padding */
+.grid-column-dropzone > *:first-child {
+  padding-top: 0;
+}

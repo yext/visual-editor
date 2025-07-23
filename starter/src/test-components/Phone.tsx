@@ -1,0 +1,80 @@
+import { useTranslation } from "react-i18next";
+import * as React from "react";
+import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  useDocument,
+  resolveYextEntityField,
+  EntityField,
+  YextEntityField,
+  PhoneAtom,
+  YextField,
+} from "@yext/visual-editor";
+
+export interface PhoneProps {
+  phone: YextEntityField<string>;
+  format?: "domestic" | "international";
+  includeHyperlink: boolean;
+}
+
+const PhoneFields: Fields<PhoneProps> = {
+  phone: YextField("Phone Number", {
+    type: "entityField",
+    filter: {
+      types: ["type.phone"],
+    },
+  }),
+  format: YextField("Format", {
+    type: "radio",
+    options: "PHONE_OPTIONS",
+  }),
+  includeHyperlink: YextField("Include Hyperlink", {
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  }),
+};
+
+const PhoneComponent: React.FC<PhoneProps> = ({
+  phone,
+  format,
+  includeHyperlink,
+}) => {
+  const { t } = useTranslation();
+  const document = useDocument();
+  const resolvedPhone = resolveYextEntityField<string>(document, phone);
+
+  if (!resolvedPhone) {
+    return;
+  }
+
+  return (
+    <EntityField
+      displayName={t("phone", "Phone")}
+      fieldId={phone.field}
+      constantValueEnabled={phone.constantValueEnabled}
+    >
+      <PhoneAtom
+        phoneNumber={resolvedPhone}
+        format={format}
+        includeHyperlink={includeHyperlink}
+        includeIcon={true}
+      />
+    </EntityField>
+  );
+};
+
+export const Phone: ComponentConfig<PhoneProps> = {
+  label: "Phone",
+  fields: PhoneFields,
+  defaultProps: {
+    phone: {
+      field: "mainPhone",
+      constantValue: "+1-555-123-4567",
+      constantValueEnabled: true,
+    },
+    includeHyperlink: true,
+  },
+  render: (props) => <PhoneComponent {...props} />,
+};
