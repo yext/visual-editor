@@ -8,7 +8,6 @@ import {
 import React from "react";
 import {
   resolveEmbeddedFieldsRecursively,
-  resolveEmbeddedFieldsInString,
   resolveYextEntityField,
 } from "./resolveYextEntityField";
 
@@ -107,60 +106,6 @@ const resolveTranslatableType = (
     newValue[key] = resolveTranslatableType(value[key], locale);
   }
   return newValue;
-};
-
-/**
- * Converts a type TranslatableString to a string
- * @param translatableString
- * @param locale
- * @param document
- */
-export const resolveTranslatableString = (
-  translatableString: TranslatableString = "",
-  locale: string = "en",
-  document?: any
-): string => {
-  let resolvedString;
-  if (typeof translatableString === "object") {
-    if (locale in translatableString) {
-      resolvedString = translatableString[locale];
-    } else {
-      return "";
-    }
-  } else {
-    resolvedString = translatableString;
-  }
-
-  // If the document is provided, resolve any embedded fields in the string.
-  return document
-    ? resolveEmbeddedFieldsInString(resolvedString, document, locale)
-    : resolvedString;
-};
-
-/**
- * Converts a type TranslatableRichText to string or RTF Element
- * @param translatableRichText
- * @param locale
- */
-export const resolveTranslatableRichText = (
-  translatableRichText: TranslatableRichText = "",
-  locale: string = "en"
-): string | React.ReactElement => {
-  try {
-    let value = translatableRichText;
-
-    if (
-      typeof translatableRichText !== "string" &&
-      !isRichText(translatableRichText)
-    ) {
-      value = translatableRichText[locale];
-    }
-
-    return toStringOrElement(value);
-  } catch (error) {
-    console.warn("Error in resolveTranslatableRichText:", error);
-    return "";
-  }
 };
 
 function isRichText(value: unknown): value is RichText {
