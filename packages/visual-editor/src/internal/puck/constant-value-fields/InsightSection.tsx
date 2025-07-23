@@ -60,7 +60,7 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
 
 const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -107,7 +107,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
       const translation = resolveTranslatableString(
         item.name,
         i18n.language,
-        document
+        streamDocument
       );
       if (translation) {
         return translation;

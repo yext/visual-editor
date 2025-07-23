@@ -103,9 +103,13 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedText = resolveTranslatableRichText(
-    resolveYextEntityField<TranslatableRichText>(document, data.text, locale),
+    resolveYextEntityField<TranslatableRichText>(
+      streamDocument,
+      data.text,
+      locale
+    ),
     locale
   );
 

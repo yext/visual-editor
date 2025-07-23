@@ -65,9 +65,9 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   width,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedImage = resolveYextEntityField<ImageProps["image"]>(
-    document,
+    streamDocument,
     imageField,
     i18n.language
   );

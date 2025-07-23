@@ -179,9 +179,9 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
-    document,
+    streamDocument,
     data?.promo,
     i18n.language
   );
@@ -230,7 +230,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
                 {resolveTranslatableString(
                   resolvedPromo?.title,
                   i18n.language,
-                  document
+                  streamDocument
                 )}
               </Heading>
             </div>
@@ -261,7 +261,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               label={resolveTranslatableString(
                 resolvedPromo?.cta.label,
                 i18n.language,
-                document
+                streamDocument
               )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}

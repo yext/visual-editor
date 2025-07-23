@@ -63,10 +63,14 @@ const VisualEditorHoursTable = ({
   alignment,
 }: HoursTableProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  const hours = resolveYextEntityField(document, hoursField, i18n.language);
+  const streamDocument = useDocument();
+  const hours = resolveYextEntityField(
+    streamDocument,
+    hoursField,
+    i18n.language
+  );
 
-  const { additionalHoursText } = document as {
+  const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 

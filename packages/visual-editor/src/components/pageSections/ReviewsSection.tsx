@@ -50,17 +50,18 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
-  const document: any = useDocument();
-  const apiKey = document?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+  const streamDocument = useDocument();
+  const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
     );
     return <></>;
   }
-  const businessId: number = Number(document?.businessId);
-  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
-  const entityId = document?.uid;
+  const businessId: number = Number(streamDocument?.businessId);
+  const contentDeliveryAPIDomain =
+    streamDocument?._yext?.contentDeliveryAPIDomain;
+  const entityId = streamDocument?.uid;
   const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
   const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
     {}
@@ -99,7 +100,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
     }
   }, [reviews, currentPageNumber]);
 
-  const { averageRating, reviewCount } = getAggregateRating(document);
+  const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
     return <></>;
@@ -224,7 +225,7 @@ interface AuthorWithDateProps {
 }
 
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
-  const document: any = useDocument();
+  const streamDocument = useDocument();
   return (
     <div className="flex flex-col gap-2">
       <Body variant={"lg"} className="font-bold">
@@ -235,7 +236,7 @@ const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
         option={TimestampOption.DATE}
         hideTimeZone={true}
         timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
-        locale={document?.locale}
+        locale={streamDocument?.locale}
         dateFormatOverride={DATE_FORMAT}
       />
     </div>

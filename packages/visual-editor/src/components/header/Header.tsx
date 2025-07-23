@@ -97,9 +97,9 @@ const HeaderComponent: React.FC<HeaderProps> = ({
   logoWidth,
   enableLanguageSelector,
 }) => {
-  const document: any = useDocument();
-  const links = document._site?.header?.links ?? [];
-  const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
+  const streamDocument: any = useDocument();
+  const links = streamDocument._site?.header?.links ?? [];
+  const logo = streamDocument._site?.logo ?? PLACEHOLDER_IMAGE;
 
   return (
     <HeaderLayout
@@ -107,7 +107,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({
       logo={logo}
       logoWidth={logoWidth}
       enableLanguageSelector={enableLanguageSelector}
-      languageDropDownProps={parseDocumentForLanguageDropdown(document)}
+      languageDropDownProps={parseDocumentForLanguageDropdown(streamDocument)}
     />
   );
 };

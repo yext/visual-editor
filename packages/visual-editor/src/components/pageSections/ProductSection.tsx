@@ -182,7 +182,7 @@ const ProductCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -209,7 +209,11 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {resolveTranslatableString(product.name, i18n.language, document)}
+              {resolveTranslatableString(
+                product.name,
+                i18n.language,
+                streamDocument
+              )}
             </Heading>
           )}
           {product.category && (
@@ -221,7 +225,7 @@ const ProductCard = ({
                 {resolveTranslatableString(
                   product.category,
                   i18n.language,
-                  document
+                  streamDocument
                 )}
               </Body>
             </Background>
@@ -235,7 +239,7 @@ const ProductCard = ({
             label={resolveTranslatableString(
               product.cta.label,
               i18n.language,
-              document
+              streamDocument
             )}
             link={product.cta.link}
             linkType={product.cta.linkType}
@@ -250,14 +254,14 @@ const ProductCard = ({
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedProducts = resolveYextEntityField(
-    document,
+    streamDocument,
     data.products,
     locale
   );
   const resolvedHeading = resolveTranslatableRichText(
-    resolveYextEntityField(document, data.heading, locale),
+    resolveYextEntityField(streamDocument, data.heading, locale),
     i18n.language
   );
 

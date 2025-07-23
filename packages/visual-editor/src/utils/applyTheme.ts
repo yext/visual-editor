@@ -10,13 +10,14 @@ import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
 import { googleFontLinkTags } from "./visualEditorFonts";
 
-export type Document = {
+export type StreamDocument = {
   [key: string]: any;
   __?: {
     layout?: string;
     theme?: string;
     codeTemplate?: string;
     name?: string;
+    visualEditorConfig?: string;
   };
 };
 
@@ -25,7 +26,7 @@ export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
 const devLogger = new DevLogger();
 
 export const applyTheme = (
-  document: Document,
+  document: StreamDocument,
   themeConfig: ThemeConfig,
   base?: string
 ): string => {

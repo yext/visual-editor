@@ -42,9 +42,9 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   listLength,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   let resolvedEmailList = resolveYextEntityField(
-    document,
+    streamDocument,
     emailListField,
     i18n.language
   );

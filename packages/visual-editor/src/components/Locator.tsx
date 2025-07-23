@@ -130,22 +130,22 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 };
 
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
-  const document: any = useDocument();
+  const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
-      document,
+      streamDocument,
       props.experienceKeyEnvVar
     );
     if (searchHeadlessConfig === undefined) {
       return { searchAnalyticsConfig: undefined, searcher: undefined };
     }
 
-    const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
+    const searchAnalyticsConfig = createSearchAnalyticsConfig(streamDocument);
     return {
       searchAnalyticsConfig,
       searcher: provideHeadless(searchHeadlessConfig),
     };
-  }, [document.id, document.locale]);
+  }, [streamDocument.id, streamDocument.locale]);
 
   if (searcher === undefined || searchAnalyticsConfig === undefined) {
     console.warn(
