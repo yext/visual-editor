@@ -198,7 +198,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     <PageSection
       background={styles.backgroundColor}
       className={themeManagerCn(
-        "flex flex-col md:flex-row md:gap-8",
+        "flex flex-col md:flex-row md:gap-16",
         styles.orientation === "right" && "md:flex-row-reverse"
       )}
     >
@@ -218,7 +218,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </div>
         </EntityField>
       )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 md:px-16 pt-4 md:pt-0 w-full break-words">
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
             displayName={pt("fields.title", "Title")}
