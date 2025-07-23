@@ -35,9 +35,9 @@ const GetDirectionsComponent = ({
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
-    document,
+    streamDocument,
     coordinateField,
     i18n.language
   );

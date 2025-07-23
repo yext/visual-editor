@@ -73,13 +73,13 @@ const SectionContainerComponent = (
   props: WithId<WithPuckProps<SectionContainerProps>>
 ) => {
   const { background, sectionHeading } = props;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
   const resolvedHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
+      streamDocument,
       sectionHeading.text,
       locale
     ),
