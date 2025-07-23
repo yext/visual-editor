@@ -1,17 +1,17 @@
 import { describe, it, expect } from "vitest";
-import { applyTheme, Document } from "./applyTheme.ts";
+import { applyTheme, StreamDocument } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { defaultGoogleFontsLinkTags } from "./font_registry.js";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
-    const document: Document = {
+    const streamDocument: StreamDocument = {
       siteId: 123,
       __: {
         theme: JSON.stringify({ "--colors-palette-text": "red" }),
       },
     };
-    const result = applyTheme(document, themeConfig);
+    const result = applyTheme(streamDocument, themeConfig);
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
@@ -25,7 +25,7 @@ describe("buildCssOverridesStyle", () => {
   });
 
   it("should generate correct CSS with multiple overrides in c_theme", () => {
-    const document: Document = {
+    const streamDocument: StreamDocument = {
       siteId: 123,
       __: {
         theme: JSON.stringify({
@@ -36,7 +36,7 @@ describe("buildCssOverridesStyle", () => {
       },
     };
 
-    const result = applyTheme(document, themeConfig);
+    const result = applyTheme(streamDocument, themeConfig);
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
@@ -50,7 +50,7 @@ describe("buildCssOverridesStyle", () => {
   });
 
   it("should return default values for an empty c_theme field", () => {
-    const result = applyTheme({} as Document, themeConfig);
+    const result = applyTheme({} as StreamDocument, themeConfig);
 
     expect(result).toBe(
       defaultGoogleFontsLinkTags +
@@ -65,7 +65,7 @@ describe("buildCssOverridesStyle", () => {
   });
 
   it("should return font style tag only for fonts in theme", () => {
-    const document: Document = {
+    const streamDocument: StreamDocument = {
       siteId: 123,
       __: {
         theme: JSON.stringify({
@@ -74,7 +74,7 @@ describe("buildCssOverridesStyle", () => {
       },
     };
 
-    const result = applyTheme(document, themeConfig);
+    const result = applyTheme(streamDocument, themeConfig);
 
     expect(result).toBe(
       '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
@@ -92,18 +92,18 @@ describe("buildCssOverridesStyle", () => {
 
   it("should return the base string unmodified when themeConfig is empty", () => {
     const base = "<style>div{color:blue}</style>";
-    const result = applyTheme({} as Document, {}, base);
+    const result = applyTheme({} as StreamDocument, {}, base);
 
     expect(result).toBe(base);
   });
 
   it("should ignore saved values that are no longer in the themeConfig", () => {
-    const document: Document = {
+    const streamDocument: StreamDocument = {
       __: {
         theme: JSON.stringify({ "--absdag": "red" }),
       },
     };
-    const result = applyTheme(document, themeConfig);
+    const result = applyTheme(streamDocument, themeConfig);
 
     expect(result).toBe(
       '<style id="visual-editor-theme" type="text/css">.components{' +
@@ -117,12 +117,12 @@ describe("buildCssOverridesStyle", () => {
   });
 
   it("should generate contrasting palette colors", () => {
-    const document: Document = {
+    const streamDocument: StreamDocument = {
       __: {
         theme: JSON.stringify({ "--colors-palette-primary": "#7ED321" }),
       },
     };
-    const result = applyTheme(document, {
+    const result = applyTheme(streamDocument, {
       palette: {
         label: "Colors",
         styles: {

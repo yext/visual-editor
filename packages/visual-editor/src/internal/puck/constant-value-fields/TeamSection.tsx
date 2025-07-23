@@ -54,7 +54,7 @@ export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
 
 const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -98,7 +98,7 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
       const translation = resolveTranslatableString(
         item.name,
         i18n.language,
-        document
+        streamDocument
       );
       if (translation) {
         return translation;
