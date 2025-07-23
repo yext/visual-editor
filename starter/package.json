@@ -68,9 +68,5 @@
     "vite": {
       "rollup": "npm:@rollup/wasm-node"
     }
-  },
-  "stackblitz": {
-    "installDependencies": false,
-    "startCommand": "pnpm install && pnpm run dev:stackblitz"
   }
 }
