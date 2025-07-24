@@ -102,7 +102,10 @@ export const InternalLayoutEditor = ({
             saveLayoutSaveState({
               payload: {
                 hash: histories[index].id,
-                history: JSON.stringify(histories[index].state),
+                history: JSON.stringify({
+                  data: histories[index].state.data,
+                  ui: histories[index].state.ui,
+                }),
               },
             });
           }
