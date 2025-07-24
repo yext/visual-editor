@@ -554,6 +554,40 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## StaticMapSection
+
+The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox. Avaliable on Location templates.
+
+![Preview of the StaticMapSection component](../components/testing/screenshots/StaticMapSection/%5Bdesktop%5D%20default%20props%20with%20coordinate%20-%20no%20api%20key.png)
+
+### Props
+
+#### Data Props
+
+This object contains the configuration needed to generate the map.
+
+| Prop   | Type            | Description                                                        | Default |
+| :----- | :-------------- | :----------------------------------------------------------------- | :------ |
+| `data` | `StaticMapData` | This object contains the configuration needed to generate the map. |         |
+
+#### Styles Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop                     | Type              | Description                          | Default              |
+| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 1` |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
 ## TeamSection
 
 The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card. Avaliable on Location templates.

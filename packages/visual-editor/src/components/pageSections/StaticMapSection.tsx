@@ -1,5 +1,6 @@
 import {
   backgroundColors,
+  BackgroundStyle,
   msg,
   PageSection,
   VisibilityWrapper,
@@ -16,6 +17,14 @@ export interface StaticMapData {
   apiKey: string;
 }
 
+export interface StaticMapStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+}
+
 export interface StaticMapSectionProps {
   /**
    * This object contains the configuration needed to generate the map.
@@ -28,6 +37,12 @@ export interface StaticMapSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Styles Props
+   */
+  styles: StaticMapStyles;
 }
 
 const staticMapSectionFields: Fields<StaticMapSectionProps> = {
@@ -49,12 +64,24 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
       ],
     }
   ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+    },
+  }),
 };
 
-export const StaticMapSectionWrapper = ({ data }: StaticMapSectionProps) => {
+const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
   return (
     <PageSection
-      background={backgroundColors.background1.value}
+      background={styles?.backgroundColor}
       className={`flex items-center`}
     >
       <MapboxStaticMapComponent
@@ -83,6 +110,9 @@ export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
       apiKey: "",
     },
     liveVisibility: true,
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+    },
   },
   render: (props) => (
     <VisibilityWrapper
