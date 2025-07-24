@@ -246,14 +246,14 @@ const InsightCard = ({
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedInsights = resolveYextEntityField(
-    document,
+    streamDocument,
     data.insights,
     locale
   );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading, locale),
+    resolveYextEntityField(streamDocument, data.heading, locale),
     i18n.language
   );
 

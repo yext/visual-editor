@@ -268,10 +268,10 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument() as any;
+  const streamDocument = useDocument();
   const resolvedBusinessName = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
+      streamDocument,
       data?.businessName,
       locale
     ),
@@ -279,24 +279,28 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   );
   const resolvedLocalGeoModifier = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
+      streamDocument,
       data?.localGeoModifier,
       locale
     ),
     locale
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
-    document,
+    streamDocument,
     data?.hours,
     locale
   );
-  const resolvedHero = resolveYextStructField(document, data?.hero, locale);
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    locale
+  );
 
-  const { timezone } = document as {
+  const { timezone } = streamDocument as {
     timezone: string;
   };
 
-  const { averageRating, reviewCount } = getAggregateRating(document);
+  const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   return (
     <PageSection

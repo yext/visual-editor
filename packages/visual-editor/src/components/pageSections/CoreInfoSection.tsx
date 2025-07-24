@@ -157,10 +157,12 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             },
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
+              const streamDocument = useDocument();
+
               const translation = resolveTranslatableString(
                 item.label,
                 i18n.language,
-                document
+                streamDocument
               );
               if (translation) {
                 return translation;
@@ -337,52 +339,52 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const addressHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
+      streamDocument,
       data.info.headingText,
       locale
     ),
     locale
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
-    document,
+    streamDocument,
     data.info.address,
     locale
   );
   const resolvedEmails = resolveYextEntityField<string[]>(
-    document,
+    streamDocument,
     data.info.emails,
     locale
   );
   const hoursHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
+      streamDocument,
       data.hours.headingText,
       locale
     ),
     i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
-    document,
+    streamDocument,
     data.hours.hours,
     locale
   );
   const servicesHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
+      streamDocument,
       data.services.headingText,
       locale
     ),
     i18n.language
   );
   const servicesList = resolveYextEntityField<TranslatableString[]>(
-    document,
+    streamDocument,
     data.services.servicesList,
     locale
   )?.map((translatableString: TranslatableString) =>
-    resolveTranslatableString(translatableString, i18n.language, document)
+    resolveTranslatableString(translatableString, i18n.language, streamDocument)
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
@@ -390,7 +392,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     undefined,
     { provider: "google" }
   );
-  const { additionalHoursText } = document as {
+  const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 
@@ -462,7 +464,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item, idx) => {
               const resolvedNumber = resolveYextEntityField<string>(
-                document,
+                streamDocument,
                 item.number,
                 locale
               );
@@ -473,7 +475,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               const phoneLabel = resolveTranslatableString(
                 item.label,
                 i18n.language,
-                document
+                streamDocument
               );
 
               return (
