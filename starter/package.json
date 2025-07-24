@@ -33,7 +33,7 @@
     "@types/node": "^20.12.3",
     "@yext/search-headless-react": "^2.5.3",
     "@yext/search-ui-react": "^1.9.0",
-    "@yext/visual-editor": "*",
+    "@yext/visual-editor": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.4.0",
     "clsx": "^2.1.1",
