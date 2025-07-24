@@ -51,7 +51,6 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     React.useState<boolean>(false);
   const { i18n } = usePlatformTranslation();
   const getPuck = useGetPuck();
-
   const histories = usePuck((s) => s.history.histories);
   const index = usePuck((s) => s.history.index);
   const hasFuture = usePuck((s) => s.history.hasFuture);

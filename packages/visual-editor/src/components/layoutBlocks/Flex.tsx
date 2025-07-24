@@ -9,7 +9,6 @@ import {
   YextField,
   VisibilityWrapper,
   LayoutBlockCategory,
-  msg,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
@@ -107,7 +106,7 @@ const flexContainerFields: Fields<FlexProps> = {
 };
 
 export const Flex: ComponentConfig<FlexProps> = {
-  label: msg("components.flex", "Flex"),
+  label: "Flex",
   fields: flexContainerFields,
   defaultProps: {
     direction: "flex-row",
