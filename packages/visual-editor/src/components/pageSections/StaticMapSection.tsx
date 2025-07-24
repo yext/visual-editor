@@ -37,6 +37,11 @@ export interface StaticMapSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Styles Props
+   */
   styles: StaticMapStyles;
 }
 
@@ -73,10 +78,7 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
   }),
 };
 
-export const StaticMapSectionWrapper = ({
-  data,
-  styles,
-}: StaticMapSectionProps) => {
+const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
   return (
     <PageSection
       background={styles?.backgroundColor}
