@@ -9,7 +9,7 @@ import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultPerson: PersonStruct = {
@@ -95,11 +95,9 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
     },
     defaultItemProps: defaultPerson,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(
-        item.name,
-        i18n.language,
-        streamDocument
-      );
+      const translation =
+        item?.name &&
+        resolveComponentData(item.name, i18n.language, streamDocument);
       if (translation) {
         return translation;
       }

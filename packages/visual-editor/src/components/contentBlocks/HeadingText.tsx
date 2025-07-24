@@ -2,14 +2,13 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   useDocument,
-  resolveYextEntityField,
   EntityField,
   YextEntityField,
   Heading,
   HeadingProps,
   YextField,
   TranslatableString,
-  resolveTranslatableString,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -31,10 +30,7 @@ const HeadingTextWrapper = React.forwardRef<
       constantValueEnabled={text.constantValueEnabled}
     >
       <Heading ref={ref} {...headingProps}>
-        {resolveTranslatableString(
-          resolveYextEntityField(streamDocument, text, i18n.language),
-          i18n.language
-        )}
+        {resolveComponentData(text, i18n.language, streamDocument)}
       </Heading>
     </EntityField>
   );

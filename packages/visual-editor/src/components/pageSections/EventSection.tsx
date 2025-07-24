@@ -8,7 +8,6 @@ import {
   YextField,
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   Heading,
   EntityField,
@@ -21,14 +20,13 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  resolveTranslatableRichText,
-  resolveTranslatableString,
   TranslatableString,
   msg,
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
   CTAProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -215,11 +213,7 @@ const EventCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(
-              event.title,
-              i18n.language,
-              streamDocument
-            )}
+            {resolveComponentData(event.title, i18n.language, streamDocument)}
           </Heading>
         )}
         {event.dateTime && (
@@ -229,11 +223,12 @@ const EventCard = ({
             hideTimeZone={true}
           />
         )}
-        {resolveTranslatableRichText(event.description, i18n.language)}
+        {event.description &&
+          resolveComponentData(event.description, i18n.language)}
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={resolveTranslatableString(
+            label={resolveComponentData(
               event.cta.label,
               i18n.language,
               streamDocument
@@ -253,14 +248,15 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
   const locale = i18n.language;
   const { data, styles } = props;
   const streamDocument = useDocument();
-  const resolvedEvents = resolveYextEntityField(
-    streamDocument,
+  const resolvedEvents = resolveComponentData(
     data.events,
-    locale
+    locale,
+    streamDocument
   );
-  const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(streamDocument, data.heading, locale),
-    i18n.language
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
   );
 
   const justifyClass = styles?.heading?.align

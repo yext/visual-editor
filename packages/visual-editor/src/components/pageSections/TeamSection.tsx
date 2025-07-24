@@ -6,7 +6,6 @@ import {
   YextField,
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   Body,
   Heading,
@@ -20,12 +19,12 @@ import {
   PersonStruct,
   ComponentFields,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
   CTAProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -212,12 +211,12 @@ const PersonCard = ({
                   : "span"
               }
             >
-              {resolveTranslatableString(person.name, i18n.language)}
+              {resolveComponentData(person.name, i18n.language)}
             </Heading>
           )}
           {person.title && (
             <Body variant="base">
-              {resolveTranslatableString(person.title, i18n.language)}
+              {resolveComponentData(person.title, i18n.language)}
             </Body>
           )}
         </div>
@@ -259,10 +258,7 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${cardNumber}`}
-                label={resolveTranslatableString(
-                  person.cta.label,
-                  i18n.language
-                )}
+                label={resolveComponentData(person.cta.label, i18n.language)}
                 link={person.cta.link}
                 linkType={person.cta.linkType}
                 variant={ctaVariant}
@@ -279,14 +275,15 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedPeople = resolveYextEntityField(
-    streamDocument,
+  const resolvedPeople = resolveComponentData(
     data.people,
-    locale
+    locale,
+    streamDocument
   );
-  const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(streamDocument, data.heading, locale),
-    i18n.language
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
   );
 
   const justifyClass = styles?.heading?.align
