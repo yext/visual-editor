@@ -59,9 +59,11 @@ GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
   columns: YextField("Columns", {
-    type: "number",
-    min: 2,
-    max: 3,
+    type: "radio",
+    options: [
+      { label: "Two", value: 2 },
+      { label: "Three", value: 3 },
+    ],
   }),
   backgroundColor: YextField("Background Color", {
     type: "select",
