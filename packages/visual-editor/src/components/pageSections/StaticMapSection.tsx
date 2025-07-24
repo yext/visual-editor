@@ -20,7 +20,7 @@ export interface StaticMapData {
 export interface StaticMapStyles {
   /**
    * The background color of the section.
-   * @defaultValue `Background Color 1`
+   * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
 }
