@@ -11,7 +11,7 @@ import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultInsight: InsightStruct = {
@@ -104,11 +104,9 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
     },
     defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(
-        item.name,
-        i18n.language,
-        streamDocument
-      );
+      const translation =
+        item.name &&
+        resolveComponentData(item.name, i18n.language, streamDocument);
       if (translation) {
         return translation;
       }

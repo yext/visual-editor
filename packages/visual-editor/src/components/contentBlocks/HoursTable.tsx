@@ -6,7 +6,7 @@ import "@yext/pages-components/style.css";
 import {
   EntityField,
   HoursTableAtom,
-  resolveYextEntityField,
+  resolveComponentData,
   useDocument,
   YextEntityField,
   YextField,
@@ -64,11 +64,7 @@ const VisualEditorHoursTable = ({
 }: HoursTableProps) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
-  const hours = resolveYextEntityField(
-    streamDocument,
-    hoursField,
-    i18n.language
-  );
+  const hours = resolveComponentData(hoursField, i18n.language, streamDocument);
 
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
