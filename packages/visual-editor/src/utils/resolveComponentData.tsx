@@ -17,7 +17,7 @@ import {
  *
  * @param data The field configuration object from component props OR a direct translatable value.
  * @param locale The current language locale (e.g., "en").
- * @param document The entity document. If not provided, embedded fields will not be resolved.
+ * @param streamDocument The entity document. If not provided, embedded fields will not be resolved.
  * @returns The fully resolved data for the component.
  */
 // --- Overload Signatures ---
@@ -25,38 +25,38 @@ import {
 export function resolveComponentData(
   data: TranslatableString | YextEntityField<TranslatableString>,
   locale: string,
-  document?: any
+  streamDocument?: any
 ): string;
 
 // 2. Handles TranslatableRichText directly or via a YextEntityField
 export function resolveComponentData(
   data: TranslatableRichText | YextEntityField<TranslatableRichText>,
   locale: string,
-  document?: any
+  streamDocument?: any
 ): string | React.ReactElement;
 
 // 3. Handles a generic YextEntityField
 export function resolveComponentData<T>(
   data: YextEntityField<T>,
   locale: string,
-  document?: any
+  streamDocument?: any
 ): T | undefined;
 
 // --- Implementation ---
 export function resolveComponentData<T>(
   data: YextEntityField<T> | TranslatableString | TranslatableRichText,
   locale: string,
-  document?: any
+  streamDocument?: any
 ): any {
   let rawValue;
 
   // If a document is provided, we can attempt full resolution.
-  if (document) {
+  if (streamDocument) {
     if (isYextEntityField(data)) {
-      rawValue = resolveYextEntityField(document, data, locale);
+      rawValue = resolveYextEntityField(streamDocument, data, locale);
     } else {
       // It's a direct TranslatableString or TranslatableRichText.
-      rawValue = resolveEmbeddedFieldsRecursively(data, document, locale);
+      rawValue = resolveEmbeddedFieldsRecursively(data, streamDocument, locale);
     }
   } else {
     // No document, so we can't resolve entity fields or embedded fields.

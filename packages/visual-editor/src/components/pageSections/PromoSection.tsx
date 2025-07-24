@@ -247,7 +247,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             resolveComponentData(
               resolvedPromo?.description,
               i18n.language,
-              document
+              streamDocument
             )}
         </EntityField>
         {resolvedPromo?.cta?.label && (
