@@ -512,7 +512,7 @@ const Map: React.FC<MapProps> = ({
       mapboxOptions={{
         center: centerCoords ?? DEFAULT_MAP_CENTER,
         fitBoundsOptions: {
-          padding: { top: 150, bottom: 150, left: 50, right: 50 },
+          padding: { top: 150, bottom: 150, left: 150, right: 150 },
         },
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
