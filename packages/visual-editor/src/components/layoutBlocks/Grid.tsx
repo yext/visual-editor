@@ -9,10 +9,7 @@ import {
   getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
-import {
-  AdvancedCoreInfoCategory,
-  LayoutBlockCategory,
-} from "../_componentCategories";
+import { AdvancedCoreInfoCategory } from "../_componentCategories";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface GridProps extends layoutProps {
@@ -36,7 +33,7 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
       >
         <div
           className={
-            "grid max-w-pageSection-contentWidth gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
+            "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
             columns
           }
           ref={ref}
@@ -50,7 +47,6 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
               )}
               zone={`column-${idx}`}
               allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
-              disallow={[...LayoutBlockCategory]}
             />
           ))}
         </div>
