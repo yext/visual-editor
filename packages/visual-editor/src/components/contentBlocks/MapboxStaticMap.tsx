@@ -3,7 +3,7 @@ import * as React from "react";
 import { Coordinate } from "@yext/pages-components";
 import {
   EntityField,
-  resolveYextEntityField,
+  resolveComponentData,
   useDocument,
   YextEntityField,
   YextField,
@@ -139,10 +139,10 @@ export const MapboxStaticMapComponent = ({
 
   const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
-  const coordinate = resolveYextEntityField<Coordinate>(
-    streamDocument,
+  const coordinate = resolveComponentData(
     coordinateField,
-    i18n.language
+    i18n.language,
+    streamDocument
   );
 
   if (!coordinate) {

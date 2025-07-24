@@ -15,7 +15,6 @@ import {
   HeadingLevel,
   BackgroundStyle,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   EntityField,
   Heading,
@@ -27,7 +26,6 @@ import {
   YextField,
   VisibilityWrapper,
   TranslatableString,
-  resolveTranslatableString,
   HoursTableAtom,
   msg,
   pt,
@@ -36,6 +34,7 @@ import {
   TranslatableStringField,
   getAnalyticsScopeHash,
   CTAProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 
 export interface CoreInfoData {
@@ -158,14 +157,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
               const streamDocument = useDocument();
-
-              const translation = resolveTranslatableString(
+              const resolvedValue = resolveComponentData(
                 item.label,
                 i18n.language,
                 streamDocument
               );
-              if (translation) {
-                return translation;
+              if (resolvedValue) {
+                return resolvedValue;
               }
               return pt("phone", "Phone");
             },
@@ -340,51 +338,42 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const addressHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      streamDocument,
-      data.info.headingText,
-      locale
-    ),
-    locale
+  const addressHeadingText = resolveComponentData(
+    data.info.headingText,
+    locale,
+    streamDocument
   );
-  const resolvedAddress = resolveYextEntityField<AddressType>(
-    streamDocument,
+  const resolvedAddress = resolveComponentData(
     data.info.address,
-    locale
+    locale,
+    streamDocument
   );
-  const resolvedEmails = resolveYextEntityField<string[]>(
-    streamDocument,
+  const resolvedEmails = resolveComponentData(
     data.info.emails,
-    locale
+    locale,
+    streamDocument
   );
-  const hoursHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      streamDocument,
-      data.hours.headingText,
-      locale
-    ),
-    i18n.language
+  const hoursHeadingText = resolveComponentData(
+    data.hours.headingText,
+    locale,
+    streamDocument
   );
-  const resolvedHours = resolveYextEntityField<HoursType>(
-    streamDocument,
+  const resolvedHours = resolveComponentData(
     data.hours.hours,
-    locale
+    locale,
+    streamDocument
   );
-  const servicesHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      streamDocument,
-      data.services.headingText,
-      locale
-    ),
-    i18n.language
+  const servicesHeadingText = resolveComponentData(
+    data.services.headingText,
+    locale,
+    streamDocument
   );
-  const servicesList = resolveYextEntityField<TranslatableString[]>(
-    streamDocument,
+  const servicesList = resolveComponentData(
     data.services.servicesList,
-    locale
+    locale,
+    streamDocument
   )?.map((translatableString: TranslatableString) =>
-    resolveTranslatableString(translatableString, i18n.language, streamDocument)
+    resolveComponentData(translatableString, i18n.language)
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
@@ -463,16 +452,16 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
         {data.info.phoneNumbers && (
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item, idx) => {
-              const resolvedNumber = resolveYextEntityField<string>(
-                streamDocument,
+              const resolvedNumber = resolveComponentData(
                 item.number,
-                locale
+                locale,
+                streamDocument
               );
               if (!resolvedNumber) {
                 return;
               }
 
-              const phoneLabel = resolveTranslatableString(
+              const phoneLabel = resolveComponentData(
                 item.label,
                 i18n.language,
                 streamDocument

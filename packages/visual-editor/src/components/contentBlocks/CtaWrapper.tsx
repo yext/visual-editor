@@ -3,12 +3,12 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   useDocument,
-  resolveYextEntityField,
   EntityField,
   YextEntityField,
   CTA,
   CTAProps,
   YextField,
+  resolveComponentData,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
@@ -37,11 +37,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
-  const cta = resolveYextEntityField(
-    streamDocument,
-    entityField,
-    i18n.language
-  );
+  const cta = resolveComponentData(entityField, i18n.language, streamDocument);
 
   return (
     <EntityField

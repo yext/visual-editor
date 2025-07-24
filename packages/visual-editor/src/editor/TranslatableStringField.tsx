@@ -1,7 +1,7 @@
 import { TranslatableString } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18n/platform.ts";
 import { CustomField, FieldLabel } from "@measured/puck";
-import { resolveTranslatableString } from "../utils/resolveTranslatableString.tsx";
+import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
@@ -20,7 +20,7 @@ export function TranslatableStringField<
     render: ({ onChange, value }) => {
       const { i18n } = useTranslation();
       const locale = i18n.language;
-      const resolvedValue = resolveTranslatableString(value, locale);
+      const resolvedValue = value && resolveComponentData(value, locale);
 
       const fieldEditor = (
         <EmbeddedFieldStringInput

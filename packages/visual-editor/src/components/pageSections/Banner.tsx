@@ -2,14 +2,13 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import {
   YextEntityField,
-  resolveYextEntityField,
+  resolveComponentData,
   useDocument,
   PageSection,
   YextField,
   VisibilityWrapper,
   EntityField,
   TranslatableRichText,
-  resolveTranslatableRichText,
   msg,
   pt,
 } from "@yext/visual-editor";
@@ -104,14 +103,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedText = resolveTranslatableRichText(
-    resolveYextEntityField<TranslatableRichText>(
-      streamDocument,
-      data.text,
-      locale
-    ),
-    locale
-  );
+  const resolvedText = resolveComponentData(data.text, locale, streamDocument);
 
   const justifyClass = {
     left: "justify-start",

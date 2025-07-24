@@ -18,7 +18,6 @@ import {
   HeadingLevel,
   Image,
   ImageProps,
-  resolveYextEntityField,
   PageSection,
   themeManagerCn,
   useBackground,
@@ -27,10 +26,10 @@ import {
   YextField,
   VisibilityWrapper,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   pt,
   ThemeOptions,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -195,15 +194,16 @@ const PhotoGallerySectionComponent = ({
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const sectionHeading = resolveTranslatableString(
-    resolveYextEntityField(streamDocument, data.heading, locale),
-    i18n.language
+  const sectionHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
   );
 
-  const resolvedImages = resolveYextEntityField(
-    streamDocument,
+  const resolvedImages = resolveComponentData(
     data.images,
-    locale
+    locale,
+    streamDocument
   );
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
