@@ -511,6 +511,9 @@ const Map: React.FC<MapProps> = ({
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={{
         center: centerCoords ?? DEFAULT_MAP_CENTER,
+        fitBoundsOptions: {
+          padding: { top: 150, bottom: 150, left: 50, right: 50 },
+        },
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
       onDrag={onDragHandler}
