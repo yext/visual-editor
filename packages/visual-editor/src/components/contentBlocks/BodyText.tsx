@@ -5,12 +5,11 @@ import {
   Body,
   BodyProps,
   useDocument,
-  resolveYextEntityField,
+  resolveComponentData,
   EntityField,
   YextEntityField,
   YextField,
   TranslatableString,
-  resolveTranslatableString,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -43,10 +42,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         constantValueEnabled={text.constantValueEnabled}
       >
         <Body ref={ref} {...bodyProps}>
-          {resolveTranslatableString(
-            resolveYextEntityField(streamDocument, text, i18n.language),
-            i18n.language
-          )}
+          {resolveComponentData(text, i18n.language, streamDocument)}
         </Body>
       </EntityField>
     );

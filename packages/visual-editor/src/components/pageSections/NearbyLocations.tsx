@@ -1,6 +1,5 @@
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  resolveYextEntityField,
   useDocument,
   YextEntityField,
   Heading,
@@ -15,12 +14,12 @@ import {
   VisibilityWrapper,
   HoursStatusAtom,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   ThemeOptions,
   MaybeLink,
   getLocationPath,
   useTemplateProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -369,18 +368,15 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  const coordinate = resolveYextEntityField<Coordinate>(
-    streamDocument,
+  const coordinate = resolveComponentData(
     data?.coordinate,
-    locale
+    locale,
+    streamDocument
   );
-  const headingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      streamDocument,
-      data?.heading,
-      locale
-    ),
-    locale
+  const headingText = resolveComponentData(
+    data?.heading,
+    locale,
+    streamDocument
   );
 
   // parse variables from streamDocument
@@ -522,8 +518,7 @@ function parseDocument(
   if (streamDocument?._pageset) {
     try {
       const pagesetJson = JSON.parse(streamDocument?._pageset);
-      contentEndpointId =
-        pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
+      contentEndpointId = pagesetJson?.config?.contentEndpointId;
     } catch (e) {
       console.error("Failed to parse pageset from stream document. err=", e);
     }

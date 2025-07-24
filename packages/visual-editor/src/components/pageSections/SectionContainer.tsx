@@ -5,7 +5,6 @@ import {
   BackgroundStyle,
   YextEntityField,
   ThemeOptions,
-  resolveYextEntityField,
   HeadingProps,
   backgroundColors,
   OtherCategory,
@@ -14,7 +13,7 @@ import {
   YextField,
   VisibilityWrapper,
   TranslatableString,
-  resolveTranslatableString,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import { useTranslation } from "react-i18next";
@@ -75,13 +74,10 @@ const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  const resolvedHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      streamDocument,
-      sectionHeading.text,
-      locale
-    ),
-    locale
+  const resolvedHeadingText = resolveComponentData(
+    sectionHeading.text,
+    locale,
+    streamDocument
   );
 
   const justifyClass = {

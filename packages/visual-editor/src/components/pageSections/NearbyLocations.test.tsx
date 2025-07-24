@@ -35,10 +35,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       yextDisplayCoordinate: {
@@ -60,10 +58,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       yextDisplayCoordinate: {
@@ -85,10 +81,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       yextDisplayCoordinate: {
@@ -156,10 +150,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
