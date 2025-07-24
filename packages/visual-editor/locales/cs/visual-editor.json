@@ -63,7 +63,8 @@
     "reviewsSection": "Sekce recenzí",
     "staticMapSection": "Sekce statické mapy",
     "teamSection": "Týmová sekce",
-    "testimonialsSection": "Sekce posudků"
+    "testimonialsSection": "Sekce posudků",
+    "customCodeSection": "Vlastní sekce kódu"
   },
   "confirm": "Potvrdit",
   "coordinate": "Koordinovat",
@@ -430,5 +431,6 @@
   "update": "Aktualizovat",
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
-  "wednesday": "středa"
+  "wednesday": "středa",
+  "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty"
 }

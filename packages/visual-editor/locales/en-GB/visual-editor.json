@@ -63,7 +63,8 @@
     "reviewsSection": "Reviews Section",
     "staticMapSection": "Static Map Section",
     "teamSection": "Team Section",
-    "testimonialsSection": "Testimonials Section"
+    "testimonialsSection": "Testimonials Section",
+    "customCodeSection": "Custom Code Section"
   },
   "confirm": "Confirm",
   "coordinate": "Coordinate",
@@ -430,5 +431,6 @@
   "update": "Update",
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
   "visitPage": "Visit Page",
-  "wednesday": "Wednesday"
+  "wednesday": "Wednesday",
+  "missingHtmlWidget": "Add HTML to view component"
 }

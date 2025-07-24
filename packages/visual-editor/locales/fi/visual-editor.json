@@ -63,7 +63,8 @@
     "reviewsSection": "Arvosteluosa",
     "staticMapSection": "Staattinen karttaosa",
     "teamSection": "Joukkueosasto",
-    "testimonialsSection": "Suositusosasto"
+    "testimonialsSection": "Suositusosasto",
+    "customCodeSection": "Mukautettu koodiosa"
   },
   "confirm": "Vahvistaa",
   "coordinate": "Koordinoida",
@@ -430,5 +431,6 @@
   "update": "Päivittää",
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
-  "wednesday": "keskiviikko"
+  "wednesday": "keskiviikko",
+  "missingHtmlWidget": "Lisää HTML katsomaan komponenttia"
 }

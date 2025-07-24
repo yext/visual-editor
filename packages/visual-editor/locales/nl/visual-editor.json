@@ -63,7 +63,8 @@
     "reviewsSection": "Beoordelingen sectie",
     "staticMapSection": "Statische kaartsectie",
     "teamSection": "Teamsectie",
-    "testimonialsSection": "Getuigenissen sectie"
+    "testimonialsSection": "Getuigenissen sectie",
+    "customCodeSection": "Aangepaste codesectie"
   },
   "confirm": "Bevestigen",
   "coordinate": "Coördineren",
@@ -430,5 +431,6 @@
   "update": "Update",
   "useOurLocatorToFindALocationNearYou": "Gebruik onze locator om een ​​locatie bij u in de buurt te vinden",
   "visitPage": "Bezoek pagina",
-  "wednesday": "Woensdag"
+  "wednesday": "Woensdag",
+  "missingHtmlWidget": "Voeg HTML toe om component te bekijken"
 }

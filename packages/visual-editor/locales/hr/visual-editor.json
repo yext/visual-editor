@@ -63,7 +63,8 @@
     "reviewsSection": "Odjeljak za preglede",
     "staticMapSection": "Odjeljak statičke karte",
     "teamSection": "Ekipa",
-    "testimonialsSection": "Odjeljak za svjedočanstvo"
+    "testimonialsSection": "Odjeljak za svjedočanstvo",
+    "customCodeSection": "Odjeljak prilagođenog koda"
   },
   "confirm": "Potvrditi",
   "coordinate": "Koordinata",
@@ -430,5 +431,6 @@
   "update": "Ažurirati",
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
-  "wednesday": "srijeda"
+  "wednesday": "srijeda",
+  "missingHtmlWidget": "Dodajte HTML za pregled komponente"
 }

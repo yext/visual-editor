@@ -28,6 +28,7 @@ export default defineConfig(() => ({
         "mapbox-gl",
         "@yext/search-headless-react",
         "@yext/search-ui-react",
+        "dompurify",
       ],
       output: {
         globals: {

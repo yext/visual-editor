@@ -63,7 +63,8 @@
     "reviewsSection": "Sekcia recenzií",
     "staticMapSection": "Sekcia statickej mapy",
     "teamSection": "Sekcia tímu",
-    "testimonialsSection": "Sekcia svedectiev"
+    "testimonialsSection": "Sekcia svedectiev",
+    "customCodeSection": "Vlastná sekcia kódu"
   },
   "confirm": "Potvrdiť",
   "coordinate": "Koordinovať",
@@ -430,5 +431,6 @@
   "update": "Aktualizácia",
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
-  "wednesday": "Streda"
+  "wednesday": "Streda",
+  "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent"
 }

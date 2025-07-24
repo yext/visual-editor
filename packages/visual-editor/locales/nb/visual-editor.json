@@ -63,7 +63,8 @@
     "reviewsSection": "Anmeldelser",
     "staticMapSection": "Statisk kartseksjon",
     "teamSection": "Team -seksjon",
-    "testimonialsSection": "Vitnesbyrdsseksjon"
+    "testimonialsSection": "Vitnesbyrdsseksjon",
+    "customCodeSection": "Tilpasset kodeseksjon"
   },
   "confirm": "Bekrefte",
   "coordinate": "Koordinere",
@@ -430,5 +431,6 @@
   "update": "Oppdatering",
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
-  "wednesday": "onsdag"
+  "wednesday": "onsdag",
+  "missingHtmlWidget": "Legg til HTML for å se komponent"
 }

@@ -63,7 +63,8 @@
     "reviewsSection": "Recensionsavsnitt",
     "staticMapSection": "Statisk kartavsnitt",
     "teamSection": "Lagavdelning",
-    "testimonialsSection": "Vittnesbörd"
+    "testimonialsSection": "Vittnesbörd",
+    "customCodeSection": "Anpassad kodavsnitt"
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
@@ -430,5 +431,6 @@
   "update": "Uppdatera",
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
-  "wednesday": "Onsdag"
+  "wednesday": "Onsdag",
+  "missingHtmlWidget": "Lägg till HTML för att visa komponent"
 }

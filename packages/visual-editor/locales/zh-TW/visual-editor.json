@@ -63,7 +63,8 @@
     "reviewsSection": "評論部分",
     "staticMapSection": "靜態地圖部分",
     "teamSection": "團隊部分",
-    "testimonialsSection": "推薦部分"
+    "testimonialsSection": "推薦部分",
+    "customCodeSection": "自定義代碼部分"
   },
   "confirm": "確認",
   "coordinate": "協調",
@@ -430,5 +431,6 @@
   "update": "更新",
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
-  "wednesday": "週三"
+  "wednesday": "週三",
+  "missingHtmlWidget": "添加HTML以查看組件"
 }

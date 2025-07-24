@@ -63,7 +63,8 @@
     "reviewsSection": "Áttekintési szakasz",
     "staticMapSection": "Statikus térképszakasz",
     "teamSection": "Csapatrész",
-    "testimonialsSection": "Beszámolók részlege"
+    "testimonialsSection": "Beszámolók részlege",
+    "customCodeSection": "Egyedi kód szakasz"
   },
   "confirm": "Megerősít",
   "coordinate": "Koordináta",
@@ -430,5 +431,6 @@
   "update": "Frissít",
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
-  "wednesday": "szerda"
+  "wednesday": "szerda",
+  "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez"
 }

@@ -63,7 +63,8 @@
     "reviewsSection": "Arvustuste jaotis",
     "staticMapSection": "Staatiline kaardiosa",
     "teamSection": "Meeskonnaosa",
-    "testimonialsSection": "Iseloomustuste sektsioon"
+    "testimonialsSection": "Iseloomustuste sektsioon",
+    "customCodeSection": "Kohandatud koodisektsioon"
   },
   "confirm": "Kinnitama",
   "coordinate": "Koordinaat",
@@ -430,5 +431,6 @@
   "update": "Värskendama",
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
-  "wednesday": "Kolmapäev"
+  "wednesday": "Kolmapäev",
+  "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML"
 }

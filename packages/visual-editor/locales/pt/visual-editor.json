@@ -63,7 +63,8 @@
     "reviewsSection": "Seção de revisões",
     "staticMapSection": "Seção de mapa estático",
     "teamSection": "Seção de equipe",
-    "testimonialsSection": "Seção de depoimentos"
+    "testimonialsSection": "Seção de depoimentos",
+    "customCodeSection": "Seção de código personalizado"
   },
   "confirm": "Confirmar",
   "coordinate": "Coordenada",
@@ -430,5 +431,6 @@
   "update": "Atualizar",
   "useOurLocatorToFindALocationNearYou": "Use nosso localizador para encontrar um local perto de você",
   "visitPage": "Visite a página",
-  "wednesday": "Quarta-feira"
+  "wednesday": "Quarta-feira",
+  "missingHtmlWidget": "Adicione HTML para visualizar o componente"
 }

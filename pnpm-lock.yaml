@@ -154,9 +154,6 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      dompurify:
-        specifier: ^3.2.3
-        version: 3.2.5
       i18next:
         specifier: ^25.2.1
         version: 25.2.1(typescript@5.8.3)
@@ -269,6 +266,9 @@ importers:
       axe-core:
         specifier: ^4.10.3
         version: 4.10.3
+      dompurify:
+        specifier: ^3.2.3
+        version: 3.2.5
       execa:
         specifier: ^8.0.1
         version: 8.0.1

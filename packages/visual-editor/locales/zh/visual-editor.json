@@ -63,7 +63,8 @@
     "reviewsSection": "评论部分",
     "staticMapSection": "静态地图部分",
     "teamSection": "团队部分",
-    "testimonialsSection": "推荐部分"
+    "testimonialsSection": "推荐部分",
+    "customCodeSection": "自定义代码部分"
   },
   "confirm": "确认",
   "coordinate": "协调",
@@ -430,5 +431,6 @@
   "update": "更新",
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
-  "wednesday": "周三"
+  "wednesday": "周三",
+  "missingHtmlWidget": "添加HTML以查看组件"
 }

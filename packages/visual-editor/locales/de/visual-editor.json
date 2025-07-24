@@ -63,7 +63,8 @@
     "reviewsSection": "Bewertungen Abschnitt",
     "staticMapSection": "Statischer Kartenabschnitt",
     "teamSection": "Teamabteilung",
-    "testimonialsSection": "Testimonials Abschnitt"
+    "testimonialsSection": "Testimonials Abschnitt",
+    "customCodeSection": "Abschnitt Custom Code"
   },
   "confirm": "Bestätigen",
   "coordinate": "Koordinieren",
@@ -430,5 +431,6 @@
   "update": "Aktualisieren",
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
   "visitPage": "Besuchen Sie die Seite",
-  "wednesday": "Mittwoch"
+  "wednesday": "Mittwoch",
+  "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen"
 }

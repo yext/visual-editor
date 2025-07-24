@@ -63,7 +63,8 @@
     "reviewsSection": "Afsnittet",
     "staticMapSection": "Statisk kortafsnit",
     "teamSection": "Holdsektion",
-    "testimonialsSection": "Afsnit for vidnesbyrd"
+    "testimonialsSection": "Afsnit for vidnesbyrd",
+    "customCodeSection": "Brugerdefineret kodesektion"
   },
   "confirm": "Bekræfte",
   "coordinate": "Koordinere",
@@ -430,5 +431,6 @@
   "update": "Opdatering",
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
-  "wednesday": "onsdag"
+  "wednesday": "onsdag",
+  "missingHtmlWidget": "Tilføj HTML for at se komponent"
 }

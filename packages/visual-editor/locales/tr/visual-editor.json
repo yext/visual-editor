@@ -63,7 +63,8 @@
     "reviewsSection": "İncelemeler Bölümü",
     "staticMapSection": "Statik Harita Bölümü",
     "teamSection": "Takım bölümü",
-    "testimonialsSection": "Referans bölümü"
+    "testimonialsSection": "Referans bölümü",
+    "customCodeSection": "Özel Kod Bölümü"
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
@@ -430,5 +431,6 @@
   "update": "Güncelleme",
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
-  "wednesday": "Çarşamba"
+  "wednesday": "Çarşamba",
+  "missingHtmlWidget": "Bileşeni görüntülemek için html ekle"
 }

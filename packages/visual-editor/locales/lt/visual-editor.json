@@ -63,7 +63,8 @@
     "reviewsSection": "Apžvalgų skyrius",
     "staticMapSection": "Statinio žemėlapio skyrius",
     "teamSection": "Komandos skyrius",
-    "testimonialsSection": "Atsakymų skyrius"
+    "testimonialsSection": "Atsakymų skyrius",
+    "customCodeSection": "Pasirinktinio kodo skyrius"
   },
   "confirm": "Patvirtinti",
   "coordinate": "Koordinatė",
@@ -430,5 +431,6 @@
   "update": "Atnaujinimas",
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
-  "wednesday": "Trečiadienis"
+  "wednesday": "Trečiadienis",
+  "missingHtmlWidget": "Pridėkite HTML, kad peržiūrėtumėte komponentą"
 }

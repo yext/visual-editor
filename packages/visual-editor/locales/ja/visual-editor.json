@@ -63,7 +63,8 @@
     "reviewsSection": "レビューセクション",
     "staticMapSection": "静的マップセクション",
     "teamSection": "チームセクション",
-    "testimonialsSection": "証言セクション"
+    "testimonialsSection": "証言セクション",
+    "customCodeSection": "カスタムコードセクション"
   },
   "confirm": "確認する",
   "coordinate": "座標",
@@ -430,5 +431,6 @@
   "update": "アップデート",
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
-  "wednesday": "水曜日"
+  "wednesday": "水曜日",
+  "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します"
 }

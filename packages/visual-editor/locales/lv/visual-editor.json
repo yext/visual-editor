@@ -63,7 +63,8 @@
     "reviewsSection": "Atsauksmju sadaļa",
     "staticMapSection": "Statiskās kartes sadaļa",
     "teamSection": "Komandu nodaļa",
-    "testimonialsSection": "Attiecību sadaļa"
+    "testimonialsSection": "Attiecību sadaļa",
+    "customCodeSection": "Pielāgota koda sadaļa"
   },
   "confirm": "Apstiprināt",
   "coordinate": "Koordinēt",
@@ -430,5 +431,6 @@
   "update": "Atjaunināt",
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
   "visitPage": "Apmeklējuma lapa",
-  "wednesday": "Trešdiena"
+  "wednesday": "Trešdiena",
+  "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu"
 }

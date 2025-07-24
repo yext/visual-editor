@@ -63,7 +63,8 @@
     "reviewsSection": "Secțiunea de recenzii",
     "staticMapSection": "Secțiunea hărții statice",
     "teamSection": "Secțiunea echipei",
-    "testimonialsSection": "Secțiunea Mărturii"
+    "testimonialsSection": "Secțiunea Mărturii",
+    "customCodeSection": "Secțiune de cod personalizat"
   },
   "confirm": "Confirma",
   "coordinate": "Coordona",
@@ -430,5 +431,6 @@
   "update": "Actualizare",
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
-  "wednesday": "miercuri"
+  "wednesday": "miercuri",
+  "missingHtmlWidget": "Adăugați HTML pentru a vizualiza componenta"
 }
