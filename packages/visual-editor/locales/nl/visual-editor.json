@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopieer naar klembord",
     "pasteFromClipboard": "Plak van klembord"
   },
+  "addEntityField": "Voeg een entiteitsveld toe",
   "address": "Adres",
   "addressInput": {
     "city": "Stad",
@@ -68,6 +69,8 @@
   "coordinate": "Coördineren",
   "coreInfoSection": "Core Info -sectie",
   "cta": "CTA",
+  "currentLocation": "Huidige locatie",
+  "customSearchArea": "Aangepast zoekgebied",
   "date": "Datum",
   "dateAndTime": "Datum en tijd",
   "deleteItem": "Verwijder item",

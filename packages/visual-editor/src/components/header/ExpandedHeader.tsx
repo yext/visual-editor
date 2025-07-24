@@ -51,33 +51,53 @@ const defaultSecondaryLink = {
   link: "#",
 };
 
+export interface ExpandedHeaderData {
+  /** Content for the main primary header bar. */
+  primaryHeader: {
+    logo: string;
+    links: TranslatableCTA[];
+    primaryCTA?: TranslatableCTA;
+    showPrimaryCTA: boolean;
+    secondaryCTA?: TranslatableCTA;
+    showSecondaryCTA: boolean;
+  };
+
+  /** Content for the secondary header (top bar). */
+  secondaryHeader: {
+    show: boolean;
+    showLanguageDropdown: boolean;
+    secondaryLinks: TranslatableCTA[];
+  };
+}
+
+export interface ExpandedHeaderStyles {
+  /** Styling for the main, primary header bar. */
+  primaryHeader: {
+    logo: ImageStylingProps;
+    backgroundColor?: BackgroundStyle;
+    primaryCtaVariant: CTAProps["variant"];
+    secondaryCtaVariant: CTAProps["variant"];
+  };
+  /** Styling for the secondary header (top bar). */
+  secondaryHeader: {
+    backgroundColor?: BackgroundStyle;
+  };
+}
+
 export interface ExpandedHeaderProps {
-  data: {
-    primaryHeader: {
-      logo: string;
-      links: TranslatableCTA[];
-      primaryCTA?: TranslatableCTA;
-      showPrimaryCTA: boolean;
-      secondaryCTA?: TranslatableCTA;
-      showSecondaryCTA: boolean;
-    };
-    secondaryHeader: {
-      show: boolean;
-      showLanguageDropdown: boolean;
-      secondaryLinks: TranslatableCTA[];
-    };
-  };
-  styles: {
-    primaryHeader: {
-      logo: ImageStylingProps;
-      backgroundColor?: BackgroundStyle;
-      primaryCtaVariant: CTAProps["variant"];
-      secondaryCtaVariant: CTAProps["variant"];
-    };
-    secondaryHeader: {
-      backgroundColor?: BackgroundStyle;
-    };
-  };
+  /**
+   * This object contains all the content for both header tiers.
+   * @propCategory Data Props
+   */
+  data: ExpandedHeaderData;
+
+  /**
+   * This object contains properties for customizing the appearance of both header tiers.
+   * @propCategory Style Props
+   */
+  styles: ExpandedHeaderStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
@@ -96,10 +116,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -114,10 +133,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -141,10 +159,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -195,10 +212,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(
-                    msg("fields.label", "Label"),
-                    "text"
-                  ),
+                  label: TranslatableStringField(msg("fields.label", "Label"), {
+                    types: ["type.string"],
+                  }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
@@ -280,7 +296,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
   const { t } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const {
     logo,
     links,
@@ -297,7 +313,8 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryCtaVariant,
   } = primaryHeaderStyle;
   const { backgroundColor: secondaryBackgroundColor } = secondaryHeaderStyle;
-  const languageDropDownProps = parseDocumentForLanguageDropdown(document);
+  const languageDropDownProps =
+    parseDocumentForLanguageDropdown(streamDocument);
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -364,7 +381,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             </EntityField>
             {(showPrimaryCTA || showSecondaryCTA) && (
               <HeaderCtas
-                document={document}
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
                 primaryVariant={primaryCtaVariant}
@@ -455,7 +471,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           {(showPrimaryCTA || showSecondaryCTA) && (
             <PageSection verticalPadding={"sm"} background={backgroundColor}>
               <HeaderCtas
-                document={document}
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
                 primaryVariant={primaryCtaVariant}
@@ -479,6 +494,7 @@ const HeaderLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
+  const streamDocument = useDocument();
   const MAX_VISIBLE = 5;
   const isSecondary = type === "Secondary";
 
@@ -494,7 +510,11 @@ const HeaderLinks = ({
           : "headerFooterSecondaryLink"
       }
       eventName={`cta.${ctaType}.${index}`}
-      label={resolveTranslatableString(item.label, i18n.language)}
+      label={resolveTranslatableString(
+        item.label,
+        i18n.language,
+        streamDocument
+      )}
       linkType={item.linkType}
       link={item.link}
       className="justify-start w-full text-left"
@@ -572,11 +592,11 @@ const HeaderCtas = (props: {
   secondaryCTA?: TranslatableCTA;
   primaryVariant: CTAProps["variant"];
   secondaryVariant: CTAProps["variant"];
-  document: any;
   showPrimaryCTA: boolean;
   showSecondaryCTA: boolean;
 }) => {
   const { i18n } = useTranslation();
+  const streamDocument = useDocument();
   const {
     primaryCTA,
     secondaryCTA,
@@ -600,7 +620,11 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`primaryCta`}
             variant={primaryVariant}
-            label={resolveTranslatableString(primaryCTA?.label, i18n.language)}
+            label={resolveTranslatableString(
+              primaryCTA?.label,
+              i18n.language,
+              streamDocument
+            )}
             link={primaryCTA.link}
             linkType={primaryCTA.linkType}
           />
@@ -614,7 +638,11 @@ const HeaderCtas = (props: {
           <CTA
             eventName={`secondaryCta`}
             variant={secondaryVariant}
-            label={resolveTranslatableString(secondaryCTA.label, i18n.language)}
+            label={resolveTranslatableString(
+              secondaryCTA.label,
+              i18n.language,
+              streamDocument
+            )}
             link={secondaryCTA.link}
             linkType={secondaryCTA.linkType}
           />
@@ -639,6 +667,10 @@ const buildComplexImage = (
   };
 };
 
+/**
+ * The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector.
+ * Avaliable on Location templates.
+ */
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   label: msg("components.expandedHeader", "Expanded Header"),
   fields: expandedHeaderSectionFields,

@@ -34,11 +34,12 @@ const GetDirectionsComponent = ({
   variant,
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
-  const { t } = useTranslation();
-  const document = useDocument();
+  const { t, i18n } = useTranslation();
+  const streamDocument = useDocument();
   const coordinate = resolveYextEntityField<Coordinate>(
-    document,
-    coordinateField
+    streamDocument,
+    coordinateField,
+    i18n.language
   );
   if (!coordinate) {
     console.warn("yextDisplayCoordinate is not present in the stream");

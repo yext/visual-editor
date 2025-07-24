@@ -4,6 +4,7 @@
     "copyToClipboard": "Másolja a vágólapra",
     "pasteFromClipboard": "Beilleszteni a vágólapról"
   },
+  "addEntityField": "Adja hozzá az entitás mezőt",
   "address": "Cím",
   "addressInput": {
     "city": "Város",
@@ -68,6 +69,8 @@
   "coordinate": "Koordináta",
   "coreInfoSection": "Alapvető információ szakasz",
   "cta": "CTA",
+  "currentLocation": "Aktuális hely",
+  "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
   "dateAndTime": "Dátum és idő",
   "deleteItem": "Az elem törlése",

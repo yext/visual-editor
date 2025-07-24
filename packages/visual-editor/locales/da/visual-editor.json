@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopier til udklipsholder",
     "pasteFromClipboard": "Indsæt fra udklipsholder"
   },
+  "addEntityField": "Tilføj entitetsfelt",
   "address": "Adresse",
   "addressInput": {
     "city": "By",
@@ -68,6 +69,8 @@
   "coordinate": "Koordinere",
   "coreInfoSection": "Kerneinfo -sektion",
   "cta": "CTA",
+  "currentLocation": "Nuværende placering",
+  "customSearchArea": "Brugerdefineret søgeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
   "deleteItem": "Slet vare",

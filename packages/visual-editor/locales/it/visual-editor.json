@@ -4,6 +4,7 @@
     "copyToClipboard": "Copia negli appunti",
     "pasteFromClipboard": "Incolla dagli appunti"
   },
+  "addEntityField": "Aggiungi campo di entità",
   "address": "Indirizzo",
   "addressInput": {
     "city": "Città",
@@ -68,6 +69,8 @@
   "coordinate": "Coordinata",
   "coreInfoSection": "Sezione Informazioni fondamentali",
   "cta": "CTA",
+  "currentLocation": "Posizione corrente",
+  "customSearchArea": "Area di ricerca personalizzata",
   "date": "Data",
   "dateAndTime": "Data e ora",
   "deleteItem": "Elimina l'articolo",

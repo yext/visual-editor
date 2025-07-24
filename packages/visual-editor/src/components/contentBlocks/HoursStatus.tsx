@@ -65,9 +65,13 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   showDayNames,
   dayOfWeekFormat,
 }) => {
-  const document = useDocument();
-  const { t } = useTranslation();
-  const hours = resolveYextEntityField(document, hoursField);
+  const streamDocument = useDocument();
+  const { t, i18n } = useTranslation();
+  const hours = resolveYextEntityField(
+    streamDocument,
+    hoursField,
+    i18n.language
+  );
 
   if (!hours) {
     return null;

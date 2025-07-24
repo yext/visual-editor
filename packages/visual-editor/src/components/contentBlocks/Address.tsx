@@ -39,9 +39,13 @@ const AddressComponent = ({
   address: addressField,
   showGetDirections,
 }: AddressProps) => {
-  const { t } = useTranslation();
-  const document = useDocument();
-  const address = resolveYextEntityField(document, addressField);
+  const { t, i18n } = useTranslation();
+  const streamDocument = useDocument();
+  const address = resolveYextEntityField(
+    streamDocument,
+    addressField,
+    i18n.language
+  );
   const coordinates = getDirections(
     address as AddressType,
     undefined,

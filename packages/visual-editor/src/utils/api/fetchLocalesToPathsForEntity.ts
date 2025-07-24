@@ -1,4 +1,6 @@
 import { normalizeSlug } from "../slugifier.ts";
+import { normalizeLocale } from "../normalizeLocale.ts";
+import { StreamDocument } from "../applyTheme.ts";
 
 const V_PARAM = "20250407";
 
@@ -34,7 +36,7 @@ export const fetchLocalesToPathsForEntity = async ({
     const json = await response.json();
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale && getPath(profile)) {
-        localeToPath[profile.meta.locale] = getPath(profile);
+        localeToPath[normalizeLocale(profile.meta.locale)] = getPath(profile);
       }
     }
   } catch (e) {
@@ -47,16 +49,18 @@ export const fetchLocalesToPathsForEntity = async ({
 // getPath assumes the user is using Visual Editor in-platform. This does not work with some hybrid cases.
 // This should use the exact same logic as getPath in packages/visual-editor/src/vite-plugin/templates/main.tsx
 // as that is the code all in-platform developers are using.
-const getPath = (document: Record<string, any>): string => {
-  if (document.slug) {
-    return document.slug;
+const getPath = (streamDocument: StreamDocument): string => {
+  if (streamDocument.slug) {
+    return streamDocument.slug;
   }
 
   const localePath =
-    document.meta?.locale !== "en" ? `${document.meta?.locale}/` : "";
-  const path = document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${document.address.line1}-${document.id}`
-    : `${localePath}${document.id}`;
+    streamDocument.meta?.locale !== "en"
+      ? `${streamDocument.meta?.locale}/`
+      : "";
+  const path = streamDocument.address
+    ? `${localePath}${streamDocument.address.region}/${streamDocument.address.city}/${streamDocument.address.line1}-${streamDocument.id}`
+    : `${localePath}${streamDocument.id}`;
 
   return normalizeSlug(path);
 };

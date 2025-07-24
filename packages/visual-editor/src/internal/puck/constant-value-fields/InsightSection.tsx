@@ -7,11 +7,12 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultInsight: InsightStruct = {
   image: {
@@ -59,18 +60,19 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
 
 const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("name", "Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
   const categoryField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("category", "Category"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
@@ -102,7 +104,11 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
     },
     defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {
-      const translation = resolveTranslatableString(item.name, i18n.language);
+      const translation = resolveTranslatableString(
+        item.name,
+        i18n.language,
+        streamDocument
+      );
       if (translation) {
         return translation;
       }

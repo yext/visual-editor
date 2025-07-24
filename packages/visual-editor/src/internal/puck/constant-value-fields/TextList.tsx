@@ -3,7 +3,7 @@ import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RichText, TranslatableRichText } from "../../../types/types.ts";
 import { getDisplayValue } from "../../../utils/resolveTranslatableString.tsx";
-import { usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useState } from "react";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
@@ -105,9 +105,9 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
 > = {
   type: "custom",
   render: ({ onChange, value = [], id }) => {
-    const document: any = useDocument();
+    const streamDocument = useDocument();
     const { t: pt } = usePlatformTranslation();
-    const locale = document?.locale ?? "en";
+    const locale = streamDocument?.locale ?? "en";
     const [localItems, setLocalItems] = useState<TranslatableRichText[]>(value);
 
     const updateItem = (

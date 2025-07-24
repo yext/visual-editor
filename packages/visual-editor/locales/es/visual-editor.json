@@ -4,6 +4,7 @@
     "copyToClipboard": "Copiar al portapapeles",
     "pasteFromClipboard": "Pegar del portapapeles"
   },
+  "addEntityField": "Agregar campo de entidad",
   "address": "DIRECCIÓN",
   "addressInput": {
     "city": "Ciudad",
@@ -68,6 +69,8 @@
   "coordinate": "Coordinar",
   "coreInfoSection": "Sección de información central",
   "cta": "CTA",
+  "currentLocation": "Ubicación actual",
+  "customSearchArea": "Área de búsqueda personalizada",
   "date": "Fecha",
   "dateAndTime": "Fecha y hora",
   "deleteItem": "Eliminar el artículo",

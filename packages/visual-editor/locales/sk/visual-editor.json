@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopírovať do schránky",
     "pasteFromClipboard": "Pasta zo schránky"
   },
+  "addEntityField": "Pridať pole entity",
   "address": "Osloviť",
   "addressInput": {
     "city": "Mesto",
@@ -68,6 +69,8 @@
   "coordinate": "Koordinovať",
   "coreInfoSection": "Sekcia",
   "cta": "CTA",
+  "currentLocation": "Súčasná lokalita",
+  "customSearchArea": "Oblasť vyhľadávania",
   "date": "Dátum",
   "dateAndTime": "Dátum a čas",
   "deleteItem": "Vymazať",

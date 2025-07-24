@@ -25,30 +25,68 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
 
-export interface ProductSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    products: YextEntityField<ProductSectionType>;
+export interface ProductData {
+  /**
+   * The main heading for the entire products section.
+   * @defaultValue "Featured Products" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+  /**
+   * The source of the product data, which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder products.
+   */
+  products: YextEntityField<ProductSectionType>;
+}
+
+export interface ProductStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 2
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for the individual product cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
+    ctaVariant: CTAProps["variant"];
   };
+}
+
+export interface ProductSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: ProductData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: ProductStyles;
+
+  /** @internal  */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -110,6 +148,10 @@ const productSectionFields: Fields<ProductSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -131,13 +173,16 @@ const ProductCard = ({
   product,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   product: ProductStruct;
   cardStyles: ProductSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const streamDocument = useDocument();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -164,7 +209,11 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {resolveTranslatableString(product.name, i18n.language)}
+              {resolveTranslatableString(
+                product.name,
+                i18n.language,
+                streamDocument
+              )}
             </Heading>
           )}
           {product.category && (
@@ -173,7 +222,11 @@ const ProductCard = ({
               className="py-2 px-4 rounded w-fit"
             >
               <Body>
-                {resolveTranslatableString(product.category, i18n.language)}
+                {resolveTranslatableString(
+                  product.category,
+                  i18n.language,
+                  streamDocument
+                )}
               </Body>
             </Background>
           )}
@@ -182,8 +235,12 @@ const ProductCard = ({
         {product.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            variant="secondary"
-            label={resolveTranslatableString(product.cta.label, i18n.language)}
+            variant={ctaVariant}
+            label={resolveTranslatableString(
+              product.cta.label,
+              i18n.language,
+              streamDocument
+            )}
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"
@@ -196,10 +253,15 @@ const ProductCard = ({
 
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
-  const resolvedProducts = resolveYextEntityField(document, data.products);
+  const locale = i18n.language;
+  const streamDocument = useDocument();
+  const resolvedProducts = resolveYextEntityField(
+    streamDocument,
+    data.products,
+    locale
+  );
   const resolvedHeading = resolveTranslatableRichText(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(streamDocument, data.heading, locale),
     i18n.language
   );
 
@@ -241,6 +303,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
                 product={product}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -250,6 +313,10 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   );
 };
 
+/**
+ * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
+ * Avaliable on Location templates.
+ */
 export const ProductSection: ComponentConfig<ProductSectionProps> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,
@@ -277,6 +344,7 @@ export const ProductSection: ComponentConfig<ProductSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
+        ctaVariant: "primary",
       },
     },
     analytics: {

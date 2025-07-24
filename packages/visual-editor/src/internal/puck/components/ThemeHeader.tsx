@@ -11,7 +11,7 @@ import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;

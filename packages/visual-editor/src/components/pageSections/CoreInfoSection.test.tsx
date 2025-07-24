@@ -397,6 +397,271 @@ const tests: ComponentTest[] = [
     },
     version: 1,
   },
+  {
+    name: "version 1 props with partial entity values 1",
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      data: {
+        hours: {
+          headingText: {
+            constantValue: "Hours",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "name",
+          },
+          hours: {
+            constantValue: {},
+            field: "hours",
+          },
+        },
+        info: {
+          address: {
+            constantValue: {
+              city: "",
+              countryCode: "",
+              line1: "",
+              postalCode: "",
+            },
+            field: "address",
+          },
+          emails: {
+            constantValue: [],
+            field: "emails",
+          },
+          headingText: {
+            constantValue: "Information",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "id",
+          },
+          phoneNumbers: [
+            {
+              label: "Phone",
+              number: {
+                constantValue: "",
+                field: "mainPhone",
+              },
+            },
+          ],
+        },
+        services: {
+          headingText: {
+            constantValue: "Services",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "description",
+          },
+          servicesList: {
+            constantValue: [],
+            field: "services",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        headingLevel: 3,
+        hours: {
+          collapseDays: false,
+          showAdditionalHoursText: true,
+          startOfWeek: "today",
+        },
+        info: {
+          emailsListLength: 1,
+          includePhoneHyperlink: true,
+          phoneFormat: "domestic",
+          showGetDirectionsLink: true,
+        },
+      },
+    },
+    version: 1,
+  },
+  {
+    name: "version 1 props with partial entity values 2",
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      data: {
+        hours: {
+          headingText: {
+            constantValue: "Hours",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "name",
+          },
+          hours: {
+            constantValue: {},
+            field: "hours",
+          },
+        },
+        info: {
+          address: {
+            constantValue: {
+              city: "",
+              countryCode: "",
+              line1: "",
+              postalCode: "",
+            },
+            field: "address",
+          },
+          emails: {
+            constantValue: [],
+            field: "emails",
+          },
+          headingText: {
+            constantValue: "Information",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "id",
+          },
+          phoneNumbers: [
+            {
+              label: "Phone",
+              number: {
+                constantValue: "",
+                field: "mainPhone",
+              },
+            },
+          ],
+        },
+        services: {
+          headingText: {
+            constantValue: "Services",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "description",
+          },
+          servicesList: {
+            constantValue: [],
+            field: "services",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        headingLevel: 3,
+        hours: {
+          collapseDays: false,
+          showAdditionalHoursText: true,
+          startOfWeek: "today",
+        },
+        info: {
+          emailsListLength: 1,
+          includePhoneHyperlink: true,
+          phoneFormat: "domestic",
+          showGetDirectionsLink: true,
+        },
+      },
+    },
+    version: 1,
+  },
+  {
+    name: "version 1 props with partial entity values 3",
+    document: {
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      data: {
+        hours: {
+          headingText: {
+            constantValue: "Hours",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "name",
+          },
+          hours: {
+            constantValue: {},
+            field: "hours",
+          },
+        },
+        info: {
+          address: {
+            constantValue: {
+              city: "",
+              countryCode: "",
+              line1: "",
+              postalCode: "",
+            },
+            field: "address",
+          },
+          emails: {
+            constantValue: [],
+            field: "emails",
+          },
+          headingText: {
+            constantValue: "",
+            constantValueEnabled: true,
+            constantValueOverride: {},
+            field: "id",
+          },
+          phoneNumbers: [
+            {
+              label: "Phone",
+              number: {
+                constantValue: "",
+                field: "mainPhone",
+              },
+            },
+          ],
+        },
+        services: {
+          headingText: {
+            constantValue: "Services",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "description",
+          },
+          servicesList: {
+            constantValue: [],
+            field: "services",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        headingLevel: 3,
+        hours: {
+          collapseDays: false,
+          showAdditionalHoursText: true,
+          startOfWeek: "today",
+        },
+        info: {
+          emailsListLength: 1,
+          includePhoneHyperlink: true,
+          phoneFormat: "domestic",
+          showGetDirectionsLink: true,
+        },
+      },
+    },
+    version: 1,
+  },
 ];
 
 describe("CoreInfoSection", async () => {

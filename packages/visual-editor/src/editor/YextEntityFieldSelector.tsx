@@ -38,9 +38,11 @@ import {
 } from "../internal/puck/ui/Tooltip.tsx";
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
-import { pt } from "../utils/i18nPlatform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
+import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
+import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 
 const devLogger = new DevLogger();
 
@@ -295,12 +297,34 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   if (!constantFieldConfig) {
     return;
   }
 
-  return constantFieldConfig.type === "custom" ? (
+  const isSingleStringField =
+    filter.types?.includes("type.string") && !filter.includeListsOnly;
+
+  const fieldEditor = isSingleStringField ? (
+    <div className="ve-pt-3">
+      <EmbeddedFieldStringInput
+        value={value?.constantValue?.[locale] ?? ""}
+        onChange={(newInputValue) => {
+          onChange({
+            field: value?.field ?? "",
+            constantValue: {
+              ...value?.constantValue,
+              [locale]: newInputValue,
+            },
+            constantValueEnabled: true,
+          });
+        }}
+        filter={filter}
+      />
+    </div>
+  ) : (
     <AutoField
       onChange={(newConstantValue, uiState) =>
         onChange(
@@ -315,27 +339,42 @@ export const ConstantValueInput = <T extends Record<string, any>>({
       value={value?.constantValue}
       field={constantFieldConfig}
     />
+  );
+
+  return constantFieldConfig.type === "custom" ? (
+    fieldEditor
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
-      className={`ve-inline-block w-full ${constantFieldConfig.label ? "ve-pt-3" : ""}`}
+      className={`ve-inline-block w-full ${
+        constantFieldConfig.label ? "ve-pt-3" : ""
+      }`}
     >
-      <AutoField
-        onChange={(newConstantValue, uiState) =>
-          onChange(
-            {
-              field: value?.field ?? "",
-              constantValue: newConstantValue,
-              constantValueEnabled: true,
-            },
-            uiState
-          )
-        }
-        value={value?.constantValue}
-        field={constantFieldConfig}
-      />
+      {fieldEditor}
     </FieldLabel>
   );
+};
+
+export const getFieldsForSelector = (
+  entityFields: StreamFields | null,
+  filter: RenderEntityFieldFilter<any>
+): YextSchemaField[] => {
+  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
+
+  // If there are no direct children, return the parent field if it is a list
+  if (filter.directChildrenOf && filteredEntityFields.length === 0) {
+    filteredEntityFields = getFilteredEntityFields(entityFields, {
+      allowList: [filter.directChildrenOf],
+      types: filter.types,
+      includeListsOnly: true,
+    });
+  }
+
+  return filteredEntityFields.sort((entityFieldA, entityFieldB) => {
+    const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
+    const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
+    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  });
 };
 
 export const EntityFieldInput = <T extends Record<string, any>>({
@@ -349,30 +388,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const templateMetadata = useTemplateMetadata();
 
   const basicSelectorField = React.useMemo(() => {
-    let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
-
-    // If there are no direct children, return the parent field if it is a list
-    if (filter.directChildrenOf && filteredEntityFields.length === 0) {
-      filteredEntityFields = getFilteredEntityFields(entityFields, {
-        allowList: [filter.directChildrenOf],
-        types: filter.types,
-        includeListsOnly: true,
-      });
-    }
-
-    const entityFieldOptions = filteredEntityFields
-      .map((entityFieldNameToSchema) => {
-        return {
-          label:
-            entityFieldNameToSchema.displayName ?? entityFieldNameToSchema.name,
-          value: entityFieldNameToSchema.name,
-        };
-      })
-      .sort((entityFieldA, entityFieldB) => {
-        const nameA = entityFieldA.label.toUpperCase();
-        const nameB = entityFieldB.label.toUpperCase();
-        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-      });
+    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    const entityFieldOptions = filteredEntityFields.map((field) => ({
+      label: field.displayName ?? field.name,
+      value: field.name,
+    }));
 
     const options = hideSelectAFieldOption
       ? [...entityFieldOptions]

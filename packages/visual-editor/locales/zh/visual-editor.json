@@ -4,6 +4,7 @@
     "copyToClipboard": "复制到剪贴板",
     "pasteFromClipboard": "从剪贴板粘贴"
   },
+  "addEntityField": "添加实体字段",
   "address": "地址",
   "addressInput": {
     "city": "城市",
@@ -68,6 +69,8 @@
   "coordinate": "协调",
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
+  "currentLocation": "当前位置",
+  "customSearchArea": "自定义搜索区域",
   "date": "日期",
   "dateAndTime": "日期和时间",
   "deleteItem": "删除项目",

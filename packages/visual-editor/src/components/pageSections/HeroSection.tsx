@@ -38,26 +38,103 @@ import {
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
+export interface HeroData {
+  /**
+   * The primary business name displayed in the hero.
+   * @defaultValue "Business Name" (constant)
+   */
+  businessName: YextEntityField<TranslatableString>;
+
+  /**
+   * A location-based modifier or slogan (e.g., "Serving Downtown").
+   * @defaultValue "Geomodifier" (constant)
+   */
+  localGeoModifier: YextEntityField<TranslatableString>;
+
+  /**
+   * The entity's hours data, used to display an "Open/Closed" status.
+   * @defaultValue 'hours' field
+   */
+  hours: YextEntityField<HoursType>;
+
+  /**
+   * The main hero content, including an image and primary/secondary call-to-action buttons.
+   * @defaultValue Placeholder image and CTAs
+   */
+  hero: YextStructEntityField<HeroSectionType>;
+
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+}
+
+export interface HeroStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /**
+   * Positions the image to the left or right of the text content.
+   * @defaultValue right
+   */
+  imageOrientation: "left" | "right";
+
+  /**
+   * The HTML heading level for the business name.
+   * @defaultValue 3
+   */
+  businessNameLevel: HeadingLevel;
+
+  /**
+   * The HTML heading level for the local geo-modifier.
+   * @defaultValue 1
+   */
+  localGeoModifierLevel: HeadingLevel;
+
+  /**
+   * The visual style variant for the primary call-to-action button.
+   * @defaultValue primary
+   */
+  primaryCTA: CTAProps["variant"];
+
+  /**
+   * The visual style variant for the secondary call-to-action button.
+   * @defaultValue secondary
+   */
+  secondaryCTA: CTAProps["variant"];
+
+  /**
+   * Styling options for the hero image, such as aspect ratio.
+   */
+  image: ImageStylingProps;
+}
+
 export interface HeroSectionProps {
-  data: {
-    businessName: YextEntityField<TranslatableString>;
-    localGeoModifier: YextEntityField<TranslatableString>;
-    hours: YextEntityField<HoursType>;
-    hero: YextStructEntityField<HeroSectionType>;
-    showAverageReview: boolean;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    imageOrientation: "left" | "right";
-    businessNameLevel: HeadingLevel;
-    localGeoModifierLevel: HeadingLevel;
-    primaryCTA: CTAProps["variant"];
-    secondaryCTA: CTAProps["variant"];
-    image: ImageStylingProps;
-  };
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: HeroData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: HeroStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility?: boolean;
 }
 
@@ -190,29 +267,40 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument() as any;
+  const locale = i18n.language;
+  const streamDocument = useDocument();
   const resolvedBusinessName = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.businessName),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      streamDocument,
+      data?.businessName,
+      locale
+    ),
+    locale
   );
   const resolvedLocalGeoModifier = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
-      data?.localGeoModifier
+      streamDocument,
+      data?.localGeoModifier,
+      locale
     ),
-    i18n.language
+    locale
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
-    document,
-    data?.hours
+    streamDocument,
+    data?.hours,
+    locale
   );
-  const resolvedHero = resolveYextStructField(document, data?.hero);
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    locale
+  );
 
-  const { timezone } = document as {
+  const { timezone } = streamDocument as {
     timezone: string;
   };
 
-  const { averageRating, reviewCount } = getAggregateRating(document);
+  const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   return (
     <PageSection
@@ -273,9 +361,6 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           {reviewCount > 0 && data.showAverageReview && (
             <ReviewStars
               averageRating={averageRating}
-              hasDarkBackground={
-                styles.backgroundColor?.textColor === "text-white"
-              }
               reviewCount={reviewCount}
             />
           )}

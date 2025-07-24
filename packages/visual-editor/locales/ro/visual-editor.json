@@ -4,6 +4,7 @@
     "copyToClipboard": "Copiați în clipboard",
     "pasteFromClipboard": "Lipiți din clipboard"
   },
+  "addEntityField": "Adăugați câmpul entității",
   "address": "Adresa",
   "addressInput": {
     "city": "Oraş",
@@ -68,6 +69,8 @@
   "coordinate": "Coordona",
   "coreInfoSection": "Secțiunea de informații de bază",
   "cta": "CTA",
+  "currentLocation": "Locația curentă",
+  "customSearchArea": "Zona de căutare personalizată",
   "date": "Data",
   "dateAndTime": "Data și ora",
   "deleteItem": "Ștergeți elementul",

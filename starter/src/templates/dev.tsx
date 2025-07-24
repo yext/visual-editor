@@ -64,7 +64,7 @@ export const config = {
       "c_deliveryPromo",
     ],
     localization: {
-      locales: ["en"],
+      locales: ["en", "zh_hans_hk", "fr-CA"],
     },
   },
   additionalProperties: {
@@ -93,6 +93,32 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
       SchemaWrapper(document._schema),
+      // Prevent Vite client script loading in StackBlitz
+      `<script>
+        (function() {
+          // Check if we're in StackBlitz
+          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
+          
+          if (isStackBlitz) {
+            // Block WebSocket connections for Vite HMR
+            var originalWebSocket = window.WebSocket;
+            window.WebSocket = function(url, protocols) {
+              // Block Vite HMR WebSocket connections
+              if (url && (url.includes('24678') || url.includes('vite') || url.includes('hmr'))) {
+                console.log('Blocked Vite WebSocket connection:', url);
+                return {
+                  readyState: 3, // CLOSED
+                  send: function() {},
+                  close: function() {},
+                  addEventListener: function() {},
+                  removeEventListener: function() {},
+                };
+              }
+              return new originalWebSocket(url, protocols);
+            };
+          }
+        })();
+      </script>`,
     ].join("\n"),
   };
 };
@@ -111,6 +137,10 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
+  const displayNames = devTemplateStream.apiNamesToDisplayNames as Record<
+    string,
+    string
+  >;
 
   return (
     <div>
@@ -127,7 +157,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
       <div>
         <VisualEditorProvider
           templateProps={props}
-          entityFields={{ fields: entityFields }}
+          entityFields={{ fields: entityFields, displayNames: displayNames }}
           tailwindConfig={tailwindConfig}
         >
           <Editor

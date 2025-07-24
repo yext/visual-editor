@@ -71,12 +71,17 @@ const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
   props
 ) => {
   const { background, sectionHeading, sectionContent: SectionContent } = props;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   const resolvedHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, sectionHeading.text),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      streamDocument,
+      sectionHeading.text,
+      locale
+    ),
+    locale
   );
 
   const justifyClass = {

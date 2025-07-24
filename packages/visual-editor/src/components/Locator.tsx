@@ -58,12 +58,25 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
 
-export type LocatorProps = {
+export interface LocatorProps {
+  /**
+   * The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
+   * @defaultValue 'mapbox://styles/mapbox/streets-v12'
+   */
   mapStyle?: string;
+
+  /**
+   * If 'true', displays a button to filter for locations that are currently open.
+   * @defaultValue false
+   */
   openNowButton?: boolean;
-  entityTypeEnvVar?: string; // to be set via withPropOverrides
-  experienceKeyEnvVar?: string; // to be set via withPropOverrides
-};
+
+  /** @internal to be set via withPropOverrides */
+  entityTypeEnvVar?: string;
+
+  /** @internal to be set via withPropOverrides */
+  experienceKeyEnvVar?: string;
+}
 
 const locatorFields: Fields<LocatorProps> = {
   mapStyle: BasicSelector({
@@ -107,6 +120,9 @@ const locatorFields: Fields<LocatorProps> = {
   ),
 };
 
+/**
+ * Avaliable on Locator templates.
+ */
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
   label: msg("components.locator", "Locator"),
@@ -114,22 +130,22 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
 };
 
 const LocatorWrapper: React.FC<LocatorProps> = (props) => {
-  const document: any = useDocument();
+  const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
-      document,
+      streamDocument,
       props.experienceKeyEnvVar
     );
     if (searchHeadlessConfig === undefined) {
       return { searchAnalyticsConfig: undefined, searcher: undefined };
     }
 
-    const searchAnalyticsConfig = createSearchAnalyticsConfig(document);
+    const searchAnalyticsConfig = createSearchAnalyticsConfig(streamDocument);
     return {
       searchAnalyticsConfig,
       searcher: provideHeadless(searchHeadlessConfig),
     };
-  }, [document.id, document.locale]);
+  }, [streamDocument.id, streamDocument.locale]);
 
   if (searcher === undefined || searchAnalyticsConfig === undefined) {
     console.warn(
@@ -181,6 +197,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             lat: mapCenter.lat,
             lng: mapCenter.lng,
             radius: mapBounds.getNorthEast().distanceTo(mapCenter),
+            name: t("customSearchArea", "Custom Search Area"),
           },
           matcher: Matcher.Near,
         },
@@ -230,6 +247,7 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
                 lat: location.coords.latitude,
                 lng: location.coords.longitude,
                 radius: DEFAULT_RADIUS_METERS,
+                name: t("currentLocation", "Current Location"),
               },
               matcher: Matcher.Near,
             },
@@ -251,8 +269,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
                 lat: DEFAULT_MAP_CENTER[1],
                 lng: DEFAULT_MAP_CENTER[0],
                 radius: DEFAULT_RADIUS_METERS,
-                // TODO (kgerner): add name property once Search SDK updated
-                // name: "New York City, New York, NY",
+                name: t(
+                  "newYorkCity",
+                  "New York City, New York, United States"
+                ),
               },
               matcher: Matcher.Near,
             },

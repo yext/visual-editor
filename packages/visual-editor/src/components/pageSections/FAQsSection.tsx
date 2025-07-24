@@ -34,22 +34,57 @@ import {
 } from "../atoms/accordion.js";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
+export interface FAQData {
+  /**
+   * The main heading for the entire events section.
+   * @defaultValue "Frequently Asked Questions" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder FAQs.
+   */
+  faqs: YextEntityField<FAQSectionType>;
+}
+
+export interface FAQStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 3
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
+  };
+}
+
 export interface FAQSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    faqs: YextEntityField<FAQSectionType>;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-  };
-  liveVisibility: boolean;
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: FAQData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: FAQStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
 }
 
 const FAQsSectionFields: Fields<FAQSectionProps> = {
@@ -111,12 +146,21 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
 
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const locale = i18n.language;
+  const streamDocument = useDocument();
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading),
+    resolveYextEntityField<TranslatableString>(
+      streamDocument,
+      data?.heading,
+      locale
+    ),
     i18n.language
   );
-  const resolvedFAQs = resolveYextEntityField(document, data?.faqs);
+  const resolvedFAQs = resolveYextEntityField(
+    streamDocument,
+    data?.faqs,
+    locale
+  );
   const analytics = useAnalytics();
 
   const justifyClass = styles?.heading?.align
@@ -201,6 +245,10 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   );
 };
 
+/**
+ * The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
+ * Avaliable on Location templates.
+ */
 export const FAQSection: ComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,

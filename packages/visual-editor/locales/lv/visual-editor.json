@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopēt uz starpliktuvi",
     "pasteFromClipboard": "Paste no starpliktuves"
   },
+  "addEntityField": "Pievienojiet entītijas lauku",
   "address": "Uzruna",
   "addressInput": {
     "city": "Pilsēta",
@@ -68,6 +69,8 @@
   "coordinate": "Koordinēt",
   "coreInfoSection": "Pamatinformācija",
   "cta": "CTA",
+  "currentLocation": "Pašreizējā atrašanās vieta",
+  "customSearchArea": "Pielāgota meklēšanas zona",
   "date": "Datums",
   "dateAndTime": "Datums un laiks",
   "deleteItem": "Dzēst vienumu",

@@ -27,22 +27,57 @@ import {
 import { ComponentConfig, Fields } from "@measured/puck";
 import { defaultTestimonial } from "../../internal/puck/constant-value-fields/TestimonialSection.tsx";
 
-export interface TestimonialSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    testimonials: YextEntityField<TestimonialSectionType>;
+export interface TestimonialData {
+  /**
+   * The main heading for the entire testimonials section.
+   * @defaultValue "Featured Testimonials" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The source of the testimonial data, which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder testimonials.
+   */
+  testimonials: YextEntityField<TestimonialSectionType>;
+}
+
+export interface TestimonialStyles {
+  /**
+   * The background color for the entire section, selected from the theme.
+   * @defaultValue Background Color 2
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for the individual testimonial cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
   };
+}
+
+export interface TestimonialSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: TestimonialData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: TestimonialStyles;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -175,13 +210,15 @@ const TestimonialSectionWrapper = ({
   styles,
 }: TestimonialSectionProps) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const locale = i18n.language;
+  const streamDocument = useDocument();
   const resolvedTestimonials = resolveYextEntityField(
-    document,
-    data.testimonials
+    streamDocument,
+    data.testimonials,
+    locale
   );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(streamDocument, data.heading, locale),
     i18n.language
   );
 
@@ -231,6 +268,10 @@ const TestimonialSectionWrapper = ({
   );
 };
 
+/**
+ * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
+ * Avaliable on Location templates.
+ */
 export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
   label: msg("components.testimonialsSection", "Testimonials Section"),
   fields: testimonialSectionFields,

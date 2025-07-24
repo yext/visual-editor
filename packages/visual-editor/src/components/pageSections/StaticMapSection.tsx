@@ -8,12 +8,27 @@ import {
 import { MapboxStaticMapComponent } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
 
-export type StaticMapSectionProps = {
-  data: {
-    apiKey: string;
-  };
+export interface StaticMapData {
+  /**
+   * The API key used to generate the map image.
+   * @defaultValue ""
+   */
+  apiKey: string;
+}
+
+export interface StaticMapSectionProps {
+  /**
+   * This object contains the configuration needed to generate the map.
+   * @propCategory Data Props
+   */
+  data: StaticMapData;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
-};
+}
 
 const staticMapSectionFields: Fields<StaticMapSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -56,6 +71,10 @@ export const StaticMapSectionWrapper = ({ data }: StaticMapSectionProps) => {
   );
 };
 
+/**
+ * The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox.
+ * Avaliable on Location templates.
+ */
 export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
   label: msg("components.staticMapSection", "Static Map Section"),
   fields: staticMapSectionFields,

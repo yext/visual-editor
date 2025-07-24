@@ -29,8 +29,12 @@ const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  let resolvedTextList = resolveYextEntityField(document, textListField);
+  const streamDocument = useDocument();
+  let resolvedTextList = resolveYextEntityField(
+    streamDocument,
+    textListField,
+    i18n.language
+  );
 
   // When constantValueEnabled is true but no constant values have been set yet, show defaults
   if (
@@ -53,7 +57,7 @@ const TextListComponent: React.FC<TextListProps> = ({
         <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
           {resolvedTextList.map((text, index) => (
             <li key={index} className="mb-2">
-              {resolveTranslatableString(text, i18n.language)}
+              {resolveTranslatableString(text, i18n.language, streamDocument)}
             </li>
           ))}
         </ul>

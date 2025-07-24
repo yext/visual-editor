@@ -7,11 +7,12 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultEvent: EventStruct = {
   image: {
@@ -57,11 +58,12 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const streamDocument = useDocument();
 
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("title", "Title"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
@@ -92,7 +94,11 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {
-      const translation = resolveTranslatableString(item.title, i18n.language);
+      const translation = resolveTranslatableString(
+        item.title,
+        i18n.language,
+        streamDocument
+      );
       if (translation) {
         return translation;
       }

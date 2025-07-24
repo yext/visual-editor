@@ -31,12 +31,18 @@ type socialLink = {
   prefix?: string;
 };
 
-type FooterProps = {
+export interface FooterProps {
+  /**
+   * The background color for the entire footer section.
+   * @defaultValue Background Color 1
+   */
   backgroundColor?: BackgroundStyle;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
-};
+}
 
 const footerFields: Fields<FooterProps> = {
   backgroundColor: YextField(
@@ -48,7 +54,11 @@ const footerFields: Fields<FooterProps> = {
   ),
 };
 
-const Footer: ComponentConfig<FooterProps> = {
+/**
+ * The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component.
+ * Avaliable on Directory and Locator templates.
+ */
+export const Footer: ComponentConfig<FooterProps> = {
   label: msg("components.footer", "Footer"),
   fields: footerFields,
   defaultProps: {
@@ -68,47 +78,47 @@ const Footer: ComponentConfig<FooterProps> = {
 const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
   props
 ) => {
-  const document = useDocument<any>();
+  const streamDocument = useDocument<any>();
   const { backgroundColor = backgroundColors.background1.value, puck } = props;
 
-  const links = document?._site?.footer?.links ?? [];
-  const copyrightMessage = document?._site?.copyrightMessage;
+  const links = streamDocument?._site?.footer?.links ?? [];
+  const copyrightMessage = streamDocument?._site?.copyrightMessage;
   const socialLinks: socialLink[] = [
     {
       name: "facebook",
-      link: document?._site?.facebookPageUrl,
+      link: streamDocument?._site?.facebookPageUrl,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
     },
     {
       name: "instagram",
       prefix: "//www.instagram.com/",
-      link: document?._site?.instagramHandle,
+      link: streamDocument?._site?.instagramHandle,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
     },
     {
       name: "youtube",
-      link: document?._site?.youTubeChannelUrl,
+      link: streamDocument?._site?.youTubeChannelUrl,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
     },
     {
       name: "linkedIn",
-      link: document?._site?.linkedInUrl,
+      link: streamDocument?._site?.linkedInUrl,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
     },
     {
       name: "twitter",
       prefix: "//www.twitter.com/",
-      link: document?._site?.twitterHandle,
+      link: streamDocument?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
     },
     {
       name: "pinterest",
-      link: document?._site?.pinterestUrl,
+      link: streamDocument?._site?.pinterestUrl,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
     },
     {
       name: "tiktok",
-      link: document?._site?.tikTokUrl,
+      link: streamDocument?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
     },
   ].filter((link) => link.link);
@@ -196,5 +206,3 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
     </div>
   );
 };
-
-export { Footer, type FooterProps };

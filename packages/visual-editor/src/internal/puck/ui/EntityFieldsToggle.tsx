@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
 import "../../../editor/index.css";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export const EntityFieldsToggle = () => {
   const tooltipsContext = useEntityTooltips();

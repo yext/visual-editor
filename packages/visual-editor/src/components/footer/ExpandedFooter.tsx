@@ -20,6 +20,7 @@ import {
   TranslatableStringField,
   TranslatableString,
   Background,
+  useDocument,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -61,43 +62,62 @@ export const validPatterns: Record<string, RegExp> = {
   tiktokLink: /^https:\/\/(www\.)?tiktok\.com\/.+/,
 };
 
+export interface ExpandedFooterData {
+  /** Content for the primary footer bar. */
+  primaryFooter: {
+    logo: string;
+    facebookLink: string;
+    instagramLink: string;
+    linkedInLink: string;
+    pinterestLink: string;
+    tiktokLink: string;
+    youtubeLink: string;
+    xLink: string;
+    utilityImages: { url: string; linkTarget?: string }[];
+    expandedFooter: boolean;
+    footerLinks: TranslatableCTA[];
+    expandedFooterLinks: {
+      label: TranslatableString;
+      links: TranslatableCTA[];
+    }[];
+  };
+  /** Content for the secondary header bar. */
+  secondaryFooter: {
+    show: boolean;
+    copyrightMessage: TranslatableString;
+    secondaryFooterLinks: TranslatableCTA[];
+  };
+}
+
+export interface ExpandedFooterStyles {
+  /** Styling for the primary footer bar. */
+  primaryFooter: {
+    backgroundColor?: BackgroundStyle;
+    linksAlignment: "left" | "right";
+    logo: ImageStylingProps;
+    utilityImages: ImageStylingProps;
+  };
+  /** Styling for the secondary footer bar. */
+  secondaryFooter: {
+    backgroundColor?: BackgroundStyle;
+    linksAlignment: "left" | "right";
+  };
+}
+
 export interface ExpandedFooterProps {
-  data: {
-    primaryFooter: {
-      logo: string;
-      facebookLink: string;
-      instagramLink: string;
-      linkedInLink: string;
-      pinterestLink: string;
-      tiktokLink: string;
-      youtubeLink: string;
-      xLink: string;
-      utilityImages: { url: string; linkTarget?: string }[];
-      expandedFooter: boolean;
-      footerLinks: TranslatableCTA[];
-      expandedFooterLinks: {
-        label: TranslatableString;
-        links: TranslatableCTA[];
-      }[];
-    };
-    secondaryFooter: {
-      show: boolean;
-      copyrightMessage: TranslatableString;
-      secondaryFooterLinks: TranslatableCTA[];
-    };
-  };
-  styles: {
-    primaryFooter: {
-      backgroundColor?: BackgroundStyle;
-      linksAlignment: "left" | "right";
-      logo: ImageStylingProps;
-      utilityImages: ImageStylingProps;
-    };
-    secondaryFooter: {
-      backgroundColor?: BackgroundStyle;
-      linksAlignment: "left" | "right";
-    };
-  };
+  /**
+   * This object contains all the content for both footer tiers.
+   * @propCategory Data Props
+   */
+  data: ExpandedFooterData;
+
+  /**
+   * This object contains properties for customizing the appearance of both footer tiers.
+   * @propCategory Style Props
+   */
+  styles: ExpandedFooterStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
@@ -180,7 +200,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   arrayFields: {
                     label: TranslatableStringField(
                       msg("fields.label", "Label"),
-                      "text"
+                      { types: ["type.string"] }
                     ),
                     link: YextField(msg("fields.link", "Link"), {
                       type: "text",
@@ -200,10 +220,9 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
               }),
@@ -231,17 +250,16 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             }),
             copyrightMessage: TranslatableStringField(
               msg("fields.copyrightMessage", "Copyright Message"),
-              "text"
+              { types: ["type.string"] }
             ),
             secondaryFooterLinks: YextField(
               msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(
-                    msg("fields.label", "Label"),
-                    "text"
-                  ),
+                  label: TranslatableStringField(msg("fields.label", "Label"), {
+                    types: ["type.string"],
+                  }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
@@ -385,6 +403,7 @@ const ExpandedFooterWrapper = ({
     linksAlignment: secondaryLinksAlignment,
   } = secondaryFooterStyle;
   const { i18n } = useTranslation();
+  const streamDocument = useDocument();
 
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
@@ -451,7 +470,11 @@ const ExpandedFooterWrapper = ({
             <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
               {expandedFooterLinks.map((item, index) => (
                 <ExpandedFooterLinks
-                  label={resolveTranslatableString(item.label, i18n.language)}
+                  label={resolveTranslatableString(
+                    item.label,
+                    i18n.language,
+                    streamDocument
+                  )}
                   links={item.links}
                   key={index}
                 />
@@ -525,7 +548,11 @@ const ExpandedFooterWrapper = ({
               displayName={pt("fields.copyrightMessage", "Copyright Message")}
             >
               <Body variant="xs" className="text-center md:text-left">
-                {resolveTranslatableString(copyrightMessage, i18n.language)}
+                {resolveTranslatableString(
+                  copyrightMessage,
+                  i18n.language,
+                  streamDocument
+                )}
               </Body>
             </EntityField>
           )}
@@ -543,6 +570,7 @@ const FooterLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
+  const streamDocument = useDocument();
 
   return (
     <ul
@@ -558,7 +586,11 @@ const FooterLinks = ({
                   : "headerFooterSecondaryLink"
               }
               eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
-              label={resolveTranslatableString(item.label, i18n.language)}
+              label={resolveTranslatableString(
+                item.label,
+                i18n.language,
+                streamDocument
+              )}
               linkType={item.linkType}
               link={item.link}
               className="justify-center md:justify-start block break-words whitespace-normal"
@@ -578,6 +610,7 @@ const ExpandedFooterLinks = ({
   label: string;
 }) => {
   const { i18n } = useTranslation();
+  const streamDocument = useDocument();
 
   return (
     <ul className={`flex flex-col items-center md:items-start gap-4 w-full`}>
@@ -589,7 +622,11 @@ const ExpandedFooterLinks = ({
           <CTA
             variant={"headerFooterMainLink"}
             eventName={`cta${index}-Link-${index + 1}`}
-            label={resolveTranslatableString(item.label, i18n.language)}
+            label={resolveTranslatableString(
+              item.label,
+              i18n.language,
+              streamDocument
+            )}
             linkType={item.linkType}
             link={item.link}
             className={"justify-start block break-words whitespace-normal"}
@@ -741,6 +778,10 @@ const FooterIcons = ({
   );
 };
 
+/**
+ * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
+ * Avalible on Location templates.
+ */
 export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   label: msg("components.expandedFooter", "Expanded Footer"),
   fields: expandedFooterSectionFields,

@@ -36,13 +36,24 @@ const PLACEHOLDER_IMAGE: ComplexImageType = {
   },
 };
 
-export type HeaderProps = {
+export interface HeaderProps {
+  /**
+   * The display width of the site logo in pixels.
+   * @defaultValue 80
+   */
   logoWidth?: number;
+
+  /**
+   * If 'true', displays the language selector dropdown in the header.
+   * @defaultValue false
+   */
   enableLanguageSelector: boolean;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
-};
+}
 
 const headerFields: Fields<HeaderProps> = {
   logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
@@ -61,6 +72,10 @@ const headerFields: Fields<HeaderProps> = {
   ),
 };
 
+/**
+ * The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component.
+ * Avaliable on Directory and Locator templates.
+ */
 export const Header: ComponentConfig<HeaderProps> = {
   label: msg("components.header", "Header"),
   fields: headerFields,
@@ -82,9 +97,9 @@ const HeaderComponent: React.FC<HeaderProps> = ({
   logoWidth,
   enableLanguageSelector,
 }) => {
-  const document: any = useDocument();
-  const links = document._site?.header?.links ?? [];
-  const logo = document._site?.logo ?? PLACEHOLDER_IMAGE;
+  const streamDocument: any = useDocument();
+  const links = streamDocument._site?.header?.links ?? [];
+  const logo = streamDocument._site?.logo ?? PLACEHOLDER_IMAGE;
 
   return (
     <HeaderLayout
@@ -92,7 +107,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({
       logo={logo}
       logoWidth={logoWidth}
       enableLanguageSelector={enableLanguageSelector}
-      languageDropDownProps={parseDocumentForLanguageDropdown(document)}
+      languageDropDownProps={parseDocumentForLanguageDropdown(streamDocument)}
     />
   );
 };

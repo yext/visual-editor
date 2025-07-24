@@ -4,6 +4,7 @@
     "copyToClipboard": "Panoya Kopyala",
     "pasteFromClipboard": "Panodan Yapıştır"
   },
+  "addEntityField": "Varlık alanı ekle",
   "address": "Adres",
   "addressInput": {
     "city": "Şehir",
@@ -68,6 +69,8 @@
   "coordinate": "Koordinat",
   "coreInfoSection": "Çekirdek Bilgi Bölümü",
   "cta": "CTA",
+  "currentLocation": "Mevcut Konum",
+  "customSearchArea": "Özel arama alanı",
   "date": "Tarih",
   "dateAndTime": "Tarih ve saat",
   "deleteItem": "Öğeyi sil",

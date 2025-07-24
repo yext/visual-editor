@@ -26,30 +26,69 @@ import {
   ThemeOptions,
   resolveTranslatableRichText,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultInsight } from "../../internal/puck/constant-value-fields/InsightSection.tsx";
 
-export interface InsightSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    insights: YextEntityField<InsightSectionType>;
+export interface InsightData {
+  /**
+   * The main heading for the entire insights section.
+   * @defaultValue "Insights"
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The source of the insight data, which can be linked to a Yext field or provided as a constant.
+   * @defaultValue A list of 3 placeholder insights.
+   */
+  insights: YextEntityField<InsightSectionType>;
+}
+
+export interface InsightStyles {
+  /**
+   * The background color for the entire section, selected from the theme.
+   * @defaultValue Background Color 2
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
   };
-  styles: {
+
+  /** Styling for the individual insight cards. */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
+    ctaVariant: CTAProps["variant"];
   };
+}
+
+export interface InsightSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: InsightData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: InsightStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -111,6 +150,10 @@ const insightSectionFields: Fields<InsightSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
     },
@@ -132,11 +175,13 @@ const InsightCard = ({
   insight,
   cardStyles,
   sectionHeadingLevel,
+  ctaVariant,
 }: {
   cardNumber: number;
   insight: InsightStruct;
   cardStyles: InsightSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
+  ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
 
@@ -186,7 +231,7 @@ const InsightCard = ({
         {insight.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            variant={"link"}
+            variant={ctaVariant}
             label={resolveTranslatableString(insight.cta.label, i18n.language)}
             link={insight.cta.link}
             linkType={insight.cta.linkType ?? "URL"}
@@ -200,10 +245,15 @@ const InsightCard = ({
 
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
-  const resolvedInsights = resolveYextEntityField(document, data.insights);
+  const locale = i18n.language;
+  const streamDocument = useDocument();
+  const resolvedInsights = resolveYextEntityField(
+    streamDocument,
+    data.insights,
+    locale
+  );
   const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading),
+    resolveYextEntityField(streamDocument, data.heading, locale),
     i18n.language
   );
 
@@ -247,6 +297,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
                 insight={insight}
                 cardStyles={styles.cards}
                 sectionHeadingLevel={styles.heading.level}
+                ctaVariant={styles.cards.ctaVariant}
               />
             ))}
           </div>
@@ -256,6 +307,10 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   );
 };
 
+/**
+ * The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content.
+ * Avaliable on Location templates.
+ */
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
@@ -283,6 +338,7 @@ export const InsightSection: ComponentConfig<InsightSectionProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 4,
+        ctaVariant: "primary",
       },
     },
     analytics: {

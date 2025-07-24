@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopijuokite į mainų sritį",
     "pasteFromClipboard": "Įklijuokite iš mainų srities"
   },
+  "addEntityField": "Pridėti subjekto lauką",
   "address": "Adresas",
   "addressInput": {
     "city": "Miestas",
@@ -68,6 +69,8 @@
   "coordinate": "Koordinatė",
   "coreInfoSection": "Pagrindinės informacijos skyrius",
   "cta": "CTA",
+  "currentLocation": "Dabartinė vieta",
+  "customSearchArea": "Pasirinktinė paieškos sritis",
   "date": "Data",
   "dateAndTime": "Data ir laikas",
   "deleteItem": "Ištrinti elementą",

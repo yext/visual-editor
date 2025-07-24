@@ -12,7 +12,7 @@ export const TEXT_CONSTANT_CONFIG: TextField = {
 };
 
 export const TRANSLATABLE_STRING_CONSTANT_CONFIG: CustomField<TranslatableString> =
-  TranslatableStringField(undefined, "text");
+  TranslatableStringField(undefined, { types: ["type.string"] });
 
 export const TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG: CustomField<TranslatableRichText> =
   TranslatableRichTextField();

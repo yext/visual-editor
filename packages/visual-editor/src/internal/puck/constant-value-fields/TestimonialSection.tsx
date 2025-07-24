@@ -6,11 +6,12 @@ import {
   TranslatableString,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18nPlatform.ts";
+import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveTranslatableString } from "../../../utils/resolveTranslatableString.tsx";
 import { useMemo } from "react";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultTestimonial: TestimonialStruct = {
   description: {
@@ -50,11 +51,12 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
 
 const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
+  const streamDocument = useDocument();
 
   const contributorNameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.contributorName", "Contributor Name"),
-      "text"
+      { types: ["type.string"] }
     );
   }, []);
 
@@ -76,7 +78,8 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
     getItemSummary: (item, i) => {
       const translation = resolveTranslatableString(
         item.contributorName,
-        i18n.language
+        i18n.language,
+        streamDocument
       );
       if (translation) {
         return translation;

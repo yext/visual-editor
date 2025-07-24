@@ -35,9 +35,13 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   variant,
   className,
 }) => {
-  const { t } = useTranslation();
-  const document = useDocument();
-  const cta = resolveYextEntityField(document, entityField);
+  const { t, i18n } = useTranslation();
+  const streamDocument = useDocument();
+  const cta = resolveYextEntityField(
+    streamDocument,
+    entityField,
+    i18n.language
+  );
 
   return (
     <EntityField

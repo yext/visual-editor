@@ -19,16 +19,46 @@ import {
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
 
-export type BannerSectionProps = {
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    textAlignment: "left" | "right" | "center";
-  };
-  data: {
-    text: YextEntityField<TranslatableRichText>;
-  };
+export interface BannerData {
+  /**
+   * The rich text to display. It can be linked to a Yext entity field or set as a constant value.
+   * @defaultValue "Banner Text" (constant)
+   */
+  text: YextEntityField<TranslatableRichText>;
+}
+
+export interface BannerStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 6
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * The horizontal alignment of the text.
+   * @defaultValue center
+   */
+  textAlignment: "left" | "right" | "center";
+}
+
+export interface BannerSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: BannerData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: BannerStyles;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
-};
+}
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -72,10 +102,15 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const locale = i18n.language;
+  const streamDocument = useDocument();
   const resolvedText = resolveTranslatableRichText(
-    resolveYextEntityField<TranslatableRichText>(document, data.text),
-    i18n.language
+    resolveYextEntityField<TranslatableRichText>(
+      streamDocument,
+      data.text,
+      locale
+    ),
+    locale
   );
 
   const justifyClass = {
@@ -105,6 +140,10 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   );
 };
 
+/**
+ * The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page.
+ * Avaliable on Location templates.
+ */
 export const BannerSection: ComponentConfig<BannerSectionProps> = {
   label: msg("components.bannerSection", "Banner Section"),
   fields: bannerSectionFields,

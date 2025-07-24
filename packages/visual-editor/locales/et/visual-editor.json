@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopeeri lõikelauale",
     "pasteFromClipboard": "Pasta lõikelaualt"
   },
+  "addEntityField": "Lisage olemiväli",
   "address": "Aadress",
   "addressInput": {
     "city": "Linn",
@@ -68,6 +69,8 @@
   "coordinate": "Koordinaat",
   "coreInfoSection": "Põhiteabe jaotis",
   "cta": "CTA",
+  "currentLocation": "Praegune asukoht",
+  "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
   "dateAndTime": "Kuupäev ja kellaaeg",
   "deleteItem": "Kustuta üksus",

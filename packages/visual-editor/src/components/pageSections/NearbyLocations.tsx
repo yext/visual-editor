@@ -32,38 +32,100 @@ import {
 } from "@yext/pages-components";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { StreamDocument } from "../../utils/applyTheme";
+
+export interface NearbyLocationsData {
+  /**
+   * The main heading for the entire section.
+   * @defaultValue "Nearby Locations" (constant)
+   */
+  heading: YextEntityField<TranslatableString>;
+
+  /**
+   * The central coordinate (`latitude`, `longitude`) to search from.
+   * @defaultValue 'yextDisplayCoordinate' field
+   */
+  coordinate: YextEntityField<Coordinate>;
+
+  /**
+   * The search radius in miles.
+   * @defaultValue 10
+   */
+  radius: number;
+
+  /**
+   * The maximum number of locations to find and display.
+   * @defaultValue 3
+   */
+  limit: number;
+}
+
+export interface NearbyLocationsStyles {
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for the main section heading. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
+  };
+
+  /** Styling for the individual location cards. */
+  cards: {
+    headingLevel: HeadingLevel;
+    backgroundColor?: BackgroundStyle;
+  };
+
+  /**
+   * The display format for phone numbers on the cards.
+   * @defaultValue 'domestic'
+   */
+  phoneNumberFormat: "domestic" | "international";
+
+  /**
+   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
+   * @defaultValue false
+   */
+  phoneNumberLink: boolean;
+
+  /** Styling for the hours display on each card. */
+  hours: {
+    showCurrentStatus: boolean;
+    timeFormat?: "12h" | "24h";
+    dayOfWeekFormat?: "short" | "long";
+    showDayNames?: boolean;
+  };
+}
 
 export interface NearbyLocationsSectionProps {
-  data: {
-    heading: YextEntityField<TranslatableString>;
-    coordinate: YextEntityField<Coordinate>;
-    radius: number;
-    limit: number;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
-    phoneNumberFormat: "domestic" | "international";
-    phoneNumberLink: boolean;
-    hours: {
-      showCurrentStatus: boolean;
-      timeFormat?: "12h" | "24h";
-      dayOfWeekFormat?: "short" | "long";
-      showDayNames?: boolean;
-    };
-  };
+  /**
+   * This object defines the search parameters for finding nearby locations.
+   * @propCategory Data Props
+   */
+  data: NearbyLocationsData;
+
+  /**
+   * This object contains extensive properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: NearbyLocationsStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
-  contentEndpointIdEnvVar?: string; // to be set via withPropOverrides
+
+  /**  @internal */
+  contentEndpointIdEnvVar?: string;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -303,18 +365,25 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   data,
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
-  const document = useDocument<any>();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
+
   const coordinate = resolveYextEntityField<Coordinate>(
-    document,
-    data?.coordinate
+    streamDocument,
+    data?.coordinate,
+    locale
   );
   const headingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      streamDocument,
+      data?.heading,
+      locale
+    ),
+    locale
   );
 
-  // parse variables from document
+  // parse variables from streamDocument
   const {
     businessId,
     entityId,
@@ -328,8 +397,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
   } = React.useMemo(
-    () => parseDocument(document, contentEndpointIdEnvVar),
-    [document, contentEndpointIdEnvVar]
+    () => parseDocument(streamDocument, contentEndpointIdEnvVar),
+    [streamDocument, contentEndpointIdEnvVar]
   );
 
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
@@ -416,9 +485,9 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   );
 };
 
-// parseDocument parses the document to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain
+// parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain
 function parseDocument(
-  document: any,
+  streamDocument: StreamDocument,
   contentEndpointIdEnvVar?: string
 ): {
   businessId: string;
@@ -428,19 +497,20 @@ function parseDocument(
   contentDeliveryAPIDomain: string;
 } {
   // read businessId
-  const businessId: string = document?.businessId;
+  const businessId: string = streamDocument?.businessId;
   if (!businessId) {
     console.warn("Missing businessId! Unable to fetch nearby locations.");
   }
 
   // read entityId
-  const entityId: string = document?.id;
+  const entityId: string = streamDocument?.id;
   if (!entityId) {
     console.warn("Missing entityId! Unable to fetch nearby locations.");
   }
 
   // read API key
-  const apiKey: string = document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+  const apiKey: string =
+    streamDocument?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to fetch nearby locations."
@@ -449,16 +519,16 @@ function parseDocument(
 
   // parse contentEndpointId
   let contentEndpointId: string = "";
-  if (document?._pageset) {
+  if (streamDocument?._pageset) {
     try {
-      const pagesetJson = JSON.parse(document?._pageset);
+      const pagesetJson = JSON.parse(streamDocument?._pageset);
       contentEndpointId =
         pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
     } catch (e) {
-      console.error("Failed to parse pageset from document. err=", e);
+      console.error("Failed to parse pageset from stream document. err=", e);
     }
   } else if (contentEndpointIdEnvVar) {
-    contentEndpointId = document?._env?.[contentEndpointIdEnvVar];
+    contentEndpointId = streamDocument?._env?.[contentEndpointIdEnvVar];
   }
   if (!contentEndpointId) {
     console.warn(
@@ -467,7 +537,8 @@ function parseDocument(
   }
 
   // read contentDeliveryAPIDomain
-  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
+  const contentDeliveryAPIDomain =
+    streamDocument?._yext?.contentDeliveryAPIDomain;
   if (!contentDeliveryAPIDomain) {
     console.warn(
       "Missing contentDeliveryAPIDomain! Unable to fetch nearby locations."
@@ -483,6 +554,10 @@ function parseDocument(
   };
 }
 
+/**
+ * The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours.
+ * Avaliable on Location templates.
+ */
 export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
   {
     label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),

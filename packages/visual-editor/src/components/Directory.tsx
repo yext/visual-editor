@@ -14,6 +14,9 @@ import {
   BackgroundStyle,
   Background,
   HeadingLevel,
+  resolveYextEntityField,
+  YextEntityField,
+  resolveTranslatableString,
   getLocationPath,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
@@ -25,18 +28,56 @@ import {
 } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 
-export interface DirectoryProps {
-  data: {
-    directoryRoot: TranslatableString;
-  };
-  styles: {
+export interface DirectoryData {
+  /**
+   * The title for the Directory Section.
+   * @defaultValue "[[name]]" (constant using embedded fields)
+   */
+  title: YextEntityField<TranslatableString>;
+
+  /**
+   * The display label for the root link in the breadcrumbs navigation.
+   * @defaultValue "Directory Root" (constant)
+   */
+  directoryRoot: TranslatableString;
+}
+
+export interface DirectoryStyles {
+  /**
+   * The main background color for the directory page content.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /**
+   * A specific background color for the breadcrumbs navigation bar.
+   * @defaultValue Background Color 1
+   */
+  breadcrumbsBackgroundColor?: BackgroundStyle;
+
+  /**
+   * Style properties for directory cards.
+   */
+  cards: {
+    headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    breadcrumbsBackgroundColor?: BackgroundStyle;
-    cards: {
-      headingLevel: HeadingLevel;
-      backgroundColor?: BackgroundStyle;
-    };
   };
+}
+
+export interface DirectoryProps {
+  /**
+   * This object contains the content used by the component.
+   * @propCategory Data Props
+   */
+  data: DirectoryData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: DirectoryStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
@@ -46,9 +87,15 @@ const directoryFields: Fields<DirectoryProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
+      title: YextField<any, TranslatableString>(msg("fields.title", "Title"), {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        "text"
+        { types: ["type.string"] }
       ),
     },
   }),
@@ -264,22 +311,17 @@ const DirectoryList = ({
 };
 
 const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
-  const { document, relativePrefixToRoot } = useTemplateProps<any>();
+  const { i18n } = useTranslation();
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  let headingText;
-  switch (document?.meta?.entityType?.id) {
-    case "dm_root":
-      headingText = "All Locations";
-      break;
-    case "dm_country":
-      headingText = document.dm_addressCountryDisplayName ?? document.name;
-      break;
-    case "dm_region":
-      headingText = document.dm_addressRegionDisplayName ?? document.name;
-      break;
-    case "dm_city":
-      headingText = document.name;
-  }
+  const title = resolveTranslatableString(
+    resolveYextEntityField<TranslatableString>(
+      streamDocument,
+      data.title,
+      i18n.language
+    ),
+    i18n.language
+  );
 
   return (
     <Background background={styles.backgroundColor}>
@@ -289,35 +331,47 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
         styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
       />
       <PageSection className="flex flex-col items-center gap-2">
-        {document._site.name && (
-          <Heading level={4}>{document._site.name}</Heading>
+        {streamDocument._site?.name && (
+          <Heading level={4}>{streamDocument._site.name}</Heading>
         )}
-        {headingText && <Heading level={2}>{headingText}</Heading>}
+        {title && <Heading level={2}>{title}</Heading>}
       </PageSection>
-      {document.dm_directoryChildren &&
-        isDirectoryGrid(document.dm_directoryChildren) && (
+      {streamDocument.dm_directoryChildren &&
+        isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryGrid
-            directoryChildren={document.dm_directoryChildren}
+            directoryChildren={streamDocument.dm_directoryChildren}
             cardStyles={styles.cards}
           />
         )}
-      {document.dm_directoryChildren &&
-        !isDirectoryGrid(document.dm_directoryChildren) && (
+      {streamDocument.dm_directoryChildren &&
+        !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryList
-            directoryChildren={document.dm_directoryChildren}
-            relativePrefixToRoot={relativePrefixToRoot}
-            level={document?.meta?.entityType?.id}
+            directoryChildren={streamDocument.dm_directoryChildren}
+            relativePrefixToRoot={relativePrefixToRoot ?? ""}
+            level={streamDocument?.meta?.entityType?.id}
           />
         )}
     </Background>
   );
 };
 
+/**
+ * The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card.
+ * Avaliable on Directory templates.
+ */
 export const Directory: ComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
   defaultProps: {
     data: {
+      title: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "[[name]]",
+          hasLocalizedValue: "true",
+        },
+      },
       directoryRoot: {
         en: "Directory Root",
         hasLocalizedValue: "true",

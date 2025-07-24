@@ -7,7 +7,9 @@ on:
 jobs:
   create-dev-release:
     # Only run for the 'create-dev-release' label
-    if: github.event.label.name == 'create-dev-release'
+    if: |
+      (github.event.action == 'labeled' && github.event.label.name == 'create-dev-release') ||
+      (github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'create-dev-release'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,7 +37,7 @@ jobs:
         run: pnpm run build
 
       - name: "Publish temporary version with pkg.pr.new"
-        run: pnpx pkg-pr-new publish
+        run: pnpx pkg-pr-new publish './packages/visual-editor' --template './starter'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -53,5 +55,5 @@ jobs:
               "pr_title": "${{ github.event.pull_request.title }}",
               "pr_url": "${{ github.event.pull_request.html_url }}",
               "author": "${{ github.event.pull_request.user.login }}",
-              "package_url": "https://pkg.pr.new/yext/visual-editor@${{ github.event.pull_request.number }}"
+              "package_url": "https://pkg.pr.new/yext/visual-editor/@yext/visual-editor@${{ github.event.pull_request.number }}"
             }

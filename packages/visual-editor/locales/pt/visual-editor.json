@@ -4,6 +4,7 @@
     "copyToClipboard": "Cópia para a área de transferência",
     "pasteFromClipboard": "Colar da área de transferência"
   },
+  "addEntityField": "Adicione o campo da entidade",
   "address": "Endereço",
   "addressInput": {
     "city": "Cidade",
@@ -68,6 +69,8 @@
   "coordinate": "Coordenada",
   "coreInfoSection": "Seção de informações principais",
   "cta": "CTA",
+  "currentLocation": "Localização atual",
+  "customSearchArea": "Área de pesquisa personalizada",
   "date": "Data",
   "dateAndTime": "Data e hora",
   "deleteItem": "Excluir item",

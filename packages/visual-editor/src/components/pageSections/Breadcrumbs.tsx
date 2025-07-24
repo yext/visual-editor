@@ -15,19 +15,53 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import { StreamDocument } from "../../utils/applyTheme";
 
-export type BreadcrumbsSectionProps = {
-  data: {
-    directoryRoot: TranslatableString;
-  };
-  styles: {
-    backgroundColor?: BackgroundStyle;
-  };
+export interface BreadcrumbsData {
+  /**
+   * The display label for the first link in the breadcrumb trail (the top-level directory page).
+   * @defaultValue "Directory Root"
+   */
+  directoryRoot: TranslatableString;
+}
+
+export interface BreadcrumbsStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+}
+
+/**
+ * @public Defines the complete set of properties for the BreadcrumbsSection component.
+ */
+export interface BreadcrumbsSectionProps {
+  /**
+   * This object contains the content used by the component.
+   * @propCategory Data Props
+   */
+  data: BreadcrumbsData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: BreadcrumbsStyles;
+
+  /**
+   * @internal
+   */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
-};
+}
 
 const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -35,7 +69,7 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
     objectFields: {
       directoryRoot: TranslatableStringField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        "text"
+        { types: ["type.string"] }
       ),
     },
   }),
@@ -66,14 +100,14 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
 // getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
 // the directory parent are not the expected objects, returns an empty array.
 const getDirectoryParents = (
-  document: Record<string, any>
+  streamDocument: StreamDocument
 ): Array<{ slug: string; name: string }> => {
-  for (const key in document) {
+  for (const key in streamDocument) {
     if (
       key.startsWith("dm_directoryParents_") &&
-      isValidDirectoryParents(document[key])
+      isValidDirectoryParents(streamDocument[key])
     ) {
-      return document[key];
+      return streamDocument[key];
     }
   }
   return [];
@@ -104,17 +138,19 @@ export const BreadcrumbsComponent = ({
 }: BreadcrumbsSectionProps) => {
   const { t, i18n } = useTranslation();
   const separator = "/";
-  const { document, relativePrefixToRoot } = useTemplateProps<any>();
-  let breadcrumbs = getDirectoryParents(document);
-  if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  let breadcrumbs = getDirectoryParents(streamDocument);
+  if (breadcrumbs?.length > 0 || streamDocument.dm_directoryChildren) {
     // append the current and filter out missing or malformed data
-    breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
-      (b) => b.name
-    );
+    breadcrumbs = [
+      ...breadcrumbs,
+      { name: streamDocument.name, slug: "" },
+    ].filter((b) => b.name);
   }
   const directoryRoot = resolveTranslatableString(
     data.directoryRoot,
-    i18n.language
+    i18n.language,
+    streamDocument
   );
 
   if (!breadcrumbs?.length) {
@@ -157,6 +193,10 @@ export const BreadcrumbsComponent = ({
   );
 };
 
+/**
+ * The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site.
+ * Avaliable on Location templates.
+ */
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,

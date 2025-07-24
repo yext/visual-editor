@@ -35,49 +35,86 @@ import {
   usePlatformTranslation,
   TranslatableStringField,
   getAnalyticsScopeHash,
+  CTAProps,
 } from "@yext/visual-editor";
 
+export interface CoreInfoData {
+  /** Content for the "Information" column. */
+  info: {
+    headingText: YextEntityField<TranslatableString>;
+    address: YextEntityField<AddressType>;
+    phoneNumbers: Array<{
+      number: YextEntityField<string>;
+      label: TranslatableString;
+    }>;
+    emails: YextEntityField<string[]>;
+  };
+
+  /** Content for the "Hours" column. */
+  hours: {
+    headingText: YextEntityField<TranslatableString>;
+    hours: YextEntityField<HoursType>;
+  };
+
+  /** Content for the "Services" column. */
+  services: {
+    headingText: YextEntityField<TranslatableString>;
+    servicesList: YextEntityField<TranslatableString[]>;
+  };
+}
+
+export interface CoreInfoStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue `Background Color 1`
+   */
+  backgroundColor?: BackgroundStyle;
+
+  /** Styling for all column headings. */
+  heading: {
+    level: HeadingLevel;
+    align: "left" | "center" | "right";
+  };
+
+  /** Styling for the "Information" column. */
+  info: {
+    showGetDirectionsLink: boolean;
+    phoneFormat: "domestic" | "international";
+    includePhoneHyperlink: boolean;
+    emailsListLength?: number;
+    ctaVariant: CTAProps["variant"];
+  };
+
+  /** Styling for the "Hours" column. */
+  hours: {
+    startOfWeek: keyof DayOfWeekNames | "today";
+    collapseDays: boolean;
+    showAdditionalHoursText: boolean;
+  };
+}
+
 export interface CoreInfoSectionProps {
-  data: {
-    info: {
-      headingText: YextEntityField<TranslatableString>;
-      address: YextEntityField<AddressType>;
-      phoneNumbers: Array<{
-        number: YextEntityField<string>;
-        label: TranslatableString;
-      }>;
-      emails: YextEntityField<string[]>;
-    };
-    hours: {
-      headingText: YextEntityField<TranslatableString>;
-      hours: YextEntityField<HoursType>;
-    };
-    services: {
-      headingText: YextEntityField<TranslatableString>;
-      servicesList: YextEntityField<TranslatableString[]>;
-    };
-  };
-  styles: {
-    heading: {
-      level: HeadingLevel;
-      align: "left" | "center" | "right";
-    };
-    backgroundColor?: BackgroundStyle;
-    info: {
-      showGetDirectionsLink: boolean;
-      phoneFormat: "domestic" | "international";
-      includePhoneHyperlink: boolean;
-      emailsListLength?: number;
-    };
-    hours: {
-      startOfWeek: keyof DayOfWeekNames | "today";
-      collapseDays: boolean;
-      showAdditionalHoursText: boolean;
-    };
-  };
+  /**
+   * This object contains all the content to be displayed within the three columns.
+   * @propCategory Data Props
+   */
+  data: CoreInfoData;
+
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: CoreInfoStyles;
+
+  /** @internal */
   analytics?: {
     scope?: string;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -114,16 +151,18 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: TranslatableStringField(
-                msg("fields.label", "Label"),
-                "text"
-              ),
+              label: TranslatableStringField(msg("fields.label", "Label"), {
+                types: ["type.string"],
+              }),
             },
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
+              const streamDocument = useDocument();
+
               const translation = resolveTranslatableString(
                 item.label,
-                i18n.language
+                i18n.language,
+                streamDocument
               );
               if (translation) {
                 return translation;
@@ -240,6 +279,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               ],
             }
           ),
+          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+            type: "radio",
+            options: "CTA_VARIANT",
+          }),
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
@@ -289,44 +332,59 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   ),
 };
 
+/**
+ * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
+ * Avaliable on Location templates.
+ */
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const locale = i18n.language;
+  const streamDocument = useDocument();
   const addressHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data.info.headingText),
-    i18n.language
+    resolveYextEntityField<TranslatableString>(
+      streamDocument,
+      data.info.headingText,
+      locale
+    ),
+    locale
   );
   const resolvedAddress = resolveYextEntityField<AddressType>(
-    document,
-    data.info.address
+    streamDocument,
+    data.info.address,
+    locale
   );
   const resolvedEmails = resolveYextEntityField<string[]>(
-    document,
-    data.info.emails
+    streamDocument,
+    data.info.emails,
+    locale
   );
   const hoursHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
-      data.hours.headingText
+      streamDocument,
+      data.hours.headingText,
+      locale
     ),
     i18n.language
   );
   const resolvedHours = resolveYextEntityField<HoursType>(
-    document,
-    data.hours.hours
+    streamDocument,
+    data.hours.hours,
+    locale
   );
   const servicesHeadingText = resolveTranslatableString(
     resolveYextEntityField<TranslatableString>(
-      document,
-      data.services.headingText
+      streamDocument,
+      data.services.headingText,
+      locale
     ),
     i18n.language
   );
   const servicesList = resolveYextEntityField<TranslatableString[]>(
-    document,
-    data.services.servicesList
+    streamDocument,
+    data.services.servicesList,
+    locale
   )?.map((translatableString: TranslatableString) =>
-    resolveTranslatableString(translatableString, i18n.language)
+    resolveTranslatableString(translatableString, i18n.language, streamDocument)
   );
   const coordinates = getDirections(
     resolvedAddress as AddressType,
@@ -334,7 +392,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     undefined,
     { provider: "google" }
   );
-  const { additionalHoursText } = document as {
+  const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 
@@ -398,7 +456,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              variant="link"
+              variant={styles.info.ctaVariant}
             />
           )}
         </div>
@@ -406,8 +464,9 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           <ul className="flex flex-col gap-4">
             {data.info.phoneNumbers.map((item, idx) => {
               const resolvedNumber = resolveYextEntityField<string>(
-                document,
-                item.number
+                streamDocument,
+                item.number,
+                locale
               );
               if (!resolvedNumber) {
                 return;
@@ -415,7 +474,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
               const phoneLabel = resolveTranslatableString(
                 item.label,
-                i18n.language
+                i18n.language,
+                streamDocument
               );
 
               return (
@@ -558,6 +618,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   );
 };
 
+/**
+ * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
+ * Avaliable on Location templates.
+ */
 export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
   label: msg("components.coreInfoSection", "Core Info Section"),
   fields: coreInfoSectionFields,
@@ -670,6 +734,7 @@ export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
         phoneFormat: "domestic",
         includePhoneHyperlink: true,
         emailsListLength: 1,
+        ctaVariant: "link",
       },
       hours: {
         startOfWeek: "today",

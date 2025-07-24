@@ -11,7 +11,7 @@ hero:
       link: /docs/getting-started
     - theme: alt
       text: Components
-      link: /editor/README
+      link: /docs/components.md
 
 features:
   - title: Yext

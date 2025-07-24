@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import React from "react";
 import { Button } from "../../puck/ui/button.tsx";
-import { pt } from "../../../utils/i18nPlatform.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type ApprovalModalProps = {
   open: boolean;

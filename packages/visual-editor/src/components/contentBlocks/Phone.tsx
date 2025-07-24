@@ -41,9 +41,13 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   format,
   includeHyperlink,
 }) => {
-  const { t } = useTranslation();
-  const document = useDocument();
-  const resolvedPhone = resolveYextEntityField<string>(document, phone);
+  const { t, i18n } = useTranslation();
+  const streamDocument = useDocument();
+  const resolvedPhone = resolveYextEntityField<string>(
+    streamDocument,
+    phone,
+    i18n.language
+  );
 
   if (!resolvedPhone) {
     return;

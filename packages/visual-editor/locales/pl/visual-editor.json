@@ -4,6 +4,7 @@
     "copyToClipboard": "Kopiuj do schowka",
     "pasteFromClipboard": "Wklej ze schowka"
   },
+  "addEntityField": "Dodaj pole jednostki",
   "address": "Adres",
   "addressInput": {
     "city": "Miasto",
@@ -68,6 +69,8 @@
   "coordinate": "Koordynować",
   "coreInfoSection": "Sekcja informacji podstawowych",
   "cta": "CTA",
+  "currentLocation": "Aktualna lokalizacja",
+  "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "date": "Data",
   "dateAndTime": "Data i godzina",
   "deleteItem": "Usuń element",
