@@ -31,6 +31,7 @@ import {
 } from "@yext/pages-components";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { StreamDocument } from "../../utils/applyTheme";
 
 export interface NearbyLocationsData {
   /**
@@ -363,14 +364,22 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   data,
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
-  const document = useDocument<any>();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  const coordinate = resolveComponentData(data?.coordinate, locale, document);
-  const headingText = resolveComponentData(data?.heading, locale, document);
+  const coordinate = resolveComponentData(
+    data?.coordinate,
+    locale,
+    streamDocument
+  );
+  const headingText = resolveComponentData(
+    data?.heading,
+    locale,
+    streamDocument
+  );
 
-  // parse variables from document
+  // parse variables from streamDocument
   const {
     businessId,
     entityId,
@@ -384,8 +393,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
   } = React.useMemo(
-    () => parseDocument(document, contentEndpointIdEnvVar),
-    [document, contentEndpointIdEnvVar]
+    () => parseDocument(streamDocument, contentEndpointIdEnvVar),
+    [streamDocument, contentEndpointIdEnvVar]
   );
 
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
@@ -472,9 +481,9 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   );
 };
 
-// parseDocument parses the document to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain
+// parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain
 function parseDocument(
-  document: any,
+  streamDocument: StreamDocument,
   contentEndpointIdEnvVar?: string
 ): {
   businessId: string;
@@ -484,19 +493,20 @@ function parseDocument(
   contentDeliveryAPIDomain: string;
 } {
   // read businessId
-  const businessId: string = document?.businessId;
+  const businessId: string = streamDocument?.businessId;
   if (!businessId) {
     console.warn("Missing businessId! Unable to fetch nearby locations.");
   }
 
   // read entityId
-  const entityId: string = document?.id;
+  const entityId: string = streamDocument?.id;
   if (!entityId) {
     console.warn("Missing entityId! Unable to fetch nearby locations.");
   }
 
   // read API key
-  const apiKey: string = document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+  const apiKey: string =
+    streamDocument?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
   if (!apiKey) {
     console.warn(
       "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to fetch nearby locations."
@@ -505,16 +515,16 @@ function parseDocument(
 
   // parse contentEndpointId
   let contentEndpointId: string = "";
-  if (document?._pageset) {
+  if (streamDocument?._pageset) {
     try {
-      const pagesetJson = JSON.parse(document?._pageset);
+      const pagesetJson = JSON.parse(streamDocument?._pageset);
       contentEndpointId =
         pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
     } catch (e) {
-      console.error("Failed to parse pageset from document. err=", e);
+      console.error("Failed to parse pageset from stream document. err=", e);
     }
   } else if (contentEndpointIdEnvVar) {
-    contentEndpointId = document?._env?.[contentEndpointIdEnvVar];
+    contentEndpointId = streamDocument?._env?.[contentEndpointIdEnvVar];
   }
   if (!contentEndpointId) {
     console.warn(
@@ -523,7 +533,8 @@ function parseDocument(
   }
 
   // read contentDeliveryAPIDomain
-  const contentDeliveryAPIDomain = document?._yext?.contentDeliveryAPIDomain;
+  const contentDeliveryAPIDomain =
+    streamDocument?._yext?.contentDeliveryAPIDomain;
   if (!contentDeliveryAPIDomain) {
     console.warn(
       "Missing contentDeliveryAPIDomain! Unable to fetch nearby locations."

@@ -47,7 +47,7 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
 
 const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   const questionField = useMemo(() => {
     return TranslatableStringField(msg("fields.question", "Question"), {
@@ -71,7 +71,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
       const translation = resolveComponentData(
         item.question,
         i18n.language,
-        document
+        streamDocument
       );
       if (translation) {
         return translation;

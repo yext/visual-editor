@@ -28,11 +28,11 @@ const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   let resolvedTextList = resolveComponentData(
     textListField,
     i18n.language,
-    document
+    streamDocument
   );
 
   // When constantValueEnabled is true but no constant values have been set yet, show defaults

@@ -42,11 +42,11 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   listLength,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   let resolvedEmailList = resolveComponentData(
     emailListField,
     i18n.language,
-    document
+    streamDocument
   );
   if (!resolvedEmailList) {
     return;

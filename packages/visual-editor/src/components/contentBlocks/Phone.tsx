@@ -42,8 +42,12 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   includeHyperlink,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  const resolvedPhone = resolveComponentData(phone, i18n.language, document);
+  const streamDocument = useDocument();
+  const resolvedPhone = resolveComponentData(
+    phone,
+    i18n.language,
+    streamDocument
+  );
 
   if (!resolvedPhone) {
     return;

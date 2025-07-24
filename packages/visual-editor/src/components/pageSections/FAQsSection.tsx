@@ -145,9 +145,13 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
-  const resolvedHeading = resolveComponentData(data?.heading, locale, document);
-  const resolvedFAQs = resolveComponentData(data?.faqs, locale, document);
+  const streamDocument = useDocument();
+  const resolvedHeading = resolveComponentData(
+    data?.heading,
+    locale,
+    streamDocument
+  );
+  const resolvedFAQs = resolveComponentData(data?.faqs, locale, streamDocument);
   const analytics = useAnalytics();
 
   const justifyClass = styles?.heading?.align

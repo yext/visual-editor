@@ -274,9 +274,17 @@ const PersonCard = ({
 const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
-  const resolvedPeople = resolveComponentData(data.people, locale, document);
-  const resolvedHeading = resolveComponentData(data.heading, locale, document);
+  const streamDocument = useDocument();
+  const resolvedPeople = resolveComponentData(
+    data.people,
+    locale,
+    streamDocument
+  );
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
+  );
 
   const justifyClass = styles?.heading?.align
     ? {

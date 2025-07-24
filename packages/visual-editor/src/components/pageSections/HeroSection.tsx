@@ -266,25 +266,29 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument() as any;
+  const streamDocument = useDocument() as any;
   const resolvedBusinessName = resolveComponentData(
     data?.businessName,
     locale,
-    document
+    streamDocument
   );
   const resolvedLocalGeoModifier = resolveComponentData(
     data?.localGeoModifier,
     locale,
-    document
+    streamDocument
   );
-  const resolvedHours = resolveComponentData(data?.hours, locale, document);
-  const resolvedHero = resolveComponentData(data?.hero, locale, document);
+  const resolvedHours = resolveComponentData(
+    data?.hours,
+    locale,
+    streamDocument
+  );
+  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
 
-  const { timezone } = document as {
+  const { timezone } = streamDocument as {
     timezone: string;
   };
 
-  const { averageRating, reviewCount } = getAggregateRating(document);
+  const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   return (
     <PageSection

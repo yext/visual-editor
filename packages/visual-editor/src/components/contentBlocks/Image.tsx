@@ -64,11 +64,11 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   width,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedImage = resolveComponentData(
     imageField,
     i18n.language,
-    document
+    streamDocument
   );
 
   if (!resolvedImage) {

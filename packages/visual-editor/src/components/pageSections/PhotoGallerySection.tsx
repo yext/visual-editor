@@ -193,10 +193,18 @@ const PhotoGallerySectionComponent = ({
 }: PhotoGallerySectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
-  const sectionHeading = resolveComponentData(data.heading, locale, document);
+  const streamDocument = useDocument();
+  const sectionHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
+  );
 
-  const resolvedImages = resolveComponentData(data.images, locale, document);
+  const resolvedImages = resolveComponentData(
+    data.images,
+    locale,
+    streamDocument
+  );
 
   const filteredImages: ImageProps[] = (resolvedImages || [])
     .filter(

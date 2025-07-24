@@ -165,7 +165,7 @@ const CommandItemWithResolvedValue = ({
 }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const [resolvedValue, setResolvedValue] = React.useState<
     string | undefined
   >();
@@ -178,12 +178,16 @@ const CommandItemWithResolvedValue = ({
         constantValue: undefined,
         constantValueEnabled: false,
       };
-      const resolved = resolveComponentData(fieldToResolve, locale, document);
+      const resolved = resolveComponentData(
+        fieldToResolve,
+        locale,
+        streamDocument
+      );
       const finalValue =
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
-  }, [isOpen, option.value, document, resolvedValue]);
+  }, [isOpen, option.value, streamDocument, resolvedValue]);
 
   return (
     <CommandItem

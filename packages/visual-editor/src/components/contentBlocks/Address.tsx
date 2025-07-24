@@ -40,8 +40,12 @@ const AddressComponent = ({
   showGetDirections,
 }: AddressProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  const address = resolveComponentData(addressField, i18n.language, document);
+  const streamDocument = useDocument();
+  const address = resolveComponentData(
+    addressField,
+    i18n.language,
+    streamDocument
+  );
   const coordinates = getDirections(
     address as AddressType,
     undefined,

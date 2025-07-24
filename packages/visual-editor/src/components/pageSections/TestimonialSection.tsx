@@ -207,13 +207,17 @@ const TestimonialSectionWrapper = ({
 }: TestimonialSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedTestimonials = resolveComponentData(
     data.testimonials,
     locale,
-    document
+    streamDocument
   );
-  const resolvedHeading = resolveComponentData(data.heading, locale, document);
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
+  );
 
   const justifyClass = styles?.heading?.align
     ? {

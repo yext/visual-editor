@@ -247,13 +247,17 @@ const InsightCard = ({
 const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedInsights = resolveComponentData(
     data.insights,
     locale,
-    document
+    streamDocument
   );
-  const resolvedHeading = resolveComponentData(data.heading, locale, document);
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
+  );
 
   const justifyClass = styles?.heading?.align
     ? {

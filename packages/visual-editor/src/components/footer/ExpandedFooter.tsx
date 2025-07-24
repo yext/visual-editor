@@ -403,7 +403,7 @@ const ExpandedFooterWrapper = ({
     linksAlignment: secondaryLinksAlignment,
   } = secondaryFooterStyle;
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
@@ -473,7 +473,7 @@ const ExpandedFooterWrapper = ({
                   label={resolveComponentData(
                     item.label,
                     i18n.language,
-                    document
+                    streamDocument
                   )}
                   links={item.links}
                   key={index}
@@ -551,7 +551,7 @@ const ExpandedFooterWrapper = ({
                 {resolveComponentData(
                   copyrightMessage,
                   i18n.language,
-                  document
+                  streamDocument
                 )}
               </Body>
             </EntityField>
@@ -570,7 +570,7 @@ const FooterLinks = ({
   type?: "Primary" | "Secondary";
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   return (
     <ul
@@ -586,7 +586,11 @@ const FooterLinks = ({
                   : "headerFooterSecondaryLink"
               }
               eventName={`cta.${type.toLowerCase()}.${index}-Link-${index + 1}`}
-              label={resolveComponentData(item.label, i18n.language, document)}
+              label={resolveComponentData(
+                item.label,
+                i18n.language,
+                streamDocument
+              )}
               linkType={item.linkType}
               link={item.link}
               className="justify-center md:justify-start block break-words whitespace-normal"
@@ -606,7 +610,7 @@ const ExpandedFooterLinks = ({
   label: string;
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   return (
     <ul className={`flex flex-col items-center md:items-start gap-4 w-full`}>
@@ -618,7 +622,11 @@ const ExpandedFooterLinks = ({
           <CTA
             variant={"headerFooterMainLink"}
             eventName={`cta${index}-Link-${index + 1}`}
-            label={resolveComponentData(item.label, i18n.language, document)}
+            label={resolveComponentData(
+              item.label,
+              i18n.language,
+              streamDocument
+            )}
             linkType={item.linkType}
             link={item.link}
             className={"justify-start block break-words whitespace-normal"}

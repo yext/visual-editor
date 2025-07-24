@@ -20,7 +20,7 @@ const HeadingTextWrapper = React.forwardRef<
   HTMLHeadingElement,
   HeadingTextProps
 >(({ text, ...headingProps }, ref) => {
-  const document = useDocument();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
   return (
@@ -30,7 +30,7 @@ const HeadingTextWrapper = React.forwardRef<
       constantValueEnabled={text.constantValueEnabled}
     >
       <Heading ref={ref} {...headingProps}>
-        {resolveComponentData(text, i18n.language, document)}
+        {resolveComponentData(text, i18n.language, streamDocument)}
       </Heading>
     </EntityField>
   );

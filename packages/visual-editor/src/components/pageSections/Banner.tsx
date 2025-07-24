@@ -102,8 +102,8 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
 const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
-  const resolvedText = resolveComponentData(data.text, locale, document);
+  const streamDocument = useDocument();
+  const resolvedText = resolveComponentData(data.text, locale, streamDocument);
 
   const justifyClass = {
     left: "justify-start",

@@ -156,10 +156,11 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             },
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
+              const streamDocument = useDocument();
               const resolvedValue = resolveComponentData(
                 item.label,
                 i18n.language,
-                document
+                streamDocument
               );
               if (resolvedValue) {
                 return resolvedValue;
@@ -336,41 +337,41 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const addressHeadingText = resolveComponentData(
     data.info.headingText,
     locale,
-    document
+    streamDocument
   );
   const resolvedAddress = resolveComponentData(
     data.info.address,
     locale,
-    document
+    streamDocument
   );
   const resolvedEmails = resolveComponentData(
     data.info.emails,
     locale,
-    document
+    streamDocument
   );
   const hoursHeadingText = resolveComponentData(
     data.hours.headingText,
     locale,
-    document
+    streamDocument
   );
   const resolvedHours = resolveComponentData(
     data.hours.hours,
     locale,
-    document
+    streamDocument
   );
   const servicesHeadingText = resolveComponentData(
     data.services.headingText,
     locale,
-    document
+    streamDocument
   );
   const servicesList = resolveComponentData(
     data.services.servicesList,
     locale,
-    document
+    streamDocument
   )?.map((translatableString: TranslatableString) =>
     resolveComponentData(translatableString, i18n.language)
   );
@@ -380,7 +381,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     undefined,
     { provider: "google" }
   );
-  const { additionalHoursText } = document as {
+  const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 
@@ -454,7 +455,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               const resolvedNumber = resolveComponentData(
                 item.number,
                 locale,
-                document
+                streamDocument
               );
               if (!resolvedNumber) {
                 return;
@@ -463,7 +464,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               const phoneLabel = resolveComponentData(
                 item.label,
                 i18n.language,
-                document
+                streamDocument
               );
 
               return (

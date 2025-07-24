@@ -180,7 +180,7 @@ const ProductCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
   return (
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
@@ -207,7 +207,11 @@ const ProductCard = ({
               }
               className="mb-2"
             >
-              {resolveComponentData(product.name, i18n.language, document)}
+              {resolveComponentData(
+                product.name,
+                i18n.language,
+                streamDocument
+              )}
             </Heading>
           )}
           {product.category && (
@@ -219,7 +223,7 @@ const ProductCard = ({
                 {resolveComponentData(
                   product.category,
                   i18n.language,
-                  document
+                  streamDocument
                 )}
               </Body>
             </Background>
@@ -234,7 +238,7 @@ const ProductCard = ({
             label={resolveComponentData(
               product.cta.label,
               i18n.language,
-              document
+              streamDocument
             )}
             link={product.cta.link}
             linkType={product.cta.linkType}
@@ -249,13 +253,17 @@ const ProductCard = ({
 const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const resolvedProducts = resolveComponentData(
     data.products,
     locale,
-    document
+    streamDocument
   );
-  const resolvedHeading = resolveComponentData(data.heading, locale, document);
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
+  );
 
   const justifyClass = styles?.heading?.align
     ? {

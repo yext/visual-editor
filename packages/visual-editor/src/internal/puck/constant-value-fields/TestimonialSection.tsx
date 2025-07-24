@@ -51,7 +51,7 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
 
 const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   const { t, i18n } = usePlatformTranslation();
-  const document = useDocument();
+  const streamDocument = useDocument();
 
   const contributorNameField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
@@ -78,7 +78,11 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
     getItemSummary: (item, i) => {
       const translation =
         item?.contributorName &&
-        resolveComponentData(item.contributorName, i18n.language, document);
+        resolveComponentData(
+          item.contributorName,
+          i18n.language,
+          streamDocument
+        );
       if (translation) {
         return translation;
       }
