@@ -52,6 +52,7 @@ export default defineConfig(() => ({
       COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY:
         process.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
     },
+    setupFiles: ["./src/editor/editorTests.setup.ts"],
     css: true,
     browser: {
       enabled: true,

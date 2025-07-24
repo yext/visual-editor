@@ -22,11 +22,11 @@ const TooltipContent = React.forwardRef<
 >(({ className, sideOffset = 4, zoomWithViewport, ...props }, ref) => {
   const [scaleFactor, setScaleFactor] = React.useState<number>(1);
   const [iframeWidth, setIFrameWidth] = React.useState<number | undefined>();
-  const getPuck = useGetPuck();
 
   // Safe fallback if tooltip renders outside of puck context
   let viewportWidth: number | undefined;
   try {
+    const getPuck = useGetPuck();
     const puck = getPuck();
     viewportWidth = puck.appState.ui.viewports.current.width;
   } catch {
