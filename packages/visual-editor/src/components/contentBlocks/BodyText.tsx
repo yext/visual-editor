@@ -11,7 +11,6 @@ import {
   YextField,
   TranslatableString,
   resolveTranslatableString,
-  msg,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -57,7 +56,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 BodyTextComponent.displayName = "BodyText";
 
 export const BodyText: ComponentConfig<BodyTextProps> = {
-  label: msg("components.bodyText", "Body Text"),
+  label: "Body Text",
   fields: bodyTextFields,
   defaultProps: {
     text: {
