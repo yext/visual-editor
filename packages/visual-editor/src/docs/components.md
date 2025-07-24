@@ -574,9 +574,9 @@ This object contains the configuration needed to generate the map.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                          | Default |
-| :----------------------- | :---------------- | :----------------------------------- | :------ |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. |         |
+| Prop                     | Type              | Description                          | Default              |
+| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 1` |
 
 #### Other Props
 
