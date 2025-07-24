@@ -235,8 +235,7 @@ export function parseDocumentForLanguageDropdown(
   if (document?._pageset) {
     try {
       const pagesetJson = JSON.parse(document?._pageset);
-      contentEndpointId =
-        pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
+      contentEndpointId = pagesetJson?.config?.contentEndpointId;
       locales = pagesetJson?.scope?.locales;
     } catch (e) {
       console.error("Failed to parse pageset from document. err=", e);

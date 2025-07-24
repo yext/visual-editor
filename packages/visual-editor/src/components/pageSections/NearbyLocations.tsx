@@ -518,8 +518,7 @@ function parseDocument(
   if (streamDocument?._pageset) {
     try {
       const pagesetJson = JSON.parse(streamDocument?._pageset);
-      contentEndpointId =
-        pagesetJson?.typeConfig?.entityConfig?.contentEndpointId;
+      contentEndpointId = pagesetJson?.config?.contentEndpointId;
     } catch (e) {
       console.error("Failed to parse pageset from stream document. err=", e);
     }
