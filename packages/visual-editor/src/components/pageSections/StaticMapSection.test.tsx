@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
@@ -96,6 +97,12 @@ const tests: ComponentTest[] = [
         apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
       },
       liveVisibility: true,
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
     },
     version: 10,
   },
@@ -149,6 +156,9 @@ describe("StaticMapSection", async () => {
       await waitFor(() => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
+
+      // wait for resizing to occur
+      await delay(1000);
 
       await expect(
         `StaticMapSection/[${viewportName}] ${name}`
