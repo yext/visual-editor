@@ -113,6 +113,8 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## CustomCodeSection
 
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+
 ### Props
 
 #### Other Props
