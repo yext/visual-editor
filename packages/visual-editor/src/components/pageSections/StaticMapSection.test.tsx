@@ -161,9 +161,15 @@ describe("StaticMapSection", async () => {
       await act(async () => await delay(1000));
       await act(async () => await delay(1000));
 
+      // The static image returned by mapbox can vary slightly
+      const threshold =
+        name.includes("with api key") && name.includes("with coordinate")
+          ? 20
+          : 0;
+
       await expect(
         `StaticMapSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ customThreshold: threshold });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -171,7 +177,7 @@ describe("StaticMapSection", async () => {
         await interactions(page);
         await expect(
           `StaticMapSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: threshold });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

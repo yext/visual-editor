@@ -32,7 +32,11 @@ beforeEach(() => {
 // This portion is run in the browser environment while
 // compareScreenshot is run in the node environment.
 expect.extend({
-  async toMatchScreenshot(screenshotName: string) {
+  async toMatchScreenshot(
+    this: any, // 'this' context for Vitest matchers
+    screenshotName: string,
+    options?: { customThreshold?: number }
+  ) {
     const updatedScreenshotData = await act(async () =>
       page.screenshot({
         save: false,
@@ -44,7 +48,7 @@ expect.extend({
       updatedScreenshotData
     );
 
-    if (numDiffPixels > 0) {
+    if (numDiffPixels > (options?.customThreshold ?? 0)) {
       return {
         pass: false,
         message: () => `Screenshots differed by ${numDiffPixels} pixels`,

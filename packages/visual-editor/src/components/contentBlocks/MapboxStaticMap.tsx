@@ -142,7 +142,7 @@ export const MapboxStaticMapComponent = ({
   );
 
   if (!coordinate) {
-    console.warn(`${coordinateField} is not present in the stream`);
+    console.warn(`${coordinateField.field} is not present in the stream`);
     return <></>;
   } else if (!apiKey) {
     console.warn("API Key is required for MapboxStaticMap");
@@ -150,11 +150,6 @@ export const MapboxStaticMapComponent = ({
   }
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
-
-  console.log(
-    "rendering this img url:",
-    `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=`
-  );
 
   return (
     <EntityField
