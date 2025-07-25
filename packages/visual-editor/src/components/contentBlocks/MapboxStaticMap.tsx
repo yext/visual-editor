@@ -173,7 +173,7 @@ export const MapboxStaticMapComponent = ({
 };
 
 export const MapboxStaticMap: ComponentConfig<MapboxStaticProps> = {
-  label: "Mapbox Static Map",
+  label: msg("components.mapboxStaticMap", "Mapbox Static Map"),
   fields: mapboxFields,
   defaultProps: {
     apiKey: "",

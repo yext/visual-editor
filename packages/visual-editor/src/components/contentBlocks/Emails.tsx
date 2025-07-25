@@ -94,7 +94,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 };
 
 export const Emails: ComponentConfig<EmailsProps> = {
-  label: "Emails",
+  label: msg("components.emails", "Emails"),
   fields: EmailsFields,
   resolveFields: (data, { fields }) => {
     if (data.props.list.constantValueEnabled) {

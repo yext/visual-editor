@@ -116,6 +116,6 @@ export const HoursTable: ComponentConfig<HoursTableProps> = {
     showAdditionalHoursText: true,
     alignment: "items-center",
   },
-  label: "Hours Table",
+  label: msg("components.hoursTable", "Hours Table"),
   render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };

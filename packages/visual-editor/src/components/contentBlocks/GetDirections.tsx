@@ -74,7 +74,7 @@ const GetDirectionsComponent = ({
 };
 
 export const GetDirections: ComponentConfig<GetDirectionsProps> = {
-  label: "Get Directions",
+  label: msg("components.getDirections", "Get Directions"),
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",

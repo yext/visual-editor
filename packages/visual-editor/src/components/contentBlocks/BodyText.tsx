@@ -53,7 +53,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 BodyTextComponent.displayName = "BodyText";
 
 export const BodyText: ComponentConfig<BodyTextProps> = {
-  label: "Body Text",
+  label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
   defaultProps: {
     text: {

@@ -68,7 +68,7 @@ const TextListComponent: React.FC<TextListProps> = ({
 };
 
 export const TextList: ComponentConfig<TextListProps> = {
-  label: "Text List",
+  label: msg("components.textList", "Text List"),
   fields: textListFields,
   defaultProps: {
     list: {
