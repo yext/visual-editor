@@ -444,7 +444,10 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
-      <div className="md:w-3/5 lg:w-2/3 md:flex hidden relative">
+      <div
+        id="locatorMapDiv"
+        className="md:w-3/5 lg:w-2/3 md:flex hidden relative"
+      >
         <Map {...mapProps} />
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">
@@ -477,11 +480,20 @@ const Map: React.FC<MapProps> = ({
   markerOptionsOverride,
 }) => {
   const { t } = useTranslation();
+
+  const documentIsUndefined = typeof document === "undefined";
+  const iframe = documentIsUndefined
+    ? undefined
+    : (document.getElementById("preview-frame") as HTMLIFrameElement);
+
+  const locatorMapDiv = documentIsUndefined
+    ? null
+    : ((iframe?.contentDocument || document)?.getElementById(
+        "locatorMapDiv"
+      ) as HTMLDivElement | null);
+  const mapPadding = getMapboxMapPadding(locatorMapDiv);
+
   // During page generation we don't exist in a browser context
-  const iframe =
-    typeof document === "undefined"
-      ? undefined
-      : (document.getElementById("preview-frame") as HTMLIFrameElement);
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
@@ -511,9 +523,7 @@ const Map: React.FC<MapProps> = ({
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={{
         center: centerCoords ?? DEFAULT_MAP_CENTER,
-        fitBoundsOptions: {
-          padding: { top: 150, bottom: 150, left: 150, right: 150 },
-        },
+        fitBoundsOptions: { padding: mapPadding },
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
       onDrag={onDragHandler}
@@ -695,6 +705,22 @@ const getEntityType = (entityTypeEnvVar?: string) => {
   } catch {
     return DEFAULT_ENTITY_TYPE;
   }
+};
+
+const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
+  if (!divElement) {
+    return 50;
+  }
+
+  const { width, height } = divElement.getBoundingClientRect();
+  const mapVerticalPadding = Math.max(50, height * 0.2);
+  const mapHorizontalPadding = Math.max(50, width * 0.2);
+  return {
+    top: mapVerticalPadding,
+    bottom: mapVerticalPadding,
+    left: mapHorizontalPadding,
+    right: mapHorizontalPadding,
+  };
 };
 
 interface Location {
