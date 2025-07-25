@@ -60,7 +60,10 @@ export const HeadingText: ComponentConfig<HeadingTextProps> = {
   defaultProps: {
     text: {
       field: "",
-      constantValue: "Text",
+      constantValue: {
+        en: "Text",
+        hasLocalizedValue: "true",
+      },
       constantValueEnabled: true,
     },
     content: "Heading",

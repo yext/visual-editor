@@ -11,10 +11,11 @@ import {
   pt,
   YextField,
   resolveComponentData,
+  TranslatableCTA,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
-  entityField: YextEntityField<CTAProps>;
+  entityField: YextEntityField<TranslatableCTA>;
   variant: CTAProps["variant"];
   className?: CTAProps["className"];
 }
@@ -47,13 +48,15 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >
-      <CTA
-        label={cta?.label}
-        link={cta?.link}
-        linkType={cta?.linkType}
-        variant={variant}
-        className={className}
-      />
+      {cta && (
+        <CTA
+          label={resolveComponentData(cta.label, i18n.language, streamDocument)}
+          link={cta.link}
+          linkType={cta.linkType}
+          variant={variant}
+          className={className}
+        />
+      )}
     </EntityField>
   );
 };
@@ -66,6 +69,7 @@ export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
       field: "",
       constantValue: {
         label: "Call to Action",
+        link: "#",
       },
     },
     variant: "primary",

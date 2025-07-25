@@ -58,7 +58,10 @@ export const BodyText: ComponentConfig<BodyTextProps> = {
   defaultProps: {
     text: {
       field: "",
-      constantValue: "Text",
+      constantValue: {
+        en: "Text",
+        hasLocalizedValue: "true",
+      },
       constantValueEnabled: true,
     },
     variant: "base",
