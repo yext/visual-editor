@@ -48,7 +48,7 @@ const EmptyCustomCodeSection = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md">
+    <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md max-w-pageSection-contentWidth mx-auto">
       <CodeXml className="w-12 h-12 text-gray-300" />
       <span className="text-gray-500 text-lg font-medium font-body-fontFamily">
         {t("missingHtmlWidget", "Add HTML to view component")}
@@ -108,6 +108,10 @@ const CustomCodeSectionWrapper = ({
   );
 };
 
+/**
+ * The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
+ * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+ */
 export const CustomCodeSection: ComponentConfig<CustomCodeSectionProps> = {
   label: msg("components.customCodeSection", "Custom Code Section"),
   fields: customCodeSectionFields,
