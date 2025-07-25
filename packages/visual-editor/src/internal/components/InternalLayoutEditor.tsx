@@ -253,7 +253,7 @@ export const InternalLayoutEditor = ({
 
               if (
                 !appState?.ui.itemSelector?.zone ||
-                !appState?.ui.itemSelector?.index ||
+                appState?.ui.itemSelector?.index === undefined ||
                 !selectedComponent ||
                 selectedComponentIndex === undefined
               ) {
@@ -272,21 +272,18 @@ export const InternalLayoutEditor = ({
                   return;
                 }
 
-                const newData = {
-                  // preserve the selected component's id and type
-                  id: selectedComponent.props.id,
-                  type: selectedComponent.type,
-                  // If the pasted data has children, we need to generate new ids for them
-                  props: walkTree(pastedData, puckConfig, (contents) =>
-                    contents.map((item: ComponentDataOptionalId) => {
-                      const id = `${item.type}-${uuidv4()}`;
-                      return {
-                        ...item,
-                        props: { ...item.props, id },
-                      };
-                    })
-                  ),
-                };
+                // If the pasted data has children, we need to generate new ids for them
+                const newData = walkTree(pastedData, puckConfig, (contents) =>
+                  contents.map((item: ComponentDataOptionalId) => {
+                    const id = `${item.type}-${uuidv4()}`;
+                    return {
+                      ...item,
+                      props: { ...item.props, id },
+                    };
+                  })
+                );
+                // preserve the selected component's id and type
+                newData.props.id = selectedComponent.props.id;
 
                 dispatch({
                   type: "replace",
@@ -294,8 +291,7 @@ export const InternalLayoutEditor = ({
                   destinationIndex: appState.ui.itemSelector.index,
                   data: newData,
                 });
-              } catch (e) {
-                console.log(e);
+              } catch (_) {
                 alert("Failed to paste: Invalid component data.");
               }
             };
