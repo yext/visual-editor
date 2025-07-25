@@ -1,4 +1,5 @@
 {
+  "Heading": "Nagłówek",
   "Link": "Połączyć",
   "actions": {
     "copyToClipboard": "Kopiuj do schowka",
@@ -86,6 +87,7 @@
   "field": "Pole",
   "fields": {
     "address": "Adres",
+    "alignCard": "Karta wyrównania",
     "answer": "Odpowiedź",
     "apiKey": "Klucz API",
     "aspectRatioForLogo": "Współczynnik kształtu dla logo",
@@ -122,6 +124,7 @@
     "faqs": "FAQ",
     "footerLinks": "Linki stopowe",
     "footerSocialIcons": "Ikony społeczne stopki",
+    "format": "Format",
     "headerLinks": "Linki nagłówka",
     "heading": "Nagłówek",
     "headingAlign": "Nagłówek wyrównany",
@@ -136,6 +139,7 @@
     "imageOrientation": "Orientacja obrazu",
     "imageUrl": "URL obrazu",
     "images": "Obrazy",
+    "includeHyperlink": "Dołącz hiperłącze",
     "includePhoneHyperlink": "Dołącz hiperłącze telefonu",
     "infoColumn": "Kolumna informacyjna",
     "insightSection": "Sekcja wglądu",
@@ -149,6 +153,7 @@
     "linkedInLink": "Link LinkedIn",
     "links": "Spinki do mankietów",
     "linksAlignment": "Wyrównanie linków",
+    "listLength": "Długość listy",
     "localGeomodifier": "Lokalny geomodyfikator",
     "localGeomodifierHeadingLevel": "Lokalny poziom nagłówka geomodifieru",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Obrazy użyteczności",
     "utilityImagesStyles": "Style obrazów użytkowych",
     "utilityImagesWidth": "Szerokość obrazów użyteczności",
+    "values": "Wartości",
+    "variant": "Wariant",
     "visibleOnLivePage": "Widoczne na stronie na żywo",
     "xLink": "X link",
     "youtubeLink": "Link YouTube"

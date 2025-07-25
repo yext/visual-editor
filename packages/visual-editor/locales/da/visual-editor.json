@@ -1,4 +1,5 @@
 {
+  "Heading": "Overskrift",
   "Link": "Forbindelse",
   "actions": {
     "copyToClipboard": "Kopier til udklipsholder",
@@ -86,6 +87,7 @@
   "field": "Felt",
   "fields": {
     "address": "Adresse",
+    "alignCard": "Juster kort",
     "answer": "Svar",
     "apiKey": "API -nøgle",
     "aspectRatioForLogo": "Aspektforhold for logo",
@@ -122,6 +124,7 @@
     "faqs": "FAQS",
     "footerLinks": "Sidefodslink",
     "footerSocialIcons": "Sidefod social ikoner",
+    "format": "Format",
     "headerLinks": "Header Links",
     "heading": "Overskrift",
     "headingAlign": "Overskriften justeres",
@@ -136,6 +139,7 @@
     "imageOrientation": "Billedorientering",
     "imageUrl": "Image URL",
     "images": "Billeder",
+    "includeHyperlink": "Medtag hyperlink",
     "includePhoneHyperlink": "Medtag telefonhyperlink",
     "infoColumn": "Info -kolonne",
     "insightSection": "Insight Section",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn -link",
     "links": "Links",
     "linksAlignment": "Links justering",
+    "listLength": "Liste længde",
     "localGeomodifier": "Lokal geomodifier",
     "localGeomodifierHeadingLevel": "Lokal geomodifier overskrifteniveau",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Hjælpebilleder",
     "utilityImagesStyles": "Hjælpebilleder stilarter",
     "utilityImagesWidth": "Hjælpebilleder bredde",
+    "values": "Værdier",
+    "variant": "Variant",
     "visibleOnLivePage": "Synlig på live side",
     "xLink": "X link",
     "youtubeLink": "YouTube -link"

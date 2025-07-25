@@ -1,4 +1,5 @@
 {
+  "Heading": "Cabeçalho",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Cópia para a área de transferência",
@@ -86,6 +87,7 @@
   "field": "Campo",
   "fields": {
     "address": "Endereço",
+    "alignCard": "Cartão alinhado",
     "answer": "Responder",
     "apiKey": "Chave da API",
     "aspectRatioForLogo": "Proporção de aspecto para o logotipo",
@@ -122,6 +124,7 @@
     "faqs": "Perguntas frequentes",
     "footerLinks": "Links de rodapé",
     "footerSocialIcons": "Rodas Ícones sociais",
+    "format": "Formatar",
     "headerLinks": "Links de cabeçalho",
     "heading": "Cabeçalho",
     "headingAlign": "Cabeçalho alinhado",
@@ -136,6 +139,7 @@
     "imageOrientation": "Orientação da imagem",
     "imageUrl": "Imagem URL",
     "images": "Imagens",
+    "includeHyperlink": "Inclua hiperlink",
     "includePhoneHyperlink": "Inclua hiperlink telefônico",
     "infoColumn": "Coluna de informações",
     "insightSection": "Seção de Insight",
@@ -149,6 +153,7 @@
     "linkedInLink": "Link LinkedIn",
     "links": "Links",
     "linksAlignment": "Alinhamento de links",
+    "listLength": "Comprimento da lista",
     "localGeomodifier": "Geomodificador local",
     "localGeomodifierHeadingLevel": "Nível de cabeçalho do geomodificador local",
     "logo": "Logotipo",
@@ -260,6 +265,8 @@
     "utilityImages": "Imagens de utilitário",
     "utilityImagesStyles": "Estilos de imagens utilitárias",
     "utilityImagesWidth": "Largura das imagens do utilitário",
+    "values": "Valores",
+    "variant": "Variante",
     "visibleOnLivePage": "Visível na página ao vivo",
     "xLink": "X link",
     "youtubeLink": "Link do YouTube"

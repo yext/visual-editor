@@ -11,6 +11,7 @@ import {
   CTAProps,
   YextField,
   pt,
+  msg,
   resolveComponentData,
 } from "@yext/visual-editor";
 
@@ -20,11 +21,14 @@ export type GetDirectionsProps = {
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
-  coordinate: YextField<any, Coordinate>("Coordinates", {
-    type: "entityField",
-    filter: { types: ["type.coordinate"] },
-  }),
-  variant: YextField("Variant", {
+  coordinate: YextField<any, Coordinate>(
+    msg("fields.coordinates", "Coordinates"),
+    {
+      type: "entityField",
+      filter: { types: ["type.coordinate"] },
+    }
+  ),
+  variant: YextField(msg("fields.variant", "Variant"), {
     type: "radio",
     options: "CTA_VARIANT",
   }),

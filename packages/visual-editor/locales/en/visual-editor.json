@@ -1,4 +1,5 @@
 {
+  "Heading": "Heading ",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Copy to Clipboard",
@@ -86,6 +87,7 @@
   "field": "Field",
   "fields": {
     "address": "Address",
+    "alignCard": "Align card",
     "answer": "Answer",
     "apiKey": "API Key",
     "aspectRatioForLogo": "Aspect Ratio for Logo",
@@ -122,6 +124,7 @@
     "faqs": "FAQs",
     "footerLinks": "Footer Links",
     "footerSocialIcons": "Footer Social Icons",
+    "format": "Format",
     "headerLinks": "Header Links",
     "heading": "Heading",
     "headingAlign": "Heading Align",
@@ -136,6 +139,7 @@
     "imageOrientation": "Image Orientation",
     "imageUrl": "Image URL",
     "images": "Images",
+    "includeHyperlink": "Include Hyperlink",
     "includePhoneHyperlink": "Include Phone Hyperlink",
     "infoColumn": "Info Column",
     "insightSection": "Insight Section",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Links",
     "linksAlignment": "Links Alignment",
+    "listLength": "List Length",
     "localGeomodifier": "Local GeoModifier",
     "localGeomodifierHeadingLevel": "Local GeoModifier Heading Level",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Utility Images",
     "utilityImagesStyles": "Utility Images Styles",
     "utilityImagesWidth": "Utility Images Width",
+    "values": "Values",
+    "variant": "Variant",
     "visibleOnLivePage": "Visible on Live Page",
     "xLink": "X Link",
     "youtubeLink": "YouTube Link"

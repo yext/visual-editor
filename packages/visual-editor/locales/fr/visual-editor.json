@@ -1,4 +1,5 @@
 {
+  "Heading": "Titre",
   "Link": "Lien",
   "actions": {
     "copyToClipboard": "Copier dans le presse-papiers",
@@ -86,6 +87,7 @@
   "field": "Champ",
   "fields": {
     "address": "Adresse",
+    "alignCard": "Aligner la carte",
     "answer": "Répondre",
     "apiKey": "Clé API",
     "aspectRatioForLogo": "Ratio d'aspect pour le logo",
@@ -122,6 +124,7 @@
     "faqs": "FAQ",
     "footerLinks": "Liens de pied de page",
     "footerSocialIcons": "Icônes sociales de pied",
+    "format": "Format",
     "headerLinks": "Liens d'en-tête",
     "heading": "Titre",
     "headingAlign": "Alignement de la rubrique",
@@ -136,6 +139,7 @@
     "imageOrientation": "Orientation de l'image",
     "imageUrl": "URL d'image",
     "images": "Images",
+    "includeHyperlink": "Inclure l'hyperlien",
     "includePhoneHyperlink": "Inclure l'hyperlien de téléphone",
     "infoColumn": "Colonne d'information",
     "insightSection": "SECTION APPORT",
@@ -149,6 +153,7 @@
     "linkedInLink": "Lien linkedin",
     "links": "Links",
     "linksAlignment": "Alignement des liens",
+    "listLength": "Longueur de liste",
     "localGeomodifier": "Géomodificateur local",
     "localGeomodifierHeadingLevel": "Niveau de cap du géomodificateur local",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Images de services publics",
     "utilityImagesStyles": "Styles d'images utilitaires",
     "utilityImagesWidth": "Largeur des images utilitaires",
+    "values": "Valeurs",
+    "variant": "Variante",
     "visibleOnLivePage": "Visible sur la page en direct",
     "xLink": "X lien",
     "youtubeLink": "Lien youtube"

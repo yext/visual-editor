@@ -8,6 +8,8 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  msg,
+  pt,
   HoursStatusAtom,
 } from "@yext/visual-editor";
 
@@ -21,40 +23,46 @@ export interface HoursStatusProps {
 }
 
 const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
-  hours: YextField("Hours", {
+  hours: YextField(msg("fields.hours", "Hours"), {
     type: "entityField",
     filter: {
       types: ["type.hours"],
     },
   }),
-  showCurrentStatus: YextField("Show Current Status", {
+  showCurrentStatus: YextField(
+    msg("fields.showCurrentStatus", "Show Current Status"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
+  timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
     type: "radio",
     options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
+      { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
+      { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
     ],
   }),
-  timeFormat: YextField("Time Format", {
+  showDayNames: YextField(msg("fields.showDayNames", "Show Day Names"), {
     type: "radio",
     options: [
-      { label: "12-hour", value: "12h" },
-      { label: "24-hour", value: "24h" },
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
     ],
   }),
-  showDayNames: YextField("Show Day Names", {
-    type: "radio",
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
-  dayOfWeekFormat: YextField("Day of Week Format", {
-    type: "radio",
-    options: [
-      { label: "Short", value: "short" },
-      { label: "Long", value: "long" },
-    ],
-  }),
+  dayOfWeekFormat: YextField(
+    msg("fields.dayOfWeekFormat", "Day of Week Format"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.short", "Short"), value: "short" },
+        { label: msg("fields.options.long", "Long"), value: "long" },
+      ],
+    }
+  ),
 };
 
 const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
@@ -66,7 +74,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   dayOfWeekFormat,
 }) => {
   const streamDocument = useDocument();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const hours = resolveComponentData(hoursField, i18n.language, streamDocument);
 
   if (!hours) {
@@ -75,7 +83,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
 
   return (
     <EntityField
-      displayName={t("hours", "Hours")}
+      displayName={pt("hours", "Hours")}
       fieldId={hoursField.field}
       constantValueEnabled={hoursField.constantValueEnabled}
     >

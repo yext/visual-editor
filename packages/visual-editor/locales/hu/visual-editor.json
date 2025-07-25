@@ -1,4 +1,5 @@
 {
+  "Heading": "Cím",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Másolja a vágólapra",
@@ -86,6 +87,7 @@
   "field": "Mező",
   "fields": {
     "address": "Cím",
+    "alignCard": "Igazítson kártya",
     "answer": "Válasz",
     "apiKey": "API kulcs",
     "aspectRatioForLogo": "A logó képaránya",
@@ -122,6 +124,7 @@
     "faqs": "GYIK",
     "footerLinks": "Lábléc linkek",
     "footerSocialIcons": "Lábléc társadalmi ikonok",
+    "format": "Formátum",
     "headerLinks": "Fejléc linkek",
     "heading": "Cím",
     "headingAlign": "Fejjel igazítás",
@@ -136,6 +139,7 @@
     "imageOrientation": "Képorientáció",
     "imageUrl": "Képképességi URL",
     "images": "Képek",
+    "includeHyperlink": "Tartalmazza a hiperhivatkozást",
     "includePhoneHyperlink": "Tartalmazza a telefon hiperhivatkozását",
     "infoColumn": "Információs oszlop",
     "insightSection": "Betekintési szakasz",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Linkek",
     "linksAlignment": "Linkek igazítás",
+    "listLength": "Lista hossza",
     "localGeomodifier": "Helyi geomodifier",
     "localGeomodifierHeadingLevel": "Helyi geomodifier fejléc",
     "logo": "Logó",
@@ -260,6 +265,8 @@
     "utilityImages": "Közüzemi képek",
     "utilityImagesStyles": "Segédprogramok stílusai",
     "utilityImagesWidth": "Segédprogramok szélessége",
+    "values": "Értékek",
+    "variant": "Változat",
     "visibleOnLivePage": "Látható az élő oldalon",
     "xLink": "X link",
     "youtubeLink": "YouTube link"

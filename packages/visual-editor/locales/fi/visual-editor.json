@@ -1,4 +1,5 @@
 {
+  "Heading": "Otsikko",
   "Link": "Linkki",
   "actions": {
     "copyToClipboard": "Kopioi leikepöydälle",
@@ -86,6 +87,7 @@
   "field": "Ala",
   "fields": {
     "address": "Osoite",
+    "alignCard": "Kohdistaa kortti",
     "answer": "Vastaus",
     "apiKey": "API -avain",
     "aspectRatioForLogo": "Logon kuvasuhde",
@@ -122,6 +124,7 @@
     "faqs": "Faqit",
     "footerLinks": "Alatunnislinkit",
     "footerSocialIcons": "Alatunnisteiden sosiaaliset kuvakkeet",
+    "format": "Muoto",
     "headerLinks": "Otsikkoyhteydet",
     "heading": "Otsikko",
     "headingAlign": "Suuntaviiva",
@@ -136,6 +139,7 @@
     "imageOrientation": "Kuvan suuntaus",
     "imageUrl": "Kuva -URL -osoite",
     "images": "Kuvat",
+    "includeHyperlink": "Sisällytä hyperlinkki",
     "includePhoneHyperlink": "Sisällytä puhelimen hyperlinkki",
     "infoColumn": "Info -sarake",
     "insightSection": "Oivallusosa",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn -linkki",
     "links": "Linkit",
     "linksAlignment": "Linkkien suuntaus",
+    "listLength": "Listata pituus",
     "localGeomodifier": "Paikallinen geomodifoija",
     "localGeomodifierHeadingLevel": "Paikallinen geomodifiorin otsikkotaso",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Apuohjelmakuvat",
     "utilityImagesStyles": "Apuohjelmakuvat tyylit",
     "utilityImagesWidth": "Apuohjelmakuvien leveys",
+    "values": "Arvot",
+    "variant": "Variantti",
     "visibleOnLivePage": "Näkyvissä live -sivulla",
     "xLink": "X -linkki",
     "youtubeLink": "YouTube -linkki"

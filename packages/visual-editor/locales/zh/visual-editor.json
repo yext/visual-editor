@@ -1,4 +1,5 @@
 {
+  "Heading": "标题",
   "Link": "关联",
   "actions": {
     "copyToClipboard": "复制到剪贴板",
@@ -86,6 +87,7 @@
   "field": "场地",
   "fields": {
     "address": "地址",
+    "alignCard": "对齐卡",
     "answer": "回答",
     "apiKey": "API键",
     "aspectRatioForLogo": "徽标的纵横比",
@@ -122,6 +124,7 @@
     "faqs": "常见问题解答",
     "footerLinks": "页脚链接",
     "footerSocialIcons": "页脚社交图标",
+    "format": "格式",
     "headerLinks": "标题链接",
     "heading": "标题",
     "headingAlign": "标题对齐",
@@ -136,6 +139,7 @@
     "imageOrientation": "图像方向",
     "imageUrl": "图像URL",
     "images": "图像",
+    "includeHyperlink": "包括超链接",
     "includePhoneHyperlink": "包括电话超链接",
     "infoColumn": "信息列",
     "insightSection": "洞察力部分",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn链接",
     "links": "链接",
     "linksAlignment": "链接对齐",
+    "listLength": "列表长度",
     "localGeomodifier": "当地的土工改装剂",
     "localGeomodifierHeadingLevel": "当地的地址式标题级别",
     "logo": "标识",
@@ -260,6 +265,8 @@
     "utilityImages": "实用图像",
     "utilityImagesStyles": "实用图像样式",
     "utilityImagesWidth": "实用图像宽度",
+    "values": "值",
+    "variant": "变体",
     "visibleOnLivePage": "在现场页面上可见",
     "xLink": "x链接",
     "youtubeLink": "YouTube链接"

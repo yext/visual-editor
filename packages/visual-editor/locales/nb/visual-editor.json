@@ -1,4 +1,5 @@
 {
+  "Heading": "Overskrift",
   "Link": "Lenke",
   "actions": {
     "copyToClipboard": "Kopier til utklippstavlen",
@@ -86,6 +87,7 @@
   "field": "Felt",
   "fields": {
     "address": "Adresse",
+    "alignCard": "Juster kortet",
     "answer": "Svare",
     "apiKey": "API -nøkkel",
     "aspectRatioForLogo": "Aspektforhold for logo",
@@ -122,6 +124,7 @@
     "faqs": "Vanlige spørsmål",
     "footerLinks": "Bunntekstlenker",
     "footerSocialIcons": "Bunntekst sosiale ikoner",
+    "format": "Format",
     "headerLinks": "Header -lenker",
     "heading": "Overskrift",
     "headingAlign": "Overskrift justeres",
@@ -136,6 +139,7 @@
     "imageOrientation": "Bildeorientering",
     "imageUrl": "Bilde -url",
     "images": "Bilder",
+    "includeHyperlink": "Inkluderer hyperkobling",
     "includePhoneHyperlink": "Inkluder telefonhyperkobling",
     "infoColumn": "Info kolonne",
     "insightSection": "Insight Section",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Lenker",
     "linksAlignment": "Koblinger justering",
+    "listLength": "Listelengde",
     "localGeomodifier": "Lokal geomodifier",
     "localGeomodifierHeadingLevel": "Lokal geomodifier overskriftsnivå",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Verktøybilder",
     "utilityImagesStyles": "Utility Images Styles",
     "utilityImagesWidth": "Utility bilder bredde",
+    "values": "Verdier",
+    "variant": "Variant",
     "visibleOnLivePage": "Synlig på live side",
     "xLink": "X lenke",
     "youtubeLink": "YouTube -lenke"

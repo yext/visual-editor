@@ -1,4 +1,5 @@
 {
+  "Heading": "Virsraksts",
   "Link": "Saite",
   "actions": {
     "copyToClipboard": "Kopēt uz starpliktuvi",
@@ -86,6 +87,7 @@
   "field": "Laukums",
   "fields": {
     "address": "Uzruna",
+    "alignCard": "Izlīdzināt karti",
     "answer": "Atbildēt",
     "apiKey": "API atslēga",
     "aspectRatioForLogo": "Logotipa malu attiecība",
@@ -122,6 +124,7 @@
     "faqs": "FAQ",
     "footerLinks": "Kājenes saites",
     "footerSocialIcons": "Kājenes sociālās ikonas",
+    "format": "Formāts",
     "headerLinks": "Galvenes saites",
     "heading": "Virsraksts",
     "headingAlign": "Virzīšanās izlīdzināšana",
@@ -136,6 +139,7 @@
     "imageOrientation": "Attēla orientācija",
     "imageUrl": "Attēla URL",
     "images": "Attēli",
+    "includeHyperlink": "Iekļaujiet hipersaiti",
     "includePhoneHyperlink": "Iekļaujiet tālruņa hipersaiti",
     "infoColumn": "Informācijas kolonna",
     "insightSection": "Ieskatu sadaļa",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn saite",
     "links": "Saites",
     "linksAlignment": "Saišu izlīdzināšana",
+    "listLength": "Saraksta garums",
     "localGeomodifier": "Vietējais ģeomodifieris",
     "localGeomodifierHeadingLevel": "Vietējais ģeomodifiera virsraksta līmenis",
     "logo": "Logotips",
@@ -260,6 +265,8 @@
     "utilityImages": "Komunālo pakalpojumu attēli",
     "utilityImagesStyles": "Lietderības attēlu stili",
     "utilityImagesWidth": "Lietderības attēlu platums",
+    "values": "Vērtības",
+    "variant": "Variants",
     "visibleOnLivePage": "Redzams tiešraides lapā",
     "xLink": "X saite",
     "youtubeLink": "YouTube saite"

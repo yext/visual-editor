@@ -8,6 +8,8 @@ import {
   YextField,
   TranslatableString,
   resolveComponentData,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
@@ -15,7 +17,7 @@ export interface TextListProps {
 }
 
 const textListFields: Fields<TextListProps> = {
-  list: YextField("Values", {
+  list: YextField(msg("fields.values", "Values"), {
     type: "entityField",
     filter: {
       types: ["type.string"],
@@ -27,7 +29,7 @@ const textListFields: Fields<TextListProps> = {
 const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   let resolvedTextList = resolveComponentData(
     textListField,
@@ -48,7 +50,7 @@ const TextListComponent: React.FC<TextListProps> = ({
 
   return (
     <EntityField
-      displayName={t("textList", "Text List")}
+      displayName={pt("textList", "Text List")}
       fieldId={textListField.field}
       constantValueEnabled={textListField.constantValueEnabled}
     >

@@ -1,4 +1,5 @@
 {
+  "Heading": "Naslov",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopirajte u međuspremnik",
@@ -86,6 +87,7 @@
   "field": "Polje",
   "fields": {
     "address": "Adresa",
+    "alignCard": "Poravnavanje",
     "answer": "Odgovor",
     "apiKey": "API ključ",
     "aspectRatioForLogo": "Omjer slike za logotip",
@@ -122,6 +124,7 @@
     "faqs": "Česta pitanja",
     "footerLinks": "Podnožje podnožja",
     "footerSocialIcons": "Društvene ikone podnožja",
+    "format": "Format",
     "headerLinks": "Veze zaglavlja",
     "heading": "Naslov",
     "headingAlign": "Poravnavanje naslova",
@@ -136,6 +139,7 @@
     "imageOrientation": "Orijentacija slike",
     "imageUrl": "URL slike",
     "images": "Slika",
+    "includeHyperlink": "Uključuju hipervezu",
     "includePhoneHyperlink": "Uključite hipervezu telefona",
     "infoColumn": "Info stupac",
     "insightSection": "Odjeljak",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn veza",
     "links": "Veze",
     "linksAlignment": "Poravnanje veza",
+    "listLength": "Dužina popisa",
     "localGeomodifier": "Lokalni geomodifikator",
     "localGeomodifierHeadingLevel": "Lokalni geomodifikator razine",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Uslužne slike",
     "utilityImagesStyles": "Stilovi uslužnih slika",
     "utilityImagesWidth": "Korisničke slike širina",
+    "values": "Vrijednosti",
+    "variant": "Varijanta",
     "visibleOnLivePage": "Vidljivo na stranici uživo",
     "xLink": "X Link",
     "youtubeLink": "YouTube veza"

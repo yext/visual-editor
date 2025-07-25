@@ -1,4 +1,5 @@
 {
+  "Heading": "Rubrik",
   "Link": "Länk",
   "actions": {
     "copyToClipboard": "Kopiera till Urklipp",
@@ -86,6 +87,7 @@
   "field": "Fält",
   "fields": {
     "address": "Adress",
+    "alignCard": "Justera kort",
     "answer": "Svar",
     "apiKey": "API -nyckel",
     "aspectRatioForLogo": "Bildförhållande för logotyp",
@@ -122,6 +124,7 @@
     "faqs": "Vanliga frågor",
     "footerLinks": "Sidfotlänkar",
     "footerSocialIcons": "Footer Social Icons",
+    "format": "Formatera",
     "headerLinks": "Rubriklänkar",
     "heading": "Rubrik",
     "headingAlign": "Rubriken justera",
@@ -136,6 +139,7 @@
     "imageOrientation": "Bildorientering",
     "imageUrl": "Url",
     "images": "Bilder",
+    "includeHyperlink": "Inkludera hyperlänk",
     "includePhoneHyperlink": "Inkludera telefonhyperlänk",
     "infoColumn": "Info -kolumn",
     "insightSection": "Insiktsavdelning",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn -länk",
     "links": "Länkar",
     "linksAlignment": "Länkar justering",
+    "listLength": "Listlängd",
     "localGeomodifier": "Lokal geomodifierare",
     "localGeomodifierHeadingLevel": "Lokal geomodifiernivå",
     "logo": "Logotyp",
@@ -260,6 +265,8 @@
     "utilityImages": "Verktygsbilder",
     "utilityImagesStyles": "Verktygsbilder stilar",
     "utilityImagesWidth": "Verktygsbilder bredd",
+    "values": "Värderingar",
+    "variant": "Variant",
     "visibleOnLivePage": "Synlig på live -sidan",
     "xLink": "X -länk",
     "youtubeLink": "YouTube -länk"

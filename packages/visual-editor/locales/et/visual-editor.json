@@ -1,4 +1,5 @@
 {
+  "Heading": "Pealkiri",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopeeri lõikelauale",
@@ -86,6 +87,7 @@
   "field": "Valdkond",
   "fields": {
     "address": "Aadress",
+    "alignCard": "Joondama kaart",
     "answer": "Vastus",
     "apiKey": "API -võti",
     "aspectRatioForLogo": "Logo kuvasuhe",
@@ -122,6 +124,7 @@
     "faqs": "KKK -d",
     "footerLinks": "Jaluse lingid",
     "footerSocialIcons": "Jaluse sotsiaalsed ikoonid",
+    "format": "Formaat",
     "headerLinks": "Päise lingid",
     "heading": "Pealkiri",
     "headingAlign": "Juhid joondama",
@@ -136,6 +139,7 @@
     "imageOrientation": "Pildi orientatsioon",
     "imageUrl": "Pildi URL",
     "images": "Pildid",
+    "includeHyperlink": "Lisage hüperlink",
     "includePhoneHyperlink": "Lisage telefoni hüperlink",
     "infoColumn": "Infoveerg",
     "insightSection": "Ülevaateosa",
@@ -149,6 +153,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Lingid",
     "linksAlignment": "Linkide joondamine",
+    "listLength": "Nimekirja pikkus",
     "localGeomodifier": "Kohalik geomodifikaator",
     "localGeomodifierHeadingLevel": "Kohalik geomodifikaatori pealkirjatase",
     "logo": "Logo",
@@ -260,6 +265,8 @@
     "utilityImages": "Utiliidipildid",
     "utilityImagesStyles": "Utiliidipildid stiilid",
     "utilityImagesWidth": "Utiliidipiltide laius",
+    "values": "Väärtused",
+    "variant": "Variant",
     "visibleOnLivePage": "Nähtav live -lehel",
     "xLink": "X Link",
     "youtubeLink": "YouTube'i link"
