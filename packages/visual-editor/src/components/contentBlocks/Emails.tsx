@@ -4,12 +4,12 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import {
   useDocument,
-  resolveYextEntityField,
   EntityField,
   YextEntityField,
   CTA,
   Body,
   YextField,
+  resolveComponentData,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -42,11 +42,11 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   listLength,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  let resolvedEmailList = resolveYextEntityField(
-    document,
+  const streamDocument = useDocument();
+  let resolvedEmailList = resolveComponentData(
     emailListField,
-    i18n.language
+    i18n.language,
+    streamDocument
   );
   if (!resolvedEmailList) {
     return;

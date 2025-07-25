@@ -5,7 +5,6 @@ import {
   YextField,
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   PageSection,
   Heading,
   EntityField,
@@ -18,11 +17,10 @@ import {
   ComponentFields,
   TimestampOption,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   pt,
-  resolveTranslatableRichText,
   ThemeOptions,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { defaultTestimonial } from "../../internal/puck/constant-value-fields/TestimonialSection.tsx";
@@ -175,7 +173,8 @@ const TestimonialCard = ({
         background={backgroundColors.background1.value}
         className="p-8 grow"
       >
-        {resolveTranslatableRichText(testimonial.description, i18n.language)}
+        {testimonial?.description &&
+          resolveComponentData(testimonial.description, i18n.language)}
       </Background>
       <Background background={cardStyles.backgroundColor} className="p-8">
         {testimonial.contributorName && (
@@ -187,10 +186,7 @@ const TestimonialCard = ({
                 : "span"
             }
           >
-            {resolveTranslatableString(
-              testimonial.contributorName,
-              i18n.language
-            )}
+            {resolveComponentData(testimonial.contributorName, i18n.language)}
           </Heading>
         )}
         {testimonial.contributionDate && (
@@ -211,15 +207,16 @@ const TestimonialSectionWrapper = ({
 }: TestimonialSectionProps) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
-  const resolvedTestimonials = resolveYextEntityField(
-    document,
+  const streamDocument = useDocument();
+  const resolvedTestimonials = resolveComponentData(
     data.testimonials,
-    locale
+    locale,
+    streamDocument
   );
-  const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField(document, data.heading, locale),
-    i18n.language
+  const resolvedHeading = resolveComponentData(
+    data.heading,
+    locale,
+    streamDocument
   );
 
   const justifyClass = styles?.heading?.align

@@ -71,6 +71,11 @@ export {
   type SectionContainerProps,
 } from "./SectionContainer.tsx";
 export {
+  StaticMapSection,
+  type StaticMapSectionProps,
+  type StaticMapStyles,
+} from "./StaticMapSection.tsx";
+export {
   TestimonialSection,
   type TestimonialSectionProps,
   type TestimonialData,

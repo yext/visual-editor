@@ -14,10 +14,9 @@ import {
   BackgroundStyle,
   Background,
   HeadingLevel,
-  resolveYextEntityField,
   YextEntityField,
-  resolveTranslatableString,
   getLocationPath,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -312,16 +311,9 @@ const DirectoryList = ({
 
 const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
   const { i18n } = useTranslation();
-  const { document, relativePrefixToRoot } = useTemplateProps<any>();
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  const title = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      document,
-      data.title,
-      i18n.language
-    ),
-    i18n.language
-  );
+  const title = resolveComponentData(data.title, i18n.language, streamDocument);
 
   return (
     <Background background={styles.backgroundColor}>
@@ -331,24 +323,24 @@ const DirectoryComponent = ({ data, styles }: DirectoryProps) => {
         styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
       />
       <PageSection className="flex flex-col items-center gap-2">
-        {document._site?.name && (
-          <Heading level={4}>{document._site.name}</Heading>
+        {streamDocument._site?.name && (
+          <Heading level={4}>{streamDocument._site.name}</Heading>
         )}
         {title && <Heading level={2}>{title}</Heading>}
       </PageSection>
-      {document.dm_directoryChildren &&
-        isDirectoryGrid(document.dm_directoryChildren) && (
+      {streamDocument.dm_directoryChildren &&
+        isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryGrid
-            directoryChildren={document.dm_directoryChildren}
+            directoryChildren={streamDocument.dm_directoryChildren}
             cardStyles={styles.cards}
           />
         )}
-      {document.dm_directoryChildren &&
-        !isDirectoryGrid(document.dm_directoryChildren) && (
+      {streamDocument.dm_directoryChildren &&
+        !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryList
-            directoryChildren={document.dm_directoryChildren}
-            relativePrefixToRoot={relativePrefixToRoot}
-            level={document?.meta?.entityType?.id}
+            directoryChildren={streamDocument.dm_directoryChildren}
+            relativePrefixToRoot={relativePrefixToRoot ?? ""}
+            level={streamDocument?.meta?.entityType?.id}
           />
         )}
     </Background>

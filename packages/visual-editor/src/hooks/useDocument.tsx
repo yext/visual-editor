@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Document } from "../utils/applyTheme";
+import { StreamDocument } from "../utils/applyTheme";
 
 const TemplatePropsContext = React.createContext<any | undefined>(undefined);
 
@@ -16,7 +16,7 @@ const useTemplateProps = <
   return context as T;
 };
 
-const useDocument = <T = Document,>(): T => {
+const useDocument = <T = StreamDocument,>(): T => {
   const context = React.useContext(TemplatePropsContext);
   if (!context) {
     throw new Error("useDocument must be used within VisualEditorProvider");

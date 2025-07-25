@@ -6,12 +6,12 @@ import "@yext/pages-components/style.css";
 import {
   YextEntityField,
   useDocument,
-  resolveYextEntityField,
   EntityField,
   CTA,
   CTAProps,
   YextField,
   pt,
+  resolveComponentData,
 } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
@@ -35,11 +35,11 @@ const GetDirectionsComponent = ({
   coordinate: coordinateField,
 }: GetDirectionsProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  const coordinate = resolveYextEntityField<Coordinate>(
-    document,
+  const streamDocument = useDocument();
+  const coordinate = resolveComponentData(
     coordinateField,
-    i18n.language
+    i18n.language,
+    streamDocument
   );
   if (!coordinate) {
     console.warn("yextDisplayCoordinate is not present in the stream");

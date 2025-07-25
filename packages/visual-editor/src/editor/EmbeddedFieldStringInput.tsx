@@ -5,7 +5,7 @@ import {
   getFieldsForSelector,
   YextEntityField,
 } from "./YextEntityFieldSelector";
-import { pt, resolveYextEntityField } from "../utils";
+import { pt, resolveComponentData } from "../utils";
 import {
   Command,
   CommandEmpty,
@@ -20,6 +20,7 @@ import {
   PopoverTrigger,
 } from "../internal/puck/ui/Popover.tsx";
 import { SquarePlus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
@@ -162,7 +163,9 @@ const CommandItemWithResolvedValue = ({
   onSelect: () => void;
   isOpen: boolean;
 }) => {
-  const document = useDocument();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
+  const streamDocument = useDocument();
   const [resolvedValue, setResolvedValue] = React.useState<
     string | undefined
   >();
@@ -175,12 +178,16 @@ const CommandItemWithResolvedValue = ({
         constantValue: undefined,
         constantValueEnabled: false,
       };
-      const resolved = resolveYextEntityField(document, fieldToResolve);
+      const resolved = resolveComponentData(
+        fieldToResolve,
+        locale,
+        streamDocument
+      );
       const finalValue =
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
-  }, [isOpen, option.value, document, resolvedValue]);
+  }, [isOpen, option.value, streamDocument, resolvedValue]);
 
   return (
     <CommandItem

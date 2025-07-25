@@ -3,12 +3,11 @@ import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   useDocument,
-  resolveYextEntityField,
   EntityField,
   YextEntityField,
   YextField,
   TranslatableString,
-  resolveTranslatableString,
+  resolveComponentData,
 } from "@yext/visual-editor";
 
 export interface TextListProps {
@@ -29,11 +28,11 @@ const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
 }) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument();
-  let resolvedTextList = resolveYextEntityField(
-    document,
+  const streamDocument = useDocument();
+  let resolvedTextList = resolveComponentData(
     textListField,
-    i18n.language
+    i18n.language,
+    streamDocument
   );
 
   // When constantValueEnabled is true but no constant values have been set yet, show defaults
@@ -57,7 +56,7 @@ const TextListComponent: React.FC<TextListProps> = ({
         <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
           {resolvedTextList.map((text, index) => (
             <li key={index} className="mb-2">
-              {resolveTranslatableString(text, i18n.language, document)}
+              {resolveComponentData(text, i18n.language)}
             </li>
           ))}
         </ul>

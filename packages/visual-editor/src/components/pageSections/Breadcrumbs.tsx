@@ -8,13 +8,14 @@ import {
   VisibilityWrapper,
   msg,
   TranslatableString,
-  resolveTranslatableString,
   TranslatableStringField,
   BackgroundStyle,
   backgroundColors,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import { StreamDocument } from "../../utils/applyTheme";
 
 export interface BreadcrumbsData {
   /**
@@ -99,14 +100,14 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
 // getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
 // the directory parent are not the expected objects, returns an empty array.
 const getDirectoryParents = (
-  document: Record<string, any>
+  streamDocument: StreamDocument
 ): Array<{ slug: string; name: string }> => {
-  for (const key in document) {
+  for (const key in streamDocument) {
     if (
       key.startsWith("dm_directoryParents_") &&
-      isValidDirectoryParents(document[key])
+      isValidDirectoryParents(streamDocument[key])
     ) {
-      return document[key];
+      return streamDocument[key];
     }
   }
   return [];
@@ -137,18 +138,19 @@ export const BreadcrumbsComponent = ({
 }: BreadcrumbsSectionProps) => {
   const { t, i18n } = useTranslation();
   const separator = "/";
-  const { document, relativePrefixToRoot } = useTemplateProps<any>();
-  let breadcrumbs = getDirectoryParents(document);
-  if (breadcrumbs?.length > 0 || document.dm_directoryChildren) {
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  let breadcrumbs = getDirectoryParents(streamDocument);
+  if (breadcrumbs?.length > 0 || streamDocument.dm_directoryChildren) {
     // append the current and filter out missing or malformed data
-    breadcrumbs = [...breadcrumbs, { name: document.name, slug: "" }].filter(
-      (b) => b.name
-    );
+    breadcrumbs = [
+      ...breadcrumbs,
+      { name: streamDocument.name, slug: "" },
+    ].filter((b) => b.name);
   }
-  const directoryRoot = resolveTranslatableString(
+  const directoryRoot = resolveComponentData(
     data.directoryRoot,
     i18n.language,
-    document
+    streamDocument
   );
 
   if (!breadcrumbs?.length) {

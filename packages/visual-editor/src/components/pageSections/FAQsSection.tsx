@@ -8,23 +8,21 @@ import {
   EntityField,
   Heading,
   HeadingLevel,
-  resolveYextEntityField,
   PageSection,
   useDocument,
   YextEntityField,
   YextField,
   VisibilityWrapper,
   TranslatableString,
-  resolveTranslatableString,
   msg,
   pt,
   ThemeOptions,
   Body,
   FAQSectionType,
   ComponentFields,
-  resolveTranslatableRichText,
   FAQStruct,
   getAnalyticsScopeHash,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -147,12 +145,13 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
 const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const document = useDocument();
-  const resolvedHeading = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(document, data?.heading, locale),
-    i18n.language
+  const streamDocument = useDocument();
+  const resolvedHeading = resolveComponentData(
+    data?.heading,
+    locale,
+    streamDocument
   );
-  const resolvedFAQs = resolveYextEntityField(document, data?.faqs, locale);
+  const resolvedFAQs = resolveComponentData(data?.faqs, locale, streamDocument);
   const analytics = useAnalytics();
 
   const justifyClass = styles?.heading?.align
@@ -211,7 +210,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
               >
                 <AccordionTrigger>
                   <Body>
-                    {resolveTranslatableString(faqItem.question, i18n.language)}
+                    {resolveComponentData(faqItem.question, i18n.language)}
                   </Body>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -221,10 +220,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
                     constantValueEnabled={data.faqs.constantValueEnabled}
                   >
                     <Body>
-                      {resolveTranslatableRichText(
-                        faqItem.answer,
-                        i18n.language
-                      )}
+                      {resolveComponentData(faqItem.answer, i18n.language)}
                     </Body>
                   </EntityField>
                 </AccordionContent>

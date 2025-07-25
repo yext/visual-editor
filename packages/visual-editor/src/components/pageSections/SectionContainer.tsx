@@ -5,7 +5,6 @@ import {
   BackgroundStyle,
   YextEntityField,
   ThemeOptions,
-  resolveYextEntityField,
   HeadingProps,
   backgroundColors,
   OtherCategory,
@@ -14,7 +13,7 @@ import {
   YextField,
   VisibilityWrapper,
   TranslatableString,
-  resolveTranslatableString,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -73,17 +72,14 @@ const SectionContainerComponent = (
   props: WithId<WithPuckProps<SectionContainerProps>>
 ) => {
   const { background, sectionHeading } = props;
-  const document = useDocument();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  const resolvedHeadingText = resolveTranslatableString(
-    resolveYextEntityField<TranslatableString>(
-      document,
-      sectionHeading.text,
-      locale
-    ),
-    locale
+  const resolvedHeadingText = resolveComponentData(
+    sectionHeading.text,
+    locale,
+    streamDocument
   );
 
   const justifyClass = {

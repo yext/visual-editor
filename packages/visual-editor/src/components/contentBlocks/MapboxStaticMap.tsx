@@ -3,12 +3,13 @@ import * as React from "react";
 import { Coordinate } from "@yext/pages-components";
 import {
   EntityField,
-  resolveYextEntityField,
+  resolveComponentData,
   useDocument,
   YextEntityField,
   YextField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
+import { StreamDocument } from "../../utils/applyTheme";
 
 type Size = { width: number; height: number };
 
@@ -30,15 +31,14 @@ const mapboxFields: Fields<MapboxStaticProps> = {
 };
 
 const DEFAULT_WIDTH = 1024;
-const DEFAULT_HEIGHT = 300;
-const MIN_HEIGHT = 300;
 const MIN_WIDTH = 100;
-const MAX_SIZE = 1280;
+const MAX_WIDTH = 1280;
+const HEIGHT = 300;
 
-const getPrimaryColor = (document: any) => {
-  if (document?.__?.theme) {
+const getPrimaryColor = (streamDocument: StreamDocument) => {
+  if (streamDocument?.__?.theme) {
     return (
-      JSON.parse(document?.__?.theme)
+      JSON.parse(streamDocument?.__?.theme)
         ?.["--colors-palette-primary"]?.trim()
         ?.replace("#", "") ?? "000000"
     );
@@ -64,7 +64,7 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   const selfRef = React.useRef<T>(null);
   const [size, setSize] = React.useState<Size>({
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
+    height: HEIGHT,
   });
 
   React.useEffect(() => {
@@ -85,13 +85,10 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
     const rect = node.getBoundingClientRect();
     setSize({
       width: Math.max(
-        Math.min(rect.width || node.clientWidth, MAX_SIZE),
-        MIN_WIDTH
+        MIN_WIDTH,
+        Math.min(rect.width || node.clientWidth, MAX_WIDTH)
       ),
-      height: Math.max(
-        Math.min(rect.height || node.clientHeight, MAX_SIZE),
-        MIN_HEIGHT
-      ),
+      height: HEIGHT,
     });
   }, [updateTrigger]);
 
@@ -134,14 +131,14 @@ export const MapboxStaticMapComponent = ({
   mapStyle = "light-v11",
 }: MapboxStaticProps) => {
   const { t, i18n } = useTranslation();
-  const document = useDocument<any>();
+  const streamDocument = useDocument<any>();
 
   const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
-  const coordinate = resolveYextEntityField<Coordinate>(
-    document,
+  const coordinate = resolveComponentData(
     coordinateField,
-    i18n.language
+    i18n.language,
+    streamDocument
   );
 
   if (!coordinate) {
@@ -152,7 +149,7 @@ export const MapboxStaticMapComponent = ({
     return <></>;
   }
 
-  const marker = `pin-l+${getPrimaryColor(document)}(${coordinate.longitude},${coordinate.latitude})`;
+  const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
   return (
     <EntityField
