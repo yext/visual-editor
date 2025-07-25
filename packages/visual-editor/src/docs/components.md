@@ -121,11 +121,11 @@ The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScri
 
 The CSS styles to be applied to the component.
 
-| Prop         | Type     | Description                                                                                                                                                          | Default |
-| :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| `css`        | `string` | The CSS styles to be applied to the component.                                                                                                                       |         |
-| `html`       | `string` | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. |         |
-| `javascript` | `string` | The JavaScript code to be added as a script tag in the component.                                                                                                    |         |
+| Prop         | Type     | Description                                                                                                                                                                                                                | Default |
+| :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| `css`        | `string` | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
+| `html`       | `string` | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
+| `javascript` | `string` | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
 
 ---
 
