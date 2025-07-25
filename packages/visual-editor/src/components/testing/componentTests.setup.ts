@@ -6,6 +6,7 @@ import "./componentTests.css";
 import "jest-axe/extend-expect";
 import { expect, vi } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
+import { act } from "@testing-library/react";
 
 // Applies the theme variables and mocks the date
 beforeEach(() => {
@@ -32,9 +33,11 @@ beforeEach(() => {
 // compareScreenshot is run in the node environment.
 expect.extend({
   async toMatchScreenshot(screenshotName: string) {
-    const updatedScreenshotData = await page.screenshot({
-      save: false,
-    });
+    const updatedScreenshotData = await act(async () =>
+      page.screenshot({
+        save: false,
+      })
+    );
 
     const numDiffPixels = await commands.compareScreenshot(
       screenshotName,
