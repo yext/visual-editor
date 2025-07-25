@@ -1,5 +1,4 @@
 import React from "react";
-import createDOMPurify from "dompurify";
 import { useTranslation } from "react-i18next";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -10,6 +9,7 @@ export interface CustomCodeSectionProps {
   /**
    * The HTML content to be rendered. Must be present for the component to display.
    * If not provided, the component will display a message prompting the user to add HTML.
+   * This data is expected to have already been sanitized.
    */
   html: string;
 
@@ -48,11 +48,13 @@ const EmptyCustomCodeSection = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md max-w-pageSection-contentWidth mx-auto">
-      <CodeXml className="w-12 h-12 text-gray-300" />
-      <span className="text-gray-500 text-lg font-medium font-body-fontFamily">
-        {t("missingHtmlWidget", "Add HTML to view component")}
-      </span>
+    <div className="p-3">
+      <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md">
+        <CodeXml className="w-12 h-12 text-gray-300" />
+        <span className="text-gray-500 text-lg font-medium font-body-fontFamily">
+          {t("missingHtmlWidget", "Add HTML to view component")}
+        </span>
+      </div>
     </div>
   );
 };
@@ -67,16 +69,8 @@ const CustomCodeSectionWrapper = ({
   }
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [sanitizedHtml, setSanitizedHtml] = React.useState("");
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
-
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      const DOMPurify = createDOMPurify(window);
-      setSanitizedHtml(DOMPurify.sanitize(html));
-    }
-  }, [html]);
 
   React.useEffect(() => {
     if (!containerRef.current) {
@@ -95,15 +89,12 @@ const CustomCodeSectionWrapper = ({
       script.innerHTML = javascript;
       containerRef.current.appendChild(script);
     }
-  }, [javascript, sanitizedHtml]);
+  }, [javascript, html]);
 
   return (
     <div>
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <div
-        ref={containerRef}
-        dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
-      />
+      <div ref={containerRef} dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   );
 };
