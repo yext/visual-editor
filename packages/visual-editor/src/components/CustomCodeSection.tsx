@@ -60,7 +60,7 @@ const CustomCodeSectionWrapper = ({
   html,
   css,
   javascript,
-  puck
+  puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   if (!html) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
@@ -83,9 +83,7 @@ const CustomCodeSectionWrapper = ({
       return;
     }
 
-    const prevScript = containerRef.current.querySelector(
-      `#${scriptTagId}`
-    );
+    const prevScript = containerRef.current.querySelector(`#${scriptTagId}`);
     if (prevScript) {
       prevScript.remove();
     }
