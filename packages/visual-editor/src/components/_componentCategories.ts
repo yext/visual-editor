@@ -78,10 +78,6 @@ import {
   ExpandedFooter,
   ExpandedFooterProps,
 } from "./footer/ExpandedFooter.tsx";
-import {
-  CustomCodeSection,
-  CustomCodeSectionProps,
-} from "./CustomCodeSection.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -99,7 +95,6 @@ export interface PageSectionCategoryProps {
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
-  CustomCodeSection: CustomCodeSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -132,7 +127,6 @@ export interface OtherCategoryProps {
 export const OtherCategoryComponents = {
   ExpandedHeader,
   ExpandedFooter,
-  CustomCodeSection,
 };
 
 export const OtherCategory = Object.keys(
