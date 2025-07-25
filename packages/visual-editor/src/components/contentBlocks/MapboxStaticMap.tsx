@@ -151,6 +151,11 @@ export const MapboxStaticMapComponent = ({
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
+  console.log(
+    "rendering this img url:",
+    `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=`
+  );
+
   return (
     <EntityField
       displayName={t("coordinate", "Coordinate")}
