@@ -147,7 +147,10 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   await onPublishLayout(appState.data);
                   onClearLocalChanges();
                   setHistories([
-                    { id: "root", state: { data: appState.data } },
+                    {
+                      id: "root",
+                      state: { data: appState.data, ui: appState.ui },
+                    },
                   ]);
                 }
               }}
