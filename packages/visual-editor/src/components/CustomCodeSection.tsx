@@ -7,8 +7,20 @@ import { YextField, msg } from "@yext/visual-editor";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 
 export interface CustomCodeSectionProps {
+  /**
+   * The HTML content to be rendered. Must be present for the component to display.
+   * If not provided, the component will display a message prompting the user to add HTML.
+   */
   html: string;
+
+  /**
+   * The CSS styles to be applied to the component.
+   */
   css: string;
+
+  /**
+   * The JavaScript code to be added as a script tag in the component.
+   */
   javascript: string;
 
   /** @internal */
@@ -34,6 +46,7 @@ const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
 
 const EmptyCustomCodeSection = () => {
   const { t } = useTranslation();
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md">
       <CodeXml className="w-12 h-12 text-gray-300" />
@@ -47,13 +60,16 @@ const CustomCodeSectionWrapper = ({
   html,
   css,
   javascript,
+  puck
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   if (!html) {
-    return <EmptyCustomCodeSection />;
+    return puck.isEditing ? <EmptyCustomCodeSection /> : null;
   }
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [sanitizedHtml, setSanitizedHtml] = React.useState("");
+  const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
+  const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -68,7 +84,7 @@ const CustomCodeSectionWrapper = ({
     }
 
     const prevScript = containerRef.current.querySelector(
-      "#custom-code-section-script"
+      `#${scriptTagId}`
     );
     if (prevScript) {
       prevScript.remove();
@@ -76,7 +92,7 @@ const CustomCodeSectionWrapper = ({
 
     if (javascript) {
       const script = document.createElement("script");
-      script.id = "custom-code-section-script";
+      script.id = scriptTagId;
       script.type = "text/javascript";
       script.innerHTML = javascript;
       containerRef.current.appendChild(script);

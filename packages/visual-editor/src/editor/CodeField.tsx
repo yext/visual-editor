@@ -73,7 +73,7 @@ export const CodeField = ({
 
       return (
         <FieldLabel label={fieldLabel}>
-          <button className="RichTextField" onClick={handleClick}>
+          <button className="CodeField" onClick={handleClick}>
             <div className="ve-line-clamp-3">{value}</div>
           </button>
         </FieldLabel>
