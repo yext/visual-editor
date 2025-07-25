@@ -6,7 +6,7 @@ import {
   delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender, waitFor } from "@testing-library/react";
+import { act, render as reactRender, waitFor } from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
@@ -157,8 +157,9 @@ describe("StaticMapSection", async () => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
-      // wait for resizing to occur
-      await delay(1000);
+      // flush resizing useEffects
+      await act(async () => await delay(1000));
+      await act(async () => await delay(1000));
 
       await expect(
         `StaticMapSection/[${viewportName}] ${name}`
