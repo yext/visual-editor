@@ -46,6 +46,7 @@
     "breadcrumbs": "Ekmek kırıntıları",
     "components": "Bileşenler",
     "coreInfoSection": "Çekirdek Bilgi Bölümü",
+    "customCodeSection": "Özel Kod Bölümü",
     "directory": "Dizin",
     "eventsSection": "Olaylar Bölümü",
     "expandedFooter": "Genişletilmiş altbilgi",
@@ -63,8 +64,7 @@
     "reviewsSection": "İncelemeler Bölümü",
     "staticMapSection": "Statik Harita Bölümü",
     "teamSection": "Takım bölümü",
-    "testimonialsSection": "Referans bölümü",
-    "customCodeSection": "Özel Kod Bölümü"
+    "testimonialsSection": "Referans bölümü"
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Yerel Geomodifikatör",
   "locationsNear_one": "{{count}} konum \"{{filtreDisplayName}}\" yakınında yer",
   "map": "Harita",
+  "missingHtmlWidget": "Bileşeni görüntülemek için html ekle",
   "monday": "Pazartesi",
   "name": "İsim",
   "newYorkCity": "New York, New York, Amerika Birleşik Devletleri",
@@ -431,6 +432,5 @@
   "update": "Güncelleme",
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
-  "wednesday": "Çarşamba",
-  "missingHtmlWidget": "Bileşeni görüntülemek için html ekle"
+  "wednesday": "Çarşamba"
 }

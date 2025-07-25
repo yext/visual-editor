@@ -46,6 +46,7 @@
     "breadcrumbs": "麵包屑",
     "components": "成分",
     "coreInfoSection": "核心信息部分",
+    "customCodeSection": "自定義代碼部分",
     "directory": "目錄",
     "eventsSection": "活動部分",
     "expandedFooter": "擴展的頁腳",
@@ -63,8 +64,7 @@
     "reviewsSection": "評論部分",
     "staticMapSection": "靜態地圖部分",
     "teamSection": "團隊部分",
-    "testimonialsSection": "推薦部分",
-    "customCodeSection": "自定義代碼部分"
+    "testimonialsSection": "推薦部分"
   },
   "confirm": "確認",
   "coordinate": "協調",
@@ -303,6 +303,7 @@
   "localGeomodifier": "當地的土工改裝劑",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
   "map": "地圖",
+  "missingHtmlWidget": "添加HTML以查看組件",
   "monday": "週一",
   "name": "姓名",
   "newYorkCity": "紐約，紐約，美國",
@@ -431,6 +432,5 @@
   "update": "更新",
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
-  "wednesday": "週三",
-  "missingHtmlWidget": "添加HTML以查看組件"
+  "wednesday": "週三"
 }

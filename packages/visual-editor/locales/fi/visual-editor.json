@@ -46,6 +46,7 @@
     "breadcrumbs": "Leivänmurska",
     "components": "Komponentit",
     "coreInfoSection": "Ydintiedot -osio",
+    "customCodeSection": "Mukautettu koodiosa",
     "directory": "Hakemisto",
     "eventsSection": "Tapahtumaosasto",
     "expandedFooter": "Laajennettu alatunniste",
@@ -63,8 +64,7 @@
     "reviewsSection": "Arvosteluosa",
     "staticMapSection": "Staattinen karttaosa",
     "teamSection": "Joukkueosasto",
-    "testimonialsSection": "Suositusosasto",
-    "customCodeSection": "Mukautettu koodiosa"
+    "testimonialsSection": "Suositusosasto"
   },
   "confirm": "Vahvistaa",
   "coordinate": "Koordinoida",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Paikallinen geomodifoija",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterdisplayName}}\"",
   "map": "Kartta",
+  "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
   "monday": "maanantai",
   "name": "Nimi",
   "newYorkCity": "New York City, New York, Yhdysvallat",
@@ -431,6 +432,5 @@
   "update": "Päivittää",
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
-  "wednesday": "keskiviikko",
-  "missingHtmlWidget": "Lisää HTML katsomaan komponenttia"
+  "wednesday": "keskiviikko"
 }

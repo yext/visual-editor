@@ -46,6 +46,7 @@
     "breadcrumbs": "Zsemlemorzsa",
     "components": "Alkatrészek",
     "coreInfoSection": "Alapvető információ szakasz",
+    "customCodeSection": "Egyedi kód szakasz",
     "directory": "Könyvtár",
     "eventsSection": "Események szakasz",
     "expandedFooter": "Kibővített lábléc",
@@ -63,8 +64,7 @@
     "reviewsSection": "Áttekintési szakasz",
     "staticMapSection": "Statikus térképszakasz",
     "teamSection": "Csapatrész",
-    "testimonialsSection": "Beszámolók részlege",
-    "customCodeSection": "Egyedi kód szakasz"
+    "testimonialsSection": "Beszámolók részlege"
   },
   "confirm": "Megerősít",
   "coordinate": "Koordináta",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Helyi geomodifier",
   "locationsNear_one": "{{count}} A hely közelében \"{{filtDisPlayName}}\"",
   "map": "Térkép",
+  "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
   "monday": "hétfő",
   "name": "Név",
   "newYorkCity": "New York City, New York, Egyesült Államok",
@@ -431,6 +432,5 @@
   "update": "Frissít",
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
-  "wednesday": "szerda",
-  "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez"
+  "wednesday": "szerda"
 }

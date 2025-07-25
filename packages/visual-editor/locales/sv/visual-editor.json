@@ -46,6 +46,7 @@
     "breadcrumbs": "Ströbröd",
     "components": "Komponenter",
     "coreInfoSection": "Kärninfo -sektionen",
+    "customCodeSection": "Anpassad kodavsnitt",
     "directory": "Katalog",
     "eventsSection": "Evenemangsavsnitt",
     "expandedFooter": "Utökad sidfot",
@@ -63,8 +64,7 @@
     "reviewsSection": "Recensionsavsnitt",
     "staticMapSection": "Statisk kartavsnitt",
     "teamSection": "Lagavdelning",
-    "testimonialsSection": "Vittnesbörd",
-    "customCodeSection": "Anpassad kodavsnitt"
+    "testimonialsSection": "Vittnesbörd"
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Lokal geomodifierare",
   "locationsNear_one": "{{greve}} Plats nära \"{{filterDisplayName}}\"",
   "map": "Karta",
+  "missingHtmlWidget": "Lägg till HTML för att visa komponent",
   "monday": "Måndag",
   "name": "Namn",
   "newYorkCity": "New York City, New York, USA",
@@ -431,6 +432,5 @@
   "update": "Uppdatera",
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
-  "wednesday": "Onsdag",
-  "missingHtmlWidget": "Lägg till HTML för att visa komponent"
+  "wednesday": "Onsdag"
 }

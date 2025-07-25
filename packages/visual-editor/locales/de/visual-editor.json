@@ -46,6 +46,7 @@
     "breadcrumbs": "Paniermehl",
     "components": "Komponenten",
     "coreInfoSection": "Kerninfo -Abschnitt",
+    "customCodeSection": "Abschnitt Custom Code",
     "directory": "Verzeichnis",
     "eventsSection": "Ereignisabschnitt",
     "expandedFooter": "Erweiterte Fußzeile",
@@ -63,8 +64,7 @@
     "reviewsSection": "Bewertungen Abschnitt",
     "staticMapSection": "Statischer Kartenabschnitt",
     "teamSection": "Teamabteilung",
-    "testimonialsSection": "Testimonials Abschnitt",
-    "customCodeSection": "Abschnitt Custom Code"
+    "testimonialsSection": "Testimonials Abschnitt"
   },
   "confirm": "Bestätigen",
   "coordinate": "Koordinieren",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Lokaler Geomodifier",
   "locationsNear_one": "{{count}} Ort in der Nähe von \"{{filterDisplayName}}\"",
   "map": "Karte",
+  "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen",
   "monday": "Montag",
   "name": "Name",
   "newYorkCity": "New York City, New York, USA",
@@ -431,6 +432,5 @@
   "update": "Aktualisieren",
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
   "visitPage": "Besuchen Sie die Seite",
-  "wednesday": "Mittwoch",
-  "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen"
+  "wednesday": "Mittwoch"
 }

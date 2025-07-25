@@ -46,6 +46,7 @@
     "breadcrumbs": "Strouhanka",
     "components": "Komponenty",
     "coreInfoSection": "Sekce hlavních informací",
+    "customCodeSection": "Vlastní sekce kódu",
     "directory": "Adresář",
     "eventsSection": "Sekce událostí",
     "expandedFooter": "Rozšířená zápatí",
@@ -63,8 +64,7 @@
     "reviewsSection": "Sekce recenzí",
     "staticMapSection": "Sekce statické mapy",
     "teamSection": "Týmová sekce",
-    "testimonialsSection": "Sekce posudků",
-    "customCodeSection": "Vlastní sekce kódu"
+    "testimonialsSection": "Sekce posudků"
   },
   "confirm": "Potvrdit",
   "coordinate": "Koordinovat",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Místní geomodifikátor",
   "locationsNear_one": "{{Count}} umístění poblíž \"{{FilterDisplayName}}\"",
   "map": "Mapa",
+  "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",
   "monday": "pondělí",
   "name": "Jméno",
   "newYorkCity": "New York City, New York, Spojené státy",
@@ -431,6 +432,5 @@
   "update": "Aktualizovat",
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
-  "wednesday": "středa",
-  "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty"
+  "wednesday": "středa"
 }

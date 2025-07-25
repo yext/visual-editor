@@ -46,6 +46,7 @@
     "breadcrumbs": "Brødkrummer",
     "components": "Komponenter",
     "coreInfoSection": "Kerneinfo -sektion",
+    "customCodeSection": "Brugerdefineret kodesektion",
     "directory": "Vejviser",
     "eventsSection": "Afsnit af begivenheder",
     "expandedFooter": "Udvidet sidefod",
@@ -63,8 +64,7 @@
     "reviewsSection": "Afsnittet",
     "staticMapSection": "Statisk kortafsnit",
     "teamSection": "Holdsektion",
-    "testimonialsSection": "Afsnit for vidnesbyrd",
-    "customCodeSection": "Brugerdefineret kodesektion"
+    "testimonialsSection": "Afsnit for vidnesbyrd"
   },
   "confirm": "Bekræfte",
   "coordinate": "Koordinere",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Lokal geomodifier",
   "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{FilterDisPlaYname}}\"",
   "map": "Kort",
+  "missingHtmlWidget": "Tilføj HTML for at se komponent",
   "monday": "mandag",
   "name": "Navn",
   "newYorkCity": "New York City, New York, USA",
@@ -431,6 +432,5 @@
   "update": "Opdatering",
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
-  "wednesday": "onsdag",
-  "missingHtmlWidget": "Tilføj HTML for at se komponent"
+  "wednesday": "onsdag"
 }

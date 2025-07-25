@@ -46,6 +46,7 @@
     "breadcrumbs": "パン粉",
     "components": "コンポーネント",
     "coreInfoSection": "コア情報セクション",
+    "customCodeSection": "カスタムコードセクション",
     "directory": "ディレクトリ",
     "eventsSection": "イベントセクション",
     "expandedFooter": "拡張フッター",
@@ -63,8 +64,7 @@
     "reviewsSection": "レビューセクション",
     "staticMapSection": "静的マップセクション",
     "teamSection": "チームセクション",
-    "testimonialsSection": "証言セクション",
-    "customCodeSection": "カスタムコードセクション"
+    "testimonialsSection": "証言セクション"
   },
   "confirm": "確認する",
   "coordinate": "座標",
@@ -303,6 +303,7 @@
   "localGeomodifier": "ローカルジオモジファイア",
   "locationsNear_one": "{{count}}近くの場所 \"{{filterdisplayname}}\"",
   "map": "地図",
+  "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
   "monday": "月曜日",
   "name": "名前",
   "newYorkCity": "ニューヨーク市、ニューヨーク、米国",
@@ -431,6 +432,5 @@
   "update": "アップデート",
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
-  "wednesday": "水曜日",
-  "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します"
+  "wednesday": "水曜日"
 }

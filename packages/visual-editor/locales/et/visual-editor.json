@@ -46,6 +46,7 @@
     "breadcrumbs": "Riivsai",
     "components": "Komponendid",
     "coreInfoSection": "Põhiteabe jaotis",
+    "customCodeSection": "Kohandatud koodisektsioon",
     "directory": "Kataloog",
     "eventsSection": "Sündmuste sektsioon",
     "expandedFooter": "Laiendatud jalus",
@@ -63,8 +64,7 @@
     "reviewsSection": "Arvustuste jaotis",
     "staticMapSection": "Staatiline kaardiosa",
     "teamSection": "Meeskonnaosa",
-    "testimonialsSection": "Iseloomustuste sektsioon",
-    "customCodeSection": "Kohandatud koodisektsioon"
+    "testimonialsSection": "Iseloomustuste sektsioon"
   },
   "confirm": "Kinnitama",
   "coordinate": "Koordinaat",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Kohalik geomodifikaator",
   "locationsNear_one": "{{krahv}} asukoht \"{{filterdisplayName}}\"  lähedal",
   "map": "Kaardistama",
+  "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
   "monday": "Esmaspäev",
   "name": "Nimetus",
   "newYorkCity": "New York City, New York, Ameerika Ühendriigid",
@@ -431,6 +432,5 @@
   "update": "Värskendama",
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
-  "wednesday": "Kolmapäev",
-  "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML"
+  "wednesday": "Kolmapäev"
 }

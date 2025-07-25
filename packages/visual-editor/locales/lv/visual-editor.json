@@ -46,6 +46,7 @@
     "breadcrumbs": "Rīvmaize",
     "components": "Komponenti",
     "coreInfoSection": "Pamatinformācija",
+    "customCodeSection": "Pielāgota koda sadaļa",
     "directory": "Direktors",
     "eventsSection": "Notikumu sadaļa",
     "expandedFooter": "Paplašināta kājene",
@@ -63,8 +64,7 @@
     "reviewsSection": "Atsauksmju sadaļa",
     "staticMapSection": "Statiskās kartes sadaļa",
     "teamSection": "Komandu nodaļa",
-    "testimonialsSection": "Attiecību sadaļa",
-    "customCodeSection": "Pielāgota koda sadaļa"
+    "testimonialsSection": "Attiecību sadaļa"
   },
   "confirm": "Apstiprināt",
   "coordinate": "Koordinēt",
@@ -303,6 +303,7 @@
   "localGeomodifier": "Vietējais ģeomodifieris",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no \"{{FilterDisplayName}}\"",
   "map": "Karte",
+  "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu",
   "monday": "Pirmdiena",
   "name": "Nosaukt",
   "newYorkCity": "Ņujorka, Ņujorka, Amerikas Savienotās Valstis",
@@ -431,6 +432,5 @@
   "update": "Atjaunināt",
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
   "visitPage": "Apmeklējuma lapa",
-  "wednesday": "Trešdiena",
-  "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu"
+  "wednesday": "Trešdiena"
 }

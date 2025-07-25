@@ -46,6 +46,7 @@
     "breadcrumbs": "面包屑",
     "components": "成分",
     "coreInfoSection": "核心信息部分",
+    "customCodeSection": "自定义代码部分",
     "directory": "目录",
     "eventsSection": "活动部分",
     "expandedFooter": "扩展的页脚",
@@ -63,8 +64,7 @@
     "reviewsSection": "评论部分",
     "staticMapSection": "静态地图部分",
     "teamSection": "团队部分",
-    "testimonialsSection": "推荐部分",
-    "customCodeSection": "自定义代码部分"
+    "testimonialsSection": "推荐部分"
   },
   "confirm": "确认",
   "coordinate": "协调",
@@ -303,6 +303,7 @@
   "localGeomodifier": "当地的土工改装剂",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
   "map": "地图",
+  "missingHtmlWidget": "添加HTML以查看组件",
   "monday": "周一",
   "name": "姓名",
   "newYorkCity": "纽约，纽约，美国",
@@ -431,6 +432,5 @@
   "update": "更新",
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
-  "wednesday": "周三",
-  "missingHtmlWidget": "添加HTML以查看组件"
+  "wednesday": "周三"
 }
