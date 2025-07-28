@@ -85,8 +85,11 @@ const gridSectionFields: Fields<GridProps> = {
   ),
 };
 
+/**
+ * The Grid Section component presents a series of columns into which a variety of smaller content blocks may be dragged, allowing for a higher degree of customization.
+ */
 export const Grid: ComponentConfig<GridProps> = {
-  label: msg("fields.gridSection", "Grid Section"),
+  label: msg("components.gridSection", "Grid Section"),
   fields: gridSectionFields,
   defaultProps: {
     columns: 2,
