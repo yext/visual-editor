@@ -38,6 +38,7 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.tsx";
+import { useOverflow } from "../../internal/hooks/useOverflow.ts";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 const defaultMainLink = {
@@ -290,13 +291,13 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   data,
   styles,
 }: ExpandedHeaderProps) => {
+  const { t } = useTranslation();
+  const streamDocument = useDocument();
   const { primaryHeader, secondaryHeader } = data;
   const {
     primaryHeader: primaryHeaderStyle,
     secondaryHeader: secondaryHeaderStyle,
   } = styles;
-  const { t } = useTranslation();
-  const streamDocument = useDocument();
   const {
     logo,
     links,
@@ -317,25 +318,57 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     parseDocumentForLanguageDropdown(streamDocument);
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const showMobileMenu =
-    (primaryCTA?.label && primaryCTA?.link) ||
-    (secondaryCTA?.label && secondaryCTA?.link) ||
-    links.some((l) => l.label && l.link) ||
-    (show &&
-      (secondaryLinks.some((l) => l.label && l.link) || showLanguageDropdown));
+  const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
+
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const isNavOverflowing = useOverflow(containerRef, contentRef);
+
+  const hasContentForMobileMenu =
+    !!(primaryCTA?.label && primaryCTA?.link) ||
+    !!(secondaryCTA?.label && secondaryCTA?.link) ||
+    !!links.some((l) => l.label && l.link) ||
+    !!(
+      show &&
+      (secondaryLinks.some((l) => l.label && l.link) || showLanguageDropdown)
+    );
+
+  const showHamburger = isNavOverflowing || !hasContentForMobileMenu;
+
+  const NavContent = () => (
+    <>
+      <EntityField
+        constantValueEnabled
+        displayName={pt("fields.primaryHeaderLinks", "Primary Header Links")}
+      >
+        <HeaderLinks links={links} />
+      </EntityField>
+      {(showPrimaryCTA || showSecondaryCTA) && (
+        <HeaderCtas
+          primaryCTA={primaryCTA}
+          secondaryCTA={secondaryCTA}
+          primaryVariant={primaryCtaVariant}
+          secondaryVariant={secondaryCtaVariant}
+          showPrimaryCTA={showPrimaryCTA}
+          showSecondaryCTA={showSecondaryCTA}
+        />
+      )}
+    </>
+  );
 
   return (
     <>
+      {/* Unified Header Structure */}
       <div
-        className="hidden md:flex flex-col"
-        aria-label={t("expandedHeaderDesktop", "Expanded Header Desktop")}
+        className="flex flex-col"
+        aria-label={t("siteHeader", "Site Header")}
       >
+        {/* Secondary Header (Top Bar) */}
         {show && (
           <PageSection
             verticalPadding={"sm"}
             background={secondaryBackgroundColor}
-            className="flex justify-end gap-6 items-center"
+            className="hidden md:flex justify-end gap-6 items-center"
           >
             <EntityField
               constantValueEnabled
@@ -354,6 +387,8 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             )}
           </PageSection>
         )}
+
+        {/* Primary Header */}
         <PageSection
           verticalPadding={"header"}
           background={backgroundColor}
@@ -369,70 +404,65 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               aspectRatio={logoStyle.aspectRatio}
             />
           </EntityField>
-          <div className="flex gap-8 items-center">
-            <EntityField
-              constantValueEnabled
-              displayName={pt(
-                "fields.primaryHeaderLinks",
-                "Primary Header Links"
-              )}
-            >
-              <HeaderLinks links={links} />
-            </EntityField>
-            {(showPrimaryCTA || showSecondaryCTA) && (
-              <HeaderCtas
-                primaryCTA={primaryCTA}
-                secondaryCTA={secondaryCTA}
-                primaryVariant={primaryCtaVariant}
-                secondaryVariant={secondaryCtaVariant}
-                showPrimaryCTA={showPrimaryCTA}
-                showSecondaryCTA={showSecondaryCTA}
-              />
-            )}
-          </div>
-        </PageSection>
-      </div>
-      <div
-        className="flex md:hidden flex-col"
-        aria-label={t("expandedHeaderMobile", "Expanded Header Mobile")}
-      >
-        <PageSection
-          verticalPadding={"header"}
-          background={backgroundColor}
-          className="flex items-center justify-between"
-        >
-          <HeaderLogo
-            logo={buildComplexImage(logo, logoStyle.width || 100)}
-            logoWidth={logoStyle.width || 100}
-            aspectRatio={logoStyle.aspectRatio}
-          />
 
-          {showMobileMenu && (
+          {/* Desktop Navigation & Mobile Hamburger */}
+          <div
+            className="flex-grow flex justify-end items-center min-w-0"
+            ref={containerRef}
+          >
+            {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
+            {/* Its width is our source of truth. */}
+            <div
+              ref={contentRef}
+              className="flex items-center gap-8 invisible h-0"
+            >
+              <NavContent />
+            </div>
+
+            {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
+            <div
+              className={`hidden md:flex items-center gap-8 absolute ${
+                showHamburger ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              <NavContent />
+            </div>
+
+            {/* Hamburger Button - Shown when nav overflows or on small screens */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               aria-label={
-                isOpen
+                isMobileMenuOpen
                   ? t("closeMenu", "Close menu")
                   : t("openMenu", "Open menu")
               }
-              aria-expanded={isOpen}
+              aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
-              className="text-xl"
+              className={`text-xl z-10 ${
+                showHamburger ? "md:block" : "md:hidden"
+              }`}
             >
-              {isOpen ? <FaTimes size="1.5rem" /> : <FaBars size="1.5rem" />}
+              {isMobileMenuOpen ? (
+                <FaTimes size="1.5rem" />
+              ) : (
+                <FaBars size="1.5rem" />
+              )}
             </button>
-          )}
+          </div>
         </PageSection>
       </div>
-      {isOpen && (
+
+      {/* Mobile Menu Panel (Flyout) */}
+      {isMobileMenuOpen && (
         <div
           id="mobile-menu"
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isOpen
+          className={`transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen
               ? "max-h-[1000px] opacity-100"
-              : "max-h-0 opacity-0 overflow-scroll"
+              : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
+          {/* ... Mobile menu sections remain the same ... */}
           <PageSection verticalPadding={"sm"} background={backgroundColor}>
             <EntityField
               constantValueEnabled
@@ -467,7 +497,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               )}
             </PageSection>
           )}
-
           {(showPrimaryCTA || showSecondaryCTA) && (
             <PageSection verticalPadding={"sm"} background={backgroundColor}>
               <HeaderCtas
