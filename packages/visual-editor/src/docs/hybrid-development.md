@@ -144,7 +144,7 @@ export const componentRegistry = new Map<string, Config<any>>([
 
 ### Working with Existing Components
 
-The avaliable components for a template are defined in that template's [config](#puck-configs). All configs and their component assignments can be found in `ve.config.tsx`. Any usages of [withPropOverrides](../utils/README.md#withpropoverrides) would be done in the `ve.config.tsx` file.
+The available components for a template are defined in that template's [config](#puck-configs). All configs and their component assignments can be found in `ve.config.tsx`. Any usages of [withPropOverrides](../utils/README.md#withpropoverrides) would be done in the `ve.config.tsx` file.
 
 The **NearbyLocationsSection** component requires [withPropOverrides](../utils/README.md#withpropoverrides) to pass in a value for contentEndpointIdEnvVar. Without this, the component will not work in a hybrid development. This can look like:
 

@@ -121,7 +121,7 @@ const locatorFields: Fields<LocatorProps> = {
 };
 
 /**
- * Avaliable on Locator templates.
+ * Available on Locator templates.
  */
 export const LocatorComponent: ComponentConfig<LocatorProps> = {
   fields: locatorFields,
