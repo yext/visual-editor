@@ -6,6 +6,7 @@ import "./componentTests.css";
 import "jest-axe/extend-expect";
 import { expect, vi } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
+import { act } from "@testing-library/react";
 
 // Applies the theme variables and mocks the date
 beforeEach(() => {
@@ -31,17 +32,23 @@ beforeEach(() => {
 // This portion is run in the browser environment while
 // compareScreenshot is run in the node environment.
 expect.extend({
-  async toMatchScreenshot(screenshotName: string) {
-    const updatedScreenshotData = await page.screenshot({
-      save: false,
-    });
+  async toMatchScreenshot(
+    this: any, // 'this' context for Vitest matchers
+    screenshotName: string,
+    options?: { customThreshold?: number }
+  ) {
+    const updatedScreenshotData = await act(async () =>
+      page.screenshot({
+        save: false,
+      })
+    );
 
     const numDiffPixels = await commands.compareScreenshot(
       screenshotName,
       updatedScreenshotData
     );
 
-    if (numDiffPixels > 0) {
+    if (numDiffPixels > (options?.customThreshold ?? 0)) {
       return {
         pass: false,
         message: () => `Screenshots differed by ${numDiffPixels} pixels`,
