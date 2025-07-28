@@ -68,6 +68,27 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
   useEffect(translatePuckSidebars, [i18n.language]);
 
+  const buttonText =
+    templateMetadata.assignment === "ALL"
+      ? // TODO: translation concatenation
+        `${pt("update", "Update")} ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
+      : templateMetadata.layoutTaskApprovals
+        ? pt("approvals.send", "Send for Approval")
+        : pt("updatePage", "Update Page");
+
+  const onButtonClick = async () => {
+    if (
+      templateMetadata.assignment == "ENTITY" &&
+      templateMetadata.layoutTaskApprovals
+    ) {
+      setApprovalModalOpen(true);
+    } else {
+      await onPublishLayout(appState.data);
+      onClearLocalChanges();
+      setHistories([{ id: "root", state: { data: appState.data } }]);
+    }
+  };
+
   return (
     <>
       <LayoutApprovalModal
@@ -129,22 +150,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             <Button
               variant="secondary"
               disabled={histories.length === 1}
-              onClick={async () => {
-                if (templateMetadata.assignment == "ENTITY") {
-                  setApprovalModalOpen(true);
-                } else {
-                  await onPublishLayout(appState.data);
-                  onClearLocalChanges();
-                  setHistories([
-                    { id: "root", state: { data: appState.data } },
-                  ]);
-                }
-              }}
+              onClick={onButtonClick}
             >
-              {templateMetadata.assignment === "ENTITY"
-                ? pt("approvals.send", "Send for Approval")
-                : // TODO: translation concatenation
-                  `${pt("update", "Update")} ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`}
+              {buttonText}
             </Button>
           )}
         </div>
