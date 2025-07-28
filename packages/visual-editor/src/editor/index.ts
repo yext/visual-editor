@@ -21,3 +21,4 @@ export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 export { TranslatableStringField } from "./TranslatableStringField.tsx";
 export { TranslatableRichTextField } from "./TranslatableRichTextField.tsx";
 export { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
+export { CodeField, type CodeFieldProps } from "./CodeField.tsx";
