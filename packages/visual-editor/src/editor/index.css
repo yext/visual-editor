@@ -81,3 +81,24 @@
 .RichTextField:hover {
   border-color: var(--puck-color-grey-05);
 }
+
+/* Temporary styling for CodeFields until we add CodeBlock component from CodeMirror */
+.CodeField {
+  border: 1px solid var(--puck-color-grey-09);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: ui-monospace, monospace;
+  padding: 12px 15px;
+  width: 100%;
+  height: calc(3lh + 24px);
+  text-align: left;
+  display: inline-flex;
+}
+
+.CodeField:focus {
+  outline: 2px solid var(--puck-color-azure-05);
+}
+
+.CodeField:hover {
+  border-color: var(--puck-color-grey-05);
+}
