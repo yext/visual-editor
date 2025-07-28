@@ -163,32 +163,31 @@ export const BreadcrumbsComponent = ({
       aria-label={t("breadcrumb", "Breadcrumb")}
       background={styles?.backgroundColor}
     >
-      <ol className="flex flex-wrap">
+      <ol className="inline p-0 m-0 list-none">
         {breadcrumbs.map(({ name, slug }, idx) => {
           const isRoot = idx === 0;
           const isLast = idx === breadcrumbs.length - 1;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
             : slug;
+
           return (
-            <>
-              <li key={idx} className="flex-shrink-0 max-w-full">
-                <MaybeLink
-                  eventName={`link${idx}`}
-                  href={isLast ? "" : href}
-                  // Force body-sm and link-fontFamily for all breadcrumbs
-                  className="text-body-sm-fontSize font-link-fontWeight font-link-fontFamily inline-block whitespace-normal break-words"
-                  alwaysHideCaret={true}
-                >
-                  {isRoot && directoryRoot ? directoryRoot : name}
-                </MaybeLink>
-              </li>
-              {!isLast && (
-                <span className="flex-shrink-0 mx-2" aria-hidden>
+            <li key={idx} className="inline whitespace-normal break-words">
+              {!isRoot && (
+                <span className="mx-2" aria-hidden>
                   {separator}
                 </span>
               )}
-            </>
+
+              <MaybeLink
+                eventName={`link${idx}`}
+                href={isLast ? "" : href}
+                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                alwaysHideCaret
+              >
+                {isRoot && directoryRoot ? directoryRoot : name}
+              </MaybeLink>
+            </li>
           );
         })}
       </ol>
