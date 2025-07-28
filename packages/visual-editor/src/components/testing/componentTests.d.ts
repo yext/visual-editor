@@ -1,7 +1,10 @@
 import "vitest";
 
 interface CustomMatchers<R = unknown> {
-  toMatchScreenshot: () => Promise<R>;
+  toMatchScreenshot: (options?: {
+    /** The screenshot will fail if >customThreshold pixels differ. Defaults to 0. */
+    customThreshold?: number;
+  }) => Promise<R>;
 }
 
 declare module "vitest" {
