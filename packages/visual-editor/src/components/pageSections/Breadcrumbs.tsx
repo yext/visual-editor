@@ -184,7 +184,9 @@ export const BreadcrumbsComponent = ({
                 </MaybeLink>
               </li>
               {!isLast && (
-                <span className="flex-shrink-0 mx-2">{separator}</span>
+                <span className="flex-shrink-0 mx-2" aria-hidden>
+                  {separator}
+                </span>
               )}
             </>
           );
