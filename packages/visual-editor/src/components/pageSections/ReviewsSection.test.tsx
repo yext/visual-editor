@@ -58,7 +58,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await expandButton.click();
       });
-      await delay(300);
+      await delay(500);
     },
   },
   {
@@ -108,7 +108,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await expandButton.click();
       });
-      await delay(300);
+      await delay(500);
     },
   },
 ];

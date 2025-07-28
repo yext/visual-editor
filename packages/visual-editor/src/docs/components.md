@@ -111,6 +111,24 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## CustomCodeSection
+
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+
+### Props
+
+#### Other Props
+
+The CSS styles to be applied to the component.
+
+| Prop         | Type     | Description                                                                                                                                                                                                                | Default |
+| :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| `css`        | `string` | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
+| `html`       | `string` | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
+| `javascript` | `string` | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
+
+---
+
 ## Directory
 
 The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card. Avaliable on Directory templates.

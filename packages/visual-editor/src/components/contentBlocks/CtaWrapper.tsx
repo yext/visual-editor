@@ -7,24 +7,27 @@ import {
   YextEntityField,
   CTA,
   CTAProps,
+  msg,
+  pt,
   YextField,
   resolveComponentData,
+  TranslatableCTA,
 } from "@yext/visual-editor";
 
 export interface CTAWrapperProps {
-  entityField: YextEntityField<CTAProps>;
+  entityField: YextEntityField<TranslatableCTA>;
   variant: CTAProps["variant"];
   className?: CTAProps["className"];
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
-  entityField: YextField("CTA", {
+  entityField: YextField(msg("fields.cta", "CTA"), {
     type: "entityField",
     filter: {
       types: ["type.cta"],
     },
   }),
-  variant: YextField("Variant", {
+  variant: YextField(msg("fields.variant", "Variant"), {
     type: "radio",
     options: "CTA_VARIANT",
   }),
@@ -35,35 +38,38 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   variant,
   className,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
 
   return (
     <EntityField
-      displayName={t("cta", "CTA")}
+      displayName={pt("cta", "CTA")}
       fieldId={entityField.field}
       constantValueEnabled={entityField.constantValueEnabled}
     >
-      <CTA
-        label={cta?.label}
-        link={cta?.link}
-        linkType={cta?.linkType}
-        variant={variant}
-        className={className}
-      />
+      {cta && (
+        <CTA
+          label={resolveComponentData(cta.label, i18n.language, streamDocument)}
+          link={cta.link}
+          linkType={cta.linkType}
+          variant={variant}
+          className={className}
+        />
+      )}
     </EntityField>
   );
 };
 
 export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
-  label: "Call to Action",
+  label: msg("components.callToAction", "Call to Action"),
   fields: ctaWrapperFields,
   defaultProps: {
     entityField: {
       field: "",
       constantValue: {
         label: "Call to Action",
+        link: "#",
       },
     },
     variant: "primary",
