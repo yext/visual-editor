@@ -27,7 +27,7 @@ const HeadingTextWrapper = React.forwardRef<
 
   return (
     <EntityField
-      displayName={pt("Heading", "Heading ") + headingProps.level}
+      displayName={pt("Heading", "Heading") + " " + headingProps.level}
       fieldId={text.field}
       constantValueEnabled={text.constantValueEnabled}
     >
