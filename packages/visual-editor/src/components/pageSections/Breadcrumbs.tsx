@@ -179,6 +179,9 @@ export const BreadcrumbsComponent = ({
                 </span>
               )}
 
+              {/* encourage the browser to break after a full breadcrumb, if necessary */}
+              <wbr />
+
               <MaybeLink
                 eventName={`link${idx}`}
                 href={isLast ? "" : href}
@@ -187,8 +190,6 @@ export const BreadcrumbsComponent = ({
               >
                 {isRoot && directoryRoot ? directoryRoot : name}
               </MaybeLink>
-              {/* encourage the browser to break after a full breadcrumb, if necessary */}
-              <wbr />
             </li>
           );
         })}
