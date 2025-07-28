@@ -5,7 +5,7 @@ outline: 2
 
 ## BannerSection
 
-The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page. Avaliable on Location templates.
+The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page. Available on Location templates.
 
 ![Preview of the BannerSection component](../components/testing/screenshots/BannerSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
@@ -40,7 +40,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## BreadcrumbsSection
 
-The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site. Avaliable on Location templates.
+The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site. Available on Location templates.
 
 ### Props
 
@@ -74,7 +74,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## CoreInfoSection
 
-The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization. Avaliable on Location templates.
+The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization. Available on Location templates.
 
 ![Preview of the CoreInfoSection component](../components/testing/screenshots/CoreInfoSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -131,7 +131,7 @@ The CSS styles to be applied to the component.
 
 ## Directory
 
-The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card. Avaliable on Directory templates.
+The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card. Available on Directory templates.
 
 ![Preview of the Directory component](../components/testing/screenshots/Directory/%5Bdesktop%5D%20default%20props%20-%20city%20list%20-%20document%20data.png)
 
@@ -160,7 +160,7 @@ This object contains properties for customizing the component's appearance.
 
 ## EventSection
 
-The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions. Avaliable on Location templates.
+The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions. Available on Location templates.
 
 ![Preview of the EventSection component](../components/testing/screenshots/EventSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -225,7 +225,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 ## ExpandedHeader
 
-The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector. Avaliable on Location templates.
+The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector. Available on Location templates.
 
 ![Preview of the ExpandedHeader component](../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props.png)
 
@@ -253,7 +253,7 @@ This object contains properties for customizing the appearance of both header ti
 
 ## FAQSection
 
-The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer. Avaliable on Location templates.
+The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer. Available on Location templates.
 
 ### Props
 
@@ -287,7 +287,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## Footer
 
-The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component. Avaliable on Directory and Locator templates.
+The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component. Available on Directory and Locator templates.
 
 ![Preview of the Footer component](../components/testing/screenshots/Footer/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -305,7 +305,7 @@ The background color for the entire footer section.
 
 ## Header
 
-The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component. Avaliable on Directory and Locator templates.
+The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component. Available on Directory and Locator templates.
 
 ![Preview of the Header component](../components/testing/screenshots/Header/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -366,7 +366,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## InsightSection
 
-The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content. Avaliable on Location templates.
+The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content. Available on Location templates.
 
 ![Preview of the InsightSection component](../components/testing/screenshots/InsightSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -403,7 +403,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## LocatorComponent
 
-Avaliable on Locator templates.
+Available on Locator templates.
 
 ### Props
 
@@ -420,7 +420,7 @@ The visual theme for the map tiles, chosen from a predefined list of Mapbox styl
 
 ## NearbyLocationsSection
 
-The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours. Avaliable on Location templates.
+The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours. Available on Location templates.
 
 ![Preview of the NearbyLocationsSection component](../components/testing/screenshots/NearbyLocationsSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
@@ -462,7 +462,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## PhotoGallerySection
 
-The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation. Avaliable on Location templates.
+The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation. Available on Location templates.
 
 ![Preview of the PhotoGallerySection component](../components/testing/screenshots/PhotoGallerySection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -499,7 +499,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## ProductSection
 
-The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers. Avaliable on Location templates.
+The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers. Available on Location templates.
 
 ![Preview of the ProductSection component](../components/testing/screenshots/ProductSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -536,7 +536,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## PromoSection
 
-The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements. Avaliable on Location templates.
+The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements. Available on Location templates.
 
 ![Preview of the PromoSection component](../components/testing/screenshots/PromoSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -574,7 +574,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## StaticMapSection
 
-The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox. Avaliable on Location templates.
+The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox. Available on Location templates.
 
 ![Preview of the StaticMapSection component](../components/testing/screenshots/StaticMapSection/%5Bdesktop%5D%20default%20props%20with%20coordinate%20-%20no%20api%20key.png)
 
@@ -608,7 +608,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## TeamSection
 
-The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card. Avaliable on Location templates.
+The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card. Available on Location templates.
 
 ![Preview of the TeamSection component](../components/testing/screenshots/TeamSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -642,7 +642,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## TestimonialSection
 
-The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors. Avaliable on Location templates.
+The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors. Available on Location templates.
 
 ![Preview of the TestimonialSection component](../components/testing/screenshots/TestimonialSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 

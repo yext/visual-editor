@@ -222,7 +222,7 @@ const filterFontWeights = (
 // Returns FontRegistry only containing fonts used in ThemeData
 export const extractInUseFontFamilies = (
   data: ThemeData,
-  avaliableFonts: FontRegistry
+  availableFonts: FontRegistry
 ): FontRegistry => {
   const fontFamilies = new Set<string>();
 
@@ -243,10 +243,10 @@ export const extractInUseFontFamilies = (
 
   const inUseFonts: FontRegistry = {};
 
-  // For each unique font family found, look it up in the avaliableFonts map.
+  // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of fontFamilies) {
-    if (avaliableFonts[fontName]) {
-      inUseFonts[fontName] = avaliableFonts[fontName];
+    if (availableFonts[fontName]) {
+      inUseFonts[fontName] = availableFonts[fontName];
     } else {
       console.warn(
         `The font '${fontName}' is used in the theme but cannot be found in available fonts.`
