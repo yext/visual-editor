@@ -7,6 +7,8 @@ import {
   EntityField,
   YextEntityField,
   PhoneAtom,
+  msg,
+  pt,
   YextField,
 } from "@yext/visual-editor";
 
@@ -17,23 +19,26 @@ export interface PhoneProps {
 }
 
 const PhoneFields: Fields<PhoneProps> = {
-  phone: YextField("Phone Number", {
+  phone: YextField(msg("fields.phoneNumber", "Phone Number"), {
     type: "entityField",
     filter: {
       types: ["type.phone"],
     },
   }),
-  format: YextField("Format", {
+  format: YextField(msg("fields.format", "Format"), {
     type: "radio",
     options: "PHONE_OPTIONS",
   }),
-  includeHyperlink: YextField("Include Hyperlink", {
-    type: "radio",
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
+  includeHyperlink: YextField(
+    msg("fields.includeHyperlink", "Include Hyperlink"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
 };
 
 const PhoneComponent: React.FC<PhoneProps> = ({
@@ -41,7 +46,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
   format,
   includeHyperlink,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPhone = resolveComponentData(
     phone,
@@ -55,7 +60,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName={t("phone", "Phone")}
+      displayName={pt("phone", "Phone")}
       fieldId={phone.field}
       constantValueEnabled={phone.constantValueEnabled}
     >
@@ -70,7 +75,7 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 };
 
 export const Phone: ComponentConfig<PhoneProps> = {
-  label: "Phone",
+  label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {
     phone: {

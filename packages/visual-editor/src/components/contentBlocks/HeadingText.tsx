@@ -9,6 +9,8 @@ import {
   YextField,
   TranslatableString,
   resolveComponentData,
+  pt,
+  msg,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -25,7 +27,7 @@ const HeadingTextWrapper = React.forwardRef<
 
   return (
     <EntityField
-      displayName={"Heading " + headingProps.level}
+      displayName={pt("Heading", "Heading") + " " + headingProps.level}
       fieldId={text.field}
       constantValueEnabled={text.constantValueEnabled}
     >
@@ -39,13 +41,13 @@ const HeadingTextWrapper = React.forwardRef<
 HeadingTextWrapper.displayName = "HeadingText";
 
 const headingTextFields: Fields<HeadingTextProps> = {
-  text: YextField<any, TranslatableString>("Text", {
+  text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {
     type: "entityField",
     filter: {
       types: ["type.string"],
     },
   }),
-  level: YextField("Heading Level", {
+  level: YextField(msg("fields.headingLevel", "Heading Level"), {
     type: "select",
     hasSearch: true,
     options: "HEADING_LEVEL",
@@ -53,12 +55,15 @@ const headingTextFields: Fields<HeadingTextProps> = {
 };
 
 export const HeadingText: ComponentConfig<HeadingTextProps> = {
-  label: "Heading Text",
+  label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
   defaultProps: {
     text: {
       field: "",
-      constantValue: "Text",
+      constantValue: {
+        en: "Text",
+        hasLocalizedValue: "true",
+      },
       constantValueEnabled: true,
     },
     content: "Heading",

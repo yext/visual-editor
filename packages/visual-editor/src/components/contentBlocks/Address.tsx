@@ -12,7 +12,9 @@ import {
   EntityField,
   YextEntityField,
   CTA,
+  pt,
   YextField,
+  msg,
   resolveComponentData,
 } from "@yext/visual-editor";
 
@@ -22,17 +24,20 @@ export type AddressProps = {
 };
 
 const addressFields: Fields<AddressProps> = {
-  address: YextField<any, AddressType>("Address", {
+  address: YextField<any, AddressType>(msg("fields.address", "Address"), {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),
-  showGetDirections: YextField("Show Get Directions Link", {
-    type: "radio",
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
+  showGetDirections: YextField(
+    msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
 };
 
 const AddressComponent = ({
@@ -57,7 +62,7 @@ const AddressComponent = ({
     <>
       {address && (
         <EntityField
-          displayName={t("address", "Address")}
+          displayName={pt("address", "Address")}
           fieldId={addressField.field}
           constantValueEnabled={addressField.constantValueEnabled}
         >
@@ -70,7 +75,7 @@ const AddressComponent = ({
           {coordinates && showGetDirections && (
             <CTA
               link={coordinates}
-              label="Get Directions"
+              label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
               variant="link"
@@ -83,7 +88,7 @@ const AddressComponent = ({
 };
 
 export const Address: ComponentConfig<AddressProps> = {
-  label: "Address",
+  label: msg("components.address", "Address"),
   fields: addressFields,
   defaultProps: {
     address: {
