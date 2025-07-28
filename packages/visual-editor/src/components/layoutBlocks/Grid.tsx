@@ -7,6 +7,7 @@ import {
   YextField,
   VisibilityWrapper,
   getAnalyticsScopeHash,
+  msg,
 } from "@yext/visual-editor";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
 import { AdvancedCoreInfoCategory } from "../_componentCategories";
@@ -58,28 +59,34 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
-  columns: YextField("Columns", {
+  columns: YextField(msg("fields.columns", "Columns"), {
     type: "radio",
     options: [
-      { label: "Two", value: 2 },
-      { label: "Three", value: 3 },
+      { label: msg("fields.options.two", "Two"), value: 2 },
+      { label: msg("fields.options.three", "Three"), value: 3 },
     ],
   }),
-  backgroundColor: YextField("Background Color", {
-    type: "select",
-    options: "BACKGROUND_COLOR",
-  }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  backgroundColor: YextField(
+    msg("fields.backgroundColor", "Background Color"),
+    {
+      type: "select",
+      options: "BACKGROUND_COLOR",
+    }
+  ),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
 export const Grid: ComponentConfig<GridProps> = {
-  label: "Grid Section",
+  label: msg("fields.gridSection", "Grid Section"),
   fields: gridSectionFields,
   defaultProps: {
     columns: 2,
