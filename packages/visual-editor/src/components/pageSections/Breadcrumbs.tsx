@@ -171,18 +171,22 @@ export const BreadcrumbsComponent = ({
             ? relativePrefixToRoot + slug
             : slug;
           return (
-            <li key={idx} className="flex items-center">
-              <MaybeLink
-                eventName={`link${idx}`}
-                href={isLast ? "" : href}
-                // Force body-sm and link-fontFamily for all breadcrumbs
-                className="text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
-                alwaysHideCaret={true}
-              >
-                {isRoot && directoryRoot ? directoryRoot : name}
-              </MaybeLink>
-              {!isLast && <span className="mx-2">{separator}</span>}
-            </li>
+            <>
+              <li key={idx} className="flex-shrink-0 max-w-full">
+                <MaybeLink
+                  eventName={`link${idx}`}
+                  href={isLast ? "" : href}
+                  // Force body-sm and link-fontFamily for all breadcrumbs
+                  className="text-body-sm-fontSize font-link-fontWeight font-link-fontFamily inline-block whitespace-normal break-words"
+                  alwaysHideCaret={true}
+                >
+                  {isRoot && directoryRoot ? directoryRoot : name}
+                </MaybeLink>
+              </li>
+              {!isLast && (
+                <span className="flex-shrink-0 mx-2">{separator}</span>
+              )}
+            </>
           );
         })}
       </ol>
