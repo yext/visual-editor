@@ -10,7 +10,7 @@ import {
   TagType,
 } from "@yext/pages";
 import { Render } from "@measured/puck";
-import { mainConfig } from "../ve.config";
+import { mainConfig, filterComponentsFromConfig } from "../ve.config";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -90,6 +90,10 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 const Location: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
+  const filteredConfig = filterComponentsFromConfig(
+    mainConfig,
+    document?._additionalLayoutComponents
+  );
 
   return (
     <AnalyticsProvider
@@ -99,11 +103,11 @@ const Location: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <Render
-          config={mainConfig}
+          config={filteredConfig}
           data={migrate(
             JSON.parse(document.__.layout),
             migrationRegistry,
-            mainConfig
+            filteredConfig
           )}
         />
       </VisualEditorProvider>
