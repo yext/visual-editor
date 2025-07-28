@@ -3,9 +3,10 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender, waitFor } from "@testing-library/react";
+import { act, render as reactRender, waitFor } from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
@@ -96,6 +97,12 @@ const tests: ComponentTest[] = [
         apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
       },
       liveVisibility: true,
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
     },
     version: 10,
   },
@@ -150,9 +157,19 @@ describe("StaticMapSection", async () => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
+      // flush resizing useEffects
+      await act(async () => await delay(1000));
+      await act(async () => await delay(1000));
+
+      // The static image returned by mapbox can vary slightly
+      const threshold =
+        name.includes("with api key") && name.includes("with coordinate")
+          ? 20
+          : 0;
+
       await expect(
         `StaticMapSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ customThreshold: threshold });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -160,7 +177,7 @@ describe("StaticMapSection", async () => {
         await interactions(page);
         await expect(
           `StaticMapSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: threshold });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
