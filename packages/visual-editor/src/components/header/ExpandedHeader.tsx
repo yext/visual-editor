@@ -322,9 +322,9 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
-  const isNavOverflowing = useOverflow(containerRef, contentRef);
+  const showHamburger = useOverflow(containerRef, contentRef);
 
-  const hasContentForMobileMenu =
+  const hasNavContent =
     !!(primaryCTA?.label && primaryCTA?.link) ||
     !!(secondaryCTA?.label && secondaryCTA?.link) ||
     !!links.some((l) => l.label && l.link) ||
@@ -332,8 +332,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
       show &&
       (secondaryLinks.some((l) => l.label && l.link) || showLanguageDropdown)
     );
-
-  const showHamburger = isNavOverflowing || !hasContentForMobileMenu;
 
   const navContent = (
     <>
@@ -359,10 +357,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   return (
     <>
       {/* Secondary Header (Top Bar) */}
-      <div
-        className="hidden md:flex flex-col"
-        aria-label={t("secondaryHeader", "Secondary Header")}
-      >
+      <div className="hidden md:flex flex-col">
         {show && (
           <div className="hidden md:flex">
             <PageSection
@@ -391,10 +386,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
       </div>
 
       {/* Primary Header */}
-      <div
-        className="flex flex-col"
-        aria-label={t("primaryHeader", "Primary Header")}
-      >
+      <div className="flex flex-col">
         <PageSection
           verticalPadding={"header"}
           background={backgroundColor}
@@ -423,51 +415,53 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           </EntityField>
 
           {/* Desktop Navigation & Mobile Hamburger */}
-          <div
-            className="flex-grow flex justify-end items-center min-w-0"
-            ref={containerRef}
-          >
-            {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
-            {/* Its width is our source of truth. */}
+          {hasNavContent && (
             <div
-              ref={contentRef}
-              className="flex items-center gap-8 invisible h-0"
+              className="flex-grow flex justify-end items-center min-w-0"
+              ref={containerRef}
             >
-              {navContent}
-            </div>
+              {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
+              {/* Its width is our source of truth. */}
+              <div
+                ref={contentRef}
+                className="flex items-center gap-8 invisible h-0"
+              >
+                {navContent}
+              </div>
 
-            {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
-            <div
-              className={`hidden md:flex items-center gap-8 absolute ${
-                showHamburger
-                  ? "opacity-0 pointer-events-none"
-                  : "opacity-100 pointer-events-auto"
-              }`}
-            >
-              {navContent}
-            </div>
+              {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
+              <div
+                className={`hidden md:flex items-center gap-8 absolute ${
+                  showHamburger
+                    ? "opacity-0 pointer-events-none"
+                    : "opacity-100 pointer-events-auto"
+                }`}
+              >
+                {navContent}
+              </div>
 
-            {/* Hamburger Button - Shown when nav overflows or on small screens */}
-            <button
-              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={
-                isMobileMenuOpen
-                  ? t("closeMenu", "Close menu")
-                  : t("openMenu", "Open menu")
-              }
-              aria-expanded={isMobileMenuOpen}
-              aria-controls="mobile-menu"
-              className={`text-xl z-10 ${
-                showHamburger ? "md:block" : "md:hidden"
-              }`}
-            >
-              {isMobileMenuOpen ? (
-                <FaTimes size="1.5rem" />
-              ) : (
-                <FaBars size="1.5rem" />
-              )}
-            </button>
-          </div>
+              {/* Hamburger Button - Shown when nav overflows or on small screens */}
+              <button
+                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={
+                  isMobileMenuOpen
+                    ? t("closeMenu", "Close menu")
+                    : t("openMenu", "Open menu")
+                }
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
+                className={`text-xl z-10 ${
+                  showHamburger ? "md:block" : "md:hidden"
+                }`}
+              >
+                {isMobileMenuOpen ? (
+                  <FaTimes size="1.5rem" />
+                ) : (
+                  <FaBars size="1.5rem" />
+                )}
+              </button>
+            </div>
+          )}
         </PageSection>
       </div>
 
