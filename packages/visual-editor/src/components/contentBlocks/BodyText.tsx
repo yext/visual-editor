@@ -9,6 +9,8 @@ import {
   EntityField,
   YextEntityField,
   YextField,
+  pt,
+  msg,
   TranslatableString,
 } from "@yext/visual-editor";
 
@@ -18,13 +20,13 @@ export type BodyTextProps = {
 };
 
 const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextField<any, TranslatableString>("Text", {
+  text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {
     type: "entityField",
     filter: {
       types: ["type.string"],
     },
   }),
-  variant: YextField("Variant", {
+  variant: YextField(msg("fields.variant", "Variant"), {
     type: "radio",
     options: "BODY_VARIANT",
   }),
@@ -32,12 +34,12 @@ const bodyTextFields: Fields<BodyTextProps> = {
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ text, ...bodyProps }, ref) => {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const streamDocument = useDocument();
 
     return (
       <EntityField
-        displayName={t("body", "Body")}
+        displayName={pt("body", "Body")}
         fieldId={text.field}
         constantValueEnabled={text.constantValueEnabled}
       >
@@ -52,12 +54,15 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
 BodyTextComponent.displayName = "BodyText";
 
 export const BodyText: ComponentConfig<BodyTextProps> = {
-  label: "Body Text",
+  label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
   defaultProps: {
     text: {
       field: "",
-      constantValue: "Text",
+      constantValue: {
+        en: "Text",
+        hasLocalizedValue: "true",
+      },
       constantValueEnabled: true,
     },
     variant: "base",

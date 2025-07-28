@@ -10,6 +10,8 @@ import {
   useDocument,
   YextEntityField,
   YextField,
+  msg,
+  pt,
 } from "@yext/visual-editor";
 
 export type HoursTableProps = {
@@ -21,36 +23,39 @@ export type HoursTableProps = {
 };
 
 const hoursTableFields: Fields<HoursTableProps> = {
-  hours: YextField("Hours", {
+  hours: YextField(msg("fields.hours", "Hours"), {
     type: "entityField",
     filter: {
       types: ["type.hours"],
     },
   }),
-  startOfWeek: YextField("Start of the Week", {
+  startOfWeek: YextField(msg("fields.startOfTheWeek", "Start of the Week"), {
     type: "select",
     hasSearch: true,
     options: "HOURS_OPTIONS",
   }),
-  collapseDays: YextField("Collapse days", {
+  collapseDays: YextField(msg("fields.collapseDays", "Collapse Days"), {
     type: "radio",
     options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
     ],
   }),
-  showAdditionalHoursText: YextField("Show additional hours text", {
+  showAdditionalHoursText: YextField(
+    msg("fields.options.showAdditionalHoursText", "Show additional hours text"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
+  alignment: YextField(msg("fields.alignCard", "Align card"), {
     type: "radio",
     options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
-  alignment: YextField("Align card", {
-    type: "radio",
-    options: [
-      { label: "Left", value: "items-start" },
-      { label: "Center", value: "items-center" },
+      { label: msg("fields.options.left", "Left"), value: "items-start" },
+      { label: msg("fields.options.center", "Center"), value: "items-center" },
     ],
   }),
 };
@@ -62,7 +67,7 @@ const VisualEditorHoursTable = ({
   showAdditionalHoursText,
   alignment,
 }: HoursTableProps) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const hours = resolveComponentData(hoursField, i18n.language, streamDocument);
 
@@ -74,7 +79,7 @@ const VisualEditorHoursTable = ({
     <div className={`flex flex-col ${alignment}`}>
       {hours && (
         <EntityField
-          displayName={t("hours", "Hours")}
+          displayName={pt("hours", "Hours")}
           fieldId="hours"
           constantValueEnabled={hoursField.constantValueEnabled}
         >
@@ -87,7 +92,7 @@ const VisualEditorHoursTable = ({
       )}
       {additionalHoursText && showAdditionalHoursText && (
         <EntityField
-          displayName={t("hoursText", "Hours Text")}
+          displayName={pt("hoursText", "Hours Text")}
           fieldId="additionalHoursText"
         >
           <div className="mt-4 text-body-sm-fontSize">
@@ -111,6 +116,6 @@ export const HoursTable: ComponentConfig<HoursTableProps> = {
     showAdditionalHoursText: true,
     alignment: "items-center",
   },
-  label: "Hours Table",
+  label: msg("components.hoursTable", "Hours Table"),
   render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };

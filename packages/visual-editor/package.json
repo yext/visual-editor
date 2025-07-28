@@ -88,7 +88,7 @@
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
     "react-i18next": "^15.5.2",
-    "react-phone-number-input": "^3.4.12",
+    "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
     "tsx": "^4.16.3"
