@@ -110,7 +110,8 @@ const tests: ComponentTest[] = [
     },
     props: {
       data: {
-        directoryRoot: "Locations Directory",
+        directoryRoot:
+          "Locations Directory with a really really really really long directory root prop - Locations Directory - Locations Directory - Locations Directory - Locations Directory",
       },
       styles: {
         backgroundColor: {

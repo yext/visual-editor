@@ -164,7 +164,7 @@ export const BreadcrumbsComponent = ({
       aria-label={t("breadcrumb", "Breadcrumb")}
       background={styles?.backgroundColor}
     >
-      <ol className="flex flex-wrap">
+      <ol className="inline">
         {breadcrumbs.map(({ name, slug }, idx) => {
           const isRoot = idx === 0;
           const isLast = idx === breadcrumbs.length - 1;
@@ -172,15 +172,18 @@ export const BreadcrumbsComponent = ({
             ? relativePrefixToRoot + slug
             : slug;
           return (
-            <li key={idx} className="flex items-center">
+            <li key={idx} className="inline">
               <MaybeLink
                 eventName={`link${idx}`}
                 href={isLast ? "" : href}
                 // Force body-sm and link-fontFamily for all breadcrumbs
-                className="text-body-sm-fontSize font-link-fontFamily"
+                className="text-body-sm-fontSize font-link-fontFamily inline"
                 alwaysHideCaret={true}
               >
-                <Body variant={"sm"}>
+                <Body
+                  variant="sm"
+                  className="break-words whitespace-normal inline"
+                >
                   {isRoot && directoryRoot ? directoryRoot : name}
                 </Body>
               </MaybeLink>
