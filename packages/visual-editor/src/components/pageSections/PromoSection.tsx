@@ -276,7 +276,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
 
 /**
  * The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const PromoSection: ComponentConfig<PromoSectionProps> = {
   label: msg("components.promoSection", "Promo Section"),

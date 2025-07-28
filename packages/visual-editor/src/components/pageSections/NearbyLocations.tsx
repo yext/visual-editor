@@ -551,7 +551,7 @@ function parseDocument(
 
 /**
  * The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
   {

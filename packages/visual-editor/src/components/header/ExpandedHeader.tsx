@@ -665,7 +665,7 @@ const buildComplexImage = (
 
 /**
  * The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   label: msg("components.expandedHeader", "Expanded Header"),

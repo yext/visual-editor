@@ -134,7 +134,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
 
 /**
  * The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const BannerSection: ComponentConfig<BannerSectionProps> = {
   label: msg("components.bannerSection", "Banner Section"),

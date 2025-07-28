@@ -195,7 +195,7 @@ export const BreadcrumbsComponent = ({
 
 /**
  * The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const BreadcrumbsSection: ComponentConfig<BreadcrumbsSectionProps> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),

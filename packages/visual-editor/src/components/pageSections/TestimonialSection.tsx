@@ -267,7 +267,7 @@ const TestimonialSectionWrapper = ({
 
 /**
  * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const TestimonialSection: ComponentConfig<TestimonialSectionProps> = {
   label: msg("components.testimonialsSection", "Testimonials Section"),

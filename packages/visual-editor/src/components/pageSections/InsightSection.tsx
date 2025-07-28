@@ -311,7 +311,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
 
 /**
  * The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const InsightSection: ComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
