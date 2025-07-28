@@ -252,7 +252,7 @@ const PhotoGallerySectionComponent = ({
           totalSlides={filteredImages.length}
           isIntrinsicHeight={true}
         >
-          <div className="hidden md:flex justify-center w-full">
+          <div className="hidden lg:flex justify-center w-full">
             <div
               className="flex items-center gap-2"
               style={{
@@ -316,7 +316,7 @@ const PhotoGallerySectionComponent = ({
               </DynamicChildColors>
             </div>
           </div>
-          <div className="flex flex-col gap-y-8 items-center justify-center md:hidden">
+          <div className="flex flex-col gap-y-8 items-center justify-center lg:hidden">
             <EntityField
               displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
@@ -326,11 +326,12 @@ const PhotoGallerySectionComponent = ({
                 {filteredImages.map((image, idx) => {
                   return (
                     <Slide index={idx} key={idx}>
-                      <div className="flex justify-center">
+                      <div className="flex justify-center w-full px-4">
                         <Image
                           image={image.image}
                           aspectRatio={image.aspectRatio}
                           width={image.width}
+                          className="w-full max-w-sm md:max-w-2xl"
                         />
                       </div>
                     </Slide>
