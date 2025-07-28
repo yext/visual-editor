@@ -187,6 +187,8 @@ export const BreadcrumbsComponent = ({
               >
                 {isRoot && directoryRoot ? directoryRoot : name}
               </MaybeLink>
+              {/* encourage the browser to break after a full breadcrumb, if necessary */}
+              <wbr />
             </li>
           );
         })}
