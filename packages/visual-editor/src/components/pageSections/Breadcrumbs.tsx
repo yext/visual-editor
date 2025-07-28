@@ -173,6 +173,7 @@ export const BreadcrumbsComponent = ({
             : slug;
           return (
             <li key={idx} className="inline">
+              {!isRoot && <span className="mx-2">{separator}</span>}
               <MaybeLink
                 eventName={`link${idx}`}
                 href={isLast ? "" : href}
@@ -187,7 +188,6 @@ export const BreadcrumbsComponent = ({
                   {isRoot && directoryRoot ? directoryRoot : name}
                 </Body>
               </MaybeLink>
-              {!isLast && <span className="mx-2">{separator}</span>}
             </li>
           );
         })}
