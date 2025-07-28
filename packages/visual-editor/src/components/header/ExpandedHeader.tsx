@@ -358,12 +358,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   return (
     <>
-      {/* Unified Header Structure */}
+      {/* Secondary Header (Top Bar) */}
       <div
         className="hidden md:flex flex-col"
-        aria-label={t("siteHeader", "Site Header")}
+        aria-label={t("secondaryHeader", "Secondary Header")}
       >
-        {/* Secondary Header (Top Bar) */}
         {show && (
           <div className="hidden md:flex">
             <PageSection
@@ -391,11 +390,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         )}
       </div>
 
+      {/* Primary Header */}
       <div
         className="flex flex-col"
-        aria-label={t("siteHeader", "Site Header")}
+        aria-label={t("primaryHeader", "Primary Header")}
       >
-        {/* Primary Header */}
         <PageSection
           verticalPadding={"header"}
           background={backgroundColor}
