@@ -68,13 +68,21 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
   useEffect(translatePuckSidebars, [i18n.language]);
 
-  const buttonText =
-    templateMetadata.assignment === "ALL"
-      ? // TODO: translation concatenation
-        `${pt("update", "Update")} ${templateMetadata.entityCount} ${templateMetadata.entityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
-      : templateMetadata.layoutTaskApprovals
-        ? pt("approvals.send", "Send for Approval")
-        : pt("updatePage", "Update Page");
+  const buttonText = (() => {
+    if (templateMetadata.assignment === "ALL") {
+      // TODO: translation concatenation
+      const pageText =
+        templateMetadata.entityCount === 1
+          ? pt("page", "Page")
+          : pt("pages", "Pages");
+      return `${pt("update", "Update")} ${templateMetadata.entityCount} ${pageText}`;
+    } else if (templateMetadata.assignment === "ENTITY") {
+      if (templateMetadata.layoutTaskApprovals) {
+        return pt("approvals.send", "Send for Approval");
+      }
+      return pt("updatePage", "Update Page");
+    }
+  })();
 
   const onButtonClick = async () => {
     if (
