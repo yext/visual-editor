@@ -86,6 +86,11 @@ const resolveTranslatableType = (
     return value;
   }
 
+  // Handle a direct RichText object that is not inside a Translatable object.
+  if (isRichText(value)) {
+    return toStringOrElement(value);
+  }
+
   // Handle TranslatableString
   if (value.hasLocalizedValue === "true" && typeof value[locale] === "string") {
     return value[locale];

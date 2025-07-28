@@ -31,10 +31,9 @@ const mapboxFields: Fields<MapboxStaticProps> = {
 };
 
 const DEFAULT_WIDTH = 1024;
-const DEFAULT_HEIGHT = 300;
-const MIN_HEIGHT = 300;
 const MIN_WIDTH = 100;
-const MAX_SIZE = 1280;
+const MAX_WIDTH = 1280;
+const HEIGHT = 300;
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
   if (streamDocument?.__?.theme) {
@@ -65,7 +64,7 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
   const selfRef = React.useRef<T>(null);
   const [size, setSize] = React.useState<Size>({
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
+    height: HEIGHT,
   });
 
   React.useEffect(() => {
@@ -86,13 +85,10 @@ export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
     const rect = node.getBoundingClientRect();
     setSize({
       width: Math.max(
-        Math.min(rect.width || node.clientWidth, MAX_SIZE),
-        MIN_WIDTH
+        MIN_WIDTH,
+        Math.min(rect.width || node.clientWidth, MAX_WIDTH)
       ),
-      height: Math.max(
-        Math.min(rect.height || node.clientHeight, MAX_SIZE),
-        MIN_HEIGHT
-      ),
+      height: HEIGHT,
     });
   }, [updateTrigger]);
 
@@ -146,7 +142,7 @@ export const MapboxStaticMapComponent = ({
   );
 
   if (!coordinate) {
-    console.warn(`${coordinateField} is not present in the stream`);
+    console.warn(`${coordinateField.field} is not present in the stream`);
     return <></>;
   } else if (!apiKey) {
     console.warn("API Key is required for MapboxStaticMap");

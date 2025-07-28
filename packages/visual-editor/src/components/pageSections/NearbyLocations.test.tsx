@@ -4,9 +4,8 @@ import {
   axe,
   ComponentTest,
   transformTests,
-  delay,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
@@ -35,10 +34,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       yextDisplayCoordinate: {
@@ -60,10 +57,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       yextDisplayCoordinate: {
@@ -85,10 +80,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       yextDisplayCoordinate: {
@@ -156,10 +149,8 @@ const tests: ComponentTest[] = [
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
       },
       _pageset: JSON.stringify({
-        typeConfig: {
-          entityConfig: {
-            contentEndpointId: "locationsContent",
-          },
+        config: {
+          contentEndpointId: "locationsContent",
         },
       }),
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
@@ -260,7 +251,13 @@ describe("NearbyLocationsSection", async () => {
       );
 
       await page.viewport(width, height);
-      await delay(300);
+
+      // wait for locations to load
+      if (name.includes("multiple nearby locations")) {
+        await waitFor(() => {
+          expect(page.getByText("Washington, DC")).toBeInTheDocument();
+        });
+      }
 
       await expect(
         `NearbyLocationsSection/[${viewportName}] ${name}`

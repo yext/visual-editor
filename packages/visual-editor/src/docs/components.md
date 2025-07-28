@@ -111,6 +111,24 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## CustomCodeSection
+
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+
+### Props
+
+#### Other Props
+
+The CSS styles to be applied to the component.
+
+| Prop         | Type     | Description                                                                                                                                                                                                                | Default |
+| :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| `css`        | `string` | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
+| `html`       | `string` | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
+| `javascript` | `string` | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
+
+---
+
 ## Directory
 
 The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card. Avaliable on Directory templates.
@@ -543,6 +561,40 @@ This object contains properties for customizing the component's appearance.
 | `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the promo's title.                                |                      |
 | `styles.image`           | `ImageStylingProps`                                              | Styling options for the promo image, such as aspect ratio.    |                      |
 | `styles.orientation`     | `"left" \| "right"`                                              | Positions the image to the left or right of the text content. | `'left'`             |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
+## StaticMapSection
+
+The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox. Avaliable on Location templates.
+
+![Preview of the StaticMapSection component](../components/testing/screenshots/StaticMapSection/%5Bdesktop%5D%20default%20props%20with%20coordinate%20-%20no%20api%20key.png)
+
+### Props
+
+#### Data Props
+
+This object contains the configuration needed to generate the map.
+
+| Prop   | Type            | Description                                                        | Default |
+| :----- | :-------------- | :----------------------------------------------------------------- | :------ |
+| `data` | `StaticMapData` | This object contains the configuration needed to generate the map. |         |
+
+#### Styles Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop                     | Type              | Description                          | Default              |
+| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 1` |
 
 #### Other Props
 
