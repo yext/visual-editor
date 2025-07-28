@@ -172,7 +172,7 @@ export const BreadcrumbsComponent = ({
             : slug;
 
           return (
-            <li key={idx} className="inline whitespace-normal break-words">
+            <li key={idx} className="contents whitespace-normal break-words">
               {!isRoot && (
                 <span className="mx-2" aria-hidden>
                   {separator}
