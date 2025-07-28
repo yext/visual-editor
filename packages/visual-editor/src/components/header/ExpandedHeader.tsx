@@ -20,6 +20,7 @@ import {
   TranslatableStringField,
   useDocument,
   resolveComponentData,
+  useOverflow,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -38,7 +39,6 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.tsx";
-import { useOverflow } from "../../internal/hooks/useOverflow.ts";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 const defaultMainLink = {
@@ -335,7 +335,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   const showHamburger = isNavOverflowing || !hasContentForMobileMenu;
 
-  const NavContent = () => (
+  const navContent = (
     <>
       <EntityField
         constantValueEnabled
@@ -360,34 +360,41 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     <>
       {/* Unified Header Structure */}
       <div
-        className="flex flex-col"
+        className="hidden md:flex flex-col"
         aria-label={t("siteHeader", "Site Header")}
       >
         {/* Secondary Header (Top Bar) */}
         {show && (
-          <PageSection
-            verticalPadding={"sm"}
-            background={secondaryBackgroundColor}
-            className="hidden md:flex justify-end gap-6 items-center"
-          >
-            <EntityField
-              constantValueEnabled
-              displayName={pt(
-                "fields.secondaryHeaderLinks",
-                "Secondary Header Links"
-              )}
+          <div className="hidden md:flex">
+            <PageSection
+              verticalPadding={"sm"}
+              background={secondaryBackgroundColor}
+              className="flex justify-end gap-6 items-center"
             >
-              <HeaderLinks links={secondaryLinks} type="Secondary" />
-            </EntityField>
-            {showLanguageDropdown && showLanguageSelector && (
-              <LanguageDropdown
-                {...languageDropDownProps}
-                className="hidden md:flex"
-              />
-            )}
-          </PageSection>
+              <EntityField
+                constantValueEnabled
+                displayName={pt(
+                  "fields.secondaryHeaderLinks",
+                  "Secondary Header Links"
+                )}
+              >
+                <HeaderLinks links={secondaryLinks} type="Secondary" />
+              </EntityField>
+              {showLanguageDropdown && showLanguageSelector && (
+                <LanguageDropdown
+                  {...languageDropDownProps}
+                  className="hidden md:flex"
+                />
+              )}
+            </PageSection>
+          </div>
         )}
+      </div>
 
+      <div
+        className="flex flex-col"
+        aria-label={t("siteHeader", "Site Header")}
+      >
         {/* Primary Header */}
         <PageSection
           verticalPadding={"header"}
@@ -398,11 +405,22 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             constantValueEnabled
             displayName={pt("fields.logoUrl", "Logo")}
           >
-            <HeaderLogo
-              logo={buildComplexImage(logo, logoStyle.width ?? 200)}
-              logoWidth={logoStyle.width ?? 200}
-              aspectRatio={logoStyle.aspectRatio}
-            />
+            {/* Mobile Logo */}
+            <div className="block md:hidden">
+              <HeaderLogo
+                logo={buildComplexImage(logo, logoStyle.width ?? 100)}
+                logoWidth={logoStyle.width ?? 100}
+                aspectRatio={logoStyle.aspectRatio}
+              />
+            </div>
+            {/* Desktop Logo */}
+            <div className="hidden md:block">
+              <HeaderLogo
+                logo={buildComplexImage(logo, logoStyle.width ?? 200)}
+                logoWidth={logoStyle.width ?? 200}
+                aspectRatio={logoStyle.aspectRatio}
+              />
+            </div>
           </EntityField>
 
           {/* Desktop Navigation & Mobile Hamburger */}
@@ -416,16 +434,18 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               ref={contentRef}
               className="flex items-center gap-8 invisible h-0"
             >
-              <NavContent />
+              {navContent}
             </div>
 
             {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
             <div
               className={`hidden md:flex items-center gap-8 absolute ${
-                showHamburger ? "opacity-0" : "opacity-100"
+                showHamburger
+                  ? "opacity-0 pointer-events-none"
+                  : "opacity-100 pointer-events-auto"
               }`}
             >
-              <NavContent />
+              {navContent}
             </div>
 
             {/* Hamburger Button - Shown when nav overflows or on small screens */}
@@ -474,28 +494,31 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
               <HeaderLinks links={links} />
             </EntityField>
           </PageSection>
+          {/* Secondary Header (Mobile menu) */}
           {show && (
-            <PageSection
-              verticalPadding={"sm"}
-              background={secondaryBackgroundColor}
-            >
-              <EntityField
-                constantValueEnabled
-                displayName={pt(
-                  "fields.secondaryHeaderLinks",
-                  "Secondary Header Links"
-                )}
+            <div className="flex md:hidden">
+              <PageSection
+                verticalPadding={"sm"}
+                background={secondaryBackgroundColor}
               >
-                <HeaderLinks links={secondaryLinks} type="Secondary" />
-              </EntityField>
-              {showLanguageDropdown && showLanguageSelector && (
-                <LanguageDropdown
-                  background={secondaryBackgroundColor}
-                  {...languageDropDownProps}
-                  className="flex md:hidden"
-                />
-              )}
-            </PageSection>
+                <EntityField
+                  constantValueEnabled
+                  displayName={pt(
+                    "fields.secondaryHeaderLinks",
+                    "Secondary Header Links"
+                  )}
+                >
+                  <HeaderLinks links={secondaryLinks} type="Secondary" />
+                </EntityField>
+                {showLanguageDropdown && showLanguageSelector && (
+                  <LanguageDropdown
+                    background={secondaryBackgroundColor}
+                    {...languageDropDownProps}
+                    className="flex md:hidden"
+                  />
+                )}
+              </PageSection>
+            </div>
           )}
           {(showPrimaryCTA || showSecondaryCTA) && (
             <PageSection verticalPadding={"sm"} background={backgroundColor}>
