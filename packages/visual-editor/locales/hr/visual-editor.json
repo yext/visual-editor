@@ -46,6 +46,7 @@
     "breadcrumbs": "Krušne mrvice",
     "components": "Komponente",
     "coreInfoSection": "Odjeljak jezgrenih informacija",
+    "customCodeSection": "Odjeljak prilagođenog koda",
     "directory": "Imenik",
     "eventsSection": "Odjeljak događaja",
     "expandedFooter": "Prošireni podnožje",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Lokalni geomodifikator",
   "locationsNear_one": "{{count}} Lokacija u blizini \"{{filterDisplayName}}\"",
   "map": "Karta",
+  "missingHtmlWidget": "Dodajte HTML za pregled komponente",
   "monday": "ponedjeljak",
   "name": "Ime",
   "newYorkCity": "New York City, New York, Sjedinjene Države",
@@ -428,6 +430,7 @@
   "tuesday": "utorak",
   "undo": "Otkopčati",
   "update": "Ažurirati",
+  "updatePage": "Stranica za ažuriranje",
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
   "wednesday": "srijeda"

@@ -46,6 +46,7 @@
     "breadcrumbs": "Ströbröd",
     "components": "Komponenter",
     "coreInfoSection": "Kärninfo -sektionen",
+    "customCodeSection": "Anpassad kodavsnitt",
     "directory": "Katalog",
     "eventsSection": "Evenemangsavsnitt",
     "expandedFooter": "Utökad sidfot",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Lokal geomodifierare",
   "locationsNear_one": "{{greve}} Plats nära \"{{filterDisplayName}}\"",
   "map": "Karta",
+  "missingHtmlWidget": "Lägg till HTML för att visa komponent",
   "monday": "Måndag",
   "name": "Namn",
   "newYorkCity": "New York City, New York, USA",
@@ -428,6 +430,7 @@
   "tuesday": "Tisdag",
   "undo": "Ångra",
   "update": "Uppdatera",
+  "updatePage": "Uppdateringssida",
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
   "wednesday": "Onsdag"

@@ -46,6 +46,7 @@
     "breadcrumbs": "Brødsmuler",
     "components": "Komponenter",
     "coreInfoSection": "Kjerneinfo -seksjon",
+    "customCodeSection": "Tilpasset kodeseksjon",
     "directory": "Katalog",
     "eventsSection": "Hendelsesdel",
     "expandedFooter": "Utvidet bunntekst",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Lokal geomodifier",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{filterdisplayName}}\"",
   "map": "Kart",
+  "missingHtmlWidget": "Legg til HTML for å se komponent",
   "monday": "mandag",
   "name": "Navn",
   "newYorkCity": "New York City, New York, USA",
@@ -428,6 +430,7 @@
   "tuesday": "tirsdag",
   "undo": "Angre",
   "update": "Oppdatering",
+  "updatePage": "Oppdateringsside",
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
   "wednesday": "onsdag"

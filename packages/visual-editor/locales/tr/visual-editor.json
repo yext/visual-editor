@@ -46,6 +46,7 @@
     "breadcrumbs": "Ekmek kırıntıları",
     "components": "Bileşenler",
     "coreInfoSection": "Çekirdek Bilgi Bölümü",
+    "customCodeSection": "Özel Kod Bölümü",
     "directory": "Dizin",
     "eventsSection": "Olaylar Bölümü",
     "expandedFooter": "Genişletilmiş altbilgi",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Yerel Geomodifikatör",
   "locationsNear_one": "{{count}} konum \"{{filtreDisplayName}}\" yakınında yer",
   "map": "Harita",
+  "missingHtmlWidget": "Bileşeni görüntülemek için html ekle",
   "monday": "Pazartesi",
   "name": "İsim",
   "newYorkCity": "New York, New York, Amerika Birleşik Devletleri",
@@ -428,6 +430,7 @@
   "tuesday": "Salı",
   "undo": "Geri almak",
   "update": "Güncelleme",
+  "updatePage": "Güncelleme sayfası",
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Ziyaret Sayfası",
   "wednesday": "Çarşamba"

@@ -11,4 +11,8 @@ export {
   type DirectoryStyles,
 } from "./Directory.tsx";
 export { LocatorComponent, type LocatorProps } from "./Locator.tsx";
+export {
+  CustomCodeSection,
+  type CustomCodeSectionProps,
+} from "./CustomCodeSection.tsx";
 export { defaultThemeConfig } from "./DefaultThemeConfig.ts";

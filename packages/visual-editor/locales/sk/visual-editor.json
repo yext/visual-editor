@@ -46,6 +46,7 @@
     "breadcrumbs": "Strúhanka",
     "components": "Komponenty",
     "coreInfoSection": "Sekcia",
+    "customCodeSection": "Vlastná sekcia kódu",
     "directory": "Adresár",
     "eventsSection": "Sekcia udalostí",
     "expandedFooter": "Rozšírená päta",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Miestny geomodifikátor",
   "locationsNear_one": "{{count}} Umiestnenie blízko \"{{FilterDisplayName}}\"",
   "map": "Mapovať",
+  "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
   "monday": "Pondelok",
   "name": "Menovať",
   "newYorkCity": "New York, New York, Spojené štáty americké",
@@ -428,6 +430,7 @@
   "tuesday": "Utorok",
   "undo": "Rozpustiť",
   "update": "Aktualizácia",
+  "updatePage": "Aktualizácia",
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
   "wednesday": "Streda"

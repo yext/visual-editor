@@ -46,6 +46,7 @@
     "breadcrumbs": "Breatcrumbs",
     "components": "Komponenty",
     "coreInfoSection": "Sekcja informacji podstawowych",
+    "customCodeSection": "Sekcja kodu niestandardowego",
     "directory": "Informator",
     "eventsSection": "Sekcja zdarzeń",
     "expandedFooter": "Rozszerzona stopka",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Lokalny geomodyfikator",
   "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{FilterDisPlayName}}”",
   "map": "Mapa",
+  "missingHtmlWidget": "Dodaj HTML, aby wyświetlić komponent",
   "monday": "Poniedziałek",
   "name": "Nazwa",
   "newYorkCity": "Nowy Jork, Nowy Jork, Stany Zjednoczone",
@@ -428,6 +430,7 @@
   "tuesday": "Wtorek",
   "undo": "Anulować",
   "update": "Aktualizacja",
+  "updatePage": "Strona aktualizacji",
   "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
   "visitPage": "Odwiedź stronę",
   "wednesday": "Środa"

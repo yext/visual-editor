@@ -142,7 +142,7 @@ export const MapboxStaticMapComponent = ({
   );
 
   if (!coordinate) {
-    console.warn(`${coordinateField} is not present in the stream`);
+    console.warn(`${coordinateField.field} is not present in the stream`);
     return <></>;
   } else if (!apiKey) {
     console.warn("API Key is required for MapboxStaticMap");

@@ -46,6 +46,7 @@
     "breadcrumbs": "Strouhanka",
     "components": "Komponenty",
     "coreInfoSection": "Sekce hlavních informací",
+    "customCodeSection": "Vlastní sekce kódu",
     "directory": "Adresář",
     "eventsSection": "Sekce událostí",
     "expandedFooter": "Rozšířená zápatí",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Místní geomodifikátor",
   "locationsNear_one": "{{Count}} umístění poblíž \"{{FilterDisplayName}}\"",
   "map": "Mapa",
+  "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",
   "monday": "pondělí",
   "name": "Jméno",
   "newYorkCity": "New York City, New York, Spojené státy",
@@ -428,6 +430,7 @@
   "tuesday": "úterý",
   "undo": "Undo",
   "update": "Aktualizovat",
+  "updatePage": "Aktualizace stránky",
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
   "wednesday": "středa"

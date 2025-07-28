@@ -10,6 +10,8 @@ import {
   BasicSelector,
   OptionalNumberFieldProps,
   OptionalNumberField,
+  CodeFieldProps,
+  CodeField,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
@@ -80,6 +82,11 @@ type YextOptionalNumberField = YextBaseField &
     type: "optionalNumber";
   };
 
+type YextCodeField = YextBaseField &
+  Omit<CodeFieldProps, "fieldLabel"> & {
+    type: "code";
+  };
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -96,7 +103,8 @@ type YextFieldConfig<Props = any> =
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextSelectField
   | YextRadioField
-  | YextOptionalNumberField;
+  | YextOptionalNumberField
+  | YextCodeField;
 
 export function YextField<T = any>(
   fieldName: string,
@@ -165,6 +173,13 @@ export function YextField<T, U>(
       label: fieldName,
       type: config.isMultiline ? "textarea" : "text",
     };
+  }
+
+  if (config.type === "code") {
+    return CodeField({
+      fieldLabel: fieldName,
+      codeLanguage: config.codeLanguage,
+    });
   }
 
   return {

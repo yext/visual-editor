@@ -46,6 +46,7 @@
     "breadcrumbs": "Duonos kuprinės",
     "components": "Komponentai",
     "coreInfoSection": "Pagrindinės informacijos skyrius",
+    "customCodeSection": "Pasirinktinio kodo skyrius",
     "directory": "Katalogas",
     "eventsSection": "Įvykių skyrius",
     "expandedFooter": "Išplėstinė poraštė",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Vietinis geomodiferis",
   "locationsNear_one": "{{count}} vieta prie \"{{FilterDisplayName}}\"",
   "map": "Žemėlapis",
+  "missingHtmlWidget": "Pridėkite HTML, kad peržiūrėtumėte komponentą",
   "monday": "Pirmadienis",
   "name": "Vardas",
   "newYorkCity": "Niujorko miestas, Niujorkas, JAV",
@@ -428,6 +430,7 @@
   "tuesday": "Antradienis",
   "undo": "Anuliuoti",
   "update": "Atnaujinimas",
+  "updatePage": "Atnaujinimo puslapis",
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
   "wednesday": "Trečiadienis"

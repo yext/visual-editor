@@ -46,6 +46,7 @@
     "breadcrumbs": "Pan rallado",
     "components": "Componentes",
     "coreInfoSection": "Sección de información central",
+    "customCodeSection": "Sección de código personalizado",
     "directory": "Directorio",
     "eventsSection": "Sección de eventos",
     "expandedFooter": "Pie de página expandido",
@@ -302,6 +303,7 @@
   "localGeomodifier": "Geomodificador local",
   "locationsNear_one": "{{count}} ubicación cerca de \"{{filterDisplayName}}\"",
   "map": "Mapa",
+  "missingHtmlWidget": "Agregue HTML para ver el componente",
   "monday": "Lunes",
   "name": "Nombre",
   "newYorkCity": "Ciudad de Nueva York, Nueva York, Estados Unidos",
@@ -428,6 +430,7 @@
   "tuesday": "Martes",
   "undo": "Deshacer",
   "update": "Actualizar",
+  "updatePage": "Página de actualización",
   "useOurLocatorToFindALocationNearYou": "Use nuestro localizador para encontrar una ubicación cerca de usted",
   "visitPage": "Visitar la página",
   "wednesday": "Miércoles"
