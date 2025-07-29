@@ -21,6 +21,7 @@ import {
   Background,
   useDocument,
   resolveComponentData,
+  PageSectionProps,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -102,6 +103,8 @@ export interface ExpandedFooterStyles {
     backgroundColor?: BackgroundStyle;
     linksAlignment: "left" | "right";
   };
+  /** The maximum width of the header */
+  maxWidth: PageSectionProps["maxWidth"];
 }
 
 export interface ExpandedFooterProps {
@@ -360,6 +363,9 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           },
         }
       ),
+      maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
+        type: "maxWidth",
+      }),
     },
   }),
 };
@@ -373,6 +379,7 @@ const ExpandedFooterWrapper = ({
   const {
     primaryFooter: primaryFooterStyle,
     secondaryFooter: secondaryFooterStyle,
+    maxWidth,
   } = styles;
   const {
     logo,
@@ -410,6 +417,7 @@ const ExpandedFooterWrapper = ({
       <PageSection
         verticalPadding={"footer"}
         background={backgroundColor}
+        maxWidth={maxWidth}
         className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
         <div
@@ -529,6 +537,7 @@ const ExpandedFooterWrapper = ({
         <PageSection
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
+          maxWidth={maxWidth}
           className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
         >
           {secondaryFooterLinks?.length >= 1 && (
@@ -877,6 +886,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         backgroundColor: backgroundColors.background2.value,
         linksAlignment: "left",
       },
+      maxWidth: "theme",
     },
     analytics: {
       scope: "expandedFooter",
@@ -942,7 +952,13 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       },
       styles: {
         ...fields.styles,
-        objectFields: stylesFields,
+        objectFields: {
+          ...stylesFields,
+          // re-generate max width options
+          maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
+            type: "maxWidth",
+          }),
+        },
       },
     };
   },
