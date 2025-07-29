@@ -74,7 +74,7 @@ const headerFields: Fields<HeaderProps> = {
 
 /**
  * The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component.
- * Avaliable on Directory and Locator templates.
+ * Available on Directory and Locator templates.
  */
 export const Header: ComponentConfig<HeaderProps> = {
   label: msg("components.header", "Header"),

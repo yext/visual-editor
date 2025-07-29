@@ -33,6 +33,6 @@ export const MaybeLink = (props: MaybeLinkProps) => {
       />
     );
   } else {
-    return <>{props.children}</>;
+    return <span className={className}>{props.children}</span>;
   }
 };
