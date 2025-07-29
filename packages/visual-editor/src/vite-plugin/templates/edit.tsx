@@ -5,8 +5,9 @@ import {
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
+  filterComponentsFromRegistry,
 } from "@yext/visual-editor";
-import { componentRegistry, filterComponentsFromRegistry } from "../ve.config";
+import { componentRegistry } from "../ve.config";
 import {
   GetPath,
   TemplateProps,

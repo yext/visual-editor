@@ -8,7 +8,7 @@ import {
   TemplateProps,
   TemplateRenderProps,
 } from "@yext/pages";
-import { componentRegistry, filterComponentsFromRegistry } from "../ve.config";
+import { componentRegistry } from "../ve.config";
 import {
   applyTheme,
   Editor,
@@ -17,6 +17,7 @@ import {
   defaultThemeConfig,
   applyAnalytics,
   applyHeaderScript,
+  filterComponentsFromRegistry,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";

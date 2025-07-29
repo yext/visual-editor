@@ -10,7 +10,7 @@ import {
   TagType,
 } from "@yext/pages";
 import { Render } from "@measured/puck";
-import { mainConfig, filterComponentsFromConfig } from "../ve.config";
+import { mainConfig } from "../ve.config";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -20,6 +20,7 @@ import {
   applyHeaderScript,
   migrate,
   migrationRegistry,
+  filterComponentsFromConfig,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";

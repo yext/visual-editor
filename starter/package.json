@@ -10,7 +10,6 @@
     "dev:stackblitz": "pages dev --local --no-prod-url --noInit",
     "prod": "pages prod",
     "build": "pages build",
-    "dev:local": "pages dev --local --no-prod-url --noInit",
     "components": "REGISTRY_URL=https://reliably-numerous-kit.pgsdemo.com/components npx shadcn add"
   },
   "engines": {
