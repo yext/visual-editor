@@ -554,11 +554,13 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
-            <HoursTableAtom
-              hours={resolvedHours}
-              startOfWeek={styles.hours.startOfWeek}
-              collapseDays={styles.hours.collapseDays}
-            />
+            <div className="w-full min-w-0 overflow-x-auto">
+              <HoursTableAtom
+                hours={resolvedHours}
+                startOfWeek={styles.hours.startOfWeek}
+                collapseDays={styles.hours.collapseDays}
+              />
+            </div>
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
             <EntityField
