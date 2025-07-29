@@ -302,7 +302,6 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryHeader: secondaryHeaderStyle,
     maxWidth,
   } = styles;
-  console.log("header", maxWidth);
   const { t } = useTranslation();
   const streamDocument = useDocument();
   const {

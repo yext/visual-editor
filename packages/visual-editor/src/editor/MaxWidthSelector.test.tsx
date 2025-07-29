@@ -3,34 +3,40 @@ import { filterMaxWidths } from "./MaxWidthSelector";
 
 describe("filterMaxWidths", () => {
   it("filters maxWidth options correctly", () => {
+    console.log("HERE1");
     const styleEl = document.createElement("style");
-    styleEl.innerText = `
+    styleEl.textContent = `
       .components {
         --maxWidth-pageSection-contentWidth:1024px !important;
       }
     `;
+    console.log("HERE2", styleEl, styleEl.textContent);
 
     const options = filterMaxWidths(styleEl);
+    console.log(options);
     expect(options).toMatchObject({
       themeValue: "1024px",
       options: ThemeOptions.MAX_WIDTH.slice(3),
     });
 
     const styleEl2 = document.createElement("style");
-    styleEl2.innerText = `
+    styleEl2.textContent = `
       .components {
         --maxWidth-pageSection-contentWidth:100px !important;
       }
     `;
 
+    console.log("HERE3", styleEl2.innerHTML);
+
     const options2 = filterMaxWidths(styleEl2);
+    console.log(options2);
     expect(options2).toMatchObject({
       themeValue: "100px",
       options: ThemeOptions.MAX_WIDTH,
     });
 
     const styleEl3 = document.createElement("style");
-    styleEl3.innerText = `
+    styleEl3.textContent = `
       .components {
         --maxWidth-pageSection-contentWidth:2000px !important;
       }
@@ -46,7 +52,7 @@ describe("filterMaxWidths", () => {
     ).toMatchObject({ options: ThemeOptions.MAX_WIDTH });
 
     const styleEl = document.createElement("style");
-    styleEl.innerText = `
+    styleEl.textContent = `
       .components {}
     `;
 
