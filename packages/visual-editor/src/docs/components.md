@@ -218,6 +218,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 | Prop                     | Type                                                                                                                                   | Description                           | Default |
 | :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                         | The maximum width of the header       |         |
 | `styles.primaryFooter`   | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; logo: ImageStylingProps; utilityImages: ImageStylingProps; }` | Styling for the primary footer bar.   |         |
 | `styles.secondaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }`                                                            | Styling for the secondary footer bar. |         |
 
