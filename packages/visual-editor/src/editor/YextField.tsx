@@ -12,6 +12,8 @@ import {
   OptionalNumberField,
   CodeFieldProps,
   CodeField,
+  getMaxWidthOptions,
+  msg,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
@@ -87,6 +89,10 @@ type YextCodeField = YextBaseField &
     type: "code";
   };
 
+type YextMaxWidthField = YextBaseField & {
+  type: "maxWidth";
+};
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -104,7 +110,8 @@ type YextFieldConfig<Props = any> =
   | YextSelectField
   | YextRadioField
   | YextOptionalNumberField
-  | YextCodeField;
+  | YextCodeField
+  | YextMaxWidthField;
 
 export function YextField<T = any>(
   fieldName: string,
@@ -179,6 +186,23 @@ export function YextField<T, U>(
     return CodeField({
       fieldLabel: fieldName,
       codeLanguage: config.codeLanguage,
+    });
+  }
+
+  if (config.type === "maxWidth") {
+    const maxWidthOptions = getMaxWidthOptions();
+    return BasicSelector({
+      label: fieldName,
+      disableSearch: true,
+      optionGroups: [
+        {
+          description: msg(
+            "maxWidthTip",
+            "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
+          ),
+          options: maxWidthOptions,
+        },
+      ],
     });
   }
 
