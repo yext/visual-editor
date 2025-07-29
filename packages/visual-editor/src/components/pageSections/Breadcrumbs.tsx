@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import {
-  Body,
   useTemplateProps,
   MaybeLink,
   PageSection,
@@ -164,27 +163,33 @@ export const BreadcrumbsComponent = ({
       aria-label={t("breadcrumb", "Breadcrumb")}
       background={styles?.backgroundColor}
     >
-      <ol className="flex flex-wrap">
+      <ol className="inline p-0 m-0 list-none">
         {breadcrumbs.map(({ name, slug }, idx) => {
           const isRoot = idx === 0;
           const isLast = idx === breadcrumbs.length - 1;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
             : slug;
+
           return (
-            <li key={idx} className="flex items-center">
+            <li key={idx} className="contents whitespace-normal break-words">
+              {!isRoot && (
+                <span className="mx-2" aria-hidden>
+                  {separator}
+                </span>
+              )}
+
+              {/* encourage the browser to break after a full breadcrumb, if necessary */}
+              <wbr />
+
               <MaybeLink
                 eventName={`link${idx}`}
                 href={isLast ? "" : href}
-                // Force body-sm and link-fontFamily for all breadcrumbs
-                className="text-body-sm-fontSize font-link-fontFamily"
-                alwaysHideCaret={true}
+                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                alwaysHideCaret
               >
-                <Body variant={"sm"}>
-                  {isRoot && directoryRoot ? directoryRoot : name}
-                </Body>
+                {isRoot && directoryRoot ? directoryRoot : name}
               </MaybeLink>
-              {!isLast && <span className="mx-2">{separator}</span>}
             </li>
           );
         })}
