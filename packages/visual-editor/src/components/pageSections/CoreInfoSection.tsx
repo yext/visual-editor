@@ -542,7 +542,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
-              <Heading level={styles.heading.level}>{hoursHeadingText}</Heading>
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles.heading.level}>
+                  {hoursHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
           <EntityField
@@ -581,9 +585,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 data.services.headingText.constantValueEnabled
               }
             >
-              <Heading level={styles.heading.level}>
-                {servicesHeadingText}
-              </Heading>
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles.heading.level}>
+                  {servicesHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
           <EntityField
