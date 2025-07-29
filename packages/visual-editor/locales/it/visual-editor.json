@@ -317,6 +317,7 @@
     "url": "URL"
   },
   "loadingMap": "Mappa di caricamento ...",
+  "loadingNearbyLocations": "Caricamento di luoghi vicini ...",
   "loadingReviews": "Caricamento delle recensioni ...",
   "loadingVE": "Caricamento dell'editor visivo ...",
   "localGeomodifier": "Geomodificatore locale",

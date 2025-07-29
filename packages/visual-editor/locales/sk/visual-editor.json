@@ -317,6 +317,7 @@
     "url": "Adresa URL"
   },
   "loadingMap": "Načítava mapa ...",
+  "loadingNearbyLocations": "Nakladanie miest v okolí ...",
   "loadingReviews": "Recenzie načítania ...",
   "loadingVE": "Načítava sa vizuálny editor ...",
   "localGeomodifier": "Miestny geomodifikátor",

@@ -20,6 +20,7 @@ import {
   getLocationPath,
   useTemplateProps,
   resolveComponentData,
+  Body,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -266,7 +267,7 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -331,6 +332,8 @@ const LocationCard = ({
             timezone={timezone}
             showCurrentStatus={styles?.hours?.showCurrentStatus}
             dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+            showDayNames={styles?.hours?.showDayNames}
+            timeFormat={styles?.hours?.timeFormat}
           />
         </div>
       )}
@@ -365,7 +368,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
   contentEndpointIdEnvVar,
 }: NearbyLocationsSectionProps) => {
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
   const coordinate = resolveComponentData(
@@ -397,6 +400,17 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     [streamDocument, contentEndpointIdEnvVar]
   );
 
+  const enableNearbyLocations =
+    !!businessId &&
+    !!entityId &&
+    !!apiKey &&
+    !!contentEndpointId &&
+    !!contentDeliveryAPIDomain &&
+    !!coordinate?.latitude &&
+    !!coordinate.longitude &&
+    !!data?.radius &&
+    !!data?.limit;
+
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
     {
       queryKey: [
@@ -425,16 +439,7 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
           locale: i18n.language,
         });
       },
-      enabled:
-        !!businessId &&
-        !!entityId &&
-        !!apiKey &&
-        !!contentEndpointId &&
-        !!contentDeliveryAPIDomain &&
-        !!coordinate?.latitude &&
-        !!coordinate.longitude &&
-        !!data?.radius &&
-        !!data?.limit,
+      enabled: enableNearbyLocations,
     }
   );
 
@@ -446,6 +451,15 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
       }[styles.heading.align]
     : "justify-start";
 
+  // do not render the component if there's no data or it's not enabled
+  if (
+    !enableNearbyLocations ||
+    (!nearbyLocationsData?.response?.docs?.length &&
+      nearbyLocationsStatus != "pending")
+  ) {
+    return <></>;
+  }
+
   return (
     <PageSection background={styles?.backgroundColor}>
       <div className="space-y-6">
@@ -453,6 +467,11 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
           <div className={`flex ${justifyClass}`}>
             <Heading level={styles?.heading?.level ?? 2}>{headingText}</Heading>
           </div>
+        )}
+        {nearbyLocationsStatus === "pending" && (
+          <Body>
+            {t("loadingNearbyLocations", "Loading nearby locations...")}
+          </Body>
         )}
 
         {nearbyLocationsStatus === "success" &&

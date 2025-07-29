@@ -317,6 +317,7 @@
     "url": "Url"
   },
   "loadingMap": "Laddar karta ...",
+  "loadingNearbyLocations": "Laddar närliggande platser ...",
   "loadingReviews": "Laddar recensioner ...",
   "loadingVE": "Laddar visuell redaktör ...",
   "localGeomodifier": "Lokal geomodifierare",

@@ -317,6 +317,7 @@
     "url": "Url"
   },
   "loadingMap": "Yükleme haritası ...",
+  "loadingNearbyLocations": "Yakındaki yerleri yükleme ...",
   "loadingReviews": "Yükleme İncelemeleri ...",
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
