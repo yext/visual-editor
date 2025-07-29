@@ -317,6 +317,7 @@
     "url": "URL -osoite"
   },
   "loadingMap": "Latauskartta ...",
+  "loadingNearbyLocations": "Lataaminen lähellä olevia paikkoja ...",
   "loadingReviews": "Ladataan arvosteluja ...",
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",

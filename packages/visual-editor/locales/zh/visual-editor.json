@@ -317,6 +317,7 @@
     "url": "URL"
   },
   "loadingMap": "加载地图...",
+  "loadingNearbyLocations": "在附近的位置加载...",
   "loadingReviews": "加载评论...",
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
