@@ -487,7 +487,7 @@ const tests: ComponentTest[] = [
     version: 1,
   },
   {
-    name: "version 1 props with partial entity values 2",
+    name: "version 1 props with partial entity values 2 and align center",
     document: {
       address: testAddress,
       mainPhone: "+18005551010",
@@ -559,6 +559,9 @@ const tests: ComponentTest[] = [
           bgColor: "bg-white",
           textColor: "text-black",
         },
+        heading: {
+          align: "center",
+        },
         headingLevel: 3,
         hours: {
           collapseDays: false,
@@ -576,7 +579,7 @@ const tests: ComponentTest[] = [
     version: 1,
   },
   {
-    name: "version 1 props with partial entity values 3",
+    name: "version 1 props with partial entity values 3 and align right",
     document: {
       hours: testHours,
       services: ["Delivery", "Catering"],
@@ -642,6 +645,9 @@ const tests: ComponentTest[] = [
         },
       },
       styles: {
+        heading: {
+          align: "right",
+        },
         backgroundColor: {
           bgColor: "bg-white",
           textColor: "text-black",
