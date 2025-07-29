@@ -10,17 +10,22 @@ import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
+  AdvancedCoreInfoCategoryProps,
+  AdvancedCoreInfoCategoryComponents,
+  AdvancedCoreInfoCategory,
 } from "@yext/visual-editor";
 
 interface MainProps
   extends PageSectionCategoryProps,
     DirectoryCategoryProps,
-    OtherCategoryProps {}
+    OtherCategoryProps,
+    AdvancedCoreInfoCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
+  ...AdvancedCoreInfoCategoryComponents,
 };
 
 // All the available components for locations
@@ -35,6 +40,10 @@ export const mainConfig: Config<MainProps> = {
       title: "Directory",
       components: DirectoryCategory,
     },
+    coreInformation: {
+      title: "Core Information",
+      components: AdvancedCoreInfoCategory,
+    },
   },
   root: {
     render: () => {
@@ -42,6 +51,7 @@ export const mainConfig: Config<MainProps> = {
         <DropZone
           zone="default-zone"
           style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
         />
       );
     },
