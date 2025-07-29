@@ -207,12 +207,12 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
-          <div className="w-full max-w-[500px] lg:max-w-none">
+          <div className="w-full">
             <Image
               image={resolvedPromo.image}
               aspectRatio={styles.image.aspectRatio ?? 1.78}
               width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial rounded-image-borderRadius w-full"
+              className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
             />
           </div>
         </EntityField>
