@@ -317,6 +317,7 @@
     "url": "Url"
   },
   "loadingMap": "Kartes ielāde ...",
+  "loadingNearbyLocations": "Iekraušana tuvējo vietu ...",
   "loadingReviews": "Atsauksmju ielāde ...",
   "loadingVE": "Vizuālā redaktora ielāde ...",
   "localGeomodifier": "Vietējais ģeomodifieris",

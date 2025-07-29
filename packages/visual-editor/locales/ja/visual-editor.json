@@ -317,6 +317,7 @@
     "url": "URL"
   },
   "loadingMap": "マップの読み込み...",
+  "loadingNearbyLocations": "近くの場所を読み込む...",
   "loadingReviews": "レビューの読み込み...",
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
