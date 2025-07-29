@@ -105,6 +105,68 @@ const tests: ComponentTest[] = [
     },
   },
   {
+    name: "version 10 props - narrow viewport",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: true,
+          showSecondaryCTA: true,
+        },
+        secondaryHeader: {
+          show: false,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: undefined,
+            aspectRatio: 2,
+          },
+          backgroundColor: backgroundColors.background1.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background2.value,
+        },
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 10,
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+    viewport: {
+      name: "narrow",
+      width: 900,
+      height: 900,
+    },
+  },
+  {
     name: "version 10 props - no data",
     document: {},
     props: {
