@@ -39,6 +39,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { GalleryImageType } from "../../types/types";
 
+// temp change to create starter test branch
+
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
 
 export interface PhotoGalleryData {
