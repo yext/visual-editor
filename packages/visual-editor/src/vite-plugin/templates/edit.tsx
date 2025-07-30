@@ -5,6 +5,7 @@ import {
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
+  filterComponentsFromRegistry,
 } from "@yext/visual-editor";
 import { componentRegistry } from "../ve.config";
 import {
@@ -40,6 +41,12 @@ const Edit: () => JSX.Element = () => {
   const entityDocument = usePlatformBridgeDocument();
   const entityFields = usePlatformBridgeEntityFields();
 
+  const filteredRegistry = filterComponentsFromRegistry(
+    componentRegistry,
+    "main",
+    entityDocument?._additionalLayoutComponents
+  );
+
   return (
     <VisualEditorProvider
       templateProps={{
@@ -50,7 +57,7 @@ const Edit: () => JSX.Element = () => {
     >
       <Editor
         document={entityDocument}
-        componentRegistry={componentRegistry}
+        componentRegistry={filteredRegistry}
         themeConfig={themeConfig}
       />
     </VisualEditorProvider>

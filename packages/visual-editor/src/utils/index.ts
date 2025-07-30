@@ -41,3 +41,7 @@ export {
 } from "./migrate.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
 export { getLocationPath } from "./getLocationPath.ts";
+export {
+  filterComponentsFromConfig,
+  filterComponentsFromRegistry,
+} from "./filterComponents.tsx";
