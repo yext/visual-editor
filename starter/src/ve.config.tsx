@@ -1,4 +1,4 @@
-import { DropZone, type Config } from "@measured/puck";
+import { type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
@@ -11,6 +11,7 @@ import {
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
 } from "@yext/visual-editor";
+import * as React from "react";
 
 interface MainProps
   extends PageSectionCategoryProps,
@@ -37,13 +38,11 @@ export const mainConfig: Config<MainProps> = {
     },
   },
   root: {
-    render: () => {
-      return (
-        <DropZone
-          zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-        />
-      );
+    render: ({ children }) => {
+      return React.cloneElement(children, {
+        ...children.props,
+        style: { display: "flex", flexDirection: "column", height: "100vh" },
+      });
     },
   },
 };

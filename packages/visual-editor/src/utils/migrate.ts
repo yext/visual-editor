@@ -4,7 +4,7 @@ import {
   DefaultComponentProps,
   DefaultRootProps,
   migrate as migratePuck,
-  transformProps,
+  walkTree,
 } from "@measured/puck";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 
@@ -19,8 +19,8 @@ export type MigrationAction =
   | {
       action: "updated";
       propTransformation: (
-        oldProps: Record<string, any>
-      ) => Record<string, any>;
+        oldProps: { id: string } & Record<string, any>
+      ) => { id: string } & Record<string, any>;
     };
 export type Migration = Record<string, MigrationAction>;
 export type MigrationRegistry = Migration[];
@@ -34,9 +34,7 @@ interface RootProps extends DefaultRootProps {
 export const migrate = (
   data: Data<DefaultComponentProps, RootProps>,
   migrationRegistry: MigrationRegistry = commonMigrationRegistry,
-  // config will be used with Puck 0.19
-  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  config?: Config
+  config: Config
 ): Data => {
   const version = data.root?.props?.version ?? 0;
 
@@ -50,17 +48,30 @@ export const migrate = (
 
   migrationsToApply.forEach((migration) => {
     Object.entries(migration).forEach(([componentName, migrationAction]) => {
-      // TODO: Update to handle slot fields as part of Puck 0.19
-      // Should be something like:
-      // data = walkTree(data, config, (content) => {
-      //   content.map((child) => ({
-      //     if (child.type === componentName) {
-      //       return applyMigrationAction(content, componentName, migrationAction)
-      //     }
-      //     return content
-      //   })
-      // })
-      data = applyMigrationAction(data, componentName, migrationAction);
+      data = walkTree(data, config, (content) => {
+        switch (migrationAction.action) {
+          case "removed":
+            return content.filter((c) => c.type !== componentName);
+          case "renamed":
+            return content.map((c) => {
+              return {
+                ...c,
+                type:
+                  c.type === componentName ? migrationAction.newName : c.type,
+              };
+            });
+          case "updated":
+            return content.map((c) => {
+              if (c.type !== componentName) {
+                return c;
+              }
+              return {
+                ...c,
+                props: migrationAction.propTransformation(c.props),
+              };
+            });
+        }
+      });
     });
   });
 
@@ -68,37 +79,5 @@ export const migrate = (
     data.root.props = {};
   }
   data.root.props.version = migrationRegistry.length;
-  return data;
-};
-
-const applyMigrationAction = (
-  data: Data<DefaultComponentProps, RootProps>,
-  componentName: string,
-  migrationAction: MigrationAction
-) => {
-  switch (migrationAction.action) {
-    case "removed":
-      data.content = data.content.filter(
-        (component) => component.type !== componentName
-      );
-      break;
-    case "renamed":
-      data.content = data.content.map((component) => {
-        if (component.type === componentName) {
-          return {
-            ...component,
-            type: migrationAction.newName,
-          };
-        }
-        return component;
-      });
-      break;
-    case "updated":
-      data = transformProps(data, {
-        [componentName]: migrationAction.propTransformation,
-      });
-      break;
-  }
-
   return data;
 };

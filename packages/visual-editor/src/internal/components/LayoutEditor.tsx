@@ -21,6 +21,7 @@ import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 
 const devLogger = new DevLogger();
 
@@ -143,7 +144,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
           JSON.parse(localHistoryArray) as History<AppState>[]
         ).map((history) => ({
           id: history.id,
-          state: { data: migrate(history.state.data), ui: history.state.ui },
+          state: {
+            data: migrate(history.state.data, migrationRegistry, puckConfig),
+            ui: history.state.ui,
+          },
         }));
         const localHistoryIndex = localHistories.length - 1;
         setPuckInitialHistory({

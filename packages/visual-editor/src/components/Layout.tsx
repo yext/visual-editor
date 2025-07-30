@@ -95,9 +95,7 @@ export const layoutVariants = cva("components w-full", {
   },
 });
 
-export interface layoutProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof layoutVariants> {
+export interface layoutProps extends VariantProps<typeof layoutVariants> {
   backgroundColor?: BackgroundStyle;
 }
 

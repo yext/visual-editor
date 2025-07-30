@@ -79,7 +79,7 @@ export const convertStyleToPuckField = (
               }),
             []
           ),
-        } as CustomField;
+        } as CustomField<string>;
       } else {
         return {
           label: t(style.label),
@@ -95,7 +95,7 @@ export const convertStyleToPuckField = (
         label: t(style.label),
         type: "custom",
         render: ColorSelector,
-      } as CustomField;
+      } as CustomField<string>;
   }
 };
 

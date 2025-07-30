@@ -1,10 +1,12 @@
 import "./puck.css";
 import React from "react";
-import { usePuck } from "@measured/puck";
+import { createUsePuck, useGetPuck } from "@measured/puck";
 import { PanelLeft, PanelRight } from "lucide-react";
 import { useCallback } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
+
+const usePuck = createUsePuck();
 
 type UIButtonsToggleProps = {
   showLeft: boolean;
@@ -12,16 +14,15 @@ type UIButtonsToggleProps = {
 
 export const UIButtonsToggle = (props: UIButtonsToggleProps) => {
   const { showLeft } = props;
+  const getPuck = useGetPuck();
 
-  const {
-    dispatch,
-    appState: {
-      ui: { leftSideBarVisible, rightSideBarVisible },
-    },
-  } = usePuck();
+  const leftSideBarVisible = usePuck((s) => s.appState.ui.leftSideBarVisible);
+  const rightSideBarVisible = usePuck((s) => s.appState.ui.rightSideBarVisible);
 
   const toggleSidebars = useCallback(
     (sidebar: "left" | "right") => {
+      const { dispatch } = getPuck();
+
       const widerViewport = window.matchMedia("(min-width: 638px)").matches;
       const sideBarVisible =
         sidebar === "left" ? leftSideBarVisible : rightSideBarVisible;
@@ -36,7 +37,7 @@ export const UIButtonsToggle = (props: UIButtonsToggleProps) => {
         },
       });
     },
-    [dispatch, leftSideBarVisible, rightSideBarVisible]
+    [leftSideBarVisible, rightSideBarVisible]
   );
 
   return (

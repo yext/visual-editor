@@ -3,7 +3,9 @@ import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
-    const migratedData = migrate(exampleDataBefore, migrationRegistry);
+    const migratedData = migrate(exampleDataBefore, migrationRegistry, {
+      components: {},
+    });
     expect(migratedData).toMatchObject(exampleDataAfter);
   });
 });

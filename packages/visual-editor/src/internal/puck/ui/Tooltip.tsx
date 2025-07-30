@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { cn } from "../../../utils/cn.ts";
-import { usePuck } from "@measured/puck";
+import { useGetPuck } from "@measured/puck";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -16,24 +16,22 @@ interface TooltipContentProps
   zoomWithViewport?: boolean;
 }
 
-// Safe fallback if tooltip renders outside of puck context
-const tryUsePuck = () => {
-  try {
-    const puck = usePuck();
-    return puck;
-  } catch {
-    return undefined;
-  }
-};
-
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   TooltipContentProps
 >(({ className, sideOffset = 4, zoomWithViewport, ...props }, ref) => {
   const [scaleFactor, setScaleFactor] = React.useState<number>(1);
   const [iframeWidth, setIFrameWidth] = React.useState<number | undefined>();
-  const puck = tryUsePuck();
-  const viewportWidth = puck?.appState.ui.viewports.current.width;
+
+  // Safe fallback if tooltip renders outside of puck context
+  let viewportWidth: number | undefined;
+  try {
+    const getPuck = useGetPuck();
+    const puck = getPuck();
+    viewportWidth = puck.appState.ui.viewports.current.width;
+  } catch {
+    // viewportWidth undefined
+  }
 
   React.useEffect(() => {
     if (!zoomWithViewport) {

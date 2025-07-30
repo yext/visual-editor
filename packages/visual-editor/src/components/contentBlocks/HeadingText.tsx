@@ -14,9 +14,10 @@ import {
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
-export interface HeadingTextProps extends HeadingProps {
+export type HeadingTextProps = {
   text: YextEntityField<TranslatableString>;
-}
+  level: HeadingProps["level"];
+};
 
 const HeadingTextWrapper = React.forwardRef<
   HTMLHeadingElement,
@@ -66,7 +67,6 @@ export const HeadingText: ComponentConfig<HeadingTextProps> = {
       },
       constantValueEnabled: true,
     },
-    content: "Heading",
     level: 2,
   },
   render: (props) => <HeadingTextWrapper {...props} />,

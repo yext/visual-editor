@@ -15,6 +15,7 @@ export interface GridProps extends layoutProps {
   rows: number;
   columns: number;
   liveVisibility: boolean;
+  className?: string;
 }
 
 const GridSection = React.forwardRef<HTMLDivElement, GridProps>(

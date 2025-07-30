@@ -27,7 +27,7 @@ export const useCommonMessageReceivers = (
 
   // Base Template Info
   const [templateMetadata, setTemplateMetadata] = useState<TemplateMetadata>();
-  const [puckConfig, setPuckConfig] = useState<Config>();
+  const [puckConfig, setPuckConfig] = useState<Config>({ components: {} });
 
   // Layout from Content
   const [layoutData, setLayoutData] = useState<Data>();
@@ -42,8 +42,15 @@ export const useCommonMessageReceivers = (
     if (localDev) {
       const devMetadata = generateTemplateMetadata();
       setTemplateMetadata(devMetadata);
+
       const puckConfig = componentRegistry.get(devMetadata.templateId);
+      if (!puckConfig) {
+        throw new Error(
+          `Could not find config for template: templateId=${devMetadata.templateId}`
+        );
+      }
       setPuckConfig(puckConfig);
+
       // applies current migration version to empty data
       setLayoutData(
         migrate(
@@ -84,6 +91,11 @@ export const useCommonMessageReceivers = (
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry.get(payload.templateId);
+    if (!puckConfig) {
+      throw new Error(
+        `Could not find config for template: templateId=${payload.templateId}`
+      );
+    }
     setPuckConfig(puckConfig);
     const templateMetadata = payload as TemplateMetadata;
     setTemplateMetadata(payload as TemplateMetadata);

@@ -6,7 +6,7 @@ import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { InitialHistory, usePuck } from "@measured/puck";
+import { InitialHistory, useGetPuck } from "@measured/puck";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
@@ -42,12 +42,14 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     localDev,
   } = props;
 
-  const {
-    dispatch,
-    history: { setHistories },
-  } = usePuck();
+  const getPuck = useGetPuck();
 
   useEffect(() => {
+    const {
+      dispatch,
+      history: { setHistories },
+    } = getPuck();
+
     setHistories(puckInitialHistory?.histories || []);
     dispatch({
       type: "setUi",
@@ -121,11 +123,12 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   };
 
   useEffect(() => {
+    const { dispatch } = getPuck();
     dispatch({
       type: "setUi",
       ui: { leftSideBarVisible: false },
     });
-  }, [dispatch]);
+  }, []);
 
   return (
     <header className="puck-header">
