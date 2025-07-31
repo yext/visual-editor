@@ -19,6 +19,7 @@ import {
   usePlatformTranslation,
   pt,
 } from "../../../utils/i18n/platform.ts";
+import { analyzeURL } from "../../../utils/urlAnalysis.ts";
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
@@ -176,6 +177,52 @@ export const LocalDevOverrideButtons = () => {
     history: { histories, setHistories },
   } = usePuck();
 
+  const handleURLAnalysis = async () => {
+    const url = prompt("Enter URL to analyze:");
+    if (!url) return;
+
+    console.log(`Starting analysis of: ${url}`);
+
+    try {
+      const result = await analyzeURL(url);
+
+      if (result.error) {
+        console.error("Analysis failed:", result.error);
+        alert(`Analysis failed: ${result.error}`);
+        return;
+      }
+
+      console.log("=== URL Analysis Results ===");
+      console.log(`URL: ${url}`);
+      console.log("\n📦 Component Matches:");
+      result.matches.forEach((match, index) => {
+        console.log(
+          `${index + 1}. ${match.componentName} (confidence: ${(match.confidence * 100).toFixed(1)}%)`
+        );
+        console.log(`   Reason: ${match.reason}`);
+      });
+
+      console.log("\n🎨 Color Analysis:");
+      console.log(`Primary Color: ${result.colors.primaryColor}`);
+      console.log(`Secondary Color: ${result.colors.secondaryColor}`);
+
+      console.log("\n=== End Analysis ===");
+
+      // Also show a summary in an alert
+      const componentNames = result.matches
+        .map((m) => m.componentName)
+        .join(", ");
+      alert(
+        `Analysis complete! Found ${result.matches.length} component matches: ${componentNames || "None"}. Colors: ${result.colors.primaryColor} (primary), ${result.colors.secondaryColor} (secondary). Check console for detailed results.`
+      );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      console.error("URL analysis error:", errorMessage);
+      alert(`Analysis failed: ${errorMessage}`);
+    }
+  };
+
   return (
     <>
       <Button
@@ -219,6 +266,9 @@ export const LocalDevOverrideButtons = () => {
         className="ve-ml-4"
       >
         Set Platform Locale
+      </Button>
+      <Button onClick={handleURLAnalysis} variant="outline" className="ve-ml-4">
+        Analyze URL
       </Button>
     </>
   );
