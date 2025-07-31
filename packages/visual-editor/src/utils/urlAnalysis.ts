@@ -2,6 +2,8 @@
  * Utility functions for analyzing URLs and matching them to components
  */
 
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
 interface ComponentMatch {
   componentName: string;
   confidence: number;
@@ -142,51 +144,14 @@ Provide specific reasoning for each match and confidence scores between 0 and 1.
 `;
 
   try {
-    // Use Gemini API to analyze the webpage
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: prompt,
-                },
-              ],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.3,
-            topK: 1,
-            topP: 1,
-            maxOutputTokens: 2048,
-          },
-        }),
-      }
-    );
+    // Initialize the Google Generative AI client
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-    if (!response.ok) {
-      throw new Error(
-        `Gemini API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-
-    if (
-      !data.candidates ||
-      !data.candidates[0] ||
-      !data.candidates[0].content
-    ) {
-      throw new Error("Invalid response from Gemini API");
-    }
-
-    const responseText = data.candidates[0].content.parts[0].text;
+    // Generate content using the prompt
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const responseText = response.text();
 
     // Try to parse JSON from the response
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
@@ -194,21 +159,21 @@ Provide specific reasoning for each match and confidence scores between 0 and 1.
       throw new Error("Could not extract JSON from Gemini response");
     }
 
-    const result = JSON.parse(jsonMatch[0]);
+    const analysisResult = JSON.parse(jsonMatch[0]);
 
     // Validate the response structure
-    if (!result.matches || !result.colors) {
+    if (!analysisResult.matches || !analysisResult.colors) {
       throw new Error("Invalid response structure from Gemini API");
     }
 
     // Filter matches to only include valid components
-    const validMatches = result.matches.filter((match: ComponentMatch) =>
+    const validMatches = analysisResult.matches.filter((match: ComponentMatch) =>
       AVAILABLE_COMPONENTS.includes(match.componentName)
     );
 
     return {
       matches: validMatches,
-      colors: result.colors,
+      colors: analysisResult.colors,
     };
   } catch (error) {
     console.error("Error calling Gemini API:", error);
