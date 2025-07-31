@@ -2,7 +2,7 @@
  * Utility functions for analyzing URLs and matching them to components
  */
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface ComponentMatch {
   componentName: string;
@@ -146,7 +146,7 @@ Provide specific reasoning for each match and confidence scores between 0 and 1.
   try {
     // Initialize the Google Generative AI client
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Generate content using the prompt
     const result = await model.generateContent(prompt);
@@ -167,8 +167,9 @@ Provide specific reasoning for each match and confidence scores between 0 and 1.
     }
 
     // Filter matches to only include valid components
-    const validMatches = analysisResult.matches.filter((match: ComponentMatch) =>
-      AVAILABLE_COMPONENTS.includes(match.componentName)
+    const validMatches = analysisResult.matches.filter(
+      (match: ComponentMatch) =>
+        AVAILABLE_COMPONENTS.includes(match.componentName)
     );
 
     return {
