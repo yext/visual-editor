@@ -206,6 +206,9 @@ export const LocalDevOverrideButtons = () => {
       console.log(`Primary Color: ${result.colors.primaryColor}`);
       console.log(`Secondary Color: ${result.colors.secondaryColor}`);
 
+      console.log("\n📋 Layout Data Structure:");
+      console.log(JSON.stringify(result.layoutData, null, 2));
+
       console.log("\n=== End Analysis ===");
 
       // Also show a summary in an alert
@@ -213,7 +216,7 @@ export const LocalDevOverrideButtons = () => {
         .map((m) => m.componentName)
         .join(", ");
       alert(
-        `Analysis complete! Found ${result.matches.length} component matches: ${componentNames || "None"}. Colors: ${result.colors.primaryColor} (primary), ${result.colors.secondaryColor} (secondary). Check console for detailed results.`
+        `Analysis complete! Found ${result.matches.length} component matches: ${componentNames || "None"}. Colors: ${result.colors.primaryColor} (primary), ${result.colors.secondaryColor} (secondary). Check console for detailed results and layout data structure.`
       );
     } catch (error) {
       const errorMessage =

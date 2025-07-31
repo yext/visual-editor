@@ -14,18 +14,18 @@ describe("urlAnalysis", () => {
       primaryColor: "#000000",
       secondaryColor: "#ffffff",
     });
+    expect(result.layoutData).toEqual({
+      root: {},
+      zones: {},
+      content: [],
+    });
   });
 
-  it("should return error when no API key is provided", async () => {
-    // Mock prompt to return null (user cancels)
-    const originalPrompt = global.prompt;
-    global.prompt = () => null;
-
+  it("should return error when API key is not configured", async () => {
     const result = await analyzeURL("https://example.com");
-    expect(result.error).toBe("Google Gemini API key is required");
-
-    // Restore original prompt
-    global.prompt = originalPrompt;
+    expect(result.error).toBe(
+      "Please configure your Google Gemini API key in the code"
+    );
   });
 
   it("should handle empty URL", async () => {
