@@ -267,8 +267,13 @@ export const LocalDevOverrideButtons = () => {
       >
         Set Platform Locale
       </Button>
-      <Button onClick={handleURLAnalysis} variant="outline" className="ve-ml-4">
-        Analyze URL
+      <Button
+        onClick={handleURLAnalysis}
+        variant="outline"
+        className="ve-ml-4"
+        title="Analyze a URL with Google Gemini to find matching components"
+      >
+        Analyze URL with AI
       </Button>
     </>
   );
