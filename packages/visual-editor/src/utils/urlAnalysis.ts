@@ -11,6 +11,7 @@ interface ComponentMatch {
   componentName: string;
   confidence: number;
   reason: string;
+  props?: Record<string, any>;
 }
 
 interface ColorAnalysis {
@@ -118,13 +119,29 @@ These are page-level sections that structure the layout. Do NOT suggest content 
    - Do NOT consider colors that appear only in images or photos
    - Focus on the actual design elements like backgrounds, text, borders, buttons
 
+3. For each component match, generate realistic props based on what you see on the webpage. Use these component structures:
+
+- BannerSection: { data: { text: { field: "", constantValueEnabled: true, constantValue: { en: "text_from_page" } } }, styles: { backgroundColor: "background-color-option", textAlignment: "left|center|right" } }
+- HeroSection: { data: { businessName: { field: "", constantValueEnabled: true, constantValue: { en: "business_name" } }, localGeoModifier: { field: "", constantValueEnabled: true, constantValue: { en: "location_text" } }, showAverageReview: true|false }, styles: { backgroundColor: "background-color-option", imageOrientation: "left|right", businessNameLevel: 1-6, localGeoModifierLevel: 1-6, primaryCTA: "primary|secondary|outline", secondaryCTA: "primary|secondary|outline" } }
+- PromoSection: { data: { promo: { field: "", constantValueEnabled: true, constantValue: { title: { en: "promo_title" }, description: { en: "promo_description" } } } }, styles: { backgroundColor: "background-color-option", orientation: "left|right", ctaVariant: "primary|secondary|outline", heading: { level: 1-6, align: "left|center|right" } } }
+- TeamSection: { data: { heading: { field: "", constantValueEnabled: true, constantValue: { en: "team_heading" } } }, styles: { backgroundColor: "background-color-option", heading: { level: 1-6, align: "left|center|right" }, cards: { headingLevel: 1-6, backgroundColor: "background-color-option", ctaVariant: "primary|secondary|outline" } } }
+- TestimonialSection: { data: { heading: { field: "", constantValueEnabled: true, constantValue: { en: "testimonial_heading" } } }, styles: { backgroundColor: "background-color-option", heading: { level: 1-6, align: "left|center|right" }, cards: { headingLevel: 1-6, backgroundColor: "background-color-option" } } }
+- PhotoGallerySection: { data: { heading: { field: "", constantValueEnabled: true, constantValue: { en: "gallery_heading" } } }, styles: { backgroundColor: "background-color-option", heading: { level: 1-6, align: "left|center|right" } } }
+- FAQSection: { data: { heading: { field: "", constantValueEnabled: true, constantValue: { en: "faq_heading" } } }, styles: { backgroundColor: "background-color-option", heading: { level: 1-6, align: "left|center|right" } } }
+- ProductSection: { data: { heading: { field: "", constantValueEnabled: true, constantValue: { en: "products_heading" } } }, styles: { backgroundColor: "background-color-option", heading: { level: 1-6, align: "left|center|right" }, cards: { headingLevel: 1-6, backgroundColor: "background-color-option", ctaVariant: "primary|secondary|outline" } } }
+- EventSection: { data: { heading: { field: "", constantValueEnabled: true, constantValue: { en: "events_heading" } } }, styles: { backgroundColor: "background-color-option", heading: { level: 1-6, align: "left|center|right" }, cards: { headingLevel: 1-6, backgroundColor: "background-color-option", ctaVariant: "primary|secondary|outline" } } }
+
+For background colors, use these values: "background1", "background2", "background3", "background4", "background5", "background6"
+Extract actual text content from the webpage for headings, titles, and descriptions where visible.
+
 Respond in the following JSON format:
 {
   "matches": [
     {
       "componentName": "ComponentName",
       "confidence": 0.8,
-      "reason": "Explanation of why this component matches"
+      "reason": "Explanation of why this component matches",
+      "props": { /* component-specific props structure from above */ }
     }
   ],
   "colors": {
@@ -183,7 +200,7 @@ Provide specific reasoning for each match and confidence scores between 0 and 1.
       content: validMatches.map((match: any) => ({
         type: match.componentName,
         id: `${match.componentName}${Math.random().toString(36).substr(2, 9)}`,
-        props: {},
+        props: match.props || {},
       })),
     };
 
