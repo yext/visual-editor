@@ -181,6 +181,7 @@
       "base_text size": "Base",
       "center": "Center",
       "center_direction": "Center",
+      "classic": "Classic",
       "ctaVariant": {
         "link": "Link",
         "primary": "Primary",
@@ -196,6 +197,7 @@
       "hour12": "12-hour",
       "hour24": "24-hour",
       "image": "Image",
+      "immersive": "Immersive",
       "includeOpenNow": "Include Open Now Button",
       "international": "International",
       "international_phone number": "International",

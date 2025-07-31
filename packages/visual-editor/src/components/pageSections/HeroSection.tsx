@@ -33,6 +33,7 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
+import { ImmersiveHero } from "./heroVariants";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -70,13 +71,19 @@ export interface HeroData {
 
 export interface HeroStyles {
   /**
+   * The visual variant for the hero section.
+   * @defaultValue classic
+   */
+  variant: "classic" | "immersive";
+
+  /**
    * The background color for the entire section.
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
 
   /**
-   * Positions the image to the left or right of the text content.
+   * Positions the image to the left or right of the text content (classic variant only).
    * @defaultValue right
    */
   imageOrientation: "left" | "right";
@@ -185,6 +192,16 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.classic", "Classic"), value: "classic" },
+          {
+            label: msg("fields.options.immersive", "Immersive"),
+            value: "immersive",
+          },
+        ],
+      }),
       backgroundColor: YextField(
         msg("fields.backgroundColor", "Background Color"),
         {
@@ -290,6 +307,12 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
 
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
+  // Immersive variant styling
+  if (styles.variant === "immersive") {
+    return <ImmersiveHero data={data} styles={styles} />;
+  }
+
+  // Classic variant (existing implementation)
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -488,6 +511,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       showAverageReview: true,
     },
     styles: {
+      variant: "classic",
       backgroundColor: backgroundColors.background1.value,
       imageOrientation: "right",
       businessNameLevel: 3,
