@@ -276,6 +276,98 @@ const tests: ComponentTest[] = [
     },
     version: 10,
   },
+  {
+    name: "version 11 props - expanded",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          logo: "https://placehold.co/100",
+          footerLinks: [
+            version10FooterLink,
+            version10FooterLink,
+            version10FooterLink,
+            version10FooterLink,
+            version10FooterLink,
+          ],
+          xLink: "https://x.com/yext",
+          facebookLink: "https://facebook.com/yext",
+          instagramLink: "https://instagram.com/yext",
+          pinterestLink: "https://pinterest.com/yext",
+          linkedInLink: "https://linkedin.com/in/yext",
+          youtubeLink: "https://youtube.com/c/yext",
+          tiktokLink: "https://tiktok.com/@yext",
+          utilityImages: [
+            { url: "https://placehold.co/20", linkTarget: "https://yext.com" },
+            { url: "https://placehold.co/50x20" },
+          ],
+          expandedFooter: true,
+          expandedFooterLinks: [
+            {
+              label: "Footer Label LONG LONG LONG",
+              links: [version10FooterLink, version10FooterLink],
+            },
+            {
+              label: "Footer Label",
+              links: [
+                version10FooterLink,
+                {
+                  linkType: "URL",
+                  label: {
+                    en: "Footer Link LONG LONG LONG LONG",
+                    hasLocalizedValue: "true",
+                  },
+                  link: "#",
+                },
+                version10FooterLink,
+                version10FooterLink,
+                version10FooterLink,
+              ],
+            },
+            {
+              label: "Footer Label",
+              links: [
+                version10FooterLink,
+                version10FooterLink,
+                version10FooterLink,
+              ],
+            },
+          ],
+        },
+        secondaryFooter: {
+          show: true,
+          copyrightMessage: { en: "Copyright 2025", hasLocalizedValue: "true" },
+          secondaryFooterLinks: [
+            version10FooterLink,
+            version10FooterLink,
+            version10FooterLink,
+            version10FooterLink,
+          ],
+        },
+      },
+      styles: {
+        primaryFooter: {
+          logo: { width: 200, aspectRatio: 4 },
+          utilityImages: { width: 50, aspectRatio: 1.78 },
+          backgroundColor: {
+            bgColor: "bg-palette-primary-dark",
+            textColor: "text-white",
+          },
+          linksAlignment: "right",
+        },
+        secondaryFooter: {
+          backgroundColor: {
+            bgColor: "bg-palette-tertiary-light",
+            textColor: "text-black",
+          },
+          linksAlignment: "right",
+        },
+        maxWidth: "full",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 10,
+  },
 ];
 
 const socialLinkTestCases = [
