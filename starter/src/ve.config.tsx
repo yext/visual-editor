@@ -14,7 +14,6 @@ import {
   AdvancedCoreInfoCategoryComponents,
   AdvancedCoreInfoCategory,
 } from "@yext/visual-editor";
-import * as React from "react";
 
 interface MainProps
   extends PageSectionCategoryProps,

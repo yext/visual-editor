@@ -243,20 +243,21 @@ export const InternalLayoutEditor = ({
             };
 
             const pasteFromClipboard = async () => {
-              const { appState, dispatch } = getPuck();
-
-              const selectedComponentIndex = appState.ui.itemSelector?.index;
-              const selectedComponent =
-                selectedComponentIndex !== undefined
-                  ? appState.data.content[selectedComponentIndex]
-                  : undefined;
+              const { appState, dispatch, getItemBySelector } = getPuck();
 
               if (
-                !appState?.ui.itemSelector?.zone ||
-                appState?.ui.itemSelector?.index === undefined ||
-                !selectedComponent ||
-                selectedComponentIndex === undefined
+                !appState?.ui?.itemSelector?.zone ||
+                appState?.ui?.itemSelector?.index === undefined
               ) {
+                return;
+              }
+
+              const selectedComponent = getItemBySelector({
+                index: appState.ui.itemSelector?.index,
+                zone: appState.ui.itemSelector?.zone,
+              });
+
+              if (!selectedComponent) {
                 return;
               }
 
