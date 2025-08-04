@@ -1,19 +1,11 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 import {
   EntityField,
   EntityTooltipsProvider,
   useEntityTooltips,
 } from "./EntityField.tsx";
-
-beforeAll(() => {
-  global.ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
 
 describe("Entity Tooltips", () => {
   it("renders the children and displays a tooltip when tooltips are toggled", () => {

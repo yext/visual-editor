@@ -1,5 +1,5 @@
 import React from "react";
-import { Data, usePuck, type History } from "@measured/puck";
+import { createUsePuck, Data, useGetPuck, type History } from "@measured/puck";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
@@ -19,6 +19,8 @@ import {
   usePlatformTranslation,
   pt,
 } from "../../../utils/i18n/platform.ts";
+
+const usePuck = createUsePuck();
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
@@ -47,20 +49,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
   const [approvalModalOpen, setApprovalModalOpen] =
     React.useState<boolean>(false);
-
-  const {
-    appState,
-    history: {
-      back,
-      forward,
-      histories,
-      index,
-      hasPast,
-      hasFuture,
-      setHistories,
-    },
-  } = usePuck();
   const { i18n } = usePlatformTranslation();
+  const getPuck = useGetPuck();
+  const histories = usePuck((s) => s.history.histories);
+  const index = usePuck((s) => s.history.index);
+  const hasFuture = usePuck((s) => s.history.hasFuture);
+  const hasPast = usePuck((s) => s.history.hasPast);
 
   useEffect(() => {
     onHistoryChange(histories, index);
@@ -85,6 +79,11 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   })();
 
   const onButtonClick = async () => {
+    const {
+      appState,
+      history: { setHistories },
+    } = getPuck();
+
     if (
       templateMetadata.assignment == "ENTITY" &&
       templateMetadata.layoutTaskApprovals
@@ -93,7 +92,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     } else {
       await onPublishLayout(appState.data);
       onClearLocalChanges();
-      setHistories([{ id: "root", state: { data: appState.data } }]);
+      setHistories([
+        { id: "root", state: { data: appState.data, ui: appState.ui } },
+      ]);
     }
   };
 
@@ -103,6 +104,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         open={approvalModalOpen}
         setOpen={setApprovalModalOpen}
         onSendLayoutForApproval={(comment: string) => {
+          const { appState } = getPuck();
           onSendLayoutForApproval(appState.data, comment);
         }}
       />
@@ -123,7 +125,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             variant="ghost"
             size="icon"
             disabled={!hasPast}
-            onClick={back}
+            onClick={() => {
+              const {
+                history: { back },
+              } = getPuck();
+              back();
+            }}
             aria-label={pt("undo", "Undo")}
           >
             <RotateCcw className="sm-icon" />
@@ -133,7 +140,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             variant="ghost"
             size="icon"
             disabled={!hasFuture}
-            onClick={forward}
+            onClick={() => {
+              const {
+                history: { forward },
+              } = getPuck();
+              forward();
+            }}
             aria-label={pt("redo", "Redo")}
           >
             <RotateCw className="sm-icon" />
@@ -148,10 +160,11 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             setModalOpen={setClearLocalChangesModalOpen}
             disabled={histories.length === 1}
             onClearLocalChanges={() => {
+              const {
+                history: { setHistories },
+              } = getPuck();
               onClearLocalChanges();
-              setHistories([
-                { id: "root", state: { data: histories[0].state.data } },
-              ]);
+              setHistories([{ ...histories[0] }]);
             }}
           />
           {!isDevMode && (
@@ -170,16 +183,15 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 };
 
 export const LocalDevOverrideButtons = () => {
-  const {
-    appState,
-    config,
-    history: { histories, setHistories },
-  } = usePuck();
+  const getPuck = useGetPuck();
 
   return (
     <>
       <Button
-        onClick={() => console.log(JSON.stringify(appState.data))}
+        onClick={() => {
+          const { appState } = getPuck();
+          console.log(JSON.stringify(appState.data));
+        }}
         variant="outline"
         className="ve-ml-4"
       >
@@ -187,6 +199,10 @@ export const LocalDevOverrideButtons = () => {
       </Button>
       <Button
         onClick={() => {
+          const {
+            history: { setHistories, histories },
+            config,
+          } = getPuck();
           let data = { root: {}, content: [] };
           try {
             data = JSON.parse(prompt("Enter layout data:") ?? "{}");
