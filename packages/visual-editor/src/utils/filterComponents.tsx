@@ -1,5 +1,6 @@
 import { DefaultComponentProps, type Config } from "@measured/puck";
 
+// The gated components that are disallowed by default. They are only visible and draggable if a business has the appropriate product features enabled.
 const gatedLayoutComponents: string[] = ["CustomCodeSection", "GridSection"];
 
 /**
@@ -42,28 +43,4 @@ export const filterComponentsFromConfig = <T extends DefaultComponentProps>(
     components: filteredComponents,
     categories: filteredCategories,
   };
-};
-
-/**
- * Filters gated layout components from a specific configuration in the registry.
- *
- * @param registry - The registry to be filtered.
- * @param registryKey - The key in the registry whose associated configuration should be filtered.
- * @param additionalLayoutComponents - An optional list of gated component names to retain.
- * @returns The new registry with the filtered configuration under the specified key.
- */
-export const filterComponentsFromRegistry = (
-  registry: Map<string, Config<any>>,
-  registryKey: string,
-  additionalLayoutComponents?: string[]
-): Map<string, Config<any>> => {
-  const newRegistry = new Map(registry);
-  const config = newRegistry.get(registryKey);
-  if (config) {
-    newRegistry.set(
-      registryKey,
-      filterComponentsFromConfig(config, additionalLayoutComponents)
-    );
-  }
-  return newRegistry;
 };

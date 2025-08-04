@@ -17,7 +17,6 @@ import {
   defaultThemeConfig,
   applyAnalytics,
   applyHeaderScript,
-  filterComponentsFromRegistry,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
@@ -133,12 +132,6 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
     : `${localePath}${document.id.toString()}`;
 };
 
-const filteredRegistry = filterComponentsFromRegistry(
-  componentRegistry,
-  "dev",
-  ["CustomCodeSection", "GridSection"],
-);
-
 const Dev: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
   const { document } = props;
@@ -169,7 +162,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         >
           <Editor
             document={document}
-            componentRegistry={filteredRegistry}
+            componentRegistry={componentRegistry}
             themeConfig={defaultThemeConfig}
             localDev={true}
             forceThemeMode={themeMode}
