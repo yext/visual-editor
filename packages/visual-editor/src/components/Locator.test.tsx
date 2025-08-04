@@ -177,7 +177,7 @@ describe("Locator", async () => {
         await waitFor(() => {
           const searchResults = screen.getAllByText("Galaxy Grill");
           expect(
-            searchResults.every((result) => result.style.opacity === "1")
+            searchResults.every((result) => getComputedStyle(result).opacity === "1")
           ).toBe(true);
         });
       }
