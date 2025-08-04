@@ -246,7 +246,12 @@ describe("FAQSection", async () => {
         await interactions(page);
         await expect(
           `FAQsSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({
+          ignoreExact: [
+            422, // ignore differences in default browser link styling
+          ],
+          customThreshold: 10,
+        });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
