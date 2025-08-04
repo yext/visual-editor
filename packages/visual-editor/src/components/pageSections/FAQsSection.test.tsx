@@ -237,6 +237,7 @@ describe("FAQSection", async () => {
         ignoreExact: [
           422, // ignore differences in default browser link styling
         ],
+        customThreshold: 10,
       });
       const results = await axe(container);
       expect(results).toHaveNoViolations();

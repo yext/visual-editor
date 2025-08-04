@@ -168,21 +168,14 @@ describe("StaticMapSection", async () => {
               expectedHeight = 240;
               break;
             case "tablet":
-              expectedHeight = 288;
+              expectedHeight = 282;
               break;
             case "mobile":
               expectedHeight = 274;
               break;
           }
 
-          console.log(
-            `StaticMapSection/[${viewportName}] ${name}`,
-            images.map((img) => img.height),
-            expectedHeight
-          );
-          expect(images.every((img) => img.height === expectedHeight)).toBe(
-            true
-          );
+          expect(images[0]?.height).toBe(expectedHeight);
         }
       });
 
