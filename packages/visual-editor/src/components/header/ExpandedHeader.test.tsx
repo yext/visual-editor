@@ -266,6 +266,65 @@ const tests: ComponentTest[] = [
       });
     },
   },
+  {
+    name: "version 11 props - secondary header",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 11,
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+  },
 ];
 
 describe("ExpandedHeader", async () => {
