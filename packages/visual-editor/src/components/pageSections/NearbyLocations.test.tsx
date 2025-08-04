@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
@@ -45,6 +46,9 @@ const tests: ComponentTest[] = [
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
     },
     props: { ...NearbyLocationsSection.defaultProps },
+    interactions: async () => {
+      await delay(1000);
+    },
     version: migrationRegistry.length,
   },
   {
@@ -68,6 +72,9 @@ const tests: ComponentTest[] = [
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
     },
     props: { ...NearbyLocationsSection.defaultProps },
+    interactions: async () => {
+      await delay(1000);
+    },
     version: migrationRegistry.length,
   },
   {
@@ -137,6 +144,9 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
+    interactions: async () => {
+      await delay(1000);
+    },
     version: 10,
   },
   {
@@ -202,6 +212,9 @@ const tests: ComponentTest[] = [
         scope: "nearbyLocationsSection",
       },
       liveVisibility: true,
+    },
+    interactions: async () => {
+      await delay(1000);
     },
     version: 10,
   },

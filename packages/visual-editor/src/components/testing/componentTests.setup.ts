@@ -74,6 +74,7 @@ export const axe = configureAxe({
 // Each test will run once for each of the following viewports
 export const viewports = {
   mobile: { name: "mobile", width: 375, height: 667 },
+  tablet: { name: "tablet", width: 800, height: 1280 },
   desktop: { name: "desktop", width: 1440, height: 900 },
 };
 
@@ -84,6 +85,7 @@ export const transformTests = (tests: ComponentTest[]) => {
       accumulator.push(test as ComponentTestWithViewport);
     } else {
       accumulator.push({ ...test, viewport: viewports.desktop });
+      accumulator.push({ ...test, viewport: viewports.tablet });
       accumulator.push({ ...test, viewport: viewports.mobile });
     }
 

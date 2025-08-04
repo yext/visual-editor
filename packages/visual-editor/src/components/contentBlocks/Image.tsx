@@ -9,6 +9,7 @@ import {
   Image,
   YextField,
   msg,
+  pt,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 
@@ -63,7 +64,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
   aspectRatio,
   width,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = resolveComponentData(
     imageField,
@@ -77,7 +78,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 
   return (
     <EntityField
-      displayName={t("image", "Image")}
+      displayName={pt("image", "Image")}
       fieldId={imageField.field}
       constantValueEnabled={imageField.constantValueEnabled}
     >
@@ -87,7 +88,7 @@ const ImageWrapperComponent: React.FC<ImageWrapperProps> = ({
 };
 
 export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
-  label: "Image",
+  label: msg("components.image", "Image"),
   fields: ImageWrapperFields,
   defaultProps: {
     image: {
