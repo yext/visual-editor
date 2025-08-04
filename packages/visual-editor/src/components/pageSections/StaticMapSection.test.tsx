@@ -175,6 +175,11 @@ describe("StaticMapSection", async () => {
               break;
           }
 
+          console.log(
+            `StaticMapSection/[${viewportName}] ${name}`,
+            images.map((img) => img.height),
+            expectedHeight
+          );
           expect(images.every((img) => img.height === expectedHeight)).toBe(
             true
           );
