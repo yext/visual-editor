@@ -157,9 +157,29 @@ describe("StaticMapSection", async () => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
-      // flush resizing useEffects
-      await act(async () => await delay(1000));
-      await act(async () => await delay(1000));
+      await act(async () => await delay(500));
+      await act(async () => await delay(500));
+
+      await waitFor(async () => {
+        if (images.length) {
+          let expectedHeight = 0;
+          switch (viewportName) {
+            case "desktop":
+              expectedHeight = 240;
+              break;
+            case "tablet":
+              expectedHeight = 282;
+              break;
+            case "mobile":
+              expectedHeight = 274;
+              break;
+          }
+
+          expect(images.every((img) => img.height === expectedHeight)).toBe(
+            true
+          );
+        }
+      });
 
       // The static image returned by mapbox can vary slightly
       const threshold =

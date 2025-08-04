@@ -175,7 +175,10 @@ describe("Locator", async () => {
       // Unless testing empty state, wait for search to load
       if (!name.includes("empty document")) {
         await waitFor(() => {
-          screen.getAllByText("Galaxy Grill");
+          const searchResults = screen.getAllByText("Galaxy Grill");
+          expect(
+            searchResults.every((result) => result.style.opacity === "1")
+          ).toBe(true);
         });
       }
 
