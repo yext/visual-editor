@@ -103,7 +103,7 @@ export interface ExpandedFooterStyles {
     backgroundColor?: BackgroundStyle;
     linksAlignment: "left" | "right";
   };
-  /** The maximum width of the header */
+  /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
 }
 
