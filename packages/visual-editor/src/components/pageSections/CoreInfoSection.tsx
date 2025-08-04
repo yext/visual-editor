@@ -332,7 +332,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
 
 /**
  * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   const { t, i18n } = useTranslation();
@@ -609,7 +609,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
 /**
  * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
   label: msg("components.coreInfoSection", "Core Info Section"),

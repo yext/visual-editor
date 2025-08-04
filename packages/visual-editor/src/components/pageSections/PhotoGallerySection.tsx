@@ -257,7 +257,7 @@ const PhotoGallerySectionComponent = ({
               className="flex items-center gap-2"
               style={{
                 width: `${(styles.image.width || 1000) + 96}px`,
-                maxWidth: "100%",
+                maxWidth: "calc(100vw - 2rem)",
                 minWidth: "fit-content",
               }}
             >
@@ -274,7 +274,10 @@ const PhotoGallerySectionComponent = ({
                 >
                   <Slider
                     className="w-auto"
-                    style={{ width: styles.image.width || 1000 }}
+                    style={{
+                      width: `min(${styles.image.width || 1000}px, calc(100vw - 6rem))`,
+                      maxWidth: "100%",
+                    }}
                   >
                     {filteredImages.map((image, idx) => {
                       return (
@@ -316,22 +319,30 @@ const PhotoGallerySectionComponent = ({
               </DynamicChildColors>
             </div>
           </div>
-          <div className="flex flex-col gap-y-8 items-center justify-center md:hidden">
+          <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
             <EntityField
               displayName={pt("fields.images", "Images")}
               fieldId={data.images.field}
               constantValueEnabled={data.images.constantValueEnabled}
             >
-              <Slider>
+              <Slider className="w-full">
                 {filteredImages.map((image, idx) => {
                   return (
                     <Slide index={idx} key={idx}>
-                      <div className="flex justify-center">
-                        <Image
-                          image={image.image}
-                          aspectRatio={image.aspectRatio}
-                          width={image.width}
-                        />
+                      <div className="flex justify-center w-full px-4">
+                        <div
+                          className="w-full max-w-full overflow-hidden"
+                          style={{
+                            maxWidth: `${Math.min(image.width || 1000, 250)}px`,
+                            width: "100%",
+                          }}
+                        >
+                          <Image
+                            image={image.image}
+                            aspectRatio={image.aspectRatio}
+                            className="w-full h-auto object-contain"
+                          />
+                        </div>
                       </div>
                     </Slide>
                   );
@@ -369,7 +380,7 @@ const PhotoGallerySectionComponent = ({
 
 /**
  * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
- * Avaliable on Location templates.
+ * Available on Location templates.
  */
 export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
   label: msg("components.photoGallerySection", "Photo Gallery Section"),
