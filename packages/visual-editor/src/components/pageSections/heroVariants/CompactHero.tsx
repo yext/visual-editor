@@ -1,0 +1,207 @@
+import { useTranslation } from "react-i18next";
+import * as React from "react";
+import {
+  EntityField,
+  Heading,
+  PageSection,
+  pt,
+  resolveComponentData,
+  getAggregateRating,
+  ReviewStars,
+  CTA,
+  HoursStatusAtom,
+  useDocument,
+} from "@yext/visual-editor";
+import { HeroSectionProps } from "../HeroSection";
+
+export const CompactHero: React.FC<HeroSectionProps> = ({ data, styles }) => {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
+  const streamDocument = useDocument() as any;
+  const resolvedBusinessName = resolveComponentData(
+    data?.businessName,
+    locale,
+    streamDocument
+  );
+  const resolvedLocalGeoModifier = resolveComponentData(
+    data?.localGeoModifier,
+    locale,
+    streamDocument
+  );
+  const resolvedHours = resolveComponentData(
+    data?.hours,
+    locale,
+    streamDocument
+  );
+  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+
+  const { timezone } = streamDocument as {
+    timezone: string;
+  };
+
+  const { averageRating, reviewCount } = getAggregateRating(streamDocument);
+
+  // Get compact-specific styles
+  const contentAlignment = styles?.contentAlignment || "left";
+  const textAlignment = styles?.textAlignment || "left";
+
+  return (
+    <PageSection
+      background={styles.backgroundColor}
+      aria-label={t("heroBanner", "Hero Banner")}
+      className="py-8 md:py-12"
+    >
+      <div
+        className={`flex flex-col gap-4 md:gap-6 ${
+          contentAlignment === "center" ? "items-center" : "items-start"
+        }`}
+        aria-labelledby="hero-heading"
+      >
+        <header
+          className={`flex flex-col gap-2 md:gap-3 ${
+            textAlignment === "center" ? "text-center" : "text-left"
+          }`}
+          aria-label={t("heroHeader", "Hero Header")}
+        >
+          <section
+            className="flex flex-col gap-1"
+            aria-label={t("businessInformation", "Business Information")}
+          >
+            {resolvedBusinessName && (
+              <EntityField
+                displayName={pt("fields.businessName", "Business Name")}
+                fieldId={data?.businessName.field}
+                constantValueEnabled={data?.businessName.constantValueEnabled}
+              >
+                <Heading
+                  level={styles?.businessNameLevel}
+                  className={`text-gray-900 ${
+                    textAlignment === "center" ? "text-center" : "text-left"
+                  }`}
+                >
+                  {resolvedBusinessName}
+                </Heading>
+              </EntityField>
+            )}
+            {resolvedLocalGeoModifier && (
+              <EntityField
+                displayName={pt("fields.localGeomodifier", "Local GeoModifier")}
+                fieldId={data?.localGeoModifier.field}
+                constantValueEnabled={
+                  data?.localGeoModifier.constantValueEnabled
+                }
+              >
+                <Heading
+                  level={styles?.localGeoModifierLevel}
+                  className={`text-gray-900 ${
+                    textAlignment === "center" ? "text-center" : "text-left"
+                  }`}
+                >
+                  {resolvedLocalGeoModifier}
+                </Heading>
+              </EntityField>
+            )}
+          </section>
+          {resolvedHours && (
+            <EntityField
+              displayName={pt("fields.hours", "Hours")}
+              fieldId={data?.hours.field}
+              constantValueEnabled={data?.hours.constantValueEnabled}
+            >
+              <div className="text-gray-700">
+                <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
+              </div>
+            </EntityField>
+          )}
+          {reviewCount > 0 && data.showAverageReview && (
+            <div className="text-gray-700">
+              <ReviewStars
+                averageRating={averageRating}
+                reviewCount={reviewCount}
+              />
+            </div>
+          )}
+        </header>
+        {(resolvedHero?.primaryCta?.label ||
+          resolvedHero?.secondaryCta?.label) && (
+          <div
+            className={`flex gap-3 md:gap-4 ${
+              contentAlignment === "center" ? "justify-center" : "justify-start"
+            } ${
+              resolvedHero?.primaryCta?.label &&
+              resolvedHero?.secondaryCta?.label
+                ? "flex-col md:flex-row"
+                : "flex-col"
+            }`}
+            aria-label={t("callToActions", "Call to Actions")}
+          >
+            {resolvedHero?.primaryCta?.label && (
+              <EntityField
+                displayName={pt("fields.primaryCta", "Primary CTA")}
+                fieldId={data.hero.field}
+                constantValueEnabled={
+                  data.hero.constantValueOverride.primaryCta
+                }
+              >
+                <CTA
+                  eventName={`primaryCta`}
+                  variant={styles?.primaryCTA}
+                  label={resolveComponentData(
+                    resolvedHero.primaryCta.label,
+                    i18n.language
+                  )}
+                  link={resolvedHero.primaryCta.link}
+                  linkType={resolvedHero.primaryCta.linkType}
+                  className={"py-2 px-4"}
+                />
+              </EntityField>
+            )}
+            {resolvedHero?.secondaryCta?.label && (
+              <EntityField
+                displayName={pt("fields.secondaryCta", "Secondary CTA")}
+                fieldId={data.hero.field}
+                constantValueEnabled={
+                  data.hero.constantValueOverride.secondaryCta
+                }
+              >
+                <CTA
+                  eventName={`secondaryCta`}
+                  variant={styles?.secondaryCTA}
+                  label={resolveComponentData(
+                    resolvedHero.secondaryCta.label,
+                    i18n.language
+                  )}
+                  link={resolvedHero.secondaryCta.link}
+                  linkType={resolvedHero.secondaryCta.linkType}
+                  className={"py-2 px-4"}
+                />
+              </EntityField>
+            )}
+          </div>
+        )}
+        {resolvedHero?.image && (
+          <EntityField
+            displayName={pt("fields.image", "Image")}
+            fieldId={data.hero.field}
+            constantValueEnabled={data.hero.constantValueOverride.image}
+          >
+            <div
+              className="w-full max-w-md mx-auto"
+              role="region"
+              aria-label={t("heroImage", "Hero Image")}
+            >
+              <img
+                src={resolvedHero.image.url}
+                // alt={resolvedHero.image.alt || "Hero image"}
+                className="w-full h-auto rounded-lg"
+                style={{
+                  aspectRatio: styles.image.aspectRatio || 16 / 9,
+                }}
+              />
+            </div>
+          </EntityField>
+        )}
+      </div>
+    </PageSection>
+  );
+};

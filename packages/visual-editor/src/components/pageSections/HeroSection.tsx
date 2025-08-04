@@ -33,7 +33,7 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
-import { ImmersiveHero } from "./heroVariants";
+import { ImmersiveHero, SpotlightHero, CompactHero } from "./heroVariants";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -74,7 +74,7 @@ export interface HeroStyles {
    * The visual variant for the hero section.
    * @defaultValue classic
    */
-  variant: "classic" | "immersive";
+  variant: "classic" | "immersive" | "spotlight" | "compact";
 
   /**
    * The background color for the entire section.
@@ -116,6 +116,24 @@ export interface HeroStyles {
    * Styling options for the hero image, such as aspect ratio.
    */
   image: ImageStylingProps;
+
+  /**
+   * Container position for spotlight variant (left or center).
+   * @defaultValue left
+   */
+  containerPosition?: "left" | "center";
+
+  /**
+   * Content alignment for spotlight variant (left or center).
+   * @defaultValue left
+   */
+  contentAlignment?: "left" | "center";
+
+  /**
+   * Text alignment for spotlight variant (left or center).
+   * @defaultValue left
+   */
+  textAlignment?: "left" | "center";
 }
 
 export interface HeroSectionProps {
@@ -200,6 +218,14 @@ const heroSectionFields: Fields<HeroSectionProps> = {
             label: msg("fields.options.immersive", "Immersive"),
             value: "immersive",
           },
+          {
+            label: msg("fields.options.spotlight", "Spotlight"),
+            value: "spotlight",
+          },
+          {
+            label: msg("fields.options.compact", "Compact"),
+            value: "compact",
+          },
         ],
       }),
       backgroundColor: YextField(
@@ -266,6 +292,63 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         type: "object",
         objectFields: ImageStylingFields,
       }),
+      containerPosition: YextField(
+        msg("fields.containerPosition", "Container Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.center", "Center", {
+                context: "direction",
+              }),
+              value: "center",
+            },
+          ],
+        }
+      ),
+      contentAlignment: YextField(
+        msg("fields.contentAlignment", "Content Alignment"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.center", "Center", {
+                context: "direction",
+              }),
+              value: "center",
+            },
+          ],
+        }
+      ),
+      textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.center", "Center", {
+              context: "direction",
+            }),
+            value: "center",
+          },
+        ],
+      }),
     },
   }),
   liveVisibility: YextField(
@@ -310,6 +393,16 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   // Immersive variant styling
   if (styles.variant === "immersive") {
     return <ImmersiveHero data={data} styles={styles} />;
+  }
+
+  // Spotlight variant styling
+  if (styles.variant === "spotlight") {
+    return <SpotlightHero data={data} styles={styles} />;
+  }
+
+  // Compact variant styling
+  if (styles.variant === "compact") {
+    return <CompactHero data={data} styles={styles} />;
   }
 
   // Classic variant (existing implementation)
@@ -521,6 +614,9 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       image: {
         aspectRatio: 1.78, // 16:9 default
       },
+      containerPosition: "left",
+      contentAlignment: "left",
+      textAlignment: "left",
     },
     analytics: {
       scope: "heroSection",

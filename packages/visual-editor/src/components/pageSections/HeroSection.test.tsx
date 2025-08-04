@@ -266,6 +266,173 @@ const tests: ComponentTest[] = [
     },
     version: 9,
   },
+  {
+    name: "spotlight variant with center alignment",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Business Name",
+          constantValueEnabled: true,
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier",
+          constantValueEnabled: true,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Call To Action",
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: "Call To Action",
+              link: "#",
+              linkType: "URL",
+            },
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "spotlight",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        businessNameLevel: 3,
+        localGeoModifierLevel: 1,
+        primaryCTA: "primary",
+        secondaryCTA: "secondary",
+        image: {
+          width: 640,
+          aspectRatio: 1.78,
+        },
+        containerPosition: "center",
+        contentAlignment: "center",
+        textAlignment: "center",
+      },
+      liveVisibility: true,
+    },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "compact variant with center alignment",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Business Name",
+          constantValueEnabled: true,
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier",
+          constantValueEnabled: true,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Call To Action",
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: "Call To Action",
+              link: "#",
+              linkType: "URL",
+            },
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        businessNameLevel: 3,
+        localGeoModifierLevel: 1,
+        primaryCTA: "primary",
+        secondaryCTA: "secondary",
+        image: {
+          width: 640,
+          aspectRatio: 1.78,
+        },
+        contentAlignment: "center",
+        textAlignment: "center",
+      },
+      liveVisibility: true,
+    },
+    version: migrationRegistry.length,
+  },
 ];
 
 describe("HeroSection", async () => {
