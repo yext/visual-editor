@@ -4,65 +4,51 @@ import {
   themeManagerCn,
   backgroundColors,
   Background,
-  ContentBlockCategory,
   YextField,
   VisibilityWrapper,
-  LayoutBlockCategory,
+  getAnalyticsScopeHash,
+  msg,
 } from "@yext/visual-editor";
-import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
+import { layoutProps, layoutVariants } from "../Layout.tsx";
+import { AdvancedCoreInfoCategory } from "../_componentCategories";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface GridProps extends layoutProps {
-  rows: number;
   columns: number;
   liveVisibility: boolean;
+  /** @internal */
+  analytics?: {
+    scope?: string;
+  };
 }
 
 const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
-  (
-    {
-      className,
-      rows = 1,
-      columns = 2,
-      gap,
-      verticalPadding,
-      horizontalPadding,
-      backgroundColor,
-      columnFormatting,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, columns = 2, backgroundColor }, ref) => {
     return (
       <Background
         background={backgroundColor}
         className={themeManagerCn(
-          layoutVariants({
-            verticalPadding,
-            horizontalPadding,
-          })
+          "flex flex-col components w-full px-4 py-pageSection-verticalPadding items-center",
+          className
         )}
       >
         <div
-          className={themeManagerCn(
-            layoutVariants({ gap, columnFormatting }),
-            `flex flex-col min-h-0 min-w-0 max-w-pageSection-contentWidth`,
-            className
-          )}
+          className={
+            "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
+            columns
+          }
           ref={ref}
-          style={{
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            gridTemplateRows: `repeat(${rows}, 1fr)`,
-          }}
-          {...props}
         >
-          {Array.from({ length: columns * rows })?.map((_, idx) => (
-            <div className="w-full" key={idx}>
-              <DropZone
-                className="flex flex-col w-full"
-                zone={`column-${idx}`}
-                allow={[...ContentBlockCategory, ...LayoutBlockCategory]}
-              />
-            </div>
+          {Array.from({ length: columns })?.map((_, idx) => (
+            <DropZone
+              key={idx}
+              className={themeManagerCn(
+                layoutVariants({ gap: "4" }),
+                `flex flex-col`
+              )}
+              zone={`column-${idx}`}
+              allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
+            />
           ))}
         </div>
       </Background>
@@ -73,46 +59,57 @@ const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: Fields<GridProps> = {
-  rows: YextField("Rows", {
-    type: "number",
-    min: 1,
-    max: 12,
-  }),
-  columns: YextField("Columns", {
-    type: "number",
-    min: 1,
-    max: 12,
-  }),
-  ...layoutFields,
-  liveVisibility: YextField("Visible on Live Page", {
+  columns: YextField(msg("fields.columns", "Columns"), {
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("fields.options.two", "Two"), value: 2 },
+      { label: msg("fields.options.three", "Three"), value: 3 },
     ],
   }),
+  backgroundColor: YextField(
+    msg("fields.backgroundColor", "Background Color"),
+    {
+      type: "select",
+      options: "BACKGROUND_COLOR",
+    }
+  ),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: true },
+      ],
+    }
+  ),
 };
 
+/**
+ * The Grid Section component presents a series of columns into which a variety of smaller content blocks may be dragged, allowing for a higher degree of customization.
+ */
 export const Grid: ComponentConfig<GridProps> = {
-  label: "Grid",
+  label: msg("components.gridSection", "Grid Section"),
   fields: gridSectionFields,
   defaultProps: {
-    rows: 1,
     columns: 2,
-    gap: "4",
-    verticalPadding: "0",
-    horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,
-    columnFormatting: "default",
     liveVisibility: true,
+    analytics: {
+      scope: "gridSection",
+    },
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-      iconSize="md"
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "gridSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <GridSection {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <GridSection {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };
