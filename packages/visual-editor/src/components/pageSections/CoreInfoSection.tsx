@@ -554,7 +554,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
-            <div className="w-full min-w-0 overflow-x-auto whitespace-nowrap">
+            <div
+              className="w-full min-w-0 overflow-x-auto whitespace-nowrap"
+              tabIndex={0}
+            >
               <HoursTableAtom
                 hours={resolvedHours}
                 startOfWeek={styles.hours.startOfWeek}
