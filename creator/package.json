@@ -1,0 +1,25 @@
+{
+  "name": "@yext/creator",
+  "version": "0.0.1",
+  "private": true,
+  "description": "AI-powered tool for generating visual-editor layouts.",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "pnpm run generate-component-data && pnpm run generate-layout",
+    "generate-layout": "tsx src/main.ts",
+    "generate-component-data": "tsx scripts/generate-component-data.ts"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@yext/visual-editor": "workspace:*",
+    "cheerio": "^1.1.2",
+    "puppeteer": "^24.15.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "ts-morph": "^26.0.0",
+    "typescript": "^5.3.3",
+    "dotenv": "^17.2.1"
+  }
+}
