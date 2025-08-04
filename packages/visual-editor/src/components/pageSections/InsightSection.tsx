@@ -201,17 +201,28 @@ const InsightCard = ({
       )}
       <div className="flex flex-col gap-8 p-8 flex-grow">
         <div className="flex flex-col gap-4">
-          {(insight.category || insight.publishTime) && (
-            <div
-              className={`flex ${insight.category && insight.publishTime && `gap-4`}`}
-            >
-              {insight.category && (
-                <Body>
-                  {resolveComponentData(insight.category, i18n.language)}
-                </Body>
-              )}
-              {insight.category && insight.publishTime && <Body>|</Body>}
-              {insight.publishTime && (
+          {((insight.category &&
+            resolveComponentData(insight.category, i18n.language)?.trim() !==
+              "") ||
+            (insight.publishTime && insight.publishTime.trim() !== "")) && (
+            <div className="flex gap-4">
+              {insight.category &&
+                resolveComponentData(
+                  insight.category,
+                  i18n.language
+                )?.trim() !== "" && (
+                  <Body>
+                    {resolveComponentData(insight.category, i18n.language)}
+                  </Body>
+                )}
+              {insight.category &&
+                resolveComponentData(
+                  insight.category,
+                  i18n.language
+                )?.trim() !== "" &&
+                insight.publishTime &&
+                insight.publishTime.trim() !== "" && <Body>|</Body>}
+              {insight.publishTime && insight.publishTime.trim() !== "" && (
                 <Timestamp date={insight.publishTime} hideTimeZone={true} />
               )}
             </div>
