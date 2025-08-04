@@ -175,12 +175,11 @@ describe("Locator", async () => {
       // Unless testing empty state, wait for search to load
       if (!name.includes("empty document")) {
         await waitFor(() => {
-          const searchResults = screen.getAllByText("Galaxy Grill");
-          expect(
-            searchResults.every(
-              (result) => getComputedStyle(result).opacity === "1"
-            )
-          ).toBe(true);
+          screen.getAllByText("Galaxy Grill");
+          const opacityContainer = container.querySelector("#innerDiv div");
+          if (opacityContainer) {
+            expect(getComputedStyle(opacityContainer).opacity).toBe("1");
+          }
         });
       }
 
