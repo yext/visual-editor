@@ -56,7 +56,7 @@ const footerFields: Fields<FooterProps> = {
 
 /**
  * The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component.
- * Avaliable on Directory and Locator templates.
+ * Available on Directory and Locator templates.
  */
 export const Footer: ComponentConfig<FooterProps> = {
   label: msg("components.footer", "Footer"),

@@ -1,4 +1,4 @@
-import { type Config } from "@measured/puck";
+import { DropZone, type Config } from "@measured/puck";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {
@@ -10,18 +10,23 @@ import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
+  AdvancedCoreInfoCategoryProps,
+  AdvancedCoreInfoCategoryComponents,
+  AdvancedCoreInfoCategory,
 } from "@yext/visual-editor";
 import * as React from "react";
 
 interface MainProps
   extends PageSectionCategoryProps,
     DirectoryCategoryProps,
-    OtherCategoryProps {}
+    OtherCategoryProps,
+    AdvancedCoreInfoCategoryProps {}
 
 const components: Config<MainProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...DirectoryCategoryComponents,
   ...OtherCategoryComponents,
+  ...AdvancedCoreInfoCategoryComponents,
 };
 
 // All the available components for locations
@@ -36,13 +41,20 @@ export const mainConfig: Config<MainProps> = {
       title: "Directory",
       components: DirectoryCategory,
     },
+    coreInformation: {
+      title: "Core Information",
+      components: AdvancedCoreInfoCategory,
+    },
   },
   root: {
-    render: ({ children }) => {
-      return React.cloneElement(children, {
-        ...children.props,
-        style: { display: "flex", flexDirection: "column", height: "100vh" },
-      });
+    render: () => {
+      return (
+        <DropZone
+          zone="default-zone"
+          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
+        />
+      );
     },
   },
 };
