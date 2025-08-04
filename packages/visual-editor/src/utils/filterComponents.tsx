@@ -8,7 +8,7 @@ const gatedLayoutComponents: string[] = ["CustomCodeSection", "GridSection"];
  *
  * @param config - The original configuration object.
  * @param additionalLayoutComponents - An optional list of gated component names to retain.
- * @returns The new configuration object with gated components that are not present in `additionalLayoutComponents` removed.
+ * @returns A new configuration object with all gated components removed, except for those listed in `additionalLayoutComponents`.
  */
 export const filterComponentsFromConfig = <T extends DefaultComponentProps>(
   config: Config<T>,
