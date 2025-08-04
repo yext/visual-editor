@@ -719,12 +719,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
     data: {
       primaryHeader: {
         logo: PLACEHOLDER_IMAGE,
-        links: [
-          defaultMainLink,
-          defaultMainLink,
-          defaultMainLink,
-          defaultMainLink,
-        ],
+        links: [defaultMainLink, defaultMainLink, defaultMainLink],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
           link: "#",

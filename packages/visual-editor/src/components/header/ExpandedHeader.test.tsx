@@ -47,12 +47,7 @@ const tests: ComponentTest[] = [
       data: {
         primaryHeader: {
           logo: "https://placehold.co/100",
-          links: [
-            defaultMainLinkV0,
-            defaultMainLinkV0,
-            defaultMainLinkV0,
-            defaultMainLinkV0,
-          ],
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
             link: "#",
