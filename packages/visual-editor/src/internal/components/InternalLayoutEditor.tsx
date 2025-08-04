@@ -6,9 +6,9 @@ import {
   InitialHistory,
   AppState,
   ActionBar,
-  usePuck,
-  ComponentData,
-  PuckAction,
+  useGetPuck,
+  walkTree,
+  ComponentDataOptionalId,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -22,6 +22,7 @@ import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 const devLogger = new DevLogger();
 
@@ -101,7 +102,10 @@ export const InternalLayoutEditor = ({
             saveLayoutSaveState({
               payload: {
                 hash: histories[index].id,
-                history: JSON.stringify(histories[index].state),
+                history: JSON.stringify({
+                  data: histories[index].state.data,
+                  ui: histories[index].state.ui,
+                }),
               },
             });
           }
@@ -141,65 +145,6 @@ export const InternalLayoutEditor = ({
     }
   };
 
-  const copyToClipboard = (data: ComponentData<any, string> | undefined) => {
-    if (!data) {
-      return;
-    }
-
-    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-  };
-
-  const pasteFromClipboard = async (
-    dispatch: (action: PuckAction) => void,
-    selectedComponentIndex: number | undefined,
-    selectedComponentType: string | undefined
-  ) => {
-    if (selectedComponentIndex === undefined) {
-      return;
-    }
-
-    try {
-      const rawClipboardText = await navigator.clipboard.readText();
-      const pastedData = JSON.parse(rawClipboardText);
-      if (
-        !pastedData.props ||
-        !pastedData.type ||
-        pastedData.type !== selectedComponentType
-      ) {
-        alert("Failed to paste: Invalid component data.");
-        return;
-      }
-      // Update the component data in the specified zone
-      dispatch({
-        type: "set",
-        state: (prevState) => {
-          const newContent = [...prevState.data.content];
-          if (
-            selectedComponentIndex !== undefined &&
-            newContent[selectedComponentIndex]
-          ) {
-            newContent[selectedComponentIndex] = {
-              ...newContent[selectedComponentIndex],
-              props: {
-                ...pastedData.props,
-                id: newContent[selectedComponentIndex].props.id, // Preserve original props.id
-              },
-            };
-          }
-          return {
-            ...prevState,
-            data: {
-              ...prevState.data,
-              content: newContent,
-            },
-          };
-        },
-      });
-    } catch (_) {
-      alert("Failed to paste: Invalid component data.");
-    }
-  };
-
   const translatedPuckConfigWithRootFields = React.useMemo(() => {
     const translatedComponents: Config["components"] = {};
     Object.entries(puckConfig.components).forEach(
@@ -229,6 +174,7 @@ export const InternalLayoutEditor = ({
               types: ["type.string"],
             },
           }),
+          ...puckConfig.root?.fields,
         },
         defaultProps: {
           title: {
@@ -241,6 +187,7 @@ export const InternalLayoutEditor = ({
             constantValue: "",
             constantValueEnabled: false,
           },
+          ...puckConfig.root?.defaultProps,
         },
       },
     } as Config;
@@ -278,21 +225,83 @@ export const InternalLayoutEditor = ({
             textarea: TranslatePuckFieldLabels,
           },
           actionBar: ({ children, label }) => {
-            const { appState, dispatch } = usePuck();
-            const selectedComponentIndex = appState.ui.itemSelector?.index;
-            const selectedZone = appState.ui.itemSelector?.zone;
-            const selectedComponent = appState.data.content.find(
-              (_item, index) =>
-                index === selectedComponentIndex &&
-                selectedZone === "default-zone"
-            );
-            const selectedComponentType = selectedComponent?.type;
+            const getPuck = useGetPuck();
+
+            const copyToClipboard = () => {
+              const { appState, getItemBySelector } = getPuck();
+
+              if (!appState.ui.itemSelector) {
+                return;
+              }
+
+              const selectedComponent = getItemBySelector(
+                appState.ui.itemSelector
+              );
+              navigator.clipboard.writeText(
+                JSON.stringify(selectedComponent, null, 2)
+              );
+            };
+
+            const pasteFromClipboard = async () => {
+              const { appState, dispatch, getItemBySelector } = getPuck();
+
+              if (
+                !appState?.ui?.itemSelector?.zone ||
+                appState?.ui?.itemSelector?.index === undefined
+              ) {
+                return;
+              }
+
+              const selectedComponent = getItemBySelector({
+                index: appState.ui.itemSelector?.index,
+                zone: appState.ui.itemSelector?.zone,
+              });
+
+              if (!selectedComponent) {
+                return;
+              }
+
+              try {
+                const rawClipboardText = await navigator.clipboard.readText();
+                const pastedData = JSON.parse(rawClipboardText);
+                if (
+                  !pastedData.props ||
+                  !pastedData.type ||
+                  pastedData.type !== selectedComponent?.type
+                ) {
+                  alert("Failed to paste: Invalid component data.");
+                  return;
+                }
+
+                // If the pasted data has children, we need to generate new ids for them
+                const newData = walkTree(pastedData, puckConfig, (contents) =>
+                  contents.map((item: ComponentDataOptionalId) => {
+                    const id = `${item.type}-${uuidv4()}`;
+                    return {
+                      ...item,
+                      props: { ...item.props, id },
+                    };
+                  })
+                );
+                // preserve the selected component's id and type
+                newData.props.id = selectedComponent.props.id;
+
+                dispatch({
+                  type: "replace",
+                  destinationZone: appState.ui.itemSelector.zone,
+                  destinationIndex: appState.ui.itemSelector.index,
+                  data: newData,
+                });
+              } catch (_) {
+                alert("Failed to paste: Invalid component data.");
+              }
+            };
 
             const additionalActions = (
               <>
                 <ActionBar.Action
                   label={pt("actions.copyToClipboard", "Copy to Clipboard")}
-                  onClick={() => copyToClipboard(selectedComponent)}
+                  onClick={copyToClipboard}
                 >
                   <ClipboardCopyIcon size={16} />
                 </ActionBar.Action>
@@ -301,13 +310,7 @@ export const InternalLayoutEditor = ({
                     "actions.pasteFromClipboard",
                     "Paste from Clipboard"
                   )}
-                  onClick={async () =>
-                    await pasteFromClipboard(
-                      dispatch,
-                      selectedComponentIndex,
-                      selectedComponentType
-                    )
-                  }
+                  onClick={pasteFromClipboard}
                 >
                   <ClipboardPasteIcon size={16} />
                 </ActionBar.Action>
