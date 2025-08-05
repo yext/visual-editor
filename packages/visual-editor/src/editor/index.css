@@ -9,6 +9,7 @@
 .HoursTable-row {
   display: flex;
   justify-content: space-between;
+  width: 18rem;
 }
 
 .components .HoursTable-intervals {
