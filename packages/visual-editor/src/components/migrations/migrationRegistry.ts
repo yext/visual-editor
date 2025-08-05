@@ -11,6 +11,7 @@ import { addShowAverageReviewMigration } from "./0009_add_show_average_reviews.t
 import { updateExpandedHeaderStylesMigration } from "./0010_update_expanded_header_styles.ts";
 import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
 import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
+import { enhanceCTATypes } from "./0013_enhance_cta_types.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -30,4 +31,5 @@ export const migrationRegistry: MigrationRegistry = [
   updateExpandedHeaderStylesMigration,
   addDirectoryTitleMigration,
   addHeaderFooterMaxWidth,
+  enhanceCTATypes,
 ];

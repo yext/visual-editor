@@ -8,7 +8,6 @@ import {
   BackgroundStyle,
   backgroundColors,
   Heading,
-  CTA,
   PageSection,
   YextField,
   VisibilityWrapper,
@@ -26,6 +25,7 @@ import {
   getAnalyticsScopeHash,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { EnhancedCTA } from "../atoms/enhancedCta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ImageStylingFields,
@@ -256,7 +256,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
-            <CTA
+            <EnhancedCTA
               eventName={`cta`}
               variant={styles?.ctaVariant}
               label={resolveComponentData(
@@ -266,6 +266,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               )}
               link={resolvedPromo?.cta.link}
               linkType={resolvedPromo?.cta.linkType}
+              ctaType={resolvedPromo?.cta.ctaType}
+              coordinate={resolvedPromo?.cta.coordinate}
+              presetImageType={resolvedPromo?.cta.presetImageType}
             />
           </EntityField>
         )}

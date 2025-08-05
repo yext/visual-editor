@@ -121,6 +121,7 @@
     "copyrightMessage": "Copyright Message",
     "copyrightText": "Copyright Text",
     "cta": "CTA",
+    "ctaType": "CTA Type",
     "ctaVariant": "CTA Variant",
     "data": "Data",
     "dayOfWeekFormat": "Day of Week Format",
@@ -463,5 +464,34 @@
   "updatePage": "Update Page",
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
   "visitPage": "Visit Page",
-  "wednesday": "Wednesday"
+  "wednesday": "Wednesday",
+  "ctaTypes": {
+    "textAndLink": "Text & Link",
+    "getDirections": "Get Directions",
+    "presetImage": "Preset Image"
+  },
+  "presetImages": {
+    "phone": "Phone",
+    "email": "Email",
+    "location": "Location",
+    "calendar": "Calendar",
+    "star": "Star",
+    "heart": "Heart",
+    "share": "Share",
+    "download": "Download",
+    "play": "Play",
+    "pause": "Pause",
+    "next": "Next",
+    "previous": "Previous",
+    "menu": "Menu",
+    "search": "Search",
+    "close": "Close",
+    "check": "Check",
+    "plus": "Plus",
+    "minus": "Minus",
+    "arrowRight": "Arrow Right",
+    "arrowLeft": "Arrow Left",
+    "arrowUp": "Arrow Up",
+    "arrowDown": "Arrow Down"
+  }
 }

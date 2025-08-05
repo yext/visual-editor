@@ -5,7 +5,7 @@ import {
   TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { enhancedTranslatableCTAFields } from "./EnhancedCallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -30,6 +30,7 @@ export const defaultEvent: EventStruct = {
     link: "#",
     label: { en: "Learn More", hasLocalizedValue: "true" },
     linkType: "URL",
+    ctaType: "textAndLink",
   },
 };
 
@@ -90,7 +91,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       title: titleField,
       dateTime: DateTimeSelector,
       description: descriptionField,
-      cta: translatableCTAFields(),
+      cta: enhancedTranslatableCTAFields(),
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {

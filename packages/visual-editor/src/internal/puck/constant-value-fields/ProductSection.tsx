@@ -7,7 +7,7 @@ import {
 } from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { enhancedTranslatableCTAFields } from "./EnhancedCallToAction.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useMemo } from "react";
@@ -32,6 +32,7 @@ export const defaultProduct: ProductStruct = {
     link: "#",
     label: { en: "Learn More", hasLocalizedValue: "true" },
     linkType: "URL",
+    ctaType: "textAndLink",
   },
 };
 
@@ -100,7 +101,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       name: nameField,
       category: categoryField,
       description: descriptionField,
-      cta: translatableCTAFields(),
+      cta: enhancedTranslatableCTAFields(),
     },
     defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {

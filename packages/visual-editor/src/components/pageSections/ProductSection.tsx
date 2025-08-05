@@ -235,11 +235,15 @@ const ProductCard = ({
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveComponentData(
-              product.cta.label,
-              i18n.language,
-              streamDocument
-            )}
+            label={
+              product.cta.label
+                ? resolveComponentData(
+                    product.cta.label,
+                    i18n.language,
+                    streamDocument
+                  )
+                : undefined
+            }
             link={product.cta.link}
             linkType={product.cta.linkType}
             className="mt-auto"

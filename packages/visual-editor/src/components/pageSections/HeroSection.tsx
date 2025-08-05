@@ -11,7 +11,6 @@ import {
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-  CTA,
   Heading,
   PageSection,
   YextField,
@@ -29,6 +28,7 @@ import {
   getAggregateRating,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { EnhancedCTA } from "../atoms/enhancedCta";
 import {
   ImageStylingFields,
   ImageStylingProps,
@@ -367,7 +367,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                   data.hero.constantValueOverride.primaryCta
                 }
               >
-                <CTA
+                <EnhancedCTA
                   eventName={`primaryCta`}
                   variant={styles?.primaryCTA}
                   label={resolveComponentData(
@@ -376,6 +376,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                   )}
                   link={resolvedHero.primaryCta.link}
                   linkType={resolvedHero.primaryCta.linkType}
+                  ctaType={resolvedHero.primaryCta.ctaType}
+                  coordinate={resolvedHero.primaryCta.coordinate}
+                  presetImageType={resolvedHero.primaryCta.presetImageType}
                   className={"py-3"}
                 />
               </EntityField>
@@ -388,7 +391,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                   data.hero.constantValueOverride.secondaryCta
                 }
               >
-                <CTA
+                <EnhancedCTA
                   eventName={`secondaryCta`}
                   variant={styles?.secondaryCTA}
                   label={resolveComponentData(
@@ -397,6 +400,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                   )}
                   link={resolvedHero.secondaryCta.link}
                   linkType={resolvedHero.secondaryCta.linkType}
+                  ctaType={resolvedHero.secondaryCta.ctaType}
+                  coordinate={resolvedHero.secondaryCta.coordinate}
+                  presetImageType={resolvedHero.secondaryCta.presetImageType}
                   className={"py-3"}
                 />
               </EntityField>
