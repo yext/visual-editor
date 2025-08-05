@@ -562,6 +562,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 hours={resolvedHours}
                 startOfWeek={styles.hours.startOfWeek}
                 collapseDays={styles.hours.collapseDays}
+                className={"w-full"}
               />
             </div>
           </EntityField>

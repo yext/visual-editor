@@ -204,7 +204,7 @@ export const testHours = {
   tuesday: {
     openIntervals: [
       {
-        end: "9:00",
+        end: "19:00",
         start: "10:00",
       },
     ],
