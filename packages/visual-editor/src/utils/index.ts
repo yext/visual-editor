@@ -6,6 +6,7 @@ export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
 export { applyTheme } from "./applyTheme.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
+export { filterComponentsFromConfig } from "./filterComponents.tsx";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export {
   migrate,
