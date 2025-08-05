@@ -38,8 +38,8 @@ import {
   useDocument,
   Toggle,
   YextField,
-  getLocationPath,
   useTemplateProps,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -568,8 +568,9 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
 const LocationCard: CardComponent<Location> = ({
   result,
 }: CardProps<Location>): React.JSX.Element => {
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
-  const { relativePrefixToRoot } = useTemplateProps();
+  const locale = i18n.language;
 
   const location = result.rawData;
   const distance = result.distance;
@@ -677,9 +678,9 @@ const LocationCard: CardComponent<Location> = ({
         </div>
         <Button asChild className="basis-full" variant="primary">
           <a
-            href={getLocationPath(
-              location,
-              i18n.language,
+            href={resolveUrlTemplate(
+              streamDocument,
+              locale,
               relativePrefixToRoot
             )}
             onClick={handleVisitPageClick}

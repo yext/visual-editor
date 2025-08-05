@@ -17,10 +17,10 @@ import {
   msg,
   ThemeOptions,
   MaybeLink,
-  getLocationPath,
-  useTemplateProps,
   resolveComponentData,
   Body,
+  resolveUrlTemplate,
+  useTemplateProps,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -281,8 +281,6 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
-  id,
-  slug,
 }: {
   cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
@@ -291,11 +289,10 @@ const LocationCard = ({
   address: AddressType;
   timezone: string;
   mainPhone: string;
-  id: string;
-  slug?: string;
 }) => {
-  const { relativePrefixToRoot } = useTemplateProps();
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   return (
     <Background
@@ -307,11 +304,7 @@ const LocationCard = ({
         eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
         className="mb-2"
-        href={getLocationPath(
-          { address, slug, id },
-          i18n.language,
-          relativePrefixToRoot
-        )}
+        href={resolveUrlTemplate(streamDocument, locale, relativePrefixToRoot)}
       >
         <Heading
           level={styles?.cards.headingLevel}
@@ -483,13 +476,11 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     key={index}
                     cardNumber={index}
                     styles={styles}
-                    id={location.id}
                     name={location.name}
                     address={location.address}
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
-                    slug={location.slug}
                   />
                 )
               )}

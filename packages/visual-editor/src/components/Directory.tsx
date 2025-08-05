@@ -15,8 +15,8 @@ import {
   Background,
   HeadingLevel,
   YextEntityField,
-  getLocationPath,
   resolveComponentData,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
@@ -171,8 +171,9 @@ const DirectoryCard = ({
   profile: any;
   cardStyles: DirectoryProps["styles"]["cards"];
 }) => {
-  const { relativePrefixToRoot } = useTemplateProps();
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   return (
     <Background
@@ -184,7 +185,11 @@ const DirectoryCard = ({
           eventName={`link${cardNumber}`}
           alwaysHideCaret={true}
           className="mb-2"
-          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
+          href={resolveUrlTemplate(
+            streamDocument,
+            locale,
+            relativePrefixToRoot
+          )}
         >
           <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}
