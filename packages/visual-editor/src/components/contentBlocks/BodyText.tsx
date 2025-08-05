@@ -14,9 +14,10 @@ import {
   TranslatableString,
 } from "@yext/visual-editor";
 
-export interface BodyTextProps extends BodyProps {
+export type BodyTextProps = {
   text: YextEntityField<TranslatableString>;
-}
+  variant: BodyProps["variant"];
+};
 
 const bodyTextFields: Fields<BodyTextProps> = {
   text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {

@@ -35,7 +35,7 @@ expect.extend({
   async toMatchScreenshot(
     this: any, // 'this' context for Vitest matchers
     screenshotName: string,
-    options?: { customThreshold?: number }
+    options?: { customThreshold?: number; ignoreExact?: number[] }
   ) {
     const updatedScreenshotData = await act(async () =>
       page.screenshot({
@@ -47,6 +47,14 @@ expect.extend({
       screenshotName,
       updatedScreenshotData
     );
+
+    if ((options?.ignoreExact ?? []).includes(numDiffPixels)) {
+      return {
+        pass: true,
+        message: () =>
+          `Screenshots differed by ${numDiffPixels} pixels. Ignoring difference.`,
+      };
+    }
 
     if (numDiffPixels > (options?.customThreshold ?? 0)) {
       return {

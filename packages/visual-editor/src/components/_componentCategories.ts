@@ -163,6 +163,42 @@ export const LocatorCategory = Object.keys(
   LocatorCategoryComponents
 ) as (keyof LocatorCategoryProps)[];
 
+export interface AdvancedCoreInfoCategoryProps {
+  Grid: GridProps;
+  Address: AddressProps;
+  BodyText: BodyTextProps;
+  CTAWrapper: CTAWrapperProps;
+  Emails: EmailsProps;
+  GetDirections: GetDirectionsProps;
+  HeadingText: HeadingTextProps;
+  HoursTable: HoursTableProps;
+  HoursStatus: HoursStatusProps;
+  ImageWrapper: ImageWrapperProps;
+  MapboxStaticMap: MapboxStaticProps;
+  Phone: PhoneProps;
+  TextList: TextListProps;
+}
+
+export const AdvancedCoreInfoCategoryComponents = {
+  Grid,
+  Address,
+  BodyText,
+  CTAWrapper,
+  Emails,
+  GetDirections,
+  HeadingText,
+  HoursStatus,
+  HoursTable,
+  ImageWrapper,
+  MapboxStaticMap,
+  Phone,
+  TextList,
+};
+
+export const AdvancedCoreInfoCategory = Object.keys(
+  AdvancedCoreInfoCategoryComponents
+) as (keyof AdvancedCoreInfoCategoryProps)[];
+
 export interface DeprecatedCategoryProps {
   Header: HeaderProps;
   Footer: FooterProps;

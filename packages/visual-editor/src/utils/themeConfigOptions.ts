@@ -327,6 +327,29 @@ const phoneOptions = [
   },
 ];
 
+const maxWidthOptions = [
+  {
+    label: msg("theme.contentWidth.compact", "Compact (768px)"),
+    value: "768px",
+  },
+  {
+    label: msg("theme.contentWidth.narrow", "Narrow (960px)"),
+    value: "960px",
+  },
+  {
+    label: msg("theme.contentWidth.standard", "Standard (1024px)"),
+    value: "1024px",
+  },
+  {
+    label: msg("theme.contentWidth.wide", "Wide (1280px)"),
+    value: "1280px",
+  },
+  {
+    label: msg("theme.contentWidth.extraWide", "Extra Wide (1440px)"),
+    value: "1440px",
+  },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
@@ -342,4 +365,5 @@ export const ThemeOptions = {
   FONT_SIZE: getFontSizeOptions,
   HOURS_OPTIONS: hoursOptions,
   PHONE_OPTIONS: phoneOptions,
+  MAX_WIDTH: maxWidthOptions,
 };
