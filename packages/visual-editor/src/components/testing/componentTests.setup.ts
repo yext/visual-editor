@@ -164,7 +164,7 @@ export const testHours = {
   friday: {
     openIntervals: [
       {
-        end: "22:00",
+        end: "16:00",
         start: "10:00",
       },
     ],
@@ -188,8 +188,8 @@ export const testHours = {
   sunday: {
     openIntervals: [
       {
-        end: "22:00",
-        start: "10:00",
+        end: "14:00",
+        start: "11:00",
       },
     ],
   },
@@ -204,7 +204,7 @@ export const testHours = {
   tuesday: {
     openIntervals: [
       {
-        end: "22:00",
+        end: "19:00",
         start: "10:00",
       },
     ],

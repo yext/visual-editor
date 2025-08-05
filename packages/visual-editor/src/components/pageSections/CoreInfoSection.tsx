@@ -542,7 +542,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
-              <Heading level={styles.heading.level}>{hoursHeadingText}</Heading>
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles.heading.level}>
+                  {hoursHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
           <EntityField
@@ -550,11 +554,17 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
-            <HoursTableAtom
-              hours={resolvedHours}
-              startOfWeek={styles.hours.startOfWeek}
-              collapseDays={styles.hours.collapseDays}
-            />
+            <div
+              className="w-full min-w-0 overflow-x-auto whitespace-nowrap"
+              tabIndex={0}
+            >
+              <HoursTableAtom
+                hours={resolvedHours}
+                startOfWeek={styles.hours.startOfWeek}
+                collapseDays={styles.hours.collapseDays}
+                className={"w-full"}
+              />
+            </div>
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
             <EntityField
@@ -581,9 +591,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 data.services.headingText.constantValueEnabled
               }
             >
-              <Heading level={styles.heading.level}>
-                {servicesHeadingText}
-              </Heading>
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles.heading.level}>
+                  {servicesHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
           <EntityField

@@ -40,7 +40,7 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
       }}
       className={themeManagerCn(
         "text-body-fontSize font-body-fontWeight font-body-fontFamily",
-        className
+        className ?? ""
       )}
     />
   );
