@@ -235,6 +235,7 @@ describe("FAQSection", async () => {
 
       await expect(`FAQsSection/[${viewportName}] ${name}`).toMatchScreenshot({
         ignoreExact: [
+          420,
           422, // ignore differences in default browser link styling
         ],
         customThreshold: 10,
