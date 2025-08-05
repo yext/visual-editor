@@ -121,7 +121,7 @@ export interface ExpandedFooterProps {
   styles: ExpandedFooterStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -365,6 +365,15 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       ),
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
