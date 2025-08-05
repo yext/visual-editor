@@ -102,6 +102,7 @@
   "fields": {
     "address": "Uzruna",
     "alignCard": "Izlīdzināt karti",
+    "analytics": "Analītika",
     "answer": "Atbildēt",
     "apiKey": "API atslēga",
     "aspectRatioForLogo": "Logotipa malu attiecība",
@@ -249,6 +250,7 @@
     "promo": "Reklamēt",
     "question": "Apšaubīt",
     "radiusMiles": "Rādiuss (jūdzes)",
+    "scope": "Apjoms",
     "secondaryCTA": "Sekundārā CTA",
     "secondaryCTAVariant": "Sekundārais CTA variants",
     "secondaryCta": "Sekundārā CTA",

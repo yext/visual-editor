@@ -79,7 +79,7 @@ export interface InsightSectionProps {
   styles: InsightStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -153,6 +153,15 @@ const insightSectionFields: Fields<InsightSectionProps> = {
             options: "CTA_VARIANT",
           }),
         },
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
