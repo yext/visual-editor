@@ -386,7 +386,10 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   };
 
   const hasCoreInfo: boolean =
-    addressHeadingText || resolvedAddress || resolvedEmails || coordinates;
+    !!addressHeadingText ||
+    !!resolvedAddress ||
+    resolvedEmails?.length > 0 ||
+    !!coordinates;
 
   const justifyClass = styles?.heading?.align
     ? {
