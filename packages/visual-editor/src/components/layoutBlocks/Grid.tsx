@@ -16,6 +16,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 export interface GridProps extends layoutProps {
   columns: number;
   liveVisibility: boolean;
+  className?: string;
   /** @internal */
   analytics?: {
     scope?: string;

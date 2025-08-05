@@ -176,6 +176,10 @@ describe("Locator", async () => {
       if (!name.includes("empty document")) {
         await waitFor(() => {
           screen.getAllByText("Galaxy Grill");
+          const opacityContainer = container.querySelector("#innerDiv div");
+          if (opacityContainer) {
+            expect(getComputedStyle(opacityContainer).opacity).toBe("1");
+          }
         });
       }
 
