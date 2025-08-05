@@ -387,7 +387,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
   const hasCoreInfo: boolean =
     !!addressHeadingText ||
-    !!resolvedAddress ||
+    !!resolvedAddress?.line1 ||
+    !!resolvedAddress?.city ||
     resolvedEmails?.length > 0 ||
     !!coordinates;
 
