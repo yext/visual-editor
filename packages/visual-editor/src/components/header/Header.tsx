@@ -50,7 +50,7 @@ export interface HeaderProps {
   enableLanguageSelector: boolean;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -70,6 +70,15 @@ const headerFields: Fields<HeaderProps> = {
       ],
     }
   ),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
 };
 
 /**

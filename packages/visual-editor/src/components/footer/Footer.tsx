@@ -39,7 +39,7 @@ export interface FooterProps {
   backgroundColor?: BackgroundStyle;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -52,6 +52,15 @@ const footerFields: Fields<FooterProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
 };
 
 /**

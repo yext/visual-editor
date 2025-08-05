@@ -24,7 +24,7 @@ export interface CustomCodeSectionProps {
   javascript: string;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -41,6 +41,15 @@ const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
   javascript: YextField("JavaScript", {
     type: "code",
     codeLanguage: "javascript",
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
   }),
 };
 

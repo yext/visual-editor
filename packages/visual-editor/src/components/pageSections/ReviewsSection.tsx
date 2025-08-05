@@ -32,7 +32,7 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
 
 export type ReviewsSectionProps = {
   backgroundColor: BackgroundStyle;
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 };
@@ -45,6 +45,15 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
+    },
+  }),
 };
 
 const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (

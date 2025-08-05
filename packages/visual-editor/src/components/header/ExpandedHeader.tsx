@@ -102,7 +102,7 @@ export interface ExpandedHeaderProps {
   styles: ExpandedHeaderStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -188,7 +188,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           ),
         },
       }),
-
       secondaryHeader: YextField(
         msg("fields.secondaryHeader", "Secondary Header"),
         {
@@ -288,6 +287,15 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       ),
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
+      }),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
       }),
     },
   }),

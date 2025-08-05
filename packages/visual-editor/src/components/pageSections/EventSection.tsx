@@ -80,7 +80,7 @@ export interface EventSectionProps {
   styles: EventStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -154,6 +154,15 @@ const eventSectionFields: Fields<EventSectionProps> = {
             options: "CTA_VARIANT",
           }),
         },
+      }),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
       }),
     },
   }),

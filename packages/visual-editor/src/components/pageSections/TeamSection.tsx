@@ -79,7 +79,7 @@ export interface TeamSectionProps {
   styles: TeamStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -153,6 +153,15 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
             options: "CTA_VARIANT",
           }),
         },
+      }),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
       }),
     },
   }),

@@ -125,7 +125,7 @@ export interface HeroSectionProps {
   styles: HeroStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -248,6 +248,15 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       image: YextField(msg("fields.image", "Image"), {
         type: "object",
         objectFields: ImageStylingFields,
+      }),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
       }),
     },
   }),

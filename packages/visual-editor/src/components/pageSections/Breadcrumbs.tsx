@@ -51,7 +51,7 @@ export interface BreadcrumbsSectionProps {
   /**
    * @internal
    */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -82,6 +82,15 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
+      }),
     },
   }),
   liveVisibility: YextField(

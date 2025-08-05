@@ -74,7 +74,7 @@ export interface FAQSectionProps {
   styles: FAQStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -127,6 +127,15 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
             options: ThemeOptions.ALIGNMENT,
           }),
         },
+      }),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
       }),
     },
   }),

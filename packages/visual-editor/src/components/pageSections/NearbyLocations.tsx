@@ -114,7 +114,7 @@ export interface NearbyLocationsSectionProps {
   styles: NearbyLocationsStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -258,6 +258,15 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
             }
           ),
         },
+      }),
+    },
+  }),
+  analytics: YextField("Analytics", {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField("Scope", {
+        type: "text",
       }),
     },
   }),
