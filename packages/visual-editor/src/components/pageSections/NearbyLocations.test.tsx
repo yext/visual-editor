@@ -1,5 +1,5 @@
 import * as React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   axe,
   ComponentTest,
@@ -46,9 +46,6 @@ const tests: ComponentTest[] = [
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
     },
     props: { ...NearbyLocationsSection.defaultProps },
-    interactions: async () => {
-      await delay(1000);
-    },
     version: migrationRegistry.length,
   },
   {
@@ -73,6 +70,8 @@ const tests: ComponentTest[] = [
     },
     props: { ...NearbyLocationsSection.defaultProps },
     interactions: async () => {
+      // re-enable fetch
+      vi.unstubAllGlobals();
       await delay(1000);
     },
     version: migrationRegistry.length,
@@ -144,9 +143,6 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    interactions: async () => {
-      await delay(1000);
-    },
     version: 10,
   },
   {
@@ -214,6 +210,8 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     interactions: async () => {
+      // re-enable fetch
+      vi.unstubAllGlobals();
       await delay(1000);
     },
     version: 10,
@@ -221,6 +219,10 @@ const tests: ComponentTest[] = [
 ];
 
 describe("NearbyLocationsSection", async () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   const puckConfig: Config = {
     components: { NearbyLocationsSection },
     root: {
@@ -270,6 +272,14 @@ describe("NearbyLocationsSection", async () => {
         await waitFor(() => {
           expect(page.getByText("Washington, DC")).toBeInTheDocument();
         });
+      } else {
+        // block fetch to ensure loading screen
+        vi.stubGlobal(
+          "fetch",
+          vi.fn(() => {
+            throw new Error("Network access currently disabled");
+          })
+        );
       }
 
       await expect(
