@@ -389,6 +389,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     !!addressHeadingText ||
     !!resolvedAddress?.line1 ||
     !!resolvedAddress?.city ||
+    !!resolvedAddress?.postalCode ||
+    !!resolvedAddress?.countryCode ||
     resolvedEmails?.length > 0 ||
     !!coordinates;
 
