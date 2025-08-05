@@ -391,8 +391,9 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     !!resolvedAddress?.city ||
     !!resolvedAddress?.postalCode ||
     !!resolvedAddress?.countryCode ||
+    data?.info?.phoneNumbers?.length > 0 ||
     resolvedEmails?.length > 0 ||
-    !!coordinates;
+    !!(coordinates && styles?.info?.showGetDirectionsLink);
 
   const justifyClass = styles?.heading?.align
     ? {
