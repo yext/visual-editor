@@ -353,6 +353,31 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     locale,
     streamDocument
   );
+
+  type ResolvedPhoneNumber = {
+    number: string;
+    label?: string;
+  };
+  const resolvedPhoneNumbers: ResolvedPhoneNumber[] =
+    data?.info?.phoneNumbers
+      ?.map((item): ResolvedPhoneNumber | null => {
+        const number = resolveComponentData(
+          item.number,
+          locale,
+          streamDocument
+        );
+        const label = resolveComponentData(
+          item.label,
+          i18n.language,
+          streamDocument
+        );
+
+        if (!number) return null;
+
+        return { number, label };
+      })
+      ?.filter((item): item is ResolvedPhoneNumber => item !== null) ?? [];
+
   const hoursHeadingText = resolveComponentData(
     data.hours.headingText,
     locale,
@@ -391,7 +416,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     !!resolvedAddress?.city ||
     !!resolvedAddress?.postalCode ||
     !!resolvedAddress?.countryCode ||
-    data?.info?.phoneNumbers?.length > 0 ||
+    resolvedPhoneNumbers?.length > 0 ||
     resolvedEmails?.length > 0 ||
     !!(coordinates && styles?.info?.showGetDirectionsLink);
 
@@ -460,38 +485,31 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               />
             )}
           </div>
-          {data.info.phoneNumbers && (
+          {resolvedPhoneNumbers.length > 0 && (
             <ul className="flex flex-col gap-4">
-              {data.info.phoneNumbers.map((item, idx) => {
-                const resolvedNumber = resolveComponentData(
-                  item.number,
-                  locale,
-                  streamDocument
-                );
-                if (!resolvedNumber) {
-                  return;
-                }
-
-                const phoneLabel = resolveComponentData(
-                  item.label,
-                  i18n.language,
-                  streamDocument
-                );
-
+              {resolvedPhoneNumbers.map((phone, idx) => {
                 return (
-                  <li key={phoneLabel} className="flex gap-2 items-center">
+                  <li
+                    key={`${phone.number}-${idx}`}
+                    className="flex gap-2 items-center"
+                  >
+                    {/* Assuming you want to associate this with the original EntityField data —
+              fallback to data.info.phoneNumbers[idx] */}
                     <EntityField
                       displayName={pt("fields.phoneNumber", "Phone Number")}
-                      fieldId={item.number.field}
-                      constantValueEnabled={item.number.constantValueEnabled}
+                      fieldId={data.info.phoneNumbers[idx]?.number?.field}
+                      constantValueEnabled={
+                        data.info.phoneNumbers[idx]?.number
+                          ?.constantValueEnabled
+                      }
                     >
-                      <div className={"flex items-center gap-3"}>
+                      <div className="flex items-center gap-3">
                         <div className="flex gap-2 items-center">
                           <PhoneAtom
                             eventName={`phone${idx}`}
                             backgroundColor={backgroundColors.background2.value}
-                            label={phoneLabel}
-                            phoneNumber={resolvedNumber}
+                            label={phone.label}
+                            phoneNumber={phone.number}
                             format={styles.info.phoneFormat}
                             includeHyperlink={styles.info.includePhoneHyperlink}
                             includeIcon={true}
