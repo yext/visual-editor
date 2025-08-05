@@ -282,7 +282,7 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "empty date and category handling",
+    name: "version 7 props empty date and category handling",
     document: { c_insights: insightsData },
     props: {
       data: {
