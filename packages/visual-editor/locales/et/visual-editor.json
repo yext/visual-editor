@@ -1,5 +1,6 @@
 {
   "Heading": "Pealkiri",
+  "Image": "Pilt",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopeeri lõikelauale",
@@ -17,6 +18,7 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
+  "altText": "Alt -tekst",
   "approvals": {
     "addAComment": "Lisage kommentaar, mis aitaks teie kinnitajal mõista, mis muutus",
     "send": "Saada heakskiitu",
@@ -37,6 +39,7 @@
     "pageSections": "Leheosad"
   },
   "category": "Kategooria",
+  "change": "Vahetus",
   "chooseImage": "Valige pilt",
   "close": "Sulgur",
   "closeHeaderMenu": "Sulgemenüü",
@@ -89,6 +92,7 @@
   "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
   "dateAndTime": "Kuupäev ja kellaaeg",
+  "delete": "Kustutama",
   "deleteItem": "Kustuta üksus",
   "discardChanges": {
     "discardChanges": "Muudatused äraviskamine",

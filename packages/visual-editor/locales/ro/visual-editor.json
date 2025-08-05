@@ -1,5 +1,6 @@
 {
   "Heading": "Îndreptându -se",
+  "Image": "Imagine",
   "Link": "Legătură",
   "actions": {
     "copyToClipboard": "Copiați în clipboard",
@@ -17,6 +18,7 @@
     "region": "Stat/regiune",
     "sublocality": "Sublociune"
   },
+  "altText": "Alt text",
   "approvals": {
     "addAComment": "Adăugați un comentariu pentru a vă ajuta aprobatorul să înțeleagă ce s -a schimbat",
     "send": "Trimiteți pentru aprobare",
@@ -37,6 +39,7 @@
     "pageSections": "Secțiuni de pagini"
   },
   "category": "Categorie",
+  "change": "Schimba",
   "chooseImage": "Alege Imagine",
   "close": "Aproape",
   "closeHeaderMenu": "Închideți meniul antetului",
@@ -89,6 +92,7 @@
   "customSearchArea": "Zona de căutare personalizată",
   "date": "Data",
   "dateAndTime": "Data și ora",
+  "delete": "Şterge",
   "deleteItem": "Ștergeți elementul",
   "discardChanges": {
     "discardChanges": "Renunțați la modificările",

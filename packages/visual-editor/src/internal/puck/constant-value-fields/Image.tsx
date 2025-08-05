@@ -1,13 +1,18 @@
-import { CustomField } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@measured/puck";
 import { ImageType } from "@yext/pages-components";
-
-import { pt } from "@yext/visual-editor";
+import {
+  msg,
+  pt,
+  TranslatableString,
+  TranslatableStringField,
+} from "@yext/visual-editor";
 import * as React from "react";
 import {
   TARGET_ORIGINS,
   useReceiveMessage,
   useSendMessageToParent,
 } from "../../hooks/useMessage";
+import { Button } from "../ui/button";
 
 /** Describes an image's aspect ratio. */
 interface ImageAspectRatio {
@@ -91,6 +96,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
             return;
           }
           onChange({
+            alternateText: value?.alternateText ?? "",
             url: imageData.url,
             height: imageData.dimension?.height ?? 0,
             width: imageData.dimension?.width ?? 0,
@@ -99,7 +105,8 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
       }
     );
 
-    const handleClick = () => {
+    const handleSelectImage = (e: React.MouseEvent) => {
+      e.stopPropagation();
       const messageId = `ImageAsset-${Date.now()}`;
       setPendingMessageId(messageId);
 
@@ -114,7 +121,11 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
       /** Handles local development testing outside of storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
         const userInput = prompt("Enter Image URL:");
+        if (!userInput) {
+          return;
+        }
         onChange({
+          alternateText: value?.alternateText ?? "",
           url: userInput ?? "",
           height: 0,
           width: 0,
@@ -122,23 +133,84 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
       }
     };
 
+    const handleDeleteImage = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      // Defer state update to prevent race condition
+      setTimeout(() => {
+        onChange({
+          alternateText: value?.alternateText ?? "",
+          url: "",
+          height: 0,
+          width: 0,
+        });
+      }, 0);
+    };
+
+    const altTextField = React.useMemo(() => {
+      return TranslatableStringField<TranslatableString | undefined>(
+        msg("altText", "Alt Text"),
+        { types: ["type.string"] }
+      );
+    }, []);
+
     return (
       <>
-        {value?.url && (
-          <img
-            src={value.url}
-            alt="Selected Thumbnail"
-            className="mt-3 w-full min-h-24 max-h-48 object-cover rounded-md mb-3"
-          />
-        )}
-        <button
-          className="text-sm py-1 w-full border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-100 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
-          onClick={handleClick}
-        >
-          <div className="ve-line-clamp-3">
-            {pt("chooseImage", "Choose Image")}
+        {/* Thumbnail */}
+        <FieldLabel label={pt("Image")} className="ve-mt-3">
+          <div className="ve-relative ve-group ve-mb-3">
+            {value?.url ? (
+              <>
+                {/* FieldLabel grabs the onclick event for the first button in its children, 
+                    and applies it to the whole area covered by the FieldLabel and its children.
+                    This hidden button catches clicks on the label/image to block unintended behavior. */}
+                <button
+                  className="ve-absolute ve-inset-0 ve-z-10 ve-hidden"
+                  onClick={(e) => e.stopPropagation()}
+                />
+
+                <img
+                  src={value.url}
+                  alt={value.alternateText}
+                  className="ve-w-full ve-min-h-[126px] ve-max-h-[200px] ve-object-cover ve-rounded-md ve-transition ve-duration-300 group-hover:ve-brightness-75"
+                />
+
+                {/* Change Button */}
+                <Button
+                  variant="secondary"
+                  onClick={handleSelectImage}
+                  className="ve-absolute ve-top-4 ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300"
+                >
+                  {pt("change", "Change")}
+                </Button>
+
+                {/* Delete Button */}
+                <Button
+                  variant="destructive"
+                  onClick={handleDeleteImage}
+                  className="ve-absolute ve-bottom-4 ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300"
+                >
+                  {pt("delete", "Delete")}
+                </Button>
+              </>
+            ) : (
+              <>
+                {/* Choose Image Button */}
+                <Button variant="secondary" onClick={handleSelectImage}>
+                  {pt("chooseImage", "Choose Image")}
+                </Button>
+              </>
+            )}
           </div>
-        </button>
+        </FieldLabel>
+
+        {/* Alt Text Field */}
+        <AutoField
+          field={altTextField}
+          value={value.alternateText}
+          onChange={(newValue) =>
+            onChange({ ...value, alternateText: newValue })
+          }
+        />
       </>
     );
   },

@@ -1,5 +1,6 @@
 {
   "Heading": "Overskrift",
+  "Image": "Bilde",
   "Link": "Lenke",
   "actions": {
     "copyToClipboard": "Kopier til utklippstavlen",
@@ -17,6 +18,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "altText": "ALT -tekst",
   "approvals": {
     "addAComment": "Legg til en kommentar for å hjelpe godkjenneren din til å forstå hva som endret seg",
     "send": "Send for godkjenning",
@@ -37,6 +39,7 @@
     "pageSections": "Sideseksjoner"
   },
   "category": "Kategori",
+  "change": "Endre",
   "chooseImage": "Velg bilde",
   "close": "Lukke",
   "closeHeaderMenu": "Lukk headermeny",
@@ -89,6 +92,7 @@
   "customSearchArea": "Tilpasset søkeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
+  "delete": "Slett",
   "deleteItem": "Slett elementet",
   "discardChanges": {
     "discardChanges": "Kast endringer",

@@ -1,5 +1,6 @@
 {
   "Heading": "Intestazione",
+  "Image": "Immagine",
   "Link": "Collegamento",
   "actions": {
     "copyToClipboard": "Copia negli appunti",
@@ -17,6 +18,7 @@
     "region": "Stato/regione",
     "sublocality": "Sublocalità"
   },
+  "altText": "Alt text",
   "approvals": {
     "addAComment": "Aggiungi un commento per aiutare l'approvazione a capire cosa è cambiato",
     "send": "Invia per l'approvazione",
@@ -37,6 +39,7 @@
     "pageSections": "Sezioni di pagina"
   },
   "category": "Categoria",
+  "change": "Modifica",
   "chooseImage": "Scegli l'immagine",
   "close": "Vicino",
   "closeHeaderMenu": "Chiudi il menu dell'intestazione",
@@ -89,6 +92,7 @@
   "customSearchArea": "Area di ricerca personalizzata",
   "date": "Data",
   "dateAndTime": "Data e ora",
+  "delete": "Eliminare",
   "deleteItem": "Elimina l'articolo",
   "discardChanges": {
     "discardChanges": "Scartare i cambiamenti",

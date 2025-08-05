@@ -1,5 +1,6 @@
 {
   "Heading": "Überschrift",
+  "Image": "Bild",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopieren Sie in die Zwischenablage",
@@ -17,6 +18,7 @@
     "region": "Staat/Region",
     "sublocality": "Sublokalität"
   },
+  "altText": "ALT -Text",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",
@@ -37,6 +39,7 @@
     "pageSections": "Seitenabschnitte"
   },
   "category": "Kategorie",
+  "change": "Ändern",
   "chooseImage": "Wählen Sie Bild",
   "close": "Schließen",
   "closeHeaderMenu": "Headermenü schließen",
@@ -89,6 +92,7 @@
   "customSearchArea": "Benutzerdefinierte Suchbereich",
   "date": "Datum",
   "dateAndTime": "Datum und Uhrzeit",
+  "delete": "Löschen",
   "deleteItem": "Artikel löschen",
   "discardChanges": {
     "discardChanges": "Veränderungen verwerfen",

@@ -1,5 +1,6 @@
 {
   "Heading": "Cím",
+  "Image": "Kép",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Másolja a vágólapra",
@@ -17,6 +18,7 @@
     "region": "Állami/régió",
     "sublocality": "Szublokitás"
   },
+  "altText": "Alt szöveg",
   "approvals": {
     "addAComment": "Adjon hozzá egy megjegyzést, hogy segítsen jóváhagyni, hogy megértse, mi változott",
     "send": "Küldje el jóváhagyásra",
@@ -37,6 +39,7 @@
     "pageSections": "Oldalszakaszok"
   },
   "category": "Kategória",
+  "change": "Változás",
   "chooseImage": "Válassza ki a képet",
   "close": "Közeli",
   "closeHeaderMenu": "Zárja be a Fejléc menüjét",
@@ -89,6 +92,7 @@
   "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
   "dateAndTime": "Dátum és idő",
+  "delete": "Töröl",
   "deleteItem": "Az elem törlése",
   "discardChanges": {
     "discardChanges": "Dobja el a változásokat",

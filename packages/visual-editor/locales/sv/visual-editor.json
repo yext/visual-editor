@@ -1,5 +1,6 @@
 {
   "Heading": "Rubrik",
+  "Image": "Bild",
   "Link": "Länk",
   "actions": {
     "copyToClipboard": "Kopiera till Urklipp",
@@ -17,6 +18,7 @@
     "region": "Stat/region",
     "sublocality": "Sublokalitet"
   },
+  "altText": "Alt text",
   "approvals": {
     "addAComment": "Lägg till en kommentar för att hjälpa din godkännare att förstå vad som förändrats",
     "send": "Skicka för godkännande",
@@ -37,6 +39,7 @@
     "pageSections": "Sidavsnitt"
   },
   "category": "Kategori",
+  "change": "Ändra",
   "chooseImage": "Välj bild",
   "close": "Nära",
   "closeHeaderMenu": "Stäng rubrikmeny",
@@ -89,6 +92,7 @@
   "customSearchArea": "Anpassad sökområde",
   "date": "Datum",
   "dateAndTime": "Datum och tid",
+  "delete": "Radera",
   "deleteItem": "Ta bort objekt",
   "discardChanges": {
     "discardChanges": "Kassera förändringar",

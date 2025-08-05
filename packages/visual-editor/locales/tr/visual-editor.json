@@ -1,5 +1,6 @@
 {
   "Heading": "Başlık",
+  "Image": "İmaj",
   "Link": "Bağlantı",
   "actions": {
     "copyToClipboard": "Panoya Kopyala",
@@ -17,6 +18,7 @@
     "region": "Eyalet/bölge",
     "sublocality": "Subloku"
   },
+  "altText": "Alt metin",
   "approvals": {
     "addAComment": "Onaycının neyin değiştiğini anlamasına yardımcı olmak için bir yorum ekleyin",
     "send": "Onay için gönder",
@@ -37,6 +39,7 @@
     "pageSections": "Sayfa bölümleri"
   },
   "category": "Kategori",
+  "change": "Değiştirmek",
   "chooseImage": "Resmi Seçin",
   "close": "Kapalı",
   "closeHeaderMenu": "Başlık menüsünü kapat",
@@ -89,6 +92,7 @@
   "customSearchArea": "Özel arama alanı",
   "date": "Tarih",
   "dateAndTime": "Tarih ve saat",
+  "delete": "Silmek",
   "deleteItem": "Öğeyi sil",
   "discardChanges": {
     "discardChanges": "Değişiklikleri at",

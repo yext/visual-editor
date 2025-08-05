@@ -1,5 +1,6 @@
 {
   "Heading": "Virsraksts",
+  "Image": "Attēls",
   "Link": "Saite",
   "actions": {
     "copyToClipboard": "Kopēt uz starpliktuvi",
@@ -17,6 +18,7 @@
     "region": "Valsts/reģions",
     "sublocality": "Sublocalitāte"
   },
+  "altText": "Alt teksts",
   "approvals": {
     "addAComment": "Pievienojiet komentāru, lai palīdzētu jūsu apstiprinātājam izprast, kas mainījās",
     "send": "Nosūtīt apstiprināšanai",
@@ -37,6 +39,7 @@
     "pageSections": "Lapas sadaļas"
   },
   "category": "Kategorija",
+  "change": "Mainīt",
   "chooseImage": "Izvēlieties attēlu",
   "close": "Tuvs",
   "closeHeaderMenu": "Aizvērt galvenes izvēlni",
@@ -89,6 +92,7 @@
   "customSearchArea": "Pielāgota meklēšanas zona",
   "date": "Datums",
   "dateAndTime": "Datums un laiks",
+  "delete": "Dzēst",
   "deleteItem": "Dzēst vienumu",
   "discardChanges": {
     "discardChanges": "Izmest izmaiņas",

@@ -1,5 +1,6 @@
 {
   "Heading": "Título",
+  "Image": "Imagen",
   "Link": "Enlace",
   "actions": {
     "copyToClipboard": "Copiar al portapapeles",
@@ -17,6 +18,7 @@
     "region": "Estado/región",
     "sublocality": "Sublocalidad"
   },
+  "altText": "Texto alternativo",
   "approvals": {
     "addAComment": "Agregue un comentario para ayudar a su aprobador a comprender lo que cambió",
     "send": "Enviar para su aprobación",
@@ -37,6 +39,7 @@
     "pageSections": "Secciones de página"
   },
   "category": "Categoría",
+  "change": "Cambiar",
   "chooseImage": "Elija imagen",
   "close": "Cerca",
   "closeHeaderMenu": "Menú de encabezado cerrar",
@@ -89,6 +92,7 @@
   "customSearchArea": "Área de búsqueda personalizada",
   "date": "Fecha",
   "dateAndTime": "Fecha y hora",
+  "delete": "Borrar",
   "deleteItem": "Eliminar el artículo",
   "discardChanges": {
     "discardChanges": "Descartar cambios",

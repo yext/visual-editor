@@ -1,5 +1,6 @@
 {
   "Heading": "Hlavný",
+  "Image": "Predstavovať",
   "Link": "Prepojiť",
   "actions": {
     "copyToClipboard": "Kopírovať do schránky",
@@ -17,6 +18,7 @@
     "region": "Štát/región",
     "sublocality": "Sublokalita"
   },
+  "altText": "Alt",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",
@@ -37,6 +39,7 @@
     "pageSections": "Sekcie stránok"
   },
   "category": "Kategória",
+  "change": "Zmena",
   "chooseImage": "Vyberte obrázok",
   "close": "Zatvoriť",
   "closeHeaderMenu": "Zavrieť ponuku hlavičky",
@@ -89,6 +92,7 @@
   "customSearchArea": "Oblasť vyhľadávania",
   "date": "Dátum",
   "dateAndTime": "Dátum a čas",
+  "delete": "Vymazať",
   "deleteItem": "Vymazať",
   "discardChanges": {
     "discardChanges": "Zlikvidovať zmeny",

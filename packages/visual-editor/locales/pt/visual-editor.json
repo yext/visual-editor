@@ -1,5 +1,6 @@
 {
   "Heading": "Cabeçalho",
+  "Image": "Imagem",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Cópia para a área de transferência",
@@ -17,6 +18,7 @@
     "region": "Estado/região",
     "sublocality": "Sublocalidade"
   },
+  "altText": "TEXTO DE ALT",
   "approvals": {
     "addAComment": "Adicione um comentário para ajudar seu aprovador a entender o que mudou",
     "send": "Enviar aprovação",
@@ -37,6 +39,7 @@
     "pageSections": "Seções de página"
   },
   "category": "Categoria",
+  "change": "Mudar",
   "chooseImage": "Escolha a imagem",
   "close": "Fechar",
   "closeHeaderMenu": "Feche o menu do cabeçalho",
@@ -89,6 +92,7 @@
   "customSearchArea": "Área de pesquisa personalizada",
   "date": "Data",
   "dateAndTime": "Data e hora",
+  "delete": "Excluir",
   "deleteItem": "Excluir item",
   "discardChanges": {
     "discardChanges": "Descarte as mudanças",

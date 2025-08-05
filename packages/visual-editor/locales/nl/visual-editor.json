@@ -1,5 +1,6 @@
 {
   "Heading": "Kop",
+  "Image": "Afbeelding",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopieer naar klembord",
@@ -17,6 +18,7 @@
     "region": "Staat/regio",
     "sublocality": "Sublocaliteit"
   },
+  "altText": "Alt -tekst",
   "approvals": {
     "addAComment": "Voeg een reactie toe om uw goedkeurder te helpen begrijpen wat er is veranderd",
     "send": "Stuur voor goedkeuring",
@@ -37,6 +39,7 @@
     "pageSections": "Paginagecties"
   },
   "category": "Categorie",
+  "change": "Wijziging",
   "chooseImage": "Kies afbeelding",
   "close": "Dichtbij",
   "closeHeaderMenu": "Sluit koptekstmenu",
@@ -89,6 +92,7 @@
   "customSearchArea": "Aangepast zoekgebied",
   "date": "Datum",
   "dateAndTime": "Datum en tijd",
+  "delete": "Verwijderen",
   "deleteItem": "Verwijder item",
   "discardChanges": {
     "discardChanges": "Veranderingen weggooien",

@@ -1,5 +1,6 @@
 {
   "Heading": "Otsikko",
+  "Image": "Kuva",
   "Link": "Linkki",
   "actions": {
     "copyToClipboard": "Kopioi leikepöydälle",
@@ -17,6 +18,7 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "altText": "Alt -teksti",
   "approvals": {
     "addAComment": "Lisää kommentti auttaaksesi hyväksyjääsi ymmärtämään, mikä on muuttunut",
     "send": "Lähetä hyväksyntä",
@@ -37,6 +39,7 @@
     "pageSections": "Page -osiot"
   },
   "category": "Luokka",
+  "change": "Muuttaa",
   "chooseImage": "Valitse kuva",
   "close": "Lähellä",
   "closeHeaderMenu": "Sulje otsikkovalikko",
@@ -89,6 +92,7 @@
   "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
   "dateAndTime": "Päivämäärä ja aika",
+  "delete": "Poistaa",
   "deleteItem": "Poista kohde",
   "discardChanges": {
     "discardChanges": "Hylätä muutokset",

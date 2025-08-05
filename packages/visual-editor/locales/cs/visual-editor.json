@@ -1,5 +1,6 @@
 {
   "Heading": "Záhlaví",
+  "Image": "Obraz",
   "Link": "Odkaz",
   "actions": {
     "copyToClipboard": "Kopírovat do schránky",
@@ -17,6 +18,7 @@
     "region": "Stát/region",
     "sublocality": "Sublokalita"
   },
+  "altText": "Alt text",
   "approvals": {
     "addAComment": "Přidejte komentář, který pomůže vašemu schvalovateli pochopit, co se změnilo",
     "send": "Odeslat ke schválení",
@@ -37,6 +39,7 @@
     "pageSections": "Sekce stránek"
   },
   "category": "Kategorie",
+  "change": "Přeměna",
   "chooseImage": "Vyberte obrázek",
   "close": "Blízko",
   "closeHeaderMenu": "Nabídka Zavřít záhlaví",
@@ -89,6 +92,7 @@
   "customSearchArea": "Vlastní vyhledávací oblast",
   "date": "Datum",
   "dateAndTime": "Datum a čas",
+  "delete": "Vymazat",
   "deleteItem": "Odstranit položku",
   "discardChanges": {
     "discardChanges": "Zlikvidovat změny",

@@ -1,5 +1,6 @@
 {
   "Heading": "標題",
+  "Image": "圖像",
   "Link": "關聯",
   "actions": {
     "copyToClipboard": "複製到剪貼板",
@@ -17,6 +18,7 @@
     "region": "州/地區",
     "sublocality": "子域"
   },
+  "altText": "Alt文字",
   "approvals": {
     "addAComment": "添加評論以幫助您的批准者了解發生了什麼變化",
     "send": "發送批准",
@@ -37,6 +39,7 @@
     "pageSections": "頁面部分"
   },
   "category": "類別",
+  "change": "改變",
   "chooseImage": "選擇圖像",
   "close": "關閉",
   "closeHeaderMenu": "關閉標題菜單",
@@ -89,6 +92,7 @@
   "customSearchArea": "自定義搜索區域",
   "date": "日期",
   "dateAndTime": "日期和時間",
+  "delete": "刪除",
   "deleteItem": "刪除項目",
   "discardChanges": {
     "discardChanges": "丟棄變化",

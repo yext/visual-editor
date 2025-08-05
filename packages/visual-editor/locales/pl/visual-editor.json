@@ -1,5 +1,6 @@
 {
   "Heading": "Nagłówek",
+  "Image": "Obraz",
   "Link": "Połączyć",
   "actions": {
     "copyToClipboard": "Kopiuj do schowka",
@@ -17,6 +18,7 @@
     "region": "Stan/region",
     "sublocality": "Sublokalność"
   },
+  "altText": "Tekst alt",
   "approvals": {
     "addAComment": "Dodaj komentarz, aby pomóc zatwierdzającym zrozumieć, co się zmieniło",
     "send": "Wyślij do zatwierdzenia",
@@ -37,6 +39,7 @@
     "pageSections": "Sekcje stron"
   },
   "category": "Kategoria",
+  "change": "Zmiana",
   "chooseImage": "Wybierz obraz",
   "close": "Zamknąć",
   "closeHeaderMenu": "Zamknij menu nagłówka",
@@ -89,6 +92,7 @@
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "date": "Data",
   "dateAndTime": "Data i godzina",
+  "delete": "Usuwać",
   "deleteItem": "Usuń element",
   "discardChanges": {
     "discardChanges": "Odrzuć zmiany",

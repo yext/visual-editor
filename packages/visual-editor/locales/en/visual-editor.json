@@ -1,5 +1,6 @@
 {
   "Heading": "Heading",
+  "Image": "Image",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Copy to Clipboard",
@@ -17,6 +18,7 @@
     "region": "State/Region",
     "sublocality": "Sublocality"
   },
+  "altText": "Alt Text",
   "approvals": {
     "addAComment": "Add a comment to help your approver understand what changed",
     "send": "Send for Approval",
@@ -37,6 +39,7 @@
     "pageSections": "PAGE SECTIONS"
   },
   "category": "Category",
+  "change": "Change",
   "chooseImage": "Choose Image",
   "close": "Close",
   "closeHeaderMenu": "Close header menu",
@@ -89,6 +92,7 @@
   "customSearchArea": "Custom Search Area",
   "date": "Date",
   "dateAndTime": "Date and Time",
+  "delete": "Delete",
   "deleteItem": "Delete Item",
   "discardChanges": {
     "discardChanges": "Discard Changes",

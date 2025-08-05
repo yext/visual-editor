@@ -1,5 +1,6 @@
 {
   "Heading": "Antraštė",
+  "Image": "Vaizdas",
   "Link": "Nuoroda",
   "actions": {
     "copyToClipboard": "Kopijuokite į mainų sritį",
@@ -17,6 +18,7 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
+  "altText": "Alt tekstas",
   "approvals": {
     "addAComment": "Pridėkite komentarą, kad padėtumėte jūsų patvirtintojui suprasti, kas pasikeitė",
     "send": "Siųsti patvirtinti",
@@ -37,6 +39,7 @@
     "pageSections": "Puslapių skyriai"
   },
   "category": "Kategorija",
+  "change": "Pakeisti",
   "chooseImage": "Pasirinkite vaizdą",
   "close": "Uždaryti",
   "closeHeaderMenu": "Uždarykite antraštės meniu",
@@ -89,6 +92,7 @@
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "date": "Data",
   "dateAndTime": "Data ir laikas",
+  "delete": "Ištrinti",
   "deleteItem": "Ištrinti elementą",
   "discardChanges": {
     "discardChanges": "Išmeskite pokyčius",
