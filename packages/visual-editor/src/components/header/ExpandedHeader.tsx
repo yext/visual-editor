@@ -20,6 +20,7 @@ import {
   TranslatableStringField,
   useDocument,
   resolveComponentData,
+  PageSectionProps,
   useOverflow,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
@@ -83,6 +84,8 @@ export interface ExpandedHeaderStyles {
   secondaryHeader: {
     backgroundColor?: BackgroundStyle;
   };
+  /** The maximum width of the header */
+  maxWidth: PageSectionProps["maxWidth"];
 }
 
 export interface ExpandedHeaderProps {
@@ -283,6 +286,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           },
         }
       ),
+      maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
+        type: "maxWidth",
+      }),
     },
   }),
 };
@@ -297,6 +303,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const {
     primaryHeader: primaryHeaderStyle,
     secondaryHeader: secondaryHeaderStyle,
+    maxWidth,
   } = styles;
   const {
     logo,
@@ -361,6 +368,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
         {show && (
           <div className="hidden md:flex">
             <PageSection
+              maxWidth={maxWidth}
               verticalPadding={"sm"}
               background={secondaryBackgroundColor}
               className="flex justify-end gap-6 items-center"
@@ -388,6 +396,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
       {/* Primary Header */}
       <div className="flex flex-col">
         <PageSection
+          maxWidth={maxWidth}
           verticalPadding={"header"}
           background={backgroundColor}
           className="flex flex-row justify-between w-full items-center gap-8"
@@ -476,7 +485,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           }`}
         >
           {/* ... Mobile menu sections remain the same ... */}
-          <PageSection verticalPadding={"sm"} background={backgroundColor}>
+          <PageSection
+            verticalPadding={"sm"}
+            background={backgroundColor}
+            maxWidth={maxWidth}
+          >
             <EntityField
               constantValueEnabled
               displayName={pt(
@@ -491,6 +504,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           {show && (
             <div className="flex md:hidden">
               <PageSection
+                maxWidth={maxWidth}
                 verticalPadding={"sm"}
                 background={secondaryBackgroundColor}
               >
@@ -514,7 +528,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             </div>
           )}
           {(showPrimaryCTA || showSecondaryCTA) && (
-            <PageSection verticalPadding={"sm"} background={backgroundColor}>
+            <PageSection
+              verticalPadding={"sm"}
+              background={backgroundColor}
+              maxWidth={maxWidth}
+            >
               <HeaderCtas
                 primaryCTA={primaryCTA}
                 secondaryCTA={secondaryCTA}
@@ -758,6 +776,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
       secondaryHeader: {
         backgroundColor: backgroundColors.background2.value,
       },
+      maxWidth: "theme",
     },
     analytics: {
       scope: "expandedHeader",
@@ -808,7 +827,13 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
       },
       styles: {
         ...fields.styles,
-        objectFields: stylesFields,
+        objectFields: {
+          ...stylesFields,
+          // re-generate max width options
+          maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
+            type: "maxWidth",
+          }),
+        },
       },
     };
   },

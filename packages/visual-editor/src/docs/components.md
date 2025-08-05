@@ -218,6 +218,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 | Prop                     | Type                                                                                                                                   | Description                           | Default |
 | :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                         | The maximum width of the footer.      |         |
 | `styles.primaryFooter`   | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; logo: ImageStylingProps; utilityImages: ImageStylingProps; }` | Styling for the primary footer bar.   |         |
 | `styles.secondaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }`                                                            | Styling for the secondary footer bar. |         |
 
@@ -246,6 +247,7 @@ This object contains properties for customizing the appearance of both header ti
 
 | Prop                     | Type                                                                                                                                                | Description                                 | Default |
 | :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                                      | The maximum width of the header             |         |
 | `styles.primaryHeader`   | `{ logo: ImageStylingProps; backgroundColor?: BackgroundStyle; primaryCtaVariant: CTAProps["variant"]; secondaryCtaVariant: CTAProps["variant"]; }` | Styling for the main, primary header bar.   |         |
 | `styles.secondaryHeader` | `{ backgroundColor?: BackgroundStyle; }`                                                                                                            | Styling for the secondary header (top bar). |         |
 
