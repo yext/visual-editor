@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adress",
     "alignCard": "Justera kort",
+    "analytics": "Analys",
     "answer": "Svar",
     "apiKey": "API -nyckel",
     "aspectRatioForLogo": "Bildförhållande för logotyp",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Fråga",
     "radiusMiles": "Radie (miles)",
+    "scope": "Omfattning",
     "secondaryCTA": "Sekundär CTA",
     "secondaryCTAVariant": "Sekundär CTA -variant",
     "secondaryCta": "Sekundär CTA",

@@ -102,6 +102,7 @@
   "fields": {
     "address": "Aadress",
     "alignCard": "Joondama kaart",
+    "analytics": "Analüütika",
     "answer": "Vastus",
     "apiKey": "API -võti",
     "aspectRatioForLogo": "Logo kuvasuhe",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Küsitlus",
     "radiusMiles": "Raadius (miil)",
+    "scope": "Ulatus",
     "secondaryCTA": "Teisene CTA",
     "secondaryCTAVariant": "Teisene CTA variant",
     "secondaryCta": "Teisene CTA",

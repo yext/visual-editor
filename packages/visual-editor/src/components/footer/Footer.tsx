@@ -52,11 +52,11 @@ const footerFields: Fields<FooterProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
-  analytics: YextField("Analytics", {
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField("Scope", {
+      scope: YextField(msg("fields.scope", "Scope"), {
         type: "text",
       }),
     },

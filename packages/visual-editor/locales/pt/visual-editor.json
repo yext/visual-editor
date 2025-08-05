@@ -102,6 +102,7 @@
   "fields": {
     "address": "Endereço",
     "alignCard": "Cartão alinhado",
+    "analytics": "Análise",
     "answer": "Responder",
     "apiKey": "Chave da API",
     "aspectRatioForLogo": "Proporção de aspecto para o logotipo",
@@ -249,6 +250,7 @@
     "promo": "Promoção",
     "question": "Pergunta",
     "radiusMiles": "Raio (milhas)",
+    "scope": "Escopo",
     "secondaryCTA": "CTA secundário",
     "secondaryCTAVariant": "Variante secundária do CTA",
     "secondaryCta": "CTA secundário",
