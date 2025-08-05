@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adresse",
     "alignCard": "Juster kort",
+    "analytics": "Analytics",
     "answer": "Svar",
     "apiKey": "API -nøgle",
     "aspectRatioForLogo": "Aspektforhold for logo",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Spørgsmål",
     "radiusMiles": "Radius (miles)",
+    "scope": "Omfang",
     "secondaryCTA": "Sekundær CTA",
     "secondaryCTAVariant": "Sekundær CTA -variant",
     "secondaryCta": "Sekundær CTA",

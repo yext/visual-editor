@@ -102,6 +102,7 @@
   "fields": {
     "address": "Osloviť",
     "alignCard": "Zarovnaná karta",
+    "analytics": "Analytika",
     "answer": "Odpoveď",
     "apiKey": "API Kľúč",
     "aspectRatioForLogo": "Pomer strán pre logo",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Spochybniť",
     "radiusMiles": "Polomer (míle)",
+    "scope": "Rozsah",
     "secondaryCTA": "Sekundárna CTA",
     "secondaryCTAVariant": "Variant CTA",
     "secondaryCta": "Sekundárna CTA",

@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Karta wyrównania",
+    "analytics": "Analityka",
     "answer": "Odpowiedź",
     "apiKey": "Klucz API",
     "aspectRatioForLogo": "Współczynnik kształtu dla logo",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Pytanie",
     "radiusMiles": "Promień (mile)",
+    "scope": "Zakres",
     "secondaryCTA": "Wtórne CTA",
     "secondaryCTAVariant": "Wtórny wariant CTA",
     "secondaryCta": "Wtórne CTA",

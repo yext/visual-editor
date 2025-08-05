@@ -106,7 +106,7 @@ export interface CoreInfoSectionProps {
   styles: CoreInfoStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -315,6 +315,15 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
             }
           ),
         },
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
