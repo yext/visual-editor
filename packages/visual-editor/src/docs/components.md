@@ -42,6 +42,8 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site. Available on Location templates.
 
+![Preview of the BreadcrumbsSection component](../components/testing/screenshots/BreadcrumbsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
+
 ### Props
 
 Defines the complete set of properties for the BreadcrumbsSection component.
