@@ -53,6 +53,17 @@ const defaultFooterLink = {
   link: "#",
 };
 
+const defaultExpandedFooterLinkSection = {
+  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  links: [
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+  ],
+};
+
 export const validPatterns: Record<string, RegExp> = {
   xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,
   facebookLink: /^https:\/\/(www\.)?facebook\.com\/.+/,
@@ -195,8 +206,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                label: YextField(msg("fields.label", "Label"), {
-                  type: "text",
+                label: TranslatableStringField(msg("fields.label", "Label"), {
+                  types: ["type.string"],
                 }),
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
@@ -815,46 +826,10 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         utilityImages: [],
         expandedFooter: false,
         expandedFooterLinks: [
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
         ],
       },
       secondaryFooter: {
