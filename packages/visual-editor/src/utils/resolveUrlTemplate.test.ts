@@ -1,6 +1,7 @@
 import { assert, describe, it } from "vitest";
 import { resolveUrlTemplate } from "./resolveUrlTemplate";
 import { StreamDocument } from "./applyTheme";
+import { normalizeSlug } from "./slugifier";
 
 const mockStreamDocument: StreamDocument = {
   name: "Yext",
@@ -167,5 +168,30 @@ describe("resolveUrlTemplate", () => {
     assert.throws(() => {
       resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
     }, /No URL template found/);
+  });
+
+  it("use alternateFunction when provided to resolve URL template", () => {
+    const alternateFunction = (
+      streamDocument: StreamDocument,
+      locale: string,
+      relativePrefixToRoot: string,
+      // eslint-disable-next-line no-unused-vars
+      alternateDataSource?: any
+    ) => {
+      return (
+        relativePrefixToRoot +
+        normalizeSlug(`custom-url-for-${streamDocument.name}-${locale}`)
+      );
+    };
+
+    const result = resolveUrlTemplate(
+      mockStreamDocument,
+      "en",
+      "../",
+      undefined,
+      alternateFunction
+    );
+
+    assert.equal(result, "../custom-url-for-yext-en");
   });
 });

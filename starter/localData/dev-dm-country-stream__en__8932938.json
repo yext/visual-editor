@@ -1,8 +1,10 @@
 {
   "__": {
     "entityPageSet": {},
-    "name": "dev-location"
+    "name": "dev-location",
+    "isPrimaryLocale": true
   },
+  "_pageset": "{\"config\":{\"urlTemplate\":{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}}}",
   "_schema": {
     "@graph": [
       {

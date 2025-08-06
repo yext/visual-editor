@@ -303,22 +303,13 @@ const LocationCard = ({
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  // If a hybrid developer passes in a resolveUrlTemplate function, use that to resolve the URL.
-  // Otherwise, use the default resolveUrlTemplate function.
-  const resolvedUrl =
-    typeof puck.metadata?.resolveUrlTemplate === "function"
-      ? puck.metadata.resolveUrlTemplate(
-          streamDocument,
-          locale,
-          relativePrefixToRoot ?? "",
-          locationData
-        )
-      : resolveUrlTemplate(
-          streamDocument,
-          locale,
-          relativePrefixToRoot ?? "",
-          locationData
-        );
+  const resolvedUrl = resolveUrlTemplate(
+    streamDocument,
+    locale,
+    relativePrefixToRoot ?? "",
+    locationData,
+    puck.metadata?.resolveUrlTemplate
+  );
 
   return (
     <Background

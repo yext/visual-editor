@@ -608,16 +608,13 @@ const LocationCard = ({
     "TAP_TO_CALL"
   );
 
-  // If a hybrid developer passes in a resolveUrlTemplate function, use that to resolve the URL.
-  // Otherwise, use the default resolveUrlTemplate function.
-  const resolvedUrl =
-    typeof puck.metadata?.resolveUrlTemplate === "function"
-      ? puck.metadata.resolveUrlTemplate(
-          streamDocument,
-          locale,
-          relativePrefixToRoot ?? ""
-        )
-      : resolveUrlTemplate(streamDocument, locale, relativePrefixToRoot ?? "");
+  const resolvedUrl = resolveUrlTemplate(
+    streamDocument,
+    locale,
+    relativePrefixToRoot ?? "",
+    undefined,
+    puck.metadata?.resolveUrlTemplate
+  );
 
   return (
     <Background
