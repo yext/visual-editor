@@ -102,6 +102,7 @@
   "fields": {
     "address": "Osoite",
     "alignCard": "Kohdistaa kortti",
+    "analytics": "Analytiikka",
     "answer": "Vastaus",
     "apiKey": "API -avain",
     "aspectRatioForLogo": "Logon kuvasuhde",
@@ -249,6 +250,7 @@
     "promo": "Ylennys",
     "question": "Kyseenalaistaa",
     "radiusMiles": "Säde (mailia)",
+    "scope": "Laajuus",
     "secondaryCTA": "Toissijainen CTA",
     "secondaryCTAVariant": "Toissijainen CTA -variantti",
     "secondaryCta": "Toissijainen CTA",

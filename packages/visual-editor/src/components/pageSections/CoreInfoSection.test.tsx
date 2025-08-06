@@ -662,6 +662,96 @@ const tests: ComponentTest[] = [
     },
     version: 1,
   },
+  {
+    name: "version 10 props with partial entity values align right",
+    document: {
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      data: {
+        hours: {
+          headingText: {
+            constantValue: "Hours",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "name",
+          },
+          hours: {
+            constantValue: {},
+            field: "hours",
+          },
+        },
+        info: {
+          address: {
+            constantValue: {
+              city: "",
+              countryCode: "",
+              line1: "",
+              postalCode: "",
+            },
+            field: "address",
+          },
+          emails: {
+            constantValue: [],
+            field: "emails",
+          },
+          headingText: {
+            constantValue: "",
+            constantValueEnabled: true,
+            constantValueOverride: {},
+            field: "id",
+          },
+          phoneNumbers: [
+            {
+              label: "Phone",
+              number: {
+                constantValue: "",
+                field: "mainPhone",
+              },
+            },
+          ],
+        },
+        services: {
+          headingText: {
+            constantValue: "Services",
+            constantValueEnabled: false,
+            constantValueOverride: {},
+            field: "description",
+          },
+          servicesList: {
+            constantValue: [],
+            field: "services",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        heading: {
+          align: "right",
+          level: 3,
+        },
+        hours: {
+          collapseDays: false,
+          showAdditionalHoursText: true,
+          startOfWeek: "today",
+        },
+        info: {
+          emailsListLength: 1,
+          includePhoneHyperlink: true,
+          phoneFormat: "domestic",
+          showGetDirectionsLink: true,
+        },
+      },
+    },
+    version: 10,
+  },
 ];
 
 describe("CoreInfoSection", async () => {

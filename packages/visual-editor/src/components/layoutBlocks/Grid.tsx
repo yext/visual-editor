@@ -18,7 +18,7 @@ export interface GridProps extends layoutProps {
   liveVisibility: boolean;
   className?: string;
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -74,6 +74,15 @@ const gridSectionFields: Fields<GridProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {

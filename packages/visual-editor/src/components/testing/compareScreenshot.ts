@@ -5,8 +5,19 @@ import { PNG } from "pngjs";
 import type { BrowserCommand } from "vitest/node";
 
 export const compareScreenshot: BrowserCommand<
-  [screenshotName: string, updatedScreenshotData: string]
-> = (_, screenshotName, updatedScreenshotData) => {
+  [
+    screenshotName: string,
+    updatedScreenshotData: string,
+    customThreshold: number | undefined,
+    ignoreExact: number[] | undefined,
+  ]
+> = (
+  _,
+  screenshotName,
+  updatedScreenshotData,
+  customThreshold,
+  ignoreExact
+) => {
   const filePath = path.join(
     process.cwd(),
     `src/components/testing/screenshots/${screenshotName}.png`
@@ -24,7 +35,7 @@ export const compareScreenshot: BrowserCommand<
     mkdirSync(path.dirname(filePath), { recursive: true });
     writeFileSync(filePath, PNG.sync.write(updatedImg));
     return {
-      pass: true,
+      pass: false,
       message: () => `Baseline screenshot created for ${filePath}`,
     };
   }
@@ -50,10 +61,15 @@ export const compareScreenshot: BrowserCommand<
     { threshold: 0.3 } // the per-pixel color difference threshold
   );
 
-  if (numDiffPixels > 0) {
-    // save the updated screenshot
-    writeFileSync(filePath, PNG.sync.write(updatedImg));
+  if ((ignoreExact ?? []).includes(numDiffPixels)) {
+    return { passes: true, numDiffPixels };
   }
 
-  return numDiffPixels;
+  if (numDiffPixels > (customThreshold ?? 0)) {
+    // save the updated screenshot
+    writeFileSync(filePath, PNG.sync.write(updatedImg));
+    return { passes: false, numDiffPixels };
+  }
+
+  return { passes: true, numDiffPixels };
 };

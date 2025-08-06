@@ -82,7 +82,7 @@ export interface DirectoryProps {
   styles: DirectoryStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
@@ -139,6 +139,15 @@ const directoryFields: Fields<DirectoryProps> = {
             }
           ),
         },
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
@@ -331,6 +340,7 @@ const DirectoryList = ({
 const DirectoryComponent = ({
   data,
   styles,
+  analytics,
   puck,
 }: WithPuckProps<DirectoryProps>) => {
   const { i18n } = useTranslation();
@@ -342,8 +352,9 @@ const DirectoryComponent = ({
     <Background background={styles.backgroundColor}>
       <BreadcrumbsComponent
         data={{ directoryRoot: data.directoryRoot }}
-        liveVisibility={true}
         styles={{ backgroundColor: styles.breadcrumbsBackgroundColor }}
+        analytics={analytics}
+        liveVisibility={true}
       />
       <PageSection className="flex flex-col items-center gap-2">
         {streamDocument._site?.name && (

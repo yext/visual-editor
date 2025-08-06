@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adresas",
     "alignCard": "Sulygios kortelė",
+    "analytics": "Analizė",
     "answer": "Atsakymas",
     "apiKey": "API raktas",
     "aspectRatioForLogo": "Logotipo kraštinių santykis",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Klausimas",
     "radiusMiles": "Spindulys (mylios)",
+    "scope": "Taikymo sritis",
     "secondaryCTA": "Antrinė CTA",
     "secondaryCTAVariant": "Antrinis CTA variantas",
     "secondaryCta": "Antrinė CTA",
