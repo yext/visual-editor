@@ -16,9 +16,6 @@ import {
   YextField,
   VisibilityWrapper,
   CTAProps,
-  YextStructFieldSelector,
-  YextStructEntityField,
-  ComponentFields,
   HoursStatusAtom,
   TranslatableString,
   msg,
@@ -33,6 +30,7 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
+import { ENHANCED_CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -59,7 +57,7 @@ export interface HeroData {
    * The main hero content, including an image and primary/secondary call-to-action buttons.
    * @defaultValue Placeholder image and CTAs
    */
-  hero: YextStructEntityField<HeroSectionType>;
+  hero: HeroSectionType;
 
   /**
    * If 'true', displays the entity's average review rating.
@@ -164,12 +162,32 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      hero: YextStructFieldSelector({
+      hero: {
+        type: "object",
         label: msg("fields.hero", "Hero"),
-        filter: {
-          type: ComponentFields.HeroSection.type,
+        objectFields: {
+          image: {
+            type: "object",
+            label: pt("fields.image", "Image"),
+            objectFields: {
+              url: {
+                label: pt("fields.url", "URL"),
+                type: "text",
+              },
+              height: {
+                label: pt("fields.height", "Height"),
+                type: "number",
+              },
+              width: {
+                label: pt("fields.width", "Width"),
+                type: "number",
+              },
+            },
+          },
+          primaryCta: ENHANCED_CTA_CONSTANT_CONFIG,
+          secondaryCta: ENHANCED_CTA_CONSTANT_CONFIG,
         },
-      }),
+      },
       showAverageReview: YextField(
         msg("fields.showAverageReview", "Show Average Review"),
         {
@@ -282,7 +300,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     locale,
     streamDocument
   );
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+  const resolvedHero = data?.hero;
 
   const { timezone } = streamDocument as {
     timezone: string;
@@ -360,75 +378,53 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             aria-label={t("callToActions", "Call to Actions")}
           >
             {resolvedHero?.primaryCta?.label && (
-              <EntityField
-                displayName={pt("fields.primaryCta", "Primary CTA")}
-                fieldId={data.hero.field}
-                constantValueEnabled={
-                  data.hero.constantValueOverride.primaryCta
-                }
-              >
-                <EnhancedCTA
-                  eventName={`primaryCta`}
-                  variant={styles?.primaryCTA}
-                  label={resolveComponentData(
-                    resolvedHero.primaryCta.label,
-                    i18n.language
-                  )}
-                  link={resolvedHero.primaryCta.link}
-                  linkType={resolvedHero.primaryCta.linkType}
-                  ctaType={resolvedHero.primaryCta.ctaType}
-                  coordinate={resolvedHero.primaryCta.coordinate}
-                  presetImageType={resolvedHero.primaryCta.presetImageType}
-                  className={"py-3"}
-                />
-              </EntityField>
+              <EnhancedCTA
+                eventName={`primaryCta`}
+                variant={styles?.primaryCTA}
+                label={resolveComponentData(
+                  resolvedHero.primaryCta.label,
+                  i18n.language
+                )}
+                link={resolvedHero.primaryCta.link}
+                linkType={resolvedHero.primaryCta.linkType}
+                ctaType={resolvedHero.primaryCta.ctaType}
+                coordinate={resolvedHero.primaryCta.coordinate}
+                presetImageType={resolvedHero.primaryCta.presetImageType}
+                className={"py-3"}
+              />
             )}
             {resolvedHero?.secondaryCta?.label && (
-              <EntityField
-                displayName={pt("fields.secondaryCta", "Secondary CTA")}
-                fieldId={data.hero.field}
-                constantValueEnabled={
-                  data.hero.constantValueOverride.secondaryCta
-                }
-              >
-                <EnhancedCTA
-                  eventName={`secondaryCta`}
-                  variant={styles?.secondaryCTA}
-                  label={resolveComponentData(
-                    resolvedHero.secondaryCta.label,
-                    i18n.language
-                  )}
-                  link={resolvedHero.secondaryCta.link}
-                  linkType={resolvedHero.secondaryCta.linkType}
-                  ctaType={resolvedHero.secondaryCta.ctaType}
-                  coordinate={resolvedHero.secondaryCta.coordinate}
-                  presetImageType={resolvedHero.secondaryCta.presetImageType}
-                  className={"py-3"}
-                />
-              </EntityField>
+              <EnhancedCTA
+                eventName={`secondaryCta`}
+                variant={styles?.secondaryCTA}
+                label={resolveComponentData(
+                  resolvedHero.secondaryCta.label,
+                  i18n.language
+                )}
+                link={resolvedHero.secondaryCta.link}
+                linkType={resolvedHero.secondaryCta.linkType}
+                ctaType={resolvedHero.secondaryCta.ctaType}
+                coordinate={resolvedHero.secondaryCta.coordinate}
+                presetImageType={resolvedHero.secondaryCta.presetImageType}
+                className={"py-3"}
+              />
             )}
           </div>
         )}
       </div>
       {resolvedHero?.image && (
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.hero.field}
-          constantValueEnabled={data.hero.constantValueOverride.image}
+        <div
+          className="w-full"
+          role="region"
+          aria-label={t("heroImage", "Hero Image")}
         >
-          <div
-            className="w-full"
-            role="region"
-            aria-label={t("heroImage", "Hero Image")}
-          >
-            <Image
-              image={resolvedHero?.image}
-              aspectRatio={styles.image.aspectRatio}
-              width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
-            />
-          </div>
-        </EntityField>
+          <Image
+            image={resolvedHero?.image}
+            aspectRatio={styles.image.aspectRatio}
+            width={styles.image.width || 640}
+            className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
+          />
+        </div>
       )}
     </PageSection>
   );
@@ -460,35 +456,28 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         constantValue: {},
       },
       hero: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          primaryCta: {
-            label: {
-              en: "Call To Action",
-              hasLocalizedValue: "true",
-            },
-            link: "#",
-            linkType: "URL",
+        primaryCta: {
+          label: {
+            en: "Call To Action",
+            hasLocalizedValue: "true",
           },
-          secondaryCta: {
-            label: {
-              en: "Call To Action",
-              hasLocalizedValue: "true",
-            },
-            link: "#",
-            linkType: "URL",
-          },
-          image: {
-            url: PLACEHOLDER_IMAGE_URL,
-            height: 360,
-            width: 640,
-          },
+          link: "#",
+          linkType: "URL",
+          ctaType: "textAndLink",
         },
-        constantValueOverride: {
-          image: true,
-          primaryCta: true,
-          secondaryCta: true,
+        secondaryCta: {
+          label: {
+            en: "Call To Action",
+            hasLocalizedValue: "true",
+          },
+          link: "#",
+          linkType: "URL",
+          ctaType: "textAndLink",
+        },
+        image: {
+          url: PLACEHOLDER_IMAGE_URL,
+          height: 360,
+          width: 640,
         },
       },
       showAverageReview: true,
@@ -509,34 +498,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveFields: (data, { lastData }) => {
-    // If set to entity value and no field selected, hide the component.
-    if (
-      !data.props.data.hero.constantValueEnabled &&
-      data.props.data.hero.field === ""
-    ) {
-      data.props.liveVisibility = false;
-      return {
-        ...heroSectionFields,
-        liveVisibility: undefined,
-      };
-    }
 
-    // If no field was selected and then constant value is enabled
-    // or a field is selected, show the component.
-    if (
-      (data.props.data.hero.constantValueEnabled &&
-        !lastData?.props.data.hero.constantValueEnabled &&
-        data.props.data.hero.field === "") ||
-      (lastData?.props.data.hero.field === "" &&
-        data.props.data.hero.field !== "")
-    ) {
-      data.props.liveVisibility = true;
-    }
-
-    // Otherwise, return normal fields.
-    return heroSectionFields;
-  },
   render: (props) => (
     <AnalyticsScopeProvider
       name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}

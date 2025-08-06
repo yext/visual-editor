@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   ProductSectionType,
@@ -25,6 +24,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { EnhancedCTA } from "../atoms/enhancedCta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
@@ -232,7 +232,7 @@ const ProductCard = ({
             resolveComponentData(product.description, i18n.language)}
         </div>
         {product.cta && (
-          <CTA
+          <EnhancedCTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
             label={
@@ -246,6 +246,9 @@ const ProductCard = ({
             }
             link={product.cta.link}
             linkType={product.cta.linkType}
+            ctaType={product.cta.ctaType}
+            coordinate={product.cta.coordinate}
+            presetImageType={product.cta.presetImageType}
             className="mt-auto"
           />
         )}

@@ -1,6 +1,7 @@
 export { Body, type BodyProps, bodyVariants } from "./body.tsx";
 export { Button, type ButtonProps, buttonVariants } from "./button.tsx";
 export { CTA, type CTAProps } from "./cta.tsx";
+export { EnhancedCTA, type EnhancedCTAProps } from "./enhancedCta.tsx";
 export { Heading, type HeadingProps, headingVariants } from "./heading.tsx";
 export { ImageButton, type ImageButtonProps } from "./imageButton.tsx";
 export { HoursTableAtom, type HoursTableAtomProps } from "./hoursTable.tsx";

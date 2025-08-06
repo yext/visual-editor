@@ -131,10 +131,7 @@ export interface EnhancedCTAProps {
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
-  coordinate?: {
-    latitude: number;
-    longitude: number;
-  };
+  coordinate?: { latitude: number; longitude: number };
   presetImageType?: PresetImageType;
 }
 
