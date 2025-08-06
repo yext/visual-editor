@@ -29,8 +29,7 @@ export const resolveUrlTemplate = (
     ];
 
   if (!urlTemplate) {
-    console.error("No URL template found on document");
-    return "";
+    throw new Error("No URL template found on document");
   }
 
   const normalizedSlug = normalizeSlug(
@@ -42,8 +41,7 @@ export const resolveUrlTemplate = (
   ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
 
   if (!normalizedSlug) {
-    console.error("Could not resolve URL template", urlTemplate);
-    return "";
+    throw new Error("Could not resolve URL template", urlTemplate);
   }
 
   return relativePrefixToRoot + normalizedSlug;

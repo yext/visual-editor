@@ -1,4 +1,4 @@
-import { assert, describe, it, vi } from "vitest";
+import { assert, describe, it } from "vitest";
 import { resolveUrlTemplate } from "./resolveUrlTemplate";
 import { StreamDocument } from "./applyTheme";
 
@@ -107,71 +107,36 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "../alternate-region/alternate-city/alternate-line1");
   });
 
-  it("does not add prefix if URL resolves to empty string", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const docWithoutUrlTemplate = {
-      ...mockStreamDocument,
-      _pageset: JSON.stringify({ config: {} }),
-    };
-    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
-    assert.equal(result, "");
-    assert.isTrue(
-      consoleSpy.mock.calls[0][0].includes("No URL template found")
-    );
-    consoleSpy.mockRestore();
-  });
-
   it("handles empty string prefix without altering URL", () => {
     const result = resolveUrlTemplate(mockStreamDocument, "en", "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
-  it("returns empty string and errors if _pageset is undefined", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const docWithoutPageset = {
-      ...mockStreamDocument,
-      _pageset: undefined,
-    };
-    const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
-    assert.equal(result, "");
-    assert.isTrue(
-      consoleSpy.mock.calls[0][0].includes("No URL template found")
-    );
-    consoleSpy.mockRestore();
+  it("throws an error if _pageset is undefined", () => {
+    const docWithoutPageset = { ...mockStreamDocument, _pageset: undefined };
+    assert.throws(() => {
+      resolveUrlTemplate(docWithoutPageset, "en", "../");
+    }, /No URL template found/);
   });
 
-  it("returns empty string and errors if _pageset is an empty string", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const docWithEmptyPageset = {
-      ...mockStreamDocument,
-      _pageset: "",
-    };
-    const result = resolveUrlTemplate(docWithEmptyPageset, "en", "../");
-    assert.equal(result, "");
-    assert.isTrue(
-      consoleSpy.mock.calls[0][0].includes("No URL template found")
-    );
-    consoleSpy.mockRestore();
+  it("throws an error if _pageset is an empty string", () => {
+    const docWithEmptyPageset = { ...mockStreamDocument, _pageset: "" };
+    assert.throws(() => {
+      resolveUrlTemplate(docWithEmptyPageset, "en", "../");
+    }, /No URL template found/);
   });
 
-  it("returns empty string and errors if urlTemplate is missing", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("throws an error if urlTemplate is missing in config", () => {
     const docWithoutUrlTemplate = {
       ...mockStreamDocument,
-      _pageset: JSON.stringify({
-        config: {},
-      }),
+      _pageset: JSON.stringify({ config: {} }),
     };
-    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
-    assert.equal(result, "");
-    assert.isTrue(
-      consoleSpy.mock.calls[0][0].includes("No URL template found")
-    );
-    consoleSpy.mockRestore();
+    assert.throws(() => {
+      resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
+    }, /No URL template found/);
   });
 
-  it("returns empty string and errors if primary template is missing for primary locale", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("throws an error if primary template is missing for primary locale", () => {
     const docWithoutPrimaryTemplate = {
       ...mockStreamDocument,
       _pageset: JSON.stringify({
@@ -182,16 +147,12 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
-    assert.equal(result, "");
-    assert.isTrue(
-      consoleSpy.mock.calls[0][0].includes("No URL template found")
-    );
-    consoleSpy.mockRestore();
+    assert.throws(() => {
+      resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
+    }, /No URL template found/);
   });
 
-  it("returns empty string and errors if alternate template is missing for alternate locale", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("throws an error if alternate template is missing for alternate locale", () => {
     const docWithoutAlternateTemplate = {
       ...mockStreamDocument,
       __: { isPrimaryLocale: false },
@@ -203,11 +164,8 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
-    assert.equal(result, "");
-    assert.isTrue(
-      consoleSpy.mock.calls[0][0].includes("No URL template found")
-    );
-    consoleSpy.mockRestore();
+    assert.throws(() => {
+      resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
+    }, /No URL template found/);
   });
 });
