@@ -124,6 +124,12 @@ export interface ExpandedFooterProps {
   analytics: {
     scope?: string;
   };
+
+  /**
+   * Indicates which props should not be checked for missing translations.
+   * @internal
+   */
+  ignoreLocaleWarning?: string[];
 }
 
 const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
@@ -968,6 +974,25 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
             type: "maxWidth",
           }),
         },
+      },
+    };
+  },
+  resolveData: (data) => {
+    const hiddenProps: string[] = [
+      data.props.data.primaryFooter.expandedFooter
+        ? "data.primaryFooter.footerLinks"
+        : "data.primaryFooter.expandedFooterLinks",
+    ];
+
+    if (!data.props.data.secondaryFooter.show) {
+      hiddenProps.push("data.secondaryFooter");
+    }
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreLocaleWarning: hiddenProps,
       },
     };
   },
