@@ -197,18 +197,6 @@ const InsightCard = ({
   const hasCategory = resolvedCategory.trim() !== "";
   const hasPublishTime =
     insight.publishTime && insight.publishTime.trim() !== "";
-  console.log(
-    "Debug - Category:",
-    resolvedCategory,
-    "hasCategory:",
-    hasCategory
-  );
-  console.log(
-    "Debug - PublishTime:",
-    insight.publishTime,
-    "hasPublishTime:",
-    hasPublishTime
-  );
   return (
     <Background
       className="rounded flex flex-col"
