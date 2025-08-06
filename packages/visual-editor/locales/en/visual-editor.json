@@ -24,7 +24,6 @@
   },
   "arrayField": "Array Field",
   "base": "Base",
-  "basicSelectorContentLabel": "Select a Content field",
   "basicSelectorNoOptionsLabel": "No options available",
   "body": "Body",
   "borderRadiusDefaultLabel": "Default",
@@ -94,11 +93,11 @@
     "warning": "This action will remove your local changes. It cannot be undone."
   },
   "emailList": "Email List",
+  "entityTypeField": "{{entityType}} Field",
   "event": "Event",
   "expandedHeaderDesktop": "Expanded Header Desktop",
   "expandedHeaderMobile": "Expanded Header Mobile",
   "faq": "FAQ",
-  "field": "Field",
   "fields": {
     "address": "Address",
     "alignCard": "Align card",
