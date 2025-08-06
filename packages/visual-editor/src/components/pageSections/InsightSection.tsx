@@ -187,20 +187,18 @@ const InsightCard = ({
     : "";
   const hasCategory = resolvedCategory.trim() !== "";
   const hasPublishTime = insight.publishTime?.trim() !== "";
-
+  console.log(insight.image);
   return (
     <Background
-      className="rounded h-full flex flex-col"
+      className="rounded flex flex-col"
       background={cardStyles.backgroundColor}
     >
-      {insight.image ? (
+      {insight.image && insight.image.url && (
         <Image
           image={insight.image}
           aspectRatio={1.778} // 16:9
           className="rounded-t-[inherit] h-[200px]"
         />
-      ) : (
-        <div className="sm:h-[200px]" />
       )}
       <div className="flex flex-col gap-8 p-8 flex-grow">
         <div className="flex flex-col gap-4">
@@ -293,7 +291,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
             {resolvedInsights.insights.map((insight, index) => (
               <InsightCard
                 key={index}
