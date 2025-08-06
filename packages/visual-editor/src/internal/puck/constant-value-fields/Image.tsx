@@ -135,7 +135,11 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
 
     const handleDeleteImage = (e: React.MouseEvent) => {
       e.stopPropagation();
-      // Defer state update to prevent race condition
+      /* Deleting an image replaces the thumbnail with the "Choose Image" button.
+         The click event from this button is still "active", and gets passed off 
+         to the new Choose Image button, which triggers the image selector.
+         To prevent this, we use setTimeout to delay the onChange call until 
+         after the click event is finished. */
       setTimeout(() => {
         onChange({
           alternateText: value?.alternateText ?? "",
@@ -158,16 +162,15 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         {/* Thumbnail */}
         <FieldLabel label={pt("Image")} className="ve-mt-3">
           <div className="ve-relative ve-group ve-mb-3">
+            {/* FieldLabel grabs the onclick event for the first button in its children, 
+                and applies it to the whole area covered by the FieldLabel and its children.
+                This hidden button catches clicks on the label/image to block unintended behavior. */}
+            <button
+              className="ve-absolute ve-inset-0 ve-z-10 ve-hidden"
+              onClick={(e) => e.stopPropagation()}
+            />
             {value?.url ? (
               <>
-                {/* FieldLabel grabs the onclick event for the first button in its children, 
-                    and applies it to the whole area covered by the FieldLabel and its children.
-                    This hidden button catches clicks on the label/image to block unintended behavior. */}
-                <button
-                  className="ve-absolute ve-inset-0 ve-z-10 ve-hidden"
-                  onClick={(e) => e.stopPropagation()}
-                />
-
                 <img
                   src={value.url}
                   alt={value.alternateText}
