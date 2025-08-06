@@ -1,7 +1,6 @@
 {
   "Heading": "Titre",
   "Link": "Lien",
-  "a": "un",
   "actions": {
     "copyToClipboard": "Copier dans le presse-papiers",
     "pasteFromClipboard": "Coller du presse-papiers"
@@ -18,7 +17,6 @@
     "region": "État / région",
     "sublocality": "Sublocalité"
   },
-  "an": "un",
   "approvals": {
     "addAComment": "Ajoutez un commentaire pour aider votre approbateur à comprendre ce qui a changé",
     "send": "Envoyer l'approbation",
@@ -361,14 +359,13 @@
   "recommendedColors": "Couleurs recommandées",
   "redo": "Refaire",
   "reopenDate": "Rouvrir la date",
-  "responseFrom": "Réponse de {{BusinessName}}",
+  "responseFrom": "Réponse de {{businessName}}",
   "saturday": "Samedi",
   "search": "Recherche",
   "searchDropdownHere": "Entrée déroulante de recherche",
   "searchHere": "Recherche ici ...",
   "searchThisArea": "Recherchez cette zone",
   "secondaryHeader": "Tête secondaire",
-  "selectAField": "Sélectionnez {{article}} {{entityType}}",
   "selectAnOption": "Sélectionnez une option",
   "servicesSection": "Section des services",
   "showLabels": "Montrer les étiquettes",

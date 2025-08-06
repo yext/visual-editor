@@ -1,7 +1,6 @@
 {
   "Heading": "Pealkiri",
   "Link": "Link",
-  "a": "a",
   "actions": {
     "copyToClipboard": "Kopeeri lõikelauale",
     "pasteFromClipboard": "Pasta lõikelaualt"
@@ -18,7 +17,6 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
-  "an": "ja",
   "approvals": {
     "addAComment": "Lisage kommentaar, mis aitaks teie kinnitajal mõista, mis muutus",
     "send": "Saada heakskiitu",
@@ -331,7 +329,7 @@
   "loadingReviews": "Ülevaadete laadimine ...",
   "loadingVE": "Visuaalse toimetaja laadimine ...",
   "localGeomodifier": "Kohalik geomodifikaator",
-  "locationsNear_one": "{{krahv}} asukoht \"{{filterdisplayName}}\"  lähedal",
+  "locationsNear_one": "{{krahv}} asukoht \"{{filterDisplayName}}\"  lähedal",
   "map": "Kaardistama",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
@@ -361,14 +359,13 @@
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
   "reopenDate": "Taasavamine kuupäev",
-  "responseFrom": "Vastus {{BusinessName}}",
+  "responseFrom": "Vastus {{businessName}}",
   "saturday": "Laupäev",
   "search": "Otsima",
   "searchDropdownHere": "Otsi rippseant",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryHeader": "Teisene päis",
-  "selectAField": "Valige {{article}} {{entityType}} väli",
   "selectAnOption": "Valige suvand",
   "servicesSection": "Teenuste sektsioon",
   "showLabels": "Näita silte",

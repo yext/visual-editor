@@ -1,7 +1,6 @@
 {
   "Heading": "Îndreptându -se",
   "Link": "Legătură",
-  "a": "o",
   "actions": {
     "copyToClipboard": "Copiați în clipboard",
     "pasteFromClipboard": "Lipiți din clipboard"
@@ -18,7 +17,6 @@
     "region": "Stat/regiune",
     "sublocality": "Sublociune"
   },
-  "an": "un",
   "approvals": {
     "addAComment": "Adăugați un comentariu pentru a vă ajuta aprobatorul să înțeleagă ce s -a schimbat",
     "send": "Trimiteți pentru aprobare",
@@ -331,7 +329,7 @@
   "loadingReviews": "Încărcarea recenziilor ...",
   "loadingVE": "Încărcarea editorului vizual ...",
   "localGeomodifier": "Geomodificator local",
-  "locationsNear_one": "{{count}} locație lângă \"{{FilterDisplayName}}\"",
+  "locationsNear_one": "{{count}} locație lângă \"{{filterDisplayName}}\"",
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "missingHtmlWidget": "Adăugați HTML pentru a vizualiza componenta",
@@ -368,7 +366,6 @@
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
   "secondaryHeader": "Antet secundar",
-  "selectAField": "Selectați {{article}} {{entityType}} câmp",
   "selectAnOption": "Selectați o opțiune",
   "servicesSection": "Secțiunea Servicii",
   "showLabels": "Arată etichete",

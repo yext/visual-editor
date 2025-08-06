@@ -1,7 +1,6 @@
 {
   "Heading": "Heading",
   "Link": "Link",
-  "a": "a",
   "actions": {
     "copyToClipboard": "Copy to Clipboard",
     "pasteFromClipboard": "Paste from Clipboard"
@@ -18,7 +17,6 @@
     "region": "State/Region",
     "sublocality": "Sublocality"
   },
-  "an": "an",
   "approvals": {
     "addAComment": "Add a comment to help your approver understand what changed",
     "send": "Send for Approval",
@@ -368,7 +366,6 @@
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",
   "secondaryHeader": "Secondary Header",
-  "selectAField": "Select {{article}} {{entityType}} Field",
   "selectAnOption": "Select an option",
   "servicesSection": "Services Section",
   "showLabels": "Show Labels",

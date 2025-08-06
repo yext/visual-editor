@@ -1,7 +1,6 @@
 {
   "Heading": "Záhlaví",
   "Link": "Odkaz",
-  "a": "A",
   "actions": {
     "copyToClipboard": "Kopírovat do schránky",
     "pasteFromClipboard": "Vložit ze schránky"
@@ -18,7 +17,6 @@
     "region": "Stát/region",
     "sublocality": "Sublokalita"
   },
-  "an": "An",
   "approvals": {
     "addAComment": "Přidejte komentář, který pomůže vašemu schvalovateli pochopit, co se změnilo",
     "send": "Odeslat ke schválení",
@@ -331,7 +329,7 @@
   "loadingReviews": "Načítání recenzí ...",
   "loadingVE": "Načítání vizuálního editoru ...",
   "localGeomodifier": "Místní geomodifikátor",
-  "locationsNear_one": "{{Count}} umístění poblíž \"{{FilterDisplayName}}\"",
+  "locationsNear_one": "{{count}} umístění poblíž \"{{filterDisplayName}}\"",
   "map": "Mapa",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",
@@ -361,14 +359,13 @@
   "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
   "reopenDate": "Znovu otevřít datum",
-  "responseFrom": "Odpověď od {{BusinessName}}",
+  "responseFrom": "Odpověď od {{businessName}}",
   "saturday": "sobota",
   "search": "Vyhledávání",
   "searchDropdownHere": "Rozbalovací vstup pro vyhledávání",
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryHeader": "Sekundární záhlaví",
-  "selectAField": "Vyberte {{article}} {{entityType}} pole",
   "selectAnOption": "Vyberte možnost",
   "servicesSection": "Sekce služeb",
   "showLabels": "Zobrazit štítky",
@@ -460,7 +457,7 @@
   },
   "thursday": "čtvrtek",
   "title": "Titul",
-  "totalReviews_one": "{{Count}} review",
+  "totalReviews_one": "{{count}} review",
   "tuesday": "úterý",
   "undo": "Undo",
   "update": "Aktualizovat",

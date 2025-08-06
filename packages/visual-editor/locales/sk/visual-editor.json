@@ -1,7 +1,6 @@
 {
   "Heading": "Hlavný",
   "Link": "Prepojiť",
-  "a": "a",
   "actions": {
     "copyToClipboard": "Kopírovať do schránky",
     "pasteFromClipboard": "Pasta zo schránky"
@@ -18,7 +17,6 @@
     "region": "Štát/región",
     "sublocality": "Sublokalita"
   },
-  "an": "a",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",
@@ -331,7 +329,7 @@
   "loadingReviews": "Recenzie načítania ...",
   "loadingVE": "Načítava sa vizuálny editor ...",
   "localGeomodifier": "Miestny geomodifikátor",
-  "locationsNear_one": "{{count}} Umiestnenie blízko \"{{FilterDisplayName}}\"",
+  "locationsNear_one": "{{count}} Umiestnenie blízko \"{{filterDisplayName}}\"",
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
@@ -368,7 +366,6 @@
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
   "secondaryHeader": "Sekundárna hlavička",
-  "selectAField": "Vyberte {{article}} {{entityType}}",
   "selectAnOption": "Vyberte možnosť",
   "servicesSection": "Sekcia",
   "showLabels": "Ukazovať štítky",

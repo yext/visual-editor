@@ -1,7 +1,6 @@
 {
   "Heading": "Cabeçalho",
   "Link": "Link",
-  "a": "um",
   "actions": {
     "copyToClipboard": "Cópia para a área de transferência",
     "pasteFromClipboard": "Colar da área de transferência"
@@ -18,7 +17,6 @@
     "region": "Estado/região",
     "sublocality": "Sublocalidade"
   },
-  "an": "um",
   "approvals": {
     "addAComment": "Adicione um comentário para ajudar seu aprovador a entender o que mudou",
     "send": "Enviar aprovação",
@@ -361,14 +359,13 @@
   "recommendedColors": "Cores recomendadas",
   "redo": "Refazer",
   "reopenDate": "Reabrir data",
-  "responseFrom": "Resposta de {{BusinessName}}",
+  "responseFrom": "Resposta de {{businessName}}",
   "saturday": "Sábado",
   "search": "Procurar",
   "searchDropdownHere": "Pesquise a entrada suspensa",
   "searchHere": "Pesquise aqui ...",
   "searchThisArea": "Pesquise nesta área",
   "secondaryHeader": "Cabeçalho secundário",
-  "selectAField": "Selecione {{article}} {{entityType}} campo",
   "selectAnOption": "Selecione uma opção",
   "servicesSection": "Seção de serviços",
   "showLabels": "Mostrar rótulos",

@@ -1,7 +1,6 @@
 {
   "Heading": "Título",
   "Link": "Enlace",
-  "a": "a",
   "actions": {
     "copyToClipboard": "Copiar al portapapeles",
     "pasteFromClipboard": "Pegar del portapapeles"
@@ -18,7 +17,6 @@
     "region": "Estado/región",
     "sublocality": "Sublocalidad"
   },
-  "an": "un",
   "approvals": {
     "addAComment": "Agregue un comentario para ayudar a su aprobador a comprender lo que cambió",
     "send": "Enviar para su aprobación",
@@ -361,14 +359,13 @@
   "recommendedColors": "Colores recomendados",
   "redo": "Rehacer",
   "reopenDate": "Reabrir fecha",
-  "responseFrom": "Respuesta de {{BusinessName}}",
+  "responseFrom": "Respuesta de {{businessName}}",
   "saturday": "Sábado",
   "search": "Buscar",
   "searchDropdownHere": "Entrada desplegable de búsqueda",
   "searchHere": "Buscar aquí ...",
   "searchThisArea": "Busca esta área",
   "secondaryHeader": "Encabezado secundario",
-  "selectAField": "Seleccionar {{article}} {{entityType}} campo",
   "selectAnOption": "Seleccione una opción",
   "servicesSection": "Sección de servicios",
   "showLabels": "Espectáculo de etiquetas",

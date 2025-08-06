@@ -399,18 +399,9 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       : [
           {
             value: "",
-            label: pt(
-              "selectAField",
-              "Select {{article}} {{entityType}} Field",
-              {
-                article: /^[aeiou]/i.test(
-                  templateMetadata.entityTypeDisplayName
-                )
-                  ? pt("an", "an")
-                  : pt("a", "a"),
-                entityType: templateMetadata.entityTypeDisplayName,
-              }
-            ),
+            label: pt("entityTypeField", "{{entityType}} Field", {
+              entityType: templateMetadata.entityTypeDisplayName,
+            }),
           },
           ...entityFieldOptions,
         ];

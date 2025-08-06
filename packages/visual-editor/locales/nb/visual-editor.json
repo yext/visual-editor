@@ -1,7 +1,6 @@
 {
   "Heading": "Overskrift",
   "Link": "Lenke",
-  "a": "en",
   "actions": {
     "copyToClipboard": "Kopier til utklippstavlen",
     "pasteFromClipboard": "Lim inn fra utklippstavlen"
@@ -18,7 +17,6 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
-  "an": "an",
   "approvals": {
     "addAComment": "Legg til en kommentar for å hjelpe godkjenneren din til å forstå hva som endret seg",
     "send": "Send for godkjenning",
@@ -331,7 +329,7 @@
   "loadingReviews": "Laster inn anmeldelser ...",
   "loadingVE": "Laster inn visuell redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
-  "locationsNear_one": "{{count}} plassering i nærheten \"{{filterdisplayName}}\"",
+  "locationsNear_one": "{{count}} plassering i nærheten \"{{filterDisplayName}}\"",
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "missingHtmlWidget": "Legg til HTML for å se komponent",
@@ -368,7 +366,6 @@
   "searchHere": "Søk her ...",
   "searchThisArea": "Søk i dette området",
   "secondaryHeader": "Sekundær header",
-  "selectAField": "Velg {{article}} {{entityType}}feltet",
   "selectAnOption": "Velg et alternativ",
   "servicesSection": "Serviceseksjonen",
   "showLabels": "Vis etiketter",

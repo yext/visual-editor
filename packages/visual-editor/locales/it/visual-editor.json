@@ -1,7 +1,6 @@
 {
   "Heading": "Intestazione",
   "Link": "Collegamento",
-  "a": "UN",
   "actions": {
     "copyToClipboard": "Copia negli appunti",
     "pasteFromClipboard": "Incolla dagli appunti"
@@ -18,7 +17,6 @@
     "region": "Stato/regione",
     "sublocality": "Sublocalità"
   },
-  "an": "UN",
   "approvals": {
     "addAComment": "Aggiungi un commento per aiutare l'approvazione a capire cosa è cambiato",
     "send": "Invia per l'approvazione",
@@ -331,7 +329,7 @@
   "loadingReviews": "Caricamento delle recensioni ...",
   "loadingVE": "Caricamento dell'editor visivo ...",
   "localGeomodifier": "Geomodificatore locale",
-  "locationsNear_one": "{{count}} posizione vicino a \"{{FilterDisplayName}}\"",
+  "locationsNear_one": "{{count}} posizione vicino a \"{{filterDisplayName}}\"",
   "map": "Mappa",
   "maxWidthTip": "Per un allineamento ottimale dei contenuti, si consiglia di impostare la larghezza di intestazione e piè di pagina per abbinare o superare la griglia di contenuto della pagina.",
   "missingHtmlWidget": "Aggiungi HTML al componente Visualizza",
@@ -361,14 +359,13 @@
   "recommendedColors": "Colori consigliati",
   "redo": "Rifare",
   "reopenDate": "Rinnova la data",
-  "responseFrom": "Risposta da {{BusinessName}}",
+  "responseFrom": "Risposta da {{businessName}}",
   "saturday": "Sabato",
   "search": "Ricerca",
   "searchDropdownHere": "Ricerca input a discesa",
   "searchHere": "Cerca qui ...",
   "searchThisArea": "Cerca in quest'area",
   "secondaryHeader": "Intestazione secondaria",
-  "selectAField": "Seleziona {{article}} {{entityType}} campo",
   "selectAnOption": "Seleziona un'opzione",
   "servicesSection": "Sezione Servizi",
   "showLabels": "Etichette per mostrare",
@@ -460,7 +457,7 @@
   },
   "thursday": "Giovedì",
   "title": "Titolo",
-  "totalReviews_one": "{{Count}} Review",
+  "totalReviews_one": "{{count}} Review",
   "tuesday": "Martedì",
   "undo": "Disfare",
   "update": "Aggiornamento",

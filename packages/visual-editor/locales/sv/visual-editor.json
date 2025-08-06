@@ -1,7 +1,6 @@
 {
   "Heading": "Rubrik",
   "Link": "Länk",
-  "a": "en",
   "actions": {
     "copyToClipboard": "Kopiera till Urklipp",
     "pasteFromClipboard": "Klistra in från urklipp"
@@ -18,7 +17,6 @@
     "region": "Stat/region",
     "sublocality": "Sublokalitet"
   },
-  "an": "en",
   "approvals": {
     "addAComment": "Lägg till en kommentar för att hjälpa din godkännare att förstå vad som förändrats",
     "send": "Skicka för godkännande",
@@ -361,14 +359,13 @@
   "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
   "reopenDate": "Öppna datum igen",
-  "responseFrom": "Svar från {{BusinessName}}",
+  "responseFrom": "Svar från {{businessName}}",
   "saturday": "Lördag",
   "search": "Söka",
   "searchDropdownHere": "Sökrullningsingång",
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",
   "secondaryHeader": "Sekundärrubrik",
-  "selectAField": "Välj {{article}} {{entityType}}",
   "selectAnOption": "Välj ett alternativ",
   "servicesSection": "Serviceavdelning",
   "showLabels": "Visa etiketter",

@@ -1,7 +1,6 @@
 {
   "Heading": "Naslov",
   "Link": "Link",
-  "a": "a",
   "actions": {
     "copyToClipboard": "Kopirajte u međuspremnik",
     "pasteFromClipboard": "Zalijepi iz međuspremnika"
@@ -18,7 +17,6 @@
     "region": "Država/regija",
     "sublocality": "Subblokalnost"
   },
-  "an": "an",
   "approvals": {
     "addAComment": "Dodajte komentar kako biste pomogli vašem odobrenju da shvati što se promijenilo",
     "send": "Pošaljite na odobrenje",
@@ -361,14 +359,13 @@
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
   "reopenDate": "Ponovno otvaranje datuma",
-  "responseFrom": "Odgovor od {{BusinessName}}",
+  "responseFrom": "Odgovor od {{businessName}}",
   "saturday": "subota",
   "search": "Pretraživanje",
   "searchDropdownHere": "Pretražite unos pada",
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",
   "secondaryHeader": "Sekundarno zaglavlje",
-  "selectAField": "Odaberite {{article}} {{entityType}}",
   "selectAnOption": "Odaberite opciju",
   "servicesSection": "Odjeljak za usluge",
   "showLabels": "Prikaži naljepnice",

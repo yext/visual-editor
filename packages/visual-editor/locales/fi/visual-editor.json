@@ -1,7 +1,6 @@
 {
   "Heading": "Otsikko",
   "Link": "Linkki",
-  "a": "eräs",
   "actions": {
     "copyToClipboard": "Kopioi leikepöydälle",
     "pasteFromClipboard": "Liittää leikepöydältä"
@@ -18,7 +17,6 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
-  "an": "yksi",
   "approvals": {
     "addAComment": "Lisää kommentti auttaaksesi hyväksyjääsi ymmärtämään, mikä on muuttunut",
     "send": "Lähetä hyväksyntä",
@@ -331,7 +329,7 @@
   "loadingReviews": "Ladataan arvosteluja ...",
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",
-  "locationsNear_one": "{{count}} sijainti lähellä \"{{filterdisplayName}}\"",
+  "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
@@ -361,14 +359,13 @@
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
   "reopenDate": "Avata päivämäärä uudelleen",
-  "responseFrom": "Vastaus {{BusinessName}}}",
+  "responseFrom": "Vastaus {{businessName}}}",
   "saturday": "Lauantai",
   "search": "Haku",
   "searchDropdownHere": "Haku avattavasta tulosta",
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
   "secondaryHeader": "Toissijainen otsikko",
-  "selectAField": "Valitse {{article}} {{entityType}}kenttä",
   "selectAnOption": "Valitse vaihtoehto",
   "servicesSection": "Palvelusosasto",
   "showLabels": "Näyttötarrat",

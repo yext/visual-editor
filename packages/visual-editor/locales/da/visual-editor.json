@@ -1,7 +1,6 @@
 {
   "Heading": "Overskrift",
   "Link": "Forbindelse",
-  "a": "-en",
   "actions": {
     "copyToClipboard": "Kopier til udklipsholder",
     "pasteFromClipboard": "Indsæt fra udklipsholder"
@@ -18,7 +17,6 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
-  "an": "en",
   "approvals": {
     "addAComment": "Tilføj en kommentar for at hjælpe din godkender med at forstå, hvad der ændrede sig",
     "send": "Send til godkendelse",
@@ -331,7 +329,7 @@
   "loadingReviews": "Indlæser anmeldelser ...",
   "loadingVE": "Indlæser visuel redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
-  "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{FilterDisPlaYname}}\"",
+  "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{filterDisplayName}}\"",
   "map": "Kort",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "missingHtmlWidget": "Tilføj HTML for at se komponent",
@@ -361,14 +359,13 @@
   "recommendedColors": "Anbefalede farver",
   "redo": "Genindstille",
   "reopenDate": "Genåbnet dato",
-  "responseFrom": "Svar fra {{BusinessName}}",
+  "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",
   "search": "Søge",
   "searchDropdownHere": "Søg rullelinjet",
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",
   "secondaryHeader": "Sekundær header",
-  "selectAField": "Vælg {{article}} {{entityType}} felt",
   "selectAnOption": "Vælg en mulighed",
   "servicesSection": "Servicesektion",
   "showLabels": "Vis etiketter",

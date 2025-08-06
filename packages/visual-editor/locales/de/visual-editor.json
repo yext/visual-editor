@@ -1,7 +1,6 @@
 {
   "Heading": "Überschrift",
   "Link": "Link",
-  "a": "A",
   "actions": {
     "copyToClipboard": "Kopieren Sie in die Zwischenablage",
     "pasteFromClipboard": "Einfügen aus der Zwischenablage"
@@ -18,7 +17,6 @@
     "region": "Staat/Region",
     "sublocality": "Sublokalität"
   },
-  "an": "ein",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",
@@ -361,14 +359,13 @@
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
   "reopenDate": "Wiedereröffnung Datum",
-  "responseFrom": "Antwort von {{BusinessName}}",
+  "responseFrom": "Antwort von {{businessName}}",
   "saturday": "Samstag",
   "search": "Suchen",
   "searchDropdownHere": "Dropdown -Eingabe suchen",
   "searchHere": "Suche hier ...",
   "searchThisArea": "Suchen Sie diesen Bereich",
   "secondaryHeader": "Sekundärer Header",
-  "selectAField": "Wählen Sie {{article}} {{entityType}} Feld",
   "selectAnOption": "Wählen Sie eine Option aus",
   "servicesSection": "Dienstleistungsabschnitt",
   "showLabels": "Etiketten zeigen",

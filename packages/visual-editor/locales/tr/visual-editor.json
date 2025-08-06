@@ -1,7 +1,6 @@
 {
   "Heading": "Başlık",
   "Link": "Bağlantı",
-  "a": "A",
   "actions": {
     "copyToClipboard": "Panoya Kopyala",
     "pasteFromClipboard": "Panodan Yapıştır"
@@ -18,7 +17,6 @@
     "region": "Eyalet/bölge",
     "sublocality": "Subloku"
   },
-  "an": "BİR",
   "approvals": {
     "addAComment": "Onaycının neyin değiştiğini anlamasına yardımcı olmak için bir yorum ekleyin",
     "send": "Onay için gönder",
@@ -331,7 +329,7 @@
   "loadingReviews": "Yükleme İncelemeleri ...",
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
-  "locationsNear_one": "{{count}} konum \"{{filtreDisplayName}}\" yakınında yer",
+  "locationsNear_one": "{{count}} konum \"{{filterDisplayName}}\" yakınında yer",
   "map": "Harita",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
   "missingHtmlWidget": "Bileşeni görüntülemek için html ekle",
@@ -361,14 +359,13 @@
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
   "reopenDate": "Tarihi Yeniden Aç",
-  "responseFrom": "{{BusinessName}} 'dan yanıt",
+  "responseFrom": "{{businessName}} 'dan yanıt",
   "saturday": "Cumartesi",
   "search": "Aramak",
   "searchDropdownHere": "Arama açılır girişi",
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
   "secondaryHeader": "İkincil başlık",
-  "selectAField": "{{article}} {{entityType}} alanını seçin",
   "selectAnOption": "Bir seçenek seçin",
   "servicesSection": "Hizmetler Bölümü",
   "showLabels": "Etiketleri Göster",

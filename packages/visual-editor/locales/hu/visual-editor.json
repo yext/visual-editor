@@ -1,7 +1,6 @@
 {
   "Heading": "Cím",
   "Link": "Link",
-  "a": "A",
   "actions": {
     "copyToClipboard": "Másolja a vágólapra",
     "pasteFromClipboard": "Beilleszteni a vágólapról"
@@ -18,7 +17,6 @@
     "region": "Állami/régió",
     "sublocality": "Szublokitás"
   },
-  "an": "egy",
   "approvals": {
     "addAComment": "Adjon hozzá egy megjegyzést, hogy segítsen jóváhagyni, hogy megértse, mi változott",
     "send": "Küldje el jóváhagyásra",
@@ -331,7 +329,7 @@
   "loadingReviews": "A vélemények betöltése ...",
   "loadingVE": "Vizuális szerkesztő betöltése ...",
   "localGeomodifier": "Helyi geomodifier",
-  "locationsNear_one": "{{count}} A hely közelében \"{{filtDisPlayName}}\"",
+  "locationsNear_one": "{{count}} A hely közelében \"{{filterDisplayName}}\"",
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
@@ -361,14 +359,13 @@
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
   "reopenDate": "Újra megnyitja a dátumot",
-  "responseFrom": "Válasz a {{üzletnév}} -ból",
+  "responseFrom": "Válasz a {{businessName}}ból",
   "saturday": "szombat",
   "search": "Keresés",
   "searchDropdownHere": "Keresési legördülő bemenet",
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",
   "secondaryHeader": "Másodlagos fejléc",
-  "selectAField": "Válassza {{article}} {{entityType}} mezőt",
   "selectAnOption": "Válasszon egy opciót",
   "servicesSection": "Szolgáltatási szakasz",
   "showLabels": "A címkék megjelenítését",

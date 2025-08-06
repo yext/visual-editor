@@ -1,7 +1,6 @@
 {
   "Heading": "見出し",
   "Link": "リンク",
-  "a": "a",
   "actions": {
     "copyToClipboard": "クリップボードにコピーします",
     "pasteFromClipboard": "クリップボードから貼り付けます"
@@ -18,7 +17,6 @@
     "region": "州/地域",
     "sublocality": "サブロカリティ"
   },
-  "an": "an",
   "approvals": {
     "addAComment": "コメントを追加して、承認者が何が変わったのかを理解できるようにします",
     "send": "承認のために送信します",
@@ -331,7 +329,7 @@
   "loadingReviews": "レビューの読み込み...",
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
-  "locationsNear_one": "{{count}}近くの場所 \"{{filterdisplayname}}\"",
+  "locationsNear_one": "{{count}}近くの場所 \"{{filterDisplayName}}\"",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
@@ -361,14 +359,13 @@
   "recommendedColors": "推奨される色",
   "redo": "やり直します",
   "reopenDate": "日付を再開します",
-  "responseFrom": "{{BusinessName}}からの応答",
+  "responseFrom": "{{businessName}}からの応答",
   "saturday": "土曜日",
   "search": "検索",
   "searchDropdownHere": "ドロップダウン入力を検索します",
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
   "secondaryHeader": "セカンダリヘッダー",
-  "selectAField": "{{entityType}}フィールドを選択します",
   "selectAnOption": "オプションを選択します",
   "servicesSection": "サービスセクション",
   "showLabels": "ラベルを表示します",

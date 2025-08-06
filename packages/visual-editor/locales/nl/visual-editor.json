@@ -1,7 +1,6 @@
 {
   "Heading": "Kop",
   "Link": "Link",
-  "a": "A",
   "actions": {
     "copyToClipboard": "Kopieer naar klembord",
     "pasteFromClipboard": "Plak van klembord"
@@ -18,7 +17,6 @@
     "region": "Staat/regio",
     "sublocality": "Sublocaliteit"
   },
-  "an": "een",
   "approvals": {
     "addAComment": "Voeg een reactie toe om uw goedkeurder te helpen begrijpen wat er is veranderd",
     "send": "Stuur voor goedkeuring",
@@ -331,7 +329,7 @@
   "loadingReviews": "Beoordelingen laden ...",
   "loadingVE": "Visuele editor laden ...",
   "localGeomodifier": "Lokale geomodifier",
-  "locationsNear_one": "{{count}} locatie nabij \"{{filterdisplayName}}\"",
+  "locationsNear_one": "{{count}} locatie nabij \"{{filterDisplayName}}\"",
   "map": "Kaart",
   "maxWidthTip": "Voor optimale inhouduitlijning raden we aan de koptekst- en voettekstbreedte in te stellen om het pagina -inhoudsnet van de pagina te matchen of te overschrijden.",
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",
@@ -361,14 +359,13 @@
   "recommendedColors": "Aanbevolen kleuren",
   "redo": "Opnieuw doen",
   "reopenDate": "Heropen datum",
-  "responseFrom": "Reactie van {{BusinessName}}",
+  "responseFrom": "Reactie van {{businessName}}",
   "saturday": "Zaterdag",
   "search": "Zoekopdracht",
   "searchDropdownHere": "Zoek de vervolgkeuzeveld",
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
   "secondaryHeader": "Secundaire header",
-  "selectAField": "Selecteer {{article}} {{entityType}} veld",
   "selectAnOption": "Selecteer een optie",
   "servicesSection": "Dienstensectie",
   "showLabels": "Toon labels",
