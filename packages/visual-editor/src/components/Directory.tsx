@@ -185,11 +185,13 @@ const DirectoryCard = ({
   // If a hybrid developer passes in a resolveUrlTemplate function, use that to resolve the URL.
   // Otherwise, use the default resolveUrlTemplate function.
   const resolvedUrl =
-    puck.metadata?.resolveUrlTemplate(
-      streamDocument,
-      locale,
-      relativePrefixToRoot ?? ""
-    ) ?? resolveUrlTemplate(streamDocument, locale, relativePrefixToRoot ?? "");
+    typeof puck.metadata?.resolveUrlTemplate === "function"
+      ? puck.metadata.resolveUrlTemplate(
+          streamDocument,
+          locale,
+          relativePrefixToRoot ?? ""
+        )
+      : resolveUrlTemplate(streamDocument, locale, relativePrefixToRoot ?? "");
 
   return (
     <Background
