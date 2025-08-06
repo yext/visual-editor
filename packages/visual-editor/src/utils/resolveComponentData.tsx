@@ -101,6 +101,11 @@ const resolveTranslatableType = (
     return toStringOrElement(value[locale]);
   }
 
+  // Handle missing translation
+  if (value.hasLocalizedValue === "true" && !value[locale]) {
+    return "";
+  }
+
   if (Array.isArray(value)) {
     return value.map((item) => resolveTranslatableType(item, locale));
   }
