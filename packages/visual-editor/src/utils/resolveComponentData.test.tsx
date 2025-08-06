@@ -265,6 +265,11 @@ describe("resolveComponentData", () => {
       expect(resolveComponentData(data, "fr", mockDocument)).toBe("");
     });
 
+    it("returns an empty string if the locale is missing from a non-entity TranslatableString", () => {
+      const data: TranslatableString = { hasLocalizedValue: "true", en: "Hi" };
+      expect(resolveComponentData(data, "fr")).toBe("");
+    });
+
     it("returns an empty string if the locale is missing from a TranslatableRichText", () => {
       const data: TranslatableRichText = {
         hasLocalizedValue: "true",

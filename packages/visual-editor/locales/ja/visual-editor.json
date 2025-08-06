@@ -102,6 +102,7 @@
   "fields": {
     "address": "住所",
     "alignCard": "カードを調整します",
+    "analytics": "分析",
     "answer": "答え",
     "apiKey": "APIキー",
     "aspectRatioForLogo": "ロゴのアスペクト比",
@@ -249,6 +250,7 @@
     "promo": "プロモーション",
     "question": "質問",
     "radiusMiles": "半径（マイル）",
+    "scope": "範囲",
     "secondaryCTA": "二次CTA",
     "secondaryCTAVariant": "二次CTAバリアント",
     "secondaryCta": "二次CTA",

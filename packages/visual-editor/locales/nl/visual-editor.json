@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Lijnkaart",
+    "analytics": "Analyse",
     "answer": "Antwoord",
     "apiKey": "API -sleutel",
     "aspectRatioForLogo": "Beeldverhouding voor logo",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Vraag",
     "radiusMiles": "Straal (mijlen)",
+    "scope": "Domein",
     "secondaryCTA": "Secundaire CTA",
     "secondaryCTAVariant": "Secundaire CTA -variant",
     "secondaryCta": "Secundaire CTA",

@@ -102,6 +102,7 @@
   "fields": {
     "address": "Cím",
     "alignCard": "Igazítson kártya",
+    "analytics": "Analitika",
     "answer": "Válasz",
     "apiKey": "API kulcs",
     "aspectRatioForLogo": "A logó képaránya",
@@ -249,6 +250,7 @@
     "promo": "Promóció",
     "question": "Kérdés",
     "radiusMiles": "Sugár (mérföld)",
+    "scope": "Hatókör",
     "secondaryCTA": "Másodlagos CTA",
     "secondaryCTAVariant": "Másodlagos CTA -változat",
     "secondaryCta": "Másodlagos CTA",

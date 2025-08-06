@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adresa",
     "alignCard": "Poravnavanje",
+    "analytics": "Analitika",
     "answer": "Odgovor",
     "apiKey": "API ključ",
     "aspectRatioForLogo": "Omjer slike za logotip",
@@ -249,6 +250,7 @@
     "promo": "Promocija",
     "question": "Pitanje",
     "radiusMiles": "Polumjer (milja)",
+    "scope": "Opseg",
     "secondaryCTA": "Sekundarni CTA",
     "secondaryCTAVariant": "Sekundarna varijanta CTA",
     "secondaryCta": "Sekundarni CTA",

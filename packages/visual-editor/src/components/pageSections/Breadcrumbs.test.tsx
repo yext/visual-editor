@@ -170,14 +170,16 @@ describe("BreadcrumbsSection", async () => {
 
       await page.viewport(width, height);
 
-      await expect(`Breadcrumbs/[${viewportName}] ${name}`).toMatchScreenshot();
+      await expect(
+        `BreadcrumbsSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
         await expect(
-          `Breadcrumbs/[${viewportName}] ${name} (after interactions)`
+          `BreadcrumbsSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
