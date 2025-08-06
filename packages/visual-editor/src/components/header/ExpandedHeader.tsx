@@ -105,6 +105,12 @@ export interface ExpandedHeaderProps {
   analytics: {
     scope?: string;
   };
+
+  /**
+   * Indicates which props should not be checked for missing translations.
+   * @internal
+   */
+  ignoreI18nWarning?: string[];
 }
 
 const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
@@ -842,6 +848,29 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
             type: "maxWidth",
           }),
         },
+      },
+    };
+  },
+  resolveData: (data) => {
+    const hiddenProps: string[] = [];
+
+    if (!data.props.data.secondaryHeader?.show) {
+      hiddenProps.push("data.secondaryHeader");
+    }
+
+    if (!data.props.data.primaryHeader.showPrimaryCTA) {
+      hiddenProps.push("data.primaryHeader.primaryCTA");
+    }
+
+    if (!data.props.data.primaryHeader.showSecondaryCTA) {
+      hiddenProps.push("data.primaryHeader.secondaryCTA");
+    }
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreI18nWarning: hiddenProps,
       },
     };
   },
