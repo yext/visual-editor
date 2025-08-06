@@ -53,6 +53,17 @@ const defaultFooterLink = {
   link: "#",
 };
 
+const defaultExpandedFooterLinkSection = {
+  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  links: [
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+  ],
+};
+
 export const validPatterns: Record<string, RegExp> = {
   xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,
   facebookLink: /^https:\/\/(www\.)?facebook\.com\/.+/,
@@ -124,6 +135,12 @@ export interface ExpandedFooterProps {
   analytics: {
     scope?: string;
   };
+
+  /**
+   * Indicates which props should not be checked for missing translations.
+   * @internal
+   */
+  ignoreLocaleWarning?: string[];
 }
 
 const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
@@ -195,8 +212,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                label: YextField(msg("fields.label", "Label"), {
-                  type: "text",
+                label: TranslatableStringField(msg("fields.label", "Label"), {
+                  types: ["type.string"],
                 }),
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
@@ -824,46 +841,10 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         utilityImages: [],
         expandedFooter: false,
         expandedFooterLinks: [
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
         ],
       },
       secondaryFooter: {
@@ -968,6 +949,25 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
             type: "maxWidth",
           }),
         },
+      },
+    };
+  },
+  resolveData: (data) => {
+    const hiddenProps: string[] = [
+      data.props.data.primaryFooter.expandedFooter
+        ? "data.primaryFooter.footerLinks"
+        : "data.primaryFooter.expandedFooterLinks",
+    ];
+
+    if (!data.props.data.secondaryFooter.show) {
+      hiddenProps.push("data.secondaryFooter");
+    }
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreLocaleWarning: hiddenProps,
       },
     };
   },
