@@ -118,25 +118,6 @@ export const Grid: ComponentConfig<GridProps> = {
       scope: "gridSection",
     },
   },
-  // resolveData: (data, params) => {
-  //   if (
-  //     !params.changed.columns ||
-  //     data.props.slots.length === data.props.columns
-  //   ) {
-  //     return data;
-  //   }
-
-  //   return {
-  //     ...data,
-  //     props: {
-  //       ...data.props,
-  //       slots:
-  //         data.props.columns === 2
-  //           ? data.props.slots.slice(0, 2)
-  //           : [data.props.slots[0], data.props.slots[1], { Column: [] }],
-  //     },
-  //   };
-  // },
   render: (props) => (
     <AnalyticsScopeProvider
       name={`${props.analytics?.scope ?? "gridSection"}${getAnalyticsScopeHash(props.id)}`}
