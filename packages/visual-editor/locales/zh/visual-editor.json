@@ -24,7 +24,6 @@
   },
   "arrayField": "数组字段",
   "base": "根据",
-  "basicSelectorContentLabel": "选择一个内容字段",
   "basicSelectorNoOptionsLabel": "没有可用的选项",
   "body": "身体",
   "borderRadiusDefaultLabel": "默认",
@@ -94,11 +93,11 @@
     "warning": "此操作将消除您的本地更改。它不能撤消。"
   },
   "emailList": "电子邮件列表",
+  "entityTypeField": "{{entityType}}字段",
   "event": "事件",
   "expandedHeaderDesktop": "扩展的标头桌面",
   "expandedHeaderMobile": "扩展的标头移动设备",
   "faq": "常问问题",
-  "field": "场地",
   "fields": {
     "address": "地址",
     "alignCard": "对齐卡",
