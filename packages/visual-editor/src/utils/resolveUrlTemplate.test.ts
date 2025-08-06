@@ -1,84 +1,177 @@
-import { assert, describe, it } from "vitest";
+import { assert, describe, it, vi } from "vitest";
 import { resolveUrlTemplate } from "./resolveUrlTemplate";
 import { StreamDocument } from "./applyTheme";
 
-describe("resolveUrlTemplate", () => {
-  const mockStreamDocument: StreamDocument = {
-    name: "Yext",
-    id: "123",
-    locale: "en",
-    address: {
-      line1: "61 9th Ave",
-      city: "New York",
-      region: "NY",
-      country: "USA",
-    },
-    __: {
-      isPrimaryLocale: true,
-    },
-    _pageset: JSON.stringify({
-      config: {
-        urlTemplate: {
-          primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          alternate: "[[locale]]/[[address.region]]/[[address.city]]",
-        },
+const mockStreamDocument: StreamDocument = {
+  name: "Yext",
+  id: "123",
+  locale: "en",
+  address: {
+    line1: "61 9th Ave",
+    city: "New York",
+    region: "NY",
+    country: "USA",
+  },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+        alternate:
+          "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
       },
-    }),
-  };
+    },
+  }),
+};
 
-  it("should resolve the URL using the primary template for a primary locale", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "en");
+describe("resolveUrlTemplate", () => {
+  it("resolves primary template for primary locale", () => {
+    const result = resolveUrlTemplate(mockStreamDocument, "en", "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
-  it("should resolve the URL using the alternate template for a non-primary locale", () => {
+  it("resolves alternate template for non-primary locale", () => {
     const alternateLocaleDoc = {
       ...mockStreamDocument,
       __: { isPrimaryLocale: false },
       locale: "es",
     };
-    const result = resolveUrlTemplate(alternateLocaleDoc, "es");
-    assert.equal(result, "es/ny/new-york");
+    const result = resolveUrlTemplate(alternateLocaleDoc, "es", "");
+    assert.equal(result, "es/ny/new-york/61-9th-ave");
   });
 
-  it("should default to the alternate template if the '__' property is missing", () => {
+  it("defaults to alternate template if '__' is missing", () => {
     // eslint-disable-next-line no-unused-vars
     const { __, ...docWithoutPrimaryInfo } = mockStreamDocument;
-
-    const result = resolveUrlTemplate(docWithoutPrimaryInfo, "en");
-    assert.equal(result, "en/ny/new-york");
+    const result = resolveUrlTemplate(docWithoutPrimaryInfo, "en", "");
+    assert.equal(result, "en/ny/new-york/61-9th-ave");
   });
 
-  it("should return an empty string if _pageset is missing or undefined", () => {
+  it("gracefully resolves empty fields", () => {
+    const docWithMissingField = {
+      ...mockStreamDocument,
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary:
+              "[[address.region]]/[[address.postalCode]]/[[address.city]]",
+          },
+        },
+      }),
+    };
+    const result = resolveUrlTemplate(docWithMissingField, "en", "");
+    assert.equal(result, "ny/new-york");
+  });
+
+  it("gracefully resolves empty fields and hardcoded strings", () => {
+    const docWithMissingField = {
+      ...mockStreamDocument,
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary:
+              "foo/[[address.postalCode]]/[[address.region]]/[[address.city]]",
+          },
+        },
+      }),
+    };
+    const result = resolveUrlTemplate(docWithMissingField, "en", "");
+    assert.equal(result, "foo/ny/new-york");
+  });
+
+  it("prepends relativePrefixToRoot to primary URL", () => {
+    const result = resolveUrlTemplate(mockStreamDocument, "en", "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
+  });
+
+  it("prepends relativePrefixToRoot to alternate URL", () => {
+    const alternateLocaleDoc = {
+      ...mockStreamDocument,
+      __: { isPrimaryLocale: false },
+      locale: "es",
+    };
+    const result = resolveUrlTemplate(alternateLocaleDoc, "es", "../../");
+    assert.equal(result, "../../es/ny/new-york/61-9th-ave");
+  });
+
+  it("uses alternateDataSource if provided", () => {
+    const result = resolveUrlTemplate(mockStreamDocument, "en", "../", {
+      address: {
+        region: "alternate-region",
+        city: "alternate-city",
+        line1: "alternate-line1",
+      },
+    });
+    assert.equal(result, "../alternate-region/alternate-city/alternate-line1");
+  });
+
+  it("does not add prefix if URL resolves to empty string", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const docWithoutUrlTemplate = {
+      ...mockStreamDocument,
+      _pageset: JSON.stringify({ config: {} }),
+    };
+    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
+    assert.equal(result, "");
+    assert.isTrue(
+      consoleSpy.mock.calls[0][0].includes("No URL template found")
+    );
+    consoleSpy.mockRestore();
+  });
+
+  it("handles empty string prefix without altering URL", () => {
+    const result = resolveUrlTemplate(mockStreamDocument, "en", "");
+    assert.equal(result, "ny/new-york/61-9th-ave");
+  });
+
+  it("returns empty string and errors if _pageset is undefined", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const docWithoutPageset = {
       ...mockStreamDocument,
       _pageset: undefined,
     };
-    const result = resolveUrlTemplate(docWithoutPageset, "en");
+    const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
     assert.equal(result, "");
+    assert.isTrue(
+      consoleSpy.mock.calls[0][0].includes("No URL template found")
+    );
+    consoleSpy.mockRestore();
   });
 
-  it("should return an empty string if _pageset is an empty string", () => {
+  it("returns empty string and errors if _pageset is an empty string", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const docWithEmptyPageset = {
       ...mockStreamDocument,
       _pageset: "",
     };
-    const result = resolveUrlTemplate(docWithEmptyPageset, "en");
+    const result = resolveUrlTemplate(docWithEmptyPageset, "en", "../");
     assert.equal(result, "");
+    assert.isTrue(
+      consoleSpy.mock.calls[0][0].includes("No URL template found")
+    );
+    consoleSpy.mockRestore();
   });
 
-  it("should return an empty string if urlTemplate is missing in the config", () => {
+  it("returns empty string and errors if urlTemplate is missing", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const docWithoutUrlTemplate = {
       ...mockStreamDocument,
       _pageset: JSON.stringify({
         config: {},
       }),
     };
-    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en");
+    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
     assert.equal(result, "");
+    assert.isTrue(
+      consoleSpy.mock.calls[0][0].includes("No URL template found")
+    );
+    consoleSpy.mockRestore();
   });
 
-  it("should return an empty string if the primary template is missing for a primary locale", () => {
+  it("returns empty string and errors if primary template is missing for primary locale", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const docWithoutPrimaryTemplate = {
       ...mockStreamDocument,
       _pageset: JSON.stringify({
@@ -89,11 +182,16 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "en");
+    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
     assert.equal(result, "");
+    assert.isTrue(
+      consoleSpy.mock.calls[0][0].includes("No URL template found")
+    );
+    consoleSpy.mockRestore();
   });
 
-  it("should return an empty string if the alternate template is missing for an alternate locale", () => {
+  it("returns empty string and errors if alternate template is missing for alternate locale", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const docWithoutAlternateTemplate = {
       ...mockStreamDocument,
       __: { isPrimaryLocale: false },
@@ -105,54 +203,11 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "es");
+    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
     assert.equal(result, "");
-  });
-
-  it("should handle unresolvable fields gracefully, replacing them with empty strings", () => {
-    const docWithUnresolvableField = {
-      ...mockStreamDocument,
-      _pageset: JSON.stringify({
-        config: {
-          urlTemplate: {
-            primary:
-              "[[address.region]]/[[address.postalCode]]/[[address.city]]",
-          },
-        },
-      }),
-    };
-    const result = resolveUrlTemplate(docWithUnresolvableField, "en");
-    assert.equal(result, "ny//new-york");
-  });
-
-  describe("with relativePrefixToRoot", () => {
-    it("should prepend the relativePrefixToRoot to a primary URL", () => {
-      const result = resolveUrlTemplate(mockStreamDocument, "en", "../");
-      assert.equal(result, "../ny/new-york/61-9th-ave");
-    });
-
-    it("should prepend the relativePrefixToRoot to an alternate URL", () => {
-      const alternateLocaleDoc = {
-        ...mockStreamDocument,
-        __: { isPrimaryLocale: false },
-        locale: "es",
-      };
-      const result = resolveUrlTemplate(alternateLocaleDoc, "es", "../../");
-      assert.equal(result, "../../es/ny/new-york");
-    });
-
-    it("should not add a prefix if the resolved URL is an empty string", () => {
-      const docWithoutUrlTemplate = {
-        ...mockStreamDocument,
-        _pageset: JSON.stringify({ config: {} }),
-      };
-      const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
-      assert.equal(result, "");
-    });
-
-    it("should handle an empty string prefix without changing the URL", () => {
-      const result = resolveUrlTemplate(mockStreamDocument, "en", "");
-      assert.equal(result, "ny/new-york/61-9th-ave");
-    });
+    assert.isTrue(
+      consoleSpy.mock.calls[0][0].includes("No URL template found")
+    );
+    consoleSpy.mockRestore();
   });
 });

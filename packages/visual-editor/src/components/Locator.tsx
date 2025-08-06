@@ -1,8 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckContext,
+  WithPuckProps,
+} from "@measured/puck";
 import {
   AnalyticsProvider,
-  CardComponent,
   CardProps,
   Coordinate,
   executeSearch,
@@ -129,7 +133,7 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
   render: (props) => <LocatorWrapper {...props} />,
 };
 
-const LocatorWrapper: React.FC<LocatorProps> = (props) => {
+const LocatorWrapper: React.FC<WithPuckProps<LocatorProps>> = (props) => {
   const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
@@ -167,9 +171,9 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 
 type SearchState = "not started" | "loading" | "complete";
 
-const LocatorInternal: React.FC<LocatorProps> = (props) => {
+const LocatorInternal: React.FC<WithPuckProps<LocatorProps>> = (props) => {
   const { t } = useTranslation();
-  const { mapStyle, openNowButton, entityTypeEnvVar } = props;
+  const { mapStyle, openNowButton, entityTypeEnvVar, puck } = props;
   const entityType = getEntityType(entityTypeEnvVar);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
@@ -436,7 +440,9 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
             <VerticalResults
-              CardComponent={LocationCard}
+              CardComponent={(result: CardProps<Location>) => (
+                <LocationCard {...result} puck={puck} />
+              )}
               setResultsRef={setResultsRef}
             />
           )}
@@ -565,9 +571,13 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
   );
 };
 
-const LocationCard: CardComponent<Location> = ({
+const LocationCard = ({
   result,
-}: CardProps<Location>): React.JSX.Element => {
+  puck,
+}: {
+  result: CardProps<Location>["result"];
+  puck: PuckContext;
+}): React.JSX.Element => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
@@ -597,6 +607,15 @@ const LocationCard: CardComponent<Location> = ({
     result,
     "TAP_TO_CALL"
   );
+
+  // If a hybrid developer passes in a resolveUrlTemplate function, use that to resolve the URL.
+  // Otherwise, use the default resolveUrlTemplate function.
+  const resolvedUrl =
+    puck.metadata?.resolveUrlTemplate(
+      streamDocument,
+      locale,
+      relativePrefixToRoot ?? ""
+    ) ?? resolveUrlTemplate(streamDocument, locale, relativePrefixToRoot ?? "");
 
   return (
     <Background
@@ -677,14 +696,7 @@ const LocationCard: CardComponent<Location> = ({
           </div>
         </div>
         <Button asChild className="basis-full" variant="primary">
-          <a
-            href={resolveUrlTemplate(
-              streamDocument,
-              locale,
-              relativePrefixToRoot
-            )}
-            onClick={handleVisitPageClick}
-          >
+          <a href={resolvedUrl} onClick={handleVisitPageClick}>
             {t("visitPage", "Visit Page")}
           </a>
         </Button>

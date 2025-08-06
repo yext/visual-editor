@@ -24,7 +24,7 @@ export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "./searchHeadlessConfig.ts";
-export { normalizeSlug, validateSlug } from "./slugifier.ts";
+export { normalizeSlug } from "./slugifier.ts";
 export {
   backgroundColors,
   defaultThemeTailwindExtensions,

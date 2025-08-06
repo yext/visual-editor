@@ -30,6 +30,9 @@ const tests: ComponentTest[] = [
     document: {
       id: "1101-wilson-blvd",
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -37,6 +40,9 @@ const tests: ComponentTest[] = [
       _pageset: JSON.stringify({
         config: {
           contentEndpointId: "locationsContent",
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
         },
       }),
       yextDisplayCoordinate: {
@@ -53,6 +59,9 @@ const tests: ComponentTest[] = [
     document: {
       id: "7751-bird-rd",
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -60,6 +69,9 @@ const tests: ComponentTest[] = [
       _pageset: JSON.stringify({
         config: {
           contentEndpointId: "locationsContent",
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
         },
       }),
       yextDisplayCoordinate: {
@@ -81,6 +93,9 @@ const tests: ComponentTest[] = [
     document: {
       id: "1101-wilson-blvd",
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -88,6 +103,9 @@ const tests: ComponentTest[] = [
       _pageset: JSON.stringify({
         config: {
           contentEndpointId: "locationsContent",
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
         },
       }),
       yextDisplayCoordinate: {
@@ -150,6 +168,9 @@ const tests: ComponentTest[] = [
     document: {
       id: "7751-bird-rd",
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -157,6 +178,9 @@ const tests: ComponentTest[] = [
       _pageset: JSON.stringify({
         config: {
           contentEndpointId: "locationsContent",
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
         },
       }),
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },

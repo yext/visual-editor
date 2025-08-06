@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckContext,
+  WithPuckProps,
+} from "@measured/puck";
 import {
   useDocument,
   YextEntityField,
@@ -281,6 +286,8 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
+  locationData,
+  puck,
 }: {
   cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
@@ -289,10 +296,28 @@ const LocationCard = ({
   address: AddressType;
   timezone: string;
   mainPhone: string;
+  locationData: any;
+  puck: PuckContext;
 }) => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
   const locale = i18n.language;
+
+  // If a hybrid developer passes in a resolveUrlTemplate function, use that to resolve the URL.
+  // Otherwise, use the default resolveUrlTemplate function.
+  const resolvedUrl =
+    puck.metadata?.resolveUrlTemplate(
+      streamDocument,
+      locale,
+      relativePrefixToRoot ?? "",
+      locationData
+    ) ??
+    resolveUrlTemplate(
+      streamDocument,
+      locale,
+      relativePrefixToRoot ?? "",
+      locationData
+    );
 
   return (
     <Background
@@ -304,7 +329,7 @@ const LocationCard = ({
         eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
         className="mb-2"
-        href={resolveUrlTemplate(streamDocument, locale, relativePrefixToRoot)}
+        href={resolvedUrl}
       >
         <Heading
           level={styles?.cards.headingLevel}
@@ -355,11 +380,14 @@ const LocationCard = ({
   );
 };
 
-const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
+const NearbyLocationsComponent: React.FC<
+  WithPuckProps<NearbyLocationsSectionProps>
+> = ({
   styles,
   data,
   contentEndpointIdEnvVar,
-}: NearbyLocationsSectionProps) => {
+  puck,
+}: WithPuckProps<NearbyLocationsSectionProps>) => {
   const streamDocument = useDocument();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
@@ -481,6 +509,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
+                    locationData={location}
+                    puck={puck}
                   />
                 )
               )}
