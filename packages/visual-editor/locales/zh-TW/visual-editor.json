@@ -102,6 +102,7 @@
   "fields": {
     "address": "地址",
     "alignCard": "對齊卡",
+    "analytics": "分析",
     "answer": "回答",
     "apiKey": "API鍵",
     "aspectRatioForLogo": "徽標的縱橫比",
@@ -249,6 +250,7 @@
     "promo": "促銷",
     "question": "問題",
     "radiusMiles": "半徑（英里）",
+    "scope": "範圍",
     "secondaryCTA": "次級CTA",
     "secondaryCTAVariant": "次級CTA變體",
     "secondaryCta": "次級CTA",

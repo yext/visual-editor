@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Kartı hizalayın",
+    "analytics": "Analitik",
     "answer": "Cevap",
     "apiKey": "API Anahtarı",
     "aspectRatioForLogo": "Logo için en boy oranı",
@@ -249,6 +250,7 @@
     "promo": "Promosyon",
     "question": "Soru",
     "radiusMiles": "Yarıçap (mil)",
+    "scope": "Kapsam",
     "secondaryCTA": "İkincil CTA",
     "secondaryCTAVariant": "İkincil CTA varyantı",
     "secondaryCta": "İkincil CTA",

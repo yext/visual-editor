@@ -41,6 +41,7 @@ type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
 
 type YextBaseField = {
   type: string;
+  visible?: boolean;
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
@@ -170,6 +171,7 @@ export function YextField<T, U>(
   ) {
     return {
       label: fieldName,
+      visible: config.visible,
       type: config.type,
       options: ThemeOptions[config.options] as FieldOptions,
     };
@@ -178,6 +180,7 @@ export function YextField<T, U>(
   if (config.type === "text") {
     return {
       label: fieldName,
+      visible: config.visible,
       type: config.isMultiline ? "textarea" : "text",
     };
   }

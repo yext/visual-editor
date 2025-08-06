@@ -102,6 +102,7 @@
   "fields": {
     "address": "Adresa",
     "alignCard": "Aliniați cardul",
+    "analytics": "Analitică",
     "answer": "Răspuns",
     "apiKey": "Cheia API",
     "aspectRatioForLogo": "Raport de aspect pentru logo",
@@ -249,6 +250,7 @@
     "promo": "Promo",
     "question": "Întrebare",
     "radiusMiles": "Rază (mile)",
+    "scope": "Sfera de aplicare",
     "secondaryCTA": "CTA secundară",
     "secondaryCTAVariant": "Varianta CTA secundară",
     "secondaryCta": "CTA secundară",
