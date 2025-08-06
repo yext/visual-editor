@@ -21,6 +21,7 @@ import {
   Background,
   useDocument,
   resolveComponentData,
+  PageSectionProps,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -50,6 +51,17 @@ const defaultFooterLink = {
   linkType: "URL" as const,
   label: { en: "Footer Link", hasLocalizedValue: "true" as const },
   link: "#",
+};
+
+const defaultExpandedFooterLinkSection = {
+  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  links: [
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+    defaultFooterLink,
+  ],
 };
 
 export const validPatterns: Record<string, RegExp> = {
@@ -102,6 +114,8 @@ export interface ExpandedFooterStyles {
     backgroundColor?: BackgroundStyle;
     linksAlignment: "left" | "right";
   };
+  /** The maximum width of the footer. */
+  maxWidth: PageSectionProps["maxWidth"];
 }
 
 export interface ExpandedFooterProps {
@@ -118,9 +132,15 @@ export interface ExpandedFooterProps {
   styles: ExpandedFooterStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
+
+  /**
+   * Indicates which props should not be checked for missing translations.
+   * @internal
+   */
+  ignoreLocaleWarning?: string[];
 }
 
 const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
@@ -192,8 +212,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                label: YextField(msg("fields.label", "Label"), {
-                  type: "text",
+                label: TranslatableStringField(msg("fields.label", "Label"), {
+                  types: ["type.string"],
                 }),
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
@@ -360,6 +380,18 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           },
         }
       ),
+      maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
+        type: "maxWidth",
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
     },
   }),
 };
@@ -373,6 +405,7 @@ const ExpandedFooterWrapper = ({
   const {
     primaryFooter: primaryFooterStyle,
     secondaryFooter: secondaryFooterStyle,
+    maxWidth,
   } = styles;
   const {
     logo,
@@ -410,6 +443,7 @@ const ExpandedFooterWrapper = ({
       <PageSection
         verticalPadding={"footer"}
         background={backgroundColor}
+        maxWidth={maxWidth}
         className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
         <div
@@ -529,6 +563,7 @@ const ExpandedFooterWrapper = ({
         <PageSection
           verticalPadding={"footerSecondary"}
           background={secondaryBackgroundColor}
+          maxWidth={maxWidth}
           className={`flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
         >
           {secondaryFooterLinks?.length >= 1 && (
@@ -806,46 +841,10 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         utilityImages: [],
         expandedFooter: false,
         expandedFooterLinks: [
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
-          {
-            label: "Footer Label",
-            links: [
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-              defaultFooterLink,
-            ],
-          },
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
+          defaultExpandedFooterLinkSection,
         ],
       },
       secondaryFooter: {
@@ -877,6 +876,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
         backgroundColor: backgroundColors.background2.value,
         linksAlignment: "left",
       },
+      maxWidth: "theme",
     },
     analytics: {
       scope: "expandedFooter",
@@ -942,7 +942,32 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       },
       styles: {
         ...fields.styles,
-        objectFields: stylesFields,
+        objectFields: {
+          ...stylesFields,
+          // re-generate max width options
+          maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
+            type: "maxWidth",
+          }),
+        },
+      },
+    };
+  },
+  resolveData: (data) => {
+    const hiddenProps: string[] = [
+      data.props.data.primaryFooter.expandedFooter
+        ? "data.primaryFooter.footerLinks"
+        : "data.primaryFooter.expandedFooterLinks",
+    ];
+
+    if (!data.props.data.secondaryFooter.show) {
+      hiddenProps.push("data.secondaryFooter");
+    }
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreLocaleWarning: hiddenProps,
       },
     };
   },

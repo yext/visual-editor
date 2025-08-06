@@ -42,6 +42,8 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site. Available on Location templates.
 
+![Preview of the BreadcrumbsSection component](../components/testing/screenshots/BreadcrumbsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
+
 ### Props
 
 Defines the complete set of properties for the BreadcrumbsSection component.
@@ -218,6 +220,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 | Prop                     | Type                                                                                                                                   | Description                           | Default |
 | :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                         | The maximum width of the footer.      |         |
 | `styles.primaryFooter`   | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; logo: ImageStylingProps; utilityImages: ImageStylingProps; }` | Styling for the primary footer bar.   |         |
 | `styles.secondaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }`                                                            | Styling for the secondary footer bar. |         |
 
@@ -246,6 +249,7 @@ This object contains properties for customizing the appearance of both header ti
 
 | Prop                     | Type                                                                                                                                                | Description                                 | Default |
 | :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                                      | The maximum width of the header             |         |
 | `styles.primaryHeader`   | `{ logo: ImageStylingProps; backgroundColor?: BackgroundStyle; primaryCtaVariant: CTAProps["variant"]; secondaryCtaVariant: CTAProps["variant"]; }` | Styling for the main, primary header bar.   |         |
 | `styles.secondaryHeader` | `{ backgroundColor?: BackgroundStyle; }`                                                                                                            | Styling for the secondary header (top bar). |         |
 

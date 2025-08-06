@@ -85,13 +85,15 @@ jobs:
       - name: Detect new/modified screenshots
         id: check_screenshots
         if: matrix.node-version == '20.x'
+        env:
+          TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}
         working-directory: ./packages/${{ inputs.package }}
         run: |
           SCREENSHOTS_DIR="src/components/testing/screenshots" 
           echo "Checking for new/modified screenshots in ${SCREENSHOTS_DIR}..."
           NEW_OR_MODIFIED_FILES=$(git status --porcelain "${SCREENSHOTS_DIR}" | wc -l)
           echo "Found ${NEW_OR_MODIFIED_FILES} new or modified screenshot files."
-          if [ "$NEW_OR_MODIFIED_FILES" -gt 0 ]; then
+          if [ "$NEW_OR_MODIFIED_FILES" -gt 0 ] && [ "$TEST_EXIT_CODE"  != "0" ]; then
             echo "new_screenshots_found=true" >> "$GITHUB_OUTPUT"
           else
             echo "new_screenshots_found=false" >> "$GITHUB_OUTPUT"

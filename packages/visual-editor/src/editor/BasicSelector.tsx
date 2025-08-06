@@ -10,7 +10,7 @@ import { pt } from "../utils/i18n/platform.ts";
 import { Button } from "../internal/puck/ui/button.tsx";
 
 type BasicSelectorProps = {
-  label: string;
+  label?: string;
   translateOptions?: boolean;
   noOptionsPlaceholder?: string;
   noOptionsMessage?: string;
@@ -72,7 +72,7 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
       if (noOptions) {
         return (
           <>
-            <FieldLabel label={label} icon={icon} />
+            {label && <FieldLabel label={label} icon={icon} />}
             <Button variant="puckSelect" disabled={true}>
               {noOptionsPlaceholder}
             </Button>
@@ -83,20 +83,26 @@ export const BasicSelector = (props: BasicSelectorProps): Field => {
         );
       }
 
-      return (
+      const Selector = (
+        <Combobox
+          selectedOption={
+            serializedOptions.find(
+              (v) => JSON.stringify(v.value) === JSON.stringify(value)
+            ) ?? serializedOptions[0]
+          }
+          onChange={onChange}
+          optionGroups={translatedOptionGroups}
+          disabled={noOptions}
+          disableSearch={disableSearch}
+        />
+      );
+
+      return label ? (
         <FieldLabel label={pt(label)} icon={icon}>
-          <Combobox
-            selectedOption={
-              serializedOptions.find(
-                (v) => JSON.stringify(v.value) === JSON.stringify(value)
-              ) ?? serializedOptions[0]
-            }
-            onChange={onChange}
-            optionGroups={translatedOptionGroups}
-            disabled={noOptions}
-            disableSearch={disableSearch}
-          />
+          {Selector}
         </FieldLabel>
+      ) : (
+        Selector
       );
     },
   };
