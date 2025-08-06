@@ -182,6 +182,11 @@ const InsightCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
+  const resolvedCategory = insight.category
+    ? resolveComponentData(insight.category, i18n.language) || ""
+    : "";
+  const hasCategory = resolvedCategory.trim() !== "";
+  const hasPublishTime = insight.publishTime?.trim() !== "";
 
   return (
     <Background
@@ -199,29 +204,15 @@ const InsightCard = ({
       )}
       <div className="flex flex-col gap-8 p-8 flex-grow">
         <div className="flex flex-col gap-4">
-          {((insight.category &&
-            resolveComponentData(insight.category, i18n.language)?.trim() !==
-              "") ||
-            (insight.publishTime && insight.publishTime.trim() !== "")) && (
+          {(hasCategory || hasPublishTime) && (
             <div className="flex gap-4">
-              {insight.category &&
-                resolveComponentData(
-                  insight.category,
-                  i18n.language
-                )?.trim() !== "" && (
-                  <Body>
-                    {resolveComponentData(insight.category, i18n.language)}
-                  </Body>
-                )}
-              {insight.category &&
-                resolveComponentData(
-                  insight.category,
-                  i18n.language
-                )?.trim() !== "" &&
-                insight.publishTime &&
-                insight.publishTime.trim() !== "" && <Body>|</Body>}
-              {insight.publishTime && insight.publishTime.trim() !== "" && (
-                <Timestamp date={insight.publishTime} hideTimeZone={true} />
+              {hasCategory && <Body>{resolvedCategory}</Body>}
+              {hasCategory && hasPublishTime && <Body>|</Body>}
+              {hasPublishTime && (
+                <Timestamp
+                  date={insight.publishTime ?? ""}
+                  hideTimeZone={true}
+                />
               )}
             </div>
           )}
