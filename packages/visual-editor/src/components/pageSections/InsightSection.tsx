@@ -196,7 +196,6 @@ const InsightCard = ({
     : "";
   const hasCategory = resolvedCategory.trim() !== "";
   const hasPublishTime = insight.publishTime?.trim() !== "";
-  console.log(insight.image);
   return (
     <Background
       className="rounded flex flex-col"
