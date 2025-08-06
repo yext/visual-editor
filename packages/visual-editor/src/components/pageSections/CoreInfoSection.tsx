@@ -362,6 +362,31 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     locale,
     streamDocument
   );
+
+  type ResolvedPhoneNumber = {
+    number: string;
+    label?: string;
+  };
+  const resolvedPhoneNumbers: ResolvedPhoneNumber[] =
+    data?.info?.phoneNumbers
+      ?.map((item): ResolvedPhoneNumber | null => {
+        const number = resolveComponentData(
+          item.number,
+          locale,
+          streamDocument
+        );
+        const label = resolveComponentData(
+          item.label,
+          i18n.language,
+          streamDocument
+        );
+
+        if (!number) return null;
+
+        return { number, label };
+      })
+      ?.filter((item): item is ResolvedPhoneNumber => item !== null) ?? [];
+
   const hoursHeadingText = resolveComponentData(
     data.hours.headingText,
     locale,
@@ -394,6 +419,16 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     additionalHoursText: string;
   };
 
+  const hasCoreInfo: boolean =
+    !!addressHeadingText ||
+    !!resolvedAddress?.line1 ||
+    !!resolvedAddress?.city ||
+    !!resolvedAddress?.postalCode ||
+    !!resolvedAddress?.countryCode ||
+    (resolvedPhoneNumbers?.length ?? 0) > 0 ||
+    (resolvedEmails?.length ?? 0) > 0 ||
+    !!(coordinates && styles?.info?.showGetDirectionsLink);
+
   const justifyClass = styles?.heading?.align
     ? {
         left: "justify-start",
@@ -412,134 +447,129 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >
-      <section
-        aria-label={t("informationSection", "Information Section")}
-        className="flex flex-col gap-4"
-      >
-        {addressHeadingText && (
-          <EntityField
-            displayName={pt("fields.headingText", "Heading Text")}
-            fieldId={data.info.headingText.field}
-            constantValueEnabled={data.info.headingText.constantValueEnabled}
-          >
-            <div className={`flex ${justifyClass}`}>
-              <Heading level={styles?.heading?.level ?? 2}>
-                {addressHeadingText}
-              </Heading>
-            </div>
-          </EntityField>
-        )}
-        <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
-          {resolvedAddress && (
+      {hasCoreInfo && (
+        <section
+          aria-label={t("informationSection", "Information Section")}
+          className="flex flex-col gap-4"
+        >
+          {addressHeadingText && (
             <EntityField
-              displayName={pt("fields.address", "Address")}
-              fieldId={data.info.address.field}
-              constantValueEnabled={data.info.address.constantValueEnabled}
+              displayName={pt("fields.headingText", "Heading Text")}
+              fieldId={data.info.headingText.field}
+              constantValueEnabled={data.info.headingText.constantValueEnabled}
             >
-              <Address
-                address={resolvedAddress}
-                lines={[
-                  ["line1"],
-                  ["line2"],
-                  ["city", ",", "region", "postalCode"],
-                ]}
-              />
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles?.heading?.level ?? 2}>
+                  {addressHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
-          {coordinates && styles.info.showGetDirectionsLink && (
-            <CTA
-              eventName={`getDirections`}
-              className="font-bold"
-              link={coordinates}
-              label={t("getDirections", "Get Directions")}
-              linkType="DRIVING_DIRECTIONS"
-              target="_blank"
-              variant={styles.info.ctaVariant}
-            />
-          )}
-        </div>
-        {data.info.phoneNumbers && (
-          <ul className="flex flex-col gap-4">
-            {data.info.phoneNumbers.map((item, idx) => {
-              const resolvedNumber = resolveComponentData(
-                item.number,
-                locale,
-                streamDocument
-              );
-              if (!resolvedNumber) {
-                return;
-              }
-
-              const phoneLabel = resolveComponentData(
-                item.label,
-                i18n.language,
-                streamDocument
-              );
-
-              return (
-                <li key={phoneLabel} className="flex gap-2 items-center">
-                  <EntityField
-                    displayName={pt("fields.phoneNumber", "Phone Number")}
-                    fieldId={item.number.field}
-                    constantValueEnabled={item.number.constantValueEnabled}
+          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+            {resolvedAddress && (
+              <EntityField
+                displayName={pt("fields.address", "Address")}
+                fieldId={data.info.address.field}
+                constantValueEnabled={data.info.address.constantValueEnabled}
+              >
+                <Address
+                  address={resolvedAddress}
+                  lines={[
+                    ["line1"],
+                    ["line2"],
+                    ["city", ",", "region", "postalCode"],
+                  ]}
+                />
+              </EntityField>
+            )}
+            {coordinates && styles.info.showGetDirectionsLink && (
+              <CTA
+                eventName={`getDirections`}
+                className="font-bold"
+                link={coordinates}
+                label={t("getDirections", "Get Directions")}
+                linkType="DRIVING_DIRECTIONS"
+                target="_blank"
+                variant={styles.info.ctaVariant}
+              />
+            )}
+          </div>
+          {resolvedPhoneNumbers.length > 0 && (
+            <ul className="flex flex-col gap-4">
+              {resolvedPhoneNumbers.map((phone, idx) => {
+                return (
+                  <li
+                    key={`${phone.number}-${idx}`}
+                    className="flex gap-2 items-center"
                   >
-                    <div className={"flex items-center gap-3"}>
-                      <div className="flex gap-2 items-center">
-                        <PhoneAtom
-                          eventName={`phone${idx}`}
-                          backgroundColor={backgroundColors.background2.value}
-                          label={phoneLabel}
-                          phoneNumber={resolvedNumber}
-                          format={styles.info.phoneFormat}
-                          includeHyperlink={styles.info.includePhoneHyperlink}
-                          includeIcon={true}
-                        />
-                      </div>
-                    </div>
-                  </EntityField>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {resolvedEmails && (
-          <EntityField
-            displayName={pt("fields.emailList", "Email List")}
-            fieldId={data.info.emails.field}
-            constantValueEnabled={data.info.emails.constantValueEnabled}
-          >
-            <ul className="list-inside flex flex-col gap-4">
-              {resolvedEmails
-                .slice(
-                  0,
-                  data.info.emails.constantValueEnabled
-                    ? resolvedEmails.length
-                    : Math.min(
-                        resolvedEmails.length,
-                        styles.info.emailsListLength!
-                      )
-                )
-                .map((email, index) => (
-                  <li key={index} className={`flex items-center gap-3`}>
-                    <Background
-                      background={backgroundColors.background2.value}
-                      className={`h-10 w-10 flex justify-center rounded-full items-center`}
+                    {/* Assuming you want to associate this with the original EntityField data —
+              fallback to data.info.phoneNumbers[idx] */}
+                    <EntityField
+                      displayName={pt("fields.phoneNumber", "Phone Number")}
+                      fieldId={data.info.phoneNumbers[idx]?.number?.field}
+                      constantValueEnabled={
+                        data.info.phoneNumbers[idx]?.number
+                          ?.constantValueEnabled
+                      }
                     >
-                      <FaRegEnvelope className="w-4 h-4" />
-                    </Background>
-                    <CTA
-                      eventName={`email${index}`}
-                      link={email}
-                      label={email}
-                      linkType="EMAIL"
-                      variant="link"
-                    />
+                      <div className="flex items-center gap-3">
+                        <div className="flex gap-2 items-center">
+                          <PhoneAtom
+                            eventName={`phone${idx}`}
+                            backgroundColor={backgroundColors.background2.value}
+                            label={phone.label}
+                            phoneNumber={phone.number}
+                            format={styles.info.phoneFormat}
+                            includeHyperlink={styles.info.includePhoneHyperlink}
+                            includeIcon={true}
+                          />
+                        </div>
+                      </div>
+                    </EntityField>
                   </li>
-                ))}
+                );
+              })}
             </ul>
-          </EntityField>
-        )}
-      </section>
+          )}
+          {resolvedEmails && (
+            <EntityField
+              displayName={pt("fields.emailList", "Email List")}
+              fieldId={data.info.emails.field}
+              constantValueEnabled={data.info.emails.constantValueEnabled}
+            >
+              <ul className="list-inside flex flex-col gap-4">
+                {resolvedEmails
+                  .slice(
+                    0,
+                    data.info.emails.constantValueEnabled
+                      ? resolvedEmails.length
+                      : Math.min(
+                          resolvedEmails.length,
+                          styles.info.emailsListLength!
+                        )
+                  )
+                  .map((email, index) => (
+                    <li key={index} className={`flex items-center gap-3`}>
+                      <Background
+                        background={backgroundColors.background2.value}
+                        className={`h-10 w-10 flex justify-center rounded-full items-center`}
+                      >
+                        <FaRegEnvelope className="w-4 h-4" />
+                      </Background>
+                      <CTA
+                        eventName={`email${index}`}
+                        link={email}
+                        label={email}
+                        linkType="EMAIL"
+                        variant="link"
+                      />
+                    </li>
+                  ))}
+              </ul>
+            </EntityField>
+          )}
+        </section>
+      )}
       {resolvedHours && (
         <section
           aria-label={t("hoursSection", "Hours Section")}
@@ -563,17 +593,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             fieldId="hours"
             constantValueEnabled={data.hours.hours.constantValueEnabled}
           >
-            <div
-              className="w-full min-w-0 overflow-x-auto whitespace-nowrap"
-              tabIndex={0}
-            >
-              <HoursTableAtom
-                hours={resolvedHours}
-                startOfWeek={styles.hours.startOfWeek}
-                collapseDays={styles.hours.collapseDays}
-                className={"w-full"}
-              />
-            </div>
+            <HoursTableAtom
+              hours={resolvedHours}
+              startOfWeek={styles.hours.startOfWeek}
+              collapseDays={styles.hours.collapseDays}
+            />
           </EntityField>
           {additionalHoursText && styles.hours.showAdditionalHoursText && (
             <EntityField

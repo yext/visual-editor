@@ -9,15 +9,13 @@
 .HoursTable-row {
   display: flex;
   justify-content: space-between;
-  width: auto;
-  max-width: 100%;
+  width: 18rem;
 }
 
 .components .HoursTable-intervals {
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
-  text-align: right;
 }
 
 /* Custom styling for entity field selection in the Puck sidebar. */
