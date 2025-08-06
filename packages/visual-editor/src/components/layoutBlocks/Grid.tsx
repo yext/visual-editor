@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, DropZone, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   themeManagerCn,
   backgroundColors,
@@ -15,47 +15,48 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface GridProps extends layoutProps {
   columns: number;
+  slots: { Column: Slot }[];
   liveVisibility: boolean;
   className?: string;
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 }
 
-const GridSection = React.forwardRef<HTMLDivElement, GridProps>(
-  ({ className, columns = 2, backgroundColor }, ref) => {
-    return (
-      <Background
-        background={backgroundColor}
-        className={themeManagerCn(
-          "flex flex-col components w-full px-4 py-pageSection-verticalPadding items-center",
-          className
-        )}
+const GridSection = React.forwardRef<
+  HTMLDivElement,
+  Parameters<PuckComponent<GridProps>>[0]
+>(({ className, columns = 2, backgroundColor, slots }, ref) => {
+  return (
+    <Background
+      background={backgroundColor}
+      className={themeManagerCn(
+        "flex flex-col components w-full px-4 py-pageSection-verticalPadding items-center",
+        className
+      )}
+    >
+      <div
+        className={
+          "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
+          columns
+        }
+        ref={ref}
       >
-        <div
-          className={
-            "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
-            columns
-          }
-          ref={ref}
-        >
-          {Array.from({ length: columns })?.map((_, idx) => (
-            <DropZone
-              key={idx}
-              className={themeManagerCn(
-                layoutVariants({ gap: "4" }),
-                `flex flex-col`
-              )}
-              zone={`column-${idx}`}
-              allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
-            />
-          ))}
-        </div>
-      </Background>
-    );
-  }
-);
+        {slots.slice(0, columns).map(({ Column }, idx) => (
+          <Column
+            key={idx}
+            className={themeManagerCn(
+              layoutVariants({ gap: "4" }),
+              `flex flex-col`
+            )}
+            allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
+          />
+        ))}
+      </div>
+    </Background>
+  );
+});
 
 GridSection.displayName = "GridSection";
 
@@ -67,6 +68,13 @@ const gridSectionFields: Fields<GridProps> = {
       { label: msg("fields.options.three", "Three"), value: 3 },
     ],
   }),
+  slots: {
+    type: "array",
+    arrayFields: {
+      Column: { type: "slot" },
+    },
+    visible: false,
+  },
   backgroundColor: YextField(
     msg("fields.backgroundColor", "Background Color"),
     {
@@ -74,6 +82,15 @@ const gridSectionFields: Fields<GridProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
@@ -94,6 +111,7 @@ export const Grid: ComponentConfig<GridProps> = {
   fields: gridSectionFields,
   defaultProps: {
     columns: 2,
+    slots: [{ Column: [] }, { Column: [] }, { Column: [] }],
     backgroundColor: backgroundColors.background1.value,
     liveVisibility: true,
     analytics: {

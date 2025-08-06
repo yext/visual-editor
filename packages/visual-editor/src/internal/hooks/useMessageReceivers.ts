@@ -11,6 +11,7 @@ import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { filterComponentsFromConfig } from "../../utils/filterComponents.tsx";
 
 const devLogger = new DevLogger();
 
@@ -90,8 +91,13 @@ export const useCommonMessageReceivers = (
   }
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    const puckConfig = componentRegistry.get(payload.templateId);
-    if (!puckConfig) {
+    let puckConfig = componentRegistry.get(payload.templateId);
+    if (puckConfig) {
+      puckConfig = filterComponentsFromConfig(
+        puckConfig,
+        payload.additionalLayoutComponents
+      );
+    } else {
       throw new Error(
         `Could not find config for template: templateId=${payload.templateId}`
       );
