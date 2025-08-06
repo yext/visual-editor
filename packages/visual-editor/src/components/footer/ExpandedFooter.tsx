@@ -129,7 +129,7 @@ export interface ExpandedFooterProps {
    * Indicates which props should not be checked for missing translations.
    * @internal
    */
-  ignoreI18nWarning?: string[];
+  ignoreLocaleWarning?: string[];
 }
 
 const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
@@ -992,7 +992,7 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
       ...data,
       props: {
         ...data.props,
-        ignoreI18nWarning: hiddenProps,
+        ignoreLocaleWarning: hiddenProps,
       },
     };
   },

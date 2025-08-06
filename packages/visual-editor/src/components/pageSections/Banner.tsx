@@ -62,7 +62,7 @@ export interface BannerSectionProps {
    * Indicates which props should not be checked for missing translations.
    * @internal
    */
-  ignoreI18nWarning?: string[];
+  ignoreLocaleWarning?: string[];
 }
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
@@ -161,7 +161,7 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
       textAlignment: "center",
     },
     liveVisibility: true,
-    ignoreI18nWarning: ["data.text"],
+    ignoreLocaleWarning: ["data.text"],
   },
   render: (props) => (
     <VisibilityWrapper

@@ -1,12 +1,12 @@
 import { Migration } from "../../utils/migrate.ts";
 
-export const ignore18nWarningBannerSection: Migration = {
+export const ignoreLocaleWarningBannerSection: Migration = {
   BannerSection: {
     action: "updated",
     propTransformation: (props) => {
       return {
         ...props,
-        ignore18nWarning: ["data.text"],
+        ignoreLocaleWarning: ["data.text"],
       };
     },
   },

@@ -110,7 +110,7 @@ export interface ExpandedHeaderProps {
    * Indicates which props should not be checked for missing translations.
    * @internal
    */
-  ignoreI18nWarning?: string[];
+  ignoreLocaleWarning?: string[];
 }
 
 const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
@@ -870,7 +870,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
       ...data,
       props: {
         ...data.props,
-        ignoreI18nWarning: hiddenProps,
+        ignoreLocaleWarning: hiddenProps,
       },
     };
   },
