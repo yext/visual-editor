@@ -399,7 +399,18 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       : [
           {
             value: "",
-            label: pt("basicSelectorContentLabel", "Select a Content field"),
+            label: pt(
+              "selectAField",
+              "Select {{article}} {{entityType}} Field",
+              {
+                article: /^[aeiou]/i.test(
+                  templateMetadata.entityTypeDisplayName
+                )
+                  ? pt("an", "an")
+                  : pt("a", "a"),
+                entityType: templateMetadata.entityTypeDisplayName,
+              }
+            ),
           },
           ...entityFieldOptions,
         ];
@@ -421,10 +432,10 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       }
     }
 
-    // TODO: translation concatenation
     return BasicSelector({
-      label:
-        templateMetadata.entityTypeDisplayName + " " + pt("field", "Field"),
+      label: pt("entityTypeField", "{{entityType}} Field", {
+        entityType: templateMetadata.entityTypeDisplayName,
+      }),
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),

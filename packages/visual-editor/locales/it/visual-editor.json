@@ -1,6 +1,7 @@
 {
   "Heading": "Intestazione",
   "Link": "Collegamento",
+  "a": "UN",
   "actions": {
     "copyToClipboard": "Copia negli appunti",
     "pasteFromClipboard": "Incolla dagli appunti"
@@ -17,6 +18,7 @@
     "region": "Stato/regione",
     "sublocality": "Sublocalità"
   },
+  "an": "UN",
   "approvals": {
     "addAComment": "Aggiungi un commento per aiutare l'approvazione a capire cosa è cambiato",
     "send": "Invia per l'approvazione",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Campo di array",
   "base": "Base",
-  "basicSelectorContentLabel": "Seleziona un campo di contenuto",
   "basicSelectorNoOptionsLabel": "Nessuna opzione disponibile",
   "body": "Corpo",
   "borderRadiusDefaultLabel": "Predefinito",
@@ -94,11 +95,11 @@
     "warning": "Questa azione rimuoverà le modifiche locali. Non può essere annullato."
   },
   "emailList": "Elenco e -mail",
+  "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
   "expandedHeaderDesktop": "Desktop di intestazione ampliato",
   "expandedHeaderMobile": "Intestazione estesa Mobile",
   "faq": "FAQ",
-  "field": "Campo",
   "fields": {
     "address": "Indirizzo",
     "alignCard": "Allinea carta",
@@ -367,6 +368,7 @@
   "searchHere": "Cerca qui ...",
   "searchThisArea": "Cerca in quest'area",
   "secondaryHeader": "Intestazione secondaria",
+  "selectAField": "Seleziona {{article}} {{entityType}} campo",
   "selectAnOption": "Seleziona un'opzione",
   "servicesSection": "Sezione Servizi",
   "showLabels": "Etichette per mostrare",

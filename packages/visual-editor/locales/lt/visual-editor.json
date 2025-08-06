@@ -1,6 +1,7 @@
 {
   "Heading": "Antraštė",
   "Link": "Nuoroda",
+  "a": "a",
   "actions": {
     "copyToClipboard": "Kopijuokite į mainų sritį",
     "pasteFromClipboard": "Įklijuokite iš mainų srities"
@@ -17,6 +18,7 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
+  "an": "an",
   "approvals": {
     "addAComment": "Pridėkite komentarą, kad padėtumėte jūsų patvirtintojui suprasti, kas pasikeitė",
     "send": "Siųsti patvirtinti",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Masyvo laukas",
   "base": "Bazė",
-  "basicSelectorContentLabel": "Pasirinkite turinio lauką",
   "basicSelectorNoOptionsLabel": "Nėra galimybių",
   "body": "Kūnas",
   "borderRadiusDefaultLabel": "Numatytasis",
@@ -94,11 +95,11 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "emailList": "El. Pašto sąrašas",
+  "entityTypeField": "{{entityType}} laukas",
   "event": "Įvykis",
   "expandedHeaderDesktop": "Išplėstas antraštės darbalaukis",
   "expandedHeaderMobile": "Išplėstas antraštės mobilusis telefonas",
   "faq": "DUK",
-  "field": "Laukas",
   "fields": {
     "address": "Adresas",
     "alignCard": "Sulygios kortelė",
@@ -367,6 +368,7 @@
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",
   "secondaryHeader": "Antrinė antraštė",
+  "selectAField": "Pasirinkite {{article}} {{entityType}} laukas",
   "selectAnOption": "Pasirinkite parinktį",
   "servicesSection": "Paslaugų skyrius",
   "showLabels": "Rodyti etiketes",

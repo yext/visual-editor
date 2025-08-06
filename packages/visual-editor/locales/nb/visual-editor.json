@@ -1,6 +1,7 @@
 {
   "Heading": "Overskrift",
   "Link": "Lenke",
+  "a": "en",
   "actions": {
     "copyToClipboard": "Kopier til utklippstavlen",
     "pasteFromClipboard": "Lim inn fra utklippstavlen"
@@ -17,6 +18,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "an": "an",
   "approvals": {
     "addAComment": "Legg til en kommentar for å hjelpe godkjenneren din til å forstå hva som endret seg",
     "send": "Send for godkjenning",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Array -feltet",
   "base": "Base",
-  "basicSelectorContentLabel": "Velg et innholdsfelt",
   "basicSelectorNoOptionsLabel": "Ingen alternativer tilgjengelig",
   "body": "Kropp",
   "borderRadiusDefaultLabel": "Misligholde",
@@ -94,11 +95,11 @@
     "warning": "Denne handlingen vil fjerne dine lokale endringer. Det kan ikke angre."
   },
   "emailList": "E -postliste",
+  "entityTypeField": "{{entityType}} felt",
   "event": "Hendelse",
   "expandedHeaderDesktop": "Utvidet topptopp",
   "expandedHeaderMobile": "Utvidet overskriftsmobil",
   "faq": "FAQ",
-  "field": "Felt",
   "fields": {
     "address": "Adresse",
     "alignCard": "Juster kortet",
@@ -367,6 +368,7 @@
   "searchHere": "Søk her ...",
   "searchThisArea": "Søk i dette området",
   "secondaryHeader": "Sekundær header",
+  "selectAField": "Velg {{article}} {{entityType}}feltet",
   "selectAnOption": "Velg et alternativ",
   "servicesSection": "Serviceseksjonen",
   "showLabels": "Vis etiketter",

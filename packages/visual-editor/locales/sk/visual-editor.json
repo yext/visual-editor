@@ -1,6 +1,7 @@
 {
   "Heading": "Hlavný",
   "Link": "Prepojiť",
+  "a": "a",
   "actions": {
     "copyToClipboard": "Kopírovať do schránky",
     "pasteFromClipboard": "Pasta zo schránky"
@@ -17,6 +18,7 @@
     "region": "Štát/región",
     "sublocality": "Sublokalita"
   },
+  "an": "a",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Pole",
   "base": "Základňa",
-  "basicSelectorContentLabel": "Vyberte pole obsahu",
   "basicSelectorNoOptionsLabel": "Nie sú k dispozícii žiadne možnosti",
   "body": "Tela",
   "borderRadiusDefaultLabel": "Predvolený",
@@ -94,11 +95,11 @@
     "warning": "Táto akcia odstráni vaše miestne zmeny. Nedá sa to vrátiť späť."
   },
   "emailList": "Zoznam e -mailov",
+  "entityTypeField": "{{entityType}} pole",
   "event": "Udalosť",
   "expandedHeaderDesktop": "Rozšírená plocha hlavičky",
   "expandedHeaderMobile": "Rozšírená hlavička Mobile",
   "faq": "Často",
-  "field": "Pole",
   "fields": {
     "address": "Osloviť",
     "alignCard": "Zarovnaná karta",
@@ -367,6 +368,7 @@
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
   "secondaryHeader": "Sekundárna hlavička",
+  "selectAField": "Vyberte {{article}} {{entityType}}",
   "selectAnOption": "Vyberte možnosť",
   "servicesSection": "Sekcia",
   "showLabels": "Ukazovať štítky",

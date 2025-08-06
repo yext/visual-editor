@@ -1,6 +1,7 @@
 {
   "Heading": "標題",
   "Link": "關聯",
+  "a": "一個",
   "actions": {
     "copyToClipboard": "複製到剪貼板",
     "pasteFromClipboard": "從剪貼板粘貼"
@@ -17,6 +18,7 @@
     "region": "州/地區",
     "sublocality": "子域"
   },
+  "an": "一個",
   "approvals": {
     "addAComment": "添加評論以幫助您的批准者了解發生了什麼變化",
     "send": "發送批准",
@@ -24,7 +26,6 @@
   },
   "arrayField": "數組字段",
   "base": "根據",
-  "basicSelectorContentLabel": "選擇一個內容字段",
   "basicSelectorNoOptionsLabel": "沒有可用的選項",
   "body": "身體",
   "borderRadiusDefaultLabel": "預設",
@@ -94,11 +95,11 @@
     "warning": "此操作將消除您的本地更改。它不能撤消。"
   },
   "emailList": "電子郵件列表",
+  "entityTypeField": "{{entityType}}字段",
   "event": "事件",
   "expandedHeaderDesktop": "擴展的標頭桌面",
   "expandedHeaderMobile": "擴展的標頭移動設備",
   "faq": "常問問題",
-  "field": "場地",
   "fields": {
     "address": "地址",
     "alignCard": "對齊卡",
@@ -367,6 +368,7 @@
   "searchHere": "在這裡搜索...",
   "searchThisArea": "搜索此區域",
   "secondaryHeader": "次要標題",
+  "selectAField": "選擇{{entityType}}字段",
   "selectAnOption": "選擇一個選項",
   "servicesSection": "服務部分",
   "showLabels": "顯示標籤",

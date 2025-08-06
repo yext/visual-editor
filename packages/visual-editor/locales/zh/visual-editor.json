@@ -1,6 +1,7 @@
 {
   "Heading": "标题",
   "Link": "关联",
+  "a": "一个",
   "actions": {
     "copyToClipboard": "复制到剪贴板",
     "pasteFromClipboard": "从剪贴板粘贴"
@@ -17,6 +18,7 @@
     "region": "州/地区",
     "sublocality": "子域"
   },
+  "an": "一个",
   "approvals": {
     "addAComment": "添加评论以帮助您的批准者了解发生了什么变化",
     "send": "发送批准",
@@ -24,7 +26,6 @@
   },
   "arrayField": "数组字段",
   "base": "根据",
-  "basicSelectorContentLabel": "选择一个内容字段",
   "basicSelectorNoOptionsLabel": "没有可用的选项",
   "body": "身体",
   "borderRadiusDefaultLabel": "默认",
@@ -94,11 +95,11 @@
     "warning": "此操作将消除您的本地更改。它不能撤消。"
   },
   "emailList": "电子邮件列表",
+  "entityTypeField": "{{entityType}}字段",
   "event": "事件",
   "expandedHeaderDesktop": "扩展的标头桌面",
   "expandedHeaderMobile": "扩展的标头移动设备",
   "faq": "常问问题",
-  "field": "场地",
   "fields": {
     "address": "地址",
     "alignCard": "对齐卡",
@@ -367,6 +368,7 @@
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",
   "secondaryHeader": "次要标题",
+  "selectAField": "选择{{entityType}}字段",
   "selectAnOption": "选择一个选项",
   "servicesSection": "服务部分",
   "showLabels": "显示标签",

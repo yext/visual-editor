@@ -1,6 +1,7 @@
 {
   "Heading": "Nagłówek",
   "Link": "Połączyć",
+  "a": "A",
   "actions": {
     "copyToClipboard": "Kopiuj do schowka",
     "pasteFromClipboard": "Wklej ze schowka"
@@ -17,6 +18,7 @@
     "region": "Stan/region",
     "sublocality": "Sublokalność"
   },
+  "an": "jakiś",
   "approvals": {
     "addAComment": "Dodaj komentarz, aby pomóc zatwierdzającym zrozumieć, co się zmieniło",
     "send": "Wyślij do zatwierdzenia",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Pole tablicy",
   "base": "Opierać",
-  "basicSelectorContentLabel": "Wybierz pole treści",
   "basicSelectorNoOptionsLabel": "Brak dostępnych opcji",
   "body": "Ciało",
   "borderRadiusDefaultLabel": "Domyślny",
@@ -94,11 +95,11 @@
     "warning": "Ta akcja usunie twoje lokalne zmiany. Nie można go cofnąć."
   },
   "emailList": "Lista e -mail",
+  "entityTypeField": "Pole {{entityType}}",
   "event": "Wydarzenie",
   "expandedHeaderDesktop": "Rozszerzony pulpit nagłówka",
   "expandedHeaderMobile": "Rozszerzone nagłówki mobilne",
   "faq": "FAQ",
-  "field": "Pole",
   "fields": {
     "address": "Adres",
     "alignCard": "Karta wyrównania",
@@ -367,6 +368,7 @@
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",
   "secondaryHeader": "Wtórny nagłówek",
+  "selectAField": "Wybierz pole {{article}} {{entityType}}",
   "selectAnOption": "Wybierz opcję",
   "servicesSection": "Sekcja usług",
   "showLabels": "Pokaż etykiety",

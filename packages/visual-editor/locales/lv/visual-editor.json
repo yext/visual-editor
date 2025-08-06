@@ -1,6 +1,7 @@
 {
   "Heading": "Virsraksts",
   "Link": "Saite",
+  "a": "izšķirt",
   "actions": {
     "copyToClipboard": "Kopēt uz starpliktuvi",
     "pasteFromClipboard": "Paste no starpliktuves"
@@ -17,6 +18,7 @@
     "region": "Valsts/reģions",
     "sublocality": "Sublocalitāte"
   },
+  "an": "tāds",
   "approvals": {
     "addAComment": "Pievienojiet komentāru, lai palīdzētu jūsu apstiprinātājam izprast, kas mainījās",
     "send": "Nosūtīt apstiprināšanai",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Masīva lauks",
   "base": "Pamatne",
-  "basicSelectorContentLabel": "Atlasiet Satura lauku",
   "basicSelectorNoOptionsLabel": "Nav pieejamas iespējas",
   "body": "Ķermenis",
   "borderRadiusDefaultLabel": "Nepildīt",
@@ -94,11 +95,11 @@
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
   "emailList": "E -pasta saraksts",
+  "entityTypeField": "{{entityType}} lauks",
   "event": "Notikums",
   "expandedHeaderDesktop": "Paplašināta galvenes darbvirsma",
   "expandedHeaderMobile": "Paplašināta galvenes mobilā telpa",
   "faq": "FAQ",
-  "field": "Laukums",
   "fields": {
     "address": "Uzruna",
     "alignCard": "Izlīdzināt karti",
@@ -367,6 +368,7 @@
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",
   "secondaryHeader": "Sekundārā galvene",
+  "selectAField": "Atlasiet {{raksts}} {{entityType}} lauks",
   "selectAnOption": "Atlasiet opciju",
   "servicesSection": "Pakalpojumu nodaļa",
   "showLabels": "Izrādes etiķetes",

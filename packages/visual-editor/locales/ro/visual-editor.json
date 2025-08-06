@@ -1,6 +1,7 @@
 {
   "Heading": "Îndreptându -se",
   "Link": "Legătură",
+  "a": "o",
   "actions": {
     "copyToClipboard": "Copiați în clipboard",
     "pasteFromClipboard": "Lipiți din clipboard"
@@ -17,6 +18,7 @@
     "region": "Stat/regiune",
     "sublocality": "Sublociune"
   },
+  "an": "un",
   "approvals": {
     "addAComment": "Adăugați un comentariu pentru a vă ajuta aprobatorul să înțeleagă ce s -a schimbat",
     "send": "Trimiteți pentru aprobare",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Câmp de matrice",
   "base": "Baza",
-  "basicSelectorContentLabel": "Selectați un câmp de conținut",
   "basicSelectorNoOptionsLabel": "Nu există opțiuni disponibile",
   "body": "Corp",
   "borderRadiusDefaultLabel": "Implicit",
@@ -94,11 +95,11 @@
     "warning": "Această acțiune vă va elimina modificările locale. Nu poate fi anulat."
   },
   "emailList": "Lista de e -mailuri",
+  "entityTypeField": "câmp {{entityType}}",
   "event": "Eveniment",
   "expandedHeaderDesktop": "Desktop de antet extins",
   "expandedHeaderMobile": "Mobile antet extins",
   "faq": "FAQ",
-  "field": "Domeniu",
   "fields": {
     "address": "Adresa",
     "alignCard": "Aliniați cardul",
@@ -367,6 +368,7 @@
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
   "secondaryHeader": "Antet secundar",
+  "selectAField": "Selectați {{article}} {{entityType}} câmp",
   "selectAnOption": "Selectați o opțiune",
   "servicesSection": "Secțiunea Servicii",
   "showLabels": "Arată etichete",

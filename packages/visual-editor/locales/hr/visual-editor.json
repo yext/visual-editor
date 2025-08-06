@@ -1,6 +1,7 @@
 {
   "Heading": "Naslov",
   "Link": "Link",
+  "a": "a",
   "actions": {
     "copyToClipboard": "Kopirajte u međuspremnik",
     "pasteFromClipboard": "Zalijepi iz međuspremnika"
@@ -17,6 +18,7 @@
     "region": "Država/regija",
     "sublocality": "Subblokalnost"
   },
+  "an": "an",
   "approvals": {
     "addAComment": "Dodajte komentar kako biste pomogli vašem odobrenju da shvati što se promijenilo",
     "send": "Pošaljite na odobrenje",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Polje",
   "base": "Baza",
-  "basicSelectorContentLabel": "Odaberite polje sadržaja",
   "basicSelectorNoOptionsLabel": "Nema dostupnih opcija",
   "body": "Tijelo",
   "borderRadiusDefaultLabel": "Zadano",
@@ -94,11 +95,11 @@
     "warning": "Ova će radnja ukloniti vaše lokalne promjene. Ne može se poništiti."
   },
   "emailList": "Popis e -pošte",
+  "entityTypeField": "Polje {{entityType}}",
   "event": "Događaj",
   "expandedHeaderDesktop": "Proširena radna površina zaglavlja",
   "expandedHeaderMobile": "Prošireni zaglavni mobitel",
   "faq": "FAQ",
-  "field": "Polje",
   "fields": {
     "address": "Adresa",
     "alignCard": "Poravnavanje",
@@ -367,6 +368,7 @@
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",
   "secondaryHeader": "Sekundarno zaglavlje",
+  "selectAField": "Odaberite {{article}} {{entityType}}",
   "selectAnOption": "Odaberite opciju",
   "servicesSection": "Odjeljak za usluge",
   "showLabels": "Prikaži naljepnice",

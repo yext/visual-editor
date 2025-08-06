@@ -1,6 +1,7 @@
 {
   "Heading": "見出し",
   "Link": "リンク",
+  "a": "a",
   "actions": {
     "copyToClipboard": "クリップボードにコピーします",
     "pasteFromClipboard": "クリップボードから貼り付けます"
@@ -17,6 +18,7 @@
     "region": "州/地域",
     "sublocality": "サブロカリティ"
   },
+  "an": "an",
   "approvals": {
     "addAComment": "コメントを追加して、承認者が何が変わったのかを理解できるようにします",
     "send": "承認のために送信します",
@@ -24,7 +26,6 @@
   },
   "arrayField": "配列フィールド",
   "base": "ベース",
-  "basicSelectorContentLabel": "コンテンツフィールドを選択します",
   "basicSelectorNoOptionsLabel": "利用可能なオプションはありません",
   "body": "体",
   "borderRadiusDefaultLabel": "デフォルト",
@@ -94,11 +95,11 @@
     "warning": "このアクションにより、地元の変更が削除されます。元に戻すことはできません。"
   },
   "emailList": "メーリングリスト",
+  "entityTypeField": "{{entityType}}フィールド",
   "event": "イベント",
   "expandedHeaderDesktop": "ヘッダーデスクトップの拡張",
   "expandedHeaderMobile": "拡張ヘッダーモバイル",
   "faq": "よくある質問",
-  "field": "分野",
   "fields": {
     "address": "住所",
     "alignCard": "カードを調整します",
@@ -367,6 +368,7 @@
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
   "secondaryHeader": "セカンダリヘッダー",
+  "selectAField": "{{entityType}}フィールドを選択します",
   "selectAnOption": "オプションを選択します",
   "servicesSection": "サービスセクション",
   "showLabels": "ラベルを表示します",

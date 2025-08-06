@@ -1,6 +1,7 @@
 {
   "Heading": "Cím",
   "Link": "Link",
+  "a": "A",
   "actions": {
     "copyToClipboard": "Másolja a vágólapra",
     "pasteFromClipboard": "Beilleszteni a vágólapról"
@@ -17,6 +18,7 @@
     "region": "Állami/régió",
     "sublocality": "Szublokitás"
   },
+  "an": "egy",
   "approvals": {
     "addAComment": "Adjon hozzá egy megjegyzést, hogy segítsen jóváhagyni, hogy megértse, mi változott",
     "send": "Küldje el jóváhagyásra",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Tömbmező",
   "base": "Bázis",
-  "basicSelectorContentLabel": "Válasszon egy tartalommezőt",
   "basicSelectorNoOptionsLabel": "Nincsenek lehetőségek",
   "body": "Test",
   "borderRadiusDefaultLabel": "Mulasztás",
@@ -94,11 +95,11 @@
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
   "emailList": "E -mail lista",
+  "entityTypeField": "{{entityType}} mező",
   "event": "Esemény",
   "expandedHeaderDesktop": "Kibővített fejléc asztal",
   "expandedHeaderMobile": "Kibővített fejléc mobil",
   "faq": "GYIK",
-  "field": "Mező",
   "fields": {
     "address": "Cím",
     "alignCard": "Igazítson kártya",
@@ -367,6 +368,7 @@
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",
   "secondaryHeader": "Másodlagos fejléc",
+  "selectAField": "Válassza {{article}} {{entityType}} mezőt",
   "selectAnOption": "Válasszon egy opciót",
   "servicesSection": "Szolgáltatási szakasz",
   "showLabels": "A címkék megjelenítését",

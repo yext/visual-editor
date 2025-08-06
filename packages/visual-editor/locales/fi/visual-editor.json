@@ -1,6 +1,7 @@
 {
   "Heading": "Otsikko",
   "Link": "Linkki",
+  "a": "eräs",
   "actions": {
     "copyToClipboard": "Kopioi leikepöydälle",
     "pasteFromClipboard": "Liittää leikepöydältä"
@@ -17,6 +18,7 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "an": "yksi",
   "approvals": {
     "addAComment": "Lisää kommentti auttaaksesi hyväksyjääsi ymmärtämään, mikä on muuttunut",
     "send": "Lähetä hyväksyntä",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Ryhmäkenttä",
   "base": "Pohja",
-  "basicSelectorContentLabel": "Valitse sisältökenttä",
   "basicSelectorNoOptionsLabel": "Vaihtoehtoja ei ole käytettävissä",
   "body": "Vartalo",
   "borderRadiusDefaultLabel": "Laiminlyönti",
@@ -94,11 +95,11 @@
     "warning": "Tämä toiminto poistaa paikalliset muutokset. Sitä ei voida peruuttaa."
   },
   "emailList": "Sähköpostiluettelo",
+  "entityTypeField": "{{entityType}}kenttä",
   "event": "Tapahtuma",
   "expandedHeaderDesktop": "Laajennettu otsikkopöytä",
   "expandedHeaderMobile": "Laajennettu otsikko matkapuhelin",
   "faq": "Faq",
-  "field": "Ala",
   "fields": {
     "address": "Osoite",
     "alignCard": "Kohdistaa kortti",
@@ -367,6 +368,7 @@
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
   "secondaryHeader": "Toissijainen otsikko",
+  "selectAField": "Valitse {{article}} {{entityType}}kenttä",
   "selectAnOption": "Valitse vaihtoehto",
   "servicesSection": "Palvelusosasto",
   "showLabels": "Näyttötarrat",

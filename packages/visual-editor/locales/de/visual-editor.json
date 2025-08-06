@@ -1,6 +1,7 @@
 {
   "Heading": "Überschrift",
   "Link": "Link",
+  "a": "A",
   "actions": {
     "copyToClipboard": "Kopieren Sie in die Zwischenablage",
     "pasteFromClipboard": "Einfügen aus der Zwischenablage"
@@ -17,6 +18,7 @@
     "region": "Staat/Region",
     "sublocality": "Sublokalität"
   },
+  "an": "ein",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Array -Feld",
   "base": "Base",
-  "basicSelectorContentLabel": "Wählen Sie ein Inhaltsfeld aus",
   "basicSelectorNoOptionsLabel": "Keine Optionen verfügbar",
   "body": "Körper",
   "borderRadiusDefaultLabel": "Standard",
@@ -94,11 +95,11 @@
     "warning": "Diese Aktion entfernen Ihre lokalen Änderungen. Es kann nicht rückgängig gemacht werden."
   },
   "emailList": "E -Mail -Liste",
+  "entityTypeField": "{{entityType}} Feld",
   "event": "Ereignis",
   "expandedHeaderDesktop": "Erweiterter Header -Desktop",
   "expandedHeaderMobile": "Erweiterte Header Mobile",
   "faq": "FAQ",
-  "field": "Feld",
   "fields": {
     "address": "Adresse",
     "alignCard": "Karte ausrichten",
@@ -367,6 +368,7 @@
   "searchHere": "Suche hier ...",
   "searchThisArea": "Suchen Sie diesen Bereich",
   "secondaryHeader": "Sekundärer Header",
+  "selectAField": "Wählen Sie {{article}} {{entityType}} Feld",
   "selectAnOption": "Wählen Sie eine Option aus",
   "servicesSection": "Dienstleistungsabschnitt",
   "showLabels": "Etiketten zeigen",

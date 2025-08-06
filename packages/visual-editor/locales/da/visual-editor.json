@@ -1,6 +1,7 @@
 {
   "Heading": "Overskrift",
   "Link": "Forbindelse",
+  "a": "-en",
   "actions": {
     "copyToClipboard": "Kopier til udklipsholder",
     "pasteFromClipboard": "Indsæt fra udklipsholder"
@@ -17,6 +18,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "an": "en",
   "approvals": {
     "addAComment": "Tilføj en kommentar for at hjælpe din godkender med at forstå, hvad der ændrede sig",
     "send": "Send til godkendelse",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Array -felt",
   "base": "Grundlag",
-  "basicSelectorContentLabel": "Vælg et indholdsfelt",
   "basicSelectorNoOptionsLabel": "Ingen muligheder tilgængelige",
   "body": "Legeme",
   "borderRadiusDefaultLabel": "Misligholdelse",
@@ -94,11 +95,11 @@
     "warning": "Denne handling fjerner dine lokale ændringer. Det kan ikke fortrydes."
   },
   "emailList": "E -mail -liste",
+  "entityTypeField": "{{entityType}} felt",
   "event": "Tilfælde",
   "expandedHeaderDesktop": "Udvidet header Desktop",
   "expandedHeaderMobile": "Udvidet headermobil",
   "faq": "FAQ",
-  "field": "Felt",
   "fields": {
     "address": "Adresse",
     "alignCard": "Juster kort",
@@ -367,6 +368,7 @@
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",
   "secondaryHeader": "Sekundær header",
+  "selectAField": "Vælg {{article}} {{entityType}} felt",
   "selectAnOption": "Vælg en mulighed",
   "servicesSection": "Servicesektion",
   "showLabels": "Vis etiketter",

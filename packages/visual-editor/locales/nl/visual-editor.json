@@ -1,6 +1,7 @@
 {
   "Heading": "Kop",
   "Link": "Link",
+  "a": "A",
   "actions": {
     "copyToClipboard": "Kopieer naar klembord",
     "pasteFromClipboard": "Plak van klembord"
@@ -17,6 +18,7 @@
     "region": "Staat/regio",
     "sublocality": "Sublocaliteit"
   },
+  "an": "een",
   "approvals": {
     "addAComment": "Voeg een reactie toe om uw goedkeurder te helpen begrijpen wat er is veranderd",
     "send": "Stuur voor goedkeuring",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Arrayveld",
   "base": "Baseren",
-  "basicSelectorContentLabel": "Selecteer een inhoudsveld",
   "basicSelectorNoOptionsLabel": "Geen opties beschikbaar",
   "body": "Lichaam",
   "borderRadiusDefaultLabel": "Standaard",
@@ -94,11 +95,11 @@
     "warning": "Deze actie zal uw lokale wijzigingen verwijderen. Het kan niet ongedaan worden gemaakt."
   },
   "emailList": "E -maillijst",
+  "entityTypeField": "{{entityType}} veld",
   "event": "Evenement",
   "expandedHeaderDesktop": "Uitgebreide header bureaublad",
   "expandedHeaderMobile": "Uitgebreide header mobiel",
   "faq": "FAQ",
-  "field": "Veld",
   "fields": {
     "address": "Adres",
     "alignCard": "Lijnkaart",
@@ -367,6 +368,7 @@
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
   "secondaryHeader": "Secundaire header",
+  "selectAField": "Selecteer {{article}} {{entityType}} veld",
   "selectAnOption": "Selecteer een optie",
   "servicesSection": "Dienstensectie",
   "showLabels": "Toon labels",

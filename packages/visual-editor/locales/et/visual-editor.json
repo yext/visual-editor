@@ -1,6 +1,7 @@
 {
   "Heading": "Pealkiri",
   "Link": "Link",
+  "a": "a",
   "actions": {
     "copyToClipboard": "Kopeeri lõikelauale",
     "pasteFromClipboard": "Pasta lõikelaualt"
@@ -17,6 +18,7 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
+  "an": "ja",
   "approvals": {
     "addAComment": "Lisage kommentaar, mis aitaks teie kinnitajal mõista, mis muutus",
     "send": "Saada heakskiitu",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Massiivi väli",
   "base": "Alus",
-  "basicSelectorContentLabel": "Valige sisu väli",
   "basicSelectorNoOptionsLabel": "Valikuid pole saadaval",
   "body": "Keha",
   "borderRadiusDefaultLabel": "Täitmata jätmine",
@@ -94,11 +95,11 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "emailList": "E -posti nimekiri",
+  "entityTypeField": "{{entitytype}} väli",
   "event": "Sündmus",
   "expandedHeaderDesktop": "Laiendatud päise töölaud",
   "expandedHeaderMobile": "Laiendatud päise mobiil",
   "faq": "KKK",
-  "field": "Valdkond",
   "fields": {
     "address": "Aadress",
     "alignCard": "Joondama kaart",
@@ -367,6 +368,7 @@
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryHeader": "Teisene päis",
+  "selectAField": "Valige {{article}} {{entityType}} väli",
   "selectAnOption": "Valige suvand",
   "servicesSection": "Teenuste sektsioon",
   "showLabels": "Näita silte",

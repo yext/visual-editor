@@ -1,6 +1,7 @@
 {
   "Heading": "Cabeçalho",
   "Link": "Link",
+  "a": "um",
   "actions": {
     "copyToClipboard": "Cópia para a área de transferência",
     "pasteFromClipboard": "Colar da área de transferência"
@@ -17,6 +18,7 @@
     "region": "Estado/região",
     "sublocality": "Sublocalidade"
   },
+  "an": "um",
   "approvals": {
     "addAComment": "Adicione um comentário para ajudar seu aprovador a entender o que mudou",
     "send": "Enviar aprovação",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Campo de matriz",
   "base": "Base",
-  "basicSelectorContentLabel": "Selecione um campo de conteúdo",
   "basicSelectorNoOptionsLabel": "Sem opções disponíveis",
   "body": "Corpo",
   "borderRadiusDefaultLabel": "Padrão",
@@ -94,11 +95,11 @@
     "warning": "Esta ação removerá suas alterações locais. Não pode ser desfeito."
   },
   "emailList": "Lista de e -mails",
+  "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
   "expandedHeaderDesktop": "Desktop de cabeçalho expandido",
   "expandedHeaderMobile": "Cabeçalho expandido móvel",
   "faq": "Perguntas frequentes",
-  "field": "Campo",
   "fields": {
     "address": "Endereço",
     "alignCard": "Cartão alinhado",
@@ -367,6 +368,7 @@
   "searchHere": "Pesquise aqui ...",
   "searchThisArea": "Pesquise nesta área",
   "secondaryHeader": "Cabeçalho secundário",
+  "selectAField": "Selecione {{article}} {{entityType}} campo",
   "selectAnOption": "Selecione uma opção",
   "servicesSection": "Seção de serviços",
   "showLabels": "Mostrar rótulos",

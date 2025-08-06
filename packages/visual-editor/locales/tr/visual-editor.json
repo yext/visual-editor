@@ -1,6 +1,7 @@
 {
   "Heading": "Başlık",
   "Link": "Bağlantı",
+  "a": "A",
   "actions": {
     "copyToClipboard": "Panoya Kopyala",
     "pasteFromClipboard": "Panodan Yapıştır"
@@ -17,6 +18,7 @@
     "region": "Eyalet/bölge",
     "sublocality": "Subloku"
   },
+  "an": "BİR",
   "approvals": {
     "addAComment": "Onaycının neyin değiştiğini anlamasına yardımcı olmak için bir yorum ekleyin",
     "send": "Onay için gönder",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Dizi alanı",
   "base": "Temel",
-  "basicSelectorContentLabel": "Bir İçerik Alanı Seçin",
   "basicSelectorNoOptionsLabel": "Seçenek yok",
   "body": "Vücut",
   "borderRadiusDefaultLabel": "Varsayılan",
@@ -94,11 +95,11 @@
     "warning": "Bu eylem yerel değişikliklerinizi kaldıracaktır. Geri alınamaz."
   },
   "emailList": "E -posta Listesi",
+  "entityTypeField": "{{entityType}} alanı",
   "event": "Etkinlik",
   "expandedHeaderDesktop": "Genişletilmiş başlık masaüstü",
   "expandedHeaderMobile": "Genişletilmiş başlık mobil",
   "faq": "SSS",
-  "field": "Alan",
   "fields": {
     "address": "Adres",
     "alignCard": "Kartı hizalayın",
@@ -367,6 +368,7 @@
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
   "secondaryHeader": "İkincil başlık",
+  "selectAField": "{{article}} {{entityType}} alanını seçin",
   "selectAnOption": "Bir seçenek seçin",
   "servicesSection": "Hizmetler Bölümü",
   "showLabels": "Etiketleri Göster",

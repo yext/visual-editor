@@ -1,6 +1,7 @@
 {
   "Heading": "Záhlaví",
   "Link": "Odkaz",
+  "a": "A",
   "actions": {
     "copyToClipboard": "Kopírovat do schránky",
     "pasteFromClipboard": "Vložit ze schránky"
@@ -17,6 +18,7 @@
     "region": "Stát/region",
     "sublocality": "Sublokalita"
   },
+  "an": "An",
   "approvals": {
     "addAComment": "Přidejte komentář, který pomůže vašemu schvalovateli pochopit, co se změnilo",
     "send": "Odeslat ke schválení",
@@ -24,7 +26,6 @@
   },
   "arrayField": "Pole pole",
   "base": "Báze",
-  "basicSelectorContentLabel": "Vyberte pole obsahu",
   "basicSelectorNoOptionsLabel": "Žádné možnosti",
   "body": "Tělo",
   "borderRadiusDefaultLabel": "Výchozí",
@@ -94,11 +95,11 @@
     "warning": "Tato akce odstraní vaše místní změny. Nelze to vrátit."
   },
   "emailList": "Seznam e -mailů",
+  "entityTypeField": "{{entityType}} pole",
   "event": "Událost",
   "expandedHeaderDesktop": "Rozšířená plocha záhlaví",
   "expandedHeaderMobile": "Rozšířený mobilní záhlaví",
   "faq": "FAQ",
-  "field": "Pole",
   "fields": {
     "address": "Adresa",
     "alignCard": "Zarovnat kartu",
@@ -367,6 +368,7 @@
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryHeader": "Sekundární záhlaví",
+  "selectAField": "Vyberte {{article}} {{entityType}} pole",
   "selectAnOption": "Vyberte možnost",
   "servicesSection": "Sekce služeb",
   "showLabels": "Zobrazit štítky",
