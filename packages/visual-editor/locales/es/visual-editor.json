@@ -93,7 +93,7 @@
     "warning": "Esta acción eliminará sus cambios locales. No se puede deshacer."
   },
   "emailList": "Lista de correo electrónico",
-  "entityTypeField": "{{entityType}} campo",
+  "entityTypeField": "Campo de {{entityType}}",
   "event": "Evento",
   "expandedHeaderDesktop": "Escritorio de encabezado expandido",
   "expandedHeaderMobile": "Móvil de encabezado expandido",

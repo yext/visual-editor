@@ -424,9 +424,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     return BasicSelector({
-      label: pt("entityTypeField", "{{entityType}} Field", {
-        entityType: templateMetadata.entityTypeDisplayName,
-      }),
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),

@@ -93,7 +93,7 @@
     "warning": "Cette action supprimera vos modifications locales. Il ne peut pas être défait."
   },
   "emailList": "Liste de diffusion",
-  "entityTypeField": "{{entityType}} Champ",
+  "entityTypeField": "Champ de {{entityType}}",
   "event": "Événement",
   "expandedHeaderDesktop": "Desktop en tête élargi",
   "expandedHeaderMobile": "En-tête expansé mobile",
