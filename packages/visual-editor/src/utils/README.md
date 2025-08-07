@@ -759,16 +759,3 @@ withPropOverrides(Mock, {
 ```
 
 and would end up with a component that shows "Hello World"
-
-### Supported usages for in-repo developers
-
-This allows in-repo developers to specify the env var to be used for the NearbyLocationsSection's content endpoint. All other props may be overriden as well but that is not necessarily a recommended usage as most props rely on values input via the editor.
-
-```ts
-export const mockConfig: Config<MockProps> = {
-  components: {
-    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {contentEndpointIdEnvVar: "YEXT_PUBLIC_FOO"})
-  },
-  .....
-}
-```
