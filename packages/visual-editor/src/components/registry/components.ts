@@ -127,14 +127,7 @@ export const ui: Registry["items"] = [
     registryDependencies: ["cta"],
     files: [{ path: "contentBlocks/CtaWrapper.tsx", type: "registry:ui" }],
   },
-  {
-    name: "ImageButtonWrapper",
-    type: "registry:ui",
-    registryDependencies: ["button"],
-    files: [
-      { path: "contentBlocks/ImageButtonWrapper.tsx", type: "registry:ui" },
-    ],
-  },
+
   {
     name: "Directory",
     type: "registry:ui",
