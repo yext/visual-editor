@@ -17,6 +17,8 @@
     "region": "Država/regija",
     "sublocality": "Subblokalnost"
   },
+  "applyAll": "Prijavite se na sve lokacije",
+  "applyAllWithLabel": "Primijenite {{fieldLabel}} na sve lokacije",
   "approvals": {
     "addAComment": "Dodajte komentar kako biste pomogli vašem odobrenju da shvati što se promijenilo",
     "send": "Pošaljite na odobrenje",

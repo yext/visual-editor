@@ -273,7 +273,11 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
                 i18n.language,
                 streamDocument
               )}
-              link={resolvedPromo?.cta.link}
+              link={resolveComponentData(
+                resolvedPromo?.cta.link,
+                i18n.language,
+                streamDocument
+              )}
               linkType={resolvedPromo?.cta.linkType}
             />
           </EntityField>
