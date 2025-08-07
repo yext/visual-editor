@@ -25,7 +25,7 @@ import {
   getAggregateRating,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { EnhancedCTA } from "../atoms/enhancedCta";
+import { CTA } from "../atoms/cta";
 import {
   ImageStylingFields,
   ImageStylingProps,
@@ -399,7 +399,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             aria-label={t("callToActions", "Call to Actions")}
           >
             {resolvedHero?.primaryCta?.cta?.label && (
-              <EnhancedCTA
+              <CTA
                 eventName={`primaryCta`}
                 variant={styles?.primaryCTA}
                 label={resolveComponentData(
@@ -415,7 +415,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               />
             )}
             {resolvedHero?.secondaryCta?.cta?.label && (
-              <EnhancedCTA
+              <CTA
                 eventName={`secondaryCta`}
                 variant={styles?.secondaryCTA}
                 label={resolveComponentData(

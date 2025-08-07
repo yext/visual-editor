@@ -27,7 +27,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { EnhancedCTA } from "../atoms/enhancedCta";
+import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
 
@@ -235,7 +235,7 @@ const EventCard = ({
         {event.description &&
           resolveComponentData(event.description, i18n.language)}
         {event.cta && (
-          <EnhancedCTA
+          <CTA
             eventName={`cta${cardNumber}`}
             label={
               event.cta.label

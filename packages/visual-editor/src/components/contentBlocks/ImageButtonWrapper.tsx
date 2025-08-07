@@ -3,7 +3,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { msg, YextField, PresetImageType } from "@yext/visual-editor";
 import { ImageButton } from "../atoms/imageButton";
 
-export interface ImageButtonWrapperProps {
+export type ImageButtonWrapperProps = {
   link?: string;
   linkType?: any;
   eventName?: string;
@@ -12,7 +12,7 @@ export interface ImageButtonWrapperProps {
   target?: "_self" | "_blank" | "_parent" | "_top";
   ariaLabel?: string;
   presetImageType: PresetImageType;
-}
+};
 
 const imageButtonWrapperFields: Fields<ImageButtonWrapperProps> = {
   link: YextField(msg("fields.link", "Link"), {

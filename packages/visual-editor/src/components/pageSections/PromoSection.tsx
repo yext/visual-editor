@@ -20,7 +20,7 @@ import {
   getAnalyticsScopeHash,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { EnhancedCTA } from "../atoms/enhancedCta";
+import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ImageStylingFields,
@@ -284,7 +284,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             streamDocument
           )}
         {resolvedPromo?.cta?.cta?.label && (
-          <EnhancedCTA
+          <CTA
             eventName={`cta`}
             variant={styles?.ctaVariant}
             label={resolveComponentData(

@@ -11,7 +11,7 @@ import {
   resolveComponentData,
   EnhancedTranslatableCTA,
 } from "@yext/visual-editor";
-import { EnhancedCTA } from "../atoms/enhancedCta";
+import { CTA } from "../atoms/cta";
 
 export interface EnhancedCTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;
@@ -48,7 +48,7 @@ const EnhancedCTAWrapperComponent: React.FC<EnhancedCTAWrapperProps> = ({
       constantValueEnabled={entityField.constantValueEnabled}
     >
       {cta && (
-        <EnhancedCTA
+        <CTA
           label={resolveComponentData(cta.label, i18n.language, streamDocument)}
           link={cta.link}
           linkType={cta.linkType}

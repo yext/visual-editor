@@ -5,14 +5,13 @@ import {
   useDocument,
   EntityField,
   YextEntityField,
-  CTA,
-  CTAProps,
   msg,
   pt,
   YextField,
   resolveComponentData,
   TranslatableCTA,
 } from "@yext/visual-editor";
+import { CTA, CTAProps } from "../atoms/cta";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<TranslatableCTA>;

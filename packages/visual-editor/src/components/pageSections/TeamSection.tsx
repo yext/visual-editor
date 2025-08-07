@@ -25,7 +25,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { EnhancedCTA } from "../atoms/enhancedCta";
+import { CTA } from "../atoms/cta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -254,7 +254,7 @@ const PersonCard = ({
               <div className="w-6 h-6 rounded-full bg-palette-primary-light flex items-center justify-center">
                 <FaEnvelope />
               </div>
-              <EnhancedCTA
+              <CTA
                 eventName={`email${cardNumber}`}
                 link={person.email}
                 label={person.email}
@@ -266,7 +266,7 @@ const PersonCard = ({
           )}
           {person.cta && (
             <div className="flex justify-start gap-2">
-              <EnhancedCTA
+              <CTA
                 eventName={`cta${cardNumber}`}
                 label={
                   person.cta.label

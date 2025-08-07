@@ -5,7 +5,7 @@ import {
   TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
-import { restrictedTranslatableCTAFields } from "./EnhancedCallToAction.tsx";
+import { RESTRICTED_CTA_CONSTANT_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
@@ -101,7 +101,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
       category: categoryField,
       publishTime: DateSelector,
       description: descriptionField,
-      cta: restrictedTranslatableCTAFields(),
+      cta: RESTRICTED_CTA_CONSTANT_CONFIG,
     },
     defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {

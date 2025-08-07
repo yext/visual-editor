@@ -25,7 +25,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { EnhancedCTA } from "../atoms/enhancedCta";
+import { CTA } from "../atoms/cta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultInsight } from "../../internal/puck/constant-value-fields/InsightSection.tsx";
@@ -239,7 +239,7 @@ const InsightCard = ({
             resolveComponentData(insight.description, i18n.language)}
         </div>
         {insight.cta && (
-          <EnhancedCTA
+          <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
             label={

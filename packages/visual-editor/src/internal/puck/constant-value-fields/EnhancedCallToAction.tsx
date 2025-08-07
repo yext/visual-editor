@@ -301,3 +301,53 @@ export const restrictedTranslatableCTAFields = (): Field<any> => {
     },
   };
 };
+
+// Restricted constant config for components that should only use textAndLink CTA type
+export const RESTRICTED_CTA_CONSTANT_CONFIG: CustomField<any> = {
+  type: "custom",
+  render: ({ onChange, value }) => {
+    const labelField = TranslatableStringField<any>(
+      msg("fields.label", "Label"),
+      {
+        types: ["type.string"],
+      }
+    );
+
+    return (
+      <div className={"ve-mt-3"}>
+        <div className="ve-mb-3">
+          <FieldLabel label={pt("fields.callToAction", "Call To Action")}>
+            <AutoField
+              field={labelField}
+              value={value?.label}
+              onChange={(newValue) => onChange({ ...value, label: newValue })}
+            />
+          </FieldLabel>
+        </div>
+        <div className="ve-mb-3">
+          <FieldLabel label={pt("fields.link", "Link")}>
+            <AutoField
+              field={{ type: "text" }}
+              value={value?.link || ""}
+              onChange={(newValue) => onChange({ ...value, link: newValue })}
+            />
+          </FieldLabel>
+        </div>
+        <div className="ve-mb-3">
+          <FieldLabel label={pt("fields.linkType", "Link Type")}>
+            <AutoField
+              field={{
+                type: "select",
+                options: linkTypeOptions(),
+              }}
+              value={value?.linkType || "URL"}
+              onChange={(newValue) =>
+                onChange({ ...value, linkType: newValue })
+              }
+            />
+          </FieldLabel>
+        </div>
+      </div>
+    );
+  },
+};
