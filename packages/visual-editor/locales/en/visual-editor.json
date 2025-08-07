@@ -22,14 +22,6 @@
     "send": "Send for Approval",
     "writeComment": "Write your comment here..."
   },
-  "arrayField": "Array Field",
-  "base": "Base",
-  "basicSelectorNoOptionsLabel": "No options available",
-  "body": "Body",
-  "borderRadiusDefaultLabel": "Default",
-  "breadcrumb": "Breadcrumb",
-  "businessInformation": "Business Information",
-  "callToActions": "Call to Actions",
   "cancel": "Cancel",
   "categories": {
     "other": "OTHER",
