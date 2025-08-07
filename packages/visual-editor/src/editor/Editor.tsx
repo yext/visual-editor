@@ -18,6 +18,7 @@ import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
+import { StreamDocument } from "../utils/applyTheme.ts";
 
 const devLogger = new DevLogger();
 
@@ -30,6 +31,12 @@ export interface Metadata {
   entityTypeEnvVar?: string;
   // The environment variable that stores the experience key
   experienceKeyEnvVar?: string;
+  // The custom function to resolve the url template (aka path)
+  resolveUrlTemplate?: (
+    streamDocument: StreamDocument,
+    locale: string,
+    relativePrefixToRoot: string
+  ) => string;
 }
 
 export type EditorProps = {
