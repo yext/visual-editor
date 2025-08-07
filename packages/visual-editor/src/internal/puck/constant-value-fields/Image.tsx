@@ -107,18 +107,8 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
 
     const handleSelectImage = (e: React.MouseEvent) => {
       e.stopPropagation();
-      const messageId = `ImageAsset-${Date.now()}`;
-      setPendingMessageId(messageId);
 
-      openImageAssetSelector({
-        payload: {
-          type: "ImageAsset",
-          value: value,
-          id: messageId,
-        },
-      });
-
-      /** Handles local development testing outside of storm */
+      /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
@@ -132,6 +122,17 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
             width: 0,
           });
         }, 0);
+      } else {
+        /** Instructs Storm to open the image asset selector drawer */
+        const messageId = `ImageAsset-${Date.now()}`;
+        setPendingMessageId(messageId);
+        openImageAssetSelector({
+          payload: {
+            type: "ImageAsset",
+            value: value,
+            id: messageId,
+          },
+        });
       }
     };
 
