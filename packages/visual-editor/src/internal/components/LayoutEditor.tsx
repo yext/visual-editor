@@ -32,6 +32,7 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  metadata?: any;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -42,6 +43,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    metadata,
   } = props;
 
   const {
@@ -272,6 +274,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
+      metadata={metadata}
     />
   ) : (
     <LoadingScreen

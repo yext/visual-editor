@@ -29,6 +29,7 @@ type InternalThemeEditorProps = {
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
   localDev: boolean;
+  metadata?: any;
 };
 
 // Render Puck editor
@@ -46,6 +47,7 @@ export const InternalThemeEditor = ({
   sendDevThemeSaveStateData,
   buildThemeLocalStorageKey,
   localDev,
+  metadata,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
@@ -187,6 +189,7 @@ export const InternalThemeEditor = ({
           fields: fieldsOverride,
           iframe: loadMapboxIntoIframe,
         }}
+        metadata={metadata}
       />
     </EntityTooltipsProvider>
   );

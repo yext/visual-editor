@@ -97,17 +97,6 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "../../es/ny/new-york/61-9th-ave");
   });
 
-  it("uses alternateDataSource if provided", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "en", "../", {
-      address: {
-        region: "alternate-region",
-        city: "alternate-city",
-        line1: "alternate-line1",
-      },
-    });
-    assert.equal(result, "../alternate-region/alternate-city/alternate-line1");
-  });
-
   it("handles empty string prefix without altering URL", () => {
     const result = resolveUrlTemplate(mockStreamDocument, "en", "");
     assert.equal(result, "ny/new-york/61-9th-ave");
@@ -174,9 +163,7 @@ describe("resolveUrlTemplate", () => {
     const alternateFunction = (
       streamDocument: StreamDocument,
       locale: string,
-      relativePrefixToRoot: string,
-      // eslint-disable-next-line no-unused-vars
-      alternateDataSource?: any
+      relativePrefixToRoot: string
     ) => {
       return (
         relativePrefixToRoot +
@@ -188,7 +175,6 @@ describe("resolveUrlTemplate", () => {
       mockStreamDocument,
       "en",
       "../",
-      undefined,
       alternateFunction
     );
 

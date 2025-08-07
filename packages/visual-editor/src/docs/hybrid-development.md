@@ -197,3 +197,73 @@ export const locatorConfig: Config<LocatorConfigProps> = {
   },
 };
 ```
+
+The **Locator**, **NearbyLocations**, and **Directory** components only link to the proper paths if metadata is passed in the `<Editor/>` and `<Render/>` elements in the developer's templates.
+
+This could look like:
+
+```ts
+const resolveUrlTemplate = (
+  streamDocument: StreamDocument,
+  locale: string,
+  relativePrefixToRoot: string
+): string => {
+  // this inner code can be customized to match the paths being used.
+  return (
+    relativePrefixToRoot +
+    normalizeSlug(`custom-url-for-${streamDocument.name}-${locale}`)
+  );
+}
+
+// Example using the edit.tsx template
+const Edit: () => JSX.Element = () => {
+  const entityDocument = usePlatformBridgeDocument();
+  const entityFields = usePlatformBridgeEntityFields();
+
+  return (
+    <VisualEditorProvider
+      templateProps={{
+        document: entityDocument,
+      }}
+      entityFields={entityFields}
+      tailwindConfig={tailwindConfig}
+    >
+      <Editor
+        document={entityDocument}
+        componentRegistry={componentRegistry}
+        themeConfig={themeConfig}
+        metadata={{resolveUrlTemplate}} // add it here
+      />
+    </VisualEditorProvider>
+  );
+};
+
+// Example using the main.tsx template
+const Location: Template<TemplateRenderProps> = (props) => {
+  const { document } = props;
+  const filteredConfig = filterComponentsFromConfig(
+    mainConfig,
+    document?._additionalLayoutComponents
+  );
+
+  return (
+    <AnalyticsProvider
+      apiKey={document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
+      templateData={props}
+      currency="USD"
+    >
+      <VisualEditorProvider templateProps={props}>
+        <Render
+          config={filteredConfig}
+          data={migrate(
+            JSON.parse(document.__.layout),
+            migrationRegistry,
+            filteredConfig
+          )}
+          metadata={{resolveUrlTemplate}} // add it here
+        />
+      </VisualEditorProvider>
+    </AnalyticsProvider>
+  );
+};
+```

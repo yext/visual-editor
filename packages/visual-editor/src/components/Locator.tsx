@@ -612,7 +612,6 @@ const LocationCard = ({
     streamDocument,
     locale,
     relativePrefixToRoot ?? "",
-    undefined,
     puck.metadata?.resolveUrlTemplate
   );
 

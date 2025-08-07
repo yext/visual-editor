@@ -30,6 +30,7 @@ type ThemeEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  metadata?: any;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
@@ -40,6 +41,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    metadata,
   } = props;
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
@@ -277,6 +279,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       sendDevThemeSaveStateData={sendDevThemeSaveStateData}
       buildThemeLocalStorageKey={buildThemeLocalStorageKey}
       localDev={localDev}
+      metadata={metadata}
     />
   ) : (
     <LoadingScreen

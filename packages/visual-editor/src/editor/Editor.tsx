@@ -29,6 +29,7 @@ export type EditorProps = {
   localDev?: boolean;
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
+  metadata?: any; // passed into puck's global metadata
 };
 
 export const Editor = ({
@@ -37,6 +38,7 @@ export const Editor = ({
   themeConfig,
   localDev,
   forceThemeMode,
+  metadata,
 }: EditorProps) => {
   if (document) {
     devLogger.logData("DOCUMENT", document);
@@ -134,6 +136,7 @@ export const Editor = ({
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
+              metadata={metadata}
             />
           ) : (
             <LayoutEditor
@@ -143,6 +146,7 @@ export const Editor = ({
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
+              metadata={metadata}
             />
           )
         ) : (

@@ -195,7 +195,6 @@ const DirectoryCard = ({
     streamDocument,
     locale,
     relativePrefixToRoot ?? "",
-    undefined,
     puck.metadata?.resolveUrlTemplate
   );
 
