@@ -71,7 +71,7 @@ type ImagePayload = {
   value: ImageContentData;
 };
 
-export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
+export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
@@ -117,7 +117,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         }
         onChange({
           alternateText: value?.alternateText ?? "",
-          url: userInput ?? "",
+          url: userInput,
           height: 0,
           width: 0,
         });
@@ -206,9 +206,9 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         {/* Alt Text Field */}
         <AutoField
           field={altTextField}
-          value={value.alternateText}
+          value={value?.alternateText}
           onChange={(newValue) =>
-            onChange({ ...value, alternateText: newValue })
+            onChange(value ? { ...value, alternateText: newValue } : undefined)
           }
         />
       </>
