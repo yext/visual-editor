@@ -107,6 +107,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
 
     const handleSelectImage = (e: React.MouseEvent) => {
       e.stopPropagation();
+      e.preventDefault();
 
       /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
@@ -114,14 +115,12 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         if (!userInput) {
           return;
         }
-        setTimeout(() => {
-          onChange({
-            alternateText: value?.alternateText ?? "",
-            url: userInput ?? "",
-            height: 0,
-            width: 0,
-          });
-        }, 0);
+        onChange({
+          alternateText: value?.alternateText ?? "",
+          url: userInput ?? "",
+          height: 0,
+          width: 0,
+        });
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
@@ -138,19 +137,14 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
 
     const handleDeleteImage = (e: React.MouseEvent) => {
       e.stopPropagation();
-      /* Deleting an image replaces the thumbnail with the "Choose Image" button.
-         The click event from this button is still "active", and gets passed off 
-         to the new Choose Image button, which triggers the image selector.
-         To prevent this, we use setTimeout to delay the onChange call until 
-         after the click event is finished. */
-      setTimeout(() => {
-        onChange({
-          alternateText: value?.alternateText ?? "",
-          url: "",
-          height: 0,
-          width: 0,
-        });
-      }, 0);
+      e.preventDefault();
+
+      onChange({
+        alternateText: value?.alternateText ?? "",
+        url: "",
+        height: 0,
+        width: 0,
+      });
     };
 
     const altTextField = React.useMemo(() => {
