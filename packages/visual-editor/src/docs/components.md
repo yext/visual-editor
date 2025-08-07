@@ -336,13 +336,13 @@ If 'true', displays the language selector dropdown in the header.
 
 This object contains the content to be displayed by the component.
 
-| Prop                     | Type                                     | Description                                                                             | Default                      |
-| :----------------------- | :--------------------------------------- | :-------------------------------------------------------------------------------------- | :--------------------------- |
-| `data.businessName`      | `YextEntityField<TranslatableString>`    | The primary business name displayed in the hero.                                        | `"Business Name" (constant)` |
-| `data.hero`              | `YextStructEntityField<HeroSectionType>` | The main hero content, including an image and primary/secondary call-to-action buttons. | `Placeholder image and CTAs` |
-| `data.hours`             | `YextEntityField<HoursType>`             | The entity's hours data, used to display an "Open/Closed" status.                       | `'hours' field`              |
-| `data.localGeoModifier`  | `YextEntityField<TranslatableString>`    | A location-based modifier or slogan (e.g., "Serving Downtown").                         | `"Geomodifier" (constant)`   |
-| `data.showAverageReview` | `boolean`                                | If 'true', displays the entity's average review rating.                                 | `true`                       |
+| Prop                     | Type                                  | Description                                                                             | Default                      |
+| :----------------------- | :------------------------------------ | :-------------------------------------------------------------------------------------- | :--------------------------- |
+| `data.businessName`      | `YextEntityField<TranslatableString>` | The primary business name displayed in the hero.                                        | `"Business Name" (constant)` |
+| `data.hero`              | `HeroSectionType`                     | The main hero content, including an image and primary/secondary call-to-action buttons. | `Placeholder image and CTAs` |
+| `data.hours`             | `YextEntityField<HoursType>`          | The entity's hours data, used to display an "Open/Closed" status.                       | `'hours' field`              |
+| `data.localGeoModifier`  | `YextEntityField<TranslatableString>` | A location-based modifier or slogan (e.g., "Serving Downtown").                         | `"Geomodifier" (constant)`   |
+| `data.showAverageReview` | `boolean`                             | If 'true', displays the entity's average review rating.                                 | `true`                       |
 
 #### Style Props
 
@@ -550,9 +550,9 @@ The Promo Section is a flexible content component designed to highlight a single
 
 This object contains the content to be displayed by the component.
 
-| Prop         | Type                                      | Description                                                                                           | Default                                         |
-| :----------- | :---------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| `data.promo` | `YextStructEntityField<PromoSectionType>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
+| Prop         | Type               | Description                                                                                           | Default                                         |
+| :----------- | :----------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
+| `data.promo` | `PromoSectionType` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
 
 #### Style Props
 
