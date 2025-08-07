@@ -589,7 +589,7 @@ const HeaderLinks = ({
       eventName={`cta.${ctaType}.${index}`}
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
-      link={item.link}
+      link={resolveComponentData(item.link, i18n.language, streamDocument)}
       className="justify-start w-full text-left"
     />
   );
@@ -698,7 +698,11 @@ const HeaderCtas = (props: {
               i18n.language,
               streamDocument
             )}
-            link={primaryCTA.link}
+            link={resolveComponentData(
+              primaryCTA?.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={primaryCTA.linkType}
           />
         </EntityField>
@@ -716,7 +720,11 @@ const HeaderCtas = (props: {
               i18n.language,
               streamDocument
             )}
-            link={secondaryCTA.link}
+            link={resolveComponentData(
+              secondaryCTA.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={secondaryCTA.linkType}
           />
         </EntityField>

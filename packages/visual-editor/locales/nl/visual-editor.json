@@ -17,6 +17,8 @@
     "region": "Staat/regio",
     "sublocality": "Sublocaliteit"
   },
+  "applyAll": "Solliciteer op alle locaties",
+  "applyAllWithLabel": "Pas {{fieldLabel}} toe op alle locaties",
   "approvals": {
     "addAComment": "Voeg een reactie toe om uw goedkeurder te helpen begrijpen wat er is veranderd",
     "send": "Stuur voor goedkeuring",
