@@ -31,7 +31,7 @@ export function TranslatableStringField<
       const applyAllButton = showApplyAllOption ? (
         <Button
           size="sm"
-          variant="link"
+          variant="small_link"
           onClick={() => {
             onChange(resolvedValue as T);
           }}
