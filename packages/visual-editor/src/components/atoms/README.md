@@ -1,6 +1,6 @@
-# Enhanced CTA Component
+# CTA Component
 
-The Enhanced CTA component provides three different types of call-to-action buttons with conditional field visibility and proper label restrictions.
+The CTA component provides three different types of call-to-action buttons with conditional field visibility and proper label restrictions.
 
 ## CTA Types
 
@@ -9,7 +9,7 @@ The Enhanced CTA component provides three different types of call-to-action butt
 The traditional CTA with text label and link. This is the default behavior and all existing CTAs migrate to this type.
 
 ```tsx
-<EnhancedCTA label="Learn More" link="https://example.com" variant="primary" />
+<CTA label="Learn More" link="https://example.com" variant="primary" />
 ```
 
 ### 2. Get Directions
@@ -17,7 +17,7 @@ The traditional CTA with text label and link. This is the default behavior and a
 Automatically generates a Google Maps directions link when coordinates are provided. Coordinate fields only appear when this type is selected.
 
 ```tsx
-<EnhancedCTA
+<CTA
   label="Get Directions"
   ctaType="getDirections"
   coordinate={{ latitude: 40.7128, longitude: -74.006 }}
@@ -30,7 +30,7 @@ Automatically generates a Google Maps directions link when coordinates are provi
 Displays an icon instead of text. The icon is automatically selected based on the preset type. **Label field is hidden when this type is selected.**
 
 ```tsx
-<EnhancedCTA
+<CTA
   ctaType="presetImage"
   presetImageType="phone"
   link="tel:+1234567890"
@@ -66,7 +66,7 @@ Displays an icon instead of text. The icon is automatically selected based on th
 ## Props
 
 ```tsx
-interface EnhancedCTAProps {
+interface CTAProps {
   label?: React.ReactNode;
   link?: string;
   linkType?: LinkType;
@@ -87,7 +87,7 @@ interface EnhancedCTAProps {
 
 ## Usage in Page Sections
 
-The Enhanced CTA is automatically used in:
+The CTA is automatically used in:
 
 - Hero Section (primary and secondary CTAs)
 - Promo Section (CTA)
