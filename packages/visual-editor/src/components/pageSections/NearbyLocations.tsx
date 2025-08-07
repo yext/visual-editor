@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   useDocument,
   YextEntityField,
@@ -123,9 +123,6 @@ export interface NearbyLocationsSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-
-  /**  @internal */
-  contentEndpointIdEnvVar?: string;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -371,11 +368,11 @@ const LocationCard = ({
   );
 };
 
-const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
+const NearbyLocationsComponent = ({
   styles,
   data,
-  contentEndpointIdEnvVar,
-}: NearbyLocationsSectionProps) => {
+  puck,
+}: WithPuckProps<NearbyLocationsSectionProps>) => {
   const streamDocument = useDocument();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
@@ -405,8 +402,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
   } = React.useMemo(
-    () => parseDocument(streamDocument, contentEndpointIdEnvVar),
-    [streamDocument, contentEndpointIdEnvVar]
+    () => parseDocument(streamDocument, puck.metadata?.contentEndpointIdEnvVar),
+    [streamDocument, puck.metadata?.contentEndpointIdEnvVar]
   );
 
   const enableNearbyLocations =

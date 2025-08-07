@@ -23,6 +23,7 @@ import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import { Metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
 
@@ -39,6 +40,7 @@ type InternalLayoutEditorProps = {
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
+  metadata?: Metadata;
 };
 
 // Render Puck editor
@@ -55,6 +57,7 @@ export const InternalLayoutEditor = ({
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
   localDev,
+  metadata,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
@@ -327,6 +330,7 @@ export const InternalLayoutEditor = ({
             );
           },
         }}
+        metadata={metadata}
       />
     </EntityTooltipsProvider>
   );
