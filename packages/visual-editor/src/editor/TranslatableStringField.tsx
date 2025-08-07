@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 import { Button } from "../internal/puck/ui/button.tsx";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
+import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 
 /**
  * Generates a translatable string config
@@ -27,13 +29,24 @@ export function TranslatableStringField<
       const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
+      const templateMetadata: TemplateMetadata = useTemplateMetadata();
 
       const applyAllButton = showApplyAllOption ? (
         <Button
           size="sm"
           variant="small_link"
           onClick={() => {
-            onChange(resolvedValue as T);
+            const valueByLocale: TranslatableString = {
+              hasLocalizedValue: "true",
+              ...templateMetadata.locales.reduce(
+                (acc, locale) => {
+                  acc[locale] = resolvedValue;
+                  return acc;
+                },
+                {} as Record<string, string>
+              ),
+            };
+            onChange(valueByLocale as T);
           }}
           className={"ve-px-0 ve-h-auto"}
         >
