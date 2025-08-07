@@ -15,39 +15,39 @@ import {
 import { Button } from "../ui/button";
 
 /** Describes an image's aspect ratio. */
-interface ImageAspectRatio {
+type ImageAspectRatio = {
   horizontalFactor: number;
   verticalFactor: number;
-}
+};
 
 /** Describes the dimensions of an image. */
-interface ImageDimension {
+type ImageDimension = {
   width: number;
   height: number;
-}
+};
 
 /** Describes the data corresponding to a single image. */
-interface ImageData {
+type ImageData = {
   url: string;
   dimension?: ImageDimension; // Undefined for private urls
   exifMetadata?: {
     rotate: number;
   };
-}
+};
 
 /** Describes the data corresponding to an image rotation. */
-interface ImageRotation {
+type ImageRotation = {
   degree: number;
-}
+};
 
 /** Describes the crop boundary box data */
-interface ImageCrop {
+type ImageCrop = {
   left: number;
   top: number;
   height: number;
   width: number;
   aspectRatio?: ImageAspectRatio;
-}
+};
 
 type TransformKind = "CROP" | "ROTATION";
 
@@ -57,19 +57,19 @@ type ImageTransformation = ImageRotation | ImageCrop;
 type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
 
 /** Describes the data corresponding to a piece of image content. */
-interface ImageContentData {
+type ImageContentData = {
   name?: string;
   transformedImage?: ImageData;
   originalImage?: ImageData;
   childImages?: ImageData[];
   transformations?: ImageTransformations;
   sourceUrl?: string;
-}
+};
 
-interface ImagePayload {
+type ImagePayload = {
   id: string;
   value: ImageContentData;
-}
+};
 
 export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
   type: "custom",
@@ -124,12 +124,14 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType> = {
         if (!userInput) {
           return;
         }
-        onChange({
-          alternateText: value?.alternateText ?? "",
-          url: userInput ?? "",
-          height: 0,
-          width: 0,
-        });
+        setTimeout(() => {
+          onChange({
+            alternateText: value?.alternateText ?? "",
+            url: userInput ?? "",
+            height: 0,
+            width: 0,
+          });
+        }, 0);
       }
     };
 
