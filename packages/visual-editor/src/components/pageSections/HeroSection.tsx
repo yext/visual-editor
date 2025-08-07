@@ -184,8 +184,20 @@ const heroSectionFields: Fields<HeroSectionProps> = {
               },
             },
           },
-          primaryCta: ENHANCED_CTA_CONSTANT_CONFIG,
-          secondaryCta: ENHANCED_CTA_CONSTANT_CONFIG,
+          primaryCta: {
+            type: "object",
+            label: pt("fields.primaryCTA", "Primary CTA"),
+            objectFields: {
+              cta: ENHANCED_CTA_CONSTANT_CONFIG,
+            },
+          },
+          secondaryCta: {
+            type: "object",
+            label: pt("fields.secondaryCTA", "Secondary CTA"),
+            objectFields: {
+              cta: ENHANCED_CTA_CONSTANT_CONFIG,
+            },
+          },
         },
       },
       showAverageReview: YextField(
@@ -380,41 +392,41 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             />
           )}
         </header>
-        {(resolvedHero?.primaryCta?.label ||
-          resolvedHero?.secondaryCta?.label) && (
+        {(resolvedHero?.primaryCta?.cta?.label ||
+          resolvedHero?.secondaryCta?.cta?.label) && (
           <div
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
             aria-label={t("callToActions", "Call to Actions")}
           >
-            {resolvedHero?.primaryCta?.label && (
+            {resolvedHero?.primaryCta?.cta?.label && (
               <EnhancedCTA
                 eventName={`primaryCta`}
                 variant={styles?.primaryCTA}
                 label={resolveComponentData(
-                  resolvedHero.primaryCta.label,
+                  resolvedHero.primaryCta.cta.label,
                   i18n.language
                 )}
-                link={resolvedHero.primaryCta.link}
-                linkType={resolvedHero.primaryCta.linkType}
-                ctaType={resolvedHero.primaryCta.ctaType}
-                coordinate={resolvedHero.primaryCta.coordinate}
-                presetImageType={resolvedHero.primaryCta.presetImageType}
+                link={resolvedHero.primaryCta.cta.link}
+                linkType={resolvedHero.primaryCta.cta.linkType}
+                ctaType={resolvedHero.primaryCta.cta.ctaType}
+                coordinate={resolvedHero.primaryCta.cta.coordinate}
+                presetImageType={resolvedHero.primaryCta.cta.presetImageType}
                 className={"py-3"}
               />
             )}
-            {resolvedHero?.secondaryCta?.label && (
+            {resolvedHero?.secondaryCta?.cta?.label && (
               <EnhancedCTA
                 eventName={`secondaryCta`}
                 variant={styles?.secondaryCTA}
                 label={resolveComponentData(
-                  resolvedHero.secondaryCta.label,
+                  resolvedHero.secondaryCta.cta.label,
                   i18n.language
                 )}
-                link={resolvedHero.secondaryCta.link}
-                linkType={resolvedHero.secondaryCta.linkType}
-                ctaType={resolvedHero.secondaryCta.ctaType}
-                coordinate={resolvedHero.secondaryCta.coordinate}
-                presetImageType={resolvedHero.secondaryCta.presetImageType}
+                link={resolvedHero.secondaryCta.cta.link}
+                linkType={resolvedHero.secondaryCta.cta.linkType}
+                ctaType={resolvedHero.secondaryCta.cta.ctaType}
+                coordinate={resolvedHero.secondaryCta.cta.coordinate}
+                presetImageType={resolvedHero.secondaryCta.cta.presetImageType}
                 className={"py-3"}
               />
             )}
@@ -466,22 +478,26 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
       hero: {
         primaryCta: {
-          label: {
-            en: "Call To Action",
-            hasLocalizedValue: "true",
+          cta: {
+            label: {
+              en: "Call To Action",
+              hasLocalizedValue: "true",
+            },
+            link: "#",
+            linkType: "URL",
+            ctaType: "textAndLink",
           },
-          link: "#",
-          linkType: "URL",
-          ctaType: "textAndLink",
         },
         secondaryCta: {
-          label: {
-            en: "Call To Action",
-            hasLocalizedValue: "true",
+          cta: {
+            label: {
+              en: "Call To Action",
+              hasLocalizedValue: "true",
+            },
+            link: "#",
+            linkType: "URL",
+            ctaType: "textAndLink",
           },
-          link: "#",
-          linkType: "URL",
-          ctaType: "textAndLink",
         },
         image: {
           url: PLACEHOLDER_IMAGE_URL,

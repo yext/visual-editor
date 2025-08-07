@@ -1,4 +1,4 @@
-import { AutoField, CustomField, Field } from "@measured/puck";
+import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { PresetImageType } from "../../../types/types.ts";
 import React from "react";
@@ -96,43 +96,46 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
 
     return (
       <div className={"ve-mt-3"}>
-        <AutoField
-          field={{
-            type: "select",
-            label: pt("ctaType", "CTA Type"),
-            options: ctaTypeOptions(),
-          }}
-          value={value.ctaType || "textAndLink"}
-          onChange={(newValue) => {
-            const updatedValue = { ...value, ctaType: newValue };
+        <div className="ve-mb-3">
+          <FieldLabel label={pt("fields.ctaType", "CTA Type")}>
+            <AutoField
+              field={{
+                type: "select",
+                options: ctaTypeOptions(),
+              }}
+              value={value.ctaType || "textAndLink"}
+              onChange={(newValue) => {
+                const updatedValue = { ...value, ctaType: newValue };
 
-            // Set defaults based on CTA type
-            if (newValue === "presetImage") {
-              updatedValue.label = { en: "", hasLocalizedValue: "true" };
-              updatedValue.presetImageType =
-                updatedValue.presetImageType || "phone";
-            } else if (newValue === "getDirections") {
-              updatedValue.label = updatedValue.label || {
-                en: "Get Directions",
-                hasLocalizedValue: "true",
-              };
-              updatedValue.coordinate = updatedValue.coordinate || {
-                latitude: 0,
-                longitude: 0,
-              };
-            } else if (newValue === "textAndLink") {
-              updatedValue.label = updatedValue.label || {
-                en: "Learn More",
-                hasLocalizedValue: "true",
-              };
-              // Clear preset image and coordinate fields
-              delete updatedValue.presetImageType;
-              delete updatedValue.coordinate;
-            }
+                // Set defaults based on CTA type
+                if (newValue === "presetImage") {
+                  updatedValue.label = { en: "", hasLocalizedValue: "true" };
+                  updatedValue.presetImageType =
+                    updatedValue.presetImageType || "phone";
+                } else if (newValue === "getDirections") {
+                  updatedValue.label = updatedValue.label || {
+                    en: "Get Directions",
+                    hasLocalizedValue: "true",
+                  };
+                  updatedValue.coordinate = updatedValue.coordinate || {
+                    latitude: 0,
+                    longitude: 0,
+                  };
+                } else if (newValue === "textAndLink") {
+                  updatedValue.label = updatedValue.label || {
+                    en: "Learn More",
+                    hasLocalizedValue: "true",
+                  };
+                  // Clear preset image and coordinate fields
+                  delete updatedValue.presetImageType;
+                  delete updatedValue.coordinate;
+                }
 
-            onChange(updatedValue);
-          }}
-        />
+                onChange(updatedValue);
+              }}
+            />
+          </FieldLabel>
+        </div>
         {showLabel && (
           <AutoField
             field={labelField}
@@ -140,67 +143,83 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
             onChange={(newValue) => onChange({ ...value, label: newValue })}
           />
         )}
-        <AutoField
-          field={{ type: "text", label: pt("Link", "Link") }}
-          value={value.link || ""}
-          onChange={(newValue) => onChange({ ...value, link: newValue })}
-        />
-        <AutoField
-          field={{
-            type: "select",
-            label: pt("linkType", "Link Type"),
-            options: linkTypeOptions(),
-          }}
-          value={value.linkType || "URL"}
-          onChange={(newValue) => onChange({ ...value, linkType: newValue })}
-        />
+        <div className="ve-mb-3">
+          <FieldLabel label={pt("fields.link", "Link")}>
+            <AutoField
+              field={{ type: "text" }}
+              value={value.link || ""}
+              onChange={(newValue) => onChange({ ...value, link: newValue })}
+            />
+          </FieldLabel>
+        </div>
+        <div className="ve-mb-3">
+          <FieldLabel label={pt("fields.linkType", "Link Type")}>
+            <AutoField
+              field={{
+                type: "select",
+                options: linkTypeOptions(),
+              }}
+              value={value.linkType || "URL"}
+              onChange={(newValue) =>
+                onChange({ ...value, linkType: newValue })
+              }
+            />
+          </FieldLabel>
+        </div>
         {showPresetImage && (
-          <AutoField
-            field={{
-              type: "select",
-              label: pt("presetImageType", "Preset Image Type"),
-              options: presetImageTypeOptions(),
-            }}
-            value={value.presetImageType ?? "phone"}
-            onChange={(newValue) =>
-              onChange({ ...value, presetImageType: newValue })
-            }
-          />
+          <div className="ve-mb-3">
+            <FieldLabel
+              label={pt("fields.presetImageType", "Preset Image Type")}
+            >
+              <AutoField
+                field={{
+                  type: "select",
+                  options: presetImageTypeOptions(),
+                }}
+                value={value.presetImageType ?? "phone"}
+                onChange={(newValue) =>
+                  onChange({ ...value, presetImageType: newValue })
+                }
+              />
+            </FieldLabel>
+          </div>
         )}
         {showCoordinate && (
           <>
-            <AutoField
-              field={{
-                type: "number",
-                label: pt("coordinate.latitude", "Latitude"),
-              }}
-              value={value.coordinate?.latitude ?? 0}
-              onChange={(newValue) =>
-                onChange({
-                  ...value,
-                  coordinate: {
-                    latitude: newValue,
-                    longitude: value.coordinate?.longitude ?? 0,
-                  },
-                })
-              }
-            />
-            <AutoField
-              field={{
-                type: "number",
-                label: pt("coordinate.longitude", "Longitude"),
-              }}
-              value={value.coordinate?.longitude ?? 0}
-              onChange={(newValue) =>
-                onChange({
-                  ...value,
-                  coordinate: {
-                    latitude: value.coordinate?.latitude ?? 0,
-                    longitude: newValue,
-                  },
-                })
-              }
-            />
+            <div className="ve-mb-3">
+              <FieldLabel label={pt("fields.latitude", "Latitude")}>
+                <AutoField
+                  field={{ type: "number" }}
+                  value={value.coordinate?.latitude ?? 0}
+                  onChange={(newValue) =>
+                    onChange({
+                      ...value,
+                      coordinate: {
+                        latitude: newValue,
+                        longitude: value.coordinate?.longitude ?? 0,
+                      },
+                    })
+                  }
+                />
+              </FieldLabel>
+            </div>
+            <div className="ve-mb-3">
+              <FieldLabel label={pt("fields.longitude", "Longitude")}>
+                <AutoField
+                  field={{ type: "number" }}
+                  value={value.coordinate?.longitude ?? 0}
+                  onChange={(newValue) =>
+                    onChange({
+                      ...value,
+                      coordinate: {
+                        latitude: value.coordinate?.latitude ?? 0,
+                        longitude: newValue,
+                      },
+                    })
+                  }
+                />
+              </FieldLabel>
+            </div>
           </>
         )}
       </div>

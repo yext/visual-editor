@@ -43,15 +43,21 @@ export type PresetImageType =
 
 export type HeroSectionType = {
   image?: ImageType;
-  primaryCta?: EnhancedTranslatableCTA;
-  secondaryCta?: EnhancedTranslatableCTA;
+  primaryCta?: {
+    cta?: EnhancedTranslatableCTA;
+  };
+  secondaryCta?: {
+    cta?: EnhancedTranslatableCTA;
+  };
 };
 
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
   description?: TranslatableRichText;
-  cta?: EnhancedTranslatableCTA;
+  cta?: {
+    cta?: EnhancedTranslatableCTA;
+  };
 };
 
 export type ProductSectionType = {

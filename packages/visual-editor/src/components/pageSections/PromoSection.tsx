@@ -148,7 +148,13 @@ const promoSectionFields: Fields<PromoSectionProps> = {
               },
             },
           },
-          cta: ENHANCED_CTA_CONSTANT_CONFIG,
+          cta: {
+            type: "object",
+            label: pt("fields.cta", "CTA"),
+            objectFields: {
+              cta: ENHANCED_CTA_CONSTANT_CONFIG,
+            },
+          },
         },
       },
     },
@@ -277,20 +283,20 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             i18n.language,
             streamDocument
           )}
-        {resolvedPromo?.cta?.label && (
+        {resolvedPromo?.cta?.cta?.label && (
           <EnhancedCTA
             eventName={`cta`}
             variant={styles?.ctaVariant}
             label={resolveComponentData(
-              resolvedPromo?.cta.label,
+              resolvedPromo?.cta.cta.label,
               i18n.language,
               streamDocument
             )}
-            link={resolvedPromo?.cta.link}
-            linkType={resolvedPromo?.cta.linkType}
-            ctaType={resolvedPromo?.cta.ctaType}
-            coordinate={resolvedPromo?.cta.coordinate}
-            presetImageType={resolvedPromo?.cta.presetImageType}
+            link={resolvedPromo?.cta.cta.link}
+            linkType={resolvedPromo?.cta.cta.linkType}
+            ctaType={resolvedPromo?.cta.cta.ctaType}
+            coordinate={resolvedPromo?.cta.cta.coordinate}
+            presetImageType={resolvedPromo?.cta.cta.presetImageType}
           />
         )}
       </div>
@@ -319,10 +325,12 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
           hasLocalizedValue: "true",
         },
         cta: {
-          label: { en: "Learn More", hasLocalizedValue: "true" },
-          link: "#",
-          linkType: "URL",
-          ctaType: "textAndLink",
+          cta: {
+            label: { en: "Learn More", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+            ctaType: "textAndLink",
+          },
         },
       },
     },
