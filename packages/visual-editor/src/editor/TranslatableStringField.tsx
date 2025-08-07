@@ -12,14 +12,14 @@ import { Button } from "../internal/puck/ui/button.tsx";
  * Generates a translatable string config
  * @param label optional label. Takes in a value from msg.
  * @param filter optional filter for the entity fields that can be embedded.
- * @param allowApplyAll optional enables the "Apply to All" button
+ * @param showApplyAllOption enables the "Apply to All Locales" button
  */
 export function TranslatableStringField<
   T extends TranslatableString | undefined = TranslatableString,
 >(
   label?: MsgString,
   filter?: RenderEntityFieldFilter<any>,
-  allowApplyAll?: boolean
+  showApplyAllOption?: boolean
 ): CustomField<T> {
   return {
     type: "custom",
@@ -28,7 +28,7 @@ export function TranslatableStringField<
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
 
-      const applyAllButton = allowApplyAll ? (
+      const applyAllButton = showApplyAllOption ? (
         <Button
           size="sm"
           variant="link"
