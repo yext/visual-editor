@@ -61,15 +61,11 @@ jobs:
             echo "has_deleted=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Post or update PR comment
-        if: steps.detect.outputs.has_deleted == 'true'
+      - name: Manage PR comment
         uses: actions/github-script@v7
         with:
           script: |
-            const commentBody = `## ⚠️ Deleted Translation Keys Detected\n\n${process.env.COMMENT}`;
             const marker = "<!-- deleted-translations-warning -->";
-            const fullBody = `${marker}\n${commentBody}`;
-
             const { owner, repo, number } = context.issue;
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -80,20 +76,38 @@ jobs:
 
             const existing = comments.find(c => c.body.includes(marker));
 
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: existing.id,
-                body: fullBody,
-              });
+            const hasDeleted = '${{ steps.detect.outputs.has_deleted }}' === 'true';
+
+            if (hasDeleted) {
+              const commentBody = `## ⚠️ Deleted Translation Keys Detected\n\n${process.env.COMMENT}`;
+              const fullBody = `${marker}\n${commentBody}`;
+
+              if (existing) {
+                await github.rest.issues.updateComment({
+                  owner,
+                  repo,
+                  comment_id: existing.id,
+                  body: fullBody,
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  body: fullBody,
+                });
+              }
             } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number: number,
-                body: fullBody,
-              });
+              if (existing) {
+                await github.rest.issues.deleteComment({
+                  owner,
+                  repo,
+                  comment_id: existing.id,
+                });
+                console.log("✅ Removed outdated warning comment.");
+              } else {
+                console.log("ℹ️ No deleted keys and no comment found.");
+              }
             }
         env:
           COMMENT: ${{ steps.detect.outputs.comment }}
