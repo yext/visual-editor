@@ -35,6 +35,7 @@ export function TranslatableStringField<
           onClick={() => {
             onChange(resolvedValue as T);
           }}
+          className={"ve-px-0 ve-h-auto"}
         >
           {label
             ? pt("applyAllWithLabel", "Apply {{fieldLabel}} to All Locales", {
