@@ -18,7 +18,7 @@
     "sublocality": "Sublokalitet"
   },
   "applyAll": "Applicera på alla platser",
-  "applyAllWithLabel": "Applicera {{FieldLabel}} på alla platser",
+  "applyAllWithLabel": "Applicera {{fieldLabel}} på alla platser",
   "approvals": {
     "addAComment": "Lägg till en kommentar för att hjälpa din godkännare att förstå vad som förändrats",
     "send": "Skicka för godkännande",

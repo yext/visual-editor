@@ -18,7 +18,7 @@
     "sublocality": "Sublokalita"
   },
   "applyAll": "Sa vzťahuje na všetky lokality",
-  "applyAllWithLabel": "Použite {{FieldLabel}} na všetky lokality",
+  "applyAllWithLabel": "Použite {{fieldLabel}} na všetky lokality",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",

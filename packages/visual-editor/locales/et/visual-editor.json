@@ -18,7 +18,7 @@
     "sublocality": "Alategusus"
   },
   "applyAll": "Kandideerige kõigisse paikadesse",
-  "applyAllWithLabel": "Rakendage {{FieldLabel}} kõigisse paikadesse",
+  "applyAllWithLabel": "Rakendage {{fieldLabel}} kõigisse paikadesse",
   "approvals": {
     "addAComment": "Lisage kommentaar, mis aitaks teie kinnitajal mõista, mis muutus",
     "send": "Saada heakskiitu",

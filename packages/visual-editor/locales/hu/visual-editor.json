@@ -18,7 +18,7 @@
     "sublocality": "Szublokitás"
   },
   "applyAll": "Jelentkezzen az összes helyszínre",
-  "applyAllWithLabel": "Alkalmazza a {{FieldLabel}} -et minden lokalizációra",
+  "applyAllWithLabel": "Alkalmazza a {{fieldLabel}} -et minden lokalizációra",
   "approvals": {
     "addAComment": "Adjon hozzá egy megjegyzést, hogy segítsen jóváhagyni, hogy megértse, mi változott",
     "send": "Küldje el jóváhagyásra",
