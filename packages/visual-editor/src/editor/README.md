@@ -18,7 +18,7 @@ information.
 | document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))          |
 | componentRegistry | `Map<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
 | themeConfig?      | ThemeConfig                                                                            |
-| metadata?         | metadata                                                                               |
+| metadata?         | Metadata                                                                               |
 
 ### Usage
 
