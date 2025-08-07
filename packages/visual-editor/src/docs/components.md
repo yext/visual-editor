@@ -330,13 +330,6 @@ If 'true', displays the language selector dropdown in the header.
 
 ![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20default%20props%20with%20data.png)
 
-The HeroSection component supports four visual variants:
-
-- **Classic**: Traditional layout with image and text side-by-side, customizable image orientation
-- **Immersive**: Full-width background image with overlaid text content
-- **Spotlight**: Background image with a white container overlay, customizable positioning and alignment
-- **Compact**: Condensed layout with smaller padding, reduced spacing, and simplified design
-
 ### Props
 
 #### Data Props
@@ -355,19 +348,20 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                           | Type                                                   | Description                                                                          | Default              |
-| :----------------------------- | :----------------------------------------------------- | :----------------------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`       | `BackgroundStyle`                                      | The background color for the entire section.                                         | `Background Color 1` |
-| `styles.businessNameLevel`     | `HeadingLevel`                                         | The HTML heading level for the business name.                                        | `3`                  |
-| `styles.image`                 | `ImageStylingProps`                                    | Styling options for the hero image, such as aspect ratio.                            |                      |
-| `styles.imageOrientation`      | `"left" \| "right"`                                    | Positions the image to the left or right of the text content (classic variant only). | `right`              |
-| `styles.localGeoModifierLevel` | `HeadingLevel`                                         | The HTML heading level for the local geo-modifier.                                   | `1`                  |
-| `styles.primaryCTA`            | `CTAProps["variant"]`                                  | The visual style variant for the primary call-to-action button.                      | `primary`            |
-| `styles.secondaryCTA`          | `CTAProps["variant"]`                                  | The visual style variant for the secondary call-to-action button.                    | `secondary`          |
-| `styles.variant`               | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                             | `classic`            |
-| `styles.containerPosition`     | `"left" \| "center"`                                   | Container position for spotlight variant (left or center).                           | `left`               |
-| `styles.contentAlignment`      | `"left" \| "center"`                                   | Content alignment for spotlight variant (left or center).                            | `left`               |
-| `styles.textAlignment`         | `"left" \| "center"`                                   | Text alignment for spotlight variant (left or center).                               | `left`               |
+| Prop                              | Type                                                   | Description                                                                                                                                    | Default              |
+| :-------------------------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant). | `Background Color 1` |
+| `styles.businessNameLevel`        | `HeadingLevel`                                         | The HTML heading level for the business name.                                                                                                  | `3`                  |
+| `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                              | `left`               |
+| `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                        | `right`              |
+| `styles.image`                    | `ImageStylingProps`                                    | Styling options for the hero image, such as aspect ratio (classic variant).                                                                    |                      |
+| `styles.localGeoModifierLevel`    | `HeadingLevel`                                         | The HTML heading level for the local geo-modifier.                                                                                             | `1`                  |
+| `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                        | `left`               |
+| `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                         | `top`                |
+| `styles.primaryCTA`               | `CTAProps["variant"]`                                  | The visual style variant for the primary call-to-action button.                                                                                | `primary`            |
+| `styles.secondaryCTA`             | `CTAProps["variant"]`                                  | The visual style variant for the secondary call-to-action button.                                                                              | `secondary`          |
+| `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                  | `true`               |
+| `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                       | `classic`            |
 
 #### Other Props
 
