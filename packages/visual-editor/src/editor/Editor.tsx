@@ -40,7 +40,7 @@ export type EditorProps = {
   localDev?: boolean;
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
-  metadata?: metadata; // passed into puck's global metadata
+  metadata?: Metadata; // passed into puck's global metadata
 };
 
 export const Editor = ({
