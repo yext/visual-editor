@@ -1,4 +1,4 @@
-export { type metadata, Editor } from "./Editor.tsx";
+export { type Metadata, Editor } from "./Editor.tsx";
 export { EntityField } from "./EntityField.tsx";
 export {
   YextEntityFieldSelector,

@@ -149,7 +149,7 @@ Various existing components require additional data from the hybrid-developer. T
 This could look like:
 
 ```ts
-const customMetadata: metadata = {
+const customMetadata: Metadata = {
   contentEndpointIdEnvVar: "FOO_ENV_VAR",
   entityTypeEnvVar: "BAR_ENV_VAR",
   experienceKeyEnvVar: "BAZ_ENV_VAR"
