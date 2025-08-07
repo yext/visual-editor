@@ -17,6 +17,7 @@
     "region": "Valsts/reģions",
     "sublocality": "Sublocalitāte"
   },
+  "applyAll": "Attiecas uz visiem",
   "approvals": {
     "addAComment": "Pievienojiet komentāru, lai palīdzētu jūsu apstiprinātājam izprast, kas mainījās",
     "send": "Nosūtīt apstiprināšanai",

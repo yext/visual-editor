@@ -17,6 +17,7 @@
     "region": "州/地區",
     "sublocality": "子域"
   },
+  "applyAll": "適用於所有人",
   "approvals": {
     "addAComment": "添加評論以幫助您的批准者了解發生了什麼變化",
     "send": "發送批准",

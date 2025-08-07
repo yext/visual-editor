@@ -17,6 +17,7 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
+  "applyAll": "Kandke kõigile",
   "approvals": {
     "addAComment": "Lisage kommentaar, mis aitaks teie kinnitajal mõista, mis muutus",
     "send": "Saada heakskiitu",

@@ -17,6 +17,7 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "applyAll": "Soveltaa kaikkiin",
   "approvals": {
     "addAComment": "Lisää kommentti auttaaksesi hyväksyjääsi ymmärtämään, mikä on muuttunut",
     "send": "Lähetä hyväksyntä",

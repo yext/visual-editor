@@ -17,6 +17,7 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
+  "applyAll": "Taikyti visiems",
   "approvals": {
     "addAComment": "Pridėkite komentarą, kad padėtumėte jūsų patvirtintojui suprasti, kas pasikeitė",
     "send": "Siųsti patvirtinti",

@@ -17,6 +17,7 @@
     "region": "Eyalet/bölge",
     "sublocality": "Subloku"
   },
+  "applyAll": "Herkese başvur",
   "approvals": {
     "addAComment": "Onaycının neyin değiştiğini anlamasına yardımcı olmak için bir yorum ekleyin",
     "send": "Onay için gönder",

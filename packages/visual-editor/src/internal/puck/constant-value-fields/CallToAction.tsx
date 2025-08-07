@@ -47,7 +47,8 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
     const linkField = useMemo(() => {
       return TranslatableStringField<TranslatableString | undefined>(
         msg("fields.link", "Link"),
-        { types: ["type.string"] }
+        { types: ["type.string"] },
+        true
       );
     }, []);
 
@@ -94,7 +95,8 @@ export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const linkField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("fields.link", "Link"),
-      { types: ["type.string"] }
+      { types: ["type.string"] },
+      true
     );
   }, []);
 

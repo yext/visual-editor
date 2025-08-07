@@ -17,6 +17,7 @@
     "region": "Staat/Region",
     "sublocality": "Sublokalität"
   },
+  "applyAll": "Bewerben Sie sich für alle",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",

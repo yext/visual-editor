@@ -17,6 +17,7 @@
     "region": "Estado/región",
     "sublocality": "Sublocalidad"
   },
+  "applyAll": "Aplicar a todos",
   "approvals": {
     "addAComment": "Agregue un comentario para ayudar a su aprobador a comprender lo que cambió",
     "send": "Enviar para su aprobación",

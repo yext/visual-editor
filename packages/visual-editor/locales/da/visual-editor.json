@@ -17,6 +17,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "applyAll": "Anvend på alle",
   "approvals": {
     "addAComment": "Tilføj en kommentar for at hjælpe din godkender med at forstå, hvad der ændrede sig",
     "send": "Send til godkendelse",
