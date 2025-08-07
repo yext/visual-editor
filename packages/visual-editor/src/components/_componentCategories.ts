@@ -70,6 +70,7 @@ import {
 import { Footer, FooterProps } from "./footer/Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
+import { CTAGroup, CTAGroupProps } from "./contentBlocks/CTAGroup";
 import {
   StaticMapSection,
   StaticMapSectionProps,
@@ -167,6 +168,7 @@ export interface AdvancedCoreInfoCategoryProps {
   Grid: GridProps;
   Address: AddressProps;
   BodyText: BodyTextProps;
+  CTAGroup: CTAGroupProps;
   CTAWrapper: CTAWrapperProps;
   Emails: EmailsProps;
   GetDirections: GetDirectionsProps;
@@ -183,6 +185,7 @@ export const AdvancedCoreInfoCategoryComponents = {
   Grid,
   Address,
   BodyText,
+  CTAGroup,
   CTAWrapper,
   Emails,
   GetDirections,
