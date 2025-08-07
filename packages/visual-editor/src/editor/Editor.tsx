@@ -23,14 +23,14 @@ const devLogger = new DevLogger();
 
 // For hybrid developement use of existing components
 // See hybrid-development.md for more details
-export type Metadata = {
+export interface Metadata {
   // The environment variable that stores the content endpoint ID
   contentEndpointIdEnvVar?: string;
   // The environment variable that stores the entity type
   entityTypeEnvVar?: string;
   // The environment variable that stores the experience key
   experienceKeyEnvVar?: string;
-};
+}
 
 export type EditorProps = {
   document: any;
