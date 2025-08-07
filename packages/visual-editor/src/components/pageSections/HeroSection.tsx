@@ -513,7 +513,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       }
       case "spotlight": {
         fields = removeStyleFields(fields, [
-          "contentAlignment",
           "showImage",
           "image",
           "mobileImagePosition",
