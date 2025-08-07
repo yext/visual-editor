@@ -149,14 +149,14 @@ Various existing components require additional data from the hybrid-developer. T
 This could look like:
 
 ```ts
-const resolveUrlTemplate = (
-  streamDocument: StreamDocument,
+function resolveUrlTemplate(
+  streamDocument: any,
   locale: string,
   relativePrefixToRoot: string,
-): string => {
+): string {
   return (
     relativePrefixToRoot +
-    normalizeSlug(`custom-url-for-${streamDocument.entityId}-${locale}`)
+    normalizeSlug(`custom-url-for-${streamDocument.name}-${locale}`)
   );
 }
 
