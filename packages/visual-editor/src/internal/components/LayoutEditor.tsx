@@ -22,6 +22,7 @@ import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
 
@@ -32,6 +33,7 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  metadata?: metadata;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -42,6 +44,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    metadata,
   } = props;
 
   const {
@@ -272,6 +275,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
+      metadata={metadata}
     />
   ) : (
     <LoadingScreen
