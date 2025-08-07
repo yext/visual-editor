@@ -144,57 +144,67 @@ export const componentRegistry = new Map<string, Config<any>>([
 
 ### Working with Existing Components
 
-The available components for a template are defined in that template's [config](#puck-configs). All configs and their component assignments can be found in `ve.config.tsx`. Any usages of [withPropOverrides](../utils/README.md#withpropoverrides) would be done in the `ve.config.tsx` file.
+Various existing components require additional data from the hybrid-developer. This would be set via the metadata prop on the `<Editor/>` and `<Render/>` elements used in templates.
 
-The **NearbyLocationsSection** component requires [withPropOverrides](../utils/README.md#withpropoverrides) to pass in a value for contentEndpointIdEnvVar. Without this, the component will not work in a hybrid development. This can look like:
+This could look like:
 
 ```ts
-interface MainProps
-  extends PageSectionCategoryProps,
-    OtherCategoryProps {}
+const customMetadata: Metadata = {
+  contentEndpointIdEnvVar: "FOO_ENV_VAR",
+  entityTypeEnvVar: "BAR_ENV_VAR",
+  experienceKeyEnvVar: "BAZ_ENV_VAR"
+}
 
-const components: Config<MainProps>["components"] = {
-  ...PageSectionCategoryComponents,
-  ...OtherCategoryComponents,
+// Example using the edit.tsx template
+const Edit: () => JSX.Element = () => {
+  const entityDocument = usePlatformBridgeDocument();
+  const entityFields = usePlatformBridgeEntityFields();
+
+  return (
+    <VisualEditorProvider
+      templateProps={{
+        document: entityDocument,
+      }}
+      entityFields={entityFields}
+      tailwindConfig={tailwindConfig}
+    >
+      <Editor
+        document={entityDocument}
+        componentRegistry={componentRegistry}
+        themeConfig={themeConfig}
+        metadata={customMetadata} // added here
+      />
+    </VisualEditorProvider>
+  );
 };
 
-export const mainConfig: Config<MainProps> = {
-  components: {
-    ...components,
-    NearbyLocationsSection: withPropOverrides(NearbyLocationsSection, {
-      contentEndpointIdEnvVar: "YEXT_PUBLIC_FOO",
-    })
-  },
-  .....
-}
-```
+// Example using the main.tsx template
+const Location: Template<TemplateRenderProps> = (props) => {
+  const { document } = props;
+  const filteredConfig = filterComponentsFromConfig(
+    mainConfig,
+    document?._additionalLayoutComponents
+  );
 
-The **Locator** component also has two env vars, entityTypeEnvVar and experienceKeyEnvVar, that are required to support usage in hybrid development. That can look like:
-
-```ts
-interface LocatorConfigProps
-  extends LocatorCategoryProps,
-    OtherCategoryProps {}
-
-export const locatorConfig: Config<LocatorConfigProps> = {
-  components: {
-    ...LocatorCategoryComponents,
-    ...OtherCategoryComponents,
-    Locator: withPropOverrides(Locator, {
-      entityTypeEnvVar: "YEXT_PUBLIC_FOO",
-      experienceKeyEnvVar: "YEXT_PUBLIC_BAR",
-    })
-  },
-  root: {
-    render: () => {
-      return (
-        <DropZone
-          zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+  return (
+    <AnalyticsProvider
+      apiKey={document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
+      templateData={props}
+      currency="USD"
+    >
+      <VisualEditorProvider templateProps={props}>
+        <Render
+          config={filteredConfig}
+          data={migrate(
+            JSON.parse(document.__.layout),
+            migrationRegistry,
+            filteredConfig
+          )}
+          metadata={customMetadata} // added here
         />
-      );
-    },
-  },
+      </VisualEditorProvider>
+    </AnalyticsProvider>
+  );
 };
 ```
 

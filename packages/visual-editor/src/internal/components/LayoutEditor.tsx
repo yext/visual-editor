@@ -22,6 +22,7 @@ import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { Metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
 
@@ -32,7 +33,7 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
-  metadata?: any;
+  metadata?: Metadata;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {

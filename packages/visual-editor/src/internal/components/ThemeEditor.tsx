@@ -20,6 +20,7 @@ import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import * as lzstring from "lz-string";
+import { Metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
 
@@ -30,7 +31,7 @@ type ThemeEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
-  metadata?: any;
+  metadata?: Metadata;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {

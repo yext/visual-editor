@@ -12,6 +12,7 @@ import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
+import { Metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
 
@@ -29,7 +30,7 @@ type InternalThemeEditorProps = {
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
   localDev: boolean;
-  metadata?: any;
+  metadata?: Metadata;
 };
 
 // Render Puck editor

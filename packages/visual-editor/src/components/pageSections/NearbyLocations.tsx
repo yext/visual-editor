@@ -128,9 +128,6 @@ export interface NearbyLocationsSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-
-  /**  @internal */
-  contentEndpointIdEnvVar?: string;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -388,12 +385,9 @@ const LocationCard = ({
   );
 };
 
-const NearbyLocationsComponent: React.FC<
-  WithPuckProps<NearbyLocationsSectionProps>
-> = ({
+const NearbyLocationsComponent = ({
   styles,
   data,
-  contentEndpointIdEnvVar,
   puck,
 }: WithPuckProps<NearbyLocationsSectionProps>) => {
   const streamDocument = useDocument();
@@ -425,8 +419,8 @@ const NearbyLocationsComponent: React.FC<
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
   } = React.useMemo(
-    () => parseDocument(streamDocument, contentEndpointIdEnvVar),
-    [streamDocument, contentEndpointIdEnvVar]
+    () => parseDocument(streamDocument, puck.metadata?.contentEndpointIdEnvVar),
+    [streamDocument, puck.metadata?.contentEndpointIdEnvVar]
   );
 
   const enableNearbyLocations =
