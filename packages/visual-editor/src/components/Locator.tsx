@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   AnalyticsProvider,
   CardComponent,
@@ -70,12 +70,6 @@ export interface LocatorProps {
    * @defaultValue false
    */
   openNowButton?: boolean;
-
-  /** @internal to be set via withPropOverrides */
-  entityTypeEnvVar?: string;
-
-  /** @internal to be set via withPropOverrides */
-  experienceKeyEnvVar?: string;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -129,12 +123,12 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
   render: (props) => <LocatorWrapper {...props} />,
 };
 
-const LocatorWrapper: React.FC<LocatorProps> = (props) => {
+const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
       streamDocument,
-      props.experienceKeyEnvVar
+      props.puck.metadata?.experienceKeyEnvVar
     );
     if (searchHeadlessConfig === undefined) {
       return { searchAnalyticsConfig: undefined, searcher: undefined };
@@ -167,10 +161,13 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 
 type SearchState = "not started" | "loading" | "complete";
 
-const LocatorInternal: React.FC<LocatorProps> = (props) => {
+const LocatorInternal = ({
+  mapStyle,
+  openNowButton,
+  puck,
+}: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
-  const { mapStyle, openNowButton, entityTypeEnvVar } = props;
-  const entityType = getEntityType(entityTypeEnvVar);
+  const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
