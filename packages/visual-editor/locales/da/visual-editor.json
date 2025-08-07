@@ -17,7 +17,8 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
-  "applyAll": "Anvend på alle",
+  "applyAll": "Ansøg på alle lokaliteter",
+  "applyAllWithLabel": "Anvend {{FieldLabel}} på alle lokaliteter",
   "approvals": {
     "addAComment": "Tilføj en kommentar for at hjælpe din godkender med at forstå, hvad der ændrede sig",
     "send": "Send til godkendelse",

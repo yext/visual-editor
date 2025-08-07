@@ -17,7 +17,8 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
-  "applyAll": "Taikyti visiems",
+  "applyAll": "Kreipkitės į visas vietas",
+  "applyAllWithLabel": "Taikyti {{fieldLabel}} visoms lokalams",
   "approvals": {
     "addAComment": "Pridėkite komentarą, kad padėtumėte jūsų patvirtintojui suprasti, kas pasikeitė",
     "send": "Siųsti patvirtinti",

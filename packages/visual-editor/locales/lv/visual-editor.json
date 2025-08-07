@@ -17,7 +17,8 @@
     "region": "Valsts/reģions",
     "sublocality": "Sublocalitāte"
   },
-  "applyAll": "Attiecas uz visiem",
+  "applyAll": "Piesakieties visās vietās",
+  "applyAllWithLabel": "Pielietojiet {{FieldLabel}} uz visām vietām",
   "approvals": {
     "addAComment": "Pievienojiet komentāru, lai palīdzētu jūsu apstiprinātājam izprast, kas mainījās",
     "send": "Nosūtīt apstiprināšanai",

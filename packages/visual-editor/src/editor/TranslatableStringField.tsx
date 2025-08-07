@@ -24,46 +24,53 @@ export function TranslatableStringField<
   return {
     type: "custom",
     render: ({ onChange, value }) => {
-      const { t, i18n } = useTranslation();
+      const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
-
-      const fieldEditor = (
-        <EmbeddedFieldStringInput
-          value={resolvedValue}
-          onChange={(val) => {
-            return onChange({
-              ...(typeof value === "object" && !Array.isArray(value)
-                ? value
-                : {}),
-              [locale]: val,
-              hasLocalizedValue: "true",
-            } as Record<string, string> as T);
-          }}
-          filter={filter ?? { types: ["type.string"] }}
-        />
-      );
 
       const applyAllButton = allowApplyAll ? (
         <Button
           size="sm"
-          variant="outline"
+          variant="link"
           onClick={() => {
             onChange(resolvedValue as T);
           }}
         >
-          {t("applyAll", "Apply to all")}
+          {label
+            ? pt("applyAllWithLabel", "Apply {{fieldLabel}} to All Locales", {
+                fieldLabel: pt(label),
+              })
+            : pt("applyAll", "Apply to All Locales")}
         </Button>
       ) : null;
 
+      const fieldEditor = (
+        <>
+          <EmbeddedFieldStringInput
+            value={resolvedValue}
+            onChange={(val) => {
+              return onChange({
+                ...(typeof value === "object" && !Array.isArray(value)
+                  ? value
+                  : {}),
+                [locale]: val,
+                hasLocalizedValue: "true",
+              } as Record<string, string> as T);
+            }}
+            filter={filter ?? { types: ["type.string"] }}
+          />
+          {applyAllButton}
+        </>
+      );
+
+      if (!label) {
+        return <div className={"ve-pt-3"}>{fieldEditor}</div>;
+      }
+
       return (
-        <div className="ve-pt-3">
-          <div className="flex items-baseline justify-between mb-1">
-            {label && <FieldLabel label={`${pt(label)} (${locale})`} />}
-            {applyAllButton}
-          </div>
+        <FieldLabel label={`${pt(label)} (${locale})`}>
           {fieldEditor}
-        </div>
+        </FieldLabel>
       );
     },
   };

@@ -17,7 +17,8 @@
     "region": "州/地区",
     "sublocality": "子域"
   },
-  "applyAll": "适用于所有人",
+  "applyAll": "申请所有地区",
+  "applyAllWithLabel": "将{{fieldLabel}}应用于所有语言",
   "approvals": {
     "addAComment": "添加评论以帮助您的批准者了解发生了什么变化",
     "send": "发送批准",

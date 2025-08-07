@@ -17,7 +17,8 @@
     "region": "Stat/region",
     "sublocality": "Sublokalitet"
   },
-  "applyAll": "Tillämpas på alla",
+  "applyAll": "Applicera på alla platser",
+  "applyAllWithLabel": "Applicera {{FieldLabel}} på alla platser",
   "approvals": {
     "addAComment": "Lägg till en kommentar för att hjälpa din godkännare att förstå vad som förändrats",
     "send": "Skicka för godkännande",

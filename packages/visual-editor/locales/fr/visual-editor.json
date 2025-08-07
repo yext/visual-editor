@@ -17,7 +17,8 @@
     "region": "État / région",
     "sublocality": "Sublocalité"
   },
-  "applyAll": "Appliquer à tous",
+  "applyAll": "Postuler à tous les lieux",
+  "applyAllWithLabel": "Appliquer {{FieldLabel}} à tous les endroits",
   "approvals": {
     "addAComment": "Ajoutez un commentaire pour aider votre approbateur à comprendre ce qui a changé",
     "send": "Envoyer l'approbation",

@@ -17,7 +17,8 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
-  "applyAll": "Kandke kõigile",
+  "applyAll": "Kandideerige kõigisse paikadesse",
+  "applyAllWithLabel": "Rakendage {{FieldLabel}} kõigisse paikadesse",
   "approvals": {
     "addAComment": "Lisage kommentaar, mis aitaks teie kinnitajal mõista, mis muutus",
     "send": "Saada heakskiitu",
