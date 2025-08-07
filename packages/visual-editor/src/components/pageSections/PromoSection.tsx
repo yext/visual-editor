@@ -83,7 +83,7 @@ export interface PromoSectionProps {
   styles: PromoStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -204,6 +204,15 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       image: YextField(msg("fields.image", "Image"), {
         type: "object",
         objectFields: ImageStylingFields,
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),

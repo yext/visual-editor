@@ -77,7 +77,7 @@ export interface ProductSectionProps {
   styles: ProductStyles;
 
   /** @internal  */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -151,6 +151,15 @@ const productSectionFields: Fields<ProductSectionProps> = {
             options: "CTA_VARIANT",
           }),
         },
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),

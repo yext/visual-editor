@@ -102,9 +102,15 @@ export interface ExpandedHeaderProps {
   styles: ExpandedHeaderStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
+
+  /**
+   * Indicates which props should not be checked for missing translations.
+   * @internal
+   */
+  ignoreLocaleWarning?: string[];
 }
 
 const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
@@ -188,7 +194,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           ),
         },
       }),
-
       secondaryHeader: YextField(
         msg("fields.secondaryHeader", "Secondary Header"),
         {
@@ -288,6 +293,15 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       ),
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
@@ -834,6 +848,29 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
             type: "maxWidth",
           }),
         },
+      },
+    };
+  },
+  resolveData: (data) => {
+    const hiddenProps: string[] = [];
+
+    if (!data.props.data.secondaryHeader?.show) {
+      hiddenProps.push("data.secondaryHeader");
+    }
+
+    if (!data.props.data.primaryHeader.showPrimaryCTA) {
+      hiddenProps.push("data.primaryHeader.primaryCTA");
+    }
+
+    if (!data.props.data.primaryHeader.showSecondaryCTA) {
+      hiddenProps.push("data.primaryHeader.secondaryCTA");
+    }
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreLocaleWarning: hiddenProps,
       },
     };
   },

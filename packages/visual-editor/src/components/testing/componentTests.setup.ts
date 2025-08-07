@@ -43,29 +43,16 @@ expect.extend({
       })
     );
 
-    const numDiffPixels = await commands.compareScreenshot(
+    const { passes, numDiffPixels } = await commands.compareScreenshot(
       screenshotName,
-      updatedScreenshotData
+      updatedScreenshotData,
+      options?.customThreshold,
+      options?.ignoreExact
     );
 
-    if ((options?.ignoreExact ?? []).includes(numDiffPixels)) {
-      return {
-        pass: true,
-        message: () =>
-          `Screenshots differed by ${numDiffPixels} pixels. Ignoring difference.`,
-      };
-    }
-
-    if (numDiffPixels > (options?.customThreshold ?? 0)) {
-      return {
-        pass: false,
-        message: () => `Screenshots differed by ${numDiffPixels} pixels`,
-      };
-    }
-
     return {
-      pass: true,
-      message: () => "Screenshots matched",
+      pass: passes,
+      message: () => `Screenshots differed by ${numDiffPixels} pixels`,
     };
   },
 });
@@ -164,7 +151,7 @@ export const testHours = {
   friday: {
     openIntervals: [
       {
-        end: "22:00",
+        end: "16:00",
         start: "10:00",
       },
     ],
@@ -188,8 +175,8 @@ export const testHours = {
   sunday: {
     openIntervals: [
       {
-        end: "22:00",
-        start: "10:00",
+        end: "14:00",
+        start: "11:00",
       },
     ],
   },
@@ -204,7 +191,7 @@ export const testHours = {
   tuesday: {
     openIntervals: [
       {
-        end: "22:00",
+        end: "19:00",
         start: "10:00",
       },
     ],

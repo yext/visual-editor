@@ -79,7 +79,7 @@ export interface InsightSectionProps {
   styles: InsightStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -156,6 +156,15 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       }),
     },
   }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
@@ -182,35 +191,35 @@ const InsightCard = ({
   ctaVariant: CTAProps["variant"];
 }) => {
   const { i18n } = useTranslation();
-
+  const resolvedCategory = insight.category
+    ? resolveComponentData(insight.category, i18n.language) || ""
+    : "";
+  const hasCategory = resolvedCategory.trim() !== "";
+  const hasPublishTime =
+    insight.publishTime && insight.publishTime.trim() !== "";
   return (
     <Background
-      className="rounded h-full flex flex-col"
+      className="rounded flex flex-col"
       background={cardStyles.backgroundColor}
     >
-      {insight.image ? (
+      {insight.image && insight.image.url && (
         <Image
           image={insight.image}
           aspectRatio={1.778} // 16:9
           className="rounded-t-[inherit] h-[200px]"
         />
-      ) : (
-        <div className="sm:h-[200px]" />
       )}
       <div className="flex flex-col gap-8 p-8 flex-grow">
         <div className="flex flex-col gap-4">
-          {(insight.category || insight.publishTime) && (
-            <div
-              className={`flex ${insight.category && insight.publishTime && `gap-4`}`}
-            >
-              {insight.category && (
-                <Body>
-                  {resolveComponentData(insight.category, i18n.language)}
-                </Body>
-              )}
-              {insight.category && insight.publishTime && <Body>|</Body>}
-              {insight.publishTime && (
-                <Timestamp date={insight.publishTime} hideTimeZone={true} />
+          {(hasCategory || hasPublishTime) && (
+            <div className="flex gap-4">
+              {hasCategory && <Body>{resolvedCategory}</Body>}
+              {hasCategory && hasPublishTime && <Body>|</Body>}
+              {hasPublishTime && (
+                <Timestamp
+                  date={insight.publishTime ?? ""}
+                  hideTimeZone={true}
+                />
               )}
             </div>
           )}
@@ -298,7 +307,7 @@ const InsightSectionWrapper = ({ data, styles }: InsightSectionProps) => {
           fieldId={data.insights.field}
           constantValueEnabled={data.insights.constantValueEnabled}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
             {resolvedInsights.insights.map((insight, index) => (
               <InsightCard
                 key={index}
