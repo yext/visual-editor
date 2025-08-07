@@ -439,11 +439,12 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
   return (
     <PageSection
-      className={`flex flex-col md:flex-row justify-between w-full gap-8 ${
-        (!resolvedHours && servicesList) || (resolvedHours && !servicesList)
-          ? "md:[&>section]:w-1/2"
-          : "md:[&>section]:w-1/3"
-      }`}
+      className={`
+    grid w-full gap-8
+    grid-cols-1
+    md:grid-cols-2 md:auto-rows-min
+    lg:grid-cols-3
+  `}
       background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >
