@@ -437,13 +437,14 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       }[styles.heading.align]
     : "justify-start";
 
-  const sectionCount =
-    (hasCoreInfo ? 1 : 0) + (resolvedHours ? 1 : 0) + (servicesList ? 1 : 0);
-  const columnsCount = Math.min(sectionCount, 3);
+  const sectionCount = [hasCoreInfo, resolvedHours, servicesList].filter(
+    Boolean
+  ).length;
+
   const gridColsClass = [
-    "grid-cols-1", // mobile
-    `md:grid-cols-${columnsCount === 3 ? 2 : columnsCount}`, // tablet (2 cols for 3 items)
-    `lg:grid-cols-${columnsCount}`, // desktop (actual count)
+    "grid-cols-1",
+    `md:grid-cols-${Math.min(sectionCount, 2)}`,
+    `lg:grid-cols-${Math.min(sectionCount, 3)}`,
   ].join(" ");
 
   return (
