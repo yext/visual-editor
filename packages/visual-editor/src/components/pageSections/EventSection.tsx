@@ -242,7 +242,11 @@ const EventCard = ({
               i18n.language,
               streamDocument
             )}
-            link={event.cta.link}
+            link={resolveComponentData(
+              event.cta.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={event.cta.linkType}
             variant={ctaVariant}
           />

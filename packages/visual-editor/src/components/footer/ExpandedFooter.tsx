@@ -627,7 +627,11 @@ const FooterLinks = ({
                 streamDocument
               )}
               linkType={item.linkType}
-              link={item.link}
+              link={resolveComponentData(
+                item.link,
+                i18n.language,
+                streamDocument
+              )}
               className="justify-center md:justify-start block break-words whitespace-normal"
             />
           </li>
@@ -663,7 +667,11 @@ const ExpandedFooterLinks = ({
               streamDocument
             )}
             linkType={item.linkType}
-            link={item.link}
+            link={resolveComponentData(
+              item.link,
+              i18n.language,
+              streamDocument
+            )}
             className={"justify-start block break-words whitespace-normal"}
           />
         </li>

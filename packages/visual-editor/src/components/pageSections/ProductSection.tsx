@@ -249,7 +249,11 @@ const ProductCard = ({
               i18n.language,
               streamDocument
             )}
-            link={product.cta.link}
+            link={resolveComponentData(
+              product.cta.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={product.cta.linkType}
             className="mt-auto"
           />
