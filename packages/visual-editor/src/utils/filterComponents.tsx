@@ -20,45 +20,46 @@ export const filterComponentsFromConfig = <T extends DefaultComponentProps>(
   additionalLayoutCategories?: string[]
 ): Config<T> => {
   // 1. Filter out gated categories unless they are explicitly allowed
-  const filteredCategories = Object.entries(config.categories || {}).filter(
+  const allowedCategories = Object.entries(config.categories || {}).filter(
     ([categoryKey]) => {
       const isGated = gatedLayoutCategories.includes(categoryKey);
-      const isGrantedAccess = additionalLayoutCategories?.includes(categoryKey);
-      return !isGated || isGrantedAccess;
+      const isExplicitlyAllowed =
+        additionalLayoutCategories?.includes(categoryKey);
+      return !isGated || isExplicitlyAllowed;
     }
   );
 
-  // 2. Collect all component names under the filtered categories
-  const componentsUnderFilteredCategories = new Set<string>(
-    filteredCategories.flatMap(([, category]) =>
+  // 2. Collect all component names under the allowed categories
+  const componentsUnderAllowedCategories = new Set<string>(
+    allowedCategories.flatMap(([, category]) =>
       (category.components ?? []).map(
         (componentName) => componentName as string
       )
     )
   );
 
-  // 3. Filter out
-  // - components that are exclusive to the disallowed categories
-  //   (e.g `Grid` component is exclusive to `coreInformation` category. So if `coreInformation` is filtered out, `Grid` will also be filtered out)
-  // - gated components unless they are explicitly allowed
-  const filteredComponents = Object.entries(config.components).filter(
+  // 3. Filter components based on:
+  // - If the component is gated, it must be explicitly allowed
+  // - It must exist under an allowed category
+  //   (e.g `Grid` component is exclusive to `coreInformation` category. So if `coreInformation` is disallowed, `Grid` will also be disallowed)
+  const allowedComponents = Object.entries(config.components).filter(
     ([componentKey]) => {
-      const isUnderFilteredCategories =
-        componentsUnderFilteredCategories.has(componentKey);
+      const isUnderAllowedCategories =
+        componentsUnderAllowedCategories.has(componentKey);
       const isGated = gatedLayoutComponents.includes(componentKey);
-      const isGrantedAccess =
+      const isExplicitlyAllowed =
         additionalLayoutComponents?.includes(componentKey);
-      return (isUnderFilteredCategories && !isGated) || isGrantedAccess;
+      return (!isGated || isExplicitlyAllowed) && isUnderAllowedCategories;
     }
   );
 
   return {
     ...config,
     components: Object.fromEntries(
-      filteredComponents
+      allowedComponents
     ) as Config<T>["components"],
     categories: Object.fromEntries(
-      filteredCategories
+      allowedCategories
     ) as Config<T>["categories"],
   };
 };
