@@ -1,8 +1,9 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
 
 // A copy of CTAType that changes label from string to TranslatableString
-export type TranslatableCTA = Omit<CTAType, "label"> & {
+export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
   label: TranslatableString;
+  link: TranslatableString;
 };
 
 export type HeroSectionType = {
