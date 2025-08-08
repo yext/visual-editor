@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorija",
   "Heading": "Antraštė",
+  "Image": "Vaizdas",
   "Link": "Nuoroda",
   "actions": {
     "copyToClipboard": "Kopijuokite į mainų sritį",

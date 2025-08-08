@@ -1,5 +1,7 @@
 {
+  "Category": "Kategooria",
   "Heading": "Pealkiri",
+  "Image": "Pilt",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopeeri lõikelauale",

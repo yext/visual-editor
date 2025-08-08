@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorie",
   "Heading": "Záhlaví",
+  "Image": "Obraz",
   "Link": "Odkaz",
   "actions": {
     "copyToClipboard": "Kopírovat do schránky",

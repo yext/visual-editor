@@ -1,5 +1,7 @@
 {
+  "Category": "Kategória",
   "Heading": "Cím",
+  "Image": "Kép",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Másolja a vágólapra",

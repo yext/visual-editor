@@ -1,5 +1,7 @@
 {
+  "Category": "类别",
   "Heading": "标题",
+  "Image": "图像",
   "Link": "关联",
   "actions": {
     "copyToClipboard": "复制到剪贴板",

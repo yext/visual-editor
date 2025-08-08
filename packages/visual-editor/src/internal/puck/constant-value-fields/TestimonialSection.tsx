@@ -1,4 +1,5 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import {
   TestimonialSectionType,
   TestimonialStruct,
@@ -6,7 +7,7 @@ import {
   TranslatableString,
 } from "../../../types/types.ts";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -50,7 +51,6 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSection
   };
 
 const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
-  const { t, i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
 
   const contributorNameField = useMemo(() => {
@@ -67,7 +67,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
   }, []);
 
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       description: descriptionField,
@@ -76,6 +76,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
     },
     defaultItemProps: defaultTestimonial,
     getItemSummary: (item, i) => {
+      const { i18n } = useTranslation();
       const translation =
         item?.contributorName &&
         resolveComponentData(
@@ -86,7 +87,7 @@ const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
       if (translation) {
         return translation;
       }
-      return t("testimonial", "Testimonial") + " " + ((i ?? 0) + 1);
+      return pt("testimonial", "Testimonial") + " " + ((i ?? 0) + 1);
     },
   };
 };

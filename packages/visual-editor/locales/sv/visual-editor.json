@@ -1,5 +1,7 @@
 {
+  "Category": "Kategori",
   "Heading": "Rubrik",
+  "Image": "Bild",
   "Link": "Länk",
   "actions": {
     "copyToClipboard": "Kopiera till Urklipp",

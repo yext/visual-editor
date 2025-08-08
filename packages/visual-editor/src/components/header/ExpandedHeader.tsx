@@ -139,6 +139,13 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               },
             },
             defaultItemProps: defaultMainLink,
+            getItemSummary: (item, i) => {
+              const { i18n } = useTranslation();
+              return (
+                resolveComponentData(item.label, i18n.language) ||
+                pt("Link", "Link") + " " + ((i ?? 0) + 1)
+              );
+            },
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
@@ -234,6 +241,13 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
                   },
                 },
                 defaultItemProps: defaultSecondaryLink,
+                getItemSummary: (item, i) => {
+                  const { i18n } = useTranslation();
+                  return (
+                    resolveComponentData(item.label, i18n.language) ||
+                    pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                  );
+                },
               }
             ),
           },

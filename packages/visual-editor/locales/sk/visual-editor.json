@@ -1,5 +1,7 @@
 {
+  "Category": "Kategória",
   "Heading": "Hlavný",
+  "Image": "Predstavovať",
   "Link": "Prepojiť",
   "actions": {
     "copyToClipboard": "Kopírovať do schránky",

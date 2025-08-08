@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorie",
   "Heading": "Überschrift",
+  "Image": "Bild",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopieren Sie in die Zwischenablage",

@@ -1,5 +1,7 @@
 {
+  "Category": "Kategori",
   "Heading": "Başlık",
+  "Image": "İmaj",
   "Link": "Bağlantı",
   "actions": {
     "copyToClipboard": "Panoya Kopyala",

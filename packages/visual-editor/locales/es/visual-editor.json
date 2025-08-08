@@ -1,5 +1,7 @@
 {
+  "Category": "Categoría",
   "Heading": "Título",
+  "Image": "Imagen",
   "Link": "Enlace",
   "actions": {
     "copyToClipboard": "Copiar al portapapeles",
