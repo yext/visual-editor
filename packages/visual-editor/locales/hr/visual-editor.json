@@ -1,5 +1,6 @@
 {
   "Heading": "Naslov",
+  "Image": "Slika",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopirajte u međuspremnik",
@@ -17,6 +18,7 @@
     "region": "Država/regija",
     "sublocality": "Subblokalnost"
   },
+  "altText": "Alt tekst",
   "applyAll": "Prijavite se na sve lokacije",
   "applyAllWithLabel": "Primijenite {{fieldLabel}} na sve lokacije",
   "approvals": {
@@ -38,6 +40,8 @@
     "pageSections": "Odjeljci stranica"
   },
   "category": "Kategorija",
+  "change": "Promijeniti",
+  "chooseImage": "Odaberite sliku",
   "close": "Zatvoriti",
   "closeHeaderMenu": "Zatvori izbornik zaglavlja",
   "closeMenu": "Zatvori izbornik",
@@ -89,6 +93,7 @@
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "date": "Datum",
   "dateAndTime": "Datum i vrijeme",
+  "delete": "Izbrisati",
   "deleteItem": "Izbriši predmet",
   "discardChanges": {
     "discardChanges": "Odbaciti promjene",

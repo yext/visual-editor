@@ -1,5 +1,6 @@
 {
   "Heading": "Overskrift",
+  "Image": "Billede",
   "Link": "Forbindelse",
   "actions": {
     "copyToClipboard": "Kopier til udklipsholder",
@@ -17,8 +18,9 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "altText": "Alt tekst",
   "applyAll": "Ansøg på alle lokaliteter",
-  "applyAllWithLabel": "Anvend {{fieldLabel}} på alle lokaliteter",
+  "applyAllWithLabel": "Anvend {{FieldLabel}} på alle lokaliteter",
   "approvals": {
     "addAComment": "Tilføj en kommentar for at hjælpe din godkender med at forstå, hvad der ændrede sig",
     "send": "Send til godkendelse",
@@ -38,6 +40,8 @@
     "pageSections": "Sidesektioner"
   },
   "category": "Kategori",
+  "change": "Forandring",
+  "chooseImage": "Vælg billede",
   "close": "Tæt",
   "closeHeaderMenu": "Luk header -menu",
   "closeMenu": "Luk menu",
@@ -89,6 +93,7 @@
   "customSearchArea": "Brugerdefineret søgeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
+  "delete": "Slet",
   "deleteItem": "Slet vare",
   "discardChanges": {
     "discardChanges": "Kasser ændringer",

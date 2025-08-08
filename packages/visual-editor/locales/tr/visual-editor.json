@@ -1,5 +1,6 @@
 {
   "Heading": "Başlık",
+  "Image": "İmaj",
   "Link": "Bağlantı",
   "actions": {
     "copyToClipboard": "Panoya Kopyala",
@@ -17,6 +18,7 @@
     "region": "Eyalet/bölge",
     "sublocality": "Subloku"
   },
+  "altText": "Alt metin",
   "applyAll": "Tüm yerellere başvurun",
   "applyAllWithLabel": "Tüm yerellere {{fieldLabel}} uygulayın",
   "approvals": {
@@ -38,6 +40,8 @@
     "pageSections": "Sayfa bölümleri"
   },
   "category": "Kategori",
+  "change": "Değiştirmek",
+  "chooseImage": "Resmi Seçin",
   "close": "Kapalı",
   "closeHeaderMenu": "Başlık menüsünü kapat",
   "closeMenu": "Kapat Menüsü",
@@ -89,6 +93,7 @@
   "customSearchArea": "Özel arama alanı",
   "date": "Tarih",
   "dateAndTime": "Tarih ve saat",
+  "delete": "Silmek",
   "deleteItem": "Öğeyi sil",
   "discardChanges": {
     "discardChanges": "Değişiklikleri at",
