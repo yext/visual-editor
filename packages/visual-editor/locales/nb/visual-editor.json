@@ -19,6 +19,8 @@
     "sublocality": "Sublocality"
   },
   "altText": "ALT -tekst",
+  "applyAll": "Bruk på alle lokaliteter",
+  "applyAllWithLabel": "Bruk {{FieldLabel}} på alle steder",
   "approvals": {
     "addAComment": "Legg til en kommentar for å hjelpe godkjenneren din til å forstå hva som endret seg",
     "send": "Send for godkjenning",

@@ -19,6 +19,8 @@
     "sublocality": "サブロカリティ"
   },
   "altText": "altテキスト",
+  "applyAll": "すべてのロケールに適用します",
+  "applyAllWithLabel": "すべてのロケールに{{fieldlabel}}を適用します",
   "approvals": {
     "addAComment": "コメントを追加して、承認者が何が変わったのかを理解できるようにします",
     "send": "承認のために送信します",

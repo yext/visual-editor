@@ -383,7 +383,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                     resolvedHero.primaryCta.label,
                     i18n.language
                   )}
-                  link={resolvedHero.primaryCta.link}
+                  link={resolveComponentData(
+                    resolvedHero.primaryCta.link,
+                    i18n.language
+                  )}
                   linkType={resolvedHero.primaryCta.linkType}
                   className={"py-3"}
                 />
@@ -404,7 +407,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                     resolvedHero.secondaryCta.label,
                     i18n.language
                   )}
-                  link={resolvedHero.secondaryCta.link}
+                  link={resolveComponentData(
+                    resolvedHero.secondaryCta.link,
+                    i18n.language
+                  )}
                   linkType={resolvedHero.secondaryCta.linkType}
                   className={"py-3"}
                 />

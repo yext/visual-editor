@@ -19,6 +19,8 @@
     "sublocality": "Sublokalność"
   },
   "altText": "Tekst alt",
+  "applyAll": "Zastosuj się do wszystkich lokalizacji",
+  "applyAllWithLabel": "Zastosuj {{fieldLabel}} do wszystkich lokalizacji",
   "approvals": {
     "addAComment": "Dodaj komentarz, aby pomóc zatwierdzającym zrozumieć, co się zmieniło",
     "send": "Wyślij do zatwierdzenia",

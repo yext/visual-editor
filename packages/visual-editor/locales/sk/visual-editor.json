@@ -19,6 +19,8 @@
     "sublocality": "Sublokalita"
   },
   "altText": "Alt",
+  "applyAll": "Vzťahovať sa na všetky miesta",
+  "applyAllWithLabel": "Použite {{FieldLabel}} na všetky lokality",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",

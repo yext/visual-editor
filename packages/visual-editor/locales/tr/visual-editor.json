@@ -19,6 +19,8 @@
     "sublocality": "Subloku"
   },
   "altText": "Alt metin",
+  "applyAll": "Tüm yerellere başvurun",
+  "applyAllWithLabel": "Tüm yerellere {{fieldLabel}} uygulayın",
   "approvals": {
     "addAComment": "Onaycının neyin değiştiğini anlamasına yardımcı olmak için bir yorum ekleyin",
     "send": "Onay için gönder",

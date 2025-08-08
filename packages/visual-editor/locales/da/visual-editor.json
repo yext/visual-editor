@@ -19,6 +19,8 @@
     "sublocality": "Sublocality"
   },
   "altText": "Alt tekst",
+  "applyAll": "Ansøg på alle lokaliteter",
+  "applyAllWithLabel": "Anvend {{FieldLabel}} på alle lokaliteter",
   "approvals": {
     "addAComment": "Tilføj en kommentar for at hjælpe din godkender med at forstå, hvad der ændrede sig",
     "send": "Send til godkendelse",
