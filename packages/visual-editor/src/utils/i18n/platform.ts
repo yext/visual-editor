@@ -29,6 +29,7 @@ i18nPlatformInstance.use(initReactI18next).init({
   ns: [NAMESPACE],
   defaultNS: NAMESPACE,
   interpolation: { escapeValue: false },
+  nsSeparator: false,
   resources,
 });
 

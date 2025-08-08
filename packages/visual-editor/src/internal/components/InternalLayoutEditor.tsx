@@ -357,10 +357,7 @@ const TranslatePuckFieldLabels = ({
         );
       }
 
-      if (
-        ("label" in child.props && "icon" in child.props) ||
-        "title" in child.props
-      ) {
+      if ("label" in child.props || "title" in child.props) {
         return React.cloneElement(
           child as React.ReactElement<{
             children?: React.ReactNode;

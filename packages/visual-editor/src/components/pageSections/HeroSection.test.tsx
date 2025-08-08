@@ -266,6 +266,508 @@ const tests: ComponentTest[] = [
     },
     version: 9,
   },
+  {
+    name: "[classic] version 14 props using constant values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Business Name",
+            hasLocalizedValue: "true",
+          },
+        },
+        localGeoModifier: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Geomodifier",
+            hasLocalizedValue: "true",
+          },
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            primaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            image: {
+              url: "https://placehold.co/640x360",
+              height: 360,
+              width: 640,
+            },
+          },
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        desktopImagePosition: "right",
+        businessNameLevel: 3,
+        localGeoModifierLevel: 1,
+        primaryCTA: "primary",
+        secondaryCTA: "secondary",
+        image: { aspectRatio: 1.78 },
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        showImage: true,
+        mobileImagePosition: "bottom",
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      id: "HeroSection-99c86e04-e8fc-441e-b14d-e165b787d6d5",
+    },
+    version: 14,
+  },
+  {
+    name: "[classic] version 14 props using entity values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: {
+            en: "Business Name",
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: false,
+        },
+        localGeoModifier: {
+          field: "address.line1",
+          constantValue: {
+            en: "Geomodifier",
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: false,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          field: "c_hero",
+          constantValue: {
+            primaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            image: {
+              url: "https://placehold.co/640x360",
+              height: 360,
+              width: 640,
+            },
+          },
+          constantValueEnabled: false,
+          constantValueOverride: {
+            image: false,
+            primaryCta: false,
+            secondaryCta: false,
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        desktopImagePosition: "right",
+        businessNameLevel: 3,
+        localGeoModifierLevel: 1,
+        primaryCTA: "primary",
+        secondaryCTA: "secondary",
+        image: { aspectRatio: 1.78 },
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        showImage: true,
+        mobileImagePosition: "bottom",
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+    },
+    version: 14,
+  },
+  {
+    name: "[immersive] version 14 props using constant values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Business Name",
+            hasLocalizedValue: "true",
+          },
+        },
+        localGeoModifier: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Geomodifier",
+            hasLocalizedValue: "true",
+          },
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            primaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            image: {
+              url: "https://placehold.co/640x360",
+              height: 360,
+              width: 640,
+            },
+          },
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "immersive",
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        desktopImagePosition: "right",
+        businessNameLevel: 3,
+        localGeoModifierLevel: 1,
+        primaryCTA: "primary",
+        secondaryCTA: "secondary",
+        image: { aspectRatio: 1.78 },
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        showImage: true,
+        mobileImagePosition: "bottom",
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+    },
+
+    version: 14,
+  },
+  {
+    name: "[spotlight] version 14 props using constant values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Business Name",
+            hasLocalizedValue: "true",
+          },
+        },
+        localGeoModifier: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Geomodifier",
+            hasLocalizedValue: "true",
+          },
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            primaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            image: {
+              url: "https://placehold.co/640x360",
+              height: 360,
+              width: 640,
+            },
+          },
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "spotlight",
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        desktopImagePosition: "right",
+        businessNameLevel: 1,
+        localGeoModifierLevel: 6,
+        primaryCTA: "secondary",
+        secondaryCTA: "link",
+        image: { aspectRatio: 1.78 },
+        desktopContainerPosition: "center",
+        mobileContentAlignment: "center",
+        showImage: true,
+        mobileImagePosition: "bottom",
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+    },
+    version: 14,
+  },
+  {
+    name: "[compact] version 14 props using constant values",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Business Name",
+            hasLocalizedValue: "true",
+          },
+        },
+        localGeoModifier: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Geomodifier",
+            hasLocalizedValue: "true",
+          },
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            primaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+            },
+            image: {
+              url: "https://placehold.co/640x360",
+              height: 360,
+              width: 640,
+            },
+          },
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        desktopImagePosition: "right",
+        businessNameLevel: 3,
+        localGeoModifierLevel: 1,
+        primaryCTA: "primary",
+        secondaryCTA: "secondary",
+        image: { aspectRatio: 1.78 },
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        showImage: true,
+        mobileImagePosition: "bottom",
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+    },
+    version: 14,
+  },
 ];
 
 describe("HeroSection", async () => {

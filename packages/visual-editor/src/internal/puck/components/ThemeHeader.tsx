@@ -70,7 +70,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     const puckPreview =
       document.querySelector<HTMLIFrameElement>("#preview-frame");
     if (
-      puckPreview?.contentDocument &&
+      puckPreview?.contentDocument?.head &&
       !puckPreview?.contentDocument.getElementById(
         "yext-preview-disable-pointer-events"
       )

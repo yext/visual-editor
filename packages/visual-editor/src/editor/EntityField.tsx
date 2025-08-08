@@ -22,6 +22,7 @@ type EntityFieldProps = {
   fieldId?: string;
   constantValueEnabled?: boolean;
   children: React.ReactNode;
+  fullHeight?: boolean;
 };
 
 export const EntityField = ({
@@ -29,6 +30,7 @@ export const EntityField = ({
   fieldId,
   constantValueEnabled,
   children,
+  fullHeight,
 }: EntityFieldProps) => {
   const tooltipsContext = useEntityTooltips();
 
@@ -50,16 +52,17 @@ export const EntityField = ({
   }
 
   return (
-    <div>
+    <div className={fullHeight ? "h-full" : ""}>
       <TooltipProvider>
         <Tooltip open={!!tooltipContent && tooltipsVisible}>
           <TooltipTrigger asChild>
             <div
               className={
-                tooltipsVisible
+                (fullHeight ? "h-full " : "") +
+                (tooltipsVisible
                   ? "ve-outline-2 ve-outline-dotted" +
                     (!constantValueEnabled ? " ve-outline-primary" : "")
-                  : ""
+                  : "")
               }
             >
               <MemoizedChildren>{children}</MemoizedChildren>
