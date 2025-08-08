@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { TARGET_ORIGINS, useSendMessageToParent } from "./useMessage.ts";
 
 interface UseProgressProps {
   minProgress?: number;
@@ -34,6 +35,20 @@ export const useProgress = ({
     const fraction = totalCount > 0 ? trueCount / totalCount : 0;
     return Math.round(minProgress + fraction * (maxProgress - minProgress));
   }, [completionCriteria, minProgress, maxProgress]);
+
+  const { sendToParent: sendLoadingProgress } = useSendMessageToParent(
+    "sendLoadingProgress",
+    TARGET_ORIGINS
+  );
+
+  useEffect(() => {
+    sendLoadingProgress({
+      payload: {
+        isLoading: isLoading,
+        progress: progress,
+      },
+    });
+  }, [isLoading, progress]);
 
   return { isLoading, progress };
 };
