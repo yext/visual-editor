@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   PhoneAtom,
@@ -26,6 +25,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -260,6 +260,7 @@ const PersonCard = ({
                 label={person.email}
                 linkType="EMAIL"
                 variant="link"
+                ctaType="textAndLink"
               />
             </div>
           )}
@@ -267,9 +268,16 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${cardNumber}`}
-                label={resolveComponentData(person.cta.label, i18n.language)}
+                label={
+                  person.cta.label
+                    ? resolveComponentData(person.cta.label, i18n.language)
+                    : undefined
+                }
                 link={resolveComponentData(person.cta.link, i18n.language)}
                 linkType={person.cta.linkType}
+                ctaType={person.cta.ctaType}
+                coordinate={person.cta.coordinate}
+                presetImageType={person.cta.presetImageType}
                 variant={ctaVariant}
               />
             </div>

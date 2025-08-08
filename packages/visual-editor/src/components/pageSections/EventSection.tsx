@@ -12,7 +12,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   EventSectionType,
@@ -28,6 +27,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
 
@@ -237,17 +237,24 @@ const EventCard = ({
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={resolveComponentData(
-              event.cta.label,
-              i18n.language,
-              streamDocument
-            )}
+            label={
+              event.cta.label
+                ? resolveComponentData(
+                    event.cta.label,
+                    i18n.language,
+                    streamDocument
+                  )
+                : undefined
+            }
             link={resolveComponentData(
               event.cta.link,
               i18n.language,
               streamDocument
             )}
             linkType={event.cta.linkType}
+            ctaType={event.cta.ctaType}
+            coordinate={event.cta.coordinate}
+            presetImageType={event.cta.presetImageType}
             variant={ctaVariant}
           />
         )}

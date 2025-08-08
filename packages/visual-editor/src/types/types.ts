@@ -6,17 +6,59 @@ export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
   link: TranslatableString;
 };
 
+// Enhanced CTA type with new options
+export type EnhancedTranslatableCTA = Omit<TranslatableCTA, "label"> & {
+  label: TranslatableString;
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
+  coordinate?: {
+    latitude: number;
+    longitude: number;
+  };
+  presetImageType?: PresetImageType;
+};
+
+// Preset image types for CTA buttons
+export type PresetImageType =
+  | "phone"
+  | "email"
+  | "location"
+  | "calendar"
+  | "star"
+  | "heart"
+  | "share"
+  | "download"
+  | "play"
+  | "pause"
+  | "next"
+  | "previous"
+  | "menu"
+  | "search"
+  | "close"
+  | "check"
+  | "plus"
+  | "minus"
+  | "arrow-right"
+  | "arrow-left"
+  | "arrow-up"
+  | "arrow-down";
+
 export type HeroSectionType = {
   image?: ImageType;
-  primaryCta?: TranslatableCTA;
-  secondaryCta?: TranslatableCTA;
+  primaryCta?: {
+    cta?: EnhancedTranslatableCTA;
+  };
+  secondaryCta?: {
+    cta?: EnhancedTranslatableCTA;
+  };
 };
 
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
   description?: TranslatableRichText;
-  cta?: TranslatableCTA;
+  cta?: {
+    cta?: EnhancedTranslatableCTA;
+  };
 };
 
 export type ProductSectionType = {
@@ -28,7 +70,7 @@ export type ProductStruct = {
   name?: TranslatableString;
   description?: TranslatableRichText;
   category?: TranslatableString;
-  cta?: TranslatableCTA;
+  cta?: EnhancedTranslatableCTA;
 };
 
 export type EventSectionType = {
@@ -40,7 +82,7 @@ export type EventStruct = {
   title?: TranslatableString;
   dateTime?: string;
   description?: TranslatableRichText;
-  cta?: TranslatableCTA;
+  cta?: EnhancedTranslatableCTA;
 };
 
 export type FAQSectionType = {
@@ -72,7 +114,7 @@ export type InsightStruct = {
   category?: TranslatableString;
   publishTime?: string;
   description?: TranslatableRichText;
-  cta?: TranslatableCTA;
+  cta?: EnhancedTranslatableCTA;
 };
 
 export type TeamSectionType = {
@@ -85,7 +127,7 @@ export type PersonStruct = {
   title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
-  cta?: TranslatableCTA;
+  cta?: EnhancedTranslatableCTA;
 };
 
 type LocalizedValues = {

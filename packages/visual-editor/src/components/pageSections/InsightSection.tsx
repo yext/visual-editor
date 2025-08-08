@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   InsightSectionType,
@@ -26,6 +25,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultInsight } from "../../internal/puck/constant-value-fields/InsightSection.tsx";
@@ -242,9 +242,16 @@ const InsightCard = ({
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveComponentData(insight.cta.label, i18n.language)}
+            label={
+              insight.cta.label
+                ? resolveComponentData(insight.cta.label, i18n.language)
+                : undefined
+            }
             link={resolveComponentData(insight.cta.link, i18n.language)}
             linkType={insight.cta.linkType ?? "URL"}
+            ctaType={insight.cta.ctaType}
+            coordinate={insight.cta.coordinate}
+            presetImageType={insight.cta.presetImageType}
             className="mt-auto"
           />
         )}

@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   ProductSectionType,
@@ -25,6 +24,7 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
@@ -244,17 +244,24 @@ const ProductCard = ({
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveComponentData(
-              product.cta.label,
-              i18n.language,
-              streamDocument
-            )}
+            label={
+              product.cta.label
+                ? resolveComponentData(
+                    product.cta.label,
+                    i18n.language,
+                    streamDocument
+                  )
+                : undefined
+            }
             link={resolveComponentData(
               product.cta.link,
               i18n.language,
               streamDocument
             )}
             linkType={product.cta.linkType}
+            ctaType={product.cta.ctaType}
+            coordinate={product.cta.coordinate}
+            presetImageType={product.cta.presetImageType}
             className="mt-auto"
           />
         )}

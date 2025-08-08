@@ -8,24 +8,21 @@ import {
   BackgroundStyle,
   backgroundColors,
   Heading,
-  CTA,
   PageSection,
   YextField,
   VisibilityWrapper,
   CTAProps,
   PromoSectionType,
-  YextStructEntityField,
-  YextStructFieldSelector,
-  resolveYextStructField,
-  ComponentFields,
-  EntityField,
   msg,
-  pt,
   HeadingLevel,
   ThemeOptions,
   getAnalyticsScopeHash,
   resolveComponentData,
+  YextStructEntityField,
+  YextStructFieldSelector,
+  resolveYextStructField,
 } from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ImageStylingFields,
@@ -102,10 +99,10 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      promo: YextStructFieldSelector({
+      promo: YextStructFieldSelector<PromoSectionType>({
         label: msg("fields.promo", "Promo"),
         filter: {
-          type: ComponentFields.PromoSection.type,
+          type: "type.promo_section",
         },
       }),
     },
@@ -211,76 +208,52 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       )}
     >
       {resolvedPromo?.image && (
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.promo.field}
-          constantValueEnabled={data.promo.constantValueOverride.image}
-        >
-          <div className="w-full">
-            <Image
-              image={resolvedPromo.image}
-              aspectRatio={styles.image.aspectRatio ?? 1.78}
-              width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
-            />
-          </div>
-        </EntityField>
+        <div className="w-full">
+          <Image
+            image={resolvedPromo.image}
+            aspectRatio={styles.image.aspectRatio ?? 1.78}
+            width={styles.image.width || 640}
+            className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
+          />
+        </div>
       )}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
-          <EntityField
-            displayName={pt("fields.title", "Title")}
-            fieldId={data.promo.field}
-            constantValueEnabled={data.promo.constantValueOverride.title}
-          >
-            <div className={`flex ${justifyClass}`}>
-              <Heading level={styles.heading.level}>
-                {resolveComponentData(
-                  resolvedPromo?.title,
-                  i18n.language,
-                  streamDocument
-                )}
-              </Heading>
-            </div>
-          </EntityField>
+          <div className={`flex ${justifyClass}`}>
+            <Heading level={styles.heading.level}>
+              {resolveComponentData(
+                resolvedPromo?.title,
+                i18n.language,
+                streamDocument
+              )}
+            </Heading>
+          </div>
         )}
-        <EntityField
-          displayName={pt("fields.description", "Description")}
-          fieldId={data.promo.field}
-          constantValueEnabled={
-            !resolvedPromo?.description ||
-            data.promo.constantValueOverride.description
-          }
-        >
-          {resolvedPromo?.description &&
-            resolveComponentData(
-              resolvedPromo?.description,
+        {resolvedPromo?.description &&
+          resolveComponentData(
+            resolvedPromo?.description,
+            i18n.language,
+            streamDocument
+          )}
+        {resolvedPromo?.cta?.cta && (
+          <CTA
+            eventName={`cta`}
+            variant={styles?.ctaVariant}
+            label={resolveComponentData(
+              resolvedPromo?.cta.cta.label,
               i18n.language,
               streamDocument
             )}
-        </EntityField>
-        {resolvedPromo?.cta?.label && (
-          <EntityField
-            displayName={pt("fields.callToAction", "Call To Action")}
-            fieldId={data.promo.field}
-            constantValueEnabled={data.promo.constantValueOverride.cta}
-          >
-            <CTA
-              eventName={`cta`}
-              variant={styles?.ctaVariant}
-              label={resolveComponentData(
-                resolvedPromo?.cta.label,
-                i18n.language,
-                streamDocument
-              )}
-              link={resolveComponentData(
-                resolvedPromo?.cta.link,
-                i18n.language,
-                streamDocument
-              )}
-              linkType={resolvedPromo?.cta.linkType}
-            />
-          </EntityField>
+            link={resolveComponentData(
+              resolvedPromo?.cta.cta.link,
+              i18n.language,
+              streamDocument
+            )}
+            linkType={resolvedPromo?.cta.cta.linkType}
+            ctaType={resolvedPromo?.cta.cta.ctaType}
+            coordinate={resolvedPromo?.cta.cta.coordinate}
+            presetImageType={resolvedPromo?.cta.cta.presetImageType}
+          />
         )}
       </div>
     </PageSection>
@@ -298,7 +271,6 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     data: {
       promo: {
         field: "",
-        constantValueEnabled: true,
         constantValue: {
           image: {
             height: 360,
@@ -311,11 +283,15 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             hasLocalizedValue: "true",
           },
           cta: {
-            label: { en: "Learn More", hasLocalizedValue: "true" },
-            link: "#",
-            linkType: "URL",
+            cta: {
+              label: { en: "Learn More", hasLocalizedValue: "true" },
+              link: "#",
+              linkType: "URL",
+              ctaType: "textAndLink",
+            },
           },
         },
+        constantValueEnabled: true,
         constantValueOverride: {
           image: true,
           title: true,
@@ -341,34 +317,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveFields: (data, { lastData }) => {
-    // If set to entity value and no field selected, hide the component.
-    if (
-      !data.props.data.promo.constantValueEnabled &&
-      data.props.data.promo.field === ""
-    ) {
-      data.props.liveVisibility = false;
-      return {
-        ...promoSectionFields,
-        liveVisibility: undefined,
-      };
-    }
 
-    // If no field was selected and then constant value is enabled
-    // or a field is selected, show the component.
-    if (
-      (data.props.data.promo.constantValueEnabled &&
-        !lastData?.props.data.promo.constantValueEnabled &&
-        data.props.data.promo.field === "") ||
-      (lastData?.props.data.promo.field === "" &&
-        data.props.data.promo.field !== "")
-    ) {
-      data.props.liveVisibility = true;
-    }
-
-    // Otherwise, return normal fields.
-    return promoSectionFields;
-  },
   render: (props) => {
     return (
       <AnalyticsScopeProvider
