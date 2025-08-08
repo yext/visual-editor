@@ -56,11 +56,10 @@ export const migrateCTAStructures: Migration = {
           !oldHeroData.constantValueOverride?.primaryCta &&
           !oldHeroData.constantValueOverride?.secondaryCta
         ) {
-          // Set up the component to use constant values that match the expected new structure
-          // This ensures the component renders correctly even if the entity field has old structure
+          // For entity values, we need to provide constant values that match the expected new structure
+          // but keep the entity field enabled for other data
           props.data.hero = {
             ...oldHeroData,
-            constantValueEnabled: true,
             constantValueOverride: {
               image: false,
               primaryCta: true,
@@ -70,7 +69,7 @@ export const migrateCTAStructures: Migration = {
               ...oldHeroData.constantValue,
               primaryCta: {
                 cta: {
-                  label: "Call To Action",
+                  label: "Get Directions",
                   link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
@@ -78,7 +77,7 @@ export const migrateCTAStructures: Migration = {
               },
               secondaryCta: {
                 cta: {
-                  label: "Call To Action",
+                  label: "Learn More",
                   link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
@@ -138,10 +137,10 @@ export const migrateCTAStructures: Migration = {
           oldPromoData.field &&
           !oldPromoData.constantValueOverride?.cta
         ) {
-          // Set up the component to use constant values that match the expected new structure
+          // For entity values, we need to provide constant values that match the expected new structure
+          // but keep the entity field enabled for other data
           props.data.promo = {
             ...oldPromoData,
-            constantValueEnabled: true,
             constantValueOverride: {
               image: false,
               title: false,
@@ -152,9 +151,9 @@ export const migrateCTAStructures: Migration = {
               ...oldPromoData.constantValue,
               cta: {
                 cta: {
-                  label: "Call To Action",
-                  link: "#",
-                  linkType: "URL",
+                  label: "Call to Order",
+                  link: "+18005551010",
+                  linkType: "PHONE",
                   ctaType: "textAndLink",
                 },
               },
