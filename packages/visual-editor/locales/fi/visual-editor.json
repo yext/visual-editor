@@ -1,5 +1,7 @@
 {
+  "Category": "Luokka",
   "Heading": "Otsikko",
+  "Image": "Kuva",
   "Link": "Linkki",
   "actions": {
     "copyToClipboard": "Kopioi leikepöydälle",

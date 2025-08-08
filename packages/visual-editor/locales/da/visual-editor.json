@@ -1,5 +1,7 @@
 {
+  "Category": "Kategori",
   "Heading": "Overskrift",
+  "Image": "Billede",
   "Link": "Forbindelse",
   "actions": {
     "copyToClipboard": "Kopier til udklipsholder",

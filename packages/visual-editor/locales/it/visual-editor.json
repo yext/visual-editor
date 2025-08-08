@@ -1,5 +1,7 @@
 {
+  "Category": "Categoria",
   "Heading": "Intestazione",
+  "Image": "Immagine",
   "Link": "Collegamento",
   "actions": {
     "copyToClipboard": "Copia negli appunti",

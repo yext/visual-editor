@@ -1,5 +1,7 @@
 {
+  "Category": "類別",
   "Heading": "標題",
+  "Image": "圖像",
   "Link": "關聯",
   "actions": {
     "copyToClipboard": "複製到剪貼板",
