@@ -22,7 +22,9 @@ export const migrateCTAStructures: Migration = {
               image: oldHeroData.constantValue?.image,
               primaryCta: {
                 cta: {
-                  label: oldHeroData.constantValue.primaryCta.label,
+                  label:
+                    oldHeroData.constantValue.primaryCta.label ||
+                    "Call To Action",
                   link: oldHeroData.constantValue.primaryCta.link,
                   linkType: oldHeroData.constantValue.primaryCta.linkType,
                   ctaType: "textAndLink",
@@ -31,7 +33,9 @@ export const migrateCTAStructures: Migration = {
               secondaryCta: oldHeroData.constantValue?.secondaryCta
                 ? {
                     cta: {
-                      label: oldHeroData.constantValue.secondaryCta.label,
+                      label:
+                        oldHeroData.constantValue.secondaryCta.label ||
+                        "Call To Action",
                       link: oldHeroData.constantValue.secondaryCta.link,
                       linkType: oldHeroData.constantValue.secondaryCta.linkType,
                       ctaType: "textAndLink",
@@ -135,7 +139,8 @@ export const migrateCTAStructures: Migration = {
               description: oldPromoData.constantValue?.description,
               cta: {
                 cta: {
-                  label: oldPromoData.constantValue.cta.label,
+                  label:
+                    oldPromoData.constantValue.cta.label || "Call To Action",
                   link: oldPromoData.constantValue.cta.link,
                   linkType: oldPromoData.constantValue.cta.linkType,
                   ctaType: "textAndLink",
@@ -213,7 +218,7 @@ export const migrateCTAStructures: Migration = {
                 ...product,
                 cta: {
                   cta: {
-                    label: product.cta.label,
+                    label: product.cta.label || "CTA",
                     link: product.cta.link,
                     linkType: product.cta.linkType,
                     ctaType: "textAndLink",
@@ -281,7 +286,7 @@ export const migrateCTAStructures: Migration = {
                 ...person,
                 cta: {
                   cta: {
-                    label: person.cta.label,
+                    label: person.cta.label || "CTA",
                     link: person.cta.link,
                     linkType: person.cta.linkType,
                     ctaType: "textAndLink",
@@ -349,7 +354,7 @@ export const migrateCTAStructures: Migration = {
                 ...insight,
                 cta: {
                   cta: {
-                    label: insight.cta.label,
+                    label: insight.cta.label || "CTA",
                     link: insight.cta.link,
                     linkType: insight.cta.linkType,
                     ctaType: "textAndLink",
@@ -417,7 +422,7 @@ export const migrateCTAStructures: Migration = {
                 ...event,
                 cta: {
                   cta: {
-                    label: event.cta.label,
+                    label: event.cta.label || "CTA",
                     link: event.cta.link,
                     linkType: event.cta.linkType,
                     ctaType: "textAndLink",
