@@ -221,7 +221,7 @@ export function YextField<T, U>(
 
   if (config.type === "translatableString") {
     return TranslatableStringField(
-      fieldName as MsgString,
+      fieldName,
       config.filter,
       config.showApplyAllOption
     );
