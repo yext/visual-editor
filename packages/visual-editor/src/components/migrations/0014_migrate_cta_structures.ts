@@ -202,8 +202,12 @@ export const migrateCTAStructures: Migration = {
     propTransformation: (props) => {
       // Handle old structure where products array has CTAs without nested 'cta' wrapper
       if (props.data?.products?.constantValue) {
-        props.data.products.constantValue =
-          props.data.products.constantValue.map((product: any) => {
+        const productsArray = Array.isArray(props.data.products.constantValue)
+          ? props.data.products.constantValue
+          : props.data.products.constantValue.products;
+
+        if (Array.isArray(productsArray)) {
+          const updatedProducts = productsArray.map((product: any) => {
             if (product.cta && product.cta.label && !product.cta.cta) {
               return {
                 ...product,
@@ -219,12 +223,23 @@ export const migrateCTAStructures: Migration = {
             }
             return product;
           });
+
+          if (Array.isArray(props.data.products.constantValue)) {
+            props.data.products.constantValue = updatedProducts;
+          } else {
+            props.data.products.constantValue.products = updatedProducts;
+          }
+        }
       }
 
       // Handle cases where CTAs already have the new nested structure but are missing ctaType
       if (props.data?.products?.constantValue) {
-        props.data.products.constantValue =
-          props.data.products.constantValue.map((product: any) => {
+        const productsArray = Array.isArray(props.data.products.constantValue)
+          ? props.data.products.constantValue
+          : props.data.products.constantValue.products;
+
+        if (Array.isArray(productsArray)) {
+          const updatedProducts = productsArray.map((product: any) => {
             if (product.cta && product.cta.cta && !product.cta.cta.ctaType) {
               return {
                 ...product,
@@ -239,6 +254,13 @@ export const migrateCTAStructures: Migration = {
             }
             return product;
           });
+
+          if (Array.isArray(props.data.products.constantValue)) {
+            props.data.products.constantValue = updatedProducts;
+          } else {
+            props.data.products.constantValue.products = updatedProducts;
+          }
+        }
       }
       return props;
     },
@@ -248,8 +270,12 @@ export const migrateCTAStructures: Migration = {
     propTransformation: (props) => {
       // Handle old structure where people array has CTAs without nested 'cta' wrapper
       if (props.data?.people?.constantValue) {
-        props.data.people.constantValue = props.data.people.constantValue.map(
-          (person: any) => {
+        const peopleArray = Array.isArray(props.data.people.constantValue)
+          ? props.data.people.constantValue
+          : props.data.people.constantValue.people;
+
+        if (Array.isArray(peopleArray)) {
+          const updatedPeople = peopleArray.map((person: any) => {
             if (person.cta && person.cta.label && !person.cta.cta) {
               return {
                 ...person,
@@ -264,14 +290,24 @@ export const migrateCTAStructures: Migration = {
               };
             }
             return person;
+          });
+
+          if (Array.isArray(props.data.people.constantValue)) {
+            props.data.people.constantValue = updatedPeople;
+          } else {
+            props.data.people.constantValue.people = updatedPeople;
           }
-        );
+        }
       }
 
       // Handle cases where CTAs already have the new nested structure but are missing ctaType
       if (props.data?.people?.constantValue) {
-        props.data.people.constantValue = props.data.people.constantValue.map(
-          (person: any) => {
+        const peopleArray = Array.isArray(props.data.people.constantValue)
+          ? props.data.people.constantValue
+          : props.data.people.constantValue.people;
+
+        if (Array.isArray(peopleArray)) {
+          const updatedPeople = peopleArray.map((person: any) => {
             if (person.cta && person.cta.cta && !person.cta.cta.ctaType) {
               return {
                 ...person,
@@ -285,8 +321,14 @@ export const migrateCTAStructures: Migration = {
               };
             }
             return person;
+          });
+
+          if (Array.isArray(props.data.people.constantValue)) {
+            props.data.people.constantValue = updatedPeople;
+          } else {
+            props.data.people.constantValue.people = updatedPeople;
           }
-        );
+        }
       }
       return props;
     },
@@ -296,8 +338,12 @@ export const migrateCTAStructures: Migration = {
     propTransformation: (props) => {
       // Handle old structure where insights array has CTAs without nested 'cta' wrapper
       if (props.data?.insights?.constantValue) {
-        props.data.insights.constantValue =
-          props.data.insights.constantValue.map((insight: any) => {
+        const insightsArray = Array.isArray(props.data.insights.constantValue)
+          ? props.data.insights.constantValue
+          : props.data.insights.constantValue.insights;
+
+        if (Array.isArray(insightsArray)) {
+          const updatedInsights = insightsArray.map((insight: any) => {
             if (insight.cta && insight.cta.label && !insight.cta.cta) {
               return {
                 ...insight,
@@ -313,12 +359,23 @@ export const migrateCTAStructures: Migration = {
             }
             return insight;
           });
+
+          if (Array.isArray(props.data.insights.constantValue)) {
+            props.data.insights.constantValue = updatedInsights;
+          } else {
+            props.data.insights.constantValue.insights = updatedInsights;
+          }
+        }
       }
 
       // Handle cases where CTAs already have the new nested structure but are missing ctaType
       if (props.data?.insights?.constantValue) {
-        props.data.insights.constantValue =
-          props.data.insights.constantValue.map((insight: any) => {
+        const insightsArray = Array.isArray(props.data.insights.constantValue)
+          ? props.data.insights.constantValue
+          : props.data.insights.constantValue.insights;
+
+        if (Array.isArray(insightsArray)) {
+          const updatedInsights = insightsArray.map((insight: any) => {
             if (insight.cta && insight.cta.cta && !insight.cta.cta.ctaType) {
               return {
                 ...insight,
@@ -333,6 +390,13 @@ export const migrateCTAStructures: Migration = {
             }
             return insight;
           });
+
+          if (Array.isArray(props.data.insights.constantValue)) {
+            props.data.insights.constantValue = updatedInsights;
+          } else {
+            props.data.insights.constantValue.insights = updatedInsights;
+          }
+        }
       }
       return props;
     },
@@ -342,8 +406,12 @@ export const migrateCTAStructures: Migration = {
     propTransformation: (props) => {
       // Handle old structure where events array has CTAs without nested 'cta' wrapper
       if (props.data?.events?.constantValue) {
-        props.data.events.constantValue = props.data.events.constantValue.map(
-          (event: any) => {
+        const eventsArray = Array.isArray(props.data.events.constantValue)
+          ? props.data.events.constantValue
+          : props.data.events.constantValue.events;
+
+        if (Array.isArray(eventsArray)) {
+          const updatedEvents = eventsArray.map((event: any) => {
             if (event.cta && event.cta.label && !event.cta.cta) {
               return {
                 ...event,
@@ -358,14 +426,24 @@ export const migrateCTAStructures: Migration = {
               };
             }
             return event;
+          });
+
+          if (Array.isArray(props.data.events.constantValue)) {
+            props.data.events.constantValue = updatedEvents;
+          } else {
+            props.data.events.constantValue.events = updatedEvents;
           }
-        );
+        }
       }
 
       // Handle cases where CTAs already have the new nested structure but are missing ctaType
       if (props.data?.events?.constantValue) {
-        props.data.events.constantValue = props.data.events.constantValue.map(
-          (event: any) => {
+        const eventsArray = Array.isArray(props.data.events.constantValue)
+          ? props.data.events.constantValue
+          : props.data.events.constantValue.events;
+
+        if (Array.isArray(eventsArray)) {
+          const updatedEvents = eventsArray.map((event: any) => {
             if (event.cta && event.cta.cta && !event.cta.cta.ctaType) {
               return {
                 ...event,
@@ -379,8 +457,14 @@ export const migrateCTAStructures: Migration = {
               };
             }
             return event;
+          });
+
+          if (Array.isArray(props.data.events.constantValue)) {
+            props.data.events.constantValue = updatedEvents;
+          } else {
+            props.data.events.constantValue.events = updatedEvents;
           }
-        );
+        }
       }
       return props;
     },
