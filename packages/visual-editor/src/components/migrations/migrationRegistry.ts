@@ -12,8 +12,7 @@ import { updateExpandedHeaderStylesMigration } from "./0010_update_expanded_head
 import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
 import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
 import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_banner_section.ts";
-import { enhanceCTATypes } from "./0014_enhance_cta_types.ts";
-import { migrateCTAStructures } from "./0015_migrate_cta_structures.ts";
+import { migrateCTAStructures } from "./0014_migrate_cta_structures.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -33,7 +32,6 @@ export const migrationRegistry: MigrationRegistry = [
   updateExpandedHeaderStylesMigration,
   addDirectoryTitleMigration,
   addHeaderFooterMaxWidth,
-  enhanceCTATypes,
   migrateCTAStructures,
   ignoreLocaleWarningBannerSection,
 ];

@@ -86,6 +86,27 @@ export const migrateCTAStructures: Migration = {
             },
           };
         }
+
+        // Handle cases where CTAs already have the new nested structure but are missing ctaType
+        // (This covers the functionality from 0014_enhance_cta_types.ts)
+        if (
+          props.data?.hero?.constantValue?.primaryCta?.cta &&
+          !props.data.hero.constantValue.primaryCta.cta.ctaType
+        ) {
+          props.data.hero.constantValue.primaryCta.cta = {
+            ...props.data.hero.constantValue.primaryCta.cta,
+            ctaType: "textAndLink",
+          };
+        }
+        if (
+          props.data?.hero?.constantValue?.secondaryCta?.cta &&
+          !props.data.hero.constantValue.secondaryCta.cta.ctaType
+        ) {
+          props.data.hero.constantValue.secondaryCta.cta = {
+            ...props.data.hero.constantValue.secondaryCta.cta,
+            ctaType: "textAndLink",
+          };
+        }
       }
 
       return props;
@@ -160,6 +181,17 @@ export const migrateCTAStructures: Migration = {
             },
           };
         }
+
+        // Handle cases where CTAs already have the new nested structure but are missing ctaType
+        if (
+          props.data?.promo?.constantValue?.cta?.cta &&
+          !props.data.promo.constantValue.cta.cta.ctaType
+        ) {
+          props.data.promo.constantValue.cta.cta = {
+            ...props.data.promo.constantValue.cta.cta,
+            ctaType: "textAndLink",
+          };
+        }
       }
 
       return props;
@@ -180,6 +212,26 @@ export const migrateCTAStructures: Migration = {
                     label: product.cta.label,
                     link: product.cta.link,
                     linkType: product.cta.linkType,
+                    ctaType: "textAndLink",
+                  },
+                },
+              };
+            }
+            return product;
+          });
+      }
+
+      // Handle cases where CTAs already have the new nested structure but are missing ctaType
+      if (props.data?.products?.constantValue) {
+        props.data.products.constantValue =
+          props.data.products.constantValue.map((product: any) => {
+            if (product.cta && product.cta.cta && !product.cta.cta.ctaType) {
+              return {
+                ...product,
+                cta: {
+                  ...product.cta,
+                  cta: {
+                    ...product.cta.cta,
                     ctaType: "textAndLink",
                   },
                 },
@@ -215,6 +267,27 @@ export const migrateCTAStructures: Migration = {
           }
         );
       }
+
+      // Handle cases where CTAs already have the new nested structure but are missing ctaType
+      if (props.data?.people?.constantValue) {
+        props.data.people.constantValue = props.data.people.constantValue.map(
+          (person: any) => {
+            if (person.cta && person.cta.cta && !person.cta.cta.ctaType) {
+              return {
+                ...person,
+                cta: {
+                  ...person.cta,
+                  cta: {
+                    ...person.cta.cta,
+                    ctaType: "textAndLink",
+                  },
+                },
+              };
+            }
+            return person;
+          }
+        );
+      }
       return props;
     },
   },
@@ -241,6 +314,26 @@ export const migrateCTAStructures: Migration = {
             return insight;
           });
       }
+
+      // Handle cases where CTAs already have the new nested structure but are missing ctaType
+      if (props.data?.insights?.constantValue) {
+        props.data.insights.constantValue =
+          props.data.insights.constantValue.map((insight: any) => {
+            if (insight.cta && insight.cta.cta && !insight.cta.cta.ctaType) {
+              return {
+                ...insight,
+                cta: {
+                  ...insight.cta,
+                  cta: {
+                    ...insight.cta.cta,
+                    ctaType: "textAndLink",
+                  },
+                },
+              };
+            }
+            return insight;
+          });
+      }
       return props;
     },
   },
@@ -259,6 +352,27 @@ export const migrateCTAStructures: Migration = {
                     label: event.cta.label,
                     link: event.cta.link,
                     linkType: event.cta.linkType,
+                    ctaType: "textAndLink",
+                  },
+                },
+              };
+            }
+            return event;
+          }
+        );
+      }
+
+      // Handle cases where CTAs already have the new nested structure but are missing ctaType
+      if (props.data?.events?.constantValue) {
+        props.data.events.constantValue = props.data.events.constantValue.map(
+          (event: any) => {
+            if (event.cta && event.cta.cta && !event.cta.cta.ctaType) {
+              return {
+                ...event,
+                cta: {
+                  ...event.cta,
+                  cta: {
+                    ...event.cta.cta,
                     ctaType: "textAndLink",
                   },
                 },
