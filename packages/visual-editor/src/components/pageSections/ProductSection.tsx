@@ -252,7 +252,7 @@ const ProductCard = ({
                     streamDocument
                   )
                 : undefined
-            }            
+            }
             link={resolveComponentData(
               product.cta.link,
               i18n.language,

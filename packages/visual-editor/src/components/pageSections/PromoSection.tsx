@@ -253,7 +253,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             ctaType={resolvedPromo?.cta.cta.ctaType}
             coordinate={resolvedPromo?.cta.cta.coordinate}
             presetImageType={resolvedPromo?.cta.cta.presetImageType}
-          />    
+          />
         )}
       </div>
     </PageSection>
