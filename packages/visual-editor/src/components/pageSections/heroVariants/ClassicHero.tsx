@@ -21,24 +21,24 @@ export const ClassicHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
     return (
       resolvedHero?.image &&
       styles.showImage && (
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.hero.field}
-          constantValueEnabled={data.hero.constantValueOverride.image}
+        <div
+          className={themeManagerCn("w-full my-auto", className)}
+          role="region"
+          aria-label={t("heroImage", "Hero Image")}
         >
-          <div
-            className={themeManagerCn("w-full", className)}
-            role="region"
-            aria-label={t("heroImage", "Hero Image")}
+          <EntityField
+            displayName={pt("fields.image", "Image")}
+            fieldId={data.hero.field}
+            constantValueEnabled={data.hero.constantValueOverride.image}
           >
             <Image
               image={resolvedHero?.image}
               aspectRatio={styles.image.aspectRatio}
-              width={styles.image.width || 640}
+              width={styles.image.width}
               className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
             />
-          </div>
-        </EntityField>
+          </EntityField>
+        </div>
       )
     );
   };

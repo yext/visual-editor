@@ -11,6 +11,7 @@ import {
   HoursStatusAtom,
   useDocument,
   themeManagerCn,
+  HeadingLevel,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 
@@ -28,21 +29,21 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const locale = i18n.language;
   const streamDocument = useDocument() as any;
   const resolvedBusinessName = resolveComponentData(
-    data?.businessName,
+    data.businessName,
     locale,
     streamDocument
   );
   const resolvedLocalGeoModifier = resolveComponentData(
-    data?.localGeoModifier,
+    data.localGeoModifier,
     locale,
     streamDocument
   );
   const resolvedHours = resolveComponentData(
-    data?.hours,
+    data.hours,
     locale,
     streamDocument
   );
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+  const resolvedHero = resolveComponentData(data.hero, locale, streamDocument);
   const { timezone } = streamDocument as {
     timezone: string;
   };
@@ -66,10 +67,17 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
           {resolvedBusinessName && (
             <EntityField
               displayName={pt("fields.businessName", "Business Name")}
-              fieldId={data?.businessName.field}
-              constantValueEnabled={data?.businessName.constantValueEnabled}
+              fieldId={data.businessName.field}
+              constantValueEnabled={data.businessName.constantValueEnabled}
             >
-              <Heading level={styles?.businessNameLevel}>
+              <Heading
+                level={styles.businessNameLevel}
+                semanticLevelOverride={
+                  styles.localGeoModifierLevel < 6
+                    ? ((styles.localGeoModifierLevel + 1) as HeadingLevel)
+                    : "span"
+                }
+              >
                 {resolvedBusinessName}
               </Heading>
             </EntityField>
@@ -77,10 +85,10 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
           {resolvedLocalGeoModifier && (
             <EntityField
               displayName={pt("fields.localGeomodifier", "Local GeoModifier")}
-              fieldId={data?.localGeoModifier.field}
-              constantValueEnabled={data?.localGeoModifier.constantValueEnabled}
+              fieldId={data.localGeoModifier.field}
+              constantValueEnabled={data.localGeoModifier.constantValueEnabled}
             >
-              <Heading level={styles?.localGeoModifierLevel}>
+              <Heading level={styles.localGeoModifierLevel}>
                 {resolvedLocalGeoModifier}
               </Heading>
             </EntityField>
@@ -89,8 +97,8 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
         {resolvedHours && (
           <EntityField
             displayName={pt("fields.hours", "Hours")}
-            fieldId={data?.hours.field}
-            constantValueEnabled={data?.hours.constantValueEnabled}
+            fieldId={data.hours.field}
+            constantValueEnabled={data.hours.constantValueEnabled}
           >
             <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
           </EntityField>
@@ -132,7 +140,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
             >
               <CTA
                 eventName="primaryCta"
-                variant={styles?.primaryCTA}
+                variant={styles.primaryCTA}
                 label={resolveComponentData(
                   resolvedHero.primaryCta.label,
                   i18n.language
@@ -143,7 +151,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                 )}
                 linkType={resolvedHero.primaryCta.linkType}
                 className={
-                  styles?.primaryCTA === "link"
+                  styles.primaryCTA === "link"
                     ? "py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
                     : ""
                 }
@@ -160,7 +168,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
             >
               <CTA
                 eventName="secondaryCta"
-                variant={styles?.secondaryCTA}
+                variant={styles.secondaryCTA}
                 label={resolveComponentData(
                   resolvedHero.secondaryCta.label,
                   i18n.language
@@ -171,7 +179,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                 )}
                 linkType={resolvedHero.secondaryCta.linkType}
                 className={
-                  styles?.secondaryCTA === "link"
+                  styles.secondaryCTA === "link"
                     ? "py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
                     : ""
                 }

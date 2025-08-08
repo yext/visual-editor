@@ -68,7 +68,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
         background={styles.backgroundColor}
         className={themeManagerCn(
           heroContentParentCn(styles),
-          "max-w-[700px] py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex self-center lg:min-w-[350px]"
+          "sm:max-w-[400px] py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex self-center lg:min-w-[350px]"
         )}
         style={
           styles.desktopImagePosition === "left"
