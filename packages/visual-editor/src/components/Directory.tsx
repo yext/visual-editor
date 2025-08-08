@@ -9,7 +9,6 @@ import {
   PhoneAtom,
   msg,
   YextField,
-  TranslatableStringField,
   TranslatableString,
   BackgroundStyle,
   Background,
@@ -92,9 +91,12 @@ const directoryFields: Fields<DirectoryProps> = {
           types: ["type.string"],
         },
       }),
-      directoryRoot: TranslatableStringField(
+      directoryRoot: YextField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        { types: ["type.string"] }
+        {
+          type: "translatableString",
+          filter: { types: ["type.string"] },
+        }
       ),
     },
   }),
