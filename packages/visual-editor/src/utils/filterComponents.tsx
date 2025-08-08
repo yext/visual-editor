@@ -1,46 +1,65 @@
 import { DefaultComponentProps, type Config } from "@measured/puck";
 
-// The gated components that are disallowed by default. They are only visible and draggable if a business has the appropriate product features enabled.
-const gatedLayoutComponents: string[] = ["CustomCodeSection", "GridSection"];
+// The components that are disallowed by default. They are only visible and draggable if a business has the appropriate product features enabled.
+const gatedLayoutComponents: string[] = ["CustomCodeSection"];
+
+// The categories that are disallowed by default. Their components are only visible and draggable if a business has the appropriate product features enabled.
+const gatedLayoutCategories: string[] = ["coreInformation"];
 
 /**
  * Filters out gated layout components from a configuration object unless explicitly allowed.
  *
  * @param config - The original configuration object.
  * @param additionalLayoutComponents - An optional list of gated component names to retain.
+ * @param additionalLayoutCategories - An optional list of gated categories to retain.
  * @returns A new configuration object with all gated components removed, except for those listed in `additionalLayoutComponents`.
  */
 export const filterComponentsFromConfig = <T extends DefaultComponentProps>(
   config: Config<T>,
-  additionalLayoutComponents?: string[]
+  additionalLayoutComponents?: string[],
+  additionalLayoutCategories?: string[]
 ): Config<T> => {
-  // Filter components object
-  const filteredComponents = Object.fromEntries(
-    Object.entries(config.components).filter(
-      ([key]) =>
-        !gatedLayoutComponents.includes(key) ||
-        additionalLayoutComponents?.includes(key)
-    )
-  ) as Config<T>["components"];
+  // 1. Filter out gated categories unless they are explicitly allowed
+  const allowedCategories = Object.entries(config.categories || {}).filter(
+    ([categoryKey]) => {
+      const isGated = gatedLayoutCategories.includes(categoryKey);
+      const isExplicitlyAllowed =
+        additionalLayoutCategories?.includes(categoryKey);
+      return !isGated || isExplicitlyAllowed;
+    }
+  );
 
-  // Filter categories by removing gated components that are not present in the additional components list from their components arrays
-  const filteredCategories = Object.fromEntries(
-    Object.entries(config.categories || {}).map(([categoryKey, category]) => [
-      categoryKey,
-      {
-        ...category,
-        components: (category.components || []).filter(
-          (componentName) =>
-            !gatedLayoutComponents.includes(componentName as string) ||
-            additionalLayoutComponents?.includes(componentName as string)
-        ),
-      },
-    ])
+  // 2. Collect all component names under the allowed categories
+  const componentsUnderAllowedCategories = new Set<string>(
+    allowedCategories.flatMap(([, category]) =>
+      (category.components ?? []).map(
+        (componentName) => componentName as string
+      )
+    )
+  );
+
+  // 3. Filter components based on:
+  // - If the component is gated, it must be explicitly allowed
+  // - It must exist under an allowed category
+  //   (e.g `Grid` component is exclusive to `coreInformation` category. So if `coreInformation` is disallowed, `Grid` will also be disallowed)
+  const allowedComponents = Object.entries(config.components).filter(
+    ([componentKey]) => {
+      const isUnderAllowedCategories =
+        componentsUnderAllowedCategories.has(componentKey);
+      const isGated = gatedLayoutComponents.includes(componentKey);
+      const isExplicitlyAllowed =
+        additionalLayoutComponents?.includes(componentKey);
+      return (!isGated || isExplicitlyAllowed) && isUnderAllowedCategories;
+    }
   );
 
   return {
     ...config,
-    components: filteredComponents,
-    categories: filteredCategories,
+    components: Object.fromEntries(
+      allowedComponents
+    ) as Config<T>["components"],
+    categories: Object.fromEntries(
+      allowedCategories
+    ) as Config<T>["categories"],
   };
 };
