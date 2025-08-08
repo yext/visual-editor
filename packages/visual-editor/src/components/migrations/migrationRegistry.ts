@@ -13,6 +13,7 @@ import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
 import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
 import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_banner_section.ts";
 import { enhanceCTATypes } from "./0014_enhance_cta_types.ts";
+import { migrateHeroPromoToStructFields } from "./0015_migrate_hero_promo_to_struct_fields.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -33,5 +34,6 @@ export const migrationRegistry: MigrationRegistry = [
   addDirectoryTitleMigration,
   addHeaderFooterMaxWidth,
   enhanceCTATypes,
+  migrateHeroPromoToStructFields,
   ignoreLocaleWarningBannerSection,
 ];
