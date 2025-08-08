@@ -73,7 +73,7 @@ type ImagePayload = {
 
 export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
   type: "custom",
-  render: ({ onChange, value }) => {
+  render: ({ onChange, value, field }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
@@ -118,8 +118,8 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
         onChange({
           alternateText: value?.alternateText ?? "",
           url: userInput,
-          height: 0,
-          width: 0,
+          height: 1,
+          width: 1,
         });
       } else {
         /** Instructs Storm to open the image asset selector drawer */
@@ -154,10 +154,15 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
       );
     }, []);
 
+    console.log("Rendering Image Field with label:", field?.label);
+
     return (
       <>
         {/* Thumbnail */}
-        <FieldLabel label={pt("Image")} className="ve-mt-3">
+        <FieldLabel
+          label={field?.label ?? pt("image", "Image")}
+          className="ve-mt-3"
+        >
           <div className="ve-relative ve-group ve-mb-3">
             {/* FieldLabel grabs the onclick event for the first button in its children, 
                 and applies it to the whole area covered by the FieldLabel and its children.

@@ -89,7 +89,10 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     label: t("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
-      image: IMAGE_CONSTANT_CONFIG,
+      image: {
+        ...IMAGE_CONSTANT_CONFIG,
+        label: t("fields.image", "Image"),
+      },
       name: nameField,
       category: categoryField,
       description: descriptionField,
