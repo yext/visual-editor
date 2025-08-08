@@ -379,7 +379,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                   resolvedHero.primaryCta.cta.label,
                   i18n.language
                 )}
-                link={resolvedHero.primaryCta.cta.link}
+                link={resolveComponentData(
+                  resolvedHero.primaryCta.cta.link,
+                  i18n.language
+                )}
                 linkType={resolvedHero.primaryCta.cta.linkType}
                 ctaType={resolvedHero.primaryCta.cta.ctaType}
                 coordinate={resolvedHero.primaryCta.cta.coordinate}
@@ -395,7 +398,10 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                   resolvedHero.secondaryCta.cta.label,
                   i18n.language
                 )}
-                link={resolvedHero.secondaryCta.cta.link}
+                link={resolveComponentData(
+                  resolvedHero.secondaryCta.cta.link,
+                  i18n.language
+                )}
                 linkType={resolvedHero.secondaryCta.cta.linkType}
                 ctaType={resolvedHero.secondaryCta.cta.ctaType}
                 coordinate={resolvedHero.secondaryCta.cta.coordinate}

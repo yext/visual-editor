@@ -252,8 +252,12 @@ const ProductCard = ({
                     streamDocument
                   )
                 : undefined
-            }
-            link={product.cta.link}
+            }            
+            link={resolveComponentData(
+              product.cta.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={product.cta.linkType}
             ctaType={product.cta.ctaType}
             coordinate={product.cta.coordinate}

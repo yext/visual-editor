@@ -273,7 +273,7 @@ const PersonCard = ({
                     ? resolveComponentData(person.cta.label, i18n.language)
                     : undefined
                 }
-                link={person.cta.link}
+                link={resolveComponentData(person.cta.link, i18n.language)}
                 linkType={person.cta.linkType}
                 ctaType={person.cta.ctaType}
                 coordinate={person.cta.coordinate}

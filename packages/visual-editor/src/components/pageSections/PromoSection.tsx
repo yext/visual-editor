@@ -244,12 +244,16 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               i18n.language,
               streamDocument
             )}
-            link={resolvedPromo?.cta.cta.link}
+            link={resolveComponentData(
+              resolvedPromo?.cta.cta.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={resolvedPromo?.cta.cta.linkType}
             ctaType={resolvedPromo?.cta.cta.ctaType}
             coordinate={resolvedPromo?.cta.cta.coordinate}
             presetImageType={resolvedPromo?.cta.cta.presetImageType}
-          />
+          />    
         )}
       </div>
     </PageSection>

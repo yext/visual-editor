@@ -247,7 +247,7 @@ const InsightCard = ({
                 ? resolveComponentData(insight.cta.label, i18n.language)
                 : undefined
             }
-            link={insight.cta.link}
+            link={resolveComponentData(insight.cta.link, i18n.language)}
             linkType={insight.cta.linkType ?? "URL"}
             ctaType={insight.cta.ctaType}
             coordinate={insight.cta.coordinate}

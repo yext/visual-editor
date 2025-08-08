@@ -17,6 +17,8 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "applyAll": "Sovelleta kaikkia alueita",
+  "applyAllWithLabel": "Levitä {{fieldLabel}} kaikkiin alueisiin",
   "approvals": {
     "addAComment": "Lisää kommentti auttaaksesi hyväksyjääsi ymmärtämään, mikä on muuttunut",
     "send": "Lähetä hyväksyntä",
