@@ -5,15 +5,15 @@ export const enhanceCTATypes: Migration = {
     action: "updated",
     propTransformation: (props) => {
       // Update hero section CTAs to use enhanced format
-      if (props.data?.hero?.constantValue?.primaryCta) {
-        props.data.hero.constantValue.primaryCta = {
-          ...props.data.hero.constantValue.primaryCta,
+      if (props.data?.hero?.constantValue?.primaryCta?.cta) {
+        props.data.hero.constantValue.primaryCta.cta = {
+          ...props.data.hero.constantValue.primaryCta.cta,
           ctaType: "textAndLink",
         };
       }
-      if (props.data?.hero?.constantValue?.secondaryCta) {
-        props.data.hero.constantValue.secondaryCta = {
-          ...props.data.hero.constantValue.secondaryCta,
+      if (props.data?.hero?.constantValue?.secondaryCta?.cta) {
+        props.data.hero.constantValue.secondaryCta.cta = {
+          ...props.data.hero.constantValue.secondaryCta.cta,
           ctaType: "textAndLink",
         };
       }
@@ -24,9 +24,9 @@ export const enhanceCTATypes: Migration = {
     action: "updated",
     propTransformation: (props) => {
       // Update promo section CTAs to use enhanced format
-      if (props.data?.promo?.constantValue?.cta) {
-        props.data.promo.constantValue.cta = {
-          ...props.data.promo.constantValue.cta,
+      if (props.data?.promo?.constantValue?.cta?.cta) {
+        props.data.promo.constantValue.cta.cta = {
+          ...props.data.promo.constantValue.cta.cta,
           ctaType: "textAndLink",
         };
       }

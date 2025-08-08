@@ -24,13 +24,15 @@ import {
   ReviewStars,
   getAggregateRating,
   resolveComponentData,
+  YextStructEntityField,
+  YextStructFieldSelector,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import { CTA } from "../atoms/cta";
 import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
-import { ENHANCED_CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -57,7 +59,7 @@ export interface HeroData {
    * The main hero content, including an image and primary/secondary call-to-action buttons.
    * @defaultValue Placeholder image and CTAs
    */
-  hero: HeroSectionType;
+  hero: YextStructEntityField<HeroSectionType>;
 
   /**
    * If 'true', displays the entity's average review rating.
@@ -162,44 +164,12 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      hero: {
-        type: "object",
+      hero: YextStructFieldSelector<HeroSectionType>({
         label: msg("fields.hero", "Hero"),
-        objectFields: {
-          image: {
-            type: "object",
-            label: pt("fields.image", "Image"),
-            objectFields: {
-              url: {
-                label: pt("fields.url", "URL"),
-                type: "text",
-              },
-              height: {
-                label: pt("fields.height", "Height"),
-                type: "number",
-              },
-              width: {
-                label: pt("fields.width", "Width"),
-                type: "number",
-              },
-            },
-          },
-          primaryCta: {
-            type: "object",
-            label: pt("fields.primaryCTA", "Primary CTA"),
-            objectFields: {
-              cta: ENHANCED_CTA_CONSTANT_CONFIG,
-            },
-          },
-          secondaryCta: {
-            type: "object",
-            label: pt("fields.secondaryCTA", "Secondary CTA"),
-            objectFields: {
-              cta: ENHANCED_CTA_CONSTANT_CONFIG,
-            },
-          },
+        filter: {
+          type: "type.hero_section",
         },
-      },
+      }),
       showAverageReview: YextField(
         msg("fields.showAverageReview", "Show Average Review"),
         {
@@ -321,7 +291,11 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     locale,
     streamDocument
   );
-  const resolvedHero = data?.hero;
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    locale
+  );
 
   const { timezone } = streamDocument as {
     timezone: string;
@@ -392,13 +366,12 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             />
           )}
         </header>
-        {(resolvedHero?.primaryCta?.cta?.label ||
-          resolvedHero?.secondaryCta?.cta?.label) && (
+        {(resolvedHero?.primaryCta?.cta || resolvedHero?.secondaryCta?.cta) && (
           <div
             className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
             aria-label={t("callToActions", "Call to Actions")}
           >
-            {resolvedHero?.primaryCta?.cta?.label && (
+            {resolvedHero?.primaryCta?.cta && (
               <CTA
                 eventName={`primaryCta`}
                 variant={styles?.primaryCTA}
@@ -414,7 +387,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
                 className={"py-3"}
               />
             )}
-            {resolvedHero?.secondaryCta?.cta?.label && (
+            {resolvedHero?.secondaryCta?.cta && (
               <CTA
                 eventName={`secondaryCta`}
                 variant={styles?.secondaryCTA}
@@ -477,32 +450,41 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         constantValue: {},
       },
       hero: {
-        primaryCta: {
-          cta: {
-            label: {
-              en: "Call To Action",
-              hasLocalizedValue: "true",
+        field: "",
+        constantValue: {
+          primaryCta: {
+            cta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+              ctaType: "textAndLink",
             },
-            link: "#",
-            linkType: "URL",
-            ctaType: "textAndLink",
+          },
+          secondaryCta: {
+            cta: {
+              label: {
+                en: "Call To Action",
+                hasLocalizedValue: "true",
+              },
+              link: "#",
+              linkType: "URL",
+              ctaType: "textAndLink",
+            },
+          },
+          image: {
+            url: PLACEHOLDER_IMAGE_URL,
+            height: 360,
+            width: 640,
           },
         },
-        secondaryCta: {
-          cta: {
-            label: {
-              en: "Call To Action",
-              hasLocalizedValue: "true",
-            },
-            link: "#",
-            linkType: "URL",
-            ctaType: "textAndLink",
-          },
-        },
-        image: {
-          url: PLACEHOLDER_IMAGE_URL,
-          height: 360,
-          width: 640,
+        constantValueEnabled: true,
+        constantValueOverride: {
+          primaryCta: true,
+          secondaryCta: true,
+          image: true,
         },
       },
       showAverageReview: true,

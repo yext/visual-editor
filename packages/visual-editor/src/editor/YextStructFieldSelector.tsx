@@ -166,7 +166,10 @@ const SubfieldsInput = ({
               <div className="ve-mt-3 first:ve-mt-0">
                 <ConstantValueModeToggler
                   fieldTypeFilter={[type]}
-                  constantValueEnabled={value?.constantValueOverride?.[field]}
+                  constantValueEnabled={
+                    value?.constantValueOverride?.[field] ||
+                    value?.constantValueEnabled
+                  }
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
                   label={label}
                   showLocale={
@@ -175,16 +178,23 @@ const SubfieldsInput = ({
                   }
                 />
               </div>
-              {value?.constantValueOverride?.[field] && (
+              {(value?.constantValueOverride?.[field] ||
+                value?.constantValueEnabled) && (
                 <div>
                   <AutoField
-                    onChange={(newConstantValue, uiState) =>
+                    onChange={(newConstantValue, uiState) => {
+                      // For CTA fields, we need to wrap the value in a cta object
+                      const fieldValue =
+                        type === "type.cta"
+                          ? { cta: newConstantValue }
+                          : newConstantValue;
+
                       onChange(
                         {
                           field: value?.field,
                           constantValue: {
                             ...value?.constantValue,
-                            [field]: newConstantValue,
+                            [field]: fieldValue,
                           },
                           constantValueEnabled: value?.constantValueEnabled,
                           constantValueOverride: {
@@ -193,9 +203,13 @@ const SubfieldsInput = ({
                           },
                         },
                         uiState
-                      )
+                      );
+                    }}
+                    value={
+                      type === "type.cta"
+                        ? value.constantValue?.[field]?.cta
+                        : value.constantValue?.[field]
                     }
-                    value={value.constantValue?.[field]}
                     field={constantConfig}
                   />
                 </div>

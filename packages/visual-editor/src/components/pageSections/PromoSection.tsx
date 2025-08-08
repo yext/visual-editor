@@ -14,11 +14,13 @@ import {
   CTAProps,
   PromoSectionType,
   msg,
-  pt,
   HeadingLevel,
   ThemeOptions,
   getAnalyticsScopeHash,
   resolveComponentData,
+  YextStructEntityField,
+  YextStructFieldSelector,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -26,7 +28,6 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
-import { ENHANCED_CTA_CONSTANT_CONFIG } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -35,7 +36,7 @@ export interface PromoData {
    * The source for the promotional content, including an image, title, description, and a call-to-action.
    * @defaultValue Placeholder content for a featured promotion.
    */
-  promo: PromoSectionType;
+  promo: YextStructEntityField<PromoSectionType>;
 }
 
 export interface PromoStyles {
@@ -98,65 +99,12 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      promo: {
-        type: "object",
+      promo: YextStructFieldSelector<PromoSectionType>({
         label: msg("fields.promo", "Promo"),
-        objectFields: {
-          image: {
-            type: "object",
-            label: pt("fields.image", "Image"),
-            objectFields: {
-              url: {
-                label: pt("fields.url", "URL"),
-                type: "text",
-              },
-              height: {
-                label: pt("fields.height", "Height"),
-                type: "number",
-              },
-              width: {
-                label: pt("fields.width", "Width"),
-                type: "number",
-              },
-            },
-          },
-          title: {
-            type: "object",
-            label: pt("fields.title", "Title"),
-            objectFields: {
-              en: {
-                label: pt("fields.title", "Title"),
-                type: "text",
-              },
-              hasLocalizedValue: {
-                label: pt("fields.hasLocalizedValue", "Has Localized Value"),
-                type: "text",
-              },
-            },
-          },
-          description: {
-            type: "object",
-            label: pt("fields.description", "Description"),
-            objectFields: {
-              en: {
-                label: pt("fields.description", "Description"),
-                type: "text",
-              },
-              hasLocalizedValue: {
-                label: pt("fields.hasLocalizedValue", "Has Localized Value"),
-                type: "text",
-              },
-            },
-          },
-          cta: {
-            type: "object",
-            label: pt("fields.cta", "CTA"),
-            objectFields: {
-              cta: ENHANCED_CTA_CONSTANT_CONFIG,
-            },
-          },
+        filter: {
+          type: "type.promo_section",
         },
-      },
+      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -237,7 +185,11 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedPromo = data?.promo;
+  const resolvedPromo = resolveYextStructField(
+    streamDocument,
+    data?.promo,
+    i18n.language
+  );
 
   const justifyClass = styles?.heading?.align
     ? {
@@ -283,7 +235,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             i18n.language,
             streamDocument
           )}
-        {resolvedPromo?.cta?.cta?.label && (
+        {resolvedPromo?.cta?.cta && (
           <CTA
             eventName={`cta`}
             variant={styles?.ctaVariant}
@@ -314,23 +266,33 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
   defaultProps: {
     data: {
       promo: {
-        image: {
-          height: 360,
-          width: 640,
-          url: PLACEHOLDER_IMAGE_URL,
-        },
-        title: { en: "Featured Promotion", hasLocalizedValue: "true" },
-        description: {
-          en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
-          hasLocalizedValue: "true",
-        },
-        cta: {
-          cta: {
-            label: { en: "Learn More", hasLocalizedValue: "true" },
-            link: "#",
-            linkType: "URL",
-            ctaType: "textAndLink",
+        field: "",
+        constantValue: {
+          image: {
+            height: 360,
+            width: 640,
+            url: PLACEHOLDER_IMAGE_URL,
           },
+          title: { en: "Featured Promotion", hasLocalizedValue: "true" },
+          description: {
+            en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+            hasLocalizedValue: "true",
+          },
+          cta: {
+            cta: {
+              label: { en: "Learn More", hasLocalizedValue: "true" },
+              link: "#",
+              linkType: "URL",
+              ctaType: "textAndLink",
+            },
+          },
+        },
+        constantValueEnabled: true,
+        constantValueOverride: {
+          image: true,
+          title: true,
+          description: true,
+          cta: true,
         },
       },
     },
