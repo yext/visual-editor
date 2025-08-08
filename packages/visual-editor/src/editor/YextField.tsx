@@ -14,12 +14,15 @@ import {
   CodeField,
   getMaxWidthOptions,
   msg,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
+import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import { MsgString } from "../utils/i18n/platform.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -94,6 +97,12 @@ type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
 
+type YextTranslatableStringField = YextBaseField & {
+  type: "translatableString";
+  filter?: RenderEntityFieldFilter<any>;
+  showApplyAllOption?: boolean;
+};
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -112,7 +121,8 @@ type YextFieldConfig<Props = any> =
   | YextRadioField
   | YextOptionalNumberField
   | YextCodeField
-  | YextMaxWidthField;
+  | YextMaxWidthField
+  | YextTranslatableStringField;
 
 export function YextField<T = any>(
   fieldName: string,
@@ -207,6 +217,14 @@ export function YextField<T, U>(
         },
       ],
     });
+  }
+
+  if (config.type === "translatableString") {
+    return TranslatableStringField(
+      fieldName as MsgString,
+      config.filter,
+      config.showApplyAllOption
+    );
   }
 
   return {

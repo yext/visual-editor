@@ -235,7 +235,7 @@ const myComponentFields: Fields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), and [YextEntityFieldSelector](##YextEntityFieldSelector).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
 
 ### Features
 
@@ -460,3 +460,27 @@ limit: YextField("Items Limit", {
 - `hideNumberFieldRadioLabel`: `boolean`
 - `showNumberFieldRadioLabel`: `boolean`
 - `defaultCustomValue `: `number`
+
+---
+
+#### Translatable String Field
+
+Creates a translatable string input with optional entity field embedding and locale management. [Additional documentation](##TranslatableStringField).
+
+```tsx
+directoryRoot: YextField("Directory Root Link Label", {
+  type: "translatableString",
+  filter: { types: ["type.string"] }
+}),
+title: YextField("Page Title", {
+  type: "translatableString",
+  filter: { types: ["type.string"] },
+  showApplyAllOption: true
+}),
+```
+
+**Props:**
+
+- `type`: `"translatableString"`
+- `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
+- `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
