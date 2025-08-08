@@ -39,8 +39,16 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
   render: ({ onChange, value }) => {
     const labelField = useMemo(() => {
       return TranslatableStringField<TranslatableString | undefined>(
-        msg("label", "Label"),
+        msg("fields.label", "Label"),
         { types: ["type.string"] }
+      );
+    }, []);
+
+    const linkField = useMemo(() => {
+      return TranslatableStringField<TranslatableString | undefined>(
+        msg("fields.link", "Link"),
+        { types: ["type.string"] },
+        true
       );
     }, []);
 
@@ -48,11 +56,6 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
       onChange: onChange,
       value: value,
       fields: [
-        {
-          label: pt("Link", "Link"),
-          field: "link",
-          fieldType: "text",
-        },
         {
           label: pt("linkType", "Link Type"),
           field: "linkType",
@@ -69,6 +72,11 @@ export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
           value={value.label}
           onChange={(newValue) => onChange({ ...value, label: newValue })}
         />
+        <AutoField
+          field={linkField}
+          value={value.link}
+          onChange={(newValue) => onChange({ ...value, link: newValue })}
+        />
         {constantFields}
       </div>
     );
@@ -84,15 +92,20 @@ export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
     );
   }, []);
 
+  const linkField = useMemo(() => {
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.link", "Link"),
+      { types: ["type.string"] },
+      true
+    );
+  }, []);
+
   return {
     type: "object",
     label: pt("fields.callToAction", "Call To Action"),
     objectFields: {
       label: labelField,
-      link: {
-        label: pt("fields.link", "Link"),
-        type: "text",
-      },
+      link: linkField,
       linkType: {
         label: pt("fields.linkType", "Link Type"),
         type: "select",

@@ -268,7 +268,7 @@ const PersonCard = ({
               <CTA
                 eventName={`cta${cardNumber}`}
                 label={resolveComponentData(person.cta.label, i18n.language)}
-                link={person.cta.link}
+                link={resolveComponentData(person.cta.link, i18n.language)}
                 linkType={person.cta.linkType}
                 variant={ctaVariant}
               />

@@ -51,7 +51,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
       {cta && (
         <CTA
           label={resolveComponentData(cta.label, i18n.language, streamDocument)}
-          link={cta.link}
+          link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
           variant={variant}
           className={className}
