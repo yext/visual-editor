@@ -34,6 +34,9 @@ const tests: ComponentTest[] = [
     name: "default props",
     document: {
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -50,6 +53,11 @@ const tests: ComponentTest[] = [
             source: "accounts/4174974/sites/155048/pagesets/locations",
             experienceKey: "locator-41",
             entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
           },
         },
       }),
@@ -61,6 +69,9 @@ const tests: ComponentTest[] = [
     name: "version 10 default props",
     document: {
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -79,6 +90,11 @@ const tests: ComponentTest[] = [
             entityType: "location",
           },
         },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
       }),
     },
     props: {},
@@ -88,6 +104,9 @@ const tests: ComponentTest[] = [
     name: "version 10 non-default props",
     document: {
       businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
           .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
@@ -104,6 +123,11 @@ const tests: ComponentTest[] = [
             source: "accounts/4174974/sites/155048/pagesets/locations",
             experienceKey: "locator-41",
             entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
           },
         },
       }),
