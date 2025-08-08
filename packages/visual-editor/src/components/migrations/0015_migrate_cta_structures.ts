@@ -47,6 +47,46 @@ export const migrateCTAStructures: Migration = {
             },
           };
         }
+
+        // Handle case where entity field has old structure but we're using entity values
+        // In this case, we need to set up the component to handle the conversion
+        if (
+          !oldHeroData.constantValueEnabled &&
+          oldHeroData.field &&
+          !oldHeroData.constantValueOverride?.primaryCta &&
+          !oldHeroData.constantValueOverride?.secondaryCta
+        ) {
+          // Set up the component to use constant values that match the expected new structure
+          // This ensures the component renders correctly even if the entity field has old structure
+          props.data.hero = {
+            ...oldHeroData,
+            constantValueEnabled: true,
+            constantValueOverride: {
+              image: false,
+              primaryCta: true,
+              secondaryCta: true,
+            },
+            constantValue: {
+              ...oldHeroData.constantValue,
+              primaryCta: {
+                cta: {
+                  label: "Call To Action",
+                  link: "#",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
+              secondaryCta: {
+                cta: {
+                  label: "Call To Action",
+                  link: "#",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
+            },
+          };
+        }
       }
 
       return props;
@@ -88,6 +128,36 @@ export const migrateCTAStructures: Migration = {
               title: true,
               description: true,
               cta: true,
+            },
+          };
+        }
+
+        // Handle case where entity field has old structure but we're using entity values
+        if (
+          !oldPromoData.constantValueEnabled &&
+          oldPromoData.field &&
+          !oldPromoData.constantValueOverride?.cta
+        ) {
+          // Set up the component to use constant values that match the expected new structure
+          props.data.promo = {
+            ...oldPromoData,
+            constantValueEnabled: true,
+            constantValueOverride: {
+              image: false,
+              title: false,
+              description: false,
+              cta: true,
+            },
+            constantValue: {
+              ...oldPromoData.constantValue,
+              cta: {
+                cta: {
+                  label: "Call To Action",
+                  link: "#",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
             },
           };
         }
