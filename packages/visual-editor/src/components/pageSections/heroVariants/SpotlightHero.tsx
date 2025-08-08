@@ -12,7 +12,7 @@ import { HeroContent, heroContentParentCn } from "./HeroContent";
 export const SpotlightHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const streamDocument = useDocument() as any;
+  const streamDocument = useDocument();
   const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
 
   return (

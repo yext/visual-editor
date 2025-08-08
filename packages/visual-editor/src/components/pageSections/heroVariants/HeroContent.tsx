@@ -24,10 +24,13 @@ export const heroContentParentCn = (styles: HeroVariantProps["styles"]) => {
   return `flex flex-col gap-y-6 md:gap-y-8 w-full break-words ${desktopContainerPosition === "left" ? "items-start sm:text-start" : "items-center sm:text-center"} ${styles.mobileContentAlignment === "left" ? "text-start" : "text-center"}`;
 };
 
+// Match link CTAs sizing to other CTA variants for consistent layout
+const heroCtaLinkVariantCn = "py-3 border-2 border-transparent sm:w-fit w-full";
+
 export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const streamDocument = useDocument() as any;
+  const streamDocument = useDocument();
   const resolvedBusinessName = resolveComponentData(
     data.businessName,
     locale,
@@ -44,9 +47,6 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
     streamDocument
   );
   const resolvedHero = resolveComponentData(data.hero, locale, streamDocument);
-  const { timezone } = streamDocument as {
-    timezone: string;
-  };
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   const desktopContainerPosition =
@@ -100,7 +100,10 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
             fieldId={data.hours.field}
             constantValueEnabled={data.hours.constantValueEnabled}
           >
-            <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
+            <HoursStatusAtom
+              hours={resolvedHours}
+              timezone={streamDocument.timezone}
+            />
           </EntityField>
         )}
         {reviewCount > 0 && data.showAverageReview && (
@@ -151,9 +154,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                 )}
                 linkType={resolvedHero.primaryCta.linkType}
                 className={
-                  styles.primaryCTA === "link"
-                    ? "py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
-                    : ""
+                  styles.primaryCTA === "link" ? heroCtaLinkVariantCn : ""
                 }
               />
             </EntityField>
@@ -179,9 +180,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                 )}
                 linkType={resolvedHero.secondaryCta.linkType}
                 className={
-                  styles.secondaryCTA === "link"
-                    ? "py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
-                    : ""
+                  styles.secondaryCTA === "link" ? heroCtaLinkVariantCn : ""
                 }
               />
             </EntityField>
