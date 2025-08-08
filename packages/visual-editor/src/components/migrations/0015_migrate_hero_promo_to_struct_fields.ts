@@ -9,34 +9,38 @@ export const migrateHeroPromoToStructFields: Migration = {
       if (props.data?.hero) {
         const oldHeroData = props.data.hero;
 
-        // Check if it's the old structure (not wrapped in YextStructEntityField)
-        if (oldHeroData.primaryCta && !oldHeroData.primaryCta.cta) {
+        // Check if it's the old structure (CTAs don't have nested 'cta' wrapper)
+        if (
+          oldHeroData.constantValue?.primaryCta &&
+          oldHeroData.constantValue.primaryCta.label &&
+          !oldHeroData.constantValue.primaryCta.cta
+        ) {
           // Convert old CTA structure to new nested structure
           props.data.hero = {
-            field: "",
+            field: oldHeroData.field || "",
             constantValue: {
-              image: oldHeroData.image,
+              image: oldHeroData.constantValue?.image,
               primaryCta: {
                 cta: {
-                  label: oldHeroData.primaryCta.label,
-                  link: oldHeroData.primaryCta.link,
-                  linkType: oldHeroData.primaryCta.linkType,
+                  label: oldHeroData.constantValue.primaryCta.label,
+                  link: oldHeroData.constantValue.primaryCta.link,
+                  linkType: oldHeroData.constantValue.primaryCta.linkType,
                   ctaType: "textAndLink",
                 },
               },
-              secondaryCta: oldHeroData.secondaryCta
+              secondaryCta: oldHeroData.constantValue?.secondaryCta
                 ? {
                     cta: {
-                      label: oldHeroData.secondaryCta.label,
-                      link: oldHeroData.secondaryCta.link,
-                      linkType: oldHeroData.secondaryCta.linkType,
+                      label: oldHeroData.constantValue.secondaryCta.label,
+                      link: oldHeroData.constantValue.secondaryCta.link,
+                      linkType: oldHeroData.constantValue.secondaryCta.linkType,
                       ctaType: "textAndLink",
                     },
                   }
                 : undefined,
             },
-            constantValueEnabled: true,
-            constantValueOverride: {
+            constantValueEnabled: oldHeroData.constantValueEnabled ?? true,
+            constantValueOverride: oldHeroData.constantValueOverride || {
               image: true,
               primaryCta: true,
               secondaryCta: true,
@@ -56,26 +60,30 @@ export const migrateHeroPromoToStructFields: Migration = {
       if (props.data?.promo) {
         const oldPromoData = props.data.promo;
 
-        // Check if it's the old structure (not wrapped in YextStructEntityField)
-        if (oldPromoData.cta && !oldPromoData.cta.cta) {
+        // Check if it's the old structure (CTAs don't have nested 'cta' wrapper)
+        if (
+          oldPromoData.constantValue?.cta &&
+          oldPromoData.constantValue.cta.label &&
+          !oldPromoData.constantValue.cta.cta
+        ) {
           // Convert old CTA structure to new nested structure
           props.data.promo = {
-            field: "",
+            field: oldPromoData.field || "",
             constantValue: {
-              image: oldPromoData.image,
-              title: oldPromoData.title,
-              description: oldPromoData.description,
+              image: oldPromoData.constantValue?.image,
+              title: oldPromoData.constantValue?.title,
+              description: oldPromoData.constantValue?.description,
               cta: {
                 cta: {
-                  label: oldPromoData.cta.label,
-                  link: oldPromoData.cta.link,
-                  linkType: oldPromoData.cta.linkType,
+                  label: oldPromoData.constantValue.cta.label,
+                  link: oldPromoData.constantValue.cta.link,
+                  linkType: oldPromoData.constantValue.cta.linkType,
                   ctaType: "textAndLink",
                 },
               },
             },
-            constantValueEnabled: true,
-            constantValueOverride: {
+            constantValueEnabled: oldPromoData.constantValueEnabled ?? true,
+            constantValueOverride: oldPromoData.constantValueOverride || {
               image: true,
               title: true,
               description: true,
