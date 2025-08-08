@@ -21,7 +21,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const CompactHeroImage = ({ className }: { className: string }) => {
     return resolvedHero?.image && styles.showImage ? (
       <div
-        className={`w-full ${className}`}
+        className={`w-full ${className} max-h-[400px]`}
         role="region"
         aria-label={t("heroImage", "Hero Image")}
       >
@@ -68,7 +68,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
         background={styles.backgroundColor}
         className={themeManagerCn(
           heroContentParentCn(styles),
-          "max-w-[700px] py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex"
+          "max-w-[700px] py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex self-center"
         )}
         style={
           styles.desktopImagePosition === "left"

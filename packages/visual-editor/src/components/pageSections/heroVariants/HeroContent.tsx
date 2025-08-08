@@ -56,7 +56,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
   return (
     <>
       <header
-        className="flex flex-col gap-y-4"
+        className="flex flex-col gap-y-4 w-full sm:w-initial"
         aria-label={t("heroHeader", "Hero Header")}
       >
         <section
@@ -114,7 +114,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
         resolvedHero?.secondaryCta?.label) && (
         <div
           className={themeManagerCn(
-            "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full ",
+            "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap ",
             styles.mobileContentAlignment === "center"
               ? "sm:items-center"
               : "sm:items-start",
@@ -144,7 +144,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                 linkType={resolvedHero.primaryCta.linkType}
                 className={
                   styles?.primaryCTA === "link"
-                    ? "mx-auto py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
+                    ? "py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
                     : ""
                 }
               />
@@ -172,7 +172,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                 linkType={resolvedHero.secondaryCta.linkType}
                 className={
                   styles?.secondaryCTA === "link"
-                    ? "mx-auto py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
+                    ? "py-3 border-2 border-transparent sm:w-fit w-full" // match other CTA variant sizing
                     : ""
                 }
               />

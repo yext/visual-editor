@@ -57,7 +57,11 @@ export const ClassicHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
         )}
       />
 
-      <div className={heroContentParentCn(styles) + " justify-center"}>
+      <div
+        className={
+          heroContentParentCn(styles) + " justify-center lg:min-w-[350px]"
+        }
+      >
         <HeroContent data={data} styles={styles} />
       </div>
 
