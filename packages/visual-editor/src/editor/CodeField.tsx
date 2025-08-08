@@ -6,6 +6,7 @@ import {
   useReceiveMessage,
   useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
+import { pt } from "../utils/i18n/platform.ts";
 
 export type codeLanguageOptions =
   | "html"
@@ -63,7 +64,7 @@ export const CodeField = ({
             type: "Code",
             value: value,
             id: messageId,
-            fieldName: fieldLabel,
+            fieldName: pt(fieldLabel),
             codeLanguage: codeLanguage,
           },
         });
@@ -78,7 +79,7 @@ export const CodeField = ({
       };
 
       return (
-        <FieldLabel label={fieldLabel}>
+        <FieldLabel label={pt(fieldLabel)}>
           <button className="CodeField" onClick={handleClick}>
             <div className="ve-line-clamp-3">{value}</div>
           </button>
