@@ -125,17 +125,17 @@ type YextFieldConfig<Props = any> =
   | YextTranslatableStringField;
 
 export function YextField<T = any>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
 
 export function YextField<T extends Record<string, any>, U = any>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
 
 export function YextField<T, U>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<any> {
   // use YextEntityFieldSelector

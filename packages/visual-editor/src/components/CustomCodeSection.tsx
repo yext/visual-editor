@@ -30,15 +30,15 @@ export interface CustomCodeSectionProps {
 }
 
 const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
-  html: YextField("HTML", {
+  html: YextField(msg("fields.html", "HTML"), {
     type: "code",
     codeLanguage: "html",
   }),
-  css: YextField("CSS", {
+  css: YextField(msg("fields.css", "CSS"), {
     type: "code",
     codeLanguage: "css",
   }),
-  javascript: YextField("JavaScript", {
+  javascript: YextField(msg("fields.javascript", "JavaScript"), {
     type: "code",
     codeLanguage: "javascript",
   }),
