@@ -583,6 +583,81 @@ const tests: ComponentTest[] = [
     },
     version: 11,
   },
+  {
+    name: "version 14 with default props",
+    document: {
+      _site: {
+        name: "Example Business",
+      },
+      name: "VA",
+      meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+      dm_childEntityIds: ["8932945"],
+      dm_directoryChildren: [
+        {
+          name: "Arlington",
+          slug: "us/va/arlington",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "Virginia",
+        },
+      ],
+      dm_directoryManagerId: "63590-locations",
+      dm_directoryParents_63590_locations: [
+        {
+          name: "Locations Directory",
+          slug: "en/index.html",
+          dm_addressCountryDisplayName: "United States",
+          dm_addressRegionDisplayName: "Virginia",
+        },
+        {
+          name: "US",
+          slug: "en/us",
+          dm_addressCountryDisplayName: "United States",
+        },
+      ],
+    },
+    props: {
+      data: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "[[name]]",
+            hasLocalizedValue: "true",
+          },
+        },
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: false,
+          dayOfWeekFormat: "short",
+        },
+        phoneNumberFormat: "international",
+        phoneNumberLink: true,
+      },
+      liveVisibility: true,
+    },
+    version: 14,
+  },
 ];
 
 describe("Directory", async () => {
