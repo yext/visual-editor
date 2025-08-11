@@ -14,7 +14,7 @@ function Toggle({
         textTransform: "var(--textTransform-button-textTransform)",
       }}
       className={themeManagerCn(
-        "items-center justify-center gap-2 rounded-full text-black " +
+        "inline-flex items-center justify-center gap-2 rounded-full text-black " +
           "bg-gray-100 ",
         "data-[state=on]:bg-palette-secondary data-[state=on]:border-palette-secondary " +
           "whitespace-nowrap border-gray-200 border border-solid hover:underline " +
