@@ -49,7 +49,7 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
 
 const DEFAULT_FIELD = "builtin.location";
@@ -405,7 +405,10 @@ const LocatorInternal = ({
               onPressedChange={(pressed) => handleOpenNowClick(pressed)}
               className="py-2 px-2"
             >
-              {t("openNow", "Open Now")}
+              <span className="flex items-center gap-2">
+                {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
+                {t("openNow", "Open Now")}
+              </span>
             </Toggle>
           )}
         </div>
