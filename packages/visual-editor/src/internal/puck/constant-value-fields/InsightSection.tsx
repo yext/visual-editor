@@ -1,4 +1,5 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import {
   InsightSectionType,
   InsightStruct,
@@ -7,7 +8,7 @@ import {
 } from "../../../types/types.ts";
 import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
@@ -60,7 +61,6 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
   };
 
 const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
-  const { t, i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
@@ -84,15 +84,15 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
   }, []);
 
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         type: "object",
-        label: t("fields.image", "Image"),
+        label: pt("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("fields.url", "URL"),
+            label: pt("fields.url", "URL"),
             type: "text",
           },
         },
@@ -105,13 +105,14 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
     },
     defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {
+      const { i18n } = useTranslation();
       const translation =
         item.name &&
         resolveComponentData(item.name, i18n.language, streamDocument);
       if (translation) {
         return translation;
       }
-      return t("insight", "Insight") + " " + ((i ?? 0) + 1);
+      return pt("insight", "Insight") + " " + ((i ?? 0) + 1);
     },
   };
 };

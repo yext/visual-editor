@@ -7,7 +7,6 @@ import {
   VisibilityWrapper,
   msg,
   TranslatableString,
-  TranslatableStringField,
   BackgroundStyle,
   backgroundColors,
   resolveComponentData,
@@ -66,9 +65,12 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      directoryRoot: TranslatableStringField(
+      directoryRoot: YextField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        { types: ["type.string"] }
+        {
+          type: "translatableString",
+          filter: { types: ["type.string"] },
+        }
       ),
     },
   }),
