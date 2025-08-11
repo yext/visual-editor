@@ -152,11 +152,11 @@ This object contains the content used by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                                | Type                                                                 | Description                                                     | Default              |
-| :---------------------------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`            | `BackgroundStyle`                                                    | The main background color for the directory page content.       | `Background Color 1` |
-| `styles.breadcrumbsBackgroundColor` | `BackgroundStyle`                                                    | A specific background color for the breadcrumbs navigation bar. | `Background Color 1` |
-| `styles.cards`                      | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Style properties for directory cards.                           |                      |
+| Prop                                | Type                                                                                                                                                                                                   | Description                                                     | Default              |
+| :---------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`            | `BackgroundStyle`                                                                                                                                                                                      | The main background color for the directory page content.       | `Background Color 1` |
+| `styles.breadcrumbsBackgroundColor` | `BackgroundStyle`                                                                                                                                                                                      | A specific background color for the breadcrumbs navigation bar. | `Background Color 1` |
+| `styles.cards`                      | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; hours: { showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }; }` | Style properties for directory cards.                           |                      |
 
 ---
 
@@ -445,14 +445,11 @@ This object defines the search parameters for finding nearby locations.
 
 This object contains extensive properties for customizing the component's appearance.
 
-| Prop                       | Type                                                                                                                        | Description                                        | Default              |
-| :------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`   | `BackgroundStyle`                                                                                                           | The background color for the entire section.       | `Background Color 1` |
-| `styles.cards`             | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Styling for the individual location cards.         |                      |
-| `styles.heading`           | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                            | Styling for the main section heading.              |                      |
-| `styles.hours`             | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.        |                      |
-| `styles.phoneNumberFormat` | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards. | `'domestic'`         |
-| `styles.phoneNumberLink`   | `boolean`                                                                                                                   | If , wraps phone numbers in a clickable hyperlink. | `false`              |
+| Prop                     | Type                                                                                                                                                                                                                                                                               | Description                                  | Default              |
+| :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                                                                                                                                                                                                                  | The background color for the entire section. | `Background Color 1` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; phoneNumberFormat: "domestic" \| "international"; phoneNumberLink: boolean; hours: { showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }; }` | Styling for the individual location cards.   |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                                                                                                                                                                                   | Styling for the main section heading.        |                      |
 
 #### Other Props
 
