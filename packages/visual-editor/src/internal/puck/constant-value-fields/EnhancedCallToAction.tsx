@@ -103,6 +103,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
     const showLabel = value?.ctaType !== "presetImage";
     const showCoordinate = value?.ctaType === "getDirections";
     const showPresetImage = value?.ctaType === "presetImage";
+    const showLinkFields = value?.ctaType !== "getDirections";
 
     return (
       <div className={"ve-mt-3"}>
@@ -131,14 +132,19 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
                     latitude: 0,
                     longitude: 0,
                   };
+                  // Clear link fields since they're not needed for directions
+                  delete updatedValue.link;
+                  delete updatedValue.linkType;
                 } else if (newValue === "textAndLink") {
                   updatedValue.label = updatedValue.label || {
                     en: "Learn More",
                     hasLocalizedValue: "true",
                   };
-                  // Clear preset image and coordinate fields
+                  // Clear preset image and coordinate fields, restore link fields
                   delete updatedValue.presetImageType;
                   delete updatedValue.coordinate;
+                  updatedValue.link = updatedValue.link || "#";
+                  updatedValue.linkType = updatedValue.linkType || "URL";
                 }
 
                 onChange(updatedValue);
@@ -153,29 +159,35 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
             onChange={(newValue) => onChange({ ...value, label: newValue })}
           />
         )}
-        <div className="ve-mb-3">
-          <FieldLabel label={pt("fields.link", "Link")}>
-            <AutoField
-              field={{ type: "text" }}
-              value={value.link || ""}
-              onChange={(newValue) => onChange({ ...value, link: newValue })}
-            />
-          </FieldLabel>
-        </div>
-        <div className="ve-mb-3">
-          <FieldLabel label={pt("fields.linkType", "Link Type")}>
-            <AutoField
-              field={{
-                type: "select",
-                options: linkTypeOptions(),
-              }}
-              value={value.linkType || "URL"}
-              onChange={(newValue) =>
-                onChange({ ...value, linkType: newValue })
-              }
-            />
-          </FieldLabel>
-        </div>
+        {showLinkFields && (
+          <>
+            <div className="ve-mb-3">
+              <FieldLabel label={pt("fields.link", "Link")}>
+                <AutoField
+                  field={{ type: "text" }}
+                  value={value.link || ""}
+                  onChange={(newValue) =>
+                    onChange({ ...value, link: newValue })
+                  }
+                />
+              </FieldLabel>
+            </div>
+            <div className="ve-mb-3">
+              <FieldLabel label={pt("fields.linkType", "Link Type")}>
+                <AutoField
+                  field={{
+                    type: "select",
+                    options: linkTypeOptions(),
+                  }}
+                  value={value.linkType || "URL"}
+                  onChange={(newValue) =>
+                    onChange({ ...value, linkType: newValue })
+                  }
+                />
+              </FieldLabel>
+            </div>
+          </>
+        )}
         {showPresetImage && (
           <div className="ve-mb-3">
             <FieldLabel

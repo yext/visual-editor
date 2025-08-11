@@ -497,7 +497,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           primaryCta: {
             cta: {
               label: {
-                en: "Get Directions",
+                en: "Call To Action",
                 hasLocalizedValue: "true",
               },
               link: "#",
@@ -546,6 +546,34 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       scope: "heroSection",
     },
     liveVisibility: true,
+  },
+  resolveFields: (data, { lastData }) => {
+    // If set to entity value and no field selected, hide the component.
+    if (
+      !data.props.data.hero.constantValueEnabled &&
+      data.props.data.hero.field === ""
+    ) {
+      data.props.liveVisibility = false;
+      return {
+        ...heroSectionFields,
+        liveVisibility: undefined,
+      };
+    }
+
+    // If no field was selected and then constant value is enabled
+    // or a field is selected, show the component.
+    if (
+      (data.props.data.hero.constantValueEnabled &&
+        !lastData?.props.data.hero.constantValueEnabled &&
+        data.props.data.hero.field === "") ||
+      (lastData?.props.data.hero.field === "" &&
+        data.props.data.hero.field !== "")
+    ) {
+      data.props.liveVisibility = true;
+    }
+
+    // Otherwise, return normal fields.
+    return heroSectionFields;
   },
 
   render: (props) => (

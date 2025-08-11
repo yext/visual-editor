@@ -1,4 +1,5 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import {
   ProductSectionType,
   ProductStruct,
@@ -8,7 +9,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useMemo } from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
@@ -61,7 +62,6 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: CustomField<ProductSectionType> =
   };
 
 const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
-  const { t, i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
@@ -85,15 +85,15 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
   }, []);
 
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         type: "object",
-        label: t("fields.image", "Image"),
+        label: pt("fields.image", "Image"),
         objectFields: {
           url: {
-            label: t("fields.url", "URL"),
+            label: pt("fields.url", "URL"),
             type: "text",
           },
         },
@@ -105,13 +105,14 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     },
     defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {
+      const { i18n } = useTranslation();
       const translation =
         item?.name &&
         resolveComponentData(item.name, i18n.language, streamDocument);
       if (translation) {
         return translation;
       }
-      return t("product", "Product") + " " + ((i ?? 0) + 1);
+      return pt("product", "Product") + " " + ((i ?? 0) + 1);
     },
   };
 };
