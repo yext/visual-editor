@@ -405,7 +405,7 @@ const LocatorInternal = ({
               onPressedChange={(pressed) => handleOpenNowClick(pressed)}
               className="py-2 px-2"
             >
-              <span className="flex items-center justify-center gap-2 w-full">
+              <span className="inline-flex items-center gap-2">
                 {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
                 {t("openNow", "Open Now")}
               </span>
