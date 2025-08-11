@@ -32,7 +32,7 @@ Displays an icon instead of text. The icon is automatically selected based on th
 ```tsx
 <CTA
   ctaType="presetImage"
-  presetImageType="phone"
+  presetImageType="app-store"
   link="tel:+1234567890"
   variant="primary"
 />

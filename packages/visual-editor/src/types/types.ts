@@ -17,30 +17,22 @@ export type EnhancedTranslatableCTA = Omit<TranslatableCTA, "label"> & {
   presetImageType?: PresetImageType;
 };
 
-// Preset image types for CTA buttons
+// Preset image types for CTA buttons - Mobile app store buttons and Social buttons
 export type PresetImageType =
-  | "phone"
-  | "email"
-  | "location"
-  | "calendar"
-  | "star"
-  | "heart"
-  | "share"
-  | "download"
-  | "play"
-  | "pause"
-  | "next"
-  | "previous"
-  | "menu"
-  | "search"
-  | "close"
-  | "check"
-  | "plus"
-  | "minus"
-  | "arrow-right"
-  | "arrow-left"
-  | "arrow-up"
-  | "arrow-down";
+  | "app-store"
+  | "google-play"
+  | "galaxy-store"
+  | "app-gallery"
+  | "app-store-outline"
+  | "google-play-outline"
+  | "galaxy-store-outline"
+  | "app-gallery-outline"
+  | "google"
+  | "facebook"
+  | "apple"
+  | "twitter"
+  | "figma"
+  | "dribbble";
 
 export type HeroSectionType = {
   image?: ImageType;

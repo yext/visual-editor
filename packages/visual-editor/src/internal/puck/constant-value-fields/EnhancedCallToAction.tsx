@@ -55,31 +55,41 @@ export const presetImageTypeOptions = (): {
   value: PresetImageType;
 }[] => {
   return [
-    { label: pt("presetImages.phone", "Phone"), value: "phone" },
-    { label: pt("presetImages.email", "Email"), value: "email" },
-    { label: pt("presetImages.location", "Location"), value: "location" },
-    { label: pt("presetImages.calendar", "Calendar"), value: "calendar" },
-    { label: pt("presetImages.star", "Star"), value: "star" },
-    { label: pt("presetImages.heart", "Heart"), value: "heart" },
-    { label: pt("presetImages.share", "Share"), value: "share" },
-    { label: pt("presetImages.download", "Download"), value: "download" },
-    { label: pt("presetImages.play", "Play"), value: "play" },
-    { label: pt("presetImages.pause", "Pause"), value: "pause" },
-    { label: pt("presetImages.next", "Next"), value: "next" },
-    { label: pt("presetImages.previous", "Previous"), value: "previous" },
-    { label: pt("presetImages.menu", "Menu"), value: "menu" },
-    { label: pt("presetImages.search", "Search"), value: "search" },
-    { label: pt("presetImages.close", "Close"), value: "close" },
-    { label: pt("presetImages.check", "Check"), value: "check" },
-    { label: pt("presetImages.plus", "Plus"), value: "plus" },
-    { label: pt("presetImages.minus", "Minus"), value: "minus" },
+    { label: pt("presetImages.appStore", "App Store"), value: "app-store" },
     {
-      label: pt("presetImages.arrowRight", "Arrow Right"),
-      value: "arrow-right",
+      label: pt("presetImages.googlePlay", "Google Play"),
+      value: "google-play",
     },
-    { label: pt("presetImages.arrowLeft", "Arrow Left"), value: "arrow-left" },
-    { label: pt("presetImages.arrowUp", "Arrow Up"), value: "arrow-up" },
-    { label: pt("presetImages.arrowDown", "Arrow Down"), value: "arrow-down" },
+    {
+      label: pt("presetImages.galaxyStore", "Galaxy Store"),
+      value: "galaxy-store",
+    },
+    {
+      label: pt("presetImages.appGallery", "App Gallery"),
+      value: "app-gallery",
+    },
+    {
+      label: pt("presetImages.appStoreOutline", "App Store (Outline)"),
+      value: "app-store-outline",
+    },
+    {
+      label: pt("presetImages.googlePlayOutline", "Google Play (Outline)"),
+      value: "google-play-outline",
+    },
+    {
+      label: pt("presetImages.galaxyStoreOutline", "Galaxy Store (Outline)"),
+      value: "galaxy-store-outline",
+    },
+    {
+      label: pt("presetImages.appGalleryOutline", "App Gallery (Outline)"),
+      value: "app-gallery-outline",
+    },
+    { label: pt("presetImages.google", "Google"), value: "google" },
+    { label: pt("presetImages.facebook", "Facebook"), value: "facebook" },
+    { label: pt("presetImages.apple", "Apple"), value: "apple" },
+    { label: pt("presetImages.twitter", "Twitter/X"), value: "twitter" },
+    { label: pt("presetImages.figma", "Figma"), value: "figma" },
+    { label: pt("presetImages.dribbble", "Dribbble"), value: "dribbble" },
   ];
 };
 
@@ -111,7 +121,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
                 if (newValue === "presetImage") {
                   updatedValue.label = { en: "", hasLocalizedValue: "true" };
                   updatedValue.presetImageType =
-                    updatedValue.presetImageType || "phone";
+                    updatedValue.presetImageType || "app-store";
                 } else if (newValue === "getDirections") {
                   updatedValue.label = updatedValue.label || {
                     en: "Get Directions",
@@ -176,7 +186,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
                   type: "select",
                   options: presetImageTypeOptions(),
                 }}
-                value={value.presetImageType ?? "phone"}
+                value={value.presetImageType ?? "app-store"}
                 onChange={(newValue) =>
                   onChange({ ...value, presetImageType: newValue })
                 }

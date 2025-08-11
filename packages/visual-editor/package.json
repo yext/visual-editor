@@ -85,6 +85,7 @@
     "picocolors": "^1.0.1",
     "prompts": "^2.4.2",
     "pure-react-carousel": "^1.32.0",
+    "react-aria-components": "^1.11.0",
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
     "react-i18next": "^15.5.2",
