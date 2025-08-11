@@ -1,5 +1,7 @@
 {
+  "Category": "カテゴリ",
   "Heading": "見出し",
+  "Image": "画像",
   "Link": "リンク",
   "actions": {
     "copyToClipboard": "クリップボードにコピーします",

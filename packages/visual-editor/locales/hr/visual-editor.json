@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorija",
   "Heading": "Naslov",
+  "Image": "Slika",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopirajte u međuspremnik",

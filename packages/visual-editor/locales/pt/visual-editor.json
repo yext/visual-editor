@@ -1,5 +1,7 @@
 {
+  "Category": "Categoria",
   "Heading": "Cabeçalho",
+  "Image": "Imagem",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Cópia para a área de transferência",

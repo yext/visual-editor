@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorija",
   "Heading": "Virsraksts",
+  "Image": "Attēls",
   "Link": "Saite",
   "actions": {
     "copyToClipboard": "Kopēt uz starpliktuvi",

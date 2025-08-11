@@ -1,5 +1,7 @@
 {
+  "Category": "Categorie",
   "Heading": "Kop",
+  "Image": "Afbeelding",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopieer naar klembord",

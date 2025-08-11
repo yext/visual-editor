@@ -1,5 +1,7 @@
 {
+  "Category": "Categorie",
   "Heading": "Îndreptându -se",
+  "Image": "Imagine",
   "Link": "Legătură",
   "actions": {
     "copyToClipboard": "Copiați în clipboard",

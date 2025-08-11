@@ -1,5 +1,7 @@
 {
+  "Category": "Kategoria",
   "Heading": "Nagłówek",
+  "Image": "Obraz",
   "Link": "Połączyć",
   "actions": {
     "copyToClipboard": "Kopiuj do schowka",

@@ -1,5 +1,7 @@
 {
+  "Category": "Catégorie",
   "Heading": "Titre",
+  "Image": "Image",
   "Link": "Lien",
   "actions": {
     "copyToClipboard": "Copier dans le presse-papiers",

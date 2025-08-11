@@ -194,6 +194,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   }
                 ),
               },
+              getItemSummary: (_, i) =>
+                pt("Image", "Image") + " " + ((i ?? 0) + 1),
             }
           ),
           expandedFooter: YextField(
@@ -232,9 +234,23 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                     },
                   },
                   defaultItemProps: defaultFooterLink,
+                  getItemSummary: (item, i) => {
+                    const { i18n } = useTranslation();
+                    return (
+                      resolveComponentData(item.label, i18n.language) ||
+                      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                    );
+                  },
                 }),
               },
               defaultItemProps: defaultExpandedFooterLinks,
+              getItemSummary: (item, i) => {
+                const { i18n } = useTranslation();
+                return (
+                  resolveComponentData(item.label, i18n.language) ||
+                  pt("Category", "Category") + " " + ((i ?? 0) + 1)
+                );
+              },
             }
           ),
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
@@ -254,6 +270,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               },
             },
             defaultItemProps: defaultFooterLink,
+            getItemSummary: (item, i) => {
+              const { i18n } = useTranslation();
+              return (
+                resolveComponentData(item.label, i18n.language) ||
+                pt("Link", "Link") + " " + ((i ?? 0) + 1)
+              );
+            },
           }),
         },
       }),
@@ -295,6 +318,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   },
                 },
                 defaultItemProps: defaultFooterLink,
+                getItemSummary: (item, i) => {
+                  const { i18n } = useTranslation();
+                  return (
+                    resolveComponentData(item.label, i18n.language) ||
+                    pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                  );
+                },
               }
             ),
           },

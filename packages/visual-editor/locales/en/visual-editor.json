@@ -1,5 +1,7 @@
 {
+  "Category": "Category",
   "Heading": "Heading",
+  "Image": "Image",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Copy to Clipboard",
