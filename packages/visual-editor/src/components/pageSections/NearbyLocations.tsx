@@ -194,30 +194,15 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
-        },
-      }),
-      phoneNumberFormat: YextField(
-        msg("fields.phoneNumberFormat", "Phone Number Format"),
-        {
-          type: "radio",
-          options: "PHONE_OPTIONS",
-        }
-      ),
-      phoneNumberLink: YextField(
-        msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
-      hours: YextField(msg("fields.hours", "Hours"), {
-        type: "object",
-        objectFields: {
-          showCurrentStatus: YextField(
-            msg("fields.showCurrentStatus", "Show Current Status"),
+          phoneNumberFormat: YextField(
+            msg("fields.phoneNumberFormat", "Phone Number Format"),
+            {
+              type: "radio",
+              options: "PHONE_OPTIONS",
+            }
+          ),
+          phoneNumberLink: YextField(
+            msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
             {
               type: "radio",
               options: [
@@ -226,33 +211,60 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
               ],
             }
           ),
-          timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
-              { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
-            ],
+          hours: YextField(msg("fields.hours", "Hours"), {
+            type: "object",
+            objectFields: {
+              showCurrentStatus: YextField(
+                msg("fields.showCurrentStatus", "Show Current Status"),
+                {
+                  type: "radio",
+                  options: [
+                    { label: msg("fields.options.yes", "Yes"), value: true },
+                    { label: msg("fields.options.no", "No"), value: false },
+                  ],
+                }
+              ),
+              timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
+                type: "radio",
+                options: [
+                  {
+                    label: msg("fields.options.hour12", "12-hour"),
+                    value: "12h",
+                  },
+                  {
+                    label: msg("fields.options.hour24", "24-hour"),
+                    value: "24h",
+                  },
+                ],
+              }),
+              showDayNames: YextField(
+                msg("fields.showDayNames", "Show Day Names"),
+                {
+                  type: "radio",
+                  options: [
+                    { label: msg("fields.options.yes", "Yes"), value: true },
+                    { label: msg("fields.options.no", "No"), value: false },
+                  ],
+                }
+              ),
+              dayOfWeekFormat: YextField(
+                msg("fields.dayOfWeekFormat", "Day of Week Format"),
+                {
+                  type: "radio",
+                  options: [
+                    {
+                      label: msg("fields.options.short", "Short"),
+                      value: "short",
+                    },
+                    {
+                      label: msg("fields.options.long", "Long"),
+                      value: "long",
+                    },
+                  ],
+                }
+              ),
+            },
           }),
-          showDayNames: YextField(
-            msg("fields.showDayNames", "Show Day Names"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          dayOfWeekFormat: YextField(
-            msg("fields.dayOfWeekFormat", "Day of Week Format"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.short", "Short"), value: "short" },
-                { label: msg("fields.options.long", "Long"), value: "long" },
-              ],
-            }
-          ),
         },
       }),
     },
