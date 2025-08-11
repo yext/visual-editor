@@ -7,7 +7,7 @@ import {
   FigmaLogo,
   GoogleLogo,
   TwitterLogo,
-} from "../y/base/buttons/social-logos";
+} from "../components/base/buttons/social-logos";
 
 // Simple 24x24 SVG icons for app store buttons, matching the style of social media icons
 const AppStoreIcon = () => (

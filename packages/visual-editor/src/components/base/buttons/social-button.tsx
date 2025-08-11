@@ -5,7 +5,7 @@ import type {
 } from "react";
 import type { ButtonProps as AriaButtonProps } from "react-aria-components";
 import { Button as AriaButton, Link as AriaLink } from "react-aria-components";
-import { cx, sortCx } from "../../../utils/cx";
+import { cn } from "../../../utils/cn";
 import {
   AppleLogo,
   DribbleLogo,
@@ -16,7 +16,7 @@ import {
   TwitterLogo,
 } from "./social-logos";
 
-export const styles = sortCx({
+export const styles = {
   common: {
     root: "group relative inline-flex h-max cursor-pointer items-center justify-center font-semibold whitespace-nowrap outline-focus-ring transition duration-100 ease-linear before:absolute focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:stroke-fg-disabled disabled:text-fg-disabled disabled:*:text-fg-disabled",
     icon: "pointer-events-none shrink-0 transition-inherit-all",
@@ -60,7 +60,7 @@ export const styles = sortCx({
       icon: "",
     },
   },
-});
+};
 
 interface CommonProps {
   social: "google" | "facebook" | "apple" | "twitter" | "figma" | "dribble";
@@ -153,7 +153,7 @@ export const SocialButton = ({
       isDisabled={disabled}
       {...props}
       data-icon-only={isIconOnly ? true : undefined}
-      className={cx(
+      className={cn(
         styles.common.root,
         styles.sizes[size].root,
         colorStyles.root,
@@ -161,7 +161,7 @@ export const SocialButton = ({
       )}
     >
       <Logo
-        className={cx(
+        className={cn(
           styles.common.icon,
           theme === "gray"
             ? colorStyles.icon

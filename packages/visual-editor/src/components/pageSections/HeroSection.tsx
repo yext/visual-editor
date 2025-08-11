@@ -4,6 +4,7 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
+  EnhancedTranslatableCTA,
   useDocument,
   EntityField,
   YextEntityField,
@@ -35,6 +36,28 @@ import {
 } from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/100x100";
+
+// Helper function to extract CTA data from either nested or direct structure
+const extractCTA = (
+  ctaData:
+    | EnhancedTranslatableCTA
+    | { cta?: EnhancedTranslatableCTA }
+    | undefined
+) => {
+  if (!ctaData) return null;
+
+  // Check if it's the nested structure
+  if ("cta" in ctaData && ctaData.cta) {
+    return ctaData.cta;
+  }
+
+  // Check if it's the direct structure
+  if ("label" in ctaData) {
+    return ctaData as EnhancedTranslatableCTA;
+  }
+
+  return null;
+};
 
 export interface HeroData {
   /**
@@ -291,11 +314,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     locale,
     streamDocument
   );
-  const resolvedHero = resolveYextStructField(
-    streamDocument,
-    data?.hero,
-    locale
-  );
+  const resolvedHero = data?.hero
+    ? resolveYextStructField(streamDocument, data.hero, locale)
+    : undefined;
 
   const { timezone } = streamDocument as {
     timezone: string;
@@ -366,51 +387,66 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             />
           )}
         </header>
-        {(resolvedHero?.primaryCta?.cta || resolvedHero?.secondaryCta?.cta) && (
-          <div
-            className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label={t("callToActions", "Call to Actions")}
-          >
-            {resolvedHero?.primaryCta?.cta && (
-              <CTA
-                eventName={`primaryCta`}
-                variant={styles?.primaryCTA}
-                label={resolveComponentData(
-                  resolvedHero.primaryCta.cta.label,
-                  i18n.language
+        {resolvedHero &&
+          (resolvedHero.primaryCta || resolvedHero.secondaryCta) && (
+            <div
+              className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
+              aria-label={t("callToActions", "Call to Actions")}
+            >
+              {resolvedHero?.primaryCta &&
+                extractCTA(resolvedHero.primaryCta) && (
+                  <CTA
+                    eventName={`primaryCta`}
+                    variant={styles?.primaryCTA}
+                    label={resolveComponentData(
+                      extractCTA(resolvedHero.primaryCta)!.label,
+                      i18n.language
+                    )}
+                    link={resolveComponentData(
+                      extractCTA(resolvedHero.primaryCta)!.link,
+                      i18n.language
+                    )}
+                    linkType={extractCTA(resolvedHero.primaryCta)!.linkType}
+                    ctaType={
+                      extractCTA(resolvedHero.primaryCta)!.ctaType ||
+                      "textAndLink"
+                    }
+                    coordinate={extractCTA(resolvedHero.primaryCta)!.coordinate}
+                    presetImageType={
+                      extractCTA(resolvedHero.primaryCta)!.presetImageType
+                    }
+                    className={"py-3"}
+                  />
                 )}
-                link={resolveComponentData(
-                  resolvedHero.primaryCta.cta.link,
-                  i18n.language
+              {resolvedHero?.secondaryCta &&
+                extractCTA(resolvedHero.secondaryCta) && (
+                  <CTA
+                    eventName={`secondaryCta`}
+                    variant={styles?.secondaryCTA}
+                    label={resolveComponentData(
+                      extractCTA(resolvedHero.secondaryCta)!.label,
+                      i18n.language
+                    )}
+                    link={resolveComponentData(
+                      extractCTA(resolvedHero.secondaryCta)!.link,
+                      i18n.language
+                    )}
+                    linkType={extractCTA(resolvedHero.secondaryCta)!.linkType}
+                    ctaType={
+                      extractCTA(resolvedHero.secondaryCta)!.ctaType ||
+                      "textAndLink"
+                    }
+                    coordinate={
+                      extractCTA(resolvedHero.secondaryCta)!.coordinate
+                    }
+                    presetImageType={
+                      extractCTA(resolvedHero.secondaryCta)!.presetImageType
+                    }
+                    className={"py-3"}
+                  />
                 )}
-                linkType={resolvedHero.primaryCta.cta.linkType}
-                ctaType={resolvedHero.primaryCta.cta.ctaType}
-                coordinate={resolvedHero.primaryCta.cta.coordinate}
-                presetImageType={resolvedHero.primaryCta.cta.presetImageType}
-                className={"py-3"}
-              />
-            )}
-            {resolvedHero?.secondaryCta?.cta && (
-              <CTA
-                eventName={`secondaryCta`}
-                variant={styles?.secondaryCTA}
-                label={resolveComponentData(
-                  resolvedHero.secondaryCta.cta.label,
-                  i18n.language
-                )}
-                link={resolveComponentData(
-                  resolvedHero.secondaryCta.cta.link,
-                  i18n.language
-                )}
-                linkType={resolvedHero.secondaryCta.cta.linkType}
-                ctaType={resolvedHero.secondaryCta.cta.ctaType}
-                coordinate={resolvedHero.secondaryCta.cta.coordinate}
-                presetImageType={resolvedHero.secondaryCta.cta.presetImageType}
-                className={"py-3"}
-              />
-            )}
-          </div>
-        )}
+            </div>
+          )}
       </div>
       {resolvedHero?.image && (
         <div

@@ -2,25 +2,25 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  themeManagerCn,
+  PromoSectionType,
+  EnhancedTranslatableCTA,
   useDocument,
   Image,
-  BackgroundStyle,
   backgroundColors,
+  BackgroundStyle,
+  HeadingLevel,
   Heading,
   PageSection,
   YextField,
   VisibilityWrapper,
   CTAProps,
-  PromoSectionType,
   msg,
-  HeadingLevel,
-  ThemeOptions,
-  getAnalyticsScopeHash,
   resolveComponentData,
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
+  themeManagerCn,
+  getAnalyticsScopeHash,
 } from "@yext/visual-editor";
 import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -30,6 +30,28 @@ import {
 } from "../contentBlocks/ImageStyling.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+
+// Helper function to extract CTA data from either nested or direct structure
+const extractCTA = (
+  ctaData:
+    | EnhancedTranslatableCTA
+    | { cta?: EnhancedTranslatableCTA }
+    | undefined
+) => {
+  if (!ctaData) return null;
+
+  // Check if it's the nested structure
+  if ("cta" in ctaData && ctaData.cta) {
+    return ctaData.cta;
+  }
+
+  // Check if it's the direct structure
+  if ("label" in ctaData) {
+    return ctaData as EnhancedTranslatableCTA;
+  }
+
+  return null;
+};
 
 export interface PromoData {
   /**
@@ -151,7 +173,26 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           }),
           align: YextField(msg("fields.headingAlign", "Heading Align"), {
             type: "radio",
-            options: ThemeOptions.ALIGNMENT,
+            options: [
+              {
+                label: msg("fields.options.left", "Left", {
+                  context: "direction",
+                }),
+                value: "left",
+              },
+              {
+                label: msg("fields.options.center", "Center", {
+                  context: "direction",
+                }),
+                value: "center",
+              },
+              {
+                label: msg("fields.options.right", "Right", {
+                  context: "direction",
+                }),
+                value: "right",
+              },
+            ],
           }),
         },
       }),
@@ -235,26 +276,28 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             i18n.language,
             streamDocument
           )}
-        {resolvedPromo?.cta?.cta && (
-          <CTA
-            eventName={`cta`}
-            variant={styles?.ctaVariant}
-            label={resolveComponentData(
-              resolvedPromo?.cta.cta.label,
-              i18n.language,
-              streamDocument
-            )}
-            link={resolveComponentData(
-              resolvedPromo?.cta.cta.link,
-              i18n.language,
-              streamDocument
-            )}
-            linkType={resolvedPromo?.cta.cta.linkType}
-            ctaType={resolvedPromo?.cta.cta.ctaType}
-            coordinate={resolvedPromo?.cta.cta.coordinate}
-            presetImageType={resolvedPromo?.cta.cta.presetImageType}
-          />
-        )}
+        {resolvedPromo &&
+          resolvedPromo.cta &&
+          extractCTA(resolvedPromo.cta) && (
+            <CTA
+              eventName={`cta`}
+              variant={styles?.ctaVariant}
+              label={resolveComponentData(
+                extractCTA(resolvedPromo.cta)!.label,
+                i18n.language,
+                streamDocument
+              )}
+              link={resolveComponentData(
+                extractCTA(resolvedPromo.cta)!.link,
+                i18n.language,
+                streamDocument
+              )}
+              linkType={extractCTA(resolvedPromo.cta)!.linkType}
+              ctaType={extractCTA(resolvedPromo.cta)!.ctaType || "textAndLink"}
+              coordinate={extractCTA(resolvedPromo.cta)!.coordinate}
+              presetImageType={extractCTA(resolvedPromo.cta)!.presetImageType}
+            />
+          )}
       </div>
     </PageSection>
   );
