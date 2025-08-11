@@ -8,6 +8,8 @@ export const directoryHoursStyles: Migration = {
         ...props,
         styles: {
           ...props.styles,
+          phoneNumberFormat: "domestic",
+          phoneNumberLink: true,
           hours: {
             showCurrentStatus: true,
             timeFormat: "12h",

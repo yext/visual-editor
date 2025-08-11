@@ -59,6 +59,18 @@ export interface DirectoryStyles {
     backgroundColor?: BackgroundStyle;
   };
 
+  /**
+   * The display format for phone numbers on the cards.
+   * @defaultValue 'domestic'
+   */
+  phoneNumberFormat: "domestic" | "international";
+
+  /**
+   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
+   * @defaultValue false
+   */
+  phoneNumberLink: boolean;
+
   /** Styling for the hours display on each card. */
   hours: {
     showCurrentStatus: boolean;
@@ -143,6 +155,23 @@ const directoryFields: Fields<DirectoryProps> = {
           ),
         },
       }),
+      phoneNumberFormat: YextField(
+        msg("fields.phoneNumberFormat", "Phone Number Format"),
+        {
+          type: "radio",
+          options: "PHONE_OPTIONS",
+        }
+      ),
+      phoneNumberLink: YextField(
+        msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
       hours: YextField(msg("fields.hours", "Hours"), {
         type: "object",
         objectFields: {
@@ -279,13 +308,9 @@ const DirectoryCard = ({
       {profile.mainPhone && (
         <PhoneAtom
           phoneNumber={profile.mainPhone}
-          includeHyperlink={false}
+          includeHyperlink={styles.phoneNumberLink}
           includeIcon={false}
-          format={
-            profile.mainPhone.slice(0, 2) === "+1"
-              ? "domestic"
-              : "international"
-          }
+          format={styles.phoneNumberFormat}
         />
       )}
       {profile.address && (
@@ -458,6 +483,8 @@ export const Directory: ComponentConfig<DirectoryProps> = {
         showDayNames: true,
         dayOfWeekFormat: "long",
       },
+      phoneNumberFormat: "domestic",
+      phoneNumberLink: true,
     },
     analytics: {
       scope: "directory",
