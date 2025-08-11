@@ -18,30 +18,4 @@ export const directoryHoursStyles: Migration = {
       };
     },
   },
-  NearbyLocationsSection: {
-    action: "updated",
-    propTransformation: (props) => {
-      const { phoneNumberFormat, phoneNumberLink, hours, cards, ...styles } =
-        props.styles || {};
-
-      return {
-        ...props,
-        styles: {
-          ...styles,
-          cards: {
-            ...cards,
-            phoneNumberFormat: phoneNumberFormat ?? "domestic",
-            phoneNumberLink: phoneNumberLink ?? true,
-            hours: {
-              showCurrentStatus: true,
-              timeFormat: "12h",
-              showDayNames: true,
-              dayOfWeekFormat: "long",
-              ...hours,
-            },
-          },
-        },
-      };
-    },
-  },
 };

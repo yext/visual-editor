@@ -77,25 +77,26 @@ export interface NearbyLocationsStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    /**
-     * The display format for phone numbers on the cards.
-     * @defaultValue 'domestic'
-     */
-    phoneNumberFormat: "domestic" | "international";
+  };
 
-    /**
-     * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
-     * @defaultValue false
-     */
-    phoneNumberLink: boolean;
+  /**
+   * The display format for phone numbers on the cards.
+   * @defaultValue 'domestic'
+   */
+  phoneNumberFormat: "domestic" | "international";
 
-    /** Styling for the hours display on each card. */
-    hours: {
-      showCurrentStatus: boolean;
-      timeFormat?: "12h" | "24h";
-      dayOfWeekFormat?: "short" | "long";
-      showDayNames?: boolean;
-    };
+  /**
+   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
+   * @defaultValue false
+   */
+  phoneNumberLink: boolean;
+
+  /** Styling for the hours display on each card. */
+  hours: {
+    showCurrentStatus: boolean;
+    timeFormat?: "12h" | "24h";
+    dayOfWeekFormat?: "short" | "long";
+    showDayNames?: boolean;
   };
 }
 
@@ -194,15 +195,30 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
-          phoneNumberFormat: YextField(
-            msg("fields.phoneNumberFormat", "Phone Number Format"),
-            {
-              type: "radio",
-              options: "PHONE_OPTIONS",
-            }
-          ),
-          phoneNumberLink: YextField(
-            msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+        },
+      }),
+      phoneNumberFormat: YextField(
+        msg("fields.phoneNumberFormat", "Phone Number Format"),
+        {
+          type: "radio",
+          options: "PHONE_OPTIONS",
+        }
+      ),
+      phoneNumberLink: YextField(
+        msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
+      hours: YextField(msg("fields.hours", "Hours"), {
+        type: "object",
+        objectFields: {
+          showCurrentStatus: YextField(
+            msg("fields.showCurrentStatus", "Show Current Status"),
             {
               type: "radio",
               options: [
@@ -211,60 +227,33 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
               ],
             }
           ),
-          hours: YextField(msg("fields.hours", "Hours"), {
-            type: "object",
-            objectFields: {
-              showCurrentStatus: YextField(
-                msg("fields.showCurrentStatus", "Show Current Status"),
-                {
-                  type: "radio",
-                  options: [
-                    { label: msg("fields.options.yes", "Yes"), value: true },
-                    { label: msg("fields.options.no", "No"), value: false },
-                  ],
-                }
-              ),
-              timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.hour12", "12-hour"),
-                    value: "12h",
-                  },
-                  {
-                    label: msg("fields.options.hour24", "24-hour"),
-                    value: "24h",
-                  },
-                ],
-              }),
-              showDayNames: YextField(
-                msg("fields.showDayNames", "Show Day Names"),
-                {
-                  type: "radio",
-                  options: [
-                    { label: msg("fields.options.yes", "Yes"), value: true },
-                    { label: msg("fields.options.no", "No"), value: false },
-                  ],
-                }
-              ),
-              dayOfWeekFormat: YextField(
-                msg("fields.dayOfWeekFormat", "Day of Week Format"),
-                {
-                  type: "radio",
-                  options: [
-                    {
-                      label: msg("fields.options.short", "Short"),
-                      value: "short",
-                    },
-                    {
-                      label: msg("fields.options.long", "Long"),
-                      value: "long",
-                    },
-                  ],
-                }
-              ),
-            },
+          timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
+              { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
+            ],
           }),
+          showDayNames: YextField(
+            msg("fields.showDayNames", "Show Day Names"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          dayOfWeekFormat: YextField(
+            msg("fields.dayOfWeekFormat", "Day of Week Format"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.short", "Short"), value: "short" },
+                { label: msg("fields.options.long", "Long"), value: "long" },
+              ],
+            }
+          ),
         },
       }),
     },
@@ -347,10 +336,10 @@ const LocationCard = ({
             hours={hours}
             className="h-full"
             timezone={timezone}
-            showCurrentStatus={styles?.cards?.hours?.showCurrentStatus}
-            dayOfWeekFormat={styles?.cards?.hours?.dayOfWeekFormat}
-            showDayNames={styles?.cards?.hours?.showDayNames}
-            timeFormat={styles?.cards?.hours?.timeFormat}
+            showCurrentStatus={styles?.hours?.showCurrentStatus}
+            dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+            showDayNames={styles?.hours?.showDayNames}
+            timeFormat={styles?.hours?.timeFormat}
           />
         </div>
       )}
@@ -358,8 +347,8 @@ const LocationCard = ({
         <PhoneAtom
           eventName={`phone${cardNumber}`}
           phoneNumber={mainPhone}
-          format={styles?.cards.phoneNumberFormat}
-          includeHyperlink={!!styles?.cards.phoneNumberLink}
+          format={styles?.phoneNumberFormat}
+          includeHyperlink={styles?.phoneNumberLink}
           includeIcon={false}
         />
       )}
@@ -619,15 +608,15 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
         cards: {
           backgroundColor: backgroundColors.background1.value,
           headingLevel: 3,
-          phoneNumberFormat: "domestic",
-          phoneNumberLink: true,
-          hours: {
-            showCurrentStatus: true,
-            timeFormat: "12h",
-            showDayNames: true,
-            dayOfWeekFormat: "long",
-          },
         },
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: true,
+          dayOfWeekFormat: "long",
+        },
+        phoneNumberFormat: "domestic",
+        phoneNumberLink: true,
       },
       analytics: {
         scope: "nearbyLocationsSection",

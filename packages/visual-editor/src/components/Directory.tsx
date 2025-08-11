@@ -57,13 +57,14 @@ export interface DirectoryStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    /** Styling for the hours display on each card. */
-    hours: {
-      showCurrentStatus: boolean;
-      timeFormat?: "12h" | "24h";
-      dayOfWeekFormat?: "short" | "long";
-      showDayNames?: boolean;
-    };
+  };
+
+  /** Styling for the hours display on each card. */
+  hours: {
+    showCurrentStatus: boolean;
+    timeFormat?: "12h" | "24h";
+    dayOfWeekFormat?: "short" | "long";
+    showDayNames?: boolean;
   };
 }
 
@@ -140,60 +141,60 @@ const directoryFields: Fields<DirectoryProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
-          hours: YextField(msg("fields.hours", "Hours"), {
-            type: "object",
-            objectFields: {
-              showCurrentStatus: YextField(
-                msg("fields.showCurrentStatus", "Show Current Status"),
-                {
-                  type: "radio",
-                  options: [
-                    { label: msg("fields.options.yes", "Yes"), value: true },
-                    { label: msg("fields.options.no", "No"), value: false },
-                  ],
-                }
-              ),
-              timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.hour12", "12-hour"),
-                    value: "12h",
-                  },
-                  {
-                    label: msg("fields.options.hour24", "24-hour"),
-                    value: "24h",
-                  },
-                ],
-              }),
-              showDayNames: YextField(
-                msg("fields.showDayNames", "Show Day Names"),
-                {
-                  type: "radio",
-                  options: [
-                    { label: msg("fields.options.yes", "Yes"), value: true },
-                    { label: msg("fields.options.no", "No"), value: false },
-                  ],
-                }
-              ),
-              dayOfWeekFormat: YextField(
-                msg("fields.dayOfWeekFormat", "Day of Week Format"),
-                {
-                  type: "radio",
-                  options: [
-                    {
-                      label: msg("fields.options.short", "Short"),
-                      value: "short",
-                    },
-                    {
-                      label: msg("fields.options.long", "Long"),
-                      value: "long",
-                    },
-                  ],
-                }
-              ),
-            },
+        },
+      }),
+      hours: YextField(msg("fields.hours", "Hours"), {
+        type: "object",
+        objectFields: {
+          showCurrentStatus: YextField(
+            msg("fields.showCurrentStatus", "Show Current Status"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.hour12", "12-hour"),
+                value: "12h",
+              },
+              {
+                label: msg("fields.options.hour24", "24-hour"),
+                value: "24h",
+              },
+            ],
           }),
+          showDayNames: YextField(
+            msg("fields.showDayNames", "Show Day Names"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          dayOfWeekFormat: YextField(
+            msg("fields.dayOfWeekFormat", "Day of Week Format"),
+            {
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.short", "Short"),
+                  value: "short",
+                },
+                {
+                  label: msg("fields.options.long", "Long"),
+                  value: "long",
+                },
+              ],
+            }
+          ),
         },
       }),
     },
@@ -235,14 +236,15 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 const DirectoryCard = ({
   cardNumber,
   profile,
-  cardStyles,
+  styles,
 }: {
   cardNumber: number;
   profile: any;
-  cardStyles: DirectoryProps["styles"]["cards"];
+  styles: DirectoryProps["styles"];
 }) => {
   const { relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
+  const cardStyles: DirectoryProps["styles"]["cards"] = styles["cards"];
 
   return (
     <Background
@@ -266,10 +268,10 @@ const DirectoryCard = ({
               hours={profile.hours}
               className="h-full"
               timezone={profile.timezone}
-              showCurrentStatus={cardStyles?.hours?.showCurrentStatus}
-              dayOfWeekFormat={cardStyles?.hours?.dayOfWeekFormat}
-              showDayNames={cardStyles?.hours?.showDayNames}
-              timeFormat={cardStyles?.hours?.timeFormat}
+              showCurrentStatus={styles?.hours?.showCurrentStatus}
+              dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+              showDayNames={styles?.hours?.showDayNames}
+              timeFormat={styles?.hours?.timeFormat}
             />
           </div>
         )}
@@ -301,10 +303,10 @@ const DirectoryCard = ({
 // DirectoryGrid uses PageSection's theme config for styling.
 const DirectoryGrid = ({
   directoryChildren,
-  cardStyles,
+  styles,
 }: {
   directoryChildren: any[];
-  cardStyles: DirectoryProps["styles"]["cards"];
+  styles: DirectoryProps["styles"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -324,7 +326,7 @@ const DirectoryGrid = ({
           key={idx}
           cardNumber={idx}
           profile={child}
-          cardStyles={cardStyles}
+          styles={styles}
         />
       ))}
     </PageSection>
@@ -406,7 +408,7 @@ const DirectoryComponent = ({ data, styles, analytics }: DirectoryProps) => {
         isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={streamDocument.dm_directoryChildren}
-            cardStyles={styles.cards}
+            styles={styles}
           />
         )}
       {streamDocument.dm_directoryChildren &&
@@ -449,12 +451,12 @@ export const Directory: ComponentConfig<DirectoryProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
-        hours: {
-          showCurrentStatus: true,
-          timeFormat: "12h",
-          showDayNames: true,
-          dayOfWeekFormat: "long",
-        },
+      },
+      hours: {
+        showCurrentStatus: true,
+        timeFormat: "12h",
+        showDayNames: true,
+        dayOfWeekFormat: "long",
       },
     },
     analytics: {
