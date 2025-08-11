@@ -43,7 +43,10 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   };
 
   return (
-    <div className="components w-full flex flex-col sm:flex-row">
+    <Background
+      background={styles.backgroundColor}
+      className="components w-full flex flex-col sm:flex-row"
+    >
       {/* Desktop left image / Mobile top image */}
       <CompactHeroImage
         className={themeManagerCn(
@@ -53,19 +56,17 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
       />
 
       {/* Mobile container styles */}
-      <Background
-        background={styles.backgroundColor}
+      <div
         className={themeManagerCn(
           heroContentParentCn(styles),
           "sm:hidden max-w-[700px] py-pageSection-verticalPadding pt-6 px-4"
         )}
       >
         <HeroContent data={data} styles={styles} />
-      </Background>
+      </div>
 
       {/* Desktop container */}
-      <Background
-        background={styles.backgroundColor}
+      <div
         className={themeManagerCn(
           heroContentParentCn(styles),
           "sm:max-w-[400px] py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex self-center lg:min-w-[350px]"
@@ -87,7 +88,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
         }
       >
         <HeroContent data={data} styles={styles} />
-      </Background>
+      </div>
 
       {/* Desktop right image / Mobile bottom image */}
       <CompactHeroImage
@@ -96,6 +97,6 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
           styles.desktopImagePosition === "left" && "sm:hidden"
         )}
       />
-    </div>
+    </Background>
   );
 };
