@@ -154,8 +154,6 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
       );
     }, []);
 
-    console.log("Rendering Image Field with label:", field?.label);
-
     return (
       <>
         {/* Thumbnail */}
