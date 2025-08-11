@@ -16,15 +16,13 @@ import {
   YextEntityField,
   getLocationPath,
   resolveComponentData,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  Address,
-  AnalyticsScopeProvider,
-  HoursStatus,
-} from "@yext/pages-components";
+import { Address, AnalyticsScopeProvider } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
+import * as React from "react";
 
 export interface DirectoryData {
   /**
@@ -59,6 +57,13 @@ export interface DirectoryStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
+    /** Styling for the hours display on each card. */
+    hours: {
+      showCurrentStatus: boolean;
+      timeFormat?: "12h" | "24h";
+      dayOfWeekFormat?: "short" | "long";
+      showDayNames?: boolean;
+    };
   };
 }
 
@@ -202,12 +207,15 @@ const DirectoryCard = ({
           </Heading>
         </MaybeLink>
         {profile.hours && (
-          <div className="font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatus
+          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+            <HoursStatusAtom
               hours={profile.hours}
-              timezone={profile.timezone}
               className="h-full"
-              dayOfWeekTemplate={() => <></>}
+              timezone={profile.timezone}
+              showCurrentStatus={cardStyles?.hours?.showCurrentStatus}
+              dayOfWeekFormat={cardStyles?.hours?.dayOfWeekFormat}
+              showDayNames={cardStyles?.hours?.showDayNames}
+              timeFormat={cardStyles?.hours?.timeFormat}
             />
           </div>
         )}
@@ -387,6 +395,12 @@ export const Directory: ComponentConfig<DirectoryProps> = {
       cards: {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: true,
+          dayOfWeekFormat: "long",
+        },
       },
     },
     analytics: {

@@ -77,26 +77,25 @@ export interface NearbyLocationsStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-  };
+    /**
+     * The display format for phone numbers on the cards.
+     * @defaultValue 'domestic'
+     */
+    phoneNumberFormat: "domestic" | "international";
 
-  /**
-   * The display format for phone numbers on the cards.
-   * @defaultValue 'domestic'
-   */
-  phoneNumberFormat: "domestic" | "international";
+    /**
+     * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
+     * @defaultValue false
+     */
+    phoneNumberLink: boolean;
 
-  /**
-   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
-   * @defaultValue false
-   */
-  phoneNumberLink: boolean;
-
-  /** Styling for the hours display on each card. */
-  hours: {
-    showCurrentStatus: boolean;
-    timeFormat?: "12h" | "24h";
-    dayOfWeekFormat?: "short" | "long";
-    showDayNames?: boolean;
+    /** Styling for the hours display on each card. */
+    hours: {
+      showCurrentStatus: boolean;
+      timeFormat?: "12h" | "24h";
+      dayOfWeekFormat?: "short" | "long";
+      showDayNames?: boolean;
+    };
   };
 }
 
@@ -336,10 +335,10 @@ const LocationCard = ({
             hours={hours}
             className="h-full"
             timezone={timezone}
-            showCurrentStatus={styles?.hours?.showCurrentStatus}
-            dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
-            showDayNames={styles?.hours?.showDayNames}
-            timeFormat={styles?.hours?.timeFormat}
+            showCurrentStatus={styles?.cards?.hours?.showCurrentStatus}
+            dayOfWeekFormat={styles?.cards?.hours?.dayOfWeekFormat}
+            showDayNames={styles?.cards?.hours?.showDayNames}
+            timeFormat={styles?.cards?.hours?.timeFormat}
           />
         </div>
       )}
@@ -347,8 +346,8 @@ const LocationCard = ({
         <PhoneAtom
           eventName={`phone${cardNumber}`}
           phoneNumber={mainPhone}
-          format={styles?.phoneNumberFormat}
-          includeHyperlink={styles?.phoneNumberLink}
+          format={styles?.cards.phoneNumberFormat}
+          includeHyperlink={!!styles?.cards.phoneNumberLink}
           includeIcon={false}
         />
       )}
@@ -608,15 +607,15 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
         cards: {
           backgroundColor: backgroundColors.background1.value,
           headingLevel: 3,
+          phoneNumberFormat: "domestic",
+          phoneNumberLink: true,
+          hours: {
+            showCurrentStatus: true,
+            timeFormat: "12h",
+            showDayNames: true,
+            dayOfWeekFormat: "long",
+          },
         },
-        hours: {
-          showCurrentStatus: true,
-          timeFormat: "12h",
-          showDayNames: true,
-          dayOfWeekFormat: "long",
-        },
-        phoneNumberFormat: "domestic",
-        phoneNumberLink: false,
       },
       analytics: {
         scope: "nearbyLocationsSection",
