@@ -5,7 +5,7 @@ import {
   TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
-import { RESTRICTED_CTA_CONSTANT_CONFIG } from "./EnhancedCallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -91,7 +91,7 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       title: titleField,
       dateTime: DateTimeSelector,
       description: descriptionField,
-      cta: RESTRICTED_CTA_CONSTANT_CONFIG,
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {

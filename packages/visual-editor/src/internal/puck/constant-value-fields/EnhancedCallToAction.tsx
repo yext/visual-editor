@@ -303,7 +303,7 @@ export const restrictedTranslatableCTAFields = (): Field<any> => {
 };
 
 // Restricted constant config for components that should only use textAndLink CTA type
-export const RESTRICTED_CTA_CONSTANT_CONFIG: CustomField<any> = {
+export const LINK_ONLY_CTA_CONFIG: CustomField<any> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const labelField = TranslatableStringField<any>(

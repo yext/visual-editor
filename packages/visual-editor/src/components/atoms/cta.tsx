@@ -101,8 +101,10 @@ export const CTA = ({
         {ctaType !== "presetImage" && (
           <FaAngleRight
             size={"12px"}
+            // For directoryLink, the theme value for caret is ignored
             className={variant === "directoryLink" ? "block sm:hidden" : ""}
             style={{
+              // display does not support custom Tailwind utilities so the property must be set directly
               display: variant === "directoryLink" ? "" : caretVisibility,
             }}
           />

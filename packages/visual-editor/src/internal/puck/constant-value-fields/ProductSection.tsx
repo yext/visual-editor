@@ -7,7 +7,7 @@ import {
 } from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { RESTRICTED_CTA_CONSTANT_CONFIG } from "./EnhancedCallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useMemo } from "react";
@@ -101,7 +101,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       name: nameField,
       category: categoryField,
       description: descriptionField,
-      cta: RESTRICTED_CTA_CONSTANT_CONFIG,
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {
