@@ -235,7 +235,7 @@ const myComponentFields: Fields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), and [YextEntityFieldSelector](##YextEntityFieldSelector).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
 
 ### Features
 
@@ -249,31 +249,34 @@ const myComponentFields: Fields<MyComponentProps> = {
 #### `YextField`
 
 ```tsx
-YextField(label: string, config: YextFieldConfig): Field<any>
+YextField(label: MsgString, config: YextFieldConfig): Field<any>
 ```
 
 **Parameters:**
 
-- `label`: `string` — The name of the field shown in the visual editor.
+- `label`: `MsgString` — The translated name of the field shown in the visual editor. Must use `msg()` function to ensure translation compliance.
 - `config`: `YextFieldConfig` — Configuration object describing the field type and its behavior.
 
 ### Usage
 
 ```tsx
-import { YextField } from "@yext/visual-editor";
+import { YextField, msg } from "@yext/visual-editor";
 
 const myComponentFields: Fields<myComponentProps> = {
-  address: YextField<any, AddressType>("Address", {
+  address: YextField<any, AddressType>(msg("fields.address", "Address"), {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),
-  showGetDirections: YextField("Show Get Directions Link", {
-    type: "radio",
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-    ],
-  }),
+  showGetDirections: YextField(
+    msg("fields.showGetDirections", "Show Get Directions Link"),
+    {
+      type: "radio",
+      options: [
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+      ],
+    }
+  ),
 };
 
 export const MyComponent: ComponentConfig<myComponentProps> = {
@@ -282,6 +285,25 @@ export const MyComponent: ComponentConfig<myComponentProps> = {
 };
 ```
 
+### Translation Requirements
+
+All field labels in `YextField` must use the `msg()` function to ensure proper internationalization. This enforces translation compliance at compile time through TypeScript's type system.
+
+```tsx
+import { msg } from "@yext/visual-editor";
+
+// Correct - uses msg() function
+title: YextField(msg("fields.title", "Title"), { type: "text" });
+
+// Incorrect - plain string will cause TypeScript error
+title: YextField("Title", { type: "text" });
+```
+
+The `msg()` function takes two parameters:
+
+- `key`: Translation key (e.g., `"fields.title"`)
+- `defaultValue`: Fallback text shown if translation is missing
+
 ### Supported Field Types
 
 #### Text Field
@@ -289,10 +311,10 @@ export const MyComponent: ComponentConfig<myComponentProps> = {
 Creates a simple string input. Supports multi-line input.
 
 ```tsx
-title: YextField("Title", {
+title: YextField(msg("fields.title", "Title"), {
   type: "text",
 }),
-description: YextField("Description", {
+description: YextField(msg("fields.description", "Description"), {
   type: "text",
   isMultiline: true
 })
@@ -310,12 +332,12 @@ description: YextField("Description", {
 Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the [BasicSelector](##BasicSelector).
 
 ```tsx
-variant: YextField("CTA Variant", {
+variant: YextField(msg("fields.variant", "CTA Variant"), {
   type: "select",
   options: "CTA_VARIANT",
   hasSearch: true,
 }),
-aspectRatio: YextField("Aspect Ratio", {
+aspectRatio: YextField(msg("fields.aspectRatio", "Aspect Ratio"), {
   type: "select",
   options: [
     { label: "1:1", value: 1 },
@@ -338,11 +360,11 @@ aspectRatio: YextField("Aspect Ratio", {
 Creates a radio button group. Options can be passed directly or via a `ThemeOptions` key.
 
 ```tsx
-alignment: YextField("Alignment", {
+alignment: YextField(msg("fields.alignment", "Alignment"), {
   type: "radio",
   options: "ALIGNMENT",
 }),
-includeHyperlink: YextField("Include Hyperlink", {
+includeHyperlink: YextField(msg("fields.includeHyperlink", "Include Hyperlink"), {
   type: "radio",
   options: [
     { label: "Yes", value: true },
@@ -363,7 +385,7 @@ includeHyperlink: YextField("Include Hyperlink", {
 Creates a numeric input field with optional min and max values. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/number)
 
 ```tsx
-spacing: YextField("Spacing", { type: "number" });
+spacing: YextField(msg("fields.spacing", "Spacing"), { type: "number" });
 ```
 
 **Props:**
@@ -379,11 +401,11 @@ spacing: YextField("Spacing", { type: "number" });
 Creates a repeatable field group (e.g., a list of items). Define inner fields using `arrayFields`. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/array)
 
 ```tsx
-items: YextField("Items", {
+items: YextField(msg("fields.items", "Items"), {
   type: "array",
   arrayFields: {
-    title: YextField("Title", { type: "text" }),
-    url: YextField("URL", { type: "text" }),
+    title: YextField(msg("fields.title", "Title"), { type: "text" }),
+    url: YextField(msg("fields.url", "URL"), { type: "text" }),
   },
 });
 ```
@@ -404,11 +426,11 @@ items: YextField("Items", {
 Creates a nested object field with multiple subfields. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/object)
 
 ```tsx
-card: YextField("Card", {
+card: YextField(msg("fields.card", "Card"), {
   type: "object",
   objectFields: {
-    title: YextField("Title", { type: "text" }),
-    description: YextField("Description", {
+    title: YextField(msg("fields.title", "Title"), { type: "text" }),
+    description: YextField(msg("fields.description", "Description"), {
       type: "text",
       isMultiline: true,
     }),
@@ -460,3 +482,27 @@ limit: YextField("Items Limit", {
 - `hideNumberFieldRadioLabel`: `boolean`
 - `showNumberFieldRadioLabel`: `boolean`
 - `defaultCustomValue `: `number`
+
+---
+
+#### Translatable String Field
+
+Creates a translatable string input with optional entity field embedding and locale management. [Additional documentation](##TranslatableStringField).
+
+```tsx
+directoryRoot: YextField(msg("fields.directoryRoot", "Directory Root Link Label"), {
+  type: "translatableString",
+  filter: { types: ["type.string"] }
+}),
+title: YextField(msg("fields.title", "Page Title"), {
+  type: "translatableString",
+  filter: { types: ["type.string"] },
+  showApplyAllOption: true
+}),
+```
+
+**Props:**
+
+- `type`: `"translatableString"`
+- `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
+- `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
