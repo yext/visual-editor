@@ -1,4 +1,5 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import {
   EventSectionType,
   EventStruct,
@@ -7,7 +8,7 @@ import {
 } from "../../../types/types.ts";
 import { translatableCTAFields } from "./CallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -58,7 +59,6 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
 };
 
 const EventStructArrayField = (): ArrayField<EventStruct[]> => {
-  const { t, i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
 
   const titleField = useMemo(() => {
@@ -75,12 +75,12 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   }, []);
 
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       image: {
         ...IMAGE_CONSTANT_CONFIG,
-        label: t("fields.image", "Image"),
+        label: pt("fields.image", "Image"),
       },
       title: titleField,
       dateTime: DateTimeSelector,
@@ -89,13 +89,14 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {
+      const { i18n } = useTranslation();
       const translation =
         item?.title &&
         resolveComponentData(item.title, i18n.language, streamDocument);
       if (translation) {
         return translation;
       }
-      return t("event", "Event") + " " + ((i ?? 0) + 1);
+      return pt("event", "Event") + " " + ((i ?? 0) + 1);
     },
   };
 };

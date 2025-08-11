@@ -31,7 +31,6 @@ import {
   pt,
   ThemeOptions,
   usePlatformTranslation,
-  TranslatableStringField,
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
@@ -150,8 +149,9 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
             },
             getItemSummary: (item): string => {

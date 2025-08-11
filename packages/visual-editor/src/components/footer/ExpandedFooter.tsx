@@ -16,7 +16,6 @@ import {
   CTA,
   TranslatableCTA,
   PageSection,
-  TranslatableStringField,
   TranslatableString,
   Background,
   useDocument,
@@ -195,6 +194,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   }
                 ),
               },
+              getItemSummary: (_, i) =>
+                pt("Image", "Image") + " " + ((i ?? 0) + 1),
             }
           ),
           expandedFooter: YextField(
@@ -212,16 +213,17 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                label: TranslatableStringField(msg("fields.label", "Label"), {
-                  types: ["type.string"],
+                label: YextField(msg("fields.label", "Label"), {
+                  type: "translatableString",
+                  filter: { types: ["type.string"] },
                 }),
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
                   arrayFields: {
-                    label: TranslatableStringField(
-                      msg("fields.label", "Label"),
-                      { types: ["type.string"] }
-                    ),
+                    label: YextField(msg("fields.label", "Label"), {
+                      type: "translatableString",
+                      filter: { types: ["type.string"] },
+                    }),
                     link: YextField(msg("fields.link", "Link"), {
                       type: "text",
                     }),
@@ -232,16 +234,31 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                     },
                   },
                   defaultItemProps: defaultFooterLink,
+                  getItemSummary: (item, i) => {
+                    const { i18n } = useTranslation();
+                    return (
+                      resolveComponentData(item.label, i18n.language) ||
+                      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                    );
+                  },
                 }),
               },
               defaultItemProps: defaultExpandedFooterLinks,
+              getItemSummary: (item, i) => {
+                const { i18n } = useTranslation();
+                return (
+                  resolveComponentData(item.label, i18n.language) ||
+                  pt("Category", "Category") + " " + ((i ?? 0) + 1)
+                );
+              },
             }
           ),
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -253,6 +270,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               },
             },
             defaultItemProps: defaultFooterLink,
+            getItemSummary: (item, i) => {
+              const { i18n } = useTranslation();
+              return (
+                resolveComponentData(item.label, i18n.language) ||
+                pt("Link", "Link") + " " + ((i ?? 0) + 1)
+              );
+            },
           }),
         },
       }),
@@ -268,17 +292,21 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 { label: msg("fields.options.no", "No"), value: false },
               ],
             }),
-            copyrightMessage: TranslatableStringField(
+            copyrightMessage: YextField(
               msg("fields.copyrightMessage", "Copyright Message"),
-              { types: ["type.string"] }
+              {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
+              }
             ),
             secondaryFooterLinks: YextField(
               msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(msg("fields.label", "Label"), {
-                    types: ["type.string"],
+                  label: YextField(msg("fields.label", "Label"), {
+                    type: "translatableString",
+                    filter: { types: ["type.string"] },
                   }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
@@ -290,6 +318,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   },
                 },
                 defaultItemProps: defaultFooterLink,
+                getItemSummary: (item, i) => {
+                  const { i18n } = useTranslation();
+                  return (
+                    resolveComponentData(item.label, i18n.language) ||
+                    pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                  );
+                },
               }
             ),
           },
