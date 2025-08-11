@@ -34,7 +34,7 @@ import {
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/100x100";
 
 export interface HeroData {
   /**
@@ -461,7 +461,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           primaryCta: {
             cta: {
               label: {
-                en: "Call To Action",
+                en: "Get Directions",
                 hasLocalizedValue: "true",
               },
               link: "#",
@@ -472,7 +472,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           secondaryCta: {
             cta: {
               label: {
-                en: "Call To Action",
+                en: "Learn More",
                 hasLocalizedValue: "true",
               },
               link: "#",
@@ -482,8 +482,8 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,
-            height: 360,
-            width: 640,
+            height: 100,
+            width: 100,
           },
         },
         constantValueEnabled: true,
