@@ -10,8 +10,9 @@ import {
   YextField,
   resolveComponentData,
   EnhancedTranslatableCTA,
+  CTA,
+  CTAProps,
 } from "@yext/visual-editor";
-import { CTA, CTAProps } from "../atoms/cta";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;

@@ -21,8 +21,8 @@ import {
   resolveYextStructField,
   themeManagerCn,
   getAnalyticsScopeHash,
+  CTA,
 } from "@yext/visual-editor";
-import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ImageStylingFields,

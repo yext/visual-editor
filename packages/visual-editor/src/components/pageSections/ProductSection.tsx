@@ -23,8 +23,8 @@ import {
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
+  CTA,
 } from "@yext/visual-editor";
-import { CTA } from "../atoms/cta";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";

@@ -28,8 +28,8 @@ import {
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
+  CTA,
 } from "@yext/visual-editor";
-import { CTA } from "../atoms/cta";
 import {
   ImageStylingFields,
   ImageStylingProps,
