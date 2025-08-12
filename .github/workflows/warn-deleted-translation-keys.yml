@@ -1,81 +1,130 @@
-- name: Detect deleted nested keys
-  id: detect
-  run: |
-    BASE_SHA=$(jq -r '.pull_request.base.sha' "$GITHUB_EVENT_PATH")
-    HEAD_SHA=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
+name: Warn on Deleted Translation Keys
 
-    LOCALE_DIR="packages/visual-editor/locales"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
-    echo "Base SHA: $BASE_SHA"
-    echo "Head SHA: $HEAD_SHA"
-    echo "Locale directory: $LOCALE_DIR"
+jobs:
+  detect-deleted-keys:
+    runs-on: ubuntu-latest
 
-    declare -A deleted_map
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    flatten_keys() {
-      jq -r 'paths(scalars) | map(tostring) | join(".")' "$1" | sort
-    }
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
-    files_changed=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$LOCALE_DIR")
-    echo "Changed locale files:"
-    echo "$files_changed"
+      - name: Detect deleted nested keys
+        id: detect
+        run: |
+          BASE_SHA=$(jq -r '.pull_request.base.sha' "$GITHUB_EVENT_PATH")
+          HEAD_SHA=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
 
-    for file in $files_changed; do
-      [[ "$file" != *.json ]] && continue
+          LOCALE_DIR="packages/visual-editor/locales"
+          declare -A deleted_map
 
-      echo "Checking locale file: $file"
-      LANG=$(basename "$(dirname "$file")")
-      echo "Detected language: $LANG"
+          flatten_keys() {
+            jq -r 'paths(scalars) | map(tostring) | join(".")' "$1" | sort
+          }
 
-      TMP_BASE=$(mktemp)
-      TMP_HEAD=$(mktemp)
+          for file in $(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$LOCALE_DIR"); do
+            [[ "$file" != *.json ]] && continue
 
-      git show "${BASE_SHA}:${file}" > "$TMP_BASE" 2>/dev/null || continue
-      git show "${HEAD_SHA}:${file}" > "$TMP_HEAD" 2>/dev/null || echo '{}' > "$TMP_HEAD"
+            LANG=$(basename "$(dirname "$file")")
 
-      flatten_keys "$TMP_BASE" > base_keys.txt
-      flatten_keys "$TMP_HEAD" > head_keys.txt
+            TMP_BASE=$(mktemp)
+            TMP_HEAD=$(mktemp)
 
-      DELETED_KEYS=$(comm -23 base_keys.txt head_keys.txt)
+            git show "${BASE_SHA}:${file}" > "$TMP_BASE" 2>/dev/null || continue
+            git show "${HEAD_SHA}:${file}" > "$TMP_HEAD" 2>/dev/null || echo '{}' > "$TMP_HEAD"
 
-      if [ -n "$DELETED_KEYS" ]; then
-        echo "Deleted keys found in $file:"
-        echo "$DELETED_KEYS"
-      fi
+            flatten_keys "$TMP_BASE" > base_keys.txt
+            flatten_keys "$TMP_HEAD" > head_keys.txt
 
-      while read -r key; do
-        [[ -z "$key" ]] && continue
-        deleted_map["$key"]+="${LANG} "
-      done < <(echo "$DELETED_KEYS")
-    done
+            while read -r key; do
+              [[ -z "$key" ]] && continue
+              deleted_map["$key"]+="${LANG} "
+            done < <(comm -23 base_keys.txt head_keys.txt)
+          done
 
-    echo "Total unique deleted keys: ${#deleted_map[@]}"
+          if [ ${#deleted_map[@]} -gt 0 ]; then
+            OUTPUT="### 🔤 Deleted Translation Keys (consolidated)\n"
 
-    if [ ${#deleted_map[@]} -gt 0 ]; then
-      OUTPUT="### 🔤 Deleted Translation Keys (consolidated)\n"
+            declare -A grouped
+            for key in "${!deleted_map[@]}"; do
+              group="${key%%.*}"
+              grouped["$group"]+="$key"$'\n'
+            done
 
-      declare -A grouped
-      for key in "${!deleted_map[@]}"; do
-        group="${key%%.*}"
-        grouped["$group"]+="$key"$'\n'
-      done
+            for group in $(printf "%s\n" "${!grouped[@]}" | sort); do
+              OUTPUT+="\n#### \`$group\`\n\n"
+              OUTPUT+="| Key | Languages Removed |\n| --- | ----------------- |\n"
 
-      for group in $(printf "%s\n" "${!grouped[@]}" | sort); do
-        OUTPUT+="\n#### \`$group\`\n\n"
-        OUTPUT+="| Key | Languages Removed |\n| --- | ----------------- |\n"
+              while read -r key; do
+                [[ -z "$key" ]] && continue
+                langs=$(echo "${deleted_map[$key]}" | xargs -n1 | sort | uniq | paste -sd ', ' -)
+                OUTPUT+="| \`$key\` | $langs |\n"
+              done < <(printf "%s" "${grouped[$group]}" | sort)
+            done
 
-        while read -r key; do
-          [[ -z "$key" ]] && continue
-          langs=$(echo "${deleted_map[$key]}" | xargs -n1 | sort | uniq | paste -sd ', ' -)
-          OUTPUT+="| \`$key\` | $langs |\n"
-        done < <(printf "%s" "${grouped[$group]}" | sort)
-      done
+            echo "comment<<EOF" >> "$GITHUB_OUTPUT"
+            echo -e "$OUTPUT" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+            echo "has_deleted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_deleted=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      echo "comment<<EOF" >> "$GITHUB_OUTPUT"
-      echo -e "$OUTPUT" >> "$GITHUB_OUTPUT"
-      echo "EOF" >> "$GITHUB_OUTPUT"
-      echo "has_deleted=true" >> "$GITHUB_OUTPUT"
-    else
-      echo "No deleted keys detected."
-      echo "has_deleted=false" >> "$GITHUB_OUTPUT"
-    fi
+      - name: Manage PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = "<!-- deleted-translations-warning -->";
+            const { owner, repo, number } = context.issue;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: number,
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+
+            const hasDeleted = '${{ steps.detect.outputs.has_deleted }}' === 'true';
+
+            if (hasDeleted) {
+              const commentBody = `## ⚠️ Deleted Translation Keys Detected\n\n${process.env.COMMENT}`;
+              const fullBody = `${marker}\n${commentBody}`;
+
+              if (existing) {
+                await github.rest.issues.updateComment({
+                  owner,
+                  repo,
+                  comment_id: existing.id,
+                  body: fullBody,
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  body: fullBody,
+                });
+              }
+            } else {
+              if (existing) {
+                await github.rest.issues.deleteComment({
+                  owner,
+                  repo,
+                  comment_id: existing.id,
+                });
+                console.log("✅ Removed outdated warning comment.");
+              } else {
+                console.log("ℹ️ No deleted keys and no comment found.");
+              }
+            }
+        env:
+          COMMENT: ${{ steps.detect.outputs.comment }}
