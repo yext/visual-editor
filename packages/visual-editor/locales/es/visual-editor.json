@@ -32,6 +32,22 @@
   "basicSelectorNoOptionsLabel": "No hay opciones disponibles",
   "body": "Cuerpo",
   "borderRadiusDefaultLabel": "Por defecto",
+  "breadcrumb": "Migaja de pan",
+  "businessInformation": "Información comercial",
+  "callToActions": "Llamar a las acciones",
+  "cancel": "Cancelar",
+  "categories": {
+    "other": "OTRO",
+    "pageSections": "Secciones de página"
+  },
+  "category": "Categoría",
+  "change": "Cambiar",
+  "chooseImage": "Elija imagen",
+  "close": "Cerca",
+  "closeHeaderMenu": "Menú de encabezado cerrar",
+  "closeMenu": "Menú cerrado",
+  "closed": "Cerrado",
+  "closesAt": "Cierra",
   "components": {
     "address": "DIRECCIÓN",
     "bannerSection": "Banner",
