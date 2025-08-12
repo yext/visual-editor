@@ -228,10 +228,13 @@ const tests: ComponentTest[] = [
           level: 1,
           align: "left",
         },
+        image: {
+          aspectRatio: 1.78,
+        },
       },
       liveVisibility: true,
     },
-    version: 13,
+    version: 14,
   },
   {
     name: "version 14 props using entity values with old CTA structure",
@@ -265,10 +268,13 @@ const tests: ComponentTest[] = [
           level: 1,
           align: "left",
         },
+        image: {
+          aspectRatio: 1.78,
+        },
       },
       liveVisibility: true,
     },
-    version: 13,
+    version: 14,
   },
   {
     name: "version 14 props with missing ctaType",
@@ -314,10 +320,13 @@ const tests: ComponentTest[] = [
           level: 1,
           align: "left",
         },
+        image: {
+          aspectRatio: 1.78,
+        },
       },
       liveVisibility: true,
     },
-    version: 13,
+    version: 14,
   },
 ];
 
