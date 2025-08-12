@@ -12,7 +12,8 @@ import { updateExpandedHeaderStylesMigration } from "./0010_update_expanded_head
 import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
 import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
 import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_banner_section.ts";
-import { addHeaderPosition } from "./0014_add_header_position.ts";
+import { directoryHoursStyles } from "./0014_directory_hours_styles.ts";
+import { addHeaderPosition } from "./0015_add_header_position.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -33,5 +34,6 @@ export const migrationRegistry: MigrationRegistry = [
   addDirectoryTitleMigration,
   addHeaderFooterMaxWidth,
   ignoreLocaleWarningBannerSection,
+  directoryHoursStyles,
   addHeaderPosition,
 ];
