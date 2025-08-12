@@ -409,7 +409,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   return (
     <div
-      className={`hidden md:flex flex-col ${
+      className={`flex flex-col ${
         styles.headerPosition === "sticky" ? "sticky top-0 z-50" : ""
       }`}
     >
