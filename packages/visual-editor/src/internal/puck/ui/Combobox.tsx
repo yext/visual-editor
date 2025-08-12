@@ -12,6 +12,7 @@ import {
 } from "./Command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { convertComputedStyleColorToHex } from "../../../utils/colors.ts";
 
 export type ComboboxOption = {
   label: string;
@@ -101,6 +102,10 @@ export const Combobox = ({
                     </p>
                   )}
                   {group.options.map((option) => {
+                    const [colorHexValue, setColorHexValue] = React.useState<
+                      string | undefined
+                    >(undefined);
+
                     return (
                       <CommandItem
                         className="ve-cursor-pointer"
@@ -119,8 +124,18 @@ export const Combobox = ({
                               : "ve-opacity-0"
                           )}
                         />
-                        <ColorIndicator color={option.color} />
-                        {option.label}
+                        <ColorIndicator
+                          color={option.color}
+                          setHexValue={setColorHexValue}
+                        />
+                        <div className="ve-flex ve-flex-col ve-gap-0.5">
+                          {option.label}
+                          {colorHexValue && (
+                            <span className="ve-text-sm ve-text-[#5B5D60]">
+                              {colorHexValue}
+                            </span>
+                          )}
+                        </div>
                       </CommandItem>
                     );
                   })}
@@ -134,14 +149,34 @@ export const Combobox = ({
   );
 };
 
-const ColorIndicator = ({ color }: { color?: string }) => {
+const ColorIndicator = ({
+  color,
+  setHexValue,
+}: {
+  color?: string;
+  setHexValue?: (s: string) => void;
+}) => {
+  const ref = React.useRef<HTMLDivElement>(null);
+  let colorHexValue = undefined;
+
+  React.useEffect(() => {
+    if (color && ref.current && setHexValue) {
+      colorHexValue = convertComputedStyleColorToHex(
+        window.getComputedStyle(ref.current).backgroundColor
+      );
+      setHexValue(colorHexValue);
+    }
+  }, [color, setHexValue]);
+
   if (!color) {
-    return;
+    return null;
   }
+
   return (
     <div
+      ref={ref}
       className={cn(
-        "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-3 ve-h-3 ve-rounded-sm ve-mr-2 components",
+        "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-5 ve-h-5 ve-rounded-sm ve-mr-2 components",
         color
       )}
     />

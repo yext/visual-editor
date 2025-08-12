@@ -1,5 +1,7 @@
 {
+  "Category": "Kategoria",
   "Heading": "Nagłówek",
+  "Image": "Obraz",
   "Link": "Połączyć",
   "actions": {
     "copyToClipboard": "Kopiuj do schowka",
@@ -17,6 +19,7 @@
     "region": "Stan/region",
     "sublocality": "Sublokalność"
   },
+  "altText": "Tekst alt",
   "applyAll": "Zastosuj się do wszystkich lokalizacji",
   "applyAllWithLabel": "Zastosuj {{fieldLabel}} do wszystkich lokalizacji",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Sekcje stron"
   },
   "category": "Kategoria",
+  "change": "Zmiana",
+  "chooseImage": "Wybierz obraz",
   "close": "Zamknąć",
   "closeHeaderMenu": "Zamknij menu nagłówka",
   "closeMenu": "Zamknij menu",
@@ -89,6 +94,7 @@
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "date": "Data",
   "dateAndTime": "Data i godzina",
+  "delete": "Usuwać",
   "deleteItem": "Usuń element",
   "discardChanges": {
     "discardChanges": "Odrzuć zmiany",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Karta wyrównania",
+    "alignItems": "Wyrównaj elementy",
+    "alignment": "Wyrównanie",
     "analytics": "Analityka",
     "answer": "Odpowiedź",
     "apiKey": "Klucz API",
@@ -122,12 +130,14 @@
     "coordinates": "Współrzędne",
     "copyrightMessage": "Wiadomość o prawach autorskich",
     "copyrightText": "Tekst praw autorskich",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "Wariant CTA",
     "data": "Dane",
     "dayOfWeekFormat": "Format dnia tygodnia",
     "description": "Opis",
     "destinationURL": "URL docelowego",
+    "direction": "Kierunek",
     "directoryRootLinkLabel": "Director Count Link",
     "email": "E-mail",
     "emailList": "Lista e -mail",
@@ -152,6 +162,7 @@
     "hours": "Godziny",
     "hoursColumn": "Kolumna godzin",
     "hoursText": "SMS -y",
+    "html": "HTML",
     "image": "Obraz",
     "imageOrientation": "Orientacja obrazu",
     "imageUrl": "URL obrazu",
@@ -162,6 +173,8 @@
     "insightSection": "Sekcja wglądu",
     "insights": "Spostrzeżenia",
     "instagramLink": "Link Instagram",
+    "javascript": "JavaScript",
+    "justifyContent": "Uzasadnić treść",
     "label": "Etykieta",
     "level": "Poziom",
     "limit": "Limit",
@@ -171,6 +184,7 @@
     "links": "Spinki do mankietów",
     "linksAlignment": "Wyrównanie linków",
     "listLength": "Długość listy",
+    "liveVisibility": "Widoczne na stronie na żywo",
     "localGeomodifier": "Lokalny geomodyfikator",
     "localGeomodifierHeadingLevel": "Lokalny poziom nagłówka geomodifieru",
     "logo": "Logo",
@@ -261,6 +275,7 @@
     "secondaryHeaderLinks": "Wtórne linki nagłówka",
     "secondaryLinks": "Linki wtórne",
     "sectionHeading": "Nagłówek sekcji",
+    "sectionHeadingText": "Tekst nagłówka sekcji",
     "servicesColumn": "Kolumna usług",
     "servicesList": "Lista usług",
     "show": "Pokazywać",
@@ -291,6 +306,7 @@
     "values": "Wartości",
     "variant": "Wariant",
     "visibleOnLivePage": "Widoczne na stronie na żywo",
+    "wrap": "Zawinąć",
     "xLink": "X link",
     "youtubeLink": "Link YouTube"
   },

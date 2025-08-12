@@ -1,5 +1,7 @@
 {
+  "Category": "カテゴリ",
   "Heading": "見出し",
+  "Image": "画像",
   "Link": "リンク",
   "actions": {
     "copyToClipboard": "クリップボードにコピーします",
@@ -17,6 +19,7 @@
     "region": "州/地域",
     "sublocality": "サブロカリティ"
   },
+  "altText": "altテキスト",
   "applyAll": "すべてのロケールに適用します",
   "applyAllWithLabel": "すべてのロケールに{{fieldlabel}}を適用します",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "ページセクション"
   },
   "category": "カテゴリ",
+  "change": "変化",
+  "chooseImage": "画像を選択します",
   "close": "近い",
   "closeHeaderMenu": "ヘッダーを閉じるメニュー",
   "closeMenu": "メニューを閉じます",
@@ -89,6 +94,7 @@
   "customSearchArea": "カスタム検索領域",
   "date": "日付",
   "dateAndTime": "日時",
+  "delete": "消去",
   "deleteItem": "アイテムを削除します",
   "discardChanges": {
     "discardChanges": "変更を破棄します",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "住所",
     "alignCard": "カードを調整します",
+    "alignItems": "アイテムを調整します",
+    "alignment": "アライメント",
     "analytics": "分析",
     "answer": "答え",
     "apiKey": "APIキー",
@@ -122,12 +130,14 @@
     "coordinates": "座標",
     "copyrightMessage": "著作権メッセージ",
     "copyrightText": "著作権テキスト",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTAバリアント",
     "data": "データ",
     "dayOfWeekFormat": "曜日の形式",
     "description": "説明",
     "destinationURL": "宛先URL",
+    "direction": "方向",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
     "email": "メール",
     "emailList": "メーリングリスト",
@@ -152,6 +162,7 @@
     "hours": "時間",
     "hoursColumn": "時間列",
     "hoursText": "時間テキスト",
+    "html": "HTML",
     "image": "画像",
     "imageOrientation": "画像の向き",
     "imageUrl": "画像URL",
@@ -162,6 +173,8 @@
     "insightSection": "洞察セクション",
     "insights": "洞察",
     "instagramLink": "Instagramリンク",
+    "javascript": "JavaScript",
+    "justifyContent": "コンテンツを正当化します",
     "label": "ラベル",
     "level": "レベル",
     "limit": "制限",
@@ -171,6 +184,7 @@
     "links": "リンク",
     "linksAlignment": "リンクアライメント",
     "listLength": "リストの長さ",
+    "liveVisibility": "ライブページに表示されます",
     "localGeomodifier": "ローカルジオモジファイア",
     "localGeomodifierHeadingLevel": "ローカル地球層の見出しレベル",
     "logo": "ロゴ",
@@ -261,6 +275,7 @@
     "secondaryHeaderLinks": "セカンダリヘッダーリンク",
     "secondaryLinks": "二次リンク",
     "sectionHeading": "セクションの見出し",
+    "sectionHeadingText": "セクション見出しテキスト",
     "servicesColumn": "サービスコラム",
     "servicesList": "サービスリスト",
     "show": "見せる",
@@ -291,6 +306,7 @@
     "values": "値",
     "variant": "変異体",
     "visibleOnLivePage": "ライブページに表示されます",
+    "wrap": "包む",
     "xLink": "Xリンク",
     "youtubeLink": "YouTubeリンク"
   },

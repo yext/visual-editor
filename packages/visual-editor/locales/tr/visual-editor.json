@@ -1,5 +1,7 @@
 {
+  "Category": "Kategori",
   "Heading": "Başlık",
+  "Image": "İmaj",
   "Link": "Bağlantı",
   "actions": {
     "copyToClipboard": "Panoya Kopyala",
@@ -17,6 +19,7 @@
     "region": "Eyalet/bölge",
     "sublocality": "Subloku"
   },
+  "altText": "Alt metin",
   "applyAll": "Tüm yerellere başvurun",
   "applyAllWithLabel": "Tüm yerellere {{fieldLabel}} uygulayın",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Sayfa bölümleri"
   },
   "category": "Kategori",
+  "change": "Değiştirmek",
+  "chooseImage": "Resmi Seçin",
   "close": "Kapalı",
   "closeHeaderMenu": "Başlık menüsünü kapat",
   "closeMenu": "Kapat Menüsü",
@@ -89,6 +94,7 @@
   "customSearchArea": "Özel arama alanı",
   "date": "Tarih",
   "dateAndTime": "Tarih ve saat",
+  "delete": "Silmek",
   "deleteItem": "Öğeyi sil",
   "discardChanges": {
     "discardChanges": "Değişiklikleri at",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Kartı hizalayın",
+    "alignItems": "Öğeleri hizalayın",
+    "alignment": "Uyuşma",
     "analytics": "Analitik",
     "answer": "Cevap",
     "apiKey": "API Anahtarı",
@@ -122,12 +130,14 @@
     "coordinates": "Koordinatlar",
     "copyrightMessage": "Telif hakkı mesajı",
     "copyrightText": "Telif hakkı metni",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA varyantı",
     "data": "Veri",
     "dayOfWeekFormat": "Haftanın Günü Biçimi",
     "description": "Tanım",
     "destinationURL": "Hedef URL",
+    "direction": "Yön",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
     "email": "E -posta",
     "emailList": "E -posta Listesi",
@@ -152,6 +162,7 @@
     "hours": "Saat",
     "hoursColumn": "Saat sütunu",
     "hoursText": "Saat Metni",
+    "html": "HTML",
     "image": "İmaj",
     "imageOrientation": "Görüntü oryantasyonu",
     "imageUrl": "Resim URL",
@@ -162,6 +173,8 @@
     "insightSection": "Insight bölümü",
     "insights": "İçgörü",
     "instagramLink": "Instagram bağlantısı",
+    "javascript": "JavaScript",
+    "justifyContent": "İçeriği haklı çıkar",
     "label": "Etiket",
     "level": "Seviyesi",
     "limit": "Sınırlamak",
@@ -171,6 +184,7 @@
     "links": "Bağlar",
     "linksAlignment": "Bağlantılar Hizalama",
     "listLength": "Liste uzunluğu",
+    "liveVisibility": "Canlı sayfada görünür",
     "localGeomodifier": "Yerel Geomodifikatör",
     "localGeomodifierHeadingLevel": "Yerel Geomodififier Başlık Seviyesi",
     "logo": "Logo",
@@ -261,6 +275,7 @@
     "secondaryHeaderLinks": "İkincil başlık bağlantıları",
     "secondaryLinks": "İkincil bağlantılar",
     "sectionHeading": "Bölüm başlığı",
+    "sectionHeadingText": "Bölüm Başlık Metni",
     "servicesColumn": "Hizmetler sütunu",
     "servicesList": "Hizmetler Listesi",
     "show": "Göstermek",
@@ -291,6 +306,7 @@
     "values": "Değer",
     "variant": "Varyant",
     "visibleOnLivePage": "Canlı sayfada görünür",
+    "wrap": "Dürüm",
     "xLink": "X Bağlantı",
     "youtubeLink": "YouTube bağlantısı"
   },

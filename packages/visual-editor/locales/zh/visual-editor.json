@@ -1,5 +1,7 @@
 {
+  "Category": "类别",
   "Heading": "标题",
+  "Image": "图像",
   "Link": "关联",
   "actions": {
     "copyToClipboard": "复制到剪贴板",
@@ -17,6 +19,7 @@
     "region": "州/地区",
     "sublocality": "子域"
   },
+  "altText": "Alt文字",
   "applyAll": "申请所有地区",
   "applyAllWithLabel": "将{{fieldLabel}}应用于所有语言",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "页面部分"
   },
   "category": "类别",
+  "change": "改变",
+  "chooseImage": "选择图像",
   "close": "关闭",
   "closeHeaderMenu": "关闭标题菜单",
   "closeMenu": "关闭菜单",
@@ -89,6 +94,7 @@
   "customSearchArea": "自定义搜索区域",
   "date": "日期",
   "dateAndTime": "日期和时间",
+  "delete": "删除",
   "deleteItem": "删除项目",
   "discardChanges": {
     "discardChanges": "丢弃变化",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "地址",
     "alignCard": "对齐卡",
+    "alignItems": "对齐项目",
+    "alignment": "结盟",
     "analytics": "分析",
     "answer": "回答",
     "apiKey": "API键",
@@ -122,12 +130,14 @@
     "coordinates": "坐标",
     "copyrightMessage": "版权消息",
     "copyrightText": "版权文字",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA变体",
     "data": "数据",
     "dayOfWeekFormat": "周的格式",
     "description": "描述",
     "destinationURL": "目标网址",
+    "direction": "方向",
     "directoryRootLinkLabel": "目录根链接标签",
     "email": "电子邮件",
     "emailList": "电子邮件列表",
@@ -152,6 +162,7 @@
     "hours": "小时",
     "hoursColumn": "小时列",
     "hoursText": "小时文字",
+    "html": "HTML",
     "image": "图像",
     "imageOrientation": "图像方向",
     "imageUrl": "图像URL",
@@ -162,6 +173,8 @@
     "insightSection": "洞察力部分",
     "insights": "见解",
     "instagramLink": "Instagram链接",
+    "javascript": "JavaScript",
+    "justifyContent": "证明内容合理",
     "label": "标签",
     "level": "等级",
     "limit": "限制",
@@ -171,6 +184,7 @@
     "links": "链接",
     "linksAlignment": "链接对齐",
     "listLength": "列表长度",
+    "liveVisibility": "在现场页面上可见",
     "localGeomodifier": "当地的土工改装剂",
     "localGeomodifierHeadingLevel": "当地的地址式标题级别",
     "logo": "标识",
@@ -261,6 +275,7 @@
     "secondaryHeaderLinks": "次要标题链接",
     "secondaryLinks": "次要链接",
     "sectionHeading": "部分标题",
+    "sectionHeadingText": "部分标题文字",
     "servicesColumn": "服务列",
     "servicesList": "服务清单",
     "show": "展示",
@@ -291,6 +306,7 @@
     "values": "值",
     "variant": "变体",
     "visibleOnLivePage": "在现场页面上可见",
+    "wrap": "裹",
     "xLink": "x链接",
     "youtubeLink": "YouTube链接"
   },

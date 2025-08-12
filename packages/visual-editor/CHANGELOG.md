@@ -1,3 +1,21 @@
+#### 0.0.52 (2025-08-11)
+
+##### Chores
+
+- add TranslatableString type to YextField (#706) (2fb957e8)
+
+##### New Features
+
+- update array field item labels (#708) (4b816dde)
+- support category filtering (#705) (d3663709)
+- warn when translation keys are deleted (#700) (f79ec675)
+- allow different urls per locale for CTA links (#698) (800601d8)
+- improve CoreInfoSection styling for tablet (#701) (1e03777a)
+
+##### Refactors
+
+- hybrid developer work flow (#699) (fdf820e1)
+
 #### 0.0.51 (2025-08-06)
 
 ##### Chores

@@ -1,5 +1,7 @@
 {
+  "Category": "類別",
   "Heading": "標題",
+  "Image": "圖像",
   "Link": "關聯",
   "actions": {
     "copyToClipboard": "複製到剪貼板",
@@ -17,6 +19,7 @@
     "region": "州/地區",
     "sublocality": "子域"
   },
+  "altText": "Alt文字",
   "applyAll": "申請所有地區",
   "applyAllWithLabel": "將{{fieldLabel}}應用於所有語言",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "頁面部分"
   },
   "category": "類別",
+  "change": "改變",
+  "chooseImage": "選擇圖像",
   "close": "關閉",
   "closeHeaderMenu": "關閉標題菜單",
   "closeMenu": "關閉菜單",
@@ -89,6 +94,7 @@
   "customSearchArea": "自定義搜索區域",
   "date": "日期",
   "dateAndTime": "日期和時間",
+  "delete": "刪除",
   "deleteItem": "刪除項目",
   "discardChanges": {
     "discardChanges": "丟棄變化",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "地址",
     "alignCard": "對齊卡",
+    "alignItems": "對齊項目",
+    "alignment": "結盟",
     "analytics": "分析",
     "answer": "回答",
     "apiKey": "API鍵",
@@ -122,12 +130,14 @@
     "coordinates": "坐標",
     "copyrightMessage": "版權消息",
     "copyrightText": "版權文字",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA變體",
     "data": "數據",
     "dayOfWeekFormat": "週的格式",
     "description": "描述",
     "destinationURL": "目標網址",
+    "direction": "方向",
     "directoryRootLinkLabel": "目錄根鏈接標籤",
     "email": "電子郵件",
     "emailList": "電子郵件列表",
@@ -152,6 +162,7 @@
     "hours": "小時",
     "hoursColumn": "小時列",
     "hoursText": "小時文字",
+    "html": "HTML",
     "image": "圖像",
     "imageOrientation": "圖像方向",
     "imageUrl": "圖像URL",
@@ -162,6 +173,8 @@
     "insightSection": "洞察力部分",
     "insights": "見解",
     "instagramLink": "Instagram鏈接",
+    "javascript": "JavaScript",
+    "justifyContent": "證明內容合理",
     "label": "標籤",
     "level": "等級",
     "limit": "限制",
@@ -171,6 +184,7 @@
     "links": "鏈接",
     "linksAlignment": "鏈接對齊",
     "listLength": "列表長度",
+    "liveVisibility": "在現場頁面上可見",
     "localGeomodifier": "當地的土工改裝劑",
     "localGeomodifierHeadingLevel": "當地的地址式標題級別",
     "logo": "標識",
@@ -261,6 +275,7 @@
     "secondaryHeaderLinks": "次要標題鏈接",
     "secondaryLinks": "次要鏈接",
     "sectionHeading": "部分標題",
+    "sectionHeadingText": "部分標題文字",
     "servicesColumn": "服務列",
     "servicesList": "服務清單",
     "show": "展示",
@@ -291,6 +306,7 @@
     "values": "值",
     "variant": "變體",
     "visibleOnLivePage": "在現場頁面上可見",
+    "wrap": "裹",
     "xLink": "x鏈接",
     "youtubeLink": "YouTube鏈接"
   },
