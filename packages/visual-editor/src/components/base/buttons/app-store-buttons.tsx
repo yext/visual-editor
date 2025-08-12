@@ -8,7 +8,6 @@ export const GooglePlayButton = ({
   return (
     <a
       aria-label="Get it on Google Play"
-      href="#"
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -264,7 +263,6 @@ export const GooglePlayWhiteButton = ({
   return (
     <a
       aria-label="Download on the App Store"
-      href="#"
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -367,7 +365,6 @@ export const AppStoreButton = ({
   return (
     <a
       aria-label="Download on the App Store"
-      href="#"
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -481,7 +478,6 @@ export const GalaxyStoreButton = ({
   return (
     <a
       aria-label="Available on Galaxy Store"
-      href="#"
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -630,7 +626,6 @@ export const AppGalleryButton = ({
   return (
     <a
       aria-label="Explore it on AppGallery"
-      href="#"
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
