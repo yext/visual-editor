@@ -8,7 +8,7 @@ export const addHeaderPosition: Migration = {
         ...props,
         styles: {
           ...props.styles,
-          headerPosition: "scrollsWithPage",
+          headerPosition: props?.styles?.headerPosition ?? "scrollsWithPage",
         },
       };
     },
