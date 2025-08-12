@@ -29,23 +29,6 @@
   },
   "arrayField": "Array -felt",
   "base": "Grundlag",
-  "basicSelectorNoOptionsLabel": "Ingen muligheder tilgængelige",
-  "body": "Legeme",
-  "borderRadiusDefaultLabel": "Misligholdelse",
-  "breadcrumb": "Brødkrumme",
-  "businessInformation": "Forretningsoplysninger",
-  "callToActions": "Ring til handlinger",
-  "cancel": "Ophæve",
-  "categories": {
-    "other": "ANDRE",
-    "pageSections": "Sidesektioner"
-  },
-  "category": "Kategori",
-  "change": "Forandring",
-  "chooseImage": "Vælg billede",
-  "close": "Tæt",
-  "closeHeaderMenu": "Luk header -menu",
-  "closeMenu": "Luk menu",
   "closed": "Lukket",
   "closesAt": "Lukker kl",
   "components": {
