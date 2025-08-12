@@ -21,7 +21,7 @@
   },
   "altText": "Alt teksts",
   "applyAll": "Piesakieties visās vietās",
-  "applyAllWithLabel": "Uz visiem lokiem uzklājiet {{FieldLabel}}",
+  "applyAllWithLabel": "Uz visiem lokiem uzklājiet {{fieldLabel}}",
   "approvals": {
     "addAComment": "Pievienojiet komentāru, lai palīdzētu jūsu apstiprinātājam izprast, kas mainījās",
     "send": "Nosūtīt apstiprināšanai",

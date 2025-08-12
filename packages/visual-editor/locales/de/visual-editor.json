@@ -21,7 +21,7 @@
   },
   "altText": "ALT -Text",
   "applyAll": "Bewerben Sie sich für alle Orte",
-  "applyAllWithLabel": "Wenden Sie {{FieldLabel}} auf alle Orte an",
+  "applyAllWithLabel": "Wenden Sie {{fieldLabel}} auf alle Orte an",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",
