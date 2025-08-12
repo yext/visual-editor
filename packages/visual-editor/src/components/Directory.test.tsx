@@ -584,39 +584,8 @@ const tests: ComponentTest[] = [
     version: 11,
   },
   {
-    name: "version 14 with default props",
-    document: {
-      _site: {
-        name: "Example Business",
-      },
-      name: "VA",
-      meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-      dm_childEntityIds: ["8932945"],
-      dm_directoryChildren: [
-        {
-          name: "Arlington",
-          slug: "us/va/arlington",
-          dm_addressCountryDisplayName: "United States",
-          dm_addressRegionDisplayName: "Virginia",
-        },
-      ],
-      dm_directoryManagerId: "63590-locations",
-      dm_directoryParents_63590_locations: [
-        {
-          name: "Locations Directory",
-          slug: "en/index.html",
-          dm_addressCountryDisplayName: "United States",
-          dm_addressRegionDisplayName: "Virginia",
-        },
-        {
-          name: "US",
-          slug: "en/us",
-          dm_addressCountryDisplayName: "United States",
-        },
-      ],
-    },
+    name: "version 14 with cityDocument and default props",
+    document: cityDocument,
     props: {
       data: {
         title: {

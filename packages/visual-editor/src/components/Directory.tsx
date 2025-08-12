@@ -292,17 +292,15 @@ const DirectoryCard = ({
           </Heading>
         </MaybeLink>
         {profile.hours && (
-          <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatusAtom
-              hours={profile.hours}
-              className="h-full"
-              timezone={profile.timezone}
-              showCurrentStatus={styles?.hours?.showCurrentStatus}
-              dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
-              showDayNames={styles?.hours?.showDayNames}
-              timeFormat={styles?.hours?.timeFormat}
-            />
-          </div>
+          <HoursStatusAtom
+            hours={profile.hours}
+            className="mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full"
+            timezone={profile.timezone}
+            showCurrentStatus={styles?.hours?.showCurrentStatus}
+            dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+            showDayNames={styles?.hours?.showDayNames}
+            timeFormat={styles?.hours?.timeFormat}
+          />
         )}
       </div>
       {profile.mainPhone && (
