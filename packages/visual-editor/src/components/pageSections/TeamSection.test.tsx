@@ -337,10 +337,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "version 14 props with nested people structure and missing ctaType",
+    name: "version 15 props with nested people structure and missing ctaType",
     document: { c_team: teamData },
     props: {
       data: {

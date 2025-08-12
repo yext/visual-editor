@@ -29,6 +29,7 @@ import {
   YextStructFieldSelector,
   resolveYextStructField,
   CTA,
+  ComponentFields,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -190,7 +191,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       hero: YextStructFieldSelector<HeroSectionType>({
         label: msg("fields.hero", "Hero"),
         filter: {
-          type: "type.hero_section",
+          type: ComponentFields.HeroSection.type,
         },
       }),
       showAverageReview: YextField(
@@ -449,18 +450,24 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           )}
       </div>
       {resolvedHero?.image && (
-        <div
-          className="w-full"
-          role="region"
-          aria-label={t("heroImage", "Hero Image")}
+        <EntityField
+          displayName={pt("fields.image", "Image")}
+          fieldId={data.hero.field}
+          constantValueEnabled={data.hero.constantValueEnabled}
         >
-          <Image
-            image={resolvedHero?.image}
-            aspectRatio={styles.image.aspectRatio}
-            width={styles.image.width || 640}
-            className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
-          />
-        </div>
+          <div
+            className="w-full"
+            role="region"
+            aria-label={t("heroImage", "Hero Image")}
+          >
+            <Image
+              image={resolvedHero?.image}
+              aspectRatio={styles.image.aspectRatio}
+              width={styles.image.width || 640}
+              className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
+            />
+          </div>
+        </EntityField>
       )}
     </PageSection>
   );
@@ -518,8 +525,8 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,
-            height: 640,
-            width: 360,
+            height: 360,
+            width: 640,
           },
         },
         constantValueEnabled: true,

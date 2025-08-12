@@ -336,10 +336,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "version 14 props with nested events structure and missing ctaType",
+    name: "version 15 props with nested events structure and missing ctaType",
     document: { c_events: eventsData },
     props: {
       data: {

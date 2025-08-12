@@ -280,7 +280,7 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "version 14 props with missing ctaType",
+    name: "version 15 props with missing ctaType",
     document: { c_products: productsData },
     props: {
       data: {
@@ -330,7 +330,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
     name: "version 15 props with nested products structure and missing ctaType",
