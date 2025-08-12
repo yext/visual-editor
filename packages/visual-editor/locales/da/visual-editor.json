@@ -39,12 +39,6 @@
     "other": "ANDRE",
     "pageSections": "Sidesektioner"
   },
-  "category": "Kategori",
-  "close": "Tæt",
-  "closeHeaderMenu": "Luk header -menu",
-  "closeMenu": "Luk menu",
-  "closed": "Lukket",
-  "closesAt": "Lukker kl",
   "components": {
     "address": "Adresse",
     "bannerSection": "Banner -sektion",
