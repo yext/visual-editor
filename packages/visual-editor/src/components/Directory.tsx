@@ -280,29 +280,31 @@ const DirectoryCard = ({
       className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
       background={cardStyles.backgroundColor}
     >
-      <div>
-        <MaybeLink
-          eventName={`link${cardNumber}`}
-          alwaysHideCaret={true}
-          className="mb-2"
-          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
+      <MaybeLink
+        eventName={`link${cardNumber}`}
+        alwaysHideCaret={true}
+        className="mb-2 max-w-full text-wrap break-words"
+        href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
+      >
+        <Heading
+          level={cardStyles.headingLevel}
+          semanticLevelOverride={3}
+          className="max-w-full"
         >
-          <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
-            {profile.name}
-          </Heading>
-        </MaybeLink>
-        {profile.hours && (
-          <HoursStatusAtom
-            hours={profile.hours}
-            className="mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full"
-            timezone={profile.timezone}
-            showCurrentStatus={styles?.hours?.showCurrentStatus}
-            dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
-            showDayNames={styles?.hours?.showDayNames}
-            timeFormat={styles?.hours?.timeFormat}
-          />
-        )}
-      </div>
+          {profile.name}
+        </Heading>
+      </MaybeLink>
+      {profile.hours && (
+        <HoursStatusAtom
+          hours={profile.hours}
+          className="mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full"
+          timezone={profile.timezone}
+          showCurrentStatus={styles?.hours?.showCurrentStatus}
+          dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+          showDayNames={styles?.hours?.showDayNames}
+          timeFormat={styles?.hours?.timeFormat}
+        />
+      )}
       {profile.mainPhone && (
         <PhoneAtom
           phoneNumber={profile.mainPhone}
@@ -338,11 +340,8 @@ const DirectoryGrid = ({
       verticalPadding="sm"
       background={backgroundColors.background1.value}
       className={themeManagerCn(
-        "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
+        "flex min-h-0 min-w-0 mx-auto flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
       )}
-      style={{
-        gridTemplateColumns: `repeat(3, 1fr)`,
-      }}
     >
       {sortedDirectoryChildren?.map((child, idx) => (
         <DirectoryCard
