@@ -12,6 +12,7 @@ import {
   Heading,
   EntityField,
   Background,
+  CTA,
   backgroundColors,
   VisibilityWrapper,
   EventSectionType,
@@ -27,7 +28,6 @@ import {
   CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { CTA } from "../atoms/cta";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
 

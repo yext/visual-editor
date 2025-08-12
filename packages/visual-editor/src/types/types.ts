@@ -7,8 +7,7 @@ export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
 };
 
 // Enhanced CTA type with new options
-export type EnhancedTranslatableCTA = Omit<TranslatableCTA, "label"> & {
-  label: TranslatableString;
+export type EnhancedTranslatableCTA = TranslatableCTA & {
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
   coordinate?: {
     latitude: number;

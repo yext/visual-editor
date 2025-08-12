@@ -32,6 +32,6 @@ export const migrationRegistry: MigrationRegistry = [
   updateExpandedHeaderStylesMigration,
   addDirectoryTitleMigration,
   addHeaderFooterMaxWidth,
-  migrateCTAStructures,
   ignoreLocaleWarningBannerSection,
+  migrateCTAStructures,
 ];
