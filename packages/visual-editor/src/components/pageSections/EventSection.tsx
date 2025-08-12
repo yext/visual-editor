@@ -237,15 +237,11 @@ const EventCard = ({
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
-            label={
-              event.cta.label
-                ? resolveComponentData(
-                    event.cta.label,
-                    i18n.language,
-                    streamDocument
-                  )
-                : undefined
-            }
+            label={resolveComponentData(
+              event.cta.label,
+              i18n.language,
+              streamDocument
+            )}
             link={resolveComponentData(
               event.cta.link,
               i18n.language,

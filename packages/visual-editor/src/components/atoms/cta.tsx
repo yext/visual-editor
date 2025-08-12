@@ -8,7 +8,7 @@ import { PresetImageType } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
 
 export type CTAProps = {
-  label?: React.ReactNode;
+  label: React.ReactNode;
   link?: string;
   linkType?: LinkType;
   eventName?: string;
@@ -39,7 +39,7 @@ export const CTA = ({
   let caretVisibility = "none";
   let finalLink = link || "#";
   let finalLinkType = linkType ?? "URL";
-  let finalLabel: React.ReactNode = label ?? "";
+  let finalLabel: React.ReactNode = label;
   let finalAriaLabel = ariaLabel || "";
 
   // Handle different CTA types
@@ -108,7 +108,7 @@ export const CTA = ({
         target={target}
         aria-label={finalAriaLabel || undefined}
       >
-        {finalLabel || ""}
+        {finalLabel}
         {ctaType !== "presetImage" && (
           <FaAngleRight
             size={"12px"}

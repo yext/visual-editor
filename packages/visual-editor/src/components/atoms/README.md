@@ -27,10 +27,11 @@ Automatically generates a Google Maps directions link when coordinates are provi
 
 ### 3. Preset Image
 
-Displays an icon instead of text. The icon is automatically selected based on the preset type. **Label field is hidden when this type is selected.**
+Displays an icon instead of text. The icon is automatically selected based on the preset type. **Label is still required but will be automatically overridden by the preset image.**
 
 ```tsx
 <CTA
+  label="Download App" // Required but will be overridden by preset image
   ctaType="presetImage"
   presetImageType="app-store"
   link="tel:+1234567890"
@@ -67,7 +68,7 @@ Displays an icon instead of text. The icon is automatically selected based on th
 
 ```tsx
 interface CTAProps {
-  label?: React.ReactNode;
+  label: React.ReactNode;
   link?: string;
   linkType?: LinkType;
   eventName?: string;
@@ -97,11 +98,11 @@ When using these sections, you can configure the CTA type through the editor int
 
 - Text & Link (default)
 - Get Directions (coordinate fields appear only when selected)
-- Preset Image (preset image type selection appears, label field is hidden)
+- Preset Image (preset image type selection appears, label is required but overridden)
 
 ## Conditional Field Visibility
 
-- **Label Field**: Only visible when CTA type is "Text & Link" or "Get Directions"
+- **Label Field**: Always required, but for "Preset Image" CTAs, the label is automatically set based on the preset type
 - **Coordinate Fields**: Only visible when CTA type is "Get Directions"
 - **Preset Image Type Field**: Only visible when CTA type is "Preset Image"
 
