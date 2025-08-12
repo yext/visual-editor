@@ -65,7 +65,7 @@ jobs:
 
               while read -r key; do
                 [[ -z "$key" ]] && continue
-                langs=$(echo "${deleted_map[$key]}" | xargs -n1 | sort | tr '\n' ' ' | xargs)
+                langs=$(echo "${deleted_map[$key]}" | xargs -n1 | sort | uniq | paste -sd ', ' -)
                 OUTPUT+="| \`$key\` | $langs |\n"
               done < <(printf "%s" "${grouped[$group]}" | sort)
             done
