@@ -34,7 +34,7 @@ jobs:
           for file in $(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$LOCALE_DIR"); do
             [[ "$file" != *.json ]] && continue
 
-            LANG=$(basename "$(dirname "$file")")  # <-- FIXED: extract language folder name
+            LANG=$(basename "$(dirname "$file")")  # Extract language folder name
 
             TMP_BASE=$(mktemp)
             TMP_HEAD=$(mktemp)
@@ -54,24 +54,34 @@ jobs:
           if [ ${#deleted_map[@]} -gt 0 ]; then
             OUTPUT="### 🔤 Deleted Translation Keys (consolidated)\n"
 
-            # Build an associative array of groups: top-level namespace → keys
+            # Group keys by top-level namespace
             declare -A grouped
             for key in "${!deleted_map[@]}"; do
-              group="${key%%.*}" # everything before first dot
+              group="${key%%.*}"
               grouped["$group"]+="$key"$'\n'
             done
 
-            # Sort groups and print with collapsible details blocks
+            # Output groups sorted alphabetically,
+            # use collapsible <details> only if more than 1 key in group
             for group in $(printf "%s\n" "${!grouped[@]}" | sort); do
-              OUTPUT+="\n<details>\n<summary>\`$group\`</summary>\n\n"
+              key_count=$(printf "%s" "${grouped[$group]}" | grep -cve '^\s*$')
+              if [ "$key_count" -gt 1 ]; then
+                OUTPUT+="\n<details>\n<summary>\`$group\`</summary>\n\n"
+              else
+                OUTPUT+="\n#### \`$group\`\n\n"
+              fi
+
               OUTPUT+="| Key | Languages Removed |\n| --- | ----------------- |\n"
-              # Sort keys within group
+
               while read -r key; do
                 [[ -z "$key" ]] && continue
                 langs=$(echo "${deleted_map[$key]}" | xargs -n1 | sort | tr '\n' ' ' | xargs)
                 OUTPUT+="| \`$key\` | $langs |\n"
               done < <(printf "%s" "${grouped[$group]}" | sort)
-              OUTPUT+="\n</details>\n"
+
+              if [ "$key_count" -gt 1 ]; then
+                OUTPUT+="\n</details>\n"
+              fi
             done
 
             echo "comment<<EOF" >> "$GITHUB_OUTPUT"
