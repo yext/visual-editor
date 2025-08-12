@@ -34,7 +34,7 @@ jobs:
           for file in $(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$LOCALE_DIR"); do
             [[ "$file" != *.json ]] && continue
 
-            LANG=$(basename "$file" .json) # e.g., en.json → en
+            LANG=$(basename "$(dirname "$file")")  # <-- FIXED: extract language folder name
 
             TMP_BASE=$(mktemp)
             TMP_HEAD=$(mktemp)
@@ -61,7 +61,7 @@ jobs:
               grouped["$group"]+="$key"$'\n'
             done
 
-            # Sort groups
+            # Sort groups and print with collapsible details blocks
             for group in $(printf "%s\n" "${!grouped[@]}" | sort); do
               OUTPUT+="\n<details>\n<summary>\`$group\`</summary>\n\n"
               OUTPUT+="| Key | Languages Removed |\n| --- | ----------------- |\n"
