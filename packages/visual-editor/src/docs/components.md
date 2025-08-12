@@ -159,7 +159,7 @@ This object contains properties for customizing the component's appearance.
 | `styles.cards`                      | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Style properties for directory cards.                           |                      |
 | `styles.hours`                      | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.                     |                      |
 | `styles.phoneNumberFormat`          | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards.              | `'domestic'`         |
-| `styles.phoneNumberLink`            | `boolean`                                                                                                                   | If , wraps phone numbers in a clickable hyperlink.              | `false`              |
+| `styles.phoneNumberLink`            | `boolean`                                                                                                                   | If "true", wraps phone numbers in a clickable "tel:" hyperlink. | `false`              |
 
 ---
 
