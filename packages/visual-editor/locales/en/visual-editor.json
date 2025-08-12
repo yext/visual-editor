@@ -1,24 +1,4 @@
 {
-  "Category": "Category",
-  "Heading": "Heading",
-  "Image": "Image",
-  "Link": "Link",
-  "actions": {
-    "copyToClipboard": "Copy to Clipboard",
-    "pasteFromClipboard": "Paste from Clipboard"
-  },
-  "addEntityField": "Add entity field",
-  "address": "Address",
-  "addressInput": {
-    "city": "City",
-    "countryCode": "Country Code",
-    "line1": "Line 1",
-    "line2": "Line 2",
-    "line3": "Line 3",
-    "postalCode": "Postal Code",
-    "region": "State/Region",
-    "sublocality": "Sublocality"
-  },
   "altText": "Alt Text",
   "applyAll": "Apply to All Locales",
   "applyAllWithLabel": "Apply {{fieldLabel}} to All Locales",
