@@ -11,7 +11,6 @@ import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 import { useTranslation } from "react-i18next";
 
 export const defaultPerson: PersonStruct = {
@@ -76,8 +75,14 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
     type: "array",
     arrayFields: {
       headshot: {
-        ...IMAGE_CONSTANT_CONFIG,
+        type: "object",
         label: pt("fields.headshot", "Headshot"),
+        objectFields: {
+          url: {
+            label: pt("fields.url", "URL"),
+            type: "text",
+          },
+        },
       },
       name: nameField,
       title: titleField,

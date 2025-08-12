@@ -19,9 +19,8 @@
     "region": "Staat/Region",
     "sublocality": "Sublokalität"
   },
-  "altText": "ALT -Text",
   "applyAll": "Bewerben Sie sich für alle Orte",
-  "applyAllWithLabel": "Wenden Sie {{FieldLabel}} auf alle Orte an",
+  "applyAllWithLabel": "Wenden Sie {{fieldLabel}} auf alle Orte an",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",
@@ -41,8 +40,6 @@
     "pageSections": "Seitenabschnitte"
   },
   "category": "Kategorie",
-  "change": "Ändern",
-  "chooseImage": "Wählen Sie Bild",
   "close": "Schließen",
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
@@ -94,7 +91,6 @@
   "customSearchArea": "Benutzerdefinierte Suchbereich",
   "date": "Datum",
   "dateAndTime": "Datum und Uhrzeit",
-  "delete": "Löschen",
   "deleteItem": "Artikel löschen",
   "discardChanges": {
     "discardChanges": "Veränderungen verwerfen",
