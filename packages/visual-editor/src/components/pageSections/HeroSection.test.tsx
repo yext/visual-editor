@@ -345,10 +345,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "version 14 props using entity values with old CTA structure",
+    name: "version 15 props using entity values with old CTA structure",
     document: {
       name: "name",
       address: {
@@ -421,10 +421,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "version 14 props with missing ctaType",
+    name: "version 15 props with missing ctaType",
     document: {
       name: "name",
       address: {
@@ -508,7 +508,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
 ];
 

@@ -285,7 +285,7 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "version 14 props with missing ctaType",
+    name: "version 15 props with missing ctaType",
     document: { c_events: eventsData },
     props: {
       data: {
@@ -393,7 +393,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
 ];
 
