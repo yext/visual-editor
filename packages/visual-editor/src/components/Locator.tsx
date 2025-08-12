@@ -1,8 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckContext,
+  WithPuckProps,
+} from "@measured/puck";
 import {
   AnalyticsProvider,
-  CardComponent,
   CardProps,
   Coordinate,
   executeSearch,
@@ -38,8 +42,8 @@ import {
   useDocument,
   Toggle,
   YextField,
-  getLocationPath,
   useTemplateProps,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -433,7 +437,9 @@ const LocatorInternal = ({
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
             <VerticalResults
-              CardComponent={LocationCard}
+              CardComponent={(result: CardProps<Location>) => (
+                <LocationCard {...result} puck={puck} />
+              )}
               setResultsRef={setResultsRef}
             />
           )}
@@ -562,11 +568,16 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
   );
 };
 
-const LocationCard: CardComponent<Location> = ({
+const LocationCard = ({
   result,
-}: CardProps<Location>): React.JSX.Element => {
+  puck,
+}: {
+  result: CardProps<Location>["result"];
+  puck: PuckContext;
+}): React.JSX.Element => {
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
-  const { relativePrefixToRoot } = useTemplateProps();
+  const locale = i18n.language;
 
   const location = result.rawData;
   const distance = result.distance;
@@ -592,6 +603,13 @@ const LocationCard: CardComponent<Location> = ({
   const handlePhoneNumberClick = useCardAnalyticsCallback(
     result,
     "TAP_TO_CALL"
+  );
+
+  const resolvedUrl = resolveUrlTemplate(
+    streamDocument,
+    locale,
+    relativePrefixToRoot ?? "",
+    puck.metadata?.resolveUrlTemplate
   );
 
   return (
@@ -673,14 +691,7 @@ const LocationCard: CardComponent<Location> = ({
           </div>
         </div>
         <Button asChild className="basis-full" variant="primary">
-          <a
-            href={getLocationPath(
-              location,
-              i18n.language,
-              relativePrefixToRoot
-            )}
-            onClick={handleVisitPageClick}
-          >
+          <a href={resolvedUrl} onClick={handleVisitPageClick}>
             {t("visitPage", "Visit Page")}
           </a>
         </Button>

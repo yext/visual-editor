@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckContext,
+  WithPuckProps,
+} from "@measured/puck";
 import {
   useDocument,
   YextEntityField,
@@ -17,10 +22,10 @@ import {
   msg,
   ThemeOptions,
   MaybeLink,
-  getLocationPath,
-  useTemplateProps,
   resolveComponentData,
   Body,
+  resolveUrlTemplate,
+  useTemplateProps,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -287,8 +292,8 @@ const LocationCard = ({
   address,
   timezone,
   mainPhone,
-  id,
-  slug,
+  locationData,
+  puck,
 }: {
   cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
@@ -297,11 +302,27 @@ const LocationCard = ({
   address: AddressType;
   timezone: string;
   mainPhone: string;
-  id: string;
-  slug?: string;
+  locationData: any;
+  puck: PuckContext;
 }) => {
-  const { relativePrefixToRoot } = useTemplateProps();
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
+
+  const documentForUrlTemplate = {
+    ...locationData,
+    __: {
+      isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
+    },
+    _pageset: streamDocument._pageset,
+  };
+
+  const resolvedUrl = resolveUrlTemplate(
+    documentForUrlTemplate,
+    locale,
+    relativePrefixToRoot ?? "",
+    puck.metadata?.resolveUrlTemplate
+  );
 
   return (
     <Background
@@ -313,11 +334,7 @@ const LocationCard = ({
         eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
         className="mb-2"
-        href={getLocationPath(
-          { address, slug, id },
-          i18n.language,
-          relativePrefixToRoot
-        )}
+        href={resolvedUrl}
       >
         <Heading
           level={styles?.cards.headingLevel}
@@ -489,13 +506,13 @@ const NearbyLocationsComponent = ({
                     key={index}
                     cardNumber={index}
                     styles={styles}
-                    id={location.id}
                     name={location.name}
                     address={location.address}
                     hours={location.hours}
                     timezone={location.timezone}
                     mainPhone={location.mainPhone}
-                    slug={location.slug}
+                    locationData={location}
+                    puck={puck}
                   />
                 )
               )}

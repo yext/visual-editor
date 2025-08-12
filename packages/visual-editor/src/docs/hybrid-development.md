@@ -149,10 +149,22 @@ Various existing components require additional data from the hybrid-developer. T
 This could look like:
 
 ```ts
+function resolveUrlTemplate(
+  streamDocument: any,
+  locale: string,
+  relativePrefixToRoot: string,
+): string {
+  return (
+    relativePrefixToRoot +
+    normalizeSlug(`custom-url-for-${streamDocument.name}-${locale}`)
+  );
+}
+
 const customMetadata: Metadata = {
   contentEndpointIdEnvVar: "FOO_ENV_VAR",
   entityTypeEnvVar: "BAR_ENV_VAR",
-  experienceKeyEnvVar: "BAZ_ENV_VAR"
+  experienceKeyEnvVar: "BAZ_ENV_VAR",
+  resolveUrlTemplate,
 }
 
 // Example using the edit.tsx template
@@ -210,8 +222,9 @@ const Location: Template<TemplateRenderProps> = (props) => {
 
 This table shows which metadata fields are used for which components.
 
-| Metadata Field          | Components                             |
-| ----------------------- | -------------------------------------- |
-| contentEndpointIdEnvVar | NearbyLocationsSection, ExpandedHeader |
-| entityTypeEnvVar        | Locator                                |
-| experienceKeyEnvVar     | Locator                                |
+| Metadata Field          | Components                                 |
+| ----------------------- | ------------------------------------------ |
+| contentEndpointIdEnvVar | NearbyLocationsSection, ExpandedHeader     |
+| entityTypeEnvVar        | Locator                                    |
+| experienceKeyEnvVar     | Locator                                    |
+| resolveUrlTemplate      | NearbyLocationsSection, Directory, Locator |

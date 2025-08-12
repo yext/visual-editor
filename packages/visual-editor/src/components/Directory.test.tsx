@@ -20,6 +20,16 @@ const rootDocument = {
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   name: "Location Directory",
   meta: { entityType: { id: "dm_root", uid: 123 }, locale: "en" },
   dm_childEntityIds: ["998877"],
@@ -53,6 +63,16 @@ const countryDocument = {
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   name: "US",
   meta: { entityType: { id: "dm_country", uid: 123 }, locale: "en" },
   dm_addressCountryDisplayName: "United States",
@@ -98,6 +118,16 @@ const regionDocument = {
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   name: "VA",
   meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
   dm_addressCountryDisplayName: "United States",
@@ -148,6 +178,16 @@ const cityDocument = {
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   dm_childEntityIds: ["8725530"],
   dm_directoryChildren: [
     {

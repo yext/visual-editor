@@ -14,11 +14,16 @@ import {
   Background,
   HeadingLevel,
   YextEntityField,
-  getLocationPath,
   resolveComponentData,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
-import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckContext,
+  WithPuckProps,
+} from "@measured/puck";
 import {
   Address,
   AnalyticsScopeProvider,
@@ -177,13 +182,23 @@ const DirectoryCard = ({
   cardNumber,
   profile,
   cardStyles,
+  puck,
 }: {
   cardNumber: number;
   profile: any;
   cardStyles: DirectoryProps["styles"]["cards"];
+  puck: PuckContext;
 }) => {
-  const { relativePrefixToRoot } = useTemplateProps();
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
+  const locale = i18n.language;
+
+  const resolvedUrl = resolveUrlTemplate(
+    streamDocument,
+    locale,
+    relativePrefixToRoot ?? "",
+    puck.metadata?.resolveUrlTemplate
+  );
 
   return (
     <Background
@@ -195,7 +210,7 @@ const DirectoryCard = ({
           eventName={`link${cardNumber}`}
           alwaysHideCaret={true}
           className="mb-2"
-          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
+          href={resolvedUrl}
         >
           <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
             {profile.name}
@@ -240,9 +255,11 @@ const DirectoryCard = ({
 const DirectoryGrid = ({
   directoryChildren,
   cardStyles,
+  puck,
 }: {
   directoryChildren: any[];
   cardStyles: DirectoryProps["styles"]["cards"];
+  puck: PuckContext;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -263,6 +280,7 @@ const DirectoryGrid = ({
           cardNumber={idx}
           profile={child}
           cardStyles={cardStyles}
+          puck={puck}
         />
       ))}
     </PageSection>
@@ -320,7 +338,12 @@ const DirectoryList = ({
   );
 };
 
-const DirectoryComponent = ({ data, styles, analytics }: DirectoryProps) => {
+const DirectoryComponent = ({
+  data,
+  styles,
+  analytics,
+  puck,
+}: WithPuckProps<DirectoryProps>) => {
   const { i18n } = useTranslation();
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
@@ -345,6 +368,7 @@ const DirectoryComponent = ({ data, styles, analytics }: DirectoryProps) => {
           <DirectoryGrid
             directoryChildren={streamDocument.dm_directoryChildren}
             cardStyles={styles.cards}
+            puck={puck}
           />
         )}
       {streamDocument.dm_directoryChildren &&
