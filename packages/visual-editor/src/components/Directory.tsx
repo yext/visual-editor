@@ -66,7 +66,7 @@ export interface DirectoryStyles {
   phoneNumberFormat: "domestic" | "international";
 
   /**
-   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
+   * If "true", wraps phone numbers in a clickable "tel:" hyperlink.
    * @defaultValue false
    */
   phoneNumberLink: boolean;
