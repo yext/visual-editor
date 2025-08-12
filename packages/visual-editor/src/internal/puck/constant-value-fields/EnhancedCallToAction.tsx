@@ -104,11 +104,13 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
           </FieldLabel>
         </div>
         {showLabel && (
-          <AutoField
-            field={labelField}
-            value={value.label}
-            onChange={(newValue) => onChange({ ...value, label: newValue })}
-          />
+          <div className="ve-mb-3">
+            <AutoField
+              field={labelField}
+              value={value.label}
+              onChange={(newValue) => onChange({ ...value, label: newValue })}
+            />
+          </div>
         )}
         {showLinkFields && (
           <>
