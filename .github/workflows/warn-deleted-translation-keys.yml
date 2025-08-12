@@ -26,7 +26,6 @@ jobs:
           LOCALE_DIR="packages/visual-editor/locales"
           declare -A deleted_map
 
-          # Flatten to dot notation: e.g., {"a":{"b":"c"}} → a.b
           flatten_keys() {
             jq -r 'paths(scalars) | map(tostring) | join(".")' "$1" | sort
           }
@@ -34,7 +33,7 @@ jobs:
           for file in $(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$LOCALE_DIR"); do
             [[ "$file" != *.json ]] && continue
 
-            LANG=$(basename "$(dirname "$file")")  # Extract language folder name
+            LANG=$(basename "$(dirname "$file")")
 
             TMP_BASE=$(mktemp)
             TMP_HEAD=$(mktemp)
@@ -54,23 +53,14 @@ jobs:
           if [ ${#deleted_map[@]} -gt 0 ]; then
             OUTPUT="### 🔤 Deleted Translation Keys (consolidated)\n"
 
-            # Group keys by top-level namespace
             declare -A grouped
             for key in "${!deleted_map[@]}"; do
               group="${key%%.*}"
               grouped["$group"]+="$key"$'\n'
             done
 
-            # Output groups sorted alphabetically,
-            # use collapsible <details> only if more than 1 key in group
             for group in $(printf "%s\n" "${!grouped[@]}" | sort); do
-              key_count=$(printf "%s" "${grouped[$group]}" | grep -cve '^\s*$')
-              if [ "$key_count" -gt 1 ]; then
-                OUTPUT+="\n<details>\n<summary>\`$group\`</summary>\n\n"
-              else
-                OUTPUT+="\n#### \`$group\`\n\n"
-              fi
-
+              OUTPUT+="\n#### \`$group\`\n\n"
               OUTPUT+="| Key | Languages Removed |\n| --- | ----------------- |\n"
 
               while read -r key; do
@@ -78,10 +68,6 @@ jobs:
                 langs=$(echo "${deleted_map[$key]}" | xargs -n1 | sort | tr '\n' ' ' | xargs)
                 OUTPUT+="| \`$key\` | $langs |\n"
               done < <(printf "%s" "${grouped[$group]}" | sort)
-
-              if [ "$key_count" -gt 1 ]; then
-                OUTPUT+="\n</details>\n"
-              fi
             done
 
             echo "comment<<EOF" >> "$GITHUB_OUTPUT"
