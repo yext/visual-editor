@@ -19,9 +19,8 @@
     "region": "Stát/region",
     "sublocality": "Sublokalita"
   },
-  "altText": "Alt text",
   "applyAll": "Aplikujte na všechna lokalita",
-  "applyAllWithLabel": "Použít {{FieldLabel}} na všechna lokalita",
+  "applyAllWithLabel": "Použít {{fieldLabel}} na všechna lokalita",
   "approvals": {
     "addAComment": "Přidejte komentář, který pomůže vašemu schvalovateli pochopit, co se změnilo",
     "send": "Odeslat ke schválení",
@@ -41,8 +40,6 @@
     "pageSections": "Sekce stránek"
   },
   "category": "Kategorie",
-  "change": "Přeměna",
-  "chooseImage": "Vyberte obrázek",
   "close": "Blízko",
   "closeHeaderMenu": "Nabídka Zavřít záhlaví",
   "closeMenu": "Zavřít menu",
@@ -94,7 +91,6 @@
   "customSearchArea": "Vlastní vyhledávací oblast",
   "date": "Datum",
   "dateAndTime": "Datum a čas",
-  "delete": "Vymazat",
   "deleteItem": "Odstranit položku",
   "discardChanges": {
     "discardChanges": "Zlikvidovat změny",

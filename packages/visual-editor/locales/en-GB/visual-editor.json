@@ -19,7 +19,6 @@
     "region": "State/Region",
     "sublocality": "Sublocality"
   },
-  "altText": "Alt Text",
   "applyAll": "Apply to All Locales",
   "applyAllWithLabel": "Apply {{fieldLabel}} to All Locales",
   "approvals": {
@@ -41,8 +40,6 @@
     "pageSections": "PAGE SECTIONS"
   },
   "category": "Category",
-  "change": "Change",
-  "chooseImage": "Choose Image",
   "close": "Close",
   "closeHeaderMenu": "Close header menu",
   "closeMenu": "Close menu",
@@ -94,7 +91,6 @@
   "customSearchArea": "Custom Search Area",
   "date": "Date",
   "dateAndTime": "Date and Time",
-  "delete": "Delete",
   "deleteItem": "Delete Item",
   "discardChanges": {
     "discardChanges": "Discard Changes",
