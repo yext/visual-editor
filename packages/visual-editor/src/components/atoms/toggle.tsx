@@ -16,10 +16,10 @@ function Toggle({
       className={themeManagerCn(
         "inline-flex items-center justify-center gap-2 rounded-full text-black " +
           "bg-gray-100 ",
-        "data-[state=on]:bg-palette-secondary data-[state=on]:border-palette-secondary " +
-          "whitespace-nowrap border-gray-200 border border-solid hover:underline " +
+        "whitespace-nowrap border-black text-black border border-solid hover:underline " +
           "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing",
-        className
+        "data-[state=on]:bg-palette-secondary data-[state=on]:border-palette-secondary data-[state=on]:text-palette-secondary-dark" +
+          className
       )}
       {...props}
     />
