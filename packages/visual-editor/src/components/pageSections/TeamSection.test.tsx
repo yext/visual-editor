@@ -284,6 +284,118 @@ const tests: ComponentTest[] = [
     },
     version: 7,
   },
+  {
+    name: "version 14 props with missing ctaType",
+    document: { c_team: teamData },
+    props: {
+      data: {
+        people: {
+          field: "c_team",
+          constantValue: [
+            {
+              name: "Name",
+              title: "Title",
+              phoneNumber: "8888888888",
+              email: "email",
+              cta: {
+                label: "CTA",
+                // Missing link, linkType, and ctaType - should be added by migration
+              },
+            },
+            {
+              name: "Name 2",
+              title: "Title 2",
+              phoneNumber: "9999999999",
+              email: "email2",
+              cta: {
+                label: "CTA 2",
+                link: "#",
+                linkType: "URL",
+                // Missing ctaType - should be added by migration
+              },
+            },
+          ],
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-secondary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 13,
+  },
+  {
+    name: "version 14 props with nested people structure and missing ctaType",
+    document: { c_team: teamData },
+    props: {
+      data: {
+        people: {
+          field: "c_team",
+          constantValue: {
+            people: [
+              {
+                name: "Name",
+                title: "Title",
+                phoneNumber: "8888888888",
+                email: "email",
+                cta: {
+                  label: "CTA",
+                  // Missing link, linkType, and ctaType - should be added by migration
+                },
+              },
+              {
+                name: "Name 2",
+                title: "Title 2",
+                phoneNumber: "9999999999",
+                email: "email2",
+                cta: {
+                  label: "CTA 2",
+                  link: "#",
+                  linkType: "URL",
+                  // Missing ctaType - should be added by migration
+                },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-secondary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 13,
+  },
 ];
 
 describe("TeamSection", async () => {
