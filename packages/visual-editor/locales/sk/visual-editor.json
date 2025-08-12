@@ -19,9 +19,8 @@
     "region": "Štát/región",
     "sublocality": "Sublokalita"
   },
-  "altText": "Alt",
-  "applyAll": "Vzťahovať sa na všetky miesta",
-  "applyAllWithLabel": "Použite {{FieldLabel}} na všetky lokality",
+  "applyAll": "Sa vzťahuje na všetky lokality",
+  "applyAllWithLabel": "Použite {{fieldLabel}} na všetky lokality",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",
@@ -41,8 +40,6 @@
     "pageSections": "Sekcie stránok"
   },
   "category": "Kategória",
-  "change": "Zmena",
-  "chooseImage": "Vyberte obrázok",
   "close": "Zatvoriť",
   "closeHeaderMenu": "Zavrieť ponuku hlavičky",
   "closeMenu": "Menu",
@@ -94,7 +91,6 @@
   "customSearchArea": "Oblasť vyhľadávania",
   "date": "Dátum",
   "dateAndTime": "Dátum a čas",
-  "delete": "Vymazať",
   "deleteItem": "Vymazať",
   "discardChanges": {
     "discardChanges": "Zlikvidovať zmeny",

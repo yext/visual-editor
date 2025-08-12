@@ -14,7 +14,6 @@ import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const defaultEvent: EventStruct = {
   image: {
@@ -79,8 +78,14 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     type: "array",
     arrayFields: {
       image: {
-        ...IMAGE_CONSTANT_CONFIG,
+        type: "object",
         label: pt("fields.image", "Image"),
+        objectFields: {
+          url: {
+            label: pt("fields.url", "URL"),
+            type: "text",
+          },
+        },
       },
       title: titleField,
       dateTime: DateTimeSelector,

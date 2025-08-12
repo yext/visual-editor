@@ -1,3 +1,20 @@
+#### 0.0.53 (2025-08-12)
+
+##### New Features
+
+- sendLoadingProgress to parent (#707) (a35865a9)
+- open image upload drawer for static images (#687) (29915e62)
+- display hex values in background picker (#709) (5d7a2fe3)
+
+##### Bug Fixes
+
+- apply page section to grid (#713) (b5199d27)
+- directory wrapping (#710) (0cbe8bd3)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714) (401d6585)
+
 #### 0.0.52 (2025-08-11)
 
 ##### Chores
