@@ -17,22 +17,13 @@ export type EnhancedTranslatableCTA = Omit<TranslatableCTA, "label"> & {
   presetImageType?: PresetImageType;
 };
 
-// Preset image types for CTA buttons - Mobile app store buttons and Social buttons
+// Preset image types for CTA buttons - Mobile app store buttons and Food delivery
 export type PresetImageType =
   | "app-store"
   | "google-play"
   | "galaxy-store"
   | "app-gallery"
-  | "app-store-outline"
-  | "google-play-outline"
-  | "galaxy-store-outline"
-  | "app-gallery-outline"
-  | "google"
-  | "facebook"
-  | "apple"
-  | "twitter"
-  | "figma"
-  | "dribbble";
+  | "uber-eats";
 
 export type HeroSectionType = {
   image?: ImageType;

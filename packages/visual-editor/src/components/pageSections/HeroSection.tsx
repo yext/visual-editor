@@ -35,7 +35,7 @@ import {
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/100x100";
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 // Helper function to extract CTA data from either nested or direct structure
 const extractCTA = (
@@ -518,8 +518,8 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,
-            height: 100,
-            width: 100,
+            height: 640,
+            width: 360,
           },
         },
         constantValueEnabled: true,
@@ -575,7 +575,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     // Otherwise, return normal fields.
     return heroSectionFields;
   },
-
   render: (props) => (
     <AnalyticsScopeProvider
       name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}

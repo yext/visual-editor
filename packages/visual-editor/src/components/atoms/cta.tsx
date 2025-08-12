@@ -85,8 +85,19 @@ export const CTA = ({
   return (
     <Button
       asChild
-      className={themeManagerCn("flex", className)}
-      variant={variant}
+      className={themeManagerCn(
+        "flex",
+        // Let preset images determine their natural size - no forced width constraints
+        ctaType === "presetImage"
+          ? "w-fit h-[51px] items-center justify-center"
+          : "",
+        // Special handling for Uber Eats to give it more visual prominence
+        ctaType === "presetImage" && presetImageType === "uber-eats"
+          ? "!w-auto"
+          : "",
+        className
+      )}
+      variant={ctaType === "presetImage" ? "link" : variant}
     >
       <Link
         cta={{

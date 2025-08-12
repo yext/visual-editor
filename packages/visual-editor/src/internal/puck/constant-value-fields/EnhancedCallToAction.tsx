@@ -68,28 +68,7 @@ export const presetImageTypeOptions = (): {
       label: pt("presetImages.appGallery", "App Gallery"),
       value: "app-gallery",
     },
-    {
-      label: pt("presetImages.appStoreOutline", "App Store (Outline)"),
-      value: "app-store-outline",
-    },
-    {
-      label: pt("presetImages.googlePlayOutline", "Google Play (Outline)"),
-      value: "google-play-outline",
-    },
-    {
-      label: pt("presetImages.galaxyStoreOutline", "Galaxy Store (Outline)"),
-      value: "galaxy-store-outline",
-    },
-    {
-      label: pt("presetImages.appGalleryOutline", "App Gallery (Outline)"),
-      value: "app-gallery-outline",
-    },
-    { label: pt("presetImages.google", "Google"), value: "google" },
-    { label: pt("presetImages.facebook", "Facebook"), value: "facebook" },
-    { label: pt("presetImages.apple", "Apple"), value: "apple" },
-    { label: pt("presetImages.twitter", "Twitter/X"), value: "twitter" },
-    { label: pt("presetImages.figma", "Figma"), value: "figma" },
-    { label: pt("presetImages.dribbble", "Dribbble"), value: "dribbble" },
+    { label: pt("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
   ];
 };
 
