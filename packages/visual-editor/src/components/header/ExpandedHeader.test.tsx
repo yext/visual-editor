@@ -377,7 +377,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 11,
+    version: 15,
     interactions: async (page) => {
       const mobileMenuButton = page.getByLabelText("Open menu");
       await act(async () => {
