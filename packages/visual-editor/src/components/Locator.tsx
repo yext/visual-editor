@@ -403,7 +403,7 @@ const LocatorInternal = ({
             <Toggle
               pressed={isSelected}
               onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-              className="p-4 self-start w-auto"
+              className="p-8 self-start w-auto"
             >
               <span className="inline-flex items-center gap-2">
                 {isSelected ? (
