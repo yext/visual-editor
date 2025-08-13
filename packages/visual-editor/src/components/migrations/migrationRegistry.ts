@@ -13,7 +13,7 @@ import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
 import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
 import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_banner_section.ts";
 import { directoryHoursStyles } from "./0014_directory_hours_styles.ts";
-import { addDirectorySiteNameMigration } from "./0016_add_directory_site_name.ts";
+import { addDirectorySiteNameMigration } from "./0017_add_directory_site_name.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
