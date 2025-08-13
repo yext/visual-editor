@@ -192,7 +192,7 @@ const tests: ComponentTest[] = [
     version: 5,
   },
   {
-    name: "version 15 props with old CTA structure",
+    name: "version 16 props with old CTA structure",
     document: { c_promo: promoData },
     props: {
       data: {
@@ -234,10 +234,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 15,
+    version: 16,
   },
   {
-    name: "version 15 props using entity values with old CTA structure",
+    name: "version 16 props using entity values with old CTA structure",
     document: { c_promo: promoData },
     props: {
       data: {
@@ -274,10 +274,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 15,
+    version: 16,
   },
   {
-    name: "version 15 props with missing ctaType",
+    name: "version 16 props with missing ctaType",
     document: { c_promo: promoData },
     props: {
       data: {
@@ -324,7 +324,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 15,
+    version: 16,
   },
 ];
 
