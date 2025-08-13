@@ -21,7 +21,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const CompactHeroImage = ({ className }: { className: string }) => {
     return resolvedHero?.image && styles.showImage ? (
       <div
-        className={themeManagerCn("w-full max-h-[400px]", className)}
+        className={themeManagerCn("w-full", className)}
         role="region"
         aria-label={t("heroImage", "Hero Image")}
       >
