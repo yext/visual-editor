@@ -53,7 +53,6 @@ export const migrateCTAStructures: Migration = {
         }
 
         // Handle case where entity field has old structure but we're using entity values
-        // In this case, we need to set up the component to handle the conversion
         if (
           !oldHeroData.constantValueEnabled &&
           oldHeroData.field &&
@@ -62,6 +61,12 @@ export const migrateCTAStructures: Migration = {
         ) {
           // For entity values, we need to provide constant values that match the expected new structure
           // but keep the entity field enabled for other data
+          // Preserve existing CTA labels if they exist, otherwise use sensible defaults
+          const existingPrimaryLabel =
+            oldHeroData.constantValue?.primaryCta?.label;
+          const existingSecondaryLabel =
+            oldHeroData.constantValue?.secondaryCta?.label;
+
           props.data.hero = {
             ...oldHeroData,
             constantValueOverride: {
@@ -73,17 +78,19 @@ export const migrateCTAStructures: Migration = {
               ...oldHeroData.constantValue,
               primaryCta: {
                 cta: {
-                  label: "Get Directions",
-                  link: "#",
-                  linkType: "URL",
+                  label: existingPrimaryLabel || "Get Directions",
+                  link: oldHeroData.constantValue?.primaryCta?.link || "#",
+                  linkType:
+                    oldHeroData.constantValue?.primaryCta?.linkType || "URL",
                   ctaType: "textAndLink",
                 },
               },
               secondaryCta: {
                 cta: {
-                  label: "Learn More",
-                  link: "#",
-                  linkType: "URL",
+                  label: existingSecondaryLabel || "Learn More",
+                  link: oldHeroData.constantValue?.secondaryCta?.link || "#",
+                  linkType:
+                    oldHeroData.constantValue?.secondaryCta?.linkType || "URL",
                   ctaType: "textAndLink",
                 },
               },
@@ -165,6 +172,9 @@ export const migrateCTAStructures: Migration = {
         ) {
           // For entity values, we need to provide constant values that match the expected new structure
           // but keep the entity field enabled for other data
+          // Preserve existing CTA label if it exists, otherwise use sensible default
+          const existingCtaLabel = oldPromoData.constantValue?.cta?.label;
+
           props.data.promo = {
             ...oldPromoData,
             constantValueOverride: {
@@ -177,9 +187,10 @@ export const migrateCTAStructures: Migration = {
               ...oldPromoData.constantValue,
               cta: {
                 cta: {
-                  label: "Call to Order",
-                  link: "+18005551010",
-                  linkType: "PHONE",
+                  label: existingCtaLabel || "Call to Order",
+                  link: oldPromoData.constantValue?.cta?.link || "+18005551010",
+                  linkType:
+                    oldPromoData.constantValue?.cta?.linkType || "PHONE",
                   ctaType: "textAndLink",
                 },
               },
