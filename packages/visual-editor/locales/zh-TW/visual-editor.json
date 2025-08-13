@@ -19,6 +19,7 @@
     "region": "州/地區",
     "sublocality": "子域"
   },
+  "altText": "Alt文字",
   "applyAll": "申請所有地區",
   "applyAllWithLabel": "將{{fieldLabel}}應用於所有語言",
   "approvals": {
@@ -40,6 +41,8 @@
     "pageSections": "頁面部分"
   },
   "category": "類別",
+  "change": "改變",
+  "chooseImage": "選擇圖像",
   "close": "關閉",
   "closeHeaderMenu": "關閉標題菜單",
   "closeMenu": "關閉菜單",
@@ -91,6 +94,7 @@
   "customSearchArea": "自定義搜索區域",
   "date": "日期",
   "dateAndTime": "日期和時間",
+  "delete": "刪除",
   "deleteItem": "刪除項目",
   "discardChanges": {
     "discardChanges": "丟棄變化",
