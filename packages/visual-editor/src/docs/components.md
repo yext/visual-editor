@@ -146,6 +146,7 @@ This object contains the content used by the component.
 | Prop                 | Type                                  | Description                                                        | Default                                       |
 | :------------------- | :------------------------------------ | :----------------------------------------------------------------- | :-------------------------------------------- |
 | `data.directoryRoot` | `TranslatableString`                  | The display label for the root link in the breadcrumbs navigation. | `"Directory Root" (constant)`                 |
+| `data.siteName`      | `YextEntityField<TranslatableString>` | The site name to display above the title.                          | `"" (empty string)`                           |
 | `data.title`         | `YextEntityField<TranslatableString>` | The title for the Directory Section.                               | `"[[name]]" (constant using embedded fields)` |
 
 #### Style Props
