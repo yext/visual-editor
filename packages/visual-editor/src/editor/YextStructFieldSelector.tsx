@@ -166,10 +166,7 @@ const SubfieldsInput = ({
               <div className="ve-mt-3 first:ve-mt-0">
                 <ConstantValueModeToggler
                   fieldTypeFilter={[type]}
-                  constantValueEnabled={
-                    value?.constantValueOverride?.[field] ||
-                    value?.constantValueEnabled
-                  }
+                  constantValueEnabled={value?.constantValueOverride?.[field]}
                   toggleConstantValueEnabled={toggleConstantValueEnabled}
                   label={label}
                   showLocale={
@@ -178,11 +175,10 @@ const SubfieldsInput = ({
                   }
                 />
               </div>
-              {(value?.constantValueOverride?.[field] ||
-                value?.constantValueEnabled) && (
+              {value?.constantValueOverride?.[field] && (
                 <div>
                   <AutoField
-                    onChange={(newConstantValue, uiState) => {
+                    onChange={(newConstantValue, uiState) =>
                       onChange(
                         {
                           field: value?.field,
@@ -197,8 +193,8 @@ const SubfieldsInput = ({
                           },
                         },
                         uiState
-                      );
-                    }}
+                      )
+                    }
                     value={value.constantValue?.[field]}
                     field={constantConfig}
                   />
