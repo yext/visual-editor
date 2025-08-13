@@ -1,5 +1,7 @@
 {
+  "Category": "Kategori",
   "Heading": "Overskrift",
+  "Image": "Bilde",
   "Link": "Lenke",
   "actions": {
     "copyToClipboard": "Kopier til utklippstavlen",
@@ -17,6 +19,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "altText": "ALT -tekst",
   "applyAll": "Bruk på alle lokaliteter",
   "applyAllWithLabel": "Bruk {{fieldLabel}} på alle steder",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Sideseksjoner"
   },
   "category": "Kategori",
+  "change": "Endre",
+  "chooseImage": "Velg bilde",
   "close": "Lukke",
   "closeHeaderMenu": "Lukk headermeny",
   "closeMenu": "Lukk meny",
@@ -89,6 +94,7 @@
   "customSearchArea": "Tilpasset søkeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
+  "delete": "Slett",
   "deleteItem": "Slett elementet",
   "discardChanges": {
     "discardChanges": "Kast endringer",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adresse",
     "alignCard": "Juster kortet",
+    "alignItems": "Juster gjenstander",
+    "alignment": "Justering",
     "analytics": "Analytics",
     "answer": "Svare",
     "apiKey": "API -nøkkel",
@@ -122,6 +130,7 @@
     "coordinates": "Koordinater",
     "copyrightMessage": "Opphavsrettsmelding",
     "copyrightText": "Copyright -tekst",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA -variant",
     "data": "Data",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Desktop Container Position",
     "desktopImagePosition": "Desktop bildeposisjon",
     "destinationURL": "Destinasjonsadressen",
+    "direction": "Retning",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "email": "E -post",
     "emailList": "E -postliste",
@@ -154,6 +164,7 @@
     "hours": "Timer",
     "hoursColumn": "Timer kolonne",
     "hoursText": "Timeseks",
+    "html": "HTML",
     "image": "Bilde",
     "imageOrientation": "Bildeorientering",
     "imageUrl": "Bilde -url",
@@ -164,6 +175,8 @@
     "insightSection": "Insight Section",
     "insights": "Innsikt",
     "instagramLink": "Instagram -lenke",
+    "javascript": "JavaScript",
+    "justifyContent": "Rettferdiggjøre innhold",
     "label": "Merkelapp",
     "level": "Nivå",
     "limit": "Begrense",
@@ -173,6 +186,7 @@
     "links": "Lenker",
     "linksAlignment": "Koblinger justering",
     "listLength": "Listelengde",
+    "liveVisibility": "Synlig på live side",
     "localGeomodifier": "Lokal geomodifier",
     "localGeomodifierHeadingLevel": "Lokal geomodifier overskriftsnivå",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Sekundære header -koblinger",
     "secondaryLinks": "Sekundære lenker",
     "sectionHeading": "Seksjonsoverskrift",
+    "sectionHeadingText": "Seksjonsoverskrift",
     "servicesColumn": "Services kolonne",
     "servicesList": "Tjenesteliste",
     "show": "Vise",
@@ -304,6 +319,7 @@
     "values": "Verdier",
     "variant": "Variant",
     "visibleOnLivePage": "Synlig på live side",
+    "wrap": "Pakk",
     "xLink": "X lenke",
     "youtubeLink": "YouTube -lenke"
   },

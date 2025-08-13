@@ -1,5 +1,7 @@
 {
+  "Category": "Kategória",
   "Heading": "Hlavný",
+  "Image": "Predstavovať",
   "Link": "Prepojiť",
   "actions": {
     "copyToClipboard": "Kopírovať do schránky",
@@ -17,7 +19,8 @@
     "region": "Štát/región",
     "sublocality": "Sublokalita"
   },
-  "applyAll": "Sa vzťahuje na všetky lokality",
+  "altText": "Alt",
+  "applyAll": "Vzťahovať sa na všetky miesta",
   "applyAllWithLabel": "Použite {{fieldLabel}} na všetky lokality",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
@@ -38,6 +41,8 @@
     "pageSections": "Sekcie stránok"
   },
   "category": "Kategória",
+  "change": "Zmena",
+  "chooseImage": "Vyberte obrázok",
   "close": "Zatvoriť",
   "closeHeaderMenu": "Zavrieť ponuku hlavičky",
   "closeMenu": "Menu",
@@ -89,6 +94,7 @@
   "customSearchArea": "Oblasť vyhľadávania",
   "date": "Dátum",
   "dateAndTime": "Dátum a čas",
+  "delete": "Vymazať",
   "deleteItem": "Vymazať",
   "discardChanges": {
     "discardChanges": "Zlikvidovať zmeny",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Osloviť",
     "alignCard": "Zarovnaná karta",
+    "alignItems": "Vyrovnanie",
+    "alignment": "Vyrovnanie",
     "analytics": "Analytika",
     "answer": "Odpoveď",
     "apiKey": "API Kľúč",
@@ -122,6 +130,7 @@
     "coordinates": "Súradnice",
     "copyrightMessage": "Autorské práva",
     "copyrightText": "Text",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "Variant CTA",
     "data": "Údaje",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Poloha stolného kontajnera",
     "desktopImagePosition": "Pozícia obrazu na pracovnej ploche",
     "destinationURL": "Cieľová adresa URL",
+    "direction": "Smerovanie",
     "directoryRootLinkLabel": "Štítok s koreňom adresára",
     "email": "E -mail",
     "emailList": "Zoznam e -mailov",
@@ -154,6 +164,7 @@
     "hours": "Hodiny",
     "hoursColumn": "Stĺp",
     "hoursText": "Text",
+    "html": "HTML",
     "image": "Predstavovať",
     "imageOrientation": "Orientácia obrazu",
     "imageUrl": "Obrazová adresa",
@@ -164,6 +175,8 @@
     "insightSection": "Sekcia",
     "insights": "Postrehy",
     "instagramLink": "Odkaz na Instagram",
+    "javascript": "JavaScript",
+    "justifyContent": "Zdôvodniť obsah",
     "label": "Štítok",
     "level": "Vyrovnanie",
     "limit": "Obmedzenie",
@@ -173,6 +186,7 @@
     "links": "Odkazy",
     "linksAlignment": "Zarovnanie odkazov",
     "listLength": "Dĺžka zoznamu",
+    "liveVisibility": "Viditeľné na živej stránke",
     "localGeomodifier": "Miestny geomodifikátor",
     "localGeomodifierHeadingLevel": "Úroveň miestneho geomodifikátora",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Odkazy na sekundárne hlavičky",
     "secondaryLinks": "Sekundárne odkazy",
     "sectionHeading": "Smerovanie sekcie",
+    "sectionHeadingText": "Text",
     "servicesColumn": "Stĺpec",
     "servicesList": "Zoznam služieb",
     "show": "Ukázať",
@@ -304,6 +319,7 @@
     "values": "Hodnota",
     "variant": "Variant",
     "visibleOnLivePage": "Viditeľné na živej stránke",
+    "wrap": "Zabaliť",
     "xLink": "X Link",
     "youtubeLink": "Odkaz na YouTube"
   },

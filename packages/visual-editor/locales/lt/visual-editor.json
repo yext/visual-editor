@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorija",
   "Heading": "Antraštė",
+  "Image": "Vaizdas",
   "Link": "Nuoroda",
   "actions": {
     "copyToClipboard": "Kopijuokite į mainų sritį",
@@ -17,6 +19,7 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
+  "altText": "Alt tekstas",
   "applyAll": "Kreipkitės į visas vietas",
   "applyAllWithLabel": "Taikyti {{fieldLabel}} visoms lokalams",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Puslapių skyriai"
   },
   "category": "Kategorija",
+  "change": "Pakeisti",
+  "chooseImage": "Pasirinkite vaizdą",
   "close": "Uždaryti",
   "closeHeaderMenu": "Uždarykite antraštės meniu",
   "closeMenu": "Uždaryti meniu",
@@ -89,6 +94,7 @@
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "date": "Data",
   "dateAndTime": "Data ir laikas",
+  "delete": "Ištrinti",
   "deleteItem": "Ištrinti elementą",
   "discardChanges": {
     "discardChanges": "Išmeskite pokyčius",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adresas",
     "alignCard": "Sulygios kortelė",
+    "alignItems": "Lyginkite daiktus",
+    "alignment": "Suderinimas",
     "analytics": "Analizė",
     "answer": "Atsakymas",
     "apiKey": "API raktas",
@@ -122,6 +130,7 @@
     "coordinates": "Koordinatės",
     "copyrightMessage": "Autorių teisių pranešimas",
     "copyrightText": "Autorių teisių tekstas",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA variantas",
     "data": "Duomenys",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Stalinio konteinerio padėtis",
     "desktopImagePosition": "Darbalaukio vaizdo padėtis",
     "destinationURL": "Paskirties URL",
+    "direction": "Kryptis",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
     "email": "El. Paštas",
     "emailList": "El. Pašto sąrašas",
@@ -154,6 +164,7 @@
     "hours": "Valandos",
     "hoursColumn": "Valandų stulpelis",
     "hoursText": "Valandų tekstas",
+    "html": "HTML",
     "image": "Vaizdas",
     "imageOrientation": "Vaizdo orientacija",
     "imageUrl": "Vaizdo URL",
@@ -164,6 +175,8 @@
     "insightSection": "Įžvalgos skyrius",
     "insights": "Įžvalgos",
     "instagramLink": "„Instagram“ nuoroda",
+    "javascript": "„JavaScript“",
+    "justifyContent": "Pateisinkite turinį",
     "label": "Etiketė",
     "level": "Lygis",
     "limit": "Limit",
@@ -173,6 +186,7 @@
     "links": "Nuorodos",
     "linksAlignment": "Nuorodos suderinimas",
     "listLength": "Sąrašo ilgis",
+    "liveVisibility": "Matomas tiesioginiame puslapyje",
     "localGeomodifier": "Vietinis geomodiferis",
     "localGeomodifierHeadingLevel": "Vietinis geomodifier antraštės lygis",
     "logo": "Logotipas",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Antrinės antraštės nuorodos",
     "secondaryLinks": "Antrinės nuorodos",
     "sectionHeading": "Skyriaus antraštė",
+    "sectionHeadingText": "Skyriaus antraštės tekstas",
     "servicesColumn": "Paslaugų stulpelis",
     "servicesList": "Paslaugų sąrašas",
     "show": "Parodyti",
@@ -304,6 +319,7 @@
     "values": "Vertės",
     "variant": "Variantas",
     "visibleOnLivePage": "Matomas tiesioginiame puslapyje",
+    "wrap": "Apvynioti",
     "xLink": "X nuoroda",
     "youtubeLink": "„YouTube“ nuoroda"
   },

@@ -1,5 +1,7 @@
 {
+  "Category": "Category",
   "Heading": "Heading",
+  "Image": "Image",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Copy to Clipboard",
@@ -17,6 +19,7 @@
     "region": "State/Region",
     "sublocality": "Sublocality"
   },
+  "altText": "Alt Text",
   "applyAll": "Apply to All Locales",
   "applyAllWithLabel": "Apply {{fieldLabel}} to All Locales",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "PAGE SECTIONS"
   },
   "category": "Category",
+  "change": "Change",
+  "chooseImage": "Choose Image",
   "close": "Close",
   "closeHeaderMenu": "Close header menu",
   "closeMenu": "Close menu",
@@ -89,6 +94,7 @@
   "customSearchArea": "Custom Search Area",
   "date": "Date",
   "dateAndTime": "Date and Time",
+  "delete": "Delete",
   "deleteItem": "Delete Item",
   "discardChanges": {
     "discardChanges": "Discard Changes",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Address",
     "alignCard": "Align card",
+    "alignItems": "Align Items",
+    "alignment": "Alignment",
     "analytics": "Analytics",
     "answer": "Answer",
     "apiKey": "API Key",
@@ -122,6 +130,7 @@
     "coordinates": "Coordinates",
     "copyrightMessage": "Copyright Message",
     "copyrightText": "Copyright Text",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA Variant",
     "data": "Data",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Desktop Container Position",
     "desktopImagePosition": "Desktop Image Position",
     "destinationURL": "Destination URL",
+    "direction": "Direction",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "email": "Email",
     "emailList": "Email List",
@@ -154,6 +164,7 @@
     "hours": "Hours",
     "hoursColumn": "Hours Column",
     "hoursText": "Hours Text",
+    "html": "HTML",
     "image": "Image",
     "imageOrientation": "Image Orientation",
     "imageUrl": "Image URL",
@@ -164,6 +175,8 @@
     "insightSection": "Insight Section",
     "insights": "Insights",
     "instagramLink": "Instagram Link",
+    "javascript": "JavaScript",
+    "justifyContent": "Justify Content",
     "label": "Label",
     "level": "Level",
     "limit": "Limit",
@@ -173,6 +186,7 @@
     "links": "Links",
     "linksAlignment": "Links Alignment",
     "listLength": "List Length",
+    "liveVisibility": "Visible on Live Page",
     "localGeomodifier": "Local GeoModifier",
     "localGeomodifierHeadingLevel": "Local GeoModifier Heading Level",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Secondary Header Links",
     "secondaryLinks": "Secondary Links",
     "sectionHeading": "Section Heading",
+    "sectionHeadingText": "Section Heading Text",
     "servicesColumn": "Services Column",
     "servicesList": "Services List",
     "show": "Show",
@@ -304,6 +319,7 @@
     "values": "Values",
     "variant": "Variant",
     "visibleOnLivePage": "Visible on Live Page",
+    "wrap": "Wrap",
     "xLink": "X Link",
     "youtubeLink": "YouTube Link"
   },

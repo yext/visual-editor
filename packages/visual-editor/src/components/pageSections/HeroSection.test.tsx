@@ -267,7 +267,7 @@ const tests: ComponentTest[] = [
     version: 9,
   },
   {
-    name: "[classic] version 14 props using constant values",
+    name: "[classic] version 15 props using constant values",
     document: {
       name: "name",
       address: {
@@ -365,10 +365,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "HeroSection-99c86e04-e8fc-441e-b14d-e165b787d6d5",
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "[classic] version 14 props using entity values",
+    name: "[classic] version 15 props using entity values",
     document: {
       name: "name",
       address: {
@@ -465,10 +465,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "heroSection" },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "[immersive] version 14 props using constant values",
+    name: "[immersive] version 15 props using constant values",
     document: {
       name: "name",
       address: {
@@ -566,10 +566,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
 
-    version: 14,
+    version: 15,
   },
   {
-    name: "[spotlight] version 14 props using constant values",
+    name: "[spotlight] version 15 props using constant values",
     document: {
       name: "name",
       address: {
@@ -666,10 +666,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "heroSection" },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
   {
-    name: "[compact] version 14 props using constant values",
+    name: "[compact] version 15 props using constant values",
     document: {
       name: "name",
       address: {
@@ -766,7 +766,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "heroSection" },
       liveVisibility: true,
     },
-    version: 14,
+    version: 15,
   },
 ];
 

@@ -1,5 +1,7 @@
 {
+  "Category": "Luokka",
   "Heading": "Otsikko",
+  "Image": "Kuva",
   "Link": "Linkki",
   "actions": {
     "copyToClipboard": "Kopioi leikepöydälle",
@@ -17,6 +19,7 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "altText": "Alt -teksti",
   "applyAll": "Sovelleta kaikkia alueita",
   "applyAllWithLabel": "Levitä {{fieldLabel}} kaikkiin alueisiin",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Page -osiot"
   },
   "category": "Luokka",
+  "change": "Muuttaa",
+  "chooseImage": "Valitse kuva",
   "close": "Lähellä",
   "closeHeaderMenu": "Sulje otsikkovalikko",
   "closeMenu": "Suljevalikko",
@@ -89,6 +94,7 @@
   "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
   "dateAndTime": "Päivämäärä ja aika",
+  "delete": "Poistaa",
   "deleteItem": "Poista kohde",
   "discardChanges": {
     "discardChanges": "Hylätä muutokset",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Osoite",
     "alignCard": "Kohdistaa kortti",
+    "alignItems": "Kohdistaa kohteet",
+    "alignment": "Linjaus",
     "analytics": "Analytiikka",
     "answer": "Vastaus",
     "apiKey": "API -avain",
@@ -122,6 +130,7 @@
     "coordinates": "Koordinaatit",
     "copyrightMessage": "Tekijänoikeusviesti",
     "copyrightText": "Tekijänoikeusteksti",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA -variantti",
     "data": "Tiedot",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Työpöydän säiliön sijainti",
     "desktopImagePosition": "Työpöydän kuvan sijainti",
     "destinationURL": "Kohde -URL -osoite",
+    "direction": "Suunta",
     "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
     "email": "Sähköposti",
     "emailList": "Sähköpostiluettelo",
@@ -154,6 +164,7 @@
     "hours": "Tuntia",
     "hoursColumn": "Tuntiasarake",
     "hoursText": "Tuntien teksti",
+    "html": "HTML",
     "image": "Kuva",
     "imageOrientation": "Kuvan suuntaus",
     "imageUrl": "Kuva -URL -osoite",
@@ -164,6 +175,8 @@
     "insightSection": "Oivallusosa",
     "insights": "Oivallukset",
     "instagramLink": "Instagram -linkki",
+    "javascript": "JavaScript",
+    "justifyContent": "Perustele sisältöä",
     "label": "Merkitä",
     "level": "Taso",
     "limit": "Rajoittaa",
@@ -173,6 +186,7 @@
     "links": "Linkit",
     "linksAlignment": "Linkkien suuntaus",
     "listLength": "Listata pituus",
+    "liveVisibility": "Näkyvissä live -sivulla",
     "localGeomodifier": "Paikallinen geomodifoija",
     "localGeomodifierHeadingLevel": "Paikallinen geomodifiorin otsikkotaso",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Toissijainen otsikkoyhteys",
     "secondaryLinks": "Toissijaiset linkit",
     "sectionHeading": "Osiootsikko",
+    "sectionHeadingText": "Osan otsikkoteksti",
     "servicesColumn": "Palvelukerros",
     "servicesList": "Palvelulista",
     "show": "Show",
@@ -304,6 +319,7 @@
     "values": "Arvot",
     "variant": "Variantti",
     "visibleOnLivePage": "Näkyvissä live -sivulla",
+    "wrap": "Kääriä",
     "xLink": "X -linkki",
     "youtubeLink": "YouTube -linkki"
   },

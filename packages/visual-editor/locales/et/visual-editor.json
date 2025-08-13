@@ -1,5 +1,7 @@
 {
+  "Category": "Kategooria",
   "Heading": "Pealkiri",
+  "Image": "Pilt",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopeeri lõikelauale",
@@ -17,6 +19,7 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
+  "altText": "Alt -tekst",
   "applyAll": "Kandideerige kõigisse paikadesse",
   "applyAllWithLabel": "Rakendage {{fieldLabel}} kõigisse paikadesse",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Leheosad"
   },
   "category": "Kategooria",
+  "change": "Vahetus",
+  "chooseImage": "Valige pilt",
   "close": "Sulgur",
   "closeHeaderMenu": "Sulgemenüü",
   "closeMenu": "Sulgemenüü",
@@ -89,6 +94,7 @@
   "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
   "dateAndTime": "Kuupäev ja kellaaeg",
+  "delete": "Kustutama",
   "deleteItem": "Kustuta üksus",
   "discardChanges": {
     "discardChanges": "Muudatused äraviskamine",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Aadress",
     "alignCard": "Joondama kaart",
+    "alignItems": "Esemeid joondama",
+    "alignment": "Joondamine",
     "analytics": "Analüütika",
     "answer": "Vastus",
     "apiKey": "API -võti",
@@ -122,6 +130,7 @@
     "coordinates": "Koordinaadid",
     "copyrightMessage": "Autoriõiguse teade",
     "copyrightText": "Autoriõiguse tekst",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA variant",
     "data": "Andmed",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Lauaarvuti konteineri asend",
     "desktopImagePosition": "Töölaua pildipositsioon",
     "destinationURL": "Sihtkoha URL",
+    "direction": "Suund",
     "directoryRootLinkLabel": "Kataloogi juurte lingi silt",
     "email": "E -kiri",
     "emailList": "E -posti nimekiri",
@@ -154,6 +164,7 @@
     "hours": "Tööaeg",
     "hoursColumn": "Töötundide veerg",
     "hoursText": "Tundidekst",
+    "html": "HTML",
     "image": "Pilt",
     "imageOrientation": "Pildi orientatsioon",
     "imageUrl": "Pildi URL",
@@ -164,6 +175,8 @@
     "insightSection": "Ülevaateosa",
     "insights": "Teadmised",
     "instagramLink": "Instagrami link",
+    "javascript": "JavaScript",
+    "justifyContent": "Õigustage sisu",
     "label": "Silt",
     "level": "Tasand",
     "limit": "Piiranguid",
@@ -173,6 +186,7 @@
     "links": "Lingid",
     "linksAlignment": "Linkide joondamine",
     "listLength": "Nimekirja pikkus",
+    "liveVisibility": "Nähtav live -lehel",
     "localGeomodifier": "Kohalik geomodifikaator",
     "localGeomodifierHeadingLevel": "Kohalik geomodifikaatori pealkirjatase",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Teisese päise lingid",
     "secondaryLinks": "Sekundaarsed lingid",
     "sectionHeading": "Sektsiooni pealkiri",
+    "sectionHeadingText": "Sektsiooni pealkiri tekst",
     "servicesColumn": "Teenuste veerg",
     "servicesList": "Teenuste nimekiri",
     "show": "Näitama",
@@ -304,6 +319,7 @@
     "values": "Väärtused",
     "variant": "Variant",
     "visibleOnLivePage": "Nähtav live -lehel",
+    "wrap": "Mähis",
     "xLink": "X Link",
     "youtubeLink": "YouTube'i link"
   },

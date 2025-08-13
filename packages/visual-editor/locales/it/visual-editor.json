@@ -1,5 +1,7 @@
 {
+  "Category": "Categoria",
   "Heading": "Intestazione",
+  "Image": "Immagine",
   "Link": "Collegamento",
   "actions": {
     "copyToClipboard": "Copia negli appunti",
@@ -17,8 +19,9 @@
     "region": "Stato/regione",
     "sublocality": "Sublocalità"
   },
+  "altText": "Alt text",
   "applyAll": "Applicare a tutti i locali",
-  "applyAllWithLabel": "Applica {{fieldlabel}} a tutti i locali",
+  "applyAllWithLabel": "Applica {{fieldLabel}} a tutti i locali",
   "approvals": {
     "addAComment": "Aggiungi un commento per aiutare l'approvazione a capire cosa è cambiato",
     "send": "Invia per l'approvazione",
@@ -38,6 +41,8 @@
     "pageSections": "Sezioni di pagina"
   },
   "category": "Categoria",
+  "change": "Modifica",
+  "chooseImage": "Scegli l'immagine",
   "close": "Vicino",
   "closeHeaderMenu": "Chiudi il menu dell'intestazione",
   "closeMenu": "Chiudi menu",
@@ -89,6 +94,7 @@
   "customSearchArea": "Area di ricerca personalizzata",
   "date": "Data",
   "dateAndTime": "Data e ora",
+  "delete": "Eliminare",
   "deleteItem": "Elimina l'articolo",
   "discardChanges": {
     "discardChanges": "Scartare i cambiamenti",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Indirizzo",
     "alignCard": "Allinea carta",
+    "alignItems": "Allinea gli articoli",
+    "alignment": "Allineamento",
     "analytics": "Analisi",
     "answer": "Risposta",
     "apiKey": "Chiave API",
@@ -122,6 +130,7 @@
     "coordinates": "Coordinate",
     "copyrightMessage": "Messaggio di copyright",
     "copyrightText": "Testo del copyright",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "Variante CTA",
     "data": "Dati",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Posizione del contenitore desktop",
     "desktopImagePosition": "Posizione dell'immagine desktop",
     "destinationURL": "URL di destinazione",
+    "direction": "Direzione",
     "directoryRootLinkLabel": "Etichetta del collegamento root directory",
     "email": "E-mail",
     "emailList": "Elenco e -mail",
@@ -154,6 +164,7 @@
     "hours": "Ore",
     "hoursColumn": "Colonna delle ore",
     "hoursText": "Testo delle ore",
+    "html": "HTML",
     "image": "Immagine",
     "imageOrientation": "Orientamento dell'immagine",
     "imageUrl": "URL di immagine",
@@ -164,6 +175,8 @@
     "insightSection": "Sezione Insight",
     "insights": "Intuizioni",
     "instagramLink": "Link Instagram",
+    "javascript": "JavaScript",
+    "justifyContent": "Giustifica il contenuto",
     "label": "Etichetta",
     "level": "Livello",
     "limit": "Limite",
@@ -173,6 +186,7 @@
     "links": "Link",
     "linksAlignment": "Allineamento dei collegamenti",
     "listLength": "Lunghezza dell'elenco",
+    "liveVisibility": "Visibile sulla pagina live",
     "localGeomodifier": "Geomodificatore locale",
     "localGeomodifierHeadingLevel": "Livello di intestazione del geomodificatore locale",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Collegamenti di intestazione secondaria",
     "secondaryLinks": "Collegamenti secondari",
     "sectionHeading": "Intestazione della sezione",
+    "sectionHeadingText": "Testo di intestazione della sezione",
     "servicesColumn": "Colonna dei servizi",
     "servicesList": "Elenco dei servizi",
     "show": "Spettacolo",
@@ -304,6 +319,7 @@
     "values": "Valori",
     "variant": "Variante",
     "visibleOnLivePage": "Visibile sulla pagina live",
+    "wrap": "Avvolgere",
     "xLink": "X link",
     "youtubeLink": "Link YouTube"
   },

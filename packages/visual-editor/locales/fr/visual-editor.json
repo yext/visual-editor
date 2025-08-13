@@ -1,5 +1,7 @@
 {
+  "Category": "Catégorie",
   "Heading": "Titre",
+  "Image": "Image",
   "Link": "Lien",
   "actions": {
     "copyToClipboard": "Copier dans le presse-papiers",
@@ -17,6 +19,7 @@
     "region": "État / région",
     "sublocality": "Sublocalité"
   },
+  "altText": "Texte alt",
   "applyAll": "Postuler à tous les lieux",
   "applyAllWithLabel": "Appliquer {{fieldLabel}} à tous les endroits",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Sections de page"
   },
   "category": "Catégorie",
+  "change": "Changement",
+  "chooseImage": "Choisir l'image",
   "close": "Fermer",
   "closeHeaderMenu": "Menu d'en-tête de fermeture",
   "closeMenu": "Fermer le menu",
@@ -89,6 +94,7 @@
   "customSearchArea": "Zone de recherche personnalisée",
   "date": "Date",
   "dateAndTime": "Date et heure",
+  "delete": "Supprimer",
   "deleteItem": "Supprimer",
   "discardChanges": {
     "discardChanges": "Jeter les changements",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adresse",
     "alignCard": "Aligner la carte",
+    "alignItems": "Aligner les éléments",
+    "alignment": "Alignement",
     "analytics": "Analytique",
     "answer": "Répondre",
     "apiKey": "Clé API",
@@ -122,6 +130,7 @@
     "coordinates": "Coordonnées",
     "copyrightMessage": "Message du droit d'auteur",
     "copyrightText": "Texte du droit d'auteur",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "Variante CTA",
     "data": "Données",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Position de conteneur de bureau",
     "desktopImagePosition": "Position d'image de bureau",
     "destinationURL": "URL de destination",
+    "direction": "Direction",
     "directoryRootLinkLabel": "Étiquette du lien racine du répertoire",
     "email": "E-mail",
     "emailList": "Liste de diffusion",
@@ -154,6 +164,7 @@
     "hours": "Heures",
     "hoursColumn": "Colonne d'heures",
     "hoursText": "Texte des heures",
+    "html": "HTML",
     "image": "Image",
     "imageOrientation": "Orientation de l'image",
     "imageUrl": "URL d'image",
@@ -164,6 +175,8 @@
     "insightSection": "SECTION APPORT",
     "insights": "Connaissances",
     "instagramLink": "Lien Instagram",
+    "javascript": "Javascrip",
+    "justifyContent": "Justifier le contenu",
     "label": "Étiquette",
     "level": "Niveau",
     "limit": "Limite",
@@ -173,6 +186,7 @@
     "links": "Links",
     "linksAlignment": "Alignement des liens",
     "listLength": "Longueur de liste",
+    "liveVisibility": "Visible sur la page en direct",
     "localGeomodifier": "Géomodificateur local",
     "localGeomodifierHeadingLevel": "Niveau de cap du géomodificateur local",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Liens d'en-tête secondaires",
     "secondaryLinks": "Liens secondaires",
     "sectionHeading": "Section Contrôle",
+    "sectionHeadingText": "SECTION Texte",
     "servicesColumn": "Colonne de services",
     "servicesList": "Liste des services",
     "show": "Montrer",
@@ -304,6 +319,7 @@
     "values": "Valeurs",
     "variant": "Variante",
     "visibleOnLivePage": "Visible sur la page en direct",
+    "wrap": "Envelopper",
     "xLink": "X lien",
     "youtubeLink": "Lien youtube"
   },

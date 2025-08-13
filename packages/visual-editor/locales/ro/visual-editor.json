@@ -1,5 +1,7 @@
 {
+  "Category": "Categorie",
   "Heading": "Îndreptându -se",
+  "Image": "Imagine",
   "Link": "Legătură",
   "actions": {
     "copyToClipboard": "Copiați în clipboard",
@@ -17,6 +19,7 @@
     "region": "Stat/regiune",
     "sublocality": "Sublociune"
   },
+  "altText": "Alt text",
   "applyAll": "Aplicați la toate localitățile",
   "applyAllWithLabel": "Aplicați {{fieldLabel}} la toate localitățile",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Secțiuni de pagini"
   },
   "category": "Categorie",
+  "change": "Schimba",
+  "chooseImage": "Alege Imagine",
   "close": "Aproape",
   "closeHeaderMenu": "Închideți meniul antetului",
   "closeMenu": "Închideți meniul",
@@ -89,6 +94,7 @@
   "customSearchArea": "Zona de căutare personalizată",
   "date": "Data",
   "dateAndTime": "Data și ora",
+  "delete": "Şterge",
   "deleteItem": "Ștergeți elementul",
   "discardChanges": {
     "discardChanges": "Renunțați la modificările",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adresa",
     "alignCard": "Aliniați cardul",
+    "alignItems": "Aliniați articolele",
+    "alignment": "Aliniere",
     "analytics": "Analitică",
     "answer": "Răspuns",
     "apiKey": "Cheia API",
@@ -122,6 +130,7 @@
     "coordinates": "Coordonate",
     "copyrightMessage": "Mesaj pentru drepturi de autor",
     "copyrightText": "Textul dreptului de autor",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "Varianta CTA",
     "data": "Date",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Poziția containerului desktop",
     "desktopImagePosition": "Poziția imaginii desktop",
     "destinationURL": "URL de destinație",
+    "direction": "Direcţie",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
     "email": "E-mail",
     "emailList": "Lista de e -mailuri",
@@ -154,6 +164,7 @@
     "hours": "Ore",
     "hoursColumn": "Coloană de ore",
     "hoursText": "Text text",
+    "html": "HTML",
     "image": "Imagine",
     "imageOrientation": "Orientarea imaginii",
     "imageUrl": "URL de imagine",
@@ -164,6 +175,8 @@
     "insightSection": "Secțiune Insight",
     "insights": "Perspective",
     "instagramLink": "Link Instagram",
+    "javascript": "JavaScript",
+    "justifyContent": "Justifică conținutul",
     "label": "Eticheta",
     "level": "Nivel",
     "limit": "Limită",
@@ -173,6 +186,7 @@
     "links": "Link -uri",
     "linksAlignment": "Alinierea legăturilor",
     "listLength": "Lungimea listei",
+    "liveVisibility": "Vizibil pe pagina live",
     "localGeomodifier": "Geomodificator local",
     "localGeomodifierHeadingLevel": "Nivelul local al geomodificatorului",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Legături de antet secundare",
     "secondaryLinks": "Legături secundare",
     "sectionHeading": "Rubrică de secțiune",
+    "sectionHeadingText": "Text de rubrică secțiune",
     "servicesColumn": "Coloana Servicii",
     "servicesList": "Lista serviciilor",
     "show": "Spectacol",
@@ -304,6 +319,7 @@
     "values": "Valori",
     "variant": "Variantă",
     "visibleOnLivePage": "Vizibil pe pagina live",
+    "wrap": "Înveliș",
     "xLink": "X Link",
     "youtubeLink": "Link YouTube"
   },

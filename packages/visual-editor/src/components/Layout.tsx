@@ -4,6 +4,7 @@ import {
   SpacingSelector,
   BackgroundStyle,
   YextField,
+  msg,
 } from "@yext/visual-editor";
 
 export const layoutVariants = cva("components w-full", {
@@ -100,10 +101,13 @@ export interface layoutProps extends VariantProps<typeof layoutVariants> {
 }
 
 export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: YextField("Background Color", {
-    type: "select",
-    options: "BACKGROUND_COLOR",
-  }),
+  backgroundColor: YextField(
+    msg("fields.backgroundColor", "Background Color"),
+    {
+      type: "select",
+      options: "BACKGROUND_COLOR",
+    }
+  ),
   gap: SpacingSelector("Gap", "gap", false),
   verticalPadding: SpacingSelector("Top/Bottom Padding", "padding", true),
   horizontalPadding: SpacingSelector("Left/Right Padding", "padding", false),

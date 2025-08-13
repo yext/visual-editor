@@ -1,5 +1,7 @@
 {
+  "Category": "Kategorija",
   "Heading": "Naslov",
+  "Image": "Slika",
   "Link": "Link",
   "actions": {
     "copyToClipboard": "Kopirajte u međuspremnik",
@@ -17,6 +19,7 @@
     "region": "Država/regija",
     "sublocality": "Subblokalnost"
   },
+  "altText": "Alt tekst",
   "applyAll": "Prijavite se na sve lokacije",
   "applyAllWithLabel": "Primijenite {{fieldLabel}} na sve lokacije",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Odjeljci stranica"
   },
   "category": "Kategorija",
+  "change": "Promijeniti",
+  "chooseImage": "Odaberite sliku",
   "close": "Zatvoriti",
   "closeHeaderMenu": "Zatvori izbornik zaglavlja",
   "closeMenu": "Zatvori izbornik",
@@ -89,6 +94,7 @@
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "date": "Datum",
   "dateAndTime": "Datum i vrijeme",
+  "delete": "Izbrisati",
   "deleteItem": "Izbriši predmet",
   "discardChanges": {
     "discardChanges": "Odbaciti promjene",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adresa",
     "alignCard": "Poravnavanje",
+    "alignItems": "Poravnaj predmete",
+    "alignment": "Poravnanje",
     "analytics": "Analitika",
     "answer": "Odgovor",
     "apiKey": "API ključ",
@@ -122,6 +130,7 @@
     "coordinates": "Koordinate",
     "copyrightMessage": "Poruka o autorskim pravima",
     "copyrightText": "Tekst autorskih prava",
+    "css": "CSS",
     "cta": "CTA",
     "ctaVariant": "CTA varijanta",
     "data": "Podaci",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Položaj kontejnera radne površine",
     "desktopImagePosition": "Položaj slike radne površine",
     "destinationURL": "URL odredišta",
+    "direction": "Smjer",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
     "email": "E -pošta",
     "emailList": "Popis e -pošte",
@@ -154,6 +164,7 @@
     "hours": "Sate",
     "hoursColumn": "Sati stupaca",
     "hoursText": "Sati teksta",
+    "html": "HTML",
     "image": "Slika",
     "imageOrientation": "Orijentacija slike",
     "imageUrl": "URL slike",
@@ -164,6 +175,8 @@
     "insightSection": "Odjeljak",
     "insights": "Uvidi",
     "instagramLink": "Instagram veza",
+    "javascript": "JavaScript",
+    "justifyContent": "Opravdati sadržaj",
     "label": "Označiti",
     "level": "Nivo",
     "limit": "Ograničiti",
@@ -173,6 +186,7 @@
     "links": "Veze",
     "linksAlignment": "Poravnanje veza",
     "listLength": "Dužina popisa",
+    "liveVisibility": "Vidljivo na stranici uživo",
     "localGeomodifier": "Lokalni geomodifikator",
     "localGeomodifierHeadingLevel": "Lokalni geomodifikator razine",
     "logo": "Logo",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Sekundarne veze zaglavlja",
     "secondaryLinks": "Sekundarne veze",
     "sectionHeading": "Odjeljak za naslov",
+    "sectionHeadingText": "Tekst naslova odjeljka",
     "servicesColumn": "Službeni stupac",
     "servicesList": "Popis usluga",
     "show": "Pokazati",
@@ -304,6 +319,7 @@
     "values": "Vrijednosti",
     "variant": "Varijanta",
     "visibleOnLivePage": "Vidljivo na stranici uživo",
+    "wrap": "Zamotati",
     "xLink": "X Link",
     "youtubeLink": "YouTube veza"
   },

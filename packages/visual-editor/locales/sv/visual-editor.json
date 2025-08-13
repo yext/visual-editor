@@ -1,5 +1,7 @@
 {
+  "Category": "Kategori",
   "Heading": "Rubrik",
+  "Image": "Bild",
   "Link": "Länk",
   "actions": {
     "copyToClipboard": "Kopiera till Urklipp",
@@ -17,6 +19,7 @@
     "region": "Stat/region",
     "sublocality": "Sublokalitet"
   },
+  "altText": "Alt text",
   "applyAll": "Applicera på alla platser",
   "applyAllWithLabel": "Applicera {{fieldLabel}} på alla platser",
   "approvals": {
@@ -38,6 +41,8 @@
     "pageSections": "Sidavsnitt"
   },
   "category": "Kategori",
+  "change": "Ändra",
+  "chooseImage": "Välj bild",
   "close": "Nära",
   "closeHeaderMenu": "Stäng rubrikmeny",
   "closeMenu": "Stänga meny",
@@ -89,6 +94,7 @@
   "customSearchArea": "Anpassad sökområde",
   "date": "Datum",
   "dateAndTime": "Datum och tid",
+  "delete": "Radera",
   "deleteItem": "Ta bort objekt",
   "discardChanges": {
     "discardChanges": "Kassera förändringar",
@@ -103,6 +109,8 @@
   "fields": {
     "address": "Adress",
     "alignCard": "Justera kort",
+    "alignItems": "Justera föremål",
+    "alignment": "Inriktning",
     "analytics": "Analys",
     "answer": "Svar",
     "apiKey": "API -nyckel",
@@ -122,6 +130,7 @@
     "coordinates": "Koordinater",
     "copyrightMessage": "Upphovsrättsmeddelande",
     "copyrightText": "Upphovsrättstext",
+    "css": "CSS",
     "cta": "Cta",
     "ctaVariant": "CTA -variant",
     "data": "Data",
@@ -130,6 +139,7 @@
     "desktopContainerPosition": "Skrivbordsbehållare",
     "desktopImagePosition": "Skrivbordsbilden",
     "destinationURL": "Destinationsadress",
+    "direction": "Riktning",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
     "email": "E-post",
     "emailList": "E -postlista",
@@ -154,6 +164,7 @@
     "hours": "Timme",
     "hoursColumn": "Time -kolumn",
     "hoursText": "Timmars text",
+    "html": "HTML",
     "image": "Bild",
     "imageOrientation": "Bildorientering",
     "imageUrl": "Url",
@@ -164,6 +175,8 @@
     "insightSection": "Insiktsavdelning",
     "insights": "Insikt",
     "instagramLink": "Instagram -länk",
+    "javascript": "JavaScript",
+    "justifyContent": "Motivera innehåll",
     "label": "Märka",
     "level": "Nivå",
     "limit": "Begränsa",
@@ -173,6 +186,7 @@
     "links": "Länkar",
     "linksAlignment": "Länkar justering",
     "listLength": "Listlängd",
+    "liveVisibility": "Synlig på live -sidan",
     "localGeomodifier": "Lokal geomodifierare",
     "localGeomodifierHeadingLevel": "Lokal geomodifiernivå",
     "logo": "Logotyp",
@@ -273,6 +287,7 @@
     "secondaryHeaderLinks": "Sekundärhuvudlänkar",
     "secondaryLinks": "Sekundär länkar",
     "sectionHeading": "Sektionsrubrik",
+    "sectionHeadingText": "Sektionsrubriktext",
     "servicesColumn": "Servicekolumn",
     "servicesList": "Tjänstelista",
     "show": "Visa",
@@ -304,6 +319,7 @@
     "values": "Värderingar",
     "variant": "Variant",
     "visibleOnLivePage": "Synlig på live -sidan",
+    "wrap": "Sjal",
     "xLink": "X -länk",
     "youtubeLink": "YouTube -länk"
   },
