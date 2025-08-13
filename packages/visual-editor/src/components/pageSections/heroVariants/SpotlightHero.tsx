@@ -29,7 +29,11 @@ export const SpotlightHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
     >
       <PageSection
         aria-label={t("heroBanner", "Hero Banner")}
-        className={`relative z-10 flex items-center h-full ${
+        outerClassName="h-fit flex items-center"
+        outerStyle={{
+          minHeight: `${styles.image.height}px`,
+        }}
+        className={`relative z-10 flex items-center w-full h-full ${
           styles.desktopContainerPosition === "center"
             ? "justify-center"
             : "justify-start"

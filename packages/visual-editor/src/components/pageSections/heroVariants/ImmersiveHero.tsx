@@ -35,7 +35,11 @@ export const ImmersiveHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
             : backgroundColors.background1.value
         }
         aria-label={t("heroBanner", "Hero Banner")}
-        className="z-10 flex items-center h-full"
+        className="z-10 flex items-center h-full w-full"
+        outerClassName="h-fit flex items-center"
+        outerStyle={{
+          minHeight: `${styles.image.height}px`,
+        }}
       >
         <div className={heroContentParentCn(styles)}>
           <HeroContent data={data} styles={styles} />

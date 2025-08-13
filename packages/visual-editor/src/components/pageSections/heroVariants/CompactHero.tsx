@@ -21,7 +21,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const CompactHeroImage = ({ className }: { className: string }) => {
     return resolvedHero?.image && styles.showImage ? (
       <div
-        className={`w-full ${className} max-h-[400px]`}
+        className={themeManagerCn("w-full max-h-[400px]", className)}
         role="region"
         aria-label={t("heroImage", "Hero Image")}
       >
@@ -33,7 +33,11 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
         >
           <Image
             image={resolvedHero.image}
-            className="w-full h-full object-cover"
+            aspectRatio={styles.image.aspectRatio}
+            className={themeManagerCn(
+              "w-full sm:w-fit h-full",
+              styles.desktopImagePosition === "left" ? "mr-auto" : "ml-auto"
+            )}
           />
         </EntityField>
       </div>
@@ -45,7 +49,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   return (
     <Background
       background={styles.backgroundColor}
-      className="components w-full flex flex-col sm:flex-row"
+      className="components w-full flex flex-col sm:flex-row justify-between"
     >
       {/* Desktop left image / Mobile top image */}
       <CompactHeroImage

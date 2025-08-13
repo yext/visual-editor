@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, DefaultComponentProps, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
@@ -99,9 +99,13 @@ export interface HeroStyles {
   secondaryCTA: CTAProps["variant"];
 
   /**
-   * Styling options for the hero image, such as aspect ratio (classic variant).
+   * Styling options for the hero image.
+   * Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height.
+   * Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
+   * Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
+   * Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported).
    */
-  image: ImageStylingProps;
+  image: ImageStylingProps & { height?: number };
 
   /**
    * Container position on desktop (spotlight and immersive variants).
@@ -323,7 +327,14 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       }),
       image: YextField(msg("fields.image", "Image"), {
         type: "object",
-        objectFields: ImageStylingFields,
+        objectFields: {
+          height: {
+            type: "number",
+            min: 0,
+            label: msg("fields.height", "Height"),
+          },
+          ...ImageStylingFields,
+        },
       }),
       desktopImagePosition: YextField(
         msg("fields.desktopImagePosition", "Desktop Image Position"),
@@ -453,6 +464,7 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       secondaryCTA: "secondary",
       image: {
         aspectRatio: 1.78, // 16:9 default
+        height: 500,
       },
       desktopContainerPosition: "left",
       mobileContentAlignment: "left",
@@ -492,32 +504,66 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
 
     switch (data.props.styles.variant) {
       case "compact": {
-        fields = removeStyleFields(fields, ["image"]);
+        fields = updateFields(
+          fields,
+          ["styles.objectFields.image.objectFields.width"],
+          undefined
+        );
         // compact should also remove the props removed by classic
       }
       case "classic": {
-        fields = removeStyleFields(fields, ["desktopContainerPosition"]);
+        fields = updateFields(
+          fields,
+          [
+            "styles.objectFields.desktopContainerPosition",
+            "styles.objectFields.image.objectFields.height",
+          ],
+          undefined
+        );
 
-        if (!data.props.styles.showImage) {
-          fields = removeStyleFields(fields, [
-            "image",
-            "mobileImagePosition",
-            "desktopImagePosition",
-          ]);
+        if (data.props.styles.showImage) {
+          fields = updateFields(
+            fields,
+            ["styles.objectFields.image.objectFields.aspectRatio.options"],
+            // @ts-expect-error ts(2339) objectFields exists
+            fields.styles.objectFields.image.objectFields.aspectRatio.options.filter(
+              (option: { label: string; value: string }) =>
+                !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
+            )
+          );
+        } else {
+          fields = updateFields(
+            fields,
+            [
+              "styles.objectFields.mobileImagePosition",
+              "styles.objectFields.desktopImagePosition",
+              "styles.objectFields.image",
+            ],
+            undefined
+          );
         }
         break;
       }
       case "immersive": {
-        fields = removeStyleFields(fields, ["backgroundColor"]);
+        fields = updateFields(
+          fields,
+          ["styles.objectFields.backgroundColor"],
+          undefined
+        );
         // immersive should also remove the props removed by spotlight
       }
       case "spotlight": {
-        fields = removeStyleFields(fields, [
-          "showImage",
-          "image",
-          "mobileImagePosition",
-          "desktopImagePosition",
-        ]);
+        fields = updateFields(
+          fields,
+          [
+            "styles.objectFields.showImage",
+            "styles.objectFields.image.objectFields.aspectRatio",
+            "styles.objectFields.image.objectFields.width",
+            "styles.objectFields.mobileImagePosition",
+            "styles.objectFields.desktopImagePosition",
+          ],
+          undefined
+        );
         break;
       }
     }
@@ -555,31 +601,36 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
 };
 
 /**
- * removeStyleFields hides a given list of fields from the Puck sidebar
+ * updateFields is a resolveFields helper that can update or remove fields
+ * based on a dot notation path
  * @internal
  */
-const removeStyleFields = (
-  fields: Fields<HeroSectionProps>,
-  styleFieldsToRemove: string[]
-): Fields<HeroSectionProps> => {
-  // @ts-expect-error ts(2339) objectFields exists
-  const objectFields = fields.styles.objectFields;
-  const newObjectFields: Record<string, any> = {};
+const updateFields = <T extends DefaultComponentProps>(
+  obj: Record<string, any>,
+  paths: string[],
+  value: any
+): Fields<T> => {
+  const newObj = { ...obj };
 
-  for (const key in objectFields) {
-    if (Object.prototype.hasOwnProperty.call(objectFields, key)) {
-      if (!styleFieldsToRemove.includes(key)) {
-        newObjectFields[key] = objectFields[key];
-      }
+  for (const path of paths) {
+    const keys = path.split(".");
+    let current = newObj;
+
+    for (let i = 0; i < keys.length - 1; i++) {
+      const key = keys[i];
+      // Create new objects along the path to ensure deep immutability
+      current[key] = { ...current[key] };
+      current = current[key];
+    }
+
+    const lastKey = keys[keys.length - 1];
+
+    if (value === undefined) {
+      delete current[lastKey];
+    } else {
+      current[lastKey] = value;
     }
   }
 
-  return {
-    ...fields,
-    styles: {
-      ...fields.styles,
-      // @ts-expect-error ts(2339) objectFields exists
-      objectFields: newObjectFields,
-    },
-  };
+  return newObj as Fields<T>;
 };
