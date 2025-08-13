@@ -19,7 +19,6 @@
     "region": "Stat/regiune",
     "sublocality": "Sublociune"
   },
-  "altText": "Alt text",
   "applyAll": "Aplicați la toate localitățile",
   "applyAllWithLabel": "Aplicați {{fieldLabel}} la toate localitățile",
   "approvals": {
@@ -41,8 +40,6 @@
     "pageSections": "Secțiuni de pagini"
   },
   "category": "Categorie",
-  "change": "Schimba",
-  "chooseImage": "Alege Imagine",
   "close": "Aproape",
   "closeHeaderMenu": "Închideți meniul antetului",
   "closeMenu": "Închideți meniul",
@@ -94,7 +91,6 @@
   "customSearchArea": "Zona de căutare personalizată",
   "date": "Data",
   "dateAndTime": "Data și ora",
-  "delete": "Şterge",
   "deleteItem": "Ștergeți elementul",
   "discardChanges": {
     "discardChanges": "Renunțați la modificările",

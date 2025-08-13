@@ -205,7 +205,7 @@ const PersonCard = ({
               aspectRatio={
                 person.headshot.width && person.headshot.height
                   ? person.headshot.width / person.headshot.height
-                  : 1
+                  : 1.78
               }
             />
           )}

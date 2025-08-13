@@ -13,11 +13,9 @@ import { translatableCTAFields } from "./CallToAction.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const defaultProduct: ProductStruct = {
   image: {
-    alternateText: "",
     url: "https://placehold.co/640x360",
     height: 360,
     width: 640,
@@ -90,8 +88,14 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
     type: "array",
     arrayFields: {
       image: {
-        ...IMAGE_CONSTANT_CONFIG,
+        type: "object",
         label: pt("fields.image", "Image"),
+        objectFields: {
+          url: {
+            label: pt("fields.url", "URL"),
+            type: "text",
+          },
+        },
       },
       name: nameField,
       category: categoryField,

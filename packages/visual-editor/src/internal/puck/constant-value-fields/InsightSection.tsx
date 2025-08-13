@@ -14,7 +14,6 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const defaultInsight: InsightStruct = {
   image: {
@@ -88,8 +87,14 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
     type: "array",
     arrayFields: {
       image: {
-        ...IMAGE_CONSTANT_CONFIG,
+        type: "object",
         label: pt("fields.image", "Image"),
+        objectFields: {
+          url: {
+            label: pt("fields.url", "URL"),
+            type: "text",
+          },
+        },
       },
       name: nameField,
       category: categoryField,
