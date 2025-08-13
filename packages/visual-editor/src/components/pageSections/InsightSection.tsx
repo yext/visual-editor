@@ -242,11 +242,7 @@ const InsightCard = ({
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={
-              insight.cta.label
-                ? resolveComponentData(insight.cta.label, i18n.language)
-                : undefined
-            }
+            label={resolveComponentData(insight.cta.label, i18n.language)}
             link={resolveComponentData(insight.cta.link, i18n.language)}
             linkType={insight.cta.linkType ?? "URL"}
             ctaType={insight.cta.ctaType}

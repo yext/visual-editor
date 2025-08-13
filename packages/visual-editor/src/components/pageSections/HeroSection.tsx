@@ -26,7 +26,6 @@ import {
   resolveComponentData,
   YextStructEntityField,
   YextStructFieldSelector,
-  resolveYextStructField,
   CTA,
   ComponentFields,
 } from "@yext/visual-editor";
@@ -292,9 +291,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     locale,
     streamDocument
   );
-  const resolvedHero = data?.hero
-    ? resolveYextStructField(streamDocument, data.hero, locale)
-    : undefined;
+  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
 
   const { timezone } = streamDocument as {
     timezone: string;
@@ -433,7 +430,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
         <EntityField
           displayName={pt("fields.image", "Image")}
           fieldId={data.hero.field}
-          constantValueEnabled={data.hero.constantValueEnabled}
+          constantValueEnabled={data.hero.constantValueOverride.image}
         >
           <div
             className="w-full"

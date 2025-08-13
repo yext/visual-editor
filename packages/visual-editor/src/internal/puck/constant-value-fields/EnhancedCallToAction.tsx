@@ -8,6 +8,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
+
 export const ctaTypeOptions = () => {
   return [
     {
@@ -24,6 +25,7 @@ export const ctaTypeOptions = () => {
     },
   ];
 };
+
 export const presetImageTypeOptions = (): {
   label: string;
   value: PresetImageType;
@@ -45,6 +47,7 @@ export const presetImageTypeOptions = (): {
     { label: pt("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
   ];
 };
+
 export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
   {
     type: "custom",
@@ -196,6 +199,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
       );
     },
   };
+
 export const enhancedTranslatableCTAFields =
   (): Field<EnhancedTranslatableCTA> => {
     const labelField = TranslatableStringField<any>(
@@ -243,6 +247,7 @@ export const enhancedTranslatableCTAFields =
       },
     };
   };
+
 // Restricted CTA fields for page sections that should only show "Text & Link" options
 export const restrictedTranslatableCTAFields =
   (): Field<EnhancedTranslatableCTA> => {
@@ -269,6 +274,7 @@ export const restrictedTranslatableCTAFields =
       },
     };
   };
+
 // Restricted constant config for components that should only use textAndLink CTA type
 export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
   type: "custom",
