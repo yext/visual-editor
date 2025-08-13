@@ -4,7 +4,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
-  EnhancedTranslatableCTA,
   useDocument,
   EntityField,
   YextEntityField,
@@ -35,30 +34,9 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
+import { extractCTA } from "../../utils/ctaUtils";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
-
-// Helper function to extract CTA data from either nested or direct structure
-const extractCTA = (
-  ctaData:
-    | EnhancedTranslatableCTA
-    | { cta?: EnhancedTranslatableCTA }
-    | undefined
-) => {
-  if (!ctaData) return null;
-
-  // Check if it's the nested structure
-  if ("cta" in ctaData && ctaData.cta) {
-    return ctaData.cta;
-  }
-
-  // Check if it's the direct structure
-  if ("label" in ctaData) {
-    return ctaData as EnhancedTranslatableCTA;
-  }
-
-  return null;
-};
 
 export interface HeroData {
   /**

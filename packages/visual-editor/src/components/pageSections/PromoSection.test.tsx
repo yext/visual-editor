@@ -192,7 +192,7 @@ const tests: ComponentTest[] = [
     version: 5,
   },
   {
-    name: "version 14 props with old CTA structure",
+    name: "version 15 props with old CTA structure",
     document: { c_promo: promoData },
     props: {
       data: {
