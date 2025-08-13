@@ -627,6 +627,58 @@ const tests: ComponentTest[] = [
     },
     version: 14,
   },
+  {
+    name: "version 17 with cityDocument and siteName field",
+    document: cityDocument,
+    props: {
+      data: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "[[name]]",
+            hasLocalizedValue: "true",
+          },
+        },
+        directoryRoot: "Directory Root",
+        siteName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "",
+            hasLocalizedValue: "true",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: false,
+          dayOfWeekFormat: "short",
+        },
+        phoneNumberFormat: "international",
+        phoneNumberLink: true,
+      },
+      liveVisibility: true,
+    },
+    version: 17,
+  },
 ];
 
 describe("Directory", async () => {
