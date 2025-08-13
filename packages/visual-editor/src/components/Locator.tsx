@@ -380,29 +380,7 @@ const LocatorInternal = ({
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div className="w-full ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
-          {/* Header row with heading + toggle */}
-          <div className="flex items-center justify-between">
-            <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
-
-            {openNowButton && (
-              <Toggle
-                pressed={isSelected}
-                onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-                className="py-2 px-2 flex-shrink-0"
-              >
-                <span className="inline-flex items-center gap-2">
-                  {isSelected ? (
-                    <FaCheckSquare className="inline-block" />
-                  ) : (
-                    <FaRegSquare className="inline-block" />
-                  )}
-                  {t("openNow", "Open Now")}
-                </span>
-              </Toggle>
-            )}
-          </div>
-
-          {/* Filter search underneath */}
+          <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
             searchFields={[
               { fieldApiName: DEFAULT_FIELD, entityType: entityType },
@@ -421,6 +399,22 @@ const LocatorInternal = ({
               radius: 25,
             }}
           />
+          {openNowButton && (
+            <Toggle
+              pressed={isSelected}
+              onPressedChange={(pressed) => handleOpenNowClick(pressed)}
+              className="py-2 px-2"
+            >
+              <span className="inline-flex items-center gap-2">
+                {isSelected ? (
+                  <FaCheckSquare className="inline-block" />
+                ) : (
+                  <FaRegSquare className="inline-block" />
+                )}
+                {t("openNow", "Open Now")}
+              </span>
+            </Toggle>
+          )}
         </div>
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
           {resultCount === 0 &&
