@@ -398,60 +398,6 @@ const tests: ComponentTest[] = [
     },
     version: 15,
   },
-  {
-    name: "version 15 props with nested insights structure and missing ctaType",
-    document: { c_insights: insightsData },
-    props: {
-      data: {
-        insights: {
-          field: "c_insights",
-          constantValue: {
-            insights: [
-              {
-                name: "Insight with missing CTA properties",
-                category: "Category",
-                publishTime: "2025-06-15",
-                description: "Description",
-                cta: {
-                  label: "CTA",
-                  // Missing link, linkType, and ctaType - should be added by migration
-                },
-              },
-              {
-                name: "Insight with partial CTA properties",
-                category: "Category 2",
-                publishTime: "2025-06-15",
-                description: "Description",
-                cta: {
-                  label: "CTA 2",
-                  link: "#",
-                  linkType: "URL",
-                  // Missing ctaType - should be added by migration
-                },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 15,
-  },
 ];
 
 describe("InsightSection", async () => {

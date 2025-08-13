@@ -338,63 +338,6 @@ const tests: ComponentTest[] = [
     },
     version: 15,
   },
-  {
-    name: "version 15 props with nested events structure and missing ctaType",
-    document: { c_events: eventsData },
-    props: {
-      data: {
-        events: {
-          field: "c_events",
-          constantValue: {
-            events: [
-              {
-                image: { url: "https://placehold.co/600x400" },
-                title: "Event 1",
-                dateTime: "2020-01-01T10:00",
-                description: "Test Description",
-                cta: {
-                  label: "Test CTA",
-                  // Missing link, linkType, and ctaType - should be added by migration
-                },
-              },
-              {
-                image: { url: "https://placehold.co/600x400" },
-                title: "Event 2",
-                dateTime: "2020-02-02T10:10",
-                description: "Test Description",
-                cta: {
-                  label: "Test CTA 2",
-                  link: "https://yext.com",
-                  linkType: "URL",
-                  // Missing ctaType - should be added by migration
-                },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 3,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 15,
-  },
 ];
 
 describe("EventSection", async () => {

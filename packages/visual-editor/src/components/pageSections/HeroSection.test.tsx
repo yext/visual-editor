@@ -475,20 +475,16 @@ const tests: ComponentTest[] = [
               url: "https://placehold.co/640x360",
             },
             primaryCta: {
-              cta: {
-                label: "Call To Action 1",
-                link: "#",
-                linkType: "URL",
-                // Missing ctaType - should be added by migration
-              },
+              label: "Call To Action 1",
+              link: "#",
+              linkType: "URL",
+              // Missing ctaType - should be added by migration
             },
             secondaryCta: {
-              cta: {
-                label: "Call To Action 2",
-                link: "#",
-                linkType: "URL",
-                // Missing ctaType - should be added by migration
-              },
+              label: "Call To Action 2",
+              link: "#",
+              linkType: "URL",
+              // Missing ctaType - should be added by migration
             },
           },
         },

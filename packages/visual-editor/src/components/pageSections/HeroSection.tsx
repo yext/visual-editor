@@ -369,6 +369,7 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
           (resolvedHero.primaryCta || resolvedHero.secondaryCta) && (
             <div
               className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
+              role="group"
               aria-label={t("callToActions", "Call to Actions")}
             >
               {resolvedHero?.primaryCta && (

@@ -292,12 +292,10 @@ const tests: ComponentTest[] = [
             title: "Title",
             description: "Description",
             cta: {
-              cta: {
-                label: "Call To Action",
-                link: "#",
-                linkType: "URL",
-                // Missing ctaType - should be added by migration
-              },
+              label: "Call To Action",
+              link: "#",
+              linkType: "URL",
+              // Missing ctaType - should be added by migration
             },
           },
           constantValueEnabled: true,
