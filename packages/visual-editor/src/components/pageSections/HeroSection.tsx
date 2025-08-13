@@ -16,6 +16,10 @@ import {
   YextField,
   VisibilityWrapper,
   CTAProps,
+  resolveYextStructField,
+  YextStructFieldSelector,
+  YextStructEntityField,
+  ComponentFields,
   HoursStatusAtom,
   TranslatableString,
   msg,
@@ -24,11 +28,7 @@ import {
   ReviewStars,
   getAggregateRating,
   resolveComponentData,
-  YextStructEntityField,
-  YextStructFieldSelector,
   CTA,
-  ComponentFields,
-  resolveYextStructField,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -276,7 +276,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
 const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const streamDocument = useDocument() as any;
+  const streamDocument = useDocument();
   const resolvedBusinessName = resolveComponentData(
     data?.businessName,
     locale,
@@ -292,9 +292,11 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     locale,
     streamDocument
   );
-  const resolvedHero = data?.hero
-    ? resolveYextStructField(streamDocument, data.hero, locale)
-    : undefined;
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    i18n.language
+  );
 
   const { timezone } = streamDocument as {
     timezone: string;
