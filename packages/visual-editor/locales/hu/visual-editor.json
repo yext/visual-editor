@@ -19,8 +19,9 @@
     "region": "Állami/régió",
     "sublocality": "Szublokitás"
   },
+  "altText": "Alt szöveg",
   "applyAll": "Jelentkezzen az összes helyszínre",
-  "applyAllWithLabel": "Alkalmazza a {{fieldLabel}} -et minden lokalizációra",
+  "applyAllWithLabel": "Alkalmazza a {{fieldLabel}}et minden lokalizációra",
   "approvals": {
     "addAComment": "Adjon hozzá egy megjegyzést, hogy segítsen jóváhagyni, hogy megértse, mi változott",
     "send": "Küldje el jóváhagyásra",
@@ -40,6 +41,8 @@
     "pageSections": "Oldalszakaszok"
   },
   "category": "Kategória",
+  "change": "Változás",
+  "chooseImage": "Válassza ki a képet",
   "close": "Közeli",
   "closeHeaderMenu": "Zárja be a Fejléc menüjét",
   "closeMenu": "Zárja be a menüt",
@@ -91,6 +94,7 @@
   "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
   "dateAndTime": "Dátum és idő",
+  "delete": "Töröl",
   "deleteItem": "Az elem törlése",
   "discardChanges": {
     "discardChanges": "Dobja el a változásokat",

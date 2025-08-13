@@ -19,6 +19,7 @@
     "region": "Stat/region",
     "sublocality": "Sublokalitet"
   },
+  "altText": "Alt text",
   "applyAll": "Applicera på alla platser",
   "applyAllWithLabel": "Applicera {{fieldLabel}} på alla platser",
   "approvals": {
@@ -40,6 +41,8 @@
     "pageSections": "Sidavsnitt"
   },
   "category": "Kategori",
+  "change": "Ändra",
+  "chooseImage": "Välj bild",
   "close": "Nära",
   "closeHeaderMenu": "Stäng rubrikmeny",
   "closeMenu": "Stänga meny",
@@ -91,6 +94,7 @@
   "customSearchArea": "Anpassad sökområde",
   "date": "Datum",
   "dateAndTime": "Datum och tid",
+  "delete": "Radera",
   "deleteItem": "Ta bort objekt",
   "discardChanges": {
     "discardChanges": "Kassera förändringar",

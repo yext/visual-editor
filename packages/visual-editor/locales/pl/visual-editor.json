@@ -19,6 +19,7 @@
     "region": "Stan/region",
     "sublocality": "Sublokalność"
   },
+  "altText": "Tekst alt",
   "applyAll": "Zastosuj się do wszystkich lokalizacji",
   "applyAllWithLabel": "Zastosuj {{fieldLabel}} do wszystkich lokalizacji",
   "approvals": {
@@ -40,6 +41,8 @@
     "pageSections": "Sekcje stron"
   },
   "category": "Kategoria",
+  "change": "Zmiana",
+  "chooseImage": "Wybierz obraz",
   "close": "Zamknąć",
   "closeHeaderMenu": "Zamknij menu nagłówka",
   "closeMenu": "Zamknij menu",
@@ -91,6 +94,7 @@
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "date": "Data",
   "dateAndTime": "Data i godzina",
+  "delete": "Usuwać",
   "deleteItem": "Usuń element",
   "discardChanges": {
     "discardChanges": "Odrzuć zmiany",
