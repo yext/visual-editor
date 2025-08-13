@@ -28,6 +28,7 @@ import {
   YextStructFieldSelector,
   CTA,
   ComponentFields,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -291,7 +292,9 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
     locale,
     streamDocument
   );
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+  const resolvedHero = data?.hero
+    ? resolveYextStructField(streamDocument, data.hero, locale)
+    : undefined;
 
   const { timezone } = streamDocument as {
     timezone: string;
