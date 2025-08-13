@@ -183,18 +183,12 @@ const SubfieldsInput = ({
                 <div>
                   <AutoField
                     onChange={(newConstantValue, uiState) => {
-                      // For CTA fields, we need to wrap the value in a cta object
-                      const fieldValue =
-                        type === "type.cta"
-                          ? { cta: newConstantValue }
-                          : newConstantValue;
-
                       onChange(
                         {
                           field: value?.field,
                           constantValue: {
                             ...value?.constantValue,
-                            [field]: fieldValue,
+                            [field]: newConstantValue,
                           },
                           constantValueEnabled: value?.constantValueEnabled,
                           constantValueOverride: {
@@ -205,11 +199,7 @@ const SubfieldsInput = ({
                         uiState
                       );
                     }}
-                    value={
-                      type === "type.cta"
-                        ? value.constantValue?.[field]?.cta
-                        : value.constantValue?.[field]
-                    }
+                    value={value.constantValue?.[field]}
                     field={constantConfig}
                   />
                 </div>

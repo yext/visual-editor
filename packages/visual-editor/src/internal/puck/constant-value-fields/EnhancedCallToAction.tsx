@@ -1,10 +1,13 @@
 import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { PresetImageType } from "../../../types/types.ts";
-import React from "react";
+import {
+  EnhancedTranslatableCTA,
+  PresetImageType,
+  TranslatableString,
+} from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
-
+import { useMemo } from "react";
 export const ctaTypeOptions = () => {
   return [
     {
@@ -21,7 +24,6 @@ export const ctaTypeOptions = () => {
     },
   ];
 };
-
 export const presetImageTypeOptions = (): {
   label: string;
   value: PresetImageType;
@@ -43,242 +45,232 @@ export const presetImageTypeOptions = (): {
     { label: pt("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
   ];
 };
-
-export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<any> = {
-  type: "custom",
-  render: ({ onChange, value }) => {
-    const labelField = TranslatableStringField<any>(msg("label", "Label"), {
-      types: ["type.string"],
-    });
-
-    const showLabel = value?.ctaType !== "presetImage";
-    const showCoordinate = value?.ctaType === "getDirections";
-    const showPresetImage = value?.ctaType === "presetImage";
-    const showLinkFields = value?.ctaType !== "getDirections";
-
-    return (
-      <div className={"ve-mt-3"}>
-        <div className="ve-mb-3">
-          <FieldLabel label={pt("fields.ctaType", "CTA Type")}>
-            <AutoField
-              field={{
-                type: "select",
-                options: ctaTypeOptions(),
-              }}
-              value={value.ctaType || "textAndLink"}
-              onChange={(newValue) => {
-                const updatedValue = { ...value, ctaType: newValue };
-
-                // Set defaults based on CTA type
-                if (newValue === "presetImage") {
-                  updatedValue.label = { en: "", hasLocalizedValue: "true" };
-                  updatedValue.presetImageType =
-                    updatedValue.presetImageType || "app-store";
-                } else if (newValue === "getDirections") {
-                  updatedValue.label = updatedValue.label || {
-                    en: "Get Directions",
-                    hasLocalizedValue: "true",
-                  };
-                  updatedValue.coordinate = updatedValue.coordinate || {
-                    latitude: 0,
-                    longitude: 0,
-                  };
-                  // Clear link fields since they're not needed for directions
-                  delete updatedValue.link;
-                  delete updatedValue.linkType;
-                } else if (newValue === "textAndLink") {
-                  updatedValue.label = updatedValue.label || {
-                    en: "Learn More",
-                    hasLocalizedValue: "true",
-                  };
-                  // Clear preset image and coordinate fields, restore link fields
-                  delete updatedValue.presetImageType;
-                  delete updatedValue.coordinate;
-                  updatedValue.link = updatedValue.link || "#";
-                  updatedValue.linkType = updatedValue.linkType || "URL";
-                }
-
-                onChange(updatedValue);
-              }}
-            />
-          </FieldLabel>
-        </div>
-        {showLabel && (
+export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
+  {
+    type: "custom",
+    render: ({ onChange, value }) => {
+      const labelField = useMemo(() => {
+        return TranslatableStringField<TranslatableString>(
+          msg("fields.label", "Label"),
+          { types: ["type.string"] }
+        );
+      }, []);
+      const showLabel = value?.ctaType !== "presetImage";
+      const showCoordinate = value?.ctaType === "getDirections";
+      const showPresetImage = value?.ctaType === "presetImage";
+      const showLinkFields = value?.ctaType !== "getDirections";
+      return (
+        <div className={"ve-mt-3"}>
           <div className="ve-mb-3">
-            <AutoField
-              field={labelField}
-              value={value.label}
-              onChange={(newValue) => onChange({ ...value, label: newValue })}
-            />
-          </div>
-        )}
-        {showLinkFields && (
-          <>
-            <div className="ve-mb-3">
-              <FieldLabel label={pt("fields.link", "Link")}>
-                <AutoField
-                  field={{ type: "text" }}
-                  value={value.link || ""}
-                  onChange={(newValue) =>
-                    onChange({ ...value, link: newValue })
-                  }
-                />
-              </FieldLabel>
-            </div>
-            <div className="ve-mb-3">
-              <FieldLabel label={pt("fields.linkType", "Link Type")}>
-                <AutoField
-                  field={{
-                    type: "select",
-                    options: linkTypeOptions(),
-                  }}
-                  value={value.linkType || "URL"}
-                  onChange={(newValue) =>
-                    onChange({ ...value, linkType: newValue })
-                  }
-                />
-              </FieldLabel>
-            </div>
-          </>
-        )}
-        {showPresetImage && (
-          <div className="ve-mb-3">
-            <FieldLabel
-              label={pt("fields.presetImageType", "Preset Image Type")}
-            >
+            <FieldLabel label={pt("fields.ctaType", "CTA Type")}>
               <AutoField
                 field={{
                   type: "select",
-                  options: presetImageTypeOptions(),
+                  options: ctaTypeOptions(),
                 }}
-                value={value.presetImageType ?? "app-store"}
-                onChange={(newValue) =>
-                  onChange({ ...value, presetImageType: newValue })
-                }
+                value={value?.ctaType || "textAndLink"}
+                onChange={(newValue) => {
+                  const updatedValue = { ...value, ctaType: newValue };
+                  // Set defaults based on CTA type
+                  if (newValue === "presetImage") {
+                    updatedValue.label = { en: "", hasLocalizedValue: "true" };
+                    updatedValue.presetImageType =
+                      updatedValue?.presetImageType || "app-store";
+                  } else if (newValue === "getDirections") {
+                    updatedValue.label = updatedValue?.label || {
+                      en: "Get Directions",
+                      hasLocalizedValue: "true",
+                    };
+                    updatedValue.coordinate = updatedValue?.coordinate || {
+                      latitude: 0,
+                      longitude: 0,
+                    };
+                  } else if (newValue === "textAndLink") {
+                    updatedValue.label = updatedValue?.label || {
+                      en: "Learn More",
+                      hasLocalizedValue: "true",
+                    };
+                    updatedValue.link = updatedValue?.link || "#";
+                    updatedValue.linkType = updatedValue?.linkType || "URL";
+                  }
+                  onChange(updatedValue);
+                }}
               />
             </FieldLabel>
           </div>
-        )}
-        {showCoordinate && (
-          <>
+          {showLabel && (
             <div className="ve-mb-3">
-              <FieldLabel label={pt("fields.latitude", "Latitude")}>
+              <AutoField
+                field={labelField}
+                value={value?.label}
+                onChange={(newValue) => onChange({ ...value, label: newValue })}
+              />
+            </div>
+          )}
+          {showLinkFields && (
+            <>
+              <div className="ve-mb-3">
+                <FieldLabel label={pt("fields.link", "Link")}>
+                  <AutoField
+                    field={{ type: "text" }}
+                    value={value?.link || ""}
+                    onChange={(newValue) =>
+                      onChange({ ...value, link: newValue })
+                    }
+                  />
+                </FieldLabel>
+              </div>
+              <div className="ve-mb-3">
+                <FieldLabel label={pt("fields.linkType", "Link Type")}>
+                  <AutoField
+                    field={{
+                      type: "select",
+                      options: linkTypeOptions(),
+                    }}
+                    value={value?.linkType || "URL"}
+                    onChange={(newValue) =>
+                      onChange({ ...value, linkType: newValue })
+                    }
+                  />
+                </FieldLabel>
+              </div>
+            </>
+          )}
+          {showPresetImage && (
+            <div className="ve-mb-3">
+              <FieldLabel
+                label={pt("fields.presetImageType", "Preset Image Type")}
+              >
                 <AutoField
-                  field={{ type: "number" }}
-                  value={value.coordinate?.latitude ?? 0}
+                  field={{
+                    type: "select",
+                    options: presetImageTypeOptions(),
+                  }}
+                  value={value?.presetImageType ?? "app-store"}
                   onChange={(newValue) =>
-                    onChange({
-                      ...value,
-                      coordinate: {
-                        latitude: newValue,
-                        longitude: value.coordinate?.longitude ?? 0,
-                      },
-                    })
+                    onChange({ ...value, presetImageType: newValue })
                   }
                 />
               </FieldLabel>
             </div>
-            <div className="ve-mb-3">
-              <FieldLabel label={pt("fields.longitude", "Longitude")}>
-                <AutoField
-                  field={{ type: "number" }}
-                  value={value.coordinate?.longitude ?? 0}
-                  onChange={(newValue) =>
-                    onChange({
-                      ...value,
-                      coordinate: {
-                        latitude: value.coordinate?.latitude ?? 0,
-                        longitude: newValue,
-                      },
-                    })
-                  }
-                />
-              </FieldLabel>
-            </div>
-          </>
-        )}
-      </div>
+          )}
+          {showCoordinate && (
+            <>
+              <div className="ve-mb-3">
+                <FieldLabel label={pt("fields.latitude", "Latitude")}>
+                  <AutoField
+                    field={{ type: "number" }}
+                    value={value?.coordinate?.latitude ?? 0}
+                    onChange={(newValue) =>
+                      onChange({
+                        ...value,
+                        coordinate: {
+                          latitude: newValue,
+                          longitude: value?.coordinate?.longitude ?? 0,
+                        },
+                      })
+                    }
+                  />
+                </FieldLabel>
+              </div>
+              <div className="ve-mb-3">
+                <FieldLabel label={pt("fields.longitude", "Longitude")}>
+                  <AutoField
+                    field={{ type: "number" }}
+                    value={value?.coordinate?.longitude ?? 0}
+                    onChange={(newValue) =>
+                      onChange({
+                        ...value,
+                        coordinate: {
+                          latitude: value?.coordinate?.latitude ?? 0,
+                          longitude: newValue,
+                        },
+                      })
+                    }
+                  />
+                </FieldLabel>
+              </div>
+            </>
+          )}
+        </div>
+      );
+    },
+  };
+export const enhancedTranslatableCTAFields =
+  (): Field<EnhancedTranslatableCTA> => {
+    const labelField = TranslatableStringField<any>(
+      msg("fields.label", "Label"),
+      { types: ["type.string"] }
     );
-  },
-};
-
-export const enhancedTranslatableCTAFields = (): Field<any> => {
-  const labelField = TranslatableStringField<any>(
-    msg("fields.label", "Label"),
-    { types: ["type.string"] }
-  );
-
-  return {
-    type: "object",
-    label: pt("fields.callToAction", "Call To Action"),
-    objectFields: {
-      label: labelField,
-      link: {
-        label: pt("fields.link", "Link"),
-        type: "text",
-      },
-      linkType: {
-        label: pt("fields.linkType", "Link Type"),
-        type: "select",
-        options: linkTypeOptions(),
-      },
-      ctaType: {
-        label: pt("fields.ctaType", "CTA Type"),
-        type: "select",
-        options: ctaTypeOptions(),
-      },
-      presetImageType: {
-        label: pt("fields.presetImageType", "Preset Image Type"),
-        type: "select",
-        options: presetImageTypeOptions(),
-      },
-      coordinate: {
-        label: pt("fields.coordinate", "Coordinate"),
-        type: "object",
-        objectFields: {
-          latitude: {
-            label: pt("fields.latitude", "Latitude"),
-            type: "number",
-          },
-          longitude: {
-            label: pt("fields.longitude", "Longitude"),
-            type: "number",
+    return {
+      type: "object",
+      label: pt("fields.callToAction", "Call To Action"),
+      objectFields: {
+        label: labelField,
+        link: {
+          label: pt("fields.link", "Link"),
+          type: "text",
+        },
+        linkType: {
+          label: pt("fields.linkType", "Link Type"),
+          type: "select",
+          options: linkTypeOptions(),
+        },
+        ctaType: {
+          label: pt("fields.ctaType", "CTA Type"),
+          type: "select",
+          options: ctaTypeOptions(),
+        },
+        presetImageType: {
+          label: pt("fields.presetImageType", "Preset Image Type"),
+          type: "select",
+          options: presetImageTypeOptions(),
+        },
+        coordinate: {
+          label: pt("fields.coordinate", "Coordinate"),
+          type: "object",
+          objectFields: {
+            latitude: {
+              label: pt("fields.latitude", "Latitude"),
+              type: "number",
+            },
+            longitude: {
+              label: pt("fields.longitude", "Longitude"),
+              type: "number",
+            },
           },
         },
       },
-    },
+    };
   };
-};
-
 // Restricted CTA fields for page sections that should only show "Text & Link" options
-export const restrictedTranslatableCTAFields = (): Field<any> => {
-  const labelField = TranslatableStringField<any>(
-    msg("fields.label", "Label"),
-    { types: ["type.string"] }
-  );
-
-  return {
-    type: "object",
-    label: pt("fields.callToAction", "Call To Action"),
-    objectFields: {
-      label: labelField,
-      link: {
-        label: pt("fields.link", "Link"),
-        type: "text",
+export const restrictedTranslatableCTAFields =
+  (): Field<EnhancedTranslatableCTA> => {
+    const labelField = TranslatableStringField<any>(
+      msg("fields.label", "Label"),
+      { types: ["type.string"] }
+    );
+    return {
+      type: "object",
+      label: pt("fields.callToAction", "Call To Action"),
+      objectFields: {
+        label: labelField,
+        link: {
+          label: pt("fields.link", "Link"),
+          type: "text",
+        },
+        linkType: {
+          label: pt("fields.linkType", "Link Type"),
+          type: "select",
+          options: linkTypeOptions(),
+        },
+        // Note: ctaType is not included here, so it will default to "textAndLink"
+        // and cannot be changed in the editor
       },
-      linkType: {
-        label: pt("fields.linkType", "Link Type"),
-        type: "select",
-        options: linkTypeOptions(),
-      },
-      // Note: ctaType is not included here, so it will default to "textAndLink"
-      // and cannot be changed in the editor
-    },
+    };
   };
-};
-
 // Restricted constant config for components that should only use textAndLink CTA type
-export const LINK_ONLY_CTA_CONFIG: CustomField<any> = {
+export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const labelField = TranslatableStringField<any>(
@@ -287,7 +279,6 @@ export const LINK_ONLY_CTA_CONFIG: CustomField<any> = {
         types: ["type.string"],
       }
     );
-
     return (
       <div className={"ve-mt-3"}>
         <div className="ve-mb-3">

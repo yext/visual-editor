@@ -31,7 +31,6 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
-import { extractCTA } from "../../utils/ctaUtils";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -260,28 +259,32 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               streamDocument
             )}
         </EntityField>
-        {resolvedPromo &&
-          resolvedPromo.cta &&
-          extractCTA(resolvedPromo.cta) && (
+        {resolvedPromo?.cta && (
+          <EntityField
+            displayName={pt("fields.cta", "CTA")}
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.cta}
+          >
             <CTA
               eventName={`cta`}
               variant={styles?.ctaVariant}
               label={resolveComponentData(
-                extractCTA(resolvedPromo.cta)!.label,
+                resolvedPromo.cta.label,
                 i18n.language,
                 streamDocument
               )}
               link={resolveComponentData(
-                extractCTA(resolvedPromo.cta)!.link,
+                resolvedPromo.cta.link,
                 i18n.language,
                 streamDocument
               )}
-              linkType={extractCTA(resolvedPromo.cta)!.linkType}
-              ctaType={extractCTA(resolvedPromo.cta)!.ctaType || "textAndLink"}
-              coordinate={extractCTA(resolvedPromo.cta)!.coordinate}
-              presetImageType={extractCTA(resolvedPromo.cta)!.presetImageType}
+              linkType={resolvedPromo.cta.linkType}
+              ctaType={resolvedPromo.cta.ctaType || "textAndLink"}
+              coordinate={resolvedPromo.cta.coordinate}
+              presetImageType={resolvedPromo.cta.presetImageType}
             />
-          )}
+          </EntityField>
+        )}
       </div>
     </PageSection>
   );
@@ -310,12 +313,10 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             hasLocalizedValue: "true",
           },
           cta: {
-            cta: {
-              label: { en: "Learn More", hasLocalizedValue: "true" },
-              link: "#",
-              linkType: "URL",
-              ctaType: "textAndLink",
-            },
+            label: { en: "Learn More", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+            ctaType: "textAndLink",
           },
         },
         constantValueEnabled: true,

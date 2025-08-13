@@ -34,7 +34,6 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/ImageStyling.js";
-import { extractCTA } from "../../utils/ctaUtils";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -372,58 +371,60 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
               className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
               aria-label={t("callToActions", "Call to Actions")}
             >
-              {resolvedHero?.primaryCta &&
-                extractCTA(resolvedHero.primaryCta) && (
+              {resolvedHero?.primaryCta && (
+                <EntityField
+                  displayName={pt("fields.primaryCta", "Primary CTA")}
+                  fieldId={data.hero.field}
+                  constantValueEnabled={
+                    data.hero.constantValueOverride.primaryCta
+                  }
+                >
                   <CTA
                     eventName={`primaryCta`}
                     variant={styles?.primaryCTA}
                     label={resolveComponentData(
-                      extractCTA(resolvedHero.primaryCta)!.label,
+                      resolvedHero.primaryCta.label,
                       i18n.language
                     )}
                     link={resolveComponentData(
-                      extractCTA(resolvedHero.primaryCta)!.link,
+                      resolvedHero.primaryCta.link,
                       i18n.language
                     )}
-                    linkType={extractCTA(resolvedHero.primaryCta)!.linkType}
-                    ctaType={
-                      extractCTA(resolvedHero.primaryCta)!.ctaType ||
-                      "textAndLink"
-                    }
-                    coordinate={extractCTA(resolvedHero.primaryCta)!.coordinate}
-                    presetImageType={
-                      extractCTA(resolvedHero.primaryCta)!.presetImageType
-                    }
+                    linkType={resolvedHero.primaryCta.linkType}
+                    ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
+                    coordinate={resolvedHero.primaryCta.coordinate}
+                    presetImageType={resolvedHero.primaryCta.presetImageType}
                     className={"py-3"}
                   />
-                )}
-              {resolvedHero?.secondaryCta &&
-                extractCTA(resolvedHero.secondaryCta) && (
+                </EntityField>
+              )}
+              {resolvedHero?.secondaryCta && (
+                <EntityField
+                  displayName={pt("fields.secondaryCta", "Secondary CTA")}
+                  fieldId={data.hero.field}
+                  constantValueEnabled={
+                    data.hero.constantValueOverride.secondaryCta
+                  }
+                >
                   <CTA
                     eventName={`secondaryCta`}
                     variant={styles?.secondaryCTA}
                     label={resolveComponentData(
-                      extractCTA(resolvedHero.secondaryCta)!.label,
+                      resolvedHero.secondaryCta.label,
                       i18n.language
                     )}
                     link={resolveComponentData(
-                      extractCTA(resolvedHero.secondaryCta)!.link,
+                      resolvedHero.secondaryCta.link,
                       i18n.language
                     )}
-                    linkType={extractCTA(resolvedHero.secondaryCta)!.linkType}
-                    ctaType={
-                      extractCTA(resolvedHero.secondaryCta)!.ctaType ||
-                      "textAndLink"
-                    }
-                    coordinate={
-                      extractCTA(resolvedHero.secondaryCta)!.coordinate
-                    }
-                    presetImageType={
-                      extractCTA(resolvedHero.secondaryCta)!.presetImageType
-                    }
+                    linkType={resolvedHero.secondaryCta.linkType}
+                    ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
+                    coordinate={resolvedHero.secondaryCta.coordinate}
+                    presetImageType={resolvedHero.secondaryCta.presetImageType}
                     className={"py-3"}
                   />
-                )}
+                </EntityField>
+              )}
             </div>
           )}
       </div>
@@ -480,26 +481,22 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
         field: "",
         constantValue: {
           primaryCta: {
-            cta: {
-              label: {
-                en: "Call To Action",
-                hasLocalizedValue: "true",
-              },
-              link: "#",
-              linkType: "URL",
-              ctaType: "textAndLink",
+            label: {
+              en: "Call To Action",
+              hasLocalizedValue: "true",
             },
+            link: "#",
+            linkType: "URL",
+            ctaType: "textAndLink",
           },
           secondaryCta: {
-            cta: {
-              label: {
-                en: "Learn More",
-                hasLocalizedValue: "true",
-              },
-              link: "#",
-              linkType: "URL",
-              ctaType: "textAndLink",
+            label: {
+              en: "Learn More",
+              hasLocalizedValue: "true",
             },
+            link: "#",
+            linkType: "URL",
+            ctaType: "textAndLink",
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,

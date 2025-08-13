@@ -15,31 +15,27 @@ export const migrateCTAStructures: Migration = {
           oldHeroData.constantValue.primaryCta.label &&
           !oldHeroData.constantValue.primaryCta.cta
         ) {
-          // Convert old CTA structure to new nested structure
+          // Convert old CTA structure to new flat structure
           props.data.hero = {
             field: oldHeroData.field || "",
             constantValue: {
               image: oldHeroData.constantValue?.image,
               primaryCta: {
-                cta: {
-                  label:
-                    oldHeroData.constantValue.primaryCta.label ||
-                    "Call To Action",
-                  link: oldHeroData.constantValue.primaryCta.link,
-                  linkType: oldHeroData.constantValue.primaryCta.linkType,
-                  ctaType: "textAndLink",
-                },
+                label:
+                  oldHeroData.constantValue.primaryCta.label ||
+                  "Call To Action",
+                link: oldHeroData.constantValue.primaryCta.link,
+                linkType: oldHeroData.constantValue.primaryCta.linkType,
+                ctaType: "textAndLink",
               },
               secondaryCta: oldHeroData.constantValue?.secondaryCta
                 ? {
-                    cta: {
-                      label:
-                        oldHeroData.constantValue.secondaryCta.label ||
-                        "Call To Action",
-                      link: oldHeroData.constantValue.secondaryCta.link,
-                      linkType: oldHeroData.constantValue.secondaryCta.linkType,
-                      ctaType: "textAndLink",
-                    },
+                    label:
+                      oldHeroData.constantValue.secondaryCta.label ||
+                      "Call To Action",
+                    link: oldHeroData.constantValue.secondaryCta.link,
+                    linkType: oldHeroData.constantValue.secondaryCta.linkType,
+                    ctaType: "textAndLink",
                   }
                 : undefined,
             },
@@ -77,44 +73,39 @@ export const migrateCTAStructures: Migration = {
             constantValue: {
               ...oldHeroData.constantValue,
               primaryCta: {
-                cta: {
-                  label: existingPrimaryLabel || "Get Directions",
-                  link: oldHeroData.constantValue?.primaryCta?.link || "#",
-                  linkType:
-                    oldHeroData.constantValue?.primaryCta?.linkType || "URL",
-                  ctaType: "textAndLink",
-                },
+                label: existingPrimaryLabel || "Get Directions",
+                link: oldHeroData.constantValue?.primaryCta?.link || "#",
+                linkType:
+                  oldHeroData.constantValue?.primaryCta?.linkType || "URL",
+                ctaType: "textAndLink",
               },
               secondaryCta: {
-                cta: {
-                  label: existingSecondaryLabel || "Learn More",
-                  link: oldHeroData.constantValue?.secondaryCta?.link || "#",
-                  linkType:
-                    oldHeroData.constantValue?.secondaryCta?.linkType || "URL",
-                  ctaType: "textAndLink",
-                },
+                label: existingSecondaryLabel || "Learn More",
+                link: oldHeroData.constantValue?.secondaryCta?.link || "#",
+                linkType:
+                  oldHeroData.constantValue?.secondaryCta?.linkType || "URL",
+                ctaType: "textAndLink",
               },
             },
           };
         }
 
-        // Handle cases where CTAs already have the new nested structure but are missing ctaType
-        // (This covers the functionality from 0014_enhance_cta_types.ts)
+        // Handle cases where CTAs already have the new structure but are missing ctaType
         if (
-          props.data?.hero?.constantValue?.primaryCta?.cta &&
-          !props.data.hero.constantValue.primaryCta.cta.ctaType
+          props.data?.hero?.constantValue?.primaryCta &&
+          !props.data.hero.constantValue.primaryCta.ctaType
         ) {
-          props.data.hero.constantValue.primaryCta.cta = {
-            ...props.data.hero.constantValue.primaryCta.cta,
+          props.data.hero.constantValue.primaryCta = {
+            ...props.data.hero.constantValue.primaryCta,
             ctaType: "textAndLink",
           };
         }
         if (
-          props.data?.hero?.constantValue?.secondaryCta?.cta &&
-          !props.data.hero.constantValue.secondaryCta.cta.ctaType
+          props.data?.hero?.constantValue?.secondaryCta &&
+          !props.data.hero.constantValue.secondaryCta.ctaType
         ) {
-          props.data.hero.constantValue.secondaryCta.cta = {
-            ...props.data.hero.constantValue.secondaryCta.cta,
+          props.data.hero.constantValue.secondaryCta = {
+            ...props.data.hero.constantValue.secondaryCta,
             ctaType: "textAndLink",
           };
         }
@@ -137,7 +128,7 @@ export const migrateCTAStructures: Migration = {
           oldPromoData.constantValue.cta.label &&
           !oldPromoData.constantValue.cta.cta
         ) {
-          // Convert old CTA structure to new nested structure
+          // Convert old CTA structure to new flat structure
           props.data.promo = {
             field: oldPromoData.field || "",
             constantValue: {
@@ -145,13 +136,10 @@ export const migrateCTAStructures: Migration = {
               title: oldPromoData.constantValue?.title,
               description: oldPromoData.constantValue?.description,
               cta: {
-                cta: {
-                  label:
-                    oldPromoData.constantValue.cta.label || "Call To Action",
-                  link: oldPromoData.constantValue.cta.link,
-                  linkType: oldPromoData.constantValue.cta.linkType,
-                  ctaType: "textAndLink",
-                },
+                label: oldPromoData.constantValue.cta.label || "Call To Action",
+                link: oldPromoData.constantValue.cta.link,
+                linkType: oldPromoData.constantValue.cta.linkType,
+                ctaType: "textAndLink",
               },
             },
             constantValueEnabled: oldPromoData.constantValueEnabled ?? true,
@@ -186,25 +174,22 @@ export const migrateCTAStructures: Migration = {
             constantValue: {
               ...oldPromoData.constantValue,
               cta: {
-                cta: {
-                  label: existingCtaLabel || "Call to Order",
-                  link: oldPromoData.constantValue?.cta?.link || "+18005551010",
-                  linkType:
-                    oldPromoData.constantValue?.cta?.linkType || "PHONE",
-                  ctaType: "textAndLink",
-                },
+                label: existingCtaLabel || "Call to Order",
+                link: oldPromoData.constantValue?.cta?.link || "+18005551010",
+                linkType: oldPromoData.constantValue?.cta?.linkType || "PHONE",
+                ctaType: "textAndLink",
               },
             },
           };
         }
 
-        // Handle cases where CTAs already have the new nested structure but are missing ctaType
+        // Handle cases where CTAs already have the new structure but are missing ctaType
         if (
-          props.data?.promo?.constantValue?.cta?.cta &&
-          !props.data.promo.constantValue.cta.cta.ctaType
+          props.data?.promo?.constantValue?.cta &&
+          !props.data.promo.constantValue.cta.ctaType
         ) {
-          props.data.promo.constantValue.cta.cta = {
-            ...props.data.promo.constantValue.cta.cta,
+          props.data.promo.constantValue.cta = {
+            ...props.data.promo.constantValue.cta,
             ctaType: "textAndLink",
           };
         }

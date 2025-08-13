@@ -26,15 +26,15 @@ export type PresetImageType =
 
 export type HeroSectionType = {
   image?: ImageType;
-  primaryCta?: EnhancedTranslatableCTA | { cta?: EnhancedTranslatableCTA };
-  secondaryCta?: EnhancedTranslatableCTA | { cta?: EnhancedTranslatableCTA };
+  primaryCta?: EnhancedTranslatableCTA;
+  secondaryCta?: EnhancedTranslatableCTA;
 };
 
 export type PromoSectionType = {
   image?: ImageType;
   title?: TranslatableString;
   description?: TranslatableRichText;
-  cta?: EnhancedTranslatableCTA | { cta?: EnhancedTranslatableCTA };
+  cta: EnhancedTranslatableCTA;
 };
 
 export type ProductSectionType = {
@@ -46,7 +46,7 @@ export type ProductStruct = {
   name?: TranslatableString;
   description?: TranslatableRichText;
   category?: TranslatableString;
-  cta?: EnhancedTranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type EventSectionType = {
@@ -58,7 +58,7 @@ export type EventStruct = {
   title?: TranslatableString;
   dateTime?: string;
   description?: TranslatableRichText;
-  cta?: EnhancedTranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type FAQSectionType = {
@@ -90,7 +90,7 @@ export type InsightStruct = {
   category?: TranslatableString;
   publishTime?: string;
   description?: TranslatableRichText;
-  cta?: EnhancedTranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type TeamSectionType = {
@@ -103,7 +103,7 @@ export type PersonStruct = {
   title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
-  cta?: EnhancedTranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 type LocalizedValues = {
