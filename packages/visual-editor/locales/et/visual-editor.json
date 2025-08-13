@@ -19,6 +19,7 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
+  "altText": "Alt -tekst",
   "applyAll": "Kandideerige kõigisse paikadesse",
   "applyAllWithLabel": "Rakendage {{fieldLabel}} kõigisse paikadesse",
   "approvals": {
@@ -40,6 +41,8 @@
     "pageSections": "Leheosad"
   },
   "category": "Kategooria",
+  "change": "Vahetus",
+  "chooseImage": "Valige pilt",
   "close": "Sulgur",
   "closeHeaderMenu": "Sulgemenüü",
   "closeMenu": "Sulgemenüü",
@@ -91,6 +94,7 @@
   "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
   "dateAndTime": "Kuupäev ja kellaaeg",
+  "delete": "Kustutama",
   "deleteItem": "Kustuta üksus",
   "discardChanges": {
     "discardChanges": "Muudatused äraviskamine",

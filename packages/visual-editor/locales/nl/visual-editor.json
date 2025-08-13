@@ -19,6 +19,7 @@
     "region": "Staat/regio",
     "sublocality": "Sublocaliteit"
   },
+  "altText": "Alt -tekst",
   "applyAll": "Solliciteer op alle locaties",
   "applyAllWithLabel": "Pas {{fieldLabel}} toe op alle locaties",
   "approvals": {
@@ -40,6 +41,8 @@
     "pageSections": "Paginagecties"
   },
   "category": "Categorie",
+  "change": "Wijziging",
+  "chooseImage": "Kies afbeelding",
   "close": "Dichtbij",
   "closeHeaderMenu": "Sluit koptekstmenu",
   "closeMenu": "Sluit het menu",
@@ -91,6 +94,7 @@
   "customSearchArea": "Aangepast zoekgebied",
   "date": "Datum",
   "dateAndTime": "Datum en tijd",
+  "delete": "Verwijderen",
   "deleteItem": "Verwijder item",
   "discardChanges": {
     "discardChanges": "Veranderingen weggooien",
