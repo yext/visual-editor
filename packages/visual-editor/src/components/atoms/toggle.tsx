@@ -19,7 +19,8 @@ function Toggle({
         "whitespace-nowrap border-black text-black border border-solid hover:underline " +
           "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing",
         "data-[state=on]:bg-palette-secondary data-[state=on]:border-palette-secondary data-[state=on]:text-palette-secondary-dark" +
-          className
+          "self-start w-auto",
+        className
       )}
       {...props}
     />
