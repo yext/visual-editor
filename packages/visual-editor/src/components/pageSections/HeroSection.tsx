@@ -193,7 +193,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      hero: YextStructFieldSelector({
+      hero: YextStructFieldSelector<HeroSectionType>({
         label: msg("fields.hero", "Hero"),
         filter: {
           type: ComponentFields.HeroSection.type,
@@ -422,7 +422,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
       hero: {
         field: "",
-        constantValueEnabled: true,
         constantValue: {
           primaryCta: {
             label: {
@@ -431,14 +430,16 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
           secondaryCta: {
             label: {
-              en: "Call To Action",
+              en: "Learn More",
               hasLocalizedValue: "true",
             },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,
@@ -446,10 +447,11 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             width: 640,
           },
         },
+        constantValueEnabled: true,
         constantValueOverride: {
-          image: true,
           primaryCta: true,
           secondaryCta: true,
+          image: true,
         },
       },
       showAverageReview: true,

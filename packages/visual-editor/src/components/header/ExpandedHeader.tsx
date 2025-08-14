@@ -85,6 +85,8 @@ export interface ExpandedHeaderStyles {
   };
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
+  /** Whether the header is "sticky" or not */
+  headerPosition: "sticky" | "scrollsWithPage";
 }
 
 export interface ExpandedHeaderProps {
@@ -311,6 +313,19 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
       }),
+      headerPosition: YextField(
+        msg("fields.headerPosition", "Header Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
+              value: "scrollsWithPage",
+            },
+            { label: msg("fields.options.sticky", "Sticky"), value: "sticky" },
+          ],
+        }
+      ),
     },
   }),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
@@ -393,7 +408,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   );
 
   return (
-    <>
+    <div
+      className={`flex flex-col ${
+        styles.headerPosition === "sticky" ? "sticky top-0 z-50" : ""
+      }`}
+    >
       {/* Secondary Header (Top Bar) */}
       <div className="hidden md:flex flex-col">
         {show && (
@@ -576,7 +595,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -816,6 +835,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         backgroundColor: backgroundColors.background2.value,
       },
       maxWidth: "theme",
+      headerPosition: "scrollsWithPage",
     },
     analytics: {
       scope: "expandedHeader",

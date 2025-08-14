@@ -12,6 +12,7 @@ import {
   useDocument,
   themeManagerCn,
   HeadingLevel,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 
@@ -46,7 +47,11 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
     locale,
     streamDocument
   );
-  const resolvedHero = resolveComponentData(data.hero, locale, streamDocument);
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data.hero,
+    locale
+  );
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   const desktopContainerPosition =
@@ -153,6 +158,9 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                   i18n.language
                 )}
                 linkType={resolvedHero.primaryCta.linkType}
+                ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
+                coordinate={resolvedHero.primaryCta.coordinate}
+                presetImageType={resolvedHero.primaryCta.presetImageType}
                 className={
                   styles.primaryCTA === "link" ? heroCtaLinkVariantCn : ""
                 }
@@ -179,6 +187,9 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                   i18n.language
                 )}
                 linkType={resolvedHero.secondaryCta.linkType}
+                ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
+                coordinate={resolvedHero.secondaryCta.coordinate}
+                presetImageType={resolvedHero.secondaryCta.presetImageType}
                 className={
                   styles.secondaryCTA === "link" ? heroCtaLinkVariantCn : ""
                 }

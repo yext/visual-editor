@@ -267,7 +267,247 @@ const tests: ComponentTest[] = [
     version: 9,
   },
   {
-    name: "[classic] version 15 props using constant values",
+    name: "version 16 props with old CTA structure",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Constant Name",
+          constantValueEnabled: true,
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier Name",
+          constantValueEnabled: true,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Call To Action 1",
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: "Call To Action 2",
+              link: "#",
+              linkType: "URL",
+            },
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        imageOrientation: "right",
+        businessNameLevel: 6,
+        localGeoModifierLevel: 3,
+        primaryCTA: "secondary",
+        secondaryCTA: "primary",
+        image: {
+          width: 500,
+          aspectRatio: 1.0,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
+  {
+    name: "version 16 props using entity values with old CTA structure",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Constant Name",
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier Name",
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Get Directions",
+              link: "#",
+              linkType: "URL",
+            },
+            secondaryCta: {
+              label: "Learn More",
+              link: "#",
+              linkType: "URL",
+            },
+          },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        imageOrientation: "right",
+        businessNameLevel: 6,
+        localGeoModifierLevel: 3,
+        primaryCTA: "secondary",
+        secondaryCTA: "primary",
+        image: {
+          width: 500,
+          aspectRatio: 1.0,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
+  {
+    name: "version 16 props with missing ctaType",
+    document: {
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      c_hero: {
+        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+        secondaryCta: {
+          label: "Learn More",
+          link: "#",
+          linkType: "URL",
+        },
+      },
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        businessName: {
+          field: "name",
+          constantValue: "Constant Name",
+          constantValueEnabled: true,
+        },
+        localGeoModifier: {
+          field: "address.city",
+          constantValue: "Geomodifier Name",
+          constantValueEnabled: true,
+        },
+        hours: { field: "hours", constantValue: {} },
+        hero: {
+          constantValueOverride: {
+            image: true,
+            primaryCta: true,
+            secondaryCta: true,
+          },
+          field: "c_hero",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            primaryCta: {
+              label: "Call To Action 1",
+              link: "#",
+              linkType: "URL",
+              // Missing ctaType - should be added by migration
+            },
+            secondaryCta: {
+              label: "Call To Action 2",
+              link: "#",
+              linkType: "URL",
+              // Missing ctaType - should be added by migration
+            },
+          },
+        },
+        showAverageReview: true,
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        imageOrientation: "right",
+        businessNameLevel: 6,
+        localGeoModifierLevel: 3,
+        primaryCTA: "secondary",
+        secondaryCTA: "primary",
+        image: {
+          width: 500,
+          aspectRatio: 1.0,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
+  {
+    name: "[classic] version 17 props using constant values",
     document: {
       name: "name",
       address: {
@@ -365,10 +605,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "HeroSection-99c86e04-e8fc-441e-b14d-e165b787d6d5",
     },
-    version: 15,
+    version: 17,
   },
   {
-    name: "[classic] version 15 props using entity values",
+    name: "[classic] version 17 props using entity values",
     document: {
       name: "name",
       address: {
@@ -465,10 +705,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "heroSection" },
       liveVisibility: true,
     },
-    version: 15,
+    version: 17,
   },
   {
-    name: "[immersive] version 15 props using constant values",
+    name: "[immersive] version 17 props using constant values",
     document: {
       name: "name",
       address: {
@@ -566,10 +806,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
 
-    version: 15,
+    version: 17,
   },
   {
-    name: "[spotlight] version 15 props using constant values",
+    name: "[spotlight] version 17 props using constant values",
     document: {
       name: "name",
       address: {
@@ -666,10 +906,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "heroSection" },
       liveVisibility: true,
     },
-    version: 15,
+    version: 17,
   },
   {
-    name: "[compact] version 15 props using constant values",
+    name: "[compact] version 17 props using constant values",
     document: {
       name: "name",
       address: {
@@ -766,7 +1006,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "heroSection" },
       liveVisibility: true,
     },
-    version: 15,
+    version: 17,
   },
 ];
 

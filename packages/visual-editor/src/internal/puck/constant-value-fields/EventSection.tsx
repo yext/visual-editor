@@ -6,7 +6,7 @@ import {
   TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -14,7 +14,6 @@ import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const defaultEvent: EventStruct = {
   image: {
@@ -32,6 +31,7 @@ export const defaultEvent: EventStruct = {
     link: "#",
     label: { en: "Learn More", hasLocalizedValue: "true" },
     linkType: "URL",
+    ctaType: "textAndLink",
   },
 };
 
@@ -79,13 +79,19 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
     type: "array",
     arrayFields: {
       image: {
-        ...IMAGE_CONSTANT_CONFIG,
+        type: "object",
         label: pt("fields.image", "Image"),
+        objectFields: {
+          url: {
+            label: pt("fields.url", "URL"),
+            type: "text",
+          },
+        },
       },
       title: titleField,
       dateTime: DateTimeSelector,
       description: descriptionField,
-      cta: translatableCTAFields(),
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultEvent,
     getItemSummary: (item, i): string => {
