@@ -331,7 +331,7 @@ If 'true', displays the language selector dropdown in the header.
 
 ## HeroSection
 
-![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20default%20props%20with%20data.png)
+![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20%5Bclassic%5D%20version%2017%20props%20using%20constant%20values.png)
 
 ### Props
 
