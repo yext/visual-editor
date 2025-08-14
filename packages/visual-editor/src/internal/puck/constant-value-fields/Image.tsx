@@ -71,7 +71,11 @@ type ImagePayload = {
   value: ImageContentData;
 };
 
-export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
+type AssetImageType = ImageType & {
+  assetImage?: ImageContentData;
+};
+
+export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
   type: "custom",
   render: ({ onChange, value, field }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
@@ -100,6 +104,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<ImageType | undefined> = {
             url: imageData.url,
             height: imageData.dimension?.height ?? 0,
             width: imageData.dimension?.width ?? 0,
+            assetImage: payload.value,
           });
         }
       }
