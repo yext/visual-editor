@@ -19,8 +19,9 @@
     "region": "州/地域",
     "sublocality": "サブロカリティ"
   },
+  "altText": "altテキスト",
   "applyAll": "すべてのロケールに適用します",
-  "applyAllWithLabel": "すべてのロケールに{{fieldlabel}}を適用します",
+  "applyAllWithLabel": "すべてのロケールに{{fieldLabel}}を適用します",
   "approvals": {
     "addAComment": "コメントを追加して、承認者が何が変わったのかを理解できるようにします",
     "send": "承認のために送信します",
@@ -40,6 +41,8 @@
     "pageSections": "ページセクション"
   },
   "category": "カテゴリ",
+  "change": "変化",
+  "chooseImage": "画像を選択します",
   "close": "近い",
   "closeHeaderMenu": "ヘッダーを閉じるメニュー",
   "closeMenu": "メニューを閉じます",
@@ -98,6 +101,7 @@
   "customSearchArea": "カスタム検索領域",
   "date": "日付",
   "dateAndTime": "日時",
+  "delete": "消去",
   "deleteItem": "アイテムを削除します",
   "discardChanges": {
     "discardChanges": "変更を破棄します",
