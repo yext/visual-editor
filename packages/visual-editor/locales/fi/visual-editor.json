@@ -19,6 +19,7 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "altText": "Alt -teksti",
   "applyAll": "Sovelleta kaikkia alueita",
   "applyAllWithLabel": "Levitä {{fieldLabel}} kaikkiin alueisiin",
   "approvals": {
@@ -41,6 +42,8 @@
     "pageSections": "Page -osiot"
   },
   "category": "Luokka",
+  "change": "Muuttaa",
+  "chooseImage": "Valitse kuva",
   "close": "Lähellä",
   "closeHeaderMenu": "Sulje otsikkovalikko",
   "closeMenu": "Suljevalikko",
@@ -100,6 +103,7 @@
   "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
   "dateAndTime": "Päivämäärä ja aika",
+  "delete": "Poistaa",
   "deleteItem": "Poista kohde",
   "discardChanges": {
     "discardChanges": "Hylätä muutokset",

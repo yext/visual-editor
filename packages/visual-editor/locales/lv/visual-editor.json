@@ -19,8 +19,9 @@
     "region": "Valsts/reģions",
     "sublocality": "Sublocalitāte"
   },
+  "altText": "Alt teksts",
   "applyAll": "Piesakieties visās vietās",
-  "applyAllWithLabel": "Pielietojiet {{fieldLabel}} uz visām vietām",
+  "applyAllWithLabel": "Uz visiem lokiem uzklājiet {{fieldLabel}}",
   "approvals": {
     "addAComment": "Pievienojiet komentāru, lai palīdzētu jūsu apstiprinātājam izprast, kas mainījās",
     "send": "Nosūtīt apstiprināšanai",
@@ -41,6 +42,8 @@
     "pageSections": "Lapas sadaļas"
   },
   "category": "Kategorija",
+  "change": "Mainīt",
+  "chooseImage": "Izvēlieties attēlu",
   "close": "Tuvs",
   "closeHeaderMenu": "Aizvērt galvenes izvēlni",
   "closeMenu": "Aizvērt ēdienkarti",
@@ -100,6 +103,7 @@
   "customSearchArea": "Pielāgota meklēšanas zona",
   "date": "Datums",
   "dateAndTime": "Datums un laiks",
+  "delete": "Dzēst",
   "deleteItem": "Dzēst vienumu",
   "discardChanges": {
     "discardChanges": "Izmest izmaiņas",
