@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import { themeManagerCn } from "@yext/visual-editor";
@@ -37,6 +38,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
     alwaysHideCaret,
     ariaLabel,
   } = props;
+  const { t } = useTranslation();
 
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
@@ -64,7 +66,11 @@ const useResolvedCtaProps = (props: CTAProps) => {
           link: props.link ?? "#",
           linkType: props.linkType ?? "URL",
           label: presetImageIcons[props.presetImageType],
-          ariaLabel: ariaLabel || `Button with ${props.presetImageType} icon`,
+          ariaLabel:
+            ariaLabel ||
+            t("buttonWithIcon", `Button with {{presetImageType}} icon`, {
+              presetImageType: props.presetImageType,
+            }),
         };
 
       case "textAndLink":

@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Varsayılan",
   "breadcrumb": "Ekmek kırıntısı",
   "businessInformation": "İş bilgileri",
+  "buttonWithIcon": "{{presetImageType}} simgesi ile düğme",
   "callToActions": "Eylem çağrısı",
   "cancel": "İptal etmek",
   "categories": {

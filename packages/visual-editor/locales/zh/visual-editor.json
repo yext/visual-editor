@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "默认",
   "breadcrumb": "面包屑",
   "businessInformation": "业务信息",
+  "buttonWithIcon": "按钮带{{presetImageType}}图标",
   "callToActions": "打电话给行动",
   "cancel": "取消",
   "categories": {

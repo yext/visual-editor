@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Misligholdelse",
   "breadcrumb": "Brødkrumme",
   "businessInformation": "Forretningsoplysninger",
+  "buttonWithIcon": "Knappen med {{presetImageType}} ikon",
   "callToActions": "Ring til handlinger",
   "cancel": "Ophæve",
   "categories": {

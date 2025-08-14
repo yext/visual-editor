@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Domyślny",
   "breadcrumb": "Breatcrumb",
   "businessInformation": "Informacje biznesowe",
+  "buttonWithIcon": "Przycisk z ikoną {{PrenedImageType}}",
   "callToActions": "Zadzwoń do działań",
   "cancel": "Anulować",
   "categories": {

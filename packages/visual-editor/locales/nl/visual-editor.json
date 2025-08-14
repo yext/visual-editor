@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Standaard",
   "breadcrumb": "Broodkruimel",
   "businessInformation": "Zakelijke informatie",
+  "buttonWithIcon": "Knop met {{presetImageType}} pictogram",
   "callToActions": "Oproep tot acties",
   "cancel": "Annuleren",
   "categories": {

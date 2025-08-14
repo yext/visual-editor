@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "預設",
   "breadcrumb": "麵包屑",
   "businessInformation": "業務信息",
+  "buttonWithIcon": "按鈕帶{{presetImageType}}圖標",
   "callToActions": "打電話給行動",
   "cancel": "取消",
   "categories": {

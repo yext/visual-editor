@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Default",
   "breadcrumb": "Breadcrumb",
   "businessInformation": "Business Information",
+  "buttonWithIcon": "Button with {{presetImageType}} icon",
   "callToActions": "Call to Actions",
   "cancel": "Cancel",
   "categories": {

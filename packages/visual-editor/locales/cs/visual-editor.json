@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Výchozí",
   "breadcrumb": "Strouha",
   "businessInformation": "Obchodní informace",
+  "buttonWithIcon": "Tlačítko s ikonou {{presetImageType}}",
   "callToActions": "Volání k akcím",
   "cancel": "Zrušit",
   "categories": {

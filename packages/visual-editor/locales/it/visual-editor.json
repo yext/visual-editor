@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Predefinito",
   "breadcrumb": "Pane",
   "businessInformation": "Informazioni commerciali",
+  "buttonWithIcon": "Button con icon {{pretimagetype}}",
   "callToActions": "Chiama alle azioni",
   "cancel": "Cancellare",
   "categories": {

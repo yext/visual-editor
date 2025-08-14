@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Défaut",
   "breadcrumb": "Chapelure",
   "businessInformation": "Informations commerciales",
+  "buttonWithIcon": "Bouton avec {{Icône presetImageType}}",
   "callToActions": "Appel à des actions",
   "cancel": "Annuler",
   "categories": {

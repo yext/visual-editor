@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Nepildīt",
   "breadcrumb": "Rīvmaize",
   "businessInformation": "Biznesa informācija",
+  "buttonWithIcon": "Poga ar {{presetImageType}} ikonu",
   "callToActions": "Aicinājums uz darbībām",
   "cancel": "Atcelt",
   "categories": {

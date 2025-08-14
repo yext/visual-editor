@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Täitmata jätmine",
   "breadcrumb": "Riivsaia",
   "businessInformation": "Äriteave",
+  "buttonWithIcon": "Nupp {{pretimageType}} ikooniga",
   "callToActions": "Tegevusele helistama",
   "cancel": "Tühistama",
   "categories": {

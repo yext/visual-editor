@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Mulasztás",
   "breadcrumb": "Zsemlemorzsa",
   "businessInformation": "Üzleti információk",
+  "buttonWithIcon": "Gomb a {{presetImageType}} ikonnal",
   "callToActions": "Cselekvési felhívás",
   "cancel": "Töröl",
   "categories": {

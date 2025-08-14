@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "デフォルト",
   "breadcrumb": "パン塊",
   "businessInformation": "ビジネス情報",
+  "buttonWithIcon": "{{presetImageType}}アイコン付きボタン",
   "callToActions": "行動への呼びかけ",
   "cancel": "キャンセル",
   "categories": {

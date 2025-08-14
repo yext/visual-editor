@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Standard",
   "breadcrumb": "Brödsmum",
   "businessInformation": "Affärsinformation",
+  "buttonWithIcon": "Knapp med {{presetImageType}} -ikonen",
   "callToActions": "Uppmaning till handlingar",
   "cancel": "Avboka",
   "categories": {

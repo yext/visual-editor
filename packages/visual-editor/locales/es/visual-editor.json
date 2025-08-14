@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Por defecto",
   "breadcrumb": "Migaja de pan",
   "businessInformation": "Información comercial",
+  "buttonWithIcon": "Botón con icono {{presetImageType}}",
   "callToActions": "Llamar a las acciones",
   "cancel": "Cancelar",
   "categories": {

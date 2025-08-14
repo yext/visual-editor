@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Predvolený",
   "breadcrumb": "Strúhanka",
   "businessInformation": "Obchodné informácie",
+  "buttonWithIcon": "Tlačidlo s {{presetImageType}} ikona",
   "callToActions": "Zavolať",
   "cancel": "Zrušiť",
   "categories": {

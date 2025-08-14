@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Zadano",
   "breadcrumb": "Krušnica",
   "businessInformation": "Poslovne informacije",
+  "buttonWithIcon": "Gumb s ikonom {{presetImageType}}",
   "callToActions": "Pozovite na akcije",
   "cancel": "Otkazati",
   "categories": {
