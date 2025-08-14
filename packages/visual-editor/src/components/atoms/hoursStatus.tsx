@@ -70,20 +70,20 @@ function hoursCurrentTemplateOverride(
 ): React.ReactNode {
   if (params?.currentInterval?.is24h?.()) {
     return (
-      <span className="HoursStatus-current">
+      <span className="HoursStatus-current" style={{ fontWeight: "bolder" }}>
         {t("open24Hours", "Open 24 Hours")}
       </span>
     );
   }
   if (!params.futureInterval) {
     return (
-      <span className="HoursStatus-current">
+      <span className="HoursStatus-current" style={{ fontWeight: "bolder" }}>
         {t("temporarilyClosed", "Temporarily Closed")}
       </span>
     );
   }
   return (
-    <span className="HoursStatus-current">
+    <span className="HoursStatus-current" style={{ fontWeight: "bolder" }}>
       {params.isOpen ? t("openNow", "Open Now") : t("closed", "Closed")}
     </span>
   );
