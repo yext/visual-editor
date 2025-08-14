@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Laiminlyönti",
   "breadcrumb": "Leivänmuru",
   "businessInformation": "Yritystieto",
+  "buttonWithIcon": "Painike {{presetImageType}} -kuvakkeella",
   "callToActions": "Soita toimiin",
   "cancel": "Peruuttaa",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Toimintakehotus",
     "components": "Komponentit",
     "coreInfoSection": "Ydintiedot -osio",
+    "ctaGroup": "CTA -ryhmä",
     "customCodeSection": "Mukautettu koodiosa",
     "directory": "Hakemisto",
     "emails": "Sähköpostit",
@@ -125,6 +127,7 @@
     "businessLogo": "Liikealue",
     "businessName": "Liiketoiminnan nimi",
     "businessNameHeadingLevel": "Yrityksen nimi otsikkotaso",
+    "buttons": "Painikkeet",
     "callToAction": "Toimintakehotus",
     "cards": "Kortit",
     "category": "Luokka",

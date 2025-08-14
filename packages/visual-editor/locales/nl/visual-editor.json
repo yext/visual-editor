@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Standaard",
   "breadcrumb": "Broodkruimel",
   "businessInformation": "Zakelijke informatie",
+  "buttonWithIcon": "Knop met {{presetImageType}} pictogram",
   "callToActions": "Oproep tot acties",
   "cancel": "Annuleren",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Oproep tot actie",
     "components": "Componenten",
     "coreInfoSection": "Core Info -sectie",
+    "ctaGroup": "CTA -groep",
     "customCodeSection": "Aangepaste codesectie",
     "directory": "Directory",
     "emails": "E -mails",
@@ -125,6 +127,7 @@
     "businessLogo": "Bedrijfslogo",
     "businessName": "Bedrijfsnaam",
     "businessNameHeadingLevel": "Hoofdniveau bedrijfsniveau",
+    "buttons": "Knoppen",
     "callToAction": "Oproep tot actie",
     "cards": "Kaarten",
     "category": "Categorie",

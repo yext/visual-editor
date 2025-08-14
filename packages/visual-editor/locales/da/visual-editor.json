@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Misligholdelse",
   "breadcrumb": "Brødkrumme",
   "businessInformation": "Forretningsoplysninger",
+  "buttonWithIcon": "Knappen med {{presetImageType}} ikon",
   "callToActions": "Ring til handlinger",
   "cancel": "Ophæve",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Opfordre til handling",
     "components": "Komponenter",
     "coreInfoSection": "Kerneinfo -sektion",
+    "ctaGroup": "CTA gruppe",
     "customCodeSection": "Brugerdefineret kodesektion",
     "directory": "Vejviser",
     "emails": "E -mails",
@@ -125,6 +127,7 @@
     "businessLogo": "Forretningslogo",
     "businessName": "Forretningsnavn",
     "businessNameHeadingLevel": "Forretningsnavneoverskrift niveau",
+    "buttons": "Knapper",
     "callToAction": "Opfordre til handling",
     "cards": "Kort",
     "category": "Kategori",

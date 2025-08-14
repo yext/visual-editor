@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Default",
   "breadcrumb": "Breadcrumb",
   "businessInformation": "Business Information",
+  "buttonWithIcon": "Button with {{presetImageType}} icon",
   "callToActions": "Call to Actions",
   "cancel": "Cancel",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Call to Action",
     "components": "Components",
     "coreInfoSection": "Core Info Section",
+    "ctaGroup": "CTA Group",
     "customCodeSection": "Custom Code Section",
     "directory": "Directory",
     "emails": "Emails",
@@ -124,6 +126,7 @@
     "businessLogo": "Business Logo",
     "businessName": "Business Name",
     "businessNameHeadingLevel": "Business Name Heading Level",
+    "buttons": "Buttons",
     "callToAction": "Call To Action",
     "cards": "Cards",
     "category": "Category",

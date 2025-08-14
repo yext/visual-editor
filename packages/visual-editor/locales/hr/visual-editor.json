@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Zadano",
   "breadcrumb": "Krušnica",
   "businessInformation": "Poslovne informacije",
+  "buttonWithIcon": "Gumb s ikonom {{presetImageType}}",
   "callToActions": "Pozovite na akcije",
   "cancel": "Otkazati",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Poziv na akciju",
     "components": "Komponente",
     "coreInfoSection": "Odjeljak jezgrenih informacija",
+    "ctaGroup": "CTA grupa",
     "customCodeSection": "Odjeljak prilagođenog koda",
     "directory": "Imenik",
     "emails": "E -mailovi",
@@ -125,6 +127,7 @@
     "businessLogo": "Poslovni logotip",
     "businessName": "Naziv tvrtke",
     "businessNameHeadingLevel": "Naziv tvrtke Naziv",
+    "buttons": "Gumbi",
     "callToAction": "Poziv na akciju",
     "cards": "Karata",
     "category": "Kategorija",

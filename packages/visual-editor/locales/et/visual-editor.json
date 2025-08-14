@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Täitmata jätmine",
   "breadcrumb": "Riivsaia",
   "businessInformation": "Äriteave",
+  "buttonWithIcon": "Nupp {{presetImageType}} ikooniga",
   "callToActions": "Tegevusele helistama",
   "cancel": "Tühistama",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Kutsuge tegutseda",
     "components": "Komponendid",
     "coreInfoSection": "Põhiteabe jaotis",
+    "ctaGroup": "CTA rühm",
     "customCodeSection": "Kohandatud koodisektsioon",
     "directory": "Kataloog",
     "emails": "E -kirjad",
@@ -125,6 +127,7 @@
     "businessLogo": "Ärilogo",
     "businessName": "Ärinimi",
     "businessNameHeadingLevel": "Ettevõtte nime pealkiri",
+    "buttons": "Nupud",
     "callToAction": "Kutsuge tegutseda",
     "cards": "Kaardid",
     "category": "Kategooria",

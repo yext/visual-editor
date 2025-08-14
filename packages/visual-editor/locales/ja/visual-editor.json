@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "デフォルト",
   "breadcrumb": "パン塊",
   "businessInformation": "ビジネス情報",
+  "buttonWithIcon": "{{presetImageType}}アイコン付きボタン",
   "callToActions": "行動への呼びかけ",
   "cancel": "キャンセル",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "行動を促す",
     "components": "コンポーネント",
     "coreInfoSection": "コア情報セクション",
+    "ctaGroup": "CTAグループ",
     "customCodeSection": "カスタムコードセクション",
     "directory": "ディレクトリ",
     "emails": "メール",
@@ -125,6 +127,7 @@
     "businessLogo": "ビジネスロゴ",
     "businessName": "ビジネス名",
     "businessNameHeadingLevel": "ビジネス名の見出しレベル",
+    "buttons": "ボタン",
     "callToAction": "行動を促す",
     "cards": "カード",
     "category": "カテゴリ",

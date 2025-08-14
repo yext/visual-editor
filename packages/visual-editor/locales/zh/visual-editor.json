@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "默认",
   "breadcrumb": "面包屑",
   "businessInformation": "业务信息",
+  "buttonWithIcon": "按钮带{{presetImageType}}图标",
   "callToActions": "打电话给行动",
   "cancel": "取消",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "打电话给行动",
     "components": "成分",
     "coreInfoSection": "核心信息部分",
+    "ctaGroup": "CTA组",
     "customCodeSection": "自定义代码部分",
     "directory": "目录",
     "emails": "电子邮件",
@@ -125,6 +127,7 @@
     "businessLogo": "业务徽标",
     "businessName": "业务名称",
     "businessNameHeadingLevel": "企业名称标题级别",
+    "buttons": "按钮",
     "callToAction": "打电话给行动",
     "cards": "牌",
     "category": "类别",

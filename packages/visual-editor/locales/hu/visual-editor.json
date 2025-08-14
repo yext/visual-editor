@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Mulasztás",
   "breadcrumb": "Zsemlemorzsa",
   "businessInformation": "Üzleti információk",
+  "buttonWithIcon": "Gomb a {{presetImageType}} ikonnal",
   "callToActions": "Cselekvési felhívás",
   "cancel": "Töröl",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Cselekvésre ösztönzés",
     "components": "Alkatrészek",
     "coreInfoSection": "Alapvető információ szakasz",
+    "ctaGroup": "CTA -csoport",
     "customCodeSection": "Egyedi kód szakasz",
     "directory": "Könyvtár",
     "emails": "E -mailek",
@@ -125,6 +127,7 @@
     "businessLogo": "Üzleti logó",
     "businessName": "Üzleti név",
     "businessNameHeadingLevel": "Üzleti név címsor szintje",
+    "buttons": "Gombok",
     "callToAction": "Cselekvésre ösztönzés",
     "cards": "Kártyás kártyák",
     "category": "Kategória",

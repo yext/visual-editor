@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Varsayılan",
   "breadcrumb": "Ekmek kırıntısı",
   "businessInformation": "İş bilgileri",
+  "buttonWithIcon": "{{presetImageType}} simgesi ile düğme",
   "callToActions": "Eylem çağrısı",
   "cancel": "İptal etmek",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Harekete geçme çağrısı",
     "components": "Bileşenler",
     "coreInfoSection": "Çekirdek Bilgi Bölümü",
+    "ctaGroup": "CTA grubu",
     "customCodeSection": "Özel Kod Bölümü",
     "directory": "Dizin",
     "emails": "E -postalar",
@@ -125,6 +127,7 @@
     "businessLogo": "İş logosu",
     "businessName": "İşletme adı",
     "businessNameHeadingLevel": "İşletme Adı Başlık Seviyesi",
+    "buttons": "Düğmeler",
     "callToAction": "Harekete geçme çağrısı",
     "cards": "Kart",
     "category": "Kategori",

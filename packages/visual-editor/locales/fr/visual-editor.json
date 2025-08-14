@@ -33,6 +33,7 @@
   "borderRadiusDefaultLabel": "Défaut",
   "breadcrumb": "Chapelure",
   "businessInformation": "Informations commerciales",
+  "buttonWithIcon": "Bouton avec {{presetImageType}}",
   "callToActions": "Appel à des actions",
   "cancel": "Annuler",
   "categories": {
@@ -53,6 +54,7 @@
     "callToAction": "Appel à l'action",
     "components": "Composants",
     "coreInfoSection": "Section d'informations de base",
+    "ctaGroup": "Groupe CTA",
     "customCodeSection": "Section de code personnalisé",
     "directory": "Annuaire",
     "emails": "E-mails",
@@ -124,6 +126,7 @@
     "businessLogo": "Logo d'entreprise",
     "businessName": "Nom d'entreprise",
     "businessNameHeadingLevel": "Nom de l'entreprise",
+    "buttons": "Boutons",
     "callToAction": "Appel à l'action",
     "cards": "Cartes",
     "category": "Catégorie",
