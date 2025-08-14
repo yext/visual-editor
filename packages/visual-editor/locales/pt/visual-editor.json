@@ -348,6 +348,7 @@
   "loadingVE": "Carregando Editor Visual ...",
   "localGeomodifier": "Geomodificador local",
   "locationsNear_one": "{{count}} localização próxima a \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filtro:",
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",

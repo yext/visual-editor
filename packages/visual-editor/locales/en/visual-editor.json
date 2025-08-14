@@ -348,6 +348,7 @@
   "loadingVE": "Loading Visual Editor...",
   "localGeomodifier": "Local GeoModifier",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filter:",
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "missingHtmlWidget": "Add HTML to view component",

@@ -348,6 +348,7 @@
   "loadingVE": "Caricamento dell'editor visivo ...",
   "localGeomodifier": "Geomodificatore locale",
   "locationsNear_one": "{{count}} posizione vicino a \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filtro:",
   "map": "Mappa",
   "maxWidthTip": "Per un allineamento ottimale dei contenuti, si consiglia di impostare la larghezza di intestazione e piè di pagina per abbinare o superare la griglia di contenuto della pagina.",
   "missingHtmlWidget": "Aggiungi HTML al componente Visualizza",

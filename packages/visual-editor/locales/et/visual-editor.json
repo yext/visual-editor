@@ -348,6 +348,7 @@
   "loadingVE": "Visuaalse toimetaja laadimine ...",
   "localGeomodifier": "Kohalik geomodifikaator",
   "locationsNear_one": "{{krahv}} asukoht \"{{filterDisplayName}}\"  lähedal",
+  "locatorFilterLabel": "Filter:",
   "map": "Kaardistama",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",

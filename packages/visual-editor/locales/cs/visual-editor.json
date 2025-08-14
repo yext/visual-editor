@@ -348,6 +348,7 @@
   "loadingVE": "Načítání vizuálního editoru ...",
   "localGeomodifier": "Místní geomodifikátor",
   "locationsNear_one": "{{count}} umístění poblíž \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",

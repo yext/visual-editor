@@ -401,12 +401,17 @@ const LocatorInternal = ({
             }}
           />
           {openNowButton && (
-            <div className={"flex flex-row gap-4"}>
-              <FaSliders />
+            <div className={"flex flex-row gap-2 items-center"}>
+              <div className={"flex items-center gap-1"}>
+                <FaSliders />
+                <span className="font-bold">
+                  {t("locatorFilterLabel", "Filter:")}
+                </span>
+              </div>
               <Toggle
                 pressed={isSelected}
                 onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-                className="inline-flex py-2 w-auto"
+                className="inline-flex py-2 px-4 w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   {isSelected ? (

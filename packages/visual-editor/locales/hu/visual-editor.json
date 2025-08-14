@@ -348,6 +348,7 @@
   "loadingVE": "Vizuális szerkesztő betöltése ...",
   "localGeomodifier": "Helyi geomodifier",
   "locationsNear_one": "{{count}} A hely közelében \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Szűrő:",
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
