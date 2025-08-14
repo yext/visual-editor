@@ -26,7 +26,23 @@ export const heroContentParentCn = (styles: HeroVariantProps["styles"]) => {
 };
 
 // Match link CTAs sizing to other CTA variants for consistent layout
-const heroCtaLinkVariantCn = "py-3 border-2 border-transparent sm:w-fit w-full";
+const heroCtaLinkVariantCn = (
+  styles: HeroVariantProps["styles"],
+  primaryOrSecondary: "primary" | "secondary"
+) => {
+  if (primaryOrSecondary === "primary" && styles.primaryCTA !== "link") {
+    return "";
+  }
+
+  if (primaryOrSecondary === "secondary" && styles.secondaryCTA !== "link") {
+    return "";
+  }
+
+  return (
+    "py-3 border-2 border-transparent w-fit " +
+    (styles.mobileContentAlignment === "center" ? " mx-auto" : "")
+  );
+};
 
 export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
@@ -165,9 +181,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                   ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
                   coordinate={resolvedHero.primaryCta.coordinate}
                   presetImageType={resolvedHero.primaryCta.presetImageType}
-                  className={
-                    styles.primaryCTA === "link" ? heroCtaLinkVariantCn : ""
-                  }
+                  className={heroCtaLinkVariantCn(styles, "primary")}
                 />
               </EntityField>
             )}
@@ -196,9 +210,7 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                   ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
                   coordinate={resolvedHero.secondaryCta.coordinate}
                   presetImageType={resolvedHero.secondaryCta.presetImageType}
-                  className={
-                    styles.secondaryCTA === "link" ? heroCtaLinkVariantCn : ""
-                  }
+                  className={heroCtaLinkVariantCn(styles, "secondary")}
                 />
               </EntityField>
             )}
