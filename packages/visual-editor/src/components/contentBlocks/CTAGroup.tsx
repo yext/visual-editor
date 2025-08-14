@@ -14,6 +14,7 @@ const defaultButton: CTAWrapperProps = {
     field: "",
     constantValueEnabled: true,
     constantValue: {
+      ctaType: "textAndLink",
       label: "Button",
       link: "#",
     },
@@ -22,7 +23,7 @@ const defaultButton: CTAWrapperProps = {
 };
 
 export interface CTAGroupProps {
-  buttons: CTAWrapperProps[]; // TODO adjust from Colton's PR
+  buttons: CTAWrapperProps[];
 }
 
 const ctaGroupFields: Fields<CTAGroupProps> = {
@@ -46,35 +47,35 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
 };
 
 const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
-  const { i18n } = useTranslation();
   const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   if (!buttons || buttons.length === 0) return null;
 
   return (
     <div
-      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center align-center`}
+      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center`}
     >
       {buttons.map((button, idx) => {
         const cta = resolveComponentData(
           button.entityField,
-          i18n.language,
+          locale,
           streamDocument
         );
 
         return (
-          <div key={idx} className="flex">
+          <div key={idx} className="flex items-center justify-center">
             {cta && (
               <CTA
-                label={resolveComponentData(
-                  cta.label,
-                  i18n.language,
-                  streamDocument
-                )}
-                link={cta.link}
+                label={resolveComponentData(cta.label, locale, streamDocument)}
+                link={resolveComponentData(cta.link, locale, streamDocument)}
                 linkType={cta.linkType}
                 variant={button.variant}
-                className="w-full" // handle excessively long strings
+                ctaType={cta.ctaType}
+                coordinate={cta.coordinate}
+                presetImageType={cta.presetImageType}
+                className="truncate"
               />
             )}
           </div>
