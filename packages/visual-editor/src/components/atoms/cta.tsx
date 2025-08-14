@@ -94,7 +94,9 @@ const useResolvedCtaProps = (props: CTAProps) => {
   const buttonClassName = themeManagerCn(
     "flex",
     {
+      // Let preset images determine their natural size - no forced width constraints
       "w-fit h-[51px] items-center justify-center": ctaType === "presetImage",
+      // Special handling for Uber Eats to give it more visual prominence
       "!w-auto":
         ctaType === "presetImage" && props.presetImageType === "uber-eats",
     },
