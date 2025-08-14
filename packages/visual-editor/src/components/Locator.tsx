@@ -403,9 +403,9 @@ const LocatorInternal = ({
             <Toggle
               pressed={isSelected}
               onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-              className="px-16 py-16 self-start w-auto"
+              className="px-8 py-4 self-start w-auto"
             >
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center gap-2 px-8 py-4">
                 {isSelected ? (
                   <FaCheckSquare className="inline-block" />
                 ) : (
