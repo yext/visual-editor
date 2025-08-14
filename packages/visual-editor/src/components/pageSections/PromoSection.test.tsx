@@ -191,6 +191,141 @@ const tests: ComponentTest[] = [
     },
     version: 5,
   },
+  {
+    name: "version 16 props with old CTA structure",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: "Title",
+            description: "Description",
+            cta: { label: "Call To Action", link: "#", linkType: "URL" },
+          },
+          constantValueEnabled: true,
+          constantValueOverride: {
+            image: true,
+            title: true,
+            description: true,
+            cta: true,
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        orientation: "left",
+        ctaVariant: "primary",
+        heading: {
+          level: 1,
+          align: "left",
+        },
+        image: {
+          aspectRatio: 1.78,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
+  {
+    name: "version 16 props using entity values with old CTA structure",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: "Title",
+            description: "Description",
+            cta: { label: "Call To Action", link: "#", linkType: "URL" },
+          },
+          constantValueEnabled: false,
+          constantValueOverride: {},
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        orientation: "left",
+        ctaVariant: "primary",
+        heading: {
+          level: 1,
+          align: "left",
+        },
+        image: {
+          aspectRatio: 1.78,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
+  {
+    name: "version 16 props with missing ctaType",
+    document: { c_promo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_promo",
+          constantValue: {
+            image: {
+              height: 360,
+              width: 640,
+              url: "https://placehold.co/640x360",
+            },
+            title: "Title",
+            description: "Description",
+            cta: {
+              label: "Call To Action",
+              link: "#",
+              linkType: "URL",
+              // Missing ctaType - should be added by migration
+            },
+          },
+          constantValueEnabled: true,
+          constantValueOverride: {
+            image: true,
+            title: true,
+            description: true,
+            cta: true,
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        orientation: "left",
+        ctaVariant: "primary",
+        heading: {
+          level: 1,
+          align: "left",
+        },
+        image: {
+          aspectRatio: 1.78,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
 ];
 
 describe("PromoSection", async () => {

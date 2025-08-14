@@ -6,7 +6,7 @@ import {
   TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
@@ -14,7 +14,6 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const defaultInsight: InsightStruct = {
   image: {
@@ -33,6 +32,7 @@ export const defaultInsight: InsightStruct = {
     link: "#",
     label: { en: "Read More", hasLocalizedValue: "true" },
     linkType: "URL",
+    ctaType: "textAndLink",
   },
 };
 
@@ -88,14 +88,20 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
     type: "array",
     arrayFields: {
       image: {
-        ...IMAGE_CONSTANT_CONFIG,
+        type: "object",
         label: pt("fields.image", "Image"),
+        objectFields: {
+          url: {
+            label: pt("fields.url", "URL"),
+            type: "text",
+          },
+        },
       },
       name: nameField,
       category: categoryField,
       publishTime: DateSelector,
       description: descriptionField,
-      cta: translatableCTAFields(),
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {

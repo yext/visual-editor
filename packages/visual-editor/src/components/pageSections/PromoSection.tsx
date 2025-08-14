@@ -2,29 +2,29 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  themeManagerCn,
+  PromoSectionType,
   useDocument,
   Image,
-  BackgroundStyle,
   backgroundColors,
+  BackgroundStyle,
+  HeadingLevel,
   Heading,
-  CTA,
   PageSection,
   YextField,
   VisibilityWrapper,
   CTAProps,
-  PromoSectionType,
+  msg,
+  resolveComponentData,
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
-  ComponentFields,
-  EntityField,
-  msg,
-  pt,
-  HeadingLevel,
-  ThemeOptions,
+  themeManagerCn,
   getAnalyticsScopeHash,
-  resolveComponentData,
+  CTA,
+  ComponentFields,
+  ThemeOptions,
+  EntityField,
+  pt,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
@@ -102,7 +102,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      promo: YextStructFieldSelector({
+      promo: YextStructFieldSelector<PromoSectionType>({
         label: msg("fields.promo", "Promo"),
         filter: {
           type: ComponentFields.PromoSection.type,
@@ -259,9 +259,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               streamDocument
             )}
         </EntityField>
-        {resolvedPromo?.cta?.label && (
+        {resolvedPromo?.cta && (
           <EntityField
-            displayName={pt("fields.callToAction", "Call To Action")}
+            displayName={pt("fields.cta", "CTA")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
@@ -269,16 +269,19 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               eventName={`cta`}
               variant={styles?.ctaVariant}
               label={resolveComponentData(
-                resolvedPromo?.cta.label,
+                resolvedPromo.cta.label,
                 i18n.language,
                 streamDocument
               )}
               link={resolveComponentData(
-                resolvedPromo?.cta.link,
+                resolvedPromo.cta.link,
                 i18n.language,
                 streamDocument
               )}
-              linkType={resolvedPromo?.cta.linkType}
+              linkType={resolvedPromo.cta.linkType}
+              ctaType={resolvedPromo.cta.ctaType || "textAndLink"}
+              coordinate={resolvedPromo.cta.coordinate}
+              presetImageType={resolvedPromo.cta.presetImageType}
             />
           </EntityField>
         )}
@@ -298,7 +301,6 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     data: {
       promo: {
         field: "",
-        constantValueEnabled: true,
         constantValue: {
           image: {
             height: 360,
@@ -314,8 +316,10 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             label: { en: "Learn More", hasLocalizedValue: "true" },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
         },
+        constantValueEnabled: true,
         constantValueOverride: {
           image: true,
           title: true,
@@ -341,34 +345,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveFields: (data, { lastData }) => {
-    // If set to entity value and no field selected, hide the component.
-    if (
-      !data.props.data.promo.constantValueEnabled &&
-      data.props.data.promo.field === ""
-    ) {
-      data.props.liveVisibility = false;
-      return {
-        ...promoSectionFields,
-        liveVisibility: undefined,
-      };
-    }
 
-    // If no field was selected and then constant value is enabled
-    // or a field is selected, show the component.
-    if (
-      (data.props.data.promo.constantValueEnabled &&
-        !lastData?.props.data.promo.constantValueEnabled &&
-        data.props.data.promo.field === "") ||
-      (lastData?.props.data.promo.field === "" &&
-        data.props.data.promo.field !== "")
-    ) {
-      data.props.liveVisibility = true;
-    }
-
-    // Otherwise, return normal fields.
-    return promoSectionFields;
-  },
   render: (props) => {
     return (
       <AnalyticsScopeProvider
