@@ -9,7 +9,6 @@ import {
   PhoneAtom,
   msg,
   YextField,
-  TranslatableStringField,
   TranslatableString,
   BackgroundStyle,
   Background,
@@ -17,15 +16,13 @@ import {
   YextEntityField,
   getLocationPath,
   resolveComponentData,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  Address,
-  AnalyticsScopeProvider,
-  HoursStatus,
-} from "@yext/pages-components";
+import { Address, AnalyticsScopeProvider } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
+import * as React from "react";
 
 export interface DirectoryData {
   /**
@@ -61,6 +58,26 @@ export interface DirectoryStyles {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
   };
+
+  /**
+   * The display format for phone numbers on the cards.
+   * @defaultValue 'domestic'
+   */
+  phoneNumberFormat: "domestic" | "international";
+
+  /**
+   * If "true", wraps phone numbers in a clickable "tel:" hyperlink.
+   * @defaultValue false
+   */
+  phoneNumberLink: boolean;
+
+  /** Styling for the hours display on each card. */
+  hours: {
+    showCurrentStatus: boolean;
+    timeFormat?: "12h" | "24h";
+    dayOfWeekFormat?: "short" | "long";
+    showDayNames?: boolean;
+  };
 }
 
 export interface DirectoryProps {
@@ -92,9 +109,12 @@ const directoryFields: Fields<DirectoryProps> = {
           types: ["type.string"],
         },
       }),
-      directoryRoot: TranslatableStringField(
+      directoryRoot: YextField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        { types: ["type.string"] }
+        {
+          type: "translatableString",
+          filter: { types: ["type.string"] },
+        }
       ),
     },
   }),
@@ -131,6 +151,77 @@ const directoryFields: Fields<DirectoryProps> = {
             {
               type: "select",
               options: "BACKGROUND_COLOR",
+            }
+          ),
+        },
+      }),
+      phoneNumberFormat: YextField(
+        msg("fields.phoneNumberFormat", "Phone Number Format"),
+        {
+          type: "radio",
+          options: "PHONE_OPTIONS",
+        }
+      ),
+      phoneNumberLink: YextField(
+        msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
+      hours: YextField(msg("fields.hours", "Hours"), {
+        type: "object",
+        objectFields: {
+          showCurrentStatus: YextField(
+            msg("fields.showCurrentStatus", "Show Current Status"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.hour12", "12-hour"),
+                value: "12h",
+              },
+              {
+                label: msg("fields.options.hour24", "24-hour"),
+                value: "24h",
+              },
+            ],
+          }),
+          showDayNames: YextField(
+            msg("fields.showDayNames", "Show Day Names"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          dayOfWeekFormat: YextField(
+            msg("fields.dayOfWeekFormat", "Day of Week Format"),
+            {
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.short", "Short"),
+                  value: "short",
+                },
+                {
+                  label: msg("fields.options.long", "Long"),
+                  value: "long",
+                },
+              ],
             }
           ),
         },
@@ -174,52 +265,52 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 const DirectoryCard = ({
   cardNumber,
   profile,
-  cardStyles,
+  styles,
 }: {
   cardNumber: number;
   profile: any;
-  cardStyles: DirectoryProps["styles"]["cards"];
+  styles: DirectoryProps["styles"];
 }) => {
   const { relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
+  const cardStyles: DirectoryProps["styles"]["cards"] = styles["cards"];
 
   return (
     <Background
       className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
       background={cardStyles.backgroundColor}
     >
-      <div>
-        <MaybeLink
-          eventName={`link${cardNumber}`}
-          alwaysHideCaret={true}
-          className="mb-2"
-          href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
+      <MaybeLink
+        eventName={`link${cardNumber}`}
+        alwaysHideCaret={true}
+        className="mb-2 max-w-full text-wrap break-words"
+        href={getLocationPath(profile, i18n.language, relativePrefixToRoot)}
+      >
+        <Heading
+          level={cardStyles.headingLevel}
+          semanticLevelOverride={3}
+          className="max-w-full"
         >
-          <Heading level={cardStyles.headingLevel} semanticLevelOverride={3}>
-            {profile.name}
-          </Heading>
-        </MaybeLink>
-        {profile.hours && (
-          <div className="font-semibold font-body-fontFamily text-body-fontSize">
-            <HoursStatus
-              hours={profile.hours}
-              timezone={profile.timezone}
-              className="h-full"
-              dayOfWeekTemplate={() => <></>}
-            />
-          </div>
-        )}
-      </div>
+          {profile.name}
+        </Heading>
+      </MaybeLink>
+      {profile.hours && (
+        <HoursStatusAtom
+          hours={profile.hours}
+          className="mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full"
+          timezone={profile.timezone}
+          showCurrentStatus={styles?.hours?.showCurrentStatus}
+          dayOfWeekFormat={styles?.hours?.dayOfWeekFormat}
+          showDayNames={styles?.hours?.showDayNames}
+          timeFormat={styles?.hours?.timeFormat}
+        />
+      )}
       {profile.mainPhone && (
         <PhoneAtom
           phoneNumber={profile.mainPhone}
-          includeHyperlink={false}
+          includeHyperlink={styles.phoneNumberLink}
           includeIcon={false}
-          format={
-            profile.mainPhone.slice(0, 2) === "+1"
-              ? "domestic"
-              : "international"
-          }
+          format={styles.phoneNumberFormat}
         />
       )}
       {profile.address && (
@@ -237,10 +328,10 @@ const DirectoryCard = ({
 // DirectoryGrid uses PageSection's theme config for styling.
 const DirectoryGrid = ({
   directoryChildren,
-  cardStyles,
+  styles,
 }: {
   directoryChildren: any[];
-  cardStyles: DirectoryProps["styles"]["cards"];
+  styles: DirectoryProps["styles"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -249,18 +340,15 @@ const DirectoryGrid = ({
       verticalPadding="sm"
       background={backgroundColors.background1.value}
       className={themeManagerCn(
-        "flex min-h-0 min-w-0 mx-auto flex-col md:grid md:grid-cols-12 gap-4 sm:gap-8"
+        "flex min-h-0 min-w-0 mx-auto flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
       )}
-      style={{
-        gridTemplateColumns: `repeat(3, 1fr)`,
-      }}
     >
       {sortedDirectoryChildren?.map((child, idx) => (
         <DirectoryCard
           key={idx}
           cardNumber={idx}
           profile={child}
-          cardStyles={cardStyles}
+          styles={styles}
         />
       ))}
     </PageSection>
@@ -342,7 +430,7 @@ const DirectoryComponent = ({ data, styles, analytics }: DirectoryProps) => {
         isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={streamDocument.dm_directoryChildren}
-            cardStyles={styles.cards}
+            styles={styles}
           />
         )}
       {streamDocument.dm_directoryChildren &&
@@ -386,6 +474,14 @@ export const Directory: ComponentConfig<DirectoryProps> = {
         backgroundColor: backgroundColors.background1.value,
         headingLevel: 3,
       },
+      hours: {
+        showCurrentStatus: true,
+        timeFormat: "12h",
+        showDayNames: true,
+        dayOfWeekFormat: "long",
+      },
+      phoneNumberFormat: "domestic",
+      phoneNumberLink: true,
     },
     analytics: {
       scope: "directory",

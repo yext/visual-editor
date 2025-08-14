@@ -31,7 +31,6 @@ import {
   pt,
   ThemeOptions,
   usePlatformTranslation,
-  TranslatableStringField,
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
@@ -150,8 +149,9 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
                   },
                 }
               ),
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
             },
             getItemSummary: (item): string => {
@@ -437,13 +437,19 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       }[styles.heading.align]
     : "justify-start";
 
+  const sectionCount = [hasCoreInfo, resolvedHours, servicesList].filter(
+    Boolean
+  ).length;
+
+  const gridColsClass = [
+    "grid-cols-1",
+    `md:grid-cols-${Math.min(sectionCount, 2)}`,
+    `lg:grid-cols-${Math.min(sectionCount, 3)}`,
+  ].join(" ");
+
   return (
     <PageSection
-      className={`flex flex-col md:flex-row justify-between w-full gap-8 ${
-        (!resolvedHours && servicesList) || (resolvedHours && !servicesList)
-          ? "md:[&>section]:w-1/2"
-          : "md:[&>section]:w-1/3"
-      }`}
+      className={`grid w-full gap-8 ${gridColsClass}`}
       background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >

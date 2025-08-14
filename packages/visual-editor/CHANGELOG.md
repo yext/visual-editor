@@ -1,3 +1,54 @@
+#### 0.0.54 (2025-08-13)
+
+##### New Features
+
+- add Header Position prop to ExpandedHeader (#717) (39c4e8ef)
+- add Hours props to directory (#711) (d9571b56)
+
+##### Bug Fixes
+
+- heroComponent's entity overrides broke (#718) (00033af3)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714)"" (#719) (4980aa9f)
+- open image upload drawer for static images (#687)" (#714)" (#716) (548f6c80)
+
+#### 0.0.53 (2025-08-12)
+
+##### New Features
+
+- sendLoadingProgress to parent (#707) (a35865a9)
+- open image upload drawer for static images (#687) (29915e62)
+- display hex values in background picker (#709) (5d7a2fe3)
+
+##### Bug Fixes
+
+- apply page section to grid (#713) (b5199d27)
+- directory wrapping (#710) (0cbe8bd3)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714) (401d6585)
+
+#### 0.0.52 (2025-08-11)
+
+##### Chores
+
+- add TranslatableString type to YextField (#706) (2fb957e8)
+
+##### New Features
+
+- update array field item labels (#708) (4b816dde)
+- support category filtering (#705) (d3663709)
+- warn when translation keys are deleted (#700) (f79ec675)
+- allow different urls per locale for CTA links (#698) (800601d8)
+- improve CoreInfoSection styling for tablet (#701) (1e03777a)
+
+##### Refactors
+
+- hybrid developer work flow (#699) (fdf820e1)
+
 #### 0.0.51 (2025-08-06)
 
 ##### Chores

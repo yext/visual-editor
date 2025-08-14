@@ -93,7 +93,8 @@ const Location: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
   const filteredConfig = filterComponentsFromConfig(
     mainConfig,
-    document?._additionalLayoutComponents
+    document?._additionalLayoutComponents,
+    document?._additionalLayoutCategories
   );
 
   return (

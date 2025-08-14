@@ -17,7 +17,6 @@ import {
   TranslatableCTA,
   pt,
   PageSection,
-  TranslatableStringField,
   useDocument,
   resolveComponentData,
   PageSectionProps,
@@ -86,6 +85,8 @@ export interface ExpandedHeaderStyles {
   };
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
+  /** Whether the header is "sticky" or not */
+  headerPosition: "sticky" | "scrollsWithPage";
 }
 
 export interface ExpandedHeaderProps {
@@ -126,8 +127,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -139,12 +141,20 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               },
             },
             defaultItemProps: defaultMainLink,
+            getItemSummary: (item, i) => {
+              const { i18n } = useTranslation();
+              return (
+                resolveComponentData(item.label, i18n.language) ||
+                pt("Link", "Link") + " " + ((i ?? 0) + 1)
+              );
+            },
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -169,8 +179,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -221,8 +232,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(msg("fields.label", "Label"), {
-                    types: ["type.string"],
+                  label: YextField(msg("fields.label", "Label"), {
+                    type: "translatableString",
+                    filter: { types: ["type.string"] },
                   }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
@@ -234,6 +246,13 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
                   },
                 },
                 defaultItemProps: defaultSecondaryLink,
+                getItemSummary: (item, i) => {
+                  const { i18n } = useTranslation();
+                  return (
+                    resolveComponentData(item.label, i18n.language) ||
+                    pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                  );
+                },
               }
             ),
           },
@@ -294,6 +313,19 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
       }),
+      headerPosition: YextField(
+        msg("fields.headerPosition", "Header Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
+              value: "scrollsWithPage",
+            },
+            { label: msg("fields.options.sticky", "Sticky"), value: "sticky" },
+          ],
+        }
+      ),
     },
   }),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
@@ -376,7 +408,11 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   );
 
   return (
-    <>
+    <div
+      className={`flex flex-col ${
+        styles.headerPosition === "sticky" ? "sticky top-0 z-50" : ""
+      }`}
+    >
       {/* Secondary Header (Top Bar) */}
       <div className="hidden md:flex flex-col">
         {show && (
@@ -559,7 +595,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -589,7 +625,7 @@ const HeaderLinks = ({
       eventName={`cta.${ctaType}.${index}`}
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
-      link={item.link}
+      link={resolveComponentData(item.link, i18n.language, streamDocument)}
       className="justify-start w-full text-left"
     />
   );
@@ -698,7 +734,11 @@ const HeaderCtas = (props: {
               i18n.language,
               streamDocument
             )}
-            link={primaryCTA.link}
+            link={resolveComponentData(
+              primaryCTA?.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={primaryCTA.linkType}
           />
         </EntityField>
@@ -716,7 +756,11 @@ const HeaderCtas = (props: {
               i18n.language,
               streamDocument
             )}
-            link={secondaryCTA.link}
+            link={resolveComponentData(
+              secondaryCTA.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={secondaryCTA.linkType}
           />
         </EntityField>
@@ -791,6 +835,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         backgroundColor: backgroundColors.background2.value,
       },
       maxWidth: "theme",
+      headerPosition: "scrollsWithPage",
     },
     analytics: {
       scope: "expandedHeader",
