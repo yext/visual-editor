@@ -645,7 +645,7 @@ const tests: ComponentTest[] = [
           field: "",
           constantValueEnabled: true,
           constantValue: {
-            en: "",
+            en: "Example Business",
             hasLocalizedValue: "true",
           },
         },
