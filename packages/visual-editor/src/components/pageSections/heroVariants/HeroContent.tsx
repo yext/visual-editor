@@ -40,7 +40,7 @@ const heroCtaLinkVariantCn = (
 
   return (
     "py-3 border-2 border-transparent w-fit " +
-    (styles.mobileContentAlignment === "center" ? " mx-auto" : "")
+    (styles.mobileContentAlignment === "center" ? " mx-auto sm:m-0" : "")
   );
 };
 
