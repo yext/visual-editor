@@ -6,7 +6,7 @@ import {
   TranslatableRichText,
   TranslatableString,
 } from "../../../types/types.ts";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateSelector } from "../components/DateSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
@@ -32,6 +32,7 @@ export const defaultInsight: InsightStruct = {
     link: "#",
     label: { en: "Read More", hasLocalizedValue: "true" },
     linkType: "URL",
+    ctaType: "textAndLink",
   },
 };
 
@@ -100,7 +101,7 @@ const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
       category: categoryField,
       publishTime: DateSelector,
       description: descriptionField,
-      cta: translatableCTAFields(),
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultInsight,
     getItemSummary: (item, i) => {

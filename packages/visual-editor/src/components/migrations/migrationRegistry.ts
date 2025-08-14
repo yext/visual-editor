@@ -14,6 +14,7 @@ import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
 import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_banner_section.ts";
 import { directoryHoursStyles } from "./0014_directory_hours_styles.ts";
 import { addHeaderPosition } from "./0015_add_header_position.ts";
+import { migrateCTAStructures } from "./0016_migrate_cta_structures.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -36,4 +37,5 @@ export const migrationRegistry: MigrationRegistry = [
   ignoreLocaleWarningBannerSection,
   directoryHoursStyles,
   addHeaderPosition,
+  migrateCTAStructures,
 ];

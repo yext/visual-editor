@@ -1,5 +1,4 @@
-import { AutoField, CustomField, Field } from "@measured/puck";
-import { ConstantFields } from "./ConstantField.tsx";
+import { Field } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
@@ -32,55 +31,6 @@ export const linkTypeOptions = () => {
       value: "OTHER",
     },
   ];
-};
-
-export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
-  type: "custom",
-  render: ({ onChange, value }) => {
-    const labelField = useMemo(() => {
-      return TranslatableStringField<TranslatableString | undefined>(
-        msg("fields.label", "Label"),
-        { types: ["type.string"] }
-      );
-    }, []);
-
-    const linkField = useMemo(() => {
-      return TranslatableStringField<TranslatableString | undefined>(
-        msg("fields.link", "Link"),
-        { types: ["type.string"] },
-        true
-      );
-    }, []);
-
-    const constantFields = ConstantFields({
-      onChange: onChange,
-      value: value,
-      fields: [
-        {
-          label: pt("linkType", "Link Type"),
-          field: "linkType",
-          fieldType: "select",
-          options: linkTypeOptions(),
-        },
-      ],
-    });
-
-    return (
-      <div className={"ve-mt-3"}>
-        <AutoField
-          field={labelField}
-          value={value.label}
-          onChange={(newValue) => onChange({ ...value, label: newValue })}
-        />
-        <AutoField
-          field={linkField}
-          value={value.link}
-          onChange={(newValue) => onChange({ ...value, link: newValue })}
-        />
-        {constantFields}
-      </div>
-    );
-  },
 };
 
 // Fields for TranslatableCTA with labels
