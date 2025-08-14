@@ -628,7 +628,7 @@ const tests: ComponentTest[] = [
     version: 14,
   },
   {
-    name: "version 17 with cityDocument and siteName field",
+    name: "version 18 with cityDocument and siteName field",
     document: cityDocument,
     props: {
       data: {
@@ -677,7 +677,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 17,
+    version: 18,
   },
 ];
 
