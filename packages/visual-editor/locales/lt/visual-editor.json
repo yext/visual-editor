@@ -33,7 +33,7 @@
   "borderRadiusDefaultLabel": "Numatytasis",
   "breadcrumb": "Duonos komprumbas",
   "businessInformation": "Verslo informacija",
-  "buttonWithIcon": "Mygtukas su {{preseTimeMageType}} piktograma",
+  "buttonWithIcon": "Mygtukas su {{presetImageType}} piktograma",
   "callToActions": "Kvietimas į veiksmus",
   "cancel": "Atšaukti",
   "categories": {

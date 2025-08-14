@@ -33,7 +33,7 @@
   "borderRadiusDefaultLabel": "Laiminlyönti",
   "breadcrumb": "Leivänmuru",
   "businessInformation": "Yritystieto",
-  "buttonWithIcon": "Painike {{esiaseteMageType}} -kuvakkeella",
+  "buttonWithIcon": "Painike {{presetImageType}} -kuvakkeella",
   "callToActions": "Soita toimiin",
   "cancel": "Peruuttaa",
   "categories": {
