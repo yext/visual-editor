@@ -11,7 +11,6 @@ import {
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-  CTA,
   Heading,
   PageSection,
   YextField,
@@ -29,6 +28,7 @@ import {
   ReviewStars,
   getAggregateRating,
   resolveComponentData,
+  CTA,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -165,7 +165,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      hero: YextStructFieldSelector({
+      hero: YextStructFieldSelector<HeroSectionType>({
         label: msg("fields.hero", "Hero"),
         filter: {
           type: ComponentFields.HeroSection.type,
@@ -367,62 +367,69 @@ const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
             />
           )}
         </header>
-        {(resolvedHero?.primaryCta?.label ||
-          resolvedHero?.secondaryCta?.label) && (
-          <div
-            className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label={t("callToActions", "Call to Actions")}
-          >
-            {resolvedHero?.primaryCta?.label && (
-              <EntityField
-                displayName={pt("fields.primaryCta", "Primary CTA")}
-                fieldId={data.hero.field}
-                constantValueEnabled={
-                  data.hero.constantValueOverride.primaryCta
-                }
-              >
-                <CTA
-                  eventName={`primaryCta`}
-                  variant={styles?.primaryCTA}
-                  label={resolveComponentData(
-                    resolvedHero.primaryCta.label,
-                    i18n.language
-                  )}
-                  link={resolveComponentData(
-                    resolvedHero.primaryCta.link,
-                    i18n.language
-                  )}
-                  linkType={resolvedHero.primaryCta.linkType}
-                  className={"py-3"}
-                />
-              </EntityField>
-            )}
-            {resolvedHero?.secondaryCta?.label && (
-              <EntityField
-                displayName={pt("fields.secondaryCta", "Secondary CTA")}
-                fieldId={data.hero.field}
-                constantValueEnabled={
-                  data.hero.constantValueOverride.secondaryCta
-                }
-              >
-                <CTA
-                  eventName={`secondaryCta`}
-                  variant={styles?.secondaryCTA}
-                  label={resolveComponentData(
-                    resolvedHero.secondaryCta.label,
-                    i18n.language
-                  )}
-                  link={resolveComponentData(
-                    resolvedHero.secondaryCta.link,
-                    i18n.language
-                  )}
-                  linkType={resolvedHero.secondaryCta.linkType}
-                  className={"py-3"}
-                />
-              </EntityField>
-            )}
-          </div>
-        )}
+        {resolvedHero &&
+          (resolvedHero.primaryCta || resolvedHero.secondaryCta) && (
+            <div
+              className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
+              role="group"
+              aria-label={t("callToActions", "Call to Actions")}
+            >
+              {resolvedHero?.primaryCta && (
+                <EntityField
+                  displayName={pt("fields.primaryCta", "Primary CTA")}
+                  fieldId={data.hero.field}
+                  constantValueEnabled={
+                    data.hero.constantValueOverride.primaryCta
+                  }
+                >
+                  <CTA
+                    eventName={`primaryCta`}
+                    variant={styles?.primaryCTA}
+                    label={resolveComponentData(
+                      resolvedHero.primaryCta.label,
+                      i18n.language
+                    )}
+                    link={resolveComponentData(
+                      resolvedHero.primaryCta.link,
+                      i18n.language
+                    )}
+                    linkType={resolvedHero.primaryCta.linkType}
+                    ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
+                    coordinate={resolvedHero.primaryCta.coordinate}
+                    presetImageType={resolvedHero.primaryCta.presetImageType}
+                    className={"py-3"}
+                  />
+                </EntityField>
+              )}
+              {resolvedHero?.secondaryCta && (
+                <EntityField
+                  displayName={pt("fields.secondaryCta", "Secondary CTA")}
+                  fieldId={data.hero.field}
+                  constantValueEnabled={
+                    data.hero.constantValueOverride.secondaryCta
+                  }
+                >
+                  <CTA
+                    eventName={`secondaryCta`}
+                    variant={styles?.secondaryCTA}
+                    label={resolveComponentData(
+                      resolvedHero.secondaryCta.label,
+                      i18n.language
+                    )}
+                    link={resolveComponentData(
+                      resolvedHero.secondaryCta.link,
+                      i18n.language
+                    )}
+                    linkType={resolvedHero.secondaryCta.linkType}
+                    ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
+                    coordinate={resolvedHero.secondaryCta.coordinate}
+                    presetImageType={resolvedHero.secondaryCta.presetImageType}
+                    className={"py-3"}
+                  />
+                </EntityField>
+              )}
+            </div>
+          )}
       </div>
       {resolvedHero?.image && (
         <EntityField
@@ -475,7 +482,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
       hero: {
         field: "",
-        constantValueEnabled: true,
         constantValue: {
           primaryCta: {
             label: {
@@ -484,14 +490,16 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
           secondaryCta: {
             label: {
-              en: "Call To Action",
+              en: "Learn More",
               hasLocalizedValue: "true",
             },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,
@@ -499,10 +507,11 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             width: 640,
           },
         },
+        constantValueEnabled: true,
         constantValueOverride: {
-          image: true,
           primaryCta: true,
           secondaryCta: true,
+          image: true,
         },
       },
       showAverageReview: true,

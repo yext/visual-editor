@@ -1,3 +1,19 @@
+#### 0.0.54 (2025-08-13)
+
+##### New Features
+
+- add Header Position prop to ExpandedHeader (#717) (39c4e8ef)
+- add Hours props to directory (#711) (d9571b56)
+
+##### Bug Fixes
+
+- heroComponent's entity overrides broke (#718) (00033af3)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714)"" (#719) (4980aa9f)
+- open image upload drawer for static images (#687)" (#714)" (#716) (548f6c80)
+
 #### 0.0.53 (2025-08-12)
 
 ##### New Features

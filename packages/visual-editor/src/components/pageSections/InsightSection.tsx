@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   InsightSectionType,
@@ -25,6 +24,7 @@ import {
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
+  CTA,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -245,6 +245,9 @@ const InsightCard = ({
             label={resolveComponentData(insight.cta.label, i18n.language)}
             link={resolveComponentData(insight.cta.link, i18n.language)}
             linkType={insight.cta.linkType ?? "URL"}
+            ctaType={insight.cta.ctaType}
+            coordinate={insight.cta.coordinate}
+            presetImageType={insight.cta.presetImageType}
             className="mt-auto"
           />
         )}
