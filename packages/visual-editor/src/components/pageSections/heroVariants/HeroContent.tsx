@@ -140,62 +140,68 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
           )}
           aria-label={t("callToActions", "Call to Actions")}
         >
-          {resolvedHero?.primaryCta?.label && (
-            <EntityField
-              displayName={pt("fields.primaryCta", "Primary CTA")}
-              fieldId={data.hero.field}
-              constantValueEnabled={data.hero.constantValueOverride.primaryCta}
-            >
-              <CTA
-                eventName="primaryCta"
-                variant={styles.primaryCTA}
-                label={resolveComponentData(
-                  resolvedHero.primaryCta.label,
-                  i18n.language
-                )}
-                link={resolveComponentData(
-                  resolvedHero.primaryCta.link,
-                  i18n.language
-                )}
-                linkType={resolvedHero.primaryCta.linkType}
-                ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
-                coordinate={resolvedHero.primaryCta.coordinate}
-                presetImageType={resolvedHero.primaryCta.presetImageType}
-                className={
-                  styles.primaryCTA === "link" ? heroCtaLinkVariantCn : ""
+          {resolvedHero?.primaryCta &&
+            (resolvedHero.primaryCta.ctaType !== "textAndLink" ||
+              resolvedHero.primaryCta.label) && (
+              <EntityField
+                displayName={pt("fields.primaryCta", "Primary CTA")}
+                fieldId={data.hero.field}
+                constantValueEnabled={
+                  data.hero.constantValueOverride.primaryCta
                 }
-              />
-            </EntityField>
-          )}
-          {resolvedHero?.secondaryCta?.label && (
-            <EntityField
-              displayName={pt("fields.secondaryCta", "Secondary CTA")}
-              fieldId={data.hero.field}
-              constantValueEnabled={
-                data.hero.constantValueOverride.secondaryCta
-              }
-            >
-              <CTA
-                eventName="secondaryCta"
-                variant={styles.secondaryCTA}
-                label={resolveComponentData(
-                  resolvedHero.secondaryCta.label,
-                  i18n.language
-                )}
-                link={resolveComponentData(
-                  resolvedHero.secondaryCta.link,
-                  i18n.language
-                )}
-                linkType={resolvedHero.secondaryCta.linkType}
-                ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
-                coordinate={resolvedHero.secondaryCta.coordinate}
-                presetImageType={resolvedHero.secondaryCta.presetImageType}
-                className={
-                  styles.secondaryCTA === "link" ? heroCtaLinkVariantCn : ""
+              >
+                <CTA
+                  eventName="primaryCta"
+                  variant={styles.primaryCTA}
+                  label={resolveComponentData(
+                    resolvedHero.primaryCta.label,
+                    i18n.language
+                  )}
+                  link={resolveComponentData(
+                    resolvedHero.primaryCta.link,
+                    i18n.language
+                  )}
+                  linkType={resolvedHero.primaryCta.linkType}
+                  ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
+                  coordinate={resolvedHero.primaryCta.coordinate}
+                  presetImageType={resolvedHero.primaryCta.presetImageType}
+                  className={
+                    styles.primaryCTA === "link" ? heroCtaLinkVariantCn : ""
+                  }
+                />
+              </EntityField>
+            )}
+          {resolvedHero?.secondaryCta &&
+            (resolvedHero.secondaryCta.ctaType !== "textAndLink" ||
+              resolvedHero.secondaryCta.label) && (
+              <EntityField
+                displayName={pt("fields.secondaryCta", "Secondary CTA")}
+                fieldId={data.hero.field}
+                constantValueEnabled={
+                  data.hero.constantValueOverride.secondaryCta
                 }
-              />
-            </EntityField>
-          )}
+              >
+                <CTA
+                  eventName="secondaryCta"
+                  variant={styles.secondaryCTA}
+                  label={resolveComponentData(
+                    resolvedHero.secondaryCta.label,
+                    i18n.language
+                  )}
+                  link={resolveComponentData(
+                    resolvedHero.secondaryCta.link,
+                    i18n.language
+                  )}
+                  linkType={resolvedHero.secondaryCta.linkType}
+                  ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
+                  coordinate={resolvedHero.secondaryCta.coordinate}
+                  presetImageType={resolvedHero.secondaryCta.presetImageType}
+                  className={
+                    styles.secondaryCTA === "link" ? heroCtaLinkVariantCn : ""
+                  }
+                />
+              </EntityField>
+            )}
         </div>
       )}
     </>

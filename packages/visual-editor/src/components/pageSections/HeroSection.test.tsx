@@ -556,9 +556,11 @@ const tests: ComponentTest[] = [
           constantValue: {
             primaryCta: {
               label: {
-                en: "Call To Action",
+                en: "",
                 hasLocalizedValue: "true",
               },
+              ctaType: "presetImage",
+              presetImageType: "google-play",
               link: "#",
               linkType: "URL",
             },
@@ -765,8 +767,13 @@ const tests: ComponentTest[] = [
             },
             secondaryCta: {
               label: {
-                en: "Call To Action",
+                en: "Get Directions",
                 hasLocalizedValue: "true",
+              },
+              ctaType: "getDirections",
+              coordinates: {
+                latitude: 38.894,
+                longitude: -77.0752,
               },
               link: "#",
               linkType: "URL",
