@@ -16,6 +16,7 @@ import { directoryHoursStyles } from "./0014_directory_hours_styles.ts";
 import { addHeaderPosition } from "./0015_add_header_position.ts";
 import { migrateCTAStructures } from "./0016_migrate_cta_structures.ts";
 import { heroVariants } from "./0017_hero_variants.ts";
+import { addDirectorySiteNameMigration } from "./0018_add_directory_site_name.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -40,4 +41,5 @@ export const migrationRegistry: MigrationRegistry = [
   addHeaderPosition,
   migrateCTAStructures,
   heroVariants,
+  addDirectorySiteNameMigration,
 ];
