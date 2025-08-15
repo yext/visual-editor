@@ -377,9 +377,9 @@ const LocatorInternal = ({
   }, [searchFilters]);
 
   return (
-    <div className="components flex ve-h-screen ve-w-screen mx-auto">
+    <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
+      <div className="h-screen md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch

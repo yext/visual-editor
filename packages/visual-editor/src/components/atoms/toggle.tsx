@@ -17,8 +17,8 @@ function Toggle({
         "inline-flex items-center justify-center gap-2 rounded-full text-black " +
           "bg-gray-100 ",
         "whitespace-nowrap text-black hover:underline " +
-          "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing",
-        "data-[state=on]:bg-palette-secondary data-[state=on]:text-palette-secondary-dark" +
+          "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing ",
+        "data-[state=on]:bg-palette-secondary data-[state=on]:text-palette-secondary-dark " +
           "self-start w-auto",
         className
       )}
