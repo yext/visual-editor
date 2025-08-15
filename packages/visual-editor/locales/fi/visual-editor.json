@@ -382,6 +382,7 @@
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Suodattaa:",
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",

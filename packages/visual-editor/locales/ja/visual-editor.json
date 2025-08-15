@@ -382,6 +382,7 @@
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
   "locationsNear_one": "{{count}}近くの場所 \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "フィルター：",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",

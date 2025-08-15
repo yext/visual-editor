@@ -382,6 +382,7 @@
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
   "locationsNear_one": "{{count}} konum \"{{filterDisplayName}}\" yakınında yer",
+  "locatorFilterLabel": "Filtre:",
   "map": "Harita",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",

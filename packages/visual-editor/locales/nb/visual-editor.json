@@ -382,6 +382,7 @@
   "loadingVE": "Laster inn visuell redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filter:",
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "missingHtmlWidget": "Legg til HTML for å se komponent",

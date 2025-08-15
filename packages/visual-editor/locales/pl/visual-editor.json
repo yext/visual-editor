@@ -382,6 +382,7 @@
   "loadingVE": "Ładowanie edytora wizualnego ...",
   "localGeomodifier": "Lokalny geomodyfikator",
   "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{filterDisplayName}}”",
+  "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "missingHtmlWidget": "Dodaj HTML, aby wyświetlić komponent",

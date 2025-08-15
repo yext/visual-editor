@@ -382,6 +382,7 @@
   "loadingVE": "Laddar visuell redaktör ...",
   "localGeomodifier": "Lokal geomodifierare",
   "locationsNear_one": "{{greve}} Plats nära \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filtrera:",
   "map": "Karta",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",

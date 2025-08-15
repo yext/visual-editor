@@ -382,6 +382,7 @@
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
+  "locatorFilterLabel": "筛选：",
   "map": "地图",
   "maxWidthTip": "对于最佳内容对齐，我们建议将标题和页脚宽度设置为匹配或超过页面内容网格。",
   "missingHtmlWidget": "添加HTML以查看组件",

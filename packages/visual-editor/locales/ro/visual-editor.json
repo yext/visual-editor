@@ -382,6 +382,7 @@
   "loadingVE": "Încărcarea editorului vizual ...",
   "localGeomodifier": "Geomodificator local",
   "locationsNear_one": "{{count}} locație lângă \"{{filterDisplayName}}\"",
+  "locatorFilterLabel": "Filtra:",
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "missingHtmlWidget": "Adăugați HTML pentru a vizualiza componenta",
