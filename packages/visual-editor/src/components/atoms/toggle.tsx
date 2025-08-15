@@ -16,9 +16,9 @@ function Toggle({
       className={themeManagerCn(
         "inline-flex items-center justify-center gap-2 rounded-full text-black " +
           "bg-gray-100 ",
-        "whitespace-nowrap border-black text-black border border-solid hover:underline " +
+        "whitespace-nowrap text-black hover:underline " +
           "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing",
-        "data-[state=on]:bg-palette-secondary data-[state=on]:border-palette-secondary data-[state=on]:text-palette-secondary-dark" +
+        "data-[state=on]:bg-palette-secondary data-[state=on]:text-palette-secondary-dark" +
           "self-start w-auto",
         className
       )}
