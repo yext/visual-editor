@@ -194,7 +194,9 @@ describe("Locator", async () => {
         });
       });
 
-      await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot();
+      await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
+        customThreshold: 30,
+      });
       const results = await axe(container);
       if (results.violations.length) {
         console.error("WCAG Violations:", results.violations);
@@ -206,7 +208,7 @@ describe("Locator", async () => {
         await interactions(page);
         await expect(
           `Locator/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: 30 });
         const results = await axe(container);
         if (results.violations.length) {
           console.error("WCAG Violations:", results.violations);

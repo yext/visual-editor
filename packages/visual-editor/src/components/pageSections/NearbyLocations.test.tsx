@@ -280,6 +280,13 @@ describe("NearbyLocationsSection", async () => {
             throw new Error("Network access currently disabled");
           })
         );
+        if (document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY) {
+          await waitFor(() => {
+            expect(
+              page.getByText("Loading nearby locations")
+            ).toBeInTheDocument();
+          });
+        }
       }
 
       await expect(
@@ -297,5 +304,6 @@ describe("NearbyLocationsSection", async () => {
         expect(results).toHaveNoViolations();
       }
     }
+    // { repeats: 2 }
   );
 });
