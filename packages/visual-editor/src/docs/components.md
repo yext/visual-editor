@@ -115,7 +115,9 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## CustomCodeSection
 
-The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively. Only available with additional feature flag enabled.
+
+![Preview of the CustomCodeSection component](../components/testing/screenshots/CustomCodeSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
 ### Props
 
@@ -123,11 +125,12 @@ The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScri
 
 The CSS styles to be applied to the component.
 
-| Prop         | Type     | Description                                                                                                                                                                                                                | Default |
-| :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| `css`        | `string` | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
-| `html`       | `string` | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
-| `javascript` | `string` | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
+| Prop             | Type      | Description                                                                                                                                                                                                                | Default |
+| :--------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| `css`            | `string`  | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
+| `html`           | `string`  | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
+| `javascript`     | `string`  | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden.                                                                                                                                             | `true`  |
 
 ---
 
