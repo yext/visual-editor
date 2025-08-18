@@ -51,7 +51,7 @@ jobs:
           done
 
           if [ ${#deleted_map[@]} -gt 0 ]; then
-            OUTPUT="### 🔤 Deleted Translation Keys (consolidated)\n"
+            OUTPUT="### 🔤 Deleted Translation Keys\n"
 
             declare -A grouped
             for key in "${!deleted_map[@]}"; do
