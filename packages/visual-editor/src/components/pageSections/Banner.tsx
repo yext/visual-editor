@@ -72,7 +72,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
       text: YextField<any, TranslatableRichText>(msg("fields.text", "Text"), {
         type: "entityField",
         filter: {
-          types: ["type.string"],
+          types: ["type.rich_text_v2"],
         },
       }),
     },
