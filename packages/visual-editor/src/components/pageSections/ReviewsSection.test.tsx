@@ -21,6 +21,8 @@ import {
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
+const interactionsDelay = 750;
+
 // Based on reviews data from https://www.yext.com/s/70452/entity/edit3?entityIds=25897322
 const tests: ComponentTest[] = [
   {
@@ -58,7 +60,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await expandButton.click();
       });
-      await delay(750);
+      await delay(interactionsDelay);
     },
   },
   {
@@ -108,7 +110,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await expandButton.click();
       });
-      await delay(500);
+      await delay(interactionsDelay);
     },
   },
 ];

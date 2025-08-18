@@ -16,6 +16,8 @@ import {
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
+const interactionsDelay = 1000;
+
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
 const tests: ComponentTest[] = [
@@ -72,7 +74,7 @@ const tests: ComponentTest[] = [
     interactions: async () => {
       // re-enable fetch
       vi.unstubAllGlobals();
-      await delay(1000);
+      await delay(interactionsDelay);
     },
     version: migrationRegistry.length,
   },
@@ -212,7 +214,7 @@ const tests: ComponentTest[] = [
     interactions: async () => {
       // re-enable fetch
       vi.unstubAllGlobals();
-      await delay(1000);
+      await delay(interactionsDelay);
     },
     version: 10,
   },
@@ -280,6 +282,13 @@ describe("NearbyLocationsSection", async () => {
             throw new Error("Network access currently disabled");
           })
         );
+        if (document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY) {
+          await waitFor(() => {
+            expect(
+              page.getByText("Loading nearby locations")
+            ).toBeInTheDocument();
+          });
+        }
       }
 
       await expect(
