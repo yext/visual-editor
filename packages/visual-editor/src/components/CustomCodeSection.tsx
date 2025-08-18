@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { YextField, msg } from "@yext/visual-editor";
+import { VisibilityWrapper, YextField, msg } from "@yext/visual-editor";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 
 export interface CustomCodeSectionProps {
@@ -23,6 +23,12 @@ export interface CustomCodeSectionProps {
    */
   javascript: string;
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
+
   /** @internal */
   analytics: {
     scope?: string;
@@ -42,6 +48,16 @@ const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
     type: "code",
     codeLanguage: "javascript",
   }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -67,6 +83,7 @@ const EmptyCustomCodeSection = () => {
     </div>
   );
 };
+
 const CustomCodeSectionWrapper = ({
   html,
   css,
@@ -111,15 +128,31 @@ const CustomCodeSectionWrapper = ({
 /**
  * The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
  * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+ * Only available with additional feature flag enabled.
  */
 export const CustomCodeSection: ComponentConfig<CustomCodeSectionProps> = {
   label: msg("components.customCodeSection", "Custom Code Section"),
   fields: customCodeSectionFields,
+  defaultProps: {
+    html: "",
+    css: "",
+    javascript: "",
+    liveVisibility: true,
+    analytics: {
+      scope: "customCodeSection",
+    },
+  },
   render: (props) => (
     <AnalyticsScopeProvider
       name={props.analytics?.scope ?? "customCodeSection"}
     >
-      <CustomCodeSectionWrapper {...props} />
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <CustomCodeSectionWrapper {...props} />
+      </VisibilityWrapper>
     </AnalyticsScopeProvider>
   ),
 };
