@@ -1,3 +1,28 @@
+#### 0.0.55 (2025-08-14)
+
+##### New Features
+
+- update directory site name field (#720) (d0486843)
+- add CTA Group component (#697) (888a41a8)
+- hero variants (#704) (7a1c05ec)
+- enhance CTA behavior (#702) (394d76b8)
+
+#### 0.0.54 (2025-08-13)
+
+##### New Features
+
+- add Header Position prop to ExpandedHeader (#717) (39c4e8ef)
+- add Hours props to directory (#711) (d9571b56)
+
+##### Bug Fixes
+
+- heroComponent's entity overrides broke (#718) (00033af3)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714)"" (#719) (4980aa9f)
+- open image upload drawer for static images (#687)" (#714)" (#716) (548f6c80)
+
 #### 0.0.53 (2025-08-12)
 
 ##### New Features
