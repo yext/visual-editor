@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  testHours,
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
@@ -13,11 +14,40 @@ import {
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 import { Grid } from "./Grid.tsx";
+import {
+  Address,
+  CTAGroup,
+  GetDirections,
+  HeadingText,
+  HoursStatus,
+  HoursTable,
+  ImageWrapper,
+  TextList,
+} from "../contentBlocks/index.ts";
+
+const testAddress = {
+  city: "Brooklyn",
+  countryCode: "US",
+  line1: "288 Grand St",
+  localizedCountryName: "United States",
+  localizedRegionName: "New York",
+  postalCode: "11211",
+  region: "NY",
+};
 
 const tests: ComponentTest[] = [
   {
     name: "atoms used to make a HeroSection",
-    document: {},
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
     props: {
       ...Grid.defaultProps,
       columns: 2,
@@ -138,7 +168,16 @@ const tests: ComponentTest[] = [
   },
   {
     name: "atoms used to make a CoreInfoSection",
-    document: {},
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
     props: {
       ...Grid.defaultProps,
       columns: 3,
@@ -281,13 +320,24 @@ const tests: ComponentTest[] = [
 
 describe("Grid", async () => {
   const puckConfig: Config = {
-    components: { Grid },
+    components: {
+      Grid,
+      HeadingText,
+      HoursStatus,
+      CTAGroup,
+      ImageWrapper,
+      Address,
+      GetDirections,
+      HoursTable,
+      TextList,
+    },
     root: {
       render: ({ children }) => {
         return <>{children}</>;
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
