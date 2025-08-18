@@ -248,6 +248,9 @@ const EventCard = ({
               streamDocument
             )}
             linkType={event.cta.linkType}
+            ctaType={event.cta.ctaType}
+            coordinate={event.cta.coordinate}
+            presetImageType={event.cta.presetImageType}
             variant={ctaVariant}
           />
         )}

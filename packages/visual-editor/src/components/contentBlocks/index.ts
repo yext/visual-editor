@@ -1,5 +1,6 @@
 export { Address, type AddressProps } from "./Address.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
+export { CTAGroup, type CTAGroupProps } from "./CTAGroup.tsx";
 export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
 export { GetDirections, type GetDirectionsProps } from "./GetDirections.tsx";

@@ -1,6 +1,5 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
 import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
 import {
   ProductSectionType,
   ProductStruct,
@@ -9,9 +8,10 @@ import {
 } from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { useMemo } from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export const defaultProduct: ProductStruct = {
@@ -33,6 +33,7 @@ export const defaultProduct: ProductStruct = {
     link: "#",
     label: { en: "Learn More", hasLocalizedValue: "true" },
     linkType: "URL",
+    ctaType: "textAndLink",
   },
 };
 
@@ -100,7 +101,7 @@ const ProductStructArrayField = (): ArrayField<ProductStruct[]> => {
       name: nameField,
       category: categoryField,
       description: descriptionField,
-      cta: translatableCTAFields(),
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultProduct,
     getItemSummary: (item, i) => {

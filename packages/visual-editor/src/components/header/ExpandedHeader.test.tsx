@@ -326,7 +326,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 14 props - sticky header",
+    name: "version 15 props - sticky header",
     document: {},
     props: {
       data: {
@@ -377,7 +377,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 14,
+    version: 15,
     interactions: async (page) => {
       const mobileMenuButton = page.getByLabelText("Open menu");
       await act(async () => {

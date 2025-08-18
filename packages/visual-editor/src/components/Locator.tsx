@@ -49,8 +49,9 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { FaSliders } from "react-icons/fa6";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -376,9 +377,9 @@ const LocatorInternal = ({
   }, [searchFilters]);
 
   return (
-    <div className="components flex ve-h-screen ve-w-screen mx-auto">
+    <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="w-full ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
+      <div className="h-screen md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
@@ -400,13 +401,28 @@ const LocatorInternal = ({
             }}
           />
           {openNowButton && (
-            <Toggle
-              pressed={isSelected}
-              onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-              className="py-2 px-2"
-            >
-              {t("openNow", "Open Now")}
-            </Toggle>
+            <div className={"flex flex-row gap-2 items-center"}>
+              <div className={"flex items-center gap-1"}>
+                <FaSliders />
+                <span className="font-bold">
+                  {t("locatorFilterLabel", "Filter:")}
+                </span>
+              </div>
+              <Toggle
+                pressed={isSelected}
+                onPressedChange={(pressed) => handleOpenNowClick(pressed)}
+                className="inline-flex py-1 px-3 w-auto"
+              >
+                <span className="inline-flex items-center gap-2">
+                  {isSelected ? (
+                    <FaCheckSquare className="inline-block" />
+                  ) : (
+                    <FaRegSquare className="inline-block" />
+                  )}
+                  {t("openNow", "Open Now")}
+                </span>
+              </Toggle>
+            </div>
           )}
         </div>
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
