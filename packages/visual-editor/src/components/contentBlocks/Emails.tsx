@@ -1,23 +1,23 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { FaEnvelope } from "react-icons/fa";
+import { FaRegEnvelope } from "react-icons/fa";
 import {
   useDocument,
   EntityField,
   YextEntityField,
   CTA,
-  Body,
   YextField,
   resolveComponentData,
   msg,
   pt,
+  Background,
+  backgroundColors,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
   list: YextEntityField<string[]>;
   listLength?: number;
-  includeHyperlink: boolean;
 }
 
 const EmailsFields: Fields<EmailsProps> = {
@@ -29,21 +29,10 @@ const EmailsFields: Fields<EmailsProps> = {
       includeListsOnly: true,
     },
   }),
-  includeHyperlink: YextField(
-    msg("fields.includeHyperlink", "Include Hyperlink"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
 };
 
 const EmailsComponent: React.FC<EmailsProps> = ({
   list: emailListField,
-  includeHyperlink,
   listLength,
 }) => {
   const { i18n } = useTranslation();
@@ -61,11 +50,11 @@ const EmailsComponent: React.FC<EmailsProps> = ({
 
   return (
     <EntityField
-      displayName={pt("emailList", "Email List")}
+      displayName={pt("fields.emailList", "Email List")}
       fieldId={emailListField.field}
       constantValueEnabled={emailListField.constantValueEnabled}
     >
-      <ul className="components list-inside">
+      <ul className="list-inside flex flex-col gap-4">
         {resolvedEmailList
           .slice(
             0,
@@ -73,19 +62,21 @@ const EmailsComponent: React.FC<EmailsProps> = ({
               ? resolvedEmailList.length
               : Math.min(resolvedEmailList.length, listLength!)
           )
-          ?.map((email, index) => (
-            <li key={index} className={`mb-2 flex items-center`}>
-              <FaEnvelope className={"mr-2 my-auto"} />
-              {includeHyperlink && !!email ? (
-                <CTA
-                  link={email}
-                  label={email}
-                  linkType="EMAIL"
-                  variant="link"
-                />
-              ) : (
-                <Body>{email}</Body>
-              )}
+          .map((email, index) => (
+            <li key={index} className={`flex items-center gap-3`}>
+              <Background
+                background={backgroundColors.background2.value}
+                className={`h-10 w-10 flex justify-center rounded-full items-center`}
+              >
+                <FaRegEnvelope className="w-4 h-4" />
+              </Background>
+              <CTA
+                eventName={`email${index}`}
+                link={email}
+                label={email}
+                linkType="EMAIL"
+                variant="link"
+              />
             </li>
           ))}
       </ul>
@@ -106,7 +97,7 @@ export const Emails: ComponentConfig<EmailsProps> = {
       listLength: YextField(msg("fields.listLength", "List Length"), {
         type: "number",
         min: 1,
-        max: 100,
+        max: 5,
       }),
     };
   },
@@ -115,8 +106,7 @@ export const Emails: ComponentConfig<EmailsProps> = {
       field: "emails",
       constantValue: [],
     },
-    includeHyperlink: true,
-    listLength: 5,
+    listLength: 3,
   },
   render: (props) => <EmailsComponent {...props} />,
 };

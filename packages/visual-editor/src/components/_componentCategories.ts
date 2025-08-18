@@ -55,7 +55,10 @@ import {
 import { HeadingText, HeadingTextProps } from "./contentBlocks/HeadingText.tsx";
 import { HoursTable, HoursTableProps } from "./contentBlocks/HoursTable.tsx";
 import { HoursStatus, HoursStatusProps } from "./contentBlocks/HoursStatus.tsx";
-import { ImageWrapper, ImageWrapperProps } from "./contentBlocks/Image.tsx";
+import {
+  ImageWrapper,
+  ImageWrapperProps,
+} from "./contentBlocks/image/Image.tsx";
 import {
   MapboxStaticMap,
   MapboxStaticProps,

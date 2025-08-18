@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { getDirections, Coordinate } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
@@ -64,9 +63,12 @@ const GetDirectionsComponent = ({
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
       <CTA
+        className="font-bold"
+        eventName={`getDirections`}
         label={t("getDirections", "Get Directions")}
         link={searchQuery}
         linkType={"DRIVING_DIRECTIONS"}
+        target="_blank"
         variant={variant}
       />
     </EntityField>

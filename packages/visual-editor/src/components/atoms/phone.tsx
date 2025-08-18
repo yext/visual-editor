@@ -1,6 +1,5 @@
 import { FaPhone } from "react-icons/fa";
 import { CTA, Body } from "../index.ts";
-import * as React from "react";
 import { parsePhoneNumber } from "awesome-phonenumber";
 import { BackgroundStyle } from "@yext/visual-editor";
 
