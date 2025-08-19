@@ -7,7 +7,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
-  MaybeLink,
   backgroundColors,
   Image,
   msg,
@@ -683,17 +682,14 @@ const HeaderLogo = (props: {
   aspectRatio?: number;
 }) => {
   return (
-    <MaybeLink href={props.logo.image.url} alwaysHideCaret={true}>
-      <figure style={{ width: `${props.logoWidth}px` }}>
-        <Image
-          image={props.logo.image}
-          aspectRatio={
-            props.aspectRatio ||
-            props.logo.image.width / props.logo.image.height
-          }
-        />
-      </figure>
-    </MaybeLink>
+    <figure style={{ width: `${props.logoWidth}px` }}>
+      <Image
+        image={props.logo.image}
+        aspectRatio={
+          props.aspectRatio || props.logo.image.width / props.logo.image.height
+        }
+      />
+    </figure>
   );
 };
 
