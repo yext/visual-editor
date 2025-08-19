@@ -467,8 +467,8 @@ const tests: ComponentTest[] = [
           logo: { width: 200, aspectRatio: 4 },
           utilityImages: { width: 50, aspectRatio: 1.78 },
           backgroundColor: {
-            bgColor: "bg-palette-secondary",
-            textColor: "text-palette-secondary-contrast",
+            bgColor: "bg-palette-secondary-light",
+            textColor: "text-black",
           },
           linksAlignment: "right",
         },
