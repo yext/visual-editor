@@ -18,44 +18,53 @@ import {
   CTAProps,
 } from "@yext/visual-editor";
 
-export type AddressProps = {
+export interface AddressProps {
   data: {
     address: YextEntityField<AddressType>;
   };
   styles: {
-    showGetDirections: boolean;
+    showGetDirectionsLink: boolean;
     ctaVariant: CTAProps["variant"];
   };
+}
+
+// Address field definition used in Address and CoreInfoSection
+export const AddressDataField = YextField<any, AddressType>(
+  msg("fields.address", "Address"),
+  {
+    type: "entityField",
+    filter: { types: ["type.address"] },
+  }
+);
+
+// Address style fields used in Address and CoreInfoSection
+export const AddressStyleFields = {
+  showGetDirectionsLink: YextField(
+    msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
+  ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+    type: "radio",
+    options: "CTA_VARIANT",
+  }),
 };
 
 const addressFields: Fields<AddressProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      address: YextField(msg("fields.address", "Address"), {
-        type: "entityField",
-        filter: { types: ["type.address"] },
-      }),
+      address: AddressDataField,
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
-    objectFields: {
-      showGetDirections: YextField(
-        msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
-      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-        type: "radio",
-        options: "CTA_VARIANT",
-      }),
-    },
+    objectFields: AddressStyleFields,
   }),
 };
 
@@ -92,7 +101,7 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
               ]}
             />
           </div>
-          {coordinates && styles.showGetDirections && (
+          {coordinates && styles.showGetDirectionsLink && (
             <CTA
               eventName={`getDirections`}
               className="font-bold"
@@ -126,7 +135,7 @@ export const Address: ComponentConfig<AddressProps> = {
       },
     },
     styles: {
-      showGetDirections: true,
+      showGetDirectionsLink: true,
       ctaVariant: "link",
     },
   },

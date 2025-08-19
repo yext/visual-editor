@@ -20,14 +20,16 @@ export interface EmailsProps {
   listLength?: number;
 }
 
-const EmailsFields: Fields<EmailsProps> = {
+// Email fields used in Emails and CoreInfoSection
+export const EmailsFields: Fields<EmailsProps> = {
   list: YextField<any, string[]>(msg("fields.emails", "Emails"), {
     type: "entityField",
     filter: {
       types: ["type.string"],
-      allowList: ["emails"],
       includeListsOnly: true,
+      allowList: ["emails"],
     },
+    disallowTranslation: true,
   }),
 };
 

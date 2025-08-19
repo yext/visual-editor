@@ -1,11 +1,9 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AddressType,
   AnalyticsScopeProvider,
-  DayOfWeekNames,
   getDirections,
   HoursType,
 } from "@yext/pages-components";
@@ -32,19 +30,31 @@ import {
   ThemeOptions,
   usePlatformTranslation,
   getAnalyticsScopeHash,
-  CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import {
+  AddressDataField,
+  AddressProps,
+  AddressStyleFields,
+} from "../contentBlocks/Address.tsx";
+import {
+  PhoneDataFields,
+  PhoneProps,
+  PhoneStyleFields,
+} from "../contentBlocks/Phone.tsx";
+import { EmailsFields } from "../contentBlocks/Emails.tsx";
+import {
+  HoursTableDataField,
+  HoursTableProps,
+  HoursTableStyleFields,
+} from "../contentBlocks/HoursTable.tsx";
 
 export interface CoreInfoData {
   /** Content for the "Information" column. */
   info: {
     headingText: YextEntityField<TranslatableString>;
     address: YextEntityField<AddressType>;
-    phoneNumbers: Array<{
-      number: YextEntityField<string>;
-      label: TranslatableString;
-    }>;
+    phoneNumbers: Array<PhoneProps["data"]>;
     emails: YextEntityField<string[]>;
   };
 
@@ -75,20 +85,13 @@ export interface CoreInfoStyles {
   };
 
   /** Styling for the "Information" column. */
-  info: {
-    showGetDirectionsLink: boolean;
-    phoneFormat: "domestic" | "international";
-    includePhoneHyperlink: boolean;
-    emailsListLength?: number;
-    ctaVariant: CTAProps["variant"];
-  };
+  info: AddressProps["styles"] &
+    PhoneProps["styles"] & {
+      emailsListLength?: number;
+    };
 
   /** Styling for the "Hours" column. */
-  hours: {
-    startOfWeek: keyof DayOfWeekNames | "today";
-    collapseDays: boolean;
-    showAdditionalHoursText: boolean;
-  };
+  hours: Omit<HoursTableProps["styles"], "alignment">;
 }
 
 export interface CoreInfoSectionProps {
@@ -130,30 +133,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               filter: { types: ["type.string"] },
             }
           ),
-          address: YextField<any, AddressType>(
-            msg("fields.address", "Address"),
-            {
-              type: "entityField",
-              filter: { types: ["type.address"] },
-            }
-          ),
+          address: AddressDataField,
           phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
             type: "array",
-            arrayFields: {
-              number: YextField<any, string>(
-                msg("fields.phoneNumber", "Phone Number"),
-                {
-                  type: "entityField",
-                  filter: {
-                    types: ["type.phone"],
-                  },
-                }
-              ),
-              label: YextField(msg("fields.label", "Label"), {
-                type: "translatableString",
-                filter: { types: ["type.string"] },
-              }),
-            },
+            arrayFields: PhoneDataFields,
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
               const streamDocument = useDocument();
@@ -168,15 +151,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               return pt("phone", "Phone");
             },
           }),
-          emails: YextField<any, string[]>(msg("fields.emails", "Emails"), {
-            type: "entityField",
-            filter: {
-              types: ["type.string"],
-              includeListsOnly: true,
-              allowList: ["emails"],
-            },
-            disallowTranslation: true,
-          }),
+          emails: EmailsFields.list,
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
@@ -191,12 +166,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               },
             }
           ),
-          hours: YextField(msg("fields.hours", "Hours"), {
-            type: "entityField",
-            filter: {
-              types: ["type.hours"],
-            },
-          }),
+          hours: HoursTableDataField,
         },
       }),
       services: YextField(msg("fields.servicesColumn", "Services Column"), {
@@ -253,68 +223,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       info: YextField(msg("fields.infoColumn", "Info Column"), {
         type: "object",
         objectFields: {
-          showGetDirectionsLink: YextField(
-            msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
-            type: "radio",
-            options: "PHONE_OPTIONS",
-          }),
-          includePhoneHyperlink: YextField(
-            msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-            type: "radio",
-            options: "CTA_VARIANT",
-          }),
+          ...AddressStyleFields,
+          ...PhoneStyleFields,
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
         type: "object",
-        objectFields: {
-          startOfWeek: YextField(
-            msg("fields.startOfTheWeek", "Start of the Week"),
-            {
-              type: "select",
-              hasSearch: true,
-              options: "HOURS_OPTIONS",
-            }
-          ),
-          collapseDays: YextField(msg("fields.collapseDays", "Collapse Days"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.yes", "Yes"), value: true },
-              { label: msg("fields.options.no", "No"), value: false },
-            ],
-          }),
-          showAdditionalHoursText: YextField(
-            msg(
-              "fields.options.showAdditionalHoursText",
-              "Show additional hours text"
-            ),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-        },
+        objectFields: HoursTableStyleFields,
       }),
     },
   }),

@@ -16,12 +16,15 @@ import { page } from "@vitest/browser/context";
 import { Grid } from "./Grid.tsx";
 import {
   Address,
+  BodyText,
   CTAGroup,
+  Emails,
   GetDirections,
   HeadingText,
   HoursStatus,
   HoursTable,
   ImageWrapper,
+  Phone,
   TextList,
 } from "../contentBlocks/index.ts";
 
@@ -37,7 +40,7 @@ const testAddress = {
 
 const tests: ComponentTest[] = [
   {
-    name: "atoms used to make a HeroSection",
+    name: "version 18 - atoms used to make a HeroSection",
     document: {
       address: testAddress,
       mainPhone: "+18005551010",
@@ -164,10 +167,10 @@ const tests: ComponentTest[] = [
         },
       ],
     },
-    version: migrationRegistry.length,
+    version: 18,
   },
   {
-    name: "atoms used to make a CoreInfoSection",
+    name: "version 18 - atoms used to make a CoreInfoSection",
     document: {
       address: testAddress,
       mainPhone: "+18005551010",
@@ -314,21 +317,215 @@ const tests: ComponentTest[] = [
         },
       ],
     },
-    version: migrationRegistry.length,
+    version: 18,
+  },
+  {
+    name: "version 19 - various atoms",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+    },
+    props: {
+      ...Grid.defaultProps,
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Information",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+                level: 3,
+                id: "HeadingText-6bc59041-d812-472a-93de-3eaf5aeb67af",
+              },
+            },
+            {
+              type: "Address",
+              props: {
+                data: {
+                  address: {
+                    field: "address",
+                    constantValue: {
+                      line1: "",
+                      city: "",
+                      region: "",
+                      postalCode: "",
+                      countryCode: "",
+                    },
+                  },
+                },
+                styles: {
+                  showGetDirectionsLink: false,
+                  ctaVariant: "link",
+                },
+                id: "Address-a3495aad-afd1-441f-ad2d-d921b2cd1257",
+              },
+            },
+            {
+              type: "GetDirections",
+              props: {
+                variant: "link",
+                coordinate: {
+                  field: "yextDisplayCoordinate",
+                  constantValue: {
+                    latitude: 0,
+                    longitude: 0,
+                  },
+                },
+                id: "GetDirections-2c8e8f69-4928-415c-9e56-4ff4fa7dc043",
+              },
+            },
+            {
+              type: "Phone",
+              props: {
+                data: {
+                  number: {
+                    field: "mainPhone",
+                    constantValue: "",
+                  },
+                  label: {
+                    en: "Phone",
+                    hasLocalizedValue: "true",
+                  },
+                },
+                styles: {
+                  phoneFormat: "domestic",
+                  includePhoneHyperlink: true,
+                },
+                id: "Phone-717f487f-d487-47a1-b78a-6378d8c489e7",
+              },
+            },
+            {
+              type: "Emails",
+              props: {
+                list: {
+                  field: "emails",
+                  constantValue: [],
+                },
+                listLength: 3,
+                id: "Emails-bc6377ff-f4ff-42a8-a2fc-3b62697eba9d",
+              },
+            },
+          ],
+        },
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Test Body Text",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+                level: 3,
+                id: "HeadingText-5a040a52-f6c0-4f1d-8c89-18dd575a00d9",
+              },
+            },
+            {
+              type: "BodyText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        json: "",
+                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Small Text </span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  variant: "sm",
+                },
+                id: "BodyText-4cc9d6a0-bc01-41a8-ae12-77ec358eecf0",
+              },
+            },
+            {
+              type: "BodyText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        json: "",
+                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Base Text </span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  variant: "base",
+                },
+                id: "BodyText-6e3653d8-7da8-4cb7-805e-8f8fee7f12a3",
+              },
+            },
+            {
+              type: "BodyText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        json: "",
+                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Large Text </span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  variant: "lg",
+                },
+                id: "BodyText-7cf255e9-3c28-4920-9ad2-d30d5a32b946",
+              },
+            },
+          ],
+        },
+        {
+          Column: [],
+        },
+      ],
+    },
+    version: 19,
   },
 ];
 
 describe("Grid", async () => {
   const puckConfig: Config = {
     components: {
+      Address,
+      BodyText,
+      CTAGroup,
+      Emails,
+      GetDirections,
       Grid,
       HeadingText,
       HoursStatus,
-      CTAGroup,
-      ImageWrapper,
-      Address,
-      GetDirections,
       HoursTable,
+      ImageWrapper,
+      Phone,
       TextList,
     },
     root: {

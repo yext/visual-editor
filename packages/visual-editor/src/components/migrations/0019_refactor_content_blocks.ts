@@ -10,7 +10,7 @@ export const refactorContentBlocks: Migration = {
           address: address,
         },
         styles: {
-          showGetDirections: showGetDirections,
+          showGetDirectionsLink: showGetDirections,
           ctaVariant: "link",
         },
       };
@@ -30,7 +30,31 @@ export const refactorContentBlocks: Migration = {
       };
     },
   },
-  Image: {
+  HoursTable: {
+    action: "updated",
+    propTransformation: ({
+      hours,
+      startOfWeek,
+      collapseDays,
+      showAdditionalHoursText,
+      alignment,
+      ...props
+    }) => {
+      return {
+        ...props,
+        data: {
+          hours: hours,
+        },
+        styles: {
+          startOfWeek: startOfWeek,
+          collapseDays: collapseDays,
+          showAdditionalHoursText: showAdditionalHoursText,
+          alignment: alignment,
+        },
+      };
+    },
+  },
+  ImageWrapper: {
     action: "updated",
     propTransformation: ({ image, aspectRatio, width, ...props }) => {
       return {
@@ -51,15 +75,15 @@ export const refactorContentBlocks: Migration = {
       return {
         ...props,
         data: {
-          phone: phone,
+          number: phone,
           label: {
             en: "Phone",
             hasLocalizedValue: "true",
           },
         },
         styles: {
-          format: format || "domestic",
-          includeHyperlink: includeHyperlink,
+          phoneFormat: format || "domestic",
+          includePhoneHyperlink: includeHyperlink,
         },
       };
     },
