@@ -21,6 +21,8 @@ import {
   useDocument,
   resolveComponentData,
   PageSectionProps,
+  AssetImageType,
+  StreamDocument,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -76,7 +78,7 @@ export const validPatterns: Record<string, RegExp> = {
 export interface ExpandedFooterData {
   /** Content for the primary footer bar. */
   primaryFooter: {
-    logo: string;
+    logo: AssetImageType;
     facebookLink: string;
     instagramLink: string;
     linkedInLink: string;
@@ -84,7 +86,7 @@ export interface ExpandedFooterData {
     tiktokLink: string;
     youtubeLink: string;
     xLink: string;
-    utilityImages: { url: string; linkTarget?: string }[];
+    utilityImages: { image: AssetImageType; linkTarget?: string }[];
     expandedFooter: boolean;
     footerLinks: TranslatableCTA[];
     expandedFooterLinks: {
@@ -150,7 +152,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
         type: "object",
         objectFields: {
           logo: YextField(msg("fields.logo", "Logo"), {
-            type: "text",
+            type: "image",
           }),
           facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
             type: "text",
@@ -184,8 +186,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                url: YextField(msg("fields.imageUrl", "Image URL"), {
-                  type: "text",
+                image: YextField(msg("fields.imageUrl", "Image URL"), {
+                  type: "image",
                 }),
                 linkTarget: YextField(
                   msg("fields.destinationURL", "Destination URL"),
@@ -491,7 +493,12 @@ const ExpandedFooterWrapper = ({
             >
               <FooterLogo
                 aspectRatio={aspectRatioForLogo}
-                logo={buildComplexLogoImage(logo, logoWidth || 100)}
+                logo={buildComplexLogoImage(
+                  logo,
+                  logoWidth || 100,
+                  streamDocument,
+                  i18n.language
+                )}
                 logoWidth={logoWidth || 100}
               />
             </EntityField>
@@ -517,8 +524,10 @@ const ExpandedFooterWrapper = ({
                       aspectRatio={aspectRatioForUtilityImages}
                       key={index}
                       logo={buildComplexUtilityImage(
-                        item.url,
-                        utilityImagesWidth || 60
+                        item.image,
+                        utilityImagesWidth || 60,
+                        streamDocument,
+                        i18n.language
                       )}
                       logoWidth={utilityImagesWidth || 60}
                     />
@@ -582,8 +591,10 @@ const ExpandedFooterWrapper = ({
                       aspectRatio={aspectRatioForUtilityImages}
                       key={index}
                       logo={buildComplexUtilityImage(
-                        item.url,
-                        logoWidth || 100
+                        item.image,
+                        logoWidth || 100,
+                        streamDocument,
+                        i18n.language
                       )}
                       logoWidth={utilityImagesWidth || 100}
                     />
@@ -737,13 +748,19 @@ const FooterLogo = (props: {
 };
 
 const buildComplexLogoImage = (
-  url: string | undefined,
-  width: number
+  image: AssetImageType,
+  width: number,
+  entityDocument: StreamDocument,
+  locale: string
 ): ComplexImageType => {
+  const altText = image?.alternateText
+    ? resolveComponentData(image.alternateText, locale, entityDocument)
+    : "Logo";
+
   return {
     image: {
-      url: url!,
-      alternateText: "Logo",
+      url: image?.url,
+      alternateText: altText,
       height: width / 2,
       width: width,
     },
@@ -751,15 +768,21 @@ const buildComplexLogoImage = (
 };
 
 const buildComplexUtilityImage = (
-  url: string | undefined,
-  width: number
+  image: AssetImageType,
+  width: number,
+  entityDocument: StreamDocument,
+  locale: string
 ): ComplexImageType => {
+  const altText = image?.alternateText
+    ? resolveComponentData(image.alternateText, locale, entityDocument)
+    : "Utility Image";
+
   return {
     image: {
-      url: url!,
+      url: image?.url,
       height: width,
       width: width,
-      alternateText: "Utility Image",
+      alternateText: altText,
     },
   };
 };
@@ -866,7 +889,12 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   defaultProps: {
     data: {
       primaryFooter: {
-        logo: PLACEHOLDER_LOGO_IMAGE,
+        logo: {
+          url: PLACEHOLDER_LOGO_IMAGE,
+          height: 100,
+          width: 100,
+          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+        },
         footerLinks: [
           defaultFooterLink,
           defaultFooterLink,

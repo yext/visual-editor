@@ -1,83 +1,30 @@
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
-import { ImageType } from "@yext/pages-components";
-import {
-  msg,
-  pt,
-  TranslatableString,
-  TranslatableStringField,
-} from "@yext/visual-editor";
 import * as React from "react";
+import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import {
   TARGET_ORIGINS,
   useReceiveMessage,
   useSendMessageToParent,
 } from "../../hooks/useMessage";
 import { Button } from "../ui/button";
-
-/** Describes an image's aspect ratio. */
-type ImageAspectRatio = {
-  horizontalFactor: number;
-  verticalFactor: number;
-};
-
-/** Describes the dimensions of an image. */
-type ImageDimension = {
-  width: number;
-  height: number;
-};
-
-/** Describes the data corresponding to a single image. */
-type ImageData = {
-  url: string;
-  dimension?: ImageDimension; // Undefined for private urls
-  exifMetadata?: {
-    rotate: number;
-  };
-};
-
-/** Describes the data corresponding to an image rotation. */
-type ImageRotation = {
-  degree: number;
-};
-
-/** Describes the crop boundary box data */
-type ImageCrop = {
-  left: number;
-  top: number;
-  height: number;
-  width: number;
-  aspectRatio?: ImageAspectRatio;
-};
-
-type TransformKind = "CROP" | "ROTATION";
-
-/** Outlines the possible image transformations. */
-type ImageTransformation = ImageRotation | ImageCrop;
-
-type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
-
-/** Describes the data corresponding to a piece of image content. */
-type ImageContentData = {
-  name?: string;
-  transformedImage?: ImageData;
-  originalImage?: ImageData;
-  childImages?: ImageData[];
-  transformations?: ImageTransformations;
-  sourceUrl?: string;
-};
+import { ImageContentData, AssetImageType } from "../../../types/images";
+import { useDocument } from "../../../hooks/useDocument";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { TranslatableString } from "../../../types/types";
+import { msg, pt } from "../../../utils/i18n/platform";
 
 type ImagePayload = {
   id: string;
   value: ImageContentData;
-};
-
-type AssetImageType = ImageType & {
-  assetImage?: ImageContentData;
+  locale: string;
 };
 
 export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
   type: "custom",
   render: ({ onChange, value, field }) => {
+    const { i18n } = useTranslation();
+    const { entityDocument } = useDocument();
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
@@ -100,7 +47,12 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
             return;
           }
           onChange({
-            alternateText: value?.alternateText ?? "",
+            alternateText: imagePayload.value.altText
+              ? {
+                  [imagePayload.locale]: imagePayload.value.altText,
+                  hasLocalizedValue: "true",
+                }
+              : "",
             url: imageData.url,
             height: imageData.dimension?.height ?? 0,
             width: imageData.dimension?.width ?? 0,
@@ -159,11 +111,17 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
       );
     }, []);
 
+    const altText = resolveComponentData(
+      value?.alternateText ?? "",
+      i18n.language,
+      entityDocument
+    );
+
     return (
       <>
         {/* Thumbnail */}
         <FieldLabel
-          label={field?.label ?? pt("image", "Image")}
+          label={pt(field?.label ?? msg("fields.image", "Image"))}
           className="ve-mt-3"
         >
           <div className="ve-relative ve-group ve-mb-3">
@@ -178,7 +136,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
               <>
                 <img
                   src={value.url}
-                  alt={value.alternateText}
+                  alt={altText}
                   className="ve-w-full ve-min-h-[126px] ve-max-h-[200px] ve-object-cover ve-rounded-md ve-transition ve-duration-300 group-hover:ve-brightness-75"
                 />
 

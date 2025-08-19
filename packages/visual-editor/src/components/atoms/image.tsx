@@ -4,10 +4,17 @@ import {
   Image as ImageComponent,
   ImageType,
 } from "@yext/pages-components";
-import { themeManagerCn } from "@yext/visual-editor";
+import {
+  resolveComponentData,
+  themeManagerCn,
+  useDocument,
+  AssetImageType,
+  TranslatableString,
+} from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 
 export interface ImageProps {
-  image: ImageType | ComplexImageType;
+  image: ImageType | ComplexImageType | AssetImageType;
   aspectRatio?: number;
   width?: number;
   className?: string;
@@ -19,6 +26,8 @@ export const Image: React.FC<ImageProps> = ({
   width,
   className,
 }) => {
+  const { i18n } = useTranslation();
+  const { entityDocument } = useDocument();
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
     width && aspectRatio ? width / aspectRatio : undefined;
@@ -28,6 +37,18 @@ export const Image: React.FC<ImageProps> = ({
     ? `overflow-hidden` // No w-full when width is specified
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
+  let altTextField: string | TranslatableString | undefined = undefined;
+  if (isComplexImageType(image)) {
+    altTextField = image.image.alternateText;
+  } else if (image?.alternateText) {
+    altTextField = image.alternateText;
+  }
+
+  const altText =
+    typeof altTextField === "object"
+      ? resolveComponentData(altTextField, i18n.language, entityDocument)
+      : altTextField;
+
   return (
     <div
       className={themeManagerCn(containerStyles, className)}
@@ -35,14 +56,14 @@ export const Image: React.FC<ImageProps> = ({
     >
       {aspectRatio ? (
         <ImageComponent
-          image={image}
+          image={{ ...image, alternateText: altText }}
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
-          image={image}
+          image={{ ...image, alternateText: altText }}
           layout={"fixed"}
           width={width}
           height={calculatedHeight}
@@ -51,11 +72,7 @@ export const Image: React.FC<ImageProps> = ({
       ) : (
         <img
           src={isComplexImageType(image) ? image.image.url : image.url}
-          alt={
-            isComplexImageType(image)
-              ? (image.image.alternateText ?? "")
-              : (image.alternateText ?? "")
-          }
+          alt={altText}
           className="object-cover w-full h-full"
         />
       )}
@@ -64,7 +81,7 @@ export const Image: React.FC<ImageProps> = ({
 };
 
 function isComplexImageType(
-  image: ImageType | ComplexImageType
+  image: ImageType | ComplexImageType | AssetImageType
 ): image is ComplexImageType {
   return "image" in image;
 }
