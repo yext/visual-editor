@@ -42,7 +42,7 @@ const GridSection = React.forwardRef<
             key={idx}
             className={themeManagerCn(
               layoutVariants({ gap: "4" }),
-              `flex flex-col`
+              `flex flex-col max-w-full overflow-hidden`
             )}
             allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
           />

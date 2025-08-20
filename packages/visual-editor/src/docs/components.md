@@ -86,22 +86,22 @@ The Core Info Section is a comprehensive component designed to display essential
 
 This object contains all the content to be displayed within the three columns.
 
-| Prop            | Type                                                                                                                                                                                                                    | Description                           | Default |
-| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.hours`    | `{ headingText: YextEntityField<TranslatableString>; hours: YextEntityField<HoursType>; }`                                                                                                                              | Content for the "Hours" column.       |         |
-| `data.info`     | `{ headingText: YextEntityField<TranslatableString>; address: YextEntityField<AddressType>; phoneNumbers: Array<{ number: YextEntityField<string>; label: TranslatableString; }>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
-| `data.services` | `{ headingText: YextEntityField<TranslatableString>; servicesList: YextEntityField<TranslatableString[]>; }`                                                                                                            | Content for the "Services" column.    |         |
+| Prop            | Type                                                                                                                                                                       | Description                           | Default |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `data.hours`    | `{ headingText: YextEntityField<TranslatableString>; hours: YextEntityField<HoursType>; }`                                                                                 | Content for the "Hours" column.       |         |
+| `data.info`     | `{ headingText: YextEntityField<TranslatableString>; address: YextEntityField<AddressType>; phoneNumbers: Array<PhoneProps["data"]>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
+| `data.services` | `{ headingText: YextEntityField<TranslatableString>; servicesList: YextEntityField<TranslatableString[]>; }`                                                               | Content for the "Services" column.    |         |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                                                                                          | Description                           | Default |
-| :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                                                                                             | The background color of the section.  |         |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                                                                              | Styling for all column headings.      |         |
-| `styles.hours`           | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; }`                                                                  | Styling for the "Hours" column.       |         |
-| `styles.info`            | `{ showGetDirectionsLink: boolean; phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; emailsListLength?: number; ctaVariant: CTAProps["variant"]; }` | Styling for the "Information" column. |         |
+| Prop                     | Type                                                                             | Description                           | Default |
+| :----------------------- | :------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                | The background color of the section.  |         |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                 | Styling for all column headings.      |         |
+| `styles.hours`           | `Omit<HoursTableProps["styles"], "alignment">`                                   | Styling for the "Hours" column.       |         |
+| `styles.info`            | `AddressProps["styles"] & PhoneProps["styles"] & { emailsListLength?: number; }` | Styling for the "Information" column. |         |
 
 #### Other Props
 
