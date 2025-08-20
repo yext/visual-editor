@@ -144,7 +144,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
                 <Button
                   variant="secondary"
                   onClick={handleSelectImage}
-                  className="ve-absolute ve-top-4 ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300 ve-bg-transparent ve-text-primary ve-border-primary ve-border-solid ve-border-2"
+                  className="ve-absolute ve-top-[3.5rem] ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300 ve-bg-transparent ve-text-primary ve-border-primary ve-border-solid ve-border-2"
                 >
                   {pt("change", "Change")}
                 </Button>
@@ -153,7 +153,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
                 <Button
                   variant="destructive"
                   onClick={handleDeleteImage}
-                  className="ve-absolute ve-bottom-4 ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300 ve-text-white"
+                  className="ve-absolute ve-bottom-[3.5rem] ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300 ve-text-white"
                 >
                   {pt("delete", "Delete")}
                 </Button>

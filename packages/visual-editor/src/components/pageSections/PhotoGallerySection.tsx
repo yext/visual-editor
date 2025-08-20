@@ -254,8 +254,6 @@ const PhotoGallerySectionComponent = ({
       };
     }) ?? [];
 
-  console.log("filteredImages", filteredImages);
-
   const justifyClass = {
     left: "justify-start",
     center: "justify-center",
