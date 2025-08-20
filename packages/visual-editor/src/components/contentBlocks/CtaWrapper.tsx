@@ -13,7 +13,10 @@ import {
   CTA,
   CTAProps,
 } from "@yext/visual-editor";
-
+import {
+  ctaTypeOptions,
+  ctaTypeToEntityFieldType,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 export interface CTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;
   variant: CTAProps["variant"];
@@ -25,6 +28,12 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     type: "entityField",
     filter: {
       types: ["type.cta"],
+    },
+    typeSelectorConfig: {
+      typeLabel: msg("fields.ctaType", "CTA Type"),
+      fieldLabel: msg("fields.ctaField", "CTA Field"),
+      options: ctaTypeOptions(),
+      optionValueToEntityFieldType: ctaTypeToEntityFieldType,
     },
   }),
   variant: YextField(msg("fields.variant", "Variant"), {

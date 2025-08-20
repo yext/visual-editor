@@ -8,13 +8,10 @@ import {
   CTA,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
-import { ctaTypeOptions } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
-
-const ctaTypeToEntityFieldType = {
-  textAndLink: "type.cta",
-  getDirections: "type.coordinate",
-  presetImage: "type.cta",
-};
+import {
+  ctaTypeOptions,
+  ctaTypeToEntityFieldType,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const defaultButton: CTAWrapperProps = {
   entityField: {
