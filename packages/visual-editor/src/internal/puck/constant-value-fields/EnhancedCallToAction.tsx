@@ -26,6 +26,12 @@ export const ctaTypeOptions = () => {
   ];
 };
 
+export const ctaTypeToEntityFieldType = {
+  textAndLink: "type.cta",
+  getDirections: "type.coordinate",
+  presetImage: "type.cta",
+};
+
 export const presetImageTypeOptions = (): {
   label: string;
   value: PresetImageType;
