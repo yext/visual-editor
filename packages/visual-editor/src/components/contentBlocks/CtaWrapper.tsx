@@ -51,6 +51,12 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
 
+  const ctaType =
+    cta?.ctaType ||
+    ((cta as any)?.latitude && (cta as any)?.longitude
+      ? "getDirections"
+      : undefined);
+
   return (
     <EntityField
       displayName={pt("cta", "CTA")}
@@ -62,7 +68,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
           label={resolveComponentData(cta.label, i18n.language, streamDocument)}
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
-          ctaType={cta.ctaType}
+          ctaType={ctaType}
           coordinate={cta.coordinate}
           presetImageType={cta.presetImageType}
           variant={variant}
