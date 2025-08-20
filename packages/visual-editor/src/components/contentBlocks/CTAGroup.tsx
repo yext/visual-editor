@@ -72,6 +72,12 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
           streamDocument
         );
 
+        const ctaType =
+          cta?.ctaType ||
+          ((cta as any)?.latitude && (cta as any)?.longitude
+            ? "getDirections"
+            : undefined);
+
         return (
           <div key={idx}>
             {cta && (
@@ -80,7 +86,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
                 link={resolveComponentData(cta.link, locale, streamDocument)}
                 linkType={cta.linkType}
                 variant={button.variant}
-                ctaType={cta.ctaType}
+                ctaType={ctaType}
                 coordinate={cta.coordinate}
                 presetImageType={cta.presetImageType}
                 className="truncate"
