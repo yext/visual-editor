@@ -2,9 +2,9 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import {
   PageSection,
-  resolveComponentData,
   useDocument,
   backgroundColors,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
@@ -13,7 +13,11 @@ export const ImmersiveHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    locale
+  );
 
   return (
     <div

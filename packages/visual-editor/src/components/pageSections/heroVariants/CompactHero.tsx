@@ -3,11 +3,11 @@ import * as React from "react";
 import {
   EntityField,
   pt,
-  resolveComponentData,
   themeManagerCn,
   useDocument,
   Image,
   Background,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
@@ -16,7 +16,11 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    locale
+  );
 
   const CompactHeroImage = ({ className }: { className: string }) => {
     return resolvedHero?.image && styles.showImage ? (

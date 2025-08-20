@@ -2,10 +2,10 @@ import {
   EntityField,
   PageSection,
   pt,
-  resolveComponentData,
   Image,
   useDocument,
   themeManagerCn,
+  resolveYextStructField,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { HeroVariantProps } from "../HeroSection";
@@ -15,7 +15,11 @@ export const ClassicHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
+  const resolvedHero = resolveYextStructField(
+    streamDocument,
+    data?.hero,
+    locale
+  );
 
   const ClassicHeroImage = ({ className }: { className: string }) => {
     return (
