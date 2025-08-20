@@ -1,3 +1,12 @@
+#### 0.0.55 (2025-08-14)
+
+##### New Features
+
+- update directory site name field (#720) (d0486843)
+- add CTA Group component (#697) (888a41a8)
+- hero variants (#704) (7a1c05ec)
+- enhance CTA behavior (#702) (394d76b8)
+
 #### 0.0.54 (2025-08-13)
 
 ##### New Features

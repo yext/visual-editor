@@ -86,22 +86,22 @@ The Core Info Section is a comprehensive component designed to display essential
 
 This object contains all the content to be displayed within the three columns.
 
-| Prop            | Type                                                                                                                                                                                                                    | Description                           | Default |
-| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.hours`    | `{ headingText: YextEntityField<TranslatableString>; hours: YextEntityField<HoursType>; }`                                                                                                                              | Content for the "Hours" column.       |         |
-| `data.info`     | `{ headingText: YextEntityField<TranslatableString>; address: YextEntityField<AddressType>; phoneNumbers: Array<{ number: YextEntityField<string>; label: TranslatableString; }>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
-| `data.services` | `{ headingText: YextEntityField<TranslatableString>; servicesList: YextEntityField<TranslatableString[]>; }`                                                                                                            | Content for the "Services" column.    |         |
+| Prop            | Type                                                                                                                                                                       | Description                           | Default |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `data.hours`    | `{ headingText: YextEntityField<TranslatableString>; hours: YextEntityField<HoursType>; }`                                                                                 | Content for the "Hours" column.       |         |
+| `data.info`     | `{ headingText: YextEntityField<TranslatableString>; address: YextEntityField<AddressType>; phoneNumbers: Array<PhoneProps["data"]>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
+| `data.services` | `{ headingText: YextEntityField<TranslatableString>; servicesList: YextEntityField<TranslatableString[]>; }`                                                               | Content for the "Services" column.    |         |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                                                                                          | Description                           | Default |
-| :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                                                                                             | The background color of the section.  |         |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                                                                              | Styling for all column headings.      |         |
-| `styles.hours`           | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; }`                                                                  | Styling for the "Hours" column.       |         |
-| `styles.info`            | `{ showGetDirectionsLink: boolean; phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; emailsListLength?: number; ctaVariant: CTAProps["variant"]; }` | Styling for the "Information" column. |         |
+| Prop                     | Type                                                                             | Description                           | Default |
+| :----------------------- | :------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                | The background color of the section.  |         |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                 | Styling for all column headings.      |         |
+| `styles.hours`           | `Omit<HoursTableProps["styles"], "alignment">`                                   | Styling for the "Hours" column.       |         |
+| `styles.info`            | `AddressProps["styles"] & PhoneProps["styles"] & { emailsListLength?: number; }` | Styling for the "Information" column. |         |
 
 #### Other Props
 
@@ -115,7 +115,9 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## CustomCodeSection
 
-The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively. Only available with additional feature flag enabled.
+
+![Preview of the CustomCodeSection component](../components/testing/screenshots/CustomCodeSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
 ### Props
 
@@ -123,11 +125,12 @@ The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScri
 
 The CSS styles to be applied to the component.
 
-| Prop         | Type     | Description                                                                                                                                                                                                                | Default |
-| :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| `css`        | `string` | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
-| `html`       | `string` | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
-| `javascript` | `string` | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
+| Prop             | Type      | Description                                                                                                                                                                                                                | Default |
+| :--------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| `css`            | `string`  | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
+| `html`           | `string`  | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
+| `javascript`     | `string`  | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden.                                                                                                                                             | `true`  |
 
 ---
 
@@ -146,6 +149,7 @@ This object contains the content used by the component.
 | Prop                 | Type                                  | Description                                                        | Default                                       |
 | :------------------- | :------------------------------------ | :----------------------------------------------------------------- | :-------------------------------------------- |
 | `data.directoryRoot` | `TranslatableString`                  | The display label for the root link in the breadcrumbs navigation. | `"Directory Root" (constant)`                 |
+| `data.siteName`      | `YextEntityField<TranslatableString>` | The site name to display above the title.                          | `"" (empty string)`                           |
 | `data.title`         | `YextEntityField<TranslatableString>` | The title for the Directory Section.                               | `"[[name]]" (constant using embedded fields)` |
 
 #### Style Props
@@ -332,7 +336,7 @@ If 'true', displays the language selector dropdown in the header.
 
 ## HeroSection
 
-![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20default%20props%20with%20data.png)
+![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20%5Bclassic%5D%20version%2017%20props%20using%20constant%20values.png)
 
 ### Props
 
@@ -352,15 +356,20 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                           | Type                  | Description                                                       | Default              |
-| :----------------------------- | :-------------------- | :---------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`       | `BackgroundStyle`     | The background color for the entire section.                      | `Background Color 1` |
-| `styles.businessNameLevel`     | `HeadingLevel`        | The HTML heading level for the business name.                     | `3`                  |
-| `styles.image`                 | `ImageStylingProps`   | Styling options for the hero image, such as aspect ratio.         |                      |
-| `styles.imageOrientation`      | `"left" \| "right"`   | Positions the image to the left or right of the text content.     | `right`              |
-| `styles.localGeoModifierLevel` | `HeadingLevel`        | The HTML heading level for the local geo-modifier.                | `1`                  |
-| `styles.primaryCTA`            | `CTAProps["variant"]` | The visual style variant for the primary call-to-action button.   | `primary`            |
-| `styles.secondaryCTA`          | `CTAProps["variant"]` | The visual style variant for the secondary call-to-action button. | `secondary`          |
+| Prop                              | Type                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                | Default              |
+| :-------------------------------- | :----------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant).                                                                                                                                                                                                                                                                                             | `Background Color 1` |
+| `styles.businessNameLevel`        | `HeadingLevel`                                         | The HTML heading level for the business name.                                                                                                                                                                                                                                                                                                                                                                                              | `3`                  |
+| `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                                                                                                                                                                                                                                                                                                                          | `left`               |
+| `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                                                                                                                                                                                                                                                                                                                    | `right`              |
+| `styles.image`                    | `ImageStylingProps & { height?: number; }`             | Styling options for the hero image. Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height. Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding) Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding) Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported). |                      |
+| `styles.localGeoModifierLevel`    | `HeadingLevel`                                         | The HTML heading level for the local geo-modifier.                                                                                                                                                                                                                                                                                                                                                                                         | `1`                  |
+| `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                                                                                                                                                                                                                                                                                                                    | `left`               |
+| `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                                                                                                                                                                                                                                                                                                                     | `top`                |
+| `styles.primaryCTA`               | `CTAProps["variant"]`                                  | The visual style variant for the primary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                            | `primary`            |
+| `styles.secondaryCTA`             | `CTAProps["variant"]`                                  | The visual style variant for the secondary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                          | `secondary`          |
+| `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                                                                                                                                                                                                                                                                                                              | `true`               |
+| `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                                                                                                                                                                                                                                                                                                                   | `classic`            |
 
 #### Other Props
 
