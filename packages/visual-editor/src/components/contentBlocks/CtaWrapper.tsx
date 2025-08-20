@@ -51,11 +51,15 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
 
+  const isCoordinateField = (cta as any)?.latitude && (cta as any)?.longitude;
   const ctaType =
-    cta?.ctaType ||
-    ((cta as any)?.latitude && (cta as any)?.longitude
-      ? "getDirections"
-      : undefined);
+    cta?.ctaType || (isCoordinateField ? "getDirections" : undefined);
+  const coordinate = isCoordinateField
+    ? {
+        latitude: (cta as any).latitude,
+        longitude: (cta as any).longitude,
+      }
+    : cta?.coordinate;
 
   return (
     <EntityField
@@ -69,7 +73,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
           ctaType={ctaType}
-          coordinate={cta.coordinate}
+          coordinate={coordinate}
           presetImageType={cta.presetImageType}
           variant={variant}
           className={className}

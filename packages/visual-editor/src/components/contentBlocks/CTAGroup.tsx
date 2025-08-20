@@ -72,11 +72,16 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
           streamDocument
         );
 
+        const isCoordinateField =
+          (cta as any)?.latitude && (cta as any)?.longitude;
         const ctaType =
-          cta?.ctaType ||
-          ((cta as any)?.latitude && (cta as any)?.longitude
-            ? "getDirections"
-            : undefined);
+          cta?.ctaType || (isCoordinateField ? "getDirections" : undefined);
+        const coordinate = isCoordinateField
+          ? {
+              latitude: (cta as any).latitude,
+              longitude: (cta as any).longitude,
+            }
+          : cta?.coordinate;
 
         return (
           <div key={idx}>
@@ -87,7 +92,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
                 linkType={cta.linkType}
                 variant={button.variant}
                 ctaType={ctaType}
-                coordinate={cta.coordinate}
+                coordinate={coordinate}
                 presetImageType={cta.presetImageType}
                 className="truncate"
               />
