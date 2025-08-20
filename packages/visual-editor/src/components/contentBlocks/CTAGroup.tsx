@@ -8,6 +8,13 @@ import {
   CTA,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
+import { ctaTypeOptions } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+
+const ctaTypeToEntityFieldType = {
+  textAndLink: "type.cta",
+  getDirections: "type.coordinate",
+  presetImage: "type.cta",
+};
 
 const defaultButton: CTAWrapperProps = {
   entityField: {
@@ -37,6 +44,12 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         filter: {
           types: ["type.cta"],
         },
+        typeSelectorConfig: {
+          typeLabel: msg("fields.ctaType", "CTA Type"),
+          fieldLabel: msg("fields.ctaField", "CTA Field"),
+          options: ctaTypeOptions(),
+          optionValueToEntityFieldType: ctaTypeToEntityFieldType,
+        },
       }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
@@ -54,9 +67,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
   if (!buttons || buttons.length === 0) return null;
 
   return (
-    <div
-      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center`}
-    >
+    <div className={"flex flex-wrap items-center justify-start gap-4"}>
       {buttons.map((button, idx) => {
         const cta = resolveComponentData(
           button.entityField,
@@ -65,7 +76,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
         );
 
         return (
-          <div key={idx} className="flex items-center justify-center">
+          <div key={idx}>
             {cta && (
               <CTA
                 label={resolveComponentData(cta.label, locale, streamDocument)}
