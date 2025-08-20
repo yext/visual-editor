@@ -67,16 +67,13 @@ export const YextStructFieldSelector = <U extends Record<string, any>>(
           ])
         );
 
-        // Automatically select the first field when constantValue is disabled.
-        let newField = value.field;
-        if (value.constantValueEnabled && !constantValueEnabled) {
-          if (filteredEntityFields.length) {
-            newField = filteredEntityFields[0].name;
-          }
-        }
+        // The first field in the entity list, to be used if no value.field
+        const firstField = filteredEntityFields.length
+          ? filteredEntityFields[0].name
+          : "";
 
         onChange({
-          field: newField,
+          field: value.field ?? firstField,
           constantValue: value.constantValue,
           constantValueEnabled: constantValueEnabled,
           constantValueOverride: updateOverrides,
