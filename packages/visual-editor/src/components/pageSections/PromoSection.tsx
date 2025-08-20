@@ -208,7 +208,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <div
-          className={`w-full ${styles.orientation === "right" ? "order-2" : "order-1"}`}
+          className={`w-full ${styles.orientation === "right" ? "md:order-2" : "md:order-1"}`}
         >
           <EntityField
             displayName={pt("fields.image", "Image")}
@@ -227,7 +227,7 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       <div
         className={
           `flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words ` +
-          `${styles.orientation === "right" ? "order-1" : "order-2"}`
+          `${styles.orientation === "right" ? "md:order-1" : "md:order-2"}`
         }
       >
         {resolvedPromo?.title && (

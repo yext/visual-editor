@@ -482,7 +482,7 @@ const ExpandedFooterWrapper = ({
         className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
         <div
-          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end order-2` : `items-start order-1`}`}
+          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end md:order-2` : `items-start md:order-1`}`}
         >
           {logo && (
             <EntityField
@@ -530,7 +530,7 @@ const ExpandedFooterWrapper = ({
         </div>
         <div
           className={`w-full ${
-            primaryLinksAlignment === "right" ? "order-2" : "order-1"
+            primaryLinksAlignment === "right" ? "md:order-2" : "md:order-1"
           }`}
         >
           {expandedFooter ? (
