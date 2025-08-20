@@ -479,10 +479,10 @@ const ExpandedFooterWrapper = ({
         verticalPadding={"footer"}
         background={backgroundColor}
         maxWidth={maxWidth}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
+        className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
         <div
-          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
+          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end order-2` : `items-start order-1`}`}
         >
           {logo && (
             <EntityField
@@ -528,38 +528,44 @@ const ExpandedFooterWrapper = ({
             )}
           </div>
         </div>
-        {expandedFooter ? (
-          <EntityField
-            constantValueEnabled
-            displayName={pt(
-              "fields.expandedFooterLinks",
-              "Expanded Footer Links"
-            )}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
-              {expandedFooterLinks.map((item, index) => (
-                <ExpandedFooterLinks
-                  label={resolveComponentData(
-                    item.label,
-                    i18n.language,
-                    streamDocument
-                  )}
-                  links={item.links}
-                  key={index}
-                />
-              ))}
-            </div>
-          </EntityField>
-        ) : (
-          <div className="w-full">
+        <div
+          className={`w-full ${
+            primaryLinksAlignment === "right" ? "order-2" : "order-1"
+          }`}
+        >
+          {expandedFooter ? (
             <EntityField
               constantValueEnabled
-              displayName={pt("fields.footerLinks", "Footer Links")}
+              displayName={pt(
+                "fields.expandedFooterLinks",
+                "Expanded Footer Links"
+              )}
             >
-              <FooterLinks links={footerLinks} type="Primary" />
+              <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
+                {expandedFooterLinks.map((item, index) => (
+                  <ExpandedFooterLinks
+                    label={resolveComponentData(
+                      item.label,
+                      i18n.language,
+                      streamDocument
+                    )}
+                    links={item.links}
+                    key={index}
+                  />
+                ))}
+              </div>
             </EntityField>
-          </div>
-        )}
+          ) : (
+            <div className="w-full">
+              <EntityField
+                constantValueEnabled
+                displayName={pt("fields.footerLinks", "Footer Links")}
+              >
+                <FooterLinks links={footerLinks} type="Primary" />
+              </EntityField>
+            </div>
+          )}
+        </div>
         <div className="md:hidden block space-y-10">
           <FooterIcons
             xLink={xLink}

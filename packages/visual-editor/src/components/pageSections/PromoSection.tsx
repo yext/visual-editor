@@ -18,7 +18,6 @@ import {
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
-  themeManagerCn,
   getAnalyticsScopeHash,
   CTA,
   ComponentFields,
@@ -205,28 +204,32 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
   return (
     <PageSection
       background={styles.backgroundColor}
-      className={themeManagerCn(
-        "flex flex-col md:flex-row md:gap-16",
-        styles.orientation === "right" && "md:flex-row-reverse"
-      )}
+      className={"flex flex-col md:flex-row md:gap-16"}
     >
       {resolvedPromo?.image && (
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.promo.field}
-          constantValueEnabled={data.promo.constantValueOverride.image}
+        <div
+          className={`w-full ${styles.orientation === "right" ? "order-2" : "order-1"}`}
         >
-          <div className="w-full">
+          <EntityField
+            displayName={pt("fields.image", "Image")}
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.image}
+          >
             <Image
               image={resolvedPromo.image}
               aspectRatio={styles.image.aspectRatio ?? 1.78}
               width={styles.image.width || 640}
               className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
             />
-          </div>
-        </EntityField>
+          </EntityField>
+        </div>
       )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
+      <div
+        className={
+          `flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words ` +
+          `${styles.orientation === "right" ? "order-1" : "order-2"}`
+        }
+      >
         {resolvedPromo?.title && (
           <EntityField
             displayName={pt("fields.title", "Title")}
