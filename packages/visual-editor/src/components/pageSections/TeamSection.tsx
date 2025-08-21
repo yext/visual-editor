@@ -171,7 +171,7 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -205,7 +205,7 @@ const PersonCard = ({
               aspectRatio={
                 person.headshot.width && person.headshot.height
                   ? person.headshot.width / person.headshot.height
-                  : 1.78
+                  : 1
               }
             />
           )}
