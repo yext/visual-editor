@@ -139,24 +139,25 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
                   alt={altText}
                   className="ve-w-full ve-min-h-[126px] ve-max-h-[200px] ve-object-cover ve-rounded-md ve-transition ve-duration-300 group-hover:ve-brightness-75"
                 />
+                <div className="ve-absolute ve-top-1/2 ve-left-1/2 ve-transform -ve-translate-x-1/2 -ve-translate-y-1/2 ve-w-full ve-h-full ve-flex ve-flex-col ve-gap-3 ve-justify-center ve-items-center ve-opacity-0 hover:ve-opacity-100 ve-transition ve-duration-300">
+                  {/* Change Button */}
+                  <Button
+                    variant="secondary"
+                    onClick={handleSelectImage}
+                    className="ve-bg-transparent ve-text-primary ve-border-primary ve-border-solid ve-border-2"
+                  >
+                    {pt("change", "Change")}
+                  </Button>
 
-                {/* Change Button */}
-                <Button
-                  variant="secondary"
-                  onClick={handleSelectImage}
-                  className="ve-absolute ve-top-[3.5rem] ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300 ve-bg-transparent ve-text-primary ve-border-primary ve-border-solid ve-border-2"
-                >
-                  {pt("change", "Change")}
-                </Button>
-
-                {/* Delete Button */}
-                <Button
-                  variant="destructive"
-                  onClick={handleDeleteImage}
-                  className="ve-absolute ve-bottom-[3.5rem] ve-left-1/2 ve-transform -ve-translate-x-1/2 ve-opacity-0 group-hover:ve-opacity-100 ve-transition ve-duration-300 ve-text-white"
-                >
-                  {pt("delete", "Delete")}
-                </Button>
+                  {/* Delete Button */}
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteImage}
+                    className="ve-text-white"
+                  >
+                    {pt("delete", "Delete")}
+                  </Button>
+                </div>
               </>
             ) : (
               <>
