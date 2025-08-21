@@ -44,6 +44,7 @@
   "category": "Kategoria",
   "change": "Zmiana",
   "chooseImage": "Wybierz obraz",
+  "chooseVideo": "Wybierz wideo",
   "close": "Zamknąć",
   "closeHeaderMenu": "Zamknij menu nagłówka",
   "closeMenu": "Zamknij menu",
@@ -88,7 +89,8 @@
     "staticMapSection": "Sekcja mapy statycznej",
     "teamSection": "Sekcja zespołu",
     "testimonialsSection": "Sekcja referencji",
-    "textList": "Lista tekstowa"
+    "textList": "Lista tekstowa",
+    "videoSection": "Sekcja wideo"
   },
   "confirm": "Potwierdzać",
   "coordinate": "Koordynować",
@@ -214,6 +216,7 @@
     "longitude": "Długość geograficzna",
     "mapStyle": "Styl mapy",
     "maxWidth": "Max szerokość",
+    "media": "Głoska bezdźwięczna",
     "mobileContentAlignment": "Wyrównanie treści mobilnych",
     "mobileImagePosition": "Pozycja obrazu mobilnego",
     "name": "Nazwa",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Szerokość obrazów użyteczności",
     "values": "Wartości",
     "variant": "Wariant",
+    "video": "Wideo",
     "visibleOnLivePage": "Widoczne na stronie na żywo",
     "width": "Szerokość",
     "wrap": "Zawinąć",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
+  "mediaType": "Typ mediów",
   "missingHtmlWidget": "Dodaj HTML, aby wyświetlić komponent",
   "monday": "Poniedziałek",
   "name": "Nazwa",
@@ -559,6 +564,8 @@
   "update": "Aktualizacja",
   "updatePage": "Strona aktualizacji",
   "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
+  "video": "Wideo",
+  "videoThumbnail": "Miniatura wideo",
   "visitPage": "Odwiedź stronę",
   "wednesday": "Środa"
 }

@@ -15,6 +15,8 @@ import {
   useDocument,
   resolveComponentData,
   Heading,
+  AssetVideo,
+  Video,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -26,7 +28,7 @@ export interface VideoData {
   heading: YextEntityField<TranslatableString>;
 
   /** The embedded YouTube video */
-  video: string;
+  assetVideo: AssetVideo | undefined;
 }
 
 export interface VideoStyles {
@@ -74,8 +76,8 @@ const videoSectionFields: Fields<VideoSectionProps> = {
           filter: { types: ["type.string"] },
         }
       ),
-      video: YextField(msg("fields.video", "Video"), {
-        type: "text",
+      assetVideo: YextField(msg("fields.video", "Video"), {
+        type: "video",
       }),
     },
   }),
@@ -119,7 +121,7 @@ const videoSectionFields: Fields<VideoSectionProps> = {
 
 const VideoSectionComponent = (props: VideoSectionProps) => {
   const { data, styles } = props;
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
 
@@ -153,17 +155,13 @@ const VideoSectionComponent = (props: VideoSectionProps) => {
           </div>
         </EntityField>
       )}
-      <div className="relative aspect-video w-full lg:w-4/5 mx-auto">
-        <iframe
-          src={data.video}
-          title={t("youtubeIframeTitle", "YouTube video player")}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-          className="absolute top-0 left-0 w-full h-full"
+      {data?.assetVideo?.video?.embeddedUrl && (
+        <Video
+          youTubeEmbedUrl={data.assetVideo.video.embeddedUrl}
+          title={data.assetVideo.video.title}
+          className="lg:w-4/5 mx-auto"
         />
-      </div>
+      )}
     </PageSection>
   );
 };
@@ -184,12 +182,12 @@ export const VideoSection: ComponentConfig<VideoSectionProps> = {
       },
     },
     data: {
-      video: "",
       heading: {
         field: "",
         constantValue: { en: "", hasLocalizedValue: "true" },
         constantValueEnabled: true,
       },
+      assetVideo: undefined,
     },
     liveVisibility: true,
   },

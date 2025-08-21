@@ -44,6 +44,7 @@
   "category": "Category",
   "change": "Change",
   "chooseImage": "Choose Image",
+  "chooseVideo": "Choose Video",
   "close": "Close",
   "closeHeaderMenu": "Close header menu",
   "closeMenu": "Close menu",
@@ -87,7 +88,8 @@
     "staticMapSection": "Static Map Section",
     "teamSection": "Team Section",
     "testimonialsSection": "Testimonials Section",
-    "textList": "Text List"
+    "textList": "Text List",
+    "videoSection": "Video Section"
   },
   "confirm": "Confirm",
   "coordinate": "Coordinate",
@@ -213,6 +215,7 @@
     "longitude": "Longitude",
     "mapStyle": "Map Style",
     "maxWidth": "Max Width",
+    "media": "Media",
     "mobileContentAlignment": "Mobile Content Alignment",
     "mobileImagePosition": "Mobile Image Position",
     "name": "Name",
@@ -341,6 +344,7 @@
     "utilityImagesWidth": "Utility Images Width",
     "values": "Values",
     "variant": "Variant",
+    "video": "Video",
     "visibleOnLivePage": "Visible on Live Page",
     "width": "Width",
     "wrap": "Wrap",
@@ -388,6 +392,7 @@
   "locatorFilterLabel": "Filter:",
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
+  "mediaType": "Media Type",
   "missingHtmlWidget": "Add HTML to view component",
   "monday": "Monday",
   "name": "Name",
@@ -558,6 +563,8 @@
   "update": "Update",
   "updatePage": "Update Page",
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
+  "video": "Video",
+  "videoThumbnail": "Video Thumbnail",
   "visitPage": "Visit Page",
   "wednesday": "Wednesday"
 }

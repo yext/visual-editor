@@ -44,6 +44,7 @@
   "category": "Kategooria",
   "change": "Vahetus",
   "chooseImage": "Valige pilt",
+  "chooseVideo": "Valige video",
   "close": "Sulgur",
   "closeHeaderMenu": "Sulgemenüü",
   "closeMenu": "Sulgemenüü",
@@ -88,7 +89,8 @@
     "staticMapSection": "Staatiline kaardiosa",
     "teamSection": "Meeskonnaosa",
     "testimonialsSection": "Iseloomustuste sektsioon",
-    "textList": "Tekstiloend"
+    "textList": "Tekstiloend",
+    "videoSection": "Videosektsioon"
   },
   "confirm": "Kinnitama",
   "coordinate": "Koordinaat",
@@ -214,6 +216,7 @@
     "longitude": "Pikkuskraad",
     "mapStyle": "Kaardistiil",
     "maxWidth": "Maksimaalne laius",
+    "media": "Meedium",
     "mobileContentAlignment": "Mobiilse sisu joondamine",
     "mobileImagePosition": "Mobiilse pildipositsioon",
     "name": "Nimetus",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Utiliidipiltide laius",
     "values": "Väärtused",
     "variant": "Variant",
+    "video": "Video",
     "visibleOnLivePage": "Nähtav live -lehel",
     "width": "Laius",
     "wrap": "Mähis",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filter:",
   "map": "Kaardistama",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
+  "mediaType": "Meediumitüüp",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
   "monday": "Esmaspäev",
   "name": "Nimetus",
@@ -559,6 +564,8 @@
   "update": "Värskendama",
   "updatePage": "Värskendusleht",
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
+  "video": "Video",
+  "videoThumbnail": "Video pisipilt",
   "visitPage": "Külastage leht",
   "wednesday": "Kolmapäev"
 }

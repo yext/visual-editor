@@ -44,6 +44,7 @@
   "category": "Kategori",
   "change": "Değiştirmek",
   "chooseImage": "Resmi Seçin",
+  "chooseVideo": "Video seçin",
   "close": "Kapalı",
   "closeHeaderMenu": "Başlık menüsünü kapat",
   "closeMenu": "Kapat Menüsü",
@@ -88,7 +89,8 @@
     "staticMapSection": "Statik Harita Bölümü",
     "teamSection": "Takım bölümü",
     "testimonialsSection": "Referans bölümü",
-    "textList": "Metin listesi"
+    "textList": "Metin listesi",
+    "videoSection": "Video bölümü"
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
@@ -214,6 +216,7 @@
     "longitude": "Boylam",
     "mapStyle": "Harita stili",
     "maxWidth": "Maksimum genişlik",
+    "media": "Medya",
     "mobileContentAlignment": "Mobil içerik hizalaması",
     "mobileImagePosition": "Mobil Görüntü Pozisyonu",
     "name": "İsim",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Fayda görüntüleri genişliği",
     "values": "Değer",
     "variant": "Varyant",
+    "video": "Video",
     "visibleOnLivePage": "Canlı sayfada görünür",
     "width": "Genişlik",
     "wrap": "Dürüm",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filtre:",
   "map": "Harita",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
+  "mediaType": "Medya türü",
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",
   "monday": "Pazartesi",
   "name": "İsim",
@@ -559,6 +564,8 @@
   "update": "Güncelleme",
   "updatePage": "Güncelleme sayfası",
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
+  "video": "Video",
+  "videoThumbnail": "Video küçük resim",
   "visitPage": "Ziyaret Sayfası",
   "wednesday": "Çarşamba"
 }

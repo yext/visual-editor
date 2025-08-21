@@ -44,6 +44,7 @@
   "category": "类别",
   "change": "改变",
   "chooseImage": "选择图像",
+  "chooseVideo": "选择视频",
   "close": "关闭",
   "closeHeaderMenu": "关闭标题菜单",
   "closeMenu": "关闭菜单",
@@ -88,7 +89,8 @@
     "staticMapSection": "静态地图部分",
     "teamSection": "团队部分",
     "testimonialsSection": "推荐部分",
-    "textList": "文本列表"
+    "textList": "文本列表",
+    "videoSection": "视频部分"
   },
   "confirm": "确认",
   "coordinate": "协调",
@@ -214,6 +216,7 @@
     "longitude": "经度",
     "mapStyle": "地图样式",
     "maxWidth": "最大宽度",
+    "media": "媒体",
     "mobileContentAlignment": "移动内容对齐",
     "mobileImagePosition": "移动图像位置",
     "name": "姓名",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "实用图像宽度",
     "values": "值",
     "variant": "变体",
+    "video": "视频",
     "visibleOnLivePage": "在现场页面上可见",
     "width": "宽度",
     "wrap": "裹",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "筛选：",
   "map": "地图",
   "maxWidthTip": "对于最佳内容对齐，我们建议将标题和页脚宽度设置为匹配或超过页面内容网格。",
+  "mediaType": "媒体类型",
   "missingHtmlWidget": "添加HTML以查看组件",
   "monday": "周一",
   "name": "姓名",
@@ -559,6 +564,8 @@
   "update": "更新",
   "updatePage": "更新页面",
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
+  "video": "视频",
+  "videoThumbnail": "视频缩略图",
   "visitPage": "访问页面",
   "wednesday": "周三"
 }

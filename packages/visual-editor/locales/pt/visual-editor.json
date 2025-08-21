@@ -44,6 +44,7 @@
   "category": "Categoria",
   "change": "Mudar",
   "chooseImage": "Escolha a imagem",
+  "chooseVideo": "Escolha o vídeo",
   "close": "Fechar",
   "closeHeaderMenu": "Feche o menu do cabeçalho",
   "closeMenu": "Feche o menu",
@@ -88,7 +89,8 @@
     "staticMapSection": "Seção de mapa estático",
     "teamSection": "Seção de equipe",
     "testimonialsSection": "Seção de depoimentos",
-    "textList": "Lista de texto"
+    "textList": "Lista de texto",
+    "videoSection": "Seção de vídeo"
   },
   "confirm": "Confirmar",
   "coordinate": "Coordenada",
@@ -214,6 +216,7 @@
     "longitude": "Longitude",
     "mapStyle": "Estilo de mapa",
     "maxWidth": "Largura máxima",
+    "media": "Mídia",
     "mobileContentAlignment": "Alinhamento de conteúdo móvel",
     "mobileImagePosition": "Posição da imagem móvel",
     "name": "Nome",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Largura das imagens do utilitário",
     "values": "Valores",
     "variant": "Variante",
+    "video": "Vídeo",
     "visibleOnLivePage": "Visível na página ao vivo",
     "width": "Largura",
     "wrap": "Enrolar",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filtro:",
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
+  "mediaType": "Tipo de mídia",
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",
   "monday": "Segunda-feira",
   "name": "Nome",
@@ -559,6 +564,8 @@
   "update": "Atualizar",
   "updatePage": "Página de atualização",
   "useOurLocatorToFindALocationNearYou": "Use nosso localizador para encontrar um local perto de você",
+  "video": "Vídeo",
+  "videoThumbnail": "Miniatura de vídeo",
   "visitPage": "Visite a página",
   "wednesday": "Quarta-feira"
 }

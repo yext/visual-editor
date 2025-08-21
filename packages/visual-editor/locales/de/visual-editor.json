@@ -44,6 +44,7 @@
   "category": "Kategorie",
   "change": "Ändern",
   "chooseImage": "Wählen Sie Bild",
+  "chooseVideo": "Wählen Sie Video",
   "close": "Schließen",
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
@@ -87,7 +88,8 @@
     "staticMapSection": "Statischer Kartenabschnitt",
     "teamSection": "Teamabteilung",
     "testimonialsSection": "Testimonials Abschnitt",
-    "textList": "Textliste"
+    "textList": "Textliste",
+    "videoSection": "Videoabschnitt"
   },
   "confirm": "Bestätigen",
   "coordinate": "Koordinieren",
@@ -213,6 +215,7 @@
     "longitude": "Länge",
     "mapStyle": "Kartenstil",
     "maxWidth": "Maximale Breite",
+    "media": "Medien",
     "mobileContentAlignment": "Ausrichtung des mobilen Inhalts",
     "mobileImagePosition": "Mobile Bildposition",
     "name": "Name",
@@ -341,6 +344,7 @@
     "utilityImagesWidth": "Dienstprogrammbilder Breite",
     "values": "Werte",
     "variant": "Variante",
+    "video": "Video",
     "visibleOnLivePage": "Auf der Live -Seite sichtbar",
     "width": "Breite",
     "wrap": "Wickeln",
@@ -388,6 +392,7 @@
   "locatorFilterLabel": "Filter:",
   "map": "Karte",
   "maxWidthTip": "Für eine optimale Inhaltsausrichtung empfehlen wir, die Header- und Fußzeile -Breite so festzulegen, dass sie das Seitenzinhaltsnetz überschreiten oder übertreffen.",
+  "mediaType": "Medientyp",
   "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen",
   "monday": "Montag",
   "name": "Name",
@@ -558,6 +563,8 @@
   "update": "Aktualisieren",
   "updatePage": "Seite aktualisieren",
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
+  "video": "Video",
+  "videoThumbnail": "Video -Miniaturansicht",
   "visitPage": "Besuchen Sie die Seite",
   "wednesday": "Mittwoch"
 }

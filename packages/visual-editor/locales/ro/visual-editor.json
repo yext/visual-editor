@@ -44,6 +44,7 @@
   "category": "Categorie",
   "change": "Schimba",
   "chooseImage": "Alege Imagine",
+  "chooseVideo": "Alegeți videoclipuri",
   "close": "Aproape",
   "closeHeaderMenu": "Închideți meniul antetului",
   "closeMenu": "Închideți meniul",
@@ -88,7 +89,8 @@
     "staticMapSection": "Secțiunea hărții statice",
     "teamSection": "Secțiunea echipei",
     "testimonialsSection": "Secțiunea Mărturii",
-    "textList": "Lista de text"
+    "textList": "Lista de text",
+    "videoSection": "Secțiune video"
   },
   "confirm": "Confirma",
   "coordinate": "Coordona",
@@ -214,6 +216,7 @@
     "longitude": "Longitudine",
     "mapStyle": "Stilul hărții",
     "maxWidth": "Lățime maximă",
+    "media": "Media",
     "mobileContentAlignment": "Alinierea conținutului mobil",
     "mobileImagePosition": "Poziția imaginii mobile",
     "name": "Nume",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Lățimea imaginilor utilitare",
     "values": "Valori",
     "variant": "Variantă",
+    "video": "Video",
     "visibleOnLivePage": "Vizibil pe pagina live",
     "width": "Lăţime",
     "wrap": "Înveliș",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filtra:",
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
+  "mediaType": "Tip media",
   "missingHtmlWidget": "Adăugați HTML pentru a vizualiza componenta",
   "monday": "luni",
   "name": "Nume",
@@ -559,6 +564,8 @@
   "update": "Actualizare",
   "updatePage": "Pagina de actualizare",
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
+  "video": "Video",
+  "videoThumbnail": "Miniatură video",
   "visitPage": "Vizitați pagina",
   "wednesday": "miercuri"
 }

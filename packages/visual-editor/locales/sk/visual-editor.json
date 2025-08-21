@@ -44,6 +44,7 @@
   "category": "Kategória",
   "change": "Zmena",
   "chooseImage": "Vyberte obrázok",
+  "chooseVideo": "Vyberte video",
   "close": "Zatvoriť",
   "closeHeaderMenu": "Zavrieť ponuku hlavičky",
   "closeMenu": "Menu",
@@ -88,7 +89,8 @@
     "staticMapSection": "Sekcia statickej mapy",
     "teamSection": "Sekcia tímu",
     "testimonialsSection": "Sekcia svedectiev",
-    "textList": "Textový zoznam"
+    "textList": "Textový zoznam",
+    "videoSection": "Video sekcia"
   },
   "confirm": "Potvrdiť",
   "coordinate": "Koordinovať",
@@ -214,6 +216,7 @@
     "longitude": "Dĺžka",
     "mapStyle": "Mapový štýl",
     "maxWidth": "Maximálna šírka",
+    "media": "Médium",
     "mobileContentAlignment": "Zarovnanie mobilného obsahu",
     "mobileImagePosition": "Pozícia mobilného obrazu",
     "name": "Menovať",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Šírka úžitkových obrázkov",
     "values": "Hodnota",
     "variant": "Variant",
+    "video": "Video",
     "visibleOnLivePage": "Viditeľné na živej stránke",
     "width": "Šírka",
     "wrap": "Zabaliť",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filter:",
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
+  "mediaType": "Typ médií",
   "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
   "monday": "Pondelok",
   "name": "Menovať",
@@ -559,6 +564,8 @@
   "update": "Aktualizácia",
   "updatePage": "Aktualizácia",
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
+  "video": "Video",
+  "videoThumbnail": "Video",
   "visitPage": "Navštíviť stránku",
   "wednesday": "Streda"
 }

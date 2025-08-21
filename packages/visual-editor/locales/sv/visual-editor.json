@@ -44,6 +44,7 @@
   "category": "Kategori",
   "change": "Ändra",
   "chooseImage": "Välj bild",
+  "chooseVideo": "Välj video",
   "close": "Nära",
   "closeHeaderMenu": "Stäng rubrikmeny",
   "closeMenu": "Stänga meny",
@@ -88,7 +89,8 @@
     "staticMapSection": "Statisk kartavsnitt",
     "teamSection": "Lagavdelning",
     "testimonialsSection": "Vittnesbörd",
-    "textList": "Textlista"
+    "textList": "Textlista",
+    "videoSection": "Videosektion"
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
@@ -214,6 +216,7 @@
     "longitude": "Longitud",
     "mapStyle": "Kartstil",
     "maxWidth": "Maxbredd",
+    "media": "Media",
     "mobileContentAlignment": "Mobilt innehållsinriktning",
     "mobileImagePosition": "Mobilbildsposition",
     "name": "Namn",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Verktygsbilder bredd",
     "values": "Värderingar",
     "variant": "Variant",
+    "video": "Video",
     "visibleOnLivePage": "Synlig på live -sidan",
     "width": "Bredd",
     "wrap": "Sjal",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filtrera:",
   "map": "Karta",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
+  "mediaType": "Medietyp",
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
   "monday": "Måndag",
   "name": "Namn",
@@ -559,6 +564,8 @@
   "update": "Uppdatera",
   "updatePage": "Uppdateringssida",
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
+  "video": "Video",
+  "videoThumbnail": "Videotumsstil",
   "visitPage": "Besöka sidan",
   "wednesday": "Onsdag"
 }

@@ -44,6 +44,7 @@
   "category": "Kategorija",
   "change": "Promijeniti",
   "chooseImage": "Odaberite sliku",
+  "chooseVideo": "Odaberite video",
   "close": "Zatvoriti",
   "closeHeaderMenu": "Zatvori izbornik zaglavlja",
   "closeMenu": "Zatvori izbornik",
@@ -88,7 +89,8 @@
     "staticMapSection": "Odjeljak statičke karte",
     "teamSection": "Ekipa",
     "testimonialsSection": "Odjeljak za svjedočanstvo",
-    "textList": "Lista teksta"
+    "textList": "Lista teksta",
+    "videoSection": "Video odjeljak"
   },
   "confirm": "Potvrditi",
   "coordinate": "Koordinata",
@@ -214,6 +216,7 @@
     "longitude": "Dužina",
     "mapStyle": "Stil karte",
     "maxWidth": "Maksimalna širina",
+    "media": "Medija",
     "mobileContentAlignment": "Poravnavanje mobilnog sadržaja",
     "mobileImagePosition": "Položaj mobilne slike",
     "name": "Ime",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Korisničke slike širina",
     "values": "Vrijednosti",
     "variant": "Varijanta",
+    "video": "Video",
     "visibleOnLivePage": "Vidljivo na stranici uživo",
     "width": "Širina",
     "wrap": "Zamotati",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filter:",
   "map": "Karta",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
+  "mediaType": "Medijska vrsta",
   "missingHtmlWidget": "Dodajte HTML za pregled komponente",
   "monday": "ponedjeljak",
   "name": "Ime",
@@ -559,6 +564,8 @@
   "update": "Ažurirati",
   "updatePage": "Stranica za ažuriranje",
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
+  "video": "Video",
+  "videoThumbnail": "Video sličica",
   "visitPage": "Stranica za posjetu",
   "wednesday": "srijeda"
 }

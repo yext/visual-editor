@@ -44,6 +44,7 @@
   "category": "Kategória",
   "change": "Változás",
   "chooseImage": "Válassza ki a képet",
+  "chooseVideo": "Válassza ki a videót",
   "close": "Közeli",
   "closeHeaderMenu": "Zárja be a Fejléc menüjét",
   "closeMenu": "Zárja be a menüt",
@@ -88,7 +89,8 @@
     "staticMapSection": "Statikus térképszakasz",
     "teamSection": "Csapatrész",
     "testimonialsSection": "Beszámolók részlege",
-    "textList": "Szöveglista"
+    "textList": "Szöveglista",
+    "videoSection": "Videószakasz"
   },
   "confirm": "Megerősít",
   "coordinate": "Koordináta",
@@ -214,6 +216,7 @@
     "longitude": "Hosszúság",
     "mapStyle": "Térképstílus",
     "maxWidth": "Maximális szélesség",
+    "media": "Média",
     "mobileContentAlignment": "Mobil tartalom igazítása",
     "mobileImagePosition": "Mobil képpozíció",
     "name": "Név",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Segédprogramok szélessége",
     "values": "Értékek",
     "variant": "Változat",
+    "video": "Videó",
     "visibleOnLivePage": "Látható az élő oldalon",
     "width": "Szélesség",
     "wrap": "Betakar",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Szűrő:",
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
+  "mediaType": "Média típus",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
   "monday": "hétfő",
   "name": "Név",
@@ -559,6 +564,8 @@
   "update": "Frissít",
   "updatePage": "Frissítési oldal",
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
+  "video": "Videó",
+  "videoThumbnail": "Videó miniatűr",
   "visitPage": "Látogasson el az oldalra",
   "wednesday": "szerda"
 }

@@ -25,8 +25,11 @@ import {
   ThemeOptions,
   EntityField,
   pt,
+  Video,
+  AssetImageType,
+  AssetVideo,
 } from "@yext/visual-editor";
-import { AnalyticsScopeProvider } from "@yext/pages-components";
+import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   ImageStylingFields,
   ImageStylingProps,
@@ -158,7 +161,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           }),
         },
       }),
-      image: YextField(msg("fields.image", "Image"), {
+      image: YextField(msg("fields.media", "Media"), {
         type: "object",
         objectFields: ImageStylingFields,
       }),
@@ -212,17 +215,27 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {resolvedPromo?.image && (
         <EntityField
-          displayName={pt("fields.image", "Image")}
+          displayName={pt("fields.media", "Media")}
           fieldId={data.promo.field}
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
-          <div className="w-full">
-            <Image
-              image={resolvedPromo.image}
-              aspectRatio={styles.image.aspectRatio ?? 1.78}
-              width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
-            />
+          <div
+            className="max-w-full md:max-w-[400px] lg:max-w-none shrink-0"
+            style={{ width: styles.image.width || 640 }}
+          >
+            {isVideo(resolvedPromo.image) ? (
+              <Video
+                youTubeEmbedUrl={resolvedPromo.image.video.embeddedUrl}
+                title={resolvedPromo.image.video.title}
+              />
+            ) : (
+              <Image
+                image={resolvedPromo.image}
+                aspectRatio={styles.image.aspectRatio ?? 1.78}
+                width={styles.image.width || 640}
+                className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
+              />
+            )}
           </div>
         </EntityField>
       )}
@@ -345,7 +358,6 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-
   render: (props) => {
     return (
       <AnalyticsScopeProvider
@@ -361,3 +373,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     );
   },
 };
+
+function isVideo(
+  field: ImageType | AssetImageType | AssetVideo | undefined
+): field is AssetVideo {
+  return Boolean(field && typeof field === "object" && "video" in field);
+}

@@ -1,7 +1,10 @@
 import { msg } from "../../utils/i18n/platform.ts";
 import { StructEntityFieldTypes } from "../../editor/YextStructFieldSelector.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { EntityFieldTypes } from "../utils/getFilteredEntityFields.ts";
+import {
+  ConstantValueTypes,
+  EntityFieldTypes,
+} from "../utils/getFilteredEntityFields.ts";
 
 const devLogger = new DevLogger();
 
@@ -9,6 +12,7 @@ export type SubFieldProps = {
   field: string;
   type: EntityFieldTypes;
   label: string;
+  constantValueType?: ConstantValueTypes;
 }[];
 
 const HERO_SECTION_SUBFIELD: SubFieldProps = [
@@ -26,7 +30,12 @@ const HERO_SECTION_SUBFIELD: SubFieldProps = [
 ];
 
 const PROMO_SECTION_SUBFIELD: SubFieldProps = [
-  { field: "image", type: "type.image", label: msg("fields.image", "Image") },
+  {
+    field: "image",
+    type: "type.image",
+    constantValueType: "imageOrVideo",
+    label: msg("fields.media", "Media"),
+  },
   { field: "title", type: "type.string", label: msg("fields.title", "Title") },
   {
     field: "description",

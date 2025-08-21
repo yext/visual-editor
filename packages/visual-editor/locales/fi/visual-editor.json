@@ -44,6 +44,7 @@
   "category": "Luokka",
   "change": "Muuttaa",
   "chooseImage": "Valitse kuva",
+  "chooseVideo": "Valitse video",
   "close": "Lähellä",
   "closeHeaderMenu": "Sulje otsikkovalikko",
   "closeMenu": "Suljevalikko",
@@ -88,7 +89,8 @@
     "staticMapSection": "Staattinen karttaosa",
     "teamSection": "Joukkueosasto",
     "testimonialsSection": "Suositusosasto",
-    "textList": "Tekstin luettelo"
+    "textList": "Tekstin luettelo",
+    "videoSection": "Videoosasto"
   },
   "confirm": "Vahvistaa",
   "coordinate": "Koordinoida",
@@ -214,6 +216,7 @@
     "longitude": "Pituusaste",
     "mapStyle": "Karttatyyli",
     "maxWidth": "Enimmäisleveys",
+    "media": "Media",
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
     "mobileImagePosition": "Mobiili kuvan sijainti",
     "name": "Nimi",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Apuohjelmakuvien leveys",
     "values": "Arvot",
     "variant": "Variantti",
+    "video": "Video",
     "visibleOnLivePage": "Näkyvissä live -sivulla",
     "width": "Leveys",
     "wrap": "Kääriä",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Suodattaa:",
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
+  "mediaType": "Mediatyyppi",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
   "monday": "maanantai",
   "name": "Nimi",
@@ -559,6 +564,8 @@
   "update": "Päivittää",
   "updatePage": "Päivityssivu",
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
+  "video": "Video",
+  "videoThumbnail": "Videon pikkukuva",
   "visitPage": "Vieraile sivussa",
   "wednesday": "keskiviikko"
 }

@@ -44,6 +44,7 @@
   "category": "Kategorija",
   "change": "Pakeisti",
   "chooseImage": "Pasirinkite vaizdą",
+  "chooseVideo": "Pasirinkite vaizdo įrašą",
   "close": "Uždaryti",
   "closeHeaderMenu": "Uždarykite antraštės meniu",
   "closeMenu": "Uždaryti meniu",
@@ -88,7 +89,8 @@
     "staticMapSection": "Statinio žemėlapio skyrius",
     "teamSection": "Komandos skyrius",
     "testimonialsSection": "Atsakymų skyrius",
-    "textList": "Teksto sąrašas"
+    "textList": "Teksto sąrašas",
+    "videoSection": "Vaizdo įrašo skyrius"
   },
   "confirm": "Patvirtinti",
   "coordinate": "Koordinatė",
@@ -214,6 +216,7 @@
     "longitude": "Ilguma",
     "mapStyle": "Žemėlapio stilius",
     "maxWidth": "Maksimalus plotis",
+    "media": "Žiniasklaida",
     "mobileContentAlignment": "Mobiliojo turinio suderinimas",
     "mobileImagePosition": "Mobiliojo vaizdo padėtis",
     "name": "Vardas",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Naudingumo vaizdų plotis",
     "values": "Vertės",
     "variant": "Variantas",
+    "video": "Vaizdo įrašas",
     "visibleOnLivePage": "Matomas tiesioginiame puslapyje",
     "width": "Plotis",
     "wrap": "Apvynioti",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "FiltRas:",
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
+  "mediaType": "Žiniasklaidos tipas",
   "missingHtmlWidget": "Pridėkite HTML, kad peržiūrėtumėte komponentą",
   "monday": "Pirmadienis",
   "name": "Vardas",
@@ -559,6 +564,8 @@
   "update": "Atnaujinimas",
   "updatePage": "Atnaujinimo puslapis",
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
+  "video": "Vaizdo įrašas",
+  "videoThumbnail": "Vaizdo įrašo miniatiūra",
   "visitPage": "Apsilankykite puslapyje",
   "wednesday": "Trečiadienis"
 }

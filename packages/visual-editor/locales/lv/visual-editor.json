@@ -44,6 +44,7 @@
   "category": "Kategorija",
   "change": "Mainīt",
   "chooseImage": "Izvēlieties attēlu",
+  "chooseVideo": "Izvēlieties video",
   "close": "Tuvs",
   "closeHeaderMenu": "Aizvērt galvenes izvēlni",
   "closeMenu": "Aizvērt ēdienkarti",
@@ -88,7 +89,8 @@
     "staticMapSection": "Statiskās kartes sadaļa",
     "teamSection": "Komandu nodaļa",
     "testimonialsSection": "Attiecību sadaļa",
-    "textList": "Teksta saraksts"
+    "textList": "Teksta saraksts",
+    "videoSection": "Video sadaļa"
   },
   "confirm": "Apstiprināt",
   "coordinate": "Koordinēt",
@@ -214,6 +216,7 @@
     "longitude": "Garums",
     "mapStyle": "Kartes stils",
     "maxWidth": "Maksimālais platums",
+    "media": "Plašsaziņas līdzekļi",
     "mobileContentAlignment": "Mobilā satura izlīdzināšana",
     "mobileImagePosition": "Mobilā attēla pozīcija",
     "name": "Nosaukt",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Lietderības attēlu platums",
     "values": "Vērtības",
     "variant": "Variants",
+    "video": "Video",
     "visibleOnLivePage": "Redzams tiešraides lapā",
     "width": "Platums",
     "wrap": "Ietīt",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filtrs:",
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
+  "mediaType": "Multivides tips",
   "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu",
   "monday": "Pirmdiena",
   "name": "Nosaukt",
@@ -559,6 +564,8 @@
   "update": "Atjaunināt",
   "updatePage": "Atjaunināšanas lapa",
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
+  "video": "Video",
+  "videoThumbnail": "Video sīktēls",
   "visitPage": "Apmeklējuma lapa",
   "wednesday": "Trešdiena"
 }

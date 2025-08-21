@@ -44,6 +44,7 @@
   "category": "Kategori",
   "change": "Endre",
   "chooseImage": "Velg bilde",
+  "chooseVideo": "Velg video",
   "close": "Lukke",
   "closeHeaderMenu": "Lukk headermeny",
   "closeMenu": "Lukk meny",
@@ -88,7 +89,8 @@
     "staticMapSection": "Statisk kartseksjon",
     "teamSection": "Team -seksjon",
     "testimonialsSection": "Vitnesbyrdsseksjon",
-    "textList": "Tekstliste"
+    "textList": "Tekstliste",
+    "videoSection": "Videoseksjon"
   },
   "confirm": "Bekrefte",
   "coordinate": "Koordinere",
@@ -214,6 +216,7 @@
     "longitude": "Lengdegrad",
     "mapStyle": "Kartstil",
     "maxWidth": "Maks bredde",
+    "media": "Media",
     "mobileContentAlignment": "Mobilinnholdsinnretning",
     "mobileImagePosition": "Mobil bildeposisjon",
     "name": "Navn",
@@ -342,6 +345,7 @@
     "utilityImagesWidth": "Utility bilder bredde",
     "values": "Verdier",
     "variant": "Variant",
+    "video": "Video",
     "visibleOnLivePage": "Synlig på live side",
     "width": "Bredde",
     "wrap": "Pakk",
@@ -389,6 +393,7 @@
   "locatorFilterLabel": "Filter:",
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
+  "mediaType": "Medietype",
   "missingHtmlWidget": "Legg til HTML for å se komponent",
   "monday": "mandag",
   "name": "Navn",
@@ -559,6 +564,8 @@
   "update": "Oppdatering",
   "updatePage": "Oppdateringsside",
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
+  "video": "Video",
+  "videoThumbnail": "Video miniatyrbilde",
   "visitPage": "Besøk side",
   "wednesday": "onsdag"
 }

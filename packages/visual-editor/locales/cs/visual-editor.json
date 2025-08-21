@@ -44,6 +44,7 @@
   "category": "Kategorie",
   "change": "Přeměna",
   "chooseImage": "Vyberte obrázek",
+  "chooseVideo": "Vyberte video",
   "close": "Blízko",
   "closeHeaderMenu": "Nabídka Zavřít záhlaví",
   "closeMenu": "Zavřít menu",
@@ -88,7 +89,8 @@
     "staticMapSection": "Sekce statické mapy",
     "teamSection": "Týmová sekce",
     "testimonialsSection": "Sekce posudků",
-    "textList": "Textový seznam"
+    "textList": "Textový seznam",
+    "videoSection": "Sekce videa"
   },
   "confirm": "Potvrdit",
   "coordinate": "Koordinovat",
@@ -215,6 +217,7 @@
     "longitude": "Zeměpisná délka",
     "mapStyle": "Styl mapy",
     "maxWidth": "Max šířka",
+    "media": "Média",
     "mobileContentAlignment": "Zarovnání mobilního obsahu",
     "mobileImagePosition": "Pozice mobilního obrazu",
     "name": "Jméno",
@@ -343,6 +346,7 @@
     "utilityImagesWidth": "Šířka obslužných obrázků",
     "values": "Hodnoty",
     "variant": "Varianta",
+    "video": "Video",
     "visibleOnLivePage": "Viditelné na živé stránce",
     "width": "Šířka",
     "wrap": "Zabalit",
@@ -390,6 +394,7 @@
   "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
+  "mediaType": "Typ médií",
   "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",
   "monday": "pondělí",
   "name": "Jméno",
@@ -560,6 +565,8 @@
   "update": "Aktualizovat",
   "updatePage": "Aktualizace stránky",
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
+  "video": "Video",
+  "videoThumbnail": "Video miniatura",
   "visitPage": "Navštivte stránku",
   "wednesday": "středa"
 }
