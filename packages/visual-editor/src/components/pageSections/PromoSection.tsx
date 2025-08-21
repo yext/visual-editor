@@ -24,6 +24,7 @@ import {
   ThemeOptions,
   EntityField,
   pt,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
@@ -185,7 +186,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
     streamDocument,
@@ -201,14 +202,13 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       }[styles.heading.align]
     : "justify-start";
 
-  return (
-    <PageSection
-      background={styles.backgroundColor}
-      className={"flex flex-col md:flex-row md:gap-16"}
-    >
-      {resolvedPromo?.image && (
+  const PromoImage = ({ className }: { className: string }) => {
+    return (
+      resolvedPromo?.image && (
         <div
-          className={`w-full ${styles.orientation === "right" ? "md:order-2" : "md:order-1"}`}
+          className={themeManagerCn("w-full my-auto", className)}
+          role="region"
+          aria-label={t("promoImage", "Promo Image")}
         >
           <EntityField
             displayName={pt("fields.image", "Image")}
@@ -223,12 +223,23 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
             />
           </EntityField>
         </div>
-      )}
+      )
+    );
+  };
+
+  return (
+    <PageSection
+      background={styles.backgroundColor}
+      className={"flex flex-col md:flex-row md:gap-16"}
+    >
+      {/* Desktop left image */}
+      <PromoImage
+        className={themeManagerCn(
+          styles.orientation === "right" && "md:hidden"
+        )}
+      />
       <div
-        className={
-          `flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words ` +
-          `${styles.orientation === "right" ? "md:order-1" : "md:order-2"}`
-        }
+        className={`flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words`}
       >
         {resolvedPromo?.title && (
           <EntityField
@@ -289,6 +300,13 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
       </div>
+      {/* Desktop right image */}
+      <PromoImage
+        className={themeManagerCn(
+          "hidden sm:block",
+          styles.orientation === "left" && "md:hidden"
+        )}
+      />
     </PageSection>
   );
 };

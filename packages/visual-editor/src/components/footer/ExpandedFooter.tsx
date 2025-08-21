@@ -21,6 +21,7 @@ import {
   useDocument,
   resolveComponentData,
   PageSectionProps,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -473,99 +474,108 @@ const ExpandedFooterWrapper = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
+  const FooterLogos = ({ className }: { className: string }) => {
+    return (
+      <div
+        className={themeManagerCn(`flex flex-col gap-10 md:gap-8`, className)}
+      >
+        {logo && (
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.logo", "Logo")}
+          >
+            <FooterLogo
+              aspectRatio={aspectRatioForLogo}
+              logo={buildComplexLogoImage(logo, logoWidth || 100)}
+              logoWidth={logoWidth || 100}
+            />
+          </EntityField>
+        )}
+        <div className="hidden md:block space-y-8">
+          <FooterIcons
+            xLink={xLink}
+            facebookLink={facebookLink}
+            instagramLink={instagramLink}
+            pinterestLink={pinterestLink}
+            linkedInLink={linkedInLink}
+            youtubeLink={youtubeLink}
+            tiktokLink={tiktokLink}
+          />
+          {utilityImages && utilityImages.length >= 1 && (
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.utilityImages", "Utility Images")}
+            >
+              <div className="grid grid-cols-3 gap-8">
+                {utilityImages.map((item, index) => (
+                  <FooterLogo
+                    aspectRatio={aspectRatioForUtilityImages}
+                    key={index}
+                    logo={buildComplexUtilityImage(
+                      item.url,
+                      utilityImagesWidth || 60
+                    )}
+                    logoWidth={utilityImagesWidth || 60}
+                  />
+                ))}
+              </div>
+            </EntityField>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
+      {/* Primary footer section. */}
       <PageSection
         verticalPadding={"footer"}
         background={backgroundColor}
         maxWidth={maxWidth}
         className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
-        <div
-          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end md:order-2` : `items-start md:order-1`}`}
-        >
-          {logo && (
-            <EntityField
-              constantValueEnabled
-              displayName={pt("fields.logo", "Logo")}
-            >
-              <FooterLogo
-                aspectRatio={aspectRatioForLogo}
-                logo={buildComplexLogoImage(logo, logoWidth || 100)}
-                logoWidth={logoWidth || 100}
-              />
-            </EntityField>
-          )}
-          <div className="hidden md:block space-y-8">
-            <FooterIcons
-              xLink={xLink}
-              facebookLink={facebookLink}
-              instagramLink={instagramLink}
-              pinterestLink={pinterestLink}
-              linkedInLink={linkedInLink}
-              youtubeLink={youtubeLink}
-              tiktokLink={tiktokLink}
-            />
-            {utilityImages && utilityImages.length >= 1 && (
-              <EntityField
-                constantValueEnabled
-                displayName={pt("fields.utilityImages", "Utility Images")}
-              >
-                <div className="grid grid-cols-3 gap-8">
-                  {utilityImages.map((item, index) => (
-                    <FooterLogo
-                      aspectRatio={aspectRatioForUtilityImages}
-                      key={index}
-                      logo={buildComplexUtilityImage(
-                        item.url,
-                        utilityImagesWidth || 60
-                      )}
-                      logoWidth={utilityImagesWidth || 60}
-                    />
-                  ))}
-                </div>
-              </EntityField>
+        {/** Desktop left footer logos and icons / Mobile top footer logo */}
+        <FooterLogos
+          className={`${primaryLinksAlignment === "left" ? `md:hidden` : `items-start`}`}
+        />
+        {expandedFooter ? (
+          <EntityField
+            constantValueEnabled
+            displayName={pt(
+              "fields.expandedFooterLinks",
+              "Expanded Footer Links"
             )}
-          </div>
-        </div>
-        <div
-          className={`w-full ${
-            primaryLinksAlignment === "right" ? "md:order-2" : "md:order-1"
-          }`}
-        >
-          {expandedFooter ? (
+          >
+            <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
+              {expandedFooterLinks.map((item, index) => (
+                <ExpandedFooterLinks
+                  label={resolveComponentData(
+                    item.label,
+                    i18n.language,
+                    streamDocument
+                  )}
+                  links={item.links}
+                  key={index}
+                />
+              ))}
+            </div>
+          </EntityField>
+        ) : (
+          <div className="w-full">
             <EntityField
               constantValueEnabled
-              displayName={pt(
-                "fields.expandedFooterLinks",
-                "Expanded Footer Links"
-              )}
+              displayName={pt("fields.footerLinks", "Footer Links")}
             >
-              <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
-                {expandedFooterLinks.map((item, index) => (
-                  <ExpandedFooterLinks
-                    label={resolveComponentData(
-                      item.label,
-                      i18n.language,
-                      streamDocument
-                    )}
-                    links={item.links}
-                    key={index}
-                  />
-                ))}
-              </div>
+              <FooterLinks links={footerLinks} type="Primary" />
             </EntityField>
-          ) : (
-            <div className="w-full">
-              <EntityField
-                constantValueEnabled
-                displayName={pt("fields.footerLinks", "Footer Links")}
-              >
-                <FooterLinks links={footerLinks} type="Primary" />
-              </EntityField>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+        {/** Desktop right aligned footer logos and icons */}
+        <FooterLogos
+          className={`${primaryLinksAlignment === "left" ? `items-end` : `md:hidden`} hidden sm:block`}
+        />
+        {/** Mobile footer icons and utility images */}
         <div className="md:hidden block space-y-10">
           <FooterIcons
             xLink={xLink}
@@ -587,11 +597,8 @@ const ExpandedFooterWrapper = ({
                     <FooterLogo
                       aspectRatio={aspectRatioForUtilityImages}
                       key={index}
-                      logo={buildComplexUtilityImage(
-                        item.url,
-                        logoWidth || 100
-                      )}
-                      logoWidth={utilityImagesWidth || 100}
+                      logo={buildComplexUtilityImage(item.url, logoWidth || 60)}
+                      logoWidth={utilityImagesWidth || 60}
                     />
                   ))}
                 </div>
@@ -600,6 +607,7 @@ const ExpandedFooterWrapper = ({
           )}
         </div>
       </PageSection>
+      {/* Secondary footer section */}
       {show && (
         <PageSection
           verticalPadding={"footerSecondary"}
