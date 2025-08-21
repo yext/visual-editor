@@ -44,7 +44,7 @@ export const getCTATypeAndCoordinate = <T extends Record<string, any>>(
   entityField: YextEntityField<T>,
   cta: any
 ): {
-  ctaType: string | undefined;
+  ctaType: "textAndLink" | "getDirections" | "presetImage" | undefined;
   coordinate?: { latitude: number; longitude: number };
 } => {
   const ctaType = entityField.constantValueEnabled
