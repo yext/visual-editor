@@ -19,6 +19,7 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
+  "altText": "Alt tekstas",
   "applyAll": "Kreipkitės į visas vietas",
   "applyAllWithLabel": "Taikyti {{fieldLabel}} visoms lokalams",
   "approvals": {
@@ -41,6 +42,8 @@
     "pageSections": "Puslapių skyriai"
   },
   "category": "Kategorija",
+  "change": "Pakeisti",
+  "chooseImage": "Pasirinkite vaizdą",
   "close": "Uždaryti",
   "closeHeaderMenu": "Uždarykite antraštės meniu",
   "closeMenu": "Uždaryti meniu",
@@ -100,6 +103,7 @@
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "date": "Data",
   "dateAndTime": "Data ir laikas",
+  "delete": "Ištrinti",
   "deleteItem": "Ištrinti elementą",
   "discardChanges": {
     "discardChanges": "Išmeskite pokyčius",
