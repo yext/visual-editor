@@ -122,6 +122,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         {/* Thumbnail */}
         <FieldLabel
           label={pt(field?.label ?? msg("fields.image", "Image"))}
+          el="div"
           className="ve-mt-3"
         >
           <div className="ve-relative ve-group ve-mb-3">
