@@ -19,6 +19,7 @@
     "region": "Estado/región",
     "sublocality": "Sublocalidad"
   },
+  "altText": "Texto alternativo",
   "applyAll": "Aplicar a todos los lugares",
   "applyAllWithLabel": "Aplicar {{fieldLabel}} a todos los locales",
   "approvals": {
@@ -41,6 +42,8 @@
     "pageSections": "Secciones de página"
   },
   "category": "Categoría",
+  "change": "Cambiar",
+  "chooseImage": "Elija imagen",
   "close": "Cerca",
   "closeHeaderMenu": "Menú de encabezado cerrar",
   "closeMenu": "Menú cerrado",
@@ -99,6 +102,7 @@
   "customSearchArea": "Área de búsqueda personalizada",
   "date": "Fecha",
   "dateAndTime": "Fecha y hora",
+  "delete": "Borrar",
   "deleteItem": "Eliminar el artículo",
   "discardChanges": {
     "discardChanges": "Descartar cambios",

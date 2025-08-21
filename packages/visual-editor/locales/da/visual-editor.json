@@ -19,6 +19,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "altText": "Alt tekst",
   "applyAll": "Ansøg på alle lokaliteter",
   "applyAllWithLabel": "Anvend {{fieldLabel}} på alle lokaliteter",
   "approvals": {
@@ -41,6 +42,8 @@
     "pageSections": "Sidesektioner"
   },
   "category": "Kategori",
+  "change": "Forandring",
+  "chooseImage": "Vælg billede",
   "close": "Tæt",
   "closeHeaderMenu": "Luk header -menu",
   "closeMenu": "Luk menu",
@@ -100,6 +103,7 @@
   "customSearchArea": "Brugerdefineret søgeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
+  "delete": "Slet",
   "deleteItem": "Slet vare",
   "discardChanges": {
     "discardChanges": "Kasser ændringer",

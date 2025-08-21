@@ -5,7 +5,7 @@ import {
   testHours,
   transformTests,
 } from "../testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
@@ -570,6 +570,10 @@ describe("Grid", async () => {
       );
 
       await page.viewport(width, height);
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
 
       await expect(`Grid/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
