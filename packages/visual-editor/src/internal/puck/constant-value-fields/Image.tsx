@@ -24,7 +24,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
   type: "custom",
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
-    const { entityDocument } = useDocument();
+    const streamDocument = useDocument();
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
@@ -114,7 +114,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
     const altText = resolveComponentData(
       value?.alternateText ?? "",
       i18n.language,
-      entityDocument
+      streamDocument
     );
 
     return (

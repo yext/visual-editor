@@ -771,12 +771,12 @@ const buildComplexImage = (
   width: number
 ): ComplexImageType => {
   const safeUrl = image?.url || PLACEHOLDER_IMAGE;
-  const { entityDocument } = useDocument();
+  const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const altText = resolveComponentData(
     image?.alternateText ?? "",
     i18n.language,
-    entityDocument
+    streamDocument
   );
 
   return {
