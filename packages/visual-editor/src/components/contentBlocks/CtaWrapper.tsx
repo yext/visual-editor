@@ -16,6 +16,7 @@ import {
 import {
   ctaTypeOptions,
   ctaTypeToEntityFieldType,
+  getCTATypeAndCoordinate,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 export interface CTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;
@@ -50,16 +51,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
-
-  const isCoordinateField = (cta as any)?.latitude && (cta as any)?.longitude;
-  const ctaType =
-    cta?.ctaType || (isCoordinateField ? "getDirections" : undefined);
-  const coordinate = isCoordinateField
-    ? {
-        latitude: (cta as any).latitude,
-        longitude: (cta as any).longitude,
-      }
-    : cta?.coordinate;
+  const { ctaType, coordinate } = getCTATypeAndCoordinate(entityField, cta);
 
   return (
     <EntityField

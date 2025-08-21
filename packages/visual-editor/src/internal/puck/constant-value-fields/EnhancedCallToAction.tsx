@@ -33,10 +33,20 @@ export const ctaTypeToEntityFieldType = {
   presetImage: "type.cta",
 };
 
+/**
+ * Determines the CTA type and coordinate data from an entity field and resolved CTA object.
+ *
+ * @param entityField - The Yext entity field containing CTA configuration.
+ * @param cta - The resolved CTA object, which may have coordinate data in different places depending on the field type.
+ * @returns An object containing the CTA type and coordinate (if available).
+ */
 export const getCTATypeAndCoordinate = <T extends Record<string, any>>(
   entityField: YextEntityField<T>,
   cta: any
-) => {
+): {
+  ctaType: string | undefined;
+  coordinate?: { latitude: number; longitude: number };
+} => {
   const ctaType = entityField.constantValueEnabled
     ? entityField.constantValue.ctaType
     : entityField.selectedType;
