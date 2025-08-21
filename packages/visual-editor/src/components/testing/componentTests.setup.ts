@@ -35,13 +35,24 @@ expect.extend({
   async toMatchScreenshot(
     this: any, // 'this' context for Vitest matchers
     screenshotName: string,
-    options?: { customThreshold?: number; ignoreExact?: number[] }
+    options?: {
+      customThreshold?: number;
+      ignoreExact?: number[];
+      useFullPage?: boolean;
+    }
   ) {
-    const updatedScreenshotData = await act(async () =>
-      page.screenshot({
+    const updatedScreenshotData = await act(async () => {
+      if (options?.useFullPage) {
+        // Workaround for vitest not allowing fullPage mobile screenshots
+        // See https://github.com/vitest-dev/vitest/discussions/7749
+        (window.frameElement as HTMLIFrameElement).style.height =
+          `${document.body.offsetHeight}px`;
+      }
+
+      return page.screenshot({
         save: false,
-      })
-    );
+      });
+    });
 
     const { passes, numDiffPixels } = await commands.compareScreenshot(
       screenshotName,
