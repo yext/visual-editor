@@ -27,7 +27,7 @@ export const Image: React.FC<ImageProps> = ({
   className,
 }) => {
   const { i18n } = useTranslation();
-  const { entityDocument } = useDocument();
+  const streamDocument = useDocument();
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
     width && aspectRatio ? width / aspectRatio : undefined;
@@ -46,7 +46,7 @@ export const Image: React.FC<ImageProps> = ({
 
   const altText =
     typeof altTextField === "object"
-      ? resolveComponentData(altTextField, i18n.language, entityDocument)
+      ? resolveComponentData(altTextField, i18n.language, streamDocument)
       : altTextField;
 
   return (
