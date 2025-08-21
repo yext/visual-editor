@@ -15,6 +15,9 @@ import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_b
 import { directoryHoursStyles } from "./0014_directory_hours_styles.ts";
 import { addHeaderPosition } from "./0015_add_header_position.ts";
 import { migrateCTAStructures } from "./0016_migrate_cta_structures.ts";
+import { heroVariants } from "./0017_hero_variants.ts";
+import { addDirectorySiteNameMigration } from "./0018_add_directory_site_name.ts";
+import { refactorContentBlocks } from "./0019_refactor_content_blocks.ts";
 import { updateFooterForAssetImages } from "./0020_footer_asset_images.ts";
 
 // To add a migration:
@@ -39,8 +42,8 @@ export const migrationRegistry: MigrationRegistry = [
   directoryHoursStyles,
   addHeaderPosition,
   migrateCTAStructures,
-  {}, // placeholder 17
-  {}, // placeholder 18
-  {}, // placeholder 19
+  heroVariants,
+  addDirectorySiteNameMigration,
+  refactorContentBlocks,
   updateFooterForAssetImages,
 ];

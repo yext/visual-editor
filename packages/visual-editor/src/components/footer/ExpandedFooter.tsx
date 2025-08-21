@@ -38,7 +38,7 @@ import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallT
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.tsx";
+} from "../contentBlocks/image/styling.ts";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 

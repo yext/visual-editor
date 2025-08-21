@@ -30,7 +30,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
+} from "../contentBlocks/image/styling.ts";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 

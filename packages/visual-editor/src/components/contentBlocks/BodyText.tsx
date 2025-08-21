@@ -11,61 +11,82 @@ import {
   YextField,
   pt,
   msg,
-  TranslatableString,
+  TranslatableRichText,
+  useBackground,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
-  text: YextEntityField<TranslatableString>;
-  variant: BodyProps["variant"];
+  data: {
+    text: YextEntityField<TranslatableRichText>;
+  };
+  styles: {
+    variant: BodyProps["variant"];
+  };
 };
 
 const bodyTextFields: Fields<BodyTextProps> = {
-  text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {
-    type: "entityField",
-    filter: {
-      types: ["type.string"],
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      text: YextField(msg("fields.text", "Text"), {
+        type: "entityField",
+        filter: {
+          types: ["type.rich_text_v2"],
+        },
+      }),
     },
   }),
-  variant: YextField(msg("fields.variant", "Variant"), {
-    type: "radio",
-    options: "BODY_VARIANT",
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "radio",
+        options: "BODY_VARIANT",
+      }),
+    },
   }),
 };
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
-  ({ text, ...bodyProps }, ref) => {
+  ({ data, styles }, ref) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
+    const background = useBackground();
 
     return (
       <EntityField
         displayName={pt("body", "Body")}
-        fieldId={text.field}
-        constantValueEnabled={text.constantValueEnabled}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
       >
-        <Body ref={ref} {...bodyProps}>
-          {resolveComponentData(text, i18n.language, streamDocument)}
+        <Body
+          ref={ref}
+          className={`rtf-theme ${background?.textColor == "text-white" ? "rtf-dark-background" : "rtf-light-background"} rtf-body-${styles.variant}`}
+        >
+          {resolveComponentData(data.text, i18n.language, streamDocument)}
         </Body>
       </EntityField>
     );
   }
 );
 
-BodyTextComponent.displayName = "BodyText";
-
 export const BodyText: ComponentConfig<BodyTextProps> = {
   label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
   defaultProps: {
-    text: {
-      field: "",
-      constantValue: {
-        en: "Text",
-        hasLocalizedValue: "true",
+    data: {
+      text: {
+        field: "",
+        constantValue: {
+          en: "Text",
+          hasLocalizedValue: "true",
+        },
+        constantValueEnabled: true,
       },
-      constantValueEnabled: true,
     },
-    variant: "base",
+    styles: {
+      variant: "base",
+    },
   },
   render: (props) => <BodyTextComponent {...props} />,
 };

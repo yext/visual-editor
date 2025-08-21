@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
-import { Body, useBackground } from "@yext/visual-editor";
+import { Body, themeManagerCn, useBackground } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export type AggregateRating = {
@@ -11,10 +11,11 @@ export type AggregateRating = {
 export type ReviewStarsProps = {
   averageRating: number;
   reviewCount?: number;
+  className?: string;
 };
 
 export const ReviewStars = (props: ReviewStarsProps) => {
-  const { averageRating, reviewCount } = props;
+  const { averageRating, reviewCount, className } = props;
   const background = useBackground();
   const hasDarkBackground = background?.isDarkBackground;
   const roundedAverageRating = Math.round(averageRating * 10) / 10;
@@ -25,7 +26,7 @@ export const ReviewStars = (props: ReviewStarsProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center gap-3">
+    <div className={themeManagerCn("flex items-center gap-3", className)}>
       <Body className="font-bold">{roundedAverageRating}</Body>
       <div className={`flex items-center gap-0.5 ${starColor}`}>
         {Array.from({ length: 5 })

@@ -34,7 +34,7 @@ import {
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
+} from "../contentBlocks/image/styling.ts";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { AssetImageType } from "../../types/images";

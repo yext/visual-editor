@@ -55,7 +55,10 @@ import {
 import { HeadingText, HeadingTextProps } from "./contentBlocks/HeadingText.tsx";
 import { HoursTable, HoursTableProps } from "./contentBlocks/HoursTable.tsx";
 import { HoursStatus, HoursStatusProps } from "./contentBlocks/HoursStatus.tsx";
-import { ImageWrapper, ImageWrapperProps } from "./contentBlocks/Image.tsx";
+import {
+  ImageWrapper,
+  ImageWrapperProps,
+} from "./contentBlocks/image/Image.tsx";
 import {
   MapboxStaticMap,
   MapboxStaticProps,
@@ -70,6 +73,7 @@ import {
 import { Footer, FooterProps } from "./footer/Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
+import { CTAGroup, CTAGroupProps } from "./contentBlocks/CTAGroup";
 import {
   StaticMapSection,
   StaticMapSectionProps,
@@ -167,6 +171,7 @@ export interface AdvancedCoreInfoCategoryProps {
   Grid: GridProps;
   Address: AddressProps;
   BodyText: BodyTextProps;
+  CTAGroup: CTAGroupProps;
   CTAWrapper: CTAWrapperProps;
   Emails: EmailsProps;
   GetDirections: GetDirectionsProps;
@@ -183,6 +188,7 @@ export const AdvancedCoreInfoCategoryComponents = {
   Grid,
   Address,
   BodyText,
+  CTAGroup,
   CTAWrapper,
   Emails,
   GetDirections,

@@ -9,6 +9,7 @@ import { cva, VariantProps } from "class-variance-authority";
 const pageSectionVariants = cva("px-4 md:px-6", {
   variants: {
     verticalPadding: {
+      none: "",
       sm: "py-4",
       default: "py-pageSection-verticalPadding",
       header: "py-2 sm:py-6",
@@ -45,6 +46,7 @@ export interface PageSectionProps
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
   outerClassName?: string;
+  outerStyle?: React.CSSProperties;
 }
 
 export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
@@ -54,6 +56,7 @@ export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
       background,
       verticalPadding,
       outerClassName,
+      outerStyle,
       as,
       maxWidth,
       ...props
@@ -69,6 +72,7 @@ export const PageSection = React.forwardRef<HTMLDivElement, PageSectionProps>(
           pageSectionVariants({ verticalPadding }),
           outerClassName
         )}
+        style={outerStyle}
         background={background}
         ref={ref}
       >

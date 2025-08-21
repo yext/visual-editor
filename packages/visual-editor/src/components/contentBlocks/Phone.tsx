@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   useDocument,
@@ -10,27 +9,43 @@ import {
   msg,
   pt,
   YextField,
+  TranslatableString,
+  backgroundColors,
 } from "@yext/visual-editor";
 
 export interface PhoneProps {
-  phone: YextEntityField<string>;
-  format?: "domestic" | "international";
-  includeHyperlink: boolean;
+  data: {
+    number: YextEntityField<string>;
+    label: TranslatableString;
+  };
+  styles: {
+    phoneFormat: "domestic" | "international";
+    includePhoneHyperlink: boolean;
+  };
 }
 
-const PhoneFields: Fields<PhoneProps> = {
-  phone: YextField(msg("fields.phoneNumber", "Phone Number"), {
+// Phone field definitions used in Phone and CoreInfoSection
+export const PhoneDataFields = {
+  number: YextField<any, string>(msg("fields.phoneNumber", "Phone Number"), {
     type: "entityField",
     filter: {
       types: ["type.phone"],
     },
   }),
-  format: YextField(msg("fields.format", "Format"), {
+  label: YextField(msg("fields.label", "Label"), {
+    type: "translatableString",
+    filter: { types: ["type.string"] },
+  }),
+};
+
+// Phone style definitions used in Phone and CoreInfoSection
+export const PhoneStyleFields = {
+  phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
     type: "radio",
     options: "PHONE_OPTIONS",
   }),
-  includeHyperlink: YextField(
-    msg("fields.includeHyperlink", "Include Hyperlink"),
+  includePhoneHyperlink: YextField(
+    msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
     {
       type: "radio",
       options: [
@@ -41,15 +56,22 @@ const PhoneFields: Fields<PhoneProps> = {
   ),
 };
 
-const PhoneComponent: React.FC<PhoneProps> = ({
-  phone,
-  format,
-  includeHyperlink,
-}) => {
+const PhoneFields: Fields<PhoneProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: PhoneDataFields,
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: PhoneStyleFields,
+  }),
+};
+
+const PhoneComponent = ({ data, styles }: PhoneProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPhone = resolveComponentData(
-    phone,
+    data.number,
     i18n.language,
     streamDocument
   );
@@ -60,14 +82,17 @@ const PhoneComponent: React.FC<PhoneProps> = ({
 
   return (
     <EntityField
-      displayName={pt("phone", "Phone")}
-      fieldId={phone.field}
-      constantValueEnabled={phone.constantValueEnabled}
+      displayName={pt("fields.phoneNumber", "Phone Number")}
+      fieldId={data.number.field}
+      constantValueEnabled={data.number.constantValueEnabled}
     >
       <PhoneAtom
+        backgroundColor={backgroundColors.background2.value}
+        eventName={`phone`}
+        format={styles.phoneFormat}
+        label={resolveComponentData(data.label, i18n.language, streamDocument)}
         phoneNumber={resolvedPhone}
-        format={format}
-        includeHyperlink={includeHyperlink}
+        includeHyperlink={styles.includePhoneHyperlink}
         includeIcon={true}
       />
     </EntityField>
@@ -78,11 +103,20 @@ export const Phone: ComponentConfig<PhoneProps> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {
-    phone: {
-      field: "mainPhone",
-      constantValue: "",
+    data: {
+      number: {
+        field: "mainPhone",
+        constantValue: "",
+      },
+      label: {
+        en: "Phone",
+        hasLocalizedValue: "true",
+      },
     },
-    includeHyperlink: true,
+    styles: {
+      phoneFormat: "domestic",
+      includePhoneHyperlink: true,
+    },
   },
   render: (props) => <PhoneComponent {...props} />,
 };

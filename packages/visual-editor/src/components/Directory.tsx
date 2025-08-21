@@ -36,6 +36,12 @@ export interface DirectoryData {
    * @defaultValue "Directory Root" (constant)
    */
   directoryRoot: TranslatableString;
+
+  /**
+   * The site name to display above the title.
+   * @defaultValue "" (empty string)
+   */
+  siteName: YextEntityField<TranslatableString>;
 }
 
 export interface DirectoryStyles {
@@ -116,6 +122,12 @@ const directoryFields: Fields<DirectoryProps> = {
           filter: { types: ["type.string"] },
         }
       ),
+      siteName: YextField(msg("fields.siteName", "Site Name"), {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -411,6 +423,11 @@ const DirectoryComponent = ({ data, styles, analytics }: DirectoryProps) => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
   const title = resolveComponentData(data.title, i18n.language, streamDocument);
+  const siteName = resolveComponentData(
+    data.siteName,
+    i18n.language,
+    streamDocument
+  );
 
   return (
     <Background background={styles.backgroundColor}>
@@ -421,9 +438,7 @@ const DirectoryComponent = ({ data, styles, analytics }: DirectoryProps) => {
         liveVisibility={true}
       />
       <PageSection className="flex flex-col items-center gap-2">
-        {streamDocument._site?.name && (
-          <Heading level={4}>{streamDocument._site.name}</Heading>
-        )}
+        {siteName && <Heading level={4}>{siteName}</Heading>}
         {title && <Heading level={2}>{title}</Heading>}
       </PageSection>
       {streamDocument.dm_directoryChildren &&
@@ -465,6 +480,14 @@ export const Directory: ComponentConfig<DirectoryProps> = {
       directoryRoot: {
         en: "Directory Root",
         hasLocalizedValue: "true",
+      },
+      siteName: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "",
+          hasLocalizedValue: "true",
+        },
       },
     },
     styles: {
