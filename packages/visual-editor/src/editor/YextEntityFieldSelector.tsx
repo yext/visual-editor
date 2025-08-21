@@ -54,12 +54,24 @@ export type YextEntityField<T> = {
   constantValue: T;
   constantValueEnabled?: boolean;
   disallowTranslation?: boolean;
+  selectedType?: string;
 };
 
+/**
+ * Configuration for the type selector dropdown in the YextEntityFieldSelector.
+ * This allows for a two-tiered selection: first a "type", then a "field" of that type.
+ */
 export type TypeSelectorConfigProps = {
+  /** The label for the type selector dropdown. */
   typeLabel: string;
+  /** The label for the field selector dropdown. */
   fieldLabel: string;
+  /** The options to display in the type selector dropdown. */
   options: ComboboxOption[];
+  /**
+   * An optional mapping from a type selector option's value to an entity field type.
+   * This is useful when multiple type options should filter for the same underlying entity field type.
+   */
   optionValueToEntityFieldType?: Record<string, string>;
 };
 
@@ -418,13 +430,19 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     // If optionValueToEntityFieldType is provided, use it to map the selectedType to an EntityFieldType.
     // Otherwise, use the selectedType directly.
     // This allows for type selections that map to the same entity field type.
-    const selectedEntityFieldType = value?.selectedType
-      ? typeSelectorConfig?.optionValueToEntityFieldType
-        ? (typeSelectorConfig.optionValueToEntityFieldType[
-            value.selectedType
-          ] ?? undefined)
-        : value?.selectedType
-      : undefined;
+    let selectedEntityFieldType;
+    if (value?.selectedType) {
+      if (typeSelectorConfig?.optionValueToEntityFieldType) {
+        if (
+          typeSelectorConfig.optionValueToEntityFieldType[value.selectedType]
+        ) {
+          selectedEntityFieldType =
+            typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
+        }
+      } else {
+        selectedEntityFieldType = value.selectedType;
+      }
+    }
 
     const filteredEntityFields = getFieldsForSelector(entityFields, {
       ...filter,
@@ -472,7 +490,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       noOptionsMessage: getNoFieldsFoundMessage(filter),
       icon: null,
     });
-  }, [entityFields, filter, value.selectedType]);
+  }, [entityFields, filter, value?.selectedType]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>

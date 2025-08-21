@@ -8,6 +8,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
+import { YextEntityField } from "@yext/visual-editor";
 
 export const ctaTypeOptions = () => {
   return [
@@ -30,6 +31,24 @@ export const ctaTypeToEntityFieldType = {
   textAndLink: "type.cta",
   getDirections: "type.coordinate",
   presetImage: "type.cta",
+};
+
+export const getCTATypeAndCoordinate = <T extends Record<string, any>>(
+  entityField: YextEntityField<T>,
+  cta: any
+) => {
+  const ctaType = entityField.constantValueEnabled
+    ? entityField.constantValue.ctaType
+    : entityField.selectedType;
+  const coordinate =
+    cta && "latitude" in cta && "longitude" in cta
+      ? {
+          latitude: (cta as any).latitude,
+          longitude: (cta as any).longitude,
+        }
+      : cta?.coordinate;
+
+  return { ctaType, coordinate };
 };
 
 export const presetImageTypeOptions = (): {

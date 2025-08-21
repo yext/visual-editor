@@ -6,11 +6,13 @@ import {
   msg,
   resolveComponentData,
   CTA,
+  pt,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
 import {
   ctaTypeOptions,
   ctaTypeToEntityFieldType,
+  getCTATypeAndCoordinate,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const defaultButton: CTAWrapperProps = {
@@ -53,6 +55,7 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         options: "CTA_VARIANT",
       }),
     },
+    getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
   }),
 };
 
@@ -64,28 +67,25 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
   if (!buttons || buttons.length === 0) return null;
 
   return (
-    <div className={"flex flex-wrap items-center justify-start gap-4"}>
+    <div
+      className={
+        "flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start"
+      }
+    >
       {buttons.map((button, idx) => {
         const cta = resolveComponentData(
           button.entityField,
           locale,
           streamDocument
         );
-
-        const isCoordinateField =
-          (cta as any)?.latitude && (cta as any)?.longitude;
-        const ctaType =
-          cta?.ctaType || (isCoordinateField ? "getDirections" : undefined);
-        const coordinate = isCoordinateField
-          ? {
-              latitude: (cta as any).latitude,
-              longitude: (cta as any).longitude,
-            }
-          : cta?.coordinate;
+        const { ctaType, coordinate } = getCTATypeAndCoordinate(
+          button.entityField,
+          cta
+        );
 
         return (
-          <div key={idx}>
-            {cta && (
+          cta && (
+            <div key={idx} className="w-full sm:w-auto">
               <CTA
                 label={resolveComponentData(cta.label, locale, streamDocument)}
                 link={resolveComponentData(cta.link, locale, streamDocument)}
@@ -94,10 +94,10 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
                 ctaType={ctaType}
                 coordinate={coordinate}
                 presetImageType={cta.presetImageType}
-                className="truncate"
+                className="truncate w-full"
               />
-            )}
-          </div>
+            </div>
+          )
         );
       })}
     </div>
