@@ -50,6 +50,44 @@ const tests: ComponentTest[] = [
       await page.getByRole("button", { name: "Change Color" }).click();
     },
   },
+  {
+    name: "renders Handlebars template with document data",
+    document: {
+      c_exampleProducts: {
+        products: [
+          {
+            name: "Galaxy Burger",
+            image: { url: "https://example.com/burger.jpg" },
+            description: { html: "<p>Our signature burger!</p>" },
+          },
+          {
+            name: "Galaxy Salad",
+            image: { url: "https://example.com/salad.jpg" },
+          },
+        ],
+      },
+    },
+    props: {
+      ...CustomCodeSection.defaultProps,
+      html: `
+        <ul>
+          {{#each c_exampleProducts.products}}
+            <li>
+              <strong>{{name}}</strong>
+              {{#if image.url}}
+                <br />
+                <img src="{{image.url}}" alt="{{name}}" style="max-width:200px;" />
+              {{/if}}
+              {{#if description.html}}
+                <div>{{{description.html}}}</div>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      `,
+    },
+    version: migrationRegistry.length,
+  },
 ];
 
 describe("CustomCodeSection", async () => {

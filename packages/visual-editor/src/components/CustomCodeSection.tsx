@@ -1,8 +1,14 @@
 import React from "react";
+import Handlebars from "handlebars";
 import { useTranslation } from "react-i18next";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { VisibilityWrapper, YextField, msg } from "@yext/visual-editor";
+import {
+  VisibilityWrapper,
+  YextField,
+  msg,
+  useDocument,
+} from "@yext/visual-editor";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 
 export interface CustomCodeSectionProps {
@@ -90,7 +96,21 @@ const CustomCodeSectionWrapper = ({
   javascript,
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
-  if (!html) {
+  const streamDocument = useDocument();
+
+  // If html contains handlebars template syntax, process it
+  let processedHtml = html;
+  if (html && /{{.*}}/.test(html)) {
+    try {
+      const template = Handlebars.compile(html);
+      processedHtml = template(streamDocument);
+    } catch {
+      // fallback to original html if error
+      processedHtml = html;
+    }
+  }
+
+  if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
   }
 
@@ -115,12 +135,15 @@ const CustomCodeSectionWrapper = ({
       script.innerHTML = javascript;
       containerRef.current.appendChild(script);
     }
-  }, [javascript, html]);
+  }, [javascript, processedHtml]);
 
   return (
     <div>
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <div ref={containerRef} dangerouslySetInnerHTML={{ __html: html }} />
+      <div
+        ref={containerRef}
+        dangerouslySetInnerHTML={{ __html: processedHtml }}
+      />
     </div>
   );
 };

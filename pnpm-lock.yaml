@@ -157,6 +157,9 @@ importers:
       dompurify:
         specifier: ^3.2.3
         version: 3.2.6
+      handlebars:
+        specifier: ^4.7.8
+        version: 4.7.8
       i18next:
         specifier: ^25.2.1
         version: 25.3.2(typescript@5.8.3)
@@ -7205,6 +7208,14 @@ packages:
         integrity: sha512-MyTel3FXOdh1qhw1yKhpimQrAmur9q1X0ZigLmCOxouQD+BD3za9/89O+HfbgBQvvh4igEbp0/PUWO+VqGYG1g==,
       }
 
+  handlebars@4.7.8:
+    resolution:
+      {
+        integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==,
+      }
+    engines: { node: ">=0.4.7" }
+    hasBin: true
+
   has-flag@4.0.0:
     resolution:
       {
@@ -8958,6 +8969,12 @@ packages:
         integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==,
       }
     engines: { node: ">= 0.6" }
+
+  neo-async@2.6.2:
+    resolution:
+      {
+        integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==,
+      }
 
   next-themes@0.3.0:
     resolution:
@@ -11434,6 +11451,14 @@ packages:
         integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==,
       }
 
+  uglify-js@3.19.3:
+    resolution:
+      {
+        integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==,
+      }
+    engines: { node: ">=0.8.0" }
+    hasBin: true
+
   ulidx@2.4.1:
     resolution:
       {
@@ -12162,6 +12187,12 @@ packages:
       }
     engines: { node: ">=8" }
     hasBin: true
+
+  wordwrap@1.0.0:
+    resolution:
+      {
+        integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==,
+      }
 
   wrap-ansi@7.0.0:
     resolution:
@@ -17214,6 +17245,15 @@ snapshots:
     dependencies:
       through2: 2.0.5
 
+  handlebars@4.7.8:
+    dependencies:
+      minimist: 1.2.8
+      neo-async: 2.6.2
+      source-map: 0.6.1
+      wordwrap: 1.0.0
+    optionalDependencies:
+      uglify-js: 3.19.3
+
   has-flag@4.0.0: {}
 
   has-property-descriptors@1.0.2:
@@ -18362,6 +18402,8 @@ snapshots:
   negotiator@0.6.3: {}
 
   negotiator@1.0.0: {}
+
+  neo-async@2.6.2: {}
 
   next-themes@0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -20078,6 +20120,9 @@ snapshots:
 
   ufo@1.6.1: {}
 
+  uglify-js@3.19.3:
+    optional: true
+
   ulidx@2.4.1:
     dependencies:
       layerr: 3.0.0
@@ -20650,6 +20695,8 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
+
+  wordwrap@1.0.0: {}
 
   wrap-ansi@7.0.0:
     dependencies:
