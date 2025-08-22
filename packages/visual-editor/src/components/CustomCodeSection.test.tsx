@@ -80,7 +80,7 @@ const tests: ComponentTest[] = [
               <strong>{{name}}</strong>
               {{#if image.url}}
                 <br />
-                <img src="{{image.url}}" alt="{{name}}" class="product-img" />
+                <img src="{{image.url}}" class="product-img" />
               {{/if}}
               {{#if description.html}}
                 <div class="product-desc">{{{description.html}}}</div>
@@ -189,7 +189,7 @@ describe("CustomCodeSection", async () => {
 
       await expect(
         `CustomCodeSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ useFullPage: true });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
