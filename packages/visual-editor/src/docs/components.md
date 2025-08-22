@@ -117,11 +117,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
 
-## Handlebars Template Support
+### Handlebars Template Support
 
-The field supports [Handlebars](https://handlebarsjs.com/) template syntax. If your HTML contains Handlebars expressions (e.g., ), they will be rendered using the current document data ("streamDocument"). This allows you to dynamically display data from the entity or stream.
+The html field supports [Handlebars](https://handlebarsjs.com/) template syntax. If your HTML contains Handlebars expressions (e.g., name), they will be rendered using the current document data ("streamDocument"). This allows you to dynamically display data from the entity or stream.
 
-### Example Usage
+#### Example Usage
 
 Suppose your document data contains a list of products:
 
@@ -129,7 +129,7 @@ You can use the following HTML template in the CustomCodeSection:
 
 This will render a list of product names and images from your document data.
 
-### Notes - You can use any valid Handlebars syntax, including , , and triple-stash for raw HTML. - The template is rendered server-side with the document data available to the component. - If the HTML does not contain Handlebars expressions, it will be rendered as static HTML.
+#### Notes - You can use any valid Handlebars syntax, including #each, #if, and triple-stash ... for raw HTML. - The template is rendered server-side with the document data available to the component. - If the HTML does not contain Handlebars expressions, it will be rendered as static HTML.
 
 Only available with additional feature flag enabled.
 
