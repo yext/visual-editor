@@ -125,16 +125,10 @@ const CustomCodeSectionWrapper = ({
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
-
   const processedHtml = React.useMemo(
     () => processHandlebarsTemplate(html, streamDocument),
     [html, streamDocument]
   );
-
-  if (!processedHtml) {
-    return puck.isEditing ? <EmptyCustomCodeSection /> : null;
-  }
-
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
@@ -157,6 +151,10 @@ const CustomCodeSectionWrapper = ({
       containerRef.current.appendChild(script);
     }
   }, [javascript, processedHtml]);
+
+  if (!processedHtml) {
+    return puck.isEditing ? <EmptyCustomCodeSection /> : null;
+  }
 
   return (
     <div>
