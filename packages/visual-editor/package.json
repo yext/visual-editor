@@ -78,6 +78,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
+    "handlebars": "^4.7.8",
     "i18next": "^25.2.1",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",

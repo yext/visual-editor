@@ -1,5 +1,5 @@
 export * from "./i18n/index.ts";
-export { applyTheme } from "./applyTheme.ts";
+export { applyTheme, type StreamDocument } from "./applyTheme.ts";
 export {
   resolveYextEntityField,
   resolveYextStructField,
