@@ -150,7 +150,50 @@ const CustomCodeSectionWrapper = ({
 
 /**
  * The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
- * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+ *
+ * ## Handlebars Template Support
+ *
+ * The `html` field supports [Handlebars](https://handlebarsjs.com/) template syntax. If your HTML contains Handlebars expressions (e.g., `{{name}}`),
+ * they will be rendered using the current document data ("streamDocument"). This allows you to dynamically display data from the entity or stream.
+ *
+ * ### Example Usage
+ *
+ * Suppose your document data contains a list of products:
+ *
+ * ```json
+ * {
+ *   "c_exampleProducts": {
+ *     "products": [
+ *       { "name": "Galaxy Burger", "image": { "url": "https://example.com/burger.jpg" } },
+ *       { "name": "Galaxy Salad", "image": { "url": "https://example.com/salad.jpg" } }
+ *     ]
+ *   }
+ * }
+ * ```
+ *
+ * You can use the following HTML template in the CustomCodeSection:
+ *
+ * ```html
+ * <ul>
+ *   {{#each c_exampleProducts.products}}
+ *     <li>
+ *       <strong>{{name}}</strong>
+ *       {{#if image.url}}
+ *         <br />
+ *         <img src="{{image.url}}" alt="{{name}}" style="max-width:200px;" />
+ *       {{/if}}
+ *     </li>
+ *   {{/each}}
+ * </ul>
+ * ```
+ *
+ * This will render a list of product names and images from your document data.
+ *
+ * ### Notes
+ * - You can use any valid Handlebars syntax, including `#each`, `#if`, and triple-stash `{{{...}}}` for raw HTML.
+ * - The template is rendered server-side with the document data available to the component.
+ * - If the HTML does not contain Handlebars expressions, it will be rendered as static HTML.
+ *
  * Only available with additional feature flag enabled.
  */
 export const CustomCodeSection: ComponentConfig<CustomCodeSectionProps> = {

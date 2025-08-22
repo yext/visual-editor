@@ -4,7 +4,7 @@ import {
   ComponentTest,
   transformTests,
 } from "./testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   CustomCodeSection,
   migrate,
@@ -57,12 +57,16 @@ const tests: ComponentTest[] = [
         products: [
           {
             name: "Galaxy Burger",
-            image: { url: "https://example.com/burger.jpg" },
+            image: {
+              url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+            },
             description: { html: "<p>Our signature burger!</p>" },
           },
           {
             name: "Galaxy Salad",
-            image: { url: "https://example.com/salad.jpg" },
+            image: {
+              url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+            },
           },
         ],
       },
@@ -99,6 +103,7 @@ describe("CustomCodeSection", async () => {
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
@@ -134,6 +139,10 @@ describe("CustomCodeSection", async () => {
       );
 
       await page.viewport(width, height);
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
 
       await expect(
         `CustomCodeSection/[${viewportName}] ${name}`
