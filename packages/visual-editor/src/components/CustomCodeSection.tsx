@@ -8,6 +8,7 @@ import {
   YextField,
   msg,
   useDocument,
+  StreamDocument,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 
@@ -90,6 +91,33 @@ const EmptyCustomCodeSection = () => {
   );
 };
 
+/**
+ * Compiles and renders a Handlebars template string with the provided data if Handlebars syntax is detected.
+ *
+ * If the HTML string contains Handlebars expressions (e.g., {{name}}), this function will compile and render
+ * the template using the given data (typically the stream document). If compilation or rendering fails, or if
+ * no Handlebars expressions are present, the original HTML string is returned.
+ *
+ * @param html - The HTML string, possibly containing Handlebars template syntax.
+ * @param data - The data object to use for template rendering (e.g., streamDocument).
+ * @returns The processed HTML string with Handlebars expressions replaced, or the original HTML if not applicable.
+ */
+function processHandlebarsTemplate(html: string, data: StreamDocument): string {
+  if (!html) {
+    return html;
+  }
+  // Only process if handlebars syntax is present
+  if (/{{[^}]+}}/.test(html)) {
+    try {
+      const template = Handlebars.compile(html);
+      return template(data);
+    } catch {
+      return html;
+    }
+  }
+  return html;
+}
+
 const CustomCodeSectionWrapper = ({
   html,
   css,
@@ -98,17 +126,10 @@ const CustomCodeSectionWrapper = ({
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
 
-  // If html contains handlebars template syntax, process it
-  let processedHtml = html;
-  if (html && /{{.*}}/.test(html)) {
-    try {
-      const template = Handlebars.compile(html);
-      processedHtml = template(streamDocument);
-    } catch {
-      // fallback to original html if error
-      processedHtml = html;
-    }
-  }
+  const processedHtml = React.useMemo(
+    () => processHandlebarsTemplate(html, streamDocument),
+    [html, streamDocument]
+  );
 
   if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
