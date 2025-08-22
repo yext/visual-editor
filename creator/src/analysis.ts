@@ -85,13 +85,13 @@ async function analyzeWithModel(
   const model = gemini.getGenerativeModel({ model: modelName });
 
   console.log(
-    `\u23F3 Sending prompt to Gemini API (${modelName}). This may take up to 60 seconds...`,
+    `\u23F3 Sending prompt to Gemini API (${modelName}). This may take up to 5 minutes...`,
   );
 
   const timeoutPromise = new Promise<never>((_, reject) =>
     setTimeout(
-      () => reject(new Error("Gemini API call timed out after 60 seconds.")),
-      60000,
+      () => reject(new Error("Gemini API call timed out after 5 minutes.")),
+      5 * 60000,
     ),
   );
 
@@ -176,7 +176,7 @@ export async function analyzeHtml(
       result.analysisResult.explanation.includes("Gemini API quota exceeded"))
   ) {
     console.warn("\u26A0 Falling back to Flash model...");
-    result = await analyzeWithModel("gemini-1.5-flash", promptParts);
+    result = await analyzeWithModel("gemini-2.5-flash", promptParts);
   }
 
   if (!result || !Array.isArray(result.analysisResult.components)) {

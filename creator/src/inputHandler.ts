@@ -26,8 +26,12 @@ export async function getPageContent(
       window.scrollTo(0, document.body.scrollHeight);
     });
 
-    // Get the full HTML content
-    const htmlContent = await page.content();
+    // Get the content of the <body> tag and remove all <path> elements
+    const bodyContent = await page.evaluate(() => {
+      const body = document.body.cloneNode(true) as HTMLElement;
+      body.querySelectorAll("path").forEach((path) => path.remove());
+      return body.outerHTML;
+    });
 
     // Take a full-page screenshot and return it as a Base64 string
     const screenshotBuffer = await page.screenshot({
@@ -36,7 +40,7 @@ export async function getPageContent(
     });
 
     return {
-      html: htmlContent,
+      html: bodyContent,
       screenshot: screenshotBuffer as string,
     };
   } catch (error) {

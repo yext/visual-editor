@@ -148,6 +148,12 @@ async function generateComponentSchemas() {
     if (moduleSpecifier.startsWith("./")) {
       for (const namedImport of namedImports) {
         const componentName = namedImport.getName();
+        if (
+          !componentName.includes("Section") &&
+          !componentName.includes("Expanded")
+        ) {
+          continue;
+        }
         const componentFilePath = path.resolve(
           path.dirname(componentCategoriesPath),
           moduleSpecifier,

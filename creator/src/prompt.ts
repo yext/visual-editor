@@ -27,9 +27,9 @@ export function createGeminiPrompt(screenshot: string, html: string): Part[] {
       text: `
         You are an expert at analyzing website layouts and matching them to a library of components.
         
-        Your task is to analyze the provided screenshot of a webpage and generate a structured JSON layout. You must identify which components from the provided library best match the layout.
+        Your task is to analyze the provided screenshot and HTML of a webpage and generate a structured JSON layout. You must identify which components from the provided library best match the layout.
         
-        Use the screenshot to identify the layout, extract text, links, and image URLs.
+        Use the screenshot and HTML to identify the layout, extract text, links, and image URLs.
         The additionalContext contains rules for some props of some components. If it is present, these rules MUST BE followed.
         
         Below is the library of components and their schemas:
@@ -39,8 +39,6 @@ export function createGeminiPrompt(screenshot: string, html: string): Part[] {
         \`\`\`
 
         Based on the image, return a JSON array of components that represents the webpage layout. Your response MUST be a single, valid JSON array. Do not include any other text, explanations, or markdown code fences.
-
-        Anywhere there is a image url, use "https://placehold.co/500" instead of "IMAGE_URL_FROM_SCREENSHOT".
 
         For any object that has "hasLocalizedValue": "true", 
         1. Please add an "es" key with the value of the "en" key translated to Spanish.
@@ -62,6 +60,11 @@ export function createGeminiPrompt(screenshot: string, html: string): Part[] {
 
         Provide a summary of your decisions in the explanation key.
 
+        
+
+        Anytime that you see ctaVariant, the options are "primary", "secondary", or "link". Primary is for
+        a filled button, secondary is for an outlined button, and link is for a text link.
+
         Example output for a page with matching components:
         {
           "components": [
@@ -74,6 +77,8 @@ export function createGeminiPrompt(screenshot: string, html: string): Part[] {
           ],
           "explanation": "..."
         }
+
+        FINAL AND MOST IMPORTANT RULE: 'backgroundColor' MUST BE AN OBJECT. IT CANNOT BE A STRING.
       `,
     },
     {
