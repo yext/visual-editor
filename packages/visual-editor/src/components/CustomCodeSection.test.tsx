@@ -94,6 +94,7 @@ const tests: ComponentTest[] = [
           list-style: none;
           padding: 0;
           display: flex;
+          flex-wrap: wrap;
           gap: 2rem;
         }
         .product-item {
@@ -103,15 +104,32 @@ const tests: ComponentTest[] = [
           padding: 1rem;
           max-width: 220px;
           text-align: center;
+          flex: 1 1 180px;
         }
         .product-img {
+          width: 100%;
           max-width: 180px;
+          height: auto;
           border-radius: 6px;
           margin: 0.5rem 0;
         }
         .product-desc {
           font-size: 0.95rem;
           color: #444;
+        }
+        @media (max-width: 600px) {
+          .product-list {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          .product-item {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+          }
+          .product-img {
+            max-width: 100%;
+          }
         }
       `,
     },
