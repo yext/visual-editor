@@ -333,11 +333,11 @@ const tests: ComponentTest[] = [
             alternateText: { en: "Logo", hasLocalizedValue: "true" },
           },
           footerLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
           ],
           xLink: "https://x.com/yext",
           facebookLink: "https://facebook.com/yext",
@@ -374,12 +374,12 @@ const tests: ComponentTest[] = [
           expandedFooterLinks: [
             {
               label: "Footer Label LONG LONG LONG",
-              links: [version10FooterLink, version10FooterLink],
+              links: [testFooterLink, testFooterLink],
             },
             {
               label: "Footer Label",
               links: [
-                version10FooterLink,
+                testFooterLink,
                 {
                   linkType: "URL",
                   label: {
@@ -388,18 +388,14 @@ const tests: ComponentTest[] = [
                   },
                   link: "#",
                 },
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
+                testFooterLink,
+                testFooterLink,
+                testFooterLink,
               ],
             },
             {
               label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              links: [testFooterLink, testFooterLink, testFooterLink],
             },
           ],
         },
@@ -407,10 +403,10 @@ const tests: ComponentTest[] = [
           show: true,
           copyrightMessage: { en: "Copyright 2025", hasLocalizedValue: "true" },
           secondaryFooterLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
           ],
         },
       },
