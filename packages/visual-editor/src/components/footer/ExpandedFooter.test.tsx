@@ -230,7 +230,7 @@ const tests: ComponentTest[] = [
     version: 10,
   },
   {
-    name: "version 20 props - expanded",
+    name: "version 19 props - expanded",
     document: {},
     props: {
       data: {
@@ -318,7 +318,7 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 20,
+    version: 19,
   },
   {
     name: "version 20 props - expanded",
