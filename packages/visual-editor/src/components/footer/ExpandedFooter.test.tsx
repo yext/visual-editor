@@ -1,4 +1,3 @@
-import * as React from "react";
 import { describe, it, expect } from "vitest";
 import {
   axe,
@@ -15,13 +14,20 @@ import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 import { ExpandedFooter, validPatterns } from "./ExpandedFooter.tsx";
 
-const version10PlaceholderImage: string = "https://placehold.co/100";
+const testLogoUrl: string = "https://placehold.co/100";
 
-const version10FooterLink = {
+const testFooterLink = {
   linkType: "URL" as const,
   label: { en: "Footer Link", hasLocalizedValue: "true" as const },
   link: "#",
 };
+
+const testFooterLinks = [
+  testFooterLink,
+  testFooterLink,
+  testFooterLink,
+  testFooterLink,
+];
 
 const tests: ComponentTest[] = [
   {
@@ -36,14 +42,8 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryFooter: {
-          logo: version10PlaceholderImage,
-          footerLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-          ],
+          logo: testLogoUrl,
+          footerLinks: testFooterLinks,
           xLink: "",
           facebookLink: "",
           instagramLink: "",
@@ -56,56 +56,26 @@ const tests: ComponentTest[] = [
           expandedFooterLinks: [
             {
               label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              links: testFooterLinks,
             },
             {
               label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              links: testFooterLinks,
             },
             {
               label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              links: testFooterLinks,
             },
             {
               label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              links: testFooterLinks,
             },
           ],
         },
         secondaryFooter: {
           show: false,
           copyrightMessage: { en: "", hasLocalizedValue: "true" },
-          secondaryFooterLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-          ],
+          secondaryFooterLinks: testFooterLinks,
         },
       },
       styles: {
@@ -144,14 +114,8 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryFooter: {
-          logo: "https://placehold.co/100",
-          footerLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-          ],
+          logo: testLogoUrl,
+          footerLinks: testFooterLinks,
           xLink: "https://x.com/yext",
           facebookLink: "https://facebook.com/yext",
           instagramLink: "https://instagram.com/yext",
@@ -167,12 +131,12 @@ const tests: ComponentTest[] = [
           expandedFooterLinks: [
             {
               label: "Footer Label LONG LONG LONG",
-              links: [version10FooterLink, version10FooterLink],
+              links: testFooterLinks,
             },
             {
               label: "Footer Label",
               links: [
-                version10FooterLink,
+                testFooterLink,
                 {
                   linkType: "URL",
                   label: {
@@ -181,30 +145,19 @@ const tests: ComponentTest[] = [
                   },
                   link: "#",
                 },
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
+                ...testFooterLinks,
               ],
             },
             {
               label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              links: testFooterLinks,
             },
           ],
         },
         secondaryFooter: {
           show: true,
           copyrightMessage: { en: "Copyright 2025", hasLocalizedValue: "true" },
-          secondaryFooterLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-          ],
+          secondaryFooterLinks: testFooterLinks,
         },
       },
       styles: {
@@ -277,78 +230,77 @@ const tests: ComponentTest[] = [
     version: 10,
   },
   {
-    name: "version 11 props - expanded",
+    name: "version 20 props - expanded",
     document: {},
     props: {
       data: {
         primaryFooter: {
-          logo: "https://placehold.co/100",
-          footerLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-          ],
+          logo: testLogoUrl,
+          footerLinks: testFooterLinks,
           xLink: "https://x.com/yext",
           facebookLink: "https://facebook.com/yext",
-          instagramLink: "https://instagram.com/yext",
-          pinterestLink: "https://pinterest.com/yext",
-          linkedInLink: "https://linkedin.com/in/yext",
-          youtubeLink: "https://youtube.com/c/yext",
-          tiktokLink: "https://tiktok.com/@yext",
+          instagramLink: "",
+          pinterestLink: "",
+          linkedInLink: "",
+          youtubeLink: "",
+          tiktokLink: "",
           utilityImages: [
-            { url: "https://placehold.co/20", linkTarget: "https://yext.com" },
-            { url: "https://placehold.co/50x20" },
+            {
+              url: "https://placehold.co/20",
+              linkTarget: "https://yext.com",
+            },
           ],
           expandedFooter: true,
           expandedFooterLinks: [
             {
-              label: "Footer Label LONG LONG LONG",
-              links: [version10FooterLink, version10FooterLink],
+              label: {
+                en: "Footer Label",
+                hasLocalizedValue: "true",
+              },
+              links: testFooterLinks,
             },
             {
-              label: "Footer Label",
-              links: [
-                version10FooterLink,
-                {
-                  linkType: "URL",
-                  label: {
-                    en: "Footer Link LONG LONG LONG LONG",
-                    hasLocalizedValue: "true",
-                  },
-                  link: "#",
-                },
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              label: {
+                en: "Footer Label",
+                hasLocalizedValue: "true",
+              },
+              links: testFooterLinks,
             },
             {
-              label: "Footer Label",
-              links: [
-                version10FooterLink,
-                version10FooterLink,
-                version10FooterLink,
-              ],
+              label: {
+                en: "Footer Label",
+                hasLocalizedValue: "true",
+              },
+              links: testFooterLinks,
+            },
+            {
+              label: {
+                en: "Footer Label",
+                hasLocalizedValue: "true",
+              },
+              links: testFooterLinks,
             },
           ],
         },
         secondaryFooter: {
           show: true,
-          copyrightMessage: { en: "Copyright 2025", hasLocalizedValue: "true" },
-          secondaryFooterLinks: [
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-            version10FooterLink,
-          ],
+          copyrightMessage: {
+            en: "",
+            hasLocalizedValue: "true",
+          },
+          secondaryFooterLinks: testFooterLinks,
         },
       },
       styles: {
         primaryFooter: {
-          logo: { width: 200, aspectRatio: 4 },
-          utilityImages: { width: 50, aspectRatio: 1.78 },
+          logo: {
+            width: 0,
+            aspectRatio: 1.78,
+          },
+          utilityImages: {
+            width: 0,
+            aspectRatio: 1,
+          },
           backgroundColor: {
             bgColor: "bg-palette-primary-dark",
             textColor: "text-white",
@@ -357,16 +309,16 @@ const tests: ComponentTest[] = [
         },
         secondaryFooter: {
           backgroundColor: {
-            bgColor: "bg-palette-tertiary-light",
+            bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
-          linksAlignment: "right",
+          linksAlignment: "left",
         },
-        maxWidth: "full",
+        maxWidth: "theme",
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 10,
+    version: 20,
   },
   {
     name: "version 20 props - expanded",
@@ -515,6 +467,7 @@ const socialLinkTestCases = [
     expected: false,
   },
 ];
+
 describe("ExpandedFooter", async () => {
   const puckConfig: Config = {
     components: { ExpandedFooter },
@@ -524,6 +477,7 @@ describe("ExpandedFooter", async () => {
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
@@ -566,7 +520,7 @@ describe("ExpandedFooter", async () => {
 
       await expect(
         `ExpandedFooter/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ useFullPage: true });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
