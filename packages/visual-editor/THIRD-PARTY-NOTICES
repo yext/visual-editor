@@ -412,7 +412,7 @@ Apache License
 
 The following npm package may be included in this product:
 
- - @microsoft/api-documenter@7.26.30
+ - @microsoft/api-documenter@7.26.32
 
 This package contains the following license:
 
@@ -445,7 +445,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - @microsoft/api-extractor@7.52.9
+ - @microsoft/api-extractor@7.52.11
 
 This package contains the following license:
 
@@ -1536,7 +1536,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - react-i18next@15.6.1
+ - react-i18next@15.6.0
 
 This package contains the following license:
 
