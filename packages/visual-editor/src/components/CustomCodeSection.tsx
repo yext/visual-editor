@@ -103,11 +103,10 @@ const EmptyCustomCodeSection = () => {
  * @returns The processed HTML string with Handlebars expressions replaced, or the original HTML if not applicable.
  */
 function processHandlebarsTemplate(html: string, data: StreamDocument): string {
-  console.log("process data", data);
-
   if (!html) {
     return html;
   }
+
   // Only process if handlebars syntax is present
   if (/{{[^}]+}}/.test(html)) {
     try {
@@ -127,14 +126,20 @@ const CustomCodeSectionWrapper = ({
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
-  console.log("Stream Document on Live Page:", streamDocument);
-  const processedHtml = React.useMemo(
-    () => processHandlebarsTemplate(html, streamDocument),
-    [html, streamDocument]
+
+  const stableStreamDoc = React.useMemo(
+    () => streamDocument,
+    [JSON.stringify(streamDocument)]
   );
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
+
+  const processedHtml = React.useMemo(
+    () => processHandlebarsTemplate(html, stableStreamDoc),
+    [html, stableStreamDoc]
+  );
 
   React.useEffect(() => {
     if (!containerRef.current) {
