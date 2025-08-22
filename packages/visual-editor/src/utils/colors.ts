@@ -66,6 +66,65 @@ export const hexToHSL = (H: string): number[] | undefined => {
 };
 
 /**
+ * Converts a color string returned by window.getComputedStyle to a hex color string.
+ * getComputedStyle can return a variety of color values.
+ * @param colorString The computed style color string (e.g., "rgb(255, 0, 0)").
+ * @returns The hex color string (e.g., "#ff0000") or an empty string if conversion fails.
+ */
+export const convertComputedStyleColorToHex = (colorString: string): string => {
+  // A helper function to convert a value to a 2-char hex string
+  const toHex = (c: number) => {
+    const hex = Math.round(c).toString(16).toUpperCase();
+    return hex.length === 1 ? "0" + hex : hex;
+  };
+
+  // 1. Handle rgb() format
+  const rgbMatch = colorString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+
+  if (rgbMatch) {
+    const [, r, g, b] = rgbMatch.map(parseFloat);
+    if ([r, g, b].some((c) => c < 0 || c > 255)) {
+      return "";
+    }
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+
+  // 2. Handle rgba() format
+  const rgbaMatch = colorString.match(
+    /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)$/
+  );
+  if (rgbaMatch) {
+    const [, r, g, b, a] = rgbaMatch.map(parseFloat);
+    if ([r, g, b].some((c) => c < 0 || c > 255)) {
+      return "";
+    }
+
+    // We'll only return a hex if the color is fully opaque (alpha === 1)
+    if (a === 1) {
+      return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+  }
+
+  // 3. Handle color(srgb ...) format
+  const srgbMatch = colorString.match(
+    /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\)$/
+  );
+  if (srgbMatch) {
+    // The values from color(srgb ...) are floats from 0-1, so we multiply by 255
+    const [, r, g, b] = srgbMatch.map(parseFloat).map((c) => c * 255);
+    if ([r, g, b].some((c) => c < 0 || c > 255)) {
+      return "";
+    }
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+
+  // If no format is matched, return empty
+  return "";
+};
+
+/**
  * luminanceFromRGB returns the luminance value from an rgb color
  * @param H [r, g, b]
  * @returns {number | undefined} luminance if conversion succeeds

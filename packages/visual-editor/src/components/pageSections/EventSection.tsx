@@ -80,7 +80,7 @@ export interface EventSectionProps {
   styles: EventStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -154,6 +154,15 @@ const eventSectionFields: Fields<EventSectionProps> = {
             options: "CTA_VARIANT",
           }),
         },
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
@@ -233,8 +242,15 @@ const EventCard = ({
               i18n.language,
               streamDocument
             )}
-            link={event.cta.link}
+            link={resolveComponentData(
+              event.cta.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={event.cta.linkType}
+            ctaType={event.cta.ctaType}
+            coordinate={event.cta.coordinate}
+            presetImageType={event.cta.presetImageType}
             variant={ctaVariant}
           />
         )}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, DropZone, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 import {
   backgroundColors,
@@ -9,6 +9,7 @@ import {
   YextField,
   VisibilityWrapper,
   LayoutBlockCategory,
+  msg,
 } from "@yext/visual-editor";
 
 export interface FlexProps extends layoutProps {
@@ -17,9 +18,13 @@ export interface FlexProps extends layoutProps {
   direction: "flex-row" | "flex-col";
   wrap: "wrap" | "nowrap";
   liveVisibility: boolean;
+  flexZone: Slot;
 }
 
-const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
+const FlexContainer = React.forwardRef<
+  HTMLDivElement,
+  Parameters<PuckComponent<FlexProps>>[0]
+>(
   (
     {
       direction,
@@ -30,6 +35,7 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
       verticalPadding,
       horizontalPadding,
       backgroundColor,
+      flexZone: FlexZone,
     },
     ref
   ) => {
@@ -44,13 +50,12 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
         )}
         ref={ref}
       >
-        <DropZone
+        <FlexZone
           className={themeManagerCn(
             layoutVariants({ gap }),
             "flex w-full",
             direction
           )}
-          zone="flex-container"
           style={{
             justifyContent,
             alignItems,
@@ -66,36 +71,42 @@ const FlexContainer = React.forwardRef<HTMLDivElement, FlexProps>(
 FlexContainer.displayName = "Flex";
 
 const flexContainerFields: Fields<FlexProps> = {
-  direction: YextField("Direction", {
+  direction: YextField(msg("fields.direction", "Direction"), {
     type: "radio",
     options: [
       { label: "Horizontal", value: "flex-row" },
       { label: "Vertical", value: "flex-col" },
     ],
   }),
-  justifyContent: YextField("Justify Content", {
+  justifyContent: YextField(msg("fields.justifyContent", "Justify Content"), {
     type: "radio",
     options: "JUSTIFY_CONTENT",
   }),
-  alignItems: YextField("Align Items", {
+  alignItems: YextField(msg("fields.alignItems", "Align Items"), {
     type: "radio",
     options: "JUSTIFY_CONTENT",
   }),
-  wrap: YextField("Wrap", {
+  wrap: YextField(msg("fields.wrap", "Wrap"), {
     type: "radio",
     options: [
       { label: "No Wrap", value: "nowrap" },
       { label: "Wrap", value: "wrap" },
     ],
   }),
+  flexZone: {
+    type: "slot",
+  },
   ...layoutFields,
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  liveVisibility: YextField(
+    msg("fields.liveVisibility", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: "Show", value: true },
+        { label: "Hide", value: false },
+      ],
+    }
+  ),
 };
 
 export const Flex: ComponentConfig<FlexProps> = {
@@ -107,6 +118,7 @@ export const Flex: ComponentConfig<FlexProps> = {
     alignItems: "start",
     wrap: "nowrap",
     gap: "4",
+    flexZone: [],
     verticalPadding: "0",
     horizontalPadding: "0",
     backgroundColor: backgroundColors.background1.value,

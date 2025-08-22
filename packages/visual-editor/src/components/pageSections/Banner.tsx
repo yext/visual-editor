@@ -57,6 +57,12 @@ export interface BannerSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+
+  /**
+   * Indicates which props should not be checked for missing translations.
+   * @internal
+   */
+  ignoreLocaleWarning?: string[];
 }
 
 const bannerSectionFields: Fields<BannerSectionProps> = {
@@ -66,7 +72,7 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
       text: YextField<any, TranslatableRichText>(msg("fields.text", "Text"), {
         type: "entityField",
         filter: {
-          types: ["type.string"],
+          types: ["type.rich_text_v2"],
         },
       }),
     },
@@ -155,6 +161,7 @@ export const BannerSection: ComponentConfig<BannerSectionProps> = {
       textAlignment: "center",
     },
     liveVisibility: true,
+    ignoreLocaleWarning: ["data.text"],
   },
   render: (props) => (
     <VisibilityWrapper

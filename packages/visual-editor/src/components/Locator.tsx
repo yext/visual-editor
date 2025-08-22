@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   AnalyticsProvider,
   CardComponent,
@@ -49,8 +49,9 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { FaSliders } from "react-icons/fa6";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -70,12 +71,6 @@ export interface LocatorProps {
    * @defaultValue false
    */
   openNowButton?: boolean;
-
-  /** @internal to be set via withPropOverrides */
-  entityTypeEnvVar?: string;
-
-  /** @internal to be set via withPropOverrides */
-  experienceKeyEnvVar?: string;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -129,12 +124,12 @@ export const LocatorComponent: ComponentConfig<LocatorProps> = {
   render: (props) => <LocatorWrapper {...props} />,
 };
 
-const LocatorWrapper: React.FC<LocatorProps> = (props) => {
+const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
       streamDocument,
-      props.experienceKeyEnvVar
+      props.puck.metadata?.experienceKeyEnvVar
     );
     if (searchHeadlessConfig === undefined) {
       return { searchAnalyticsConfig: undefined, searcher: undefined };
@@ -167,10 +162,13 @@ const LocatorWrapper: React.FC<LocatorProps> = (props) => {
 
 type SearchState = "not started" | "loading" | "complete";
 
-const LocatorInternal: React.FC<LocatorProps> = (props) => {
+const LocatorInternal = ({
+  mapStyle,
+  openNowButton,
+  puck,
+}: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
-  const { mapStyle, openNowButton, entityTypeEnvVar } = props;
-  const entityType = getEntityType(entityTypeEnvVar);
+  const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -379,9 +377,9 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
   }, [searchFilters]);
 
   return (
-    <div className="components flex ve-h-screen ve-w-screen mx-auto">
+    <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="w-full ve-h-screen md:w-2/5 lg:w-1/3 flex flex-col">
+      <div className="h-screen md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
@@ -403,13 +401,28 @@ const LocatorInternal: React.FC<LocatorProps> = (props) => {
             }}
           />
           {openNowButton && (
-            <Toggle
-              pressed={isSelected}
-              onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-              className="py-2 px-2"
-            >
-              {t("openNow", "Open Now")}
-            </Toggle>
+            <div className={"flex flex-row gap-2 items-center"}>
+              <div className={"flex items-center gap-1"}>
+                <FaSliders />
+                <span className="font-bold">
+                  {t("locatorFilterLabel", "Filter:")}
+                </span>
+              </div>
+              <Toggle
+                pressed={isSelected}
+                onPressedChange={(pressed) => handleOpenNowClick(pressed)}
+                className="inline-flex py-1 px-3 w-auto"
+              >
+                <span className="inline-flex items-center gap-2">
+                  {isSelected ? (
+                    <FaCheckSquare className="inline-block" />
+                  ) : (
+                    <FaRegSquare className="inline-block" />
+                  )}
+                  {t("openNow", "Open Now")}
+                </span>
+              </Toggle>
+            </div>
           )}
         </div>
         <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">

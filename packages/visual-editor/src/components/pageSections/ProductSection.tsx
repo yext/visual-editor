@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   ProductSectionType,
@@ -24,6 +23,7 @@ import {
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
+  CTA,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -77,7 +77,7 @@ export interface ProductSectionProps {
   styles: ProductStyles;
 
   /** @internal  */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -154,13 +154,22 @@ const productSectionFields: Fields<ProductSectionProps> = {
       }),
     },
   }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -235,13 +244,24 @@ const ProductCard = ({
           <CTA
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
-            label={resolveComponentData(
-              product.cta.label,
+            label={
+              product.cta.label
+                ? resolveComponentData(
+                    product.cta.label,
+                    i18n.language,
+                    streamDocument
+                  )
+                : undefined
+            }
+            link={resolveComponentData(
+              product.cta.link,
               i18n.language,
               streamDocument
             )}
-            link={product.cta.link}
             linkType={product.cta.linkType}
+            ctaType={product.cta.ctaType}
+            coordinate={product.cta.coordinate}
+            presetImageType={product.cta.presetImageType}
             className="mt-auto"
           />
         )}

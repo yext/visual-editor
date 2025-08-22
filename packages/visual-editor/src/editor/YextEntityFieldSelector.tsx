@@ -17,7 +17,7 @@ import {
   TEXT_LIST_CONSTANT_CONFIG,
   TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/TextList.tsx";
-import { CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/CallToAction.tsx";
+import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
@@ -69,7 +69,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
-  "type.cta": CTA_CONSTANT_CONFIG,
+  "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
   "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
@@ -399,7 +399,9 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       : [
           {
             value: "",
-            label: pt("basicSelectorContentLabel", "Select a Content field"),
+            label: pt("entityTypeField", "{{entityType}} Field", {
+              entityType: templateMetadata.entityTypeDisplayName,
+            }),
           },
           ...entityFieldOptions,
         ];
@@ -421,10 +423,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       }
     }
 
-    // TODO: translation concatenation
     return BasicSelector({
-      label:
-        templateMetadata.entityTypeDisplayName + " " + pt("field", "Field"),
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),

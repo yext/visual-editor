@@ -1,11 +1,9 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   Address,
   AddressType,
   AnalyticsScopeProvider,
-  DayOfWeekNames,
   getDirections,
   HoursType,
 } from "@yext/pages-components";
@@ -31,21 +29,32 @@ import {
   pt,
   ThemeOptions,
   usePlatformTranslation,
-  TranslatableStringField,
   getAnalyticsScopeHash,
-  CTAProps,
   resolveComponentData,
 } from "@yext/visual-editor";
+import {
+  AddressDataField,
+  AddressProps,
+  AddressStyleFields,
+} from "../contentBlocks/Address.tsx";
+import {
+  PhoneDataFields,
+  PhoneProps,
+  PhoneStyleFields,
+} from "../contentBlocks/Phone.tsx";
+import { EmailsFields } from "../contentBlocks/Emails.tsx";
+import {
+  HoursTableDataField,
+  HoursTableProps,
+  HoursTableStyleFields,
+} from "../contentBlocks/HoursTable.tsx";
 
 export interface CoreInfoData {
   /** Content for the "Information" column. */
   info: {
     headingText: YextEntityField<TranslatableString>;
     address: YextEntityField<AddressType>;
-    phoneNumbers: Array<{
-      number: YextEntityField<string>;
-      label: TranslatableString;
-    }>;
+    phoneNumbers: Array<PhoneProps["data"]>;
     emails: YextEntityField<string[]>;
   };
 
@@ -76,20 +85,13 @@ export interface CoreInfoStyles {
   };
 
   /** Styling for the "Information" column. */
-  info: {
-    showGetDirectionsLink: boolean;
-    phoneFormat: "domestic" | "international";
-    includePhoneHyperlink: boolean;
-    emailsListLength?: number;
-    ctaVariant: CTAProps["variant"];
-  };
+  info: AddressProps["styles"] &
+    PhoneProps["styles"] & {
+      emailsListLength?: number;
+    };
 
   /** Styling for the "Hours" column. */
-  hours: {
-    startOfWeek: keyof DayOfWeekNames | "today";
-    collapseDays: boolean;
-    showAdditionalHoursText: boolean;
-  };
+  hours: Omit<HoursTableProps["styles"], "alignment">;
 }
 
 export interface CoreInfoSectionProps {
@@ -106,7 +108,7 @@ export interface CoreInfoSectionProps {
   styles: CoreInfoStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -131,29 +133,10 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               filter: { types: ["type.string"] },
             }
           ),
-          address: YextField<any, AddressType>(
-            msg("fields.address", "Address"),
-            {
-              type: "entityField",
-              filter: { types: ["type.address"] },
-            }
-          ),
+          address: AddressDataField,
           phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
             type: "array",
-            arrayFields: {
-              number: YextField<any, string>(
-                msg("fields.phoneNumber", "Phone Number"),
-                {
-                  type: "entityField",
-                  filter: {
-                    types: ["type.phone"],
-                  },
-                }
-              ),
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
-              }),
-            },
+            arrayFields: PhoneDataFields,
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
               const streamDocument = useDocument();
@@ -168,15 +151,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               return pt("phone", "Phone");
             },
           }),
-          emails: YextField<any, string[]>(msg("fields.emails", "Emails"), {
-            type: "entityField",
-            filter: {
-              types: ["type.string"],
-              includeListsOnly: true,
-              allowList: ["emails"],
-            },
-            disallowTranslation: true,
-          }),
+          emails: EmailsFields.list,
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
@@ -191,12 +166,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
               },
             }
           ),
-          hours: YextField(msg("fields.hours", "Hours"), {
-            type: "entityField",
-            filter: {
-              types: ["type.hours"],
-            },
-          }),
+          hours: HoursTableDataField,
         },
       }),
       services: YextField(msg("fields.servicesColumn", "Services Column"), {
@@ -253,68 +223,22 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       info: YextField(msg("fields.infoColumn", "Info Column"), {
         type: "object",
         objectFields: {
-          showGetDirectionsLink: YextField(
-            msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
-            type: "radio",
-            options: "PHONE_OPTIONS",
-          }),
-          includePhoneHyperlink: YextField(
-            msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-            type: "radio",
-            options: "CTA_VARIANT",
-          }),
+          ...AddressStyleFields,
+          ...PhoneStyleFields,
         },
       }),
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
         type: "object",
-        objectFields: {
-          startOfWeek: YextField(
-            msg("fields.startOfTheWeek", "Start of the Week"),
-            {
-              type: "select",
-              hasSearch: true,
-              options: "HOURS_OPTIONS",
-            }
-          ),
-          collapseDays: YextField(msg("fields.collapseDays", "Collapse Days"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.yes", "Yes"), value: true },
-              { label: msg("fields.options.no", "No"), value: false },
-            ],
-          }),
-          showAdditionalHoursText: YextField(
-            msg(
-              "fields.options.showAdditionalHoursText",
-              "Show additional hours text"
-            ),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-        },
+        objectFields: HoursTableStyleFields,
+      }),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
@@ -353,6 +277,31 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     locale,
     streamDocument
   );
+
+  type ResolvedPhoneNumber = {
+    number: string;
+    label?: string;
+  };
+  const resolvedPhoneNumbers: ResolvedPhoneNumber[] =
+    data?.info?.phoneNumbers
+      ?.map((item): ResolvedPhoneNumber | null => {
+        const number = resolveComponentData(
+          item.number,
+          locale,
+          streamDocument
+        );
+        const label = resolveComponentData(
+          item.label,
+          i18n.language,
+          streamDocument
+        );
+
+        if (!number) return null;
+
+        return { number, label };
+      })
+      ?.filter((item): item is ResolvedPhoneNumber => item !== null) ?? [];
+
   const hoursHeadingText = resolveComponentData(
     data.hours.headingText,
     locale,
@@ -385,6 +334,16 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     additionalHoursText: string;
   };
 
+  const hasCoreInfo: boolean =
+    !!addressHeadingText ||
+    !!resolvedAddress?.line1 ||
+    !!resolvedAddress?.city ||
+    !!resolvedAddress?.postalCode ||
+    !!resolvedAddress?.countryCode ||
+    (resolvedPhoneNumbers?.length ?? 0) > 0 ||
+    (resolvedEmails?.length ?? 0) > 0 ||
+    !!(coordinates && styles?.info?.showGetDirectionsLink);
+
   const justifyClass = styles?.heading?.align
     ? {
         left: "justify-start",
@@ -393,144 +352,145 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       }[styles.heading.align]
     : "justify-start";
 
+  const sectionCount = [hasCoreInfo, resolvedHours, servicesList].filter(
+    Boolean
+  ).length;
+
+  const gridColsClass = [
+    "grid-cols-1",
+    `md:grid-cols-${Math.min(sectionCount, 2)}`,
+    `lg:grid-cols-${Math.min(sectionCount, 3)}`,
+  ].join(" ");
+
   return (
     <PageSection
-      className={`flex flex-col md:flex-row justify-between w-full gap-8 ${
-        (!resolvedHours && servicesList) || (resolvedHours && !servicesList)
-          ? "md:[&>section]:w-1/2"
-          : "md:[&>section]:w-1/3"
-      }`}
+      className={`grid w-full gap-8 ${gridColsClass}`}
       background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >
-      <section
-        aria-label={t("informationSection", "Information Section")}
-        className="flex flex-col gap-4"
-      >
-        {addressHeadingText && (
-          <EntityField
-            displayName={pt("fields.headingText", "Heading Text")}
-            fieldId={data.info.headingText.field}
-            constantValueEnabled={data.info.headingText.constantValueEnabled}
-          >
-            <div className={`flex ${justifyClass}`}>
-              <Heading level={styles?.heading?.level ?? 2}>
-                {addressHeadingText}
-              </Heading>
-            </div>
-          </EntityField>
-        )}
-        <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
-          {resolvedAddress && (
+      {hasCoreInfo && (
+        <section
+          aria-label={t("informationSection", "Information Section")}
+          className="flex flex-col gap-4"
+        >
+          {addressHeadingText && (
             <EntityField
-              displayName={pt("fields.address", "Address")}
-              fieldId={data.info.address.field}
-              constantValueEnabled={data.info.address.constantValueEnabled}
+              displayName={pt("fields.headingText", "Heading Text")}
+              fieldId={data.info.headingText.field}
+              constantValueEnabled={data.info.headingText.constantValueEnabled}
             >
-              <Address
-                address={resolvedAddress}
-                lines={[
-                  ["line1"],
-                  ["line2"],
-                  ["city", ",", "region", "postalCode"],
-                ]}
-              />
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles?.heading?.level ?? 2}>
+                  {addressHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
-          {coordinates && styles.info.showGetDirectionsLink && (
-            <CTA
-              eventName={`getDirections`}
-              className="font-bold"
-              link={coordinates}
-              label={t("getDirections", "Get Directions")}
-              linkType="DRIVING_DIRECTIONS"
-              target="_blank"
-              variant={styles.info.ctaVariant}
-            />
-          )}
-        </div>
-        {data.info.phoneNumbers && (
-          <ul className="flex flex-col gap-4">
-            {data.info.phoneNumbers.map((item, idx) => {
-              const resolvedNumber = resolveComponentData(
-                item.number,
-                locale,
-                streamDocument
-              );
-              if (!resolvedNumber) {
-                return;
-              }
-
-              const phoneLabel = resolveComponentData(
-                item.label,
-                i18n.language,
-                streamDocument
-              );
-
-              return (
-                <li key={phoneLabel} className="flex gap-2 items-center">
-                  <EntityField
-                    displayName={pt("fields.phoneNumber", "Phone Number")}
-                    fieldId={item.number.field}
-                    constantValueEnabled={item.number.constantValueEnabled}
+          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+            {resolvedAddress && (
+              <EntityField
+                displayName={pt("fields.address", "Address")}
+                fieldId={data.info.address.field}
+                constantValueEnabled={data.info.address.constantValueEnabled}
+              >
+                <Address
+                  address={resolvedAddress}
+                  lines={[
+                    ["line1"],
+                    ["line2"],
+                    ["city", ",", "region", "postalCode"],
+                  ]}
+                />
+              </EntityField>
+            )}
+            {coordinates && styles.info.showGetDirectionsLink && (
+              <CTA
+                eventName={`getDirections`}
+                className="font-bold"
+                link={coordinates}
+                label={t("getDirections", "Get Directions")}
+                linkType="DRIVING_DIRECTIONS"
+                target="_blank"
+                variant={styles.info.ctaVariant}
+              />
+            )}
+          </div>
+          {resolvedPhoneNumbers.length > 0 && (
+            <ul className="flex flex-col gap-4">
+              {resolvedPhoneNumbers.map((phone, idx) => {
+                return (
+                  <li
+                    key={`${phone.number}-${idx}`}
+                    className="flex gap-2 items-center"
                   >
-                    <div className={"flex items-center gap-3"}>
-                      <div className="flex gap-2 items-center">
-                        <PhoneAtom
-                          eventName={`phone${idx}`}
-                          backgroundColor={backgroundColors.background2.value}
-                          label={phoneLabel}
-                          phoneNumber={resolvedNumber}
-                          format={styles.info.phoneFormat}
-                          includeHyperlink={styles.info.includePhoneHyperlink}
-                          includeIcon={true}
-                        />
-                      </div>
-                    </div>
-                  </EntityField>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {resolvedEmails && (
-          <EntityField
-            displayName={pt("fields.emailList", "Email List")}
-            fieldId={data.info.emails.field}
-            constantValueEnabled={data.info.emails.constantValueEnabled}
-          >
-            <ul className="list-inside flex flex-col gap-4">
-              {resolvedEmails
-                .slice(
-                  0,
-                  data.info.emails.constantValueEnabled
-                    ? resolvedEmails.length
-                    : Math.min(
-                        resolvedEmails.length,
-                        styles.info.emailsListLength!
-                      )
-                )
-                .map((email, index) => (
-                  <li key={index} className={`flex items-center gap-3`}>
-                    <Background
-                      background={backgroundColors.background2.value}
-                      className={`h-10 w-10 flex justify-center rounded-full items-center`}
+                    {/* Assuming you want to associate this with the original EntityField data —
+              fallback to data.info.phoneNumbers[idx] */}
+                    <EntityField
+                      displayName={pt("fields.phoneNumber", "Phone Number")}
+                      fieldId={data.info.phoneNumbers[idx]?.number?.field}
+                      constantValueEnabled={
+                        data.info.phoneNumbers[idx]?.number
+                          ?.constantValueEnabled
+                      }
                     >
-                      <FaRegEnvelope className="w-4 h-4" />
-                    </Background>
-                    <CTA
-                      eventName={`email${index}`}
-                      link={email}
-                      label={email}
-                      linkType="EMAIL"
-                      variant="link"
-                    />
+                      <div className="flex items-center gap-3">
+                        <div className="flex gap-2 items-center">
+                          <PhoneAtom
+                            eventName={`phone${idx}`}
+                            backgroundColor={backgroundColors.background2.value}
+                            label={phone.label}
+                            phoneNumber={phone.number}
+                            format={styles.info.phoneFormat}
+                            includeHyperlink={styles.info.includePhoneHyperlink}
+                            includeIcon={true}
+                          />
+                        </div>
+                      </div>
+                    </EntityField>
                   </li>
-                ))}
+                );
+              })}
             </ul>
-          </EntityField>
-        )}
-      </section>
+          )}
+          {resolvedEmails && (
+            <EntityField
+              displayName={pt("fields.emailList", "Email List")}
+              fieldId={data.info.emails.field}
+              constantValueEnabled={data.info.emails.constantValueEnabled}
+            >
+              <ul className="list-inside flex flex-col gap-4">
+                {resolvedEmails
+                  .slice(
+                    0,
+                    data.info.emails.constantValueEnabled
+                      ? resolvedEmails.length
+                      : Math.min(
+                          resolvedEmails.length,
+                          styles.info.emailsListLength!
+                        )
+                  )
+                  .map((email, index) => (
+                    <li key={index} className={`flex items-center gap-3`}>
+                      <Background
+                        background={backgroundColors.background2.value}
+                        className={`h-10 w-10 flex justify-center rounded-full items-center`}
+                      >
+                        <FaRegEnvelope className="w-4 h-4" />
+                      </Background>
+                      <CTA
+                        eventName={`email${index}`}
+                        link={email}
+                        label={email}
+                        linkType="EMAIL"
+                        variant="link"
+                      />
+                    </li>
+                  ))}
+              </ul>
+            </EntityField>
+          )}
+        </section>
+      )}
       {resolvedHours && (
         <section
           aria-label={t("hoursSection", "Hours Section")}
@@ -542,7 +502,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
               fieldId={data.hours.headingText.field}
               constantValueEnabled={data.hours.headingText.constantValueEnabled}
             >
-              <Heading level={styles.heading.level}>{hoursHeadingText}</Heading>
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles.heading.level}>
+                  {hoursHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
           <EntityField
@@ -581,9 +545,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 data.services.headingText.constantValueEnabled
               }
             >
-              <Heading level={styles.heading.level}>
-                {servicesHeadingText}
-              </Heading>
+              <div className={`flex ${justifyClass}`}>
+                <Heading level={styles.heading.level}>
+                  {servicesHeadingText}
+                </Heading>
+              </div>
             </EntityField>
           )}
           <EntityField

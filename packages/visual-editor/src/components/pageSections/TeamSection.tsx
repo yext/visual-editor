@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   PhoneAtom,
@@ -25,6 +24,7 @@ import {
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
+  CTA,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { FaEnvelope } from "react-icons/fa";
@@ -79,7 +79,7 @@ export interface TeamSectionProps {
   styles: TeamStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -156,13 +156,22 @@ const TeamSectionFields: Fields<TeamSectionProps> = {
       }),
     },
   }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -196,7 +205,7 @@ const PersonCard = ({
               aspectRatio={
                 person.headshot.width && person.headshot.height
                   ? person.headshot.width / person.headshot.height
-                  : 1.78
+                  : 1
               }
             />
           )}
@@ -251,6 +260,7 @@ const PersonCard = ({
                 label={person.email}
                 linkType="EMAIL"
                 variant="link"
+                ctaType="textAndLink"
               />
             </div>
           )}
@@ -258,9 +268,16 @@ const PersonCard = ({
             <div className="flex justify-start gap-2">
               <CTA
                 eventName={`cta${cardNumber}`}
-                label={resolveComponentData(person.cta.label, i18n.language)}
-                link={person.cta.link}
+                label={
+                  person.cta.label
+                    ? resolveComponentData(person.cta.label, i18n.language)
+                    : undefined
+                }
+                link={resolveComponentData(person.cta.link, i18n.language)}
                 linkType={person.cta.linkType}
+                ctaType={person.cta.ctaType}
+                coordinate={person.cta.coordinate}
+                presetImageType={person.cta.presetImageType}
                 variant={ctaVariant}
               />
             </div>

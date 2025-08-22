@@ -14,14 +14,9 @@ import {
   VisibilityWrapper,
   TranslatableString,
   resolveComponentData,
+  msg,
 } from "@yext/visual-editor";
-import {
-  ComponentConfig,
-  DropZone,
-  Fields,
-  WithId,
-  WithPuckProps,
-} from "@measured/puck";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import { useTranslation } from "react-i18next";
 
 export type SectionContainerProps = {
@@ -32,46 +27,56 @@ export type SectionContainerProps = {
     alignment: "left" | "right" | "center";
   };
   liveVisibility: boolean;
+  sectionContent: Slot;
 };
 
 const sectionContainerFields: Fields<SectionContainerProps> = {
-  background: YextField("Background Color", {
+  background: YextField(msg("fields.backgroundColor", "Background Color"), {
     type: "select",
     options: "BACKGROUND_COLOR",
   }),
-  sectionHeading: YextField("Section Heading", {
+  sectionHeading: YextField(msg("fields.sectionHeading", "Section Heading"), {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString>("Section Heading Text", {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      level: YextField("Heading Level", {
+      text: YextField<any, TranslatableString>(
+        msg("fields.sectionHeadingText", "Section Heading Text"),
+        {
+          type: "entityField",
+          filter: {
+            types: ["type.string"],
+          },
+        }
+      ),
+      level: YextField(msg("fields.headingLevel", "Heading Level"), {
         type: "select",
         hasSearch: true,
         options: "HEADING_LEVEL",
       }),
-      alignment: YextField("Alignment", {
+      alignment: YextField(msg("fields.alignment", "Alignment"), {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       }),
     },
   }),
-  liveVisibility: YextField("Visible on Live Page", {
-    type: "radio",
-    options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
-    ],
-  }),
+  sectionContent: {
+    type: "slot",
+  },
+  liveVisibility: YextField(
+    msg("fields.liveVisibility", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: "Show", value: true },
+        { label: "Hide", value: false },
+      ],
+    }
+  ),
 };
 
-const SectionContainerComponent = (
-  props: WithId<WithPuckProps<SectionContainerProps>>
+const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
+  props
 ) => {
-  const { background, sectionHeading } = props;
+  const { background, sectionHeading, sectionContent: SectionContent } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const locale = i18n.language;
@@ -98,10 +103,7 @@ const SectionContainerComponent = (
           {resolvedHeadingText}
         </Heading>
       )}
-      <DropZone
-        zone="page-section"
-        disallow={[...OtherCategory, ...PageSectionCategory]}
-      />
+      <SectionContent disallow={[...OtherCategory, ...PageSectionCategory]} />
     </PageSection>
   );
 };
@@ -120,6 +122,7 @@ export const SectionContainer: ComponentConfig<SectionContainerProps> = {
       level: 2,
       alignment: "left",
     },
+    sectionContent: [],
     liveVisibility: true,
   },
   render: (props) => (

@@ -16,6 +16,8 @@ import {
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
+const interactionsDelay = 200;
+
 const faqData = {
   faqs: [
     {
@@ -93,7 +95,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await q1.click();
         await q2.click();
-        await delay(200);
+        await delay(interactionsDelay);
       });
     },
   },
@@ -144,7 +146,7 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await q1.click();
         await q2.click();
-        await delay(200);
+        await delay(interactionsDelay);
       });
     },
   },
@@ -187,6 +189,10 @@ const tests: ComponentTest[] = [
     version: 10,
   },
 ];
+
+const screenshotThreshold = 10;
+// ignore differences in default browser link styling
+const ignoredScreenshotDifferences = [420, 422];
 
 describe("FAQSection", async () => {
   const puckConfig: Config = {
@@ -233,7 +239,10 @@ describe("FAQSection", async () => {
 
       await page.viewport(width, height);
 
-      await expect(`FAQsSection/[${viewportName}] ${name}`).toMatchScreenshot();
+      await expect(`FAQsSection/[${viewportName}] ${name}`).toMatchScreenshot({
+        ignoreExact: ignoredScreenshotDifferences,
+        customThreshold: screenshotThreshold,
+      });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -241,7 +250,10 @@ describe("FAQSection", async () => {
         await interactions(page);
         await expect(
           `FAQsSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({
+          ignoreExact: ignoredScreenshotDifferences,
+          customThreshold: screenshotThreshold,
+        });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

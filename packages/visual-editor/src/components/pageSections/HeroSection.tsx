@@ -1,38 +1,30 @@
-import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, DefaultComponentProps, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
   HeroSectionType,
-  useDocument,
-  EntityField,
   YextEntityField,
-  Image,
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-  CTA,
-  Heading,
-  PageSection,
   YextField,
   VisibilityWrapper,
   CTAProps,
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
-  HoursStatusAtom,
   TranslatableString,
   msg,
-  pt,
   getAnalyticsScopeHash,
-  ReviewStars,
-  getAggregateRating,
-  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
+} from "../contentBlocks/image/styling.ts";
+import { ClassicHero } from "./heroVariants/ClassicHero.js";
+import { CompactHero } from "./heroVariants/CompactHero.js";
+import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
+import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -70,16 +62,17 @@ export interface HeroData {
 
 export interface HeroStyles {
   /**
-   * The background color for the entire section.
+   * The visual variant for the hero section.
+   * @defaultValue classic
+   */
+  variant: "classic" | "immersive" | "spotlight" | "compact";
+
+  /**
+   * The background color for the entire section (classic and compact variants).
+   * The background color for the featured content (spotlight variant).
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
-
-  /**
-   * Positions the image to the left or right of the text content.
-   * @defaultValue right
-   */
-  imageOrientation: "left" | "right";
 
   /**
    * The HTML heading level for the business name.
@@ -106,9 +99,43 @@ export interface HeroStyles {
   secondaryCTA: CTAProps["variant"];
 
   /**
-   * Styling options for the hero image, such as aspect ratio.
+   * Styling options for the hero image.
+   * Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height.
+   * Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
+   * Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
+   * Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported).
    */
-  image: ImageStylingProps;
+  image: ImageStylingProps & { height?: number };
+
+  /**
+   * Container position on desktop (spotlight and immersive variants).
+   * @defaultValue left
+   */
+  desktopContainerPosition?: "left" | "center";
+
+  /**
+   * Content alignment for mobile viewports.
+   * @defaultValue left
+   */
+  mobileContentAlignment?: "left" | "center";
+
+  /**
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
+   */
+  showImage: boolean;
+
+  /**
+   * Positions the image to the left or right of the hero content on desktop (classic and compact variants).
+   * @defaultValue right
+   */
+  desktopImagePosition: "left" | "right";
+
+  /**
+   * Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).
+   * @defaultValue top
+   */
+  mobileImagePosition: "bottom" | "top";
 }
 
 export interface HeroSectionProps {
@@ -125,7 +152,7 @@ export interface HeroSectionProps {
   styles: HeroStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -135,6 +162,8 @@ export interface HeroSectionProps {
    */
   liveVisibility?: boolean;
 }
+
+export type HeroVariantProps = Pick<HeroSectionProps, "data" | "styles">;
 
 const heroSectionFields: Fields<HeroSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -164,7 +193,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           types: ["type.hours"],
         },
       }),
-      hero: YextStructFieldSelector({
+      hero: YextStructFieldSelector<HeroSectionType>({
         label: msg("fields.hero", "Hero"),
         filter: {
           type: ComponentFields.HeroSection.type,
@@ -185,31 +214,29 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.classic", "Classic"), value: "classic" },
+          {
+            label: msg("fields.options.immersive", "Immersive"),
+            value: "immersive",
+          },
+          {
+            label: msg("fields.options.spotlight", "Spotlight"),
+            value: "spotlight",
+          },
+          {
+            label: msg("fields.options.compact", "Compact"),
+            value: "compact",
+          },
+        ],
+      }),
       backgroundColor: YextField(
         msg("fields.backgroundColor", "Background Color"),
         {
           type: "select",
           options: "BACKGROUND_COLOR",
-        }
-      ),
-      imageOrientation: YextField(
-        msg("fields.imageOrientation", "Image Orientation"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
         }
       ),
       businessNameLevel: YextField(
@@ -245,9 +272,114 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "CTA_VARIANT",
         }
       ),
+      desktopContainerPosition: YextField(
+        msg("fields.desktopContainerPosition", "Desktop Container Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.center", "Center", {
+                context: "direction",
+              }),
+              value: "center",
+            },
+          ],
+        }
+      ),
+      mobileContentAlignment: YextField(
+        msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.center", "Center", {
+                context: "direction",
+              }),
+              value: "center",
+            },
+          ],
+        }
+      ),
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.true", "True"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.false", "False"),
+            value: false,
+          },
+        ],
+      }),
       image: YextField(msg("fields.image", "Image"), {
         type: "object",
-        objectFields: ImageStylingFields,
+        objectFields: {
+          height: {
+            type: "number",
+            min: 0,
+            label: msg("fields.height", "Height"),
+          },
+          ...ImageStylingFields,
+        },
+      }),
+      desktopImagePosition: YextField(
+        msg("fields.desktopImagePosition", "Desktop Image Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
+          ],
+        }
+      ),
+      mobileImagePosition: YextField(
+        msg("fields.mobileImagePosition", "Mobile Image Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.top", "Top"),
+              value: "top",
+            },
+            {
+              label: msg("fields.options.bottom", "Bottom"),
+              value: "bottom",
+            },
+          ],
+        }
+      ),
+    },
+  }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
       }),
     },
   }),
@@ -261,171 +393,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       ],
     }
   ),
-};
-
-const HeroSectionWrapper = ({ data, styles }: HeroSectionProps) => {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const streamDocument = useDocument() as any;
-  const resolvedBusinessName = resolveComponentData(
-    data?.businessName,
-    locale,
-    streamDocument
-  );
-  const resolvedLocalGeoModifier = resolveComponentData(
-    data?.localGeoModifier,
-    locale,
-    streamDocument
-  );
-  const resolvedHours = resolveComponentData(
-    data?.hours,
-    locale,
-    streamDocument
-  );
-  const resolvedHero = resolveComponentData(data?.hero, locale, streamDocument);
-
-  const { timezone } = streamDocument as {
-    timezone: string;
-  };
-
-  const { averageRating, reviewCount } = getAggregateRating(streamDocument);
-
-  return (
-    <PageSection
-      background={styles.backgroundColor}
-      aria-label={t("heroBanner", "Hero Banner")}
-      className={`flex flex-col gap-6 md:gap-10 ${
-        styles.imageOrientation === "right"
-          ? "md:flex-row"
-          : "md:flex-row-reverse"
-      }`}
-    >
-      <div
-        className="flex flex-col justify-center gap-y-6 w-full break-words md:gap-y-8"
-        aria-labelledby="hero-heading"
-      >
-        <header
-          className="flex flex-col gap-y-4"
-          aria-label={t("heroHeader", "Hero Header")}
-        >
-          <section
-            className="flex flex-col gap-y-0"
-            aria-label={t("businessInformation", "Business Information")}
-          >
-            {resolvedBusinessName && (
-              <EntityField
-                displayName={pt("fields.businessName", "Business Name")}
-                fieldId={data?.businessName.field}
-                constantValueEnabled={data?.businessName.constantValueEnabled}
-              >
-                <Heading level={styles?.businessNameLevel}>
-                  {resolvedBusinessName}
-                </Heading>
-              </EntityField>
-            )}
-            {resolvedLocalGeoModifier && (
-              <EntityField
-                displayName={pt("fields.localGeomodifier", "Local GeoModifier")}
-                fieldId={data?.localGeoModifier.field}
-                constantValueEnabled={
-                  data?.localGeoModifier.constantValueEnabled
-                }
-              >
-                <Heading level={styles?.localGeoModifierLevel}>
-                  {resolvedLocalGeoModifier}
-                </Heading>
-              </EntityField>
-            )}
-          </section>
-          {resolvedHours && (
-            <EntityField
-              displayName={pt("fields.hours", "Hours")}
-              fieldId={data?.hours.field}
-              constantValueEnabled={data?.hours.constantValueEnabled}
-            >
-              <HoursStatusAtom hours={resolvedHours} timezone={timezone} />
-            </EntityField>
-          )}
-          {reviewCount > 0 && data.showAverageReview && (
-            <ReviewStars
-              averageRating={averageRating}
-              reviewCount={reviewCount}
-            />
-          )}
-        </header>
-        {(resolvedHero?.primaryCta?.label ||
-          resolvedHero?.secondaryCta?.label) && (
-          <div
-            className="flex flex-col gap-y-4 md:flex-row md:gap-x-4"
-            aria-label={t("callToActions", "Call to Actions")}
-          >
-            {resolvedHero?.primaryCta?.label && (
-              <EntityField
-                displayName={pt("fields.primaryCta", "Primary CTA")}
-                fieldId={data.hero.field}
-                constantValueEnabled={
-                  data.hero.constantValueOverride.primaryCta
-                }
-              >
-                <CTA
-                  eventName={`primaryCta`}
-                  variant={styles?.primaryCTA}
-                  label={resolveComponentData(
-                    resolvedHero.primaryCta.label,
-                    i18n.language
-                  )}
-                  link={resolvedHero.primaryCta.link}
-                  linkType={resolvedHero.primaryCta.linkType}
-                  className={"py-3"}
-                />
-              </EntityField>
-            )}
-            {resolvedHero?.secondaryCta?.label && (
-              <EntityField
-                displayName={pt("fields.secondaryCta", "Secondary CTA")}
-                fieldId={data.hero.field}
-                constantValueEnabled={
-                  data.hero.constantValueOverride.secondaryCta
-                }
-              >
-                <CTA
-                  eventName={`secondaryCta`}
-                  variant={styles?.secondaryCTA}
-                  label={resolveComponentData(
-                    resolvedHero.secondaryCta.label,
-                    i18n.language
-                  )}
-                  link={resolvedHero.secondaryCta.link}
-                  linkType={resolvedHero.secondaryCta.linkType}
-                  className={"py-3"}
-                />
-              </EntityField>
-            )}
-          </div>
-        )}
-      </div>
-      {resolvedHero?.image && (
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.hero.field}
-          constantValueEnabled={data.hero.constantValueOverride.image}
-        >
-          <div
-            className="w-full"
-            role="region"
-            aria-label={t("heroImage", "Hero Image")}
-          >
-            <Image
-              image={resolvedHero?.image}
-              aspectRatio={styles.image.aspectRatio}
-              width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
-            />
-          </div>
-        </EntityField>
-      )}
-    </PageSection>
-  );
 };
 
 export const HeroSection: ComponentConfig<HeroSectionProps> = {
@@ -455,7 +422,6 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       },
       hero: {
         field: "",
-        constantValueEnabled: true,
         constantValue: {
           primaryCta: {
             label: {
@@ -464,14 +430,16 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
           secondaryCta: {
             label: {
-              en: "Call To Action",
+              en: "Learn More",
               hasLocalizedValue: "true",
             },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
           image: {
             url: PLACEHOLDER_IMAGE_URL,
@@ -479,24 +447,31 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
             width: 640,
           },
         },
+        constantValueEnabled: true,
         constantValueOverride: {
-          image: true,
           primaryCta: true,
           secondaryCta: true,
+          image: true,
         },
       },
       showAverageReview: true,
     },
     styles: {
+      variant: "classic",
       backgroundColor: backgroundColors.background1.value,
-      imageOrientation: "right",
+      desktopImagePosition: "right",
       businessNameLevel: 3,
       localGeoModifierLevel: 1,
       primaryCTA: "primary",
       secondaryCTA: "secondary",
       image: {
         aspectRatio: 1.78, // 16:9 default
+        height: 500,
       },
+      desktopContainerPosition: "left",
+      mobileContentAlignment: "left",
+      showImage: true,
+      mobileImagePosition: "bottom",
     },
     analytics: {
       scope: "heroSection",
@@ -504,14 +479,15 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
     liveVisibility: true,
   },
   resolveFields: (data, { lastData }) => {
+    let fields = heroSectionFields;
     // If set to entity value and no field selected, hide the component.
     if (
       !data.props.data.hero.constantValueEnabled &&
       data.props.data.hero.field === ""
     ) {
       data.props.liveVisibility = false;
-      return {
-        ...heroSectionFields,
+      fields = {
+        ...fields,
         liveVisibility: undefined,
       };
     }
@@ -528,19 +504,135 @@ export const HeroSection: ComponentConfig<HeroSectionProps> = {
       data.props.liveVisibility = true;
     }
 
-    // Otherwise, return normal fields.
-    return heroSectionFields;
+    switch (data.props.styles.variant) {
+      case "compact": {
+        fields = updateFields(
+          fields,
+          ["styles.objectFields.image.objectFields.width"],
+          undefined
+        );
+        // compact should also remove the props removed by classic
+      }
+      case "classic": {
+        fields = updateFields(
+          fields,
+          [
+            "styles.objectFields.desktopContainerPosition",
+            "styles.objectFields.image.objectFields.height",
+          ],
+          undefined
+        );
+
+        if (data.props.styles.showImage) {
+          fields = updateFields(
+            fields,
+            ["styles.objectFields.image.objectFields.aspectRatio.options"],
+            // @ts-expect-error ts(2339) objectFields exists
+            fields.styles.objectFields.image.objectFields.aspectRatio.options.filter(
+              (option: { label: string; value: string }) =>
+                !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
+            )
+          );
+        } else {
+          fields = updateFields(
+            fields,
+            [
+              "styles.objectFields.mobileImagePosition",
+              "styles.objectFields.desktopImagePosition",
+              "styles.objectFields.image",
+            ],
+            undefined
+          );
+        }
+        break;
+      }
+      case "immersive": {
+        fields = updateFields(
+          fields,
+          ["styles.objectFields.backgroundColor"],
+          undefined
+        );
+        // immersive should also remove the props removed by spotlight
+      }
+      case "spotlight": {
+        fields = updateFields(
+          fields,
+          [
+            "styles.objectFields.showImage",
+            "styles.objectFields.image.objectFields.aspectRatio",
+            "styles.objectFields.image.objectFields.width",
+            "styles.objectFields.mobileImagePosition",
+            "styles.objectFields.desktopImagePosition",
+          ],
+          undefined
+        );
+        break;
+      }
+    }
+
+    return fields;
   },
-  render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
-    >
-      <VisibilityWrapper
-        liveVisibility={!!props.liveVisibility}
-        isEditing={props.puck.isEditing}
+  render: (props) => {
+    const { data, styles } = props;
+    let HeroVariant = <ClassicHero data={data} styles={styles} />;
+    switch (props.styles.variant) {
+      case "immersive":
+        HeroVariant = <ImmersiveHero data={data} styles={styles} />;
+        break;
+      case "spotlight":
+        HeroVariant = <SpotlightHero data={data} styles={styles} />;
+        break;
+      case "compact":
+        HeroVariant = <CompactHero data={data} styles={styles} />;
+        break;
+    }
+
+    return (
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <HeroSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
-  ),
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          {HeroVariant}
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    );
+  },
+};
+
+/**
+ * updateFields is a resolveFields helper that can update or remove fields
+ * based on a dot notation path
+ * @internal
+ */
+const updateFields = <T extends DefaultComponentProps>(
+  obj: Record<string, any>,
+  paths: string[],
+  value: any
+): Fields<T> => {
+  const newObj = { ...obj };
+
+  for (const path of paths) {
+    const keys = path.split(".");
+    let current = newObj;
+
+    for (let i = 0; i < keys.length - 1; i++) {
+      const key = keys[i];
+      // Create new objects along the path to ensure deep immutability
+      current[key] = { ...current[key] };
+      current = current[key];
+    }
+
+    const lastKey = keys[keys.length - 1];
+
+    if (value === undefined) {
+      delete current[lastKey];
+    } else {
+      current[lastKey] = value;
+    }
+  }
+
+  return newObj as Fields<T>;
 };

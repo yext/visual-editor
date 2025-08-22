@@ -10,6 +10,14 @@ import { addBreadcrumbsDirectoryBackgroundMigration } from "./0008_add_breadcrum
 import { addShowAverageReviewMigration } from "./0009_add_show_average_reviews.ts";
 import { updateExpandedHeaderStylesMigration } from "./0010_update_expanded_header_styles.ts";
 import { addDirectoryTitleMigration } from "./0011_add_directory_title.ts";
+import { addHeaderFooterMaxWidth } from "./0012_add_header_footer_max_width.ts";
+import { ignoreLocaleWarningBannerSection } from "./0013_ignore_locale_warning_banner_section.ts";
+import { directoryHoursStyles } from "./0014_directory_hours_styles.ts";
+import { addHeaderPosition } from "./0015_add_header_position.ts";
+import { migrateCTAStructures } from "./0016_migrate_cta_structures.ts";
+import { heroVariants } from "./0017_hero_variants.ts";
+import { addDirectorySiteNameMigration } from "./0018_add_directory_site_name.ts";
+import { refactorContentBlocks } from "./0019_refactor_content_blocks.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -28,4 +36,12 @@ export const migrationRegistry: MigrationRegistry = [
   addShowAverageReviewMigration,
   updateExpandedHeaderStylesMigration,
   addDirectoryTitleMigration,
+  addHeaderFooterMaxWidth,
+  ignoreLocaleWarningBannerSection,
+  directoryHoursStyles,
+  addHeaderPosition,
+  migrateCTAStructures,
+  heroVariants,
+  addDirectorySiteNameMigration,
+  refactorContentBlocks,
 ];

@@ -7,7 +7,6 @@ import {
   VisibilityWrapper,
   msg,
   TranslatableString,
-  TranslatableStringField,
   BackgroundStyle,
   backgroundColors,
   resolveComponentData,
@@ -51,7 +50,7 @@ export interface BreadcrumbsSectionProps {
   /**
    * @internal
    */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -66,9 +65,12 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      directoryRoot: TranslatableStringField(
+      directoryRoot: YextField(
         msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        { types: ["type.string"] }
+        {
+          type: "translatableString",
+          filter: { types: ["type.string"] },
+        }
       ),
     },
   }),
@@ -84,13 +86,22 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
       ),
     },
   }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),

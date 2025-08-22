@@ -35,29 +35,35 @@ expect.extend({
   async toMatchScreenshot(
     this: any, // 'this' context for Vitest matchers
     screenshotName: string,
-    options?: { customThreshold?: number }
-  ) {
-    const updatedScreenshotData = await act(async () =>
-      page.screenshot({
-        save: false,
-      })
-    );
-
-    const numDiffPixels = await commands.compareScreenshot(
-      screenshotName,
-      updatedScreenshotData
-    );
-
-    if (numDiffPixels > (options?.customThreshold ?? 0)) {
-      return {
-        pass: false,
-        message: () => `Screenshots differed by ${numDiffPixels} pixels`,
-      };
+    options?: {
+      customThreshold?: number;
+      ignoreExact?: number[];
+      useFullPage?: boolean;
     }
+  ) {
+    const updatedScreenshotData = await act(async () => {
+      if (options?.useFullPage) {
+        // Workaround for vitest not allowing fullPage mobile screenshots
+        // See https://github.com/vitest-dev/vitest/discussions/7749
+        (window.frameElement as HTMLIFrameElement).style.height =
+          `${document.body.offsetHeight}px`;
+      }
+
+      return page.screenshot({
+        save: false,
+      });
+    });
+
+    const { passes, numDiffPixels } = await commands.compareScreenshot(
+      screenshotName,
+      updatedScreenshotData,
+      options?.customThreshold,
+      options?.ignoreExact
+    );
 
     return {
-      pass: true,
-      message: () => "Screenshots matched",
+      pass: passes,
+      message: () => `Screenshots differed by ${numDiffPixels} pixels`,
     };
   },
 });
@@ -156,7 +162,7 @@ export const testHours = {
   friday: {
     openIntervals: [
       {
-        end: "22:00",
+        end: "16:00",
         start: "10:00",
       },
     ],
@@ -180,8 +186,8 @@ export const testHours = {
   sunday: {
     openIntervals: [
       {
-        end: "22:00",
-        start: "10:00",
+        end: "14:00",
+        start: "11:00",
       },
     ],
   },
@@ -196,7 +202,7 @@ export const testHours = {
   tuesday: {
     openIntervals: [
       {
-        end: "22:00",
+        end: "19:00",
         start: "10:00",
       },
     ],

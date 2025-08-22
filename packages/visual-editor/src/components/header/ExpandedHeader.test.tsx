@@ -47,12 +47,7 @@ const tests: ComponentTest[] = [
       data: {
         primaryHeader: {
           logo: "https://placehold.co/100",
-          links: [
-            defaultMainLinkV0,
-            defaultMainLinkV0,
-            defaultMainLinkV0,
-            defaultMainLinkV0,
-          ],
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
             link: "#",
@@ -102,6 +97,68 @@ const tests: ComponentTest[] = [
       await act(async () => {
         await mobileMenuButton.click();
       });
+    },
+  },
+  {
+    name: "version 10 props - narrow viewport",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: true,
+          showSecondaryCTA: true,
+        },
+        secondaryHeader: {
+          show: false,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: undefined,
+            aspectRatio: 2,
+          },
+          backgroundColor: backgroundColors.background1.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background2.value,
+        },
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 10,
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+    viewport: {
+      name: "narrow",
+      width: 900,
+      height: 900,
     },
   },
   {
@@ -202,6 +259,125 @@ const tests: ComponentTest[] = [
       },
     },
     version: 10,
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+  },
+  {
+    name: "version 11 props - secondary header",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 11,
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+  },
+  {
+    name: "version 15 props - sticky header",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+        headerPosition: "sticky",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 15,
     interactions: async (page) => {
       const mobileMenuButton = page.getByLabelText("Open menu");
       await act(async () => {

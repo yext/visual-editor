@@ -1,8 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import { useProgress } from "./useProgress.ts";
 import { renderHook } from "@testing-library/react";
 
 describe("useProgress", () => {
+  beforeAll(() => {
+    window.postMessage = vi.fn();
+  });
+
   it("should return 100% progress when all criteria are true", () => {
     const { result } = renderHook(() =>
       useProgress({ completionCriteria: [true, true, true] })

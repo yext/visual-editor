@@ -4,13 +4,15 @@ import {
   PersonStruct,
   TranslatableString,
 } from "../../../types/types.ts";
-import { translatableCTAFields } from "./CallToAction.tsx";
+import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "./Phone.tsx";
-import { msg, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
+import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
+import { useTranslation } from "react-i18next";
 
 export const defaultPerson: PersonStruct = {
   name: { en: "First Last", hasLocalizedValue: "true" },
@@ -21,6 +23,7 @@ export const defaultPerson: PersonStruct = {
     label: { en: "Visit Profile", hasLocalizedValue: "true" },
     link: "#",
     linkType: "URL",
+    ctaType: "textAndLink",
   },
   headshot: {
     url: "https://placehold.co/80x80",
@@ -53,7 +56,6 @@ export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
 };
 
 const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
-  const { t, i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
 
   const nameField = useMemo(() => {
@@ -71,37 +73,32 @@ const PersonStructArrayField = (): ArrayField<PersonStruct[]> => {
   }, []);
 
   return {
-    label: t("arrayField", "Array Field"),
+    label: pt("arrayField", "Array Field"),
     type: "array",
     arrayFields: {
       headshot: {
-        type: "object",
-        label: t("fields.headshot", "Headshot"),
-        objectFields: {
-          url: {
-            label: t("fields.url", "URL"),
-            type: "text",
-          },
-        },
+        ...IMAGE_CONSTANT_CONFIG,
+        label: pt("fields.headshot", "Headshot"),
       },
       name: nameField,
       title: titleField,
       phoneNumber: PHONE_CONSTANT_CONFIG,
       email: {
         type: "text",
-        label: t("fields.email", "Email"),
+        label: pt("fields.email", "Email"),
       },
-      cta: translatableCTAFields(),
+      cta: LINK_ONLY_CTA_CONFIG,
     },
     defaultItemProps: defaultPerson,
     getItemSummary: (item, i) => {
+      const { i18n } = useTranslation();
       const translation =
         item?.name &&
         resolveComponentData(item.name, i18n.language, streamDocument);
       if (translation) {
         return translation;
       }
-      return t("teamMember", "Team Member") + " " + ((i ?? 0) + 1);
+      return pt("teamMember", "Team Member") + " " + ((i ?? 0) + 1);
     },
   };
 };

@@ -281,6 +281,123 @@ const tests: ComponentTest[] = [
     },
     version: 7,
   },
+  {
+    name: "version 7 props empty date and category handling",
+    document: { c_insights: insightsData },
+    props: {
+      data: {
+        heading: {
+          field: "name",
+          constantValue: "Insights",
+          constantValueEnabled: true,
+        },
+        insights: {
+          field: "c_insights",
+          constantValue: {
+            insights: [
+              {
+                name: "Insight with empty date",
+                category: "Category 1",
+                publishTime: "",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+              {
+                name: "Insight with empty category",
+                category: "",
+                publishTime: "2025-05-14",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+              {
+                name: "Insight with both empty",
+                category: "",
+                publishTime: "",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+              {
+                name: "Insight with both filled",
+                category: "Category 2",
+                publishTime: "2025-06-15",
+                description: "Description",
+                cta: { label: "CTA" },
+              },
+            ],
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          headingLevel: 4,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 7,
+  },
+  {
+    name: "version 16 props with missing ctaType",
+    document: { c_insights: insightsData },
+    props: {
+      data: {
+        insights: {
+          field: "c_insights",
+          constantValue: [
+            {
+              name: "Insight with missing CTA properties",
+              category: "Category",
+              publishTime: "2025-06-15",
+              description: "Description",
+              cta: {
+                label: "CTA",
+                // Missing link, linkType, and ctaType - should be added by migration
+              },
+            },
+            {
+              name: "Insight with partial CTA properties",
+              category: "Category 2",
+              publishTime: "2025-06-15",
+              description: "Description",
+              cta: {
+                label: "CTA 2",
+                link: "#",
+                linkType: "URL",
+                // Missing ctaType - should be added by migration
+              },
+            },
+          ],
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          headingLevel: 4,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
 ];
 
 describe("InsightSection", async () => {

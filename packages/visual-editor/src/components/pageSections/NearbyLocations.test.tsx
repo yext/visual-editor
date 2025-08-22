@@ -1,5 +1,5 @@
 import * as React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   axe,
   ComponentTest,
@@ -15,6 +15,8 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+
+const interactionsDelay = 1000;
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
@@ -46,9 +48,6 @@ const tests: ComponentTest[] = [
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
     },
     props: { ...NearbyLocationsSection.defaultProps },
-    interactions: async () => {
-      await delay(1000);
-    },
     version: migrationRegistry.length,
   },
   {
@@ -73,7 +72,9 @@ const tests: ComponentTest[] = [
     },
     props: { ...NearbyLocationsSection.defaultProps },
     interactions: async () => {
-      await delay(1000);
+      // re-enable fetch
+      vi.unstubAllGlobals();
+      await delay(interactionsDelay);
     },
     version: migrationRegistry.length,
   },
@@ -144,9 +145,6 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    interactions: async () => {
-      await delay(1000);
-    },
     version: 10,
   },
   {
@@ -214,13 +212,19 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     interactions: async () => {
-      await delay(1000);
+      // re-enable fetch
+      vi.unstubAllGlobals();
+      await delay(interactionsDelay);
     },
     version: 10,
   },
 ];
 
 describe("NearbyLocationsSection", async () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   const puckConfig: Config = {
     components: { NearbyLocationsSection },
     root: {
@@ -270,6 +274,21 @@ describe("NearbyLocationsSection", async () => {
         await waitFor(() => {
           expect(page.getByText("Washington, DC")).toBeInTheDocument();
         });
+      } else {
+        // block fetch to ensure loading screen
+        vi.stubGlobal(
+          "fetch",
+          vi.fn(() => {
+            throw new Error("Network access currently disabled");
+          })
+        );
+        if (document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY) {
+          await waitFor(() => {
+            expect(
+              page.getByText("Loading nearby locations")
+            ).toBeInTheDocument();
+          });
+        }
       }
 
       await expect(

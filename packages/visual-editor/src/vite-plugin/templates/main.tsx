@@ -20,6 +20,7 @@ import {
   applyHeaderScript,
   migrate,
   migrationRegistry,
+  filterComponentsFromConfig,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -90,6 +91,11 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 const Location: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
+  const filteredConfig = filterComponentsFromConfig(
+    mainConfig,
+    document?._additionalLayoutComponents,
+    document?._additionalLayoutCategories
+  );
 
   return (
     <AnalyticsProvider
@@ -99,11 +105,11 @@ const Location: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <Render
-          config={mainConfig}
+          config={filteredConfig}
           data={migrate(
             JSON.parse(document.__.layout),
             migrationRegistry,
-            mainConfig
+            filteredConfig
           )}
         />
       </VisualEditorProvider>

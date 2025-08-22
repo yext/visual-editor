@@ -23,6 +23,8 @@ const buttonVariants = cva(
         ghost:
           "hover:ve-bg-accent hover:ve-text-accent-foreground ve-font-medium",
         link: "ve-text-primary ve-underline-offset-4 hover:ve-underline ve-font-medium",
+        small_link:
+          "ve-text-primary ve-underline-offset-4 hover:ve-underline ve-font-small",
         puckSelect: "", // puck copycat styles applied in puck.css
       },
       size: {

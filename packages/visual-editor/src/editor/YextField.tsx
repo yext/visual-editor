@@ -12,12 +12,17 @@ import {
   OptionalNumberField,
   CodeFieldProps,
   CodeField,
+  getMaxWidthOptions,
+  msg,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
+import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import { MsgString } from "../utils/i18n/platform.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -39,6 +44,7 @@ type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
 
 type YextBaseField = {
   type: string;
+  visible?: boolean;
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
@@ -87,6 +93,16 @@ type YextCodeField = YextBaseField &
     type: "code";
   };
 
+type YextMaxWidthField = YextBaseField & {
+  type: "maxWidth";
+};
+
+type YextTranslatableStringField = YextBaseField & {
+  type: "translatableString";
+  filter?: RenderEntityFieldFilter<any>;
+  showApplyAllOption?: boolean;
+};
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -104,20 +120,22 @@ type YextFieldConfig<Props = any> =
   | YextSelectField
   | YextRadioField
   | YextOptionalNumberField
-  | YextCodeField;
+  | YextCodeField
+  | YextMaxWidthField
+  | YextTranslatableStringField;
 
 export function YextField<T = any>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
 
 export function YextField<T extends Record<string, any>, U = any>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
 
 export function YextField<T, U>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<any> {
   // use YextEntityFieldSelector
@@ -163,6 +181,7 @@ export function YextField<T, U>(
   ) {
     return {
       label: fieldName,
+      visible: config.visible,
       type: config.type,
       options: ThemeOptions[config.options] as FieldOptions,
     };
@@ -171,6 +190,7 @@ export function YextField<T, U>(
   if (config.type === "text") {
     return {
       label: fieldName,
+      visible: config.visible,
       type: config.isMultiline ? "textarea" : "text",
     };
   }
@@ -180,6 +200,31 @@ export function YextField<T, U>(
       fieldLabel: fieldName,
       codeLanguage: config.codeLanguage,
     });
+  }
+
+  if (config.type === "maxWidth") {
+    const maxWidthOptions = getMaxWidthOptions();
+    return BasicSelector({
+      label: fieldName,
+      disableSearch: true,
+      optionGroups: [
+        {
+          description: msg(
+            "maxWidthTip",
+            "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
+          ),
+          options: maxWidthOptions,
+        },
+      ],
+    });
+  }
+
+  if (config.type === "translatableString") {
+    return TranslatableStringField(
+      fieldName,
+      config.filter,
+      config.showApplyAllOption
+    );
   }
 
   return {

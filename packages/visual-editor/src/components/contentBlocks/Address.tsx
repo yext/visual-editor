@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
   AddressType,
@@ -16,19 +15,31 @@ import {
   YextField,
   msg,
   resolveComponentData,
+  CTAProps,
 } from "@yext/visual-editor";
 
-export type AddressProps = {
-  address: YextEntityField<AddressType>;
-  showGetDirections: boolean;
-};
+export interface AddressProps {
+  data: {
+    address: YextEntityField<AddressType>;
+  };
+  styles: {
+    showGetDirectionsLink: boolean;
+    ctaVariant: CTAProps["variant"];
+  };
+}
 
-const addressFields: Fields<AddressProps> = {
-  address: YextField<any, AddressType>(msg("fields.address", "Address"), {
+// Address field definition used in Address and CoreInfoSection
+export const AddressDataField = YextField<any, AddressType>(
+  msg("fields.address", "Address"),
+  {
     type: "entityField",
     filter: { types: ["type.address"] },
-  }),
-  showGetDirections: YextField(
+  }
+);
+
+// Address style fields used in Address and CoreInfoSection
+export const AddressStyleFields = {
+  showGetDirectionsLink: YextField(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
       type: "radio",
@@ -38,16 +49,30 @@ const addressFields: Fields<AddressProps> = {
       ],
     }
   ),
+  ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+    type: "radio",
+    options: "CTA_VARIANT",
+  }),
 };
 
-const AddressComponent = ({
-  address: addressField,
-  showGetDirections,
-}: AddressProps) => {
+const addressFields: Fields<AddressProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      address: AddressDataField,
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: AddressStyleFields,
+  }),
+};
+
+const AddressComponent = ({ data, styles }: AddressProps) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const address = resolveComponentData(
-    addressField,
+    data.address,
     i18n.language,
     streamDocument
   );
@@ -63,22 +88,28 @@ const AddressComponent = ({
       {address && (
         <EntityField
           displayName={pt("address", "Address")}
-          fieldId={addressField.field}
-          constantValueEnabled={addressField.constantValueEnabled}
+          fieldId={data.address.field}
+          constantValueEnabled={data.address.constantValueEnabled}
         >
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
             <RenderAddress
-              address={address as AddressType}
-              lines={[["line1"], ["line2", "city", "region", "postalCode"]]}
+              address={address}
+              lines={[
+                ["line1"],
+                ["line2"],
+                ["city", ",", "region", "postalCode"],
+              ]}
             />
           </div>
-          {coordinates && showGetDirections && (
+          {coordinates && styles.showGetDirectionsLink && (
             <CTA
+              eventName={`getDirections`}
+              className="font-bold"
               link={coordinates}
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
-              variant="link"
+              variant={styles.ctaVariant}
             />
           )}
         </EntityField>
@@ -91,17 +122,22 @@ export const Address: ComponentConfig<AddressProps> = {
   label: msg("components.address", "Address"),
   fields: addressFields,
   defaultProps: {
-    address: {
-      field: "address",
-      constantValue: {
-        line1: "",
-        city: "",
-        region: "",
-        postalCode: "",
-        countryCode: "",
+    data: {
+      address: {
+        field: "address",
+        constantValue: {
+          line1: "",
+          city: "",
+          region: "",
+          postalCode: "",
+          countryCode: "",
+        },
       },
     },
-    showGetDirections: true,
+    styles: {
+      showGetDirectionsLink: true,
+      ctaVariant: "link",
+    },
   },
   render: (props) => <AddressComponent {...props} />,
 };

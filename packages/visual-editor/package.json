@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "0.0.50",
+  "version": "0.0.55",
   "type": "module",
   "author": "sumo@yext.com",
   "types": "dist/index.d.ts",
@@ -56,7 +56,7 @@
     "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
   },
   "dependencies": {
-    "@measured/puck": "0.18.3",
+    "@measured/puck": "0.19.3",
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",
@@ -85,6 +85,7 @@
     "picocolors": "^1.0.1",
     "prompts": "^2.4.2",
     "pure-react-carousel": "^1.32.0",
+    "react-aria-components": "^1.11.0",
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
     "react-i18next": "^15.5.2",

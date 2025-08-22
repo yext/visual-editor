@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
@@ -14,21 +13,31 @@ import {
   pt,
 } from "@yext/visual-editor";
 
-export type HoursTableProps = {
-  hours: YextEntityField<HoursType>;
-  startOfWeek: keyof DayOfWeekNames | "today";
-  collapseDays: boolean;
-  showAdditionalHoursText: boolean;
-  alignment: "items-start" | "items-center";
-};
+export interface HoursTableProps {
+  data: {
+    hours: YextEntityField<HoursType>;
+  };
+  styles: {
+    startOfWeek: keyof DayOfWeekNames | "today";
+    collapseDays: boolean;
+    showAdditionalHoursText: boolean;
+    alignment: "items-start" | "items-center";
+  };
+}
 
-const hoursTableFields: Fields<HoursTableProps> = {
-  hours: YextField(msg("fields.hours", "Hours"), {
+// HoursTable data field used in HoursTable and CoreInfoSection
+export const HoursTableDataField = YextField<any, HoursType>(
+  msg("fields.hours", "Hours"),
+  {
     type: "entityField",
     filter: {
       types: ["type.hours"],
     },
-  }),
+  }
+);
+
+// HoursTable style fields used in HoursTable and CoreInfoSection
+export const HoursTableStyleFields = {
   startOfWeek: YextField(msg("fields.startOfTheWeek", "Start of the Week"), {
     type: "select",
     hasSearch: true,
@@ -51,46 +60,58 @@ const hoursTableFields: Fields<HoursTableProps> = {
       ],
     }
   ),
-  alignment: YextField(msg("fields.alignCard", "Align card"), {
-    type: "radio",
-    options: [
-      { label: msg("fields.options.left", "Left"), value: "items-start" },
-      { label: msg("fields.options.center", "Center"), value: "items-center" },
-    ],
+};
+
+const hoursTableFields: Fields<HoursTableProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      hours: HoursTableDataField,
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      ...HoursTableStyleFields,
+      alignment: YextField(msg("fields.alignCard", "Align card"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.left", "Left"), value: "items-start" },
+          {
+            label: msg("fields.options.center", "Center"),
+            value: "items-center",
+          },
+        ],
+      }),
+    },
   }),
 };
 
-const VisualEditorHoursTable = ({
-  hours: hoursField,
-  startOfWeek,
-  collapseDays,
-  showAdditionalHoursText,
-  alignment,
-}: HoursTableProps) => {
+const VisualEditorHoursTable = ({ data, styles }: HoursTableProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const hours = resolveComponentData(hoursField, i18n.language, streamDocument);
+  const hours = resolveComponentData(data.hours, i18n.language, streamDocument);
 
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 
   return (
-    <div className={`flex flex-col ${alignment}`}>
+    <div className={`flex flex-col ${styles.alignment}`}>
       {hours && (
         <EntityField
           displayName={pt("hours", "Hours")}
           fieldId="hours"
-          constantValueEnabled={hoursField.constantValueEnabled}
+          constantValueEnabled={data.hours.constantValueEnabled}
         >
           <HoursTableAtom
             hours={hours}
-            startOfWeek={startOfWeek}
-            collapseDays={collapseDays}
+            startOfWeek={styles.startOfWeek}
+            collapseDays={styles.collapseDays}
           />
         </EntityField>
       )}
-      {additionalHoursText && showAdditionalHoursText && (
+      {additionalHoursText && styles.showAdditionalHoursText && (
         <EntityField
           displayName={pt("hoursText", "Hours Text")}
           fieldId="additionalHoursText"
@@ -107,14 +128,18 @@ const VisualEditorHoursTable = ({
 export const HoursTable: ComponentConfig<HoursTableProps> = {
   fields: hoursTableFields,
   defaultProps: {
-    hours: {
-      field: "hours",
-      constantValue: {},
+    data: {
+      hours: {
+        field: "hours",
+        constantValue: {},
+      },
     },
-    startOfWeek: "today",
-    collapseDays: false,
-    showAdditionalHoursText: true,
-    alignment: "items-center",
+    styles: {
+      startOfWeek: "today",
+      collapseDays: false,
+      showAdditionalHoursText: true,
+      alignment: "items-center",
+    },
   },
   label: msg("components.hoursTable", "Hours Table"),
   render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,

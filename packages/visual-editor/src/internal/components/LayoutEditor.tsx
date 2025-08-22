@@ -21,6 +21,8 @@ import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { Metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
 
@@ -31,6 +33,7 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  metadata?: Metadata;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -41,6 +44,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    metadata,
   } = props;
 
   const {
@@ -143,7 +147,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
           JSON.parse(localHistoryArray) as History<AppState>[]
         ).map((history) => ({
           id: history.id,
-          state: { data: migrate(history.state.data), ui: history.state.ui },
+          state: {
+            data: migrate(history.state.data, migrationRegistry, puckConfig),
+            ui: history.state.ui,
+          },
         }));
         const localHistoryIndex = localHistories.length - 1;
         setPuckInitialHistory({
@@ -268,6 +275,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
+      metadata={metadata}
     />
   ) : (
     <LoadingScreen

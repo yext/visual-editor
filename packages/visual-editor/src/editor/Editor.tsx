@@ -21,6 +21,17 @@ import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
 
 const devLogger = new DevLogger();
 
+// For hybrid developement use of existing components
+// See hybrid-development.md for more details
+export interface Metadata {
+  // The environment variable that stores the content endpoint ID
+  contentEndpointIdEnvVar?: string;
+  // The environment variable that stores the entity type
+  entityTypeEnvVar?: string;
+  // The environment variable that stores the experience key
+  experienceKeyEnvVar?: string;
+}
+
 export type EditorProps = {
   document: any;
   componentRegistry: Map<string, Config<any>>;
@@ -29,6 +40,7 @@ export type EditorProps = {
   localDev?: boolean;
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
+  metadata?: Metadata; // passed into puck's global metadata
 };
 
 export const Editor = ({
@@ -37,6 +49,7 @@ export const Editor = ({
   themeConfig,
   localDev,
   forceThemeMode,
+  metadata,
 }: EditorProps) => {
   if (document) {
     devLogger.logData("DOCUMENT", document);
@@ -134,6 +147,7 @@ export const Editor = ({
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
+              metadata={metadata}
             />
           ) : (
             <LayoutEditor
@@ -143,6 +157,7 @@ export const Editor = ({
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
+              metadata={metadata}
             />
           )
         ) : (

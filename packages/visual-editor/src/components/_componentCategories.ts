@@ -55,7 +55,10 @@ import {
 import { HeadingText, HeadingTextProps } from "./contentBlocks/HeadingText.tsx";
 import { HoursTable, HoursTableProps } from "./contentBlocks/HoursTable.tsx";
 import { HoursStatus, HoursStatusProps } from "./contentBlocks/HoursStatus.tsx";
-import { ImageWrapper, ImageWrapperProps } from "./contentBlocks/Image.tsx";
+import {
+  ImageWrapper,
+  ImageWrapperProps,
+} from "./contentBlocks/image/Image.tsx";
 import {
   MapboxStaticMap,
   MapboxStaticProps,
@@ -70,6 +73,7 @@ import {
 import { Footer, FooterProps } from "./footer/Footer.tsx";
 import { Directory, DirectoryProps } from "./Directory.tsx";
 import { LocatorComponent, LocatorProps } from "./Locator.tsx";
+import { CTAGroup, CTAGroupProps } from "./contentBlocks/CTAGroup";
 import {
   StaticMapSection,
   StaticMapSectionProps,
@@ -78,6 +82,10 @@ import {
   ExpandedFooter,
   ExpandedFooterProps,
 } from "./footer/ExpandedFooter.tsx";
+import {
+  CustomCodeSection,
+  CustomCodeSectionProps,
+} from "./CustomCodeSection.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -122,11 +130,13 @@ export const PageSectionCategory = Object.keys(
 export interface OtherCategoryProps {
   ExpandedHeader: ExpandedHeaderProps;
   ExpandedFooter: ExpandedFooterProps;
+  CustomCodeSection: CustomCodeSectionProps;
 }
 
 export const OtherCategoryComponents = {
   ExpandedHeader,
   ExpandedFooter,
+  CustomCodeSection,
 };
 
 export const OtherCategory = Object.keys(
@@ -156,6 +166,44 @@ export const LocatorCategoryComponents = {
 export const LocatorCategory = Object.keys(
   LocatorCategoryComponents
 ) as (keyof LocatorCategoryProps)[];
+
+export interface AdvancedCoreInfoCategoryProps {
+  Grid: GridProps;
+  Address: AddressProps;
+  BodyText: BodyTextProps;
+  CTAGroup: CTAGroupProps;
+  CTAWrapper: CTAWrapperProps;
+  Emails: EmailsProps;
+  GetDirections: GetDirectionsProps;
+  HeadingText: HeadingTextProps;
+  HoursTable: HoursTableProps;
+  HoursStatus: HoursStatusProps;
+  ImageWrapper: ImageWrapperProps;
+  MapboxStaticMap: MapboxStaticProps;
+  Phone: PhoneProps;
+  TextList: TextListProps;
+}
+
+export const AdvancedCoreInfoCategoryComponents = {
+  Grid,
+  Address,
+  BodyText,
+  CTAGroup,
+  CTAWrapper,
+  Emails,
+  GetDirections,
+  HeadingText,
+  HoursStatus,
+  HoursTable,
+  ImageWrapper,
+  MapboxStaticMap,
+  Phone,
+  TextList,
+};
+
+export const AdvancedCoreInfoCategory = Object.keys(
+  AdvancedCoreInfoCategoryComponents
+) as (keyof AdvancedCoreInfoCategoryProps)[];
 
 export interface DeprecatedCategoryProps {
   Header: HeaderProps;

@@ -34,7 +34,7 @@ import {
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
+} from "../contentBlocks/image/styling.ts";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { GalleryImageType } from "../../types/types";
@@ -181,7 +181,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),

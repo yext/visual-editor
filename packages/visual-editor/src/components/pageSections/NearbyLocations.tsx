@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   useDocument,
   YextEntityField,
@@ -114,7 +114,7 @@ export interface NearbyLocationsSectionProps {
   styles: NearbyLocationsStyles;
 
   /** @internal */
-  analytics?: {
+  analytics: {
     scope?: string;
   };
 
@@ -123,9 +123,6 @@ export interface NearbyLocationsSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-
-  /**  @internal */
-  contentEndpointIdEnvVar?: string;
 }
 
 const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
@@ -261,6 +258,15 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
       }),
     },
   }),
+  analytics: YextField(msg("fields.analytics", "Analytics"), {
+    type: "object",
+    visible: false,
+    objectFields: {
+      scope: YextField(msg("fields.scope", "Scope"), {
+        type: "text",
+      }),
+    },
+  }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
@@ -362,11 +368,11 @@ const LocationCard = ({
   );
 };
 
-const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
+const NearbyLocationsComponent = ({
   styles,
   data,
-  contentEndpointIdEnvVar,
-}: NearbyLocationsSectionProps) => {
+  puck,
+}: WithPuckProps<NearbyLocationsSectionProps>) => {
   const streamDocument = useDocument();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
@@ -396,8 +402,8 @@ const NearbyLocationsComponent: React.FC<NearbyLocationsSectionProps> = ({
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
   } = React.useMemo(
-    () => parseDocument(streamDocument, contentEndpointIdEnvVar),
-    [streamDocument, contentEndpointIdEnvVar]
+    () => parseDocument(streamDocument, puck.metadata?.contentEndpointIdEnvVar),
+    [streamDocument, puck.metadata?.contentEndpointIdEnvVar]
   );
 
   const enableNearbyLocations =
@@ -610,7 +616,7 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
           dayOfWeekFormat: "long",
         },
         phoneNumberFormat: "domestic",
-        phoneNumberLink: false,
+        phoneNumberLink: true,
       },
       analytics: {
         scope: "nearbyLocationsSection",
