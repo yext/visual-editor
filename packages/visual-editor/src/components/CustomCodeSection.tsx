@@ -103,6 +103,8 @@ const EmptyCustomCodeSection = () => {
  * @returns The processed HTML string with Handlebars expressions replaced, or the original HTML if not applicable.
  */
 function processHandlebarsTemplate(html: string, data: StreamDocument): string {
+  console.log("process data", data);
+
   if (!html) {
     return html;
   }
@@ -125,6 +127,7 @@ const CustomCodeSectionWrapper = ({
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
+  console.log("Stream Document on Live Page:", streamDocument);
   const processedHtml = React.useMemo(
     () => processHandlebarsTemplate(html, streamDocument),
     [html, streamDocument]
