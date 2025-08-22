@@ -18,6 +18,7 @@ import {
   ExpandedFooter,
   Directory,
   LocatorComponent,
+  migrationRegistry,
 } from "@yext/visual-editor";
 import { AnalyzedComponent } from "./analysis.ts";
 
@@ -96,7 +97,7 @@ export function generateLayout(analyzedComponents: AnalyzedComponent[]): any {
           constantValue: "",
           constantValueEnabled: false,
         },
-        version: 7,
+        version: migrationRegistry.length,
         description: {
           field: "description",
           constantValue: "",
@@ -125,6 +126,7 @@ export function generateLayout(analyzedComponents: AnalyzedComponent[]): any {
         type: analyzedComponent.type,
         props: {
           ...schema.defaultProps,
+          id: `${analyzedComponent.type}-${Math.random().toString(36).substring(2, 15)}`,
           data: mergedData,
           styles: mergedStyles,
         },

@@ -2,6 +2,62 @@ import { Project, SyntaxKind } from "ts-morph";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import {
+  defaultEvent,
+  defaultFAQ,
+  defaultInsight,
+  defaultPerson,
+  defaultProduct,
+  defaultTestimonial,
+} from "@yext/visual-editor";
+
+const additionalContext = {
+  CoreInfoSection: {
+    data: {
+      services: `If the Services List is not present in the screenshot, set the services prop to {field: "", constantValue: [], constantValueEnabled: true}`,
+    },
+    styles: {
+      info: {
+        showGetDirectionsLink: `True ONLY if the screenshot includes "Get Directions" under the address. False otherwise`,
+      },
+      hours: {
+        showAdditionalHoursText: `True ONLY if the screenshot includes text under the hours table in this component. False otherwise`,
+      },
+    },
+  },
+  HeroSection: {
+    data: {
+      businessName:
+        "This is ONLY for a name of a business brand. It should NOT include any location-related information",
+      localGeoModifier: `This is for the location of the business. It could include city, state, address, etc, but MUST match the screenshot.
+        The Hours Status (example: 'Open Now • Closes at 5:00 PM Friday') should NEVER appear in this object.`,
+    },
+  },
+  ProductSection: {
+    data: {
+      products: {
+        constantValue: {
+          products: `The values in the objects in this array MUST follow: ${JSON.stringify(
+            {
+              category: `This should NEVER be more than 3 words. If it's not included in the screenshot, set it to ""`,
+              description: `This should be the full product description in the screenshot.`,
+            },
+          )}`,
+        },
+      },
+    },
+    // styles: {
+    //   heading: {
+    //     align: `"left" if the heading text in the screenshot is left-aligned, "center" if it is center-aligned, or "right" if it is right-aligned`,
+    //   },
+    // },
+  },
+  // PromoSection: {
+  //   styles: {
+  //     ctaVariant: `"primary" if the screenshot includes a filled-in button, "secondary" if it includes an outlined button, or "link" if it includes a text link`,
+  //   },
+  // },
+};
 
 // ES Module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -126,14 +182,37 @@ async function generateComponentSchemas() {
                   cleanCodeString(labelProp.getText()),
                 );
                 const fields = cleanCodeString(fieldsProp.getText());
-                const defaultProps = cleanCodeString(
-                  defaultPropsProp.getText(),
+                let defaultProps = cleanCodeString(defaultPropsProp.getText());
+                defaultProps = defaultProps.replaceAll(
+                  "defaultProduct",
+                  JSON.stringify(defaultProduct),
+                );
+                defaultProps = defaultProps.replaceAll(
+                  "defaultEvent",
+                  JSON.stringify(defaultEvent),
+                );
+                defaultProps = defaultProps.replaceAll(
+                  "defaultFAQ",
+                  JSON.stringify(defaultFAQ),
+                );
+                defaultProps = defaultProps.replaceAll(
+                  "defaultInsight",
+                  JSON.stringify(defaultInsight),
+                );
+                defaultProps = defaultProps.replaceAll(
+                  "defaultPerson",
+                  JSON.stringify(defaultPerson),
+                );
+                defaultProps = defaultProps.replaceAll(
+                  "defaultTestimonial",
+                  JSON.stringify(defaultTestimonial),
                 );
 
                 componentSchemas[componentName] = {
                   label,
                   fields,
                   defaultProps,
+                  additionalContext: additionalContext[componentName],
                 };
               }
             } else {

@@ -17,10 +17,10 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 async function orchestrateLayoutGeneration(url: string) {
   try {
     console.log(`\n\u2139 Fetching page content for: ${url}`);
-    const { screenshot } = await getPageContent(url);
+    const { screenshot, html } = await getPageContent(url);
 
     console.log("\u2139 Analyzing HTML structure...");
-    const promptParts = createGeminiPrompt(screenshot);
+    const promptParts = createGeminiPrompt(screenshot, html);
 
     const promptString = promptParts
       .map((part) => (typeof part.text === "string" ? part.text : ""))
