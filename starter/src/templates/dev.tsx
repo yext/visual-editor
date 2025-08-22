@@ -21,6 +21,7 @@ import {
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
+import Chat from "../components/Chat";
 import { SchemaWrapper } from "@yext/pages-components";
 
 export const config = {
@@ -155,19 +156,27 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         </button>
       </div>
       <div>
-        <VisualEditorProvider
-          templateProps={props}
-          entityFields={{ fields: entityFields, displayNames: displayNames }}
-          tailwindConfig={tailwindConfig}
-        >
-          <Editor
-            document={document}
-            componentRegistry={componentRegistry}
-            themeConfig={defaultThemeConfig}
-            localDev={true}
-            forceThemeMode={themeMode}
-          />
-        </VisualEditorProvider>
+        <div>
+          <VisualEditorProvider
+            templateProps={props}
+            entityFields={{
+              fields: entityFields,
+              displayNames: displayNames,
+            }}
+            tailwindConfig={tailwindConfig}
+          >
+            <Editor
+              document={document}
+              componentRegistry={componentRegistry}
+              themeConfig={defaultThemeConfig}
+              localDev={true}
+              forceThemeMode={themeMode}
+            />
+          </VisualEditorProvider>
+        </div>
+        <div style={{ width: 400 }}>
+          <Chat />
+        </div>
       </div>
     </div>
   );
