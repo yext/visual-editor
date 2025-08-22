@@ -74,20 +74,45 @@ const tests: ComponentTest[] = [
     props: {
       ...CustomCodeSection.defaultProps,
       html: `
-        <ul>
+        <ul class="product-list">
           {{#each c_exampleProducts.products}}
-            <li>
+            <li class="product-item">
               <strong>{{name}}</strong>
               {{#if image.url}}
                 <br />
-                <img src="{{image.url}}" alt="{{name}}" style="max-width:200px;" />
+                <img src="{{image.url}}" alt="{{name}}" class="product-img" />
               {{/if}}
               {{#if description.html}}
-                <div>{{{description.html}}}</div>
+                <div class="product-desc">{{{description.html}}}</div>
               {{/if}}
             </li>
           {{/each}}
         </ul>
+      `,
+      css: `
+        .product-list {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          gap: 2rem;
+        }
+        .product-item {
+          background: #f8f9fa;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+          padding: 1rem;
+          max-width: 220px;
+          text-align: center;
+        }
+        .product-img {
+          max-width: 180px;
+          border-radius: 6px;
+          margin: 0.5rem 0;
+        }
+        .product-desc {
+          font-size: 0.95rem;
+          color: #444;
+        }
       `,
     },
     version: migrationRegistry.length,
