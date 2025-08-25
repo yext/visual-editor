@@ -151,6 +151,7 @@ export function YextField<T, U>(
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
+      typeSelectorConfig: config.typeSelectorConfig,
     });
   }
 
