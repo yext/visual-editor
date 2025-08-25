@@ -405,7 +405,9 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     });
 
     resizeObserver.observe(headerRef.current);
-    return () => resizeObserver.disconnect();
+    return () => {
+      return resizeObserver.disconnect();
+    };
   }, []);
 
   const hasNavContent =
