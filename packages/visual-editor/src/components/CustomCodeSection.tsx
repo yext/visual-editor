@@ -2,7 +2,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { VisibilityWrapper, YextField, msg } from "@yext/visual-editor";
+import {
+  VisibilityWrapper,
+  YextField,
+  msg,
+  useDocument,
+} from "@yext/visual-editor";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 
 export interface CustomCodeSectionProps {
@@ -84,6 +89,89 @@ const EmptyCustomCodeSection = () => {
   );
 };
 
+/**
+ * Safely resolves a nested property path from an object.
+ * @param path The path to resolve (e.g., "address.city").
+ * @param obj The object to resolve the path from.
+ * @returns The value at the specified path, or the original path wrapped in braces if not found.
+ */
+const resolvePath = (path: string, obj: any): any => {
+  return path.split(".").reduce((prev, curr) => {
+    return prev ? prev[curr] : undefined;
+  }, obj);
+};
+
+/**
+ * Escapes special characters in a string for use in HTML.
+ * @param str The string to escape.
+ * @returns The escaped string.
+ */
+const escapeHtml = (str: any): string => {
+  if (typeof str !== "string") {
+    // If the value is not a string (e.g., a number), convert it to one.
+    str = String(str);
+  }
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+/**
+ * Replaces placeholders in an HTML string with escaped data from an object.
+ * @param templateString The HTML string containing placeholders.
+ * @param data The data object to source values from.
+ * @returns The interpolated HTML string.
+ */
+const interpolateHtmlString = (templateString: string, data: any): string => {
+  if (!templateString) {
+    return "";
+  }
+  return templateString.replace(/{{(.*?)}}/g, (match, path) => {
+    const value = resolvePath(path.trim(), data);
+    return value !== undefined ? escapeHtml(value) : match;
+  });
+};
+
+/**
+ * Replaces placeholders in a JavaScript string with JSON-stringified data from an object.
+ * This makes the data safe to be embedded directly into JavaScript code.
+ * Note: Placeholders in the JS template should NOT be wrapped in quotes.
+ * E.g., use `const name = {{name}};` instead of `const name = '{{name}}';`
+ * @param templateString The JavaScript string containing placeholders.
+ * @param data The data object to source values from.
+ * @returns The interpolated JavaScript string.
+ */
+const interpolateJsString = (templateString: string, data: any): string => {
+  if (!templateString) {
+    return "";
+  }
+  return templateString.replace(/{{(.*?)}}/g, (match, path) => {
+    const value = resolvePath(path.trim(), data);
+    if (value === undefined) {
+      return match; // Keep placeholder if value not found
+    }
+
+    // If the value is a string, escape its content for injection into another string.
+    // This assumes the user will provide quotes in the template, e.g., '{{myString}}'.
+    if (typeof value === "string") {
+      return value
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r");
+    }
+
+    // For all other types (number, boolean, object, array, null),
+    // JSON.stringify is the safest way to create a literal representation.
+    // This assumes the user will NOT provide quotes, e.g., const user = {{userObject}};
+    return JSON.stringify(value);
+  });
+};
+
 const CustomCodeSectionWrapper = ({
   html,
   css,
@@ -93,6 +181,19 @@ const CustomCodeSectionWrapper = ({
   if (!html) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
   }
+
+  const streamDocument = useDocument();
+
+  // Use the context-specific interpolation functions
+  const resolvedHtml = React.useMemo(
+    () => interpolateHtmlString(html, streamDocument),
+    [html, streamDocument]
+  );
+
+  const resolvedJavascript = React.useMemo(
+    () => interpolateJsString(javascript, streamDocument),
+    [javascript, streamDocument]
+  );
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
@@ -108,19 +209,22 @@ const CustomCodeSectionWrapper = ({
       prevScript.remove();
     }
 
-    if (javascript) {
+    if (resolvedJavascript) {
       const script = document.createElement("script");
       script.id = scriptTagId;
       script.type = "text/javascript";
-      script.innerHTML = javascript;
+      script.innerHTML = resolvedJavascript;
       containerRef.current.appendChild(script);
     }
-  }, [javascript, html]);
+  }, [resolvedJavascript, resolvedHtml]);
 
   return (
     <div>
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <div ref={containerRef} dangerouslySetInnerHTML={{ __html: html }} />
+      <div
+        ref={containerRef}
+        dangerouslySetInnerHTML={{ __html: resolvedHtml }}
+      />
     </div>
   );
 };
