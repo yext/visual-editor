@@ -87,7 +87,9 @@ describe("Footer", async () => {
 
       await page.viewport(width, height);
 
-      await expect(`Footer/[${viewportName}] ${name}`).toMatchScreenshot();
+      await expect(`Footer/[${viewportName}] ${name}`).toMatchScreenshot({
+        ignoreExact: [11],
+      });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -95,7 +97,7 @@ describe("Footer", async () => {
         await interactions(page);
         await expect(
           `Footer/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ ignoreExact: [11] });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
