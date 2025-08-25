@@ -23,6 +23,7 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
+import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -103,6 +104,10 @@ type YextTranslatableStringField = YextBaseField & {
   showApplyAllOption?: boolean;
 };
 
+type YextImageField = YextBaseField & {
+  type: "image";
+};
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -122,7 +127,8 @@ type YextFieldConfig<Props = any> =
   | YextOptionalNumberField
   | YextCodeField
   | YextMaxWidthField
-  | YextTranslatableStringField;
+  | YextTranslatableStringField
+  | YextImageField;
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -225,6 +231,13 @@ export function YextField<T, U>(
       config.filter,
       config.showApplyAllOption
     );
+  }
+
+  if (config.type === "image") {
+    return {
+      ...IMAGE_CONSTANT_CONFIG,
+      label: fieldName,
+    };
   }
 
   return {

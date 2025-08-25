@@ -7,7 +7,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
-  MaybeLink,
   backgroundColors,
   Image,
   msg,
@@ -21,6 +20,7 @@ import {
   resolveComponentData,
   PageSectionProps,
   useOverflow,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -55,7 +55,7 @@ const defaultSecondaryLink = {
 export interface ExpandedHeaderData {
   /** Content for the main primary header bar. */
   primaryHeader: {
-    logo: string;
+    logo: AssetImageType;
     links: TranslatableCTA[];
     primaryCTA?: TranslatableCTA;
     showPrimaryCTA: boolean;
@@ -122,7 +122,7 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
         type: "object",
         objectFields: {
           logo: YextField(msg("fields.logo", "Logo"), {
-            type: "text",
+            type: "image",
           }),
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
@@ -682,17 +682,14 @@ const HeaderLogo = (props: {
   aspectRatio?: number;
 }) => {
   return (
-    <MaybeLink href={props.logo.image.url} alwaysHideCaret={true}>
-      <figure style={{ width: `${props.logoWidth}px` }}>
-        <Image
-          image={props.logo.image}
-          aspectRatio={
-            props.aspectRatio ||
-            props.logo.image.width / props.logo.image.height
-          }
-        />
-      </figure>
-    </MaybeLink>
+    <figure style={{ width: `${props.logoWidth}px` }}>
+      <Image
+        image={props.logo.image}
+        aspectRatio={
+          props.aspectRatio || props.logo.image.width / props.logo.image.height
+        }
+      />
+    </figure>
   );
 };
 
@@ -770,16 +767,24 @@ const HeaderCtas = (props: {
 };
 
 const buildComplexImage = (
-  url: string | undefined,
+  image: AssetImageType,
   width: number
 ): ComplexImageType => {
-  const safeUrl = url || PLACEHOLDER_IMAGE;
+  const safeUrl = image?.url || PLACEHOLDER_IMAGE;
+  const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const altText = resolveComponentData(
+    image?.alternateText ?? "",
+    i18n.language,
+    streamDocument
+  );
+
   return {
     image: {
       url: safeUrl,
       width,
       height: width / 2,
-      alternateText: "Logo",
+      alternateText: altText,
     },
   };
 };
@@ -794,7 +799,12 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   defaultProps: {
     data: {
       primaryHeader: {
-        logo: PLACEHOLDER_IMAGE,
+        logo: {
+          url: PLACEHOLDER_IMAGE,
+          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          width: 100,
+          height: 100,
+        },
         links: [defaultMainLink, defaultMainLink, defaultMainLink],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
