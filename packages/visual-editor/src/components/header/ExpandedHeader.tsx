@@ -39,6 +39,7 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/image/styling.ts";
+import { cva } from "class-variance-authority";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 const defaultMainLink = {
@@ -51,6 +52,19 @@ const defaultSecondaryLink = {
   label: { en: "Secondary Header Link", hasLocalizedValue: "true" as const },
   link: "#",
 };
+
+export const headerWrapper = cva("flex flex-col", {
+  variants: {
+    position: {
+      sticky: "sticky top-0 z-50",
+      fixed: "fixed top-0 left-0 right-0 z-50",
+      scrollsWithPage: "",
+    },
+  },
+  defaultVariants: {
+    position: "scrollsWithPage",
+  },
+});
 
 export interface ExpandedHeaderData {
   /** Content for the main primary header bar. */
@@ -382,7 +396,9 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const [headerHeight, setHeaderHeight] = React.useState(0);
 
   React.useEffect(() => {
-    if (!headerRef.current) return;
+    if (!headerRef.current) {
+      return;
+    }
 
     const resizeObserver = new ResizeObserver(() => {
       setHeaderHeight(headerRef.current?.offsetHeight ?? 0);
@@ -424,19 +440,12 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   return (
     <>
-      {/** PLACEHOLDER IS HERE*/}
       {styles.headerPosition === "fixed" && headerHeight > 0 ? (
         <div style={{ height: headerHeight }} />
       ) : null}
       <div
         ref={headerRef}
-        className={`flex flex-col ${
-          styles.headerPosition === "sticky"
-            ? "sticky top-0 z-50"
-            : styles.headerPosition === "fixed"
-              ? "fixed top-0 left-0 right-0 z-50"
-              : ""
-        }`}
+        className={headerWrapper({ position: styles.headerPosition })}
       >
         {/* Secondary Header (Top Bar) */}
         <div className="hidden md:flex flex-col">
