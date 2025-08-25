@@ -18,6 +18,7 @@ import {
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -74,7 +75,20 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   };
 };
 
-export const getPath: GetPath<TemplateProps> = ({ document }) => {
+export const getPath: GetPath<TemplateProps> = ({
+  document,
+  relativePrefixToRoot,
+}) => {
+  const urlTemplate = resolveUrlTemplate(
+    document,
+    document.locale,
+    relativePrefixToRoot,
+    null
+  );
+  if (urlTemplate) {
+    return urlTemplate;
+  }
+
   if (document.slug) {
     return document.slug;
   }
