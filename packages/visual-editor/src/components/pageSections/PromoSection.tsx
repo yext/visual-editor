@@ -24,9 +24,12 @@ import {
   ThemeOptions,
   EntityField,
   pt,
+  Video,
+  AssetImageType,
+  AssetVideo,
   themeManagerCn,
 } from "@yext/visual-editor";
-import { AnalyticsScopeProvider } from "@yext/pages-components";
+import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   ImageStylingFields,
   ImageStylingProps,
@@ -158,7 +161,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           }),
         },
       }),
-      image: YextField(msg("fields.image", "Image"), {
+      image: YextField(msg("fields.media", "Media"), {
         type: "object",
         objectFields: ImageStylingFields,
       }),
@@ -185,8 +188,52 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   ),
 };
 
+const PromoMedia = ({
+  className,
+  image: media,
+  data,
+  styles,
+}: {
+  className: string;
+  image: PromoSectionType["image"];
+  data: PromoData;
+  styles: PromoStyles;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    media && (
+      <div
+        className={themeManagerCn("w-full my-auto", className)}
+        role="region"
+        aria-label={t("promoMedia", "Promo Media")}
+      >
+        <EntityField
+          displayName={pt("fields.media", "Media")}
+          fieldId={data.promo.field}
+          constantValueEnabled={data.promo.constantValueOverride.image}
+        >
+          {isVideo(media) ? (
+            <Video
+              youTubeEmbedUrl={media.video.embeddedUrl}
+              title={media.video.title}
+            />
+          ) : (
+            <Image
+              image={media}
+              aspectRatio={styles.image.aspectRatio ?? 1.78}
+              width={styles.image.width || 640}
+              className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
+            />
+          )}
+        </EntityField>
+      </div>
+    )
+  );
+};
+
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
     streamDocument,
@@ -202,45 +249,21 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       }[styles.heading.align]
     : "justify-start";
 
-  const PromoImage = ({ className }: { className: string }) => {
-    return (
-      resolvedPromo?.image && (
-        <div
-          className={themeManagerCn("w-full my-auto", className)}
-          role="region"
-          aria-label={t("promoImage", "Promo Image")}
-        >
-          <EntityField
-            displayName={pt("fields.image", "Image")}
-            fieldId={data.promo.field}
-            constantValueEnabled={data.promo.constantValueOverride.image}
-          >
-            <Image
-              image={resolvedPromo.image}
-              aspectRatio={styles.image.aspectRatio ?? 1.78}
-              width={styles.image.width || 640}
-              className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
-            />
-          </EntityField>
-        </div>
-      )
-    );
-  };
-
   return (
     <PageSection
       background={styles.backgroundColor}
-      className={"flex flex-col md:flex-row md:gap-16"}
+      className={themeManagerCn("flex flex-col md:flex-row md:gap-16")}
     >
       {/* Desktop left image */}
-      <PromoImage
+      <PromoMedia
+        data={data}
+        styles={styles}
+        image={resolvedPromo?.image}
         className={themeManagerCn(
           styles.orientation === "right" && "md:hidden"
         )}
       />
-      <div
-        className={`flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words`}
-      >
+      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
             displayName={pt("fields.title", "Title")}
@@ -301,7 +324,10 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
         )}
       </div>
       {/* Desktop right image */}
-      <PromoImage
+      <PromoMedia
+        data={data}
+        styles={styles}
+        image={resolvedPromo?.image}
         className={themeManagerCn(
           "hidden sm:block",
           styles.orientation === "left" && "md:hidden"
@@ -366,7 +392,6 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-
   render: (props) => {
     return (
       <AnalyticsScopeProvider
@@ -382,3 +407,9 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     );
   },
 };
+
+function isVideo(
+  field: ImageType | AssetImageType | AssetVideo | undefined
+): field is AssetVideo {
+  return Boolean(field && typeof field === "object" && "video" in field);
+}

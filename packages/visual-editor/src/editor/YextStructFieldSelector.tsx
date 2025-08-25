@@ -135,7 +135,7 @@ const SubfieldsInput = ({
   return (
     <div className="ObjectField">
       <div className="ObjectField-fieldset">
-        {subfields.map(({ field, type, label }, idx) => {
+        {subfields.map(({ field, type, constantValueType, label }, idx) => {
           const toggleConstantValueEnabled = (
             constantValueEnabled: boolean
           ) => {
@@ -150,7 +150,7 @@ const SubfieldsInput = ({
           };
 
           const constantConfig = getConstantConfigFromType(
-            type,
+            constantValueType ?? type,
             false,
             disallowTranslation
           );

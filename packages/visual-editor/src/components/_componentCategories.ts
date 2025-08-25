@@ -86,6 +86,10 @@ import {
   CustomCodeSection,
   CustomCodeSectionProps,
 } from "./CustomCodeSection.tsx";
+import {
+  VideoSection,
+  VideoSectionProps,
+} from "./pageSections/VideoSection.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -103,6 +107,7 @@ export interface PageSectionCategoryProps {
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
+  VideoSection: VideoSectionProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -121,6 +126,7 @@ export const PageSectionCategoryComponents = {
   StaticMapSection,
   TeamSection,
   TestimonialSection,
+  VideoSection,
 };
 
 export const PageSectionCategory = Object.keys(

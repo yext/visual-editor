@@ -1,6 +1,7 @@
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
 import {
+  ConstantValueTypes,
   EntityFieldTypes,
   getFilteredEntityFields,
   RenderEntityFieldFilter,
@@ -29,6 +30,7 @@ import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import { TEAM_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TeamSection.tsx";
 import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TestimonialSection.tsx";
+import { IMAGE_OR_VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageOrVideo.tsx";
 import {
   Tooltip,
   TooltipArrow,
@@ -76,6 +78,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
   "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
   "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
+  imageOrVideo: IMAGE_OR_VIDEO_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
@@ -99,7 +102,7 @@ const LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
 };
 
 export const getConstantConfigFromType = (
-  type: EntityFieldTypes,
+  type: ConstantValueTypes,
   isList?: boolean,
   disallowTranslation?: boolean
 ): Field<any> | undefined => {

@@ -1,5 +1,6 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
 import { AssetImageType } from "./images";
+import { AssetVideo } from "./videos";
 
 // A copy of CTAType that changes label from string to TranslatableString
 export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
@@ -32,7 +33,7 @@ export type HeroSectionType = {
 };
 
 export type PromoSectionType = {
-  image?: ImageType | AssetImageType;
+  image?: ImageType | AssetImageType | AssetVideo;
   title?: TranslatableString;
   description?: TranslatableRichText;
   cta: EnhancedTranslatableCTA;
