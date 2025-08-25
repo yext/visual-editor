@@ -216,10 +216,10 @@ The Expanded Footer is a comprehensive, two-tiered site-wide component for large
 
 This object contains all the content for both footer tiers.
 
-| Prop                   | Type                                                                                                                                                                                                                                                                                                                                                                    | Description                           | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.primaryFooter`   | `{ logo: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; xLink: string; utilityImages: { url: string; linkTarget?: string; }[]; expandedFooter: boolean; footerLinks: TranslatableCTA[]; expandedFooterLinks: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` | Content for the primary footer bar.   |         |
-| `data.secondaryFooter` | `{ show: boolean; copyrightMessage: TranslatableString; secondaryFooterLinks: TranslatableCTA[]; }`                                                                                                                                                                                                                                                                     | Content for the secondary header bar. |         |
+| Prop                   | Type                                                                                                                                                                                                                                                                                                                                                                                      | Description                           | Default |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `data.primaryFooter`   | `{ logo: AssetImageType; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; xLink: string; utilityImages: { image: AssetImageType; linkTarget?: string; }[]; expandedFooter: boolean; footerLinks: TranslatableCTA[]; expandedFooterLinks: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` | Content for the primary footer bar.   |         |
+| `data.secondaryFooter` | `{ show: boolean; copyrightMessage: TranslatableString; secondaryFooterLinks: TranslatableCTA[]; }`                                                                                                                                                                                                                                                                                       | Content for the secondary header bar. |         |
 
 #### Style Props
 
@@ -245,10 +245,10 @@ The Expanded Header is a two-tiered component for websites with complex navigati
 
 This object contains all the content for both header tiers.
 
-| Prop                   | Type                                                                                                                                                            | Description                                 | Default |
-| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `data.primaryHeader`   | `{ logo: string; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.    |         |
-| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                          | Content for the secondary header (top bar). |         |
+| Prop                   | Type                                                                                                                                                                    | Description                                 | Default |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `data.primaryHeader`   | `{ logo: AssetImageType; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.    |         |
+| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                  | Content for the secondary header (top bar). |         |
 
 #### Style Props
 
@@ -489,10 +489,10 @@ The Photo Gallery Section is designed to display a collection of images in a vis
 
 This object contains the content to be displayed by the component.
 
-| Prop           | Type                                                                       | Description                                                                                  | Default                           |
-| :------------- | :------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- | :-------------------------------- |
-| `data.heading` | `YextEntityField<TranslatableString>`                                      | The main heading for the photo gallery.                                                      | `"Gallery" (constant)`            |
-| `data.images`  | `YextEntityField<ImageType[] \| ComplexImageType[] \| GalleryImageType[]>` | The source of the image data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder images.` |
+| Prop           | Type                                                                                      | Description                                                                                  | Default                           |
+| :------------- | :---------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- | :-------------------------------- |
+| `data.heading` | `YextEntityField<TranslatableString>`                                                     | The main heading for the photo gallery.                                                      | `"Gallery" (constant)`            |
+| `data.images`  | `YextEntityField<ImageType[] \| ComplexImageType[] \| { assetImage: AssetImageType; }[]>` | The source of the image data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder images.` |
 
 #### Style Props
 
