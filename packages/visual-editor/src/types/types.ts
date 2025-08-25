@@ -1,4 +1,5 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
+import { AssetImageType } from "./images";
 
 // A copy of CTAType that changes label from string to TranslatableString
 export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
@@ -25,13 +26,13 @@ export type PresetImageType =
   | "uber-eats";
 
 export type HeroSectionType = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   primaryCta?: EnhancedTranslatableCTA;
   secondaryCta?: EnhancedTranslatableCTA;
 };
 
 export type PromoSectionType = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   title?: TranslatableString;
   description?: TranslatableRichText;
   cta: EnhancedTranslatableCTA;
@@ -42,7 +43,7 @@ export type ProductSectionType = {
 };
 
 export type ProductStruct = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   name?: TranslatableString;
   description?: TranslatableRichText;
   category?: TranslatableString;
@@ -54,7 +55,7 @@ export type EventSectionType = {
 };
 
 export type EventStruct = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   title?: TranslatableString;
   dateTime?: string;
   description?: TranslatableRichText;
@@ -85,7 +86,7 @@ export type InsightSectionType = {
 };
 
 export type InsightStruct = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   name?: TranslatableString;
   category?: TranslatableString;
   publishTime?: string;
@@ -98,7 +99,7 @@ export type TeamSectionType = {
 };
 
 export type PersonStruct = {
-  headshot?: ImageType;
+  headshot?: ImageType | AssetImageType;
   name?: TranslatableString;
   title?: TranslatableString;
   phoneNumber?: string;
@@ -119,11 +120,4 @@ export type TranslatableRichText =
 export type RichText = {
   html?: string;
   json?: string;
-};
-
-export type GalleryImageType = {
-  url: string;
-  alternateText?: string;
-  height?: number;
-  width?: number;
 };

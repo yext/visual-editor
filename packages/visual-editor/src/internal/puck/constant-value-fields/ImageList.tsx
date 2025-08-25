@@ -1,17 +1,18 @@
 import { ArrayField } from "@measured/puck";
 import { pt } from "../../../utils/i18n/platform.ts";
-import { GalleryImageType } from "../../../types/types";
+import { AssetImageType } from "../../../types/images.ts";
+import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const IMAGE_LIST_CONSTANT_CONFIG = (): ArrayField<
-  GalleryImageType[]
+  { assetImage: AssetImageType | undefined }[]
 > => {
   return {
     label: "",
     type: "array",
     arrayFields: {
-      url: {
-        type: "text",
-        label: pt("fields.url", "URL"),
+      assetImage: {
+        ...IMAGE_CONSTANT_CONFIG,
+        label: pt("fields.image", "Image"),
       },
     },
     getItemSummary: (_, i) => pt("photo", "Photo") + " " + i,

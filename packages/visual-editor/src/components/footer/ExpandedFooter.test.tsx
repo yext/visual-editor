@@ -230,7 +230,7 @@ const tests: ComponentTest[] = [
     version: 10,
   },
   {
-    name: "version 20 props - expanded",
+    name: "version 19 props - expanded",
     document: {},
     props: {
       data: {
@@ -315,6 +315,119 @@ const tests: ComponentTest[] = [
           linksAlignment: "left",
         },
         maxWidth: "theme",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 19,
+  },
+  {
+    name: "version 20 props - expanded",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          logo: {
+            url: "https://placehold.co/100",
+            width: 100,
+            height: 100,
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          },
+          footerLinks: [
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+          ],
+          xLink: "https://x.com/yext",
+          facebookLink: "https://facebook.com/yext",
+          instagramLink: "https://instagram.com/yext",
+          pinterestLink: "https://pinterest.com/yext",
+          linkedInLink: "https://linkedin.com/in/yext",
+          youtubeLink: "https://youtube.com/c/yext",
+          tiktokLink: "https://tiktok.com/@yext",
+          utilityImages: [
+            {
+              image: {
+                url: "https://placehold.co/20",
+                width: 20,
+                height: 20,
+                alternateText: {
+                  en: "Placeholder 1",
+                  hasLocalizedValue: "true",
+                },
+              },
+              linkTarget: "https://yext.com",
+            },
+            {
+              image: {
+                url: "https://placehold.co/50x20",
+                width: 50,
+                height: 20,
+                alternateText: {
+                  hasLocalizedValue: "true",
+                },
+              },
+            },
+          ],
+          expandedFooter: true,
+          expandedFooterLinks: [
+            {
+              label: "Footer Label LONG LONG LONG",
+              links: [testFooterLink, testFooterLink],
+            },
+            {
+              label: "Footer Label",
+              links: [
+                testFooterLink,
+                {
+                  linkType: "URL",
+                  label: {
+                    en: "Footer Link LONG LONG LONG LONG",
+                    hasLocalizedValue: "true",
+                  },
+                  link: "#",
+                },
+                testFooterLink,
+                testFooterLink,
+                testFooterLink,
+              ],
+            },
+            {
+              label: "Footer Label",
+              links: [testFooterLink, testFooterLink, testFooterLink],
+            },
+          ],
+        },
+        secondaryFooter: {
+          show: true,
+          copyrightMessage: { en: "Copyright 2025", hasLocalizedValue: "true" },
+          secondaryFooterLinks: [
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+            testFooterLink,
+          ],
+        },
+      },
+      styles: {
+        primaryFooter: {
+          logo: { width: 200, aspectRatio: 4 },
+          utilityImages: { width: 50, aspectRatio: 1.78 },
+          backgroundColor: {
+            bgColor: "bg-palette-secondary-light",
+            textColor: "text-black",
+          },
+          linksAlignment: "right",
+        },
+        secondaryFooter: {
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
+          linksAlignment: "right",
+        },
+        maxWidth: "full",
       },
       analytics: { scope: "expandedFooter" },
     },
