@@ -188,8 +188,52 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   ),
 };
 
+const PromoMedia = ({
+  className,
+  image: media,
+  data,
+  styles,
+}: {
+  className: string;
+  image: PromoSectionType["image"];
+  data: PromoData;
+  styles: PromoStyles;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    media && (
+      <div
+        className={themeManagerCn("w-full my-auto", className)}
+        role="region"
+        aria-label={t("promoMedia", "Promo Media")}
+      >
+        <EntityField
+          displayName={pt("fields.media", "Media")}
+          fieldId={data.promo.field}
+          constantValueEnabled={data.promo.constantValueOverride.image}
+        >
+          {isVideo(media) ? (
+            <Video
+              youTubeEmbedUrl={media.video.embeddedUrl}
+              title={media.video.title}
+            />
+          ) : (
+            <Image
+              image={media}
+              aspectRatio={styles.image.aspectRatio ?? 1.78}
+              width={styles.image.width || 640}
+              className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
+            />
+          )}
+        </EntityField>
+      </div>
+    )
+  );
+};
+
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
     streamDocument,
@@ -205,43 +249,6 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       }[styles.heading.align]
     : "justify-start";
 
-  const PromoMedia = ({ className }: { className: string }) => {
-    return (
-      resolvedPromo?.image && (
-        <div
-          className={themeManagerCn("w-full my-auto", className)}
-          role="region"
-          aria-label={t("promoMedia", "Promo Media")}
-        >
-          <EntityField
-            displayName={pt("fields.media", "Media")}
-            fieldId={data.promo.field}
-            constantValueEnabled={data.promo.constantValueOverride.image}
-          >
-            <div
-              className="max-w-full md:max-w-[400px] lg:max-w-none shrink-0"
-              style={{ width: styles.image.width || 640 }}
-            >
-              {isVideo(resolvedPromo.image) ? (
-                <Video
-                  youTubeEmbedUrl={resolvedPromo.image.video.embeddedUrl}
-                  title={resolvedPromo.image.video.title}
-                />
-              ) : (
-                <Image
-                  image={resolvedPromo.image}
-                  aspectRatio={styles.image.aspectRatio ?? 1.78}
-                  width={styles.image.width || 640}
-                  className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
-                />
-              )}
-            </div>
-          </EntityField>
-        </div>
-      )
-    );
-  };
-
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -249,6 +256,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
     >
       {/* Desktop left image */}
       <PromoMedia
+        data={data}
+        styles={styles}
+        image={resolvedPromo?.image}
         className={themeManagerCn(
           styles.orientation === "right" && "md:hidden"
         )}
@@ -315,6 +325,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       </div>
       {/* Desktop right image */}
       <PromoMedia
+        data={data}
+        styles={styles}
+        image={resolvedPromo?.image}
         className={themeManagerCn(
           "hidden sm:block",
           styles.orientation === "left" && "md:hidden"
