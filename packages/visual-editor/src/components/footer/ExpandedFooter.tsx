@@ -23,6 +23,7 @@ import {
   PageSectionProps,
   AssetImageType,
   StreamDocument,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -475,68 +476,78 @@ const ExpandedFooterWrapper = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
+  const FooterLogos = ({ className }: { className: string }) => {
+    return (
+      <div
+        className={themeManagerCn(`flex flex-col gap-10 md:gap-8`, className)}
+      >
+        {logo && (
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.logo", "Logo")}
+          >
+            <FooterLogo
+              aspectRatio={aspectRatioForLogo}
+              logo={buildComplexLogoImage(
+                logo,
+                logoWidth || 5,
+                streamDocument,
+                i18n.language
+              )}
+              logoWidth={logoWidth || 100}
+            />
+          </EntityField>
+        )}
+        <div className="hidden md:block space-y-8">
+          <FooterIcons
+            xLink={xLink}
+            facebookLink={facebookLink}
+            instagramLink={instagramLink}
+            pinterestLink={pinterestLink}
+            linkedInLink={linkedInLink}
+            youtubeLink={youtubeLink}
+            tiktokLink={tiktokLink}
+          />
+          {utilityImages && utilityImages.length >= 1 && (
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.utilityImages", "Utility Images")}
+            >
+              <div className="grid grid-cols-3 gap-8">
+                {utilityImages.map((item, index) => (
+                  <FooterLogo
+                    aspectRatio={aspectRatioForUtilityImages}
+                    key={index}
+                    logo={buildComplexUtilityImage(
+                      item.image,
+                      utilityImagesWidth || 60,
+                      streamDocument,
+                      i18n.language
+                    )}
+                    logoWidth={utilityImagesWidth || 60}
+                  />
+                ))}
+              </div>
+            </EntityField>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
+      {/* Primary footer section. */}
       <PageSection
         verticalPadding={"footer"}
         background={backgroundColor}
         maxWidth={maxWidth}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
+        className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
-        <div
-          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
-        >
-          {logo && (
-            <EntityField
-              constantValueEnabled
-              displayName={pt("fields.logo", "Logo")}
-            >
-              <FooterLogo
-                aspectRatio={aspectRatioForLogo}
-                logo={buildComplexLogoImage(
-                  logo,
-                  logoWidth || 100,
-                  streamDocument,
-                  i18n.language
-                )}
-                logoWidth={logoWidth || 100}
-              />
-            </EntityField>
-          )}
-          <div className="hidden md:block space-y-8">
-            <FooterIcons
-              xLink={xLink}
-              facebookLink={facebookLink}
-              instagramLink={instagramLink}
-              pinterestLink={pinterestLink}
-              linkedInLink={linkedInLink}
-              youtubeLink={youtubeLink}
-              tiktokLink={tiktokLink}
-            />
-            {utilityImages && utilityImages.length >= 1 && (
-              <EntityField
-                constantValueEnabled
-                displayName={pt("fields.utilityImages", "Utility Images")}
-              >
-                <div className="grid grid-cols-3 gap-8">
-                  {utilityImages.map((item, index) => (
-                    <FooterLogo
-                      aspectRatio={aspectRatioForUtilityImages}
-                      key={index}
-                      logo={buildComplexUtilityImage(
-                        item.image,
-                        utilityImagesWidth || 60,
-                        streamDocument,
-                        i18n.language
-                      )}
-                      logoWidth={utilityImagesWidth || 60}
-                    />
-                  ))}
-                </div>
-              </EntityField>
-            )}
-          </div>
-        </div>
+        {/** Desktop left footer logos and icons / Mobile top footer logo */}
+        <FooterLogos
+          className={`${primaryLinksAlignment === "left" ? `md:hidden` : `items-start`}`}
+        />
         {expandedFooter ? (
           <EntityField
             constantValueEnabled
@@ -569,6 +580,11 @@ const ExpandedFooterWrapper = ({
             </EntityField>
           </div>
         )}
+        {/** Desktop right aligned footer logos and icons */}
+        <FooterLogos
+          className={`${primaryLinksAlignment === "left" ? `items-end` : `md:hidden`} hidden sm:block`}
+        />
+        {/** Mobile footer icons and utility images */}
         <div className="md:hidden block space-y-10">
           <FooterIcons
             xLink={xLink}
@@ -592,11 +608,11 @@ const ExpandedFooterWrapper = ({
                       key={index}
                       logo={buildComplexUtilityImage(
                         item.image,
-                        logoWidth || 100,
+                        logoWidth || 60,
                         streamDocument,
                         i18n.language
                       )}
-                      logoWidth={utilityImagesWidth || 100}
+                      logoWidth={utilityImagesWidth || 60}
                     />
                   ))}
                 </div>
@@ -605,6 +621,7 @@ const ExpandedFooterWrapper = ({
           )}
         </div>
       </PageSection>
+      {/* Secondary footer section */}
       {show && (
         <PageSection
           verticalPadding={"footerSecondary"}

@@ -18,7 +18,6 @@ import {
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
-  themeManagerCn,
   getAnalyticsScopeHash,
   CTA,
   ComponentFields,
@@ -28,6 +27,7 @@ import {
   Video,
   AssetImageType,
   AssetVideo,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
@@ -189,7 +189,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
     streamDocument,
@@ -205,40 +205,54 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       }[styles.heading.align]
     : "justify-start";
 
+  const PromoMedia = ({ className }: { className: string }) => {
+    return (
+      resolvedPromo?.image && (
+        <div
+          className={themeManagerCn("w-full my-auto", className)}
+          role="region"
+          aria-label={t("promoMedia", "Promo Media")}
+        >
+          <EntityField
+            displayName={pt("fields.media", "Media")}
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.image}
+          >
+            <div
+              className="max-w-full md:max-w-[400px] lg:max-w-none shrink-0"
+              style={{ width: styles.image.width || 640 }}
+            >
+              {isVideo(resolvedPromo.image) ? (
+                <Video
+                  youTubeEmbedUrl={resolvedPromo.image.video.embeddedUrl}
+                  title={resolvedPromo.image.video.title}
+                />
+              ) : (
+                <Image
+                  image={resolvedPromo.image}
+                  aspectRatio={styles.image.aspectRatio ?? 1.78}
+                  width={styles.image.width || 640}
+                  className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
+                />
+              )}
+            </div>
+          </EntityField>
+        </div>
+      )
+    );
+  };
+
   return (
     <PageSection
       background={styles.backgroundColor}
-      className={themeManagerCn(
-        "flex flex-col md:flex-row md:gap-16",
-        styles.orientation === "right" && "md:flex-row-reverse"
-      )}
+      className={themeManagerCn("flex flex-col md:flex-row md:gap-16")}
     >
-      {resolvedPromo?.image && (
-        <EntityField
-          displayName={pt("fields.media", "Media")}
-          fieldId={data.promo.field}
-          constantValueEnabled={data.promo.constantValueOverride.image}
-        >
-          <div
-            className="max-w-full md:max-w-[400px] lg:max-w-none shrink-0"
-            style={{ width: styles.image.width || 640 }}
-          >
-            {isVideo(resolvedPromo.image) ? (
-              <Video
-                youTubeEmbedUrl={resolvedPromo.image.video.embeddedUrl}
-                title={resolvedPromo.image.video.title}
-              />
-            ) : (
-              <Image
-                image={resolvedPromo.image}
-                aspectRatio={styles.image.aspectRatio ?? 1.78}
-                width={styles.image.width || 640}
-                className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
-              />
-            )}
-          </div>
-        </EntityField>
-      )}
+      {/* Desktop left image */}
+      <PromoMedia
+        className={themeManagerCn(
+          styles.orientation === "right" && "md:hidden"
+        )}
+      />
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
         {resolvedPromo?.title && (
           <EntityField
@@ -299,6 +313,13 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
           </EntityField>
         )}
       </div>
+      {/* Desktop right image */}
+      <PromoMedia
+        className={themeManagerCn(
+          "hidden sm:block",
+          styles.orientation === "left" && "md:hidden"
+        )}
+      />
     </PageSection>
   );
 };
