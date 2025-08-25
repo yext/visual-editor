@@ -43,7 +43,7 @@ import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
-import { ComboboxOption } from "src/internal/puck/ui/Combobox.tsx";
+import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 
 const devLogger = new DevLogger();
 
