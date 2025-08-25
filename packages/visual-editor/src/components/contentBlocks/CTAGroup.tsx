@@ -6,8 +6,14 @@ import {
   msg,
   resolveComponentData,
   CTA,
+  pt,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
+import {
+  ctaTypeOptions,
+  ctaTypeToEntityFieldType,
+  getCTATypeAndCoordinate,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const defaultButton: CTAWrapperProps = {
   entityField: {
@@ -37,12 +43,19 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         filter: {
           types: ["type.cta"],
         },
+        typeSelectorConfig: {
+          typeLabel: msg("fields.ctaType", "CTA Type"),
+          fieldLabel: msg("fields.ctaField", "CTA Field"),
+          options: ctaTypeOptions(),
+          optionValueToEntityFieldType: ctaTypeToEntityFieldType,
+        },
       }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
       }),
     },
+    getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
   }),
 };
 
@@ -55,7 +68,9 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
 
   return (
     <div
-      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center`}
+      className={
+        "flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start"
+      }
     >
       {buttons.map((button, idx) => {
         const cta = resolveComponentData(
@@ -63,22 +78,26 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
           locale,
           streamDocument
         );
+        const { ctaType, coordinate } = getCTATypeAndCoordinate(
+          button.entityField,
+          cta
+        );
 
         return (
-          <div key={idx} className="flex items-center justify-center">
-            {cta && (
+          cta && (
+            <div key={idx} className="w-full sm:w-auto">
               <CTA
                 label={resolveComponentData(cta.label, locale, streamDocument)}
                 link={resolveComponentData(cta.link, locale, streamDocument)}
                 linkType={cta.linkType}
                 variant={button.variant}
-                ctaType={cta.ctaType}
-                coordinate={cta.coordinate}
+                ctaType={ctaType}
+                coordinate={coordinate}
                 presetImageType={cta.presetImageType}
-                className="truncate"
+                className="truncate w-full"
               />
-            )}
-          </div>
+            </div>
+          )
         );
       })}
     </div>

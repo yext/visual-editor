@@ -8,6 +8,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
+import { YextEntityField } from "@yext/visual-editor";
 
 export const ctaTypeOptions = () => {
   return [
@@ -24,6 +25,52 @@ export const ctaTypeOptions = () => {
       value: "presetImage",
     },
   ];
+};
+
+export const ctaTypeToEntityFieldType = {
+  textAndLink: "type.cta",
+  getDirections: "type.coordinate",
+  presetImage: "type.cta",
+};
+
+// The CTA object can have coordinates in two different formats.
+type CtaWithPossibleCoordinateFormats =
+  | {
+      coordinate?: { latitude: number; longitude: number };
+      [key: string]: any;
+    }
+  | {
+      latitude: number;
+      longitude: number;
+      [key: string]: any;
+    };
+
+/**
+ * Determines the CTA type and coordinate data from an entity field and resolved CTA object.
+ *
+ * @param entityField - The Yext entity field containing CTA configuration.
+ * @param cta - The resolved CTA object, which may have coordinate data in different places depending on the field type.
+ * @returns An object containing the CTA type and coordinate (if available).
+ */
+export const getCTATypeAndCoordinate = <T extends Record<string, any>>(
+  entityField: YextEntityField<T>,
+  cta: CtaWithPossibleCoordinateFormats | null | undefined
+): {
+  ctaType: "textAndLink" | "getDirections" | "presetImage" | undefined;
+  coordinate?: { latitude: number; longitude: number };
+} => {
+  const ctaType = entityField.constantValueEnabled
+    ? entityField.constantValue.ctaType
+    : entityField.selectedType;
+  const coordinate =
+    cta && "latitude" in cta && "longitude" in cta
+      ? {
+          latitude: (cta as any).latitude,
+          longitude: (cta as any).longitude,
+        }
+      : cta?.coordinate;
+
+  return { ctaType, coordinate };
 };
 
 export const presetImageTypeOptions = (): {

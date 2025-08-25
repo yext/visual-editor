@@ -13,6 +13,11 @@ import {
   CTA,
   CTAProps,
 } from "@yext/visual-editor";
+import {
+  ctaTypeOptions,
+  ctaTypeToEntityFieldType,
+  getCTATypeAndCoordinate,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;
@@ -25,6 +30,12 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     type: "entityField",
     filter: {
       types: ["type.cta"],
+    },
+    typeSelectorConfig: {
+      typeLabel: msg("fields.ctaType", "CTA Type"),
+      fieldLabel: msg("fields.ctaField", "CTA Field"),
+      options: ctaTypeOptions(),
+      optionValueToEntityFieldType: ctaTypeToEntityFieldType,
     },
   }),
   variant: YextField(msg("fields.variant", "Variant"), {
@@ -41,6 +52,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
+  const { ctaType, coordinate } = getCTATypeAndCoordinate(entityField, cta);
 
   return (
     <EntityField
@@ -53,8 +65,8 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
           label={resolveComponentData(cta.label, i18n.language, streamDocument)}
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
-          ctaType={cta.ctaType}
-          coordinate={cta.coordinate}
+          ctaType={ctaType}
+          coordinate={coordinate}
           presetImageType={cta.presetImageType}
           variant={variant}
           className={className}
