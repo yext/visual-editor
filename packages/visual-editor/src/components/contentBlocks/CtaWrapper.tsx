@@ -18,6 +18,7 @@ import {
   ctaTypeToEntityFieldType,
   getCTATypeAndCoordinate,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+
 export interface CTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;
   variant: CTAProps["variant"];

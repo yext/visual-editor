@@ -33,6 +33,18 @@ export const ctaTypeToEntityFieldType = {
   presetImage: "type.cta",
 };
 
+// The CTA object can have coordinates in two different formats.
+type CtaWithPossibleCoordinateFormats =
+  | {
+      coordinate?: { latitude: number; longitude: number };
+      [key: string]: any;
+    }
+  | {
+      latitude: number;
+      longitude: number;
+      [key: string]: any;
+    };
+
 /**
  * Determines the CTA type and coordinate data from an entity field and resolved CTA object.
  *
@@ -42,7 +54,7 @@ export const ctaTypeToEntityFieldType = {
  */
 export const getCTATypeAndCoordinate = <T extends Record<string, any>>(
   entityField: YextEntityField<T>,
-  cta: any
+  cta: CtaWithPossibleCoordinateFormats | null | undefined
 ): {
   ctaType: "textAndLink" | "getDirections" | "presetImage" | undefined;
   coordinate?: { latitude: number; longitude: number };
