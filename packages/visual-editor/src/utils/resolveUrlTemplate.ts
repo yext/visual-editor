@@ -1,6 +1,7 @@
 import { StreamDocument } from "./applyTheme";
 import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
 import { normalizeSlug } from "./slugifier";
+import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
 
 /**
  * Resolves a URL template using the provided stream document, locale, and relativePrefixToRoot.
@@ -37,7 +38,14 @@ export const resolveUrlTemplate = (
     ];
 
   if (!urlTemplate) {
-    throw new Error("No URL template found on document");
+    console.warn("No URL template found on document");
+    return (
+      getLocationPath(
+        streamDocument as LocationDocument,
+        locale,
+        relativePrefixToRoot
+      ) ?? ""
+    );
   }
 
   const normalizedSlug = normalizeSlug(
@@ -45,7 +53,7 @@ export const resolveUrlTemplate = (
   ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
 
   if (!normalizedSlug) {
-    throw new Error("Could not resolve URL template", urlTemplate);
+    throw new Error(`Could not resolve URL template: ${urlTemplate}`);
   }
 
   return relativePrefixToRoot + normalizedSlug;
