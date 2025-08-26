@@ -102,31 +102,28 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
-  it("throws an error if _pageset is undefined", () => {
+  it("use fallback if _pageset is undefined", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: undefined };
-    assert.throws(() => {
-      resolveUrlTemplate(docWithoutPageset, "en", "../");
-    }, /No URL template found/);
+    const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave-123");
   });
 
-  it("throws an error if _pageset is an empty string", () => {
-    const docWithEmptyPageset = { ...mockStreamDocument, _pageset: "" };
-    assert.throws(() => {
-      resolveUrlTemplate(docWithEmptyPageset, "en", "../");
-    }, /No URL template found/);
+  it("use fallback if _pageset is an empty string", () => {
+    const docWithoutPageset = { ...mockStreamDocument, _pageset: "" };
+    const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave-123");
   });
 
-  it("throws an error if urlTemplate is missing in config", () => {
+  it("use fallback if urlTemplate is missing in config", () => {
     const docWithoutUrlTemplate = {
       ...mockStreamDocument,
       _pageset: JSON.stringify({ config: {} }),
     };
-    assert.throws(() => {
-      resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
-    }, /No URL template found/);
+    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave-123");
   });
 
-  it("throws an error if primary template is missing for primary locale", () => {
+  it("use fallback if primary template is missing for primary locale", () => {
     const docWithoutPrimaryTemplate = {
       ...mockStreamDocument,
       _pageset: JSON.stringify({
@@ -137,12 +134,11 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    assert.throws(() => {
-      resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
-    }, /No URL template found/);
+    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave-123");
   });
 
-  it("throws an error if alternate template is missing for alternate locale", () => {
+  it("use fallback if alternate template is missing for alternate locale", () => {
     const docWithoutAlternateTemplate = {
       ...mockStreamDocument,
       __: { isPrimaryLocale: false },
@@ -154,9 +150,8 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    assert.throws(() => {
-      resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
-    }, /No URL template found/);
+    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
+    assert.equal(result, "../es/ny/new-york/61-9th-ave-123");
   });
 
   it("use alternateFunction when provided to resolve URL template", () => {
