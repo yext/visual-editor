@@ -9,6 +9,7 @@ export interface ImageStylingProps {
 export const ImageStylingFields: Fields<ImageStylingProps> = {
   width: YextField(msg("fields.options.width", "Width"), {
     type: "number",
+    isOptional: true,
     min: 0,
   }),
   aspectRatio: YextField(msg("fields.options.aspectRatio", "Aspect Ratio"), {

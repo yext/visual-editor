@@ -46,7 +46,7 @@ describe("Footer", async () => {
   const puckConfig: Config = {
     components: { Footer },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

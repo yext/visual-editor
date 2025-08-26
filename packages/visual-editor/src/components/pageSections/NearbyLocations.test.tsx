@@ -228,7 +228,7 @@ describe("NearbyLocationsSection", async () => {
   const puckConfig: Config = {
     components: { NearbyLocationsSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

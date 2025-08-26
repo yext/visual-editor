@@ -55,7 +55,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
   }),
 };
 
-export const HeadingText: ComponentConfig<HeadingTextProps> = {
+export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
   defaultProps: {

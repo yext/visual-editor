@@ -391,7 +391,7 @@ describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
     components: { ExpandedHeader },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

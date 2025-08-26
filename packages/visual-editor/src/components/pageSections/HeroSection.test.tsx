@@ -1021,7 +1021,7 @@ describe("HeroSection", async () => {
   const puckConfig: Config = {
     components: { HeroSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

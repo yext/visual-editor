@@ -198,7 +198,7 @@ describe("FAQSection", async () => {
   const puckConfig: Config = {
     components: { FAQSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

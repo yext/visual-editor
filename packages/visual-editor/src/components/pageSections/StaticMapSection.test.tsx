@@ -112,7 +112,7 @@ describe("StaticMapSection", async () => {
   const puckConfig: Config = {
     components: { StaticMapSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

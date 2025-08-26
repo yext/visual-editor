@@ -337,7 +337,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
  * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
  * Available on Location templates.
  */
-export const ProductSection: ComponentConfig<ProductSectionProps> = {
+export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,
   defaultProps: {

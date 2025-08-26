@@ -86,7 +86,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   );
 };
 
-export const Emails: ComponentConfig<EmailsProps> = {
+export const Emails: ComponentConfig<{ props: EmailsProps }> = {
   label: msg("components.emails", "Emails"),
   fields: EmailsFields,
   resolveFields: (data, { fields }) => {
@@ -98,6 +98,7 @@ export const Emails: ComponentConfig<EmailsProps> = {
       ...fields,
       listLength: YextField(msg("fields.listLength", "List Length"), {
         type: "number",
+        isOptional: true,
         min: 1,
         max: 5,
       }),

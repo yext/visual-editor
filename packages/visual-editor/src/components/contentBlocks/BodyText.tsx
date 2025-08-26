@@ -70,7 +70,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   }
 );
 
-export const BodyText: ComponentConfig<BodyTextProps> = {
+export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
   label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
   defaultProps: {

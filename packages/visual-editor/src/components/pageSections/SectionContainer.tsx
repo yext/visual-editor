@@ -33,6 +33,7 @@ export type SectionContainerProps = {
 const sectionContainerFields: Fields<SectionContainerProps> = {
   background: YextField(msg("fields.backgroundColor", "Background Color"), {
     type: "select",
+    isOptional: true,
     options: "BACKGROUND_COLOR",
   }),
   sectionHeading: YextField(msg("fields.sectionHeading", "Section Heading"), {
@@ -108,7 +109,9 @@ const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
   );
 };
 
-export const SectionContainer: ComponentConfig<SectionContainerProps> = {
+export const SectionContainer: ComponentConfig<{
+  props: SectionContainerProps;
+}> = {
   label: "Section Container",
   fields: sectionContainerFields,
   defaultProps: {

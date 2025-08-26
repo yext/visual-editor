@@ -404,7 +404,7 @@ describe("InsightSection", async () => {
   const puckConfig: Config = {
     components: { InsightSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

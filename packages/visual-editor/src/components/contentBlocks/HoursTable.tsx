@@ -38,19 +38,25 @@ export const HoursTableDataField = YextField<any, HoursType>(
 
 // HoursTable style fields used in HoursTable and CoreInfoSection
 export const HoursTableStyleFields = {
-  startOfWeek: YextField(msg("fields.startOfTheWeek", "Start of the Week"), {
-    type: "select",
-    hasSearch: true,
-    options: "HOURS_OPTIONS",
-  }),
-  collapseDays: YextField(msg("fields.collapseDays", "Collapse Days"), {
-    type: "radio",
-    options: [
-      { label: msg("fields.options.yes", "Yes"), value: true },
-      { label: msg("fields.options.no", "No"), value: false },
-    ],
-  }),
-  showAdditionalHoursText: YextField(
+  startOfWeek: YextField<keyof DayOfWeekNames | "today">(
+    msg("fields.startOfTheWeek", "Start of the Week"),
+    {
+      type: "select",
+      hasSearch: true,
+      options: "HOURS_OPTIONS",
+    }
+  ),
+  collapseDays: YextField<boolean>(
+    msg("fields.collapseDays", "Collapse Days"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
+  showAdditionalHoursText: YextField<boolean>(
     msg("fields.options.showAdditionalHoursText", "Show additional hours text"),
     {
       type: "radio",
@@ -125,7 +131,7 @@ const VisualEditorHoursTable = ({ data, styles }: HoursTableProps) => {
   );
 };
 
-export const HoursTable: ComponentConfig<HoursTableProps> = {
+export const HoursTable: ComponentConfig<{ props: HoursTableProps }> = {
   fields: hoursTableFields,
   defaultProps: {
     data: {

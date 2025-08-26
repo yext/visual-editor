@@ -75,7 +75,7 @@ const GetDirectionsComponent = ({
   );
 };
 
-export const GetDirections: ComponentConfig<GetDirectionsProps> = {
+export const GetDirections: ComponentConfig<{ props: GetDirectionsProps }> = {
   label: msg("components.getDirections", "Get Directions"),
   fields: getDirectionsFields,
   defaultProps: {

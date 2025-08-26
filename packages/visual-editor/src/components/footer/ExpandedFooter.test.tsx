@@ -468,7 +468,7 @@ describe("ExpandedFooter", async () => {
   const puckConfig: Config = {
     components: { ExpandedFooter },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

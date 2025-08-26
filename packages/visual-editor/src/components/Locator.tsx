@@ -74,7 +74,7 @@ export interface LocatorProps {
 }
 
 const locatorFields: Fields<LocatorProps> = {
-  mapStyle: BasicSelector({
+  mapStyle: BasicSelector<LocatorProps["mapStyle"]>({
     label: msg("fields.mapStyle", "Map Style"),
     options: [
       {
@@ -107,6 +107,7 @@ const locatorFields: Fields<LocatorProps> = {
     msg("fields.options.includeOpenNow", "Include Open Now Button"),
     {
       type: "radio",
+      isOptional: true,
       options: [
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
@@ -118,7 +119,7 @@ const locatorFields: Fields<LocatorProps> = {
 /**
  * Available on Locator templates.
  */
-export const LocatorComponent: ComponentConfig<LocatorProps> = {
+export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,

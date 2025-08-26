@@ -138,7 +138,7 @@ describe("BannerSection", async () => {
   const puckConfig: Config = {
     components: { BannerSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

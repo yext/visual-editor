@@ -186,7 +186,7 @@ export const InternalThemeEditor = ({
             />
           ),
           actionBar: () => <></>,
-          components: () => <></>,
+          drawer: () => <></>,
           fields: fieldsOverride,
           iframe: loadMapboxIntoIframe,
         }}

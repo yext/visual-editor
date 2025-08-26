@@ -1,9 +1,9 @@
-import { ComponentConfig, DefaultComponentProps } from "@measured/puck";
+import { ComponentConfig } from "@measured/puck";
 
-export function withPropOverrides<P extends DefaultComponentProps>(
-  base: ComponentConfig<P>,
-  overrides: Partial<P>
-): ComponentConfig<P> {
+export function withPropOverrides<C extends ComponentConfig>(
+  base: C,
+  overrides: Partial<typeof base.defaultProps>
+): C {
   return {
     ...base,
     render: (props) => base.render({ ...props, ...overrides }),

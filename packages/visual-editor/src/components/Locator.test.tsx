@@ -122,7 +122,7 @@ describe("Locator", async () => {
   const puckConfig: Config = {
     components: { LocatorComponent },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

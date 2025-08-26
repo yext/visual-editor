@@ -33,6 +33,7 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
     msg("fields.showCurrentStatus", "Show Current Status"),
     {
       type: "radio",
+      isOptional: true,
       options: [
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
@@ -41,6 +42,7 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   ),
   timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
     type: "radio",
+    isOptional: true,
     options: [
       { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
       { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
@@ -48,6 +50,7 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   }),
   showDayNames: YextField(msg("fields.showDayNames", "Show Day Names"), {
     type: "radio",
+    isOptional: true,
     options: [
       { label: msg("fields.options.yes", "Yes"), value: true },
       { label: msg("fields.options.no", "No"), value: false },
@@ -57,6 +60,7 @@ const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
     msg("fields.dayOfWeekFormat", "Day of Week Format"),
     {
       type: "radio",
+      isOptional: true,
       options: [
         { label: msg("fields.options.short", "Short"), value: "short" },
         { label: msg("fields.options.long", "Long"), value: "long" },
@@ -99,7 +103,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
   );
 };
 
-export const HoursStatus: ComponentConfig<HoursStatusProps> = {
+export const HoursStatus: ComponentConfig<{ props: HoursStatusProps }> = {
   label: msg("components.hoursStatus", "Hours Status"),
   fields: hoursStatusWrapperFields,
   defaultProps: {
