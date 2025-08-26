@@ -3,7 +3,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   themeManagerCn,
   backgroundColors,
-  Background,
+  PageSection,
   YextField,
   VisibilityWrapper,
   getAnalyticsScopeHash,
@@ -29,13 +29,7 @@ const GridSection = React.forwardRef<
   Parameters<PuckComponent<GridProps>>[0]
 >(({ className, columns = 2, backgroundColor, slots }, ref) => {
   return (
-    <Background
-      background={backgroundColor}
-      className={themeManagerCn(
-        "flex flex-col components w-full px-4 py-pageSection-verticalPadding items-center",
-        className
-      )}
-    >
+    <PageSection background={backgroundColor} className={className}>
       <div
         className={
           "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
@@ -48,13 +42,13 @@ const GridSection = React.forwardRef<
             key={idx}
             className={themeManagerCn(
               layoutVariants({ gap: "4" }),
-              `flex flex-col`
+              `flex flex-col max-w-full overflow-hidden`
             )}
             allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
           />
         ))}
       </div>
-    </Background>
+    </PageSection>
   );
 });
 
@@ -97,7 +91,7 @@ const gridSectionFields: Fields<GridProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),

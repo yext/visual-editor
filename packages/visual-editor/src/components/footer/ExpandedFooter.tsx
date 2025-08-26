@@ -16,12 +16,14 @@ import {
   CTA,
   TranslatableCTA,
   PageSection,
-  TranslatableStringField,
   TranslatableString,
   Background,
   useDocument,
   resolveComponentData,
   PageSectionProps,
+  AssetImageType,
+  StreamDocument,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import {
   FaFacebook,
@@ -37,7 +39,7 @@ import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallT
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.tsx";
+} from "../contentBlocks/image/styling.ts";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
@@ -77,7 +79,7 @@ export const validPatterns: Record<string, RegExp> = {
 export interface ExpandedFooterData {
   /** Content for the primary footer bar. */
   primaryFooter: {
-    logo: string;
+    logo: AssetImageType;
     facebookLink: string;
     instagramLink: string;
     linkedInLink: string;
@@ -85,7 +87,7 @@ export interface ExpandedFooterData {
     tiktokLink: string;
     youtubeLink: string;
     xLink: string;
-    utilityImages: { url: string; linkTarget?: string }[];
+    utilityImages: { image: AssetImageType; linkTarget?: string }[];
     expandedFooter: boolean;
     footerLinks: TranslatableCTA[];
     expandedFooterLinks: {
@@ -151,7 +153,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
         type: "object",
         objectFields: {
           logo: YextField(msg("fields.logo", "Logo"), {
-            type: "text",
+            type: "image",
           }),
           facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
             type: "text",
@@ -185,8 +187,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                url: YextField(msg("fields.imageUrl", "Image URL"), {
-                  type: "text",
+                image: YextField(msg("fields.imageUrl", "Image URL"), {
+                  type: "image",
                 }),
                 linkTarget: YextField(
                   msg("fields.destinationURL", "Destination URL"),
@@ -195,6 +197,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   }
                 ),
               },
+              getItemSummary: (_, i) =>
+                pt("Image", "Image") + " " + ((i ?? 0) + 1),
             }
           ),
           expandedFooter: YextField(
@@ -212,16 +216,17 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             {
               type: "array",
               arrayFields: {
-                label: TranslatableStringField(msg("fields.label", "Label"), {
-                  types: ["type.string"],
+                label: YextField(msg("fields.label", "Label"), {
+                  type: "translatableString",
+                  filter: { types: ["type.string"] },
                 }),
                 links: YextField(msg("fields.links", "Links"), {
                   type: "array",
                   arrayFields: {
-                    label: TranslatableStringField(
-                      msg("fields.label", "Label"),
-                      { types: ["type.string"] }
-                    ),
+                    label: YextField(msg("fields.label", "Label"), {
+                      type: "translatableString",
+                      filter: { types: ["type.string"] },
+                    }),
                     link: YextField(msg("fields.link", "Link"), {
                       type: "text",
                     }),
@@ -232,16 +237,31 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                     },
                   },
                   defaultItemProps: defaultFooterLink,
+                  getItemSummary: (item, i) => {
+                    const { i18n } = useTranslation();
+                    return (
+                      resolveComponentData(item.label, i18n.language) ||
+                      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                    );
+                  },
                 }),
               },
               defaultItemProps: defaultExpandedFooterLinks,
+              getItemSummary: (item, i) => {
+                const { i18n } = useTranslation();
+                return (
+                  resolveComponentData(item.label, i18n.language) ||
+                  pt("Category", "Category") + " " + ((i ?? 0) + 1)
+                );
+              },
             }
           ),
           footerLinks: YextField(msg("fields.footerLinks", "Footer Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -253,6 +273,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               },
             },
             defaultItemProps: defaultFooterLink,
+            getItemSummary: (item, i) => {
+              const { i18n } = useTranslation();
+              return (
+                resolveComponentData(item.label, i18n.language) ||
+                pt("Link", "Link") + " " + ((i ?? 0) + 1)
+              );
+            },
           }),
         },
       }),
@@ -268,17 +295,21 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 { label: msg("fields.options.no", "No"), value: false },
               ],
             }),
-            copyrightMessage: TranslatableStringField(
+            copyrightMessage: YextField(
               msg("fields.copyrightMessage", "Copyright Message"),
-              { types: ["type.string"] }
+              {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
+              }
             ),
             secondaryFooterLinks: YextField(
               msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(msg("fields.label", "Label"), {
-                    types: ["type.string"],
+                  label: YextField(msg("fields.label", "Label"), {
+                    type: "translatableString",
+                    filter: { types: ["type.string"] },
                   }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
@@ -290,6 +321,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   },
                 },
                 defaultItemProps: defaultFooterLink,
+                getItemSummary: (item, i) => {
+                  const { i18n } = useTranslation();
+                  return (
+                    resolveComponentData(item.label, i18n.language) ||
+                    pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                  );
+                },
               }
             ),
           },
@@ -438,61 +476,78 @@ const ExpandedFooterWrapper = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
+  const FooterLogos = ({ className }: { className: string }) => {
+    return (
+      <div
+        className={themeManagerCn(`flex flex-col gap-10 md:gap-8`, className)}
+      >
+        {logo && (
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.logo", "Logo")}
+          >
+            <FooterLogo
+              aspectRatio={aspectRatioForLogo}
+              logo={buildComplexLogoImage(
+                logo,
+                logoWidth || 5,
+                streamDocument,
+                i18n.language
+              )}
+              logoWidth={logoWidth || 100}
+            />
+          </EntityField>
+        )}
+        <div className="hidden md:block space-y-8">
+          <FooterIcons
+            xLink={xLink}
+            facebookLink={facebookLink}
+            instagramLink={instagramLink}
+            pinterestLink={pinterestLink}
+            linkedInLink={linkedInLink}
+            youtubeLink={youtubeLink}
+            tiktokLink={tiktokLink}
+          />
+          {utilityImages && utilityImages.length >= 1 && (
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.utilityImages", "Utility Images")}
+            >
+              <div className="grid grid-cols-3 gap-8">
+                {utilityImages.map((item, index) => (
+                  <FooterLogo
+                    aspectRatio={aspectRatioForUtilityImages}
+                    key={index}
+                    logo={buildComplexUtilityImage(
+                      item.image,
+                      utilityImagesWidth || 60,
+                      streamDocument,
+                      i18n.language
+                    )}
+                    logoWidth={utilityImagesWidth || 60}
+                  />
+                ))}
+              </div>
+            </EntityField>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
+      {/* Primary footer section. */}
       <PageSection
         verticalPadding={"footer"}
         background={backgroundColor}
         maxWidth={maxWidth}
-        className={`flex flex-col ${primaryLinksAlignment === "right" ? `md:flex-row` : `md:flex-row-reverse`} md:justify-start w-full md:items-start gap-8 md:gap-10`}
+        className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-8 md:gap-10`}
       >
-        <div
-          className={`flex flex-col gap-10 md:gap-8 ${primaryLinksAlignment === "left" ? `items-end` : `items-start`}`}
-        >
-          {logo && (
-            <EntityField
-              constantValueEnabled
-              displayName={pt("fields.logo", "Logo")}
-            >
-              <FooterLogo
-                aspectRatio={aspectRatioForLogo}
-                logo={buildComplexLogoImage(logo, logoWidth || 100)}
-                logoWidth={logoWidth || 100}
-              />
-            </EntityField>
-          )}
-          <div className="hidden md:block space-y-8">
-            <FooterIcons
-              xLink={xLink}
-              facebookLink={facebookLink}
-              instagramLink={instagramLink}
-              pinterestLink={pinterestLink}
-              linkedInLink={linkedInLink}
-              youtubeLink={youtubeLink}
-              tiktokLink={tiktokLink}
-            />
-            {utilityImages && utilityImages.length >= 1 && (
-              <EntityField
-                constantValueEnabled
-                displayName={pt("fields.utilityImages", "Utility Images")}
-              >
-                <div className="grid grid-cols-3 gap-8">
-                  {utilityImages.map((item, index) => (
-                    <FooterLogo
-                      aspectRatio={aspectRatioForUtilityImages}
-                      key={index}
-                      logo={buildComplexUtilityImage(
-                        item.url,
-                        utilityImagesWidth || 60
-                      )}
-                      logoWidth={utilityImagesWidth || 60}
-                    />
-                  ))}
-                </div>
-              </EntityField>
-            )}
-          </div>
-        </div>
+        {/** Desktop left footer logos and icons / Mobile top footer logo */}
+        <FooterLogos
+          className={`${primaryLinksAlignment === "left" ? `md:hidden` : `items-start`}`}
+        />
         {expandedFooter ? (
           <EntityField
             constantValueEnabled
@@ -525,6 +580,11 @@ const ExpandedFooterWrapper = ({
             </EntityField>
           </div>
         )}
+        {/** Desktop right aligned footer logos and icons */}
+        <FooterLogos
+          className={`${primaryLinksAlignment === "left" ? `items-end` : `md:hidden`} hidden sm:block`}
+        />
+        {/** Mobile footer icons and utility images */}
         <div className="md:hidden block space-y-10">
           <FooterIcons
             xLink={xLink}
@@ -547,10 +607,12 @@ const ExpandedFooterWrapper = ({
                       aspectRatio={aspectRatioForUtilityImages}
                       key={index}
                       logo={buildComplexUtilityImage(
-                        item.url,
-                        logoWidth || 100
+                        item.image,
+                        logoWidth || 60,
+                        streamDocument,
+                        i18n.language
                       )}
-                      logoWidth={utilityImagesWidth || 100}
+                      logoWidth={utilityImagesWidth || 60}
                     />
                   ))}
                 </div>
@@ -559,6 +621,7 @@ const ExpandedFooterWrapper = ({
           )}
         </div>
       </PageSection>
+      {/* Secondary footer section */}
       {show && (
         <PageSection
           verticalPadding={"footerSecondary"}
@@ -627,7 +690,11 @@ const FooterLinks = ({
                 streamDocument
               )}
               linkType={item.linkType}
-              link={item.link}
+              link={resolveComponentData(
+                item.link,
+                i18n.language,
+                streamDocument
+              )}
               className="justify-center md:justify-start block break-words whitespace-normal"
             />
           </li>
@@ -663,7 +730,11 @@ const ExpandedFooterLinks = ({
               streamDocument
             )}
             linkType={item.linkType}
-            link={item.link}
+            link={resolveComponentData(
+              item.link,
+              i18n.language,
+              streamDocument
+            )}
             className={"justify-start block break-words whitespace-normal"}
           />
         </li>
@@ -694,13 +765,19 @@ const FooterLogo = (props: {
 };
 
 const buildComplexLogoImage = (
-  url: string | undefined,
-  width: number
+  image: AssetImageType,
+  width: number,
+  entityDocument: StreamDocument,
+  locale: string
 ): ComplexImageType => {
+  const altText = image?.alternateText
+    ? resolveComponentData(image.alternateText, locale, entityDocument)
+    : "Logo";
+
   return {
     image: {
-      url: url!,
-      alternateText: "Logo",
+      url: image?.url,
+      alternateText: altText,
       height: width / 2,
       width: width,
     },
@@ -708,15 +785,21 @@ const buildComplexLogoImage = (
 };
 
 const buildComplexUtilityImage = (
-  url: string | undefined,
-  width: number
+  image: AssetImageType,
+  width: number,
+  entityDocument: StreamDocument,
+  locale: string
 ): ComplexImageType => {
+  const altText = image?.alternateText
+    ? resolveComponentData(image.alternateText, locale, entityDocument)
+    : "Utility Image";
+
   return {
     image: {
-      url: url!,
+      url: image?.url,
       height: width,
       width: width,
-      alternateText: "Utility Image",
+      alternateText: altText,
     },
   };
 };
@@ -823,7 +906,12 @@ export const ExpandedFooter: ComponentConfig<ExpandedFooterProps> = {
   defaultProps: {
     data: {
       primaryFooter: {
-        logo: PLACEHOLDER_LOGO_IMAGE,
+        logo: {
+          url: PLACEHOLDER_LOGO_IMAGE,
+          height: 100,
+          width: 100,
+          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+        },
         footerLinks: [
           defaultFooterLink,
           defaultFooterLink,

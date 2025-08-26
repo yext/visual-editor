@@ -1,5 +1,4 @@
-import { AutoField, CustomField, Field } from "@measured/puck";
-import { ConstantFields } from "./ConstantField.tsx";
+import { Field } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";
@@ -34,47 +33,6 @@ export const linkTypeOptions = () => {
   ];
 };
 
-export const CTA_CONSTANT_CONFIG: CustomField<TranslatableCTA> = {
-  type: "custom",
-  render: ({ onChange, value }) => {
-    const labelField = useMemo(() => {
-      return TranslatableStringField<TranslatableString | undefined>(
-        msg("label", "Label"),
-        { types: ["type.string"] }
-      );
-    }, []);
-
-    const constantFields = ConstantFields({
-      onChange: onChange,
-      value: value,
-      fields: [
-        {
-          label: pt("Link", "Link"),
-          field: "link",
-          fieldType: "text",
-        },
-        {
-          label: pt("linkType", "Link Type"),
-          field: "linkType",
-          fieldType: "select",
-          options: linkTypeOptions(),
-        },
-      ],
-    });
-
-    return (
-      <div className={"ve-mt-3"}>
-        <AutoField
-          field={labelField}
-          value={value.label}
-          onChange={(newValue) => onChange({ ...value, label: newValue })}
-        />
-        {constantFields}
-      </div>
-    );
-  },
-};
-
 // Fields for TranslatableCTA with labels
 export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
   const labelField = useMemo(() => {
@@ -84,15 +42,20 @@ export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
     );
   }, []);
 
+  const linkField = useMemo(() => {
+    return TranslatableStringField<TranslatableString | undefined>(
+      msg("fields.link", "Link"),
+      { types: ["type.string"] },
+      true
+    );
+  }, []);
+
   return {
     type: "object",
     label: pt("fields.callToAction", "Call To Action"),
     objectFields: {
       label: labelField,
-      link: {
-        label: pt("fields.link", "Link"),
-        type: "text",
-      },
+      link: linkField,
       linkType: {
         label: pt("fields.linkType", "Link Type"),
         type: "select",

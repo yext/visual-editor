@@ -5,17 +5,22 @@ import {
   useDocument,
   EntityField,
   YextEntityField,
-  CTA,
-  CTAProps,
   msg,
   pt,
   YextField,
   resolveComponentData,
-  TranslatableCTA,
+  EnhancedTranslatableCTA,
+  CTA,
+  CTAProps,
 } from "@yext/visual-editor";
+import {
+  ctaTypeOptions,
+  ctaTypeToEntityFieldType,
+  getCTATypeAndCoordinate,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 export interface CTAWrapperProps {
-  entityField: YextEntityField<TranslatableCTA>;
+  entityField: YextEntityField<EnhancedTranslatableCTA>;
   variant: CTAProps["variant"];
   className?: CTAProps["className"];
 }
@@ -25,6 +30,12 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     type: "entityField",
     filter: {
       types: ["type.cta"],
+    },
+    typeSelectorConfig: {
+      typeLabel: msg("fields.ctaType", "CTA Type"),
+      fieldLabel: msg("fields.ctaField", "CTA Field"),
+      options: ctaTypeOptions(),
+      optionValueToEntityFieldType: ctaTypeToEntityFieldType,
     },
   }),
   variant: YextField(msg("fields.variant", "Variant"), {
@@ -41,6 +52,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
+  const { ctaType, coordinate } = getCTATypeAndCoordinate(entityField, cta);
 
   return (
     <EntityField
@@ -51,8 +63,11 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
       {cta && (
         <CTA
           label={resolveComponentData(cta.label, i18n.language, streamDocument)}
-          link={cta.link}
+          link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
+          ctaType={ctaType}
+          coordinate={coordinate}
+          presetImageType={cta.presetImageType}
           variant={variant}
           className={className}
         />
@@ -70,6 +85,8 @@ export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
       constantValue: {
         label: "Call to Action",
         link: "#",
+        linkType: "URL",
+        ctaType: "textAndLink",
       },
     },
     variant: "primary",

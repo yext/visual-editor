@@ -1,10 +1,7 @@
 import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
-import {
-  msg,
-  pt,
-  usePlatformTranslation,
-} from "../../../utils/i18n/platform.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { useMemo } from "react";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -46,7 +43,6 @@ export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
 };
 
 const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
-  const { t, i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
 
   const questionField = useMemo(() => {
@@ -68,6 +64,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
     },
     defaultItemProps: defaultFAQ,
     getItemSummary: (item, i): string => {
+      const { i18n } = useTranslation();
       const translation = resolveComponentData(
         item.question,
         i18n.language,
@@ -76,7 +73,7 @@ const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
       if (translation) {
         return translation;
       }
-      return t("faq", "FAQ") + " " + ((i ?? 0) + 1);
+      return pt("faq", "FAQ") + " " + ((i ?? 0) + 1);
     },
   };
 };

@@ -2,35 +2,35 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  themeManagerCn,
+  PromoSectionType,
   useDocument,
   Image,
-  BackgroundStyle,
   backgroundColors,
+  BackgroundStyle,
+  HeadingLevel,
   Heading,
-  CTA,
   PageSection,
   YextField,
   VisibilityWrapper,
   CTAProps,
-  PromoSectionType,
+  msg,
+  resolveComponentData,
   YextStructEntityField,
   YextStructFieldSelector,
   resolveYextStructField,
-  ComponentFields,
-  EntityField,
-  msg,
-  pt,
-  HeadingLevel,
-  ThemeOptions,
   getAnalyticsScopeHash,
-  resolveComponentData,
+  CTA,
+  ComponentFields,
+  ThemeOptions,
+  EntityField,
+  pt,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
+} from "../contentBlocks/image/styling.ts";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -102,7 +102,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      promo: YextStructFieldSelector({
+      promo: YextStructFieldSelector<PromoSectionType>({
         label: msg("fields.promo", "Promo"),
         filter: {
           type: ComponentFields.PromoSection.type,
@@ -186,7 +186,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
 };
 
 const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedPromo = resolveYextStructField(
     streamDocument,
@@ -202,31 +202,45 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
       }[styles.heading.align]
     : "justify-start";
 
-  return (
-    <PageSection
-      background={styles.backgroundColor}
-      className={themeManagerCn(
-        "flex flex-col md:flex-row md:gap-16",
-        styles.orientation === "right" && "md:flex-row-reverse"
-      )}
-    >
-      {resolvedPromo?.image && (
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.promo.field}
-          constantValueEnabled={data.promo.constantValueOverride.image}
+  const PromoImage = ({ className }: { className: string }) => {
+    return (
+      resolvedPromo?.image && (
+        <div
+          className={themeManagerCn("w-full my-auto", className)}
+          role="region"
+          aria-label={t("promoImage", "Promo Image")}
         >
-          <div className="w-full">
+          <EntityField
+            displayName={pt("fields.image", "Image")}
+            fieldId={data.promo.field}
+            constantValueEnabled={data.promo.constantValueOverride.image}
+          >
             <Image
               image={resolvedPromo.image}
               aspectRatio={styles.image.aspectRatio ?? 1.78}
               width={styles.image.width || 640}
               className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
             />
-          </div>
-        </EntityField>
-      )}
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
+          </EntityField>
+        </div>
+      )
+    );
+  };
+
+  return (
+    <PageSection
+      background={styles.backgroundColor}
+      className={"flex flex-col md:flex-row md:gap-16"}
+    >
+      {/* Desktop left image */}
+      <PromoImage
+        className={themeManagerCn(
+          styles.orientation === "right" && "md:hidden"
+        )}
+      />
+      <div
+        className={`flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words`}
+      >
         {resolvedPromo?.title && (
           <EntityField
             displayName={pt("fields.title", "Title")}
@@ -259,9 +273,9 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               streamDocument
             )}
         </EntityField>
-        {resolvedPromo?.cta?.label && (
+        {resolvedPromo?.cta && (
           <EntityField
-            displayName={pt("fields.callToAction", "Call To Action")}
+            displayName={pt("fields.cta", "CTA")}
             fieldId={data.promo.field}
             constantValueEnabled={data.promo.constantValueOverride.cta}
           >
@@ -269,16 +283,30 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               eventName={`cta`}
               variant={styles?.ctaVariant}
               label={resolveComponentData(
-                resolvedPromo?.cta.label,
+                resolvedPromo.cta.label,
                 i18n.language,
                 streamDocument
               )}
-              link={resolvedPromo?.cta.link}
-              linkType={resolvedPromo?.cta.linkType}
+              link={resolveComponentData(
+                resolvedPromo.cta.link,
+                i18n.language,
+                streamDocument
+              )}
+              linkType={resolvedPromo.cta.linkType}
+              ctaType={resolvedPromo.cta.ctaType || "textAndLink"}
+              coordinate={resolvedPromo.cta.coordinate}
+              presetImageType={resolvedPromo.cta.presetImageType}
             />
           </EntityField>
         )}
       </div>
+      {/* Desktop right image */}
+      <PromoImage
+        className={themeManagerCn(
+          "hidden sm:block",
+          styles.orientation === "left" && "md:hidden"
+        )}
+      />
     </PageSection>
   );
 };
@@ -294,7 +322,6 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     data: {
       promo: {
         field: "",
-        constantValueEnabled: true,
         constantValue: {
           image: {
             height: 360,
@@ -310,8 +337,10 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
             label: { en: "Learn More", hasLocalizedValue: "true" },
             link: "#",
             linkType: "URL",
+            ctaType: "textAndLink",
           },
         },
+        constantValueEnabled: true,
         constantValueOverride: {
           image: true,
           title: true,
@@ -337,34 +366,7 @@ export const PromoSection: ComponentConfig<PromoSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveFields: (data, { lastData }) => {
-    // If set to entity value and no field selected, hide the component.
-    if (
-      !data.props.data.promo.constantValueEnabled &&
-      data.props.data.promo.field === ""
-    ) {
-      data.props.liveVisibility = false;
-      return {
-        ...promoSectionFields,
-        liveVisibility: undefined,
-      };
-    }
 
-    // If no field was selected and then constant value is enabled
-    // or a field is selected, show the component.
-    if (
-      (data.props.data.promo.constantValueEnabled &&
-        !lastData?.props.data.promo.constantValueEnabled &&
-        data.props.data.promo.field === "") ||
-      (lastData?.props.data.promo.field === "" &&
-        data.props.data.promo.field !== "")
-    ) {
-      data.props.liveVisibility = true;
-    }
-
-    // Otherwise, return normal fields.
-    return promoSectionFields;
-  },
   render: (props) => {
     return (
       <AnalyticsScopeProvider

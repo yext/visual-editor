@@ -279,6 +279,59 @@ const tests: ComponentTest[] = [
     },
     version: 7,
   },
+  {
+    name: "version 16 props with missing ctaType",
+    document: { c_products: productsData },
+    props: {
+      data: {
+        products: {
+          field: "c_products",
+          constantValue: [
+            {
+              name: "Product 1",
+              category: "Category",
+              description: "Description",
+              cta: {
+                label: "CTA",
+                // Missing link, linkType, and ctaType - should be added by migration
+              },
+            },
+            {
+              name: "Product 2",
+              category: "Category 2",
+              description: "Description 2",
+              cta: {
+                label: "CTA 2",
+                link: "#",
+                linkType: "URL",
+                // Missing ctaType - should be added by migration
+              },
+            },
+          ],
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        heading: {
+          level: 2,
+          align: "left",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 16,
+  },
 ];
 
 describe("ProductSection", async () => {

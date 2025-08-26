@@ -5,6 +5,7 @@ import {
   hexToHSL,
   luminanceFromRGB,
   isColorContrastWcagCompliant,
+  convertComputedStyleColorToHex,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -62,6 +63,42 @@ describe("hexToHSL", () => {
     expect(hexToHSL("123456")).toBeUndefined();
     expect(hexToHSL("#123456789")).toBeUndefined();
     expect(hexToHSL("#16")).toBeUndefined();
+  });
+});
+
+describe("convertComputedStyleColorToHex", () => {
+  it("should correctly read rgb values", () => {
+    expect(convertComputedStyleColorToHex("rgb(255, 0, 0)")).toBe("#FF0000");
+    expect(convertComputedStyleColorToHex("rgb(0, 255, 0)")).toBe("#00FF00");
+    expect(convertComputedStyleColorToHex("rgb(0, 0, 255)")).toBe("#0000FF");
+  });
+
+  it("should correctly read rgba values", () => {
+    expect(convertComputedStyleColorToHex("rgba(255, 0, 0, 1)")).toBe(
+      "#FF0000"
+    );
+    expect(convertComputedStyleColorToHex("rgba(0, 255, 0, 1)")).toBe(
+      "#00FF00"
+    );
+    expect(convertComputedStyleColorToHex("rgba(0, 0, 255, 1)")).toBe(
+      "#0000FF"
+    );
+  });
+
+  it("should correctly read color(srgb ...) values", () => {
+    expect(convertComputedStyleColorToHex("color(srgb 1 0 0)")).toBe("#FF0000");
+    expect(convertComputedStyleColorToHex("color(srgb 0 1 0)")).toBe("#00FF00");
+    expect(convertComputedStyleColorToHex("color(srgb 0 0 1)")).toBe("#0000FF");
+  });
+
+  it("should return an empty string for invalid inputs", () => {
+    expect(convertComputedStyleColorToHex("invalid")).toBe("");
+    expect(convertComputedStyleColorToHex("")).toBe("");
+    expect(convertComputedStyleColorToHex("rgb(256, 0, 0)")).toBe("");
+  });
+
+  it("should return an empty string for transparent values", () => {
+    expect(convertComputedStyleColorToHex("rgba(0, 0, 255, 0.5)")).toBe("");
   });
 });
 

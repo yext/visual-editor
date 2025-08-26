@@ -7,7 +7,6 @@ import { ComponentConfig, Fields } from "@measured/puck";
 import {
   CTA,
   EntityField,
-  MaybeLink,
   backgroundColors,
   Image,
   msg,
@@ -17,11 +16,11 @@ import {
   TranslatableCTA,
   pt,
   PageSection,
-  TranslatableStringField,
   useDocument,
   resolveComponentData,
   PageSectionProps,
   useOverflow,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -39,7 +38,8 @@ import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallT
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.tsx";
+} from "../contentBlocks/image/styling.ts";
+import { cva } from "class-variance-authority";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
 const defaultMainLink = {
@@ -53,10 +53,23 @@ const defaultSecondaryLink = {
   link: "#",
 };
 
+export const headerWrapper = cva("flex flex-col", {
+  variants: {
+    position: {
+      sticky: "sticky top-0 z-50",
+      fixed: "fixed top-0 left-0 right-0 z-50",
+      scrollsWithPage: "",
+    },
+  },
+  defaultVariants: {
+    position: "scrollsWithPage",
+  },
+});
+
 export interface ExpandedHeaderData {
   /** Content for the main primary header bar. */
   primaryHeader: {
-    logo: string;
+    logo: AssetImageType;
     links: TranslatableCTA[];
     primaryCTA?: TranslatableCTA;
     showPrimaryCTA: boolean;
@@ -86,6 +99,8 @@ export interface ExpandedHeaderStyles {
   };
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
+  /** Whether the header is "sticky" or not */
+  headerPosition: "sticky" | "fixed" | "scrollsWithPage";
 }
 
 export interface ExpandedHeaderProps {
@@ -121,13 +136,14 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
         type: "object",
         objectFields: {
           logo: YextField(msg("fields.logo", "Logo"), {
-            type: "text",
+            type: "image",
           }),
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -139,12 +155,20 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               },
             },
             defaultItemProps: defaultMainLink,
+            getItemSummary: (item, i) => {
+              const { i18n } = useTranslation();
+              return (
+                resolveComponentData(item.label, i18n.language) ||
+                pt("Link", "Link") + " " + ((i ?? 0) + 1)
+              );
+            },
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -169,8 +193,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
             objectFields: {
-              label: TranslatableStringField(msg("fields.label", "Label"), {
-                types: ["type.string"],
+              label: YextField(msg("fields.label", "Label"), {
+                type: "translatableString",
+                filter: { types: ["type.string"] },
               }),
               link: YextField(msg("fields.link", "Link"), {
                 type: "text",
@@ -221,8 +246,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               {
                 type: "array",
                 arrayFields: {
-                  label: TranslatableStringField(msg("fields.label", "Label"), {
-                    types: ["type.string"],
+                  label: YextField(msg("fields.label", "Label"), {
+                    type: "translatableString",
+                    filter: { types: ["type.string"] },
                   }),
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
@@ -234,6 +260,13 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
                   },
                 },
                 defaultItemProps: defaultSecondaryLink,
+                getItemSummary: (item, i) => {
+                  const { i18n } = useTranslation();
+                  return (
+                    resolveComponentData(item.label, i18n.language) ||
+                    pt("Link", "Link") + " " + ((i ?? 0) + 1)
+                  );
+                },
               }
             ),
           },
@@ -294,6 +327,20 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
       }),
+      headerPosition: YextField(
+        msg("fields.headerPosition", "Header Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
+              value: "scrollsWithPage",
+            },
+            { label: msg("fields.options.sticky", "Sticky"), value: "sticky" },
+            { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
+          ],
+        }
+      ),
     },
   }),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
@@ -345,6 +392,24 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   const contentRef = React.useRef<HTMLDivElement>(null);
   const showHamburger = useOverflow(containerRef, contentRef);
 
+  const headerRef = React.useRef<HTMLDivElement>(null);
+  const [headerHeight, setHeaderHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!headerRef.current) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      setHeaderHeight(headerRef.current?.offsetHeight ?? 0);
+    });
+
+    resizeObserver.observe(headerRef.current);
+    return () => {
+      return resizeObserver.disconnect();
+    };
+  }, []);
+
   const hasNavContent =
     !!(primaryCTA?.label && primaryCTA?.link) ||
     !!(secondaryCTA?.label && secondaryCTA?.link) ||
@@ -377,150 +442,22 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   return (
     <>
-      {/* Secondary Header (Top Bar) */}
-      <div className="hidden md:flex flex-col">
-        {show && (
-          <div className="hidden md:flex">
-            <PageSection
-              maxWidth={maxWidth}
-              verticalPadding={"sm"}
-              background={secondaryBackgroundColor}
-              className="flex justify-end gap-6 items-center"
-            >
-              <EntityField
-                constantValueEnabled
-                displayName={pt(
-                  "fields.secondaryHeaderLinks",
-                  "Secondary Header Links"
-                )}
-              >
-                <HeaderLinks links={secondaryLinks} type="Secondary" />
-              </EntityField>
-              {showLanguageDropdown && showLanguageSelector && (
-                <LanguageDropdown
-                  {...languageDropDownProps}
-                  className="hidden md:flex"
-                />
-              )}
-            </PageSection>
-          </div>
-        )}
-      </div>
-
-      {/* Primary Header */}
-      <div className="flex flex-col">
-        <PageSection
-          maxWidth={maxWidth}
-          verticalPadding={"header"}
-          background={backgroundColor}
-          className="flex flex-row justify-between w-full items-center gap-8"
-        >
-          <EntityField
-            constantValueEnabled
-            displayName={pt("fields.logoUrl", "Logo")}
-          >
-            {/* Mobile Logo */}
-            <div className="block md:hidden">
-              <HeaderLogo
-                logo={buildComplexImage(logo, logoStyle.width ?? 100)}
-                logoWidth={logoStyle.width ?? 100}
-                aspectRatio={logoStyle.aspectRatio}
-              />
-            </div>
-            {/* Desktop Logo */}
-            <div className="hidden md:block">
-              <HeaderLogo
-                logo={buildComplexImage(logo, logoStyle.width ?? 200)}
-                logoWidth={logoStyle.width ?? 200}
-                aspectRatio={logoStyle.aspectRatio}
-              />
-            </div>
-          </EntityField>
-
-          {/* Desktop Navigation & Mobile Hamburger */}
-          {hasNavContent && (
-            <div
-              className="flex-grow flex justify-end items-center min-w-0"
-              ref={containerRef}
-            >
-              {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
-              {/* Its width is our source of truth. */}
-              <div
-                ref={contentRef}
-                className="flex items-center gap-8 invisible h-0"
-              >
-                {navContent}
-              </div>
-
-              {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
-              <div
-                className={`hidden md:flex items-center gap-8 absolute ${
-                  showHamburger
-                    ? "opacity-0 pointer-events-none"
-                    : "opacity-100 pointer-events-auto"
-                }`}
-              >
-                {navContent}
-              </div>
-
-              {/* Hamburger Button - Shown when nav overflows or on small screens */}
-              <button
-                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label={
-                  isMobileMenuOpen
-                    ? t("closeMenu", "Close menu")
-                    : t("openMenu", "Open menu")
-                }
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-                className={`text-xl z-10 ${
-                  showHamburger ? "md:block" : "md:hidden"
-                }`}
-              >
-                {isMobileMenuOpen ? (
-                  <FaTimes size="1.5rem" />
-                ) : (
-                  <FaBars size="1.5rem" />
-                )}
-              </button>
-            </div>
-          )}
-        </PageSection>
-      </div>
-
-      {/* Mobile Menu Panel (Flyout) */}
-      {isMobileMenuOpen && (
-        <div
-          id="mobile-menu"
-          className={`transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen
-              ? "max-h-[1000px] opacity-100"
-              : "max-h-0 opacity-0 overflow-hidden"
-          }`}
-        >
-          {/* ... Mobile menu sections remain the same ... */}
-          <PageSection
-            verticalPadding={"sm"}
-            background={backgroundColor}
-            maxWidth={maxWidth}
-          >
-            <EntityField
-              constantValueEnabled
-              displayName={pt(
-                "fields.primaryHeaderLinks",
-                "Primary Header Links"
-              )}
-            >
-              <HeaderLinks links={links} />
-            </EntityField>
-          </PageSection>
-          {/* Secondary Header (Mobile menu) */}
+      {styles.headerPosition === "fixed" && headerHeight > 0 ? (
+        <div style={{ height: headerHeight }} />
+      ) : null}
+      <div
+        ref={headerRef}
+        className={headerWrapper({ position: styles.headerPosition })}
+      >
+        {/* Secondary Header (Top Bar) */}
+        <div className="hidden md:flex flex-col">
           {show && (
-            <div className="flex md:hidden">
+            <div className="hidden md:flex">
               <PageSection
                 maxWidth={maxWidth}
                 verticalPadding={"sm"}
                 background={secondaryBackgroundColor}
+                className="flex justify-end gap-6 items-center"
               >
                 <EntityField
                   constantValueEnabled
@@ -533,32 +470,168 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
                 </EntityField>
                 {showLanguageDropdown && showLanguageSelector && (
                   <LanguageDropdown
-                    background={secondaryBackgroundColor}
                     {...languageDropDownProps}
-                    className="flex md:hidden"
+                    className="hidden md:flex"
                   />
                 )}
               </PageSection>
             </div>
           )}
-          {(showPrimaryCTA || showSecondaryCTA) && (
+        </div>
+
+        {/* Primary Header */}
+        <div className="flex flex-col">
+          <PageSection
+            maxWidth={maxWidth}
+            verticalPadding={"header"}
+            background={backgroundColor}
+            className="flex flex-row justify-between w-full items-center gap-8"
+          >
+            <EntityField
+              constantValueEnabled
+              displayName={pt("fields.logoUrl", "Logo")}
+            >
+              {/* Mobile Logo */}
+              <div className="block md:hidden">
+                <HeaderLogo
+                  logo={buildComplexImage(logo, logoStyle.width ?? 100)}
+                  logoWidth={logoStyle.width ?? 100}
+                  aspectRatio={logoStyle.aspectRatio}
+                />
+              </div>
+              {/* Desktop Logo */}
+              <div className="hidden md:block">
+                <HeaderLogo
+                  logo={buildComplexImage(logo, logoStyle.width ?? 200)}
+                  logoWidth={logoStyle.width ?? 200}
+                  aspectRatio={logoStyle.aspectRatio}
+                />
+              </div>
+            </EntityField>
+
+            {/* Desktop Navigation & Mobile Hamburger */}
+            {hasNavContent && (
+              <div
+                className="flex-grow flex justify-end items-center min-w-0"
+                ref={containerRef}
+              >
+                {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
+                {/* Its width is our source of truth. */}
+                <div
+                  ref={contentRef}
+                  className="flex items-center gap-8 invisible h-0"
+                >
+                  {navContent}
+                </div>
+
+                {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
+                <div
+                  className={`hidden md:flex items-center gap-8 absolute ${
+                    showHamburger
+                      ? "opacity-0 pointer-events-none"
+                      : "opacity-100 pointer-events-auto"
+                  }`}
+                >
+                  {navContent}
+                </div>
+
+                {/* Hamburger Button - Shown when nav overflows or on small screens */}
+                <button
+                  onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                  aria-label={
+                    isMobileMenuOpen
+                      ? t("closeMenu", "Close menu")
+                      : t("openMenu", "Open menu")
+                  }
+                  aria-expanded={isMobileMenuOpen}
+                  aria-controls="mobile-menu"
+                  className={`text-xl z-10 ${
+                    showHamburger ? "md:block" : "md:hidden"
+                  }`}
+                >
+                  {isMobileMenuOpen ? (
+                    <FaTimes size="1.5rem" />
+                  ) : (
+                    <FaBars size="1.5rem" />
+                  )}
+                </button>
+              </div>
+            )}
+          </PageSection>
+        </div>
+
+        {/* Mobile Menu Panel (Flyout) */}
+        {isMobileMenuOpen && (
+          <div
+            id="mobile-menu"
+            className={`transition-all duration-300 ease-in-out ${
+              isMobileMenuOpen
+                ? "max-h-[1000px] opacity-100"
+                : "max-h-0 opacity-0 overflow-hidden"
+            }`}
+          >
+            {/* ... Mobile menu sections remain the same ... */}
             <PageSection
               verticalPadding={"sm"}
               background={backgroundColor}
               maxWidth={maxWidth}
             >
-              <HeaderCtas
-                primaryCTA={primaryCTA}
-                secondaryCTA={secondaryCTA}
-                primaryVariant={primaryCtaVariant}
-                secondaryVariant={secondaryCtaVariant}
-                showPrimaryCTA={showPrimaryCTA}
-                showSecondaryCTA={showSecondaryCTA}
-              />
+              <EntityField
+                constantValueEnabled
+                displayName={pt(
+                  "fields.primaryHeaderLinks",
+                  "Primary Header Links"
+                )}
+              >
+                <HeaderLinks links={links} />
+              </EntityField>
             </PageSection>
-          )}
-        </div>
-      )}
+            {/* Secondary Header (Mobile menu) */}
+            {show && (
+              <div className="flex md:hidden">
+                <PageSection
+                  maxWidth={maxWidth}
+                  verticalPadding={"sm"}
+                  background={secondaryBackgroundColor}
+                >
+                  <EntityField
+                    constantValueEnabled
+                    displayName={pt(
+                      "fields.secondaryHeaderLinks",
+                      "Secondary Header Links"
+                    )}
+                  >
+                    <HeaderLinks links={secondaryLinks} type="Secondary" />
+                  </EntityField>
+                  {showLanguageDropdown && showLanguageSelector && (
+                    <LanguageDropdown
+                      background={secondaryBackgroundColor}
+                      {...languageDropDownProps}
+                      className="flex md:hidden"
+                    />
+                  )}
+                </PageSection>
+              </div>
+            )}
+            {(showPrimaryCTA || showSecondaryCTA) && (
+              <PageSection
+                verticalPadding={"sm"}
+                background={backgroundColor}
+                maxWidth={maxWidth}
+              >
+                <HeaderCtas
+                  primaryCTA={primaryCTA}
+                  secondaryCTA={secondaryCTA}
+                  primaryVariant={primaryCtaVariant}
+                  secondaryVariant={secondaryCtaVariant}
+                  showPrimaryCTA={showPrimaryCTA}
+                  showSecondaryCTA={showSecondaryCTA}
+                />
+              </PageSection>
+            )}
+          </div>
+        )}
+      </div>
     </>
   );
 };
@@ -589,7 +662,7 @@ const HeaderLinks = ({
       eventName={`cta.${ctaType}.${index}`}
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
-      link={item.link}
+      link={resolveComponentData(item.link, i18n.language, streamDocument)}
       className="justify-start w-full text-left"
     />
   );
@@ -646,17 +719,14 @@ const HeaderLogo = (props: {
   aspectRatio?: number;
 }) => {
   return (
-    <MaybeLink href={props.logo.image.url} alwaysHideCaret={true}>
-      <figure style={{ width: `${props.logoWidth}px` }}>
-        <Image
-          image={props.logo.image}
-          aspectRatio={
-            props.aspectRatio ||
-            props.logo.image.width / props.logo.image.height
-          }
-        />
-      </figure>
-    </MaybeLink>
+    <figure style={{ width: `${props.logoWidth}px` }}>
+      <Image
+        image={props.logo.image}
+        aspectRatio={
+          props.aspectRatio || props.logo.image.width / props.logo.image.height
+        }
+      />
+    </figure>
   );
 };
 
@@ -698,7 +768,11 @@ const HeaderCtas = (props: {
               i18n.language,
               streamDocument
             )}
-            link={primaryCTA.link}
+            link={resolveComponentData(
+              primaryCTA?.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={primaryCTA.linkType}
           />
         </EntityField>
@@ -716,7 +790,11 @@ const HeaderCtas = (props: {
               i18n.language,
               streamDocument
             )}
-            link={secondaryCTA.link}
+            link={resolveComponentData(
+              secondaryCTA.link,
+              i18n.language,
+              streamDocument
+            )}
             linkType={secondaryCTA.linkType}
           />
         </EntityField>
@@ -726,16 +804,24 @@ const HeaderCtas = (props: {
 };
 
 const buildComplexImage = (
-  url: string | undefined,
+  image: AssetImageType,
   width: number
 ): ComplexImageType => {
-  const safeUrl = url || PLACEHOLDER_IMAGE;
+  const safeUrl = image?.url || PLACEHOLDER_IMAGE;
+  const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const altText = resolveComponentData(
+    image?.alternateText ?? "",
+    i18n.language,
+    streamDocument
+  );
+
   return {
     image: {
       url: safeUrl,
       width,
       height: width / 2,
-      alternateText: "Logo",
+      alternateText: altText,
     },
   };
 };
@@ -750,7 +836,12 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
   defaultProps: {
     data: {
       primaryHeader: {
-        logo: PLACEHOLDER_IMAGE,
+        logo: {
+          url: PLACEHOLDER_IMAGE,
+          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          width: 100,
+          height: 100,
+        },
         links: [defaultMainLink, defaultMainLink, defaultMainLink],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -791,6 +882,7 @@ export const ExpandedHeader: ComponentConfig<ExpandedHeaderProps> = {
         backgroundColor: backgroundColors.background2.value,
       },
       maxWidth: "theme",
+      headerPosition: "scrollsWithPage",
     },
     analytics: {
       scope: "expandedHeader",

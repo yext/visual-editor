@@ -11,7 +11,6 @@ import {
   Heading,
   EntityField,
   Background,
-  CTA,
   backgroundColors,
   VisibilityWrapper,
   InsightSectionType,
@@ -25,6 +24,7 @@ import {
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
+  CTA,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -171,7 +171,7 @@ const insightSectionFields: Fields<InsightSectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -243,8 +243,11 @@ const InsightCard = ({
             eventName={`cta${cardNumber}`}
             variant={ctaVariant}
             label={resolveComponentData(insight.cta.label, i18n.language)}
-            link={insight.cta.link}
+            link={resolveComponentData(insight.cta.link, i18n.language)}
             linkType={insight.cta.linkType ?? "URL"}
+            ctaType={insight.cta.ctaType}
+            coordinate={insight.cta.coordinate}
+            presetImageType={insight.cta.presetImageType}
             className="mt-auto"
           />
         )}

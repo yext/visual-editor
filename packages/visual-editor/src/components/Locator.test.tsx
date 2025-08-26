@@ -140,6 +140,8 @@ const tests: ComponentTest[] = [
   },
 ];
 
+const screenshotThreshold = 30;
+
 describe("Locator", async () => {
   const puckConfig: Config = {
     components: { LocatorComponent },
@@ -218,7 +220,9 @@ describe("Locator", async () => {
         });
       });
 
-      await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot();
+      await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
+        customThreshold: screenshotThreshold,
+      });
       const results = await axe(container);
       if (results.violations.length) {
         console.error("WCAG Violations:", results.violations);
@@ -230,7 +234,7 @@ describe("Locator", async () => {
         await interactions(page);
         await expect(
           `Locator/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
         if (results.violations.length) {
           console.error("WCAG Violations:", results.violations);

@@ -623,6 +623,102 @@ const tests: ComponentTest[] = [
     },
     version: 11,
   },
+  {
+    name: "version 14 with cityDocument and default props",
+    document: cityDocument,
+    props: {
+      data: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "[[name]]",
+            hasLocalizedValue: "true",
+          },
+        },
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: false,
+          dayOfWeekFormat: "short",
+        },
+        phoneNumberFormat: "international",
+        phoneNumberLink: true,
+      },
+      liveVisibility: true,
+    },
+    version: 14,
+  },
+  {
+    name: "version 18 with cityDocument and siteName field",
+    document: cityDocument,
+    props: {
+      data: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "[[name]]",
+            hasLocalizedValue: "true",
+          },
+        },
+        directoryRoot: "Directory Root",
+        siteName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Example Business",
+            hasLocalizedValue: "true",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: false,
+          dayOfWeekFormat: "short",
+        },
+        phoneNumberFormat: "international",
+        phoneNumberLink: true,
+      },
+      liveVisibility: true,
+    },
+    version: 18,
+  },
 ];
 
 describe("Directory", async () => {

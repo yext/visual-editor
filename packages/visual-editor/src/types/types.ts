@@ -1,21 +1,41 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
+import { AssetImageType } from "./images";
 
 // A copy of CTAType that changes label from string to TranslatableString
-export type TranslatableCTA = Omit<CTAType, "label"> & {
+export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
   label: TranslatableString;
+  link: TranslatableString;
 };
 
+// Enhanced CTA type with new options
+export type EnhancedTranslatableCTA = TranslatableCTA & {
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
+  coordinate?: {
+    latitude: number;
+    longitude: number;
+  };
+  presetImageType?: PresetImageType;
+};
+
+// Preset image types for CTA buttons - Mobile app store buttons and Food delivery
+export type PresetImageType =
+  | "app-store"
+  | "google-play"
+  | "galaxy-store"
+  | "app-gallery"
+  | "uber-eats";
+
 export type HeroSectionType = {
-  image?: ImageType;
-  primaryCta?: TranslatableCTA;
-  secondaryCta?: TranslatableCTA;
+  image?: ImageType | AssetImageType;
+  primaryCta?: EnhancedTranslatableCTA;
+  secondaryCta?: EnhancedTranslatableCTA;
 };
 
 export type PromoSectionType = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   title?: TranslatableString;
   description?: TranslatableRichText;
-  cta?: TranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type ProductSectionType = {
@@ -23,11 +43,11 @@ export type ProductSectionType = {
 };
 
 export type ProductStruct = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   name?: TranslatableString;
   description?: TranslatableRichText;
   category?: TranslatableString;
-  cta?: TranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type EventSectionType = {
@@ -35,11 +55,11 @@ export type EventSectionType = {
 };
 
 export type EventStruct = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   title?: TranslatableString;
   dateTime?: string;
   description?: TranslatableRichText;
-  cta?: TranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type FAQSectionType = {
@@ -66,12 +86,12 @@ export type InsightSectionType = {
 };
 
 export type InsightStruct = {
-  image?: ImageType;
+  image?: ImageType | AssetImageType;
   name?: TranslatableString;
   category?: TranslatableString;
   publishTime?: string;
   description?: TranslatableRichText;
-  cta?: TranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 export type TeamSectionType = {
@@ -79,12 +99,12 @@ export type TeamSectionType = {
 };
 
 export type PersonStruct = {
-  headshot?: ImageType;
+  headshot?: ImageType | AssetImageType;
   name?: TranslatableString;
   title?: TranslatableString;
   phoneNumber?: string;
   email?: string;
-  cta?: TranslatableCTA;
+  cta: EnhancedTranslatableCTA;
 };
 
 type LocalizedValues = {
@@ -100,11 +120,4 @@ export type TranslatableRichText =
 export type RichText = {
   html?: string;
   json?: string;
-};
-
-export type GalleryImageType = {
-  url: string;
-  alternateText?: string;
-  height?: number;
-  width?: number;
 };

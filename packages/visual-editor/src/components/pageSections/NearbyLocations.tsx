@@ -633,7 +633,7 @@ export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps
           dayOfWeekFormat: "long",
         },
         phoneNumberFormat: "domestic",
-        phoneNumberLink: false,
+        phoneNumberLink: true,
       },
       analytics: {
         scope: "nearbyLocationsSection",

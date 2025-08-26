@@ -14,12 +14,16 @@ import {
   CodeField,
   getMaxWidthOptions,
   msg,
+  TranslatableStringField,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
+import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import { MsgString } from "../utils/i18n/platform.ts";
+import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -94,6 +98,16 @@ type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
 
+type YextTranslatableStringField = YextBaseField & {
+  type: "translatableString";
+  filter?: RenderEntityFieldFilter<any>;
+  showApplyAllOption?: boolean;
+};
+
+type YextImageField = YextBaseField & {
+  type: "image";
+};
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -112,20 +126,22 @@ type YextFieldConfig<Props = any> =
   | YextRadioField
   | YextOptionalNumberField
   | YextCodeField
-  | YextMaxWidthField;
+  | YextMaxWidthField
+  | YextTranslatableStringField
+  | YextImageField;
 
 export function YextField<T = any>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
 
 export function YextField<T extends Record<string, any>, U = any>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
 
 export function YextField<T, U>(
-  fieldName: string,
+  fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<any> {
   // use YextEntityFieldSelector
@@ -135,6 +151,7 @@ export function YextField<T, U>(
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
+      typeSelectorConfig: config.typeSelectorConfig,
     });
   }
 
@@ -207,6 +224,21 @@ export function YextField<T, U>(
         },
       ],
     });
+  }
+
+  if (config.type === "translatableString") {
+    return TranslatableStringField(
+      fieldName,
+      config.filter,
+      config.showApplyAllOption
+    );
+  }
+
+  if (config.type === "image") {
+    return {
+      ...IMAGE_CONSTANT_CONFIG,
+      label: fieldName,
+    };
   }
 
   return {

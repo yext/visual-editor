@@ -21,17 +21,6 @@
     "name": "Locator 63797-locations",
     "url": "/locator-slug-63797-locations"
   },
-  "_site": {
-    "id": "site-63797",
-    "meta": {
-      "entityType": {
-        "id": "site",
-        "uid": 29107
-      },
-      "locale": "en"
-    },
-    "uid": 8966913
-  },
   "businessId": 2095538,
   "id": "locator-63797-locations",
   "locale": "en",

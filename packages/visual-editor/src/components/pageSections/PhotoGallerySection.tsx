@@ -34,12 +34,22 @@ import {
 import {
   ImageStylingFields,
   ImageStylingProps,
-} from "../contentBlocks/ImageStyling.js";
+} from "../contentBlocks/image/styling.ts";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { GalleryImageType } from "../../types/types";
+import { AssetImageType } from "../../types/images";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/1000x570/png";
+const PLACEHOLDER_WIDTH = 1000;
+const PLACEHOLDER_HEIGHT = 570;
+const PLACEHOLDER_IMAGE_URL = `https://placehold.co/${PLACEHOLDER_WIDTH}x${PLACEHOLDER_HEIGHT}/png`;
+const PLACEHOLDER: AssetImageType = {
+  url: PLACEHOLDER_IMAGE_URL,
+  width: PLACEHOLDER_WIDTH,
+  height: PLACEHOLDER_HEIGHT,
+  assetImage: {
+    name: "Placeholder",
+  },
+};
 
 export interface PhotoGalleryData {
   /**
@@ -53,7 +63,7 @@ export interface PhotoGalleryData {
    * @defaultValue A list of 3 placeholder images.
    */
   images: YextEntityField<
-    ImageType[] | ComplexImageType[] | GalleryImageType[]
+    ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
   >;
 }
 
@@ -135,7 +145,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       ),
       images: YextField<
         any,
-        ImageType[] | ComplexImageType[] | GalleryImageType[]
+        ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
       >(msg("fields.images", "Images"), {
         type: "entityField",
         filter: {
@@ -181,7 +191,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
       type: "radio",
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }
   ),
@@ -206,20 +216,43 @@ const PhotoGallerySectionComponent = ({
     streamDocument
   );
 
-  const filteredImages: ImageProps[] = (resolvedImages || [])
-    .filter(
-      (image): image is ImageType | ComplexImageType | GalleryImageType =>
-        !!image
-    )
-    .map((image) => ({
-      image: {
-        ...image,
-        height: "height" in image && image.height ? image.height : 570,
-        width: "width" in image && image.width ? image.width : 1000,
-      },
-      aspectRatio: styles.image.aspectRatio,
-      width: styles.image.width || 1000,
-    }));
+  const filteredImages: ImageProps[] =
+    resolvedImages?.map((image) => {
+      let url = "",
+        altText = "";
+      if ("assetImage" in image) {
+        url = image.assetImage.url;
+        altText = resolveComponentData(
+          image.assetImage.alternateText ?? "",
+          locale,
+          streamDocument
+        );
+      } else if ("image" in image) {
+        url = image.image.url;
+        altText = resolveComponentData(
+          image.image.alternateText ?? "",
+          locale,
+          streamDocument
+        );
+      } else {
+        altText = resolveComponentData(
+          image.alternateText ?? "",
+          locale,
+          streamDocument
+        );
+        url = image.url;
+      }
+      return {
+        image: {
+          url,
+          alternateText: altText,
+          height: "height" in image && image.height ? image.height : 570,
+          width: "width" in image && image.width ? image.width : 1000,
+        },
+        aspectRatio: styles.image.aspectRatio,
+        width: styles.image.width || 1000,
+      };
+    }) ?? [];
 
   const justifyClass = {
     left: "justify-start",
@@ -395,9 +428,9 @@ export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
       images: {
         field: "",
         constantValue: [
-          { url: PLACEHOLDER_IMAGE_URL },
-          { url: PLACEHOLDER_IMAGE_URL },
-          { url: PLACEHOLDER_IMAGE_URL },
+          { assetImage: PLACEHOLDER },
+          { assetImage: PLACEHOLDER },
+          { assetImage: PLACEHOLDER },
         ],
         constantValueEnabled: true,
       },
