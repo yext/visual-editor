@@ -18,7 +18,7 @@ import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
 export const resolveUrlTemplate = (
   streamDocument: StreamDocument,
   locale: string,
-  relativePrefixToRoot: string,
+  relativePrefixToRoot: string = "",
   alternateFunction?: (
     streamDocument: StreamDocument,
     locale: string,

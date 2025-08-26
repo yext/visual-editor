@@ -6,13 +6,13 @@ export interface LocationDocument extends StreamDocument {
   slug?: string;
   id: string;
   address?: AddressType;
-  isPrimary?: boolean;
+  locale?: string;
 }
 
 export const getLocationPath = (
   location: LocationDocument,
   locale: string,
-  relativePrefixToRoot: string | undefined
+  relativePrefixToRoot: string = ""
 ): string | undefined => {
   if (!location || (!location.slug && !location.address && !location.id)) {
     return;
@@ -24,10 +24,10 @@ export const getLocationPath = (
 
   const isPrimaryLocale = location.__?.isPrimaryLocale ?? false;
 
-  const localePath = isPrimaryLocale ? "" : `${locale}/`;
+  const localePath = isPrimaryLocale ? "" : `${locale ?? location.locale}/`;
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
     : `${localePath}${location.id}`;
 
-  return `${relativePrefixToRoot ?? ""}${normalizeSlug(path)}`;
+  return `${relativePrefixToRoot}${normalizeSlug(path)}`;
 };
