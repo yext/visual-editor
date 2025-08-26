@@ -39,8 +39,6 @@ export const AddressDataField = YextField<any, AddressType>(
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields = {
-  // By explicitly providing `<boolean>`, we tell YextField what type to use,
-  // which prevents TypeScript from incorrectly inferring `any`.
   showGetDirectionsLink: YextField<boolean>(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
@@ -51,7 +49,6 @@ export const AddressStyleFields = {
       ],
     }
   ),
-  // We do the same for the ctaVariant, specifying its exact type.
   ctaVariant: YextField<CTAProps["variant"]>(
     msg("fields.ctaVariant", "CTA Variant"),
     {
