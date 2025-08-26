@@ -288,6 +288,7 @@ const DirectoryCard = ({
   cardNumber: number;
   profile: any;
   styles: DirectoryProps["styles"];
+  puck: PuckContext;
 }) => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { i18n } = useTranslation();
