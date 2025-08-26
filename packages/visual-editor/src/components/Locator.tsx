@@ -621,8 +621,16 @@ const LocationCard = ({
     "TAP_TO_CALL"
   );
 
+  const documentForLocator = {
+    ...location,
+    __: {
+      isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
+    },
+    _pageset: streamDocument._pageset,
+  };
+
   const resolvedUrl = resolveUrlTemplate(
-    streamDocument,
+    documentForLocator,
     locale,
     relativePrefixToRoot ?? "",
     puck.metadata?.resolveUrlTemplate

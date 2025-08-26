@@ -295,8 +295,16 @@ const DirectoryCard = ({
   const locale = i18n.language;
   const cardStyles: DirectoryProps["styles"]["cards"] = styles["cards"];
 
+  const documentForDirectory = {
+    ...profile,
+    __: {
+      isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
+    },
+    _pageset: streamDocument._pageset,
+  };
+
   const resolvedUrl = resolveUrlTemplate(
-    streamDocument,
+    documentForDirectory,
     locale,
     relativePrefixToRoot ?? "",
     puck.metadata?.resolveUrlTemplate
