@@ -4,7 +4,7 @@ export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
 export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
-export { applyTheme, StreamDocument } from "./applyTheme.ts";
+export { applyTheme, type StreamDocument } from "./applyTheme.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.tsx";
 export { getPageMetadata } from "./getPageMetadata.ts";
