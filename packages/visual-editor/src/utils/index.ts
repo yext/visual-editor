@@ -42,4 +42,3 @@ export {
   type FontRegistry,
 } from "./visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
-export { deepMerge } from "./deepMerge.ts";
