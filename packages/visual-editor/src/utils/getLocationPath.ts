@@ -15,7 +15,9 @@ export const getLocationPath = (
   relativePrefixToRoot: string = ""
 ): string => {
   if (!location || (!location.slug && !location.address && !location.id)) {
-    return;
+    throw new Error(
+      `Could not resolve location path. Document is invalid: ${JSON.stringify(location)}`
+    );
   }
 
   if (location.slug) {
