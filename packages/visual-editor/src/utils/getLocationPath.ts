@@ -22,7 +22,7 @@ export const getLocationPath = (
   }
 
   if (location.slug) {
-    return `${relativePrefixToRoot ?? ""}${location.slug}`;
+    return `${relativePrefixToRoot}${location.slug}`;
   }
 
   const isPrimaryLocale =
