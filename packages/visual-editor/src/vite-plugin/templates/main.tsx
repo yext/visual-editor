@@ -14,7 +14,6 @@ import { mainConfig } from "../ve.config";
 import {
   applyTheme,
   VisualEditorProvider,
-  normalizeSlug,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
@@ -81,26 +80,12 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  const urlTemplate = resolveUrlTemplate(
+  return resolveUrlTemplate(
     document,
-    document.locale,
+    document?.locale ?? document?.meta?.locale,
     relativePrefixToRoot,
     null
   );
-  if (urlTemplate) {
-    return urlTemplate;
-  }
-
-  if (document.slug) {
-    return document.slug;
-  }
-
-  const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  const path = document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${document.address.line1}-${document.id}`
-    : `${localePath}${document.id}`;
-
-  return normalizeSlug(path);
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {

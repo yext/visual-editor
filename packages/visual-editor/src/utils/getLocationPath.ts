@@ -13,7 +13,7 @@ export const getLocationPath = (
   location: LocationDocument,
   locale: string,
   relativePrefixToRoot: string = ""
-): string | undefined => {
+): string => {
   if (!location || (!location.slug && !location.address && !location.id)) {
     return;
   }

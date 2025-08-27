@@ -12,6 +12,7 @@ import { googleFontLinkTags } from "./visualEditorFonts";
 
 export type StreamDocument = {
   [key: string]: any;
+  locale?: string;
   __?: {
     layout?: string;
     theme?: string;

@@ -25,6 +25,15 @@ export const resolveUrlTemplate = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
+  locale = locale ?? streamDocument.locale ?? streamDocument?.meta?.locale;
+  if (!locale) {
+    throw new Error(
+      `Could not determine locale from streamDocument: ${JSON.stringify(streamDocument)}`
+    );
+  }
+  if (!streamDocument.locale) {
+    streamDocument.locale = locale;
+  }
   if (alternateFunction) {
     return alternateFunction(streamDocument, locale, relativePrefixToRoot);
   }
@@ -38,13 +47,13 @@ export const resolveUrlTemplate = (
     ];
 
   if (!urlTemplate) {
-    console.warn("No URL template found on document");
-    return (
-      getLocationPath(
-        streamDocument as LocationDocument,
-        locale,
-        relativePrefixToRoot
-      ) ?? ""
+    console.warn(
+      `No URL template found on the document ${JSON.stringify(streamDocument)}`
+    );
+    return getLocationPath(
+      streamDocument as LocationDocument,
+      locale,
+      relativePrefixToRoot
     );
   }
 
