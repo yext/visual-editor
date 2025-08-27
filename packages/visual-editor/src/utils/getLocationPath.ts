@@ -33,7 +33,11 @@ export const getLocationPath = (
     return `${relativePrefixToRoot ?? ""}${location.slug}`;
   }
 
-  const isPrimaryLocale = location.__?.isPrimaryLocale ?? false;
+  const isPrimaryLocale =
+    location.__?.isPrimaryLocale != null
+      ? location.__.isPrimaryLocale === true ||
+        location.__.isPrimaryLocale === "true"
+      : location.locale === "en";
 
   const localePath = isPrimaryLocale ? "" : `${locale}/`;
   const path = location.address

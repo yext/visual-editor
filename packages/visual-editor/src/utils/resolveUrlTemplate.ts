@@ -46,7 +46,6 @@ export const resolveUrlTemplate = (
     ];
 
   if (!urlTemplate) {
-    console.warn("No URL template found on the document");
     return getLocationPath(
       streamDocument as LocationDocument,
       locale,
