@@ -592,7 +592,7 @@ const LocationCard = ({
   puck: PuckContext;
 }): React.JSX.Element => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const location = result.rawData;
   const distance = result.distance;
@@ -622,6 +622,7 @@ const LocationCard = ({
 
   const documentForLocator = {
     ...location,
+    locale: i18n.language,
     __: {
       isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
     },
