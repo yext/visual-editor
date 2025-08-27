@@ -105,13 +105,13 @@ describe("resolveUrlTemplate", () => {
   it("use fallback if _pageset is undefined", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: undefined };
     const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
-    assert.equal(result, "../ny/new-york/61-9th-ave-123");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("use fallback if _pageset is an empty string", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: "" };
     const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
-    assert.equal(result, "../ny/new-york/61-9th-ave-123");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("use fallback if urlTemplate is missing in config", () => {
@@ -120,7 +120,7 @@ describe("resolveUrlTemplate", () => {
       _pageset: JSON.stringify({ config: {} }),
     };
     const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
-    assert.equal(result, "../ny/new-york/61-9th-ave-123");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("use fallback if primary template is missing for primary locale", () => {
@@ -135,7 +135,7 @@ describe("resolveUrlTemplate", () => {
       }),
     };
     const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
-    assert.equal(result, "../ny/new-york/61-9th-ave-123");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("use fallback if alternate template is missing for alternate locale", () => {
@@ -151,7 +151,7 @@ describe("resolveUrlTemplate", () => {
       }),
     };
     const result = resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
-    assert.equal(result, "../es/ny/new-york/61-9th-ave-123");
+    assert.equal(result, "../es/ny/new-york/61-9th-ave");
   });
 
   it("use alternateFunction when provided to resolve URL template", () => {
