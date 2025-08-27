@@ -4,15 +4,18 @@ import { getLocationPath } from "./getLocationPath.ts";
 describe("getLocationPath", () => {
   it("returns slug paths", () => {
     expect(
-      getLocationPath({ slug: "my-slug", id: "location1" }, "en", "")
+      getLocationPath({ locale: "en", slug: "my-slug", id: "location1" }, "")
     ).toBe("my-slug");
 
     expect(
-      getLocationPath({ slug: "my-slug", id: "location1" }, "es", "")
+      getLocationPath({ locale: "en", slug: "my-slug", id: "location1" }, "")
     ).toBe("my-slug");
 
     expect(
-      getLocationPath({ slug: "my-slug", id: "location1" }, "en", "../../")
+      getLocationPath(
+        { locale: "en", slug: "my-slug", id: "location1" },
+        "../../"
+      )
     ).toBe("../../my-slug");
   });
 
@@ -20,6 +23,7 @@ describe("getLocationPath", () => {
     expect(
       getLocationPath(
         {
+          locale: "en",
           address: {
             line1: "1101 Wilson Blvd",
             city: "Arlington",
@@ -32,7 +36,6 @@ describe("getLocationPath", () => {
             isPrimaryLocale: true,
           },
         },
-        "en",
         ""
       )
     ).toBe("va/arlington/1101-wilson-blvd");
@@ -40,6 +43,7 @@ describe("getLocationPath", () => {
     expect(
       getLocationPath(
         {
+          locale: "es",
           address: {
             line1: "1101 Wilson Blvd",
             city: "Arlington",
@@ -52,7 +56,6 @@ describe("getLocationPath", () => {
             isPrimaryLocale: false,
           },
         },
-        "es",
         ""
       )
     ).toBe("es/va/arlington/1101-wilson-blvd");
@@ -60,6 +63,10 @@ describe("getLocationPath", () => {
     expect(
       getLocationPath(
         {
+          __: {
+            isPrimaryLocale: false,
+          },
+          locale: "en",
           address: {
             line1: "1101 Wilson Blvd",
             city: "Arlington",
@@ -69,7 +76,6 @@ describe("getLocationPath", () => {
           },
           id: "location1",
         },
-        "en",
         "../"
       )
     ).toBe("../en/va/arlington/1101-wilson-blvd");
@@ -78,26 +84,25 @@ describe("getLocationPath", () => {
   it("returns id-based paths", () => {
     expect(
       getLocationPath(
-        { id: "location1", __: { isPrimaryLocale: true } },
-        "en",
+        { id: "location1", locale: "en", __: { isPrimaryLocale: true } },
         ""
       )
     ).toBe("location1");
 
-    expect(getLocationPath({ id: "location1" }, "es", "")).toBe("es/location1");
+    expect(getLocationPath({ locale: "es", id: "location1" }, "")).toBe(
+      "es/location1"
+    );
 
     expect(
       getLocationPath(
-        { id: "location1", __: { isPrimaryLocale: true } },
-        "en",
+        { id: "location1", locale: "en", __: { isPrimaryLocale: true } },
         "../../../"
       )
     ).toBe("../../../location1");
 
     expect(
       getLocationPath(
-        { id: "location1", __: { isPrimaryLocale: false } },
-        "en",
+        { id: "location1", locale: "en", __: { isPrimaryLocale: false } },
         "../../../"
       )
     ).toBe("../../../en/location1");
