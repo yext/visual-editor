@@ -27,9 +27,7 @@ export const resolveUrlTemplate = (
 ): string => {
   locale = locale ?? streamDocument.locale ?? streamDocument?.meta?.locale;
   if (!locale) {
-    throw new Error(
-      `Could not determine locale from streamDocument: ${JSON.stringify(streamDocument)}`
-    );
+    throw new Error("Could not determine locale from streamDocument");
   }
   if (!streamDocument.locale) {
     streamDocument.locale = locale;
@@ -47,9 +45,7 @@ export const resolveUrlTemplate = (
     ];
 
   if (!urlTemplate) {
-    console.warn(
-      `No URL template found on the document ${JSON.stringify(streamDocument)}`
-    );
+    console.warn("No URL template found on the document");
     return getLocationPath(
       streamDocument as LocationDocument,
       locale,
@@ -62,7 +58,7 @@ export const resolveUrlTemplate = (
   ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
 
   if (!normalizedSlug) {
-    throw new Error(`Could not resolve URL template: ${urlTemplate}`);
+    throw new Error("Could not resolve URL template");
   }
 
   return relativePrefixToRoot + normalizedSlug;
