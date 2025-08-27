@@ -47,7 +47,6 @@ type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
 type YextBaseField = {
   type: string;
   visible?: boolean;
-  isOptional?: boolean;
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
@@ -136,11 +135,6 @@ type YextFieldConfig<Props = any> =
   | YextTranslatableStringField
   | YextImageField
   | YextVideoField;
-
-export function YextField<T = any>(
-  fieldName: MsgString,
-  config: YextFieldConfig<T> & { isOptional: true }
-): Field<T | undefined>;
 
 export function YextField<T = any>(
   fieldName: MsgString,

@@ -180,7 +180,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
-      isOptional: true,
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
         { label: msg("fields.options.hide", "Hide"), value: false },

@@ -99,7 +99,6 @@ export const Emails: ComponentConfig<{ props: EmailsProps }> = {
       ...fields,
       listLength: YextField(msg("fields.listLength", "List Length"), {
         type: "number",
-        isOptional: true,
         min: 1,
         max: 5,
       }),

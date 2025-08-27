@@ -105,7 +105,6 @@ export const layoutFields: Fields<layoutProps> = {
     msg("fields.backgroundColor", "Background Color"),
     {
       type: "select",
-      isOptional: true,
       options: "BACKGROUND_COLOR",
     }
   ),

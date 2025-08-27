@@ -58,7 +58,6 @@ export interface HeaderProps {
 const headerFields: Fields<HeaderProps> = {
   logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
     type: "number",
-    isOptional: true,
     min: 0,
   }),
   enableLanguageSelector: YextField(

@@ -165,7 +165,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           }),
           primaryCTA: YextField(msg("fields.primaryCTA", "Primary CTA"), {
             type: "object",
-            isOptional: true,
             objectFields: {
               label: YextField(msg("fields.label", "Label"), {
                 type: "translatableString",
@@ -193,7 +192,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
           ),
           secondaryCTA: YextField(msg("fields.secondaryCTA", "Secondary CTA"), {
             type: "object",
-            isOptional: true,
             objectFields: {
               label: YextField(msg("fields.label", "Label"), {
                 type: "translatableString",

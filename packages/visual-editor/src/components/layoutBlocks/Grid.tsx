@@ -73,7 +73,6 @@ const gridSectionFields: Fields<GridProps> = {
     msg("fields.backgroundColor", "Background Color"),
     {
       type: "select",
-      isOptional: true,
       options: "BACKGROUND_COLOR",
     }
   ),

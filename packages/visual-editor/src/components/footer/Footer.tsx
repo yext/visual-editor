@@ -49,7 +49,6 @@ const footerFields: Fields<FooterProps> = {
     msg("fields.backgroundColor", "Background Color"),
     {
       type: "select",
-      isOptional: true,
       options: "BACKGROUND_COLOR",
     }
   ),
