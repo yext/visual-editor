@@ -130,7 +130,9 @@ const CustomCodeSectionWrapper = ({
  * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
  * Only available with additional feature flag enabled.
  */
-export const CustomCodeSection: ComponentConfig<CustomCodeSectionProps> = {
+export const CustomCodeSection: ComponentConfig<{
+  props: CustomCodeSectionProps;
+}> = {
   label: msg("components.customCodeSection", "Custom Code Section"),
   fields: customCodeSectionFields,
   defaultProps: {

@@ -415,7 +415,9 @@ const PhotoGallerySectionComponent = ({
  * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
  * Available on Location templates.
  */
-export const PhotoGallerySection: ComponentConfig<PhotoGallerySectionProps> = {
+export const PhotoGallerySection: ComponentConfig<{
+  props: PhotoGallerySectionProps;
+}> = {
   label: msg("components.photoGallerySection", "Photo Gallery Section"),
   fields: photoGallerySectionFields,
   defaultProps: {

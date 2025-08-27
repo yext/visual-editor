@@ -108,7 +108,15 @@ export const layoutFields: Fields<layoutProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
-  gap: SpacingSelector("Gap", "gap", false),
-  verticalPadding: SpacingSelector("Top/Bottom Padding", "padding", true),
-  horizontalPadding: SpacingSelector("Left/Right Padding", "padding", false),
+  gap: SpacingSelector<layoutProps["gap"]>("Gap", "gap", false),
+  verticalPadding: SpacingSelector<layoutProps["verticalPadding"]>(
+    msg("fields.verticalPadding", "Top/Bottom Padding"),
+    "padding",
+    true
+  ),
+  horizontalPadding: SpacingSelector<layoutProps["horizontalPadding"]>(
+    msg("fields.horizontalPadding", "Left/Right Padding"),
+    "padding",
+    false
+  ),
 };

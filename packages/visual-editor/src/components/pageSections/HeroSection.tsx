@@ -395,7 +395,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   ),
 };
 
-export const HeroSection: ComponentConfig<HeroSectionProps> = {
+export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
   label: msg("components.heroSection", "Hero Section"),
   fields: heroSectionFields,
   defaultProps: {

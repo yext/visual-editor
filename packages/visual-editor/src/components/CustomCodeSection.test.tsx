@@ -56,7 +56,7 @@ describe("CustomCodeSection", async () => {
   const puckConfig: Config = {
     components: { CustomCodeSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

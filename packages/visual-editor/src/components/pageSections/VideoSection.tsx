@@ -170,7 +170,9 @@ const VideoSectionComponent = (props: VideoSectionProps) => {
  * The Video Section is used to display an embedded YouTube video.
  * Available on Location templates.
  */
-export const VideoSection: ComponentConfig<VideoSectionProps> = {
+export const VideoSection: ComponentConfig<{
+  props: VideoSectionProps;
+}> = {
   label: msg("components.videoSection", "Video Section"),
   fields: videoSectionFields,
   defaultProps: {

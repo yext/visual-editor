@@ -32,7 +32,7 @@ export const PhoneDataFields = {
       types: ["type.phone"],
     },
   }),
-  label: YextField(msg("fields.label", "Label"), {
+  label: YextField<TranslatableString>(msg("fields.label", "Label"), {
     type: "translatableString",
     filter: { types: ["type.string"] },
   }),
@@ -40,11 +40,15 @@ export const PhoneDataFields = {
 
 // Phone style definitions used in Phone and CoreInfoSection
 export const PhoneStyleFields = {
-  phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
-    type: "radio",
-    options: "PHONE_OPTIONS",
-  }),
-  includePhoneHyperlink: YextField(
+  phoneFormat: YextField<"domestic" | "international">(
+    msg("fields.phoneFormat", "Phone Format"),
+    {
+      type: "radio",
+      options: "PHONE_OPTIONS",
+    }
+  ),
+  // By adding `<boolean>`, we make the type explicit.
+  includePhoneHyperlink: YextField<boolean>(
     msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
     {
       type: "radio",
@@ -99,7 +103,7 @@ const PhoneComponent = ({ data, styles }: PhoneProps) => {
   );
 };
 
-export const Phone: ComponentConfig<PhoneProps> = {
+export const Phone: ComponentConfig<{ props: PhoneProps }> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {

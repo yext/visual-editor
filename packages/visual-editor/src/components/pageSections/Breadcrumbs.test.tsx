@@ -129,7 +129,7 @@ describe("BreadcrumbsSection", async () => {
   const puckConfig: Config = {
     components: { BreadcrumbsSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

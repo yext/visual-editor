@@ -104,7 +104,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
   );
 };
 
-export const CTAGroup: ComponentConfig<CTAGroupProps> = {
+export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   label: msg("components.ctaGroup", "CTA Group"),
   fields: ctaGroupFields,
   defaultProps: {

@@ -56,7 +56,7 @@
     "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
   },
   "dependencies": {
-    "@measured/puck": "0.19.3",
+    "@measured/puck": "0.20.1",
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",

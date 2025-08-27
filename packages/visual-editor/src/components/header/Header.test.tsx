@@ -83,7 +83,7 @@ describe("Header", async () => {
   const puckConfig: Config = {
     components: { Header },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

@@ -74,7 +74,7 @@ export interface LocatorProps {
 }
 
 const locatorFields: Fields<LocatorProps> = {
-  mapStyle: BasicSelector({
+  mapStyle: BasicSelector<LocatorProps["mapStyle"]>({
     label: msg("fields.mapStyle", "Map Style"),
     options: [
       {
@@ -118,7 +118,7 @@ const locatorFields: Fields<LocatorProps> = {
 /**
  * Available on Locator templates.
  */
-export const LocatorComponent: ComponentConfig<LocatorProps> = {
+export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,

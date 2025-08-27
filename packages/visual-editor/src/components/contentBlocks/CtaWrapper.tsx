@@ -76,7 +76,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   );
 };
 
-export const CTAWrapper: ComponentConfig<CTAWrapperProps> = {
+export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   label: msg("components.callToAction", "Call to Action"),
   fields: ctaWrapperFields,
   defaultProps: {

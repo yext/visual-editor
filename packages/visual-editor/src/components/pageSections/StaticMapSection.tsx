@@ -102,7 +102,9 @@ const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
  * The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox.
  * Available on Location templates.
  */
-export const StaticMapSection: ComponentConfig<StaticMapSectionProps> = {
+export const StaticMapSection: ComponentConfig<{
+  props: StaticMapSectionProps;
+}> = {
   label: msg("components.staticMapSection", "Static Map Section"),
   fields: staticMapSectionFields,
   defaultProps: {

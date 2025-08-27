@@ -233,8 +233,10 @@ function generateMarkdown() {
       continue;
     }
 
-    // Extract the props type name from the <> (e.g. "BannerSectionProps").
-    const match = /<(\w+)>/.exec(apiMember.variableTypeExcerpt.text);
+    // This regex handles both `ComponentConfig<TypeName>` and `ComponentConfig<{ props: TypeName }>`.
+    const match = /ComponentConfig<\s*(?:{\s*props:\s*)?(\w+)/i.exec(
+      apiMember.variableTypeExcerpt.text
+    );
     const propsTypeName = match?.[1];
     if (!propsTypeName || !allInterfaces.has(propsTypeName)) {
       continue;

@@ -578,61 +578,62 @@ function parseDocument(
  * The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours.
  * Available on Location templates.
  */
-export const NearbyLocationsSection: ComponentConfig<NearbyLocationsSectionProps> =
-  {
-    label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),
-    fields: nearbyLocationsSectionFields,
-    defaultProps: {
-      data: {
-        heading: {
-          field: "",
-          constantValue: { en: "Nearby Locations", hasLocalizedValue: "true" },
-          constantValueEnabled: true,
-        },
-        coordinate: {
-          field: "yextDisplayCoordinate",
-          constantValue: {
-            latitude: 0,
-            longitude: 0,
-          },
-        },
-        radius: 10,
-        limit: 3,
+export const NearbyLocationsSection: ComponentConfig<{
+  props: NearbyLocationsSectionProps;
+}> = {
+  label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),
+  fields: nearbyLocationsSectionFields,
+  defaultProps: {
+    data: {
+      heading: {
+        field: "",
+        constantValue: { en: "Nearby Locations", hasLocalizedValue: "true" },
+        constantValueEnabled: true,
       },
-      styles: {
-        backgroundColor: backgroundColors.background1.value,
-        heading: {
-          level: 2,
-          align: "left",
+      coordinate: {
+        field: "yextDisplayCoordinate",
+        constantValue: {
+          latitude: 0,
+          longitude: 0,
         },
-        cards: {
-          backgroundColor: backgroundColors.background1.value,
-          headingLevel: 3,
-        },
-        hours: {
-          showCurrentStatus: true,
-          timeFormat: "12h",
-          showDayNames: true,
-          dayOfWeekFormat: "long",
-        },
-        phoneNumberFormat: "domestic",
-        phoneNumberLink: true,
       },
-      analytics: {
-        scope: "nearbyLocationsSection",
-      },
-      liveVisibility: true,
+      radius: 10,
+      limit: 3,
     },
-    render: (props) => (
-      <AnalyticsScopeProvider
-        name={props.analytics?.scope ?? "nearbyLocationsSection"}
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      heading: {
+        level: 2,
+        align: "left",
+      },
+      cards: {
+        backgroundColor: backgroundColors.background1.value,
+        headingLevel: 3,
+      },
+      hours: {
+        showCurrentStatus: true,
+        timeFormat: "12h",
+        showDayNames: true,
+        dayOfWeekFormat: "long",
+      },
+      phoneNumberFormat: "domestic",
+      phoneNumberLink: true,
+    },
+    analytics: {
+      scope: "nearbyLocationsSection",
+    },
+    liveVisibility: true,
+  },
+  render: (props) => (
+    <AnalyticsScopeProvider
+      name={props.analytics?.scope ?? "nearbyLocationsSection"}
+    >
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          <NearbyLocationsComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    ),
-  };
+        <NearbyLocationsComponent {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
+  ),
+};

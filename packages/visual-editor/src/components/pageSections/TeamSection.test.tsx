@@ -345,7 +345,7 @@ describe("TeamSection", async () => {
   const puckConfig: Config = {
     components: { TeamSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

@@ -109,7 +109,7 @@ const flexContainerFields: Fields<FlexProps> = {
   ),
 };
 
-export const Flex: ComponentConfig<FlexProps> = {
+export const Flex: ComponentConfig<{ props: FlexProps }> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {

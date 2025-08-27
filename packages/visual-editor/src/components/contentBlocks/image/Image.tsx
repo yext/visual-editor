@@ -76,7 +76,7 @@ const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
   );
 };
 
-export const ImageWrapper: ComponentConfig<ImageWrapperProps> = {
+export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   label: msg("components.image", "Image"),
   fields: ImageWrapperFields,
   defaultProps: {

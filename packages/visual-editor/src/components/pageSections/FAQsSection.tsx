@@ -246,7 +246,7 @@ const FAQsSectionComponent: React.FC<FAQSectionProps> = ({ data, styles }) => {
  * The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
  * Available on Location templates.
  */
-export const FAQSection: ComponentConfig<FAQSectionProps> = {
+export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {

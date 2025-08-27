@@ -108,7 +108,9 @@ const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
   );
 };
 
-export const SectionContainer: ComponentConfig<SectionContainerProps> = {
+export const SectionContainer: ComponentConfig<{
+  props: SectionContainerProps;
+}> = {
   label: "Section Container",
   fields: sectionContainerFields,
   defaultProps: {

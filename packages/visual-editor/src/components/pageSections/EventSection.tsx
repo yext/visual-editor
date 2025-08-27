@@ -329,7 +329,7 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
  * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
  * Available on Location templates.
  */
-export const EventSection: ComponentConfig<EventSectionProps> = {
+export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
   label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
   defaultProps: {

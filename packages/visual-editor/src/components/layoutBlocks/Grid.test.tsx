@@ -529,7 +529,7 @@ describe("Grid", async () => {
       TextList,
     },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },
