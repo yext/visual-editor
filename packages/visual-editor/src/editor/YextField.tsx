@@ -24,6 +24,7 @@ import {
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
+import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -109,6 +110,10 @@ type YextImageField = YextBaseField & {
   type: "image";
 };
 
+type YextVideoField = YextBaseField & {
+  type: "video";
+};
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -129,7 +134,8 @@ type YextFieldConfig<Props = any> =
   | YextCodeField
   | YextMaxWidthField
   | YextTranslatableStringField
-  | YextImageField;
+  | YextImageField
+  | YextVideoField;
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -157,6 +163,7 @@ export function YextField<T, U>(
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
+      typeSelectorConfig: config.typeSelectorConfig,
     });
   }
 
@@ -242,6 +249,13 @@ export function YextField<T, U>(
   if (config.type === "image") {
     return {
       ...IMAGE_CONSTANT_CONFIG,
+      label: fieldName,
+    };
+  }
+
+  if (config.type === "video") {
+    return {
+      ...VIDEO_CONSTANT_CONFIG,
       label: fieldName,
     };
   }
