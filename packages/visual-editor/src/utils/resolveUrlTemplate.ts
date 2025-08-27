@@ -2,6 +2,7 @@ import { StreamDocument } from "./applyTheme";
 import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
 import { normalizeSlug } from "./slugifier";
 import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
+import { normalizeLocale } from "./normalizeLocale.ts";
 
 /**
  * Resolves a URL template using the provided stream document, locale, and relativePrefixToRoot.
@@ -29,7 +30,7 @@ export const resolveUrlTemplate = (
   if (!locale) {
     throw new Error(`Could not determine locale from streamDocument`);
   }
-  streamDocument.locale = locale;
+  locale = normalizeLocale(locale);
   if (alternateFunction) {
     return alternateFunction(streamDocument, locale, relativePrefixToRoot);
   }
@@ -37,7 +38,7 @@ export const resolveUrlTemplate = (
   const isPrimaryLocale = streamDocument.__?.isPrimaryLocale ?? false;
 
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-  const urlTemplate =
+  let urlTemplate =
     pagesetJson?.config?.urlTemplate?.[
       isPrimaryLocale ? "primary" : "alternate"
     ];
@@ -50,6 +51,9 @@ export const resolveUrlTemplate = (
       relativePrefixToRoot
     );
   }
+
+  // Replace [[locale]] in the template with the resolved locale
+  urlTemplate = urlTemplate.replace(/\[\[locale\]\]/g, locale);
 
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)

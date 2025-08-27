@@ -14,6 +14,11 @@ export const getLocationPath = (
   locale: string,
   relativePrefixToRoot: string = ""
 ): string => {
+  if (!locale) {
+    throw new Error(
+      `GetLocationPath is missing locale: ${JSON.stringify(location)}`
+    );
+  }
   if (!location || (!location.slug && !location.address && !location.id)) {
     throw new Error(
       `Could not resolve location path. Document is invalid: ${JSON.stringify(location)}`
@@ -30,7 +35,7 @@ export const getLocationPath = (
 
   const isPrimaryLocale = location.__?.isPrimaryLocale ?? false;
 
-  const localePath = isPrimaryLocale ? "" : `${locale ?? location.locale}/`;
+  const localePath = isPrimaryLocale ? "" : `${locale}/`;
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
     : `${localePath}${location.id}`;

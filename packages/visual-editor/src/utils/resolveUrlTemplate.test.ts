@@ -49,11 +49,14 @@ describe("resolveUrlTemplate", () => {
       locale: undefined,
       __: { isPrimaryLocale: false },
       meta: {
-        locale: "zh-hans-hk",
+        locale: "zh_hans_hk",
       },
     };
-    const result = resolveUrlTemplate(alternateLocaleDoc, "", "");
-    assert.equal(result, "zh-hans-hk/ny/new-york/61-9th-ave");
+
+    assert.equal(
+      resolveUrlTemplate(alternateLocaleDoc, "", ""),
+      "zh-hans-hk/ny/new-york/61-9th-ave"
+    );
   });
 
   it("defaults to alternate template if '__' is missing", () => {

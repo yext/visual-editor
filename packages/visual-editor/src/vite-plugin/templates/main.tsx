@@ -82,7 +82,7 @@ export const getPath: GetPath<TemplateProps> = ({
 }) => {
   return resolveUrlTemplate(
     document,
-    document?.locale ?? document?.meta?.locale,
+    document.locale ?? "",
     relativePrefixToRoot,
     null
   );
