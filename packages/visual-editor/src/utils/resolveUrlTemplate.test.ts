@@ -1,4 +1,4 @@
-import { assert, describe, it } from "vitest";
+import { assert, describe, it, expect } from "vitest";
 import { resolveUrlTemplate } from "./resolveUrlTemplate";
 import { StreamDocument } from "./applyTheme";
 import { normalizeSlug } from "./slugifier";
@@ -41,6 +41,19 @@ describe("resolveUrlTemplate", () => {
     };
     const result = resolveUrlTemplate(alternateLocaleDoc, "es", "");
     assert.equal(result, "es/ny/new-york/61-9th-ave");
+  });
+
+  it("resolves alternate template for non-primary locale when document.locale is missing", () => {
+    const alternateLocaleDoc = {
+      ...mockStreamDocument,
+      locale: undefined,
+      __: { isPrimaryLocale: false },
+      meta: {
+        locale: "zh-hans-hk",
+      },
+    };
+    const result = resolveUrlTemplate(alternateLocaleDoc, "", "");
+    assert.equal(result, "zh-hans-hk/ny/new-york/61-9th-ave");
   });
 
   it("defaults to alternate template if '__' is missing", () => {
@@ -174,5 +187,14 @@ describe("resolveUrlTemplate", () => {
     );
 
     assert.equal(result, "../custom-url-for-yext-en");
+  });
+
+  it("throw error when locale cannot be determined", () => {
+    const alternateLocaleDoc = {
+      ...mockStreamDocument,
+      locale: undefined,
+      __: { isPrimaryLocale: false },
+    };
+    expect(() => resolveUrlTemplate(alternateLocaleDoc, "", "")).toThrowError();
   });
 });

@@ -25,13 +25,11 @@ export const resolveUrlTemplate = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
-  locale = locale ?? streamDocument.locale ?? streamDocument?.meta?.locale;
+  locale = locale || streamDocument.locale || streamDocument?.meta?.locale;
   if (!locale) {
-    throw new Error("Could not determine locale from streamDocument");
+    throw new Error(`Could not determine locale from streamDocument`);
   }
-  if (!streamDocument.locale) {
-    streamDocument.locale = locale;
-  }
+  streamDocument.locale = locale;
   if (alternateFunction) {
     return alternateFunction(streamDocument, locale, relativePrefixToRoot);
   }

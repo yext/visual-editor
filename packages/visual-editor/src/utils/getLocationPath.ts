@@ -20,6 +20,10 @@ export const getLocationPath = (
     );
   }
 
+  if (!locale) {
+    throw new Error("Missing locale for getLocationPath");
+  }
+
   if (location.slug) {
     return `${relativePrefixToRoot ?? ""}${location.slug}`;
   }
