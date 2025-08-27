@@ -35,7 +35,9 @@ export const resolveUrlTemplate = (
     return alternateFunction(streamDocument, locale, relativePrefixToRoot);
   }
 
-  const isPrimaryLocale = streamDocument.__?.isPrimaryLocale ?? false;
+  const isPrimaryLocale =
+    streamDocument.__?.isPrimaryLocale === true ||
+    streamDocument.__?.isPrimaryLocale === "true";
 
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
   let urlTemplate =
