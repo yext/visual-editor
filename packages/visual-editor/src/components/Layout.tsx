@@ -111,12 +111,12 @@ export const layoutFields: Fields<layoutProps> = {
   ),
   gap: SpacingSelector<layoutProps["gap"]>("Gap", "gap", false),
   verticalPadding: SpacingSelector<layoutProps["verticalPadding"]>(
-    "Top/Bottom Padding",
+    msg("fields.verticalPadding", "Top/Bottom Padding"),
     "padding",
     true
   ),
   horizontalPadding: SpacingSelector<layoutProps["horizontalPadding"]>(
-    "Left/Right Padding",
+    msg("fields.horizontalPadding", "Left/Right Padding"),
     "padding",
     false
   ),

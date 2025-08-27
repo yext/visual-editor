@@ -81,7 +81,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
 const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
   return {
     "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
-    "type.image": IMAGE_LIST_CONSTANT_CONFIG() as Field<any>,
+    "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
   };
 };
 
