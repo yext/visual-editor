@@ -29,6 +29,9 @@ export const resolveUrlTemplate = (
   if (!locale) {
     throw new Error(`Could not determine locale from streamDocument`);
   }
+  if (!streamDocument.locale) {
+    streamDocument.locale = locale;
+  }
   if (alternateFunction) {
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
@@ -50,15 +53,12 @@ export const resolveUrlTemplate = (
     );
   }
 
-  // Replace [[locale]] in the template with the resolved locale
-  urlTemplate = urlTemplate.replace(/\[\[locale\]\]/g, locale);
-
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
   ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
 
   if (!normalizedSlug) {
-    throw new Error("Could not resolve URL template");
+    throw new Error(`Could not resolve URL template ${urlTemplate}`);
   }
 
   return relativePrefixToRoot + normalizedSlug;
