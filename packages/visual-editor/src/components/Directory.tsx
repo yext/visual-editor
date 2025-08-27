@@ -291,8 +291,6 @@ const DirectoryCard = ({
   puck: PuckContext;
 }) => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
   const cardStyles: DirectoryProps["styles"]["cards"] = styles["cards"];
 
   const documentForDirectory = {
@@ -305,7 +303,6 @@ const DirectoryCard = ({
 
   const resolvedUrl = resolveUrlTemplate(
     documentForDirectory,
-    locale,
     relativePrefixToRoot ?? "",
     puck.metadata?.resolveUrlTemplate
   );

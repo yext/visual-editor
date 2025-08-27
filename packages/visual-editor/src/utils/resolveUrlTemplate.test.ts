@@ -29,7 +29,7 @@ const mockStreamDocument: StreamDocument = {
 
 describe("resolveUrlTemplate", () => {
   it("resolves primary template for primary locale", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "en", "");
+    const result = resolveUrlTemplate(mockStreamDocument, "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
@@ -39,7 +39,7 @@ describe("resolveUrlTemplate", () => {
       __: { isPrimaryLocale: false },
       locale: "es",
     };
-    const result = resolveUrlTemplate(alternateLocaleDoc, "es", "");
+    const result = resolveUrlTemplate(alternateLocaleDoc, "");
     assert.equal(result, "es/ny/new-york/61-9th-ave");
   });
 
@@ -54,7 +54,7 @@ describe("resolveUrlTemplate", () => {
     };
 
     assert.equal(
-      resolveUrlTemplate(alternateLocaleDoc, "", ""),
+      resolveUrlTemplate(alternateLocaleDoc, ""),
       "zh-hans-hk/ny/new-york/61-9th-ave"
     );
   });
@@ -62,7 +62,7 @@ describe("resolveUrlTemplate", () => {
   it("defaults to alternate template if '__' is missing", () => {
     // eslint-disable-next-line no-unused-vars
     const { __, ...docWithoutPrimaryInfo } = mockStreamDocument;
-    const result = resolveUrlTemplate(docWithoutPrimaryInfo, "en", "");
+    const result = resolveUrlTemplate(docWithoutPrimaryInfo, "");
     assert.equal(result, "en/ny/new-york/61-9th-ave");
   });
 
@@ -78,7 +78,7 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithMissingField, "en", "");
+    const result = resolveUrlTemplate(docWithMissingField, "");
     assert.equal(result, "ny/new-york");
   });
 
@@ -94,12 +94,12 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithMissingField, "en", "");
+    const result = resolveUrlTemplate(docWithMissingField, "");
     assert.equal(result, "foo/ny/new-york");
   });
 
   it("prepends relativePrefixToRoot to primary URL", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "en", "../");
+    const result = resolveUrlTemplate(mockStreamDocument, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -109,24 +109,24 @@ describe("resolveUrlTemplate", () => {
       __: { isPrimaryLocale: false },
       locale: "es",
     };
-    const result = resolveUrlTemplate(alternateLocaleDoc, "es", "../../");
+    const result = resolveUrlTemplate(alternateLocaleDoc, "../../");
     assert.equal(result, "../../es/ny/new-york/61-9th-ave");
   });
 
   it("handles empty string prefix without altering URL", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "en", "");
+    const result = resolveUrlTemplate(mockStreamDocument, "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
   it("use fallback if _pageset is undefined", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: undefined };
-    const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
+    const result = resolveUrlTemplate(docWithoutPageset, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("use fallback if _pageset is an empty string", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: "" };
-    const result = resolveUrlTemplate(docWithoutPageset, "en", "../");
+    const result = resolveUrlTemplate(docWithoutPageset, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -135,7 +135,7 @@ describe("resolveUrlTemplate", () => {
       ...mockStreamDocument,
       _pageset: JSON.stringify({ config: {} }),
     };
-    const result = resolveUrlTemplate(docWithoutUrlTemplate, "en", "../");
+    const result = resolveUrlTemplate(docWithoutUrlTemplate, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -150,7 +150,7 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "en", "../");
+    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -158,6 +158,7 @@ describe("resolveUrlTemplate", () => {
     const docWithoutAlternateTemplate = {
       ...mockStreamDocument,
       __: { isPrimaryLocale: false },
+      locale: "es",
       _pageset: JSON.stringify({
         config: {
           urlTemplate: {
@@ -166,25 +167,25 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "es", "../");
+    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "../");
     assert.equal(result, "../es/ny/new-york/61-9th-ave");
   });
 
   it("use alternateFunction when provided to resolve URL template", () => {
     const alternateFunction = (
       streamDocument: StreamDocument,
-      locale: string,
       relativePrefixToRoot: string
     ) => {
       return (
         relativePrefixToRoot +
-        normalizeSlug(`custom-url-for-${streamDocument.name}-${locale}`)
+        normalizeSlug(
+          `custom-url-for-${streamDocument.name}-${streamDocument?.locale || streamDocument?.meta?.locale}`
+        )
       );
     };
 
     const result = resolveUrlTemplate(
       mockStreamDocument,
-      "en",
       "../",
       alternateFunction
     );
@@ -198,6 +199,6 @@ describe("resolveUrlTemplate", () => {
       locale: undefined,
       __: { isPrimaryLocale: false },
     };
-    expect(() => resolveUrlTemplate(alternateLocaleDoc, "", "")).toThrowError();
+    expect(() => resolveUrlTemplate(alternateLocaleDoc, "")).toThrowError();
   });
 });

@@ -11,28 +11,26 @@ import { normalizeLocale } from "./normalizeLocale.ts";
  * If an alternate function is provided, it will be used to resolve the URL template instead of the default logic.
  *
  * @param streamDocument - The document containing the URL template and data.
- * @param locale - The locale to use for resolving the URL.
  * @param relativePrefixToRoot - Prefix to prepend to the resolved URL.
  * @param alternateFunction - Alternate function to resolve the URL template (optional).
  * @returns The resolved and normalized URL.
  */
 export const resolveUrlTemplate = (
   streamDocument: StreamDocument,
-  locale: string,
   relativePrefixToRoot: string = "",
   alternateFunction?: (
     streamDocument: StreamDocument,
-    locale: string,
     relativePrefixToRoot: string
   ) => string
 ): string => {
-  locale = locale || streamDocument.locale || streamDocument?.meta?.locale;
+  const locale = normalizeLocale(
+    streamDocument.locale || streamDocument?.meta?.locale || ""
+  );
   if (!locale) {
     throw new Error(`Could not determine locale from streamDocument`);
   }
-  locale = normalizeLocale(locale);
   if (alternateFunction) {
-    return alternateFunction(streamDocument, locale, relativePrefixToRoot);
+    return alternateFunction(streamDocument, relativePrefixToRoot);
   }
 
   const isPrimaryLocale =
@@ -48,7 +46,6 @@ export const resolveUrlTemplate = (
   if (!urlTemplate) {
     return getLocationPath(
       streamDocument as LocationDocument,
-      locale,
       relativePrefixToRoot
     );
   }

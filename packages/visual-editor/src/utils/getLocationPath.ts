@@ -3,28 +3,20 @@ import { AddressType } from "@yext/pages-components";
 import { StreamDocument } from "./applyTheme.ts";
 
 export interface LocationDocument extends StreamDocument {
-  slug?: string;
   id: string;
+  slug?: string;
   address?: AddressType;
-  locale?: string;
 }
 
 export const getLocationPath = (
   location: LocationDocument,
-  locale: string,
   relativePrefixToRoot: string = ""
 ): string => {
-  if (!locale) {
-    throw new Error(
-      `GetLocationPath is missing locale: ${JSON.stringify(location)}`
-    );
-  }
   if (!location || (!location.slug && !location.address && !location.id)) {
-    throw new Error(
-      `Could not resolve location path. Document is invalid: ${JSON.stringify(location)}`
-    );
+    throw new Error("Could not resolve location path.");
   }
 
+  const locale = location?.locale || location?.meta?.locale;
   if (!locale) {
     throw new Error("Missing locale for getLocationPath");
   }
@@ -34,10 +26,9 @@ export const getLocationPath = (
   }
 
   const isPrimaryLocale =
-    location.__?.isPrimaryLocale != null
-      ? location.__.isPrimaryLocale === true ||
-        location.__.isPrimaryLocale === "true"
-      : location.locale === "en";
+    location.__?.isPrimaryLocale === true ||
+    location.__?.isPrimaryLocale === "true" ||
+    (location.__?.isPrimaryLocale === undefined && location.locale === "en");
 
   const localePath = isPrimaryLocale ? "" : `${locale}/`;
   const path = location.address

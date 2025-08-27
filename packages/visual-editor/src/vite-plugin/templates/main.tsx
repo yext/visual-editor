@@ -80,12 +80,7 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  return resolveUrlTemplate(
-    document,
-    document.locale ?? "",
-    relativePrefixToRoot,
-    null
-  );
+  return resolveUrlTemplate(document, relativePrefixToRoot, null);
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {
