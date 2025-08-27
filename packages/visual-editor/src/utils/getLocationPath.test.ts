@@ -35,7 +35,7 @@ describe("getLocationPath", () => {
         "en",
         ""
       )
-    ).toBe("va/arlington/1101-wilson-blvd-location1");
+    ).toBe("va/arlington/1101-wilson-blvd");
 
     expect(
       getLocationPath(
@@ -55,7 +55,7 @@ describe("getLocationPath", () => {
         "es",
         ""
       )
-    ).toBe("es/va/arlington/1101-wilson-blvd-location1");
+    ).toBe("es/va/arlington/1101-wilson-blvd");
 
     expect(
       getLocationPath(
@@ -72,7 +72,7 @@ describe("getLocationPath", () => {
         "en",
         "../"
       )
-    ).toBe("../en/va/arlington/1101-wilson-blvd-location1");
+    ).toBe("../en/va/arlington/1101-wilson-blvd");
   });
 
   it("returns id-based paths", () => {

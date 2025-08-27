@@ -28,7 +28,7 @@ export const getLocationPath = (
 
   const localePath = isPrimaryLocale ? "" : `${locale ?? location.locale}/`;
   const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}-${location.id}`
+    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
     : `${localePath}${location.id}`;
 
   return `${relativePrefixToRoot}${normalizeSlug(path)}`;
