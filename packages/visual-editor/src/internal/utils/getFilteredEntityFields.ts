@@ -55,6 +55,8 @@ export type EntityFieldTypes =
   | "type.hero_section"
   | `c_${string}`;
 
+export type ConstantValueTypes = EntityFieldTypes | "imageOrVideo";
+
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
 
 // Populate this with fields that aren't allowed to have subfields.

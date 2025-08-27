@@ -64,6 +64,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
               ? resolvedEmailList.length
               : Math.min(resolvedEmailList.length, listLength!)
           )
+          .filter((e) => !!e)
           .map((email, index) => (
             <li key={index} className={`flex items-center gap-3`}>
               <Background
