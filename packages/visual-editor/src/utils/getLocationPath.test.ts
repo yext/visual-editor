@@ -105,9 +105,9 @@ describe("getLocationPath", () => {
 
   it("handles empty values", () => {
     // @ts-expect-error
-    expect(getLocationPath({}, {}, "")).toBe(undefined);
+    expect(() => getLocationPath({}, {}, "")).toThrow();
 
     // @ts-expect-error
-    expect(getLocationPath(undefined, {}, "")).toBe(undefined);
+    expect(() => getLocationPath(undefined, {}, "")).toThrow();
   });
 });
