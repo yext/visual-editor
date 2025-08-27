@@ -496,7 +496,7 @@ const DirectoryComponent = ({
  * The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card.
  * Available on Directory templates.
  */
-export const Directory: ComponentConfig<DirectoryProps> = {
+export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
   defaultProps: {

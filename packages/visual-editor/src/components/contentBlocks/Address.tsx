@@ -39,7 +39,7 @@ export const AddressDataField = YextField<any, AddressType>(
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields = {
-  showGetDirectionsLink: YextField(
+  showGetDirectionsLink: YextField<boolean>(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
       type: "radio",
@@ -49,10 +49,13 @@ export const AddressStyleFields = {
       ],
     }
   ),
-  ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-    type: "radio",
-    options: "CTA_VARIANT",
-  }),
+  ctaVariant: YextField<CTAProps["variant"]>(
+    msg("fields.ctaVariant", "CTA Variant"),
+    {
+      type: "radio",
+      options: "CTA_VARIANT",
+    }
+  ),
 };
 
 const addressFields: Fields<AddressProps> = {
@@ -118,7 +121,9 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
   );
 };
 
-export const Address: ComponentConfig<AddressProps> = {
+export const Address: ComponentConfig<{
+  props: AddressProps;
+}> = {
   label: msg("components.address", "Address"),
   fields: addressFields,
   defaultProps: {

@@ -577,141 +577,142 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
  * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
  * Available on Location templates.
  */
-export const CoreInfoSection: ComponentConfig<CoreInfoSectionProps> = {
-  label: msg("components.coreInfoSection", "Core Info Section"),
-  fields: coreInfoSectionFields,
-  resolveFields: (data, { fields }) => {
-    if (data.props.data.info.emails.constantValueEnabled) {
-      return fields;
-    }
+export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
+  {
+    label: msg("components.coreInfoSection", "Core Info Section"),
+    fields: coreInfoSectionFields,
+    resolveFields: (data, { fields }) => {
+      if (data.props.data.info.emails.constantValueEnabled) {
+        return fields;
+      }
 
-    return {
-      ...fields,
-      styles: {
-        ...fields.styles,
-        objectFields: {
-          // @ts-expect-error ts(2339) objectFields exists
-          ...fields.styles.objectFields,
-          info: {
+      return {
+        ...fields,
+        styles: {
+          ...fields.styles,
+          objectFields: {
             // @ts-expect-error ts(2339) objectFields exists
-            ...fields.styles.objectFields.info,
-            objectFields: {
+            ...fields.styles.objectFields,
+            info: {
               // @ts-expect-error ts(2339) objectFields exists
-              ...fields.styles.objectFields.info.objectFields,
-              emailsListLength: YextField(
-                msg("fields.emailsListLength", "Emails List Length"),
-                {
-                  type: "number",
-                  min: 0,
-                  max: 3,
-                }
-              ),
+              ...fields.styles.objectFields.info,
+              objectFields: {
+                // @ts-expect-error ts(2339) objectFields exists
+                ...fields.styles.objectFields.info.objectFields,
+                emailsListLength: YextField(
+                  msg("fields.emailsListLength", "Emails List Length"),
+                  {
+                    type: "number",
+                    min: 0,
+                    max: 3,
+                  }
+                ),
+              },
             },
           },
         },
-      },
-    };
-  },
-  defaultProps: {
-    data: {
-      info: {
-        headingText: {
-          field: "",
-          constantValue: {
-            en: "Information",
-            hasLocalizedValue: "true",
-          },
-          constantValueEnabled: true,
-        },
-        address: {
-          field: "address",
-          constantValue: {
-            line1: "",
-            city: "",
-            postalCode: "",
-            countryCode: "",
-          },
-        },
-        phoneNumbers: [
-          {
-            number: {
-              field: "mainPhone",
-              constantValue: "",
-            },
-            label: {
-              en: "Phone",
+      };
+    },
+    defaultProps: {
+      data: {
+        info: {
+          headingText: {
+            field: "",
+            constantValue: {
+              en: "Information",
               hasLocalizedValue: "true",
             },
+            constantValueEnabled: true,
           },
-        ],
-        emails: {
-          field: "emails",
-          constantValue: [],
-        },
-      },
-      hours: {
-        headingText: {
-          field: "",
-          constantValue: {
-            en: "Hours",
-            hasLocalizedValue: "true",
+          address: {
+            field: "address",
+            constantValue: {
+              line1: "",
+              city: "",
+              postalCode: "",
+              countryCode: "",
+            },
           },
-          constantValueEnabled: true,
+          phoneNumbers: [
+            {
+              number: {
+                field: "mainPhone",
+                constantValue: "",
+              },
+              label: {
+                en: "Phone",
+                hasLocalizedValue: "true",
+              },
+            },
+          ],
+          emails: {
+            field: "emails",
+            constantValue: [],
+          },
         },
         hours: {
-          field: "hours",
-          constantValue: {},
-        },
-      },
-      services: {
-        headingText: {
-          field: "",
-          constantValue: {
-            en: "Services",
-            hasLocalizedValue: "true",
+          headingText: {
+            field: "",
+            constantValue: {
+              en: "Hours",
+              hasLocalizedValue: "true",
+            },
+            constantValueEnabled: true,
           },
-          constantValueEnabled: true,
+          hours: {
+            field: "hours",
+            constantValue: {},
+          },
         },
-        servicesList: {
-          field: "services",
-          constantValue: [],
+        services: {
+          headingText: {
+            field: "",
+            constantValue: {
+              en: "Services",
+              hasLocalizedValue: "true",
+            },
+            constantValueEnabled: true,
+          },
+          servicesList: {
+            field: "services",
+            constantValue: [],
+          },
         },
       },
-    },
-    styles: {
-      heading: {
-        level: 3,
-        align: "left",
+      styles: {
+        heading: {
+          level: 3,
+          align: "left",
+        },
+        backgroundColor: backgroundColors.background1.value,
+        info: {
+          showGetDirectionsLink: true,
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          emailsListLength: 1,
+          ctaVariant: "link",
+        },
+        hours: {
+          startOfWeek: "today",
+          collapseDays: false,
+          showAdditionalHoursText: true,
+        },
       },
-      backgroundColor: backgroundColors.background1.value,
-      info: {
-        showGetDirectionsLink: true,
-        phoneFormat: "domestic",
-        includePhoneHyperlink: true,
-        emailsListLength: 1,
-        ctaVariant: "link",
+      analytics: {
+        scope: "coreInfoSection",
       },
-      hours: {
-        startOfWeek: "today",
-        collapseDays: false,
-        showAdditionalHoursText: true,
-      },
+      liveVisibility: true,
     },
-    analytics: {
-      scope: "coreInfoSection",
-    },
-    liveVisibility: true,
-  },
-  render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
-    >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+    render: (props) => (
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <CoreInfoSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
-  ),
-};
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <CoreInfoSectionWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    ),
+  };

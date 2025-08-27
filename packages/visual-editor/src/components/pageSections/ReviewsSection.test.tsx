@@ -119,7 +119,7 @@ describe("ReviewsSection", async () => {
   const puckConfig: Config = {
     components: { ReviewsSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

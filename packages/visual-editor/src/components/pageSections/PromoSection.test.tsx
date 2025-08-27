@@ -332,7 +332,7 @@ describe("PromoSection", async () => {
   const puckConfig: Config = {
     components: { PromoSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

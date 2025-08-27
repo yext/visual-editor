@@ -358,16 +358,34 @@ const TranslatePuckFieldLabels = ({
       }
 
       if ("label" in child.props || "title" in child.props) {
+        const newChildren = {
+          ...child.props,
+          children: React.Children.map(child.props.children, replaceText),
+          label: child.props.label ? pt(child.props.label) : undefined,
+          title: child.props.title ? pt(child.props.title) : undefined,
+        };
+
+        // Radio options need to be translated as well
+        if (child.props.field?.type === "radio") {
+          const originalField = child.props.field;
+          const originalOptions = originalField.options || [];
+
+          const translatedOptions = originalOptions.map((option: any) => ({
+            ...option,
+            label: pt(option.label),
+          }));
+
+          newChildren.field = {
+            ...originalField,
+            options: translatedOptions,
+          };
+        }
+
         return React.cloneElement(
           child as React.ReactElement<{
             children?: React.ReactNode;
           }>,
-          {
-            ...child.props,
-            children: React.Children.map(child.props.children, replaceText),
-            label: child.props.label ? pt(child.props.label) : undefined,
-            title: child.props.title ? pt(child.props.title) : undefined,
-          }
+          newChildren
         );
       } else {
         return React.cloneElement(

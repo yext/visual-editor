@@ -338,7 +338,7 @@ describe("ProductSection", async () => {
   const puckConfig: Config = {
     components: { ProductSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

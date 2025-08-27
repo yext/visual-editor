@@ -357,7 +357,7 @@ const TeamSectionWrapper = ({ data, styles }: TeamSectionProps) => {
  * The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card.
  * Available on Location templates.
  */
-export const TeamSection: ComponentConfig<TeamSectionProps> = {
+export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
   label: msg("components.teamSection", "Team Section"),
   fields: TeamSectionFields,
   defaultProps: {

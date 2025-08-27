@@ -344,7 +344,7 @@ describe("EventSection", async () => {
   const puckConfig: Config = {
     components: { EventSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

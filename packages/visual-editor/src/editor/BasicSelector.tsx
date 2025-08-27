@@ -27,7 +27,7 @@ type BasicSelectorProps = {
     }
 );
 
-export const BasicSelector = (props: BasicSelectorProps): Field => {
+export const BasicSelector = <T,>(props: BasicSelectorProps): Field<T> => {
   const {
     label,
     options = [],

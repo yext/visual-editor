@@ -87,7 +87,7 @@ const EmailsComponent: React.FC<EmailsProps> = ({
   );
 };
 
-export const Emails: ComponentConfig<EmailsProps> = {
+export const Emails: ComponentConfig<{ props: EmailsProps }> = {
   label: msg("components.emails", "Emails"),
   fields: EmailsFields,
   resolveFields: (data, { fields }) => {

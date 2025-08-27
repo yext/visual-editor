@@ -78,11 +78,11 @@ const convertDefaultSpacingsToOptions = (
   });
 };
 
-export const SpacingSelector = (
+export const SpacingSelector = <T,>(
   label: string,
   spacingType: "padding" | "gap",
   includeDefault: boolean
-): Field => {
+): Field<T> => {
   return {
     type: "custom",
     render: ({ value, onChange }) => {

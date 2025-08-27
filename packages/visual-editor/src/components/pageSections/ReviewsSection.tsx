@@ -450,7 +450,7 @@ const ShowMoreButton: React.FC<{
   );
 };
 
-export const ReviewsSection: ComponentConfig<ReviewsSectionProps> = {
+export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
   fields: reviewsFields,
   label: msg("components.reviewsSection", "Reviews Section"),
   defaultProps: {

@@ -1,4 +1,4 @@
-import { DefaultComponentProps, type Config } from "@measured/puck";
+import { type Config } from "@measured/puck";
 
 // The components that are disallowed by default. They are only visible and draggable if a business has the appropriate product features enabled.
 const gatedLayoutComponents: string[] = ["CustomCodeSection"];
@@ -14,11 +14,11 @@ const gatedLayoutCategories: string[] = ["coreInformation"];
  * @param additionalLayoutCategories - An optional list of gated categories to retain.
  * @returns A new configuration object with all gated components removed, except for those listed in `additionalLayoutComponents`.
  */
-export const filterComponentsFromConfig = <T extends DefaultComponentProps>(
-  config: Config<T>,
+export const filterComponentsFromConfig = <C extends Config>(
+  config: C,
   additionalLayoutComponents?: string[],
   additionalLayoutCategories?: string[]
-): Config<T> => {
+): C => {
   // 1. Filter out gated categories unless they are explicitly allowed
   const allowedCategories = Object.entries(config.categories || {}).filter(
     ([categoryKey]) => {
@@ -55,11 +55,7 @@ export const filterComponentsFromConfig = <T extends DefaultComponentProps>(
 
   return {
     ...config,
-    components: Object.fromEntries(
-      allowedComponents
-    ) as Config<T>["components"],
-    categories: Object.fromEntries(
-      allowedCategories
-    ) as Config<T>["categories"],
+    components: Object.fromEntries(allowedComponents) as C["components"],
+    categories: Object.fromEntries(allowedCategories) as C["categories"],
   };
 };

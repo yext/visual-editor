@@ -377,7 +377,7 @@ describe("PhotoGallerySection", async () => {
   const puckConfig: Config = {
     components: { PhotoGallerySection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

@@ -725,7 +725,7 @@ describe("Directory", async () => {
   const puckConfig: Config = {
     components: { Directory },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

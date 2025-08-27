@@ -34,16 +34,16 @@ export const linkTypeOptions = () => {
 };
 
 // Fields for TranslatableCTA with labels
-export const translatableCTAFields = (): Field<TranslatableCTA | undefined> => {
+export const translatableCTAFields = (): Field<TranslatableCTA> => {
   const labelField = useMemo(() => {
-    return TranslatableStringField<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString>(
       msg("fields.label", "Label"),
       { types: ["type.string"] }
     );
   }, []);
 
   const linkField = useMemo(() => {
-    return TranslatableStringField<TranslatableString | undefined>(
+    return TranslatableStringField<TranslatableString>(
       msg("fields.link", "Link"),
       { types: ["type.string"] },
       true

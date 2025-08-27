@@ -258,7 +258,7 @@ describe("TestimonialSection", async () => {
   const puckConfig: Config = {
     components: { TestimonialSection },
     root: {
-      render: ({ children }) => {
+      render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },

@@ -51,7 +51,7 @@ type YextBaseField = {
 
 // YextArrayField has same functionality as Puck's ArrayField
 type YextArrayField<
-  Props extends { [key: string]: any } = { [key: string]: any },
+  Props extends { [key: string]: any }[] = { [key: string]: any }[],
 > = YextBaseField & Omit<ArrayField<Props>, keyof BaseField>;
 
 // YextNumberField has same functionality as Puck's NumberField
@@ -122,7 +122,7 @@ type YextEntitySelectorField<
   };
 
 type YextFieldConfig<Props = any> =
-  | YextArrayField<Props extends Record<string, any> ? Props : any>
+  | YextArrayField<Props extends Record<string, any>[] ? Props : any>
   | YextObjectField<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextTextField
@@ -149,7 +149,7 @@ export function YextField<T extends Record<string, any>, U = any>(
 export function YextField<T, U>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
-): Field<any> {
+): any {
   // use YextEntityFieldSelector
   if (config.type === "entityField") {
     return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
