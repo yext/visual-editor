@@ -365,8 +365,11 @@ const TranslatePuckFieldLabels = ({
           title: child.props.title ? pt(child.props.title) : undefined,
         };
 
-        // Radio options need to be translated as well
-        if (child.props.field?.type === "radio") {
+        // Radio and Select options need to be translated as well
+        if (
+          child.props.field?.type === "radio" ||
+          child.props.field?.type === "select"
+        ) {
           const originalField = child.props.field;
           const originalOptions = originalField.options || [];
 
