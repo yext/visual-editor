@@ -53,6 +53,7 @@ export const IMAGE_OR_VIDEO_CONSTANT_CONFIG: CustomField<
           />
         </FieldLabel>
         <AutoField
+          key={valueType}
           value={value}
           onChange={onChange}
           field={
