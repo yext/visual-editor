@@ -27,7 +27,6 @@ export const getLocationPath = (
 
   const isPrimaryLocale =
     location.__?.isPrimaryLocale === true ||
-    location.__?.isPrimaryLocale === "true" ||
     (location.__?.isPrimaryLocale === undefined && location.locale === "en");
 
   const localePath = isPrimaryLocale ? "" : `${locale}/`;
